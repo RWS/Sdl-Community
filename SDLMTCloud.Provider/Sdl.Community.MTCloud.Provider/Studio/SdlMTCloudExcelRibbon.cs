@@ -25,10 +25,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				try
 				{										
 					var window = new MTCodesWindow();
-					var interopHelper = new WindowInteropHelper(window)
+					var activeForm = StudioInstance.GetActiveForm();
+					if (activeForm != null)
 					{
-						Owner = StudioInstance.GetActiveForm().Handle
-					};
+						var interopHelper = new WindowInteropHelper(window)
+						{
+							Owner = activeForm.Handle
+						};
+					}
 
 					var languages = new LanguageProvider();
 					var viewModel = new MTCodesViewModel(window, languages);

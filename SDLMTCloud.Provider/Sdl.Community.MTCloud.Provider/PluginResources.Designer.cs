@@ -81,6 +81,16 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap defaultStar {
+            get {
+                object obj = ResourceManager.GetObject("defaultStar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon dictionaryIcon {
@@ -426,6 +436,105 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send Feedback.
+        /// </summary>
+        public static string RateIt_FeedbackBtn {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add feedback (optional).
+        /// </summary>
+        public static string RateIt_FeedbackWatermark {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capitalization, punctuation.
+        /// </summary>
+        public static string RateIt_Option_Capitalization {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Capitalization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable &quot;Send feedback option&quot; from Settings.
+        /// </summary>
+        public static string RateIt_Option_DisabledMessage {
+            get {
+                return ResourceManager.GetString("RateIt_Option_DisabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grammar.
+        /// </summary>
+        public static string RateIt_Option_Grammar {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Grammar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spelling.
+        /// </summary>
+        public static string RateIt_Option_Spelling {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Spelling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unintelligible.
+        /// </summary>
+        public static string RateIt_Option_Unintelligence {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Unintelligence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word choice.
+        /// </summary>
+        public static string RateIt_Option_WordChoice {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words addition.
+        /// </summary>
+        public static string RateIt_Option_WordsAddition {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordsAddition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WordsAdditionOptionId.
+        /// </summary>
+        public static string Rateit_Option_WordsAdditionOptionId {
+            get {
+                return ResourceManager.GetString("Rateit_Option_WordsAdditionOptionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words omission.
+        /// </summary>
+        public static string RateIt_Option_WordsOmission {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordsOmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap sdl {
@@ -491,12 +600,40 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap selectedStar {
+            get {
+                object obj = ResourceManager.GetObject("selectedStar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send Translation feedback.
+        /// </summary>
+        public static string SettingsWindow_FeedbackOption {
+            get {
+                return ResourceManager.GetString("SettingsWindow_FeedbackOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-send draft and translated segments.
+        /// </summary>
+        public static string SettingsWindow_ReSendTransaltionOption {
+            get {
+                return ResourceManager.GetString("SettingsWindow_ReSendTransaltionOption", resourceCulture);
             }
         }
         

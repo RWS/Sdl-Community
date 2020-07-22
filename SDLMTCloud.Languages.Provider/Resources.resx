@@ -121,4 +121,7 @@
   <data name="DefaultMTLanguageCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\defaultmtlanguagecodes.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+	<data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
+    <value>No shortcut was set in Studio for this option</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -64,12 +65,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var type = string.Empty;
 			var name = string.Empty;
+			var user = string.Empty;
 			var password = string.Empty;
 			var token = string.Empty;
 			var accountId = string.Empty;
 			var validTo = DateTime.MinValue;
 
-			var regex = new Regex(@";\s+");
+			var regex = new Regex(@";");
 			var items = regex.Split(credentialString);
 			foreach (var item in items)
 			{
@@ -89,6 +91,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (string.Compare(itemName, "Name", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					name = itemValue;
+				}
+
+				if (string.Compare(itemName, "user", StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					user = itemValue;
 				}
 
 				if (string.Compare(itemName, "Password", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -114,6 +121,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						validTo = DateTime.FromBinary(value);
 					}
 				}
+			}
+
+			if (string.IsNullOrEmpty(name) &&
+			    !string.IsNullOrEmpty(user) && !string.IsNullOrEmpty(password))
+			{
+				if (string.Compare(type, "CustomUser", StringComparison.CurrentCultureIgnoreCase) == 0)
+				{
+					var emailAddress = new EmailAddressAttribute();
+					var isvalid = emailAddress.IsValid(user);
+					type = isvalid 
+						? Authentication.AuthenticationType.User.ToString() 
+						: Authentication.AuthenticationType.Client.ToString();
+				}
+				else
+				{
+					type = Authentication.AuthenticationType.Studio.ToString();
+				}
+
+				name = user;
 			}
 
 			if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(name))
@@ -266,6 +292,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public virtual Tuple<LanguageCloudIdentityApiModel, string> StudioSignIn()
 		{
+			if (LanguageCloudIdentityApi == null)
+			{
+				return new Tuple<LanguageCloudIdentityApiModel, string>(null, string.Empty);
+			}
+
 			var success = LanguageCloudIdentityApi.TryLogin(out var message);			
 			if (success)
 			{
