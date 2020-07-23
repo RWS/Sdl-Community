@@ -15,4 +15,10 @@ namespace Sdl.Community.XLIFF.Manager
 	public class XLIFFManagerActionsGroup : AbstractRibbonGroup
 	{
 	}
+
+	[RibbonGroup("XLIFFManager_ViewGroup", Name = "XLIFFManager_ViewGroup_Name")]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	public class XLIFFManagerViewGroup : AbstractRibbonGroup
+	{
+	}
 }

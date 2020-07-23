@@ -696,6 +696,16 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Refresh", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successful.
         /// </summary>
         internal static string Result_Successful {
@@ -931,6 +941,24 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh project data.
+        /// </summary>
+        internal static string TranscreateManager_Refresh_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_Refresh_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string TranscreateManager_Refresh_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_Refresh_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string TranscreateManager_Settings_Description {
@@ -954,6 +982,15 @@ namespace Sdl.Community.Transcreate {
         internal static string TranscreateManager_SettingsGroup_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_SettingsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        internal static string TranscreateManager_ViewGroup_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_ViewGroup_Name", resourceCulture);
             }
         }
         
