@@ -108,6 +108,16 @@ namespace Sdl.Community.AmazonTranslateProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit settings error.
         /// </summary>
         public static string EditSettingsErrorCaption {
@@ -131,6 +141,16 @@ namespace Sdl.Community.AmazonTranslateProvider {
         public static string EditSettingsXmlErrorMessage {
             get {
                 return ResourceManager.GetString("EditSettingsXmlErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -182,9 +202,9 @@ namespace Sdl.Community.AmazonTranslateProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon question {
+        public static System.Drawing.Icon Question {
             get {
-                object obj = ResourceManager.GetObject("question", resourceCulture);
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

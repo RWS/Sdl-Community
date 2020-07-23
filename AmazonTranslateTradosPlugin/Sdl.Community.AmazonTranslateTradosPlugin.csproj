@@ -152,6 +152,10 @@
     <Compile Include="SegmentEditor.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="TagInfo.cs" />
+    <Compile Include="TellMe\AmazonMTProviderCommunityForumAction.cs" />
+    <Compile Include="TellMe\AmazonMTProviderStoreAction.cs" />
+    <Compile Include="TellMe\AmazonMTProviderWikiAction.cs" />
+    <Compile Include="TellMe\AmazonMTTellMeProvider.cs" />
     <Compile Include="Translation.cs" />
     <Compile Include="TranslationDetails.cs" />
     <Compile Include="TranslationResponse.cs" />
@@ -159,7 +163,9 @@
   <ItemGroup>
     <Content Include="Resources\%24this.Icon.ico" />
     <Content Include="Resources\AmazonTranslate.ico" />
-    <Resource Include="Resources\question.ico" />
+    <None Include="Resources\Question.ico" />
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
     <None Include="Resources\amazon-aws-small.jpg" />
     <None Include="Resources\amazon-aws-main.jpg" />
     <None Include="myKey.snk" />
@@ -224,9 +230,7 @@
   <ItemGroup>
     <Analyzer Include="packages\AWSSDK.Translate.3.3.1.14\analyzers\dotnet\cs\AWSSDK.Translate.CodeAnalysis.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TellMe\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
     <ProjectGuid>{55C78039-78E8-4C86-95FD-459363251E88}</ProjectGuid>

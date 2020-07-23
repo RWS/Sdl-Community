@@ -9,7 +9,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.TellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "Amazon Translate MT Provider results";
-		public override Icon Icon => PluginResources.question;
+		public override Icon Icon => PluginResources.Question;
 
 		public AmazonMTProviderWikiAction()
 		{
