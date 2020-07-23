@@ -8,8 +8,8 @@
     <ProjectGuid>{55c78039-78e8-4c86-95fd-459363251e88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MtEnhancedTradosPlugin</RootNamespace>
-    <AssemblyName>MtEnhancedTradosPlugin</AssemblyName>
+    <RootNamespace>AmazonTranslateMTProvider</RootNamespace>
+    <AssemblyName>AmazonTranslateMTProvider</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
