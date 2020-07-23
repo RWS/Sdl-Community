@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Amazon Translate MT provider</PlugInName>
-  <Version>2.1.3.0</Version>
+  <Version>2.1.4.0</Version>
   <Description>This plugin provides machine translation from the Amazon Translate Service AWS.</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
@@ -9,5 +9,5 @@
 		<File>AWSSDK.Core.dll</File>
 		<File>AWSSDK.Translate.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0"/>
 </PluginPackage>
