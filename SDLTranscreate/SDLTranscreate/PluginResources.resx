@@ -472,4 +472,16 @@
   <data name="TranscreateManager_CreateBackTranslationProject_Name" xml:space="preserve">
     <value>Create Back-Translation</value>
   </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\refresh.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TranscreateManager_ViewGroup_Name" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="TranscreateManager_Refresh_Description" xml:space="preserve">
+    <value>Refresh project data</value>
+  </data>
+  <data name="TranscreateManager_Refresh_Name" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
 </root>

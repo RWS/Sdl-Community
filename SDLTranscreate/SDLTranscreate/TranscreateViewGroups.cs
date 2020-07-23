@@ -10,9 +10,15 @@ namespace Sdl.Community.Transcreate
 	{
 	}
 
-	[RibbonGroup("TranscreateFManager_ActionsGroup", Name = "TranscreateManager_ActionsGroup_Name")]
+	[RibbonGroup("TranscreateManager_ActionsGroup", Name = "TranscreateManager_ActionsGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class TranscreateManagerActionsGroup : AbstractRibbonGroup
+	{
+	}
+
+	[RibbonGroup("TranscreateManager_ViewGroup", Name = "TranscreateManager_ViewGroup_Name")]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	public class TranscreateManagerViewGroup : AbstractRibbonGroup
 	{
 	}
 }

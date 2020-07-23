@@ -392,7 +392,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -578,49 +577,51 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DefaultLanguageMappings.xlsx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Icon.Jigsaw.ico" />
     <Content Include="Resources\Refresh.ico" />
-    <Resource Include="Resources\LanguageMapping.ico" />
-    <Resource Include="Resources\Search.png" />
     <EmbeddedResource Include="BatchTasks\Report.xsl" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Checked.png" />
+    <Resource Include="Resources\Close.png" />
+    <Resource Include="Resources\document_add.png" />
+    <Resource Include="Resources\Export.ico" />
+    <Resource Include="Resources\Exported.png" />
+    <Resource Include="Resources\ExportTo.ico" />
+    <Resource Include="Resources\Fie.png" />
+    <Resource Include="Resources\Folder.png" />
+    <Resource Include="Resources\folder_add.png" />
+    <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Import.ico" />
-    <Resource Include="Resources\Remove-32.png" />
+    <Resource Include="Resources\Imported.png" />
+    <Resource Include="Resources\ImportFrom.ico" />
     <Resource Include="Resources\invalid-32.png" />
     <Resource Include="Resources\job_cancelling.gif" />
     <Resource Include="Resources\job_completed.gif" />
     <Resource Include="Resources\job_failed.gif" />
     <Resource Include="Resources\job_running.gif" />
     <Resource Include="Resources\job_scheduled.gif" />
-    <Resource Include="Resources\warning-32.png" />
-    <Resource Include="Resources\Exported.png" />
-    <Resource Include="Resources\Imported.png" />
-    <Resource Include="Resources\Project.ico" />
-    <Resource Include="Resources\Close.png" />
-    <Resource Include="Resources\Fie.png" />
-    <Resource Include="Resources\folder_add.png" />
-    <Resource Include="Resources\document_add.png" />
-    <Resource Include="Resources\Folder.png" />
-    <Resource Include="Resources\Export.ico" />
-    <Content Include="Resources\Icon.Jigsaw.ico" />
+    <Resource Include="Resources\LanguageMapping.ico" />
     <Resource Include="Resources\Minus.png" />
     <Resource Include="Resources\Plus.png" />
+    <Resource Include="Resources\Project.ico" />
+    <Resource Include="Resources\Question.ico" />
+    <Resource Include="Resources\Remove-32.png" />
+    <Resource Include="Resources\Search.png" />
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\TellMe.ico" />
+    <Resource Include="Resources\warning-32.png" />
+    <Resource Include="Resources\Warning.png" />
     <Resource Include="Resources\xliffManager.ico" />
     <Resource Include="Resources\xliffManager_2.ico" />
     <Resource Include="Resources\xliffManager_3.ico" />
-    <Resource Include="Resources\ExportTo.ico" />
-    <Resource Include="Resources\ImportFrom.ico" />
-    <Resource Include="Resources\Checked.png" />
-    <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\Question.ico" />
-    <Resource Include="Resources\Settings.ico" />
-    <Resource Include="Resources\TellMe.ico" />
-    <Resource Include="Resources\Warning.png" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

@@ -121,6 +121,51 @@ namespace Sdl.Community.Transcreate
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
+		public void RefreshProjects()
+		{
+			if (_projectsNavigationViewModel == null)
+			{
+				return;
+			}
+
+			var refresh = false;
+			foreach (var project in _projectsController.GetAllProjects())
+			{
+				var addedNewProject = AddNewProjectToContainer(project);
+				if (addedNewProject)
+				{
+					refresh = true;
+				}
+				else
+				{
+					var projectInfo = project.GetProjectInfo();
+					var xliffProject = _xliffProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+					if (xliffProject != null)
+					{
+						var updatedCustomer = UpdateCustomerInfo(project, xliffProject);
+						var addedNewFiles = AddNewProjectFiles(project, xliffProject);
+
+						if (updatedCustomer || addedNewFiles)
+						{
+							refresh = true;
+						}
+					}
+				}
+
+				var unloadedExistingProject = UnloadRemovedProjectsFromContainer();
+				if (unloadedExistingProject)
+				{
+					refresh = true;
+				}
+			}
+
+			if (refresh)
+			{
+				_projectsNavigationViewModel.Projects = new List<Project>();
+				_projectsNavigationViewModel.Projects = _xliffProjects;
+			}
+		}
+
 		public List<Project> GetProjects()
 		{
 			return _xliffProjects;
@@ -215,6 +260,36 @@ namespace Sdl.Community.Transcreate
 			}
 
 			UpdateProjectSettingsBundle(project);
+		}
+
+		private bool UpdateCustomerInfo(FileBasedProject project, Project xliffProject)
+		{
+			var customer = _customerProvider.GetProjectCustomer(project);
+			var customerName = customer?.Name ?? string.Empty;
+			var customerEmail = customer?.Email ?? string.Empty;
+
+			var xliffCustomerName = xliffProject.Customer?.Name?.Replace("[no client]", string.Empty) ?? string.Empty;
+			var xliffCustomerEmail = xliffProject.Customer?.Email ?? string.Empty;
+
+			if (customerName != xliffCustomerName || customerEmail != xliffCustomerEmail)
+			{
+				if (customer == null)
+				{
+					xliffProject.Customer = null;
+				}
+				else
+				{
+					xliffProject.Customer = new Customer
+					{
+						Id = customer.Id,
+						Name = customer.Name,
+						Email = customer.Email
+					};
+				}
+				return true;
+			}
+
+			return false;
 		}
 
 		private void ConvertToRelativePaths(Project project, ProjectFile wcProjectFile)

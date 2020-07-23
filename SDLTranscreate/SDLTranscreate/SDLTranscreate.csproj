@@ -122,6 +122,7 @@
     <Compile Include="Actions\CreateBackTranslationProjectAction.cs" />
     <Compile Include="Actions\ConvertProjectAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
+    <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
     <Compile Include="BatchTasks\ExportSettingsControl.cs">
@@ -447,6 +448,7 @@
     <Resource Include="Resources\Project.ico" />
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\Remove-32.png" />
+    <Content Include="Resources\Refresh.ico" />
     <Content Include="Resources\sdl_transcreate.ico" />
     <Resource Include="Resources\sdl_transcreate.png" />
     <Resource Include="Resources\Search.png" />
