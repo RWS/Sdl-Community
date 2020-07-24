@@ -319,10 +319,7 @@
   <data name="label_SdlXliffFile" xml:space="preserve">
     <value>SDLXLIFF File: {0}</value>
   </data>
-  <data name="Label_SelectedFiles" xml:space="preserve">
-    <value>Selected Files: {0}</value>
-  </data>
-  <data name="Label_SourceLanguage" xml:space="preserve">
+	<data name="Label_SourceLanguage" xml:space="preserve">
     <value>Soruce Language: {0}</value>
   </data>
   <data name="Label_StatusSegmentsNotImported" xml:space="preserve">
@@ -483,5 +480,29 @@
   </data>
   <data name="TranscreateManager_Refresh_Name" xml:space="preserve">
     <value>Refresh</value>
+  </data>
+	<data name="WizardTitle_ConvertProject" xml:space="preserve">
+    <value>Convert Project</value>
+  </data>
+	<data name="WizardTitle_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+	<data name="WizardTitle_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+	<data name="JobProcess_ConvertProject" xml:space="preserve">
+    <value>Convert Project</value>
+  </data>
+	<data name="Label_BackupSDLProject" xml:space="preserve">
+    <value>Backup Project: {0}</value>
+  </data>
+	<data name="Label_MaxAlternativeTranslations" xml:space="preserve">
+    <value>Max Alternative Translations: {0}</value>
+  </data>
+	<data name="Label_SelectedFiles" xml:space="preserve">
+    <value>Selected Files: {0}</value>
+  </data>
+	<data name="Label_ProjectBackup" xml:space="preserve">
+    <value>Project Backup Path: {0}</value>
   </data>
 </root>

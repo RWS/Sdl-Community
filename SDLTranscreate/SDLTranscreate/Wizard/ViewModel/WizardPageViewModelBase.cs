@@ -1,12 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using Sdl.Community.Transcreate.Model;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel
 {
-	public abstract class WizardPageViewModelBase : INotifyPropertyChanged
+	public abstract class WizardPageViewModelBase : BaseModel
 	{
 		private bool _isVisited;
 		private bool _isComplete;
@@ -190,13 +188,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 
 		public abstract string DisplayName { get; }
 
-		public abstract bool IsValid { get; set; }
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		public abstract bool IsValid { get; set; }		
 	}
 }

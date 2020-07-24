@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
@@ -13,7 +11,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 	{
 		private string _summaryText;
 
-		public WizardPageConvertSummaryViewModel(Window owner, object view, WizardContext wizardContext) 
+		public WizardPageConvertSummaryViewModel(Window owner, object view, WizardContext wizardContext)
 			: base(owner, view, wizardContext)
 		{
 			IsValid = true;
@@ -59,20 +57,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			summaryText += indent + string.Format(PluginResources.Label_Customer, project.Customer?.Name) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
-			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportOptions.XliffSupport) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget) + Environment.NewLine;
-			if (WizardContext.ExportOptions.ExcludeFilterIds.Count > 0)
-			{
-				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExportOptions.ExcludeFilterIds)) + Environment.NewLine;
-			}
+			summaryText += PluginResources.Label_Options + Environment.NewLine;			
+			summaryText += indent + string.Format(PluginResources.Label_ProjectBackup, WizardContext.ProjectBackupPath) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_MaxAlternativeTranslations, WizardContext.ConvertOptions.MaxAlternativeTranslations) + Environment.NewLine;
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_SelectedFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
 			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
@@ -81,44 +73,27 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			foreach (var targetLanguage in targetLanguages)
 			{
 				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
-			
+
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
-				
+
 				var targetLanguageFiles =
 					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
 					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
-					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
+					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name.Substring(0, targetLanguageFile.Name.Length- ".sdlxliff".Length) + ".xliff");
+					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
 
 					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
-					summaryText += indent + string.Format(PluginResources.label_XliffFile, xliffFilePath + Environment.NewLine) + Environment.NewLine;										
+					summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.label_XliffFile, xliffFilePath + Environment.NewLine) + Environment.NewLine;
 				}
 			}
 
 			return summaryText;
 		}
-
-		private string GetFitlerItemsString(IEnumerable<string> ids)
-		{
-			var allFilterItems = Enumerators.GetFilterItems();
-			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
-			var items = string.Empty;
-			foreach (var filterItem in filterItems)
-			{
-				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-				         filterItem.Name;
-			}
-
-			if (string.IsNullOrEmpty(items))
-			{
-				items = "[none]";
-			}
-
-			return items;
-		}
-
+	
 		private string GetProjectTargetLanguagesString(Project project)
 		{
 			var targetLanguages = string.Empty;
@@ -134,7 +109,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		private string GetSelectedLanguagesString()
 		{
 			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
-
 			var selectedLanguages = string.Empty;
 			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
 			{

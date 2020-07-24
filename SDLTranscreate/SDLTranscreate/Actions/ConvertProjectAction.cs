@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
@@ -35,6 +36,13 @@ namespace Sdl.Community.Transcreate.Actions
 
 		protected override void Execute()
 		{
+			// set the default settings for creating the xliff from the sdlxliff
+			// these should not be taken from the users settings
+			var settings = GetSettings();
+			settings.ExportOptions.CopySourceToTarget = false;
+			settings.ExportOptions.IncludeTranslations = true;
+			settings.ExportOptions.ExcludeFilterIds = new List<string>();
+			
 			var wizardService = new WizardService(Enumerators.Action.Convert, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
 

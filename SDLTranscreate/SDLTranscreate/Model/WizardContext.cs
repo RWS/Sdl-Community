@@ -15,7 +15,8 @@ namespace Sdl.Community.Transcreate.Model
 			
 			ExportOptions = settings.ExportOptions;
 			ImportOptions = settings.ImportOptions;
-			
+			ConvertOptions = settings.ConvertOptions;
+
 			Owner = Enumerators.Controller.None;
 		}
 	
@@ -36,6 +37,10 @@ namespace Sdl.Community.Transcreate.Model
 		public string TransactionFolder { get; set; }
 
 		public string WorkingFolder => Path.Combine(TransactionFolder, DateTimeStampToString);
+
+		public string ProjectBackupFolder => Path.Combine(TransactionFolder, "Original");
+
+		public string ProjectBackupPath => Path.Combine(ProjectBackupFolder, Project.Name + ".zip");
 
 		public string RelativeWorkingFolder => WorkingFolder.Replace(Project.Path + '\\', string.Empty).Trim('\\');
 
@@ -61,6 +66,8 @@ namespace Sdl.Community.Transcreate.Model
 		public ExportOptions ExportOptions { get; set; }
 
 		public ImportOptions ImportOptions { get; set; }
+
+		public ConvertOptions ConvertOptions { get; set; }
 
 		public string GetDefaultTransactionPath()
 		{

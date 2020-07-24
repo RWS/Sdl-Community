@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;

@@ -119,6 +119,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert Project.
+        /// </summary>
+        internal static string JobProcess_ConvertProject {
+            get {
+                return ResourceManager.GetString("JobProcess_ConvertProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string JobProcess_Export {
@@ -187,6 +196,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_BackupFiles {
             get {
                 return ResourceManager.GetString("Label_BackupFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup Project: {0}.
+        /// </summary>
+        internal static string Label_BackupSDLProject {
+            get {
+                return ResourceManager.GetString("Label_BackupSDLProject", resourceCulture);
             }
         }
         
@@ -335,6 +353,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max Alternative Translations: {0}.
+        /// </summary>
+        internal static string Label_MaxAlternativeTranslations {
+            get {
+                return ResourceManager.GetString("Label_MaxAlternativeTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name: {0}.
         /// </summary>
         internal static string Label_Name {
@@ -385,6 +412,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_Project {
             get {
                 return ResourceManager.GetString("Label_Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Backup Path: {0}.
+        /// </summary>
+        internal static string Label_ProjectBackup {
+            get {
+                return ResourceManager.GetString("Label_ProjectBackup", resourceCulture);
             }
         }
         
@@ -1162,6 +1198,33 @@ namespace Sdl.Community.Transcreate {
         internal static string WizardMessage_UnableToLocateSelectedProject {
             get {
                 return ResourceManager.GetString("WizardMessage_UnableToLocateSelectedProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert Project.
+        /// </summary>
+        internal static string WizardTitle_ConvertProject {
+            get {
+                return ResourceManager.GetString("WizardTitle_ConvertProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string WizardTitle_Export {
+            get {
+                return ResourceManager.GetString("WizardTitle_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string WizardTitle_Import {
+            get {
+                return ResourceManager.GetString("WizardTitle_Import", resourceCulture);
             }
         }
     }

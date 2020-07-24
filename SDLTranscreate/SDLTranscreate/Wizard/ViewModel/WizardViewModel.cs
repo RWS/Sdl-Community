@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -13,12 +12,11 @@ using Sdl.Community.Transcreate.Model;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel
 {
-	public class WizardViewModel : INotifyPropertyChanged, IDisposable
+	public class WizardViewModel : BaseModel, IDisposable
 	{		
 		private Window _window;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
-		private WizardPageViewModelBase _currentPage;
-		
+		private WizardPageViewModelBase _currentPage;		
 		private RelayCommand _moveNextCommand;
 		private RelayCommand _moveBackCommand;
 		private RelayCommand _finishCommand;
@@ -130,8 +128,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 
 				_currentPage = value;
 
+				var actionText = GetActionText();
 				WindowTitle = string.Format(PluginResources.Title_WizardPage, 
-					PluginResources.TranscreateManager_Name, Action, CurrentPage.DisplayName);
+					PluginResources.TranscreateManager_Name, actionText, CurrentPage.DisplayName);
 
 				// move focus to the page in the wizard early
 				OnPropertyChanged(nameof(CurrentPage));
@@ -172,6 +171,25 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 			}
 		}
 
+		private string GetActionText()
+		{
+			var actionText = string.Empty;
+			switch (Action)
+			{
+				case Enumerators.Action.Convert:
+					actionText = PluginResources.WizardTitle_ConvertProject;
+					break;
+				case Enumerators.Action.Export:
+					actionText = PluginResources.WizardTitle_Export;
+					break;
+				case Enumerators.Action.Import:
+					actionText = PluginResources.WizardTitle_Import;
+					break;
+			}
+
+			return actionText;
+		}
+		
 		private void AddEventhandlers(ObservableCollection<WizardPageViewModelBase> pages)
 		{
 			foreach (var viewModelBase in pages)
@@ -400,14 +418,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 		private void OnRequestClose()
 		{
 			RequestClose?.Invoke(this, EventArgs.Empty);
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		}		
 
 		public void Dispose()
 		{

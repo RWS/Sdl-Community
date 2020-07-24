@@ -35,17 +35,6 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
-			<Style x:Uid="Style_1" x:Key="NumericSpinnerStyle" TargetType="controls:NumericUpDown" BasedOn="{StaticResource Sdl.NumericUpDown.Generic}">
-				<Setter x:Uid="Setter_1" Property="HorizontalAlignment" Value="Left" />
-				<Setter x:Uid="Setter_2" Property="Width" Value="60" />
-				<Setter x:Uid="Setter_3" Property="Margin" Value="12 6" />
-				<Setter x:Uid="Setter_4" Property="Height" Value="20" />
-				<Setter x:Uid="Setter_5" Property="Minimum" Value="1" />
-				<Setter x:Uid="Setter_6" Property="Maximum" Value="20" />
-				<Setter x:Uid="Setter_7" Property="Interval" Value="1" />
-				<Setter x:Uid="Setter_8" Property="InterceptManualEnter" Value="True" />
-				<Setter x:Uid="Setter_9" Property="AllowPositiveNegativeSign" Value="False" />
-			</Style>
 
 			<Style TargetType="{x:Type Window}">
 				<Setter Property="FontFamily" Value="Segoe UI" />

@@ -1,49 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.Model;
-using Sdl.MultiSelectComboBox.EventArgs;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 {
 	public class WizardPageConvertOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly IDialogService _dialogService;
-		private List<XLIFFSupportItem> _xliffSupportItems;
-		private XLIFFSupportItem _selectedXliffSupportItemModel;
-		private string _outputFolder;
-		private bool _copySourceToTarget;
-		private bool _copySourceToTargetEnabled;
-		private bool _includeTranslations;
-		private List<FilterItem> _filterItems;
-		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
+		private int _maxAlternativeTranslations;
+		private string _outputFolder;		
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
-		private ICommand _clearFiltersCommand;
-		private ICommand _selectedItemsChangedCommand;	
-
+		
 		public WizardPageConvertOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
 			: base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
-			XLIFFSupportItems = Enumerators.GetXLIFFSupportItems();
-			
-
-			SelectedXliffSupportItem = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == WizardContext.ExportOptions.XliffSupport);
 			OutputFolder = WizardContext.TransactionFolder;
-			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
-			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
-
-			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, WizardContext.ExportOptions.ExcludeFilterIds));
-
+			MaxAlternativeTranslations = wizardContext.ConvertOptions.MaxAlternativeTranslations;
+		
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
 		}
@@ -51,69 +30,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
-
-		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
-
-		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
-
-		public List<XLIFFSupportItem> XLIFFSupportItems
-		{
-			get => _xliffSupportItems;
-			set
-			{
-				_xliffSupportItems = value;
-				OnPropertyChanged(nameof(XLIFFSupportItems));
-			}
-		}
-
-		public XLIFFSupportItem SelectedXliffSupportItem
-		{
-			get
-			{
-				return _selectedXliffSupportItemModel
-					   ?? (_selectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
-			}
-			set
-			{
-				if (_selectedXliffSupportItemModel == value)
-				{
-					return;
-				}
-
-				_selectedXliffSupportItemModel = value;
-				OnPropertyChanged(nameof(SelectedXliffSupportItem));
-			}
-		}
-
-		public List<FilterItem> FilterItems
-		{
-			get => _filterItems;
-			set
-			{
-				if (_filterItems == value)
-				{
-					return;
-				}
-
-				_filterItems = value;
-				OnPropertyChanged(nameof(FilterItems));				
-			}
-		}
-
-		public ObservableCollection<FilterItem> SelectedExcludeFilterItems
-		{
-			get => _selectedExcludeFilterItems ?? (_selectedExcludeFilterItems = new ObservableCollection<FilterItem>());
-			set
-			{
-				if (_selectedExcludeFilterItems == value)
-				{
-					return;
-				}
-
-				_selectedExcludeFilterItems = value;
-				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
-			}
-		}
 
 		public string OutputFolder
 		{
@@ -132,62 +48,18 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			}
 		}
 
-		public bool CopySourceToTarget
+		public int MaxAlternativeTranslations
 		{
-			get => _copySourceToTarget;
+			get => _maxAlternativeTranslations;
 			set
 			{
-				if (_copySourceToTarget == value)
+				if (_maxAlternativeTranslations == value)
 				{
 					return;
 				}
 
-				_copySourceToTarget = value;
-				OnPropertyChanged(nameof(CopySourceToTarget));
-
-				VerifyIsValid();
-			}
-		}
-
-		public bool CopySourceToTargetEnabled
-		{
-			get => _copySourceToTargetEnabled;
-			set
-			{
-				if (_copySourceToTargetEnabled == value)
-				{
-					return;
-				}
-
-				_copySourceToTargetEnabled = value;
-				OnPropertyChanged(nameof(CopySourceToTargetEnabled));			
-			}
-		}
-
-		public bool IncludeTranslations
-		{
-			get => _includeTranslations;
-			set
-			{
-				if (_includeTranslations == value)
-				{
-					return;
-				}
-
-				_includeTranslations = value;
-				OnPropertyChanged(nameof(IncludeTranslations));
-
-				if (!_includeTranslations)
-				{
-					CopySourceToTarget = false;
-					CopySourceToTargetEnabled = false;
-				}
-				else
-				{
-					CopySourceToTargetEnabled = true;
-				}
-
-				VerifyIsValid();
+				_maxAlternativeTranslations = value;
+				OnPropertyChanged(nameof(MaxAlternativeTranslations));
 			}
 		}
 
@@ -214,19 +86,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			}
 		}
 
-		private void ClearFilters(object parameter)
-		{
-			SelectedExcludeFilterItems.Clear();
-			OnPropertyChanged(nameof(SelectedExcludeFilterItems));
-		}
-
-		private void SelectedItemsChanged(object parameter)
-		{
-			if (parameter is SelectedItemsChangedEventArgs)
-			{
-				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
-			}
-		}
 
 		private string GetValidFolderPath()
 		{
@@ -261,11 +120,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		private void OnLeavePage(object sender, EventArgs e)
 		{
 			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ExportOptions.XliffSupport = SelectedXliffSupportItem.SupportType;
-			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
-			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
-			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-			//WizardContext.ExcludeFilterItemIds =
+			WizardContext.ConvertOptions.MaxAlternativeTranslations = MaxAlternativeTranslations;
 		}
 
 		public void Dispose()

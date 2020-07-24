@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +11,7 @@ using Sdl.Community.Transcreate.Model;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel
 {
-	public class ExceptionViewerViewModel : INotifyPropertyChanged
+	public class ExceptionViewerViewModel : BaseModel
 	{
 		private List<Exception> _errors;
 		private List<Exception> _warnings;
@@ -231,13 +229,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 			}
 
 			span.Inlines.Add(new LineBreak());
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		}	
 	}
 }

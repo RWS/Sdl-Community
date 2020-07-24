@@ -110,7 +110,7 @@ namespace Sdl.Community.Transcreate
 
 				if (_xliffProjects.Count > 0)
 				{
-					_xliffProjects[0].IsSelected = true;					
+					_xliffProjects[0].IsSelected = true;
 				}
 				_projectsNavigationViewModel.Projects = _xliffProjects;
 
@@ -745,53 +745,47 @@ namespace Sdl.Community.Transcreate
 
 		private void SetProjectFileActivityViewController()
 		{
-			lock (_lockObject)
+			if (_projectFileActivityViewController != null)
 			{
-				if (_projectFileActivityViewController != null)
-				{
-					return;
-				}
+				return;
+			}
 
-				try
-				{
-					_projectFileActivityViewController =
-						SdlTradosStudio.Application.GetController<ProjectFileActivityViewController>();
+			try
+			{
+				_projectFileActivityViewController =
+					SdlTradosStudio.Application.GetController<ProjectFileActivityViewController>();
 
-					_projectFilesViewModel.ProjectFileActivityViewModel =
-						new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivities);
+				_projectFilesViewModel.ProjectFileActivityViewModel =
+					new ProjectFileActivityViewModel(_projectFilesViewModel?.SelectedProjectFile?.ProjectFileActivities);
 
-					_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;
-				}
-				catch
-				{
-					// catch all; unable to locate the controller
-				}
+				_projectFileActivityViewController.ViewModel = _projectFilesViewModel.ProjectFileActivityViewModel;
+			}
+			catch
+			{
+				// catch all; unable to locate the controller
 			}
 		}
 
 		private void SetProjectPropertiesViewController()
 		{
-			lock (_lockObject)
+			if (_projectPropertiesViewController != null)
 			{
-				if (_projectPropertiesViewController != null)
-				{
-					return;
-				}
+				return;
+			}
 
-				try
-				{					
-					_projectPropertiesViewController =
-						SdlTradosStudio.Application.GetController<ProjectPropertiesViewController>();
+			try
+			{
+				_projectPropertiesViewController =
+					SdlTradosStudio.Application.GetController<ProjectPropertiesViewController>();
 
-					var viewModel = _projectsNavigationViewModel.ProjectPropertiesViewModel =
-						new ProjectPropertiesViewModel(_projectsNavigationViewModel.SelectedProject);
+				var viewModel = _projectsNavigationViewModel.ProjectPropertiesViewModel =
+					new ProjectPropertiesViewModel(_projectsNavigationViewModel.SelectedProject);
 
-					_projectPropertiesViewController.ViewModel = viewModel;
-				}
-				catch
-				{
-					// catch all; unable to locate the controller
-				}
+				_projectPropertiesViewController.ViewModel = viewModel;
+			}
+			catch
+			{
+				// catch all; unable to locate the controller
 			}
 		}
 
