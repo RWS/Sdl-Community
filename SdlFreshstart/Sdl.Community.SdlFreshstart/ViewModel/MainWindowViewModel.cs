@@ -1,4 +1,5 @@
-﻿using Sdl.Community.SdlFreshstart.Services;
+﻿using Sdl.Community.SdlFreshstart.Helpers;
+using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
@@ -8,7 +9,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			var versionService = new VersionService();
 			var messageService = new MessageService();
-			StudioViewModel = new StudioViewModel(mainWindow, versionService, messageService);
+			StudioViewModel = new StudioViewModel(mainWindow, versionService, messageService, new RegistryHelper());
 			MultiTermViewModel = new MultiTermViewModel(mainWindow, messageService);
 			ReadMeViewModel = new ReadMeViewModel(versionService);
 		}

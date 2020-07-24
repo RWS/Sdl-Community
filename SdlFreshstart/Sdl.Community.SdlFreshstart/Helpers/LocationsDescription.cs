@@ -1,7 +1,8 @@
 ﻿namespace Sdl.Community.SdlFreshstart.Helpers
 {
-	public static class FoldersDescriptionText
+	public static class LocationsDescription
 	{
+		public static string SdlRegistryKey => "This option will reset global settings like language, to default";
 		public static string ProjectsXmlPath => "This option will only remove the projects.xml file, it will not physically remove your projects from your Documents folder.  It will remove them from Studio, so if you delete this file and need to put some or all of the projects back, you will have to add the projects back one at a time by using the Open Project command in Studio.  The projects.xml contains the following information:" +
 				"\n - details of the Batch Tasks available to you. If you have custom Batch Tasks then these will be lost and you'll have to recreate them. " +
 				"\n - details of all the projects in your Projects View.  Not the projects themselves, only metadata telling Studio what their names are and where to find them." +

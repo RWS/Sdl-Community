@@ -41,7 +41,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 		}
 
-		public void SaveSettings(List<LocationDetails> locations,bool studioSettings)
+		public void SaveSettings(List<LocationDetails> locations, bool studioSettings)
 		{
 			try
 			{

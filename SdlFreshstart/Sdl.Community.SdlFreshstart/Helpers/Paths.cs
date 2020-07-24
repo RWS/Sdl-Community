@@ -6,7 +6,7 @@ using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
-	public static class FoldersPath
+	public static class Paths
 	{
 		public static readonly Log Log = Log.Instance;
 		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
@@ -26,11 +26,17 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 						fileName = location != null ? Path.GetFileName(location) : fileName;
 					}
 
+					if (locationName == nameof(StudioVersion.SdlRegistryKey))
+					{
+						fileName = "sdlregkeys.reg";
+					}
+					//TODO: make accommodations for registry
+					//BackUpFile path for registry also
 					var locationDetails = new LocationDetails
 					{
 						Alias = locationName,
-						BackupFilePath = Path.Combine(BackupFolderPath, version.ShortVersion, locationName, fileName),
-						OriginalFilePath = location,
+						BackupFilePath = Path.Combine(BackupFolderPath, version.VersionWithEdition, locationName, fileName),
+						OriginalPath = location,
 						Version = version.ShortVersion
 					};
 

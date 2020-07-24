@@ -27,7 +27,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 							var directoryInfo = new DirectoryInfo(packagePath);
 							var details = new LocationDetails
 							{
-								OriginalFilePath = packagePath,
+								OriginalPath = packagePath,
 								BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "PackageCache", directoryInfo.Name),
 								Version = multiTermVersion.DisplayName
 							};
@@ -77,7 +77,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var directoryInfo = new DirectoryInfo(programFilePath);
 					var details = new LocationDetails
 					{
-						OriginalFilePath = programFilePath,
+						OriginalPath = programFilePath,
 						BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "ProgramFiles", directoryInfo.Name),
 						Version = multiTermVersion.DisplayName
 					};
@@ -102,7 +102,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var directoryInfo = new DirectoryInfo(appDataFilePath);
 					var details = new LocationDetails
 					{
-						OriginalFilePath = appDataFilePath,
+						OriginalPath = appDataFilePath,
 						BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "Local", directoryInfo.Name),
 						Version = multiTermVersion.DisplayName
 					};
@@ -127,7 +127,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var directoryInfo = new DirectoryInfo(appDataFilePath);
 					var details = new LocationDetails
 					{
-						OriginalFilePath = appDataFilePath,
+						OriginalPath = appDataFilePath,
 						BackupFilePath = Path.Combine(BackupFolderPath, multiTermVersion.DisplayName, "Roaming", directoryInfo.Name),
 						Version = multiTermVersion.DisplayName
 					};
