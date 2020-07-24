@@ -16,7 +16,7 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XTranscreate;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/General.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TreeView.xaml"/>

@@ -14,9 +14,11 @@ using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Wizard.View;
+using Sdl.Community.Transcreate.Wizard.View.Convert;
 using Sdl.Community.Transcreate.Wizard.View.Export;
 using Sdl.Community.Transcreate.Wizard.View.Import;
 using Sdl.Community.Transcreate.Wizard.ViewModel;
+using Sdl.Community.Transcreate.Wizard.ViewModel.Convert;
 using Sdl.Community.Transcreate.Wizard.ViewModel.Export;
 using Sdl.Community.Transcreate.Wizard.ViewModel.Import;
 using Sdl.Core.Globalization;
@@ -126,14 +128,29 @@ namespace Sdl.Community.Transcreate.Service
 				_wizardContext.AnalysisBands = GetAnalysisBands(selectedProject);
 
 				var projectInfo = selectedProject.GetProjectInfo();
-				var selectedFileIds = controller is FilesController
-					? _controllers.FilesController.SelectedFiles.Select(a => a.Id.ToString()).ToList()
-					: null;
+				var selectedFileIds = new List<string>();
+
+
+				if (controller is FilesController)
+				{
+					selectedFileIds = _controllers.FilesController.SelectedFiles.Select(a => a.Id.ToString()).ToList();
+				}
+				else
+				{
+					foreach (var targetLanguage in projectInfo.TargetLanguages)
+					{
+						var allFiles = selectedProject.GetTargetLanguageFiles(targetLanguage);
+						selectedFileIds.AddRange(
+							from projectFile in allFiles
+							where projectFile.Role == FileRole.Translatable
+							select projectFile.Id.ToString());
+					}
+				}
 
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
-				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
+				var projectModel = GetProject(selectedProject, selectedFileIds);
 				_wizardContext.Project = projectModel;
 				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
 			}
@@ -171,7 +188,7 @@ namespace Sdl.Community.Transcreate.Service
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
-				var projectModel = GetProjectModel(selectedProject, selectedFileIds);
+				var projectModel = GetProject(selectedProject, selectedFileIds);
 				_wizardContext.Project = projectModel;
 				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
 			}
@@ -192,7 +209,7 @@ namespace Sdl.Community.Transcreate.Service
 			_wizardWindow.DataContext = viewModel;
 		}
 
-		private Project GetProjectModel(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds)
+		private Project GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds)
 		{
 			if (selectedProject == null)
 			{
@@ -381,6 +398,14 @@ namespace Sdl.Community.Transcreate.Service
 				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), wizardContext));
 				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), wizardContext));
 				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext,
+					_segmentBuilder, _pathInfo));
+			}
+			else if (_action == Enumerators.Action.Convert)
+			{
+				pages.Add(new WizardPageConvertFilesViewModel(_wizardWindow, new WizardPageConvertFilesView(), wizardContext));
+				pages.Add(new WizardPageConvertOptionsViewModel(_wizardWindow, new WizardPageConvertOptionsView(), wizardContext, _dialogService));
+				pages.Add(new WizardPageConvertSummaryViewModel(_wizardWindow, new WizardPageConvertSummaryView(), wizardContext));
+				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), wizardContext,
 					_segmentBuilder, _pathInfo));
 			}
 

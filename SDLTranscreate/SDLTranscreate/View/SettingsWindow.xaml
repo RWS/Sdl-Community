@@ -22,6 +22,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/NumberUpDown.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TreeView.xaml"/>
@@ -33,7 +34,19 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			
+
+			<Style x:Uid="Style_1" x:Key="NumericSpinnerStyle" TargetType="controls:NumericUpDown" BasedOn="{StaticResource Sdl.NumericUpDown.Generic}">
+				<Setter x:Uid="Setter_1" Property="HorizontalAlignment" Value="Left" />
+				<Setter x:Uid="Setter_2" Property="Width" Value="60" />
+				<Setter x:Uid="Setter_3" Property="Margin" Value="12 6" />
+				<Setter x:Uid="Setter_4" Property="Height" Value="20" />
+				<Setter x:Uid="Setter_5" Property="Minimum" Value="1" />
+				<Setter x:Uid="Setter_6" Property="Maximum" Value="20" />
+				<Setter x:Uid="Setter_7" Property="Interval" Value="1" />
+				<Setter x:Uid="Setter_8" Property="InterceptManualEnter" Value="True" />
+				<Setter x:Uid="Setter_9" Property="AllowPositiveNegativeSign" Value="False" />
+			</Style>
+
 			<Style TargetType="{x:Type Window}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
 				<Setter Property="FontSize" Value="11"/>
@@ -53,10 +66,29 @@
 		<Border Grid.Row="0" >
 			<Grid Margin="2">
 			</Grid>
-			
+
 		</Border>
 		<TabControl Grid.Row="1" Margin="5,5,5,5"
 		            SelectedIndex="{Binding SelectedPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<TabItem Header="General" >
+				<Grid Margin="20">
+
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					
+					<TextBlock  Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left">Max Alternative Translations:</TextBlock>
+					<controls:NumericUpDown Grid.Column="1" Grid.Row="0"
+					    Style="{StaticResource NumericSpinnerStyle}"
+					    Value="{Binding MaxAlternativeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+				</Grid>
+			</TabItem>
 			<TabItem Header="Export" >
 				<Grid Margin="20">
 
@@ -70,7 +102,7 @@
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
-					
+
 					<Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto" />
@@ -145,7 +177,7 @@
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
-			
+
 					<CheckBox Grid.Row="1" Grid.Column="0"  Margin="0,10,0,0"  Content="Overwrite existing translations" 
 					          IsChecked="{Binding ImportOverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
@@ -240,7 +272,7 @@
 
 
 			</TabItem>
-
+			
 		</TabControl>
 		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
 			<Grid Height="28">

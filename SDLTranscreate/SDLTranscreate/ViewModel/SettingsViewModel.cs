@@ -25,6 +25,9 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private ICommand _selectedItemsChangedCommand;
 		private int _selectedPage;
 
+		// Convert options
+		private int _maxAlternativeTranslations;
+
 		// Export options
 		private List<XLIFFSupportItem> _xliffSupportItems;
 		private List<FilterItem> _excludeFilterItems;
@@ -86,6 +89,27 @@ namespace Sdl.Community.Transcreate.ViewModel
 				OnPropertyChanged(nameof(SelectedPage));
 			}
 		}
+
+		#region  |  Convert Options Tab  |
+
+		public int MaxAlternativeTranslations
+		{
+			get => _maxAlternativeTranslations;
+			set
+			{
+				if (_maxAlternativeTranslations == value)
+				{
+					return;
+				}
+
+				_maxAlternativeTranslations = value;
+				OnPropertyChanged(nameof(MaxAlternativeTranslations));
+			}
+		}
+		
+
+		#endregion
+
 
 		#region  |  Export Options Tab  |
 
@@ -318,8 +342,11 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		#endregion
 
+
 		private void SaveChanges(object parameter)
 		{
+			_settings.ConvertOptions.MaxAlternativeTranslations = MaxAlternativeTranslations;
+
 			_settings.ExportOptions.XliffSupport = ExportSelectedXliffSupportItem.SupportType;
 			_settings.ExportOptions.IncludeTranslations = ExportIncludeTranslations;
 			_settings.ExportOptions.CopySourceToTarget = ExportCopySourceToTarget;
@@ -342,10 +369,15 @@ namespace Sdl.Community.Transcreate.ViewModel
 			var settings = new Settings();
 			if (SelectedPage == 0)
 			{
-				LoadExportSettings(settings.ExportOptions);
+				LoadConvertSettings(settings.ConvertOptions);
 			}
 
 			if (SelectedPage == 1)
+			{
+				LoadExportSettings(settings.ExportOptions);
+			}
+
+			if (SelectedPage == 2)
 			{
 				LoadImportSettings(settings.ImportOptions);
 			}
@@ -353,13 +385,13 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		private void ClearFilters(object parameter)
 		{
-			if (SelectedPage == 0)
+			if (SelectedPage == 1)
 			{
 				ExportSelectedExcludeFilterItems.Clear();
 				OnPropertyChanged(nameof(ExportSelectedExcludeFilterItems));
 			}
 
-			if (SelectedPage == 1)
+			if (SelectedPage == 2)
 			{
 				ImportSelectedExcludeFilterItems.Clear();
 				OnPropertyChanged(nameof(ImportSelectedExcludeFilterItems));
@@ -369,13 +401,13 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private void SelectedItemsChanged(object parameter)
 		{
 			if (parameter is SelectedItemsChangedEventArgs)
-			{
-				if (SelectedPage == 0)
+			{				
+				if (SelectedPage == 1)
 				{
 					OnPropertyChanged(nameof(ExportSelectedExcludeFilterItems));
 				}
 
-				if (SelectedPage == 1)
+				if (SelectedPage == 2)
 				{
 					OnPropertyChanged(nameof(ImportSelectedExcludeFilterItems));
 				}
@@ -384,13 +416,19 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		private void LoadSettings()
 		{
+			LoadConvertSettings(_settings.ConvertOptions);
 			LoadImportSettings(_settings.ImportOptions);
 
-			SelectedPage = 0;
+			SelectedPage = 1;
 			if (_window == null)
 			{
 				LoadExportSettings(_settings.ExportOptions);
 			}
+		}
+
+		private void LoadConvertSettings(ConvertOptions options)
+		{
+			MaxAlternativeTranslations = options.MaxAlternativeTranslations;
 		}
 
 		private void LoadExportSettings(ExportOptions exportOptions)

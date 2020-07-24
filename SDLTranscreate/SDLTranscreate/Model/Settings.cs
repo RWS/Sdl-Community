@@ -8,6 +8,9 @@ namespace Sdl.Community.Transcreate.Model
 	{
 		public Settings()
 		{
+			ConvertOptions = new ConvertOptions();
+			ConvertOptions.MaxAlternativeTranslations = 3;
+
 			ExportOptions = new ExportOptions();
 			ExportOptions.XliffSupport = Enumerators.XLIFFSupport.xliff12sdl;
 			ExportOptions.IncludeTranslations = true;
@@ -23,6 +26,8 @@ namespace Sdl.Community.Transcreate.Model
 			ImportOptions.StatusSegmentNotImportedId = string.Empty;
 			ImportOptions.ExcludeFilterIds = new List<string>();
 		}
+
+		public ConvertOptions ConvertOptions { get; set; }
 
 		public ExportOptions ExportOptions { get; set; }
 

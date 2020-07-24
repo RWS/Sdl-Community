@@ -215,7 +215,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 				return;
 			}
 
-			var isChecked = Convert.ToBoolean(parameter);
+			var isChecked = System.Convert.ToBoolean(parameter);
 			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFile>())
 			{
 				selectedFile.Selected = isChecked;

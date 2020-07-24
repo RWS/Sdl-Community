@@ -153,6 +153,7 @@
     <Compile Include="Controls\BindableParagraphBlock.cs" />
     <Compile Include="Controls\BindingDataProxy.cs" />
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
+    <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\ProjectPropertiesViewControl.cs">
       <SubType>UserControl</SubType>
@@ -199,6 +200,10 @@
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\Comment.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\DocInfo.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\SourceCopyDocument.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\SourceCopyRecord.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
@@ -264,6 +269,7 @@
     <Compile Include="Model\FilterItem.cs" />
     <Compile Include="Model\FilterItemGroup.cs" />
     <Compile Include="Model\ImportFile.cs" />
+    <Compile Include="Model\ConvertOptions.cs" />
     <Compile Include="Model\ImportOptions.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageDirectionInfo.cs" />
@@ -331,6 +337,10 @@
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\ExceptionViewerViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportFilesViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Export\WizardPageExportOptionsViewModel.cs" />
@@ -342,6 +352,18 @@
     <Compile Include="Wizard\ViewModel\Import\WizardPageImportSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
+    <Compile Include="Wizard\View\Convert\WizardPageConvertFilesView.xaml.cs">
+      <DependentUpon>WizardPageConvertFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Convert\WizardPageConvertOptionsView.xaml.cs">
+      <DependentUpon>WizardPageConvertOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Convert\WizardPageConvertPreparationView.xaml.cs">
+      <DependentUpon>WizardPageConvertPreparationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\Convert\WizardPageConvertSummaryView.xaml.cs">
+      <DependentUpon>WizardPageConvertSummaryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wizard\View\ExceptionViewerView.xaml.cs">
       <DependentUpon>ExceptionViewerView.xaml</DependentUpon>
     </Compile>
@@ -474,6 +496,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Styles\NumberUpDown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -578,6 +604,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Wizard\View\Convert\WizardPageConvertFilesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Convert\WizardPageConvertOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Convert\WizardPageConvertPreparationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\Convert\WizardPageConvertSummaryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wizard\View\ExceptionViewerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -621,6 +663,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileTypeSupport\MSOffice\Readers\" />
+    <Folder Include="FileTypeSupport\MSOffice\Writers\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

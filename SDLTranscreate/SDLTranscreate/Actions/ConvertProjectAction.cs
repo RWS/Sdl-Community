@@ -1,4 +1,14 @@
-﻿using Sdl.Community.Transcreate.Common;
+﻿using System.IO;
+using System.Linq;
+using System.Windows;
+using Newtonsoft.Json;
+using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.Transcreate.Interfaces;
+using Sdl.Community.Transcreate.LanguageMapping;
+using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
+using Sdl.Community.Transcreate.Model;
+using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -15,18 +25,74 @@ namespace Sdl.Community.Transcreate.Actions
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 5, DisplayType.Default, "", true)]
 	public class ConvertProjectAction : AbstractAction
 	{
+		private Controllers _controllers;
+		private CustomerProvider _customerProvider;
 		private PathInfo _pathInfo;
+		private ImageService _imageService;
+		private IDialogService _dialogService;
+		private SegmentBuilder _segmentBuilder;
+		private ILanguageProvider _languageProvider;
 
 		protected override void Execute()
 		{
+			var wizardService = new WizardService(Enumerators.Action.Convert, _pathInfo, _customerProvider,
+				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
 
+			var wizardContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
+			if (wizardContext == null && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+
+			_controllers.TranscreateController.UpdateProjectData(wizardContext);
 		}
 	
 
 		public override void Initialize()
 		{
 			Enabled = false;
+
+
+			_controllers = new Controllers();
+			SetProjectsController();
+			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_dialogService = new DialogService();
+			_segmentBuilder = new SegmentBuilder();
+			_languageProvider = new LanguageProvider(_pathInfo);
+
+			SetEnabled();
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
+		}
+
+		private void SetProjectsController()
+		{
+			if (_controllers.ProjectsController != null)
+			{
+				_controllers.ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
+			}
+		}
+
+		private void ProjectsController_SelectedProjectsChanged(object sender, System.EventArgs e)
+		{
+			SetEnabled();
+		}
+
+		private void SetEnabled()
+		{
+			Enabled = _controllers.ProjectsController.SelectedProjects.Count() == 1;
 		}
 	}
 }

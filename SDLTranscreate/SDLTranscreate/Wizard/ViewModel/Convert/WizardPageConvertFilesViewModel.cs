@@ -9,9 +9,9 @@ using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
+namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 {
-	public class WizardPageExportFilesViewModel : WizardPageViewModelBase, IDisposable
+	public class WizardPageConvertFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private IList _selectedProjectFiles;
 		private List<ProjectFile> _projectFiles;
@@ -21,7 +21,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private bool _checkedAll;
 		private bool _checkingAllAction;
 
-		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext)
+		public WizardPageConvertFilesViewModel(Window owner, object view, WizardContext wizardContext)
 			: base(owner, view, wizardContext)
 		{
 			ProjectFiles = wizardContext.ProjectFiles;
@@ -165,26 +165,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		{
 			foreach (var projectFile in ProjectFiles)
 			{
-				if (projectFile.Action == Enumerators.Action.Export)
-				{
-					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Export);
-
-					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = string.Format(PluginResources.Message_Exported_on_0, activityfile?.DateToString);					
-				}
-				else if (projectFile.Action == Enumerators.Action.Import)
-				{
-					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
-
-					projectFile.Status = Enumerators.Status.Warning;
-					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);					
-				}
-				else
-				{
-					projectFile.Status = Enumerators.Status.Ready;
-					projectFile.ShortMessage = string.Empty;
-					projectFile.Report = string.Empty;
-				}
+				projectFile.Status = Enumerators.Status.Ready;
+				projectFile.ShortMessage = string.Empty;
+				projectFile.Report = string.Empty;
 			}
 		}
 

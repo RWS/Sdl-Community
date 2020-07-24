@@ -14,7 +14,8 @@ namespace Sdl.Community.Transcreate.Common
 		{
 			None = 0,
 			Export = 1,
-			Import = 2
+			Import = 2,
+			Convert = 3
 		}
 
 		public enum Controller
