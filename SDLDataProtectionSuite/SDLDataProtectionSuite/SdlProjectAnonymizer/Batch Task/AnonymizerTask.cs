@@ -22,16 +22,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	[RequiresSettings(typeof(AnonymizerSettings), typeof(AnonymizerSettingsPage))]
 	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
+		private bool _restOfFilesParsed;
 		private AnonymizerSettings _settings;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			return true;
-		}
-
-		protected override void OnInitializeTask()
-		{
-			_settings = GetSetting<AnonymizerSettings>();
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -59,8 +55,37 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			ParseRestOfFiles(projectController, selectedPatternsFromGrid, key);
 		}
 
+		protected override void OnInitializeTask()
+		{
+			_settings = GetSetting<AnonymizerSettings>();
+		}
+
+		private static void CloseOpenDocuments()
+		{
+			var editor = SdlTradosStudio.Application.GetController<EditorController>();
+			var activeDocs = editor.GetDocuments().ToList();
+
+			foreach (var activeDoc in activeDocs)
+			{
+				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
+			}
+		}
+
+		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController)
+		{
+			var project = projectController.CurrentProject ?? projectController.SelectedProjects.ToList()[0];
+			var projectFiles = project.GetTargetLanguageFiles();
+
+			var taskFilesIds = TaskFiles.GetIds();
+			var unparsedFiles = projectFiles.Where(file => !taskFilesIds.Contains(file.Id)).ToList();
+
+			return unparsedFiles;
+		}
+
 		private void ParseRestOfFiles(ProjectsController projectController, List<RegexPattern> selectedPatternsFromGrid, string key)
 		{
+			if (_restOfFilesParsed) return;
+
 			var unParsedProjectFiles = GetUnparsedFiles(projectController);
 
 			CloseOpenDocuments();
@@ -75,35 +100,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
 				converter.Parse();
 			}
-		}
 
-		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController)
-		{
-			var project = projectController.CurrentProject ?? projectController.SelectedProjects.ToList()[0];
-			var projectFiles = project.GetTargetLanguageFiles();
-			var unParsedProjectFiles = new List<ProjectFile>();
-
-			foreach (var file in projectFiles)
-			{
-				if (TaskFiles.GetIds().Contains(file.Id))
-				{
-					continue;
-				}
-				unParsedProjectFiles.Add(file);
-			}
-
-			return unParsedProjectFiles;
-		}
-
-		private static void CloseOpenDocuments()
-		{
-			var editor = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeDocs = editor.GetDocuments().ToList();
-
-			foreach (var activeDoc in activeDocs)
-			{
-				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
-			}
+			_restOfFilesParsed = true;
 		}
 	}
 }
