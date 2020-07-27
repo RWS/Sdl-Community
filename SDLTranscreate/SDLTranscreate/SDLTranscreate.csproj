@@ -125,17 +125,13 @@
     <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="BatchTasks\ExportBatchTask.cs" />
-    <Compile Include="BatchTasks\ExportSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="BatchTasks\ExportSettingsControl.cs" />
     <Compile Include="BatchTasks\ExportSettingsControl.Designer.cs">
       <DependentUpon>ExportSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="BatchTasks\ExportSettingsPage.cs" />
     <Compile Include="BatchTasks\ImportBatchTask.cs" />
-    <Compile Include="BatchTasks\ImportSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="BatchTasks\ImportSettingsControl.cs" />
     <Compile Include="BatchTasks\ImportSettingsControl.Designer.cs">
       <DependentUpon>ImportSettingsControl.cs</DependentUpon>
     </Compile>
@@ -155,29 +151,21 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
-    <Compile Include="Controls\ProjectPropertiesViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\ProjectPropertiesViewControl.cs" />
     <Compile Include="Controls\ProjectPropertiesViewControl.Designer.cs">
       <DependentUpon>ProjectPropertiesViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectFileActivityViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\ProjectFileActivityViewControl.cs" />
     <Compile Include="Controls\ProjectFileActivityViewControl.Designer.cs">
       <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectPropertiesViewController.cs" />
     <Compile Include="Controls\ProjectFileActivityViewController.cs" />
-    <Compile Include="Controls\ProjectFilesViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\ProjectFilesViewControl.cs" />
     <Compile Include="Controls\ProjectFilesViewControl.Designer.cs">
       <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\ProjectsNavigationViewControl.cs" />
     <Compile Include="Controls\ProjectsNavigationViewControl.Designer.cs">
       <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
     </Compile>
