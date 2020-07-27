@@ -20,7 +20,7 @@ namespace Sdl.Community.StyleSheetVerifier
 			verifier.ShowDialog();
 		}
 	}
-	[Action("StyleSheetVerifierHelpAction", Icon = "question", Name = "StyleSheet Verifier Help", Description = "An wikie page will be opened in browser uith documentation")]
+	[Action("StyleSheetVerifierHelpAction", Icon = "question", Name = "StyleSheet Verifier Help", Description = "A Wiki page related to the documentation will be opened in the browser")]
 	[ActionLayout(typeof(StyleSheetVerifierRibonGroup), 10, DisplayType.Large)]
 	public class StyleSheetVerifierActionHelp : AbstractAction
 	{
