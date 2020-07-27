@@ -4,6 +4,7 @@ using System.Windows;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -23,14 +24,18 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private AnonymizerSettings _settings;
+		private bool _restOfFilesParsed;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			return true;
 		}
 
+
+
 		protected override void OnInitializeTask()
 		{
+
 			_settings = GetSetting<AnonymizerSettings>();
 		}
 
@@ -61,6 +66,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		private void ParseRestOfFiles(ProjectsController projectController, List<RegexPattern> selectedPatternsFromGrid, string key)
 		{
+			if (_restOfFilesParsed) return;
+
 			var unParsedProjectFiles = GetUnparsedFiles(projectController);
 
 			CloseOpenDocuments();
@@ -75,24 +82,19 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
 				converter.Parse();
 			}
+
+			_restOfFilesParsed = true;
 		}
 
 		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController)
 		{
 			var project = projectController.CurrentProject ?? projectController.SelectedProjects.ToList()[0];
 			var projectFiles = project.GetTargetLanguageFiles();
-			var unParsedProjectFiles = new List<ProjectFile>();
 
-			foreach (var file in projectFiles)
-			{
-				if (TaskFiles.GetIds().Contains(file.Id))
-				{
-					continue;
-				}
-				unParsedProjectFiles.Add(file);
-			}
+			var taskFilesIds = TaskFiles.GetIds();
+			var unparsedFiles = projectFiles.Where(file => !taskFilesIds.Contains(file.Id)).ToList();
 
-			return unParsedProjectFiles;
+			return unparsedFiles;
 		}
 
 		private static void CloseOpenDocuments()
