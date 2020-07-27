@@ -406,7 +406,7 @@ namespace Sdl.Community.Transcreate.Service
 				pages.Add(new WizardPageConvertOptionsViewModel(_wizardWindow, new WizardPageConvertOptionsView(), wizardContext, _dialogService));
 				pages.Add(new WizardPageConvertSummaryViewModel(_wizardWindow, new WizardPageConvertSummaryView(), wizardContext));
 				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), wizardContext,
-					_segmentBuilder, _pathInfo));
+					_segmentBuilder, _pathInfo, _controllers));
 			}
 
 			UpdatePageIndexes(pages);

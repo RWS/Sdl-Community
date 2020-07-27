@@ -93,6 +93,10 @@
 									<Image.Style>
 										<Style TargetType="Image">
 											<Style.Triggers>
+												<DataTrigger Binding="{Binding Action}" Value="Convert">
+													<Setter Property="Source" Value="../Resources/Fie.png"/>
+													<Setter Property="ToolTip" Value="Ready"/>
+												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
 													<Setter Property="Source" Value="../Resources/Exported.png"/>
 													<Setter Property="ToolTip" Value="Export Action"/>

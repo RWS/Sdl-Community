@@ -71,6 +71,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unexpected error converting file: {0}.
+        /// </summary>
+        internal static string ErrorMessage_ConvertingFile {
+            get {
+                return ResourceManager.GetString("ErrorMessage_ConvertingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Export {

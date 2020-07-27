@@ -505,4 +505,7 @@
 	<data name="Label_ProjectBackup" xml:space="preserve">
     <value>Project Backup Path: {0}</value>
   </data>
+	<data name="ErrorMessage_ConvertingFile" xml:space="preserve">
+    <value>Unexpected error converting file: {0}</value>
+  </data>
 </root>

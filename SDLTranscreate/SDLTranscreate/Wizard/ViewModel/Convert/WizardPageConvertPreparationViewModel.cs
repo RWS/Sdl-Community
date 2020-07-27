@@ -34,13 +34,15 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private StringBuilder _logReport;
+		private Controllers _controllers;
 
 		public WizardPageConvertPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext,
-			SegmentBuilder segmentBuilder, PathInfo pathInfo)
+			SegmentBuilder segmentBuilder, PathInfo pathInfo, Controllers controllers)
 			: base(owner, view, wizardContext)
 		{
 			_segmentBuilder = segmentBuilder;
 			_pathInfo = pathInfo;
+			_controllers = controllers;
 
 			IsValid = true;
 			InitializeJobProcessList();
@@ -123,7 +125,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				//},
 				new JobProcess
 				{
-					Name = PluginResources.JobProcess_ConvertProject
+					Name = "Convert Project Files"
+				},
+				new JobProcess
+				{
+					Name = "Convert Project"
 				},
 				new JobProcess
 				{
@@ -219,8 +225,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 			try
 			{
+				// TODO
+				//var selectedProject = _controllers.ProjectsController.GetProjects()
+				//	.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == WizardContext.Project.Id);
+				//_controllers.ProjectsController.Close(selectedProject);
+				
+				
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.UtcNow));
+				_logReport.AppendLine("Phase: Convert - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_ConvertingToFormat;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
@@ -256,43 +268,47 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						CreateBackupFile(targetFile.Location, sdlXliffBackup);
 
 						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
-
+						
 						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
 
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, exported));
 						_logReport.AppendLine();
+												
+						if (exported)
+						{
+							targetFile.Date = WizardContext.DateTimeStamp;
+							targetFile.Action = Enumerators.Action.Convert;
+							targetFile.Status = Enumerators.Status.Success;
+							targetFile.XliffFilePath = xliffFilePath;
+							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
+							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
+						}
 
-						// TODO
-						//if (exported)
-						//{
-						//	targetFile.Date = WizardContext.DateTimeStamp;
-						//	targetFile.Action = Enumerators.Action.Export;
-						//	targetFile.Status = Enumerators.Status.Success;
-						//	targetFile.XliffFilePath = xliffFilePath;
-						//	targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
-						//	targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
-						//}
+						var activityFile = new ProjectFileActivity
+						{
+							ProjectFileId = targetFile.FileId,
+							ActivityId = Guid.NewGuid().ToString(),
+							Action = Enumerators.Action.Convert,
+							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
+							Date = targetFile.Date,
+							Name = Path.GetFileName(targetFile.XliffFilePath),
+							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
+							ProjectFile = targetFile,
+							ConfirmationStatistics = targetFile.ConfirmationStatistics,
+							TranslationOriginStatistics = targetFile.TranslationOriginStatistics
+						};
 
-						//var activityFile = new ProjectFileActivity
-						//{
-						//	ProjectFileId = targetFile.FileId,
-						//	ActivityId = Guid.NewGuid().ToString(),
-						//	Action = Enumerators.Action.Export,
-						//	Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
-						//	Date = targetFile.Date,
-						//	Name = Path.GetFileName(targetFile.XliffFilePath),
-						//	Path = Path.GetDirectoryName(targetFile.XliffFilePath),
-						//	ProjectFile = targetFile,
-						//	ConfirmationStatistics = targetFile.ConfirmationStatistics,
-						//	TranslationOriginStatistics = targetFile.TranslationOriginStatistics
-						//};
+						targetFile.ProjectFileActivities.Add(activityFile);
 
-						//targetFile.ProjectFileActivities.Add(activityFile);
+						if (!exported)
+						{
+							throw new Exception(string.Format(PluginResources.ErrorMessage_ConvertingFile, targetFile.Location));
+						}
 					}
 				}
 
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Export - Completed " + FormatDateTime(DateTime.UtcNow));
+				_logReport.AppendLine("Phase: Convert - Completed " + FormatDateTime(DateTime.UtcNow));
 
 				WizardContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
@@ -334,6 +350,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
 				Refresh();
+
+				
+
+
+				//foreach (var projectFile in WizardContext.ProjectFiles)
+				//{
+				//	//projectFile.
+				//}
 
 				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
