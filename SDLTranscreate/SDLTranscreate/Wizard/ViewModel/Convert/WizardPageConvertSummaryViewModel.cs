@@ -83,10 +83,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				{
 					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
 					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name.Substring(0, targetLanguageFile.Name.Length- ".sdlxliff".Length) + ".xliff");
-					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
-
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
-					summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;
+					
+					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;					
 					summaryText += indent + string.Format(PluginResources.label_XliffFile, xliffFilePath + Environment.NewLine) + Environment.NewLine;
 				}
 			}

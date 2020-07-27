@@ -18,7 +18,6 @@ using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Community.Transcreate.Wizard.View;
-using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
 using Task = System.Threading.Tasks.Task;
@@ -41,6 +40,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private StringBuilder _logReport;
+		private FileBasedProject _newProject;
 		
 		public WizardPageConvertPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext,
 			SegmentBuilder segmentBuilder, PathInfo pathInfo, Controllers controllers, 
@@ -179,6 +179,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					if (job != null)
 					{
 						success = await CreateTranscreateProject(job);
+
 					}
 				}
 
@@ -190,7 +191,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						success = await Finalize(job);
 					}
 				}
-
+				
 				FinalizeJobProcesses(success);
 			}
 			finally
@@ -198,10 +199,26 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				Owner.Dispatcher.Invoke(DispatcherPriority.Input, new Action(delegate
 				{
 					IsProcessing = false;
-				}));
+				}));				
 			}
 
 			SaveLogReport();
+			UpdateWizardContext();
+		}
+
+		private void UpdateWizardContext()
+		{
+			if (!IsComplete)
+			{
+				return;
+			}
+
+			var newProjectInfo = _newProject.GetProjectInfo();
+			WizardContext.Project = _projectAutomationService.GetProject(_newProject, null);
+			WizardContext.ProjectFiles = WizardContext.Project.ProjectFiles;
+			WizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(_newProject);
+			WizardContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
+			WizardContext.TransactionFolder = WizardContext.GetDefaultTransactionPath();			
 		}
 
 		private async Task<bool> Preparation(JobProcess jobProcess)
@@ -353,24 +370,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					throw new Exception(string.Format(PluginResources.WarningMessage_UnableToLocateProject, WizardContext.Project.Name));
 				}
 
-				var newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, WizardContext.ProjectFiles);
-				var newProjectInfo = newProject.GetProjectInfo();
-
-
+				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, WizardContext.ProjectFiles);				
 				if (WizardContext.ConvertOptions.CloseProjectOnComplete)
 				{
 					_controllers.ProjectsController.Close(selectedProject);
 					_controllers.ProjectsController.RefreshProjects();
 				}
 
-				_controllers.ProjectsController.Open(newProject);
-
-				// New Wizard Context - based on newProject
-				WizardContext.Project = _projectAutomationService.GetProject(newProject, null);
-				WizardContext.ProjectFiles = WizardContext.Project.ProjectFiles;
-				WizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
-				WizardContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
-				WizardContext.TransactionFolder = WizardContext.GetDefaultTransactionPath();
+				_controllers.ProjectsController.Open(_newProject);				
 
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Create Transcreate Project - Completed " + FormatDateTime(DateTime.UtcNow));
@@ -429,17 +436,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 			return await Task.FromResult(success);
 		}
-
-		private void CreateBackupFile(string sdlXliffFile, string sdlXliffBackup)
-		{
-			if (File.Exists(sdlXliffBackup))
-			{
-				File.Delete(sdlXliffBackup);
-			}
-
-			File.Copy(sdlXliffFile, sdlXliffBackup, true);
-		}
-
+		
 		private static string GetXliffFolder(string languageFolder, ProjectFile targetFile)
 		{
 			var xliffFolder = Path.Combine(languageFolder, targetFile.Path.TrimStart('\\'));

@@ -77,12 +77,8 @@ namespace Sdl.Community.Transcreate
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			_editorController.Opened += EditorController_Opened;
 
-			var testData = new TestDataUtil(_imageService);
-			var projects = testData.GetDefaultTestProjectData();
-			_xliffProjects = new List<Project>();
-			_xliffProjects.AddRange(projects);
 
-			//LoadProjects();
+			LoadProjects();
 		}
 
 		protected override Control GetExplorerBarControl()
