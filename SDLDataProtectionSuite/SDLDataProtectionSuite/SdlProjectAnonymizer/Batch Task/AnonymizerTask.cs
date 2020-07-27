@@ -4,7 +4,6 @@ using System.Windows;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
-using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -23,20 +22,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	[RequiresSettings(typeof(AnonymizerSettings), typeof(AnonymizerSettingsPage))]
 	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private AnonymizerSettings _settings;
 		private bool _restOfFilesParsed;
+		private AnonymizerSettings _settings;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			return true;
-		}
-
-
-
-		protected override void OnInitializeTask()
-		{
-
-			_settings = GetSetting<AnonymizerSettings>();
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -64,6 +55,33 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			ParseRestOfFiles(projectController, selectedPatternsFromGrid, key);
 		}
 
+		protected override void OnInitializeTask()
+		{
+			_settings = GetSetting<AnonymizerSettings>();
+		}
+
+		private static void CloseOpenDocuments()
+		{
+			var editor = SdlTradosStudio.Application.GetController<EditorController>();
+			var activeDocs = editor.GetDocuments().ToList();
+
+			foreach (var activeDoc in activeDocs)
+			{
+				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
+			}
+		}
+
+		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController)
+		{
+			var project = projectController.CurrentProject ?? projectController.SelectedProjects.ToList()[0];
+			var projectFiles = project.GetTargetLanguageFiles();
+
+			var taskFilesIds = TaskFiles.GetIds();
+			var unparsedFiles = projectFiles.Where(file => !taskFilesIds.Contains(file.Id)).ToList();
+
+			return unparsedFiles;
+		}
+
 		private void ParseRestOfFiles(ProjectsController projectController, List<RegexPattern> selectedPatternsFromGrid, string key)
 		{
 			if (_restOfFilesParsed) return;
@@ -84,28 +102,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			}
 
 			_restOfFilesParsed = true;
-		}
-
-		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController)
-		{
-			var project = projectController.CurrentProject ?? projectController.SelectedProjects.ToList()[0];
-			var projectFiles = project.GetTargetLanguageFiles();
-
-			var taskFilesIds = TaskFiles.GetIds();
-			var unparsedFiles = projectFiles.Where(file => !taskFilesIds.Contains(file.Id)).ToList();
-
-			return unparsedFiles;
-		}
-
-		private static void CloseOpenDocuments()
-		{
-			var editor = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeDocs = editor.GetDocuments().ToList();
-
-			foreach (var activeDoc in activeDocs)
-			{
-				Application.Current.Dispatcher.Invoke(() => { editor.Close(activeDoc); });
-			}
 		}
 	}
 }
