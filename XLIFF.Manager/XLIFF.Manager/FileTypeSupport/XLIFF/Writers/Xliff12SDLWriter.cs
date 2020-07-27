@@ -12,7 +12,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 	{
 		private const string NsPrefix = "sdlxliff";
 		private Dictionary<string, List<IComment>> Comments { get; set; }
-		
+
 		private bool IncludeTranslations { get; set; }
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
@@ -52,7 +52,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 					//writer.WriteAttributeString("datatype", xliffFile.DataType);
 					writer.WriteAttributeString("datatype", "xml");
-					
+
 					WriterFileHeader(writer, xliffFile);
 					WriteFileBody(writer, xliffFile);
 
@@ -70,8 +70,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
-			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);			
-			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);			
+			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
+			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
 
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
@@ -145,7 +145,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 
 			WriteSourceParagraph(writer, transUnit);
 			WriteSegSource(writer, transUnit);
-			WriteTargetParagraph(writer, transUnit);
+
+			if (IncludeTranslations)
+			{
+				WriteTargetParagraph(writer, transUnit);
+			}
+
 			WriteSdlSegDefs(writer, transUnit);
 
 			writer.WriteEndElement(); // trans-unit
@@ -167,14 +172,17 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		{
 			writer.WriteStartElement(NsPrefix, "seg", null);
 			writer.WriteAttributeString("id", segmentPair.Id);
-			writer.WriteAttributeString("conf", segmentPair.ConfirmationLevel.ToString());
+			if (IncludeTranslations)
+			{
+				writer.WriteAttributeString("conf", segmentPair.ConfirmationLevel.ToString());
+			}
 
 			if (segmentPair.IsLocked)
 			{
 				writer.WriteAttributeString("locked", segmentPair.IsLocked.ToString());
 			}
 
-			if (segmentPair.TranslationOrigin != null)
+			if (IncludeTranslations && segmentPair.TranslationOrigin != null)
 			{
 				WriteTranslationOrigin(writer, segmentPair.TranslationOrigin);
 
@@ -312,7 +320,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				writer.WriteEndElement(); // mrk
 			}
 
-			writer.WriteEndElement(); // seg-source
+			writer.WriteEndElement(); // target
 		}
 
 		private void WriteSegment(XmlWriter writer, Element element)
@@ -435,6 +443,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			}
 
 			return value;
-		}		
+		}
 	}
 }
