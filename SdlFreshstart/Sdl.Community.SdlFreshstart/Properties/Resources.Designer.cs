@@ -59,5 +59,14 @@ namespace Sdl.Community.SdlFreshstart.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not all registry keys could be restored: {0}.
+        /// </summary>
+        internal static string NotAllRegistriesCouldBeRestored {
+            get {
+                return ResourceManager.GetString("NotAllRegistriesCouldBeRestored", resourceCulture);
+            }
+        }
     }
 }

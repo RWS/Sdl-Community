@@ -29,27 +29,27 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					if (!folder.BackupFilePath.Contains("projects.xml"))
 					{
 						//creates original folders if doesn't exist
-						if (!Directory.Exists(folder.OriginalFilePath))
+						if (!Directory.Exists(folder.OriginalPath))
 						{
-							Directory.CreateDirectory(folder.OriginalFilePath);
+							Directory.CreateDirectory(folder.OriginalPath);
 						}
 
 						//Get files  from backup
 						var files = Directory.GetFiles(folder.BackupFilePath);
 						if (files.Length > 0)
 						{
-							MoveToBackUp(files, folder.OriginalFilePath);
+							MoveToBackUp(files, folder.OriginalPath);
 						}
 						var subdirectories = Directory.GetDirectories(folder.BackupFilePath);
 						foreach (var subdirectory in subdirectories)
 						{
 							var currentDirInfo = new DirectoryInfo(subdirectory);
-							CheckForSubfolders(currentDirInfo, folder.OriginalFilePath);
+							CheckForSubfolders(currentDirInfo, folder.OriginalPath);
 						}
 					}
 					else
 					{
-						File.Copy(folder.BackupFilePath, folder.OriginalFilePath, true);
+						File.Copy(folder.BackupFilePath, folder.OriginalPath, true);
 					}
 				}
 			}
@@ -59,21 +59,21 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 		}
 
-		public static void RemoveFromSelectedLocations(List<LocationDetails> foldersToRemove)
+		public static void RemoveFromSelectedFolderLocations(List<LocationDetails> foldersToRemove)
 	    {
 		    try
 		    {
 			    foreach (var folder in foldersToRemove)
 			    {
-				    if (Directory.Exists(folder.OriginalFilePath))
+				    if (Directory.Exists(folder.OriginalPath))
 				    {
-						var directoryInfo = new DirectoryInfo(folder.OriginalFilePath);
+						var directoryInfo = new DirectoryInfo(folder.OriginalPath);
 						RemoveDirectoryInfo(directoryInfo);
 				    }
 				    else
 				    {
-					    if (!File.Exists(folder.OriginalFilePath)) continue;
-					    File.Delete(folder.OriginalFilePath);
+					    if (!File.Exists(folder.OriginalPath)) continue;
+					    File.Delete(folder.OriginalPath);
 				    }
 			    }
 		    }
@@ -92,7 +92,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				{
 					if (!Directory.Exists(folder.BackupFilePath))
 					{
-						if (!folder.OriginalFilePath.Contains("projects.xml"))
+						if (!folder.OriginalPath.Contains("projects.xml"))
 						{
 							Directory.CreateDirectory(folder.BackupFilePath);
 						}
@@ -104,13 +104,13 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 							{
 								Directory.CreateDirectory(directoryInfo.Parent.FullName);
 							}
-							File.Copy(folder.OriginalFilePath, folder.BackupFilePath, true);
+							File.Copy(folder.OriginalPath, folder.BackupFilePath, true);
 						}
 						CopyFiles(folder);
 					}
 					else
 					{
-						if (Directory.Exists(folder.OriginalFilePath))
+						if (Directory.Exists(folder.OriginalPath))
 						{
 							CopyFiles(folder);
 						}
@@ -132,14 +132,14 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			try
 			{
 				// Get files 
-				var files = Directory.GetFiles(folder.OriginalFilePath);
+				var files = Directory.GetFiles(folder.OriginalPath);
 				if (files.Length > 0)
 				{
 					MoveToBackUp(files, folder.BackupFilePath);
 				}
 
 				// Check for subdirectories
-				var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
+				var subdirectories = Directory.GetDirectories(folder.OriginalPath);
 				foreach (var subdirectory in subdirectories)
 				{
 					var currentDirInfo = new DirectoryInfo(subdirectory);

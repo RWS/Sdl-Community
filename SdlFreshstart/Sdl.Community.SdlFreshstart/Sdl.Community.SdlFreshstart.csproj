@@ -114,7 +114,9 @@
     <Compile Include="Converters\StringNullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\FoldersDescriptionText.cs" />
+    <Compile Include="Helpers\LocationsDescription.cs" />
+    <Compile Include="Helpers\IRegistryHelper.cs" />
+    <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Model\IStudioVersion.cs" />
     <Compile Include="Helpers\Log.cs" />
@@ -142,7 +144,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\FoldersPath.cs" />
+    <Compile Include="Helpers\Paths.cs" />
     <Compile Include="Model\MultiTermLocationListItem.cs" />
     <Compile Include="Model\LocationDetails.cs" />
     <Compile Include="Model\StudioLocationListItem.cs" />
