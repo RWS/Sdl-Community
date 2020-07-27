@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 using Sdl.Community.SdlFreshstart.ViewModel;
 
 namespace Sdl.Community.SdlFreshstart.Model
@@ -10,6 +11,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 	public class StudioVersion : BaseModel, IStudioVersion
 	{
 		private const string SdlFolder = @"SDL\SDL Trados Studio";
+		private const string SdlBaseRegistryKey = @"HKEY_CURRENT_USER\Software\SDL\SDL Trados Studio\";
 
 		private readonly Dictionary<string, int> _versionToExecutableVersionLegacy = new Dictionary<string, int>
 		{
@@ -26,6 +28,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			VersionName = $"{versionName}{edition}";
 			PublicVersion = publicVersion;
 			Edition = edition;
+			SdlRegistryKey = $"{SdlBaseRegistryKey}{AppDataStudioFolder}";
 
 			var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{edition}");
 			var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
@@ -65,6 +68,8 @@ namespace Sdl.Community.SdlFreshstart.Model
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				"SDL", "ProjectApi")).FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
 		}
+
+		public string SdlRegistryKey { get; set; }
 
 		public string AppDataLocalPluginsPath { get; set; }
 		public string AppDataLocalStudioPath { get; set; }
@@ -114,7 +119,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 		public string AppDataStudioFolder => MajorVersion > 15 ? VersionName : $"{MajorVersion}.0.0.0";
 		public string ProgramDataStudioFolder => VersionName;
 		public string VersionName { get; }
-		public string VersionWithEdition => $"{ShortVersion} {Edition}";
+		public string VersionWithEdition => !string.IsNullOrWhiteSpace(Edition) ? $"{ShortVersion} {Edition}" : ShortVersion;
 
 		private int ExtractNumber(string input)
 		{

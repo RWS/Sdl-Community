@@ -56,7 +56,7 @@
 		<Label Grid.Column="0" Grid.Row="2" Margin="0,20,0,0" FontWeight="Bold" Content="Remove folders from following locations:"/>
 		<CheckBox Grid.Column="0" Grid.Row="3" Margin="2,0,0,5" FontFamily="Calibri" FontSize="14" IsChecked="{Binding CheckAll}" Content="Select/Unselect all"/>
 		<ListBox 
-		    ItemsSource ="{Binding FoldersLocationsCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
+		    ItemsSource ="{Binding Locations,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 			SelectionMode="Multiple"
 		    Grid.Column="0"
 		    Grid.Row="4"
@@ -115,7 +115,7 @@
 		</DockPanel>
 
 		<DockPanel Grid.Column="1" Grid.Row="5" LastChildFill="False" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 10">
-			<Button FontSize="13" FontWeight="Normal" Width="120" Margin="0,40,0,0" Foreground="{Binding RemoveForeground}" Content="Remove folders" 
+			<Button FontSize="13" FontWeight="Normal" Width="120" Margin="0,40,0,0" Foreground="{Binding RemoveForeground}" Content="Remove" 
 			        VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
 				<Button.Template>
 					<ControlTemplate TargetType="{x:Type Button}">
@@ -156,7 +156,7 @@
 				</Button.Template>
 			</Button>
 			<Button FontSize="13" FontWeight="Normal" Width="120" Margin="10,40,5,0" Foreground="WhiteSmoke" Command="{Binding RestoreCommand}"
-			        Content="Restore folders" VerticalAlignment="Center" HorizontalAlignment="Right" >
+			        Content="Restore" VerticalAlignment="Center" HorizontalAlignment="Right" >
 				<Button.Template>
 					<ControlTemplate TargetType="{x:Type Button}">
 						<Border x:Name="bdr_main"   Background="#3D9DAA" CornerRadius="3" >

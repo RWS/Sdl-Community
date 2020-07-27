@@ -261,13 +261,13 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm15",
 					IsSelected = false,
-					Description = FoldersDescriptionText.MultiTermLocal,
+					Description = LocationsDescription.MultiTermLocal,
 					Alias = "appDataLocal"
 				},new MultiTermLocationListItem
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm15",
 					IsSelected = false,
-					Description =FoldersDescriptionText.MultiTermRoaming,
+					Description =LocationsDescription.MultiTermRoaming,
 					Alias = "appDataRoming"
 				}
 			};
@@ -399,7 +399,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
 					if (selectedMultiTermVersions.Any())
 					{
-						var documentsFolderLocation = await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
+						var documentsFolderLocation = await Paths.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
 						foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
@@ -408,7 +408,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 					await FileManager.BackupFiles(foldersToClearOrRestore);
 
-					FileManager.RemoveFromSelectedLocations(foldersToClearOrRestore);
+					FileManager.RemoveFromSelectedFolderLocations(foldersToClearOrRestore);
 
 					//to close the message
 					await controller.CloseAsync();
