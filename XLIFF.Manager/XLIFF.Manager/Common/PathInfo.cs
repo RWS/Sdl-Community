@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Sdl.Community.XLIFF.Manager.Common
 {
-	public class PathInfo : ICloneable
+	public class PathInfo: ICloneable
 	{
 		private const string SdlCommunityPathName = "SDL Community";
 		private const string ApplicationPathName = "XLIFF.Manager";
@@ -16,7 +16,6 @@ namespace Sdl.Community.XLIFF.Manager.Common
 		private string _applicationFolderPath;
 		private string _settingsFolderPath;
 		private string _logsFolderPath;
-		
 
 		public string SdlCommunityFolderPath
 		{
@@ -100,10 +99,10 @@ namespace Sdl.Community.XLIFF.Manager.Common
 		public string SettingsFilePath => Path.Combine(SettingsFolderPath, SettingsFileName);
 
 		public string LanguageMappingsFilePath => Path.Combine(SettingsFolderPath, LanguageMappingsFileName);
-
+		
 		public object Clone()
 		{
-			return new PathInfo();
+			return new PathInfo();			
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Sdl.Community.XLIFF.Manager.Actions
 		ContextByType = typeof(XLIFFManagerViewController),
 		Icon = "Refresh"
 		)]
-	[ActionLayout(typeof(XLIFFManagerActionsGroup), 3, DisplayType.Large)]
+	[ActionLayout(typeof(XLIFFManagerViewGroup), 3, DisplayType.Large)]
 	public class RefreshAction : AbstractViewControllerAction<XLIFFManagerViewController>
 	{
 		private PathInfo _pathInfo;

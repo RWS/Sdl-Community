@@ -130,7 +130,7 @@ namespace Sdl.Community.XLIFF.Manager
 					{
 						var updatedCustomer = UpdateCustomerInfo(project, xliffProject);
 						var addedNewFiles = AddNewProjectFiles(project, xliffProject);
-						
+
 						if (updatedCustomer || addedNewFiles)
 						{
 							refresh = true;
@@ -151,7 +151,7 @@ namespace Sdl.Community.XLIFF.Manager
 				_projectsNavigationViewModel.Projects = _xliffProjects;
 			}
 		}
-	
+
 		public List<Project> GetProjects()
 		{
 			return _xliffProjects;
