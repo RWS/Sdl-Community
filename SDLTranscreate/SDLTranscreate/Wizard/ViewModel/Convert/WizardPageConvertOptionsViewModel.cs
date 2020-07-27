@@ -12,6 +12,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 	{
 		private readonly IDialogService _dialogService;
 		private int _maxAlternativeTranslations;
+		private bool _closeProjectOnComplete;
 		private string _outputFolder;		
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
@@ -22,7 +23,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			_dialogService = dialogService;
 			OutputFolder = WizardContext.TransactionFolder;
 			MaxAlternativeTranslations = wizardContext.ConvertOptions.MaxAlternativeTranslations;
-		
+			CloseProjectOnComplete = wizardContext.ConvertOptions.CloseProjectOnComplete;
+
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
 		}
@@ -60,6 +62,21 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				_maxAlternativeTranslations = value;
 				OnPropertyChanged(nameof(MaxAlternativeTranslations));
+			}
+		}
+
+		public bool CloseProjectOnComplete
+		{
+			get => _closeProjectOnComplete;
+			set
+			{
+				if (_closeProjectOnComplete == value)
+				{
+					return;
+				}
+
+				_closeProjectOnComplete = value;
+				OnPropertyChanged(nameof(CloseProjectOnComplete));
 			}
 		}
 
@@ -121,6 +138,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		{
 			WizardContext.TransactionFolder = OutputFolder;
 			WizardContext.ConvertOptions.MaxAlternativeTranslations = MaxAlternativeTranslations;
+			WizardContext.ConvertOptions.CloseProjectOnComplete = CloseProjectOnComplete;
 		}
 
 		public void Dispose()

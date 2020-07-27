@@ -33,6 +33,7 @@ namespace Sdl.Community.Transcreate.Actions
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
 		private ILanguageProvider _languageProvider;
+		private ProjectAutomationService _projectAutomationService;
 
 		protected override void Execute()
 		{
@@ -44,7 +45,8 @@ namespace Sdl.Community.Transcreate.Actions
 			settings.ExportOptions.ExcludeFilterIds = new List<string>();
 			
 			var wizardService = new WizardService(Enumerators.Action.Convert, _pathInfo, _customerProvider,
-				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
+				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider, 
+				_projectAutomationService);
 
 			var wizardContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
 			if (wizardContext == null && !string.IsNullOrEmpty(message))
@@ -70,6 +72,7 @@ namespace Sdl.Community.Transcreate.Actions
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
 			_languageProvider = new LanguageProvider(_pathInfo);
+			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
 
 			SetEnabled();
 		}

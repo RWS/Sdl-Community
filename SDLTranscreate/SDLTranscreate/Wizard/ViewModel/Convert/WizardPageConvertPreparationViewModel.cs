@@ -16,7 +16,12 @@ using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Model;
+using Sdl.Community.Transcreate.Service;
 using Sdl.Community.Transcreate.Wizard.View;
+using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
+using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 {
@@ -28,21 +33,24 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly PathInfo _pathInfo;
+		private readonly Controllers _controllers;
+		private readonly ProjectAutomationService _projectAutomationService;
 		private List<JobProcess> _jobProcesses;
 		private ICommand _viewExceptionCommand;
 		private ICommand _openFolderInExplorerCommand;
 		private SolidColorBrush _textMessageBrush;
 		private string _textMessage;
 		private StringBuilder _logReport;
-		private Controllers _controllers;
-
+		
 		public WizardPageConvertPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext,
-			SegmentBuilder segmentBuilder, PathInfo pathInfo, Controllers controllers)
+			SegmentBuilder segmentBuilder, PathInfo pathInfo, Controllers controllers, 
+			ProjectAutomationService projectAutomationService)
 			: base(owner, view, wizardContext)
 		{
 			_segmentBuilder = segmentBuilder;
 			_pathInfo = pathInfo;
 			_controllers = controllers;
+			_projectAutomationService = projectAutomationService;
 
 			IsValid = true;
 			InitializeJobProcessList();
@@ -125,12 +133,12 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				//},
 				new JobProcess
 				{
-					Name = "Convert Project Files"
+					Name = PluginResources.JobProcess_ConvertProjectFiles
 				},
 				new JobProcess
 				{
-					Name = "Convert Project"
-				},
+					Name = PluginResources.JobProcess_CreateTranscreateProject
+				},				
 				new JobProcess
 				{
 					Name = PluginResources.JobProcess_Finalize
@@ -158,10 +166,19 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				if (success)
 				{
-					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_ConvertProject);
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_ConvertProjectFiles);
 					if (job != null)
 					{
-						success = await ConvertProject(job);
+						success = await ConvertProjectFiles(job);
+					}
+				}
+
+				if (success)
+				{
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_CreateTranscreateProject);
+					if (job != null)
+					{
+						success = await CreateTranscreateProject(job);
 					}
 				}
 
@@ -219,22 +236,16 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			return await Task.FromResult(success);
 		}
 
-		private async Task<bool> ConvertProject(JobProcess jobProcess)
+		private async Task<bool> ConvertProjectFiles(JobProcess jobProcess)
 		{
 			var success = true;
 
 			try
 			{
-				// TODO
-				//var selectedProject = _controllers.ProjectsController.GetProjects()
-				//	.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == WizardContext.Project.Id);
-				//_controllers.ProjectsController.Close(selectedProject);
-				
-				
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Convert - Started " + FormatDateTime(DateTime.UtcNow));
+				_logReport.AppendLine("Phase: Convert Project Files - Started " + FormatDateTime(DateTime.UtcNow));
 
-				TextMessage = PluginResources.WizardMessage_ConvertingToFormat;
+				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
@@ -247,7 +258,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
 
 				var selectedLanguages = GetSelectedLanguages();
-
 				foreach (var name in selectedLanguages)
 				{
 					_logReport.AppendLine();
@@ -256,24 +266,19 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					var languageFolder = GetLanguageFolder(name);
 					var targetFiles = GetSelectedTargetFiles(name);
 					foreach (var targetFile in targetFiles)
-					{						
-						var xliffFolder = Path.Combine(languageFolder, targetFile.Path.TrimStart('\\'));
+					{
+						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
 						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name.Substring(0, targetFile.Name.Length - ".sdlxliff".Length) + ".xliff");
-						var sdlXliffBackup = Path.Combine(xliffFolder, targetFile.Name);
-					
+						
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
-						_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackup));
 						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
 						
-						CreateBackupFile(targetFile.Location, sdlXliffBackup);
-
 						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
-						
 						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
 
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, exported));
 						_logReport.AppendLine();
-												
+
 						if (exported)
 						{
 							targetFile.Date = WizardContext.DateTimeStamp;
@@ -307,10 +312,109 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					}
 				}
 
+
+				_logReport.AppendLine("Phase: Convert Project Files - Complete " + FormatDateTime(DateTime.UtcNow));
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+
+			}
+			catch (Exception ex)
+			{
+				jobProcess.Errors.Add(ex);
+				jobProcess.Status = JobProcess.ProcessStatus.Failed;
+				success = false;
+
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Convert - Completed " + FormatDateTime(DateTime.UtcNow));
+				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+			}
+
+			return await Task.FromResult(success);
+		}
+
+		private async Task<bool> CreateTranscreateProject(JobProcess jobProcess)
+		{
+			var success = true;
+
+			try
+			{
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Create Transcreate Project - Started " + FormatDateTime(DateTime.UtcNow));
+
+				TextMessage = PluginResources.WizardMessage_ConvertingToFormat;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
+				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
+				Refresh();
+
+				var selectedProject = _controllers.ProjectsController.GetProjects()
+					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == WizardContext.Project.Id);
+
+				if (selectedProject == null)
+				{
+					throw new Exception(string.Format(PluginResources.WarningMessage_UnableToLocateProject, WizardContext.Project.Name));
+				}
+
+				var newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, WizardContext.ProjectFiles);
+				var newProjectInfo = newProject.GetProjectInfo();
+
+
+				if (WizardContext.ConvertOptions.CloseProjectOnComplete)
+				{
+					_controllers.ProjectsController.Close(selectedProject);
+					_controllers.ProjectsController.RefreshProjects();
+				}
+
+				_controllers.ProjectsController.Open(newProject);
+
+				// New Wizard Context - based on newProject
+				WizardContext.Project = _projectAutomationService.GetProject(newProject, null);
+				WizardContext.ProjectFiles = WizardContext.Project.ProjectFiles;
+				WizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
+				WizardContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
+				WizardContext.TransactionFolder = WizardContext.GetDefaultTransactionPath();
+
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Create Transcreate Project - Completed " + FormatDateTime(DateTime.UtcNow));
 
 				WizardContext.Completed = true;
+				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+			}
+			catch (Exception ex)
+			{
+				jobProcess.Errors.Add(ex);
+				jobProcess.Status = JobProcess.ProcessStatus.Failed;
+				success = false;
+
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+			}
+
+			return await Task.FromResult(success);
+		}
+		
+		private async Task<bool> Finalize(JobProcess jobProcess)
+		{
+			var success = true;
+
+			try
+			{
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.UtcNow));
+
+				TextMessage = PluginResources.WizardMessage_Finalizing;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
+				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
+				Refresh();
+
+
+
+
+				//foreach (var projectFile in WizardContext.ProjectFiles)
+				//{
+				//	//projectFile.
+				//}
+
+				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -334,45 +438,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			}
 
 			File.Copy(sdlXliffFile, sdlXliffBackup, true);
-		}
-
-		private async Task<bool> Finalize(JobProcess jobProcess)
-		{
-			var success = true;
-
-			try
-			{
-				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.UtcNow));
-
-				TextMessage = PluginResources.WizardMessage_Finalizing;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
-
-				Refresh();
-
-				
-
-
-				//foreach (var projectFile in WizardContext.ProjectFiles)
-				//{
-				//	//projectFile.
-				//}
-
-				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
-			}
-			catch (Exception ex)
-			{
-				jobProcess.Errors.Add(ex);
-				jobProcess.Status = JobProcess.ProcessStatus.Failed;
-				success = false;
-
-				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
-			}
-
-			return await Task.FromResult(success);
 		}
 
 		private static string GetXliffFolder(string languageFolder, ProjectFile targetFile)

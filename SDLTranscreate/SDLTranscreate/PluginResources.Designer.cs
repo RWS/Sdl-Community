@@ -137,6 +137,33 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert Project Files.
+        /// </summary>
+        internal static string JobProcess_ConvertProjectFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ConvertProjectFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert Transcreate Project Files.
+        /// </summary>
+        internal static string JobProcess_ConvertTranscreateProjectFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ConvertTranscreateProjectFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Transcreate Project.
+        /// </summary>
+        internal static string JobProcess_CreateTranscreateProject {
+            get {
+                return ResourceManager.GetString("JobProcess_CreateTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string JobProcess_Export {
@@ -1063,6 +1090,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Warning_UnableToLoadProject {
             get {
                 return ResourceManager.GetString("Warning_UnableToLoadProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to locate the selected project: {0}.
+        /// </summary>
+        internal static string WarningMessage_UnableToLocateProject {
+            get {
+                return ResourceManager.GetString("WarningMessage_UnableToLocateProject", resourceCulture);
             }
         }
         

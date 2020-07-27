@@ -306,6 +306,7 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\FilterService.cs" />
     <Compile Include="Service\ImageService.cs" />
+    <Compile Include="Service\ProjectAutomationService.cs" />
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />

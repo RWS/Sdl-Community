@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.Transcreate.Common;
@@ -21,13 +17,9 @@ using Sdl.Community.Transcreate.Wizard.ViewModel;
 using Sdl.Community.Transcreate.Wizard.ViewModel.Convert;
 using Sdl.Community.Transcreate.Wizard.ViewModel.Export;
 using Sdl.Community.Transcreate.Wizard.ViewModel.Import;
-using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
 
 namespace Sdl.Community.Transcreate.Service
 {
@@ -42,6 +34,7 @@ namespace Sdl.Community.Transcreate.Service
 		private readonly Settings _settings;
 		private readonly IDialogService _dialogService;
 		private readonly ILanguageProvider _languageProvider;
+		private readonly ProjectAutomationService _projectAutomationService;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
@@ -49,7 +42,7 @@ namespace Sdl.Community.Transcreate.Service
 		
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
-			IDialogService dialogService, ILanguageProvider languageProvider)
+			IDialogService dialogService, ILanguageProvider languageProvider, ProjectAutomationService projectAutomationService)
 		{
 			_action = action;
 			_pathInfo = pathInfo;
@@ -60,6 +53,7 @@ namespace Sdl.Community.Transcreate.Service
 			_segmentBuilder = segmentBuilder;
 			_settings = settings;
 			_languageProvider = languageProvider;
+			_projectAutomationService = projectAutomationService;
 		}
 
 		public WizardContext ShowWizard(AbstractController controller, out string message)
@@ -125,7 +119,7 @@ namespace Sdl.Community.Transcreate.Service
 					_controllers.ProjectsController.Open(selectedProject);
 				}
 
-				_wizardContext.AnalysisBands = GetAnalysisBands(selectedProject);
+				_wizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
 
 				var projectInfo = selectedProject.GetProjectInfo();
 				var selectedFileIds = new List<string>();
@@ -150,7 +144,7 @@ namespace Sdl.Community.Transcreate.Service
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
-				var projectModel = GetProject(selectedProject, selectedFileIds);
+				var projectModel = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
 				_wizardContext.Project = projectModel;
 				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
 			}
@@ -159,7 +153,7 @@ namespace Sdl.Community.Transcreate.Service
 				_wizardContext.Owner = Enumerators.Controller.Manager;
 
 				var selectedProjectFiles = _controllers.TranscreateController.GetSelectedProjectFiles();
-				var selectedProjects = GetSelectedProjects();
+				var selectedProjects = _controllers.TranscreateController.GetSelectedProjects();
 				var selectedFileIds = selectedProjectFiles?.Select(a => a.FileId.ToString()).ToList();
 
 				if (selectedProjects.Count == 0)
@@ -182,15 +176,15 @@ namespace Sdl.Community.Transcreate.Service
 					return false;
 				}
 
-				_wizardContext.AnalysisBands = GetAnalysisBands(selectedProject);
+				_wizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
 
 				var projectInfo = selectedProject.GetProjectInfo();
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
-				var projectModel = GetProject(selectedProject, selectedFileIds);
-				_wizardContext.Project = projectModel;
-				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
+				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
+				_wizardContext.Project = project;
+				_wizardContext.ProjectFiles = project.ProjectFiles;
 			}
 
 			return true;
@@ -208,178 +202,7 @@ namespace Sdl.Community.Transcreate.Service
 			viewModel.RequestCancel += ViewModel_RequestCancel;
 			_wizardWindow.DataContext = viewModel;
 		}
-
-		private Project GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds)
-		{
-			if (selectedProject == null)
-			{
-				return null;
-			}
-
-			var projectInfo = selectedProject.GetProjectInfo();
-
-			var project = new Project
-			{
-				Id = projectInfo.Id.ToString(),
-				Name = projectInfo.Name,
-				AbsoluteUri = projectInfo.Uri.AbsoluteUri,
-				Customer = _customerProvider.GetProjectCustomer(selectedProject),
-				Created = projectInfo.CreatedAt.ToUniversalTime(),
-				DueDate = projectInfo.DueDate?.ToUniversalTime() ?? DateTime.MaxValue,
-				Path = projectInfo.LocalProjectFolder,
-				SourceLanguage = GetLanguageInfo(projectInfo.SourceLanguage.CultureInfo),
-				TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages),
-				ProjectType = GetProjectType(selectedProject)
-			};
-
-			var existingProject = _controllers.TranscreateController.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
-			if (existingProject != null)
-			{
-				foreach (var projectFile in existingProject.ProjectFiles)
-				{
-					if (projectFile.Clone() is ProjectFile clonedProjectFile)
-					{
-						clonedProjectFile.Project = project;
-						clonedProjectFile.Location = GeFullPath(project.Path, clonedProjectFile.Location);
-						clonedProjectFile.Report = GeFullPath(project.Path, clonedProjectFile.Report);
-						clonedProjectFile.XliffFilePath = GeFullPath(project.Path, clonedProjectFile.XliffFilePath);
-						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.FileId.ToString());
-						project.ProjectFiles.Add(clonedProjectFile);
-					}
-				}
-			}
-			else
-			{
-				project.ProjectFiles = GetProjectFiles(selectedProject, project, selectedFileIds);
-			}
-
-			return project;
-		}
-
-		private string GeFullPath(string projectPath, string path)
-		{
-			if (string.IsNullOrEmpty(path?.Trim('\\')))
-			{
-				return string.Empty;
-			}
-
-			return Path.Combine(projectPath.Trim('\\'), path.Trim('\\'));
-		}
-
-		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, IReadOnlyCollection<string> selectedFileIds)
-		{
-			var projectInfo = project.GetProjectInfo();
-			var projectFiles = new List<ProjectFile>();
-
-			foreach (var targetLanguage in projectInfo.TargetLanguages)
-			{
-				var languageFiles = project.GetTargetLanguageFiles(targetLanguage);
-				foreach (var projectFile in languageFiles)
-				{
-					if (projectFile.Role != FileRole.Translatable)
-					{
-						continue;
-					}
-
-					var projectFileModel = GetProjectFile(projectModel, projectFile, targetLanguage, selectedFileIds);
-					projectFiles.Add(projectFileModel);
-				}
-			}
-
-			return projectFiles;
-		}
-
-		private ProjectFile GetProjectFile(Project project, ProjectAutomation.Core.ProjectFile projectFile,
-			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
-		{
-			var projectFileModel = new ProjectFile
-			{
-				ProjectId = project.Id,
-				FileId = projectFile.Id.ToString(),
-				Name = projectFile.Name,
-				Path = projectFile.Folder,
-				Location = projectFile.LocalFilePath,
-				Action = Enumerators.Action.None,
-				Status = Enumerators.Status.Ready,
-				Date = DateTime.MinValue,
-				TargetLanguage = targetLanguage.CultureInfo.Name,
-				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
-				FileType = projectFile.FileTypeId,
-				Project = project
-			};
-
-			return projectFileModel;
-		}
-
-		private List<LanguageInfo> GetLanguageInfos(IEnumerable<Language> languages)
-		{
-			var targetLanguages = new List<LanguageInfo>();
-			foreach (var targetLanguage in languages)
-			{
-				targetLanguages.Add(GetLanguageInfo(targetLanguage.CultureInfo));
-			}
-
-			return targetLanguages;
-		}
-
-		private string GetProjectType(FileBasedProject project)
-		{
-			var type = project.GetType();
-			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (internalProjectField != null)
-			{
-				dynamic internalDynamicProject = internalProjectField.GetValue(project);
-				return internalDynamicProject.ProjectType.ToString();
-			}
-
-			return null;
-		}
-
-		private List<AnalysisBand> GetAnalysisBands(FileBasedProject project)
-		{
-			var regex = new Regex(@"(?<min>[\d]*)([^\d]*)(?<max>[\d]*)", RegexOptions.IgnoreCase);
-
-			var analysisBands = new List<AnalysisBand>();
-			var type = project.GetType();
-			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (internalProjectField != null)
-			{
-				dynamic internalDynamicProject = internalProjectField.GetValue(project);
-				foreach (var analysisBand in internalDynamicProject.AnalysisBands)
-				{
-					Match match = regex.Match(analysisBand.ToString());
-					if (match.Success)
-					{
-						var min = match.Groups["min"].Value;
-						var max = match.Groups["max"].Value;
-						analysisBands.Add(new AnalysisBand
-						{
-							MinimumMatchValue = Convert.ToInt32(min),
-							MaximumMatchValue = Convert.ToInt32(max)
-						});
-					}
-				}
-			}
-
-			return analysisBands;
-		}
-
-		private LanguageInfo GetLanguageInfo(CultureInfo cultureInfo)
-		{
-			var languageInfo = new LanguageInfo
-			{
-				CultureInfo = cultureInfo,
-				Image = _imageService.GetImage(cultureInfo.Name)
-			};
-
-			return languageInfo;
-		}
-
-		private List<Project> GetSelectedProjects()
-		{
-			return _controllers.TranscreateController.GetSelectedProjects();
-		}
-
+		
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)
 		{
 			var pages = new List<WizardPageViewModelBase>();
@@ -406,7 +229,7 @@ namespace Sdl.Community.Transcreate.Service
 				pages.Add(new WizardPageConvertOptionsViewModel(_wizardWindow, new WizardPageConvertOptionsView(), wizardContext, _dialogService));
 				pages.Add(new WizardPageConvertSummaryViewModel(_wizardWindow, new WizardPageConvertSummaryView(), wizardContext));
 				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), wizardContext,
-					_segmentBuilder, _pathInfo, _controllers));
+					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService));
 			}
 
 			UpdatePageIndexes(pages);
