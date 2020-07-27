@@ -553,7 +553,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private static async Task RestoreFolders(List<LocationDetails> locationsToRestore)
+		private async Task RestoreFolders(List<LocationDetails> locationsToRestore)
 		{
 			var foldersToRestore = locationsToRestore
 				.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKey)).ToList();

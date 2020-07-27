@@ -114,14 +114,6 @@
 			</StackPanel>
 		</DockPanel>
 
-		<!--<StackPanel Grid.Column="0" Grid.Row="5" Orientation="Vertical">
-			<Label FontWeight="Bold" Content="Remove keys from registry:" />
-			<CheckBox 
-			          Content="{Binding RegistryPath}"
-			          HorizontalAlignment="Left" VerticalAlignment="Top"
-			          IsChecked="{Binding RegistryKeyChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-		</StackPanel>-->
-
 		<DockPanel Grid.Column="1" Grid.Row="5" LastChildFill="False" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 10">
 			<Button FontSize="13" FontWeight="Normal" Width="120" Margin="0,40,0,0" Foreground="{Binding RemoveForeground}" Content="Remove" 
 			        VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
