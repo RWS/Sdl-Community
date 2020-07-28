@@ -107,7 +107,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			if (_deeplConnect == null)
 			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
+				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier, _options.Formality);
 			}
 			else
 			{
@@ -309,7 +309,7 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 
-				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
+				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier, _options.Formality);
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
 				{

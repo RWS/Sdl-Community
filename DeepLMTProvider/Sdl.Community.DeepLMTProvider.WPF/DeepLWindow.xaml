@@ -9,7 +9,7 @@
         FontFamily="Calibri"
         WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="DeepL Translation Provider" Height="350" Width="600">
+        Title="DeepL Translation Provider" Height="400" Width="600">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -55,8 +55,16 @@
 					</Hyperlink>
 				</TextBlock>
 				<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0" Foreground="#0C2D47"/>
-				<DockPanel LastChildFill="False" >
-					<Button IsCancel="True" Content="Cancel" DockPanel.Dock="Right" Width="100" Margin="10,0,10,0" Cursor="Hand" FontFamily="Calibri" />
+				<StackPanel Orientation="Horizontal">
+					<Label Content="Formality: " Margin="6 10 0 0" />
+					<ComboBox Name="Formality" FontFamily="Calibri" Margin="0,10,0,0" Foreground="#0C2D47" Width="90"  HorizontalAlignment="Left">
+						<ComboBoxItem Content="Default" />
+						<ComboBoxItem Content="Less formal" ToolTip="- for a more informal language"/>
+						<ComboBoxItem Content="More formal" ToolTip="- for a more formal language"/>
+					</ComboBox>
+				</StackPanel>
+				<DockPanel LastChildFill="False" Margin="0 25 0 0">
+					<Button IsCancel="True" Content="Cancel" DockPanel.Dock="Right" Width="100" Margin="10,0,5,0" Cursor="Hand" FontFamily="Calibri" />
 					<Button Style="{StaticResource DarkBlueButtonsStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand" FontFamily="Calibri"/>
 				</DockPanel>
 			</StackPanel>

@@ -23,6 +23,17 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 		public string ApiKey { get; set; }
 
 		[JsonIgnore]
+		public Formality Formality
+		{
+			get
+			{
+				Enum.TryParse<Formality>(GetStringParameter("formality"), out var formality);
+				return formality;
+			}
+			set => SetStringParameter("formality", value.ToString());
+		}
+
+		[JsonIgnore]
 		public string Identifier { get; set; }
 
 		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();

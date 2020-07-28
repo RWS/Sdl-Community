@@ -60,6 +60,15 @@
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
@@ -69,6 +78,9 @@
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -91,6 +103,7 @@
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\DeepLTranslationOptions.cs" />
+    <Compile Include="Model\Formality.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

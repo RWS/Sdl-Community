@@ -123,4 +123,10 @@
   <data name="WindowsControl_Minimize" xml:space="preserve">
     <value>Minimize</value>
   </data>
+  <data name="SettingsUpdated_ReopenFilesForEditing" xml:space="preserve">
+	  <value>In order for the new settings to take effect, you have to reopen the file for editing</value>
+  </data>
+  <data name="SettingsUpdated" xml:space="preserve">
+	  <value>Settings Updated</value>
+  </data>
 </root>
