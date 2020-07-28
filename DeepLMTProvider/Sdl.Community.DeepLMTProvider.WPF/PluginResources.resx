@@ -129,4 +129,10 @@
   <data name="SettingsUpdated" xml:space="preserve">
 	  <value>Settings Updated</value>
   </data>
+  <data name="FormalityNotAvailableReason" xml:space="preserve">
+	  <value>Sets whether the translated text should lean towards formal or informal language.&#10;This feature currently works for all target languages except "ES" (Spanish), "JA" (Japanese) and "ZH" (Chinese).</value>
+  </data>
+  <data name="FormalityNotAvailableText" xml:space="preserve">
+	  <value>*Not all languages are compatible with this option...</value>
+  </data>
 </root>

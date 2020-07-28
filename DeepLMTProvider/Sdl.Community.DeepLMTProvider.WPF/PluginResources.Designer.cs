@@ -61,6 +61,25 @@ namespace Sdl.Community.DeepLMTProvider.WPF {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sets whether the translated text should lean towards formal or informal language.
+        ///This feature currently works for all target languages except &quot;ES&quot; (Spanish), &quot;JA&quot; (Japanese) and &quot;ZH&quot; (Chinese)..
+        /// </summary>
+        public static string FormalityNotAvailableReason {
+            get {
+                return ResourceManager.GetString("FormalityNotAvailableReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *Not all languages are compatible with this option....
+        /// </summary>
+        public static string FormalityNotAvailableText {
+            get {
+                return ResourceManager.GetString("FormalityNotAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings Updated.
         /// </summary>
         public static string SettingsUpdated {

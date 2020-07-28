@@ -32,6 +32,13 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			}
 			set => SetStringParameter("formality", value.ToString());
 		}
+		
+		[JsonIgnore]
+		public bool CompleteCompatibility
+		{
+			get => Convert.ToBoolean(GetStringParameter("formalityCompatibility"));
+			set => SetStringParameter("formalityCompatibility", value.ToString());
+		}
 
 		[JsonIgnore]
 		public string Identifier { get; set; }

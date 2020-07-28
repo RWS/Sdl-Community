@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider
 		public string ApiKey { get; set; }
 		private readonly string _pluginVersion = "";
 		private readonly string _identifier;
-		private readonly Formality _formality;
+		private Formality _formality;
 		public static readonly Log Log = Log.Instance;
 
 		public DeepLTranslationProviderConnecter(string key, string identifier, Formality formality)
@@ -54,6 +54,8 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
+			_formality = IsFormalityParameterCompatible(languageDirection) ? _formality : Formality.Default;
+
 			var targetLanguage = GetTargetLanguage(languageDirection);
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
@@ -103,6 +105,15 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			return translatedText;
+		}
+
+		private static bool IsFormalityParameterCompatible(LanguagePair languageDirection)
+		{
+			var twoLetterIsoLanguageName = languageDirection.TargetCulture.TwoLetterISOLanguageName;
+			var isFormalityParameterCompatible = !(twoLetterIsoLanguageName == "ja" ||
+			                                     twoLetterIsoLanguageName == "es" ||
+			                                     twoLetterIsoLanguageName == "zh");
+			return isFormalityParameterCompatible;
 		}
 
 		private string DecodeWhenNeeded(string translatedText)
