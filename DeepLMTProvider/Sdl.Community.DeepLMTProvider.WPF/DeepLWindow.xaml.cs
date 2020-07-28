@@ -38,6 +38,15 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			InitializeComponent();
 			_isTellMeAction = isTellMeAction;
 
+			if (!isTellMeAction)
+			{
+				//set to project options if completely compatible or not so that the tell me action is informed
+				options.CompleteCompatibility = AreLanguagesCompatibleWithFormalityParameter(languagePairs);
+			}
+
+			NotCompatibleBlock.Visibility =
+				options.CompleteCompatibility ? Visibility.Collapsed : Visibility.Visible;
+
 			Formality.SelectedIndex = (int)options.Formality;
 			PlainText.IsChecked = options.SendPlainText;
 			Options = options;
@@ -55,6 +64,17 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 				GetSupportedTargetLanguages(languagePairs);
 			}
+		}
+
+		private static bool AreLanguagesCompatibleWithFormalityParameter(LanguagePair[] languagePairs)
+		{
+			return !languagePairs.Any(lp =>
+			{
+				var twoLetterIsoLanguage = lp.TargetCulture.TwoLetterISOLanguageName;
+				return twoLetterIsoLanguage == "ja" ||
+						 twoLetterIsoLanguage == "es" ||
+						 twoLetterIsoLanguage == "zh";
+			});
 		}
 
 		public DeepLWindow()

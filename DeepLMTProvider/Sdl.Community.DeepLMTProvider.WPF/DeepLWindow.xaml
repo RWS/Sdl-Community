@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.WPF.UiHelpers"
+        xmlns:wpf="clr-namespace:Sdl.Community.DeepLMTProvider.WPF"
         mc:Ignorable="d"
         FontFamily="Calibri"
         WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
@@ -34,8 +35,10 @@
 				<Image Source="Logo/deepLResized.png" Width="50" Height="50" DockPanel.Dock="Right"/>
 			</DockPanel>
 			<StackPanel>
-				<TextBlock Margin="10,20,10,15" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" FontSize="12">The DeepL API is a paid machine translation service. 
-					Please purchase a DeepL Pro Subscription in order to get an API Key and use this service.</TextBlock>
+				<TextBlock Margin="10,20,10,15" 
+				           TextWrapping="WrapWithOverflow"
+				           FontSize="12"
+				           Text="The DeepL API is a paid machine translation service. Please purchase a DeepL Pro Subscription in order to get an API Key and use this service."/>
 				<TextBlock Text="Please enter your API Key below:"  Margin="10,0,10,10" FontSize="12"/>
 				<PasswordBox   
 					Name="ApiKeyBox"
@@ -54,16 +57,31 @@
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
 				</TextBlock>
-				<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0" Foreground="#0C2D47"/>
-				<StackPanel Orientation="Horizontal">
-					<Label Content="Formality: " Margin="6 10 0 0" />
-					<ComboBox Name="Formality" FontFamily="Calibri" Margin="0,10,0,0" Foreground="#0C2D47" Width="90"  HorizontalAlignment="Left">
-						<ComboBoxItem Content="Default" />
-						<ComboBoxItem Content="Less formal" ToolTip="- for a more informal language"/>
-						<ComboBoxItem Content="More formal" ToolTip="- for a more formal language"/>
-					</ComboBox>
+				<Label Content="Translation options" FontWeight="Bold" Margin="0"/>
+				<StackPanel>
+					<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0"
+						          Foreground="#0C2D47" />
+					<StackPanel Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
+						<Label Name="FormalityLabel" Content="Formality: " Margin="6 10 0 0" />
+						<ComboBox Name="Formality" FontFamily="Calibri" Margin="0,10,0,0" Foreground="#0C2D47" Width="100"
+							          HorizontalAlignment="Left">
+							<ComboBoxItem Content="Default" />
+							<ComboBoxItem Content="Less formal" ToolTip="- for a more informal language" />
+							<ComboBoxItem Content="More formal" ToolTip="- for a more formal language" />
+						</ComboBox>
+						<TextBlock Name="NotCompatibleBlock" 
+								   Margin="10 10 0 0"
+								   VerticalAlignment="Center"
+						           Foreground="DarkRed" 
+						           Visibility="Collapsed"
+						           FontFamily="Calibri"
+								   TextWrapping="Wrap"
+						           Text="{x:Static wpf:PluginResources.FormalityNotAvailableText}" 
+								   
+						           FontSize="14"/>
+					</StackPanel>
 				</StackPanel>
-				<DockPanel LastChildFill="False" Margin="0 25 0 0">
+				<DockPanel LastChildFill="False" Margin="0 5 0 0">
 					<Button IsCancel="True" Content="Cancel" DockPanel.Dock="Right" Width="100" Margin="10,0,5,0" Cursor="Hand" FontFamily="Calibri" />
 					<Button Style="{StaticResource DarkBlueButtonsStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand" FontFamily="Calibri"/>
 				</DockPanel>
