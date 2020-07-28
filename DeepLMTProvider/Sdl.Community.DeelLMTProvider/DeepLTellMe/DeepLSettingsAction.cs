@@ -40,16 +40,11 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 					{
 						var uri = translationProvider.MainTranslationProvider.Uri;
 						var options = new DeepLTranslationOptions(uri);
-						var dialog = new DeepLWindow(options, true);
+						var dialog = new DeepLWindow(options, isTellMeAction:true);
 						dialog.ShowDialog();
 						if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 						{
-							settings.Entries
-								.Find(entry =>
-									entry.MainTranslationProvider.Uri.OriginalString.Contains(
-										"deepltranslationprovider"))
-								.MainTranslationProvider.Uri = options.Uri;
-
+							translationProvider.MainTranslationProvider.Uri = options.Uri;
 							currentProject.UpdateTranslationProviderConfiguration(settings);
 						}
 					}

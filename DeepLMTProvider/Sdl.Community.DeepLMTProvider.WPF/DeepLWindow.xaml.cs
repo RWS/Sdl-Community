@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Desktop.Platform;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
@@ -25,31 +29,32 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			"RU"
 		};
 
-		private readonly bool _tellMeAction;
-		private readonly LanguagePair[] _languagePairs;
+		private readonly bool _isTellMeAction;
 		public DeepLTranslationOptions Options { get; set; }
 
-		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore,
-			LanguagePair[] languagePairs)
+		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
+			LanguagePair[] languagePairs = null, bool isTellMeAction = false)
 		{
-			_languagePairs = languagePairs;
 			InitializeComponent();
+			_isTellMeAction = isTellMeAction;
+
+			Formality.SelectedIndex = (int)options.Formality;
+			PlainText.IsChecked = options.SendPlainText;
 			Options = options;
-			if (credentialStore != null)
+
+			if (isTellMeAction)
 			{
-				ApiKeyBox.Password = credentialStore.Credential;
+				ApiKeyBox.IsEnabled = false;
 			}
-			PlainText.IsChecked = Options.SendPlainText;
+			else
+			{
+				if (credentialStore != null)
+				{
+					ApiKeyBox.Password = credentialStore.Credential;
+				}
 
-			GetSupportedTargetLanguages();
-		}
-
-		public DeepLWindow(DeepLTranslationOptions options, bool tellMeAction)
-		{
-			InitializeComponent();
-			_tellMeAction = tellMeAction;
-			Options = options;
-			IsEnabled = false;
+				GetSupportedTargetLanguages(languagePairs);
+			}
 		}
 
 		public DeepLWindow()
@@ -59,32 +64,45 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			Options.ApiKey = ApiKeyBox.Password.Trim();
+			Enum.TryParse<Formality>(Formality.SelectedIndex.ToString(), out var formality);
+			Options.Formality = formality;
 			if (PlainText.IsChecked != null)
 			{
-				Options.SendPlainText = (bool) PlainText.IsChecked;
+				Options.SendPlainText = (bool)PlainText.IsChecked;
 			}
 
-			if (_tellMeAction)
+			if (_isTellMeAction)
 			{
-				DialogResult = true;
-				Close();
-			}
-			if (!string.IsNullOrEmpty(Options.ApiKey))
-			{
-				ValidationBlock.Visibility = Visibility.Hidden;
+				var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+				var documentsOpened = editorController.GetDocuments().Any();
+
+				if (documentsOpened)
+				{
+					MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
+						PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
+				}
 				DialogResult = true;
 				Close();
 			}
 			else
 			{
-				ValidationBlock.Visibility = Visibility.Visible;
+				Options.ApiKey = ApiKeyBox.Password.Trim();
+				if (!string.IsNullOrEmpty(Options.ApiKey))
+				{
+					ValidationBlock.Visibility = Visibility.Hidden;
+					DialogResult = true;
+					Close();
+				}
+				else
+				{
+					ValidationBlock.Visibility = Visibility.Visible;
+				}
 			}
 		}
 
-		private void GetSupportedTargetLanguages()
+		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
 		{
-			foreach (var languagePair in _languagePairs)
+			foreach (var languagePair in languagePairs)
 			{
 				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
 				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))

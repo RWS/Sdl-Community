@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using System.Xml;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -18,12 +19,14 @@ namespace Sdl.Community.DeepLMTProvider
 		public string ApiKey { get; set; }
 		private readonly string _pluginVersion = "";
 		private readonly string _identifier;
+		private readonly Formality _formality;
 		public static readonly Log Log = Log.Instance;
 
-		public DeepLTranslationProviderConnecter(string key, string identifier)
+		public DeepLTranslationProviderConnecter(string key, string identifier, Formality formality)
 		{
 			ApiKey = key;
 			_identifier = identifier;
+			_formality = formality;
 
 			try
 			{
@@ -68,6 +71,7 @@ namespace Sdl.Community.DeepLMTProvider
 					var content = new StringContent($"text={sourceText}" +
 													$"&source_lang={sourceLanguage}" +
 													$"&target_lang={targetLanguage}" +
+													$"&formality={_formality.ToString().ToLower()}" +
 													"&preserve_formatting=1" +
 													$"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
