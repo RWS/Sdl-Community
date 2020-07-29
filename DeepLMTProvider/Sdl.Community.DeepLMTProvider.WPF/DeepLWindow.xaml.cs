@@ -1,93 +1,59 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	public partial class DeepLWindow
 	{
-		private static readonly List<string> TargetSupportedLanguages = new List<string>
-		{
-			"EN",
-			"DE",
-			"FR",
-			"IT",
-			"NL",
-			"PL",
-			"ES",
-			"PT",
-			"PT-PT",
-			"PT-BR",
-			"RU",
-		};
+		private readonly bool _isTellMeAction;
 
-		private readonly bool _tellMeAction;
-		private readonly LanguagePair[] _languagePairs;
-		public DeepLTranslationOptions Options { get; set; }
-
-		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore,
-			LanguagePair[] languagePairs)
+		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
+			LanguagePair[] languagePairs = null, bool isTellMeAction = false)
 		{
-			_languagePairs = languagePairs;
 			InitializeComponent();
+			_isTellMeAction = isTellMeAction;
+
+			var currentLanguagePairs = isTellMeAction ? options.LanguagesSupported.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
+
+			NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs)
+				? Visibility.Collapsed
+				: Visibility.Visible;
+
+			Formality.SelectedIndex = (int)options.Formality;
+			PlainText.IsChecked = options.SendPlainText;
 			Options = options;
-			if (credentialStore != null)
+
+			if (isTellMeAction)
 			{
-				ApiKeyBox.Password = credentialStore.Credential;
-			}
-			PlainText.IsChecked = Options.SendPlainText;
-
-			GetSupportedTargetLanguages();
-		}
-
-		public DeepLWindow(DeepLTranslationOptions options, bool tellMeAction)
-		{
-			InitializeComponent();
-			_tellMeAction = tellMeAction;
-			Options = options;
-			IsEnabled = false;
-		}
-
-		public DeepLWindow()
-		{
-			InitializeComponent();
-		}
-
-		private void Ok_Click(object sender, RoutedEventArgs e)
-		{
-			Options.ApiKey = ApiKeyBox.Password.Trim();
-			if (PlainText.IsChecked != null)
-			{
-				Options.SendPlainText = (bool) PlainText.IsChecked;
-			}
-
-			if (_tellMeAction)
-			{
-				DialogResult = true;
-				Close();
-			}
-			if (!string.IsNullOrEmpty(Options.ApiKey))
-			{
-				ValidationBlock.Visibility = Visibility.Hidden;
-				DialogResult = true;
-				Close();
+				ApiKeyBox.IsEnabled = false;
 			}
 			else
 			{
-				ValidationBlock.Visibility = Visibility.Visible;
+				if (credentialStore != null)
+				{
+					ApiKeyBox.Password = credentialStore.Credential;
+				}
+
+				GetSupportedTargetLanguages(languagePairs);
 			}
 		}
 
-		private void GetSupportedTargetLanguages()
+		public DeepLTranslationOptions Options { get; set; }
+
+		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
 		{
-			foreach (var languagePair in _languagePairs)
+			foreach (var languagePair in languagePairs)
 			{
 				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
-				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				if (Helpers.IsSupportedLanguagePair(languagePair.SourceCulture.TwoLetterISOLanguageName.ToUpper(), languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper()) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
 				{
 					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
 					{
@@ -100,6 +66,44 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{
 			Process.Start("https://www.deepl.com/api-contact.html");
+		}
+
+		private void Ok_Click(object sender, RoutedEventArgs e)
+		{
+			Enum.TryParse<Formality>(Formality.SelectedIndex.ToString(), out var formality);
+			Options.Formality = formality;
+			if (PlainText.IsChecked != null)
+			{
+				Options.SendPlainText = (bool)PlainText.IsChecked;
+			}
+
+			if (_isTellMeAction)
+			{
+				var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+				var documentsOpened = editorController.GetDocuments().Any();
+
+				if (documentsOpened)
+				{
+					MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
+						PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+				DialogResult = true;
+				Close();
+			}
+			else
+			{
+				Options.ApiKey = ApiKeyBox.Password.Trim();
+				if (!string.IsNullOrEmpty(Options.ApiKey))
+				{
+					ValidationBlock.Visibility = Visibility.Hidden;
+					DialogResult = true;
+					Close();
+				}
+				else
+				{
+					ValidationBlock.Visibility = Visibility.Visible;
+				}
+			}
 		}
 	}
 }

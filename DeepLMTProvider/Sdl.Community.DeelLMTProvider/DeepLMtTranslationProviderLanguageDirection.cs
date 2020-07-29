@@ -1,23 +1,23 @@
-﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using System.Globalization;
 using System.Threading.Tasks;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Core.Globalization;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
-		private readonly DeepLTranslationOptions _options;
-		private readonly LanguagePair _languageDirection;
-		private DeepLTranslationProviderConnecter _deeplConnect;
 		public static readonly Log Log = Log.Instance;
+		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
+		private readonly LanguagePair _languageDirection;
+		private readonly DeepLTranslationOptions _options;
+		private DeepLTranslationProviderConnecter _deeplConnect;
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
@@ -26,13 +26,10 @@ namespace Sdl.Community.DeepLMTProvider
 			_options = deepLMtTranslationProvider.Options;
 		}
 
-		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
-
-		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
-
-		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
-
 		public bool CanReverseLanguageDirection => throw new NotImplementedException();
+		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
@@ -103,50 +100,6 @@ namespace Sdl.Community.DeepLMTProvider
 			return results;
 		}
 
-		private string LookupDeepl(string sourcetext)
-		{
-			if (_deeplConnect == null)
-			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
-			}
-			else
-			{
-				_deeplConnect.ApiKey = _options.ApiKey;
-			}
-
-			var translatedText = _deeplConnect.Translate(_languageDirection, sourcetext);
-			return translatedText;
-		}
-
-		private SearchResult CreateSearchResult(Segment segment, Segment translation)
-		{
-			#region "TranslationUnit"
-			var tu = new TranslationUnit
-			{
-				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
-				TargetSegment = translation
-			};
-			#endregion
-
-			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-			
-			//maybe this we need to add the score which Christine  requested
-			//
-			var score = 0; //score to 0...change if needed to support scoring
-			tu.Origin = TranslationUnitOrigin.Nmt;
-			var searchResult = new SearchResult(tu)
-			{
-				TranslationProposal = new TranslationUnit(tu),
-				ScoringResult = new ScoringResult
-				{
-					BaseScore = score
-				}
-			};
-			tu.ConfirmationLevel = ConfirmationLevel.Draft;
-
-			return searchResult;
-		}
-
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
 			throw new NotImplementedException();
@@ -189,7 +142,7 @@ namespace Sdl.Community.DeepLMTProvider
 				preTranslateList.Add(null);
 			}
 
-			// plugin is called from pre-translate batch task 
+			// plugin is called from pre-translate batch task
 			//we receive the data in chunk of 10 segments
 			if (translationUnits.Length > 2)
 			{
@@ -242,6 +195,47 @@ namespace Sdl.Community.DeepLMTProvider
 			return results.ToArray();
 		}
 
+		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
+		}
+
+		private SearchResult CreateSearchResult(Segment segment, Segment translation)
+		{
+			#region "TranslationUnit"
+
+			var tu = new TranslationUnit
+			{
+				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+				TargetSegment = translation
+			};
+
+			#endregion "TranslationUnit"
+
+			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+
+			//maybe this we need to add the score which Christine  requested
+			//
+			var score = 0; //score to 0...change if needed to support scoring
+			tu.Origin = TranslationUnitOrigin.Nmt;
+			var searchResult = new SearchResult(tu)
+			{
+				TranslationProposal = new TranslationUnit(tu),
+				ScoringResult = new ScoringResult
+				{
+					BaseScore = score
+				}
+			};
+			tu.ConfirmationLevel = ConfirmationLevel.Draft;
+
+			return searchResult;
+		}
+
 		private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
 		{
 			var resultsList = new List<SearchResults>(preTranslateList.Capacity);
@@ -284,6 +278,21 @@ namespace Sdl.Community.DeepLMTProvider
 			return resultsList;
 		}
 
+		private string LookupDeepl(string sourcetext)
+		{
+			if (_deeplConnect == null)
+			{
+				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier, _options.Formality);
+			}
+			else
+			{
+				_deeplConnect.ApiKey = _options.ApiKey;
+			}
+
+			var translatedText = _deeplConnect.Translate(_languageDirection, sourcetext);
+			return translatedText;
+		}
+
 		private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
 		{
 			try
@@ -309,7 +318,7 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 
-				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
+				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier, _options.Formality);
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
 				{
@@ -326,16 +335,6 @@ namespace Sdl.Community.DeepLMTProvider
 				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 			return preTranslatesegments;
-		}
-
-		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

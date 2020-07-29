@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -35,6 +37,17 @@ namespace Sdl.Community.DeepLMTProvider
 			"JA",
 			"ZH"
 		};
+
+		public static bool AreLanguagesCompatibleWithFormalityParameter(List<CultureInfo> targetLanguages)
+		{
+			return targetLanguages.All(tl =>
+			{
+				var twoLetterIsoLanguage = tl.TwoLetterISOLanguageName;
+				return twoLetterIsoLanguage != "ja" &&
+					   twoLetterIsoLanguage != "es" &&
+					   twoLetterIsoLanguage != "zh";
+			});
+		}
 
 		public static bool IsSupportedLanguagePair(string sourceLang, string targetLang)
 		{
