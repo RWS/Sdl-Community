@@ -40,10 +40,10 @@ steps:
 
 - template: tasks/sign-artifacts/prepare-signing.yml
 
-- template: tasks/sign-artifacts/sign-artifacts-azure.yml
+- template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
-      SigningRoot: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)'
-      SigningFileList: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Signing.csv'
+    fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)\Sdl.Community.SDLXLIFFSplitMerge.Installer.msi'
+    description: 'installer '
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
