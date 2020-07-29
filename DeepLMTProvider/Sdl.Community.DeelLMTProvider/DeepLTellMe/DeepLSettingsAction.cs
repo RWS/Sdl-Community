@@ -8,12 +8,19 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 {
-	public class DeepLSettingsAction: AbstractTellMeAction
+	public class DeepLSettingsAction : AbstractTellMeAction
 	{
 		public DeepLSettingsAction()
 		{
 			Name = "DeepL MT Provider options";
 		}
+
+		public override string Category => "DeepL results";
+
+		public override Icon Icon => PluginResources.Settings;
+
+		public override bool IsAvailable => true;
+
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
@@ -39,26 +46,18 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 					if (translationProvider != null)
 					{
 						var uri = translationProvider.MainTranslationProvider.Uri;
-						var options = new DeepLTranslationOptions(uri);
-						var dialog = new DeepLWindow(options, true);
+						var state = translationProvider.MainTranslationProvider.State;
+						var options = new DeepLTranslationOptions(uri, state);
+						var dialog = new DeepLWindow(options, isTellMeAction: true);
 						dialog.ShowDialog();
 						if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 						{
-							settings.Entries
-								.Find(entry =>
-									entry.MainTranslationProvider.Uri.OriginalString.Contains(
-										"deepltranslationprovider"))
-								.MainTranslationProvider.Uri = options.Uri;
-
+							translationProvider.MainTranslationProvider.Uri = options.Uri;
 							currentProject.UpdateTranslationProviderConfiguration(settings);
 						}
 					}
 				}
 			}
 		}
-
-		public override bool IsAvailable => true;
-		public override string Category => "DeepL results";
-		public override Icon Icon => PluginResources.Settings;
 	}
 }

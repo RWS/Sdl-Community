@@ -3,13 +3,13 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
-		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-		<Setter Property="Background" Value="#ffffff"/>
-		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Foreground" Value="#3D9DAA"/>
-		<Setter Property="HorizontalContentAlignment" Value="Left"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter Property="Background" Value="#ffffff" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="Foreground" Value="#3D9DAA" />
+		<Setter Property="HorizontalContentAlignment" Value="Left" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Padding" Value="16,3,16,3" />
 		<Setter Property="Margin" Value="0,0,3,0"></Setter>
 		<Setter Property="Template">
 			<Setter.Value>
@@ -23,20 +23,20 @@
 						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 						                  RecognizesAccessKey="True"
-						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="false">
 							<Setter Property="Foreground" Value="#3D9DAA" />
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="Cursor" Value="Hand" />
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
-							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="Cursor" Value="Hand" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
-							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="Cursor" Value="Hand" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -44,17 +44,17 @@
 		</Setter>
 	</Style>
 	<Style x:Key="DarkBlueButtonsStyle" TargetType="{x:Type Button}">
-		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-		<Setter Property="Background" Value="#0C2D47"/>
-		<Setter Property="BorderBrush" Value="#0C2D47"/>
-		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="Foreground" Value="#ffffff"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Padding" Value="16,3,16,3"/>
-		<Setter Property="Width" Value="100"/>
-		<Setter Property="Height" Value="30"/>
-		<Setter Property="Margin" Value="0,0,10,0"/>
+		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter Property="Background" Value="#0C2D47" />
+		<Setter Property="BorderBrush" Value="#0C2D47" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="Foreground" Value="#ffffff" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Padding" Value="16,3,16,3" />
+		<Setter Property="Width" Value="100" />
+		<Setter Property="Height" Value="30" />
+		<Setter Property="Margin" Value="0,0,10,0" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
@@ -68,20 +68,20 @@
 						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 						                  RecognizesAccessKey="True"
-						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="false">
 							<Setter Property="Foreground" Value="#333333" />
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="RenderTransformOrigin" Value="0.557,0.693"/>
-							<Setter Property="Opacity" Value="0.5"/>
+							<Setter Property="RenderTransformOrigin" Value="0.557,0.693" />
+							<Setter Property="Opacity" Value="0.5" />
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
 							<Setter Property="Background" Value="#6EC6EB" />
-							<Setter Property="BorderBrush" Value="#6EC6EB"/>
-							<Setter Property="Foreground" Value="#ffffff"/>
+							<Setter Property="BorderBrush" Value="#6EC6EB" />
+							<Setter Property="Foreground" Value="#ffffff" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
 							<Setter TargetName="Chrome" Property="BorderBrush" Value="#6EC6EB" />
@@ -92,14 +92,14 @@
 		</Setter>
 	</Style>
 	<Style x:Key="StudioGreenButtonsStyle" TargetType="{x:Type Button}">
-		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-		<Setter Property="Background" Value="#3EA691"/>
-		<Setter Property="BorderBrush" Value="#3EA691"/>
-		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="Foreground" Value="#ffffff"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter Property="Background" Value="#3EA691" />
+		<Setter Property="BorderBrush" Value="#3EA691" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="Foreground" Value="#ffffff" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Padding" Value="16,3,16,3" />
 		<Setter Property="Width" Value="100"></Setter>
 		<Setter Property="Height" Value="30"></Setter>
 		<Setter Property="Margin" Value="0,0,10,0"></Setter>
@@ -115,7 +115,7 @@
 						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 						                  RecognizesAccessKey="True"
-						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="false">
@@ -128,8 +128,8 @@
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
 							<Setter Property="Background" Value="#3EA691" />
-							<Setter Property="BorderBrush" Value="#3EA691"/>
-							<Setter Property="Foreground" Value="#ffffff"/>
+							<Setter Property="BorderBrush" Value="#3EA691" />
+							<Setter Property="Foreground" Value="#ffffff" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
 							<Setter TargetName="Chrome" Property="BorderBrush" Value="#3D9DAA" />
@@ -141,11 +141,11 @@
 	</Style>
 	<!--Window Control Button Style-->
 	<Style x:Key="WindowControlButtonStyle" TargetType="{x:Type Button}">
-		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Forground}"/>
+		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Forground}" />
 		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
-		<Setter Property="Focusable" Value="False"/>
-		<Setter Property="IsTabStop" Value="False"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Focusable" Value="False" />
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
 
 		<Setter Property="Template">
 			<Setter.Value>
@@ -155,10 +155,10 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Highlight}"/>
+							<Setter TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Highlight}" />
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Active}"/>
+							<Setter TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Active}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -167,13 +167,13 @@
 
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Highlight.Text}"/>
+				<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Highlight.Text}" />
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Foreground"  Value="{DynamicResource WindowsControl.Command.Active.Text}"/>
+				<Setter Property="Foreground"  Value="{DynamicResource WindowsControl.Command.Active.Text}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Visibility" Value="Collapsed"/>
+				<Setter Property="Visibility" Value="Collapsed" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -183,7 +183,7 @@
 		<Setter Property="Control.Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+					<Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>

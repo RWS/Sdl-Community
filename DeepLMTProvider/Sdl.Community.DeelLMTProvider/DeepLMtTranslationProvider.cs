@@ -1,15 +1,23 @@
-﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
+﻿using System;
 using Newtonsoft.Json;
-using Sdl.LanguagePlatform.Core;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-    public class DeepLMtTranslationProvider : ITranslationProvider
-    {
-
+	public class DeepLMtTranslationProvider : ITranslationProvider
+	{
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
+
+		public DeepLMtTranslationProvider(DeepLTranslationOptions options)
+		{
+			Options = options;
+		}
+
+		public bool IsReadOnly => true;
+
+		public string Name => "DeepL Translator provider using DeepL Translator ";
 
 		public DeepLTranslationOptions Options
 		{
@@ -17,78 +25,50 @@ namespace Sdl.Community.DeepLMTProvider
 			set;
 		}
 
-		public DeepLMtTranslationProvider(DeepLTranslationOptions options)
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "Deepl");
+
+		public bool SupportsConcordanceSearch => false;
+		public bool SupportsDocumentSearches => false;
+		public bool SupportsFilters => false;
+		public bool SupportsFuzzySearch => false;
+		public bool SupportsMultipleResults => false;
+		public bool SupportsPenalties => true;
+		public bool SupportsPlaceables => false;
+		public bool SupportsScoring => false;
+		public bool SupportsSearchForTranslationUnits => true;
+		public bool SupportsSourceConcordanceSearch => false;
+		public bool SupportsStructureContext => false;
+		public bool SupportsTaggedInput => true;
+		public bool SupportsTargetConcordanceSearch => false;
+		public bool SupportsTranslation => true;
+		public bool SupportsUpdate => false;
+		public bool SupportsWordCounts => false;
+		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
+		public Uri Uri => Options.Uri;
+
+		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			Options = options;
+			return new DeepLMtTranslationProviderLanguageDirection(this, languageDirection);
 		}
 
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deepl");
+		public void LoadState(string translationProviderState)
+		{
+			Options = JsonConvert.DeserializeObject<DeepLTranslationOptions>(translationProviderState);
+		}
 
-	    public Uri Uri => Options.Uri;
+		public void RefreshStatusInfo()
+		{
+		}
 
-        public string Name => "DeepL Translator provider using DeepL Translator ";
+		public string SerializeState()
+		{
+			return JsonConvert.SerializeObject(Options);
+		}
 
-        public bool SupportsTaggedInput => true;
-
-        public bool SupportsScoring => false;
-
-        public bool SupportsSearchForTranslationUnits => true;
-
-        public bool SupportsMultipleResults => false;
-
-        public bool SupportsFilters => false;
-
-        public bool SupportsPenalties => true;
-
-        public bool SupportsStructureContext => false;
-
-        public bool SupportsDocumentSearches => false;
-
-        public bool SupportsUpdate => false;
-
-        public bool SupportsPlaceables => false;
-
-        public bool SupportsTranslation => true;
-
-        public bool SupportsFuzzySearch => false;
-
-        public bool SupportsConcordanceSearch => false;
-
-        public bool SupportsSourceConcordanceSearch => false;
-
-        public bool SupportsTargetConcordanceSearch => false;
-
-        public bool SupportsWordCounts => false;
-
-        public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
-
-        public bool IsReadOnly => true;
-
-        public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
-        {
-			return new DeepLMtTranslationProviderLanguageDirection(this, languageDirection);
-        }
-
-        public void LoadState(string translationProviderState)
-        {
-	        Options = JsonConvert.DeserializeObject<DeepLTranslationOptions>(translationProviderState);
-        }
-
-        public void RefreshStatusInfo()
-        {
-            
-        }
-
-        public string SerializeState()
-        {
-            return JsonConvert.SerializeObject(Options);
-        }
-
-        public bool SupportsLanguageDirection(LanguagePair languageDirection)
-        {
-			
-			return Helpers.IsSupportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(), 
+		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+		{
+			return Helpers.IsSupportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(),
 				languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper());
-        }
-    }
+		}
+	}
 }

@@ -123,4 +123,16 @@
   <data name="WindowsControl_Minimize" xml:space="preserve">
     <value>Minimize</value>
   </data>
+  <data name="SettingsUpdated_ReopenFilesForEditing" xml:space="preserve">
+	  <value>In order for the new settings to take effect, you have to reopen the file for editing</value>
+  </data>
+  <data name="SettingsUpdated" xml:space="preserve">
+	  <value>Settings Updated</value>
+  </data>
+  <data name="FormalityNotAvailableReason" xml:space="preserve">
+	  <value>Sets whether the translated text should lean towards formal or informal language.&#10;This feature currently works for all target languages except "ES" (Spanish), "JA" (Japanese) and "ZH" (Chinese).</value>
+  </data>
+  <data name="FormalityNotAvailableText" xml:space="preserve">
+	  <value>*Not all languages are compatible with this option...</value>
+  </data>
 </root>

@@ -6,24 +6,26 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Xml;
 using Newtonsoft.Json;
 using Sdl.Community.DeelLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
-using System.Xml;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		public string ApiKey { get; set; }
-		private readonly string _pluginVersion = "";
-		private readonly string _identifier;
 		public static readonly Log Log = Log.Instance;
+		private readonly string _identifier;
+		private readonly string _pluginVersion = "";
+		private Formality _formality;
 
-		public DeepLTranslationProviderConnecter(string key, string identifier)
+		public DeepLTranslationProviderConnecter(string key, string identifier, Formality formality)
 		{
 			ApiKey = key;
 			_identifier = identifier;
+			_formality = formality;
 
 			try
 			{
@@ -49,8 +51,12 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 		}
 
+		public string ApiKey { get; set; }
+
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
+			_formality = IsFormalityParameterCompatible(languageDirection) ? _formality : Formality.Default;
+
 			var targetLanguage = GetTargetLanguage(languageDirection);
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
@@ -68,10 +74,11 @@ namespace Sdl.Community.DeepLMTProvider
 					var content = new StringContent($"text={sourceText}" +
 													$"&source_lang={sourceLanguage}" +
 													$"&target_lang={targetLanguage}" +
+													$"&formality={_formality.ToString().ToLower()}" +
 													"&preserve_formatting=1" +
 													$"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 					if (response.IsSuccessStatusCode)
@@ -99,6 +106,15 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			return translatedText;
+		}
+
+		private static bool IsFormalityParameterCompatible(LanguagePair languageDirection)
+		{
+			var twoLetterIsoLanguageName = languageDirection.TargetCulture.TwoLetterISOLanguageName;
+			var isFormalityParameterCompatible = !(twoLetterIsoLanguageName == "ja" ||
+												 twoLetterIsoLanguageName == "es" ||
+												 twoLetterIsoLanguageName == "zh");
+			return isFormalityParameterCompatible;
 		}
 
 		private string DecodeWhenNeeded(string translatedText)
