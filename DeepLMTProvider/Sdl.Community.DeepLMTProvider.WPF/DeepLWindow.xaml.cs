@@ -39,7 +39,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			InitializeComponent();
 			_isTellMeAction = isTellMeAction;
 
-			var currentLanguagePairs = isTellMeAction ? options.LanguagesSupported.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
+			var currentLanguagePairs = isTellMeAction ? options?.LanguagesSupported?.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs?.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
 
 			NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs)
 				? Visibility.Collapsed
