@@ -1,19 +1,19 @@
-trigger: none
-#trigger:
-#  branches:
-#    include:
-#     - master
-#  paths:
-#    include:
-#     - SDLXLIFFSplitMerge/*
 
-#pr:
-#  branches:
-#    include:
-#     - master
-#  paths:
-#    include:
-#     - SDLXLIFFSplitMerge/*
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
 
 variables:
 - group: 'SDLPLC Authenticode Credentials'
