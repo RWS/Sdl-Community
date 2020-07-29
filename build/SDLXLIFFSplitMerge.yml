@@ -1,25 +1,51 @@
-trigger:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - SDLXLIFFSplitMerge/*
+trigger: none
+#trigger:
+#  branches:
+#    include:
+#     - master
+#  paths:
+#    include:
+#     - SDLXLIFFSplitMerge/*
 
-pr:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - SDLXLIFFSplitMerge/*
-
-pool: Studio-OX
+#pr:
+#  branches:
+#    include:
+#     - master
+#  paths:
+#    include:
+#     - SDLXLIFFSplitMerge/*
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/SDLXLIFFSplitMerge.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/SDLXLIFFSplitMerge.sln'
+- name: DefaultBuildVm
+  value: 'windows-latest'
+- name: StudioBranch
+  value: refs/heads/master
+- name: VSVersion
+  value: latest
+- name: StudioProductIdentifier  
+  value: studio16
+
+pool:
+  vmImage : '$(DefaultBuildVm)'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
+- template: jobs/build-sdlplugin.yml
+
+- template: tasks/sign-artifacts/prepare-signing.yml
+
+- template: tasks/sign-artifacts/sign-artifacts-azure.yml
+  parameters:
+      SigningRoot: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)'
+      SigningFileList: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Signing.csv'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+      artifactName: SDLXLIFFSplitMergeInstaller
+      pathToPublish: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)'
