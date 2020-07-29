@@ -11,7 +11,6 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		public static Logger Logger;
 		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
-		public static Log Instance => _instance.Value;
 
 		private Log()
 		{
@@ -42,5 +41,7 @@ namespace Sdl.Community.DeepLMTProvider
 			//NLog object
 			Logger = LogManager.GetCurrentClassLogger();
 		}
+
+		public static Log Instance => _instance.Value;
 	}
 }

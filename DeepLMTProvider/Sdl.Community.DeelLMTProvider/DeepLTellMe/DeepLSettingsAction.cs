@@ -8,12 +8,19 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 {
-	public class DeepLSettingsAction: AbstractTellMeAction
+	public class DeepLSettingsAction : AbstractTellMeAction
 	{
 		public DeepLSettingsAction()
 		{
 			Name = "DeepL MT Provider options";
 		}
+
+		public override string Category => "DeepL results";
+
+		public override Icon Icon => PluginResources.Settings;
+
+		public override bool IsAvailable => true;
+
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
@@ -41,7 +48,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 						var uri = translationProvider.MainTranslationProvider.Uri;
 						var state = translationProvider.MainTranslationProvider.State;
 						var options = new DeepLTranslationOptions(uri, state);
-						var dialog = new DeepLWindow(options, isTellMeAction:true);
+						var dialog = new DeepLWindow(options, isTellMeAction: true);
 						dialog.ShowDialog();
 						if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 						{
@@ -52,9 +59,5 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 				}
 			}
 		}
-
-		public override bool IsAvailable => true;
-		public override string Category => "DeepL results";
-		public override Icon Icon => PluginResources.Settings;
 	}
 }

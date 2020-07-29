@@ -1,6 +1,6 @@
-﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
+﻿using System;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider
 {

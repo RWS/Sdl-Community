@@ -25,7 +25,6 @@
 //			}
 //		}
 
-
 //		public ElementVisitor()
 //		{
 //			_textBuilder = new StringBuilder();
@@ -64,7 +63,6 @@
 
 //		public void VisitText(Text text)
 //		{
-
 //			_plainText += text;
 //		}
 //		private void VisitChildren(ISegmentElementVisitor container)

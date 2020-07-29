@@ -11,13 +11,15 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 			Name = "Download DeepL from AppStore";
 		}
 
+		public override string Category => "DeepL results";
+
+		public override Icon Icon => PluginResources.Download;
+
+		public override bool IsAvailable => true;
+
 		public override void Execute()
 		{
 			Process.Start("https://appstore.sdl.com/language/app/deepl-translation-provider/847/");
 		}
-
-		public override bool IsAvailable => true;
-		public override string Category => "DeepL results";
-		public override Icon Icon => PluginResources.Download;
 	}
 }

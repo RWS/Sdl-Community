@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
-using Sdl.Desktop.Platform;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -31,7 +30,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		};
 
 		private readonly bool _isTellMeAction;
-		public DeepLTranslationOptions Options { get; set; }
 
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
 			LanguagePair[] languagePairs = null, bool isTellMeAction = false)
@@ -67,6 +65,28 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		public DeepLWindow()
 		{
 			InitializeComponent();
+		}
+
+		public DeepLTranslationOptions Options { get; set; }
+
+		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
+		{
+			foreach (var languagePair in languagePairs)
+			{
+				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
+				if (Helpers.IsSupportedLanguagePair(languagePair.SourceCulture.TwoLetterISOLanguageName.ToUpper(), languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper()) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				{
+					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+					{
+						Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+					}
+				}
+			}
+		}
+
+		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			Process.Start("https://www.deepl.com/api-contact.html");
 		}
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
@@ -105,26 +125,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 					ValidationBlock.Visibility = Visibility.Visible;
 				}
 			}
-		}
-
-		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
-		{
-			foreach (var languagePair in languagePairs)
-			{
-				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
-				if (Helpers.IsSupportedLanguagePair(languagePair.SourceCulture.TwoLetterISOLanguageName.ToUpper(), languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper()) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
-				{
-					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
-					{
-						Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
-					}
-				}
-			}
-		}
-
-		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
-		{
-			Process.Start("https://www.deepl.com/api-contact.html");
 		}
 	}
 }

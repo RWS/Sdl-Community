@@ -9,5 +9,5 @@
 	  <File>MahApps.Metro.dll</File>
 	  <File>System.Windows.Interactivity.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0" />
 </PluginPackage>

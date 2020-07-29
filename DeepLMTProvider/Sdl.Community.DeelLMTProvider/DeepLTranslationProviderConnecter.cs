@@ -6,21 +6,20 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Xml;
 using Newtonsoft.Json;
 using Sdl.Community.DeelLMTProvider.Model;
-using Sdl.LanguagePlatform.Core;
-using System.Xml;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		public string ApiKey { get; set; }
-		private readonly string _pluginVersion = "";
-		private readonly string _identifier;
-		private Formality _formality;
 		public static readonly Log Log = Log.Instance;
+		private readonly string _identifier;
+		private readonly string _pluginVersion = "";
+		private Formality _formality;
 
 		public DeepLTranslationProviderConnecter(string key, string identifier, Formality formality)
 		{
@@ -51,6 +50,8 @@ namespace Sdl.Community.DeepLMTProvider
 				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 		}
+
+		public string ApiKey { get; set; }
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
@@ -93,9 +94,9 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-                        Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
-                            $"Response content: {response.Content?.ReadAsStringAsync().Result}.");
-                        MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+							$"Response content: {response.Content?.ReadAsStringAsync().Result}.");
+						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
 				}
 			}
@@ -111,8 +112,8 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			var twoLetterIsoLanguageName = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var isFormalityParameterCompatible = !(twoLetterIsoLanguageName == "ja" ||
-			                                     twoLetterIsoLanguageName == "es" ||
-			                                     twoLetterIsoLanguageName == "zh");
+												 twoLetterIsoLanguageName == "es" ||
+												 twoLetterIsoLanguageName == "zh");
 			return isFormalityParameterCompatible;
 		}
 
