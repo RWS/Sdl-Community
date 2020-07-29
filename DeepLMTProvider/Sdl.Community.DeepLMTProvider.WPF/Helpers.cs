@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -40,20 +38,20 @@ namespace Sdl.Community.DeepLMTProvider
 			"ZH"
 		};
 
-		public static bool IsSupportedLanguagePair(string sourceLang, string targetLang)
-		{
-			return SourceSupportedLanguages.Contains(sourceLang) && TargetSupportedLanguages.Contains(targetLang);
-		}
-
 		public static bool AreLanguagesCompatibleWithFormalityParameter(List<CultureInfo> targetLanguages)
 		{
-			return targetLanguages.Any(tl =>
+			return targetLanguages.All(tl =>
 			{
 				var twoLetterIsoLanguage = tl.TwoLetterISOLanguageName;
 				return twoLetterIsoLanguage != "ja" &&
-				       twoLetterIsoLanguage != "es" &&
-				       twoLetterIsoLanguage != "zh";
+					   twoLetterIsoLanguage != "es" &&
+					   twoLetterIsoLanguage != "zh";
 			});
+		}
+
+		public static bool IsSupportedLanguagePair(string sourceLang, string targetLang)
+		{
+			return SourceSupportedLanguages.Contains(sourceLang) && TargetSupportedLanguages.Contains(targetLang);
 		}
 	}
 }

@@ -22,29 +22,11 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			if (string.IsNullOrWhiteSpace(state)) return;
 
 			var successful = TryParseJson(state, out var stateObject);
-
 			if (successful)
 			{
 				LanguagesSupported = JsonConvert
 					.DeserializeObject<Dictionary<string, string>>(stateObject?["LanguagesSupported"]?.ToString());
 			}
-		}
-
-		private bool TryParseJson(string state, out JObject jObject)
-		{
-			bool successful;
-			try
-			{
-				jObject = JObject.Parse(state);
-				successful = true;
-			}
-			catch
-			{
-				successful = false;
-				jObject = null;
-			}
-
-			return successful;
 		}
 
 		[JsonIgnore]
@@ -60,7 +42,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			}
 			set => SetStringParameter("formality", value.ToString());
 		}
-		
+
 		[JsonIgnore]
 		public string Identifier { get; set; }
 
@@ -92,6 +74,23 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 		private void SetStringParameter(string p, string value)
 		{
 			_uriBuilder[p] = value;
+		}
+
+		private bool TryParseJson(string state, out JObject jObject)
+		{
+			bool successful;
+			try
+			{
+				jObject = JObject.Parse(state);
+				successful = true;
+			}
+			catch
+			{
+				successful = false;
+				jObject = null;
+			}
+
+			return successful;
 		}
 	}
 }
