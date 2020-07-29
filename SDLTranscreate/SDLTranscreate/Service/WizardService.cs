@@ -39,7 +39,7 @@ namespace Sdl.Community.Transcreate.Service
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private WizardContext _wizardContext;
 		private bool _isCancelled;
-		
+
 		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
 			IDialogService dialogService, ILanguageProvider languageProvider, ProjectAutomationService projectAutomationService)
@@ -144,9 +144,10 @@ namespace Sdl.Community.Transcreate.Service
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
-				var projectModel = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
-				_wizardContext.Project = projectModel;
-				_wizardContext.ProjectFiles = projectModel.ProjectFiles;
+				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);				
+
+				_wizardContext.Project = project;
+				_wizardContext.ProjectFiles = project.ProjectFiles;
 			}
 			else if (controller is TranscreateViewController)
 			{
@@ -182,7 +183,7 @@ namespace Sdl.Community.Transcreate.Service
 				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
 
-				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
+				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);				
 				_wizardContext.Project = project;
 				_wizardContext.ProjectFiles = project.ProjectFiles;
 			}
@@ -202,7 +203,7 @@ namespace Sdl.Community.Transcreate.Service
 			viewModel.RequestCancel += ViewModel_RequestCancel;
 			_wizardWindow.DataContext = viewModel;
 		}
-		
+
 		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)
 		{
 			var pages = new List<WizardPageViewModelBase>();
@@ -224,8 +225,7 @@ namespace Sdl.Community.Transcreate.Service
 					_segmentBuilder, _pathInfo));
 			}
 			else if (_action == Enumerators.Action.Convert)
-			{
-				pages.Add(new WizardPageConvertFilesViewModel(_wizardWindow, new WizardPageConvertFilesView(), wizardContext));
+			{				
 				pages.Add(new WizardPageConvertOptionsViewModel(_wizardWindow, new WizardPageConvertOptionsView(), wizardContext, _dialogService));
 				pages.Add(new WizardPageConvertSummaryViewModel(_wizardWindow, new WizardPageConvertSummaryView(), wizardContext));
 				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), wizardContext,

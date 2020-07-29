@@ -184,6 +184,10 @@ namespace Sdl.Community.Transcreate
 				return;
 			}
 
+			var sourceLanguage = wizardContext.Project.SourceLanguage.CultureInfo.Name;
+			wizardContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
+				                                                 StringComparison.CurrentCultureIgnoreCase) == 0);
+
 			var project = _xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
 			if (project == null)
 			{
@@ -733,7 +737,7 @@ namespace Sdl.Community.Transcreate
 		{
 			if (e.Active)
 			{
-				SetProjectPropertiesViewController();
+				//SetProjectPropertiesViewController();
 				SetProjectFileActivityViewController();
 				_projectFilesViewModel.Refresh();
 			}

@@ -229,8 +229,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				Refresh();
 
 				var project = WizardContext.ProjectFiles[0].Project;
-				
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, 
+
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
 					WizardContext.ExportOptions, WizardContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(WizardContext.ExportOptions.XliffSupport);
 
@@ -251,17 +251,17 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
 						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
 
-						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);												
+						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
 						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
-						
+
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, exported));
 						_logReport.AppendLine();
 
 						if (exported)
-						{							
+						{
 							targetFile.Date = WizardContext.DateTimeStamp;
 							targetFile.Action = Enumerators.Action.Export;
-							targetFile.Status = Enumerators.Status.Success;							
+							targetFile.Status = Enumerators.Status.Success;
 							targetFile.XliffFilePath = xliffFilePath;
 							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
 							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
@@ -275,11 +275,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetFile.Date,
 							Name = Path.GetFileName(targetFile.XliffFilePath),
-							Path = Path.GetDirectoryName(targetFile.XliffFilePath),							
+							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
 							ProjectFile = targetFile,
 							ConfirmationStatistics = targetFile.ConfirmationStatistics,
 							TranslationOriginStatistics = targetFile.TranslationOriginStatistics
-					};
+						};
 
 						targetFile.ProjectFileActivities.Add(activityFile);
 					}
@@ -356,7 +356,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 			return languageFolder;
 		}
-	
+
 		private void FinalizeJobProcesses(bool success)
 		{
 			_logReport.AppendLine();
@@ -485,7 +485,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		}
 
 		private void OnLoadPage(object sender, EventArgs e)
-		{			
+		{
 			IsProcessing = true;
 			Refresh();
 			StartProcessing();
@@ -503,7 +503,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			foreach (var filterItem in filterItems)
 			{
 				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-				         filterItem.Name;
+						 filterItem.Name;
 			}
 
 			if (string.IsNullOrEmpty(items))

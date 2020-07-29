@@ -191,6 +191,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import Translations.
+        /// </summary>
+        internal static string JobProcess_ImportTranslations {
+            get {
+                return ResourceManager.GetString("JobProcess_ImportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparation.
         /// </summary>
         internal static string JobProcess_Preparation {
@@ -461,6 +470,33 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Name: {0}.
+        /// </summary>
+        internal static string Label_ProjectName {
+            get {
+                return ResourceManager.GetString("Label_ProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Path: {0}.
+        /// </summary>
+        internal static string Label_ProjectPath {
+            get {
+                return ResourceManager.GetString("Label_ProjectPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Template: {0}.
+        /// </summary>
+        internal static string Label_ProjectTemplate {
+            get {
+                return ResourceManager.GetString("Label_ProjectTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Type: {0}.
         /// </summary>
         internal static string Label_ProjectType {
@@ -547,6 +583,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_TotalFiles {
             get {
                 return ResourceManager.GetString("Label_TotalFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unload original project: {0}.
+        /// </summary>
+        internal static string Label_UnloadOiriginalProject {
+            get {
+                return ResourceManager.GetString("Label_UnloadOiriginalProject", resourceCulture);
             }
         }
         
@@ -865,6 +910,42 @@ namespace Sdl.Community.Transcreate {
         internal static string TranscreateManager_ActionsGroup_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_ActionsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string TranscreateManager_BatchTasks_Export_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_BatchTasks_Export_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string TranscreateManager_BatchTasks_Export_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_BatchTasks_Export_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string TranscreateManager_BatchTasks_Import_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_BatchTasks_Import_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string TranscreateManager_BatchTasks_Import_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_BatchTasks_Import_Name", resourceCulture);
             }
         }
         

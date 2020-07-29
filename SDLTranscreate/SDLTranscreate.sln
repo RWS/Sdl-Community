@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1169
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDLTranscreate", "SDLTranscreate\SDLTranscreate.csproj", "{AD8EE7B5-21DF-4AB0-9799-B13361B26E61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transcreate", "SDLTranscreate\Transcreate.csproj", "{AD8EE7B5-21DF-4AB0-9799-B13361B26E61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
