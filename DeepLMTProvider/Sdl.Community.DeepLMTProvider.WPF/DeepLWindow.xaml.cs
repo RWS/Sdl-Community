@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -14,21 +13,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	public partial class DeepLWindow
 	{
-		private static readonly List<string> TargetSupportedLanguages = new List<string>
-		{
-			"EN",
-			"DE",
-			"FR",
-			"IT",
-			"NL",
-			"PL",
-			"ES",
-			"PT",
-			"PT-PT",
-			"PT-BR",
-			"RU",
-		};
-
 		private readonly bool _isTellMeAction;
 
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
@@ -37,7 +21,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			InitializeComponent();
 			_isTellMeAction = isTellMeAction;
 
-			var currentLanguagePairs = isTellMeAction ? options?.LanguagesSupported?.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs?.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
+			var currentLanguagePairs = isTellMeAction ? options.LanguagesSupported.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
 
 			NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs)
 				? Visibility.Collapsed
@@ -60,11 +44,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 				GetSupportedTargetLanguages(languagePairs);
 			}
-		}
-
-		public DeepLWindow()
-		{
-			InitializeComponent();
 		}
 
 		public DeepLTranslationOptions Options { get; set; }

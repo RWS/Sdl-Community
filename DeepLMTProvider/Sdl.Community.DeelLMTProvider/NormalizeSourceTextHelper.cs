@@ -89,16 +89,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var containsTab = text.Contains('\t');
 				if (isSpace)
 				{
-					string space;
-
-					if (containsTab)
-					{
-						space = spaceRgx.Replace(text, "\t");
-					}
-					else
-					{
-						space = spaceRgx.Replace(text, " ");
-					}
+					var space = spaceRgx.Replace(text, containsTab ? "\t" : " ");
 
 					finalText.Append(space);
 				}

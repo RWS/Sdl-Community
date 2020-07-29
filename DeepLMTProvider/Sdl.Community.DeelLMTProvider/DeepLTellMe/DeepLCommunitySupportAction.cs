@@ -5,21 +5,21 @@ using Sdl.TellMe.ProviderApi;
 namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 {
 	public class DeepLCommunitySupportAction : AbstractTellMeAction
-	{
-		public DeepLCommunitySupportAction()
-		{
-			Name = "SDL Community AppStore forum";
-		}
+    {
+        public DeepLCommunitySupportAction()
+        {
+            Name = "SDL Community AppStore forum";
+        }
 
-		public override string Category => "DeepL results";
+        public override string Category => "DeepL results";
 
-		public override Icon Icon => PluginResources.ForumIcon;
+        public override Icon Icon => PluginResources.ForumIcon;
 
-		public override bool IsAvailable => true;
+        public override bool IsAvailable => true;
 
-		public override void Execute()
-		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/f/160");
-		}
-	}
+        public override void Execute()
+        {
+            Process.Start("https://community.sdl.com/product-groups/translationproductivity/f/160");
+        }
+    }
 }
