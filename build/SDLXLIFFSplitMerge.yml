@@ -16,6 +16,7 @@ trigger: none
 #     - SDLXLIFFSplitMerge/*
 
 variables:
+- group: 'SDLPLC Authenticode Credentials'
 - name: buildPlatform
   value: 'Any CPU'
 - name: buildConfiguration
