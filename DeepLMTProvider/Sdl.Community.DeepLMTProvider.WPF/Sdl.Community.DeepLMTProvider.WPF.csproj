@@ -102,6 +102,7 @@
     <Compile Include="DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="Model\DeepLTranslationOptions.cs" />
     <Compile Include="Model\Formality.cs" />
     <Compile Include="PluginResources.Designer.cs">

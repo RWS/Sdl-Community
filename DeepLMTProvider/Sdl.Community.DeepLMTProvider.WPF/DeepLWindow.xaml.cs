@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
@@ -38,14 +39,11 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			InitializeComponent();
 			_isTellMeAction = isTellMeAction;
 
-			if (!isTellMeAction)
-			{
-				//set to project options if completely compatible or not so that the tell me action is informed
-				options.CompleteCompatibility = AreLanguagesCompatibleWithFormalityParameter(languagePairs);
-			}
+			var currentLanguagePairs = isTellMeAction ? options.LanguagesSupported.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
 
-			NotCompatibleBlock.Visibility =
-				options.CompleteCompatibility ? Visibility.Collapsed : Visibility.Visible;
+			NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs)
+				? Visibility.Collapsed
+				: Visibility.Visible;
 
 			Formality.SelectedIndex = (int)options.Formality;
 			PlainText.IsChecked = options.SendPlainText;
@@ -64,17 +62,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 				GetSupportedTargetLanguages(languagePairs);
 			}
-		}
-
-		private static bool AreLanguagesCompatibleWithFormalityParameter(LanguagePair[] languagePairs)
-		{
-			return !languagePairs.Any(lp =>
-			{
-				var twoLetterIsoLanguage = lp.TargetCulture.TwoLetterISOLanguageName;
-				return twoLetterIsoLanguage == "ja" ||
-						 twoLetterIsoLanguage == "es" ||
-						 twoLetterIsoLanguage == "zh";
-			});
 		}
 
 		public DeepLWindow()
@@ -125,7 +112,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			foreach (var languagePair in languagePairs)
 			{
 				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
-				if (TargetSupportedLanguages.Contains(targetLanguage) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				if (Helpers.IsSupportedLanguagePair(languagePair.SourceCulture.TwoLetterISOLanguageName.ToUpper(), languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper()) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
 				{
 					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
 					{

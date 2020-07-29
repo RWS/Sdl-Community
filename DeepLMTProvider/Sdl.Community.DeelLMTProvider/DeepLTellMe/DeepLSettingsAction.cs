@@ -39,7 +39,8 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 					if (translationProvider != null)
 					{
 						var uri = translationProvider.MainTranslationProvider.Uri;
-						var options = new DeepLTranslationOptions(uri);
+						var state = translationProvider.MainTranslationProvider.State;
+						var options = new DeepLTranslationOptions(uri, state);
 						var dialog = new DeepLWindow(options, isTellMeAction:true);
 						dialog.ShowDialog();
 						if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)

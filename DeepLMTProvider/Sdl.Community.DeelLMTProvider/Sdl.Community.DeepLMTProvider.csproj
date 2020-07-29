@@ -128,7 +128,6 @@
     <Compile Include="DeepLTranslationProviderConnecter.cs" />
     <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="ElementVisitor.cs" />
-    <Compile Include="Helpers.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Model\DeepLTag.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
