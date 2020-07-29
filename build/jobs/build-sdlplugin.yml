@@ -35,6 +35,5 @@ steps:
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-		
+    configuration: '$(buildConfiguration)'		
 - task: PublishPipelineMetadata@0
