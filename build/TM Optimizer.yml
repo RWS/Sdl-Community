@@ -1,27 +1,50 @@
-trigger:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - TM Optimizer/*
+trigger: none
+#  branches:
+#    include:
+#     - master
+#  paths:
+#    include:
+#     - TM Optimizer/*
 
-pr:
-  branches:
-    include:
-     - master
-  paths:
-    include:
-     - TM Optimizer/*
-
-pool: Studio-OX
+#pr:
+#  branches:
+#    include:
+#     - master
+#  paths:
+#    include:
+#     - TM Optimizer/*
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TMOptimizer.sln'
-  pathToPublish: 'TM Optimizer/Sdl.Community.TMOptimizer.Integration\bin\Release\Sdl.Community.TMOptimizer.Integration.sdlplugin'
+- group: 'SDLPLC Authenticode Credentials'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.TMOptimizer.sln'
+- name: DefaultBuildVm
+  value: 'windows-latest'
+- name: StudioBranch
+  value: refs/heads/master
+- name: VSVersion
+  value: latest
+- name: StudioProductIdentifier  
+  value: studio16
+
+pool: 
+ vmImage : '$(DefaultBuildVm)'
 
 steps:
   - template: jobs/build-sdlplugin.yml
-  - template: jobs/publish-build-artifact-task.yml
+#  - template: tasks/sign-artifacts/prepare-signing.yml
+
+#  - template: tasks/sign-artifacts/sign-single-artifact.yml
+#    parameters:
+#     fileToSign: '$(Build.Repository.LocalPath)\\bin\$(buildConfiguration)\Sdl.Community.SDLXLIFFSplitMerge.Installer.msi'
+#     description: 'installer '
+
+#  - task: PublishBuildArtifacts@1
+#    displayName: 'Publish Artifact'
+#    inputs:
+#      artifactName: TMOptimizerInstaller
+#      pathToPublish: '$(Build.Repository.LocalPath)\Installer\bin\$(buildConfiguration)'
