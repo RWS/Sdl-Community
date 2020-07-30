@@ -37,6 +37,5 @@ $ToolPath=[System.IO.Path]::GetFullPath("$SrcRoot\tools\azuresigntool.exe");
 #Write-Debug "$ToolPath sign -kvu $KeyVaultUrl -kvi $SigningClientId -kvs $SigningSecret -kvc $CertificateName -d $SigningDescription -tr $TimestampServer -td sha512 -fd sha512 -v $fileToSign"
 attrib -r "$fileToSign" 
 
+
 & "$ToolPath" sign -kvu "$KeyVaultUrl" -kvi "$SigningClientId" -kvs "$SigningSecret" -kvc "$CertificateName" -d "$SigningDescription" -tr "$TimestampServer" -td sha512 -fd sha512 -v "$fileToSign"
-
-

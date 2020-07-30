@@ -6,7 +6,6 @@ steps:
     script: |
       Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
 
-
 - task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
   inputs:
@@ -37,3 +36,4 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'		
 - task: PublishPipelineMetadata@0
+
