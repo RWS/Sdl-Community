@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.WPF.Model
@@ -14,13 +15,33 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			_uriBuilder = new TranslationProviderUriBuilder("deepltranslationprovider");
 		}
 
-		public DeepLTranslationOptions(Uri uri)
+		public DeepLTranslationOptions(Uri uri, string state = null)
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
+
+			if (string.IsNullOrWhiteSpace(state)) return;
+
+			var successful = TryParseJson(state, out var stateObject);
+			if (successful)
+			{
+				LanguagesSupported = JsonConvert
+					.DeserializeObject<Dictionary<string, string>>(stateObject?["LanguagesSupported"]?.ToString());
+			}
 		}
 
 		[JsonIgnore]
 		public string ApiKey { get; set; }
+
+		[JsonIgnore]
+		public Formality Formality
+		{
+			get
+			{
+				Enum.TryParse<Formality>(GetStringParameter("formality"), out var formality);
+				return formality;
+			}
+			set => SetStringParameter("formality", value.ToString());
+		}
 
 		[JsonIgnore]
 		public string Identifier { get; set; }
@@ -53,6 +74,23 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 		private void SetStringParameter(string p, string value)
 		{
 			_uriBuilder[p] = value;
+		}
+
+		private bool TryParseJson(string state, out JObject jObject)
+		{
+			bool successful;
+			try
+			{
+				jObject = JObject.Parse(state);
+				successful = true;
+			}
+			catch
+			{
+				successful = false;
+				jObject = null;
+			}
+
+			return successful;
 		}
 	}
 }

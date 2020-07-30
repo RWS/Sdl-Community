@@ -9,9 +9,12 @@ namespace Sdl.Community.Transcreate.Model.Tasks
 		public Report(Enumerators.Action action)
 		{
 			_action = action;
+			var actionName = _action == Enumerators.Action.Export
+				? "Export"
+				: "Import";
 
 			Guid = System.Guid.NewGuid().ToString();
-			TaskTemplateId = "Transcreate.BatchTasks." + action;
+			TaskTemplateId = "Transcreate.BatchTasks." + actionName;
 		}
 
 		public string Guid { get; set; }

@@ -5,7 +5,7 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.Transcreate.BatchTasks
 {
-	[AutomaticTask("Transcreate.Manager.BatchTasks.Import",
+	[AutomaticTask("Transcreate.BatchTasks.Import",
 		"TranscreateManager_BatchTasks_Import_Name",
 		"TranscreateManager_BatchTasks_Import_Description",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]

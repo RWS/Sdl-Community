@@ -83,9 +83,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		private void WriteCommentDefinitions(Xliff xliff, XmlWriter writer)
 		{
 			writer.WriteStartElement(NsPrefix, "cmt-defs", null);
-			foreach (var comments in xliff.DocInfo.Comments)
+			if (xliff.DocInfo.Comments != null)
 			{
-				WriteCommentDefinition(writer, comments);
+				foreach (var comments in xliff.DocInfo.Comments)
+				{
+					WriteCommentDefinition(writer, comments);
+				}
 			}
 
 			writer.WriteEndElement(); //cmt-defs

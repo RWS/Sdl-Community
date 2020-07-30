@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 
 namespace Sdl.Community.Transcreate.Model
 {
@@ -25,6 +26,9 @@ namespace Sdl.Community.Transcreate.Model
 
 		[XmlIgnore]
 		public Project Project { get; set; }
+
+		[XmlIgnore]
+		public Xliff XliffData { get; set; }
 
 		public ConfirmationStatistics ConfirmationStatistics { get; set; }
 

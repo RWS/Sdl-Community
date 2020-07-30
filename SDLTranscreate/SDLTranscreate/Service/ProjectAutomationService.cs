@@ -22,7 +22,7 @@ namespace Sdl.Community.Transcreate.Service
 		private readonly TranscreateViewController _controller;
 		private readonly CustomerProvider _customerProvider;
 
-		public ProjectAutomationService(ImageService imageService, TranscreateViewController controller, 
+		public ProjectAutomationService(ImageService imageService, TranscreateViewController controller,
 			CustomerProvider customerProvider)
 		{
 			_imageService = imageService;
@@ -30,7 +30,7 @@ namespace Sdl.Community.Transcreate.Service
 			_customerProvider = customerProvider;
 		}
 
-		public FileBasedProject CreateTranscreateProject(FileBasedProject project, 
+		public FileBasedProject CreateTranscreateProject(FileBasedProject project,
 			List<ProjectFile> projectFiles, string projectNameSuffix = null)
 		{
 			if (!string.IsNullOrEmpty(projectNameSuffix))
@@ -44,20 +44,22 @@ namespace Sdl.Community.Transcreate.Service
 			var newProjectInfo = new ProjectInfo
 			{
 				Name = projectInfo.Name + _projectNameSuffix,
+				Description = projectInfo.Description,
 				LocalProjectFolder = projectInfo.LocalProjectFolder + _projectNameSuffix,
 				SourceLanguage = projectInfo.SourceLanguage,
-				TargetLanguages = projectInfo.TargetLanguages
+				TargetLanguages = projectInfo.TargetLanguages,
+				DueDate = projectInfo.DueDate
 			};
 
 			var newProject = new FileBasedProject(newProjectInfo, projectReference);
 			foreach (var contextProjectFile in projectFiles)
 			{
 				if (!string.IsNullOrEmpty(contextProjectFile.XliffFilePath) &&
-				    File.Exists(contextProjectFile.XliffFilePath))
+					File.Exists(contextProjectFile.XliffFilePath))
 				{
-					newProject.AddFiles(new[] { contextProjectFile.XliffFilePath }, contextProjectFile.Path);
+					newProject.AddFiles(new[] {contextProjectFile.XliffFilePath}, contextProjectFile.Path);
 				}
-			}
+			}			
 
 			var sourceLanguageFiles = newProject.GetSourceLanguageFiles();
 			var scanResult = newProject.RunAutomaticTask(
@@ -86,7 +88,6 @@ namespace Sdl.Community.Transcreate.Service
 			newProject.Save();
 			return newProject;
 		}
-
 
 		public Project GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds)
 		{
@@ -164,7 +165,6 @@ namespace Sdl.Community.Transcreate.Service
 			return analysisBands;
 		}
 
-	
 		private string GeFullPath(string projectPath, string path)
 		{
 			if (string.IsNullOrEmpty(path?.Trim('\\')))
@@ -212,7 +212,7 @@ namespace Sdl.Community.Transcreate.Service
 
 
 		private ProjectFile GetProjectFile(Project project, ProjectAutomation.Core.ProjectFile projectFile,
-			Language targetLanguage, IReadOnlyCollection<string> selectedFileIds)
+			IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile
 			{
@@ -224,7 +224,7 @@ namespace Sdl.Community.Transcreate.Service
 				Action = Enumerators.Action.None,
 				Status = Enumerators.Status.Ready,
 				Date = DateTime.MinValue,
-				TargetLanguage = targetLanguage.CultureInfo.Name,
+				TargetLanguage = projectFile.Language.CultureInfo.Name,
 				Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.Id.ToString()),
 				FileType = projectFile.FileTypeId,
 				Project = project
@@ -238,6 +238,19 @@ namespace Sdl.Community.Transcreate.Service
 			var projectInfo = project.GetProjectInfo();
 			var projectFiles = new List<ProjectFile>();
 
+
+			var sourceLanguageFiles = project.GetSourceLanguageFiles();
+			foreach (var projectFile in sourceLanguageFiles)
+			{
+				if (projectFile.Role != FileRole.Translatable)
+				{
+					continue;
+				}
+
+				var projectFileModel = GetProjectFile(projectModel, projectFile, null);
+				projectFiles.Add(projectFileModel);
+			}
+
 			foreach (var targetLanguage in projectInfo.TargetLanguages)
 			{
 				var languageFiles = project.GetTargetLanguageFiles(targetLanguage);
@@ -248,7 +261,7 @@ namespace Sdl.Community.Transcreate.Service
 						continue;
 					}
 
-					var projectFileModel = GetProjectFile(projectModel, projectFile, targetLanguage, selectedFileIds);
+					var projectFileModel = GetProjectFile(projectModel, projectFile, selectedFileIds);
 					projectFiles.Add(projectFileModel);
 				}
 			}

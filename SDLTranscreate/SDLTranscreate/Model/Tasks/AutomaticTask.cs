@@ -11,11 +11,15 @@ namespace Sdl.Community.Transcreate.Model.Tasks
 		{
 			_action = action;
 
+			var actionName = _action == Enumerators.Action.Export
+				? "Export"
+				: "Import";
+
 			Guid = System.Guid.NewGuid().ToString();
 			Status = "Completed";
 			PredecessorTaskGuid = "00000000-0000-0000-0000-000000000000";
 			PercentComplete = "100";
-			TemplateIds = new List<TemplateId> {new TemplateId {Value = "Transcreate.BatchTasks." + action}};
+			TemplateIds = new List<TemplateId> {new TemplateId {Value = "Transcreate.BatchTasks." + actionName } };
 			TaskFiles = new List<TaskFile>();
 			OutputFiles = new List<OutputFile>();
 			Reports = new List<Report>();

@@ -517,7 +517,34 @@
   <data name="WarningMessage_UnableToLocateProject" xml:space="preserve">
     <value>Unable to locate the selected project: {0}</value>
   </data>
-	<data name="JobProcess_ConvertTranscreateProjectFiles" xml:space="preserve">
+  <data name="JobProcess_ConvertTranscreateProjectFiles" xml:space="preserve">
     <value>Convert Transcreate Project Files</value>
+  </data>
+  <data name="Label_ProjectName" xml:space="preserve">
+    <value>Project Name: {0}</value>
+  </data>
+  <data name="Label_ProjectPath" xml:space="preserve">
+    <value>Project Path: {0}</value>
+  </data>
+  <data name="JobProcess_ImportTranslations" xml:space="preserve">
+    <value>Import Translations</value>
+  </data>
+  <data name="Label_UnloadOiriginalProject" xml:space="preserve">
+    <value>Unload original project: {0}</value>
+  </data>
+  <data name="Label_ProjectTemplate" xml:space="preserve">
+    <value>Project Template: {0}</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Export_Description" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Export_Name" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Import_Description" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Import_Name" xml:space="preserve">
+    <value>Import</value>
   </data>
 </root>

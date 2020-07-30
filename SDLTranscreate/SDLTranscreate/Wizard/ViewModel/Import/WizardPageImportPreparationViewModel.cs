@@ -250,7 +250,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 												a => a.Selected &&
 												!string.IsNullOrEmpty(a.XliffFilePath) &&
 												File.Exists(a.XliffFilePath) &&
-												Equals(a.TargetLanguage, targetLanguage));
+												string.Compare(a.TargetLanguage, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
 					{

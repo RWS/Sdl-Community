@@ -43,7 +43,12 @@ namespace Sdl.Community.Transcreate.Actions
 			settings.ExportOptions.CopySourceToTarget = false;
 			settings.ExportOptions.IncludeTranslations = true;
 			settings.ExportOptions.ExcludeFilterIds = new List<string>();
-			
+
+			settings.ImportOptions.StatusTranslationUpdatedId = "Translated";
+			settings.ImportOptions.StatusSegmentNotImportedId = string.Empty;
+			settings.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
+			settings.ImportOptions.OverwriteTranslations = true;
+
 			var wizardService = new WizardService(Enumerators.Action.Convert, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider, 
 				_projectAutomationService);
