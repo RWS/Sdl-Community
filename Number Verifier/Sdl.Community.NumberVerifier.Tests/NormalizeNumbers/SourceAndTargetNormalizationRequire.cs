@@ -218,13 +218,135 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             Assert.True(errorMessage.Count == 0);
         }
 
-        /// <summary>
-        /// Check for negative numbers
-        /// Error : number modified/unlocalized
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        [Theory]
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'Comma' checked
+		/// Verification error: no errors should be returned.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("Simple test with comma after number 1000,for all", "1,000")]
+		public void ValidateSource_ThousandAfterComma_NoErrors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			numberVerifierSettings.Setup(s => s.CustomsSeparatorsAlphanumerics).Returns(false);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.True(errorMessage.Count == 0);
+		}
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'Comma' checked
+		/// Verification error: modified number error should be returned
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("2000,", "1,000")]
+		public void ValidateSource_ThousandAfterComma_WithErrors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+		}
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'Comma' checked
+		/// Verification error: no errors should be returned.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData("Simple test with comma before number,1000", "1,000")]
+		public void ValidateSource_ThousandBeforeComma_NoErrors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			numberVerifierSettings.Setup(s => s.CustomsSeparatorsAlphanumerics).Returns(false);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.True(errorMessage.Count == 0);
+		}
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'Comma' checked
+		/// Verification error: modified number error should be returned
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
+		[InlineData(",1000", "2,000")]
+		public void ValidateSource_ThousandBeforeComma_WithErrors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			var docPropMock = new Mock<IDocumentProperties>();
+			numberVerifierMain.Initialize(docPropMock.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+		}
+
+		/// <summary>
+		/// Check for negative numbers
+		/// Error : number modified/unlocalized
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="target"></param>
+		[Theory]
         [InlineData("-1 554,5", "1.554,5")]
         public void CheckNegativeNumbers(string source, string target)
         {
