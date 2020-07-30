@@ -47,4 +47,4 @@ steps:
     displayName: 'Publish Artifact'
     inputs:
       artifactName: TMOptimizerInstaller
-      pathToPublish: '$(Build.Repository.LocalPath)\Installer\bin\$(buildConfiguration)'
+      pathToPublish: '$(Build.Repository.LocalPath)\TM Optimizer\Sdl.Community.TMOptimizer.Installer\bin\$(buildConfiguration)'
