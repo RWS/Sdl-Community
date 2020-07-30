@@ -14,12 +14,25 @@ pr:
     include:
      - HunspellDictionaryManager/*
 
-pool: Studio-OX
-
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/HunspellDictionaryManager.sln'
+- group: 'SDLPLC Authenticode Credentials'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/HunspellDictionaryManager.sln'
+- name: DefaultBuildVm
+  value: 'windows-latest'
+- name: StudioBranch
+  value: refs/heads/master
+- name: VSVersion
+  value: latest
+- name: StudioProductIdentifier  
+  value: studio16
+
+pool: 
+ vmImage : '$(DefaultBuildVm)'
 
 steps:
   - template: jobs/build-sdlplugin.yml
