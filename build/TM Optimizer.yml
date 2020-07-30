@@ -1,18 +1,18 @@
-trigger: none
-#  branches:
-#    include:
-#     - master
-#  paths:
-#    include:
-#     - TM Optimizer/*
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TM Optimizer/*
 
-#pr:
-#  branches:
-#    include:
-#     - master
-#  paths:
-#    include:
-#     - TM Optimizer/*
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - TM Optimizer/*
 
 variables:
 - group: 'SDLPLC Authenticode Credentials'
