@@ -11,12 +11,16 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	/// </summary>
 	public class SourceAndTargetNormalizationPrevent
     {
-        
+	    private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public SourceAndTargetNormalizationPrevent()
+	    {
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
         /// <summary>
         /// Decimal separators : comma, period
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("1,55", "1.55")]
         public void DecimalSeparatorsComma(string source, string target)
@@ -33,8 +37,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 

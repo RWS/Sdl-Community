@@ -8,11 +8,16 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class CheckFullWidthJapaneseNumbers
 	{
+		private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public CheckFullWidthJapaneseNumbers()
+		{
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
 		/// <summary>
 		/// Validate the full-width Japanese numbers: ２０１６ -> 2016
 		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="target"></param>
 		[Theory]
 		[InlineData("２０１６", "2016")]
 		public void ValidateFullWidthJapaneseNumbers(string source, string target)
@@ -24,8 +29,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
