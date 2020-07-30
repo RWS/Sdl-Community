@@ -10,6 +10,12 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	/// </summary>
 	public class SourceAndTargetNormalizationAllow
     {
+	    private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public SourceAndTargetNormalizationAllow()
+	    {
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
 
         #region Check thousands numbers and negative numbers
 
@@ -18,8 +24,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// Decimal sep: period
         /// Error: no error
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("1.554,5 negative number -1.554,5", "1,554,5 negative -1.554,5")]
         public void ThousandsSeparatorsCommaPeriod(string source, string target)
@@ -30,8 +34,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -42,8 +45,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// Thousands sep: comma, period, space
         /// Decimal: comma
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("1 554,5 some word 1.234,5 another word -1 222,3", "1.554,5 test 1,234,5 another test word −1.222,3")]
         public void ThousandsSeparatorsSpaceCommaPeriod(string source, string target)
@@ -54,8 +55,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -72,8 +72,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -83,8 +82,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// Thousands sep: space, thin space, no-break space
         /// Decimal sep: comma, period
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("1 554.5 some word 1 234,5 another word −1 222,3", "1 554,5 test 1 234.5 another test word -1 222,3")]
         public void ThousandsSeparatorsAllTypesOfSpaces(string source, string target)
@@ -96,8 +93,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -108,8 +104,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// Thousands sep: no separator, comma, period
         /// Decimal sep: comma, period
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("1,554.5 some word 1.234,5 another word 1.222,3", "1,554,5 test 1,234.5 another test word 1.222,3")]
         public void ThousandsSeparatorsNoSeparatorCommaPeriod(string source, string target)
@@ -127,8 +121,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -142,8 +135,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <summary>
         /// Check decimal numbers, both numbers should have comma as separator
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("1,55", "1.55")]
         public void DecimalSeparatorsComma(string source, string target)
@@ -156,8 +147,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -167,9 +157,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// <summary>
 		/// Check decimal numbers, numbers can have period or comma as separator
 		/// Error message: Number modified
-		/// /// </summary>
-		/// <param name="source"></param>
-		/// <param name="target"></param>
+		/// </summary>
 		[Theory]
 		[InlineData("1,55", "1.55")]
 		public void DecimalSeparatorsComma_WithErrors(string source, string target)
@@ -182,8 +170,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -194,8 +181,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// Check decimal numbers, numbers can have period or comma as separator
 		/// No error message
 		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="target"></param>
 		[Theory]
         [InlineData("2,55", "2.55")]
         public void DecimalSeparatorsCommaAndPeriod(string source, string target)
@@ -208,8 +193,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -224,8 +208,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// Check decimal numbers and removed numbers error.
         /// Error: Number removed.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("2,55 1,25", "2.55")]
         public void CheckForRemovedNumbers(string source, string target)
@@ -238,8 +220,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -250,8 +231,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// Check decimal numbers and added numbers error.
         /// Error: Number added.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
         [InlineData("2,55", "2.55 1,25")]
         public void CheckForAddedNumbers(string source, string target)
@@ -264,8 +243,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
             Assert.Equal(PluginResources.Error_NumbersAdded, errorMessage[0].ErrorMessage);

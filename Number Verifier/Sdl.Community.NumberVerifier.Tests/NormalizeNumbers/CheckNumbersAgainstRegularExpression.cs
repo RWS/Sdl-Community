@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
@@ -8,14 +7,18 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class CheckNumbersAgainstRegularExpression
 	{
+		private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public CheckNumbersAgainstRegularExpression()
+		{
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
 		/// <summary>
-        /// In case of -(space)number the dash should be ignored because is not a negative number  
-        /// is a item in a list
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="thousandSep"></param>
-        /// <param name="decimalSep"></param>
-        [Theory]
+		/// In case of -(space)number the dash should be ignored because is not a negative number  
+		/// is a item in a list
+		/// </summary>
+		[Theory]
         [InlineData("- 34", ".,", ",")]
         public void SkipTheDash(string text, string thousandSep, string decimalSep)
         {
@@ -26,8 +29,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
@@ -37,7 +39,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             Assert.Equal("34", normalizeNumber.InitialNumberList[0]);
             Assert.Equal("34", normalizeNumber.NormalizedNumberList[0]);
-            
         }
 
         [Theory]
@@ -50,8 +51,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 			
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
@@ -74,8 +74,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
@@ -99,8 +98,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			// run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep, true);
 			var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep, true);
@@ -126,8 +124,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep, true);
 			var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep, true);
