@@ -7,6 +7,13 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class MultipleErrors
 	{
+		private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public MultipleErrors()
+		{
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
 		[Theory]
 		[InlineData("1,554,5 alphanumeric AB23", " wrong separator 1 554.5 wrong alphanumeric BC12")]
 		public void ThousandsNumbersAndAlphanumerics(string source, string target)
@@ -23,8 +30,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 

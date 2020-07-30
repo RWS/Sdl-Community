@@ -164,7 +164,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitUncheckedTargetCheckedError(string source, string target)
 		{
 			var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_NumbersAdded, errorMessage[0].ErrorMessage);
+			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
 		}
 
 		/// <summary>

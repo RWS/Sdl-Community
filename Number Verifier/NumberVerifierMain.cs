@@ -833,23 +833,20 @@ namespace Sdl.Community.NumberVerifier
 			{
 				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator, VerificationSettings.SourceDecimalCustomSeparator, VerificationSettings.TargetDecimalCustomSeparator);
 				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator);
+				var sepChars = _textFormatter.GetSeparatorsChars(customDecimalSeparators, customThousandSeparators);
 
 				var numbers = Regex.Split(normalizedNumber.Text, $@"[^−\-\0-9 ０-９\[.,{customDecimalSeparators}{customThousandSeparators}{Constants.SpaceSeparators}]+").Where(c => c != "." && c.Trim() != "");
-
+				
 				if (numbers.Any())
 				{
 					foreach (var item in numbers)
 					{
 						var text = item.Trim();
-						var separatorModel = new SeparatorModel
-						{
-							LengthCommaOrCustomSep = GetItemLength(text, ',', $"{customDecimalSeparators}{customThousandSeparators}"),
-							LengthPeriodOrCustomSep = GetItemLength(text, '.', $"{customDecimalSeparators}{customThousandSeparators}"),
-							DecimalCustomSeparators = customDecimalSeparators,
-							ThousandCustomSeparators = customThousandSeparators,
-							DecimalSeparators = normalizedNumber.DecimalSeparators,
-							ThousandSeparators = normalizedNumber.ThousandSeparators
-						};
+						text = !string.IsNullOrWhiteSpace(text) ? _textFormatter.RemovePunctuationChar(text, sepChars, _omitLeadingZero) : string.Empty;
+						
+						if (string.IsNullOrWhiteSpace(text)) continue;
+
+						var separatorModel = GetSeparatorModel(normalizedNumber, text, customDecimalSeparators, customThousandSeparators);
 
 						if (IsNumberDecimal(text, separatorModel))
 						{
@@ -883,6 +880,19 @@ namespace Sdl.Community.NumberVerifier
 			{
 				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		private SeparatorModel GetSeparatorModel(NormalizedNumber normalizedNumber, string text, string customDecimalSeparators, string customThousandSeparators)
+		{
+			return new SeparatorModel
+			{
+				LengthCommaOrCustomSep = GetItemLength(text, ',', $"{customDecimalSeparators}{customThousandSeparators}"),
+				LengthPeriodOrCustomSep = GetItemLength(text, '.', $"{customDecimalSeparators}{customThousandSeparators}"),
+				DecimalCustomSeparators = customDecimalSeparators,
+				ThousandCustomSeparators = customThousandSeparators,
+				DecimalSeparators = normalizedNumber.DecimalSeparators,
+				ThousandSeparators = normalizedNumber.ThousandSeparators
+			};
 		}
 
 		private void SetSeparatorInformation(SeparatorModel separatorModel, string customSeparators, bool isThousandDecimal)

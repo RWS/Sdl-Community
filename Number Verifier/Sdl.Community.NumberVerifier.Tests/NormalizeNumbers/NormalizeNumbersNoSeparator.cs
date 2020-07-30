@@ -8,7 +8,14 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class NormalizeNumbersNoSeparator
     {
-	    [Theory]
+	    private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public NormalizeNumbersNoSeparator()
+	    {
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
+		[Theory]
         [InlineData("1,55", " ", ",", true)]
         public string NormalizeNoSeparatorNumbers(string text, string thousandSep, string decimalSep, bool noSeparator)
         {
@@ -19,8 +26,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 			
             var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
 			{
@@ -51,8 +57,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -74,8 +79,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -99,8 +103,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 	        //run initialize method in order to set chosen separators
-	        var docPropMock = new Mock<IDocumentProperties>();
-	        numberVerifierMain.Initialize(docPropMock.Object);
+	        numberVerifierMain.Initialize(_documentProperties.Object);
 
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
