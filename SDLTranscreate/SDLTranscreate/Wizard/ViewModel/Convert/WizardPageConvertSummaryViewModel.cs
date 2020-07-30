@@ -58,28 +58,29 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_ProjectBackup, WizardContext.ProjectBackupPath) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_MaxAlternativeTranslations, WizardContext.ConvertOptions.MaxAlternativeTranslations) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_UnloadOiriginalProject, WizardContext.ConvertOptions.CloseProjectOnComplete) + Environment.NewLine;
 
+			var soruceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name;
+
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;			
+			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count(a => a.TargetLanguage != soruceLanguage)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_Languages, GetProjectTargetLanguagesString(WizardContext.Project)) + Environment.NewLine;
 
-			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
+			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected && a.TargetLanguage != soruceLanguage)
 				.Select(a => a.TargetLanguage).Distinct();
 
 			foreach (var targetLanguage in targetLanguages)
-			{				
+			{
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
 
 				var targetLanguageFiles =
 					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
-				{									
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;					
+				{
+					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 				}
 			}
 
@@ -98,7 +99,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			return targetLanguages;
 		}
 
-		
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{

@@ -547,4 +547,10 @@
   <data name="TranscreateManager_BatchTasks_Import_Name" xml:space="preserve">
     <value>Import</value>
   </data>
+  <data name="TranscreateManager_BatchTasks_Convert_Description" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Convert_Name" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
 </root>

@@ -89,7 +89,8 @@ namespace Sdl.Community.Transcreate.Service
 			return newProject;
 		}
 
-		public Project GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds)
+		public Project GetProject(FileBasedProject selectedProject, 
+			IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)
 		{
 			if (selectedProject == null)
 			{
@@ -132,6 +133,8 @@ namespace Sdl.Community.Transcreate.Service
 			{
 				project.ProjectFiles = GetProjectFiles(selectedProject, project, selectedFileIds);
 			}
+
+			AssignProjectFileXliffData(project, projectFiles);
 
 			return project;
 		}
@@ -210,6 +213,37 @@ namespace Sdl.Community.Transcreate.Service
 			return null;
 		}
 
+		private void AssignProjectFileXliffData(Project project, IEnumerable<ProjectFile> projectfiles)
+		{
+			if (projectfiles == null)
+			{
+				return;
+			}
+
+			foreach (var projectFile in projectfiles)
+			{
+				if (projectFile.XliffData == null)
+				{
+					continue;
+				}
+
+				var projectFileName = projectFile.Name.Substring(0, projectFile.Name.Length - ".sdlxliff".Length) + ".xliff.sdlxliff";
+
+				var targetFile = project.ProjectFiles?.FirstOrDefault(a =>
+					string.Compare(a.Name, projectFileName, StringComparison.CurrentCultureIgnoreCase) == 0
+					&& string.Compare(a.Path, projectFile.Path, StringComparison.CurrentCultureIgnoreCase) == 0
+					&& string.Compare(a.TargetLanguage, projectFile.TargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
+
+				if (targetFile != null)
+				{
+					targetFile.XliffData = projectFile.XliffData;
+					targetFile.XliffFilePath = projectFile.XliffFilePath;
+					targetFile.ConfirmationStatistics = projectFile.ConfirmationStatistics;
+					targetFile.TranslationOriginStatistics = projectFile.TranslationOriginStatistics;
+					targetFile.Selected = true;
+				}
+			}
+		}
 
 		private ProjectFile GetProjectFile(Project project, ProjectAutomation.Core.ProjectFile projectFile,
 			IReadOnlyCollection<string> selectedFileIds)

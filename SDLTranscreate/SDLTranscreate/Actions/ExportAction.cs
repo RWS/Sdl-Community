@@ -86,7 +86,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
 		{
-			Enabled = e.SelectedProject != null;
+			//Enabled = e.SelectedProject != null;
 		}
 	}
 }

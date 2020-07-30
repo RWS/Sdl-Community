@@ -49,7 +49,7 @@ namespace Sdl.Community.Transcreate
 		private ProjectFilesViewControl _projectFilesViewControl;
 		private ProjectsNavigationViewControl _projectsNavigationViewControl;
 		private ProjectFileActivityViewController _projectFileActivityViewController;
-		private ProjectPropertiesViewController _projectPropertiesViewController;
+		//private ProjectPropertiesViewController _projectPropertiesViewController;
 		private ProjectsController _projectsController;
 		private EditorController _editorController;
 		private FilesController _filesController;
@@ -766,28 +766,28 @@ namespace Sdl.Community.Transcreate
 			}
 		}
 
-		private void SetProjectPropertiesViewController()
-		{
-			if (_projectPropertiesViewController != null)
-			{
-				return;
-			}
+		//private void SetProjectPropertiesViewController()
+		//{
+		//	if (_projectPropertiesViewController != null)
+		//	{
+		//		return;
+		//	}
 
-			try
-			{
-				_projectPropertiesViewController =
-					SdlTradosStudio.Application.GetController<ProjectPropertiesViewController>();
+		//	try
+		//	{
+		//		_projectPropertiesViewController =
+		//			SdlTradosStudio.Application.GetController<ProjectPropertiesViewController>();
 
-				var viewModel = _projectsNavigationViewModel.ProjectPropertiesViewModel =
-					new ProjectPropertiesViewModel(_projectsNavigationViewModel.SelectedProject);
+		//		var viewModel = _projectsNavigationViewModel.ProjectPropertiesViewModel =
+		//			new ProjectPropertiesViewModel(_projectsNavigationViewModel.SelectedProject);
 
-				_projectPropertiesViewController.ViewModel = viewModel;
-			}
-			catch
-			{
-				// catch all; unable to locate the controller
-			}
-		}
+		//		_projectPropertiesViewController.ViewModel = viewModel;
+		//	}
+		//	catch
+		//	{
+		//		// catch all; unable to locate the controller
+		//	}
+		//}
 
 		private bool AddNewProjectToContainer(FileBasedProject project)
 		{
