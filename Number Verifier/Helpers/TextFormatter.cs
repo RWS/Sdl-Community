@@ -202,7 +202,18 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			{
 				text = text.Remove(0, 1);
 			}
+
+			if (!string.IsNullOrWhiteSpace(text) && IsPunctuationChar(text, sepChars))
+			{
+				text = RemovePunctuationChar(text, sepChars, omitLeadingZero);
+			}
+			
 			return text.Trim();
+		}
+
+		private bool IsPunctuationChar(string text, char[] sepChars)
+		{
+			return text.IndexOfAny(sepChars) == 0 || text.Length - 1 == text.LastIndexOfAny(sepChars);
 		}
 	}
 }

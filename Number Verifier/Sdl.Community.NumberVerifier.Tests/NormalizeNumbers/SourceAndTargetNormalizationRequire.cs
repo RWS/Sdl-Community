@@ -375,6 +375,35 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// Verification error: no errors should be returned.
 		/// </summary>
 		[Theory]
+		[InlineData("This is a simple test with 3000 and a comma before second number...3000", "This is a simple test with 3000 and second number 3,000")]
+		[InlineData("This is a simple test with...*+12000 and a comma before second number...3000", "This is a simple test with 12.000 and second number 3,000")]
+		public void ValidateSource_ThousandBeforeComma_WithMultiplePunctuationMarks_NoErrors(string source, string target)
+		{
+			//target settings
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+
+			// source settings
+			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			numberVerifierSettings.Setup(s => s.CustomsSeparatorsAlphanumerics).Returns(false);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+			//run initialize method in order to set chosen separators
+			numberVerifierMain.Initialize(_documentProperties.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+			Assert.True(errorMessage.Count == 0);
+		}
+
+		/// <summary>
+		/// Source sep: 'No separator' checked
+		/// Target sep: 'Comma' checked
+		/// Verification error: no errors should be returned.
+		/// </summary>
+		[Theory]
 		[InlineData("This is 12,000 and 3000 and a comma before second number, 3000", "This is 12000 and 3000 and second number 3,000")]
 		public void ValidateSource_WithSpaces_CombinedNumbers_NoErrors(string source, string target)
 		{
