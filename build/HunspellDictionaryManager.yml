@@ -36,3 +36,15 @@ pool:
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
+     description: 'installer '
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      artifactName: HunspellDictionaryManagerInstaller
+      pathToPublish: '$(Build.Repository.LocalPath)\\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'
