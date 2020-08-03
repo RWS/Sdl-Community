@@ -14,12 +14,17 @@ pr:
     include:
      - Sdl.Community.UpLiftAutomationV4/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.FragmentAlignmentAutomation.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.FragmentAlignmentAutomation.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

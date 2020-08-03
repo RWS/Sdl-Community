@@ -14,13 +14,22 @@ pr:
     include:
      - SegmentStatusSwitcher/*
 
-pool: Studio-OX
+	 pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.SegmentStatusSwitcher.sln'
-  pathToPublish: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher\bin\Release\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.SegmentStatusSwitcher.sln'
+- name: pathToPublish
+  value: 'SegmentStatusSwitcher\Sdl.Community.SegmentStatusSwitcher\bin\Release\Sdl.Community.SegmentStatusSwitcher.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

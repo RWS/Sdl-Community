@@ -14,13 +14,19 @@ pr:
     include:
      - TranslationMemoryManagementUtility/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
-  pathToPublish: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility\bin\Release\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TranslationMemoryManagementUtility.sln'
+- name: pathToPublish
+  value: 'TranslationMemoryManagementUtility/Sdl.Community.TranslationMemoryManagementUtility\bin\Release\Sdl.Community.TranslationMemoryManagementUtility.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

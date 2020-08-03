@@ -14,13 +14,19 @@ pr:
     include:
      - TermInjector/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TermInjector.sln'
-  pathToPublish: 'TermInjector/Sdl.Community.TermInjector\bin\Release\Sdl.Community.TermInjector.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value:  '**/Sdl.Community.TermInjector.sln'
+- name: pathToPublish
+  value: 'TermInjector/Sdl.Community.TermInjector\bin\Release\Sdl.Community.TermInjector.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

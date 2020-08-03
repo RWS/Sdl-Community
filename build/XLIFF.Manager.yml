@@ -14,13 +14,19 @@ pr:
     include:
      - XLIFF.Manager/*
  
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/XLIFF.Manager.sln'
-  pathToPublish: 'XLIFF.Manager/XLIFF.Manager\bin\Release\Sdl.Community.XLIFF.Manager.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/XLIFF.Manager.sln'
+- name: pathToPublish
+  value: 'XLIFF.Manager/XLIFF.Manager\bin\Release\Sdl.Community.XLIFF.Manager.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

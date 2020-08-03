@@ -14,13 +14,19 @@ pr:
     include:
      - TMX/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.FileTypeSupport.TMX.sln'
-  pathToPublish: 'TMX\bin\Release\Sdl.Community.FileType.TMX.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.FileTypeSupport.TMX.sln'
+- name: pathToPublish
+  value: 'TMX\bin\Release\Sdl.Community.FileType.TMX.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

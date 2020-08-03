@@ -16,20 +16,13 @@ pr:
 
 variables:
 - group: 'SDLPLC Authenticode Credentials'
+- template: jobs/branch-variables.yml
 - name: buildPlatform
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: solution
   value: '**/Sdl.Community.TMOptimizer.sln'
-- name: DefaultBuildVm
-  value: 'windows-latest'
-- name: StudioBranch
-  value: refs/heads/master
-- name: VSVersion
-  value: latest
-- name: StudioProductIdentifier  
-  value: studio16
 
 pool: 
  vmImage : '$(DefaultBuildVm)'

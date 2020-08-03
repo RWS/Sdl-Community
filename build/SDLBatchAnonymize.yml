@@ -14,12 +14,17 @@ pr:
     include:
      - SDLBatchAnonymize/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.SDLBatchAnonymize.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.SDLBatchAnonymize.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

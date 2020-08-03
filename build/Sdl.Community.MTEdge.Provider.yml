@@ -14,15 +14,19 @@ pr:
     include:
      - SDLMTEdge.Provider/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.MTEdge.Provider.sln'
-  pathToPublish : SDLMTEdge.Provider\SDLMTEdgeTranslationProvider\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin
-
-
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.MTEdge.Provider.sln'
+- name: pathToPublish
+  value: SDLMTEdge.Provider\SDLMTEdgeTranslationProvider\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin
 
 steps:
   - template: jobs/build-sdlplugin.yml

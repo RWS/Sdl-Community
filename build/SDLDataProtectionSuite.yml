@@ -14,13 +14,19 @@ pr:
     include:
      - SDLDataProtectionSuite/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/SDLDataProtectionSuite.sln'
-  pathToPublish: 'SDLDataProtectionSuite\SDLDataProtectionSuite\bin\Release\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/SDLDataProtectionSuite.sln'
+- name: pathToPublish
+  value: 'SDLDataProtectionSuite\SDLDataProtectionSuite\bin\Release\Sdl.Community.SdlDataProtectionSuite.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

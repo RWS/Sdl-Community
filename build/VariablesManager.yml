@@ -14,13 +14,19 @@ pr:
     include:
      - VariablesManager/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution: '**/VariablesManager.sln'
-  pathToPublish: '$(appdata)/SDL/SDL Trados Studio/12/Plugins/Packages/VariablesManager.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/VariablesManager.sln'
+- name: pathToPublish
+  value: '$(appdata)/SDL/SDL Trados Studio/12/Plugins/Packages/VariablesManager.sdlplugin'
 
 steps:
   - powershell: echo "##vso[task.setvariable variable=appdata]$env:appdata"

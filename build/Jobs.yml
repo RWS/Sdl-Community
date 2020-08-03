@@ -14,13 +14,19 @@ pr:
     include:
      - Jobs/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.Jobs.sln'
-  pathToPublish: 'Jobs\Sdl.Community.Jobs\bin\Release\Sdl.Community.Jobs.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value : '**/Sdl.Community.Jobs.sln'
+- name: pathToPublish
+  value: 'Jobs\Sdl.Community.Jobs\bin\Release\Sdl.Community.Jobs.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

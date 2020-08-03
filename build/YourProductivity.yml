@@ -12,13 +12,20 @@ pr:
   paths:
     include:
      - YourProductivity/*
-pool: Studio-OX
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.YourProductivity.sln'
-  pathToPublish: 'YourProductivity/Sdl.Community.YourProductivity\bin\Release\Sdl.Community.YourProductivity.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.YourProductivity.sln'
+- name: pathToPublish
+  value: 'YourProductivity/Sdl.Community.YourProductivity\bin\Release\Sdl.Community.YourProductivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

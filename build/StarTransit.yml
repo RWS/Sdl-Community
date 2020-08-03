@@ -14,13 +14,19 @@ pr:
     include:
      - StarTransit/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.StarTransit.sln'
-  pathToPublish: 'StarTransit\Sdl.Community.StarTransit\bin\Release\Sdl.Community.StarTransit.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.StarTransit.sln'
+- name: pathToPublish
+  value: 'StarTransit\Sdl.Community.StarTransit\bin\Release\Sdl.Community.StarTransit.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

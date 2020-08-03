@@ -14,12 +14,17 @@ pr:
     include:
      - SDLMTEdge.Provider/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/SDLMTEdgeLanguageResourceBuilder.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/SDLMTEdgeLanguageResourceBuilder.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

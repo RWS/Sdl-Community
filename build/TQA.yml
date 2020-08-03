@@ -14,13 +14,19 @@ pr:
     include:
      - TQA/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TQA.sln'
-  pathToPublish: 'TQA/TQA\bin\Release\Sdl.Community.TQA.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TQA.sln'
+- name: pathToPublish
+  value: 'TQA/TQA\bin\Release\Sdl.Community.TQA.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
