@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly LanguagePair _languageDirection;
 		private readonly DeepLTranslationOptions _options;
 		private DeepLTranslationProviderConnecter _deeplConnect;
-		private Logger Logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
@@ -99,7 +99,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
 			}
 			return results;
 		}
@@ -336,7 +336,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Logger.Error($"{e.Message}\n {e.StackTrace}");
+				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 			return preTranslatesegments;
 		}
