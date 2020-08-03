@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Helpers;
@@ -11,6 +12,7 @@ using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -19,7 +21,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private readonly EditorController _editorController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
-
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController)
@@ -99,7 +101,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.SupportsLanguageDirection} {e.Message}\n {e.StackTrace}");
 			}
 
 			return false;

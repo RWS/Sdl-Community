@@ -6,16 +6,19 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Helpers;
+using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.LanguagePlatform.Core;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
-	{		
+	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public TranslationService(IConnectionService connectionService)
 		{
 			ConnectionService = connectionService;
@@ -36,7 +39,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				var success = ConnectionService.Connect(ConnectionService.Credential);
 				if (!success.Item1)
 				{
-					Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
 					throw new Exception(PluginResources.Message_Connection_token_has_expired);
 				}
 			}
@@ -58,14 +61,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Model = model.SelectedModel.Model,
 					InputFormat = "xliff"
 				};
-				//var feedback = new Feedback
-				//{
-				//	SourceText = text,
-				//	SourceLanguageId = model.SelectedSource.CodeName,
-				//	TargetLanguageId = model.SelectedTarget.CodeName,
-				//	Model = model.SelectedModel.Model
-				//};
-
+				
 				if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 					&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 				{
@@ -119,7 +115,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					var success = ConnectionService.Connect(ConnectionService.Credential);
 					if (!success.Item1)
 					{
-						Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+						_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
 						throw new Exception(PluginResources.Message_Connection_token_has_expired);
 					}
 				}
@@ -142,12 +138,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						return result;
 					}
 
-					Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
+					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
 				throw;
 			}
 
@@ -164,7 +160,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					var success = ConnectionService.Connect(ConnectionService.Credential);
 					if (!success.Item1)
 					{
-						Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+						_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
 						throw new Exception(PluginResources.Message_Connection_token_has_expired);
 					}
 				}
@@ -187,12 +183,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						return result;
 					}
 
-					Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
+					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
 				throw;
 			}
 
