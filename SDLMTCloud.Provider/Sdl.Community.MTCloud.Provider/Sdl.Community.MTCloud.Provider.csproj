@@ -50,10 +50,6 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReachFramework" />
-    <Reference Include="Sdl.Community.RateItControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6073d430a1fe4c62, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>

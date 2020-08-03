@@ -149,8 +149,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			if (languagePair != null && LanguageMappingsService.SubscriptionInfo.LanguagePairs?.Count > 0)
 			{
 				mtCloudLanguagePair = GetMTCloudLanguagePair();
-
-				if (mtCloudLanguagePair != null)
+				
+				var hasOptionsLanguageMapping = HasOptionsLanguageMapping(languagePair);
+				if (mtCloudLanguagePair != null && hasOptionsLanguageMapping)
 				{
 					return mtCloudLanguagePair;
 				}
@@ -338,6 +339,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 							  && l.TargetLanguages.Any(a =>
 								  a.CodeName.Equals(o.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase))));
 			return languagePair;
+		}
+
+		private bool HasOptionsLanguageMapping(LanguagePair languagePair)
+		{
+			return Options.LanguageMappings.Any(l => l.SourceTradosCode.Equals(languagePair.SourceCulture.Name)
+			                                        && l.TargetTradosCode.Equals(languagePair.TargetCulture.Name));
 		}
 	}
 }
