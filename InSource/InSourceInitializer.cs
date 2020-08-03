@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Community.InSource.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -13,6 +14,7 @@ namespace Sdl.Community.InSource
 	    private IStudioEventAggregator _eventAggregator;
 		public void Execute()
 	    {
+			Log.Setup();
 		    _eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 		    _eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
 	    }
