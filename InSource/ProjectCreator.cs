@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using NLog;
 using Sdl.Community.InSource.Helpers;
 using Sdl.Community.InSource.Interfaces;
 using Sdl.ProjectAutomation.Core;
@@ -19,7 +20,7 @@ namespace Sdl.Community.InSource
 	    private readonly ProjectRequest _projectRequest;
 		private readonly IMessageBoxService _messageBoxService;
 
-		public static readonly Log Log = Log.Instance;
+		public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate, IMessageBoxService messageBoxService)
         {
@@ -103,7 +104,7 @@ namespace Sdl.Community.InSource
 			}
 		    catch (Exception e)
 		    {
-				Log.Logger.Error($"ProjectCreator-> CreateProject method: {e.Message}\n {e.StackTrace}");
+			    _logger.Error($"ProjectCreator-> CreateProject method: {e.Message}\n {e.StackTrace}");
 		    }
 			return null;
 	    }
@@ -151,7 +152,7 @@ namespace Sdl.Community.InSource
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ExecuteTaskSequence method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ExecuteTaskSequence method: {ex.Message}\n {ex.StackTrace}");
 				_messageBoxService.ShowMessage(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
 			}
 		}
@@ -199,7 +200,7 @@ namespace Sdl.Community.InSource
 			}
 	        catch (Exception e)
 			{
-				Log.Logger.Error($"GetProjectFolderPath method: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"GetProjectFolderPath method: {e.Message}\n {e.StackTrace}");
 			}
 	        return string.Empty;
         }
@@ -215,7 +216,7 @@ namespace Sdl.Community.InSource
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"ExistLanguageDirection method: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"ExistLanguageDirection method: {e.Message}\n {e.StackTrace}");
 			}
 			return false;
 		}
