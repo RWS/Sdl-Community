@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.InSource.Helpers;
 using Sdl.Community.InSource.Interfaces;
 using Sdl.Community.InSource.Notifications;
@@ -44,8 +45,9 @@ namespace Sdl.Community.InSource
 		private BackgroundWorker _worker;
 
 		public static Persistence Persistence = new Persistence();
-		public static readonly Log Log = Log.Instance;
-		
+		public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+
 		public event EventHandler ProjectRequestsChanged;
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -142,7 +144,7 @@ namespace Sdl.Community.InSource
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"CheckForProjects method: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"CheckForProjects method: {e.Message}\n {e.StackTrace}");
 			}
 		}
 
@@ -302,7 +304,7 @@ namespace Sdl.Community.InSource
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"InSourceViewController->CreateProjects method: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"InSourceViewController->CreateProjects method: {e.Message}\n {e.StackTrace}");
 			}
 		}
 
@@ -398,7 +400,7 @@ namespace Sdl.Community.InSource
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"CreateProjectFromNotification method: {e.Message}\n {e.StackTrace}");
 			}
 		}
 
