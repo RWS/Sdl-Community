@@ -10,7 +10,11 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		public static void Setup()
 		{
-			var config = LogManager.Configuration ?? new LoggingConfiguration();
+			if (LogManager.Configuration == null)
+			{
+				LogManager.Configuration = new LoggingConfiguration();
+			}
+			var config = LogManager.Configuration;
 
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
 				"DeepLLogs");
