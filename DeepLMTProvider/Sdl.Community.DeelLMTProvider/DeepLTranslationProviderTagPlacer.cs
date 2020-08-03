@@ -14,7 +14,7 @@ namespace Sdl.Community.DeepLMTProvider
         private string _returnedText;
         private Segment _sourceSegment;
         private Dictionary<string, DeepLTag> _tagsDictionary;
-        private Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public DeepLTranslationProviderTagPlacer(Segment sourceSegment)
         {
@@ -72,7 +72,7 @@ namespace Sdl.Community.DeepLMTProvider
             }
             catch (Exception e)
             {
-                Logger.Error($"{e.Message}\n {e.StackTrace}");
+                _logger.Error($"{e.Message}\n {e.StackTrace}");
             }
 
             return segment; //this will return a tagged segment
@@ -172,7 +172,7 @@ namespace Sdl.Community.DeepLMTProvider
             }
             catch (Exception e)
             {
-                Logger.Error($"{e.Message}\n {e.StackTrace}");
+                _logger.Error($"{e.Message}\n {e.StackTrace}");
             }
             return _tagsDictionary;
         }
