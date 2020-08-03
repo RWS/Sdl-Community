@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		private readonly string _pluginVersion = "";
 		private Formality _formality;
-		private Logger Logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public DeepLTranslationProviderConnecter(string key, Formality formality)
 		{
@@ -46,7 +46,7 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception e)
 			{
 				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
-				Logger.Error($"{e.Message}\n {e.StackTrace}");
+				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-						Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+						_logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
 							$"Response content: {response.Content?.ReadAsStringAsync().Result}.");
 						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
@@ -101,7 +101,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Logger.Error($"{e.Message}\n {e.StackTrace}");
+				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
 			return translatedText;
