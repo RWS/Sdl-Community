@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
@@ -16,15 +17,13 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		public static readonly Log Log = Log.Instance;
-		private readonly string _identifier;
 		private readonly string _pluginVersion = "";
 		private Formality _formality;
+		private Logger Logger = LogManager.GetCurrentClassLogger();
 
-		public DeepLTranslationProviderConnecter(string key, string identifier, Formality formality)
+		public DeepLTranslationProviderConnecter(string key, Formality formality)
 		{
 			ApiKey = key;
-			_identifier = identifier;
 			_formality = formality;
 
 			try
@@ -47,7 +46,7 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception e)
 			{
 				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
-				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+				Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 		}
 
@@ -94,7 +93,7 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-						Log.Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+						Logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
 							$"Response content: {response.Content?.ReadAsStringAsync().Result}.");
 						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					}
@@ -102,7 +101,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+				Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
 			return translatedText;
