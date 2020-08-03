@@ -14,13 +14,19 @@ pr:
     include:
      - ApplyTMTemplate/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.ApplyTMTemplate.sln'
-  pathToPublish: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate\bin\Release\Sdl.Community.ApplyTMTemplate.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.ApplyTMTemplate.sln'
+- name: pathToPublish
+  value: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate\bin\Release\Sdl.Community.ApplyTMTemplate.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

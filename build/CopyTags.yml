@@ -14,12 +14,17 @@ pr:
     include:
      - CopyTags/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/SDLCopyTags.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.SDLCopyTags.sln'
   pathToPublish: 'CopyTags\CopyTags\bin\Release\SDLCopyTags.sdlplugin'
 
 steps:

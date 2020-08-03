@@ -14,13 +14,19 @@ pr:
     include:
      - Antidote Verifier/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AntidoteVerifier.sln'
-  pathToPublish: 'Antidote Verifier\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier\bin\Release\Sdl.Community.AntidoteVerifier.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.AntidoteVerifier.sln'
+- name: pathToPublish
+  value: 'Antidote Verifier\Sdl.Community.AntidoteVerifier\Sdl.Community.AntidoteVerifier\bin\Release\Sdl.Community.AntidoteVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

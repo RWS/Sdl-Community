@@ -14,13 +14,19 @@ pr:
     include:
      - Export to Excel/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.ExportToExcel.sln'
-  pathToPublish: 'Export to Excel\Export to Excel\bin\Release\Sdl.Community.ExportToExcel.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/ExportToExcel.sln'
+- name: pathToPublish
+  value: 'Export to Excel\Export to Excel\bin\Release\Sdl.Community.ExportToExcel.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

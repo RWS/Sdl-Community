@@ -14,12 +14,17 @@ pr:
     include:
      - DeepLMTProvider/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.DeepLMTProvider.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.DeepLMTProvider.sln'
   pathToPublish: 'DeepLMTProvider\Sdl.Community.DeelLMTProvider\bin\Release\Sdl.Community.DeepLMTProvider.sdlplugin'
 
 steps:

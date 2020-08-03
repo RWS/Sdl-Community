@@ -1,0 +1,12 @@
+variables:
+- name: DefaultBuildVm
+  value: 'windows-latest'
+
+- name: StudioProductIdentifier  
+  value: Studio16
+
+- name: StudioBranch
+  value: refs/heads/master
+
+- name: VSVersion
+  value: '16.0'
