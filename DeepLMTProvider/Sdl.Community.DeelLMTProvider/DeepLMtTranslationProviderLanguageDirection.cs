@@ -2,28 +2,32 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		public static readonly Log Log = Log.Instance;
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly LanguagePair _languageDirection;
 		private readonly DeepLTranslationOptions _options;
 		private DeepLTranslationProviderConnecter _deeplConnect;
+		private Logger Logger = LogManager.GetCurrentClassLogger();
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
+
+			
 		}
 
 		public bool CanReverseLanguageDirection => throw new NotImplementedException();
@@ -95,7 +99,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
+				Logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
 			}
 			return results;
 		}
@@ -282,7 +286,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			if (_deeplConnect == null)
 			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier, _options.Formality);
+				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Formality);
 			}
 			else
 			{
@@ -318,7 +322,7 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 
-				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier, _options.Formality);
+				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Formality);
 
 				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
 				{
@@ -332,7 +336,7 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+				Logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 			return preTranslatesegments;
 		}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web;
+using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 
@@ -9,11 +10,11 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderTagPlacer
     {
-        public static readonly Log Log = Log.Instance;
         private string _preparedSourceText;
         private string _returnedText;
         private Segment _sourceSegment;
         private Dictionary<string, DeepLTag> _tagsDictionary;
+        private Logger Logger = LogManager.GetCurrentClassLogger();
 
         public DeepLTranslationProviderTagPlacer(Segment sourceSegment)
         {
@@ -71,7 +72,7 @@ namespace Sdl.Community.DeepLMTProvider
             }
             catch (Exception e)
             {
-                Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+                Logger.Error($"{e.Message}\n {e.StackTrace}");
             }
 
             return segment; //this will return a tagged segment
@@ -171,7 +172,7 @@ namespace Sdl.Community.DeepLMTProvider
             }
             catch (Exception e)
             {
-                Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+                Logger.Error($"{e.Message}\n {e.StackTrace}");
             }
             return _tagsDictionary;
         }
