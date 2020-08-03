@@ -166,6 +166,7 @@
     <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
     <Compile Include="Model\Improvement.cs" />
+    <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Rating.cs" />

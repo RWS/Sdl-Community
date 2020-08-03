@@ -171,119 +171,46 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, List<MappedLanguage> mappedLanguages)
 		{
-			var sourceLanguageCode = mappedLanguages?.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.SourceCulture?.Name));
-			if (sourceLanguageCode == null)
+			var internalLanguageMapping = new InternalLanguageMapping
+			{
+				SourceLanguageCode = mappedLanguages?.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.SourceCulture?.Name))
+			};
+
+			if (internalLanguageMapping.SourceLanguageCode == null)
 			{
 				return null;
 			}
 
-			var sourceLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(sourceLanguageCode, languageDirection.SourceCulture);
-			var sourceLanguageMappingSelected = sourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? sourceLanguageMappings[0];
+			internalLanguageMapping.SourceLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(internalLanguageMapping.SourceLanguageCode, languageDirection.SourceCulture);
+			internalLanguageMapping.SelectedSourceLanguageMapping = internalLanguageMapping.SourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? internalLanguageMapping.SourceLanguageMappings[0];
 
-			var targetLanguageCode = mappedLanguages.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.TargetCulture?.Name));
-			if (targetLanguageCode == null)
+			internalLanguageMapping.TargetLanguageCode = mappedLanguages.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.TargetCulture?.Name));
+			if (internalLanguageMapping.TargetLanguageCode == null)
 			{
 				return null;
 			}
 
-			var name = $"{languageDirection.SourceCulture?.DisplayName} - {languageDirection.TargetCulture?.DisplayName}";
-			var savedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+			internalLanguageMapping.Name = $"{languageDirection.SourceCulture?.DisplayName} - {languageDirection.TargetCulture?.DisplayName}";
+			internalLanguageMapping.SavedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(internalLanguageMapping.Name, StringComparison.InvariantCultureIgnoreCase));
 
-			var targetLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(targetLanguageCode, languageDirection.TargetCulture);
-			var targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? targetLanguageMappings[0];
+			internalLanguageMapping.TargetLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(internalLanguageMapping.TargetLanguageCode, languageDirection.TargetCulture);
+			internalLanguageMapping.SelectedTargetLanguageMapping = internalLanguageMapping.TargetLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? internalLanguageMapping.TargetLanguageMappings[0];
 
 			// assign the selected target langauge
-			targetLanguageMappingSelected = targetLanguageMappings.FirstOrDefault(a =>
-												a.CodeName.Equals(savedLanguageMappingModel?.SelectedTarget?.CodeName))
-											?? targetLanguageMappingSelected;
+			internalLanguageMapping.SelectedTargetLanguageMapping = internalLanguageMapping.TargetLanguageMappings.FirstOrDefault(a => a.CodeName.Equals(internalLanguageMapping.SavedLanguageMappingModel?.SelectedTarget?.CodeName))
+			                                                        ?? internalLanguageMapping.SelectedTargetLanguageMapping;
 
-			var engineModels = LanguageMappingsService.GetTranslationModels(sourceLanguageMappingSelected, targetLanguageMappingSelected,
-				sourceLanguageCode.TradosCode, targetLanguageCode.TradosCode);
+			internalLanguageMapping.EngineModels = LanguageMappingsService.GetTranslationModels(internalLanguageMapping.SelectedSourceLanguageMapping, internalLanguageMapping.SelectedTargetLanguageMapping,
+				internalLanguageMapping.SourceLanguageCode.TradosCode, internalLanguageMapping.TargetLanguageCode.TradosCode);
 
-			if (savedLanguageMappingModel?.SelectedModel.DisplayName != PluginResources.Message_No_model_available)
+			if (internalLanguageMapping.SavedLanguageMappingModel?.SelectedModel.DisplayName != PluginResources.Message_No_model_available)
 			{
-				// attempt to recover the language model from the secondary target language code
-				if (NoEngineFound(engineModels) && targetLanguageMappings.Count > 1)
-				{
-					var secondaryLanguageCode =
-						targetLanguageMappings.FirstOrDefault(a => a.CodeName != targetLanguageMappingSelected.CodeName);
-
-					var secondaryEngineModels = LanguageMappingsService.GetTranslationModels(
-						sourceLanguageMappingSelected, secondaryLanguageCode, sourceLanguageCode.TradosCode,
-						targetLanguageCode.TradosCode);
-
-					if (secondaryEngineModels.Any())
-					{
-						engineModels = secondaryEngineModels;
-						targetLanguageMappingSelected = secondaryLanguageCode;
-					}
-				}
-
-				// attempt to recover the language model from the secondary source language code
-				if (NoEngineFound(engineModels) && sourceLanguageMappings.Count > 1)
-				{
-					var secondarySourceLanguageCode =
-						sourceLanguageMappings.FirstOrDefault(a => a.CodeName != sourceLanguageMappingSelected.CodeName);
-
-					var secondaryEngineModels = LanguageMappingsService.GetTranslationModels(
-						secondarySourceLanguageCode, targetLanguageMappingSelected, sourceLanguageCode.TradosCode,
-						targetLanguageCode.TradosCode);
-
-					if (secondaryEngineModels.Any())
-					{
-						engineModels = secondaryEngineModels;
-						sourceLanguageMappingSelected = secondarySourceLanguageCode;
-					}
-					else if (targetLanguageMappings.Count > 1)
-					{
-						// attempt to recover the language model from the secondary source OR target language code
-						var secondaryTargetLanguageCode =
-							targetLanguageMappings.FirstOrDefault(a => a.CodeName != targetLanguageMappingSelected?.CodeName);
-
-						secondaryEngineModels = LanguageMappingsService.GetTranslationModels(
-							secondarySourceLanguageCode, secondaryTargetLanguageCode, sourceLanguageCode.TradosCode,
-							targetLanguageCode.TradosCode);
-
-						if (secondaryEngineModels.Any())
-						{
-							engineModels = secondaryEngineModels;
-							sourceLanguageMappingSelected = secondarySourceLanguageCode;
-							targetLanguageMappingSelected = secondaryTargetLanguageCode;
-						}
-					}
-				}
+				ValidateEngineExistence(internalLanguageMapping);
 			}
 
-			if (engineModels.Any())
+			if (internalLanguageMapping.EngineModels.Any())
 			{
-				// assign the selected model
-				var selectedModel =
-					engineModels.FirstOrDefault(a => a.DisplayName.Equals(savedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-					?? engineModels.FirstOrDefault(a => a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
-					?? engineModels[0];
-
-				var dictionaries = LanguageMappingsService.GetDictionaries(sourceLanguageMappingSelected, targetLanguageMappingSelected);
-
-				// assign the selected dictionary
-				var selectedDictionary =
-					dictionaries.FirstOrDefault(a => a.Name.Equals(savedLanguageMappingModel?.SelectedDictionary?.Name))
-					?? dictionaries[0];
-
-				var languageMappingModel = new LanguageMappingModel
-				{
-					Name = name,
-					SourceLanguages = sourceLanguageMappings,
-					TargetLanguages = targetLanguageMappings,
-					SelectedSource = sourceLanguageMappingSelected,
-					SelectedTarget = targetLanguageMappingSelected,
-					SourceTradosCode = sourceLanguageCode.TradosCode,
-					TargetTradosCode = targetLanguageCode.TradosCode,
-					Models = engineModels,
-					SelectedModel = selectedModel,
-					Dictionaries = dictionaries,
-					SelectedDictionary = selectedDictionary
-				};
-
+				var languageMappingModel = GetLanguageMappingModel(internalLanguageMapping);
 				return languageMappingModel;
 			}
 
@@ -299,29 +226,102 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			if (translationModels.Any())
 			{
 				// assign the selected model
-				var selectedModel =
-					translationModels.FirstOrDefault(a => string.Compare(a.DisplayName,
-															  languageMappingModel.SelectedModel?.DisplayName,
-															  StringComparison.InvariantCultureIgnoreCase) == 0)
-					?? translationModels.FirstOrDefault(a =>
-						string.Compare(a.Model, "generic", StringComparison.InvariantCultureIgnoreCase) == 0)
-					?? translationModels[0];
+				var selectedModel = translationModels.FirstOrDefault(a => string.Compare(a.DisplayName, languageMappingModel.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase) == 0)
+				                    ?? translationModels.FirstOrDefault(a => string.Compare(a.Model, "generic", StringComparison.InvariantCultureIgnoreCase) == 0)
+				                    ?? translationModels[0];
 
 				languageMappingModel.Models = translationModels;
 				languageMappingModel.SelectedModel = selectedModel;
 			}
 
-			var dictionaries =
-				LanguageMappingsService.GetDictionaries(languageMappingModel.SelectedSource,
-					languageMappingModel.SelectedTarget);
+			var dictionaries = LanguageMappingsService.GetDictionaries(languageMappingModel.SelectedSource, languageMappingModel.SelectedTarget);
 
 			// assign the selected dictionary
-			var selectedDictionary =
-				dictionaries.FirstOrDefault(a => a.Name.Equals(languageMappingModel.SelectedDictionary?.Name))
-				?? dictionaries[0];
+			var selectedDictionary = dictionaries.FirstOrDefault(a => a.Name.Equals(languageMappingModel.SelectedDictionary?.Name)) ?? dictionaries[0];
 
 			languageMappingModel.Dictionaries = dictionaries;
 			languageMappingModel.SelectedDictionary = selectedDictionary;
+		}
+
+		private LanguageMappingModel GetLanguageMappingModel(InternalLanguageMapping internalLanguageMapping)
+		{
+			// assign the selected model
+			var selectedModel = internalLanguageMapping.EngineModels.FirstOrDefault(a => a.DisplayName.Equals(internalLanguageMapping.SavedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+			                    ?? internalLanguageMapping.EngineModels.FirstOrDefault(a => a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
+			                    ?? internalLanguageMapping.EngineModels[0];
+
+			var dictionaries = LanguageMappingsService.GetDictionaries(internalLanguageMapping.SelectedSourceLanguageMapping, internalLanguageMapping.SelectedTargetLanguageMapping);
+
+			// assign the selected dictionary
+			var selectedDictionary =
+				dictionaries.FirstOrDefault(a => a.Name.Equals(internalLanguageMapping.SavedLanguageMappingModel?.SelectedDictionary?.Name))
+				?? dictionaries[0];
+
+			var languageMappingModel = new LanguageMappingModel
+			{
+				Name = internalLanguageMapping.Name,
+				SourceLanguages = internalLanguageMapping.SourceLanguageMappings,
+				TargetLanguages = internalLanguageMapping.TargetLanguageMappings,
+				SelectedSource = internalLanguageMapping.SelectedSourceLanguageMapping,
+				SelectedTarget = internalLanguageMapping.SelectedTargetLanguageMapping,
+				SourceTradosCode = internalLanguageMapping.SourceLanguageCode.TradosCode,
+				TargetTradosCode = internalLanguageMapping.TargetLanguageCode.TradosCode,
+				Models = internalLanguageMapping.EngineModels,
+				SelectedModel = selectedModel,
+				Dictionaries = dictionaries,
+				SelectedDictionary = selectedDictionary
+			};
+
+			return languageMappingModel;
+		}
+
+		private void ValidateEngineExistence(InternalLanguageMapping internalLanguageMapping)
+		{
+			// attempt to recover the language model from the secondary target language code
+			if (NoEngineFound(internalLanguageMapping.EngineModels) && internalLanguageMapping.TargetLanguageMappings.Count > 1)
+			{
+				var secondaryLanguageCode = internalLanguageMapping.TargetLanguageMappings.FirstOrDefault(a => a.CodeName != internalLanguageMapping.SelectedTargetLanguageMapping.CodeName);
+
+				var secondaryEngineModels = LanguageMappingsService.GetTranslationModels(internalLanguageMapping.SelectedSourceLanguageMapping, secondaryLanguageCode,
+					internalLanguageMapping.SourceLanguageCode.TradosCode, internalLanguageMapping.TargetLanguageCode.TradosCode);
+
+				if (secondaryEngineModels.Any())
+				{
+					internalLanguageMapping.EngineModels = secondaryEngineModels;
+					internalLanguageMapping.SelectedTargetLanguageMapping = secondaryLanguageCode;
+				}
+			}
+
+			// attempt to recover the language model from the secondary source language code
+			if (NoEngineFound(internalLanguageMapping.EngineModels) && internalLanguageMapping.SourceLanguageMappings.Count > 1)
+			{
+				internalLanguageMapping.SecondarySourceLanguageCode = internalLanguageMapping.SourceLanguageMappings.FirstOrDefault(a => a.CodeName != internalLanguageMapping.SelectedSourceLanguageMapping.CodeName);
+
+				internalLanguageMapping.SecondaryEngineModels = LanguageMappingsService.GetTranslationModels(internalLanguageMapping.SecondarySourceLanguageCode, internalLanguageMapping.SelectedTargetLanguageMapping,
+					internalLanguageMapping.SourceLanguageCode.TradosCode, internalLanguageMapping.TargetLanguageCode.TradosCode);
+
+				if (internalLanguageMapping.SecondaryEngineModels.Any())
+				{
+					internalLanguageMapping.EngineModels = internalLanguageMapping.SecondaryEngineModels;
+					internalLanguageMapping.SelectedSourceLanguageMapping = internalLanguageMapping.SecondarySourceLanguageCode;
+				}
+				else if (internalLanguageMapping.TargetLanguageMappings.Count > 1)
+				{
+					// attempt to recover the language model from the secondary source OR target language code
+					internalLanguageMapping.SecondaryTargetLanguageCode = internalLanguageMapping.TargetLanguageMappings.FirstOrDefault(a => a.CodeName != internalLanguageMapping.SelectedTargetLanguageMapping?.CodeName);
+
+					internalLanguageMapping.SecondaryEngineModels = LanguageMappingsService.GetTranslationModels(
+						internalLanguageMapping.SecondarySourceLanguageCode, internalLanguageMapping.SecondaryTargetLanguageCode, internalLanguageMapping.SourceLanguageCode.TradosCode,
+						internalLanguageMapping.TargetLanguageCode.TradosCode);
+
+					if (internalLanguageMapping.SecondaryEngineModels.Any())
+					{
+						internalLanguageMapping.EngineModels = internalLanguageMapping.SecondaryEngineModels;
+						internalLanguageMapping.SelectedSourceLanguageMapping = internalLanguageMapping.SecondarySourceLanguageCode;
+						internalLanguageMapping.SelectedTargetLanguageMapping = internalLanguageMapping.SecondaryTargetLanguageCode;
+					}
+				}
+			}
 		}
 
 		private bool NoEngineFound(IReadOnlyList<TranslationModel> engineModels)
@@ -329,6 +329,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return engineModels.Count == 1 &&
 				   engineModels[0].DisplayName == PluginResources.Message_No_model_available;
 		}
+
 
 		private MTCloudLanguagePair GetMTCloudLanguagePair()
 		{
