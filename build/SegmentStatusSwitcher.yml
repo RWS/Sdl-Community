@@ -14,9 +14,6 @@ pr:
     include:
      - SegmentStatusSwitcher/*
 
-	 pool: 
-  vmImage : '$(DefaultBuildVm)'
-
 pool: 
   vmImage : '$(DefaultBuildVm)'
 
