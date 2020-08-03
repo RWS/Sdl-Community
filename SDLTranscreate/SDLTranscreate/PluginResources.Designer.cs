@@ -914,6 +914,24 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to Transcreate Project.
+        /// </summary>
+        internal static string TranscreateManager_BatchTasks_Convert_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_BatchTasks_Convert_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert to Transcreate Project.
+        /// </summary>
+        internal static string TranscreateManager_BatchTasks_Convert_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_BatchTasks_Convert_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string TranscreateManager_BatchTasks_Export_Description {

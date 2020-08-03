@@ -1,6 +1,8 @@
-﻿namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
+﻿using System;
+
+namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 {
-	public class File
+	public class File: ICloneable
 	{
 		public File()
 		{
@@ -19,5 +21,19 @@
 		public Header Header { get; set; }
 
 		public Body Body { get; set; }
+
+		public object Clone()
+		{
+			var file = new File
+			{
+				Original = Original,
+				SourceLanguage = SourceLanguage,
+				TargetLanguage = TargetLanguage,
+				DataType = DataType,
+				Body = Body.Clone() as Body
+			};
+
+			return file;
+		}
 	}
 }
