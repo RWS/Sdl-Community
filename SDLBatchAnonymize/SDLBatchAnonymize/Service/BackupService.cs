@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using NLog;
 
 namespace Sdl.Community.SDLBatchAnonymize.Service
 {
     public class BackupService
     {
 	    private readonly string _backupDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "SDLBatchAnonymizer","Projects Backup");
-	    public static readonly Log Log = Log.Instance;
+	    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void BackupProject(string projectPath, string projectName)
 	    {
@@ -22,7 +23,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 		    }
 		    catch (Exception exception)
 		    {
-				Log.Logger.Error($"{exception.Message}\n {exception.StackTrace}");
+				_logger.Error($"{exception.Message}\n {exception.StackTrace}");
 			}
 		}
     }
