@@ -9,7 +9,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace ETSTranslationProvider
 {
 	public partial class ProviderConfDialog : Form
-    {
+	{
 		private ITranslationProviderCredentialStore credentialStore;
 		private LanguagePair[] LanguagePairs;
 		private System.Timers.Timer lpPopulationTimer = new System.Timers.Timer(500);
@@ -99,7 +99,7 @@ namespace ETSTranslationProvider
 
 		private Uri GetUri()
 		{
-            //try to take the credentials from the project if there are any
+			//try to take the credentials from the project if there are any
 			try
 			{
 				return Options.Uri;
@@ -129,31 +129,23 @@ namespace ETSTranslationProvider
 
 		private void PopulateLanguagePairs()
 		{
-			Cursor = Cursors.WaitCursor;
 			if (LanguagePairs == null || LanguagePairs.Length == 0)
 			{
 				return;
 			}
 			var credentials = GetCredentials();
-			if (!AuthenticateCredentials(credentials, false))
+			if (AuthenticateCredentials(credentials, false) && Options.ApiVersion == ETSApi.APIVersion.v2)
 			{
-				return;
+				var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
+
+				Options.SetDictionaries(languagePairChoices);
+
+				// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
+				var lpChoicesColumn = new DataGridViewComboBoxColumn();
+				var lpDictionariesColumn = new DataGridViewComboBoxColumn();
+
+				SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
 			}
-
-			if (Options.ApiVersion != ETSApi.APIVersion.v2)
-			{
-				return;
-			}
-			var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
-
-			Options.SetDictionaries(languagePairChoices);
-
-			// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
-			var lpChoicesColumn = new DataGridViewComboBoxColumn();
-			var lpDictionariesColumn = new DataGridViewComboBoxColumn();
-
-			SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
-			Cursor = Cursors.Default;
 		}
 
 		/// <summary>
@@ -225,20 +217,20 @@ namespace ETSTranslationProvider
 			}));
 		}
 
-	    private void RemoveIncorrectLanguageSet()
-	    {
-		    foreach (var lpKey in Options.LPPreferences.ToList())
-		    {
-			    var languagePair = LanguagePairs.FirstOrDefault(lp =>
-				    lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals(lpKey.Key.ThreeLetterWindowsLanguageName));
-			    if (languagePair == null)
-			    {
-				    Options.LPPreferences.Remove(lpKey.Key);
-			    }
-		    }
-	    }
+		private void RemoveIncorrectLanguageSet()
+		{
+			foreach (var lpKey in Options.LPPreferences.ToList())
+			{
+				var languagePair = LanguagePairs.FirstOrDefault(lp =>
+					lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals(lpKey.Key.ThreeLetterWindowsLanguageName));
+				if (languagePair == null)
+				{
+					Options.LPPreferences.Remove(lpKey.Key);
+				}
+			}
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// This errror handle is for DataGridViewCombobox cell value is not valid error
 		/// </summary>
 		/// <param name="sender"></param>
@@ -275,30 +267,30 @@ namespace ETSTranslationProvider
 			}
 		}
 
-	    private void SetPreferedLanguageFlavours()
-	    {
-		    const int comboboxColumnIndex = 1;
+		private void SetPreferedLanguageFlavours()
+		{
+			const int comboboxColumnIndex = 1;
 
-		    for (var i = 0; i < Options.LPPreferences.Count; i++)
-		    {
-			    var comboBox = (DataGridViewComboBoxCell) TradosLPs?.Rows[i].Cells[comboboxColumnIndex];
-			    if (comboBox != null)
-			    {
+			for (var i = 0; i < Options.LPPreferences.Count; i++)
+			{
+				var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[comboboxColumnIndex];
+				if (comboBox != null)
+				{
 					comboBox.Value = Options.LPPreferences.ToList()[i].Value?.LanguagePairId;
 				}
 			}
 		}
-	    private void TradosLPs_CellEnter(object sender, DataGridViewCellEventArgs e)
-	    {
-		    var tradosLPs = sender as DataGridView;
+		private void TradosLPs_CellEnter(object sender, DataGridViewCellEventArgs e)
+		{
+			var tradosLPs = sender as DataGridView;
 
-		    // Check to make sure the cell clicked is the cell containing the combobox
-		    if (e.RowIndex != -1 && e.ColumnIndex != -1 && tradosLPs.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
-		    {
-			    tradosLPs.BeginEdit(true);
-			    ((ComboBox)tradosLPs.EditingControl).DroppedDown = true;
-		    }
-	    }
+			// Check to make sure the cell clicked is the cell containing the combobox
+			if (e.RowIndex != -1 && e.ColumnIndex != -1 && tradosLPs.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
+			{
+				tradosLPs.BeginEdit(true);
+				((ComboBox)tradosLPs.EditingControl).DroppedDown = true;
+			}
+		}
 		private void TradosLPs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			const int comboboxColumnIndex = 1;
@@ -312,7 +304,7 @@ namespace ETSTranslationProvider
 				{
 					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.ETSLPs.First(lp => lp.LanguagePairId == newLp);
 				}
-				if(TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
 				{
 					lpPairing = TradosLPs[1, e.RowIndex].Tag as ETSApi.TradosToETSLP;
 					newLp = TradosLPs[1, e.RowIndex].Value as string;
@@ -337,7 +329,7 @@ namespace ETSTranslationProvider
 				if (Options?.LPPreferences == null)
 				{
 					continue;
-				}				
+				}
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 				{
 					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
@@ -375,7 +367,7 @@ namespace ETSTranslationProvider
 				{
 					DialogResult = DialogResult.None;
 					var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
-					MessageBox.Show(error, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(error, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
 
@@ -444,12 +436,10 @@ namespace ETSTranslationProvider
 				if (showAlertOnFailure)
 				{
 					DialogResult = DialogResult.None;
-					if (Environment.UserInteractive)
-					{
-						MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
+					MessageBox.Show(e.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				return false;
+
+				throw;
 			}
 			Options.ApiToken = token;
 
@@ -489,18 +479,24 @@ namespace ETSTranslationProvider
 
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (Options.UseBasicAuthentication)
+			var credentialsValid = !string.IsNullOrEmpty(UsernameField.Text) &&
+								   !string.IsNullOrEmpty(PasswordField.Text) &&
+								   !string.IsNullOrEmpty(HostNameField.Text);
+
+			Cursor = Cursors.WaitCursor;
+			if (!Options.UseBasicAuthentication || credentialsValid)
 			{
-				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
-				    !string.IsNullOrEmpty(HostNameField.Text))
+				try
 				{
 					PopulateLanguagePairs();
 				}
+				catch (Exception ex)
+				{
+					Log.Logger.Error(ex.Message);
+					MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
-			else
-			{
-				PopulateLanguagePairs();
-			}
+			Cursor = Cursors.Default;
 		}
 
 		private void HostNameChanged(object sender, EventArgs e)
@@ -563,12 +559,12 @@ namespace ETSTranslationProvider
 			}
 		}
 
-	    private void TryToAuthenticate()
-	    {
+		private void TryToAuthenticate()
+		{
 			if (Options.UseBasicAuthentication)
 			{
 				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
-				    !string.IsNullOrEmpty(HostNameField.Text))
+					!string.IsNullOrEmpty(HostNameField.Text))
 				{
 					PopulateLanguagePairs();
 				}

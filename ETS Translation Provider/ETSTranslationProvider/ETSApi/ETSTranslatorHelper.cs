@@ -24,13 +24,16 @@ namespace ETSTranslationProvider.ETSApi
 
 	public static class ETSTranslatorHelper
 	{
-		private static Func<Uri, HttpClient, HttpResponseMessage> ETSPost = delegate (Uri uri, HttpClient client)
-		{ return client.PostAsync(uri, content: null).Result; };
-		private static Func<Uri, HttpClient, HttpResponseMessage> ETSGet = delegate (Uri uri, HttpClient client)
-		{ return client.GetAsync(uri).Result; };
-		private static ETSLanguagePair[] LanguagePairsOnServer;
-		private static object languageLock = new object();
-		private static object optionsLock = new object();
+		private static readonly Func<Uri, HttpClient, HttpResponseMessage> ETSPost = (uri, client) =>
+			client.PostAsync(uri, content: null).Result;
+
+		private static readonly Func<Uri, HttpClient, HttpResponseMessage> ETSGet = (uri, client) =>
+			client.GetAsync(uri).Result;
+
+		private static ETSLanguagePair[] _languagePairsOnServer;
+		private static readonly object languageLock = new object();
+		private static readonly object optionsLock = new object();
+
 
 		private enum ErrorHResult
 		{
@@ -121,7 +124,7 @@ namespace ETSTranslationProvider.ETSApi
 			Log.Logger.Trace("");
 			lock (languageLock)
 			{
-				if (LanguagePairsOnServer == null || !LanguagePairsOnServer.Any())
+				if (_languagePairsOnServer == null || !_languagePairsOnServer.Any())
 				{
 					try
 					{
@@ -130,7 +133,7 @@ namespace ETSTranslationProvider.ETSApi
 						// that happens, open a message with the related error
 						var jsonResult = ContactETSServer(ETSGet, options, "language-pairs");
 						var languagePairs = JsonConvert.DeserializeObject<LanguagePairResult>(jsonResult).LanguagePairs;
-						LanguagePairsOnServer = (languagePairs != null ? languagePairs : new ETSLanguagePair[0]);
+						_languagePairsOnServer = (languagePairs != null ? languagePairs : new ETSLanguagePair[0]);
 
 						// In 60 seconds, wipe the LPs so we query again. That way, if someone makes a change, we'll
 						// pick it up eventually.
@@ -151,11 +154,11 @@ namespace ETSTranslationProvider.ETSApi
 						{
 							MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
-						LanguagePairsOnServer = new ETSLanguagePair[0];
+						_languagePairsOnServer = new ETSLanguagePair[0];
 					}
 				}
 			}
-			return LanguagePairsOnServer;
+			return _languagePairsOnServer;
 		}
 
 		/// <summary>
@@ -186,7 +189,7 @@ namespace ETSTranslationProvider.ETSApi
 
 		public static void ExpireLanguagePairs()
 		{
-			LanguagePairsOnServer = new ETSLanguagePair[0];
+			_languagePairsOnServer = new ETSLanguagePair[0];
 		}
 
 		/// <summary>
@@ -203,8 +206,7 @@ namespace ETSTranslationProvider.ETSApi
 			TranslationOptions options,
 			string path,
 			NameValueCollection parameters = null,
-			bool useHTTP = false,
-			int timesToRetry = 5)
+			bool useHTTP = false)
 		{
 			Log.Logger.Trace("");
 
@@ -222,25 +224,21 @@ namespace ETSTranslationProvider.ETSApi
 			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 			using (var httpClient = new HttpClient())
 			{
-				if (options.UseBasicAuthentication)
-				{
-					httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.ApiToken);
-				}
-				else
-				{
-					// Append colon to the api key, but leave it off of the Options variable
-					httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
-				}
+				httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
+					? new AuthenticationHeaderValue("Bearer", options.ApiToken)
+					: new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
 
-				var builder = new UriBuilder(options.Uri);
-				builder.Path = string.Format("/api/{0}/{1}", options.ApiVersionString, path);
-				builder.Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps;
+				var builder = new UriBuilder(options.Uri)
+				{
+					Path = $"/api/{options.ApiVersionString}/{path}",
+					Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps
+				};
 
 				if (parameters != null)
 				{
 					builder.Query = parameters.ToString();
 				}
-				HttpResponseMessage httpResponse = null;
+				HttpResponseMessage httpResponse;
 
 				try
 				{
@@ -252,15 +250,9 @@ namespace ETSTranslationProvider.ETSApi
 					{
 						e = e.InnerException;
 					}
-					if (!useHTTP && e.HResult == (int)ErrorHResult.HandshakeFailure)
-					{
-						return ContactETSServer(etsHttpMethod, options, path, parameters, true);
-					}
-					if (timesToRetry > 0)
-					{
-						return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
-					}
+
 					Log.Logger.Error($"{Constants.ETSServerContact}:\n {Constants.ETSServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
+
 					throw TranslateAggregateException(e);
 				}
 
@@ -268,22 +260,19 @@ namespace ETSTranslationProvider.ETSApi
 				{
 					return httpResponse.Content.ReadAsStringAsync().Result;
 				}
-				else if (httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+				switch (httpResponse.StatusCode)
 				{
-					Log.Logger.Error($"{Constants.ETSServerContact}: {Constants.InvalidCredentials}");
-					throw new UnauthorizedAccessException("The credentials provided are not authorized.");
+					case HttpStatusCode.Unauthorized:
+						Log.Logger.Error($"{Constants.ETSServerContact}: {Constants.InvalidCredentials}");
+						throw new UnauthorizedAccessException("The credentials provided are not authorized.");
+					case HttpStatusCode.BadRequest:
+						Log.Logger.Error($"{Constants.ETSServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
+						throw new Exception($"There was a problem with the request: { httpResponse.Content.ReadAsStringAsync().Result }");
+					default:
+						Log.Logger.Error($"{Constants.ETSServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
+
+						return null;
 				}
-				else if (httpResponse.StatusCode == HttpStatusCode.BadRequest)
-				{
-					Log.Logger.Error($"{Constants.ETSServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
-					throw new Exception($"There was a problem with the request: { httpResponse.Content.ReadAsStringAsync().Result }");
-				}
-				Log.Logger.Error($"{Constants.ETSServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
-				if (timesToRetry > 0)
-				{
-					return ContactETSServer(etsHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
-				}
-				return null;
 			}
 		}
 
@@ -302,6 +291,7 @@ namespace ETSTranslationProvider.ETSApi
 			{
 				Log.Logger.Error($"{Constants.ETSApiVersion}: {e.Message}\n {e.StackTrace}");
 				options.ApiVersion = APIVersion.v1;
+				throw;
 			}
 		}
 
