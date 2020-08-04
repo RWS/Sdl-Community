@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace Sdl.Community.NumberVerifier.Helpers
@@ -177,6 +178,42 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			}
 
 			return numberText;
+		}
+
+		public char[] GetSeparatorsChars(string customDecimalSeparators, string customThousandSeparators)
+		{
+			var decimalSep = customDecimalSeparators.ToCharArray();
+			var thousandSep = customThousandSeparators.ToCharArray();
+			var separatorsChars = new[] { ',', '.' }.Concat(decimalSep).Concat(thousandSep).ToArray();
+
+			return separatorsChars;
+		}
+
+		// When number has the last or first char one of the separators, remove it because we don't need it.
+		// Is not corresponding to decimal/thousand separator, it's used as simple punctuation letter (Eg: ,123 or 245, )
+		public string RemovePunctuationChar(string text, char[] sepChars, bool omitLeadingZero)
+		{
+			if (text.Length - 1 == text.LastIndexOfAny(sepChars))
+			{
+				text = text.Remove(text.Length - 1, 1);
+			}
+
+			if (text.IndexOfAny(sepChars) == 0 && !omitLeadingZero)
+			{
+				text = text.Remove(0, 1);
+			}
+
+			if (!string.IsNullOrWhiteSpace(text) && IsPunctuationChar(text, sepChars))
+			{
+				text = RemovePunctuationChar(text, sepChars, omitLeadingZero);
+			}
+			
+			return text.Trim();
+		}
+
+		private bool IsPunctuationChar(string text, char[] sepChars)
+		{
+			return text.IndexOfAny(sepChars) == 0 || text.Length - 1 == text.LastIndexOfAny(sepChars);
 		}
 	}
 }
