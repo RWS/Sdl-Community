@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Interop;
+using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.View;
@@ -8,6 +9,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -19,7 +21,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		[ActionLayout(typeof(SdlMTCloudAddInsRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class SDLMTCloudLanguageMappingShowAction : AbstractAction
-		{			
+		{
+			private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 			protected override void Execute()
 			{
 				try
@@ -42,7 +46,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				catch (Exception ex)
 				{
-					Log.Logger.Error($"{Constants.ExcelExecuteAction} {ex.Message}\n {ex.StackTrace}");
+					_logger.Error($"{Constants.ExcelExecuteAction} {ex.Message}\n {ex.StackTrace}");
 					throw;
 				}
 			}

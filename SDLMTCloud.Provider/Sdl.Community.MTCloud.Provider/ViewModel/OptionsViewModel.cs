@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
@@ -15,6 +16,7 @@ using Sdl.LanguagePlatform.Core;
 using Application = System.Windows.Forms.Application;
 using Cursors = System.Windows.Input.Cursors;
 using MessageBox = System.Windows.Forms.MessageBox;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -22,13 +24,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	{
 		private readonly SdlMTCloudTranslationProvider _provider;
 		private readonly List<LanguagePair> _languagePairs;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
 
 		private bool _reSendChecked;
-		private bool _sendFeedback;
 		private LanguageMappingModel _selectedLanguageMappingModel;
 		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
 		private bool _isWaiting;
@@ -167,7 +169,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			catch (Exception ex)
 			{
 				IsWaiting = false;
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 
 				if (Owner != null)
 				{
@@ -204,7 +206,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			catch (Exception ex)
 			{
 				IsWaiting = false;
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 
 				if (Owner != null)
 				{
