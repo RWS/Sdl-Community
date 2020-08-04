@@ -14,12 +14,17 @@ pr:
     include:
      - Community Wpf Helpers/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.CommunityWpfHelpers.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.CommunityWpfHelpers.sln'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -14,13 +14,19 @@ pr:
     include:
      - TMLifting/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TMLifting.sln'
-  pathToPublish: 'TMLifting/Sdl.Community.TMLifting\bin\Release\Sdl.Community.TMLifting.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TMLifting.sln'
+- name: pathToPublish
+  value: 'TMLifting/Sdl.Community.TMLifting\bin\Release\Sdl.Community.TMLifting.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

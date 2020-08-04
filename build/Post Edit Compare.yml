@@ -14,13 +14,19 @@ pr:
     include:
      - Post Edit Compare/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.PostEdit.Versions.sln'
-  pathToPublish: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.PostEdit.Versions.sln'
+- name: pathToPublish
+  value: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

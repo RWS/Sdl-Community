@@ -14,13 +14,19 @@ pr:
     include:
      - SDLTMRepair/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TMRepair.sln'
-  pathToPublish: 'SDLTMRepair\SDLTMRepair\bin\Release\Sdl.Community.TMRepair.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TMRepair.sln'
+- name: pathToPublish
+  value: 'SDLTMRepair\SDLTMRepair\bin\Release\Sdl.Community.TMRepair.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

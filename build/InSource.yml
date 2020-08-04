@@ -18,23 +18,7 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-- name: DefaultBuildVm
-  value: 'windows-latest'
-#windows-latest
-#windows-2019
-#vs2017-win2016
-#vs2015-win2012r2
-
-- name: StudioProductIdentifier  
-  value: Studio16
-
-- name: StudioBranch
-  value: refs/heads/master
-#  value: refs/heads/Release/15.2
-
-- name: VSVersion
-  value: '16.0'
-
+- template: jobs/branch-variables.yml
 - name: buildPlatform
   value: 'Any CPU'
 - name: buildConfiguration

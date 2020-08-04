@@ -14,13 +14,19 @@ pr:
     include:
      - Word Cloud/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.WordCloud.sln'
-  pathToPublish: 'Word Cloud/Sdl.Community.WordCloud.Plugin\bin\Release\Sdl.Community.WordCloud.Plugin.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.WordCloud.sln'
+- name: pathToPublish
+  value: 'Word Cloud/Sdl.Community.WordCloud.Plugin\bin\Release\Sdl.Community.WordCloud.Plugin.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

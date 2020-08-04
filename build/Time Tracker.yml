@@ -14,13 +14,19 @@ pr:
     include:
      - Time Tracker/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.Studio.Time.Tracker.sln'
-  pathToPublish: 'Time Tracker\bin\Release\Sdl.Community.Studio.Time.Tracker.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.Studio.Time.Tracker.sln'
+- name: pathToPublish
+  value: 'Time Tracker\bin\Release\Sdl.Community.Studio.Time.Tracker.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

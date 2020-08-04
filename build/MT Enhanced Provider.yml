@@ -14,13 +14,19 @@ pr:
     include:
      - MT Enhanced Provider/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.MtEnhancedProvider.sln'
-  pathToPublish: 'MT Enhanced Provider\Sdl.Community.MtEnhancedProvider\bin\debug\Sdl.Community.MtEnhancedProvider.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value :  '**/Sdl.Community.MtEnhancedProvider.sln'
+- name: pathToPublish
+  value: 'MT Enhanced Provider\Sdl.Community.MtEnhancedProvider\bin\debug\Sdl.Community.MtEnhancedProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

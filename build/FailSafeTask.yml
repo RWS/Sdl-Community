@@ -14,13 +14,19 @@ pr:
     include:
      - FailSafeTask/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.FailSafeTask.sln'
-  pathToPublish: 'FailSafeTask\Sdl.Community.FailSafeTask\bin\Release\FailSafeTask.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/FailSafeTask.sln'
+- name: pathToPublish
+  value: 'FailSafeTask\Sdl.Community.FailSafeTask\bin\Release\FailSafeTask.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

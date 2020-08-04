@@ -14,12 +14,17 @@ pr:
     include:
      - DSI Viewer/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.DsiViewer.sln'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.DsiViewer.sln'
   pathToPublish: 'DSI Viewer\Sdl.Community.SdiViewer\bin\Release\Sdl.Community.DsiViewer.sdlplugin'
 
 steps:

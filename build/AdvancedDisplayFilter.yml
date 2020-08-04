@@ -14,13 +14,19 @@ pr:
     include:
      - AdvancedDisplayFilter/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.AdvancedDisplayFilter.sln'
-  pathToPublish: 'AdvancedDisplayFilter\bin\Release\Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.AdvancedDisplayFilter.sln'
+- name: pathToPublish
+  value: 'AdvancedDisplayFilter\bin\Release\Sdl.Community.AdvancedDisplayFilter.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

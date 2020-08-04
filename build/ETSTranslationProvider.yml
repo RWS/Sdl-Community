@@ -14,14 +14,20 @@ pr:
     include:
      - ETS Translation Provider/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/ETSTranslationProvider.sln'
-  pathToPublish: 'ETS Translation Provider\ETSTranslationProvider\Trados2019_Plugin\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/ETSTranslationProvider.sln'
+- name: pathToPublish
+  value: 'ETS Translation Provider\ETSTranslationProvider\Trados2019_Plugin\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
- # - template: jobs/publish-build-artifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml

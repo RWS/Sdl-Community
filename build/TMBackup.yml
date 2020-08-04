@@ -14,13 +14,19 @@ pr:
     include:
      - TMBackup/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.TMBackup.sln'
-  pathToPublish: 'TMBackup\build\Sdl.Community.TMBackup.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TMBackup.sln'
+- name: pathToPublish
+  value: 'TMBackup\build\Sdl.Community.TMBackup.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

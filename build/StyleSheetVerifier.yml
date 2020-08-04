@@ -14,13 +14,19 @@ pr:
     include:
      - StyleSheetVerifier/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.StyleSheetVerifier.sln'
-  pathToPublish: 'StyleSheetVerifier\StyleSheetVerifier\bin\Release\Sdl.Community.StyleSheetVerifier.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.StyleSheetVerifier.sln'
+- name: pathToPublish
+  value: 'StyleSheetVerifier\StyleSheetVerifier\bin\Release\Sdl.Community.StyleSheetVerifier.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

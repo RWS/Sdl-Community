@@ -14,13 +14,19 @@ pr:
     include:
      - FileTypeSupport.MXLIFF/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.FileTypeSupport.MXLIFF.sln'
-  pathToPublish: 'FileTypeSupport.MXLIFF\bin\Release\MXLIFFFileType.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/FileTypeSupport.MXLIFF.sln'
+- name: pathToPublish
+  value: 'FileTypeSupport.MXLIFF\bin\Release\MXLIFFFileType.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

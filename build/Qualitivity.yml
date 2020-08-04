@@ -14,13 +14,19 @@ pr:
     include:
      - Qualitivity/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.Qualitivity.sln'
-  pathToPublish: 'Qualitivity\Sdl.Community.Qualitivity\bin\Release\Sdl.Community.Qualitivity.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.Qualitivity.sln'
+- name: pathToPublish
+  value: 'Qualitivity\Sdl.Community.Qualitivity\bin\Release\Sdl.Community.Qualitivity.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

@@ -14,13 +14,19 @@ pr:
     include:
      - CleanUpTasks/*
 
-pool: Studio-OX
+pool: 
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solution : '**/Sdl.Community.CleanUpTasks.sln'
-  pathToPublish: 'CleanUpTasks/CleanUpTasks\bin\Release\SDLCommunityCleanUpTasks.sdlplugin'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.CleanUpTasks.sln'
+- name: pathToPublish
+  value: 'CleanUpTasks/CleanUpTasks\bin\Release\SDLCommunityCleanUpTasks.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
