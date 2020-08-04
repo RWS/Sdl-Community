@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
@@ -23,18 +24,17 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-    #region "Declaration"
+
     [TranslationProviderWinFormsUi(
         Id = "MtTranslationProviderWinFormsUI",
         Name = "MtTranslationProviderWinFormsUI",
         Description = "MtTranslationProviderWinFormsUI")]
-    #endregion
+
     public class MtTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-		private Constants _constants = new Constants();
-		public Log Log = Log.Instance;
+		private readonly Constants _constants = new Constants();
+		private Logger _logger = LogManager.GetCurrentClassLogger();
 
-		#region ITranslationProviderWinFormsUI Members
 		/// <summary>
 		/// Show the plug-in settings form when the user is adding the translation provider plug-in
 		/// through the GUI of SDL Trados Studio
@@ -78,7 +78,6 @@ namespace Sdl.Community.MtEnhancedProvider
             credentialStore.AddCredential(myUri, cred);
         }
 
-        #region "Browse"
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             //construct options to send to form
@@ -105,7 +104,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 }
                 catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program
 				{
-					Log.Logger.Error($"{_constants.Browse} {ex.Message}\n { ex.StackTrace}");
+					_logger.Error($"{_constants.Browse} {ex.Message}\n { ex.StackTrace}");
 
 				} 
 			}
@@ -140,18 +139,16 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             return null;
         }
-        #endregion
 
         /// <summary>
         /// Determines whether the plug-in settings can be changed
         /// by displaying the Settings button in SDL Trados Studio.
         /// </summary>
-        #region "SupportsEditing"
+
         public bool SupportsEditing
         {
             get { return true; }
         }
-        #endregion
 
         /// <summary>
         /// If the plug-in settings can be changed by the user,
@@ -165,7 +162,7 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <param name="languagePairs"></param>
         /// <param name="credentialStore"></param>
         /// <returns></returns>
-        #region "Edit"
+
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             var editProvider = translationProvider as MtTranslationProvider;
@@ -196,7 +193,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 }
                 catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program 
 				{
-					Log.Logger.Error($"{_constants.Edit} {ex.Message}\n { ex.StackTrace}");
+					_logger.Error($"{_constants.Edit} {ex.Message}\n { ex.StackTrace}");
 				}
 			}
 
@@ -229,8 +226,6 @@ namespace Sdl.Community.MtEnhancedProvider
 
             return false;
         }
-        #endregion
-
 
         /// <summary>
         /// This gets called when a TranslationProviderAuthenticationException is thrown
@@ -243,7 +238,7 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <param name="translationProviderState"></param>
         /// <param name="credentialStore"></param>
         /// <returns></returns>
-        #region "GetCredentialsFromUser"
+
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
             
@@ -276,7 +271,6 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             return false;
         }
-        #endregion
 
         /// <summary>
         /// Used for displaying the plug-in info such as the plug-in name,
@@ -285,7 +279,7 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <param name="translationProviderUri"></param>
         /// <param name="translationProviderState"></param>
         /// <returns></returns>
-        #region "GetDisplayInfo"
+
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
 
@@ -312,7 +306,6 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             return info;
         }
-        #endregion
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
@@ -327,6 +320,5 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public string TypeName => PluginResources.Plugin_NiceName;
 
-        #endregion
     }
 }
