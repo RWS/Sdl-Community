@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using ETSLPConverter;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -12,18 +13,18 @@ namespace ETSTranslationProvider
         public const string TranslationProviderScheme = "sdlmtedge";
 
         public TranslationOptions Options { get; set; }
-		public static readonly Log Log = Log.Instance;
+        public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public TranslationProvider(TranslationOptions options)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             Options = options;
         }
 
         #region ITranslationProvider Properties
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             return new TranslationProviderLanguageDirection(this, languageDirection);
         }
 
@@ -31,7 +32,7 @@ namespace ETSTranslationProvider
 
 	    public void LoadState(string translationProviderState)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
         }
 
@@ -39,12 +40,12 @@ namespace ETSTranslationProvider
 
 	    public void RefreshStatusInfo()
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
         }
 
         public string SerializeState()
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             return JsonConvert.SerializeObject(Options);
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -11,7 +12,7 @@ namespace ETSTranslationProvider
         Description = "TranslationProviderWinFormsUI")]
     public class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-		public static readonly Log Log = Log.Instance;
+	    public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Show the plug-in settings form when the user is adding the translation provider plug-in
@@ -23,7 +24,7 @@ namespace ETSTranslationProvider
 		/// <returns></returns>
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             var dialog = new ProviderConfDialog(new TranslationOptions(), credentialStore, languagePairs);
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
@@ -58,7 +59,7 @@ namespace ETSTranslationProvider
 			LanguagePair[] languagePairs,
 			ITranslationProviderCredentialStore credentialStore)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             var editProvider = translationProvider as TranslationProvider;
             if (editProvider == null)
             {
@@ -88,7 +89,7 @@ namespace ETSTranslationProvider
         /// <returns></returns>
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             var options = new TranslationOptions(translationProviderUri);
 
 			//only show controls for setting credentials, as that is the only thing that will end up getting saved
@@ -107,7 +108,7 @@ namespace ETSTranslationProvider
 		/// <returns></returns>
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			var info = new TranslationProviderDisplayInfo
 			{
 				Name = PluginResources.Plugin_NiceName,
@@ -120,7 +121,7 @@ namespace ETSTranslationProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
 			if (translationProviderUri == null)
 			{
 				throw new ArgumentNullException("translationProviderUri", "URI not supported by the plug-in.");
