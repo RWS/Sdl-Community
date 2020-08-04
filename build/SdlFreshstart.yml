@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - SdlFreshstart/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - SdlFreshstart/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+  - group: 'SDLPLC Authenticode Credentials'
+  - template: jobs/branch-variables.yml
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: solution
+    value: '**/Sdl.Community.SdlFreshstart.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+    parameters:
+      SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
+      SigningFileList: '$(Build.Repository.LocalPath)\SdlFreshstart\Signing.csv'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      artifactName: SdlFreshstartInstaller
+      pathToPublish: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'

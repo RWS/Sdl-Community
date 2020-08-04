@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TMBackup/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TMBackup/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TMBackup.sln'
+- name: pathToPublish
+  value: 'TMBackup\build\Sdl.Community.TMBackup.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

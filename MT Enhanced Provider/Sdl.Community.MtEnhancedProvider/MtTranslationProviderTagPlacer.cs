@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -15,12 +16,11 @@ namespace Sdl.Community.MtEnhancedProvider
 	public class MtTranslationProviderTagPlacer
 	{
 		private string _returnedText;
-		private string _preparedSourceText;
 		private readonly Segment _sourceSegment;
 		private Dictionary<string, MtTag> dict;
-		private Constants _constants = new Constants();
+		private readonly Constants _constants = new Constants();
 
-		public Log Log = Log.Instance;
+		private Logger _logger = LogManager.GetCurrentClassLogger();
 		public List<TagInfo> TagsInfo { get; set; }
 		public MtTranslationProviderTagPlacer(Segment sourceSegment)
 		{
@@ -32,7 +32,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Returns the source text with markup replacing the tags in the source segment
 		/// </summary>
-		public string PreparedSourceText => _preparedSourceText;
+		public string PreparedSourceText { get; private set; }
 
 		/// <summary>
 		/// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
@@ -76,7 +76,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.GetTaggedSegment} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.GetTaggedSegment} {ex.Message}\n { ex.StackTrace}");
 				return new Segment();
 			}
 		}
@@ -109,7 +109,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.RemoveTrailingClosingTags} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.RemoveTrailingClosingTags} {ex.Message}\n { ex.StackTrace}");
 				return segment;
 			}
 		}
@@ -124,7 +124,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.DecodeReturnedText} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.DecodeReturnedText} {ex.Message}\n { ex.StackTrace}");
 				return string.Empty;
 			}
 		}
@@ -185,7 +185,7 @@ namespace Sdl.Community.MtEnhancedProvider
 								tagText = "<tg" + tag.TagId + "/>";
 							}
 						}
-						_preparedSourceText += tagText;
+						PreparedSourceText += tagText;
 						//now we have to figure out whether this tag is preceded and/or followed by whitespace
 						if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
 						{
@@ -214,14 +214,14 @@ namespace Sdl.Community.MtEnhancedProvider
 					{
 						var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
 																								 //_preparedSourceText += str;
-						_preparedSourceText += _sourceSegment.Elements[i].ToString();
+						PreparedSourceText += _sourceSegment.Elements[i].ToString();
 					}
 				}
 				TagsInfo.Clear();
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{_constants.GetSourceTagsDict} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.GetSourceTagsDict} {ex.Message}\n { ex.StackTrace}");
 			}
 			return dict;
 		}
@@ -269,7 +269,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{_constants.GetTagsWithDecimals} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.GetTagsWithDecimals} {ex.Message}\n { ex.StackTrace}");
 			}
 			return translation;
 		}
@@ -288,7 +288,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.GetTags} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.GetTags} {ex.Message}\n { ex.StackTrace}");
 			}
 			return translation;
 		}
@@ -307,7 +307,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.GetAlphanumericTags} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.GetAlphanumericTags} {ex.Message}\n { ex.StackTrace}");
 			}
 			return translation;
 		}

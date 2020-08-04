@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -26,26 +27,26 @@ namespace Sdl.Community.MtEnhancedProvider
 {
 	public partial class MtProviderConfDialog : Form
 	{
-		private const string gTranslateString = "Google Translate";
-		private const string msTranslatorString = "Microsoft Translator";
+		private const string GTranslateString = "Google Translate";
+		private const string MsTranslatorString = "Microsoft Translator";
 		private readonly List<LanguagePair> _correspondingLanguages;
 
 		//these strings should not be localized or changed and are therefore hard-coded as constants
 		//these strings should not be localized or changed and are therefore hard-coded as constants
 		private bool _isTellMeAction;
 
-		private ITranslationProviderCredentialStore credstore;
-		private TranslationProviderCredential gtCred;
-		private TranslationProviderCredential msCred;
-		private Point showcredsloc;
-		private Uri uriGt;
-		private Uri uriMs;
-		private Constants _constants = new Constants();
-		public Log Log = Log.Instance;
+		private readonly ITranslationProviderCredentialStore _credstore;
+		private TranslationProviderCredential _gtCred;
+		private TranslationProviderCredential _msCred;
+		private Point _showcredsloc;
+		private readonly Uri uriGt;
+		private readonly Uri uriMs;
+		private readonly Constants _constants = new Constants();
+		private Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public MtProviderConfDialog(MtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
 		{
-			this.credstore = credentialStore;
+			this._credstore = credentialStore;
 			uriMs = new Uri("mtenhancedprovidermst:///");
 			uriGt = new Uri("mtenhancedprovidergt:///");
 			Options = options;
@@ -72,7 +73,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public MtProviderConfDialog(MtTranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
 		{
-			this.credstore = credentialStore;
+			this._credstore = credentialStore;
 			uriMs = new Uri("mtenhancedprovidermst:///");
 			uriGt = new Uri("mtenhancedprovidergt:///");
 			Options = options;
@@ -136,7 +137,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 				{
-					Log.Logger.Error($"{_constants.BrowseEditFile} {ex.Message}\n { ex.StackTrace}");
+					_logger.Error($"{_constants.BrowseEditFile} {ex.Message}\n { ex.StackTrace}");
 
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = string.Format(MtProviderConfDialogResources.lookupFileStructureCheckXmlProblemErrorMessage, System.IO.Path.GetFileName(openFile.FileName));
@@ -145,7 +146,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
 				{
-					Log.Logger.Error($"{_constants.BrowseEditFile} {exp.Message}\n { exp.StackTrace}");
+					_logger.Error($"{_constants.BrowseEditFile} {exp.Message}\n { exp.StackTrace}");
 
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage + " " + exp.Message;
@@ -206,10 +207,10 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		private void btnDeleteSavedGoogleKey_Click(object sender, EventArgs e)
 		{
-			this.gtCred = credstore.GetCredential(uriGt);
-			if (gtCred != null && gtCred.Persist)
+			this._gtCred = _credstore.GetCredential(uriGt);
+			if (_gtCred != null && _gtCred.Persist)
 			{
-				credstore.RemoveCredential(uriGt);
+				_credstore.RemoveCredential(uriGt);
 				chkSaveKey.Checked = false;
 				MessageBox.Show(MtProviderConfDialogResources.deleteCredentialsMessageSavedKeyDeleted);
 			}
@@ -221,10 +222,10 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		private void btnDeleteSavedMicrosoftCreds_Click(object sender, EventArgs e)
 		{
-			this.msCred = credstore.GetCredential(uriMs);
-			if (msCred != null && msCred.Persist)
+			this._msCred = _credstore.GetCredential(uriMs);
+			if (_msCred != null && _msCred.Persist)
 			{
-				credstore.RemoveCredential(uriMs);
+				_credstore.RemoveCredential(uriMs);
 				chkSaveCred.Checked = false;
 				MessageBox.Show(MtProviderConfDialogResources.deleteCredentialsMessageSavedCredsDeleted);
 			}
@@ -327,15 +328,15 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		private void ShowCredBox()
 		{
-			if (comboProvider.Text.Equals(gTranslateString)) //these strings should not be localized and are therefore hard-coded
+			if (comboProvider.Text.Equals(GTranslateString)) //these strings should not be localized and are therefore hard-coded
 			{
-				groupBoxGT.Location = showcredsloc;
+				groupBoxGT.Location = _showcredsloc;
 				groupBoxMT.Hide();
 				groupBoxGT.Show();
 			}
-			else if (comboProvider.Text.Equals(msTranslatorString)) //these strings should not be localized and are therefore hard-coded
+			else if (comboProvider.Text.Equals(MsTranslatorString)) //these strings should not be localized and are therefore hard-coded
 			{
-				groupBoxMT.Location = showcredsloc;
+				groupBoxMT.Location = _showcredsloc;
 				groupBoxGT.Hide();
 				groupBoxMT.Show();
 			}
@@ -343,7 +344,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		private void UpdateDialog()
 		{
-			showcredsloc = groupBoxMT.Location; //holds our location of where to place the group box we are showing
+			_showcredsloc = groupBoxMT.Location; //holds our location of where to place the group box we are showing
 			textApiKey.Text = Options.ApiKey;
 			txtClientId.Text = Options.ClientId;
 			chkSaveKey.Checked = Options.PersistGoogleKey;
@@ -372,7 +373,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{_constants.UpdateDialog} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.UpdateDialog} {ex.Message}\n { ex.StackTrace}");
 			}
 		}
 
@@ -386,7 +387,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				prompt += newLine + MtProviderConfDialogResources.validationMessageNoProvider;
 				result = false;
 			}
-			if (comboProvider.Text.Equals(msTranslatorString) //these strings should not be localized and are therefore hard-coded
+			if (comboProvider.Text.Equals(MsTranslatorString) //these strings should not be localized and are therefore hard-coded
 				&& txtClientId.Text == string.Empty)
 			{
 				if (_isTellMeAction)
@@ -399,7 +400,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					result = false;
 				}
 			}
-			if (comboProvider.Text.Equals(gTranslateString) //these strings should not be localized and are therefore hard-coded
+			if (comboProvider.Text.Equals(GTranslateString) //these strings should not be localized and are therefore hard-coded
 				&& textApiKey.Text == string.Empty)
 			{
 				if (_isTellMeAction)

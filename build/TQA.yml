@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TQA/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TQA/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.TQA.sln'
+- name: pathToPublish
+  value: 'TQA/TQA\bin\Release\Sdl.Community.TQA.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -20,6 +20,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
+using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.LanguagePlatform.Core;
 
@@ -29,11 +30,11 @@ namespace Sdl.Community.MtEnhancedProvider
 	{
 		//holds supported languages so we don't have to keep pinging google once the lang has been checked
 		//the structure is <targetLang, List<sourceLangs>>
-		private static Dictionary<string, List<string>> dictSupportedLangs;
-		private Constants _constants = new Constants();
+		private static Dictionary<string, List<string>> _dictSupportedLangs;
+		private readonly Constants _constants = new Constants();
 
 		public string ApiKey { get; set; }//for when this is already instantiated but key is changed in dialog
-		public Log Log = Log.Instance;
+		private Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public MtTranslationProviderGTApiConnecter(string key)
 		{
@@ -48,18 +49,18 @@ namespace Sdl.Community.MtEnhancedProvider
 				var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;// +Environment.NewLine + PluginResources.LangPairAuthErrorMsg3;
 				throw new Exception(message); //b/c list will come back null if key is bad
 			}
-			dictSupportedLangs.Add(target, list);
+			_dictSupportedLangs.Add(target, list);
 		}
 
 		public bool IsSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
 			var sourceLang = GetLanguageCode(sourceCulture);
 			var targetLang = GetLanguageCode(targetCulture);
-			if (dictSupportedLangs == null)
-				dictSupportedLangs = new Dictionary<string, List<string>>();
-			if (!dictSupportedLangs.ContainsKey(targetLang))
+			if (_dictSupportedLangs == null)
+				_dictSupportedLangs = new Dictionary<string, List<string>>();
+			if (!_dictSupportedLangs.ContainsKey(targetLang))
 				UpdateSupportedLangs(targetLang);
-			foreach (var source in dictSupportedLangs[targetLang])
+			foreach (var source in _dictSupportedLangs[targetLang])
 			{
 				if (source == sourceLang)
 				{
@@ -119,9 +120,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					targetLang = GetLanguageCode(langPair.TargetCulture);
 				}
 
-				#region "Encoding"
 				text = EncodeSpecialChars(text); //all strings should get this final check for characters that seem to break GT api
-				#endregion
 
 				//create the url for the translate request
 				var url = string.Format("https://translation.googleapis.com/language/translate/v2?key={0}&q={1}&target={2}", ApiKey, text, targetLang);
@@ -141,7 +140,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					}
 					catch (WebException e) //will come back 400 bad request if there is a problem
 					{
-						Log.Logger.Error($"{_constants.DoTranslate} {e.Message}\n { e.StackTrace}");
+						_logger.Error($"{_constants.DoTranslate} {e.Message}\n { e.StackTrace}");
 
 						string eReason = GetExceptionReason(e);
 						//get our localized error message from the resources file
@@ -162,7 +161,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.DoTranslate} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.DoTranslate} {ex.Message}\n { ex.StackTrace}");
 				throw new Exception(ex.Message);
 			}
 		}
@@ -214,7 +213,6 @@ namespace Sdl.Community.MtEnhancedProvider
 				string url = string.Format("https://www.googleapis.com/language/translate/v2/languages?key={0}&target={1}", ApiKey, targetLang);
 				string result = ""; //this will take the result from the webclient
 
-				#region "webclient"
 				using (var webClient = new WebClient())
 				{
 					try
@@ -223,7 +221,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					}
 					catch (WebException e) //will come back 400 invalid value if target lang not supported
 					{
-						Log.Logger.Error($"{_constants.GetSourceLangsList} {e.Message}\n { e.StackTrace}");
+						_logger.Error($"{_constants.GetSourceLangsList} {e.Message}\n { e.StackTrace}");
 
 						string eReason = GetExceptionReason(e);
 						if (eReason == "Bad Request")
@@ -235,7 +233,6 @@ namespace Sdl.Community.MtEnhancedProvider
 						return list;
 					}
 				}
-				#endregion
 
 				foreach (string lang in ParseReturnedResults(result, "language")) //the second arg is the key we'll be looking for
 				{
@@ -248,7 +245,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.GetSourceLangsList} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.GetSourceLangsList} {ex.Message}\n { ex.StackTrace}");
 			}
 			return list;
 		}
@@ -275,16 +272,14 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		private List<string> ParseReturnedResults(string input, string findKey)
 		{
-			#region "variables"
+
 			var ser = new JavaScriptSerializer();
 			var dict = new Dictionary<string, Dictionary<string, object>>();
 			Dictionary<string, object> dict2;
 			Dictionary<string, object> dict3;
 			System.Collections.ArrayList myAl;
 			var myList = new List<string>();
-			#endregion
 
-			#region "loopthrough"
 			dict = ser.Deserialize<Dictionary<string, Dictionary<string, object>>>(input);
 			//loop through output 
 			foreach (var strKey in dict.Keys) //this structure seems to be the only way to get it out
@@ -303,7 +298,6 @@ namespace Sdl.Community.MtEnhancedProvider
 					}
 				}
 			}
-			#endregion
 
 			return myList;
 		}
@@ -316,16 +310,14 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <returns></returns>
 		private string ParseLanguageDetect(string input)
 		{
-			#region "variables"
+
 			var ser = new JavaScriptSerializer();
 			var dict = new Dictionary<string, Dictionary<string, object>>();
 			Dictionary<string, object> dict2;
 			System.Collections.ArrayList myAl;
 			System.Collections.ArrayList myAl2;
 			var myList = new List<string>();
-			#endregion
 
-			#region "loopthrough"
 			dict = ser.Deserialize<Dictionary<string, Dictionary<string, object>>>(input);
 			//loop through output 
 			foreach (String strKey in dict.Keys) //this structure seems to be the only way to get it out
@@ -346,7 +338,6 @@ namespace Sdl.Community.MtEnhancedProvider
 
 
 			}
-			#endregion
 
 			return null;
 		}

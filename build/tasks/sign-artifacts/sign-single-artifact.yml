@@ -1,0 +1,16 @@
+parameters:
+  fileToSign: '$PSScriptRoot\signme.exe'
+  description: 'a file to sign'
+ 
+steps:
+- task: PowerShell@2
+  displayName: 'Sign artifacts'
+  inputs:
+    targetType: filePath
+    filePath: './build/tasks/sign-artifacts/sign-single-artifact-azure.ps1'
+    arguments: '"${{ parameters.fileToSign }}" "${{ parameters.description }}"'
+  env:
+    CurrentCertificateName: $(CurrentCertificateName)
+    SigningClientId: $(SigningClientId)
+    SigningSecret: $(SigningSecret)
+    KeyVaultUrl: $(KeyVaultUrl)

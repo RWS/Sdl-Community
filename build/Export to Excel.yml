@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - Export to Excel/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - Export to Excel/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/ExportToExcel.sln'
+- name: pathToPublish
+  value: 'Export to Excel\Export to Excel\bin\Release\Sdl.Community.ExportToExcel.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
