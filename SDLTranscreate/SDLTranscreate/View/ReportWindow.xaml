@@ -54,7 +54,7 @@
 			</Grid.RowDefinitions>
 	
 			<Border Background="White" Grid.Column="0" Grid.Row="0" Margin="0">
-				<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding HtmlUri, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<WebBrowser controls:WebBrowserHelper.BindableSource="{Binding HtmlUri, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</Border>
 			
 		</Grid>
