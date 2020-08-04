@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MtEnhancedTradosPlugin</RootNamespace>
     <AssemblyName>MtEnhancedTradosPlugin</AssemblyName>
-	  <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -201,6 +201,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppInitializer.cs" />
     <Compile Include="EditCollection.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />

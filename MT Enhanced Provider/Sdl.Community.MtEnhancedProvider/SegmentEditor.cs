@@ -18,23 +18,24 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
     public class SegmentEditor
     {
-        string filename;
-        EditCollection edcoll;
-        DateTime lastversion;
+	    private readonly string _filename;
+        private EditCollection _edcoll;
+        private DateTime _lastversion;
 		private Constants _constants = new Constants();
 
-		public Log Log = Log.Instance;
+		private Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public SegmentEditor(string editCollectionFilename)
         {
-            filename = editCollectionFilename;
-            lastversion = File.GetLastWriteTime(filename);
+            _filename = editCollectionFilename;
+            _lastversion = File.GetLastWriteTime(_filename);
             LoadCollection();
         }
 
@@ -42,24 +43,24 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             try
             {
-                using (var reader = new StreamReader(filename))
+                using (var reader = new StreamReader(_filename))
                 {
                     var serializer = new XmlSerializer(typeof(EditCollection));
-                    edcoll = (EditCollection)serializer.Deserialize(reader);
+                    _edcoll = (EditCollection)serializer.Deserialize(reader);
                 }
             }
             catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
             {
-				Log.Logger.Error($"{_constants.LoadCollection} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.LoadCollection} {ex.Message}\n { ex.StackTrace}");
 
 				var caption = PluginResources.EditSettingsErrorCaption;
-                var message = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(filename));
+                var message = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(_filename));
                 MessageBox.Show(new MtWindowWrapper(GetHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 throw new Exception(message);
             }
             catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
             {
-				Log.Logger.Error($"{_constants.LoadCollection} {exp.Message}\n { exp.StackTrace}");
+				_logger.Error($"{_constants.LoadCollection} {exp.Message}\n { exp.StackTrace}");
 
 				var caption = PluginResources.EditSettingsErrorCaption;
                 var message = PluginResources.EditSettingsGenericErrorMessage + " " + exp.Message;
@@ -72,29 +73,29 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             var result = text;
             //check last time edit file was written to and if its changed reload the collection.
-            var currentversion = File.GetLastWriteTime(filename);
-            if (currentversion > lastversion)
+            var currentversion = File.GetLastWriteTime(_filename);
+            if (currentversion > _lastversion)
             {
-                lastversion = currentversion;
+                _lastversion = currentversion;
                 LoadCollection();
             }
 
-            if (edcoll.Items.Count == 0)
+            if (_edcoll.Items.Count == 0)
                 return text;
 
             
-            for (var i = 0; i< edcoll.Items.Count; i++)
+            for (var i = 0; i< _edcoll.Items.Count; i++)
             {
-                if (edcoll.Items[i].Enabled) //need to skip when disabled
+                if (_edcoll.Items[i].Enabled) //need to skip when disabled
                 {
-                    var find = edcoll.Items[i].FindText;
-                    var replace = edcoll.Items[i].ReplaceText;
+                    var find = _edcoll.Items[i].FindText;
+                    var replace = _edcoll.Items[i].ReplaceText;
 
-                    if (edcoll.Items[i].Type == EditItem.EditItemType.PlainText)
+                    if (_edcoll.Items[i].Type == EditItem.EditItemType.PlainText)
                     {
                         result = result.Replace(find, replace);
                     }
-                    else if (edcoll.Items[i].Type == EditItem.EditItemType.RegularExpression)
+                    else if (_edcoll.Items[i].Type == EditItem.EditItemType.RegularExpression)
                     {
                         var reg = new Regex(find);
                         result = reg.Replace(result, replace);
