@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -9,37 +8,28 @@ namespace Sdl.Community.SDLBatchAnonymize
 {
 	public sealed class Log
 	{
-		public static Logger Logger;
-		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
-		public static Log Instance => _instance.Value;
-
-		private Log()
+		public static void Setup()
 		{
-			var config = new LoggingConfiguration();
-			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "SDLBatchAnonymizer");
-			if (!Directory.Exists(logDirectoryPath))
+			if (LogManager.Configuration == null)
 			{
-				Directory.CreateDirectory(logDirectoryPath);
+				LogManager.Configuration = new LoggingConfiguration();
 			}
+			var config = LogManager.Configuration;
+
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "SDLBatchAnonymizer");
+			Directory.CreateDirectory(logDirectoryPath);
+
 			var target = new FileTarget
 			{
+				Name = "BatchAnonymize",
 				FileName = Path.Combine(logDirectoryPath, "SDLBatchAnonymizer.txt"),
-				// Roll over the log every 10 MB
-				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
-
-				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
-				// we need to do basic string concatenation.
-				ArchiveFileName = logDirectoryPath + "/" + assembly.GetName().Name + ".log.{#####}.txt"
+				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
-			config.AddTarget("file", target);
-			var rule = new LoggingRule("*", LogLevel.Debug, target);
-			config.LoggingRules.Add(rule);
-			LogManager.Configuration = config;
-			//NLog object
-			Logger = LogManager.GetCurrentClassLogger();
+			config.AddTarget(target);
+			config.AddRuleForAllLevels(target, "*BatchAnonymize*");
+
+			LogManager.ReconfigExistingLoggers();
 		}
 	}
 }

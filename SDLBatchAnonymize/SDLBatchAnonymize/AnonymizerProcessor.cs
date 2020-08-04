@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using NLog;
 using Sdl.Community.SDLBatchAnonymize.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
@@ -7,7 +9,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 {
 	public class AnonymizerProcessor : AbstractBilingualContentProcessor
 	{
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IBatchAnonymizerSettings _settings;
 		private readonly IUserNameService _usernameService;
 		private readonly IResourceOriginsService _resourceOriginsService;
@@ -54,7 +56,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			}
 			catch (Exception exception)
 			{
-				Log.Logger.Error($"{exception.Message}\n {exception.StackTrace}");
+				_logger.Error($"{exception.Message}\n {exception.StackTrace}");
 			}
 		}
 

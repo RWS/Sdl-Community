@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymizerProcessor.cs" />
+    <Compile Include="AppInitializer.cs" />
     <Compile Include="BatchAnonymizerTask.cs" />
     <Compile Include="BatchTask\BatchAnonymizerSettings.cs" />
     <Compile Include="BatchTask\BatchAnonymizerSettingsPage.cs" />
