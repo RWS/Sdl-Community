@@ -1,14 +1,14 @@
 trigger:
   branches:
     include:
-     - master
+     - studio_2019
   paths:
     include:
      - YourProductivity/*
 pr:
   branches:
     include:
-     - master
+     - studio_2019
   paths:
     include:
      - YourProductivity/*

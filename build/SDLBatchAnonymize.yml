@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-     - master
+     - studio_2019
   paths:
     include:
      - SDLBatchAnonymize/*
@@ -9,7 +9,7 @@ trigger:
 pr:
   branches:
     include:
-     - master
+     - studio_2019
   paths:
     include:
      - SDLBatchAnonymize/*

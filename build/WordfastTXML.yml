@@ -1,14 +1,14 @@
 trigger:
   branches:
     include:
-     - master
+     - studio_2019
   paths:
     include:
      - Wordfast TXML/*
 pr:
   branches:
     include:
-     - master
+     - studio_2019
   paths:
     include:
      - Wordfast TXML/*
