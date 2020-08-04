@@ -1,47 +1,35 @@
 using System;
 using System.IO;
-using System.Reflection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 
 namespace ETSTranslationProvider
 {
-	public sealed class Log
+	public static class Log
 	{
-		private static Log _instance;
-
-		private Log()
+		public static void Setup()
 		{
-			var config = new LoggingConfiguration();
-			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "SDLMachineTranslationEdge");
-			if (!Directory.Exists(logDirectoryPath))
+			if (LogManager.Configuration == null)
 			{
-				Directory.CreateDirectory(logDirectoryPath);
+				LogManager.Configuration = new LoggingConfiguration();
 			}
+			var config = LogManager.Configuration;
+
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "SDLMachineTranslationEdge");
+			Directory.CreateDirectory(logDirectoryPath);
+
 			var target = new FileTarget
 			{
+				Name = "ETS",
 				FileName = Path.Combine(logDirectoryPath, "SDLMachineTranslationEdgeLogs.txt"),
-				// Roll over the log every 10 MB
-				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
-
-				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
-				// we need to do basic string concatenation.
-				ArchiveFileName = logDirectoryPath + "/" + assembly.GetName().Name + ".log.{#####}.txt"
+				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
-			config.AddTarget("file", target);
-			var rule = new LoggingRule("*", LogLevel.Debug, target);
-			config.LoggingRules.Add(rule);
-			LogManager.Configuration = config;
+			config.AddTarget(target);
+			config.AddRuleForAllLevels(target, "*ETS*");
 
-			// NLog object
-			Logger = LogManager.GetCurrentClassLogger();
+			LogManager.ReconfigExistingLoggers();
 		}
-
-		public static Log Instance => _instance ?? (_instance = new Log());
-		public static Logger Logger;
 	}
 }

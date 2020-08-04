@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using ETSTranslationProvider.Helpers;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -14,7 +15,7 @@ namespace ETSTranslationProvider
 		private LanguagePair[] LanguagePairs;
 		private System.Timers.Timer lpPopulationTimer = new System.Timers.Timer(500);
 		public TranslationOptions Options { get; set; }
-		public static readonly Log Log = Log.Instance;
+		public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ProviderConfDialog(TranslationOptions options, ITranslationProviderCredentialStore store, LanguagePair[] languagePairs)
 		{
@@ -106,7 +107,7 @@ namespace ETSTranslationProvider
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error(e);
+				_logger.Error(e);
 			}
 
 			// If the port is not a number or out of port range, don't build the URI
@@ -122,7 +123,7 @@ namespace ETSTranslationProvider
 			}
 			catch (UriFormatException e)
 			{
-				Log.Logger.Error($"{Constants.BuildUri}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.BuildUri}: {e.Message}\n {e.StackTrace}");
 				return null;
 			}
 		}
@@ -212,7 +213,7 @@ namespace ETSTranslationProvider
 				catch (Exception e)
 				{
 					FinishButton.Enabled = true;
-					Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+					_logger.Error($"{e.Message}\n {e.StackTrace}");
 				}
 			}));
 		}
@@ -240,14 +241,14 @@ namespace ETSTranslationProvider
 			if (e.Exception.Message.Contains("value is not valid"))
 			{
 				var lp = TradosLPs.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-				Log.Logger.Info($"lp:{lp}");
+				_logger.Info($"lp:{lp}");
 
 				foreach (var langP in Options.LPPreferences)
 				{
-					Log.Logger.Info($"LPPreferences foreach {langP.Value.LanguagePairId}");
+					_logger.Info($"LPPreferences foreach {langP.Value.LanguagePairId}");
 				}
 
-				Log.Logger.Error($"{e.Exception.Message}\n {e.Exception.StackTrace}");
+				_logger.Error($"{e.Exception.Message}\n {e.Exception.StackTrace}");
 				if (!((DataGridViewComboBoxColumn)TradosLPs.Columns[e.ColumnIndex]).Items.Contains(lp))
 				{
 					((DataGridViewComboBoxColumn)TradosLPs.Columns[e.ColumnIndex]).Items.Add(lp);
@@ -432,7 +433,7 @@ namespace ETSTranslationProvider
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.AuthenticateCredentials}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.AuthenticateCredentials}: {e.Message}\n {e.StackTrace}");
 				if (showAlertOnFailure)
 				{
 					DialogResult = DialogResult.None;
@@ -492,7 +493,7 @@ namespace ETSTranslationProvider
 				}
 				catch (Exception ex)
 				{
-					Log.Logger.Error(ex.Message);
+					_logger.Error(ex.Message);
 					MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}

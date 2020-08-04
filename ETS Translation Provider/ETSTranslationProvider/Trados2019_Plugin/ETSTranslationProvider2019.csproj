@@ -84,6 +84,12 @@
       <HintPath>..\..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -137,6 +143,7 @@
     <Compile Include="..\ETSApi\TradosToETSLP.cs" />
     <Compile Include="..\Log.cs" />
     <Compile Include="..\PluginConfiguration.cs" />
+    <Compile Include="ApplicationInitializer.cs" />
     <Compile Include="ETSTellMe\ETSLanguagePairsAction.cs" />
     <Compile Include="ETSTellMe\ETSMTAction.cs" />
     <Compile Include="ETSTellMe\ETSOfficialWebAction.cs" />

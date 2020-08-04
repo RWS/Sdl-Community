@@ -14,6 +14,7 @@ using ETSLPConverter;
 using ETSTranslationProvider.Helpers;
 using ETSTranslationProvider.Model;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -42,7 +43,7 @@ namespace ETSTranslationProvider.ETSApi
 			RequestTimeout = -2146233029,
 		}
 
-		public static readonly Log Log = Log.Instance;
+		public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Get the translation of an xliff file using the ETS API.
@@ -55,7 +56,7 @@ namespace ETSTranslationProvider.ETSApi
 			LanguagePair languageDirection,
 			Xliff xliffFile)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			var text = xliffFile.ToString();
 			var queryString = HttpUtility.ParseQueryString(string.Empty);
 			var encodedInput = text.Base64Encode();
@@ -96,7 +97,7 @@ namespace ETSTranslationProvider.ETSApi
 			}
 			queryString["inputFormat"] = "application/x-xliff";
 
-			Log.Logger.Debug("Sending translation request for: {0}", encodedInput);
+			_logger.Debug("Sending translation request for: {0}", encodedInput);
 			string jsonResult;
 			try
 			{
@@ -104,13 +105,13 @@ namespace ETSTranslationProvider.ETSApi
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.Translation}: {e.Message}\n {e.StackTrace}\n Encoded Input: {encodedInput}");
+				_logger.Error($"{Constants.Translation}: {e.Message}\n {e.StackTrace}\n Encoded Input: {encodedInput}");
 				throw;
 			}
 
 			var encodedTranslation = JsonConvert.DeserializeObject<ETSTranslationOutput>(jsonResult).Translation;
 			var decodedTranslation = encodedTranslation.Base64Decode();
-			Log.Logger.Debug("Resultant translation is: {0}", encodedTranslation);
+			_logger.Debug("Resultant translation is: {0}", encodedTranslation);
 			return decodedTranslation;
 		}
 
@@ -121,7 +122,7 @@ namespace ETSTranslationProvider.ETSApi
 		/// <returns></returns>
 		public static ETSLanguagePair[] GetLanguagePairs(TranslationOptions options)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			lock (languageLock)
 			{
 				if (_languagePairsOnServer == null || !_languagePairsOnServer.Any())
@@ -148,7 +149,7 @@ namespace ETSTranslationProvider.ETSApi
 					}
 					catch (Exception e)
 					{
-						Log.Logger.Error($"{Constants.LanguagePairs}: {Constants.InaccessibleLangPairs}:  {e.Message}\n {e.StackTrace}");
+						_logger.Error($"{Constants.LanguagePairs}: {Constants.InaccessibleLangPairs}:  {e.Message}\n {e.StackTrace}");
 
 						if (Environment.UserInteractive)
 						{
@@ -208,7 +209,7 @@ namespace ETSTranslationProvider.ETSApi
 			NameValueCollection parameters = null,
 			bool useHTTP = false)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 
 			lock (optionsLock)
 			{
@@ -251,7 +252,7 @@ namespace ETSTranslationProvider.ETSApi
 						e = e.InnerException;
 					}
 
-					Log.Logger.Error($"{Constants.ETSServerContact}:\n {Constants.ETSServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
+					_logger.Error($"{Constants.ETSServerContact}:\n {Constants.ETSServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
 
 					throw TranslateAggregateException(e);
 				}
@@ -263,13 +264,13 @@ namespace ETSTranslationProvider.ETSApi
 				switch (httpResponse.StatusCode)
 				{
 					case HttpStatusCode.Unauthorized:
-						Log.Logger.Error($"{Constants.ETSServerContact}: {Constants.InvalidCredentials}");
+						_logger.Error($"{Constants.ETSServerContact}: {Constants.InvalidCredentials}");
 						throw new UnauthorizedAccessException("The credentials provided are not authorized.");
 					case HttpStatusCode.BadRequest:
-						Log.Logger.Error($"{Constants.ETSServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
+						_logger.Error($"{Constants.ETSServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
 						throw new Exception($"There was a problem with the request: { httpResponse.Content.ReadAsStringAsync().Result }");
 					default:
-						Log.Logger.Error($"{Constants.ETSServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
+						_logger.Error($"{Constants.ETSServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
 
 						return null;
 				}
@@ -289,7 +290,7 @@ namespace ETSTranslationProvider.ETSApi
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.ETSApiVersion}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.ETSApiVersion}: {e.Message}\n {e.StackTrace}");
 				options.ApiVersion = APIVersion.v1;
 				throw;
 			}
@@ -302,7 +303,7 @@ namespace ETSTranslationProvider.ETSApi
 		/// <param name="credentials"></param>
 		public static void VerifyBasicAPIToken(TranslationOptions options, GenericCredentials credentials)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			if (options == null)
 			{
 				throw new ArgumentNullException("Options is null");
@@ -318,12 +319,12 @@ namespace ETSTranslationProvider.ETSApi
 			}
 			catch (AggregateException e)
 			{
-				Log.Logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
 				throw TranslateAggregateException(e);
 			}
 			catch (SocketException e)
 			{
-				Log.Logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
 				throw TranslateAggregateException(e);
 			}
 			finally
@@ -345,7 +346,7 @@ namespace ETSTranslationProvider.ETSApi
 			GenericCredentials credentials,
 			bool useHTTP = false)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 
 			lock (optionsLock)
 			{
@@ -400,7 +401,7 @@ namespace ETSTranslationProvider.ETSApi
 					{
 						return GetAuthToken(options, credentials, true);
 					}
-					Log.Logger.Error($"{Constants.AuthToken}: {e.Message}\n {e.StackTrace}");
+					_logger.Error($"{Constants.AuthToken}: {e.Message}\n {e.StackTrace}");
 					throw TranslateAggregateException(e);
 				}
 			}
@@ -413,7 +414,7 @@ namespace ETSTranslationProvider.ETSApi
 		/// <returns></returns>
 		private static Exception TranslateAggregateException(Exception culprit)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			while (culprit.InnerException != null)
 			{
 				culprit = culprit.InnerException;
@@ -436,7 +437,7 @@ namespace ETSTranslationProvider.ETSApi
 			{
 				return new WebException("The request has been cancelled, either due to timeout or being interrupted externally.");
 			}
-			Log.Logger.Error($"{Constants.TranslateAggregateException}: {culprit}");
+			_logger.Error($"{Constants.TranslateAggregateException}: {culprit}");
 			return culprit;
 		}
 
@@ -448,7 +449,7 @@ namespace ETSTranslationProvider.ETSApi
 		/// <returns></returns>
 		private static string Base64Encode(this string text)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
 		}
 
@@ -459,7 +460,7 @@ namespace ETSTranslationProvider.ETSApi
 		/// <returns></returns>
 		private static string Base64Decode(this string encodedText)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			return Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 		}
 		#endregion
