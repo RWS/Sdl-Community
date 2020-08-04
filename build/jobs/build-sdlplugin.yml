@@ -1,0 +1,39 @@
+steps:
+- task: PowerShell@2
+  displayName: 'set x86path'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download Trados Studio Binaries Pipeline Artifact'
+  inputs:
+    buildType: 'specific'
+    project: 'TradosStudio'
+    definition: '1258'
+    artifactName: 'binaries'
+    buildVersionToDownload: 'latestFromBranch'
+    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+    runBranch: '$(StudioBranch)'
+    tags: 'Package'
+
+
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 4.5.3'
+  inputs:
+    versionSpec: 4.5.3
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(solution)'
+    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'		
+- task: PublishPipelineMetadata@0
+

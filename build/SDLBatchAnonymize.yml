@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - SDLBatchAnonymize/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - SDLBatchAnonymize/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.SDLBatchAnonymize.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

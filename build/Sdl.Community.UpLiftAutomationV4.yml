@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - Sdl.Community.UpLiftAutomationV4/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - Sdl.Community.UpLiftAutomationV4/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.FragmentAlignmentAutomation.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

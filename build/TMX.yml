@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TMX/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TMX/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.FileTypeSupport.TMX.sln'
+- name: pathToPublish
+  value: 'TMX\bin\Release\Sdl.Community.FileType.TMX.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

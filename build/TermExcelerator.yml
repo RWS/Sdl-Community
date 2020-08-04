@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TermExcelerator/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TermExcelerator/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value:  '**/Sdl.Community.TermExcelerator.sln'
+- name: pathToPublish
+  value: 'TermExcelerator/Sdl.Community.TermExcelerator\bin\Release\Sdl.Community.TermExcelerator.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
