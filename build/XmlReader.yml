@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XML Reader/*
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - XML Reader/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.xmlReader.sln'
+- name: pathToPublish
+  value: 'XML Reader/Sdl.Community.XmlReader\bin\Release\Sdl.Community.XmlReader.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

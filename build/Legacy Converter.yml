@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Legacy Converter/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Legacy Converter/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value : '**/Sdl.Community.LegacyConverter.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

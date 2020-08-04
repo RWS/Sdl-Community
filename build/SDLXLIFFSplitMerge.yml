@@ -1,0 +1,45 @@
+
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - SDLXLIFFSplitMerge/*
+
+variables:
+- group: 'SDLPLC Authenticode Credentials'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/SDLXLIFFSplitMerge.sln'
+
+pool:
+  vmImage : '$(DefaultBuildVm)'
+
+steps:
+- template: jobs/build-sdlplugin.yml
+
+- template: tasks/sign-artifacts/prepare-signing.yml
+
+- template: tasks/sign-artifacts/sign-single-artifact.yml
+  parameters:
+    fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)\Sdl.Community.SDLXLIFFSplitMerge.Installer.msi'
+    description: 'installer '
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+      artifactName: SDLXLIFFSplitMergeInstaller
+      pathToPublish: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)'

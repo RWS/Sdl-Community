@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Wordfast TXML/*
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Wordfast TXML/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.FileTypeSupport.TXML.sln'
+- name: pathToPublish
+  value: 'Wordfast TXML\bin\Release\Sdl.Community.FileType.TXML.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

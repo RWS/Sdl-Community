@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FailSafeTask/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FailSafeTask/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/FailSafeTask.sln'
+- name: pathToPublish
+  value: 'FailSafeTask\Sdl.Community.FailSafeTask\bin\Release\FailSafeTask.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

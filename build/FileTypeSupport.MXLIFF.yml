@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FileTypeSupport.MXLIFF/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - FileTypeSupport.MXLIFF/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/FileTypeSupport.MXLIFF.sln'
+- name: pathToPublish
+  value: 'FileTypeSupport.MXLIFF\bin\Release\MXLIFFFileType.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
