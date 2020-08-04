@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - Post Edit Compare/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - Post Edit Compare/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.PostEdit.Versions.sln'
+- name: pathToPublish
+  value: 'Post Edit Compare\bin\Release\Sdl.Community.PostEdit.Versions.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

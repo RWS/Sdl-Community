@@ -441,6 +441,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\sdl_transcreate_view.ico" />
     <EmbeddedResource Include="BatchTasks\Report.xsl" />
     <Content Include="pluginpackage.manifest.xml" />
     <Resource Include="Resources\Checked.png" />
@@ -469,8 +470,6 @@
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\Remove-32.png" />
     <Content Include="Resources\Refresh.ico" />
-    <Content Include="Resources\sdl_transcreate.ico" />
-    <Resource Include="Resources\sdl_transcreate.png" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\TellMe.ico" />

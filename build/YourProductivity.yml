@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - YourProductivity/*
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - YourProductivity/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.YourProductivity.sln'
+- name: pathToPublish
+  value: 'YourProductivity/Sdl.Community.YourProductivity\bin\Release\Sdl.Community.YourProductivity.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

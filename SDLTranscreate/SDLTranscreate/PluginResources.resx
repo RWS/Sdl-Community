@@ -421,9 +421,6 @@
   <data name="WizardMessage_UnableToLocateSelectedProject" xml:space="preserve">
     <value>Unable to locate the selected project!</value>
   </data>
-  <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\sdl_transcreate.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -552,5 +549,8 @@
   </data>
   <data name="TranscreateManager_BatchTasks_Convert_Name" xml:space="preserve">
     <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\sdl_transcreate_view.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

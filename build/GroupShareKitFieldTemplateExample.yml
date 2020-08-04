@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - GroupShareKitFieldTemplateExample/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - GroupShareKitFieldTemplateExample/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/GroupShareKitFieldTemplateExample.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - ApplyTMTemplate/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - ApplyTMTemplate/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.ApplyTMTemplate.sln'
+- name: pathToPublish
+  value: 'ApplyTMTemplate\Sdl.Community.ApplyTMTemplate\bin\Release\Sdl.Community.ApplyTMTemplate.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

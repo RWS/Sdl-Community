@@ -1,0 +1,12 @@
+variables:
+- name: DefaultBuildVm
+  value: 'vs2017-win2016'
+
+- name: StudioProductIdentifier  
+  value: Studio15
+
+- name: StudioBranch
+  value: refs/heads/Release/15.2
+
+- name: VSVersion
+  value: '15.0'

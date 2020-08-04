@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TAUS Data Search/*
+
+pr:
+  branches:
+    include:
+     - studio_2019
+  paths:
+    include:
+     - TAUS Data Search/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value:  '**/Sdl.Community.Taus.Translation.Provider.sln'
+- name: pathToPublish
+  value: 'TAUS Data Search/Sdl.Community.Taus.Translation.Provider\bin\Release\Sdl.Community.Taus.Translation.Provider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
