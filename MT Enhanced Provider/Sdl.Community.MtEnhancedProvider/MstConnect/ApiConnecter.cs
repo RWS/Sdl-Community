@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 using RestSharp;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
@@ -28,7 +29,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
 		private Constants _constants = new Constants();
 
-		public Log Log = Log.Instance;
+		private Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
@@ -130,7 +131,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				Log.Logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return translatedText;
@@ -244,7 +245,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				Log.Logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return languageCodeList;
@@ -368,7 +369,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{_constants.AddTranslationMethod} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{_constants.AddTranslationMethod} {ex.Message}\n { ex.StackTrace}");
 			}
 			finally
 			{
