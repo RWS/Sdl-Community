@@ -7,6 +7,13 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 {
 	public class AlphanumericCustomSeparators
 	{
+		private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public AlphanumericCustomSeparators()
+		{
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
 		[Theory]
 		[InlineData("BS2-3", "-")]
 		public void FindAlphanumericWithCustomSeparators(string text, string customSeparators)
@@ -19,8 +26,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
@@ -39,8 +45,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 

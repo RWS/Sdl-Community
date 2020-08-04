@@ -1,5 +1,4 @@
 ﻿using Moq;
-using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
@@ -8,6 +7,13 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class NormalizeNumbersAllowLocalization
 	{
+		private readonly Mock<IDocumentProperties> _documentProperties;
+
+		public NormalizeNumbersAllowLocalization()
+		{
+			_documentProperties = new Mock<IDocumentProperties>();
+		}
+
 		[Theory]
 		[InlineData("1,55", "1.55")]
 		public void NormalizeDecimalNumbersComma(string source, string target)
@@ -25,8 +31,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 			//run initialize method in order to set chosen separators
-			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
