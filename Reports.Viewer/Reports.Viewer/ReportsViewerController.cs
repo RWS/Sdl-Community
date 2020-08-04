@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using Sdl.Community.Reports.Viewer.Controls;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
@@ -29,6 +30,13 @@ namespace Sdl.Community.Reports.Viewer
 		private ReportViewControl _reportViewControl;
 		private ReportsNavigationViewControl _reportsNavigationViewControl;
 		private ProjectsController _projectsController;
+		private ReportView _reportView;
+		private ReportsNavigationView _reportsNavigationView;
+		//private DataView _dataView;
+		//private BrowserView _browserView;
+		//private DataViewModel _dataViewModel;
+		//private BrowserViewModel _browserViewModel;
+		
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -37,52 +45,46 @@ namespace Sdl.Community.Reports.Viewer
 
 			var testDataUtil = new TestDataUtil();
 			_reports = testDataUtil.GetTestReports();
-		}
-
-		protected override Control GetExplorerBarControl()
-		{
-			if (_reportsNavigationViewControl == null)
+			if (_reports.Count > 0)
 			{
-				_reportsNavigationViewModel = new ReportsNavigationViewModel(new List<Report>(), _projectsController);
-				_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
-
-				_reportsNavigationViewControl = new ReportsNavigationViewControl();
-
+				_reports[0].IsSelected = true;
 			}
 
-			return _reportsNavigationViewControl;
+			InitializeViews();
+		}
+		
+		protected override Control GetExplorerBarControl()
+		{
+			return _reportsNavigationViewControl ?? (_reportsNavigationViewControl = new ReportsNavigationViewControl());
 		}
 
 		protected override Control GetContentControl()
 		{
-			if (_reportViewControl == null)
-			{
-				var reportView = new ReportView();
-				_reportViewModel = new ReportViewModel(reportView);
-				reportView.DataContext = _reportViewModel;
-
-				_reportViewControl = new ReportViewControl();
-				_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
-
-				if (_reports.Count > 0)
-				{
-					_reports[0].IsSelected = true;
-				}
-
-				_reportsNavigationViewModel.Reports = _reports;
-
-
-				var reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
-
-
-				_reportsNavigationViewControl.UpdateViewModel(reportsNavigationView);
-				_reportViewControl.UpdateViewModel(reportView);
-			}
-
-			return _reportViewControl;
+			return _reportViewControl ?? (_reportViewControl = new ReportViewControl());
 		}
 
 		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
+
+		private void InitializeViews()
+		{
+			Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate
+			{			
+				_reportViewModel = new ReportViewModel();
+				_reportView = new ReportView();
+				_reportView.DataContext = _reportViewModel;
+
+				_reportsNavigationViewModel = new ReportsNavigationViewModel(_reports, _projectsController);
+				_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
+				_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
+
+				_reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
+
+				_reportViewControl.UpdateViewModel(_reportView);
+				_reportsNavigationViewControl.UpdateViewModel(_reportsNavigationView);
+				
+			}));
+		}
+
 
 		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
 		{

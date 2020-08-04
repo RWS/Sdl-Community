@@ -8,50 +8,7 @@
              xmlns:view="clr-namespace:Sdl.Community.Reports.Viewer.View"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ReportViewModel}">
-	<UserControl.Resources>
-		<ResourceDictionary>
-			
-			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Hidden"/>
-		</ResourceDictionary>
-
-	</UserControl.Resources>
-
-	<Border Margin="5,5,5,15">
-		<Grid Margin="0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-
-			<Border Grid.Column="0" Grid.Row="0" Margin="0">
-				<ContentControl Content="{Binding Browser}"/>
-
-				<!--<Border.Style>
-					<Style TargetType="{x:Type Border}">
-						<Style.Triggers>
-
-							<DataTrigger Binding="{Binding IsTest, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-								<Setter Property="Background">
-									<Setter.Value>
-										<LinearGradientBrush>
-											<LinearGradientBrush.GradientStops>
-												<GradientStop Color="Aquamarine" Offset="0"/>
-												<GradientStop Color="Beige" Offset="0.2"/>
-												<GradientStop Color="Firebrick" Offset="0.5"/>
-												<GradientStop Color="DarkMagenta" Offset="0.9"/>
-											</LinearGradientBrush.GradientStops>
-										</LinearGradientBrush>
-									</Setter.Value>
-								</Setter>
-							</DataTrigger>
-							
-						</Style.Triggers>
-					</Style>
-				</Border.Style>-->
-			</Border>
-
-		</Grid>
+	<Border Margin="0">
+		<ContentControl Content="{Binding CurrentView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 	</Border>
 </UserControl>

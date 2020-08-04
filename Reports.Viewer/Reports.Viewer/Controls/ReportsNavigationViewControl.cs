@@ -15,7 +15,7 @@ namespace Sdl.Community.Reports.Viewer.Controls
 		public void UpdateViewModel(ReportsNavigationView view)
 		{
 
-			//DisposeViewModel();
+			DisposeViewModel();
 			AssignView(view);
 		}
 
@@ -24,15 +24,15 @@ namespace Sdl.Community.Reports.Viewer.Controls
 			elementHost1.Child = view;
 		}
 
-		//private void DisposeViewModel()
-		//{
-		//	if (elementHost1.Child != null && elementHost1.Child is ReportsNavigationView view)
-		//	{
-		//		if (view.DataContext is ReportsNavigationViewModel model)
-		//		{
-		//			model.Dispose();
-		//		}
-		//	}
-		//}
+		private void DisposeViewModel()
+		{
+			if (elementHost1.Child != null && elementHost1.Child is ReportsNavigationView view)
+			{
+				if (view.DataContext is ReportsNavigationViewModel model)
+				{
+					model.Dispose();
+				}
+			}
+		}
 	}
 }

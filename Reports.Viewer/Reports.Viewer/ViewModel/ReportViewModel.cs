@@ -1,100 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.View;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
-	public class ReportViewModel : INotifyPropertyChanged
+	public class ReportViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private string _windowTitle;
-		private string _htmlUri;
-		private ReportView _view;
-		private bool _isTest;
+		private readonly BrowserView _browserView;
+		private readonly DataView _dataView;
+		private readonly BrowserViewModel _browserViewModel;
+		private readonly DataViewModel _dataViewModel;
+		private object _currentView;
 
-		public ReportViewModel(ReportView view)
+		//public ReportViewModel(BrowserViewModel browserViewModel, object browserView,
+		//	DataViewModel dataViewModel, object dataView)
+		//{
+		//	_browserViewModel = browserViewModel;
+		//	_browserView = browserView;
+
+		//	_dataViewModel = dataViewModel;
+		//	_dataView = dataView;
+
+		//	CurrentView = _dataView;
+		//}
+
+		public ReportViewModel()
 		{
-			_view = view;
-			IsTest = true;
-			Browser = new WebBrowser();
+			_browserViewModel = new BrowserViewModel();
+			_browserView = new BrowserView();
+			_browserView.DataContext = _browserViewModel;
+
+			_dataViewModel = new DataViewModel();
+			_dataView = new DataView();
+			_dataView.DataContext = _dataViewModel;
+
+			//CurrentView = _dataView;
 		}
 
-		public WebBrowser Browser { get; set; }
-
-		public bool IsTest
+		public object CurrentView
 		{
-			get => _isTest;
+			get => _currentView;
 			set
 			{
-				if (_isTest == value)
-				{
-					return;
-				}
-
-				_isTest = value;
-				OnPropertyChanged(nameof(IsTest));
+				_currentView = value;
+				OnPropertyChanged(nameof(CurrentView));
 			}
 		}
-
-		public string HtmlUri
-		{
-			get => _htmlUri;
-			set
-			{
-				_htmlUri = value;
-				OnPropertyChanged(nameof(HtmlUri));
-
-
-				if (!string.IsNullOrEmpty(_htmlUri) && File.Exists(_htmlUri))
-				{
-					var ms = new MemoryStream();
-					using (var file = new FileStream(_htmlUri, FileMode.Open, FileAccess.Read))
-					{
-						file.CopyTo(ms);
-					}
-
-					ms.Position = 0;
-					Browser.NavigateToStream(ms);
-
-					return;
-				}
-
-				Browser.NavigateToString("<html><div style=\"text - align:center\"><p>Empty</p></div></html>");
-			}
-		}
-
+		
 		public void UpdateReport(string filePath)
 		{
-			//BrowserIsVisible = true;
-			//DataIsVisible = false;
-			//CurrentView = BrowserView;
-
-			//_view.Dispatcher.Invoke(new Action(delegate
-			//{
-				//IsTest = true;
-				HtmlUri = filePath;
-			//}));
-
+			CurrentView = _browserView;
+			_browserViewModel.HtmlUri = filePath;
 		}
 
 		public void UpdateData(List<Report> reports)
 		{
-			//DataIsVisible = true;
-			//BrowserIsVisible = false;
-
-			//CurrentView = DataView;
-			//_view.Dispatcher.Invoke(new Action(delegate
-			//{
-				//IsTest = false;
-			//}));
-			Browser.NavigateToString("<html><div style=\"text - align:center\"><p>[debug info: none selected]</p></div></html>");
+			CurrentView = _dataView;
 		}
 
 		public string WindowTitle

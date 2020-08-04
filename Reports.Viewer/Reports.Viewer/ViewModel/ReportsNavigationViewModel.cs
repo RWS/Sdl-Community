@@ -14,7 +14,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
-	public class ReportsNavigationViewModel : INotifyPropertyChanged
+	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private readonly ProjectsController _projectsController;
 		private List<Report> _reports;
@@ -24,7 +24,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private bool _isReportSelected;
 		private List<ReportGroup> _reportGroups;
 		private GroupType _groupType;
-		public List<GroupType> _groupTypes;
+		private List<GroupType> _groupTypes;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
 		private ICommand _removeProjectDataCommand;
@@ -133,7 +133,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				if (_selectedReport != null)
 				{
-					ReportViewModel.UpdateReport(_selectedReport.Path ?? string.Empty);
+					ReportViewModel?.UpdateReport(_selectedReport.Path ?? string.Empty);
 				}
 
 				IsReportSelected = _selectedReport != null;
@@ -223,12 +223,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						if (groupItem != null)
 						{
 							groupItem.Reports.Add(report);
-
-							if (report.IsSelected)
-							{
-								groupItem.IsExpanded = true;
-								reportGroup.IsExpanded = true;
-							}
+							UpdateIsExpanded(report, groupItem, reportGroup);
 						}
 						else
 						{
@@ -240,11 +235,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 							reportGroup.GroupItems.Add(groupItem);
 
-							if (report.IsSelected)
-							{
-								groupItem.IsExpanded = true;
-								reportGroup.IsExpanded = true;
-							}
+							UpdateIsExpanded(report, groupItem, reportGroup);
 						}
 					}
 					else
@@ -261,11 +252,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						reportGroup.GroupItems.Add(groupItem);
 						reportGroups.Add(reportGroup);
 
-						if (report.IsSelected)
-						{
-							groupItem.IsExpanded = true;
-							reportGroup.IsExpanded = true;
-						}
+						UpdateIsExpanded(report, groupItem, reportGroup);
 					}
 				}
 				else
@@ -277,11 +264,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						if (groupItem != null)
 						{
 							groupItem.Reports.Add(report);
-							if (report.IsSelected)
-							{
-								groupItem.IsExpanded = true;
-								reportGroup.IsExpanded = true;
-							}
+
+							UpdateIsExpanded(report, groupItem, reportGroup);
 						}
 						else
 						{
@@ -293,11 +277,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 							reportGroup.GroupItems.Add(groupItem);
 
-							if (report.IsSelected)
-							{
-								groupItem.IsExpanded = true;
-								reportGroup.IsExpanded = true;
-							}
+							UpdateIsExpanded(report, groupItem, reportGroup);
 						}
 					}
 					else
@@ -314,21 +294,22 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						reportGroup.GroupItems.Add(groupItem);
 						reportGroups.Add(reportGroup);
 
-						if (report.IsSelected)
-						{
-							groupItem.IsExpanded = true;
-							reportGroup.IsExpanded = true;
-						}
+						UpdateIsExpanded(report, groupItem, reportGroup);
 					}
-
 				}
-
-
 			}
 
 			ReportGroups = reportGroups;
 		}
 
+		private static void UpdateIsExpanded(Report report, GroupItem groupItem, ReportGroup reportGroup)
+		{
+			if (report.IsSelected)
+			{
+				groupItem.IsExpanded = true;
+				reportGroup.IsExpanded = true;
+			}
+		}
 
 		private void ClearSelection(object parameter)
 		{
@@ -413,6 +394,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		public void Dispose()
+		{
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

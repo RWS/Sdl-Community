@@ -1,21 +1,23 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using Sdl.Community.Reports.Viewer.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
-	public class BrowserViewModel : BaseModel, IDisposable
+	public class BrowserViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private string _htmlUri;
 		private string _windowTitle;
 
 		public BrowserViewModel()
 		{
-			Browser = new WebBrowser();
+			//Browser = new WebBrowser();
 		}
 
-		public WebBrowser Browser { get; set; }
+		//public WebBrowser Browser { get; set; }
 
 		public string HtmlUri
 		{
@@ -25,21 +27,21 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_htmlUri = value;
 				OnPropertyChanged(nameof(HtmlUri));
 
-				if (!string.IsNullOrEmpty(_htmlUri) && File.Exists(_htmlUri))
-				{
-					var ms = new MemoryStream();
-					using (var file = new FileStream(_htmlUri, FileMode.Open, FileAccess.Read))
-					{
-						file.CopyTo(ms);
-					}
+				//if (!string.IsNullOrEmpty(_htmlUri) && File.Exists(_htmlUri))
+				//{
+				//	var ms = new MemoryStream();
+				//	using (var file = new FileStream(_htmlUri, FileMode.Open, FileAccess.Read))
+				//	{
+				//		file.CopyTo(ms);
+				//	}
 
-					ms.Position = 0;
-					Browser.NavigateToStream(ms);
+				//	ms.Position = 0;
+				//	Browser.NavigateToStream(ms);
 
-					return;
-				}
+				//	return;
+				//}
 
-				Browser.NavigateToString("<html><div style=\"text - align:center\"><p>Empty</p></div></html>");
+				//Browser.NavigateToString("<html><div style=\"text - align:center\"><p>Empty</p></div></html>");
 			}
 		}
 
@@ -55,6 +57,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public void Dispose()
 		{
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
