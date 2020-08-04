@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using NLog;
 using Sdl.Community.InSource.Helpers;
 using Sdl.Community.InSource.Interfaces;
 using Sdl.Community.InSource.Notifications;
@@ -20,7 +21,7 @@ namespace Sdl.Community.InSource
 		private List<ProjectRequest> _folderPathList;
 		private readonly List<ProjectRequest> _selectedFolders;
 		private readonly List<ProjectRequest> _watchFolders;
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IMessageBoxService _messageBoxService;
 
 		public InSourceViewControl()
@@ -150,7 +151,7 @@ namespace Sdl.Community.InSource
 			}
 			catch (Exception exception)
 			{
-				Log.Logger.Error($"FoldersListView_CellEditStarting: {exception.Message}\n {exception.StackTrace}");
+				_logger.Error($"FoldersListView_CellEditStarting: {exception.Message}\n {exception.StackTrace}");
 			}
 		}
 
