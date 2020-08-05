@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using ETSLPConverter;
 using ETSTranslationProvider.Helpers;
 using NLog;
 using Sdl.LanguagePlatform.Core;
@@ -146,6 +147,10 @@ namespace ETSTranslationProvider
 				var lpDictionariesColumn = new DataGridViewComboBoxColumn();
 
 				SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
+			}
+			else
+			{
+				MessageBox.Show(PluginResources.AuthenticationFailed, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -326,11 +331,17 @@ namespace ETSTranslationProvider
 
 				comboCell.Tag = entry;
 				comboCell.DataSource = entry.ETSLPs.Select(lp => lp.LanguagePairId).ToList();
-				dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
-				if (Options?.LPPreferences == null)
+
+				if (entry.Dictionaries != null)
+				{
+					dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
+					dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId; // set by default "No dictionary" value
+				}
+				if (Options?.LPPreferences == null || Options?.LPPreferences.Count == 0)
 				{
 					continue;
 				}
+				
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 				{
 					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
@@ -439,8 +450,7 @@ namespace ETSTranslationProvider
 					DialogResult = DialogResult.None;
 					MessageBox.Show(e.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-
-				throw;
+				return false;
 			}
 			Options.ApiToken = token;
 

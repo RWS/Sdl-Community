@@ -34,7 +34,7 @@ steps:
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
      fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
-     description: 'installer '
+     description: 'HunspellDictionaryManager'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'

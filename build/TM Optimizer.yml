@@ -34,7 +34,7 @@ steps:
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
      fileToSign: '$(Build.Repository.LocalPath)\TM Optimizer\Sdl.Community.TMOptimizer.Installer\bin\$(buildConfiguration)\Sdl.Community.TMOptimizer.Installer.msi'
-     description: 'installer '
+     description: 'TMOptimizer'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'

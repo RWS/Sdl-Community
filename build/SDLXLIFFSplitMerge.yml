@@ -36,7 +36,7 @@ steps:
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
     fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)\Sdl.Community.SDLXLIFFSplitMerge.Installer.msi'
-    description: 'installer '
+    description: 'SDLXLIFFSplitMerge'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
