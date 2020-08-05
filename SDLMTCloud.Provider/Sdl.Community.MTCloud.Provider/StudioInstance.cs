@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
+using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.LanguageCloud.IdentityApi;
@@ -13,6 +14,7 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		public void Execute()
 		{
+			Log.Setup();
 			SetApplicationShutdownMode();
 		}		
 

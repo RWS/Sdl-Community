@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Interop;
+using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
@@ -10,6 +11,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -19,6 +21,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Description = "SDLMTCloud_Provider_Description")]
 	public class SdlMTCloudProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public string TypeName => PluginResources.Plugin_NiceName;
 
 		public string TypeDescription => PluginResources.Plugin_NiceName;
@@ -56,7 +60,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
 			}
 
 			return null;
@@ -94,7 +98,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.EditWindow} {e.Message}\n {e.StackTrace}");
 			}
 
 			return false;

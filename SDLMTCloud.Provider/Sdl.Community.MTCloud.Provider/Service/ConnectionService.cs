@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Newtonsoft.Json;
-using Sdl.Community.MTCloud.Provider.Helpers;
+using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.View;
@@ -17,11 +17,14 @@ using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class ConnectionService : IConnectionService
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public ConnectionService(IWin32Window owner, VersionService versionService, LanguageCloudIdentityApi languageCloudIdentityApi)
 		{
 			Owner = owner;
@@ -326,7 +329,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var signIn = await SignInAttempt(resource, content);
 			if (string.IsNullOrEmpty(signIn.Item1?.AccessToken))
 			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
 				signIn = await SignInAttempt(resource, content);
 			}
 
@@ -350,7 +353,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var userDetails = await GetUserDetailsAttempt(token, resource);
 			if (userDetails.Item1?.AccountId <= 0)
 			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
 				userDetails = await GetUserDetailsAttempt(token, resource);
 			}
 
@@ -506,7 +509,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
 				return new Tuple<AuthorizationResponse, string>(null, ex.Message);
 			}
 		}
@@ -539,7 +542,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
 				return new Tuple<UserDetails, string>(null, ex.Message);
 			}
 		}
