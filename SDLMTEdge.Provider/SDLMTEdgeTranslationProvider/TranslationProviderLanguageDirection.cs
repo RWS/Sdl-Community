@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NLog;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
 using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.Core.Globalization;
@@ -11,14 +12,14 @@ namespace Sdl.Community.MTEdge.Provider
 {
 	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
-        private TranslationProvider provider;
-        private LanguagePair languageDirection;
+        private readonly TranslationProvider provider;
+        private readonly LanguagePair languageDirection;
 
-		public static readonly Log Log = Log.Instance;
+        private static readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
 		public TranslationProviderLanguageDirection(TranslationProvider provider, LanguagePair languages)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             this.provider = provider;
             languageDirection = languages;
         }
@@ -51,7 +52,7 @@ namespace Sdl.Community.MTEdge.Provider
 		/// <returns></returns>
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 
 			var results = new SearchResults();
 			var translation = TranslateSegments(new Segment[] { segment }).First();
@@ -95,7 +96,7 @@ namespace Sdl.Community.MTEdge.Provider
 		/// <returns></returns>
 		private static SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			var unit = new TranslationUnit
 			{
 				SourceSegment = searchSegment,
@@ -131,7 +132,7 @@ namespace Sdl.Community.MTEdge.Provider
 		/// <returns></returns>
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 
 			var results = new SearchResults[segments.Length];
 			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
@@ -171,7 +172,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             if (segments == null)
             {
                 throw new ArgumentNullException("segments", "Segments in SearchSegmentsMasked");
@@ -192,7 +193,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public SearchResults SearchText(SearchSettings settings, string segment)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             var seg = new Segment(languageDirection.SourceCulture);
             seg.Add(segment);
             return SearchSegment(settings, seg);
@@ -206,7 +207,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             return SearchSegment(settings, translationUnit.SourceSegment);
         }
 
@@ -218,7 +219,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             return SearchSegments(settings, translationUnits.Select(tu => tu.SourceSegment).ToArray());
         }
 
@@ -235,7 +236,7 @@ namespace Sdl.Community.MTEdge.Provider
 			TranslationUnit[] translationUnits,
 			bool[] mask)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			if (translationUnits == null)
 			{
 				throw new ArgumentNullException("translationUnits", "TranslationUnits in SearchSegmentsMasked");
@@ -257,7 +258,7 @@ namespace Sdl.Community.MTEdge.Provider
 		/// <returns>Xliff</returns>
 		public Xliff CreateXliffFile(Segment[] segments)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			var xliffDocument = new Xliff(languageDirection.SourceCulture, languageDirection.TargetCulture);
 
 			foreach (var seg in segments)
@@ -284,7 +285,7 @@ namespace Sdl.Community.MTEdge.Provider
             ImportSettings settings,
             bool[] mask)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -296,7 +297,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -308,7 +309,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
         /// <summary>
@@ -326,7 +327,7 @@ namespace Sdl.Community.MTEdge.Provider
             ImportSettings settings,
             bool[] mask)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -339,7 +340,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -352,7 +353,7 @@ namespace Sdl.Community.MTEdge.Provider
         /// <returns></returns>
         public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
 
@@ -369,7 +370,7 @@ namespace Sdl.Community.MTEdge.Provider
             int[] previousTranslationHashes,
             ImportSettings settings)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             throw new NotImplementedException();
         }
         #endregion

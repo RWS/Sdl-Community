@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -11,18 +12,18 @@ namespace Sdl.Community.MTEdge.Provider
         Description = "MTEdge translation provider.")]
     public class TranslationProviderFactory : ITranslationProviderFactory
     {
-		public static readonly Log Log = Log.Instance;
+	    public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ITranslationProvider CreateTranslationProvider(
 			Uri translationProviderUri,
 			string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
         {
-            Log.Logger.Info("Attempting to create a new translation provider with URI: {0}", translationProviderUri);
+            _logger.Info("Attempting to create a new translation provider with URI: {0}", translationProviderUri);
 
             if (!SupportsTranslationProviderUri(translationProviderUri))
             {
-                Log.Logger.Error("Cannot handle URI {0}.", translationProviderUri);
+                _logger.Error("Cannot handle URI {0}.", translationProviderUri);
                 throw new Exception("Cannot handle URI.");
             }
 
@@ -49,10 +50,10 @@ namespace Sdl.Community.MTEdge.Provider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             if (translationProviderUri == null)
             {
-                Log.Logger.Error("Attempted to use null translation provider URI.");
+                _logger.Error("Attempted to use null translation provider URI.");
                 throw new ArgumentNullException("translationProviderUri", "Translation provider URI not supported.");
             }
             return string.Equals(translationProviderUri.Scheme, TranslationProvider.TranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
@@ -60,7 +61,7 @@ namespace Sdl.Community.MTEdge.Provider
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
-            Log.Logger.Trace("");
+            _logger.Trace("");
             return new TranslationProviderInfo()
             {
                 TranslationMethod = TranslationOptions.ProviderTranslationMethod,

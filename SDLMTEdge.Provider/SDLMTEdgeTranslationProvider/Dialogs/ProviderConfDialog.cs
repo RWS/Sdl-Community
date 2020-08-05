@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
 using Sdl.LanguagePlatform.Core;
@@ -10,12 +11,12 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.MTEdge.Provider.Dialogs
 {
 	public partial class ProviderConfDialog : Form
-    {
+	{
 		private ITranslationProviderCredentialStore credentialStore;
 		private LanguagePair[] LanguagePairs;
 		private System.Timers.Timer lpPopulationTimer = new System.Timers.Timer(500);
 		public TranslationOptions Options { get; set; }
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ProviderConfDialog(TranslationOptions options, ITranslationProviderCredentialStore store, LanguagePair[] languagePairs)
 		{
@@ -100,14 +101,14 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		private Uri GetUri()
 		{
-            //try to take the credentials from the project if there are any
+			//try to take the credentials from the project if there are any
 			try
 			{
 				return Options.Uri;
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error(e);
+				_logger.Error(e);
 			}
 
 			// If the port is not a number or out of port range, don't build the URI
@@ -123,38 +124,34 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 			catch (UriFormatException e)
 			{
-				Log.Logger.Error($"{Constants.BuildUri}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.BuildUri}: {e.Message}\n {e.StackTrace}");
 				return null;
 			}
 		}
 
 		private void PopulateLanguagePairs()
 		{
-			Cursor = Cursors.WaitCursor;
 			if (LanguagePairs == null || LanguagePairs.Length == 0)
 			{
 				return;
 			}
 			var credentials = GetCredentials();
-			if (!AuthenticateCredentials(credentials, false))
+			if (AuthenticateCredentials(credentials, false) && Options.ApiVersion == APIVersion.v2)
 			{
-				return;
-			}
+				var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
 
-			if (Options.ApiVersion != APIVersion.v2)
+				Options.SetDictionaries(languagePairChoices);
+
+				// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
+				var lpChoicesColumn = new DataGridViewComboBoxColumn();
+				var lpDictionariesColumn = new DataGridViewComboBoxColumn();
+
+				SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
+			}
+			else
 			{
-				return;
+				MessageBox.Show(PluginResources.AuthenticationFailed, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
-
-			Options.SetDictionaries(languagePairChoices);
-
-			// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
-			var lpChoicesColumn = new DataGridViewComboBoxColumn();
-			var lpDictionariesColumn = new DataGridViewComboBoxColumn();
-
-			SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
-			Cursor = Cursors.Default;
 		}
 
 		/// <summary>
@@ -221,25 +218,25 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				catch (Exception e)
 				{
 					FinishButton.Enabled = true;
-					Log.Logger.Error($"{e.Message}\n {e.StackTrace}");
+					_logger.Error($"{e.Message}\n {e.StackTrace}");
 				}
 			}));
 		}
 
-	    private void RemoveIncorrectLanguageSet()
-	    {
-		    foreach (var lpKey in Options.LPPreferences.ToList())
-		    {
-			    var languagePair = LanguagePairs.FirstOrDefault(lp =>
-				    lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals(lpKey.Key.ThreeLetterWindowsLanguageName));
-			    if (languagePair == null)
-			    {
-				    Options.LPPreferences.Remove(lpKey.Key);
-			    }
-		    }
-	    }
+		private void RemoveIncorrectLanguageSet()
+		{
+			foreach (var lpKey in Options.LPPreferences.ToList())
+			{
+				var languagePair = LanguagePairs.FirstOrDefault(lp =>
+					lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals(lpKey.Key.ThreeLetterWindowsLanguageName));
+				if (languagePair == null)
+				{
+					Options.LPPreferences.Remove(lpKey.Key);
+				}
+			}
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// This errror handle is for DataGridViewCombobox cell value is not valid error
 		/// </summary>
 		/// <param name="sender"></param>
@@ -249,14 +246,14 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			if (e.Exception.Message.Contains("value is not valid"))
 			{
 				var lp = TradosLPs.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-				Log.Logger.Info($"lp:{lp}");
+				_logger.Info($"lp:{lp}");
 
 				foreach (var langP in Options.LPPreferences)
 				{
-					Log.Logger.Info($"LPPreferences foreach {langP.Value.LanguagePairId}");
+					_logger.Info($"LPPreferences foreach {langP.Value.LanguagePairId}");
 				}
 
-				Log.Logger.Error($"{e.Exception.Message}\n {e.Exception.StackTrace}");
+				_logger.Error($"{e.Exception.Message}\n {e.Exception.StackTrace}");
 				if (!((DataGridViewComboBoxColumn)TradosLPs.Columns[e.ColumnIndex]).Items.Contains(lp))
 				{
 					((DataGridViewComboBoxColumn)TradosLPs.Columns[e.ColumnIndex]).Items.Add(lp);
@@ -276,30 +273,30 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 		}
 
-	    private void SetPreferedLanguageFlavours()
-	    {
-		    const int comboboxColumnIndex = 1;
+		private void SetPreferedLanguageFlavours()
+		{
+			const int comboboxColumnIndex = 1;
 
-		    for (var i = 0; i < Options.LPPreferences.Count; i++)
-		    {
-			    var comboBox = (DataGridViewComboBoxCell) TradosLPs?.Rows[i].Cells[comboboxColumnIndex];
-			    if (comboBox != null)
-			    {
+			for (var i = 0; i < Options.LPPreferences.Count; i++)
+			{
+				var comboBox = (DataGridViewComboBoxCell)TradosLPs?.Rows[i].Cells[comboboxColumnIndex];
+				if (comboBox != null)
+				{
 					comboBox.Value = Options.LPPreferences.ToList()[i].Value?.LanguagePairId;
 				}
 			}
 		}
-	    private void TradosLPs_CellEnter(object sender, DataGridViewCellEventArgs e)
-	    {
-		    var tradosLPs = sender as DataGridView;
+		private void TradosLPs_CellEnter(object sender, DataGridViewCellEventArgs e)
+		{
+			var tradosLPs = sender as DataGridView;
 
-		    // Check to make sure the cell clicked is the cell containing the combobox
-		    if (e.RowIndex != -1 && e.ColumnIndex != -1 && tradosLPs.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
-		    {
-			    tradosLPs.BeginEdit(true);
-			    ((ComboBox)tradosLPs.EditingControl).DroppedDown = true;
-		    }
-	    }
+			// Check to make sure the cell clicked is the cell containing the combobox
+			if (e.RowIndex != -1 && e.ColumnIndex != -1 && tradosLPs.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
+			{
+				tradosLPs.BeginEdit(true);
+				((ComboBox)tradosLPs.EditingControl).DroppedDown = true;
+			}
+		}
 		private void TradosLPs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			const int comboboxColumnIndex = 1;
@@ -313,7 +310,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				{
 					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.MtEdgeLPs.First(lp => lp.LanguagePairId == newLp);
 				}
-				if(TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
 				{
 					lpPairing = TradosLPs[1, e.RowIndex].Tag as TradosToMTEdgeLP;
 					newLp = TradosLPs[1, e.RowIndex].Value as string;
@@ -338,7 +335,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				if (Options?.LPPreferences == null)
 				{
 					continue;
-				}				
+				}
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 				{
 					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
@@ -376,7 +373,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				{
 					DialogResult = DialogResult.None;
 					var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
-					MessageBox.Show(error, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(error, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
 
@@ -441,14 +438,11 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.AuthenticateCredentials}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.AuthenticateCredentials}: {e.Message}\n {e.StackTrace}");
 				if (showAlertOnFailure)
 				{
 					DialogResult = DialogResult.None;
-					if (Environment.UserInteractive)
-					{
-						MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
+					MessageBox.Show(e.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 				return false;
 			}
@@ -490,18 +484,24 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (Options.UseBasicAuthentication)
+			var credentialsValid = !string.IsNullOrEmpty(UsernameField.Text) &&
+								   !string.IsNullOrEmpty(PasswordField.Text) &&
+								   !string.IsNullOrEmpty(HostNameField.Text);
+
+			Cursor = Cursors.WaitCursor;
+			if (!Options.UseBasicAuthentication || credentialsValid)
 			{
-				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
-				    !string.IsNullOrEmpty(HostNameField.Text))
+				try
 				{
 					PopulateLanguagePairs();
 				}
+				catch (Exception ex)
+				{
+					_logger.Error(ex.Message);
+					MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
-			else
-			{
-				PopulateLanguagePairs();
-			}
+			Cursor = Cursors.Default;
 		}
 
 		private void HostNameChanged(object sender, EventArgs e)
@@ -564,12 +564,12 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 		}
 
-	    private void TryToAuthenticate()
-	    {
+		private void TryToAuthenticate()
+		{
 			if (Options.UseBasicAuthentication)
 			{
 				if (!string.IsNullOrEmpty(UsernameField.Text) && !string.IsNullOrEmpty(PasswordField.Text) &&
-				    !string.IsNullOrEmpty(HostNameField.Text))
+					!string.IsNullOrEmpty(HostNameField.Text))
 				{
 					PopulateLanguagePairs();
 				}

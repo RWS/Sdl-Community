@@ -69,7 +69,7 @@ namespace Sdl.Community.MTEdge.Provider
 			{
 				var resolvedUri = new UriBuilder(_uriBuilder.Uri)
 				{
-					Host = ResolveHost()
+					Host = Host
 				};
 				return resolvedUri.Uri;
 			}
@@ -208,17 +208,7 @@ namespace Sdl.Community.MTEdge.Provider
 				}
 			}
 		}
-
-		private string ResolveHost()
-		{
-			if (ResolvedHost != null)
-			{
-				return ResolvedHost;
-			}
-			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
-			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
-			return ResolvedHost;
-		}
+		
 		#endregion
 	}
 }

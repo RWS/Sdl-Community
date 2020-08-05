@@ -148,4 +148,13 @@
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Error" xml:space="preserve">
+	  <value>Error</value>
+  </data>
+  <data name="URIException" xml:space="preserve">
+	  <value>URI exception</value>
+  </data>
+  <data name="AuthenticationFailed" xml:space="preserve">
+	  <value>Authentication failed</value>
+  </data>
 </root>
