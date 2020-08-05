@@ -61,6 +61,15 @@ namespace ETSTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication Failed.
+        /// </summary>
+        public static string AuthenticationFailed {
+            get {
+                return ResourceManager.GetString("AuthenticationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {

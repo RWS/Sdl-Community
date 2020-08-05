@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using ETSLPConverter;
 using ETSTranslationProvider.Helpers;
 using NLog;
 using Sdl.LanguagePlatform.Core;
@@ -146,6 +147,10 @@ namespace ETSTranslationProvider
 				var lpDictionariesColumn = new DataGridViewComboBoxColumn();
 
 				SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
+			}
+			else
+			{
+				MessageBox.Show(PluginResources.AuthenticationFailed, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -445,8 +450,7 @@ namespace ETSTranslationProvider
 					DialogResult = DialogResult.None;
 					MessageBox.Show(e.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-
-				throw;
+				return false;
 			}
 			Options.ApiToken = token;
 
