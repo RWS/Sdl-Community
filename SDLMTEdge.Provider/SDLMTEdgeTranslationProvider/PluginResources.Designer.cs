@@ -61,12 +61,30 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication failed.
+        /// </summary>
+        internal static string AuthenticationFailed {
+            get {
+                return ResourceManager.GetString("AuthenticationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
@@ -153,6 +171,15 @@ namespace Sdl.Community.MTEdge.Provider {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URI exception.
+        /// </summary>
+        internal static string URIException {
+            get {
+                return ResourceManager.GetString("URIException", resourceCulture);
             }
         }
     }

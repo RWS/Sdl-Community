@@ -63,17 +63,7 @@ namespace Sdl.Community.MTEdge.Provider
 
 		public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";
 
-		public Uri Uri
-		{
-			get
-			{
-				var resolvedUri = new UriBuilder(_uriBuilder.Uri)
-				{
-					Host = ResolveHost()
-				};
-				return resolvedUri.Uri;
-			}
-		}
+		public Uri Uri => _uriBuilder.Uri;
 
 		public TradosToMTEdgeLP[] SetPreferredLanguages(LanguagePair[] languagePairs)
 		{
@@ -208,17 +198,7 @@ namespace Sdl.Community.MTEdge.Provider
 				}
 			}
 		}
-
-		private string ResolveHost()
-		{
-			if (ResolvedHost != null)
-			{
-				return ResolvedHost;
-			}
-			// If the host is an IP address, preserve that, otherwise get the DNS host and cache it.
-			ResolvedHost = IPAddress.TryParse(Host, out var address) ? Host : Dns.GetHostEntry(Host).HostName;
-			return ResolvedHost;
-		}
+		
 		#endregion
 	}
 }

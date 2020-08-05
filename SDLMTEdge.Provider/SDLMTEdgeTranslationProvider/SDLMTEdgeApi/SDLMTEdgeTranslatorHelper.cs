@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.MTEdge.LPConverter;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Model;
@@ -24,11 +25,11 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 	public static class SDLMTEdgeTranslatorHelper
 	{
-		private static Func<Uri, HttpClient, HttpResponseMessage> MtEdgePost = delegate (Uri uri, HttpClient client)
-		{ return client.PostAsync(uri, content: null).Result; };
-		private static Func<Uri, HttpClient, HttpResponseMessage> MtEdgeGet = delegate (Uri uri, HttpClient client)
-		{ return client.GetAsync(uri).Result; };
-		private static SDLMTEdgeLanguagePair[] LanguagePairsOnServer;
+		private static Func<Uri, HttpClient, HttpResponseMessage> MtEdgePost = (uri, client) =>
+			client.PostAsync(uri, content: null).Result;
+		private static Func<Uri, HttpClient, HttpResponseMessage> MtEdgeGet = (uri, client) =>
+			client.GetAsync(uri).Result;
+		private static SDLMTEdgeLanguagePair[] _languagePairsOnServer;
 		private static object languageLock = new object();
 		private static object optionsLock = new object();
 
@@ -39,7 +40,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			RequestTimeout = -2146233029,
 		}
 
-		public static readonly Log Log = Log.Instance;
+		public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Get the translation of an xliff file using the MTEdge API.
@@ -52,7 +53,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			LanguagePair languageDirection,
 			Xliff xliffFile)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			var text = xliffFile.ToString();
 			var queryString = HttpUtility.ParseQueryString(string.Empty);
 			var encodedInput = text.Base64Encode();
@@ -93,7 +94,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			}
 			queryString["inputFormat"] = "application/x-xliff";
 
-			Log.Logger.Debug("Sending translation request for: {0}", encodedInput);
+			_logger.Debug("Sending translation request for: {0}", encodedInput);
 			string jsonResult;
 			try
 			{
@@ -101,13 +102,13 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.Translation}: {e.Message}\n {e.StackTrace}\n Encoded Input: {encodedInput}");
+				_logger.Error($"{Constants.Translation}: {e.Message}\n {e.StackTrace}\n Encoded Input: {encodedInput}");
 				throw;
 			}
 
 			var encodedTranslation = JsonConvert.DeserializeObject<SDLMTEdgeTranslationOutput>(jsonResult).Translation;
 			var decodedTranslation = encodedTranslation.Base64Decode();
-			Log.Logger.Debug("Resultant translation is: {0}", encodedTranslation);
+			_logger.Debug("Resultant translation is: {0}", encodedTranslation);
 			return decodedTranslation;
 		}
 
@@ -118,10 +119,10 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <returns></returns>
 		public static SDLMTEdgeLanguagePair[] GetLanguagePairs(TranslationOptions options)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			lock (languageLock)
 			{
-				if (LanguagePairsOnServer == null || !LanguagePairsOnServer.Any())
+				if (_languagePairsOnServer == null || !_languagePairsOnServer.Any())
 				{
 					try
 					{
@@ -130,7 +131,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 						// that happens, open a message with the related error
 						var jsonResult = ContactMtEdgeServer(MtEdgeGet, options, "language-pairs");
 						var languagePairs = JsonConvert.DeserializeObject<LanguagePairResult>(jsonResult).LanguagePairs;
-						LanguagePairsOnServer = (languagePairs != null ? languagePairs : new SDLMTEdgeLanguagePair[0]);
+						_languagePairsOnServer = (languagePairs != null ? languagePairs : new SDLMTEdgeLanguagePair[0]);
 
 						// In 60 seconds, wipe the LPs so we query again. That way, if someone makes a change, we'll
 						// pick it up eventually.
@@ -145,17 +146,17 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 					}
 					catch (Exception e)
 					{
-						Log.Logger.Error($"{Constants.LanguagePairs}: {Constants.InaccessibleLangPairs}:  {e.Message}\n {e.StackTrace}");
+						_logger.Error($"{Constants.LanguagePairs}: {Constants.InaccessibleLangPairs}:  {e.Message}\n {e.StackTrace}");
 
 						if (Environment.UserInteractive)
 						{
 							MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
-						LanguagePairsOnServer = new SDLMTEdgeLanguagePair[0];
+						_languagePairsOnServer = new SDLMTEdgeLanguagePair[0];
 					}
 				}
 			}
-			return LanguagePairsOnServer;
+			return _languagePairsOnServer;
 		}
 
 		/// <summary>
@@ -186,7 +187,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 		public static void ExpireLanguagePairs()
 		{
-			LanguagePairsOnServer = new SDLMTEdgeLanguagePair[0];
+			_languagePairsOnServer = new SDLMTEdgeLanguagePair[0];
 		}
 
 		/// <summary>
@@ -203,10 +204,9 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			TranslationOptions options,
 			string path,
 			NameValueCollection parameters = null,
-			bool useHTTP = false,
-			int timesToRetry = 5)
+			bool useHTTP = false)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 
 			lock (optionsLock)
 			{
@@ -222,25 +222,21 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 			using (var httpClient = new HttpClient())
 			{
-				if (options.UseBasicAuthentication)
-				{
-					httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.ApiToken);
-				}
-				else
-				{
-					// Append colon to the api key, but leave it off of the Options variable
-					httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
-				}
+				httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
+					? new AuthenticationHeaderValue("Bearer", options.ApiToken)
+					: new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
 
-				var builder = new UriBuilder(options.Uri);
-				builder.Path = string.Format("/api/{0}/{1}", options.ApiVersionString, path);
-				builder.Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps;
+				var builder = new UriBuilder(options.Uri)
+				{
+					Path = $"/api/{options.ApiVersionString}/{path}",
+					Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps
+				};
 
 				if (parameters != null)
 				{
 					builder.Query = parameters.ToString();
 				}
-				HttpResponseMessage httpResponse = null;
+				HttpResponseMessage httpResponse;
 
 				try
 				{
@@ -252,15 +248,8 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 					{
 						e = e.InnerException;
 					}
-					if (!useHTTP && e.HResult == (int)ErrorHResult.HandshakeFailure)
-					{
-						return ContactMtEdgeServer(mtEdgeHttpMethod, options, path, parameters, true);
-					}
-					if (timesToRetry > 0)
-					{
-						return ContactMtEdgeServer(mtEdgeHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
-					}
-					Log.Logger.Error($"{Constants.MTEdgeServerContact}:\n {Constants.MtEdgeServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
+					
+					_logger.Error($"{Constants.MTEdgeServerContact}:\n {Constants.MtEdgeServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
 					throw TranslateAggregateException(e);
 				}
 
@@ -268,22 +257,19 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				{
 					return httpResponse.Content.ReadAsStringAsync().Result;
 				}
-				else if (httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+				switch (httpResponse.StatusCode)
 				{
-					Log.Logger.Error($"{Constants.MTEdgeServerContact}: {Constants.InvalidCredentials}");
-					throw new UnauthorizedAccessException("The credentials provided are not authorized.");
+					case HttpStatusCode.Unauthorized:
+						_logger.Error($"{Constants.MTEdgeServerContact}: {Constants.InvalidCredentials}");
+						throw new UnauthorizedAccessException("The credentials provided are not authorized.");
+					case HttpStatusCode.BadRequest:
+						_logger.Error($"{Constants.MTEdgeServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
+						throw new Exception($"There was a problem with the request: { httpResponse.Content.ReadAsStringAsync().Result }");
+					default:
+						_logger.Error($"{Constants.MTEdgeServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
+
+						return null;
 				}
-				else if (httpResponse.StatusCode == HttpStatusCode.BadRequest)
-				{
-					Log.Logger.Error($"{Constants.MTEdgeServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
-					throw new Exception($"There was a problem with the request: { httpResponse.Content.ReadAsStringAsync().Result }");
-				}
-				Log.Logger.Error($"{Constants.MTEdgeServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
-				if (timesToRetry > 0)
-				{
-					return ContactMtEdgeServer(mtEdgeHttpMethod, options, path, parameters, useHTTP, --timesToRetry);
-				}
-				return null;
 			}
 		}
 
@@ -300,8 +286,9 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{Constants.MTEdgeApiVersion}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.MTEdgeApiVersion}: {e.Message}\n {e.StackTrace}");
 				options.ApiVersion = APIVersion.v1;
+				throw;
 			}
 		}
 
@@ -312,7 +299,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <param name="credentials"></param>
 		public static void VerifyBasicAPIToken(TranslationOptions options, GenericCredentials credentials)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			if (options == null)
 			{
 				throw new ArgumentNullException("Options is null");
@@ -328,12 +315,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			}
 			catch (AggregateException e)
 			{
-				Log.Logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
 				throw TranslateAggregateException(e);
 			}
 			catch (SocketException e)
 			{
-				Log.Logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{Constants.VerifyBasicAPIToken}: {e.Message}\n {e.StackTrace}");
 				throw TranslateAggregateException(e);
 			}
 			finally
@@ -355,7 +342,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			GenericCredentials credentials,
 			bool useHTTP = false)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 
 			lock (optionsLock)
 			{
@@ -410,7 +397,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 					{
 						return GetAuthToken(options, credentials, true);
 					}
-					Log.Logger.Error($"{Constants.AuthToken}: {e.Message}\n {e.StackTrace}");
+					_logger.Error($"{Constants.AuthToken}: {e.Message}\n {e.StackTrace}");
 					throw TranslateAggregateException(e);
 				}
 			}
@@ -423,7 +410,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <returns></returns>
 		private static Exception TranslateAggregateException(Exception culprit)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			while (culprit.InnerException != null)
 			{
 				culprit = culprit.InnerException;
@@ -446,7 +433,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			{
 				return new WebException("The request has been cancelled, either due to timeout or being interrupted externally.");
 			}
-			Log.Logger.Error($"{Constants.TranslateAggregateException}: {culprit}");
+			_logger.Error($"{Constants.TranslateAggregateException}: {culprit}");
 			return culprit;
 		}
 
@@ -458,7 +445,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <returns></returns>
 		private static string Base64Encode(this string text)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
 		}
 
@@ -469,7 +456,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <returns></returns>
 		private static string Base64Decode(this string encodedText)
 		{
-			Log.Logger.Trace("");
+			_logger.Trace("");
 			return Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 		}
 		#endregion

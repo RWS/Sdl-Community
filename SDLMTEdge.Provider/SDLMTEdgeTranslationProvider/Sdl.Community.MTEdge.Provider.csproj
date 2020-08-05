@@ -74,6 +74,12 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -113,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppInitializer.cs" />
     <Compile Include="Dialogs\ProviderConfDialog.cs">
       <SubType>Form</SubType>
     </Compile>
