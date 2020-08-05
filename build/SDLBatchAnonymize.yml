@@ -25,6 +25,8 @@ variables:
   value: 'Release'
 - name: solution 
   value: '**/Sdl.Community.SDLBatchAnonymize.sln'
-
+- name: pathToPublish
+  value: 'SDLBatchAnonymize\SDLBatchAnonymize\bin\Release\Sdl.Community.SDLBatchAnonymize.sdlplugin'
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
