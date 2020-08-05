@@ -63,17 +63,7 @@ namespace Sdl.Community.MTEdge.Provider
 
 		public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";
 
-		public Uri Uri
-		{
-			get
-			{
-				var resolvedUri = new UriBuilder(_uriBuilder.Uri)
-				{
-					Host = Host
-				};
-				return resolvedUri.Uri;
-			}
-		}
+		public Uri Uri => _uriBuilder.Uri;
 
 		public TradosToMTEdgeLP[] SetPreferredLanguages(LanguagePair[] languagePairs)
 		{
