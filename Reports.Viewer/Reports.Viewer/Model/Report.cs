@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Input;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Commands;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.Reports.Viewer.Model
 {
@@ -14,10 +20,24 @@ namespace Sdl.Community.Reports.Viewer.Model
 		private bool _isSelected;
 		private bool _isExtended;
 
+		private ICommand _editReportCommand;
+		private ICommand _removeReportCommand;
+		private ICommand _openFolderCommand;
+
 		public Report()
 		{
 			Date = DateTime.Now;
 		}
+
+		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
+
+		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
+
+		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
+
+		[XmlIgnore]
+		[JsonIgnore]
+		public FileBasedProject Project { get; set; }
 
 		public string Name
 		{
@@ -166,6 +186,38 @@ namespace Sdl.Community.Reports.Viewer.Model
 				_isExtended = value;
 				OnPropertyChanged(nameof(IsExpanded));
 			}
+		}
+
+
+
+		private void EditReport(object parameter)
+		{
+			MessageBox.Show("TODO");
+		}
+
+		private void RemoveReport(object parameter)
+		{
+			MessageBox.Show("TODO");
+		}
+
+		private void OpenFolder(object parameter)
+		{
+			MessageBox.Show("TODO");
+			return;
+
+			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
+			//{
+			//	return;
+			//}
+
+
+			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
+			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
+
+			//if (File.Exists(path))
+			//{
+			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
+			//}
 		}
 	}
 }

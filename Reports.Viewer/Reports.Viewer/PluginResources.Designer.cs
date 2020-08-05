@@ -61,11 +61,51 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Add {
+            get {
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Delete {
+            get {
+                object obj = ResourceManager.GetObject("Delete", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Edit {
+            get {
+                object obj = ResourceManager.GetObject("Edit", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Languages.
         /// </summary>
         internal static string Label_AllLanguages {
             get {
                 return ResourceManager.GetString("Label_AllLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon PageSetup {
+            get {
+                object obj = ResourceManager.GetObject("PageSetup", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -81,9 +121,248 @@ namespace Sdl.Community.Reports.Viewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon Print {
+            get {
+                object obj = ResourceManager.GetObject("Print", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon PrintPreview {
+            get {
+                object obj = ResourceManager.GetObject("PrintPreview", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Refresh", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Report {
+            get {
+                object obj = ResourceManager.GetObject("Report", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon ReportsView {
             get {
                 object obj = ResourceManager.GetObject("ReportsView", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Report.
+        /// </summary>
+        internal static string ReportsViewer_AddReport_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_AddReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string ReportsViewer_AddReport_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_AddReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Report.
+        /// </summary>
+        internal static string ReportsViewer_EditReport_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_EditReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string ReportsViewer_EditReport_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_EditReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Settings.
+        /// </summary>
+        internal static string ReportsViewer_OpenSettings_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_OpenSettings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string ReportsViewer_OpenSettings_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_OpenSettings_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Page Setup.
+        /// </summary>
+        internal static string ReportsViewer_PageSetup_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_PageSetup_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Setup.
+        /// </summary>
+        internal static string ReportsViewer_PageSetup_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_PageSetup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Print Preview.
+        /// </summary>
+        internal static string ReportsViewer_PrintPreviewReport_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_PrintPreviewReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print Preview.
+        /// </summary>
+        internal static string ReportsViewer_PrintPreviewReport_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_PrintPreviewReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print Report.
+        /// </summary>
+        internal static string ReportsViewer_PrintReport_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_PrintReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print.
+        /// </summary>
+        internal static string ReportsViewer_PrintReport_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_PrintReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh View.
+        /// </summary>
+        internal static string ReportsViewer_Refresh_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_Refresh_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string ReportsViewer_Refresh_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_Refresh_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Report.
+        /// </summary>
+        internal static string ReportsViewer_RemoveReport_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_RemoveReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string ReportsViewer_RemoveReport_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_RemoveReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        internal static string ReportsViewer_ReportGroup_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_ReportGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Report As.
+        /// </summary>
+        internal static string ReportsViewer_SaveAsReport_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewer_SaveAsReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save As.
+        /// </summary>
+        internal static string ReportsViewer_SaveAsReport_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_SaveAsReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration.
+        /// </summary>
+        internal static string ReportsViewer_SettingsGroup_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_SettingsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        internal static string ReportsViewer_ViewGroup_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewer_ViewGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Save {
+            get {
+                object obj = ResourceManager.GetObject("Save", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -103,6 +382,16 @@ namespace Sdl.Community.Reports.Viewer {
         internal static string SDLReportsViewer_Name {
             get {
                 return ResourceManager.GetString("SDLReportsViewer_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

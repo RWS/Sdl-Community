@@ -130,7 +130,100 @@
   <data name="SDLReportsViewer_Name" xml:space="preserve">
     <value>Reports Viewer</value>
   </data>
-	<data name="Label_AllLanguages" xml:space="preserve">
+  <data name="Label_AllLanguages" xml:space="preserve">
     <value>All Languages</value>
+  </data>
+  <data name="ReportsViewer_ReportGroup_Name" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="ReportsViewer_SettingsGroup_Name" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="ReportsViewer_ViewGroup_Name" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ReportsViewer_Refresh_Description" xml:space="preserve">
+    <value>Refresh View</value>
+  </data>
+  <data name="ReportsViewer_Refresh_Name" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="ReportsViewer_OpenSettings_Description" xml:space="preserve">
+    <value>Open Settings</value>
+  </data>
+  <data name="ReportsViewer_OpenSettings_Name" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ReportsViewer_AddReport_Description" xml:space="preserve">
+    <value>Add Report</value>
+  </data>
+  <data name="ReportsViewer_AddReport_Name" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ReportsViewer_EditReport_Description" xml:space="preserve">
+    <value>Edit Report</value>
+  </data>
+  <data name="ReportsViewer_EditReport_Name" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ReportsViewer_RemoveReport_Description" xml:space="preserve">
+    <value>Remove Report</value>
+  </data>
+  <data name="ReportsViewer_RemoveReport_Name" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\refresh.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Report" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\report.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReportsViewer_SaveAsReport_Description" xml:space="preserve">
+    <value>Save Report As</value>
+  </data>
+  <data name="ReportsViewer_SaveAsReport_Name" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\add.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\edit.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\save.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReportsViewer_PageSetup_Description" xml:space="preserve">
+    <value>Open Page Setup</value>
+  </data>
+  <data name="ReportsViewer_PageSetup_Name" xml:space="preserve">
+    <value>Page Setup</value>
+  </data>
+  <data name="ReportsViewer_PrintPreviewReport_Description" xml:space="preserve">
+    <value>Open Print Preview</value>
+  </data>
+  <data name="ReportsViewer_PrintPreviewReport_Name" xml:space="preserve">
+    <value>Print Preview</value>
+  </data>
+  <data name="ReportsViewer_PrintReport_Description" xml:space="preserve">
+    <value>Print Report</value>
+  </data>
+  <data name="ReportsViewer_PrintReport_Name" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="PageSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\pagesetup.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Print" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\print.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PrintPreview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\printpreview.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

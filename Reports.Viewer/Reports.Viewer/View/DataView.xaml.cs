@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Sdl.Community.Reports.Viewer.ViewModel;
+﻿using System.Windows.Controls;
 
 namespace Sdl.Community.Reports.Viewer.View
 {

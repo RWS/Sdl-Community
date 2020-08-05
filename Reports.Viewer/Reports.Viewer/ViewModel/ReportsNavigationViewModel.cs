@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
@@ -25,11 +23,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<ReportGroup> _reportGroups;
 		private GroupType _groupType;
 		private List<GroupType> _groupTypes;
-		private ICommand _clearSelectionCommand;
+		private ICommand _expandAllCommand;
+		private ICommand _collapseAllCommand;
 		private ICommand _clearFilterCommand;
-		private ICommand _removeProjectDataCommand;
-		private ICommand _openProjectFolderCommand;
-		private ICommand _selectedItemChanged;
+		private ICommand _selectedItemChangedCommand;
 
 		public ReportsNavigationViewModel(List<Report> reports, ProjectsController projectsController)
 		{
@@ -44,15 +41,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
-		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
+		public ICommand ExpandAllCommand => _expandAllCommand ?? (_expandAllCommand = new CommandHandler(ExpandAll));
+
+		public ICommand CollapseAllCommand => _collapseAllCommand ?? (_collapseAllCommand = new CommandHandler(CollapseAll));
 
 		public ICommand ClearFilterCommand => _clearFilterCommand ?? (_clearFilterCommand = new CommandHandler(ClearFilter));
 
-		public ICommand RemoveProjectDataCommand => _removeProjectDataCommand ?? (_removeProjectDataCommand = new CommandHandler(RemoveProjectData));
+		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ?? (_selectedItemChangedCommand = new CommandHandler(SelectedItemChanged));
 
-		public ICommand OpenProjectFolderCommand => _openProjectFolderCommand ?? (_openProjectFolderCommand = new CommandHandler(OpenProjectFolder));
-
-		public ICommand SelectedItemChangedCommand => _selectedItemChanged ?? (_selectedItemChanged = new CommandHandler(SelectedItemChanged));
 
 		public ReportViewModel ReportViewModel { get; internal set; }
 
@@ -68,7 +64,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				FilterString = string.Empty;
 				FilteredReports = _reports;
 			}
-		}
+		}		
 
 		public string FilterString
 		{
@@ -106,8 +102,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					SelectedReport = null;
 				}
 
-
-				BuildReportGroup();
+				var reportGroups = BuildReportGroup();
+				ReportGroups = ExpandAll(reportGroups);				
 
 				OnPropertyChanged(nameof(StatusLabel));
 			}
@@ -153,8 +149,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_groupType = value;
 				OnPropertyChanged(nameof(GroupType));
 
-
-				BuildReportGroup();
+				ReportGroups = BuildReportGroup();
 			}
 		}
 
@@ -166,7 +161,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				{
 					new GroupType
 					{
-						Name = "Group",
+						Name = "Group Name",
 						Type = "Group"
 					},
 					new GroupType
@@ -208,11 +203,15 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		private void BuildReportGroup()
+		private List<ReportGroup> BuildReportGroup()
 		{
 			var reportGroups = new List<ReportGroup>();
+			if (FilteredReports == null)
+			{
+				return reportGroups;
+			}
 
-			foreach (var report in Reports)
+			foreach (var report in FilteredReports)
 			{
 				if (_groupType.Type == "Group")
 				{
@@ -299,7 +298,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			ReportGroups = reportGroups;
+			return reportGroups;
 		}
 
 		private static void UpdateIsExpanded(Report report, GroupItem groupItem, ReportGroup reportGroup)
@@ -311,68 +310,54 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		private void ClearSelection(object parameter)
+		private void ExpandAll(object parameter)
 		{
-			SelectedReport = null;
+			var reportGroups = ExpandAll(BuildReportGroup());
+
+			ReportGroups = reportGroups;
+		}
+
+		private List<ReportGroup> ExpandAll(List<ReportGroup> reportGroups)
+		{
+			foreach (var reportGroup in reportGroups)
+			{
+				reportGroup.IsExpanded = true;
+				foreach (var groupItem in reportGroup.GroupItems)
+				{
+					groupItem.IsExpanded = true;
+				}
+			}
+
+			return reportGroups;
+		}
+
+		private void CollapseAll(object parameter)
+		{
+			var reportGroups = CollapseAll(BuildReportGroup());
+			ReportGroups = reportGroups;
+		}
+
+		private List<ReportGroup> CollapseAll(List<ReportGroup> reportGroups)
+		{
+			foreach (var reportGroup in reportGroups)
+			{
+				reportGroup.IsExpanded = false;
+				reportGroup.IsSelected = false;
+				foreach (var groupItem in reportGroup.GroupItems)
+				{
+					groupItem.IsExpanded = false;
+					groupItem.IsSelected = false;
+				}
+			}
+
+			reportGroups[0].IsSelected = true;
+
+			return reportGroups;
 		}
 
 		private void ClearFilter(object parameter)
 		{
 			FilterString = string.Empty;
-		}
-
-		private void RemoveProjectData(object parameter)
-		{
-			//var message1 = PluginResources.Message_ActionWillRemoveAllProjectData;
-			//var message2 = PluginResources.Message_DoYouWantToProceed;
-
-			//var response = MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2,
-			//	PluginResources.TranscreateManager_Name, MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-			//if (response == MessageBoxResult.No)
-			//{
-			//	return;
-			//}
-
-			//var selectedProject = _projectsController.GetProjects()
-			//	.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == SelectedReport.Id);
-
-			//if (selectedProject != null)
-			//{
-			//	var settingsBundle = selectedProject.GetSettings();
-			//	var managerProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
-
-			//	managerProject.ProjectFilesJson.Value = string.Empty;
-
-			//	selectedProject.UpdateSettings(settingsBundle);
-			//	selectedProject.Save();
-
-			//	var xliffFolderPath = Path.Combine(SelectedReport.Path, "Transcreate");
-			//	if (Directory.Exists(xliffFolderPath))
-			//	{
-			//		try
-			//		{
-			//			Directory.Delete(xliffFolderPath, true);
-			//		}
-			//		catch
-			//		{
-			//			// ignore; catch all
-			//		}
-			//	}
-
-			//	// TODO: remove reports
-
-
-			//	Projects = Projects.Where(a => a.Id != SelectedReport.Id).ToList();
-			//}
-		}
-
-		private void OpenProjectFolder(object parameter)
-		{
-			if (Directory.Exists(SelectedReport.Path))
-			{
-				System.Diagnostics.Process.Start("explorer.exe", SelectedReport.Path);
-			}
 		}
 
 		private void SelectedItemChanged(object parameter)

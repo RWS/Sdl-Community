@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Windows.Threading;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
 

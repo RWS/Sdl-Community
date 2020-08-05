@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
@@ -17,10 +17,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private Report _selectedReport;
 		private IList _selectedReports;
 		private ICommand _clearSelectionCommand;
+		private ICommand _editReportCommand;
+		private ICommand _removeReportCommand;
+		private ICommand _openFolderCommand;
 
 
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
+		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
+
+		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
+
+		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
 
 		public string WindowTitle
 		{
@@ -73,6 +81,36 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					_selectedReports.Count);
 				return message;
 			}
+		}
+
+		private void EditReport(object parameter)
+		{
+			MessageBox.Show("TODO");
+		}
+
+		private void RemoveReport(object parameter)
+		{
+			MessageBox.Show("TODO");
+		}
+
+		private void OpenFolder(object parameter)
+		{
+			MessageBox.Show("TODO");
+			return;
+
+			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
+			//{
+			//	return;
+			//}
+
+
+			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
+			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
+
+			//if (File.Exists(path))
+			//{
+			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
+			//}
 		}
 
 

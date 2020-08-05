@@ -48,9 +48,7 @@ namespace Sdl.Community.Reports.Viewer
 			if (_reports.Count > 0)
 			{
 				_reports[0].IsSelected = true;
-			}
-
-			InitializeViews();
+			}			
 		}
 		
 		protected override Control GetExplorerBarControl()
@@ -59,16 +57,11 @@ namespace Sdl.Community.Reports.Viewer
 		}
 
 		protected override Control GetContentControl()
-		{
-			return _reportViewControl ?? (_reportViewControl = new ReportViewControl());
-		}
+		{			
+			if (_reportViewControl == null)
+			{
+				_reportViewControl = new ReportViewControl();
 
-		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
-
-		private void InitializeViews()
-		{
-			Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate
-			{			
 				_reportViewModel = new ReportViewModel();
 				_reportView = new ReportView();
 				_reportView.DataContext = _reportViewModel;
@@ -76,15 +69,21 @@ namespace Sdl.Community.Reports.Viewer
 				_reportsNavigationViewModel = new ReportsNavigationViewModel(_reports, _projectsController);
 				_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 				_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
-
 				_reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
 
 				_reportViewControl.UpdateViewModel(_reportView);
 				_reportsNavigationViewControl.UpdateViewModel(_reportsNavigationView);
-				
-			}));
+			}
+
+			return _reportViewControl;
 		}
 
+		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
+
+		public void RefreshView()
+		{
+			MessageBox.Show("TODO");
+		}
 
 		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
 		{
