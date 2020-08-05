@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="TMOptimizer 2021" Language="1033" Version="3.2.0.0" Manufacturer="Sdl" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
+	<Product Id="*" Name="TMOptimizer 2021" Language="1033" Version="3.2.1.0" Manufacturer="Sdl" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="product.ico" SourceFile="$(var.ProjectDir)product.ico" />
