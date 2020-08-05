@@ -60,6 +60,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public void UpdateData(List<Report> reports)
 		{
 			CurrentView = _dataView;
+			_dataViewModel.Reports = reports;
 		}
 
 		public string WindowTitle

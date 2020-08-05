@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Controls\TextBoxWithEllipsis.cs" />
     <Compile Include="Controls\WebBrowserHelper.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CultureInfoNameToDisplayNameConverter.cs" />
@@ -154,9 +155,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\Report.png" />
+    <Resource Include="Resources\Report-32.png" />
+    <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\Checked.png" />
     <Resource Include="Resources\Close.png" />
-    <Resource Include="Resources\Fie.png" />
+    <Resource Include="Resources\File.png" />
     <Resource Include="Resources\Folder.png" />
     <Resource Include="Resources\Project.ico" />
     <Resource Include="Resources\Question.ico" />
@@ -203,6 +207,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ComboboStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

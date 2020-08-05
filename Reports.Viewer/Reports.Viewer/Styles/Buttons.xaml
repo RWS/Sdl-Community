@@ -35,6 +35,7 @@
 		</Style.Triggers>
 	</Style>
 
+
 	<!--Window Control Button Style-->
 	<Style x:Key="WindowControlButtonStyle" TargetType="{x:Type Button}">
 		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Forground}"/>

@@ -27,21 +27,21 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Border Margin="5,5,5,15">
-		<Grid Margin="0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
 
-			<Border Background="White" Grid.Column="0" Grid.Row="0" Margin="0">
-				<!--<ContentControl Content="{Binding Browser}"/>-->
-				<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding HtmlUri, 
+	<Grid Margin="0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Border Background="White" Grid.Column="0" Grid.Row="0" Margin="0">
+			<!--<ContentControl Content="{Binding Browser}"/>-->
+			<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding HtmlUri, 
 					Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></WebBrowser>
-			</Border>
+		</Border>
 
-		</Grid>
-	</Border>
+	</Grid>
+
 </UserControl>

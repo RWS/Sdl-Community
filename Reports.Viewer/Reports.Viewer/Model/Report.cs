@@ -1,15 +1,23 @@
-﻿namespace Sdl.Community.Reports.Viewer.Model
+﻿using System;
+
+namespace Sdl.Community.Reports.Viewer.Model
 {
-	public class Report: BaseModel
+	public class Report : BaseModel
 	{
 		private string _name;
 		private string _group;
 		private string _language;
 		private string _description;
 		private string _path;
+		private DateTime _date;
 		private string _xsltPath;
 		private bool _isSelected;
 		private bool _isExtended;
+
+		public Report()
+		{
+			Date = DateTime.Now;
+		}
 
 		public string Name
 		{
@@ -98,6 +106,35 @@
 
 				_xsltPath = value;
 				OnPropertyChanged(nameof(XsltPath));
+			}
+		}
+
+		public DateTime Date
+		{
+			get => _date;
+			set
+			{
+				_date = value;
+
+				OnPropertyChanged(nameof(Date));
+				OnPropertyChanged(nameof(DateToString));
+			}
+		}
+
+		public string DateToString
+		{
+			get
+			{
+				var value = (Date != DateTime.MinValue && Date != DateTime.MaxValue)
+					? Date.Year
+					  + "-" + Date.Month.ToString().PadLeft(2, '0')
+					  + "-" + Date.Day.ToString().PadLeft(2, '0')
+					  + " " + Date.Hour.ToString().PadLeft(2, '0')
+					  + ":" + Date.Minute.ToString().PadLeft(2, '0')
+					  + ":" + Date.Second.ToString().PadLeft(2, '0')
+					: "[none]";
+
+				return value;
 			}
 		}
 

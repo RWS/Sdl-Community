@@ -19,6 +19,8 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TreeView.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
@@ -253,7 +255,20 @@
 
 								<HierarchicalDataTemplate.ItemTemplate>
 									<DataTemplate DataType="{x:Type model:Report}" >
-										<TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding Name}" Margin="0,1,0,1"/>
+										<DockPanel>
+											<Image
+												Stretch="UniformToFill"
+												RenderOptions.BitmapScalingMode="HighQuality" 
+												RenderOptions.EdgeMode="Aliased"
+												HorizontalAlignment="Center"
+												VerticalAlignment="Center"		
+												Width="18"
+												Margin="0,0,2,0"
+												Source="../Resources/Report.png" >
+											</Image>
+											<TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding Name}" Margin="2,1,0,1"/>
+										</DockPanel>
+
 									</DataTemplate>
 								</HierarchicalDataTemplate.ItemTemplate>
 							</HierarchicalDataTemplate>
@@ -262,16 +277,22 @@
 				</TreeView.ItemTemplate>
 			</TreeView>
 
-			<Grid Grid.Row="2" Grid.Column="0"  Margin="2,0,2,0">
-				<StackPanel Orientation="Horizontal">
+			<DockPanel Grid.Row="2" Grid.Column="0" Dock="Left" Margin="2,0,2,0">
+				<DockPanel HorizontalAlignment="Left">
+					<Button Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="Bold" Foreground="#464646" Content="+" Width="15"  ToolTip="Expand All"/>
+					<Label Content="/" VerticalAlignment="Center" Padding="0"/>
+					<Button Background="Transparent" BorderThickness="0"  FontSize="16" FontWeight="Bold" Foreground="#464646" Content="-" Width="15" ToolTip="Collapse All"/>
+				</DockPanel>
+				<DockPanel HorizontalAlignment="Right" Dock="Right">
 					<Label Content="Group by:"/>
-					<ComboBox Width="100"							  
+					<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						Width="80"
 						HorizontalAlignment="Left"
 						VerticalAlignment="Center"
 						ItemsSource="{Binding GroupTypes}"
 						SelectedItem="{Binding GroupType, Mode=TwoWay}"/>
-				</StackPanel>
-			</Grid>
+				</DockPanel>
+			</DockPanel>
 		</Grid>
 	</Border>
 </UserControl>
