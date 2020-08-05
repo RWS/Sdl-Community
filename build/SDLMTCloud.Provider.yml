@@ -25,6 +25,9 @@ variables:
   value: 'Release'
 - name: solution 
   value: '**/Sdl.Community.MTCloud.Provider.sln'
+- name: pathToPublish
+  value: 'SDLMTCloud.Provider\Sdl.Community.MTCloud.Provider\bin\Release\Sdl.Community.MTCloud.Provider.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml
