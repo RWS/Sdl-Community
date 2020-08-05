@@ -326,11 +326,17 @@ namespace ETSTranslationProvider
 
 				comboCell.Tag = entry;
 				comboCell.DataSource = entry.ETSLPs.Select(lp => lp.LanguagePairId).ToList();
-				dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
-				if (Options?.LPPreferences == null)
+
+				if (entry.Dictionaries != null)
+				{
+					dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
+					dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId; // set by default "No dictionary" value
+				}
+				if (Options?.LPPreferences == null || Options?.LPPreferences.Count == 0)
 				{
 					continue;
 				}
+				
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 				{
 					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
