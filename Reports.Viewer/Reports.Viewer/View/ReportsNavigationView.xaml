@@ -222,6 +222,8 @@
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
 						<Setter Property="IsSelected" Value="{Binding IsSelected}" />
 						<Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+						<EventSetter Event="PreviewMouseRightButtonDown"
+						             Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
 					</Style>
 				</TreeView.ItemContainerStyle>
 				<TreeView.ItemTemplate >

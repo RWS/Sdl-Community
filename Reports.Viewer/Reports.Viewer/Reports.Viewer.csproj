@@ -59,6 +59,7 @@
     <Compile Include="Actions\EditReportAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="Actions\RefreshAction.cs" />
+    <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="ViewModel\DataViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="View\DataView.xaml.cs">
       <DependentUpon>DataView.xaml</DependentUpon>
     </Compile>
@@ -116,6 +118,9 @@
     </Compile>
     <Compile Include="View\ReportsNavigationView.xaml.cs">
       <DependentUpon>ReportsNavigationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +317,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ReportsNavigationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

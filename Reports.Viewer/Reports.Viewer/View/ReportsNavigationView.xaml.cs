@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using Sdl.Community.Reports.Viewer.ViewModel;
 
 namespace Sdl.Community.Reports.Viewer.View
@@ -29,6 +31,29 @@ namespace Sdl.Community.Reports.Viewer.View
 		{
 			Loaded -= ReportsNavigationView_Loaded;
 			DataContext = _viewModel;
+		}
+
+
+		private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+			if (treeViewItem == null)
+			{
+				return;
+			}
+
+			treeViewItem.IsSelected = true;
+			e.Handled = true;
+		}
+
+		private static TreeViewItem VisualUpwardSearch(DependencyObject source)
+		{
+			while (source != null && !(source is TreeViewItem))
+			{
+				source = VisualTreeHelper.GetParent(source);
+			}
+
+			return source as TreeViewItem;
 		}
 	}
 }

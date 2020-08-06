@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Sdl.Community.Reports.Viewer.View;
+using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
@@ -14,8 +16,11 @@ namespace Sdl.Community.Reports.Viewer.Actions
 	public class OpenSettingsAction : AbstractViewControllerAction<ReportsViewerController>
 	{		
 		protected override void Execute()
-		{		
-			MessageBox.Show("TODO");
+		{
+			var view = new SettingsWindow();
+			var viewModel = new SettingsViewModel(view);
+			view.DataContext = viewModel;
+			view.ShowDialog();
 		}
 
 		public override void Initialize()

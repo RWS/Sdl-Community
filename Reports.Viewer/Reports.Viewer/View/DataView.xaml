@@ -84,12 +84,8 @@
 				</DataGridTemplateColumn>
 
 
-				<DataGridTextColumn Header="Group" CanUserSort="True"
+				<DataGridTextColumn Header="Group Name" CanUserSort="True"
 				                    Binding="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
-
-				<DataGridTextColumn Header="Description" CanUserSort="True" 
-				                    Binding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
 				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 
 				<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" SortMemberPath="Name" Width="1*" >
@@ -132,8 +128,13 @@
 
 				<DataGridTextColumn Header="Date" CanUserSort="True" 
 				                    Binding="{Binding DateToString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-										ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
+				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 
+
+				<DataGridTextColumn Header="Description" CanUserSort="True"  
+				                    Binding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
+				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
+						
 				<DataGridTemplateColumn Header="Path" Width="2*" CanUserSort="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:Report">

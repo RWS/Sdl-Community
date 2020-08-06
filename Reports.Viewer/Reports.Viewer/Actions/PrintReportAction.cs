@@ -10,7 +10,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		ContextByType = typeof(ReportsViewerController),
 		Icon = "Print"
 	)]
-	[ActionLayout(typeof(ReportsViewerReportGroups), 5, DisplayType.Large)]
+	[ActionLayout(typeof(ReportsViewerReportGroups), 5, DisplayType.Normal)]
 	public class PrintReportAction : AbstractViewControllerAction<ReportsViewerController>
 	{
 		protected override void Execute()
