@@ -11,7 +11,7 @@
         ResizeMode="CanResizeWithGrip"
 		mc:Ignorable="d" 
         Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-        MinHeight="500" MinWidth="600" Height="500" Width="600"
+        MinHeight="400" MinWidth="600" Height="400" Width="600"
 		d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -24,6 +24,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
+
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="{x:Type Window}">
@@ -47,8 +48,46 @@
 			</Grid>
 			
 		</Border>
-		<Grid Grid.Row="1" Margin="5,5,5,5">
-		
+		<Grid Grid.Row="1" Margin="10">
+			
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
+						           Text="Group By:" Margin="0,0,10,0"/>
+					<ComboBox Grid.Row="0" Grid.Column="1" 
+					          Width="150" 
+					          HorizontalAlignment="Left" Height="22"
+					          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  VerticalAlignment="Center"
+							  VerticalContentAlignment="Center"
+							  ItemsSource="{Binding GroupTypes}"
+							  DisplayMemberPath="Name"
+							  SelectedItem="{Binding GroupType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				</Grid>
+
+				<CheckBox Grid.Row="1" Margin="0,10,0,0" Grid.Column="0" Content="Display date suffix with report name" 
+				    IsChecked="{Binding DisplayDateSuffixWithReportName, 
+					Mode=TwoWay, 
+					UpdateSourceTrigger=PropertyChanged}"/>
+
+				
+
+			
 		</Grid>
 		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
 			<Grid Height="28">

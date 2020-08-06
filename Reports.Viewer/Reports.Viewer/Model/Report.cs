@@ -1,14 +1,18 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Model
 {
-	public class Report : BaseModel
+	public class Report : INotifyPropertyChanged
 	{
 		private string _name;
 		private string _group;
@@ -27,6 +31,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 		public Report()
 		{
 			Date = DateTime.Now;
+			Id = Guid.NewGuid().ToString();
 		}
 
 		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
@@ -34,6 +39,8 @@ namespace Sdl.Community.Reports.Viewer.Model
 		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
 
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
+
+		public string Id { get; set; }
 
 		[XmlIgnore]
 		[JsonIgnore]
@@ -141,6 +148,8 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
+		[XmlIgnore]
+		[JsonIgnore]
 		public string DateToString
 		{
 			get
@@ -152,6 +161,22 @@ namespace Sdl.Community.Reports.Viewer.Model
 					  + " " + Date.Hour.ToString().PadLeft(2, '0')
 					  + ":" + Date.Minute.ToString().PadLeft(2, '0')
 					  + ":" + Date.Second.ToString().PadLeft(2, '0')
+					: "[none]";
+
+				return value;
+			}
+		}
+
+		[XmlIgnore]
+		[JsonIgnore]
+		public string DateToShortString
+		{
+			get
+			{
+				var value = (Date != DateTime.MinValue && Date != DateTime.MaxValue)
+					? Date.Year
+					  + "-" + Date.Month.ToString().PadLeft(2, '0')
+					  + "-" + Date.Day.ToString().PadLeft(2, '0')
 					: "[none]";
 
 				return value;
@@ -197,7 +222,8 @@ namespace Sdl.Community.Reports.Viewer.Model
 
 		private void RemoveReport(object parameter)
 		{
-			MessageBox.Show("TODO");
+			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
+			action.Run();
 		}
 
 		private void OpenFolder(object parameter)
@@ -218,6 +244,13 @@ namespace Sdl.Community.Reports.Viewer.Model
 			//{
 			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
 			//}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

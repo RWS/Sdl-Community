@@ -22,11 +22,6 @@ namespace Sdl.Community.Reports.Viewer.Controls
 
 		public static void BindableSourcePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
 		{
-			if (string.IsNullOrEmpty(e.NewValue.ToString()))
-			{
-				return;
-			}
-
 			if (!(o is WebBrowser browser))
 			{
 				return;
@@ -44,8 +39,7 @@ namespace Sdl.Community.Reports.Viewer.Controls
 				uri = uri1;
 			}
 
-			browser.Source = uri;
-			
+			browser.Source = uri;			
 		}
 	}
 }

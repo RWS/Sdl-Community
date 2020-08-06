@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
@@ -15,6 +17,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private readonly ProjectsController _projectsController;
+		private readonly PathInfo _pathInfo;
 		private List<Report> _reports;
 		private string _filterString;
 		private List<Report> _filteredReports;
@@ -28,12 +31,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _clearFilterCommand;
 		private ICommand _selectedItemChangedCommand;
 
-		public ReportsNavigationViewModel(List<Report> reports, ProjectsController projectsController)
+		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo, ProjectsController projectsController)
 		{
 			_reports = reports;
+			Settings = settings;
+			_pathInfo = pathInfo;
 			_projectsController = projectsController;
 
-			GroupType = GroupTypes[0];
+			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
 			FilteredReports = _reports;
 			FilterString = string.Empty;
@@ -49,6 +54,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ?? (_selectedItemChangedCommand = new CommandHandler(SelectedItemChanged));
 
+		public Settings Settings { get; set; }
 
 		public ReportViewModel ReportViewModel { get; internal set; }
 
@@ -64,7 +70,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				FilterString = string.Empty;
 				FilteredReports = _reports;
 			}
-		}		
+		}
 
 		public string FilterString
 		{
@@ -103,7 +109,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 
 				var reportGroups = BuildReportGroup();
-				ReportGroups = ExpandAll(reportGroups);				
+				ReportGroups = ExpandAll(reportGroups);
 
 				OnPropertyChanged(nameof(StatusLabel));
 			}
@@ -117,6 +123,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_reportGroups = value;
 				OnPropertyChanged(nameof(ReportGroups));
 			}
+		}
+
+		public void Refresh(Settings settings)
+		{
+			Settings = settings;
+			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
+			ReportGroups = BuildReportGroup();
 		}
 
 		public Report SelectedReport
@@ -150,6 +163,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(GroupType));
 
 				ReportGroups = BuildReportGroup();
+
+				UpdateSettings();
 			}
 		}
 
@@ -211,9 +226,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				return reportGroups;
 			}
 
-			foreach (var report in FilteredReports)
+			var orderedReports = GroupType.Type == "Group" 
+				? FilteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
+				: FilteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
+
+			foreach (var report in orderedReports)
 			{
-				if (_groupType.Type == "Group")
+				if (GroupType.Type == "Group")
 				{
 					var reportGroup = reportGroups.FirstOrDefault(a => a.Name == report.Group);
 					if (reportGroup != null)
@@ -360,22 +379,39 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			FilterString = string.Empty;
 		}
 
+		public object SelectedItem { get; set; }
+
 		private void SelectedItemChanged(object parameter)
 		{
 			if (parameter is RoutedPropertyChangedEventArgs<object> property)
 			{
 				if (property.NewValue is Report report)
 				{
+					IsReportSelected = true;
+					SelectedItem = report;
 					SelectedReport = report;
 				}
 				else if (property.NewValue is GroupItem groupItem)
 				{
+					SelectedItem = groupItem;
+					SelectedReport = null;
 					ReportViewModel.UpdateData(groupItem.Reports);
 				}
 				else if (property.NewValue is ReportGroup reportGroup)
 				{
+					SelectedItem = reportGroup;
+					SelectedReport = null;
 					ReportViewModel.UpdateData(reportGroup.GroupItems?.SelectMany(a => a.Reports).ToList());
 				}
+			}
+		}
+
+		private void UpdateSettings()
+		{
+			if (Settings.GroupByType != GroupType.Type)
+			{
+				Settings.GroupByType = GroupType.Type;
+				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
 			}
 		}
 

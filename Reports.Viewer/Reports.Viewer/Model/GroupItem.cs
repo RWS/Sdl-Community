@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.Reports.Viewer.Model
 {
-	public class GroupItem: BaseModel
+	public class GroupItem: INotifyPropertyChanged
 	{
 		private string _name;		
 
@@ -75,6 +77,13 @@ namespace Sdl.Community.Reports.Viewer.Model
 				_isExtended = value;
 				OnPropertyChanged(nameof(IsExpanded));
 			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

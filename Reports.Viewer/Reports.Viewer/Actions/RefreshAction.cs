@@ -22,7 +22,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		public override void Initialize()
 		{
-			Enabled = true;
+			Enabled = false;
 
 			_controller = SdlTradosStudio.Application.GetController<ReportsViewerController>();			
 		}

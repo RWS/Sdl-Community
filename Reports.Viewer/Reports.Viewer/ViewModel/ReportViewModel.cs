@@ -2,46 +2,33 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.View;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
 	public class ReportViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private string _windowTitle;
-		private readonly BrowserView _browserView;
-		private readonly DataView _dataView;
+		private readonly ContentControl _browserView;
+		private readonly ContentControl _dataView;
 		private readonly BrowserViewModel _browserViewModel;
 		private readonly DataViewModel _dataViewModel;
-		private object _currentView;
+		private ContentControl _currentView;
 
-		//public ReportViewModel(BrowserViewModel browserViewModel, object browserView,
-		//	DataViewModel dataViewModel, object dataView)
-		//{
-		//	_browserViewModel = browserViewModel;
-		//	_browserView = browserView;
-
-		//	_dataViewModel = dataViewModel;
-		//	_dataView = dataView;
-
-		//	CurrentView = _dataView;
-		//}
-
-		public ReportViewModel()
+		public ReportViewModel(BrowserViewModel browserViewModel, ContentControl browserView,
+			DataViewModel dataViewModel, ContentControl dataView)
 		{
-			_browserViewModel = new BrowserViewModel();
-			_browserView = new BrowserView();
-			_browserView.DataContext = _browserViewModel;
+			_browserViewModel = browserViewModel;
+			_browserView = browserView;
 
-			_dataViewModel = new DataViewModel();
-			_dataView = new DataView();
-			_dataView.DataContext = _dataViewModel;
+			_dataViewModel = dataViewModel;
+			_dataView = dataView;
 
-			//CurrentView = _dataView;
+			CurrentView = _dataView;
 		}
 
-		public object CurrentView
+		public ContentControl CurrentView
 		{
 			get => _currentView;
 			set

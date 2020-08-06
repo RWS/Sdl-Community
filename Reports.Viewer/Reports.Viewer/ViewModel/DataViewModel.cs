@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -20,8 +22,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
 		private ICommand _openFolderCommand;
-
-
+	
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
@@ -39,7 +40,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(WindowTitle));
 			}
 		}
-
 
 		public List<Report> Reports
 		{
@@ -90,7 +90,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void RemoveReport(object parameter)
 		{
-			MessageBox.Show("TODO");
+			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
+			action.Run();
 		}
 
 		private void OpenFolder(object parameter)

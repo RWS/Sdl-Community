@@ -39,8 +39,8 @@
 		</Grid.RowDefinitions>
 
 		<controls:SortAwareDataGrid Grid.Row="0"
-		              DefaultColumnName="Name"
-		              DefaultSortDirection="Ascending"
+		              DefaultColumnName="Date"
+		              DefaultSortDirection="Descending"									
 		              Style="{StaticResource CustomGridStyle}"
 			          Margin="0" 			                           
 					  ItemsSource="{Binding Reports, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                

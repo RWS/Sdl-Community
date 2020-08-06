@@ -1,6 +1,12 @@
-﻿using System.Windows;
+﻿using System.IO;
+using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Community.Reports.Viewer.Service;
+using Sdl.Community.Reports.Viewer.View;
+using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
 {
@@ -12,15 +18,42 @@ namespace Sdl.Community.Reports.Viewer.Actions
 	)]
 	[ActionLayout(typeof(ReportsViewerReportGroups), 9, DisplayType.Large)]
 	public class AddReportAction : AbstractViewControllerAction<ReportsViewerController>
-	{		
+	{
+		private PathInfo _pathInfo;
+		private ImageService _imageService;
+		private ReportsViewerController _reportsViewerController;
+
 		protected override void Execute()
 		{		
-			MessageBox.Show("TODO");
+			var settings = GetSettings();
+			var view = new AppendReportWindow();
+			var viewModel = new AppendReportViewModel(view, new Report(), settings, _pathInfo, _imageService,
+				_reportsViewerController.SelectedProject);
+			view.DataContext = viewModel;
+			var result = view.ShowDialog();
+			if (result != null && (bool)result)
+			{
+				_reportsViewerController.AddReport(viewModel.Report);
+			}
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
 		}
 
 		public override void Initialize()
 		{
 			Enabled = true;
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 		}
 	}
 }
