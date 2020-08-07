@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -24,6 +25,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			ConnectionService = connectionService;
 		}
 
+		public event TranslationFeedbackEventRaiser TranslationReceived;
 		public IConnectionService ConnectionService { get; }
 		
 		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
@@ -193,6 +195,37 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return null;
+		}
+
+		public async Task CreateTranslationFeedback(FeedbackRequest translationFeedback, string accountId)
+		{
+			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
+			{
+				// attempt one connection
+				var success = ConnectionService.Connect(ConnectionService.Credential);
+				if (!success.Item1)
+				{
+					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+					throw new Exception(PluginResources.Message_Connection_token_has_expired);
+				}
+			}
+
+			using (var httpClient = new HttpClient())
+			{
+				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
+
+				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{accountId}/feedback/translations");
+				var request = new HttpRequestMessage(HttpMethod.Post, uri);
+				ConnectionService.AddTraceHeader(request);
+
+				var content = JsonConvert.SerializeObject(translationFeedback);
+				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+
+
+				var responseMessage = await httpClient.SendAsync(request);
+				var response = await responseMessage.Content.ReadAsStringAsync();
+			}
 		}
 
 		private async Task<string> GetTranslations(HttpClient httpClient, string id)

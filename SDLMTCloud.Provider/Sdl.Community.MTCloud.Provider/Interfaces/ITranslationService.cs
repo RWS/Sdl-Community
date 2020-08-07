@@ -7,7 +7,8 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	public delegate void TranslationFeedbackEventRaiser(FeedbackRequest translationFeedback);
 
 	public interface ITranslationService
-	{		
+	{
+		event TranslationFeedbackEventRaiser TranslationReceived;
 		IConnectionService ConnectionService { get; }	
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
@@ -15,5 +16,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
 
 		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
+		Task CreateTranslationFeedback(FeedbackRequest translationFeedback, string accountId);
 	}
 }

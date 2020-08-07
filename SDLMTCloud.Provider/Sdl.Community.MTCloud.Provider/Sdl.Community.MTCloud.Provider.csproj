@@ -50,6 +50,10 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReachFramework" />
+    <Reference Include="Sdl.Community.RateItControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6073d430a1fe4c62, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -185,7 +189,17 @@
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
+    <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
+    <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetUnintelligenceAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
@@ -228,6 +242,8 @@
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CredentialsViewModel.cs" />
+    <Compile Include="ViewModel\RateItViewModel.cs" />
+    <Compile Include="View\ActionProvider.cs" />
     <Compile Include="View\CredentialsWindow.xaml.cs">
       <DependentUpon>CredentialsWindow.xaml</DependentUpon>
     </Compile>
@@ -240,6 +256,15 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
+    <Compile Include="View\RateItControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\RateItControl.designer.cs">
+      <DependentUpon>RateItControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\RateItView.xaml.cs">
+      <DependentUpon>RateItView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XliffConverter\Models\Body.cs" />
     <Compile Include="XliffConverter\Models\File.cs" />
     <Compile Include="XliffConverter\Models\Header.cs" />
@@ -253,6 +278,13 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="View\RateItControl.resx">
+      <DependentUpon>RateItControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <Page Include="View\RateItView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Resource Include="Resources\selectedStar.png" />
     <Resource Include="Resources\defaultStar.png" />
     <Resource Include="Resources\checked.png" />
@@ -313,6 +345,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
