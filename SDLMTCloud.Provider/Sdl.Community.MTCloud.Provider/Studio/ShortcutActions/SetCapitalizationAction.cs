@@ -13,11 +13,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		ContextByType = typeof(EditorController))]
 	public class SetCapitalizationAction : AbstractAction, ISDLMTCloudAction
 	{
-		public override void Initialize()
-		{
-			base.Initialize();
-			OptionName = nameof(RateItViewModel.CapitalizationOption);
-		}
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();

@@ -187,6 +187,7 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
+    <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
     <Compile Include="Studio\RateItController.cs" />
@@ -196,7 +197,7 @@
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetUnintelligenceAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetUnintelligibilityAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />

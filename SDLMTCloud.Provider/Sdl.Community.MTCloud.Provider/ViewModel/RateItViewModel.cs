@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider;
@@ -15,7 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private IShortcutService _shortcutService;
 		private ITranslationService _translationService;
 		private readonly IActionProvider _actionProvider;
-		private readonly List<ISDLMTCloudAction> _actions;
+		private List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 		private ObservableCollection<FeedbackOption> _feedbackOptions;
 
@@ -28,22 +29,23 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private FeedbackOption _capitalizationChecked;
 		private int _rating;
 		private string _feedback;
-		private bool _sendFeedback;
+		private bool _isSendFeedbackEnabled;
 
 		public RateItViewModel(IShortcutService shortcutService,IActionProvider actionProvider)
 		{
 			_actionProvider = actionProvider;
 			SetShortcutService(shortcutService);
-			InitializeFeedbackOptions();
 			//_feedbackOptions = new ObservableCollection<FeedbackOption>(
 			//	);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 
-			_actions = InitializeActions();
+			Initialize();
 			UpdateActionTooltips();
 
 			_rating = 0;
 		}
+
+		public ObservableCollection<FeedbackOption> FeedbackOptions { get; set; }
 
 		public FeedbackOption WordsOmissionOption
 		{
@@ -133,14 +135,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public bool SendFeedback
+		public bool IsSendFeedbackEnabled
 		{
-			get => _sendFeedback;
+			get => _isSendFeedbackEnabled;
 			set
 			{
-				if (_sendFeedback == value) return;
-				_sendFeedback = value;
-				OnPropertyChanged(nameof(SendFeedback));
+				if (_isSendFeedbackEnabled == value) return;
+				_isSendFeedbackEnabled = value;
+				OnPropertyChanged(nameof(IsSendFeedbackEnabled));
 			}
 		}
 
@@ -241,20 +243,39 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			UpdateActionTooltips();
 		}
 
-		private List<ISDLMTCloudAction> InitializeActions()
+		private void Initialize()
 		{
-			return _actionProvider.GetActions();
-		}
+			var feedbackOptionsNames = new List<string>
+			{
+				"Words omission",
+				"Grammar",
+				"Unintelligibility",
+				"Word choice",
+				"Words addition",
+				"Spelling",
+				"Capitalization"
+			};
 
-		private void InitializeFeedbackOptions()
-		{
-			_wordsOmissionChecked = new FeedbackOption();
-			_grammarChecked = new FeedbackOption();
-			_unintelligenceChecked = new FeedbackOption();
-			_wordChoiceChecked = new FeedbackOption();
-			_wordsAdditionChecked = new FeedbackOption();
-			_spellingChecked = new FeedbackOption();
-			_capitalizationChecked = new FeedbackOption();
+			_actions = _actionProvider.GetActions();
+			FeedbackOptions = new ObservableCollection<FeedbackOption>();
+			foreach (var name in feedbackOptionsNames)
+			{
+				var nameWithoutSpaces = name.Replace(" ", "");
+				var studioAction = _actions.FirstOrDefault(action => nameof(action).Contains(nameWithoutSpaces));
+
+				var studioActionId = string.Empty;
+				if (studioAction != null)
+				{
+					studioAction.OptionName = name;
+					studioActionId = studioAction.Id;
+				}
+
+				FeedbackOptions.Add(new FeedbackOption
+				{
+					OptionName = name,
+					StudioActionId = studioActionId
+				});
+			}
 		}
 
 		private void UpdateActionTooltips()
@@ -297,7 +318,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SetSendFeedback(bool sendFeedback)
 		{
-			SendFeedback = sendFeedback;
+			IsSendFeedbackEnabled = sendFeedback;
 		}
 	}
 }

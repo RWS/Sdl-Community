@@ -13,11 +13,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		ContextByType = typeof(EditorController))]
 	public class SetWordsAdditionAction : AbstractAction, ISDLMTCloudAction
 	{
-		public override void Initialize()
-		{
-			base.Initialize();
-			OptionName = nameof(RateItViewModel.WordsAdditionOption);
-		}
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
