@@ -43,17 +43,20 @@
 			<ItemsControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding FeedbackOptions}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
-						<DockPanel/>
+						<WrapPanel ItemWidth="170"/>
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" 
-							          Content="{Binding OptionName}"
-									  IsChecked="{Binding IsChecked}"
-							          ToolTipService.ShowOnDisabled="True"
-									  IsEnabled="{Binding Path=DataContext.IsSendFeedbackEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
-
+							      Content="{Binding OptionName}"
+								  IsChecked="{Binding IsChecked}"
+							      ToolTipService.ShowOnDisabled="True"
+								  IsEnabled="{Binding Path=DataContext.IsSendFeedbackEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+							<CheckBox.ToolTip>
+								<ToolTip Content="{Binding Tooltip}" Style="{StaticResource ToolTipStyle}"/>
+							</CheckBox.ToolTip>
+						</CheckBox>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
