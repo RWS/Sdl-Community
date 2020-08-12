@@ -11,7 +11,7 @@
 
 ## Intro
 
-This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
+This repository contains around 80 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implementing new features or improving the documentation. To contribute, clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
@@ -24,20 +24,20 @@ If you have any questions, don't hesitate to ask on the [Sdl Language Developer 
 
 #### Required Tools
 To get started with this repository, install the following tools:
-1. **SDL Trados Studio 2019**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
+1. **SDL Trados Studio 2021**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
 2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
-3. **.NET 4.7.2**
-4. **Microsoft Visual Studio 2013, 2015 or 2017**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
+3. **.NET 4.8**
+4. **Microsoft Visual Studio 2013/2015/2017 or higher**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
 5. **Git**. Find more details on installing git [here](https://www.atlassian.com/git/tutorials/install-git#windows). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
 
 Once you have installed the tools, follow the steps below:
 
-1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path: "https://github.com/sdl/Sdl-Community.git". In destination path, select a path where you want to store the repository on your drive:
+1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). In order to clone the repository using Source Tree, from menu select "Clone/New". In the Source Path paste this path: "https://github.com/sdl/Sdl-Community.git". In the Destination Path, select a path where you want to store the repository on your local drive:
 [](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
 2. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder. All you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-3. Build the solution. After the build has succeeded, open SDL Trados Studio 2019. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
+3. Build the solution. After the build has succeeded, open SDL Trados Studio 2021. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
@@ -45,9 +45,9 @@ Once you have installed the tools, follow the steps below:
 
 #### Visual Studio SDL templates extensions
 
-Starting with Visual Studio 2017, the Trados Studio plugin templates are provided through Visual Studio extension which can be downloaded from [Marketplace](https://marketplace.visualstudio.com/items?itemName=sdl.project-templates-for-trados-studio-2019) for both **Visual Studio 2017 and Visual Studio 2019**.
+Starting with Visual Studio 2017, the Trados Studio plugin templates are provided through Visual Studio extension which can be downloaded from [Marketplace](https://marketplace.visualstudio.com/items?itemName=sdl.project-templates-for-trados-studio-2021) for both **Visual Studio 2017 and Visual Studio 2019**.
 
-The Github source code for Visual Studio templates extension, can be downloaded from [Github](https://github.com/sdl/trados-studio-vs-extension).
+The Github source code for Visual Studio templates extension, can be downloaded from the [Github](https://github.com/sdl/trados-studio-vs-extension) repository.
 
 
 ## List of plugins
