@@ -331,4 +331,7 @@
   <data name="RateIt_Option_DisabledMessage" xml:space="preserve">
     <value>Enable "Send feedback option" from Settings</value>
   </data>
+  <data name="Tooltip_DisabledMessage" xml:space="preserve">
+	  <value>To enable rating change the settings...</value>
+  </data>
 </root>

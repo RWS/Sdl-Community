@@ -8,19 +8,28 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	public class SegmentSupervisor
 	{
 		private readonly ITranslationService _translationService;
+		private EditorController _editorController;
 
 		public SegmentSupervisor(ITranslationService translationService)
 		{
 			_translationService = translationService;
-			var editor = SdlTradosStudio.Application.GetController<EditorController>();
-			//editor.Se
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			_editorController.ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+		}
+
+		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, System.EventArgs e)
+		{
+			//throw new System.NotImplementedException();
 		}
 
 		public async Task SendFeedback()
 		{
-			var accountId = _translationService.ConnectionService.Credential.AccountId;
-			var feedBack = new FeedbackRequest();
-			await _translationService.CreateTranslationFeedback(feedBack, accountId);
+			//if  (_editorController.ActiveDocument.ActiveSegmentPair.Properties.ConfirmationLevel)
+			//var accountId = _translationService.ConnectionService.Credential.AccountId;
+			//var feedBack = new FeedbackRequest();
+			//await _translationService.CreateTranslationFeedback(feedBack, accountId);
 		}
+
+
 	}
 }

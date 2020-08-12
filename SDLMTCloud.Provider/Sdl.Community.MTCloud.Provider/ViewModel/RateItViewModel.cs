@@ -105,9 +105,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (_translationService != null)
 			{
-				var accountId = _translationService.ConnectionService.Credential.AccountId;
-				var test = new FeedbackRequest();
-				await _translationService.CreateTranslationFeedback(test, accountId);
+				var comments = new List<string>{Feedback};
+				comments.AddRange(FeedbackOptions.Where(fo => fo.IsChecked).Select(fo => fo.OptionName).ToList());
+
+				await _translationService.SendFeedback(new Rating
+				{
+					Score = Rating,
+					Comments = comments
+				});
 			}
 			else
 			{

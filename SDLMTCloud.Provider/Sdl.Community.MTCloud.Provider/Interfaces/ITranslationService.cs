@@ -16,6 +16,8 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
 
 		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
-		Task CreateTranslationFeedback(FeedbackRequest translationFeedback, string accountId);
+		Task CreateTranslationFeedback(FeedbackRequest translationFeedback);
+
+		Task SendFeedback(Rating rating);
 	}
 }

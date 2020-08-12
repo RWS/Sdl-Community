@@ -6,7 +6,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
 	[Action(Id = "WordChoiceOptionId",
-		Name = "Word Choice option",
+		Name = "Word Choice",
 		Description =
 			"Check/Uncheck Word Choice option", //TODO:Move this in a resource file after we confirm the exact string
 		ContextByType = typeof(EditorController))]

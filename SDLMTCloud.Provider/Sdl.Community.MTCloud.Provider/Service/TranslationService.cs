@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,6 +12,8 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.LanguagePlatform.Core;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 using LogManager = NLog.LogManager;
 
@@ -27,9 +30,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public event TranslationFeedbackEventRaiser TranslationReceived;
 		public IConnectionService ConnectionService { get; }
-		
+
 		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
-		{			
+		{
 			if (string.IsNullOrEmpty(model?.SelectedModel?.Model))
 			{
 				throw new Exception(PluginResources.Message_No_model_selected);
@@ -63,7 +66,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Model = model.SelectedModel.Model,
 					InputFormat = "xliff"
 				};
-				
+
 				if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 					&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 				{
@@ -76,7 +79,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				var responseMessage = await httpClient.SendAsync(request);
 				var response = await responseMessage.Content.ReadAsStringAsync();
-				
+
 				if (!responseMessage.IsSuccessStatusCode)
 				{
 					return null;
@@ -197,7 +200,39 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		public async Task CreateTranslationFeedback(FeedbackRequest translationFeedback, string accountId)
+		public async Task SendFeedback(Rating rating)
+		{
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var translationProviderConfiguration = editorController.ActiveDocument.Project.GetTranslationProviderConfiguration();
+			var translationProvider = translationProviderConfiguration.Entries.FirstOrDefault(e =>
+				e.MainTranslationProvider.Uri.OriginalString.Contains("sdlmtcloud:///"));
+
+			List<LanguageMappingModel> languageMappings = null;
+			if (translationProvider != null)
+			{
+				languageMappings = JsonConvert.DeserializeObject<Options>(translationProvider.MainTranslationProvider.State).LanguageMappings;
+			}
+
+			var currentProject = editorController.ActiveDocument.Project.GetProjectInfo();
+			var currentLanguageMapping = languageMappings?.FirstOrDefault(l =>
+				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation) &&
+				l.TargetTradosCode.Equals(editorController.ActiveDocument.ActiveFile.Language.IsoAbbreviation));
+
+			//editorController.ActiveDocument.Project.
+			var translationFeedbackRequest = new TranslationFeedbackRequest
+			{
+				SourceLanguageId = currentLanguageMapping.SourceTradosCode
+			};
+			var improvement = new Improvement {Text = editorController.ActiveDocument.ActiveSegmentPair.Target.ToString()};
+			var feedbackRequest = new FeedbackRequest
+			{
+				Translation = translationFeedbackRequest, Improvement = improvement, Rating = rating
+			};
+
+			//await CreateTranslationFeedback(feedbackRequest);
+		}
+
+		public async Task CreateTranslationFeedback(FeedbackRequest translationFeedback)
 		{
 			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
 			{
@@ -215,7 +250,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
 
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{accountId}/feedback/translations");
+				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
 				var request = new HttpRequestMessage(HttpMethod.Post, uri);
 				ConnectionService.AddTraceHeader(request);
 

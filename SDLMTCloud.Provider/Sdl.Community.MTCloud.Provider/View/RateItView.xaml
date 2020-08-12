@@ -48,14 +48,22 @@
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" 
-							      Content="{Binding OptionName}"
-								  IsChecked="{Binding IsChecked}"
-							      ToolTipService.ShowOnDisabled="True"
-								  IsEnabled="{Binding Path=DataContext.IsSendFeedbackEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+						<CheckBox Content="{Binding OptionName}"
+						          IsChecked="{Binding IsChecked}"
+						          ToolTipService.ShowOnDisabled="True"
+						          IsEnabled="{Binding Path=DataContext.IsSendFeedbackEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 							<CheckBox.ToolTip>
 								<ToolTip Content="{Binding Tooltip}" Style="{StaticResource ToolTipStyle}"/>
 							</CheckBox.ToolTip>
+							<CheckBox.Style>
+								<Style TargetType="CheckBox" BasedOn="{StaticResource OptionsCheckboxesStyle}">
+									<Style.Triggers>
+										<Trigger Property="IsEnabled" Value="False">
+											<Setter Property="ToolTip" Value="{x:Static rsx:PluginResources.Tooltip_DisabledMessage}"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</CheckBox.Style>
 						</CheckBox>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
