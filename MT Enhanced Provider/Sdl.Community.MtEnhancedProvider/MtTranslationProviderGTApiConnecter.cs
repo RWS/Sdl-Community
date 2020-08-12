@@ -20,6 +20,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.LanguagePlatform.Core;
@@ -213,7 +214,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				string url = string.Format("https://www.googleapis.com/language/translate/v2/languages?key={0}&target={1}", ApiKey, targetLang);
 				string result = ""; //this will take the result from the webclient
 
-				using (var webClient = new WebClient())
+				using (var webClient = new WebClient{Encoding = Encoding.UTF8})
 				{
 					try
 					{
