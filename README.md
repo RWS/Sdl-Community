@@ -158,7 +158,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Variables Manager](https://appstore.sdl.com/language/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/VariablesManager)|
 | [#YourProductivity](https://appstore.sdl.com/language/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
 | [CopyTags](https://appstore.sdl.com/language/app/sdl-copy-tags/1070/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/CopyTags)|
-| [SpotCheck] | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SpotCheck)|
+|  SpotCheck | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SpotCheck)|
 | [TermExcelerator](https://appstore.sdl.com/language/app/termexcelerator/534/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermExcelerator)|
 | [TermInjector](https://appstore.sdl.com/language/app/terminjector/759/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
 
