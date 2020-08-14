@@ -446,5 +446,8 @@
   <PropertyGroup>
     <AssemblyName>Sdl.Community.MtEnhancedProvider</AssemblyName>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
