@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Reports.Viewer.API;
+using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -37,11 +40,19 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(CurrentView));
 			}
 		}
-		
-		public void UpdateReport(string filePath)
+
+		public string ProjectLocalFolder { get; set; }
+
+		public void UpdateReport(Report report)
 		{
 			CurrentView = _browserView;
-			_browserViewModel.HtmlUri = filePath;
+
+			var file = Path.Combine(ProjectLocalFolder, report.Path);
+			if (!File.Exists(file))
+			{
+				file = null;
+			}
+			_browserViewModel.HtmlUri = file;
 		}
 
 		public void UpdateData(List<Report> reports)

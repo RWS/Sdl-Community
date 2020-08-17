@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Sdl.Reports.Viewer.API;
+using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.Model
 {
@@ -29,7 +31,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 					return;
 				}
 
-				_name = value;
+				_name = value ?? string.Empty;
 				OnPropertyChanged(nameof(Name));
 			}
 		}	

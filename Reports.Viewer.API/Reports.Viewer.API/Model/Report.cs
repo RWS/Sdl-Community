@@ -1,16 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Input;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Sdl.Community.Reports.Viewer.Actions;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.ProjectAutomation.FileBased;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Model
+namespace Sdl.Reports.Viewer.API.Model
 {
 	public class Report : INotifyPropertyChanged
 	{
@@ -20,33 +12,20 @@ namespace Sdl.Community.Reports.Viewer.Model
 		private string _description;
 		private string _path;
 		private DateTime _date;
-		private string _xsltPath;
+		private string _xslt;
 		private bool _isSelected;
 		private bool _isExtended;
 
-		private ICommand _editReportCommand;
-		private ICommand _removeReportCommand;
-		private ICommand _openFolderCommand;
-
 		public Report()
 		{
-			Date = DateTime.Now;
 			Id = Guid.NewGuid().ToString();
+			Date = DateTime.Now;
+			Language = string.Empty;
 		}
 
-		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
+		public virtual string Id { get; internal set; }
 
-		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
-
-		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
-
-		public string Id { get; set; }
-
-		[XmlIgnore]
-		[JsonIgnore]
-		public FileBasedProject Project { get; set; }
-
-		public string Name
+		public virtual string Name
 		{
 			get => _name;
 			set
@@ -61,7 +40,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		public string Group
+		public virtual string Group
 		{
 			get => _group;
 			set
@@ -71,12 +50,12 @@ namespace Sdl.Community.Reports.Viewer.Model
 					return;
 				}
 
-				_group = value;
+				_group = value ?? string.Empty;
 				OnPropertyChanged(nameof(Group));
 			}
 		}
 
-		public string Language
+		public virtual string Language
 		{
 			get => _language;
 			set
@@ -86,12 +65,12 @@ namespace Sdl.Community.Reports.Viewer.Model
 					return;
 				}
 
-				_language = value;
+				_language = value ?? string.Empty;
 				OnPropertyChanged(nameof(Language));
 			}
 		}
 
-		public string Description
+		public virtual string Description
 		{
 			get => _description;
 			set
@@ -106,7 +85,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		public string Path
+		public virtual string Path
 		{
 			get => _path;
 			set
@@ -121,25 +100,25 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		public string XsltPath
+		public virtual string Xslt
 		{
-			get => _xsltPath;
+			get => _xslt;
 			set
 			{
-				if (_xsltPath == value)
+				if (_xslt == value)
 				{
 					return;
 				}
 
-				_xsltPath = value;
-				OnPropertyChanged(nameof(XsltPath));
+				_xslt = value;
+				OnPropertyChanged(nameof(Xslt));
 			}
 		}
 
-		public DateTime Date
+		public virtual DateTime Date
 		{
 			get => _date;
-			set
+			internal set
 			{
 				_date = value;
 
@@ -148,9 +127,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		[XmlIgnore]
-		[JsonIgnore]
-		public string DateToString
+		public virtual string DateToString
 		{
 			get
 			{
@@ -167,9 +144,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		[XmlIgnore]
-		[JsonIgnore]
-		public string DateToShortString
+		public virtual string DateToShortString
 		{
 			get
 			{
@@ -183,7 +158,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		public bool IsSelected
+		public virtual bool IsSelected
 		{
 			get => _isSelected;
 			set
@@ -198,7 +173,7 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-		public bool IsExpanded
+		public virtual bool IsExpanded
 		{
 			get => _isExtended;
 			set
@@ -213,44 +188,28 @@ namespace Sdl.Community.Reports.Viewer.Model
 			}
 		}
 
-
-
-		private void EditReport(object parameter)
-		{
-			MessageBox.Show("TODO");
-		}
-
-		private void RemoveReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
-			action.Run();
-		}
-
-		private void OpenFolder(object parameter)
-		{
-			MessageBox.Show("TODO");
-			return;
-
-			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
-			//{
-			//	return;
-			//}
-
-
-			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
-			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
-
-			//if (File.Exists(path))
-			//{
-			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
-			//}
-		}
-
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		public virtual object Clone()
+		{
+			return new Report
+			{
+				Id = Id,
+				Name = Name,
+				Description = Description,
+				Group = Group,
+				Language = Language,
+				Date = new DateTime(Date.Ticks),
+				Path = Path,
+				Xslt = Xslt,
+				IsExpanded = IsExpanded,
+				IsSelected = IsSelected
+			};
 		}
 	}
 }

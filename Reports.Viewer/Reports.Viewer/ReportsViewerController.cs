@@ -7,15 +7,15 @@ using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Controls;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Model.ProjectSettings;
-using Sdl.Community.Reports.Viewer.TestData;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.ProjectAutomation.FileBased;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.ProjectAutomation.Core;
+using Sdl.Reports.Viewer.API;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+
 
 namespace Sdl.Community.Reports.Viewer
 {
@@ -33,7 +33,6 @@ namespace Sdl.Community.Reports.Viewer
 		private ReportsNavigationViewModel _reportsNavigationViewModel;
 		private ReportViewControl _reportViewControl;
 		private ReportsNavigationViewControl _reportsNavigationViewControl;
-		private ProjectsController _projectsController;
 		private ReportView _reportView;
 		private ReportsNavigationView _reportsNavigationView;
 		private DataView _dataView;
@@ -41,25 +40,29 @@ namespace Sdl.Community.Reports.Viewer
 		private DataViewModel _dataViewModel;
 		private BrowserViewModel _browserViewModel;
 		private PathInfo _pathInfo;
-		private bool _isLoaded;
-		private string _loadedProjectId;
+		private ReportsController _controller;
+		private string _clientId;
 
 		protected override void Initialize(IViewContext context)
-		{			
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+		{
+			_clientId = Guid.NewGuid().ToString();
 
 			_pathInfo = new PathInfo();
-			_reports = new List<Report>();
+			_controller = ReportsController.Instance;
+			_controller.ProjectChanged += Controller_ProjectChanged;
+			_controller.ReportsAdded += Controller_ReportsAdded;
+			_controller.ReportsRemoved += Controller_ReportsRemoved;
+			_controller.ReportsUpdated += Controller_ReportsUpdated;
 
-			SelectedProject = _projectsController.CurrentProject
-							  ?? _projectsController.SelectedProjects.FirstOrDefault();
+			_reports = _controller.GetReports();
 
-			_isLoaded = true;
-
-			LoadProjectReports();
+			if (_reportsNavigationViewModel != null)
+			{
+				_reportsNavigationViewModel.Reports = _reports;
+				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
+			}
 		}
-
+		
 		protected override Control GetExplorerBarControl()
 		{
 			return _reportsNavigationViewControl ?? (_reportsNavigationViewControl = new ReportsNavigationViewControl());
@@ -79,62 +82,42 @@ namespace Sdl.Community.Reports.Viewer
 
 		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
-		public void AddReport(Report report)
-		{
-			report.IsSelected = true;
-			_reports.Add(report);
-			_reportsNavigationViewModel.Reports = _reports;
-
-			// Update Project Settings
-			var settingsBundle = SelectedProject.GetSettings();
-			var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
-
-			reportViewerProject.ReportsJson.Value = JsonConvert.SerializeObject(_reports);
-			SelectedProject.UpdateSettings(reportViewerProject.SettingsBundle);
-			SelectedProject.Save();
-		}
-
 		public List<Report> GetSelectedReports()
 		{
 			var selectedReport = _reportsNavigationViewModel?.SelectedReport;
 			if (selectedReport != null)
 			{
-				return new List<Report> {selectedReport};
+				return new List<Report> { selectedReport };
 			}
 
-			return _dataViewModel?.SelectedReports.Cast<Report>().ToList();
+			return _dataViewModel?.SelectedReports?.Cast<Report>().ToList();
 		}
 
-		public void RemoveReports(List<Report> reports)
+		public void AddReport(Report report)
 		{
-			var dataViewReports = _dataViewModel.Reports;
+			report.IsSelected = true;
 
-			foreach (var report in reports)
+			var result = _controller.AddReports(_clientId, new List<Report> { report });
+			if (!result.Success)
 			{
-				dataViewReports?.Remove(report);
-				_reports.Remove(report);
+				MessageBox.Show(result.Message);
+				return;
 			}
 
-			
-			if (_reportsNavigationViewModel.IsReportSelected)
-			{
-				_browserViewModel.HtmlUri = null;
-			}
-			else
-			{
-				_dataViewModel.Reports = new List<Report>();
-				_dataViewModel.Reports = dataViewReports;
-			}
-		
-
+			_reports.Add(result.Reports[0]);
 			_reportsNavigationViewModel.Reports = _reports;
+		}
 
-			var settingsBundle = SelectedProject.GetSettings();
-			var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
+		public void RemoveReports(List<string> reportIds)
+		{
+			var result = _controller.RemoveReports(_clientId, reportIds);
+			if (!result.Success)
+			{
+				MessageBox.Show(result.Message);
+				return;
+			}
 
-			reportViewerProject.ReportsJson.Value = JsonConvert.SerializeObject(_reports);
-			SelectedProject.UpdateSettings(reportViewerProject.SettingsBundle);
-			SelectedProject.Save();			 
+			RemoveReportsInternal(result.Reports);
 		}
 
 		public void RefreshView()
@@ -142,7 +125,10 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.Refresh(GetSettings());
 		}
 
-		public FileBasedProject SelectedProject { get; private set; }
+		public IProject GetSelectedProject()
+		{
+			return _controller?.SelectedProject;
+		}
 
 		private void InitializeViews()
 		{
@@ -164,10 +150,12 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _reportViewModel
 			};
 
-			_reportsNavigationViewModel = new ReportsNavigationViewModel(
-				_reports, GetSettings(), _pathInfo, _projectsController);
+			_reports = _controller.GetReports();
+
+			_reportsNavigationViewModel = new ReportsNavigationViewModel(_reports, GetSettings(), _pathInfo);
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
+			_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
 			_reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
 
 			_reportViewControl.UpdateViewModel(_reportView);
@@ -185,72 +173,91 @@ namespace Sdl.Community.Reports.Viewer
 			return new Settings();
 		}
 
-		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
+		private IEnumerable<Report> GetReports(IEnumerable<string> reportIds)
 		{
-			ReportSelectionChanged?.Invoke(this, e);
+			var reports = new List<Report>();
+			foreach (var reportId in reportIds)
+			{
+				var report = _reports.FirstOrDefault(a => a.Id == reportId);
+				reports.Add(report);
+			}
+
+			return reports;
 		}
 
-		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
+		private void RemoveReportsInternal(IReadOnlyCollection<Report> reports)
 		{
-			SelectedProject = _projectsController.CurrentProject
-							  ?? _projectsController.SelectedProjects.FirstOrDefault();
+			foreach (var report in reports)
+			{
+				_reports.RemoveAll(a => a.Id == report.Id);
+			}
 
-			if (!_isLoaded)
+			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
-			LoadProjectReports();
+
+			var dataViewReports = _dataViewModel.Reports;
+			foreach (var report in reports)
+			{
+				dataViewReports?.RemoveAll(a => a.Id == report.Id);
+			}
+
+			if (_reportsNavigationViewModel.IsReportSelected)
+			{
+				_browserViewModel.HtmlUri = null;
+			}
+			else
+			{
+				_dataViewModel.Reports = new List<Report>();
+				_dataViewModel.Reports = dataViewReports;
+			}
+
+			_reportsNavigationViewModel.Reports = _reports;
 		}
 
-		private void LoadProjectReports()
+		private void Controller_ReportsRemoved(object sender, Sdl.Reports.Viewer.API.Events.ReportsRemovedEventArgs e)
 		{
-			if (SelectedProject == null)
+			if (e.ClientId != _clientId && e.Reports != null)
 			{
-				_reports = new List<Report>();
+				RemoveReportsInternal(e.Reports);
+			}
+		}
+
+		private void Controller_ReportsAdded(object sender, Sdl.Reports.Viewer.API.Events.ReportsAddedEventArgs e)
+		{
+			if (e.ClientId != _clientId && e.Reports != null)
+			{
+				_reports.AddRange(e.Reports);
 				if (_reportsNavigationViewModel != null)
 				{
 					_reportsNavigationViewModel.Reports = _reports;
 				}
-
-				return;
 			}
+		}
 
-			var projectInfo = SelectedProject.GetProjectInfo();
-			var projectId = projectInfo.Id.ToString();
-
-			if (projectId == _loadedProjectId)
+		private void Controller_ReportsUpdated(object sender, Sdl.Reports.Viewer.API.Events.ReportsUpdatedEventArgs e)
+		{
+			if (e.ClientId != _clientId)
 			{
-				return;
+				MessageBox.Show("TODO: Controller_ReportsUpdated");
 			}
+		}
 
-			_loadedProjectId = projectId;
-
-			var settingsBundle = SelectedProject.GetSettings();
-			var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
-			var reports = SerializeProjectFiles(reportViewerProject.ReportsJson.Value);
-			_reports = reports;
+		private void Controller_ProjectChanged(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangedEventArgs e)
+		{
+			_reports = e.Reports;
 
 			if (_reportsNavigationViewModel != null)
 			{
-				_reportsNavigationViewModel.Reports = _reports;
-			}
+				_reportsNavigationViewModel.Reports = _reports;				
+				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
+			}			
 		}
 
-		private static List<Report> SerializeProjectFiles(string value)
+		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
 		{
-			try
-			{
-				var reports =
-					JsonConvert.DeserializeObject<List<Report>>(value);
-				return reports;
-			}
-			catch
-			{
-				// catch all; ignore
-			}
-
-			return null;
+			ReportSelectionChanged?.Invoke(this, e);
 		}
-
 	}
 }

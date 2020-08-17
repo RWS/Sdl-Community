@@ -7,14 +7,13 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
-using Sdl.ProjectAutomation.FileBased;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Sdl.ProjectAutomation.Core;
+using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -24,8 +23,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private readonly Settings _settings;
 		private readonly PathInfo _pathInfo;
 		private readonly ImageService _imageService;
-		private readonly DialogService _dialogService;
-		private readonly FileBasedProject _project;
+		private readonly IProject _project;
 		private string _windowTitle;
 		private ICommand _saveCommand;
 		private ICommand _selectedItemsChangedCommand;
@@ -42,7 +40,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 
 		public AppendReportViewModel(Window window, Report report, Settings settings,
-			PathInfo pathInfo, ImageService imageService, FileBasedProject project)
+			PathInfo pathInfo, ImageService imageService, IProject project)
 		{
 			_window = window;
 			Report = report;
@@ -75,9 +73,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			GroupName = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path;
-			Xslt = Report.XsltPath;
-
-
+			Xslt = Report.Xslt;
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new CommandHandler(SaveChanges));
@@ -238,12 +234,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				if (!string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
 				{
 					return false;
-				}
-
-				if (string.IsNullOrEmpty(GroupName))
-				{
-					return false;
-				}
+				}				
 
 				if (string.IsNullOrEmpty(Name))
 				{
@@ -259,11 +250,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			if (IsValid)
 			{
 				Report.Name = Name;
-				Report.Date = Date;
 				Report.Group = GroupName;
 				Report.Description = Description;
 				Report.Path = Path;
-				Report.XsltPath = Xslt;
+				Report.Xslt = Xslt;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
 				_window.DialogResult = true;

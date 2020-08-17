@@ -8,6 +8,8 @@ using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Reports.Viewer.API;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
@@ -48,6 +50,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_reports = value;
 				OnPropertyChanged(nameof(Reports));
+				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 

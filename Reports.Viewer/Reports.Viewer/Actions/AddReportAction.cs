@@ -6,6 +6,8 @@ using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Reports.Viewer.API;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
@@ -28,7 +30,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var settings = GetSettings();
 			var view = new AppendReportWindow();
 			var viewModel = new AppendReportViewModel(view, new Report(), settings, _pathInfo, _imageService,
-				_reportsViewerController.SelectedProject);
+				_reportsViewerController.GetSelectedProject());
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)

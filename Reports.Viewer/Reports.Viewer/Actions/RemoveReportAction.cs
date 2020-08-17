@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
@@ -34,7 +35,8 @@ namespace Sdl.Community.Reports.Viewer.Actions
 				return;
 			}
 
-			_reportsViewerController.RemoveReports(reports);
+			var removeIds = reports.Select(a => a.Id).ToList();
+			_reportsViewerController.RemoveReports(removeIds);
 		}
 
 		public void Run()

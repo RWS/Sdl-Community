@@ -7,17 +7,18 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
 	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
-	{
-		private readonly ProjectsController _projectsController;
-		private readonly PathInfo _pathInfo;
+	{	
+		private readonly PathInfo _pathInfo;		
 		private List<Report> _reports;
 		private string _filterString;
 		private List<Report> _filteredReports;
@@ -26,17 +27,20 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<ReportGroup> _reportGroups;
 		private GroupType _groupType;
 		private List<GroupType> _groupTypes;
+		private string _projectLocalFolder;
 		private ICommand _expandAllCommand;
 		private ICommand _collapseAllCommand;
 		private ICommand _clearFilterCommand;
 		private ICommand _selectedItemChangedCommand;
+		private ICommand _editReportCommand;
+		private ICommand _removeReportCommand;
+		private ICommand _openFolderCommand;
 
-		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo, ProjectsController projectsController)
+		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
 		{
 			_reports = reports;
 			Settings = settings;
 			_pathInfo = pathInfo;
-			_projectsController = projectsController;
 
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
@@ -54,9 +58,35 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ?? (_selectedItemChangedCommand = new CommandHandler(SelectedItemChanged));
 
+		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
+
+		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
+
+		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));		
+
 		public Settings Settings { get; set; }
 
 		public ReportViewModel ReportViewModel { get; internal set; }
+
+		public string ProjectLocalFolder
+		{
+			get => _projectLocalFolder;
+			set
+			{
+				if (_projectLocalFolder == value)
+				{
+					return;
+				}
+
+				_projectLocalFolder = value;
+				OnPropertyChanged(nameof(ProjectLocalFolder));
+
+				if (ReportViewModel != null)
+				{
+					ReportViewModel.ProjectLocalFolder = ProjectLocalFolder;
+				}
+			}
+		}
 
 		public List<Report> Reports
 		{
@@ -129,7 +159,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			Settings = settings;
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-			ReportGroups = BuildReportGroup();
+			//foreach (var report in FilteredReports)
+			//{
+				OnPropertyChanged(nameof(Report.DateToShortString));
+			//}
+			//ReportGroups = BuildReportGroup();
 		}
 
 		public Report SelectedReport
@@ -142,7 +176,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				if (_selectedReport != null)
 				{
-					ReportViewModel?.UpdateReport(_selectedReport.Path ?? string.Empty);
+
+
+
+					ReportViewModel?.UpdateReport(SelectedReport);
 				}
 
 				IsReportSelected = _selectedReport != null;
@@ -413,6 +450,37 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Settings.GroupByType = GroupType.Type;
 				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
 			}
+		}
+
+		private void EditReport(object parameter)
+		{
+			MessageBox.Show("TODO");
+		}
+
+		private void RemoveReport(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
+			action.Run();
+		}
+
+		private void OpenFolder(object parameter)
+		{
+			MessageBox.Show("TODO");
+			return;
+
+			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
+			//{
+			//	return;
+			//}
+
+
+			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
+			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
+
+			//if (File.Exists(path))
+			//{
+			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
+			//}
 		}
 
 		public void Dispose()

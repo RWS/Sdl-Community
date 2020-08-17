@@ -92,7 +92,6 @@
     <Compile Include="Model\LanguageItem.cs" />
     <Compile Include="Model\PathInfo.cs" />
     <Compile Include="Model\ProjectSettings\ReportsViewer.cs" />
-    <Compile Include="Model\Report.cs" />
     <Compile Include="Model\ReportGroup.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\Settings.cs" />
@@ -134,6 +133,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Reports.Viewer.API">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Reports.Viewer.API.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
@@ -363,6 +365,5 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

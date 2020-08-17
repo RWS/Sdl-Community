@@ -8,8 +8,9 @@
              xmlns:behaviours="clr-namespace:Sdl.Community.Reports.Viewer.Behaviours"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
-             xmlns:model="clr-namespace:Sdl.Community.Reports.Viewer.Model"
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
+             xmlns:model="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
+             xmlns:model1="clr-namespace:Sdl.Community.Reports.Viewer.Model"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
 	<UserControl.Resources>
@@ -68,6 +69,10 @@
 										<Setter Property="Width" Value="0"/>
 										<Setter Property="Margin" Value="0"/>
 									</DataTrigger>
+									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+										<Setter Property="Width" Value="0"/>
+										<Setter Property="Margin" Value="0"/>
+									</DataTrigger>
 								</Style.Triggers>
 							</Style>
 						</Image.Style>
@@ -96,7 +101,26 @@
 
 			<DataTemplate x:Key="GroupNodeLevel1"  >
 				<DockPanel>
-					<TextBlock Style="{StaticResource BoldTextBlock}" Text="{Binding Name}"/>
+					<TextBlock>
+						<TextBlock.Style>
+							<Style TargetType="TextBlock">
+								<Setter Property="Text" Value="{Binding Name}"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+								<Setter Property="FontWeight" Value="Bold"/>
+								<Setter Property="Foreground" Value="#575656"/>
+								<Setter Property="FontFamily" Value="Segoe UI" />
+								<Setter Property="FontSize" Value="12"/>
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Name}" Value="">
+										<Setter Property="Text" Value="No Group"/>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+										<Setter Property="Text" Value="No Group"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+					</TextBlock>
 					<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
 					<TextBlock>
 						<TextBlock.Style>
@@ -134,6 +158,10 @@
 										<Setter Property="Width" Value="0"/>
 										<Setter Property="Margin" Value="0"/>
 									</DataTrigger>
+									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+										<Setter Property="Width" Value="0"/>
+										<Setter Property="Margin" Value="0"/>
+									</DataTrigger>
 								</Style.Triggers>
 							</Style>
 						</Image.Style>
@@ -151,7 +179,26 @@
 
 			<DataTemplate x:Key="GroupNodeLevel2" >
 				<DockPanel>
-					<TextBlock Style="{StaticResource BoldTextBlock}" Text="{Binding Name}"/>
+					<TextBlock>
+						<TextBlock.Style>
+							<Style TargetType="TextBlock">
+								<Setter Property="Text" Value="{Binding Name}"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+								<Setter Property="FontWeight" Value="Bold"/>
+								<Setter Property="Foreground" Value="#575656"/>
+								<Setter Property="FontFamily" Value="Segoe UI" />
+								<Setter Property="FontSize" Value="12"/>
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Name}" Value="">
+										<Setter Property="Text" Value="No Group"/>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+										<Setter Property="Text" Value="No Group"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+						</TextBlock>
 					<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
 					<TextBlock Style="{StaticResource FadedTextBlock}" Text="reports: "/>
 					<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding Reports.Count}"/>
@@ -236,7 +283,7 @@
 					</Style>
 				</TreeView.ItemContainerStyle>
 				<TreeView.ItemTemplate >
-					<HierarchicalDataTemplate ItemsSource="{Binding GroupItems}" DataType="{x:Type model:ReportGroup}">
+					<HierarchicalDataTemplate ItemsSource="{Binding GroupItems}" DataType="{x:Type model1:ReportGroup}">
 						<ContentControl Content="{Binding}" Margin="0,1,0,1">
 							<ContentControl.Style>
 								<Style TargetType="ContentControl">
@@ -251,7 +298,7 @@
 						</ContentControl>
 						<HierarchicalDataTemplate.ItemTemplate>
 							<HierarchicalDataTemplate ItemsSource="{Binding Reports }" 
-							                          DataType="{x:Type model:GroupItem}">
+							                          DataType="{x:Type model1:GroupItem}">
 
 								<ContentControl Content="{Binding}" Margin="0,1,0,1">
 									<ContentControl.Style>
@@ -268,9 +315,9 @@
 
 								<HierarchicalDataTemplate.ItemTemplate>
 									<DataTemplate DataType="{x:Type model:Report}" >
-										<DockPanel>
+										<DockPanel Tag="{Binding ElementName=ReportsNavigationControl, Path=DataContext}">
 											<DockPanel.ContextMenu>
-												<ContextMenu>
+												<ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
 													<MenuItem Header="Edit report properties" 
 													          Command="{Binding EditReportCommand}"
 													          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
@@ -286,7 +333,8 @@
 														</MenuItem.Icon>
 													</MenuItem>
 													<Separator/>
-													<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}"
+													<MenuItem Header="Open folder in explorer" 
+													          Command="{Binding OpenFolderCommand}"
 													          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 														<MenuItem.Icon>
 															<Image Source="../Resources/Folder.png"/>
@@ -307,7 +355,9 @@
 
 											<TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding Name}" Margin="2,1,0,1"/>
 											<StackPanel Orientation="Horizontal" 
-											            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+											            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, 
+															Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
+															RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
 												<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
 												<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding DateToShortString}"/>
 												<TextBlock Style="{StaticResource FadedTextBlock}" Text="]" />
