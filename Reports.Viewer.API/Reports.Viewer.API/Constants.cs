@@ -8,6 +8,6 @@ namespace Sdl.Reports.Viewer.API
 {
 	public class Constants
 	{
-		public const string ReportsFolderName = "Reprots.Viewer";
+		public const string ReportsFolderName = "Reports.Viewer";
 	}
 }
