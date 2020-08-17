@@ -332,6 +332,9 @@
     <value>Enable "Send feedback option" from Settings</value>
   </data>
   <data name="Tooltip_DisabledMessage" xml:space="preserve">
-	  <value>To enable rating change the settings...</value>
+    <value>To enable rating change the settings...</value>
+  </data>
+  <data name="SendFeedbackResponseFromServer" xml:space="preserve">
+	  <value>Send feedback response from server: Status: {0} Response: {1}</value>
   </data>
 </root>

@@ -68,63 +68,6 @@
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
-			<!--<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsOmission}"
-					  IsChecked="{Binding WordsOmissionOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-					  IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						-->
-			<!--TODO: If the option is disabled change te text message (Confirm exact text): "To enable rating change the settings..."-->
-			<!--
-						<ToolTip Content="{Binding WordsOmissionOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>
-
-				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Grammar}" 
-						  IsChecked="{Binding GrammarOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-				          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding GrammarOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>
-
-				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Unintelligence}"
-						  IsChecked="{Binding UnintelligenceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-				          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding UnintelligenceOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>
-
-				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordChoice}" 
-						  IsChecked="{Binding WordChoiceOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-				          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding WordChoiceOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>
-
-				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_WordsAddition}" 
-						  IsChecked="{Binding WordsAdditionOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-				          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding WordsAdditionOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>
-
-				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Spelling}" 
-						  IsChecked="{Binding SpellingOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-				          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding SpellingOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>
-				<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" Content="{x:Static rsx:PluginResources.RateIt_Option_Capitalization}"
-						  IsChecked="{Binding CapitalizationOption.IsChecked,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
-				          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}">
-					<CheckBox.ToolTip>
-						<ToolTip Content="{Binding CapitalizationOption.Tooltip,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ToolTipStyle}"/>
-					</CheckBox.ToolTip>
-				</CheckBox>-->
 
 			<sdl:RateItControl Grid.Row="0" Grid.Column="1" BorderThickness="0"
 			                   Rating="{Binding Rating}" EnableMouseHoverSelection="False" VerticalAlignment="Top"
@@ -140,7 +83,10 @@
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
 			<Button Grid.Row="1" Grid.Column="1" Style="{StaticResource Sdl.Button.WindowControlStyle}" Margin="5"
 			        IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					Cursor="Hand" Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" Command="{Binding SendFeedbackCommand}"/>
+					Cursor="Hand" 
+					Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" 
+					Command="{Binding SendFeedbackCommand}"
+					/>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

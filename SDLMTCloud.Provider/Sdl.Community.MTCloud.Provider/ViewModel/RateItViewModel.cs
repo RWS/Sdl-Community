@@ -8,6 +8,7 @@ using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -16,6 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private IShortcutService _shortcutService;
 		private ITranslationService _translationService;
 		private readonly IActionProvider _actionProvider;
+		private ISegmentSupervisor _segmentSupervisor;
 		private List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 
@@ -23,9 +25,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _feedback;
 		private bool _isSendFeedbackEnabled;
 
-		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider)
+		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor)
 		{
 			_actionProvider = actionProvider;
+			SetSegmentSupervisor(segmentSupervisor);
+
 			SetShortcutService(shortcutService);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
 
@@ -35,7 +39,27 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_rating = 0;
 		}
 
-		public ObservableCollection<FeedbackOption> FeedbackOptions { get; set; }
+		private void SetSegmentSupervisor(ISegmentSupervisor segmentSupervisor)
+		{
+			if (_segmentSupervisor != null)
+			{
+				_segmentSupervisor.ImprovementAvailable -= SegmentSupervisorOnSegmentContentChanged;
+			}
+
+			_segmentSupervisor = segmentSupervisor;
+
+			if (_segmentSupervisor != null)
+			{
+				_segmentSupervisor.ImprovementAvailable += SegmentSupervisorOnSegmentContentChanged;
+			}
+		}
+
+		private void SegmentSupervisorOnSegmentContentChanged(object sender, EventArgs e)
+		{
+			//SendFeedbackToService()
+		}
+
+		public List<FeedbackOption> FeedbackOptions { get; set; }
 
 		public int Rating
 		{
@@ -61,7 +85,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public string Feedback
 		{
-			get => _feedback;
+			get => _feedback ?? string.Empty;
 			set
 			{
 				if (_feedback == value) return;
@@ -103,21 +127,41 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async Task SendFeedbackToService()
 		{
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var currentSegment = editorController.ActiveDocument.ActiveSegmentPair.Source.ToString();
+			var improvement = _segmentSupervisor.Improvements[currentSegment];
+			if (improvement == null) return;
+
 			if (_translationService != null)
 			{
-				var comments = new List<string>{Feedback};
+				var comments = new List<string>();
+				if (!string.IsNullOrWhiteSpace(Feedback))
+				{
+					comments.Add(Feedback);
+				}
 				comments.AddRange(FeedbackOptions.Where(fo => fo.IsChecked).Select(fo => fo.OptionName).ToList());
 
-				await _translationService.SendFeedback(new Rating
-				{
-					Score = Rating,
-					Comments = comments
-				});
+				var rating = _rating > 0
+					? new Rating
+					{
+						Score = _rating,
+						Comments = comments
+					}
+					: null;
+				await _translationService.SendFeedback(rating, improvement.OriginalTarget, improvement.Improvement);
 			}
 			else
 			{
 				//TODO: Log that translation service is null
 			}
+
+			SetFeedbackOptionsToDefault();
+		}
+
+		private void SetFeedbackOptionsToDefault()
+		{
+			FeedbackOptions.ForEach(fb => fb.IsChecked = false);
+			Rating = 0;
 		}
 
 		private void ClearFeedbackBox(object obj)
@@ -154,7 +198,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
 
-			FeedbackOptions = new ObservableCollection<FeedbackOption>();
+			FeedbackOptions = new List<FeedbackOption>();
 			foreach (var feedbackOption in feedbackOptions)
 			{
 				FeedbackOptions.Add(new FeedbackOption

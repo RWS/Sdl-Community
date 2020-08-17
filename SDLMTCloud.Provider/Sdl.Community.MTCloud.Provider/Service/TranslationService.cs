@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,26 +8,35 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NLog;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.LanguagePlatform.Core;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 using LogManager = NLog.LogManager;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private string _text;
+		string _improvement;
 
 		public TranslationService(IConnectionService connectionService)
 		{
 			ConnectionService = connectionService;
 		}
+
+		public Options Options { get; set; }
 
 		public event TranslationFeedbackEventRaiser TranslationReceived;
 		public IConnectionService ConnectionService { get; }
@@ -200,39 +210,55 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		public async Task SendFeedback(Rating rating)
+		public async Task SendFeedback(Rating rating, string originalText, string improvement)
 		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var translationProviderConfiguration = editorController.ActiveDocument.Project.GetTranslationProviderConfiguration();
-			var translationProvider = translationProviderConfiguration.Entries.FirstOrDefault(e =>
-				e.MainTranslationProvider.Uri.OriginalString.Contains("sdlmtcloud:///"));
-
-			List<LanguageMappingModel> languageMappings = null;
-			if (translationProvider != null)
-			{
-				languageMappings = JsonConvert.DeserializeObject<Options>(translationProvider.MainTranslationProvider.State).LanguageMappings;
-			}
-
-			var currentProject = editorController.ActiveDocument.Project.GetProjectInfo();
-			var currentLanguageMapping = languageMappings?.FirstOrDefault(l =>
-				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation) &&
-				l.TargetTradosCode.Equals(editorController.ActiveDocument.ActiveFile.Language.IsoAbbreviation));
-
-			//editorController.ActiveDocument.Project.
-			var translationFeedbackRequest = new TranslationFeedbackRequest
-			{
-				SourceLanguageId = currentLanguageMapping.SourceTradosCode
-			};
-			var improvement = new Improvement {Text = editorController.ActiveDocument.ActiveSegmentPair.Target.ToString()};
-			var feedbackRequest = new FeedbackRequest
-			{
-				Translation = translationFeedbackRequest, Improvement = improvement, Rating = rating
-			};
-
-			//await CreateTranslationFeedback(feedbackRequest);
+			var feedbackRequest = CreateFeedbackRequest(rating, originalText, improvement);
+			await SendFeedback(feedbackRequest);
 		}
 
-		public async Task CreateTranslationFeedback(FeedbackRequest translationFeedback)
+		private dynamic CreateFeedbackRequest(Rating rating, string originalText, string improvement)
+		{
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+
+			var activeDocument = editorController.ActiveDocument;
+			var currentProject = editorController.ActiveDocument.Project.GetProjectInfo();
+
+			var model = GetCorrespondingLanguageMappingModel(currentProject, activeDocument);
+			var translationFeedbackRequest = new TranslationFeedbackRequest
+			{
+				Model = model?.SelectedModel.Model,
+				SourceLanguageId = model?.SelectedSource.CodeName,
+				SourceText = activeDocument.ActiveSegmentPair.Source.ToString(),
+				TargetLanguageId = model?.SelectedTarget.CodeName,
+				TargetMtText = originalText
+			};
+
+			dynamic feedbackRequest = new ExpandoObject();
+			if (!string.IsNullOrWhiteSpace(improvement))
+			{
+				var improvementObject = new Improvement {Text = improvement};
+				feedbackRequest.Improvement = improvementObject;
+			}
+			if (rating != null)
+			{
+				feedbackRequest.Rating = rating;
+			}
+			feedbackRequest.Translation = translationFeedbackRequest;
+
+			return feedbackRequest;
+		}
+
+		private LanguageMappingModel GetCorrespondingLanguageMappingModel(ProjectInfo currentProject, Document activeDocument)
+		{
+			var model = Options.LanguageMappings?.FirstOrDefault(l =>
+				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,
+					StringComparison.InvariantCultureIgnoreCase) &&
+				l.TargetTradosCode.Equals(activeDocument.ActiveFile.Language.IsoAbbreviation,
+					StringComparison.InvariantCultureIgnoreCase));
+			return model;
+		}
+
+		public async Task SendFeedback(dynamic translationFeedback)
 		{
 			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
 			{
@@ -254,12 +280,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				var request = new HttpRequestMessage(HttpMethod.Post, uri);
 				ConnectionService.AddTraceHeader(request);
 
-				var content = JsonConvert.SerializeObject(translationFeedback);
-				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+				var serializerSettings =
+					new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()};
+				var content = JsonConvert.SerializeObject(translationFeedback, serializerSettings);
 
+				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 
 				var responseMessage = await httpClient.SendAsync(request);
 				var response = await responseMessage.Content.ReadAsStringAsync();
+
+				_logger.Info(PluginResources.SendFeedbackResponseFromServer, responseMessage.StatusCode, response);
 			}
 		}
 

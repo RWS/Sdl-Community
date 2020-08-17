@@ -81,7 +81,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public bool IsReadOnly => true;
 
-		public Options Options { get; set; }
+		public Options Options
+		{
+			get => TranslationService.Options;
+			set => TranslationService.Options = value;
+		}
 
 		public ITranslationService TranslationService { get; }
 

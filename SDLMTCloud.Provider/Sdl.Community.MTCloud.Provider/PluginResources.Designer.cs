@@ -610,6 +610,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send feedback response from server: Status: {0} Response: {1}.
+        /// </summary>
+        public static string SendFeedbackResponseFromServer {
+            get {
+                return ResourceManager.GetString("SendFeedbackResponseFromServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Settings {

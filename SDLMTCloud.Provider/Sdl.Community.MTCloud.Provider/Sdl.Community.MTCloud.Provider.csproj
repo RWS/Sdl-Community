@@ -169,6 +169,7 @@
     <Compile Include="Model\Credential.cs" />
     <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
+    <Compile Include="Model\ImprovedTarget.cs" />
     <Compile Include="Model\Improvement.cs" />
     <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
@@ -187,6 +188,7 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
+    <Compile Include="Interfaces\ISegmentSupervisor.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
