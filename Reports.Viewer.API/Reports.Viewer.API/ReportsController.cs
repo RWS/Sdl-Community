@@ -179,7 +179,7 @@ namespace Sdl.Reports.Viewer.API
 		public IProject SelectedProject
 		{
 			get => _selectedProject;
-			set
+			internal set
 			{
 				if (IsProjectLoaded(value))
 				{
