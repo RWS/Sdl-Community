@@ -192,10 +192,10 @@ namespace Sdl.Reports.Viewer.API
 			}
 		}
 
-		public string GetReportsFolder()
+		public string GetReportsViewerFolder()
 		{
 			var localProjectFolder = _selectedProject.GetProjectInfo().LocalProjectFolder.Trim('\\');
-			var reportsFolder = Path.Combine(localProjectFolder, Constants.ReportsFolderName);
+			var reportsFolder = Path.Combine(localProjectFolder, Constants.ReportsViewerFolderName);
 			if (!Directory.Exists(reportsFolder))
 			{
 				Directory.CreateDirectory(reportsFolder);
@@ -348,19 +348,7 @@ namespace Sdl.Reports.Viewer.API
 
 		private Report GetClonedReport(Report report)
 		{
-			var clonedReport = new Report
-			{
-				Id = report.Id,
-				Name = report.Name,
-				Description = report.Description,
-				Group = report.Group,
-				Language = report.Language ?? "",
-				Date = new DateTime(report.Date.Ticks),
-				Path = report.Path,
-				Xslt = report.Xslt,
-				IsExpanded = report.IsExpanded,
-				IsSelected = report.IsSelected
-			};
+			var clonedReport = report.Clone() as Report;
 
 			MoveReportFilesToRelativePath(clonedReport);
 
@@ -369,7 +357,7 @@ namespace Sdl.Reports.Viewer.API
 
 		private void DeleteReportFiles(Report report)
 		{			
-			var reportsFolder = GetReportsFolder();
+			var reportsFolder = GetReportsViewerFolder();
 			if (!Directory.Exists(reportsFolder))
 			{
 				return;
@@ -405,11 +393,11 @@ namespace Sdl.Reports.Viewer.API
 				return;
 			}
 
-			var reportsFolder = GetReportsFolder();
-			var reportFolder = Path.GetDirectoryName(report.Path);
+			var reportsFolder = GetReportsViewerFolder();
+			var reportsFolderName = Path.GetDirectoryName(report.Path);
 
 			// Move report file to relative project folder
-			if (string.Compare(reportFolder, Constants.ReportsFolderName, StringComparison.InvariantCultureIgnoreCase) != 0)
+			if (string.Compare(reportsFolderName, Constants.ReportsViewerFolderName, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				var reportName = Path.GetFileName(report.Path);
 				var reportPath = Path.Combine(reportsFolder, reportName);
@@ -424,21 +412,21 @@ namespace Sdl.Reports.Viewer.API
 				}
 
 				File.Copy(report.Path, reportPath);
-				report.Path = $"{Constants.ReportsFolderName}\\{Path.GetFileName(reportPath)}";
+				report.Path = $"{Constants.ReportsViewerFolderName}\\{Path.GetFileName(reportPath)}";
 			}
 
 			// Move xslt file to relative project folder
 			if (!string.IsNullOrEmpty(report.Xslt) && File.Exists(report.Xslt))
 			{
 				var xsltFolder = Path.GetDirectoryName(report.Xslt);
-				if (string.Compare(xsltFolder, Constants.ReportsFolderName, StringComparison.InvariantCultureIgnoreCase) != 0)
+				if (string.Compare(xsltFolder, Constants.ReportsViewerFolderName, StringComparison.InvariantCultureIgnoreCase) != 0)
 				{
 					var xsltName = Path.GetFileName(report.Xslt);
 					var xsltPath = Path.Combine(reportsFolder, xsltName);
 					if (!File.Exists(xsltPath))
 					{
 						File.Copy(report.Xslt, xsltPath);
-						report.Xslt = $"{Constants.ReportsFolderName}\\{Path.GetFileName(xsltPath)}";
+						report.Xslt = $"{Constants.ReportsViewerFolderName}\\{Path.GetFileName(xsltPath)}";
 					}
 				}
 			}

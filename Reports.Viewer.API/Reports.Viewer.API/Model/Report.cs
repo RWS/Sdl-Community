@@ -6,6 +6,7 @@ namespace Sdl.Reports.Viewer.API.Model
 {
 	public class Report : INotifyPropertyChanged
 	{
+		private string _id;
 		private string _name;
 		private string _group;
 		private string _language;
@@ -14,16 +15,28 @@ namespace Sdl.Reports.Viewer.API.Model
 		private DateTime _date;
 		private string _xslt;
 		private bool _isSelected;
-		private bool _isExtended;
 
 		public Report()
 		{
-			Id = Guid.NewGuid().ToString();
-			Date = DateTime.Now;
-			Language = string.Empty;
+			_id = Guid.NewGuid().ToString();
+			_date = DateTime.Now;
+			_language = string.Empty;
 		}
 
-		public virtual string Id { get; internal set; }
+		public virtual string Id
+		{
+			get => _id;
+			set
+			{
+				if (_id == value)
+				{
+					return;
+				}
+
+				_id = value;
+				OnPropertyChanged(nameof(Id));
+			}
+		}
 
 		public virtual string Name
 		{
@@ -173,18 +186,13 @@ namespace Sdl.Reports.Viewer.API.Model
 			}
 		}
 
-		public virtual bool IsExpanded
+		public virtual bool IsStudioReport
 		{
-			get => _isExtended;
-			set
+			get
 			{
-				if (_isExtended == value)
-				{
-					return;
-				}
-
-				_isExtended = value;
-				OnPropertyChanged(nameof(IsExpanded));
+				var reportsFolderName = System.IO.Path.GetDirectoryName(Path);
+				return string.Compare(reportsFolderName, Constants.ReportsFolderName, 
+					       StringComparison.InvariantCultureIgnoreCase) == 0;
 			}
 		}
 
@@ -207,7 +215,6 @@ namespace Sdl.Reports.Viewer.API.Model
 				Date = new DateTime(Date.Ticks),
 				Path = Path,
 				Xslt = Xslt,
-				IsExpanded = IsExpanded,
 				IsSelected = IsSelected
 			};
 		}
