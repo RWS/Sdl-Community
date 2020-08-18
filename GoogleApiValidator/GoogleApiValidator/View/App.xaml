@@ -1,9 +1,13 @@
-﻿<Application x:Class="GoogleApiValidator.App"
+﻿<Application x:Class="Sdl.Community.GoogleApiValidator.View.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:GoogleApiValidator"
-             StartupUri="View/MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+             StartupUri="MainWindow.xaml">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>
