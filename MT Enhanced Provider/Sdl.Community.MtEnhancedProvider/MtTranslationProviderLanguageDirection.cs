@@ -10,7 +10,6 @@ namespace Sdl.Community.MtEnhancedProvider
 {
 	public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		#region "PrivateMembers"
 
 		private readonly LanguagePair _languageDirection;
 		private readonly MtTranslationOptions _options;
@@ -21,10 +20,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		private SegmentEditor _postLookupSegmentEditor;
 		private SegmentEditor _preLookupSegmentEditor;
 
-		#endregion "PrivateMembers"
-
-		#region "ITranslationProviderLanguageDirection Members"
-
 		/// <summary>
 		/// Instantiates the variables and fills the list file content into
 		/// a Dictionary collection object.
@@ -32,20 +27,14 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <param name="provider"></param>
 		/// <param name="languages"></param>
 
-		#region "ListTranslationProviderLanguageDirection"
-
 		public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages)
 		{
-			#region "Instantiate"
 
 			_provider = provider;
 			_languageDirection = languages;
 			_options = _provider.Options;
 
-			#endregion "Instantiate"
 		}
-
-		#endregion "ListTranslationProviderLanguageDirection"
 
 		public bool CanReverseLanguageDirection { get; } = false;
 		public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
@@ -235,10 +224,10 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			else
 			{
-				_mstConnect.resetCrd(options.ClientId, options.ClientSecret); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				_mstConnect.ResetCrd(options.ClientId, options.ClientSecret); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
 			}
 
-			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId, format);
+			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);
 			return translatedText;
 		}
 
@@ -252,20 +241,12 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <param name="segment"></param>
 		/// <returns></returns>
 
-		#region "SearchSegment"
-
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
 			var translation = new Segment(_languageDirection.TargetCulture);//this will be the target segment
 
-			#region "SearchResultsObject"
-
 			var results = new SearchResults();
 			results.SourceSegment = segment.Duplicate();
-
-			#endregion "SearchResultsObject"
-
-			#region "Confirmation Level"
 
 			if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) //i.e. if it's status is other than untranslated
 			{ //don't do the lookup, b/c we don't need to pay google to translate text already translated if we edit a segment
@@ -275,11 +256,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				return results;
 			}
 
-			#endregion "Confirmation Level"
-
 			// Look up the currently selected segment in the collection (normal segment lookup).
-
-			#region "SegmentLookup"
 
 			var translatedText = "";
 			//a new seg avoids modifying the current segment object
@@ -329,14 +306,15 @@ namespace Sdl.Community.MtEnhancedProvider
 					newseg.Add(sourcetext);
 				}
 
-				//now do lookup
-				if (_options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+				switch (_options.SelectedProvider)
 				{
-					translatedText = LookupGt(sourcetext, _options, "html"); //plain??
-				}
-				else if (_options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-				{
-					translatedText = LookupMst(sourcetext, _options, "text/plain");
+					//now do lookup
+					case MtTranslationOptions.ProviderType.GoogleTranslate:
+						translatedText = LookupGt(sourcetext, _options, "html"); //plain??
+						break;
+					case MtTranslationOptions.ProviderType.MicrosoftTranslator:
+						translatedText = LookupMst(sourcetext, _options, "text/plain");
+						break;
 				}
 				//now do post-edit if that option is checked
 				if (_options.UsePostEdit)
@@ -348,16 +326,10 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 
 			results.Add(CreateSearchResult(newseg, translation));
-			#endregion "SegmentLookup"
 
-			#region "Close"
 			return results;
-			#endregion "Close"
+
 		}
-
-		#endregion "SearchSegment"
-
-		#region "NotForThisImplementation"
 
 		/// <summary>
 		/// Not required for this implementation.
@@ -439,8 +411,5 @@ namespace Sdl.Community.MtEnhancedProvider
 			throw new NotImplementedException();
 		}
 
-		#endregion "NotForThisImplementation"
-
-		#endregion "ITranslationProviderLanguageDirection Members"
 	}
 }
