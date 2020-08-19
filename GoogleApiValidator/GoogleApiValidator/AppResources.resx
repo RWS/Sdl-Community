@@ -126,12 +126,18 @@
   <data name="CloseBtn" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="EmptyKey" xml:space="preserve">
+    <value>API Key field is required</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="GAV" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\GAV.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GoogleResponseDescription" xml:space="preserve">
     <value>Google Response</value>
+  </data>
+  <data name="SuccessMsg" xml:space="preserve">
+    <value>API Key is valid</value>
   </data>
   <data name="ValidateBtn" xml:space="preserve">
     <value>Validate</value>

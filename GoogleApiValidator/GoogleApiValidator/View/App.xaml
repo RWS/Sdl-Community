@@ -2,14 +2,19 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:Sdl.Community.GoogleApiValidator.ViewModel"
+             xmlns:converters ="clr-namespace:Sdl.Community.GoogleApiValidator.Converters"
+
              StartupUri="MainWindow.xaml">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<viewModel:MainWindowViewModel x:Key="MainViewModel" />
+			<converters:EmptyToVisibility x:Key="EmptyToVisibility"/>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

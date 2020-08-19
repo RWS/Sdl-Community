@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:styles ="clr-namespace:Sdl.Community.GoogleApiValidator.Styles"
 		xmlns:resx="clr-namespace:Sdl.Community.GoogleApiValidator"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:utils="clr-namespace:Sdl.Community.GoogleApiValidator.Utils"
         mc:Ignorable="d"
 		Icon="../Resources/GAV.ico"
 		WindowStartupLocation="CenterScreen"
 		DataContext="{StaticResource MainViewModel}"
         WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
         Title="Google API Validator" Height="450" Width="800">
-
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
 		<Grid Margin="1,0,0,0">
 			<Grid.ColumnDefinitions>
@@ -26,40 +27,53 @@
 
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
-			<Border Grid.Column="0" Grid.Row="1" Margin="0,0,0,20" >
-				<StackPanel Margin="10">
+				<StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
+					<TextBlock 
+						Text="{Binding Message}"
+						Visibility="{Binding Message,Converter={StaticResource EmptyToVisibility}}"
+						Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+						Margin="10"
+						FontSize="15"
+						HorizontalAlignment="Center"/>
 					<TextBlock 
 						Style="{StaticResource Description}"
 						Margin="10 0" 
 						Text="{x:Static resx:AppResources.ApiVersionDescription}"/>
 					<ComboBox
+						FontFamily="Segoe UI"
 						ItemsSource="{Binding ApiVersions}"
 						SelectedItem="{Binding SelectedVersion}"
 						Margin="10"
-						Width="250"
+						Width="300"
 						HorizontalAlignment="Left"
 						DisplayMemberPath="Name"/>
 					<TextBlock  
 						Margin="10 0"  
 						Style="{StaticResource Description}"
 						Text="{x:Static resx:AppResources.ApiKeyDescription}"/>
-
-					<TextBox
-						Width="300"
-						Margin="10 10"
-						Height="30"
-						VerticalContentAlignment="Center"
-						HorizontalAlignment="Left"
-						Text="{Binding ApiKey}"/>
+					<PasswordBox Style="{DynamicResource MahApps.Styles.PasswordBox.Button.Revealed}"
+					             Width="300"
+					             Margin="10 10"
+					             VerticalContentAlignment="Center"
+					             HorizontalAlignment="Left"
+					             Controls:TextBoxHelper.UseFloatingWatermark="True"  
+					             Controls:TextBoxHelper.Watermark="API Key"
+					             Controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(Controls:TextBoxHelper.HasText), Mode=OneWay}"
+					             Controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					             utils:PasswordHelper.Attach="True" 
+					             utils:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
+					             IsEnabled="True">
+					</PasswordBox>
 
 					<TextBlock
 						Style="{StaticResource Sdl.TextBlock.TitleStyle}"
-						Margin="10 0" FontSize="16"
-						Text="{x:Static resx:AppResources.GoogleResponseDescription}"/>
+						Margin="10 0 0 0" FontSize="16"
+						Text="{x:Static resx:AppResources.GoogleResponseDescription}"
+						Visibility="{Binding GoogleResponse,Converter={StaticResource EmptyToVisibility}}"
+						/>
 				</StackPanel>
-			</Border>
 			<TextBlock 
-				Margin="10 0"
+				Margin="20 0 0 0"
 				Grid.Row="2" Text="{Binding GoogleResponse}"/>
 			<DockPanel Grid.Row="3" LastChildFill="False" HorizontalAlignment="Right">
 

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Google.Cloud.Translation.V2;
 using Sdl.Community.GoogleApiValidator.Commands;
 using Sdl.Community.GoogleApiValidator.Model;
 using Sdl.Community.GoogleApiValidator.Utils;
@@ -66,6 +63,7 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 		    {
 			    if (_apyKey == value) return;
 			    _apyKey = value;
+			    GoogleResponse = string.Empty;
 			    OnPropertyChanged(nameof(ApiKey));
 		    }
 	    }
@@ -95,7 +93,32 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 
 	    private void ValidateKey()
 	    {
-		    
+		    Message = string.Empty;
+
+		    if (string.IsNullOrEmpty(ApiKey))
+		    {
+			    Message = AppResources.EmptyKey;
+		    }
+		    else
+		    {
+			    if (SelectedVersion.Version == Enums.Version.V2)
+			    {
+				    try
+				    {
+					    var client = TranslationClient.CreateFromApiKey(ApiKey);
+					    var response = client.TranslateText("","ru","en");
+					    if (response != null)
+					    {
+						    GoogleResponse = AppResources.SuccessMsg;
+					    }
+				    }
+				    catch (Exception e)
+				    {
+					    GoogleResponse = e.Message;
+				    }
+			    }
+		    }
+
 	    }
     }
 }

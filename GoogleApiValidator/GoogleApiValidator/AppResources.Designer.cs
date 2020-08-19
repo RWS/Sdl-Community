@@ -88,6 +88,15 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API Key field is required.
+        /// </summary>
+        public static string EmptyKey {
+            get {
+                return ResourceManager.GetString("EmptyKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon GAV {
@@ -103,6 +112,15 @@ namespace Sdl.Community.GoogleApiValidator {
         public static string GoogleResponseDescription {
             get {
                 return ResourceManager.GetString("GoogleResponseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Key is valid.
+        /// </summary>
+        public static string SuccessMsg {
+            get {
+                return ResourceManager.GetString("SuccessMsg", resourceCulture);
             }
         }
         
