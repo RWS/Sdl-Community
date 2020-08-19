@@ -41,7 +41,7 @@ namespace Sdl.Community.Reports.Viewer
 		private BrowserViewModel _browserViewModel;
 		private PathInfo _pathInfo;
 		private ReportsController _controller;
-		private string _clientId;		
+		private string _clientId;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -49,6 +49,7 @@ namespace Sdl.Community.Reports.Viewer
 
 			_pathInfo = new PathInfo();
 			_controller = ReportsController.Instance;
+			_controller.ProjectChanging += Controller_ProjectChanging;
 			_controller.ProjectChanged += Controller_ProjectChanged;
 			_controller.ReportsAdded += Controller_ReportsAdded;
 			_controller.ReportsRemoved += Controller_ReportsRemoved;
@@ -57,8 +58,8 @@ namespace Sdl.Community.Reports.Viewer
 			_reports = _controller.GetReports();
 
 			UpdateReportsNavigationViewModel();		
-		}
-		
+		}		
+
 		protected override Control GetExplorerBarControl()
 		{
 			return _reportsNavigationViewControl ?? (_reportsNavigationViewControl = new ReportsNavigationViewControl());
@@ -252,6 +253,40 @@ namespace Sdl.Community.Reports.Viewer
 			_reports = e.Reports;
 
 			UpdateReportsNavigationViewModel();
+
+			EnableControls(true);
+		}
+
+		private void Controller_ProjectChanging(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangingEventArgs e)
+		{
+			EnableControls(false);			
+		}
+
+		private void EnableControls(bool isEnabled)
+		{
+			if (_reportsNavigationViewControl.InvokeRequired)
+			{
+				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isEnabled);				
+			}
+			else
+			{			
+				if (_reportsNavigationViewControl != null)
+				{
+					if (!isEnabled)
+					{
+						_reports.Clear();
+						_reportsNavigationViewModel.Reports = _reports;
+					}
+
+					_reportsNavigationViewModel.IsLoading = !isEnabled;
+					_reportsNavigationViewControl.Enabled = isEnabled;
+				}
+
+				if (_reportViewControl != null)
+				{
+					_reportViewControl.Enabled = isEnabled;
+				}
+			}
 		}
 
 		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)

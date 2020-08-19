@@ -17,8 +17,8 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
 	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
-	{	
-		private readonly PathInfo _pathInfo;		
+	{
+		private readonly PathInfo _pathInfo;
 		private List<Report> _reports;
 		private string _filterString;
 		private List<Report> _filteredReports;
@@ -28,6 +28,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private GroupType _groupType;
 		private List<GroupType> _groupTypes;
 		private string _projectLocalFolder;
+		private bool _isLoading;
 		private ICommand _expandAllCommand;
 		private ICommand _collapseAllCommand;
 		private ICommand _clearFilterCommand;
@@ -62,12 +63,27 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
 
-		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));		
+		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
 
 		public Settings Settings { get; set; }
 
 		public ReportViewModel ReportViewModel { get; internal set; }
 
+
+		public bool IsLoading
+		{
+			get => _isLoading;
+			set
+			{
+				if (_isLoading == value)
+				{
+					return;
+				}
+
+				_isLoading = value;
+				OnPropertyChanged(nameof(IsLoading));
+			}
+		}
 		public string ProjectLocalFolder
 		{
 			get => _projectLocalFolder;
@@ -161,7 +177,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 			//foreach (var report in FilteredReports)
 			//{
-				OnPropertyChanged(nameof(Report.DateToShortString));
+			OnPropertyChanged(nameof(Report.DateToShortString));
 			//}
 			//ReportGroups = BuildReportGroup();
 		}
@@ -174,13 +190,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_selectedReport = value;
 				OnPropertyChanged(nameof(SelectedReport));
 
-				if (_selectedReport != null)
-				{
 
+				ReportViewModel?.UpdateReport(_selectedReport);
 
-
-					ReportViewModel?.UpdateReport(SelectedReport);
-				}
 
 				IsReportSelected = _selectedReport != null;
 			}
@@ -263,7 +275,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				return reportGroups;
 			}
 
-			var orderedReports = GroupType.Type == "Group" 
+			var orderedReports = GroupType.Type == "Group"
 				? FilteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
 				: FilteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
 

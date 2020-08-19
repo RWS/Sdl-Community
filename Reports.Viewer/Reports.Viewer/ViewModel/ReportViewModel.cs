@@ -45,11 +45,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			CurrentView = _browserView;
 
-			var file = Path.Combine(ProjectLocalFolder, report.Path);
-			if (!File.Exists(file))
+			string file = null;
+			if (report != null)
 			{
-				file = null;
+				file = Path.Combine(ProjectLocalFolder, report.Path);
+				if (!File.Exists(file))
+				{
+					file = null;
+				}
 			}
+
 			_browserViewModel.HtmlUri = file;
 		}
 

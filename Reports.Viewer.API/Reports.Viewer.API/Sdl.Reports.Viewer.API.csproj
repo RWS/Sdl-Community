@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Events\ProjectChangingEventArgs.cs" />
     <Compile Include="Model\LanguageDirectionInfo.cs" />
     <Compile Include="Model\ReportDefinition.cs" />
     <Compile Include="ReportsController.cs" />
