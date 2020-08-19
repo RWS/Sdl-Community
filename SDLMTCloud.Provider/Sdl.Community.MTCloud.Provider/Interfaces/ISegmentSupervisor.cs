@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service.Events;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface ISegmentSupervisor
 	{
-		string Improvement { get; }
-		string OriginalTargetText { get; }
+		event ConfirmationLevelChangedEventHandler ConfirmationLevelChanged;
 
-		event EventHandler ImprovementAvailable;
-		Dictionary<string, ImprovedTarget> Improvements { get; set; }
+		Dictionary<SegmentId, ImprovedTarget> Improvements { get; set; }
+
+		void StartSupervising();
+
+		void StopSupervising();
 	}
 }

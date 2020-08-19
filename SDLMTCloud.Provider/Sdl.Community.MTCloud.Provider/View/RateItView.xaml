@@ -23,16 +23,16 @@
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle" BasedOn="{StaticResource Sdl.Checkbox.GenericStyle}">
-				<Setter Property="Margin" Value="10,0,5,10"/>
+				<Setter Property="Margin" Value="10,15,5,10"/>
 			</Style>
-
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<ScrollViewer VerticalScrollBarVisibility="Auto" 
 				  MaxHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=ActualHeight}">
-		<Grid>
+		<Grid Height="Auto">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="30"/>
 				<RowDefinition Height="30"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
@@ -40,7 +40,7 @@
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
-			<ItemsControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding FeedbackOptions}">
+			<ItemsControl x:Name="CheckboxList"  Grid.Column="0" Grid.Row="0" ItemsSource="{Binding FeedbackOptions}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<WrapPanel ItemWidth="170"/>
@@ -52,14 +52,12 @@
 						          IsChecked="{Binding IsChecked}"
 						          ToolTipService.ShowOnDisabled="True"
 						          IsEnabled="{Binding Path=DataContext.IsSendFeedbackEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-							<CheckBox.ToolTip>
-								<ToolTip Content="{Binding Tooltip}" Style="{StaticResource ToolTipStyle}"/>
-							</CheckBox.ToolTip>
 							<CheckBox.Style>
 								<Style TargetType="CheckBox" BasedOn="{StaticResource OptionsCheckboxesStyle}">
+									<Setter Property="ToolTip" Value="{Binding Tooltip}"/>
 									<Style.Triggers>
 										<Trigger Property="IsEnabled" Value="False">
-											<Setter Property="ToolTip" Value="{x:Static rsx:PluginResources.Tooltip_DisabledMessage}"/>
+											<Setter Property="ToolTip"  Value="{x:Static rsx:PluginResources.Tooltip_DisabledMessage}"/>
 										</Trigger>
 									</Style.Triggers>
 								</Style>
@@ -78,15 +76,23 @@
 							   Cursor="Hand"
 			                   />
 			<TextBox  Style="{DynamicResource WatermarkTextBox}" watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
+					  HorizontalAlignment="Left"
 					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding Feedback,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
+					  Width="1150"
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
-			<Button Grid.Row="1" Grid.Column="1" Style="{StaticResource Sdl.Button.WindowControlStyle}" Margin="5"
-			        IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					Cursor="Hand" 
-					Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" 
-					Command="{Binding SendFeedbackCommand}"
-					/>
+			<Button Grid.Row="1" Grid.Column="1"
+				    Margin="5"
+				    Cursor="Hand"
+				    Style="{StaticResource Sdl.Button.WindowControlStyle}"
+				    Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}"
+				    Command="{Binding SendFeedbackCommand}"/>
+			<CheckBox Grid.Row="2" Grid.Column="1" 
+			          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  Margin="5"
+			          IsEnabled="{Binding IsSendFeedbackEnabled}"
+				      Content="{x:Static rsx:PluginResources.AutoSendFeedback}"
+				      IsChecked="{Binding AutoSendFeedback}" />
 		</Grid>
 	</ScrollViewer>
 </UserControl>

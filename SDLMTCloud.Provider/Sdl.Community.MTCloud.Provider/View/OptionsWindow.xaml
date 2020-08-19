@@ -40,7 +40,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
-				<Setter Property="Margin" Value="15,5,15,15"/>
+				<Setter Property="Margin" Value="15 5 0 5"/>
 				<Setter Property="FontFamily" Value="Segoe UI"/>
 				<Setter Property="Foreground" Value="#333232"/>
 				<Setter Property="FontSize" Value="13"/>
@@ -210,9 +210,10 @@
 						</DataGridTemplateColumn>
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
-				<DockPanel Grid.Row="1">
+				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
-				</DockPanel>
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding SendFeedback}" Content="{x:Static rsx:PluginResources.EnableRating}"  />
+				</StackPanel>
 			</Grid >
 
 			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">

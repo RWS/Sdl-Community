@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
@@ -9,17 +10,17 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	public interface ITranslationService
 	{
 		event TranslationFeedbackEventRaiser TranslationReceived;
-		IConnectionService ConnectionService { get; }	
 
-		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
+		IConnectionService ConnectionService { get; }
+
+		Options Options { get; set; }
+
+		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
 
 		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
 
-		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
-		Task SendFeedback(dynamic translationFeedback);
+		Task SendFeedback(SegmentId? segmentId, Rating rating, string original, string improvement);
 
-		Task SendFeedback(Rating rating, string original, string improvement);
-
-		Options Options { get; set; }
+		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
 	}
 }

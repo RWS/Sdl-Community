@@ -8,6 +8,8 @@ using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -17,18 +19,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private IShortcutService _shortcutService;
 		private ITranslationService _translationService;
 		private readonly IActionProvider _actionProvider;
-		private ISegmentSupervisor _segmentSupervisor;
+		private readonly ISegmentSupervisor _segmentSupervisor;
 		private List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 
 		private int _rating;
 		private string _feedback;
 		private bool _isSendFeedbackEnabled;
+		private bool _autoSendFeedback;
 
 		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor)
 		{
 			_actionProvider = actionProvider;
-			SetSegmentSupervisor(segmentSupervisor);
+			_segmentSupervisor = segmentSupervisor;
 
 			SetShortcutService(shortcutService);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
@@ -39,27 +42,45 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_rating = 0;
 		}
 
-		private void SetSegmentSupervisor(ISegmentSupervisor segmentSupervisor)
+		private void SetSegmentSupervisor()
 		{
-			if (_segmentSupervisor != null)
-			{
-				_segmentSupervisor.ImprovementAvailable -= SegmentSupervisorOnSegmentContentChanged;
-			}
+			if (_segmentSupervisor == null) return;
 
-			_segmentSupervisor = segmentSupervisor;
-
-			if (_segmentSupervisor != null)
-			{
-				_segmentSupervisor.ImprovementAvailable += SegmentSupervisorOnSegmentContentChanged;
-			}
+			_segmentSupervisor.ConfirmationLevelChanged -= OnConfirmationLevelChanged;
+			_segmentSupervisor.ConfirmationLevelChanged += OnConfirmationLevelChanged;
 		}
 
-		private void SegmentSupervisorOnSegmentContentChanged(object sender, EventArgs e)
+		private void ResetSegmentSupervisor()
 		{
-			//SendFeedbackToService()
+			if (_segmentSupervisor == null) return;
+			_segmentSupervisor.ConfirmationLevelChanged -= OnConfirmationLevelChanged;
+		}
+
+		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
+		{
+			await SendFeedbackToService(confirmedSegment);
 		}
 
 		public List<FeedbackOption> FeedbackOptions { get; set; }
+
+		public bool AutoSendFeedback
+		{
+			get => _autoSendFeedback;
+			set
+			{
+				_autoSendFeedback = value;
+				if (value)
+				{
+					SetSegmentSupervisor();
+				}
+				else
+				{
+					ResetSegmentSupervisor();
+				}
+
+				OnPropertyChanged(nameof(AutoSendFeedback));
+			}
+		}
 
 		public int Rating
 		{
@@ -78,6 +99,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			set
 			{
 				if (_isSendFeedbackEnabled == value) return;
+				if (!value)
+				{
+					Rating = 0;
+					_segmentSupervisor.StopSupervising();
+					AutoSendFeedback = false;
+				}
 				_isSendFeedbackEnabled = value;
 				OnPropertyChanged(nameof(IsSendFeedbackEnabled));
 			}
@@ -95,7 +122,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand ClearCommand { get; }
-		public ICommand SendFeedbackCommand => _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(SendFeedbackToService));
+
+		public ICommand SendFeedbackCommand
+			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService()));
 
 
 		public void IncreaseRating()
@@ -125,12 +154,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private async Task SendFeedbackToService()
+		private async Task SendFeedbackToService(SegmentId? segmentId = null)
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var currentSegment = editorController.ActiveDocument.ActiveSegmentPair.Source.ToString();
-			var improvement = _segmentSupervisor.Improvements[currentSegment];
-			if (improvement == null) return;
+			var segment = segmentId ?? editorController.ActiveDocument.ActiveSegmentPair.Properties.Id;
+
+			if (!_segmentSupervisor.Improvements.ContainsKey(segment) && _rating == 0) return;
+
+			var improvement = _segmentSupervisor.Improvements[segment];
 
 			if (_translationService != null)
 			{
@@ -148,7 +179,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 						Comments = comments
 					}
 					: null;
-				await _translationService.SendFeedback(rating, improvement.OriginalTarget, improvement.Improvement);
+
+				if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
+				await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
 			}
 			else
 			{
@@ -265,6 +298,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public void SetSendFeedback(bool sendFeedback)
 		{
 			IsSendFeedbackEnabled = sendFeedback;
+
+			if (sendFeedback)
+			{
+				_segmentSupervisor.StartSupervising();
+			}
 		}
 	}
 }

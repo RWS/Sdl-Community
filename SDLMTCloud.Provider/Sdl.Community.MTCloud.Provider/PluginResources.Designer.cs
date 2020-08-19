@@ -81,6 +81,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto Send Feedback.
+        /// </summary>
+        public static string AutoSendFeedback {
+            get {
+                return ResourceManager.GetString("AutoSendFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap defaultStar {
@@ -97,6 +106,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("dictionaryIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Rating.
+        /// </summary>
+        public static string EnableRating {
+            get {
+                return ResourceManager.GetString("EnableRating", resourceCulture);
             }
         }
         
@@ -658,6 +676,15 @@ namespace Sdl.Community.MTCloud.Provider {
         
         /// <summary>
         ///   Looks up a localized string similar to To enable rating change the settings....
+        /// </summary>
+        public static string ToEnableRatingChangeTheSettings {
+            get {
+                return ResourceManager.GetString("ToEnableRatingChangeTheSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the SDL MT Cloud settings page..
         /// </summary>
         public static string Tooltip_DisabledMessage {
             get {

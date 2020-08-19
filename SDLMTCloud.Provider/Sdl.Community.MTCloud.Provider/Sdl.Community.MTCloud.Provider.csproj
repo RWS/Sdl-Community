@@ -77,6 +77,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.DesktopEditor.Control.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.DesktopEditor.EditorApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.DesktopEditor.EditorApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
@@ -189,6 +193,8 @@
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
+    <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
+    <Compile Include="Service\ImprovementAvailableEventArgs.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
