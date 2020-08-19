@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -16,10 +15,12 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		Icon = "Settings"
 	)]
 	[ActionLayout(typeof(ReportsViewerSettingsGroups), 10, DisplayType.Large)]
-	public class OpenSettingsAction : AbstractViewControllerAction<ReportsViewerController>
+	public class OpenSettingsAction : BaseReportAction
 	{
 		private PathInfo _pathInfo;
 		private ReportsViewerController _reportsViewerController;
+		private bool _canEnable;
+		private bool _isLoading;
 
 		protected override void Execute()
 		{
@@ -32,6 +33,12 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			{
 				_reportsViewerController.RefreshView();
 			}
+		}
+
+		public override void UpdateEnabled(bool loading)
+		{
+			_isLoading = loading;
+			SetEnabled();
 		}
 
 		private Settings GetSettings()
@@ -47,9 +54,16 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		public override void Initialize()
 		{
-			Enabled = true;
+			_canEnable = true;
 			_pathInfo = new PathInfo();
 			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
+
+			SetEnabled();
+		}		
+
+		private void SetEnabled()
+		{
+			Enabled = !_isLoading && _canEnable;
 		}
 	}
 }

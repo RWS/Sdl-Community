@@ -4,7 +4,6 @@ using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -18,11 +17,13 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		Icon = "Add"
 	)]
 	[ActionLayout(typeof(ReportsViewerReportGroups), 9, DisplayType.Large)]
-	public class AddReportAction : AbstractViewControllerAction<ReportsViewerController>
+	public class AddReportAction : BaseReportAction
 	{
 		private PathInfo _pathInfo;
 		private ImageService _imageService;
 		private ReportsViewerController _reportsViewerController;
+		private bool _canEnable;
+		private bool _isLoading;
 
 		protected override void Execute()
 		{		
@@ -38,6 +39,12 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			}
 		}
 
+		public override void UpdateEnabled(bool loading)
+		{
+			_isLoading = loading;
+			SetEnabled();
+		}
+
 		private Settings GetSettings()
 		{
 			if (File.Exists(_pathInfo.SettingsFilePath))
@@ -51,10 +58,17 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		public override void Initialize()
 		{
-			Enabled = true;
+			_canEnable = true;
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
+
+			SetEnabled();
+		}
+
+		private void SetEnabled()
+		{
+			Enabled = !_isLoading && _canEnable;
 		}
 	}
 }

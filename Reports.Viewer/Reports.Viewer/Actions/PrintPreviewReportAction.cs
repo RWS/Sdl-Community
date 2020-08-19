@@ -1,6 +1,8 @@
 ﻿using System.Windows;
-using Sdl.Desktop.IntegrationApi;
+using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
 {
@@ -11,16 +13,44 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		Icon = "PrintPreview"
 	)]
 	[ActionLayout(typeof(ReportsViewerReportGroups), 4, DisplayType.Normal)]
-	public class PrintPreviewReportAction : AbstractViewControllerAction<ReportsViewerController>
+	public class PrintPreviewReportAction : BaseReportAction
 	{
+		private PathInfo _pathInfo;
+		private ImageService _imageService;
+		private ReportsViewerController _reportsViewerController;
+		private bool _canEnable;
+		private bool _isLoading;
+
 		protected override void Execute()
 		{
 			MessageBox.Show("TODO");
 		}
 
+		public override void UpdateEnabled(bool loading)
+		{
+			_isLoading = loading;
+			SetEnabled();
+		}
+
 		public override void Initialize()
 		{
-			Enabled = false;
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
+			_reportsViewerController.ReportSelectionChanged += ReportsViewerController_ReportSelectionChanged;
+
+			SetEnabled();
+		}
+
+		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
+		{
+			_canEnable = e.SelectedReports?.Count > 0;
+			SetEnabled();
+		}
+
+		private void SetEnabled()
+		{
+			Enabled = !_isLoading && _canEnable;
 		}
 	}
 }

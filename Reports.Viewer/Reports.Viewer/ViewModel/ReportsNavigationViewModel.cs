@@ -49,7 +49,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			FilterString = string.Empty;
 		}
 
-		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
+		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
 		public ICommand ExpandAllCommand => _expandAllCommand ?? (_expandAllCommand = new CommandHandler(ExpandAll));
 
@@ -69,7 +69,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ReportViewModel ReportViewModel { get; internal set; }
 
-
 		public bool IsLoading
 		{
 			get => _isLoading;
@@ -84,6 +83,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(IsLoading));
 			}
 		}
+
 		public string ProjectLocalFolder
 		{
 			get => _projectLocalFolder;
@@ -190,9 +190,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_selectedReport = value;
 				OnPropertyChanged(nameof(SelectedReport));
 
-
 				ReportViewModel?.UpdateReport(_selectedReport);
 
+				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
+				{
+					SelectedReport = _selectedReport,
+					SelectedReports = _selectedReport != null ? new List<Report> { _selectedReport } : null
+				});
 
 				IsReportSelected = _selectedReport != null;
 			}
@@ -504,6 +508,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		protected virtual void OnReportSelectionChanged(ReportSelectionChangedEventArgs e)
+		{
+			ReportSelectionChanged?.Invoke(this, e);
 		}
 	}
 }

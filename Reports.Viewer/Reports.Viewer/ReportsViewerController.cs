@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Controls;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
@@ -14,6 +15,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Core;
 using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 
@@ -43,9 +45,29 @@ namespace Sdl.Community.Reports.Viewer
 		private ReportsController _controller;
 		private string _clientId;
 
+		private BaseReportAction _removeReportAction;
+		private BaseReportAction _addReportAction;
+		private BaseReportAction _editReportAction;
+		private BaseReportAction _openSettingsAction;
+		private BaseReportAction _pageSetupAction;
+		private BaseReportAction _printPreviewReportAction;
+		private BaseReportAction _printReportAction;
+		private BaseReportAction _refreshAction;
+		private BaseReportAction _saveAsReportAction;
+
 		protected override void Initialize(IViewContext context)
 		{
 			_clientId = Guid.NewGuid().ToString();
+
+			_removeReportAction = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
+			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
+			_editReportAction = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			_openSettingsAction = SdlTradosStudio.Application.GetAction<OpenSettingsAction>();
+			_pageSetupAction = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			_printPreviewReportAction = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			_printReportAction = SdlTradosStudio.Application.GetAction<PrintReportAction>();
+			_refreshAction = SdlTradosStudio.Application.GetAction<RefreshAction>();
+			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
 
 			_pathInfo = new PathInfo();
 			_controller = ReportsController.Instance;
@@ -77,7 +99,7 @@ namespace Sdl.Community.Reports.Viewer
 			return _reportViewControl;
 		}
 
-		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
+		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
 		public List<Report> GetSelectedReports()
 		{
@@ -136,6 +158,7 @@ namespace Sdl.Community.Reports.Viewer
 			};
 
 			_dataViewModel = new DataViewModel();
+			_dataViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_dataView = new DataView
 			{
 				DataContext = _dataViewModel
@@ -254,38 +277,51 @@ namespace Sdl.Community.Reports.Viewer
 
 			UpdateReportsNavigationViewModel();
 
-			EnableControls(true);
+			EnableControls(false);
 		}
 
 		private void Controller_ProjectChanging(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangingEventArgs e)
 		{
-			EnableControls(false);			
+			EnableControls(true);			
 		}
 
-		private void EnableControls(bool isEnabled)
+		private void EnableControls(bool isLoading)
 		{
 			if (_reportsNavigationViewControl.InvokeRequired)
 			{
-				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isEnabled);				
+				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isLoading);				
 			}
 			else
 			{			
 				if (_reportsNavigationViewControl != null)
 				{
-					if (!isEnabled)
+					if (isLoading)
 					{
 						_reports.Clear();
 						_reportsNavigationViewModel.Reports = _reports;
 					}
 
-					_reportsNavigationViewModel.IsLoading = !isEnabled;
-					_reportsNavigationViewControl.Enabled = isEnabled;
+					_reportsNavigationViewModel.IsLoading = isLoading;
+					_reportsNavigationViewControl.Enabled = !isLoading;
 				}
 
 				if (_reportViewControl != null)
 				{
-					_reportViewControl.Enabled = isEnabled;
+					_reportViewControl.Enabled = !isLoading;
 				}
+
+				_openSettingsAction.UpdateEnabled(isLoading);
+
+				_addReportAction.UpdateEnabled(isLoading);
+				_editReportAction.UpdateEnabled(isLoading);
+				_removeReportAction.UpdateEnabled(isLoading);
+
+				_printReportAction.UpdateEnabled(isLoading);
+				_pageSetupAction.UpdateEnabled(isLoading);
+				_printPreviewReportAction.UpdateEnabled(isLoading);
+				_saveAsReportAction.UpdateEnabled(isLoading);
+
+				_refreshAction.UpdateEnabled(isLoading);
 			}
 		}
 

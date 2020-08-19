@@ -50,6 +50,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\BaseReportAction.cs" />
     <Compile Include="Actions\PrintPreviewReportAction.cs" />
     <Compile Include="Actions\PageSetupAction.cs" />
     <Compile Include="Actions\PrintReportAction.cs" />

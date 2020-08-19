@@ -174,6 +174,7 @@
 			<DataGrid.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="Edit report properties" 
+							  IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 					          Command="{Binding EditReportCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
@@ -181,6 +182,7 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Remove report from project" 
+					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 					          Command="{Binding RemoveReportCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
@@ -188,7 +190,9 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}"
+					<MenuItem Header="Open folder in explorer" 
+					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          Command="{Binding OpenFolderCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/Folder.png"/>

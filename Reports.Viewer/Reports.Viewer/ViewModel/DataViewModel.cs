@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
+using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -22,7 +24,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
 		private ICommand _openFolderCommand;
-	
+
+		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
+
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
@@ -52,6 +56,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		public bool IsReportSelected => SelectedReports?.Cast<Report>().ToList().Count > 0;
+
 		public Report SelectedReport
 		{
 			get => _selectedReport;
@@ -59,6 +65,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_selectedReport = value;
 				OnPropertyChanged(nameof(SelectedReport));
+
+				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
+				{
+					SelectedReport = _selectedReport,
+					SelectedReports = SelectedReports?.Cast<Report>().ToList()
+				});
+
+				OnPropertyChanged(nameof(IsReportSelected));
 			}
 		}
 
@@ -70,8 +84,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_selectedReports = value;
 				OnPropertyChanged(nameof(SelectedReports));
 				OnPropertyChanged(nameof(StatusLabel));
+
+				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
+				{
+					SelectedReport = _selectedReport,
+					SelectedReports = _selectedReports?.Cast<Report>().ToList()
+				});
+
+				OnPropertyChanged(nameof(IsReportSelected));
 			}
 		}
+
+
 
 		public string StatusLabel
 		{
