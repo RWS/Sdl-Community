@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;

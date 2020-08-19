@@ -7,6 +7,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.Reports.Viewer.API.Events;
 using Sdl.Reports.Viewer.API.Model;
+using Sdl.Reports.Viewer.API.Services;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Reports.Viewer.API
@@ -15,13 +16,16 @@ namespace Sdl.Reports.Viewer.API
 	{
 		private static readonly Lazy<ReportsController> LazyController = new Lazy<ReportsController>(() => new ReportsController());
 		private static readonly object LockObject = new object();
+		private readonly ReportService _reportService;
 		private readonly ProjectsController _projectsController;
 		private List<Report> _reports;
 		private string _selectedProjectId;
 		private IProject _selectedProject;
+		//private CultureInfo _currentUICulture;
 
 		private ReportsController()
 		{
+			_reportService = new ReportService(new ProjectSettingsService());
 			_reports = new List<Report>();
 
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -30,7 +34,7 @@ namespace Sdl.Reports.Viewer.API
 			SelectedProject = _projectsController.CurrentProject
 							  ?? _projectsController.SelectedProjects.FirstOrDefault();
 
-			ReadProjectReports();
+			//_currentUICulture = Thread.CurrentThread.CurrentUICulture;
 		}
 
 		public static ReportsController Instance => LazyController.Value;
@@ -186,9 +190,12 @@ namespace Sdl.Reports.Viewer.API
 					return;
 				}
 
-				_selectedProject = value;
+				lock (LockObject)
+				{
+					_selectedProject = value;
 
-				ReadProjectReports();
+					ReadProjectReports();
+				}
 			}
 		}
 
@@ -206,7 +213,7 @@ namespace Sdl.Reports.Viewer.API
 
 		public string GetProjectLocalFolder()
 		{
-			var localProjectFolder = _selectedProject.GetProjectInfo().LocalProjectFolder.Trim('\\');			
+			var localProjectFolder = _selectedProject.GetProjectInfo().LocalProjectFolder.Trim('\\');
 			return localProjectFolder;
 		}
 
@@ -218,32 +225,41 @@ namespace Sdl.Reports.Viewer.API
 
 		private void ReadProjectReports()
 		{
-			lock (LockObject)
+			string projectId = null;
+
+			if (SelectedProject != null)
 			{
-				string projectId = null;
+				projectId = GetProjectId();
 
-				if (SelectedProject != null)
-				{
-					projectId = GetProjectId();
+				var settingsBundle = SelectedProject.GetSettings();
+				var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
+				var reports = SerializeProjectFiles(reportViewerProject.ReportsJson.Value);
 
-					var settingsBundle = SelectedProject.GetSettings();
-					var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
-					var reports = SerializeProjectFiles(reportViewerProject.ReportsJson.Value);
+				var overwrite = false;
+				// TODO: identify if we need to overwrite the existing studio reports 'always' when
+				// switching the selected project?
+				
+				//if (Thread.CurrentThread.CurrentUICulture.Name != _currentUICulture.Name)
+				//{
+				//	_currentUICulture = Thread.CurrentThread.CurrentUICulture;
+				//	overwrite = true;					
+				//}
 
-					_reports = reports;
-				}
-				else
-				{
-					_selectedProjectId = null;
-					_reports = new List<Report>();
-				}
+				reports.AddRange(_reportService.GetStudioReports(SelectedProject, overwrite));
 
-				ProjectChanged?.Invoke(this, new ProjectChangedEventArgs
-				{
-					ProjectId = projectId,
-					Reports = GetClonedReports()
-				});
+				_reports = reports;
 			}
+			else
+			{
+				_selectedProjectId = null;
+				_reports = new List<Report>();
+			}
+
+			ProjectChanged?.Invoke(this, new ProjectChangedEventArgs
+			{
+				ProjectId = projectId,
+				Reports = GetClonedReports()
+			});
 		}
 
 		private void UpdateProjectReports()
@@ -251,7 +267,7 @@ namespace Sdl.Reports.Viewer.API
 			var settingsBundle = SelectedProject.GetSettings();
 			var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
 
-			var reports = GetClonedReports();
+			var reports = GetClonedReports().Where(a => !a.IsStudioReport).ToList();
 
 			reportViewerProject.ReportsJson.Value = JsonConvert.SerializeObject(reports);
 
@@ -302,7 +318,6 @@ namespace Sdl.Reports.Viewer.API
 				existingReport.Name = clonedReport.Name;
 				existingReport.Description = clonedReport.Description;
 				existingReport.Path = clonedReport.Path;
-				existingReport.Xslt = clonedReport.Xslt;
 
 				clonedReports.Add(clonedReport);
 			}
@@ -356,7 +371,7 @@ namespace Sdl.Reports.Viewer.API
 		}
 
 		private void DeleteReportFiles(Report report)
-		{			
+		{
 			var reportsFolder = GetReportsViewerFolder();
 			if (!Directory.Exists(reportsFolder))
 			{
@@ -370,15 +385,7 @@ namespace Sdl.Reports.Viewer.API
 				if (File.Exists(reportFile))
 				{
 					File.Delete(reportFile);
-				}
-				if (!string.IsNullOrEmpty(report.Xslt))
-				{
-					var xsltFile = Path.Combine(localProjectFolder, report.Xslt);
-					if (File.Exists(xsltFile))
-					{
-						File.Delete(xsltFile);
-					}
-				}
+				}	
 			}
 			catch
 			{
@@ -390,6 +397,13 @@ namespace Sdl.Reports.Viewer.API
 		{
 			if (string.IsNullOrEmpty(report.Path) || !File.Exists(report.Path))
 			{
+				return;
+			}
+
+			if (report.IsStudioReport)
+			{
+				var localFolderPath = GetProjectLocalFolder();
+				report.Path = report.Path.Substring(localFolderPath.Length + 1);
 				return;
 			}
 
@@ -414,28 +428,12 @@ namespace Sdl.Reports.Viewer.API
 				File.Copy(report.Path, reportPath);
 				report.Path = $"{Constants.ReportsViewerFolderName}\\{Path.GetFileName(reportPath)}";
 			}
-
-			// Move xslt file to relative project folder
-			if (!string.IsNullOrEmpty(report.Xslt) && File.Exists(report.Xslt))
-			{
-				var xsltFolder = Path.GetDirectoryName(report.Xslt);
-				if (string.Compare(xsltFolder, Constants.ReportsViewerFolderName, StringComparison.InvariantCultureIgnoreCase) != 0)
-				{
-					var xsltName = Path.GetFileName(report.Xslt);
-					var xsltPath = Path.Combine(reportsFolder, xsltName);
-					if (!File.Exists(xsltPath))
-					{
-						File.Copy(report.Xslt, xsltPath);
-						report.Xslt = $"{Constants.ReportsViewerFolderName}\\{Path.GetFileName(xsltPath)}";
-					}
-				}
-			}
 		}
 
 		private static List<Report> SerializeProjectFiles(string value)
 		{
 			try
-			{				
+			{
 				var reports = JsonConvert.DeserializeObject<List<Report>>(value);
 				return reports?.ToList() ?? new List<Report>();
 			}

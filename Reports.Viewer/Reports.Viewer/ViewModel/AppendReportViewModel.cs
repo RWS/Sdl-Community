@@ -38,7 +38,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private string _path;
 		private string _xslt;
 
-
 		public AppendReportViewModel(Window window, Report report, Settings settings,
 			PathInfo pathInfo, ImageService imageService, IProject project)
 		{
@@ -73,7 +72,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			GroupName = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path;
-			Xslt = Report.Xslt;
+			//Xslt = Report.Xslt;
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new CommandHandler(SaveChanges));
@@ -253,7 +252,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Report.Group = GroupName;
 				Report.Description = Description;
 				Report.Path = Path;
-				Report.Xslt = Xslt;
+				//Report.Xslt = Xslt;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
 				_window.DialogResult = true;

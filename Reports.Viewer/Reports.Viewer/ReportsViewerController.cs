@@ -41,7 +41,7 @@ namespace Sdl.Community.Reports.Viewer
 		private BrowserViewModel _browserViewModel;
 		private PathInfo _pathInfo;
 		private ReportsController _controller;
-		private string _clientId;
+		private string _clientId;		
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -56,11 +56,7 @@ namespace Sdl.Community.Reports.Viewer
 
 			_reports = _controller.GetReports();
 
-			if (_reportsNavigationViewModel != null)
-			{
-				_reportsNavigationViewModel.Reports = _reports;
-				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
-			}
+			UpdateReportsNavigationViewModel();		
 		}
 		
 		protected override Control GetExplorerBarControl()
@@ -216,6 +212,15 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.Reports = _reports;
 		}
 
+		private void UpdateReportsNavigationViewModel()
+		{
+			if (_reportsNavigationViewModel != null)
+			{
+				_reportsNavigationViewModel.Reports = _reports;
+				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
+			}
+		}
+
 		private void Controller_ReportsRemoved(object sender, Sdl.Reports.Viewer.API.Events.ReportsRemovedEventArgs e)
 		{
 			if (e.ClientId != _clientId && e.Reports != null)
@@ -229,10 +234,8 @@ namespace Sdl.Community.Reports.Viewer
 			if (e.ClientId != _clientId && e.Reports != null)
 			{
 				_reports.AddRange(e.Reports);
-				if (_reportsNavigationViewModel != null)
-				{
-					_reportsNavigationViewModel.Reports = _reports;
-				}
+
+				UpdateReportsNavigationViewModel();
 			}
 		}
 
@@ -248,11 +251,7 @@ namespace Sdl.Community.Reports.Viewer
 		{
 			_reports = e.Reports;
 
-			if (_reportsNavigationViewModel != null)
-			{
-				_reportsNavigationViewModel.Reports = _reports;				
-				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
-			}			
+			UpdateReportsNavigationViewModel();
 		}
 
 		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)

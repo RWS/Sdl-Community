@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.View;

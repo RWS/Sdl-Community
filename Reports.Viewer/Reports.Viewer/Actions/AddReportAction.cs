@@ -6,7 +6,6 @@ using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 

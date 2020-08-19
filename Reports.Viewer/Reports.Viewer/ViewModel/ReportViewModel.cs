@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel

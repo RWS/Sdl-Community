@@ -13,8 +13,9 @@ namespace Sdl.Reports.Viewer.API.Model
 		private string _description;
 		private string _path;
 		private DateTime _date;
-		private string _xslt;
 		private bool _isSelected;
+		private bool _isStudioReport;
+		private string _templateId;
 
 		public Report()
 		{
@@ -112,26 +113,26 @@ namespace Sdl.Reports.Viewer.API.Model
 				OnPropertyChanged(nameof(Path));
 			}
 		}
-
-		public virtual string Xslt
+		
+		public virtual string TemplateId
 		{
-			get => _xslt;
+			get => _templateId;
 			set
 			{
-				if (_xslt == value)
+				if (_templateId == value)
 				{
 					return;
 				}
 
-				_xslt = value;
-				OnPropertyChanged(nameof(Xslt));
+				_templateId = value;
+				OnPropertyChanged(TemplateId);
 			}
 		}
 
 		public virtual DateTime Date
 		{
 			get => _date;
-			internal set
+			set
 			{
 				_date = value;
 
@@ -185,16 +186,21 @@ namespace Sdl.Reports.Viewer.API.Model
 				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
-
+		
 		public virtual bool IsStudioReport
 		{
-			get
+			get => _isStudioReport;
+			internal set
 			{
-				var reportsFolderName = System.IO.Path.GetDirectoryName(Path);
-				return string.Compare(reportsFolderName, Constants.ReportsFolderName, 
-					       StringComparison.InvariantCultureIgnoreCase) == 0;
+				if (_isStudioReport == value)
+				{
+					return;
+				}
+
+				_isStudioReport = value;
+				OnPropertyChanged(nameof(IsStudioReport));
 			}
-		}
+		}		
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -214,8 +220,9 @@ namespace Sdl.Reports.Viewer.API.Model
 				Language = Language,
 				Date = new DateTime(Date.Ticks),
 				Path = Path,
-				Xslt = Xslt,
-				IsSelected = IsSelected
+				IsStudioReport = IsStudioReport,
+				IsSelected = IsSelected,
+				TemplateId = TemplateId
 			};
 		}
 	}
