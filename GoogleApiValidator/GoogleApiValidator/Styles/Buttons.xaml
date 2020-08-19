@@ -11,6 +11,7 @@
 		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
 		<Setter Property="Focusable" Value="False" />
 		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Cursor" Value="Hand"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 
 		<Setter Property="Template">
@@ -65,6 +66,7 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="10,5"/>
+		<Setter Property="Cursor" Value="Hand"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
@@ -103,6 +105,7 @@
 		<Setter Property="BorderThickness" Value="0,0,0,2"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Cursor" Value="Hand"/>
 		<Setter Property="Padding" Value="10,5"/>
 		<Setter Property="Template">
 			<Setter.Value>
@@ -145,6 +148,7 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="10,5"/>
+		<Setter Property="Cursor" Value="Hand"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">

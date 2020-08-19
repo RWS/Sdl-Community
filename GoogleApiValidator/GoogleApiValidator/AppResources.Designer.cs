@@ -61,6 +61,61 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter yout Google Translate API key into the field bellow and press Validate button.
+        /// </summary>
+        public static string ApiKeyDescription {
+            get {
+                return ResourceManager.GetString("ApiKeyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select against what version of Google Translate API you want to validate the API Key.
+        /// </summary>
+        public static string ApiVersionDescription {
+            get {
+                return ResourceManager.GetString("ApiVersionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string CloseBtn {
+            get {
+                return ResourceManager.GetString("CloseBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon GAV {
+            get {
+                object obj = ResourceManager.GetObject("GAV", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Response.
+        /// </summary>
+        public static string GoogleResponseDescription {
+            get {
+                return ResourceManager.GetString("GoogleResponseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validate.
+        /// </summary>
+        public static string ValidateBtn {
+            get {
+                return ResourceManager.GetString("ValidateBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string WindowsControl_Close {

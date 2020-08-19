@@ -4,10 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:styles ="clr-namespace:Sdl.Community.GoogleApiValidator.Styles"
+		xmlns:resx="clr-namespace:Sdl.Community.GoogleApiValidator"
         mc:Ignorable="d"
+		Icon="../Resources/GAV.ico"
 		WindowStartupLocation="CenterScreen"
+		DataContext="{StaticResource MainViewModel}"
         WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
         Title="Google API Validator" Height="450" Width="800">
+
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
 		<Grid Margin="1,0,0,0">
 			<Grid.ColumnDefinitions>
@@ -16,13 +20,56 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
 			<Border Grid.Column="0" Grid.Row="1" Margin="0,0,0,20" >
-				<TextBox>test</TextBox>
+				<StackPanel Margin="10">
+					<TextBlock 
+						Style="{StaticResource Description}"
+						Margin="10 0" 
+						Text="{x:Static resx:AppResources.ApiVersionDescription}"/>
+					<ComboBox
+						ItemsSource="{Binding ApiVersions}"
+						SelectedItem="{Binding SelectedVersion}"
+						Margin="10"
+						Width="250"
+						HorizontalAlignment="Left"
+						DisplayMemberPath="Name"/>
+					<TextBlock  
+						Margin="10 0"  
+						Style="{StaticResource Description}"
+						Text="{x:Static resx:AppResources.ApiKeyDescription}"/>
+
+					<TextBox
+						Width="300"
+						Margin="10 10"
+						Height="30"
+						VerticalContentAlignment="Center"
+						HorizontalAlignment="Left"
+						Text="{Binding ApiKey}"/>
+
+					<TextBlock
+						Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+						Margin="10 0" FontSize="16"
+						Text="{x:Static resx:AppResources.GoogleResponseDescription}"/>
+				</StackPanel>
 			</Border>
+			<TextBlock 
+				Margin="10 0"
+				Grid.Row="2" Text="{Binding GoogleResponse}"/>
+			<DockPanel Grid.Row="3" LastChildFill="False" HorizontalAlignment="Right">
+
+				<Button
+					Command="{Binding ValidateCommand}"
+					Style="{StaticResource SdlPrimaryButtonStyle}" 
+					Content="{x:Static resx:AppResources.ValidateBtn}"
+				    Width="100"
+				    Margin="10"/>
+			</DockPanel>
 		</Grid>
 	</Border>
 </Window>

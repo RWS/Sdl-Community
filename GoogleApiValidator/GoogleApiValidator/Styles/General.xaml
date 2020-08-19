@@ -50,6 +50,14 @@
 	<SolidColorBrush x:Key="WindowsControl.Command.Highlight.Text" Color="#0D1E2D" />
 	<SolidColorBrush x:Key="WindowsControl.Command.Forground" Color="#5D6E7F" />
 	<SolidColorBrush x:Key="WindowsControl.Navigation.Backround" Color="#F6F6F6" />
+	
+	<!-- Font Family-->
+	<FontFamily x:Uid="FontFamily_1" x:Key="FontFamily">Segoe UI</FontFamily>
+	<!-- Shared colors-->
+	<SolidColorBrush x:Uid="SolidColorBrush_1" x:Key="TitleColor">#0096D6</SolidColorBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_2" x:Key="InformationTitleColor">#303030</SolidColorBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_3" x:Key="TextColor">#0D1E2D</SolidColorBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_4" x:Key="DisableTextColor">#A2A2A2</SolidColorBrush>
 
 	<Style x:Uid="SdlHyperlink" x:Key="SdlHyperlinkStyle" TargetType="Hyperlink">
 		<Setter x:Uid="Setter_21" Property="FontFamily" Value="Segoe UI" />
@@ -67,8 +75,32 @@
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Control.Text}"/>
 	</Style>
-	<Style x:Key="PaginationTextBlock" TargetType="TextBlock">
+	<Style x:Key="Description" TargetType="TextBlock">
 		<Setter Property="FontFamily" Value="Segoe UI"/>
-		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="FontSize" Value="13"/>
 	</Style>
+	
+	<Style x:Uid="Style_3" x:Key="Sdl.TextBlock.InformationTitleStyle" TargetType="TextBlock">
+		<Setter x:Uid="Setter_11" Property="FontSize" Value="11"/>
+		<Setter x:Uid="Setter_12" Property="FontStretch" Value="ExtraExpanded"/>
+		<Setter x:Uid="Setter_13" Property="FontFamily" Value="{StaticResource FontFamily}"/>
+		<Setter x:Uid="Setter_14" Property="Foreground" Value="{StaticResource InformationTitleColor}"/>
+		<Setter x:Uid="Setter_15" Property="FontWeight" Value="Bold"/>
+		<Setter x:Uid="Setter_16" Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	
+	<Style x:Uid="Style_1" x:Key="Sdl.TextBlock.TitleStyle" TargetType="TextBlock">
+		<Setter x:Uid="Setter_1" Property="FontSize" Value="36"/>
+		<Setter x:Uid="Setter_2" Property="FontFamily" Value="{StaticResource FontFamily}"/>
+		<Setter x:Uid="Setter_3" Property="Foreground" Value="{StaticResource TitleColor}"/>
+		<Setter x:Uid="Setter_4" Property="FontWeight" Value="Light"/>
+		<Setter x:Uid="Setter_5" Property="TextWrapping" Value="WrapWithOverflow"/>
+	</Style>
+	
+	<Style x:Uid="Style_7" TargetType="TextBlock" x:Key="Sdl.TextBlock.ErrorTitleStyle" BasedOn="{StaticResource Sdl.TextBlock.InformationTitleStyle}" >
+		<Setter x:Uid="Setter_38" Property="Foreground" Value="Red"/>
+		<Setter x:Uid="Setter_39" Property="TextWrapping" Value="WrapWithOverflow"/>
+		<Setter x:Uid="Setter_40" Property="FontWeight" Value="Normal"/>
+	</Style>
+	
 </ResourceDictionary>
