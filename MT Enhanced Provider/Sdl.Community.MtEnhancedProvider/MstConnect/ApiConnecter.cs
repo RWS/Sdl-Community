@@ -21,15 +21,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private static string _authToken;
 		private static DateTime _tokenExpiresAt; //to keep track of when token expires
 		public static List<string> SupportedLangs { get; set; }
-		private MtTranslationOptions _options;
-		private string _subscriptionKey = string.Empty;
-		private static readonly string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
+		private string _subscriptionKey;
+		private const string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
 
 		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-		private Constants _constants = new Constants();
+		private readonly Constants _constants = new Constants();
 
-		private Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
@@ -37,8 +36,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <param name="options"></param>
 		internal ApiConnecter(MtTranslationOptions options)
 		{
-			_options = options;
-			_subscriptionKey = _options.ClientId;
+			_subscriptionKey = options.ClientId;
 			if (_authToken == null)
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
@@ -54,7 +52,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// </summary>
 		/// <param name="cid">the client Id obtained from Microsoft</param>
 		/// <param name="cst">the client secret obtained from Microsoft</param>
-		internal void resetCrd(string cid, string cst)
+		internal void ResetCrd(string cid, string cst)
 		{
 			_subscriptionKey = cid;
 		}
@@ -68,12 +66,11 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <param name="categoryId"></param>
 		/// <param name="format"></param>
 		/// <returns></returns>
-		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId,
-			string format)
+		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
 		{
 			//convert our language codes
-			var sourceLc = convertLangCode(sourceLang);
-			var targetLc = convertLangCode(targetLang);
+			var sourceLc = ConvertLangCode(sourceLang);
+			var targetLc = ConvertLangCode(targetLang);
 
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
@@ -163,11 +160,11 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 					}
 				}
 			}
-			var splitedText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
+			var splitText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
 			var positions = new List<int>();
-			for (var i = 0; i < splitedText.Count; i++)
+			for (var i = 0; i < splitText.Count; i++)
 			{
-				if (!splitedText[i].Contains("tg"))
+				if (!splitText[i].Contains("tg"))
 				{
 					positions.Add(i);
 				}
@@ -175,13 +172,13 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 			foreach (var position in positions)
 			{
-				var originalString = splitedText[position];
+				var originalString = splitText[position];
 				var start = Regex.Replace(originalString, "<", "&lt;");
 				var finalString = Regex.Replace(start, ">", "&gt;");
-				splitedText[position] = finalString;
+				splitText[position] = finalString;
 			}
 			var finalText = string.Empty;
-			foreach (var text in splitedText)
+			foreach (var text in splitText)
 			{
 				finalText += text;
 			}
@@ -194,17 +191,17 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <param name="sourceLang"></param>
 		/// <param name="targetLang"></param>
 		/// <returns></returns>
-		internal bool isSupportedLangPair(string sourceLang, string targetLang)
+		internal bool IsSupportedLangPair(string sourceLang, string targetLang)
 		{
 			//convert our language codes
-			var source = convertLangCode(sourceLang);
-			var target = convertLangCode(targetLang);
+			var source = ConvertLangCode(sourceLang);
+			var target = ConvertLangCode(targetLang);
 
 			var sourceSupported = false;
 			var targetSupported = false;
 
 			//check to see if both the source and target languages are supported
-			foreach (string lang in SupportedLangs)
+			foreach (var lang in SupportedLangs)
 			{
 				if (lang.Equals(source)) sourceSupported = true;
 				if (lang.Equals(target)) targetSupported = true;
@@ -256,7 +253,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			Console.WriteLine("{0}: {1}", message, e);
 
 			// Obtain detailed error information
-			var strResponse = string.Empty;
+			string strResponse;
 			using (var response = (HttpWebResponse)e.Response)
 			{
 				using (var responseStream = response.GetResponseStream())
@@ -267,7 +264,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 					}
 				}
 			}
-			return string.Format("Http status code={0}, error message={1}", e.Status, strResponse);
+			return $"Http status code={e.Status}, error message={strResponse}";
 		}
 
 		private string GetAuthToken()
@@ -295,6 +292,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		public async Task<string> GetAccessTokenAsync()
 		{
+			if (!string.IsNullOrWhiteSpace(_authToken)) return _authToken;
 			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
 
 			using (var client = new HttpClient())
@@ -302,7 +300,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				request.Method = HttpMethod.Post;
 				request.RequestUri = ServiceUrl;
-				request.Content = new StringContent(string.Empty);
 				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
 				var response = await client.SendAsync(request);
 				response.EnsureSuccessStatusCode();
@@ -313,7 +310,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 		}
 
-		private string convertLangCode(string languageCode)
+		private string ConvertLangCode(string languageCode)
 		{
 			//takes the language code input and converts it to one that MS Translate can use
 			if (languageCode.Contains("sr-Cyrl")) return "sr-Cyrl";
@@ -327,58 +324,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 			return ci.TwoLetterISOLanguageName;
 
-		}
-
-		/// <summary>
-		/// This method can be used to add translations to the microsoft server.  It is currently not implemented in the plugin
-		/// </summary>
-		/// <param name="originalText">The original source text.</param>
-		/// <param name="translatedText">The updated transated target text.</param>
-		/// <param name="sourceLang">The source languge.</param>
-		/// <param name="targetLang">The target language.</param>
-		/// <param name="user">The MST user to associate the update with (see MS Translator documentation).</param>
-		/// <param name="rating">The rating to associate with the update (see MS Translator documentation).</param>
-		internal void AddTranslationMethod(string originalText, string translatedText, string sourceLang, string targetLang, string user, string rating)
-		{
-			//convert our language codes
-			var from = convertLangCode(sourceLang);
-			var to = convertLangCode(targetLang);
-
-			//check to see if token is null
-			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
-
-
-			HttpWebRequest httpWebRequest = null;
-			WebResponse response = null;
-
-			string addTranslationuri = "http://api.microsofttranslator.com/V2/Http.svc/AddTranslation?originaltext=" + originalText
-								+ "&translatedtext=" + translatedText
-								+ "&from=" + from
-								+ "&to=" + to
-								+ "&user=" + user
-								+ "&rating=" + rating;
-
-			httpWebRequest = (HttpWebRequest)WebRequest.Create(addTranslationuri);
-			httpWebRequest.Headers.Add("Authorization", _authToken);
-
-			try
-			{
-				response = httpWebRequest.GetResponse();
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{_constants.AddTranslationMethod} {ex.Message}\n { ex.StackTrace}");
-			}
-			finally
-			{
-				if (response != null)
-				{
-					response.Close();
-					response = null;
-				}
-			}
 		}
 	}
 }
