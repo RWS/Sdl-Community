@@ -17,11 +17,11 @@ namespace Sdl.Reports.Viewer.API.Services
 	{
 		private readonly List<ReportDefinition> _thirdPartyReportDefinitions;
 		private readonly ProjectSettingsService _projectSettingsService;
-
+		
 		public ReportService(ProjectSettingsService projectSettingsService)
 		{
 			_projectSettingsService = projectSettingsService;
-			_thirdPartyReportDefinitions = GetThirdPartyReportDefinitions();
+			_thirdPartyReportDefinitions = GetThirdPartyReportDefinitions();			
 		}
 
 		public IEnumerable<Report> GetStudioReports(IProject project, bool overwrite)
@@ -30,7 +30,7 @@ namespace Sdl.Reports.Viewer.API.Services
 
 			var reports = new List<Report>();
 			if (project is FileBasedProject fileBasedProject)
-			{
+			{				
 				var studioReports = _projectSettingsService.GetProjectTaskReports(fileBasedProject.FilePath);
 				foreach (var studioReport in studioReports)
 				{

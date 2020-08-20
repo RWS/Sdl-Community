@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -22,9 +23,13 @@ namespace Sdl.Reports.Viewer.API
 		private List<Report> _reports;
 		private string _currentProjectId;
 		private IProject _selectedProject;
+		private readonly ProjectCultureCacheService _projectCultureCacheService;
+		private readonly PathInfo _pathInfo;
 
 		private ReportsController()
 		{
+			_pathInfo = new PathInfo();
+			_projectCultureCacheService = new ProjectCultureCacheService(_pathInfo);
 			_reportService = new ReportService(new ProjectSettingsService());
 			_reports = new List<Report>();
 
@@ -243,16 +248,7 @@ namespace Sdl.Reports.Viewer.API
 					var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
 					var reports = SerializeProjectFiles(reportViewerProject.ReportsJson.Value);
 
-					var overwrite = true;
-					// TODO: identify if we need to overwrite the existing studio reports 'always' when
-					// switching the selected project?
-
-					//if (Thread.CurrentThread.CurrentUICulture.Name != _currentUICulture.Name)
-					//{
-					//	_currentUICulture = Thread.CurrentThread.CurrentUICulture;
-					//	overwrite = true;					
-					//}
-
+					var overwrite = OverwriteExistingReports(projectId);
 					reports.AddRange(_reportService.GetStudioReports(SelectedProject, overwrite));
 
 					_reports = reports;
@@ -271,6 +267,39 @@ namespace Sdl.Reports.Viewer.API
 			}
 
 			await Task.CompletedTask;
+		}
+
+		private bool OverwriteExistingReports(string projectId)
+		{			
+			var projectCultureCache = _projectCultureCacheService.GetProjectCultureCache();
+			var projectCulture = projectCultureCache.FirstOrDefault(a => a.ProjectId == projectId);
+			if (projectCulture != null)
+			{
+				if (Thread.CurrentThread.CurrentUICulture.Name != projectCulture.UICultureName)
+				{
+					projectCulture.CultureName = Thread.CurrentThread.CurrentCulture.Name;
+					projectCulture.UICultureName = Thread.CurrentThread.CurrentUICulture.Name;
+
+					_projectCultureCacheService.UpdateProjectCultureCache(projectCultureCache);
+
+					return true;
+				}				
+			}
+			else
+			{
+				projectCultureCache.Add(new ProjectCulture
+				{
+					ProjectId = projectId,
+					CultureName = Thread.CurrentThread.CurrentCulture.Name,
+					UICultureName = Thread.CurrentThread.CurrentUICulture.Name
+				});
+
+				_projectCultureCacheService.UpdateProjectCultureCache(projectCultureCache);
+
+				return true;
+			}
+
+			return false;
 		}
 
 		private void UpdateProjectReports()

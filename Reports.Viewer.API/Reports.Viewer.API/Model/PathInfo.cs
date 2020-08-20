@@ -15,6 +15,7 @@ namespace Sdl.Reports.Viewer.API.Model
 		private const string SettingsPathName = "Settings";
 		private const string LogsPathName = "Logs";
 		private const string SettingsFileName = "Settings.xml";
+		private const string ProjectCultureCacheName = "ProjectCultureCache.xml";
 
 		private string _sdlCommunityFolderPath;
 		private string _applicationFolderPath;
@@ -101,13 +102,6 @@ namespace Sdl.Reports.Viewer.API.Model
 
 		public string SettingsFilePath => Path.Combine(SettingsFolderPath, SettingsFileName);
 
-		public string GetReportsPath(string projectFolder)
-		{
-			var path = string.Empty;
-
-		
-
-			return path;
-		}
+		public string ProjectCultureCachePath => Path.Combine(SettingsFolderPath, ProjectCultureCacheName);
 	}
 }

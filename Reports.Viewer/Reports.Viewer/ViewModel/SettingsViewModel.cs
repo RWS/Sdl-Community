@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
