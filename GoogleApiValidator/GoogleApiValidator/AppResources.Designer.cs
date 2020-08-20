@@ -61,6 +61,15 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All fields are required.
+        /// </summary>
+        public static string AllFieldsRequired {
+            get {
+                return ResourceManager.GetString("AllFieldsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter yout Google Translate API key into the field bellow and press Validate button.
         /// </summary>
         public static string ApiKeyDescription {
@@ -107,6 +116,15 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GOOGLE_APPLICATION_CREDENTIALS.
+        /// </summary>
+        public static string GoogleApiEnvironmentVariableName {
+            get {
+                return ResourceManager.GetString("GoogleApiEnvironmentVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Google Response.
         /// </summary>
         public static string GoogleResponseDescription {
@@ -116,11 +134,47 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Key is valid.
+        ///   Looks up a localized string similar to Invalid project name..
+        /// </summary>
+        public static string InvalidProjectName {
+            get {
+                return ResourceManager.GetString("InvalidProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Json file could not be found at the specified path..
+        /// </summary>
+        public static string JsonFileMessage {
+            get {
+                return ResourceManager.GetString("JsonFileMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Key is valid..
         /// </summary>
         public static string SuccessMsg {
             get {
                 return ResourceManager.GetString("SuccessMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the path where the json file asociated to your API Key  is saved locally.
+        /// </summary>
+        public static string V3JsonPathDescription {
+            get {
+                return ResourceManager.GetString("V3JsonPathDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter project name.
+        /// </summary>
+        public static string V3ProjectNameDescription {
+            get {
+                return ResourceManager.GetString("V3ProjectNameDescription", resourceCulture);
             }
         }
         

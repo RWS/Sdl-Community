@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Converters\EmptyToVisibility.cs" />
+    <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
     <Compile Include="Model\GoogleApiVersion.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Properties\Annotations.cs" />

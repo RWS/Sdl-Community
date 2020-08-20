@@ -35,46 +35,69 @@
 						Margin="10"
 						FontSize="15"
 						HorizontalAlignment="Center"/>
-					<TextBlock 
-						Style="{StaticResource Description}"
-						Margin="10 0" 
-						Text="{x:Static resx:AppResources.ApiVersionDescription}"/>
-					<ComboBox
-						FontFamily="Segoe UI"
-						ItemsSource="{Binding ApiVersions}"
-						SelectedItem="{Binding SelectedVersion}"
-						Margin="10"
-						Width="300"
-						HorizontalAlignment="Left"
-						DisplayMemberPath="Name"/>
-					<TextBlock  
-						Margin="10 0"  
-						Style="{StaticResource Description}"
-						Text="{x:Static resx:AppResources.ApiKeyDescription}"/>
-					<PasswordBox Style="{DynamicResource MahApps.Styles.PasswordBox.Button.Revealed}"
-					             Width="300"
-					             Margin="10 10"
-					             VerticalContentAlignment="Center"
-					             HorizontalAlignment="Left"
-					             Controls:TextBoxHelper.UseFloatingWatermark="True"  
-					             Controls:TextBoxHelper.Watermark="API Key"
-					             Controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(Controls:TextBoxHelper.HasText), Mode=OneWay}"
-					             Controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					             utils:PasswordHelper.Attach="True" 
-					             utils:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
-					             IsEnabled="True">
-					</PasswordBox>
+						<TextBlock 
+								Style="{StaticResource Description}"
+								Margin="10 0" 
+								Text="{x:Static resx:AppResources.ApiVersionDescription}"/>
+						<ComboBox
+							FontFamily="Segoe UI"
+							ItemsSource="{Binding ApiVersions}"
+							SelectedItem="{Binding SelectedVersion}"
+							Margin="10"
+							Width="300"
+							HorizontalAlignment="Left"
+							DisplayMemberPath="Name"/>
+					
+						<!--V2 API-->
+						<StackPanel Visibility="{Binding V2Selected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+							<TextBlock  
+								Margin="10 0"  
+								Style="{StaticResource Description}"
+								Text="{x:Static resx:AppResources.ApiKeyDescription}"/>
+							<PasswordBox Style="{DynamicResource MahApps.Styles.PasswordBox.Button.Revealed}"
+										 Width="300"
+										 Margin="10 10"
+										 VerticalContentAlignment="Center"
+										 HorizontalAlignment="Left"
+										 Controls:TextBoxHelper.UseFloatingWatermark="True"  
+										 Controls:TextBoxHelper.Watermark="API Key"
+										 Controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(Controls:TextBoxHelper.HasText), Mode=OneWay}"
+										 Controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+										 utils:PasswordHelper.Attach="True" 
+										 utils:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
+										 IsEnabled="True">
+							</PasswordBox>
+						</StackPanel>
+					
+					<!--V3 API-->
+					<StackPanel Visibility="{Binding V2Selected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
+						<TextBlock 
+							Style="{StaticResource Description}"
+							Margin="10 10 0 0" 
+							Text="{x:Static resx:AppResources.V3JsonPathDescription}"/>
+						<TextBox Controls:TextBoxHelper.Watermark="Json file path"
+						         Margin="10 10"
+								 Text="{Binding JsonFilePath}"/>
+						<TextBlock 
+							Style="{StaticResource Description}"
+							Margin="10 10" 
+							Text="{x:Static resx:AppResources.V3ProjectNameDescription}"/>
+						<TextBox Controls:TextBoxHelper.Watermark="Project Name"
+						         Margin="10 0"
+						         Text="{Binding ProjectName}"/>
+				</StackPanel>
 
 					<TextBlock
 						Style="{StaticResource Sdl.TextBlock.TitleStyle}"
-						Margin="10 0 0 0" FontSize="16"
+						Margin="10 10 0 0" FontSize="16"
 						Text="{x:Static resx:AppResources.GoogleResponseDescription}"
 						Visibility="{Binding GoogleResponse,Converter={StaticResource EmptyToVisibility}}"
 						/>
 				</StackPanel>
 			<TextBlock 
 				Margin="20 0 0 0"
-				Grid.Row="2" Text="{Binding GoogleResponse}"/>
+				Grid.Row="2" Text="{Binding GoogleResponse}"
+				TextWrapping="WrapWithOverflow"/>
 			<DockPanel Grid.Row="3" LastChildFill="False" HorizontalAlignment="Right">
 
 				<Button

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
+using Google.Api.Gax.ResourceNames;
+using Google.Cloud.Translate.V3;
 using Google.Cloud.Translation.V2;
 using Sdl.Community.GoogleApiValidator.Commands;
 using Sdl.Community.GoogleApiValidator.Model;
@@ -16,6 +19,9 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 	    private string _apyKey;
 	    private string _message;
 	    private string _googleResponse;
+	    private string _jsonFilePath;
+	    private string _projectName;
+	    private bool _v2Selected;
 
 		public MainWindowViewModel()
 	    {
@@ -34,6 +40,7 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 			};
 
 		    _selectedVersion = _apiVersions[0];
+		    _v2Selected = true;
 	    }
 
 	    public ObservableCollection<GoogleApiVersion> ApiVersions
@@ -52,6 +59,9 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 		    set
 		    {
 			    _selectedVersion = value;
+			    V2Selected = value.Version == Enums.Version.V2;
+			    Message = string.Empty;
+			    GoogleResponse = string.Empty;
 			    OnPropertyChanged(nameof(SelectedVersion));
 		    }
 	    }
@@ -89,36 +99,125 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 			    OnPropertyChanged(nameof(GoogleResponse));
 		    }
 	    }
+
+	    public string JsonFilePath
+	    {
+		    get => _jsonFilePath;
+		    set
+		    {
+			    if (_jsonFilePath == value) return;
+			    _jsonFilePath = value;
+			    OnPropertyChanged(nameof(JsonFilePath));
+		    }
+	    }
+
+	    public string ProjectName
+	    {
+		    get => _projectName;
+		    set
+		    {
+			    if (_projectName == value) return;
+			    _projectName = value;
+			    OnPropertyChanged(nameof(ProjectName));
+		    }
+	    }
+
+	    public bool V2Selected
+	    {
+		    get => _v2Selected;
+		    set
+		    {
+			    if (_v2Selected == value) return;
+			    _v2Selected = value;
+			    OnPropertyChanged(nameof(V2Selected));
+		    }
+	    }
+
 	    public ICommand ValidateCommand => _validateCommand ?? (_validateCommand = new CommandHandler(ValidateKey, true));
 
 	    private void ValidateKey()
 	    {
 		    Message = string.Empty;
 
+		    if (SelectedVersion.Version == Enums.Version.V2)
+		    {
+			    ValidateV2();
+		    }
+		    else
+		    {
+			    ValidateV3();
+		    }
+	    }
+
+	    private void ValidateV3()
+	    {
+		    if (IsWindowValid())
+		    {
+			    if (File.Exists(JsonFilePath))
+			    {
+					Environment.SetEnvironmentVariable(AppResources.GoogleApiEnvironmentVariableName, JsonFilePath);
+				    try
+				    {
+					    var translationServiceClient = TranslationServiceClient.Create();
+					    var request = new TranslateTextRequest
+					    {
+						    Contents =
+						    {
+							    "test"
+						    },
+						    TargetLanguageCode = "fr-FR",
+						    Parent = new ProjectName(ProjectName).ToString()
+
+					    };
+					    var response = translationServiceClient.TranslateText(request);
+					    if (response != null)
+					    {
+							GoogleResponse = AppResources.SuccessMsg;
+						}
+					}
+				    catch (Exception e)
+				    {
+					    GoogleResponse = e.Message.Contains("Invalid resource name") ? AppResources.InvalidProjectName : e.Message;
+				    }
+				}
+			    else
+			    {
+				    Message = AppResources.JsonFileMessage;
+			    }
+		    }
+		    else
+		    {
+			    Message = AppResources.AllFieldsRequired;
+		    }
+	    }
+
+	    private void ValidateV2()
+	    {
 		    if (string.IsNullOrEmpty(ApiKey))
 		    {
 			    Message = AppResources.EmptyKey;
 		    }
 		    else
 		    {
-			    if (SelectedVersion.Version == Enums.Version.V2)
+			    try
 			    {
-				    try
+				    var client = TranslationClient.CreateFromApiKey(ApiKey);
+				    var response = client.TranslateText("", "ru", "en");
+				    if (response != null)
 				    {
-					    var client = TranslationClient.CreateFromApiKey(ApiKey);
-					    var response = client.TranslateText("","ru","en");
-					    if (response != null)
-					    {
-						    GoogleResponse = AppResources.SuccessMsg;
-					    }
-				    }
-				    catch (Exception e)
-				    {
-					    GoogleResponse = e.Message;
+					    GoogleResponse = AppResources.SuccessMsg;
 				    }
 			    }
+			    catch (Exception e)
+			    {
+				    GoogleResponse = e.Message;
+			    }
 		    }
+	    }
 
+	    private bool IsWindowValid()
+	    {
+		    return !(string.IsNullOrEmpty(JsonFilePath) || string.IsNullOrEmpty(ProjectName));
 	    }
     }
 }

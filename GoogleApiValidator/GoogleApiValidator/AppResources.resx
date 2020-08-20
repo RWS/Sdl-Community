@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllFieldsRequired" xml:space="preserve">
+    <value>All fields are required</value>
+  </data>
   <data name="ApiKeyDescription" xml:space="preserve">
     <value>Enter yout Google Translate API key into the field bellow and press Validate button</value>
   </data>
@@ -133,16 +136,31 @@
   <data name="GAV" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\GAV.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="GoogleApiEnvironmentVariableName" xml:space="preserve">
+    <value>GOOGLE_APPLICATION_CREDENTIALS</value>
+  </data>
   <data name="GoogleResponseDescription" xml:space="preserve">
     <value>Google Response</value>
   </data>
+  <data name="JsonFileMessage" xml:space="preserve">
+    <value>Json file could not be found at the specified path.</value>
+  </data>
   <data name="SuccessMsg" xml:space="preserve">
-    <value>API Key is valid</value>
+    <value>API Key is valid.</value>
+  </data>
+  <data name="V3JsonPathDescription" xml:space="preserve">
+    <value>Enter the path where the json file asociated to your API Key  is saved locally</value>
+  </data>
+  <data name="V3ProjectNameDescription" xml:space="preserve">
+    <value>Enter project name</value>
   </data>
   <data name="ValidateBtn" xml:space="preserve">
     <value>Validate</value>
   </data>
   <data name="WindowsControl_Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="InvalidProjectName" xml:space="preserve">
+    <value>Invalid project name.</value>
   </data>
 </root>
