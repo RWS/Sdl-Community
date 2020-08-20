@@ -40,7 +40,6 @@ namespace Sdl.Community.Reports.Viewer
 		private DataView _dataView;
 		private BrowserView _browserView;
 		private DataViewModel _dataViewModel;
-		private BrowserViewModel _browserViewModel;
 		private PathInfo _pathInfo;
 		private ReportsController _controller;
 		private string _clientId;
@@ -176,12 +175,7 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void InitializeViews()
 		{
-			_browserViewModel = new BrowserViewModel();
-			_browserView = new BrowserView
-			{
-				DataContext = _browserViewModel
-			};
-
+			_browserView = new BrowserView();			
 			_dataViewModel = new DataViewModel();
 			_dataViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_dataView = new DataView
@@ -189,7 +183,7 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _dataViewModel
 			};
 
-			_reportViewModel = new ReportViewModel(_browserViewModel, _browserView, _dataViewModel, _dataView);
+			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView);
 			_reportView = new ReportView
 			{
 				DataContext = _reportViewModel
@@ -221,6 +215,16 @@ namespace Sdl.Community.Reports.Viewer
 		public void Print()
 		{
 			_reportViewModel?.Print();
+		}
+
+		public string GetSelectedLanguage()
+		{
+			if (_reportsNavigationViewModel != null)
+			{
+				return _reportsNavigationViewModel.GetSelectedLanguage();
+			}
+
+			return string.Empty;
 		}
 
 		public void ShowPageSetupDialog()
@@ -268,16 +272,12 @@ namespace Sdl.Community.Reports.Viewer
 				dataViewReports?.RemoveAll(a => a.Id == report.Id);
 			}
 
-			if (_reportsNavigationViewModel.IsReportSelected)
-			{
-				_browserViewModel.HtmlUri = null;
-			}
-			else
+			if (!_reportsNavigationViewModel.IsReportSelected)
 			{
 				_dataViewModel.Reports = new List<Report>();
 				_dataViewModel.Reports = dataViewReports;
 			}
-
+			
 			_reportsNavigationViewModel.Reports = _reports;
 		}
 

@@ -4,9 +4,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
@@ -14,6 +18,7 @@ using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.Reports.Viewer.API.Model;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -41,7 +46,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private bool _canEditLanguages;
 		private bool _canEditGroups;
 
-		public AppendReportViewModel(Window window, Report report, Settings settings,
+		public AppendReportViewModel(Window window, ReportWithXslt report, Settings settings,
 			PathInfo pathInfo, ImageService imageService, IProject project, bool isEditMode = false)
 		{
 			_window = window;
@@ -77,7 +82,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			GroupName = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path;
-
+			Xslt = report.Xslt;
 			CanEditLanguages = !report.IsStudioReport;
 			CanEditGroups = !report.IsStudioReport;
 		}
@@ -302,17 +307,61 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private void SaveChanges(object parameter)
 		{
 			if (IsValid)
-			{
+			{				
+				if (Path.ToLower().EndsWith(".xml") && !string.IsNullOrEmpty(Xslt) && File.Exists(Xslt))
+				{
+					var htmlPath = Path + ".html";
+					var result = TransformXmlReport(Path, Xslt, htmlPath);
+					if (result)
+					{
+						Path = htmlPath;
+					}
+					else
+					{
+						return;
+					}
+				}
+
+
 				Report.Name = Name;
 				Report.Group = GroupName;
 				Report.Description = Description;
-				Report.Path = Path;
-				//Report.Xslt = Xslt;
+				Report.Path = Path;				
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
 				_window.DialogResult = true;
 				_window?.Close();
 			}
+		}
+
+		private bool TransformXmlReport(string xml, string xslt, string output)
+		{
+			try
+			{
+				var xsltSetting = new XsltSettings
+				{
+					EnableDocumentFunction = true,
+					EnableScript = true
+				};
+
+				var myXPathDoc = new XPathDocument(xml);
+
+				var myXslTrans = new XslCompiledTransform();
+				myXslTrans.Load(xslt, xsltSetting, null);
+
+				var myWriter = new XmlTextWriter(output, Encoding.UTF8);
+
+				myXslTrans.Transform(myXPathDoc, null, myWriter);
+				myWriter.Flush();
+				myWriter.Close();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+				return false;
+			}
+
+			return true;
 		}
 
 		private void SelectedItemsChanged(object parameter)
@@ -337,14 +386,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void BrowseFolder(object parameter)
 		{
-			var fileType = parameter.ToString() == "path" ? "HTML" : "XSLT";
+			var fileType = parameter.ToString() == "path" ? "data" : "xslt template";
 
-			var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			var openFileDialog = new OpenFileDialog();
 			openFileDialog.Multiselect = false;
 			openFileDialog.Title = string.Format("Select the {0} file", fileType);
 			openFileDialog.InitialDirectory = _project.GetProjectInfo().LocalProjectFolder;
 			openFileDialog.Filter = fileType == "HTML"
-				? "HTML files(*.html;*.htm)| *.html;*.htm"
+				? "All supported files (*.html;*.htm;*.xml)|*.html;*.htm;*.xml|HTML files(*.html;*.htm)|*.html;*.htm|XML files(*.xml)|*.xml"
 				: "XSLT files(*.xslt)| *.xslt;*.xsl";
 
 			var result = openFileDialog.ShowDialog();

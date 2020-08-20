@@ -6,8 +6,9 @@
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
              xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
+             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" 
              mc:Ignorable="d" 			 
-             d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:BrowserViewModel}">
+             d:DesignHeight="150" d:DesignWidth="650">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -28,7 +29,7 @@
 	</UserControl.Resources>
 
 
-	<Grid Margin="0">
+	<Grid Margin="0" AllowDrop="False">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
@@ -37,9 +38,12 @@
 		</Grid.RowDefinitions>
 
 		<Border Background="White" Grid.Column="0" Grid.Row="0" Margin="0">
+			<WindowsFormsHost>
+				<wf:WebBrowser AllowWebBrowserDrop="False" x:Name="WebBrowser"/>
+			</WindowsFormsHost>
 			<!--<ContentControl Content="{Binding Browser}"/>-->
-			<WebBrowser x:Name="WebBrowser" controls:BindingWebBrowserSource.BindableSource="{Binding HtmlUri, 
-					Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+			<!--<WebBrowser x:Name="WebBrowser" controls:BindingWebBrowserSource.BindableSource="{Binding HtmlUri, 
+					Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>-->
 		</Border>
 
 	</Grid>

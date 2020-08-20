@@ -16,6 +16,8 @@ namespace Sdl.Reports.Viewer.API.Services
 {
 	public class ReportService
 	{
+		private static readonly object LockObject = new object();
+		private static readonly Random Rnd = new Random(DateTime.Now.Millisecond);
 		private readonly List<ReportDefinition> _thirdPartyReportDefinitions;
 		private readonly ProjectSettingsService _projectSettingsService;		
 		private Report _report;
@@ -324,6 +326,25 @@ namespace Sdl.Reports.Viewer.API.Services
 			var output = new byte[sw.BaseStream.Length];
 			var bytesRead = sw.BaseStream.Read(output, 0, output.Length);
 			return output;
+		}
+		
+		public static string GetTempFile(string extension)
+		{
+			var prefix = "temp";
+
+			string file;
+
+			lock (LockObject)
+			{
+				while (File.Exists(file = Path.Combine(Path.GetTempPath(), prefix + Rnd.Next() + "." + extension)))
+				{
+				}
+
+				var fs = File.Create(file);
+				fs.Close();
+			}
+
+			return file;
 		}
 
 		private byte[] GetXslData(Assembly automaticTaskAssembly)

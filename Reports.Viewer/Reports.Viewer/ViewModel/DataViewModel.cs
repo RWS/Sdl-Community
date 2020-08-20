@@ -5,10 +5,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
+using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -25,6 +27,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
 		private ICommand _openFolderCommand;
+		private ICommand _printReportCommand;
+		private ICommand _printPreviewCommand;
+		private ICommand _pageSetupCommand;
+		private ICommand _saveAsCommand;
+		private ICommand _dragDropCommand;
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
@@ -35,6 +42,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
 
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
+
+		public ICommand PrintReportCommand => _printReportCommand ?? (_printReportCommand = new CommandHandler(PrintReport));
+
+		public ICommand PrintPreviewCommand => _printPreviewCommand ?? (_printPreviewCommand = new CommandHandler(PrintPreview));
+
+		public ICommand PageSetupCommand => _pageSetupCommand ?? (_pageSetupCommand = new CommandHandler(PageSetup));
+
+		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
+
+		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+
 
 		public string WindowTitle
 		{
@@ -151,6 +169,67 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		private void PrintReport(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PrintReportAction>();
+			action.Run();
+		}
+
+		private void PrintPreview(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			action.Run();
+		}
+
+		private void PageSetup(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			action.Run();
+		}
+
+		private void SaveAs(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
+			action.Run();
+		}
+
+		private void DragDrop(object parameter)
+		{
+			var report = new ReportWithXslt();
+
+			if (parameter == null || !(parameter is DragEventArgs eventArgs))
+			{
+				return;
+			}
+
+			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+			if (fileDrop is string[] files && files.Length > 0 && files.Length <= 2)
+			{
+				foreach (var fullPath in files)
+				{
+					var fileAttributes = File.GetAttributes(fullPath);
+					if (!fileAttributes.HasFlag(FileAttributes.Directory))
+					{
+						if (string.IsNullOrEmpty(report.Xslt) &&
+						    (fullPath.ToLower().EndsWith(".xslt") 
+						     || fullPath.ToLower().EndsWith(".xsl")))
+						{
+							report.Xslt = fullPath;
+						}
+						if (string.IsNullOrEmpty(report.Path) &&
+						    (fullPath.ToLower().EndsWith(".html") 
+						     || fullPath.ToLower().EndsWith(".htm")
+						     || fullPath.ToLower().EndsWith(".xml")))
+						{
+							report.Path = fullPath;
+						}
+					}					
+				}
+			}
+
+			var action = SdlTradosStudio.Application.GetAction<AddReportAction>();
+			action.Run(report);
+		}
 
 		private void ClearSelection(object parameter)
 		{

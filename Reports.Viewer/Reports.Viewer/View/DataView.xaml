@@ -9,6 +9,7 @@
              xmlns:model="clr-namespace:Sdl.Community.Reports.Viewer.Model"
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
              xmlns:model1="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
+             xmlns:behaviours="clr-namespace:Sdl.Community.Reports.Viewer.Behaviours"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:DataViewModel}">
 	<UserControl.Resources>
@@ -43,10 +44,12 @@
 		              DefaultColumnName="Date"
 		              DefaultSortDirection="Descending"									
 		              Style="{StaticResource CustomGridStyle}"
-			          Margin="0" 			                           
+			          Margin="0" 		
+		              AllowDrop="True"
 					  ItemsSource="{Binding Reports, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
 					  SelectedItem="{Binding SelectedReports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		              SelectedItems="{Binding SelectedReports, Mode=OneWayToSource}"
+		                            behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
 					  FontSize="12"
 					  BorderBrush="#C1C0C0"
 					  FontFamily="Segoe UI"
@@ -191,6 +194,39 @@
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/Delete.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Print Report" 
+					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          Command="{Binding PrintReportCommand}"
+					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Print.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Print Preview" 
+					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          Command="{Binding PrintPreviewCommand}"
+					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/PrintPreview.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Page Setup" 
+					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          Command="{Binding PageSetupCommand}"
+					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/PageSetup.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Save As" 
+					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          Command="{Binding SaveAsCommand}"
+					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Save.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>

@@ -26,10 +26,15 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		private bool _isLoading;
 
 		protected override void Execute()
-		{		
+		{
+			AddNewReport(new ReportWithXslt());
+		}
+
+		private void AddNewReport(ReportWithXslt report)
+		{
 			var settings = GetSettings();
 			var view = new AppendReportWindow();
-			var viewModel = new AppendReportViewModel(view, new Report(), settings, _pathInfo, _imageService,
+			var viewModel = new AppendReportViewModel(view, report, settings, _pathInfo, _imageService,
 				_reportsViewerController.GetSelectedProject());
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
@@ -43,6 +48,12 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		{
 			_isLoading = loading;
 			SetEnabled();
+		}
+
+		public void Run(ReportWithXslt report)
+		{
+			report.Language = _reportsViewerController.GetSelectedLanguage();
+			AddNewReport(report);
 		}
 
 		private Settings GetSettings()

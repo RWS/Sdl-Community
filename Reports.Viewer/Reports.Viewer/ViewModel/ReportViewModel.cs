@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Reports.Viewer.API.Model;
 
@@ -15,19 +14,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private string _windowTitle;
 		private readonly BrowserView _browserView;
 		private readonly DataView _dataView;
-		private readonly BrowserViewModel _browserViewModel;
 		private readonly DataViewModel _dataViewModel;
 		private string _projectLocalFolder;
 		private ContentControl _currentView;
 
-		public ReportViewModel(BrowserViewModel browserViewModel, BrowserView browserView,
+		public ReportViewModel(BrowserView browserView,
 			DataViewModel dataViewModel, DataView dataView)
-		{
-			_browserViewModel = browserViewModel;
+		{			
 			_browserView = browserView;
-
 			_dataViewModel = dataViewModel;
 			_dataView = dataView;
+			_dataViewModel.ReportSelectionChanged += DataViewModel_ReportSelectionChanged;
 
 			CurrentView = _dataView;
 		}
@@ -58,58 +55,39 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				if (_dataViewModel != null)
 				{
 					_dataViewModel.ProjectLocalFolder = _projectLocalFolder;
-				}				
+				}
 			}
 		}
 
 		public void Print()
 		{
-			//var printDialog = new PrintDialog();
-			//printDialog.PrintDocument(((IDocumentPaginatorSource)_browserView.WebBrowser.Document).DocumentPaginator, "Reports Viewer");			
-
-			var doc = _browserView.WebBrowser.Document as mshtml.IHTMLDocument2;
-			doc.execCommand("Print", true, null);
+			_browserView.WebBrowser.Print();
 		}
 
 		public void ShowPageSetupDialog()
 		{
-			//_webBrowser.ShowPageSetupDialog();
+			_browserView.WebBrowser.ShowPageSetupDialog();
 		}
 
 		public void ShowPrintPreviewDialog()
 		{
-			//_webBrowser.ShowPrintPreviewDialog();
+			_browserView.WebBrowser.ShowPrintPreviewDialog();
 		}
 
 		public void SaveReport()
 		{
-			//_mhtReport = Path.Combine(System.IO.Path.GetTempPath(), _report.Guid.ToString() + ".html");
-
-			//ReportFormat htmlFormat = Array.Find<ReportFormat>(_report.AvailableFormats, delegate (ReportFormat format)
-			//{
-			//	return format.Name == "HTML";
-			//});
-
-			//ReportFormat xmlFormat = null;
-			//if (htmlFormat == null)
-			//{
-			//	xmlFormat = _report.AvailableFormats.FirstOrDefault(x => x.Name == "XML");
-			//	_mhtReport = System.IO.Path.ChangeExtension(_mhtReport, "xml");
-			//}
-
-			//if (htmlFormat == null && xmlFormat == null)
-			//{
-			//	throw new InvalidOperationException(StringResources.ReportRendererNotFound);
-			//}
-
-			//_report.SaveAs(_mhtReport, htmlFormat ?? xmlFormat);
-			//_reportLoaded = true;
+			_browserView.WebBrowser.ShowSaveAsDialog();
 		}
 
 		public void UpdateReport(Report report)
 		{
 			CurrentView = _browserView;
 
+			WebBrowserNavigateToReport(report);
+		}
+
+		private void WebBrowserNavigateToReport(Report report)
+		{
 			string file = null;
 			if (report != null)
 			{
@@ -120,7 +98,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			_browserViewModel.HtmlUri = file;
+			_browserView.WebBrowser.Navigate(file != null ? "file://" + file : null);
 		}
 
 		public void UpdateData(List<Report> reports)
@@ -136,6 +114,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_windowTitle = value;
 				OnPropertyChanged(nameof(WindowTitle));
+			}
+		}
+
+		private void DataViewModel_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
+		{
+			if (CurrentView is DataView)
+			{
+				WebBrowserNavigateToReport(e.SelectedReports?.Count > 0 ? e.SelectedReports[0] : null);
 			}
 		}
 

@@ -1,8 +1,4 @@
-﻿using System.Windows;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Reports.Viewer.API.Model;
+﻿using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
@@ -16,8 +12,6 @@ namespace Sdl.Community.Reports.Viewer.Actions
 	[ActionLayout(typeof(ReportsViewerReportGroups), 5, DisplayType.Normal)]
 	public class PrintReportAction : BaseReportAction
 	{
-		private PathInfo _pathInfo;
-		private ImageService _imageService;
 		private ReportsViewerController _reportsViewerController;
 		private bool _canEnable;
 		private bool _isLoading;
@@ -35,12 +29,15 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		public override void Initialize()
 		{
-			_pathInfo = new PathInfo();
-			_imageService = new ImageService();
 			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 			_reportsViewerController.ReportSelectionChanged += ReportsViewerController_ReportSelectionChanged;
 
 			SetEnabled();
+		}
+
+		public void Run()
+		{
+			Execute();
 		}
 
 		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)

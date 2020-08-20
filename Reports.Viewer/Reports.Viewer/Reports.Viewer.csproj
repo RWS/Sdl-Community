@@ -64,6 +64,7 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Model\ProjectSettings\ReportsViewer.cs" />
     <Compile Include="Model\ReportGroup.cs" />
     <Compile Include="Model\GroupItem.cs" />
+    <Compile Include="Model\ReportWithXslt.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="ReportsViewerController.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -110,7 +112,6 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
-    <Compile Include="ViewModel\BrowserViewModel.cs" />
     <Compile Include="ViewModel\DataViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
@@ -193,7 +194,7 @@
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\Print.ico" />
     <Resource Include="Resources\PrintPreview.ico" />
-    <Content Include="Resources\Save.ico" />
+    <Resource Include="Resources\Save.ico" />
     <Resource Include="Resources\analytics.png" />
     <Resource Include="Resources\document.png" />
     <Resource Include="Resources\Edit-No-32.png" />

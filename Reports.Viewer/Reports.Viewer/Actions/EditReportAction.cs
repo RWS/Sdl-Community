@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
@@ -37,7 +36,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 			var settings = GetSettings();
 			var view = new AppendReportWindow();
-			var viewModel = new AppendReportViewModel(view, report.Clone() as Report, settings, _pathInfo, _imageService,
+			var viewModel = new AppendReportViewModel(view, report.Clone() as ReportWithXslt, settings, _pathInfo, _imageService,
 				_reportsViewerController.GetSelectedProject(), true);
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();

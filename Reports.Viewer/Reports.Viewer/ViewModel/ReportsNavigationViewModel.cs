@@ -33,9 +33,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _collapseAllCommand;
 		private ICommand _clearFilterCommand;
 		private ICommand _selectedItemChangedCommand;
+		private ICommand _dragDropCommand;
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
 		private ICommand _openFolderCommand;
+		private ICommand _printReportCommand;
+		private ICommand _printPreviewCommand;
+		private ICommand _pageSetupCommand;
+		private ICommand _saveAsCommand;
 
 		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
 		{
@@ -59,11 +64,21 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ?? (_selectedItemChangedCommand = new CommandHandler(SelectedItemChanged));
 
+		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+
 		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
 
 		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
 
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
+
+		public ICommand PrintReportCommand => _printReportCommand ?? (_printReportCommand = new CommandHandler(PrintReport));
+
+		public ICommand PrintPreviewCommand => _printPreviewCommand ?? (_printPreviewCommand = new CommandHandler(PrintPreview));
+
+		public ICommand PageSetupCommand => _pageSetupCommand ?? (_pageSetupCommand = new CommandHandler(PageSetup));
+
+		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
 		public Settings Settings { get; set; }
 
@@ -433,6 +448,26 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public object SelectedItem { get; set; }
 
+		public string GetSelectedLanguage()
+		{
+			if (SelectedItem is Report report)
+			{
+				return report.Language;
+			}
+
+			if (SelectedItem is GroupItem groupItem)
+			{
+				return groupItem.Reports?.FirstOrDefault()?.Language;
+			}
+
+			if (SelectedItem is ReportGroup reportGroup)
+			{
+				return reportGroup.GroupItems.FirstOrDefault()?.Reports?.FirstOrDefault()?.Language;
+			}
+
+			return string.Empty;
+		}
+
 		private void SelectedItemChanged(object parameter)
 		{
 			if (parameter is RoutedPropertyChangedEventArgs<object> property)
@@ -494,6 +529,68 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
 			}
 		}
+
+		private void PrintReport(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PrintReportAction>();
+			action.Run();
+		}
+
+		private void PrintPreview(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			action.Run();
+		}
+
+		private void PageSetup(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			action.Run();
+		}
+
+		private void SaveAs(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
+			action.Run();
+		}
+
+		private void DragDrop(object parameter)
+		{
+			var report = new ReportWithXslt();
+
+			if (parameter == null || !(parameter is DragEventArgs eventArgs))
+			{
+				return;
+			}
+
+			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+			if (fileDrop is string[] files && files.Length > 0 && files.Length <= 2)
+			{
+				foreach (var fullPath in files)
+				{
+					var fileAttributes = File.GetAttributes(fullPath);
+					if (!fileAttributes.HasFlag(FileAttributes.Directory))
+					{
+						if (string.IsNullOrEmpty(report.Xslt) &&
+						    (fullPath.ToLower().EndsWith(".xslt")
+						     || fullPath.ToLower().EndsWith(".xsl")))
+						{
+							report.Xslt = fullPath;
+						}
+						if (string.IsNullOrEmpty(report.Path) &&
+						    (fullPath.ToLower().EndsWith(".html")
+						     || fullPath.ToLower().EndsWith(".htm")
+						     || fullPath.ToLower().EndsWith(".xml")))
+						{
+							report.Path = fullPath;
+						}
+					}
+				}
+			}
+			
+			var action = SdlTradosStudio.Application.GetAction<AddReportAction>();
+			action.Run(report);
+		}		
 
 		public void Dispose()
 		{

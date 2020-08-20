@@ -11,7 +11,7 @@
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
              xmlns:model="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
              xmlns:model1="clr-namespace:Sdl.Community.Reports.Viewer.Model"
-             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"             
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
 	<UserControl.Resources>
@@ -277,9 +277,10 @@
 					</Button>
 				</Grid>
 
-				<TreeView Grid.Row="1" Grid.Column="0" Padding="2,5,2,2" 	
+				<TreeView Grid.Row="1" Grid.Column="0" Padding="2,5,2,2" 
+						  AllowDrop="True"
 				          ItemsSource="{Binding Source={StaticResource ReportGroups}}"
-			          				
+				          behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"				
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 					<TreeView.ItemContainerStyle>
 						<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
@@ -337,6 +338,35 @@
 													          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 															<MenuItem.Icon>
 																<Image Source="../Resources/Delete.ico"/>
+															</MenuItem.Icon>
+														</MenuItem>
+														<Separator/>
+														<MenuItem Header="Print Report" 														          
+														          Command="{Binding PrintReportCommand}"
+														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+															<MenuItem.Icon>
+																<Image Source="../Resources/Print.ico"/>
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Print Preview" 														          
+														          Command="{Binding PrintPreviewCommand}"
+														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+															<MenuItem.Icon>
+																<Image Source="../Resources/PrintPreview.ico"/>
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Page Setup" 														          
+														          Command="{Binding PageSetupCommand}"
+														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+															<MenuItem.Icon>
+																<Image Source="../Resources/PageSetup.ico"/>
+															</MenuItem.Icon>
+														</MenuItem>
+														<MenuItem Header="Save As" 														          
+														          Command="{Binding SaveAsCommand}"
+														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+															<MenuItem.Icon>
+																<Image Source="../Resources/Save.ico"/>
 															</MenuItem.Icon>
 														</MenuItem>
 														<Separator/>
