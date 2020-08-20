@@ -120,30 +120,32 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// </summary>
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+			switch (Options.SelectedProvider)
 			{
-				if (mstConnect == null) //construct ApiConnecter if necessary 
-					mstConnect = new ApiConnecter(Options);
-				else
-					mstConnect.resetCrd(Options.ClientId,
-						Options.ClientSecret); //reset in case changed since last time the class was constructed
+				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
+				{
+					if (mstConnect == null) //construct ApiConnecter if necessary 
+						mstConnect = new ApiConnecter(Options);
+					else
+						mstConnect.ResetCrd(Options.ClientId,
+							Options.ClientSecret); //reset in case changed since last time the class was constructed
 
-				return mstConnect.isSupportedLangPair(languageDirection.SourceCulture.Name,
-					languageDirection.TargetCulture.Name);
+					return mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
+						languageDirection.TargetCulture.Name);
+				}
+				case MtTranslationOptions.ProviderType.GoogleTranslate:
+				{
+					if (gtConnect == null) //instantiate GtApiConnecter if necessary
+						gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
+					else
+						gtConnect.ApiKey =
+							Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
+					return gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+				}
+				default:
+					//not likely to get here but...
+					return true;
 			}
-
-			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-			{
-				if (gtConnect == null) //instantiate GtApiConnecter if necessary
-					gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
-				else
-					gtConnect.ApiKey =
-						Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
-				return gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
-			}
-
-			//not likely to get here but...
-			return true;
 		}
 	}
 }
