@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -81,6 +81,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto Send Feedback.
+        /// </summary>
+        public static string AutoSendFeedback {
+            get {
+                return ResourceManager.GetString("AutoSendFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap defaultStar {
@@ -97,6 +106,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("dictionaryIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Rating.
+        /// </summary>
+        public static string EnableRating {
+            get {
+                return ResourceManager.GetString("EnableRating", resourceCulture);
             }
         }
         
@@ -590,6 +608,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        /// </summary>
+        public static string SDLMTCloudName {
+            get {
+                return ResourceManager.GetString("SDLMTCloudName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Search__1_ {
@@ -606,6 +633,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("selectedStar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send feedback response from server: Status: {0} Response: {1}.
+        /// </summary>
+        public static string SendFeedbackResponseFromServer {
+            get {
+                return ResourceManager.GetString("SendFeedbackResponseFromServer", resourceCulture);
             }
         }
         
@@ -644,6 +680,24 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("TellMe1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To enable rating change the settings....
+        /// </summary>
+        public static string ToEnableRatingChangeTheSettings {
+            get {
+                return ResourceManager.GetString("ToEnableRatingChangeTheSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the SDL MT Cloud settings page..
+        /// </summary>
+        public static string Tooltip_DisabledMessage {
+            get {
+                return ResourceManager.GetString("Tooltip_DisabledMessage", resourceCulture);
             }
         }
         
