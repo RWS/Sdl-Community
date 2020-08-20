@@ -2,11 +2,12 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Sdl.Community.WordCloud.Controls.Geometry;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.WordCloud.Plugin
 {
-    public partial class WordCloudViewPartControl : UserControl
-    {
+    public partial class WordCloudViewPartControl : UserControl, IUIControl
+	{
         public WordCloudViewPartControl()
         {
             InitializeComponent();
