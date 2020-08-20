@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
@@ -20,6 +20,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<Report> _reports;
 		private Report _selectedReport;
 		private IList _selectedReports;
+		private string _projectLocalFolder;		
 		private ICommand _clearSelectionCommand;
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
@@ -45,6 +46,21 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		public string ProjectLocalFolder
+		{
+			get => _projectLocalFolder;
+			set
+			{
+				if (_projectLocalFolder == value)
+				{
+					return;
+				}
+
+				_projectLocalFolder = value;
+				OnPropertyChanged(nameof(ProjectLocalFolder));				
+			}
+		}
+
 		public List<Report> Reports
 		{
 			get => _reports;
@@ -56,7 +72,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		public bool IsReportSelected => SelectedReports?.Cast<Report>().ToList().Count > 0;
+		public bool IsReportSelected => SelectedReports?.Cast<Report>().ToList().Count > 0;		
 
 		public Report SelectedReport
 		{
@@ -85,6 +101,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(SelectedReports));
 				OnPropertyChanged(nameof(StatusLabel));
 
+				_selectedReport = _selectedReports?.Cast<Report>().ToList().FirstOrDefault();
 				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
 				{
 					SelectedReport = _selectedReport,
@@ -94,8 +111,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(IsReportSelected));
 			}
 		}
-
-
 
 		public string StatusLabel
 		{
@@ -110,7 +125,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void EditReport(object parameter)
 		{
-			MessageBox.Show("TODO");
+			var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			action.Run();
 		}
 
 		private void RemoveReport(object parameter)
@@ -121,22 +137,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void OpenFolder(object parameter)
 		{
-			MessageBox.Show("TODO");
-			return;
+			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
+			                                 || !Directory.Exists(ProjectLocalFolder))
+			{
+				return;
+			}
 
-			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
-			//{
-			//	return;
-			//}
+			var path = Path.Combine(ProjectLocalFolder, SelectedReport.Path.Trim('\\'));
 
-
-			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
-			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
-
-			//if (File.Exists(path))
-			//{
-			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
-			//}
+			if (File.Exists(path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
+			}
 		}
 
 

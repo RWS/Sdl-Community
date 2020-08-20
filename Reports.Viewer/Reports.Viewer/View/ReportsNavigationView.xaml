@@ -30,6 +30,9 @@
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
 			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
+
+			<CollectionViewSource x:Key="ReportGroups" Source="{Binding ReportGroups}"/>
+
 			<Style TargetType="{x:Type UserControl}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
 				<Setter Property="FontSize" Value="12"/>
@@ -274,8 +277,9 @@
 					</Button>
 				</Grid>
 
-				<TreeView Grid.Row="1" Grid.Column="0" Padding="2,5,2,2" 					  
-			          ItemsSource="{Binding ReportGroups, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"					
+				<TreeView Grid.Row="1" Grid.Column="0" Padding="2,5,2,2" 	
+				          ItemsSource="{Binding Source={StaticResource ReportGroups}}"
+			          				
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 					<TreeView.ItemContainerStyle>
 						<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
@@ -357,6 +361,7 @@
 												</Image>
 
 												<TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding Name}" Margin="2,1,0,1"/>
+												
 												<StackPanel Orientation="Horizontal" 
 											            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, 
 															Mode=OneWay, UpdateSourceTrigger=PropertyChanged,

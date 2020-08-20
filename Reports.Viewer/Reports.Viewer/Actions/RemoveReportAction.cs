@@ -14,7 +14,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 	)]
 	[ActionLayout(typeof(ReportsViewerReportGroups), 7, DisplayType.Normal)]
 	public class RemoveReportAction : BaseReportAction
-	{		
+	{
 		private ReportsViewerController _reportsViewerController;
 		private bool _canEnable;
 		private bool _isLoading;
@@ -50,7 +50,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		}
 
 		public override void Initialize()
-		{			
+		{
 			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 			_reportsViewerController.ReportSelectionChanged += ReportsViewerController_ReportSelectionChanged;
 
@@ -59,7 +59,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
 		{
-			_canEnable = e.SelectedReports?.Count > 0;
+			_canEnable = e.SelectedReports?.Count > 0;			
 			SetEnabled();
 		}
 

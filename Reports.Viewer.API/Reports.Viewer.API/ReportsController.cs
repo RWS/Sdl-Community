@@ -342,7 +342,7 @@ namespace Sdl.Reports.Viewer.API
 
 		private List<Report> UpdateReportData(IEnumerable<Report> reports)
 		{
-			var clonedReports = new List<Report>();
+			var clonedReports = new List<Report>();			
 			foreach (var report in reports)
 			{
 				var existingReport = _reports?.FirstOrDefault(a => a.Id == report.Id);
@@ -359,7 +359,20 @@ namespace Sdl.Reports.Viewer.API
 				existingReport.Description = clonedReport.Description;
 				existingReport.Path = clonedReport.Path;
 
-				clonedReports.Add(clonedReport);
+				clonedReports.Add(existingReport.Clone() as Report);
+			}
+
+			var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
+			if (studioReports.Count > 0)
+			{
+				if (SelectedProject is FileBasedProject fileBasedProject)
+				{
+					_projectsController.Close(fileBasedProject);
+
+					_reportService.UpdateStudioReportInformation(fileBasedProject.FilePath, studioReports);
+
+					_projectsController.Add(fileBasedProject.FilePath);
+				}
 			}
 
 			return clonedReports;
@@ -367,7 +380,7 @@ namespace Sdl.Reports.Viewer.API
 
 		private List<Report> RemoveReportData(IEnumerable<string> reportIds)
 		{
-			var reports = new List<Report>();
+			var clonedReports = new List<Report>();
 			foreach (var reportId in reportIds)
 			{
 				var existingReport = _reports?.FirstOrDefault(a => a.Id == reportId);
@@ -377,14 +390,27 @@ namespace Sdl.Reports.Viewer.API
 				}
 
 				var clonedReport = GetClonedReport(existingReport);
-				reports.Add(clonedReport);
+				clonedReports.Add(clonedReport);
 
 				DeleteReportFiles(clonedReport);
 
 				_reports.Remove(existingReport);
 			}
 
-			return reports;
+			var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
+			if (studioReports.Count > 0)
+			{
+				if (SelectedProject is FileBasedProject fileBasedProject)
+				{
+					_projectsController.Close(fileBasedProject);
+
+					_reportService.DeleteStudioReportInformation(fileBasedProject.FilePath, studioReports);
+
+					_projectsController.Add(fileBasedProject.FilePath);
+				}
+			}
+
+			return clonedReports;
 		}
 
 		private List<Report> GetClonedReports()

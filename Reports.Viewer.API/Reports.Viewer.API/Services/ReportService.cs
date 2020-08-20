@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Xsl;
 using Sdl.Core.PluginFramework;
@@ -16,12 +17,13 @@ namespace Sdl.Reports.Viewer.API.Services
 	public class ReportService
 	{
 		private readonly List<ReportDefinition> _thirdPartyReportDefinitions;
-		private readonly ProjectSettingsService _projectSettingsService;
-		
+		private readonly ProjectSettingsService _projectSettingsService;		
+		private Report _report;
+
 		public ReportService(ProjectSettingsService projectSettingsService)
 		{
 			_projectSettingsService = projectSettingsService;
-			_thirdPartyReportDefinitions = GetThirdPartyReportDefinitions();			
+			_thirdPartyReportDefinitions = GetThirdPartyReportDefinitions();
 		}
 
 		public IEnumerable<Report> GetStudioReports(IProject project, bool overwrite)
@@ -30,7 +32,7 @@ namespace Sdl.Reports.Viewer.API.Services
 
 			var reports = new List<Report>();
 			if (project is FileBasedProject fileBasedProject)
-			{				
+			{
 				var studioReports = _projectSettingsService.GetProjectTaskReports(fileBasedProject.FilePath);
 				foreach (var studioReport in studioReports)
 				{
@@ -74,6 +76,98 @@ namespace Sdl.Reports.Viewer.API.Services
 			return reports;
 		}
 
+		public void UpdateStudioReportInformation(string filePath, List<Report> reports)
+		{						
+			try
+			{
+				string content;
+				using (var reader = new StreamReader(filePath, Encoding.UTF8))
+				{
+					content = reader.ReadToEnd();
+					reader.Close();
+				}
+
+				foreach (var report in reports)
+				{
+					_report = report;
+
+					var regexReport = new Regex(@"<Report\s+Guid\=""" + report.Id + @"""\s+(?<attributes>.*?|)/>",
+						RegexOptions.Singleline | RegexOptions.IgnoreCase);
+					if (regexReport.Matches(content).Count > 0)
+					{
+						content = regexReport.Replace(content, ReplaceReportInfo);
+					}
+				}
+
+				using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+				{
+					writer.Write(content);
+					writer.Flush();
+					writer.Close();
+				}
+			}
+			catch
+			{
+				// ignore catch all
+			}
+		}
+
+		public void DeleteStudioReportInformation(string filePath, List<Report> reports)
+		{
+			try
+			{
+				string content;
+				using (var reader = new StreamReader(filePath, Encoding.UTF8))
+				{
+					content = reader.ReadToEnd();
+					reader.Close();
+				}
+
+				foreach (var report in reports)
+				{
+					_report = report;
+
+					var regexReport = new Regex(@"<Report\s+Guid\=""" + report.Id + @"""\s+(?<attributes>.*?|)/>",
+						RegexOptions.Singleline | RegexOptions.IgnoreCase);
+					if (regexReport.Matches(content).Count > 0)
+					{
+						content = regexReport.Replace(content, string.Empty);
+					}
+				}
+
+				using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+				{
+					writer.Write(content);
+					writer.Flush();
+					writer.Close();
+				}
+			}
+			catch
+			{
+				// ignore catch all
+			}
+		}
+
+		public string ReplaceReportInfo(Match match)
+		{
+			var regexName = new Regex(@"(Name\="")([^""]*)("")", RegexOptions.Singleline);
+			var regexDescription = new Regex(@"(Description\="")([^""]*)("")", RegexOptions.Singleline);
+			//var regexPhysicalPath = new Regex(@"(PhysicalPath\="")([^""]*)("")", RegexOptions.Singleline);
+
+			var content = match.Value;
+
+			content = regexName.Replace(content,
+				"$1" + _report.Name + "$3");
+
+			content = regexDescription.Replace(content,
+				"$1" + _report.Description + "$3");
+
+			//content = regexPhysicalPath.Replace(content,
+			//	"$1" + _report.Path + "$3");
+
+			return content;
+		}
+		
 		private string CreateHtmlReport(ReportDefinition reportDefinition, string xmlPath, bool replace)
 		{
 			var reportFilePath = xmlPath + ".html";
@@ -259,6 +353,6 @@ namespace Sdl.Reports.Viewer.API.Services
 			}
 
 			return null;
-		}		
+		}
 	}
 }

@@ -79,8 +79,8 @@ namespace Sdl.Community.Reports.Viewer
 
 			_reports = _controller.GetReports();
 
-			UpdateReportsNavigationViewModel();		
-		}		
+			UpdateReportsNavigationViewModel();
+		}
 
 		protected override Control GetExplorerBarControl()
 		{
@@ -124,6 +124,31 @@ namespace Sdl.Community.Reports.Viewer
 			}
 
 			_reports.Add(result.Reports[0]);
+			_reportsNavigationViewModel.Reports = _reports;
+		}
+
+		public void UpdateReport(Report updatedReport)
+		{
+			var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
+			if (report == null)
+			{				
+				return;
+			}
+
+			report.IsSelected = true;
+			report.Path = updatedReport.Path;
+			report.Name = updatedReport.Name;
+			report.Description = updatedReport.Description;
+			report.Language = updatedReport.Language;
+			report.Group = updatedReport.Group;
+
+			var result = _controller.UpdateReports(_clientId, new List<Report> {report});
+			if (!result.Success)
+			{
+				MessageBox.Show(result.Message);
+				return;
+			}			
+			
 			_reportsNavigationViewModel.Reports = _reports;
 		}
 
@@ -191,6 +216,26 @@ namespace Sdl.Community.Reports.Viewer
 			}
 
 			return new Settings();
+		}
+
+		public void Print()
+		{
+			_reportViewModel?.Print();
+		}
+
+		public void ShowPageSetupDialog()
+		{
+			_reportViewModel?.ShowPageSetupDialog();
+		}
+
+		public void ShowPrintPreviewDialog()
+		{
+			_reportViewModel?.ShowPrintPreviewDialog();
+		}
+
+		public void SaveReport()
+		{
+			_reportViewModel?.SaveReport();
 		}
 
 		private IEnumerable<Report> GetReports(IEnumerable<string> reportIds)
@@ -265,7 +310,7 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void Controller_ReportsUpdated(object sender, Sdl.Reports.Viewer.API.Events.ReportsUpdatedEventArgs e)
 		{
-			if (e.ClientId != _clientId)
+			if (e.ClientId != _clientId && e.Reports != null)
 			{
 				MessageBox.Show("TODO: Controller_ReportsUpdated");
 			}
@@ -282,17 +327,17 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void Controller_ProjectChanging(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangingEventArgs e)
 		{
-			EnableControls(true);			
+			EnableControls(true);
 		}
 
 		private void EnableControls(bool isLoading)
 		{
 			if (_reportsNavigationViewControl.InvokeRequired)
 			{
-				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isLoading);				
+				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isLoading);
 			}
 			else
-			{			
+			{
 				if (_reportsNavigationViewControl != null)
 				{
 					if (isLoading)

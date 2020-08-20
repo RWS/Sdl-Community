@@ -5,6 +5,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"       
         xmlns:sdl="http://schemas.sdl.com/xaml"
         xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
+        xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
         WindowStyle="ThreeDBorderWindow"
 		WindowStartupLocation="CenterScreen"
         AllowsTransparency="False" 
@@ -29,6 +30,8 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+
+			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
 
 			<Style TargetType="{x:Type Window}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
@@ -79,7 +82,7 @@
 					         Padding="2,0,20,0" Height="24" 
 					         VerticalAlignment="Center"
 							  VerticalContentAlignment="Center"
-				        Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True" />
+				        Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}" IsEnabled="True" />
 					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the html file"
 					       VerticalAlignment="Center" HorizontalAlignment="Left"
 				           Margin="0" Foreground="DarkGray">
@@ -138,11 +141,20 @@
 						ToolTip="Select the output folder"
 				        HorizontalAlignment="Left" VerticalAlignment="Center" 
 				        Height="24" Width="24" Margin="0,5,0,0"/>
-
-
+				<Grid.Style>
+					<Style TargetType="{x:Type Grid}">
+						<Setter Property="IsEnabled" Value="True" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding IsEditMode}" Value="True">
+								<Setter Property="IsEnabled" Value="False"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Grid.Style>
 			</Grid>
 
-			<Grid Grid.Row="1">
+			<Grid Grid.Row="1"
+			      Visibility="{Binding IsEditMode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -155,7 +167,7 @@
 					         Padding="2,0,20,0" Height="24" 
 					         VerticalAlignment="Center"
 							 VerticalContentAlignment="Center"
-				        Text="{Binding Xslt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True" />
+				        Text="{Binding Xslt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}" IsEnabled="True" />
 					<TextBlock IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the xslt file"
 					       VerticalAlignment="Center" HorizontalAlignment="Left"
 				           Margin="0" Foreground="DarkGray">
@@ -225,7 +237,9 @@
 				<TextBox Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
 			</Grid>
 			
-			<Grid Grid.Row="3" Margin="0,5,0,0">
+			<Grid Grid.Row="3" 
+			      IsEnabled="{Binding CanEditLanguages, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			      Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -234,7 +248,8 @@
 				<TextBox Grid.Column="1" Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
 			</Grid>
 
-			<Grid Grid.Row="4">
+			<Grid Grid.Row="4"
+			      IsEnabled="{Binding CanEditLanguages, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -249,7 +264,7 @@
 				<sdl:MultiSelectComboBox Grid.Row="0" Grid.Column="1" 
 					    Margin="0,5,30,0" 
 					    Height="30" 
-					    MaxDropDownHeight="250"		
+					    MaxDropDownHeight="250"							
 				        Style="{StaticResource MultiSelectComboBox.Custom.Style}"
 				        SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
 				        DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 

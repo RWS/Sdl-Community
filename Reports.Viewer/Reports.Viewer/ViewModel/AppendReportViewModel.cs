@@ -37,9 +37,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private DateTime _date;
 		private string _path;
 		private string _xslt;
+		private bool _isEditMode;
+		private bool _canEditLanguages;
+		private bool _canEditGroups;
 
 		public AppendReportViewModel(Window window, Report report, Settings settings,
-			PathInfo pathInfo, ImageService imageService, IProject project)
+			PathInfo pathInfo, ImageService imageService, IProject project, bool isEditMode = false)
 		{
 			_window = window;
 			Report = report;
@@ -48,7 +51,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			_imageService = imageService;
 			_project = project;
 
-			WindowTitle = "Add Report to Project";
+			IsEditMode = isEditMode;
+
+			WindowTitle = IsEditMode ? "Edit Project Report Information" : "Add Project Report";
 
 			var projectInfo = _project.GetProjectInfo();
 
@@ -65,14 +70,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				.ToList();
 
 			SelectedLanguageItems = new List<LanguageItem> {
-				LanguageItems.FirstOrDefault(a=> a.CultureInfo.Name == Report.Language) };
+				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, Report.Language, StringComparison.CurrentCultureIgnoreCase)==0) };
 
 			Date = Report.Date;
 			Name = Report.Name;
 			GroupName = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path;
-			//Xslt = Report.Xslt;
+
+			CanEditLanguages = !report.IsStudioReport;
+			CanEditGroups = !report.IsStudioReport;
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new CommandHandler(SaveChanges));
@@ -108,6 +115,51 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_name = value;
 				OnPropertyChanged(nameof(Name));
 				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+		public bool CanEditLanguages
+		{
+			get => _canEditLanguages;
+			set
+			{
+				if (_canEditLanguages == value)
+				{
+					return;
+				}
+
+				_canEditLanguages = value;
+				OnPropertyChanged(nameof(CanEditLanguages));
+			}
+		}
+
+		public bool CanEditGroups
+		{
+			get => _canEditGroups;
+			set
+			{
+				if (_canEditGroups == value)
+				{
+					return;
+				}
+
+				_canEditGroups = value;
+				OnPropertyChanged(nameof(CanEditGroups));
+			}
+		}
+
+		public bool IsEditMode
+		{
+			get => _isEditMode;
+			set
+			{
+				if (_isEditMode == value)
+				{
+					return;
+				}
+
+				_isEditMode = value;
+				OnPropertyChanged(nameof(IsEditMode));
 			}
 		}
 
@@ -225,15 +277,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(Path) || !File.Exists(Path))
+				if (!IsEditMode)
 				{
-					return false;
-				}
+					if (string.IsNullOrEmpty(Path) || !File.Exists(Path))
+					{
+						return false;
+					}
 
-				if (!string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
-				{
-					return false;
-				}				
+					if (!string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
+					{
+						return false;
+					}
+				}
 
 				if (string.IsNullOrEmpty(Name))
 				{

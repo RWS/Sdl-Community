@@ -24,7 +24,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		protected override void Execute()
 		{
-			MessageBox.Show("TODO");
+			_reportsViewerController.Print();
 		}
 
 		public override void UpdateEnabled(bool loading)

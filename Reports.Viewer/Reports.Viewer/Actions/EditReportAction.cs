@@ -1,6 +1,11 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Linq;
+using System.Windows;
+using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
+using Sdl.Community.Reports.Viewer.View;
+using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -23,8 +28,23 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		private bool _isLoading;
 
 		protected override void Execute()
-		{		
-			MessageBox.Show("TODO");
+		{
+			var report = _reportsViewerController.GetSelectedReports().FirstOrDefault();
+			if (report == null)
+			{
+				return;
+			}
+
+			var settings = GetSettings();
+			var view = new AppendReportWindow();
+			var viewModel = new AppendReportViewModel(view, report.Clone() as Report, settings, _pathInfo, _imageService,
+				_reportsViewerController.GetSelectedProject(), true);
+			view.DataContext = viewModel;
+			var result = view.ShowDialog();
+			if (result != null && (bool)result)
+			{
+				_reportsViewerController.UpdateReport(viewModel.Report);
+			}
 		}
 
 		public override void UpdateEnabled(bool loading)
@@ -43,9 +63,25 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			SetEnabled();
 		}
 
+		public void Run()
+		{
+			Execute();
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
+		}
+
 		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
 		{
-			_canEnable = e.SelectedReports?.Count > 0;
+			_canEnable = e.SelectedReports?.Count == 1;
 			SetEnabled();
 		}
 

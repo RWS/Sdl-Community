@@ -157,9 +157,14 @@
 				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 
 
-				<DataGridTextColumn Header="Description" CanUserSort="True"  
-				                    Binding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
+				<DataGridTemplateColumn Header="Description" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="2*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:Report">
+							<TextBlock ToolTip="{Binding Description}"
+							           Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 						
 				<DataGridTemplateColumn Header="Path" Width="2*" CanUserSort="True">
 					<DataGridTemplateColumn.CellTemplate>

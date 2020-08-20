@@ -67,7 +67,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public Settings Settings { get; set; }
 
-		public ReportViewModel ReportViewModel { get; internal set; }
+		public ReportViewModel ReportViewModel { get; internal set; }	
 
 		public bool IsLoading
 		{
@@ -175,11 +175,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			Settings = settings;
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-			//foreach (var report in FilteredReports)
-			//{
+
 			OnPropertyChanged(nameof(Report.DateToShortString));
-			//}
-			//ReportGroups = BuildReportGroup();
+
+			ReportGroups = BuildReportGroup();
 		}
 
 		public Report SelectedReport
@@ -470,7 +469,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void EditReport(object parameter)
 		{
-			MessageBox.Show("TODO");
+			var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			action.Run();
 		}
 
 		private void RemoveReport(object parameter)
@@ -480,23 +480,19 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		}
 
 		private void OpenFolder(object parameter)
-		{
-			MessageBox.Show("TODO");
-			return;
+		{			
+			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder) 
+			    || !Directory.Exists(ProjectLocalFolder))
+			{
+				return;
+			}
+			
+			var path = Path.Combine(ProjectLocalFolder, SelectedReport.Path.Trim('\\'));
 
-			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
-			//{
-			//	return;
-			//}
-
-
-			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
-			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
-
-			//if (File.Exists(path))
-			//{
-			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
-			//}
+			if (File.Exists(path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
+			}
 		}
 
 		public void Dispose()

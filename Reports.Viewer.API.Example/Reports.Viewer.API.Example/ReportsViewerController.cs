@@ -116,9 +116,25 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		private void Controller_ReportsUpdated(object sender, Sdl.Reports.Viewer.API.Events.ReportsUpdatedEventArgs e)
 		{
-			if (e.ClientId != _clientId)
+			if (e.ClientId != _clientId && e.Reports != null)
 			{
-				MessageBox.Show("TODO: (API Example) Controller_ReportsUpdated");
+				foreach (var updatedReport in e.Reports)
+				{
+					var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
+					if (report != null)
+					{
+						report.Language = updatedReport.Language;
+						report.Name = updatedReport.Name;
+						report.Description = updatedReport.Description;
+						report.Group = updatedReport.Group;
+						report.Path = updatedReport.Path;
+					}
+				}
+
+				if (_dataViewModel != null)
+				{
+					_dataViewModel.Reports = new List<Report>(_reports);
+				}
 			}
 		}
 
