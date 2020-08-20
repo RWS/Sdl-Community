@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define Sdl.Community.GoogleApiValidator_TargetDir=$(var.Sdl.Community.GoogleApiValidator.TargetDir)?>
+	<Product Id="*" Name="Google API Validator" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="eb801ff6-6c88-4f37-b046-9aa0da311c44">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+		
+		<Icon Id="GAV.ico" SourceFile="$(var.ProjectDir)GAV.ico" />
+		<Property Id="ARPPRODUCTICON" Value="GAV.ico" />
+		
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+		
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<UIRef Id="WixUI_InstallDir" />
+		
+		<Feature Id="ProductFeature" Title="GoogleApiValidator.Setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="GoogleApiValidator.Setup" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+	
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="cde1e030-eb64-49a5-b7b8-400b379c2d1a">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="Google API Validator" Icon="GAV.ico" Description="Google API Validator" Target="[INSTALLFOLDER]Sdl.Community.GoogleApiValidator.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Google API Validator" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="grpc_csharp_ext.x86.dll" Guid="8316f79a-f675-452e-97b8-26506bb9934e">
+			  <File Id="grpc_csharp_ext.x86.dll" Name="grpc_csharp_ext.x86.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)grpc_csharp_ext.x86.dll" />
+			</Component>
+			<Component Id="grpc_csharp_ext.x64.dll" Guid="2a628f19-94ef-49f1-a0a4-40df1f68cde3">
+			  <File Id="grpc_csharp_ext.x64.dll" Name="grpc_csharp_ext.x64.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)grpc_csharp_ext.x64.dll" />
+			</Component>
+			<Component Id="libgrpc_csharp_ext.x86.so" Guid="75bd05a5-b4f7-4a0b-bb4b-8c6ece27e4d2">
+			  <File Id="libgrpc_csharp_ext.x86.so" Name="libgrpc_csharp_ext.x86.so" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)libgrpc_csharp_ext.x86.so" />
+			</Component>
+			<Component Id="libgrpc_csharp_ext.x64.so" Guid="8178c240-6dcf-44c4-bf08-879393c0f627">
+			  <File Id="libgrpc_csharp_ext.x64.so" Name="libgrpc_csharp_ext.x64.so" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)libgrpc_csharp_ext.x64.so" />
+			</Component>
+			<Component Id="libgrpc_csharp_ext.x86.dylib" Guid="9309a18f-28b1-4f4d-94f4-bf70c93085ea">
+			  <File Id="libgrpc_csharp_ext.x86.dylib" Name="libgrpc_csharp_ext.x86.dylib" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)libgrpc_csharp_ext.x86.dylib" />
+			</Component>
+			<Component Id="libgrpc_csharp_ext.x64.dylib" Guid="826453a2-d75e-4d1d-85b3-d5935540196c">
+			  <File Id="libgrpc_csharp_ext.x64.dylib" Name="libgrpc_csharp_ext.x64.dylib" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)libgrpc_csharp_ext.x64.dylib" />
+			</Component>
+			<Component Id="Sdl.Community.GoogleApiValidator.exe" Guid="94708570-db35-420d-b1d6-4d6b007373fd">
+			  <File Id="Sdl.Community.GoogleApiValidator.exe" Name="Sdl.Community.GoogleApiValidator.exe" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Sdl.Community.GoogleApiValidator.exe" />
+			</Component>
+			<Component Id="Sdl.Community.GoogleApiValidator.exe.config" Guid="4772e181-e7cf-4f91-96bb-65b1de987deb">
+			  <File Id="Sdl.Community.GoogleApiValidator.exe.config" Name="Sdl.Community.GoogleApiValidator.exe.config" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Sdl.Community.GoogleApiValidator.exe.config" />
+			</Component>
+			<Component Id="Google.Cloud.Translate.V3.dll" Guid="739e4e4f-24a7-455e-b5c9-7f052b39e1a7">
+			  <File Id="Google.Cloud.Translate.V3.dll" Name="Google.Cloud.Translate.V3.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Cloud.Translate.V3.dll" />
+			</Component>
+			<Component Id="Google.Cloud.Translation.V2.dll" Guid="e3ca0734-8ac8-46e5-bd8a-d3d519495ed4">
+			  <File Id="Google.Cloud.Translation.V2.dll" Name="Google.Cloud.Translation.V2.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Cloud.Translation.V2.dll" />
+			</Component>
+			<Component Id="Google.Api.Gax.dll" Guid="cd47dfbb-eb09-4542-81b3-c19e22a57562">
+			  <File Id="Google.Api.Gax.dll" Name="Google.Api.Gax.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Api.Gax.dll" />
+			</Component>
+			<Component Id="Google.Api.Gax.Grpc.dll" Guid="7ef303fb-f4bb-4e68-8c4e-1592715e0dc9">
+			  <File Id="Google.Api.Gax.Grpc.dll" Name="Google.Api.Gax.Grpc.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Api.Gax.Grpc.dll" />
+			</Component>
+			<Component Id="Google.Protobuf.dll" Guid="50b062a7-ad91-48d8-b19e-ca22d38f55ba">
+			  <File Id="Google.Protobuf.dll" Name="Google.Protobuf.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Protobuf.dll" />
+			</Component>
+			<Component Id="ControlzEx.dll" Guid="ec11c269-4269-49db-8dc2-e7b429db725c">
+			  <File Id="ControlzEx.dll" Name="ControlzEx.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)ControlzEx.dll" />
+			</Component>
+			<Component Id="Microsoft.Xaml.Behaviors.dll" Guid="ef05af3d-6506-4585-be08-32e84f37cbda">
+			  <File Id="Microsoft.Xaml.Behaviors.dll" Name="Microsoft.Xaml.Behaviors.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Microsoft.Xaml.Behaviors.dll" />
+			</Component>
+			<Component Id="Google.Api.CommonProtos.dll" Guid="f14648c3-b62f-4673-ab69-b589ad4bce11">
+			  <File Id="Google.Api.CommonProtos.dll" Name="Google.Api.CommonProtos.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Api.CommonProtos.dll" />
+			</Component>
+			<Component Id="Google.LongRunning.dll" Guid="8daa76d8-70ac-4d0d-be9d-37ce8e5882ef">
+			  <File Id="Google.LongRunning.dll" Name="Google.LongRunning.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.LongRunning.dll" />
+			</Component>
+			<Component Id="Grpc.Core.Api.dll" Guid="69d9defd-ab99-4b1a-8cb9-40fbcf460c1b">
+			  <File Id="Grpc.Core.Api.dll" Name="Grpc.Core.Api.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Grpc.Core.Api.dll" />
+			</Component>
+			<Component Id="System.Memory.dll" Guid="3c3f80ad-ff8b-445e-8dfa-f8ab6656614d">
+			  <File Id="System.Memory.dll" Name="System.Memory.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)System.Memory.dll" />
+			</Component>
+			<Component Id="System.Numerics.Vectors.dll" Guid="8db3bc86-04b2-466e-b163-9a9149f95027">
+			  <File Id="System.Numerics.Vectors.dll" Name="System.Numerics.Vectors.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)System.Numerics.Vectors.dll" />
+			</Component>
+			<Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="e08d92c7-d119-432f-81da-c86ca155222d">
+			  <File Id="System.Runtime.CompilerServices.Unsafe.dll" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)System.Runtime.CompilerServices.Unsafe.dll" />
+			</Component>
+			<Component Id="System.Buffers.dll" Guid="34703e22-b20f-425b-af60-9307aefcffbb">
+			  <File Id="System.Buffers.dll" Name="System.Buffers.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)System.Buffers.dll" />
+			</Component>
+			<Component Id="Grpc.Core.dll" Guid="74899909-e0b6-4dd4-8773-dc7b112083de">
+			  <File Id="Grpc.Core.dll" Name="Grpc.Core.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Grpc.Core.dll" />
+			</Component>
+			<Component Id="Google.Api.Gax.Grpc.GrpcCore.dll" Guid="0c182f76-d703-4c3e-a58a-46cb2915669a">
+			  <File Id="Google.Api.Gax.Grpc.GrpcCore.dll" Name="Google.Api.Gax.Grpc.GrpcCore.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Api.Gax.Grpc.GrpcCore.dll" />
+			</Component>
+			<Component Id="Google.Apis.Translate.v2.dll" Guid="d3d28c60-87c4-49e6-b686-ebc6c3a78e6c">
+			  <File Id="Google.Apis.Translate.v2.dll" Name="Google.Apis.Translate.v2.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Apis.Translate.v2.dll" />
+			</Component>
+			<Component Id="Google.Apis.Core.dll" Guid="090f96b0-20cb-4e99-bb0c-48f7676ab324">
+			  <File Id="Google.Apis.Core.dll" Name="Google.Apis.Core.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Apis.Core.dll" />
+			</Component>
+			<Component Id="Google.Apis.dll" Guid="aa79c999-29f4-4c85-984c-3e69db55e30b">
+			  <File Id="Google.Apis.dll" Name="Google.Apis.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Apis.dll" />
+			</Component>
+			<Component Id="Newtonsoft.Json.dll" Guid="2c20de06-31dd-45ab-ba93-331712f5eee4">
+			  <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Newtonsoft.Json.dll" />
+			</Component>
+			<Component Id="Google.Apis.Auth.dll" Guid="47dd9dfd-230c-43cf-a1ff-6d11fb9f99dd">
+			  <File Id="Google.Apis.Auth.dll" Name="Google.Apis.Auth.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Apis.Auth.dll" />
+			</Component>
+			<Component Id="Google.Api.Gax.Rest.dll" Guid="9a3e3faf-1f77-4162-89ee-91f486d826ef">
+			  <File Id="Google.Api.Gax.Rest.dll" Name="Google.Api.Gax.Rest.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Api.Gax.Rest.dll" />
+			</Component>
+			<Component Id="Microsoft.Bcl.AsyncInterfaces.dll" Guid="727849dc-52cb-464e-b4db-da526dd8b2ab">
+			  <File Id="Microsoft.Bcl.AsyncInterfaces.dll" Name="Microsoft.Bcl.AsyncInterfaces.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Microsoft.Bcl.AsyncInterfaces.dll" />
+			</Component>
+			<Component Id="System.Threading.Tasks.Extensions.dll" Guid="e3794d0a-28c5-4223-a45b-ab4f88d4bb62">
+			  <File Id="System.Threading.Tasks.Extensions.dll" Name="System.Threading.Tasks.Extensions.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)System.Threading.Tasks.Extensions.dll" />
+			</Component>
+			<Component Id="Grpc.Auth.dll" Guid="b7ea3f94-bb97-40f0-841d-2376ebbfbf96">
+			  <File Id="Grpc.Auth.dll" Name="Grpc.Auth.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Grpc.Auth.dll" />
+			</Component>
+			<Component Id="Google.Apis.Auth.PlatformServices.dll" Guid="9b5a32cb-a7f4-495e-8ad0-b408eb0cf7d9">
+			  <File Id="Google.Apis.Auth.PlatformServices.dll" Name="Google.Apis.Auth.PlatformServices.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)Google.Apis.Auth.PlatformServices.dll" />
+			</Component>
+			<Component Id="MahApps.Metro.dll" Guid="ecd20707-32d2-438e-a00f-66175016e0b2">
+			  <File Id="MahApps.Metro.dll" Name="MahApps.Metro.dll" Source="$(var.Sdl.Community.GoogleApiValidator_TargetDir)MahApps.Metro.dll" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
