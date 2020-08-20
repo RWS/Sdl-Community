@@ -32,6 +32,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _pageSetupCommand;
 		private ICommand _saveAsCommand;
 		private ICommand _dragDropCommand;
+		private ICommand _mouseDoubleClick;
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
@@ -52,6 +53,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
 		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+
+		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
 
 
 		public string WindowTitle
@@ -229,6 +232,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			var action = SdlTradosStudio.Application.GetAction<AddReportAction>();
 			action.Run(report);
+		}
+
+		private void MouseDoubleClick(object parameter)
+		{
+			if (SelectedReport != null)
+			{
+				// TODO load the report 
+			}
 		}
 
 		private void ClearSelection(object parameter)

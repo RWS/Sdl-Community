@@ -46,7 +46,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private bool _canEditLanguages;
 		private bool _canEditGroups;
 
-		public AppendReportViewModel(Window window, ReportWithXslt report, Settings settings,
+		public AppendReportViewModel(Window window, Report report, Settings settings,
 			PathInfo pathInfo, ImageService imageService, IProject project, bool isEditMode = false)
 		{
 			_window = window;
@@ -82,7 +82,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			GroupName = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path;
-			Xslt = report.Xslt;
+			if (report is ReportWithXslt reportWithXslt)
+			{
+				Xslt = reportWithXslt.Xslt;
+			}
+
 			CanEditLanguages = !report.IsStudioReport;
 			CanEditGroups = !report.IsStudioReport;
 		}

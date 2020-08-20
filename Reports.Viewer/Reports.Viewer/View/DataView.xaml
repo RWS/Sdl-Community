@@ -50,6 +50,7 @@
 					  SelectedItem="{Binding SelectedReports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		              SelectedItems="{Binding SelectedReports, Mode=OneWayToSource}"
 		                            behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+		                            behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"			
 					  FontSize="12"
 					  BorderBrush="#C1C0C0"
 					  FontFamily="Segoe UI"

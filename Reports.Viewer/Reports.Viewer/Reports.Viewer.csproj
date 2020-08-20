@@ -66,6 +66,7 @@
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
