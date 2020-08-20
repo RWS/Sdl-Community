@@ -3,6 +3,6 @@
 	public interface ISDLMTCloudAction
 	{
 		string Id { get; set; }
-		string OptionName { get; set; }
+		string Text { get; set; }
 	}
 }

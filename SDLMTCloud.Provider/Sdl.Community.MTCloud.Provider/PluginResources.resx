@@ -331,4 +331,22 @@
   <data name="RateIt_Option_DisabledMessage" xml:space="preserve">
     <value>Enable "Send feedback option" from Settings</value>
   </data>
+  <data name="Tooltip_DisabledMessage" xml:space="preserve">
+    <value>To enable RateIt check the "Enable Rating" checkbox in the SDL MT Cloud settings page.</value>
+  </data>
+  <data name="SendFeedbackResponseFromServer" xml:space="preserve">
+	  <value>Send feedback response from server: Status: {0} Response: {1}</value>
+  </data>
+  <data name="AutoSendFeedback" xml:space="preserve">
+	  <value>Auto Send Feedback</value>
+  </data>
+  <data name="EnableRating" xml:space="preserve">
+	  <value>Enable Rating</value>
+  </data>
+  <data name="ToEnableRatingChangeTheSettings" xml:space="preserve">
+	  <value>To enable rating change the settings...</value>
+  </data>
+  <data name="SDLMTCloudName" xml:space="preserve">
+	  <value>SDL Machine Translation Cloud Provider</value>
+  </data>
 </root>

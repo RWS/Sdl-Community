@@ -10,7 +10,5 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		[JsonProperty("TargetMTText")]
 		public string TargetMtText { get; set; }
 		public string SourceText { get; set; }
-		public string SelectedText { get; set; }
-		public string Metadata { get; set; }
 	}
 }
