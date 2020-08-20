@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -20,6 +22,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ITranslationService _translationService;
 		private readonly IActionProvider _actionProvider;
 		private readonly ISegmentSupervisor _segmentSupervisor;
+		private readonly IMessageBoxService _messageBoxService;
 		private List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 
@@ -28,10 +31,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool _isSendFeedbackEnabled;
 		private bool _autoSendFeedback;
 
-		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor)
+		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService)
 		{
 			_actionProvider = actionProvider;
 			_segmentSupervisor = segmentSupervisor;
+			_messageBoxService = messageBoxService;
 
 			SetShortcutService(shortcutService);
 			ClearCommand = new CommandHandler(ClearFeedbackBox);
@@ -101,13 +105,30 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (_isSendFeedbackEnabled == value) return;
 				if (!value)
 				{
-					Rating = 0;
-					_segmentSupervisor.StopSupervising();
-					AutoSendFeedback = false;
+					StopSegmentSupervisor();
+					ResetFeedbackOptions();
 				}
+				else
+				{
+					_segmentSupervisor.StartSupervising();
+				}
+
 				_isSendFeedbackEnabled = value;
 				OnPropertyChanged(nameof(IsSendFeedbackEnabled));
 			}
+		}
+
+		private void ResetFeedbackOptions()
+		{
+			Rating = 0;
+			AutoSendFeedback = false;
+			FeedbackOptions.ForEach(fo => fo.IsChecked = false);
+		}
+
+		private void StopSegmentSupervisor()
+		{
+			_segmentSupervisor?.StopSupervising();
+			ResetSegmentSupervisor();
 		}
 
 		public string Feedback
@@ -145,6 +166,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SetRateOptionFromShortcuts(string optionName)
 		{
+			if (!IsSendFeedbackEnabled) return;
 			if (string.IsNullOrWhiteSpace(optionName)) return;
 
 			var option = FeedbackOptions.FirstOrDefault(fo => fo.OptionName == optionName);
@@ -159,9 +181,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var segment = segmentId ?? editorController.ActiveDocument.ActiveSegmentPair.Properties.Id;
 
-			if (!_segmentSupervisor.Improvements.ContainsKey(segment) && _rating == 0) return;
+			if (!_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(segment))
+			{
+				_messageBoxService.ShowWarningMessage($"Original translation from {PluginResources.SDLMTCloudName} is missing. Translate again using the {PluginResources.SDLMTCloudName} if you want to be able to send a feedback for this segment pair", "Original translation missing");
 
-			var improvement = _segmentSupervisor.Improvements[segment];
+				return;
+			}
+
+			var improvement = _segmentSupervisor.ActiveDocumentImprovements[segment];
 
 			if (_translationService != null)
 			{
@@ -172,13 +199,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 				comments.AddRange(FeedbackOptions.Where(fo => fo.IsChecked).Select(fo => fo.OptionName).ToList());
 
-				var rating = _rating > 0
-					? new Rating
-					{
-						Score = _rating,
-						Comments = comments
-					}
-					: null;
+				dynamic rating = new ExpandoObject();
+				if (_rating > 0) rating.Score = _rating;
+				if (comments.Count > 0) rating.Comments = comments;
+				if (!((ExpandoObject) rating).Any()) rating = null;
 
 				if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
 				await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
@@ -292,16 +316,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (_translationService != null)
 			{
 				_translationService.TranslationReceived += _translationService_TranslationReceived;
-			}
-		}
-
-		public void SetSendFeedback(bool sendFeedback)
-		{
-			IsSendFeedbackEnabled = sendFeedback;
-
-			if (sendFeedback)
-			{
-				_segmentSupervisor.StartSupervising();
 			}
 		}
 	}

@@ -202,6 +202,7 @@
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
     <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SendFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />

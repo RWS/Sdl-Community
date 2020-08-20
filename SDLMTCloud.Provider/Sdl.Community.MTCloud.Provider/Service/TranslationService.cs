@@ -125,7 +125,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		public async Task SendFeedback(SegmentId? segmentId, Rating rating, string originalText, string improvement)
+		public async Task SendFeedback(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
 		{
 			var feedbackRequest = CreateFeedbackRequest(segmentId, rating, originalText, improvement);
 			await SendFeedback(feedbackRequest);
@@ -243,7 +243,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		private dynamic CreateFeedbackRequest(SegmentId? segmentId, Rating rating, string originalText, string improvement)
+		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 

@@ -608,6 +608,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        /// </summary>
+        public static string SDLMTCloudName {
+            get {
+                return ResourceManager.GetString("SDLMTCloudName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Search__1_ {

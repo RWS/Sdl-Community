@@ -139,6 +139,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public void LoadState(string translationProviderState)
 		{
+			Options = new Options();
 			try
 			{
 				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
@@ -146,7 +147,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			catch
 			{
 				// ignore any casting errors and simply create a new options instance
-				Options = new Options();
 			}
 			finally
 			{
@@ -259,7 +259,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			// assign the selected model
 			var selectedModel = mapping.EngineModels.FirstOrDefault(a => a.DisplayName.Equals(mapping.SavedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-			                    ?? mapping.EngineModels.FirstOrDefault(a => a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
+			                    ?? mapping.EngineModels.FirstOrDefault(a => a.Model != null && a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
 			                    ?? mapping.EngineModels[0];
 
 			var dictionaries = LanguageMappingsService.GetDictionaries(mapping.SelectedSourceLanguageMapping, mapping.SelectedTargetLanguageMapping);
@@ -364,7 +364,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			if (_rateItController != null)
 			{
-				_rateItController.RateIt.SetSendFeedback(Options.SendFeedback);
+				_rateItController.RateIt.IsSendFeedbackEnabled = Options.SendFeedback;
 				return;
 			}
 
@@ -377,7 +377,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					if (_rateItController != null)
 					{
 						_rateItController.RateIt.SetTranslationService(TranslationService);
-						_rateItController.RateIt.SetSendFeedback(Options.SendFeedback); // TODO: Set the feedback to the view model after whe
+						_rateItController.RateIt.IsSendFeedbackEnabled = Options.SendFeedback; 
 						_rateItController.Activate();
 					}
 				});

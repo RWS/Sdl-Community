@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
 
-		Task SendFeedback(SegmentId? segmentId, Rating rating, string original, string improvement);
+		Task SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement);
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
 	}

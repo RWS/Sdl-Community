@@ -15,7 +15,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 		public override void Initialize()
 		{
 			base.Initialize();
-			OptionName = nameof(RateItViewModel.DecreaseRating);
 		}
 
 		protected override void Execute()
@@ -23,7 +22,5 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();
 			rateItController?.RateIt?.DecreaseRating();
 		}
-
-		public string OptionName { get; set; }
 	}
 }

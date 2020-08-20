@@ -346,4 +346,7 @@
   <data name="ToEnableRatingChangeTheSettings" xml:space="preserve">
 	  <value>To enable rating change the settings...</value>
   </data>
+  <data name="SDLMTCloudName" xml:space="preserve">
+	  <value>SDL Machine Translation Cloud Provider</value>
+  </data>
 </root>

@@ -157,6 +157,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			try
 			{
 				ReSendChecked = true;
+				SendFeedback = true;
 
 				_provider.Options = new Options();
 

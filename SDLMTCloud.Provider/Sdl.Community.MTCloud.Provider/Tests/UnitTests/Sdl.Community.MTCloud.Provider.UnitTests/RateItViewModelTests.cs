@@ -14,7 +14,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var shortcutService = Substitute.For<IShortcutService>();
 			var providerAction = Substitute.For<IActionProvider>();
 			var segmentSupervisor = Substitute.For<ISegmentSupervisor>();
-			_rateItViewModel = new RateItViewModel(shortcutService, providerAction, segmentSupervisor);
+			var messageBoxService = Substitute.For<IMessageBoxService>();
+			_rateItViewModel = new RateItViewModel(shortcutService, providerAction, segmentSupervisor, messageBoxService);
 		}
 
 		//[Theory]
