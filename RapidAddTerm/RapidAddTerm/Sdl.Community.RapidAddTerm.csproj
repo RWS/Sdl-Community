@@ -54,7 +54,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(ProgramFiles)\SDL\SDL MultiTerm\MultiTerm15\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL MultiTerm\MultiTerm16\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
