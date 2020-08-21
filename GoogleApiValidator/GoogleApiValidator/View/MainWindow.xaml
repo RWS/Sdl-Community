@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:styles ="clr-namespace:Sdl.Community.GoogleApiValidator.Styles"
 		xmlns:resx="clr-namespace:Sdl.Community.GoogleApiValidator"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:behaviours ="clr-namespace:Sdl.Community.GoogleApiValidator.Behaviors"
+        AllowsTransparency="False"
         xmlns:utils="clr-namespace:Sdl.Community.GoogleApiValidator.Utils"
         mc:Ignorable="d"
 		Icon="../Resources/GAV.ico"
 		WindowStartupLocation="CenterScreen"
 		DataContext="{StaticResource MainViewModel}"
-        WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
+        WindowStyle="None"  ResizeMode="NoResize"
         Title="Google API Validator" Height="450" Width="800">
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
 		<Grid Margin="1,0,0,0">
@@ -27,7 +29,7 @@
 
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
-				<StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
+				<StackPanel Grid.Column="0" Grid.Row="1" Margin="10,10,10,0">
 					<TextBlock 
 						Text="{Binding Message}"
 						Visibility="{Binding Message,Converter={StaticResource EmptyToVisibility}}"
@@ -55,14 +57,14 @@
 								Style="{StaticResource Description}"
 								Text="{x:Static resx:AppResources.ApiKeyDescription}"/>
 							<PasswordBox Style="{DynamicResource MahApps.Styles.PasswordBox.Button.Revealed}"
-										 Width="300"
+										 Width="360"
 										 Margin="10 10"
 										 VerticalContentAlignment="Center"
 										 HorizontalAlignment="Left"
-										 Controls:TextBoxHelper.UseFloatingWatermark="True"  
-										 Controls:TextBoxHelper.Watermark="API Key"
-										 Controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(Controls:TextBoxHelper.HasText), Mode=OneWay}"
-										 Controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+							             controls:TextBoxHelper.UseFloatingWatermark="True"  
+										 controls:TextBoxHelper.Watermark="API Key"
+							             controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+							             controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
 										 utils:PasswordHelper.Attach="True" 
 										 utils:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
 										 IsEnabled="True">
@@ -75,14 +77,14 @@
 							Style="{StaticResource Description}"
 							Margin="10 10 0 0" 
 							Text="{x:Static resx:AppResources.V3JsonPathDescription}"/>
-						<TextBox Controls:TextBoxHelper.Watermark="Json file path"
+						<TextBox controls:TextBoxHelper.Watermark="Json file path"
 						         Margin="10 10"
 								 Text="{Binding JsonFilePath}"/>
 						<TextBlock 
 							Style="{StaticResource Description}"
 							Margin="10 10" 
 							Text="{x:Static resx:AppResources.V3ProjectNameDescription}"/>
-						<TextBox Controls:TextBoxHelper.Watermark="Project Name"
+						<TextBox controls:TextBoxHelper.Watermark="Project Name"
 						         Margin="10 0"
 						         Text="{Binding ProjectName}"/>
 				</StackPanel>
@@ -93,11 +95,16 @@
 						Text="{x:Static resx:AppResources.GoogleResponseDescription}"
 						Visibility="{Binding GoogleResponse,Converter={StaticResource EmptyToVisibility}}"
 						/>
-				</StackPanel>
-			<TextBlock 
-				Margin="20 0 0 0"
-				Grid.Row="2" Text="{Binding GoogleResponse}"
-				TextWrapping="WrapWithOverflow"/>
+				
+			</StackPanel>
+			<WebBrowser behaviours:WebBrowserContentSource.Html="{Binding GoogleResponse, UpdateSourceTrigger=PropertyChanged}"
+						behaviours:WebBrowserUtility.HideScrollBar="true"
+						behaviours:WebBrowserUtility.Top="0"
+			            Width="auto"
+			            Grid.Row="2"
+			            Margin="10 0 20 20"
+			            />
+
 			<DockPanel Grid.Row="3" LastChildFill="False" HorizontalAlignment="Right">
 
 				<Button

@@ -70,7 +70,7 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter yout Google Translate API key into the field bellow and press Validate button.
+        ///   Looks up a localized string similar to Enter your Google Translate API key into the field below and press the &quot;Validate&quot; button:.
         /// </summary>
         public static string ApiKeyDescription {
             get {
@@ -79,7 +79,7 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select against what version of Google Translate API you want to validate the API Key.
+        ///   Looks up a localized string similar to Please select the version of the Google Translate API that you wish to validate:.
         /// </summary>
         public static string ApiVersionDescription {
             get {
@@ -161,7 +161,7 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the path where the json file asociated to your API Key  is saved locally.
+        ///   Looks up a localized string similar to Enter the local path to the json file associated with your API key:.
         /// </summary>
         public static string V3JsonPathDescription {
             get {
@@ -170,7 +170,7 @@ namespace Sdl.Community.GoogleApiValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter project name.
+        ///   Looks up a localized string similar to Enter the project name for this file from your Google account.
         /// </summary>
         public static string V3ProjectNameDescription {
             get {

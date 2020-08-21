@@ -38,7 +38,6 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 				    Version = Enums.Version.V3
 				}
 			};
-
 		    _selectedVersion = _apiVersions[0];
 		    _v2Selected = true;
 	    }
@@ -177,7 +176,8 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 					}
 				    catch (Exception e)
 				    {
-					    GoogleResponse = e.Message.Contains("Invalid resource name") ? AppResources.InvalidProjectName : e.Message;
+						var message = e.Message.Contains("Invalid resource name") ? AppResources.InvalidProjectName : e.Message;
+					    GoogleResponse = AddEncriptionMeta(message);
 				    }
 				}
 			    else
@@ -210,12 +210,21 @@ namespace Sdl.Community.GoogleApiValidator.ViewModel
 			    }
 			    catch (Exception e)
 			    {
-				    GoogleResponse = e.Message;
+				    GoogleResponse = AddEncriptionMeta(e.Message);
 			    }
 		    }
 	    }
 
-	    private bool IsWindowValid()
+	    private string AddEncriptionMeta(string response)
+	    {
+			var htmlStart = "<html> \n <meta http-equiv=\'Content-Type\' content=\'text/html;charset=UTF-8\'>\n <body style=\"font-family:Segoe Ui!important;font-size:13px!important\">\n";
+
+		    var editedDescription = response.Insert(0, htmlStart);
+		    editedDescription += "\n</body></html>";
+		    return editedDescription;
+		}
+
+		private bool IsWindowValid()
 	    {
 		    return !(string.IsNullOrEmpty(JsonFilePath) || string.IsNullOrEmpty(ProjectName));
 	    }
