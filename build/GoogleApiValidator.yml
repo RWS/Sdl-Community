@@ -30,4 +30,12 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
+
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator\bin\$(buildConfiguration)\Sdl.Community.GoogleApiValidator.exe'
+     description: 'GoogleApiValidator'
+
 #  - template: jobs/publish-build-artifact-task.yml
