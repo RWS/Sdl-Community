@@ -1,5 +1,7 @@
-"<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define Sdl.Community.GoogleApiValidator_TargetDir="D:\a\1\s\GoogleApiValidator\GoogleApiValidator\bin\Release\"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<?define Sdl.Community.GoogleApiValidator_TargetDir="D:\a\1\s\GoogleApiValidator\GoogleApiValidator\bin\Release\"?>
+	
 	<Product Id="*" Name="Google API Validator" Language="1033" Version="1.0.0.3" Manufacturer="Sdl Community" UpgradeCode="eb801ff6-6c88-4f37-b046-9aa0da311c44">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
