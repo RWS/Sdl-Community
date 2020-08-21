@@ -72,10 +72,19 @@
 								<Image Grid.Column="0" Margin="2,0,0,2" 
 								       VerticalAlignment="Center" 
 								       Stretch="UniformToFill"
-								       Width="18" 
-									   Source="../Resources/Report.png"
+								       Width="17" 
 								       RenderOptions.BitmapScalingMode="HighQuality" 
 								       RenderOptions.EdgeMode="Aliased">
+									<Image.Style>
+										<Style TargetType="Image">
+											<Setter Property="Source" Value="../Resources/Report.png"/>
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding IsStudioReport}" Value="True">
+													<Setter Property="Source" Value="../Resources/StudioReport.png"/>
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</Image.Style>
 								</Image>
 
 								<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4,0,2,0"  

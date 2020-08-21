@@ -18,7 +18,7 @@ namespace Sdl.Community.Reports.Viewer.View
 			InitializeComponent();
 
 			_viewModel = viewModel;
-			Loaded += ReportsNavigationView_Loaded;
+			Loaded += ReportsNavigationView_Loaded;			
 		}
 
 		/// <summary>

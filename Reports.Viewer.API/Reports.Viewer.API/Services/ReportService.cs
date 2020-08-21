@@ -150,7 +150,7 @@ namespace Sdl.Reports.Viewer.API.Services
 			}
 		}
 
-		public string ReplaceReportInfo(Match match)
+		private string ReplaceReportInfo(Match match)
 		{
 			var regexName = new Regex(@"(Name\="")([^""]*)("")", RegexOptions.Singleline);
 			var regexDescription = new Regex(@"(Description\="")([^""]*)("")", RegexOptions.Singleline);

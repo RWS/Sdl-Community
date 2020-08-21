@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.API.Example.Actions
 {
@@ -12,15 +12,34 @@ namespace Sdl.Community.Reports.Viewer.API.Example.Actions
 	)]
 	[ActionLayout(typeof(ReportsViewerAPIExampleActionsGroup), 8, DisplayType.Large)]
 	public class EditReportAction : AbstractViewControllerAction<ReportsViewerController>
-	{		
+	{
+		private ReportsViewerController _reportsViewerController;
+
 		protected override void Execute()
-		{		
-			MessageBox.Show("TODO");
+		{
+			var reports = _reportsViewerController.GetSelectedReports();
+			if (reports == null || reports.Count == 0)
+			{
+				return;
+			}
+
+			foreach (var report in reports)
+			{
+				report.Name += " [updated]";
+			}
+
+			_reportsViewerController.UpdateReports(reports);
+		}
+
+		public void Run()
+		{
+			Execute();
 		}
 
 		public override void Initialize()
 		{
-			Enabled = false;
+			Enabled = true;
+			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 		}
 	}
 }

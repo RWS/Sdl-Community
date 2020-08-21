@@ -102,6 +102,16 @@ namespace Sdl.Community.Reports.Viewer.API.Example {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Refresh", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon ReportsView {
             get {
                 object obj = ResourceManager.GetObject("ReportsView", resourceCulture);
@@ -169,6 +179,24 @@ namespace Sdl.Community.Reports.Viewer.API.Example {
         internal static string ReportsViewerAPIExample_Name {
             get {
                 return ResourceManager.GetString("ReportsViewerAPIExample_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh view.
+        /// </summary>
+        internal static string ReportsViewerAPIExample_Refresh_Description {
+            get {
+                return ResourceManager.GetString("ReportsViewerAPIExample_Refresh_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string ReportsViewerAPIExample_Refresh_Name {
+            get {
+                return ResourceManager.GetString("ReportsViewerAPIExample_Refresh_Name", resourceCulture);
             }
         }
         

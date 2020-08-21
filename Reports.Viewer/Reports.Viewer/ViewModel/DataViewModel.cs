@@ -22,7 +22,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<Report> _reports;
 		private Report _selectedReport;
 		private IList _selectedReports;
-		private string _projectLocalFolder;		
+		private string _projectLocalFolder;
 		private ICommand _clearSelectionCommand;
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
@@ -56,7 +56,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
 
-
 		public string WindowTitle
 		{
 			get => _windowTitle;
@@ -78,7 +77,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 
 				_projectLocalFolder = value;
-				OnPropertyChanged(nameof(ProjectLocalFolder));				
+				OnPropertyChanged(nameof(ProjectLocalFolder));
 			}
 		}
 
@@ -93,7 +92,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		public bool IsReportSelected => SelectedReports?.Cast<Report>().ToList().Count > 0;		
+		public bool IsReportsSelected => SelectedReports?.Cast<Report>().ToList().Count > 0;
+
+		public bool IsReportSelected => SelectedReports?.Cast<Report>().ToList().Count == 1;
 
 		public Report SelectedReport
 		{
@@ -159,7 +160,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private void OpenFolder(object parameter)
 		{
 			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
-			                                 || !Directory.Exists(ProjectLocalFolder))
+											 || !Directory.Exists(ProjectLocalFolder))
 			{
 				return;
 			}
@@ -214,19 +215,19 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					if (!fileAttributes.HasFlag(FileAttributes.Directory))
 					{
 						if (string.IsNullOrEmpty(report.Xslt) &&
-						    (fullPath.ToLower().EndsWith(".xslt") 
-						     || fullPath.ToLower().EndsWith(".xsl")))
+							(fullPath.ToLower().EndsWith(".xslt")
+							 || fullPath.ToLower().EndsWith(".xsl")))
 						{
 							report.Xslt = fullPath;
 						}
 						if (string.IsNullOrEmpty(report.Path) &&
-						    (fullPath.ToLower().EndsWith(".html") 
-						     || fullPath.ToLower().EndsWith(".htm")
-						     || fullPath.ToLower().EndsWith(".xml")))
+							(fullPath.ToLower().EndsWith(".html")
+							 || fullPath.ToLower().EndsWith(".htm")
+							 || fullPath.ToLower().EndsWith(".xml")))
 						{
 							report.Path = fullPath;
 						}
-					}					
+					}
 				}
 			}
 
@@ -238,7 +239,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			if (SelectedReport != null)
 			{
-				// TODO load the report 
+				var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+				action.Run();
 			}
 		}
 

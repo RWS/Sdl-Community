@@ -45,6 +45,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private bool _isEditMode;
 		private bool _canEditLanguages;
 		private bool _canEditGroups;
+		private bool _canEditXslt;
 
 		public AppendReportViewModel(Window window, Report report, Settings settings,
 			PathInfo pathInfo, ImageService imageService, IProject project, bool isEditMode = false)
@@ -81,7 +82,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			Name = Report.Name;
 			GroupName = Report.Group;
 			Description = Report.Description;
-			Path = Report.Path;
+			Path = Report.Path ?? string.Empty;
+			Xslt = string.Empty;
 			if (report is ReportWithXslt reportWithXslt)
 			{
 				Xslt = reportWithXslt.Xslt;
@@ -154,6 +156,21 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				_canEditGroups = value;
 				OnPropertyChanged(nameof(CanEditGroups));
+			}
+		}
+
+		public bool CanEditXslt
+		{
+			get => _canEditXslt;
+			set
+			{
+				if (_canEditXslt == value)
+				{
+					return;
+				}
+
+				_canEditXslt = value;
+				OnPropertyChanged(nameof(CanEditXslt));
 			}
 		}
 
@@ -252,15 +269,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_path = value;
 				OnPropertyChanged(nameof(Path));
 
-
-				if (File.Exists(Path) && string.IsNullOrEmpty(Name))
+				if (File.Exists(_path) && string.IsNullOrEmpty(Name))
 				{
-					Name = System.IO.Path.GetFileName(Path);
+					Name = System.IO.Path.GetFileName(_path);
 					while (!string.IsNullOrEmpty(System.IO.Path.GetExtension(Name)))
 					{
 						Name = Name?.Substring(0, Name.Length - System.IO.Path.GetExtension(Name).Length);
 					}
 				}
+
+				CanEditXslt = _path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml");
 
 				OnPropertyChanged(nameof(IsValid));
 			}
@@ -276,7 +294,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					return;
 				}
 
-				_xslt = value;
+				_xslt = value ?? "";
 				OnPropertyChanged(nameof(Xslt));
 				OnPropertyChanged(nameof(IsValid));
 			}
@@ -311,7 +329,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private void SaveChanges(object parameter)
 		{
 			if (IsValid)
-			{				
+			{
 				if (Path.ToLower().EndsWith(".xml") && !string.IsNullOrEmpty(Xslt) && File.Exists(Xslt))
 				{
 					var htmlPath = Path + ".html";
@@ -330,7 +348,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Report.Name = Name;
 				Report.Group = GroupName;
 				Report.Description = Description;
-				Report.Path = Path;				
+				Report.Path = Path;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
 				_window.DialogResult = true;

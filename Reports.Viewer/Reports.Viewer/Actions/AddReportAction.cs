@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
@@ -40,7 +41,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
 			{
-				_reportsViewerController.AddReport(viewModel.Report);
+				_reportsViewerController.AddReports(new List<Report> {viewModel.Report});
 			}
 		}
 
@@ -53,6 +54,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		public void Run(ReportWithXslt report)
 		{
 			report.Language = _reportsViewerController.GetSelectedLanguage();
+			report.Group = _reportsViewerController.GetSelectedGroup();
 			AddNewReport(report);
 		}
 

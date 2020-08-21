@@ -1,6 +1,4 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;

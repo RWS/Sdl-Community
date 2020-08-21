@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.API.Example.Actions;
 using Sdl.Community.Reports.Viewer.API.Example.Commands;
@@ -18,6 +18,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 		private List<Report> _reports;
 		private Report _selectedReport;
 		private IList _selectedReports;
+		private string _projectLocalFolder;
 		private ICommand _clearSelectionCommand;
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
@@ -43,6 +44,21 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 			{
 				_windowTitle = value;
 				OnPropertyChanged(nameof(WindowTitle));
+			}
+		}
+
+		public string ProjectLocalFolder
+		{
+			get => _projectLocalFolder;
+			set
+			{
+				if (_projectLocalFolder == value)
+				{
+					return;
+				}
+
+				_projectLocalFolder = value;
+				OnPropertyChanged(nameof(ProjectLocalFolder));
 			}
 		}
 
@@ -91,7 +107,8 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 
 		private void EditReport(object parameter)
 		{
-			MessageBox.Show("TODO");
+			var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			action.Run();
 		}
 
 		private void RemoveReport(object parameter)
@@ -102,22 +119,18 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 
 		private void OpenFolder(object parameter)
 		{
-			MessageBox.Show("TODO");
-			return;
+			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
+			                                 || !Directory.Exists(ProjectLocalFolder))
+			{
+				return;
+			}
 
-			//if (SelectedReport?.Path == null || SelectedReport?.Project == null)
-			//{
-			//	return;
-			//}
+			var path = Path.Combine(ProjectLocalFolder, SelectedReport.Path.Trim('\\'));
 
-
-			//var projectInfo = SelectedReport?.Project.GetProjectInfo();
-			//var path = System.IO.Path.Combine(projectInfo.LocalProjectFolder, SelectedReport.Path.Trim('\\'));
-
-			//if (File.Exists(path))
-			//{
-			//	System.Diagnostics.Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
-			//}
+			if (File.Exists(path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
+			}
 		}
 
 

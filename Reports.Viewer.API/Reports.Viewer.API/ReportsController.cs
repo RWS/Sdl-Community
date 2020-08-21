@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -21,15 +22,15 @@ namespace Sdl.Reports.Viewer.API
 		private readonly ReportService _reportService;
 		private readonly ProjectsController _projectsController;
 		private List<Report> _reports;
-		private string _currentProjectId;
+		private string _previousProjectId;
 		private IProject _selectedProject;
+		private bool _ignoreChanges;
 		private readonly ProjectCultureCacheService _projectCultureCacheService;
-		private readonly PathInfo _pathInfo;
 
 		private ReportsController()
 		{
-			_pathInfo = new PathInfo();
-			_projectCultureCacheService = new ProjectCultureCacheService(_pathInfo);
+			var pathInfo = new PathInfo();
+			_projectCultureCacheService = new ProjectCultureCacheService(pathInfo);
 			_reportService = new ReportService(new ProjectSettingsService());
 			_reports = new List<Report>();
 
@@ -47,6 +48,7 @@ namespace Sdl.Reports.Viewer.API
 		public event EventHandler<ReportsAddedEventArgs> ReportsAdded;
 		public event EventHandler<ReportsUpdatedEventArgs> ReportsUpdated;
 		public event EventHandler<ReportsRemovedEventArgs> ReportsRemoved;
+		public event EventHandler<ProjectReportChangesEventArgs> ProjectReportChanges;
 
 		public ActionResult AddReports(string clientId, List<Report> reports)
 		{
@@ -177,9 +179,9 @@ namespace Sdl.Reports.Viewer.API
 		}
 
 		public List<Report> GetReports()
-		{
+		{		
 			lock (LockObject)
-			{
+			{				
 				return GetClonedReports();
 			}
 		}
@@ -190,18 +192,18 @@ namespace Sdl.Reports.Viewer.API
 			internal set
 			{
 				var projectId = value?.GetProjectInfo().Id.ToString();
-				if (_currentProjectId == projectId)
+				if (_previousProjectId == projectId)
 				{
 					return;
 				}
 
 				var eventArgs = new ProjectChangingEventArgs
 				{
-					PreviousProjectId = _currentProjectId,
+					PreviousProjectId = _previousProjectId,
 					ProjectId = projectId
 				};
 
-				_currentProjectId = projectId;
+				_previousProjectId = projectId;
 				_selectedProject = value;
 
 				ProjectChanging?.Invoke(this, eventArgs);
@@ -228,6 +230,51 @@ namespace Sdl.Reports.Viewer.API
 			return localProjectFolder;
 		}
 
+		public async Task<ReportChanges> GetStudioReportUpdates(string clientId)
+		{
+			var clonedAddedReports = new List<Report>();
+			var clonedRemovedReports = new List<Report>();
+			var studioReports = _reportService.GetStudioReports(SelectedProject, false).ToList();
+			foreach (var studioReport in studioReports)
+			{
+				if (!_reports.Exists(a => a.IsStudioReport && a.Id == studioReport.Id))
+				{
+					_reports.Add(studioReport);
+					clonedAddedReports.Add(studioReport.Clone() as Report);
+				}
+			}
+			
+			foreach (var report in _reports)
+			{				
+				if (report.IsStudioReport &&  !studioReports.Exists(a => a.Id == report.Id))
+				{
+					clonedRemovedReports.Add(report.Clone() as Report);
+				}
+			}
+
+			foreach (var removedReport in clonedRemovedReports)
+			{
+				_reports.RemoveAll(a => a.Id == removedReport.Id);
+			}
+
+			ProjectReportChanges?.Invoke(this, new ProjectReportChangesEventArgs
+			{
+				ClientId = clientId,
+				ProjectId = GetProjectId(),
+				AddedReports = clonedAddedReports,
+				RemovedReports = clonedRemovedReports
+			});
+
+			var reportChanges = new ReportChanges
+			{
+				ProjectId = GetProjectId(),
+				AddedReports = clonedAddedReports,
+				RemovedReports = clonedRemovedReports
+			};
+
+			return await Task.FromResult(reportChanges);
+		}
+
 		private string GetProjectId()
 		{
 			var projectInfo = SelectedProject?.GetProjectInfo();
@@ -248,14 +295,14 @@ namespace Sdl.Reports.Viewer.API
 					var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
 					var reports = SerializeProjectFiles(reportViewerProject.ReportsJson.Value);
 
-					var overwrite = OverwriteExistingReports(projectId);
+					var overwrite = CanOverwriteExistingReports(projectId);
 					reports.AddRange(_reportService.GetStudioReports(SelectedProject, overwrite));
 
 					_reports = reports;
 				}
 				else
 				{
-					_currentProjectId = null;
+					_previousProjectId = null;
 					_reports = new List<Report>();
 				}
 
@@ -269,8 +316,8 @@ namespace Sdl.Reports.Viewer.API
 			await Task.CompletedTask;
 		}
 
-		private bool OverwriteExistingReports(string projectId)
-		{			
+		private bool CanOverwriteExistingReports(string projectId)
+		{
 			var projectCultureCache = _projectCultureCacheService.GetProjectCultureCache();
 			var projectCulture = projectCultureCache.FirstOrDefault(a => a.ProjectId == projectId);
 			if (projectCulture != null)
@@ -283,7 +330,7 @@ namespace Sdl.Reports.Viewer.API
 					_projectCultureCacheService.UpdateProjectCultureCache(projectCultureCache);
 
 					return true;
-				}				
+				}
 			}
 			else
 			{
@@ -342,7 +389,7 @@ namespace Sdl.Reports.Viewer.API
 
 		private List<Report> UpdateReportData(IEnumerable<Report> reports)
 		{
-			var clonedReports = new List<Report>();			
+			var clonedReports = new List<Report>();
 			foreach (var report in reports)
 			{
 				var existingReport = _reports?.FirstOrDefault(a => a.Id == report.Id);
@@ -365,13 +412,22 @@ namespace Sdl.Reports.Viewer.API
 			var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
 			if (studioReports.Count > 0)
 			{
-				if (SelectedProject is FileBasedProject fileBasedProject)
+				try
 				{
-					_projectsController.Close(fileBasedProject);
+					_ignoreChanges = true;
 
-					_reportService.UpdateStudioReportInformation(fileBasedProject.FilePath, studioReports);
+					if (SelectedProject is FileBasedProject fileBasedProject)
+					{
+						_projectsController.Close(fileBasedProject);
 
-					_projectsController.Add(fileBasedProject.FilePath);
+						_reportService.UpdateStudioReportInformation(fileBasedProject.FilePath, studioReports);
+
+						_projectsController.Add(fileBasedProject.FilePath);
+					}
+				}
+				finally
+				{
+					_ignoreChanges = false;
 				}
 			}
 
@@ -513,6 +569,11 @@ namespace Sdl.Reports.Viewer.API
 
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
+			if (_ignoreChanges)
+			{
+				return;
+			}
+
 			SelectedProject = _projectsController.CurrentProject
 							  ?? _projectsController.SelectedProjects.FirstOrDefault();
 		}

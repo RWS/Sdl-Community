@@ -83,7 +83,7 @@
 					         VerticalAlignment="Center"
 							  VerticalContentAlignment="Center"
 				        Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}" IsEnabled="True" />
-					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the html file"
+					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the report file (*.xml;*.html)"
 					       VerticalAlignment="Center" HorizontalAlignment="Left"
 				           Margin="0" Foreground="DarkGray">
 						<TextBlock.Style>
@@ -154,7 +154,9 @@
 			</Grid>
 
 			<Grid Grid.Row="1"
-			      Visibility="{Binding IsEditMode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
+			      Visibility="{Binding IsEditMode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}"
+			      IsEnabled="{Binding CanEditXslt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />

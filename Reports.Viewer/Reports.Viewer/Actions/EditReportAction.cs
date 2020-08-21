@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
@@ -42,7 +43,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
 			{
-				_reportsViewerController.UpdateReport(viewModel.Report);
+				_reportsViewerController.UpdateReports(new List<Report> {viewModel.Report});
 			}
 		}
 

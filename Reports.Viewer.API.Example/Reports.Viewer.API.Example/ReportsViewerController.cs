@@ -29,6 +29,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 		private DataViewModel _dataViewModel;
 		private DataView _dataView;
 		private string _clientId;
+		private bool _isActive;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -39,13 +40,9 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			_controller.ReportsAdded += Controller_ReportsAdded;
 			_controller.ReportsRemoved += Controller_ReportsRemoved;
 			_controller.ReportsUpdated += Controller_ReportsUpdated;
+			_controller.ProjectReportChanges += Controller_ProjectReportChanges;
 
-			_reports = _controller.GetReports();
-
-			if (_dataViewModel != null)
-			{
-				_dataViewModel.Reports = _reports;
-			}
+			ActivationChanged += ReportsViewerController_ActivationChanged;
 		}
 
 		protected override Control GetContentControl()
@@ -93,6 +90,23 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			RemoveReportsInternal(result.Reports);
 		}
 
+		public void UpdateReports(List<Report> reports)
+		{
+			if (reports == null)
+			{
+				return;
+			}
+
+			var result = _controller.UpdateReports(_clientId, reports);
+			if (!result.Success)
+			{
+				MessageBox.Show(result.Message);
+				return;
+			}
+
+			UpdateReportsInternal(result.Reports);
+		}
+	
 		public IProject GetSelectedProject()
 		{
 			return _controller?.SelectedProject;
@@ -103,14 +117,30 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			return _dataViewModel.SelectedReports?.Cast<Report>().ToList();
 		}
 
+		public void RefreshView()
+		{
+			if (_dataViewModel == null)
+			{
+				return;
+			}
+			_reports = _controller.GetReports();
+			_dataViewModel.Reports = new List<Report>(_reports);
+		}
+
 		private void InitializeViews()
 		{
-			_dataViewModel = new DataViewModel(_reports);
+			_reports = _controller.GetReports();
+
+			_dataViewModel = new DataViewModel(_reports)
+			{
+				ProjectLocalFolder = _controller.GetProjectLocalFolder()
+			};
 			_dataView = new DataView
 			{
 				DataContext = _dataViewModel
 			};
 
+			
 			_reportViewControl.UpdateViewModel(_dataView);
 		}
 
@@ -118,23 +148,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 		{
 			if (e.ClientId != _clientId && e.Reports != null)
 			{
-				foreach (var updatedReport in e.Reports)
-				{
-					var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
-					if (report != null)
-					{
-						report.Language = updatedReport.Language;
-						report.Name = updatedReport.Name;
-						report.Description = updatedReport.Description;
-						report.Group = updatedReport.Group;
-						report.Path = updatedReport.Path;
-					}
-				}
-
-				if (_dataViewModel != null)
-				{
-					_dataViewModel.Reports = new List<Report>(_reports);
-				}
+				UpdateReportsInternal(e.Reports);
 			}
 		}
 
@@ -164,7 +178,26 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 			if (_dataViewModel != null)
 			{
+				_dataViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
 				_dataViewModel.Reports = _reports;
+			}
+		}
+
+		private void Controller_ProjectReportChanges(object sender, Sdl.Reports.Viewer.API.Events.ProjectReportChangesEventArgs e)
+		{
+			if (e.ClientId != _clientId)
+			{
+				if (e.AddedReports.Count > 0 || e.RemovedReports.Count > 0)
+				{					
+					if (_isActive)
+					{
+						DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
+					}
+					else
+					{
+						RefreshView();
+					}
+				}
 			}
 		}
 
@@ -180,6 +213,30 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			return reports;
 		}
 
+		private void UpdateReportsInternal(IEnumerable<Report> reports)
+		{
+			foreach (var updatedReport in reports)
+			{
+				var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
+				if (report == null)
+				{
+					return;
+				}
+
+				report.IsSelected = true;
+				report.Path = updatedReport.Path;
+				report.Name = updatedReport.Name;
+				report.Description = updatedReport.Description;
+				report.Language = updatedReport.Language;
+				report.Group = updatedReport.Group;
+			}
+
+			if (_dataViewModel != null)
+			{				
+				_dataViewModel.Reports = new List<Report>(_reports);
+			}
+		}
+
 		private void RemoveReportsInternal(IEnumerable<Report> reports)
 		{
 			if (reports == null)
@@ -193,8 +250,46 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			}
 
 			if (_dataViewModel != null)
-			{
+			{				
 				_dataViewModel.Reports = new List<Report>(_reports);
+			}
+		}
+
+		private void ReportsViewerController_ActivationChanged(object sender, ActivationChangedEventArgs e)
+		{
+			_isActive = e.Active;
+
+			if (_dataViewModel == null)
+			{
+				return;
+			}
+
+			if (e.Active)
+			{
+				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportUpdates(_clientId));
+
+				task.ContinueWith(t =>
+				{
+					if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
+					{
+						DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
+					}
+				});
+			}
+		}
+
+		private void DisplayRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
+		{
+			var message = "Studio has applied changes in the Reports view."
+			              + Environment.NewLine + Environment.NewLine
+			              + string.Format("Added Reports: {0}", addedRecords.Count) + Environment.NewLine
+			              + string.Format("Removed Reports: {0}", removedRecords.Count)
+			              + Environment.NewLine + Environment.NewLine
+			              + "Click on 'Yes' to refresh the view";
+			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (dialogResult == DialogResult.Yes)
+			{
+				RefreshView();
 			}
 		}
 	}

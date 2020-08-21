@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Actions\AddReportAction.cs" />
     <Compile Include="Actions\EditReportAction.cs" />
+    <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="Actions\RemoveReportAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
@@ -137,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\Refresh.ico" />
+    <Resource Include="Resources\StudioReport.ico" />
+    <Resource Include="Resources\StudioReport.png" />
     <Resource Include="Resources\Add.ico" />
     <Resource Include="Resources\Close.png" />
     <Resource Include="Resources\Delete.ico" />
