@@ -121,10 +121,10 @@
     <value>All fields are required</value>
   </data>
   <data name="ApiKeyDescription" xml:space="preserve">
-    <value>Enter yout Google Translate API key into the field bellow and press Validate button</value>
+    <value>Enter your Google Translate API key into the field below and press the "Validate" button:</value>
   </data>
   <data name="ApiVersionDescription" xml:space="preserve">
-    <value>Please select against what version of Google Translate API you want to validate the API Key</value>
+    <value>Please select the version of the Google Translate API that you wish to validate:</value>
   </data>
   <data name="CloseBtn" xml:space="preserve">
     <value>Close</value>
@@ -149,10 +149,10 @@
     <value>API Key is valid.</value>
   </data>
   <data name="V3JsonPathDescription" xml:space="preserve">
-    <value>Enter the path where the json file asociated to your API Key  is saved locally</value>
+    <value>Enter the local path to the json file associated with your API key:</value>
   </data>
   <data name="V3ProjectNameDescription" xml:space="preserve">
-    <value>Enter project name</value>
+    <value>Enter the project name for this file from your Google account</value>
   </data>
   <data name="ValidateBtn" xml:space="preserve">
     <value>Validate</value>

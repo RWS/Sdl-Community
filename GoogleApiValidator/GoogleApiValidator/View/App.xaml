@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:Sdl.Community.GoogleApiValidator.ViewModel"
              xmlns:converters ="clr-namespace:Sdl.Community.GoogleApiValidator.Converters"
-
              StartupUri="MainWindow.xaml">
 	<Application.Resources>
 		<ResourceDictionary>
