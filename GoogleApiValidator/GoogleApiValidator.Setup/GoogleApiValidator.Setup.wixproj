@@ -27,16 +27,6 @@
     <Content Include="terms_and_conditions.rtf" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GoogleApiValidator\Sdl.Community.GoogleApiValidator.csproj">
-      <Name>Sdl.Community.GoogleApiValidator</Name>
-      <Project>{2dba4d93-bce3-4bdc-a020-757d707f68cf}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
