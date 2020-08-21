@@ -39,4 +39,11 @@ steps:
      fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator\bin\$(buildConfiguration)\Sdl.Community.GoogleApiValidator.exe'
      description: 'GoogleApiValidator'
 
+  - task: VSBuild@1
+    inputs:
+     solution: '**GoogleApiValidator.Setup.wixproj'
+     platform: 'x86'
+     configuration: '$(buildConfiguration)'
+     msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+     
 #  - template: jobs/publish-build-artifact-task.yml
