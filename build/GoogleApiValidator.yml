@@ -27,7 +27,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.GoogleApiValidator.sln'
 - name: pathToPublish
-  value: ''
+  value: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
 
 steps:
   - template: jobs/build-sdlplugin.yml
@@ -45,5 +45,9 @@ steps:
      platform: 'x86'
      configuration: '$(buildConfiguration)'
      msbuildArgs: '/p:RunWixToolsOutOfProc=true'
-     
-#  - template: jobs/publish-build-artifact-task.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
+     description: 'GoogleApiValidator'
+  - template: jobs/publish-build-artifact-task.yml
