@@ -263,7 +263,7 @@ namespace Sdl.Community.RapidAddTerm
 		private Termbase GetTermbase(string termbasePath)
 		{
 			var termbases = GetTermbases();
-			termbases.Add(termbasePath, "", "");
+			termbases.Add(termbasePath, string.Empty, string.Empty);
 			var termbase = termbases[termbasePath];
 			return termbase;
 		}
