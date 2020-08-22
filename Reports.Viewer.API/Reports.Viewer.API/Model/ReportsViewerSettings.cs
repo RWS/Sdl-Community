@@ -2,7 +2,7 @@
 
 namespace Sdl.Reports.Viewer.API.Model
 {
-	public class ReportsViewer : SettingsGroup
+	public class ReportsViewerSettings : SettingsGroup
 	{
 		private const string ReportsSettingId = "Reports";
 		private const string UICultureNameSettingId = "UICultureName";

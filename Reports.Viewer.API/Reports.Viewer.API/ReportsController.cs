@@ -25,12 +25,9 @@ namespace Sdl.Reports.Viewer.API
 		private string _previousProjectId;
 		private IProject _selectedProject;
 		private bool _ignoreChanges;
-		//private readonly ProjectCultureCacheService _projectCultureCacheService;
 
 		private ReportsController()
-		{
-			var pathInfo = new PathInfo();
-			//_projectCultureCacheService = new ProjectCultureCacheService(pathInfo);
+		{			
 			_reportService = new ReportService(new ProjectSettingsService());
 			_reports = new List<Report>();
 
@@ -292,7 +289,7 @@ namespace Sdl.Reports.Viewer.API
 					projectId = GetProjectId();
 
 					var settingsBundle = SelectedProject.GetSettings();
-					var reportViewerSettings = settingsBundle.GetSettingsGroup<ReportsViewer>();
+					var reportViewerSettings = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
 					var reports = SerializeProjectFiles(reportViewerSettings.ReportsJson.Value);
 					var overwrite = CanOverwriteExistingReports(reportViewerSettings);
 
@@ -316,7 +313,7 @@ namespace Sdl.Reports.Viewer.API
 			await Task.CompletedTask;
 		}
 
-		private bool CanOverwriteExistingReports(ReportsViewer reportsViewerSettings)
+		private bool CanOverwriteExistingReports(ReportsViewerSettings reportsViewerSettings)
 		{			
 			var uiCultureName = reportsViewerSettings.UICultureName;
 	
@@ -338,11 +335,12 @@ namespace Sdl.Reports.Viewer.API
 		private void UpdateProjectReports()
 		{
 			var settingsBundle = SelectedProject.GetSettings();
-			var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
+			var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
 
 			var reports = GetClonedReports().Where(a => !a.IsStudioReport).ToList();
 
 			reportViewerProject.ReportsJson.Value = JsonConvert.SerializeObject(reports);
+			reportViewerProject.UICultureName.Value = Thread.CurrentThread.CurrentUICulture.Name;
 
 			SelectedProject.UpdateSettings(reportViewerProject.SettingsBundle);
 			if (SelectedProject is FileBasedProject fileBasedProject)

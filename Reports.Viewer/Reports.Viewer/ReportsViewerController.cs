@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,7 +14,6 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Core;
 using Sdl.Reports.Viewer.API;
-using Sdl.Reports.Viewer.API.Events;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -121,8 +119,7 @@ namespace Sdl.Community.Reports.Viewer
 				MessageBox.Show(result.Message);
 				return;
 			}
-
-			result.Reports[0].IsSelected = true;
+			
 			_reports.AddRange(result.Reports);
 		
 			_reportsNavigationViewModel.Reports = _reports;
@@ -137,8 +134,7 @@ namespace Sdl.Community.Reports.Viewer
 				{
 					return;
 				}
-
-				report.IsSelected = true;
+				
 				report.Path = updatedReport.Path;
 				report.Name = updatedReport.Name;
 				report.Description = updatedReport.Description;
@@ -284,8 +280,11 @@ namespace Sdl.Community.Reports.Viewer
 			{
 				_reports.RemoveAll(a => a.Id == report.Id);
 			}
-			
-			_reportsNavigationViewModel.Reports = _reports;
+
+			if (_reportsNavigationViewModel != null)
+			{
+				_reportsNavigationViewModel.Reports = _reports;
+			}
 		}		
 
 		private void Controller_ReportsRemoved(object sender, Sdl.Reports.Viewer.API.Events.ReportsRemovedEventArgs e)
@@ -301,7 +300,10 @@ namespace Sdl.Community.Reports.Viewer
 			if (e.ClientId != _clientId && e.Reports != null && e.Reports.Count > 0)
 			{
 				_reports.AddRange(e.Reports);
-				_reportsNavigationViewModel.Reports = _reports;
+				if (_reportsNavigationViewModel != null)
+				{
+					_reportsNavigationViewModel.Reports = _reports;
+				}
 			}
 		}
 
@@ -324,8 +326,11 @@ namespace Sdl.Community.Reports.Viewer
 					report.Language = updatedReport.Language;
 					report.Group = updatedReport.Group;					
 				}
-				
-				_reportsNavigationViewModel.Reports = _reports;
+
+				if (_reportsNavigationViewModel != null)
+				{
+					_reportsNavigationViewModel.Reports = _reports;
+				}
 			}
 		}
 
@@ -367,6 +372,11 @@ namespace Sdl.Community.Reports.Viewer
 	
 		private void EnableControls(bool isLoading)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
 			if (_reportsNavigationViewControl.InvokeRequired)
 			{
 				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isLoading);

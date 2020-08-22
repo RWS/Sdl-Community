@@ -481,7 +481,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 
 			return itemStates;
-		}		
+		}
 
 		private void ExpandAll(object parameter)
 		{

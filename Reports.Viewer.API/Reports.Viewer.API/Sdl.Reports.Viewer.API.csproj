@@ -98,7 +98,7 @@
     <Compile Include="Events\ReportsAddedEventArgs.cs" />
     <Compile Include="Model\ActionResult.cs" />
     <Compile Include="Model\Report.cs" />
-    <Compile Include="Model\ReportsViewer.cs" />
+    <Compile Include="Model\ReportsViewerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DefaultXslExtension.cs" />
     <Compile Include="Services\ProjectSettingsService.cs" />
