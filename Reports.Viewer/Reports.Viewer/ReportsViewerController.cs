@@ -93,12 +93,9 @@ namespace Sdl.Community.Reports.Viewer
 			if (_reportViewControl == null)
 			{
 				_reportViewControl = new ReportViewControl();
-
 				InitializeViews();
 			}
-
 			
-
 			return _reportViewControl;
 		}
 		
@@ -127,8 +124,8 @@ namespace Sdl.Community.Reports.Viewer
 
 			result.Reports[0].IsSelected = true;
 			_reports.AddRange(result.Reports);
-
-			_reportsNavigationViewModel?.Refresh(GetSettings());
+		
+			_reportsNavigationViewModel.Reports = _reports;
 		}
 
 		public void UpdateReports(List<Report> updatedReports)
@@ -155,8 +152,8 @@ namespace Sdl.Community.Reports.Viewer
 					return;
 				}
 			}
-
-			_reportsNavigationViewModel?.Refresh(GetSettings());
+		
+			_reportsNavigationViewModel.Reports = _reports;
 		}
 
 		public void RemoveReports(List<string> reportIds)
@@ -171,14 +168,17 @@ namespace Sdl.Community.Reports.Viewer
 			RemoveReportsInternal(result.Reports);
 		}
 
-		public void RefreshView()
+		public void RefreshView(bool refreshReports)
 		{
-			_reports = _controller.GetReports();
-			_reportsNavigationViewModel.Settings = GetSettings();
-			_reportsNavigationViewModel.ReportGroups = new ObservableCollection<ReportGroup>();
-			_reportsNavigationViewModel.Reports = _reports;			
-		}
+			if (refreshReports)
+			{
+				_reports = _controller.GetReports();
+			}
 
+			_reportsNavigationViewModel.Settings = GetSettings();
+			_reportsNavigationViewModel.Reports = _reports;			
+		}	
+	
 		public IProject GetSelectedProject()
 		{
 			return _controller?.SelectedProject;
@@ -211,6 +211,8 @@ namespace Sdl.Community.Reports.Viewer
 
 			_reportViewControl.UpdateViewModel(_reportView);
 			_reportsNavigationViewControl.UpdateViewModel(_reportsNavigationView);
+
+			_reports = _controller.GetReports();
 		}
 
 		private Settings GetSettings()
@@ -282,8 +284,8 @@ namespace Sdl.Community.Reports.Viewer
 			{
 				_reports.RemoveAll(a => a.Id == report.Id);
 			}
-
-			_reportsNavigationViewModel?.Refresh(GetSettings());
+			
+			_reportsNavigationViewModel.Reports = _reports;
 		}		
 
 		private void Controller_ReportsRemoved(object sender, Sdl.Reports.Viewer.API.Events.ReportsRemovedEventArgs e)
@@ -299,8 +301,7 @@ namespace Sdl.Community.Reports.Viewer
 			if (e.ClientId != _clientId && e.Reports != null && e.Reports.Count > 0)
 			{
 				_reports.AddRange(e.Reports);
-
-				_reportsNavigationViewModel?.Refresh(GetSettings());
+				_reportsNavigationViewModel.Reports = _reports;
 			}
 		}
 
@@ -323,8 +324,8 @@ namespace Sdl.Community.Reports.Viewer
 					report.Language = updatedReport.Language;
 					report.Group = updatedReport.Group;					
 				}
-
-				_reportsNavigationViewModel?.Refresh(GetSettings());
+				
+				_reportsNavigationViewModel.Reports = _reports;
 			}
 		}
 
@@ -335,7 +336,6 @@ namespace Sdl.Community.Reports.Viewer
 			if (_reportsNavigationViewModel != null)
 			{
 				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
-				_reportsNavigationViewModel.ReportGroups = new ObservableCollection<ReportGroup>();
 				_reportsNavigationViewModel.Reports = _reports;
 			}
 
@@ -359,7 +359,7 @@ namespace Sdl.Community.Reports.Viewer
 					}
 					else
 					{
-						RefreshView();
+						RefreshView(true);
 					}					
 				}
 			}
@@ -431,7 +431,6 @@ namespace Sdl.Community.Reports.Viewer
 						DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
 					}
 				});
-
 			}
 		}
 
@@ -446,7 +445,7 @@ namespace Sdl.Community.Reports.Viewer
 			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
-				RefreshView();
+				RefreshView(true);
 			}
 		}
 	}

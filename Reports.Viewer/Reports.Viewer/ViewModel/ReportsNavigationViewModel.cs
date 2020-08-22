@@ -131,7 +131,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_reports = value;
 
 				OnPropertyChanged(nameof(Reports));
-				
+
+				ReportGroups = new ObservableCollection<ReportGroup>();
 				FilterString = string.Empty;
 				FilteredReports = _reports;
 			}
@@ -207,14 +208,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		public void Refresh(Settings settings)
+		public void UpdateReports(Settings settings)
 		{
 			Settings = settings;
-			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-
-			OnPropertyChanged(nameof(Report.DateToShortString));
-
-			ReportGroups = new ObservableCollection<ReportGroup>(BuildReportGroup());
+			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();		
 		}
 
 		public Report SelectedReport

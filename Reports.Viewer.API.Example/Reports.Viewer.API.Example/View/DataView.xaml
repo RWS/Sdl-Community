@@ -80,7 +80,7 @@
 											<Setter Property="Source" Value="../Resources/Report.png"/>
 											<Style.Triggers>
 												<DataTrigger Binding="{Binding IsStudioReport}" Value="True">
-													<Setter Property="Source" Value="../Resources/StudioReport.png"/>
+													<Setter Property="Source" Value="../Resources/StudioReport.ico"/>
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>

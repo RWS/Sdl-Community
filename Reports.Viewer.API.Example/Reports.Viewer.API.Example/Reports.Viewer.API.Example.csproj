@@ -140,7 +140,6 @@
     <Content Include="pluginpackage.manifest.xml" />
     <Resource Include="Resources\Refresh.ico" />
     <Resource Include="Resources\StudioReport.ico" />
-    <Resource Include="Resources\StudioReport.png" />
     <Resource Include="Resources\Add.ico" />
     <Resource Include="Resources\Close.png" />
     <Resource Include="Resources\Delete.ico" />

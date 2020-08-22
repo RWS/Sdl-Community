@@ -25,12 +25,12 @@ namespace Sdl.Reports.Viewer.API
 		private string _previousProjectId;
 		private IProject _selectedProject;
 		private bool _ignoreChanges;
-		private readonly ProjectCultureCacheService _projectCultureCacheService;
+		//private readonly ProjectCultureCacheService _projectCultureCacheService;
 
 		private ReportsController()
 		{
 			var pathInfo = new PathInfo();
-			_projectCultureCacheService = new ProjectCultureCacheService(pathInfo);
+			//_projectCultureCacheService = new ProjectCultureCacheService(pathInfo);
 			_reportService = new ReportService(new ProjectSettingsService());
 			_reports = new List<Report>();
 
@@ -179,9 +179,9 @@ namespace Sdl.Reports.Viewer.API
 		}
 
 		public List<Report> GetReports()
-		{		
+		{
 			lock (LockObject)
-			{				
+			{
 				return GetClonedReports();
 			}
 		}
@@ -243,10 +243,10 @@ namespace Sdl.Reports.Viewer.API
 					clonedAddedReports.Add(studioReport.Clone() as Report);
 				}
 			}
-			
+
 			foreach (var report in _reports)
-			{				
-				if (report.IsStudioReport &&  !studioReports.Exists(a => a.Id == report.Id))
+			{
+				if (report.IsStudioReport && !studioReports.Exists(a => a.Id == report.Id))
 				{
 					clonedRemovedReports.Add(report.Clone() as Report);
 				}
@@ -292,10 +292,10 @@ namespace Sdl.Reports.Viewer.API
 					projectId = GetProjectId();
 
 					var settingsBundle = SelectedProject.GetSettings();
-					var reportViewerProject = settingsBundle.GetSettingsGroup<ReportsViewer>();
-					var reports = SerializeProjectFiles(reportViewerProject.ReportsJson.Value);
+					var reportViewerSettings = settingsBundle.GetSettingsGroup<ReportsViewer>();
+					var reports = SerializeProjectFiles(reportViewerSettings.ReportsJson.Value);
+					var overwrite = CanOverwriteExistingReports(reportViewerSettings);
 
-					var overwrite = CanOverwriteExistingReports(projectId);
 					reports.AddRange(_reportService.GetStudioReports(SelectedProject, overwrite));
 
 					_reports = reports;
@@ -316,32 +316,18 @@ namespace Sdl.Reports.Viewer.API
 			await Task.CompletedTask;
 		}
 
-		private bool CanOverwriteExistingReports(string projectId)
-		{
-			var projectCultureCache = _projectCultureCacheService.GetProjectCultureCache();
-			var projectCulture = projectCultureCache.FirstOrDefault(a => a.ProjectId == projectId);
-			if (projectCulture != null)
+		private bool CanOverwriteExistingReports(ReportsViewer reportsViewerSettings)
+		{			
+			var uiCultureName = reportsViewerSettings.UICultureName;
+	
+			if (Thread.CurrentThread.CurrentUICulture.Name != uiCultureName.Value)
 			{
-				if (Thread.CurrentThread.CurrentUICulture.Name != projectCulture.UICultureName)
+				uiCultureName.Value = Thread.CurrentThread.CurrentUICulture.Name;
+				SelectedProject.UpdateSettings(reportsViewerSettings.SettingsBundle);
+				if (SelectedProject is FileBasedProject fileBasedProject)
 				{
-					projectCulture.CultureName = Thread.CurrentThread.CurrentCulture.Name;
-					projectCulture.UICultureName = Thread.CurrentThread.CurrentUICulture.Name;
-
-					_projectCultureCacheService.UpdateProjectCultureCache(projectCultureCache);
-
-					return true;
+					fileBasedProject.Save();
 				}
-			}
-			else
-			{
-				projectCultureCache.Add(new ProjectCulture
-				{
-					ProjectId = projectId,
-					CultureName = Thread.CurrentThread.CurrentCulture.Name,
-					UICultureName = Thread.CurrentThread.CurrentUICulture.Name
-				});
-
-				_projectCultureCacheService.UpdateProjectCultureCache(projectCultureCache);
 
 				return true;
 			}
@@ -419,9 +405,7 @@ namespace Sdl.Reports.Viewer.API
 					if (SelectedProject is FileBasedProject fileBasedProject)
 					{
 						_projectsController.Close(fileBasedProject);
-
 						_reportService.UpdateStudioReportInformation(fileBasedProject.FilePath, studioReports);
-
 						_projectsController.Add(fileBasedProject.FilePath);
 					}
 				}
@@ -448,7 +432,16 @@ namespace Sdl.Reports.Viewer.API
 				var clonedReport = GetClonedReport(existingReport);
 				clonedReports.Add(clonedReport);
 
-				DeleteReportFiles(clonedReport);
+				DeleteReportFile(clonedReport.Path);
+				if (clonedReport.IsStudioReport)
+				{
+					var extension = Path.GetExtension(clonedReport.Path);
+					if (extension != null)
+					{
+						var xmlPath = clonedReport.Path.Substring(0, clonedReport.Path.Length - extension.Length);
+						DeleteReportFile(xmlPath);
+					}
+				}
 
 				_reports.Remove(existingReport);
 			}
@@ -456,13 +449,20 @@ namespace Sdl.Reports.Viewer.API
 			var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
 			if (studioReports.Count > 0)
 			{
-				if (SelectedProject is FileBasedProject fileBasedProject)
+				try
 				{
-					_projectsController.Close(fileBasedProject);
+					_ignoreChanges = true;
 
-					_reportService.DeleteStudioReportInformation(fileBasedProject.FilePath, studioReports);
-
-					_projectsController.Add(fileBasedProject.FilePath);
+					if (SelectedProject is FileBasedProject fileBasedProject)
+					{
+						_projectsController.Close(fileBasedProject);
+						_reportService.DeleteStudioReportInformation(fileBasedProject.FilePath, studioReports);
+						_projectsController.Add(fileBasedProject.FilePath);
+					}
+				}
+				finally
+				{
+					_ignoreChanges = false;
 				}
 			}
 
@@ -492,18 +492,17 @@ namespace Sdl.Reports.Viewer.API
 			return clonedReport;
 		}
 
-		private void DeleteReportFiles(Report report)
+		private void DeleteReportFile(string path)
 		{
-			var reportsFolder = GetReportsViewerFolder();
-			if (!Directory.Exists(reportsFolder))
+			var projectLocalFolder = GetProjectLocalFolder();
+			if (!Directory.Exists(projectLocalFolder))
 			{
 				return;
 			}
 
 			try
 			{
-				var localProjectFolder = GetProjectLocalFolder();
-				var reportFile = Path.Combine(localProjectFolder, report.Path);
+				var reportFile = Path.Combine(projectLocalFolder, path);
 				if (File.Exists(reportFile))
 				{
 					File.Delete(reportFile);
@@ -542,9 +541,9 @@ namespace Sdl.Reports.Viewer.API
 				{
 					var extension = Path.GetExtension(reportName);
 					var fileName = reportPath.Substring(0, reportPath.Length - extension.Length);
-					reportName = $"{fileName}({index++}){extension}";
+					var newReportName = $"{fileName}({index++}){extension}";
 
-					reportPath = Path.Combine(reportsFolder, reportName);
+					reportPath = Path.Combine(reportsFolder, newReportName);
 				}
 
 				File.Copy(report.Path, reportPath);

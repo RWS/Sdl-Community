@@ -187,7 +187,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
-    <Resource Include="Resources\StudioReport.png" />
     <Resource Include="Resources\StudioReport.ico" />
     <Resource Include="Resources\Add.ico" />
     <Resource Include="Resources\Edit.ico" />

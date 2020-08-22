@@ -5,11 +5,18 @@ namespace Sdl.Reports.Viewer.API.Model
 	public class ReportsViewer : SettingsGroup
 	{
 		private const string ReportsSettingId = "Reports";
+		private const string UICultureNameSettingId = "UICultureName";
 
 		public Setting<string> ReportsJson
 		{
 			get => GetSetting<string>(ReportsSettingId);
 			set => GetSetting<string>(ReportsSettingId).Value = value;
+		}
+
+		public Setting<string> UICultureName
+		{
+			get => GetSetting<string>(UICultureNameSettingId);
+			set => GetSetting<string>(UICultureNameSettingId).Value = value;
 		}
 
 		protected override object GetDefaultValue(string settingId)
@@ -18,6 +25,8 @@ namespace Sdl.Reports.Viewer.API.Model
 			{
 				case ReportsSettingId:
 					return string.Empty;
+				case UICultureNameSettingId:
+					return "en-US";
 				default:
 					return base.GetDefaultValue(settingId);
 			}

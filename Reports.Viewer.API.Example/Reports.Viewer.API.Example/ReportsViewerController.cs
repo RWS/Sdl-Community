@@ -43,6 +43,8 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			_controller.ProjectReportChanges += Controller_ProjectReportChanges;
 
 			ActivationChanged += ReportsViewerController_ActivationChanged;
+
+			_reports = _controller.GetReports();
 		}
 
 		protected override Control GetContentControl()
@@ -59,6 +61,11 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		public void AddReport(Report report)
 		{
+			if (_reports == null)
+			{
+				return;
+			}
+
 			report.IsSelected = true;
 
 			var result = _controller.AddReports(_clientId, new List<Report> { report });
@@ -114,17 +121,16 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		public List<Report> GetSelectedReports()
 		{
-			return _dataViewModel.SelectedReports?.Cast<Report>().ToList();
+			return _dataViewModel?.SelectedReports?.Cast<Report>().ToList();
 		}
 
 		public void RefreshView()
 		{
-			if (_dataViewModel == null)
-			{
-				return;
-			}
 			_reports = _controller.GetReports();
-			_dataViewModel.Reports = new List<Report>(_reports);
+			if (_dataViewModel != null)
+			{
+				_dataViewModel.Reports = new List<Report>(_reports);
+			}						
 		}
 
 		private void InitializeViews()
@@ -135,13 +141,14 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			{
 				ProjectLocalFolder = _controller.GetProjectLocalFolder()
 			};
+
 			_dataView = new DataView
 			{
 				DataContext = _dataViewModel
 			};
 
 			
-			_reportViewControl.UpdateViewModel(_dataView);
+			_reportViewControl?.UpdateViewModel(_dataView);
 		}
 
 		private void Controller_ReportsUpdated(object sender, Sdl.Reports.Viewer.API.Events.ReportsUpdatedEventArgs e)
@@ -156,7 +163,10 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 		{
 			if (e.ClientId != _clientId && e.Reports != null)
 			{
-				RemoveReportsInternal(e.Reports);
+				if (_dataViewModel != null)
+				{
+					RemoveReportsInternal(e.Reports);
+				}
 			}
 		}
 
@@ -215,6 +225,10 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		private void UpdateReportsInternal(IEnumerable<Report> reports)
 		{
+			if (reports == null)
+			{
+				return;
+			}
 			foreach (var updatedReport in reports)
 			{
 				var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
@@ -278,7 +292,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			}
 		}
 
-		private void DisplayRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
+		private void DisplayRefreshViewMessage(IReadOnlyCollection<Report> addedRecords, IReadOnlyCollection<Report> removedRecords)
 		{
 			var message = "Studio has applied changes in the Reports view."
 			              + Environment.NewLine + Environment.NewLine
