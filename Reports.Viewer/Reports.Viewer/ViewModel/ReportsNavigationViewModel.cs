@@ -31,6 +31,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<GroupType> _groupTypes;
 		private string _projectLocalFolder;
 		private bool _isLoading;
+		private List<ReportState> _previousReportStates;
 		private ICommand _expandAllCommand;
 		private ICommand _collapseAllCommand;
 		private ICommand _clearFilterCommand;
@@ -132,7 +133,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				OnPropertyChanged(nameof(Reports));
 
-				ReportGroups = new ObservableCollection<ReportGroup>();
+				if (_reportGroups != null && _reportGroups.Count > 0)
+				{
+					_previousReportStates = GetReportStates(_reportGroups);
+				}
+				_reportGroups = new ObservableCollection<ReportGroup>();
+
 				FilterString = string.Empty;
 				FilteredReports = _reports;
 			}
@@ -177,7 +183,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				if (ReportGroups == null || ReportGroups.Count == 0)
 				{
 					var reportGroups = BuildReportGroup();
-					ReportGroups = new ObservableCollection<ReportGroup>(ExpandAll(reportGroups));
+					ReportGroups = new ObservableCollection<ReportGroup>(reportGroups);
 				}
 				else
 				{
@@ -197,7 +203,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
-		
+
 		public ObservableCollection<ReportGroup> ReportGroups
 		{
 			get => _reportGroups;
@@ -211,7 +217,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public void UpdateReports(Settings settings)
 		{
 			Settings = settings;
-			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();		
+			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 		}
 
 		public Report SelectedReport
@@ -352,6 +358,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private List<ReportGroup> BuildReportGroup()
 		{
+			if (_reportGroups != null && _reportGroups.Count > 0)
+			{
+				_previousReportStates = GetReportStates(_reportGroups);
+			}
+
 			var reportGroups = new List<ReportGroup>();
 			if (FilteredReports == null)
 			{
@@ -371,51 +382,106 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					if (groupItem != null)
 					{
 						groupItem.Reports.Add(report);
-						UpdateIsExpanded(report, groupItem, reportGroup);
+						if (report.IsSelected)
+						{
+							groupItem.IsExpanded = true;
+							reportGroup.IsExpanded = true;
+						}
 					}
 					else
 					{
 						groupItem = new GroupItem
 						{
-							Name = GroupType.Type == "Group" ? report.Language : report.Group,
+							Name = (GroupType.Type == "Group" ? report.Language : report.Group),
 							Reports = new List<Report> { report }
 						};
+						var groupItemState = _previousReportStates?.FirstOrDefault(a => a.Id == reportGroup.Name + "-" + groupItem.Name);
+						if (groupItemState != null)
+						{
+							groupItem.IsExpanded = groupItemState.IsExpanded;
+							groupItem.IsSelected = groupItemState.IsSelected;
+						}
 
 						reportGroup.GroupItems.Add(groupItem);
-
-						UpdateIsExpanded(report, groupItem, reportGroup);
 					}
 				}
 				else
 				{
+					reportGroup = new ReportGroup
+					{
+						Name = (GroupType.Type == "Group" ? report.Group : report.Language)
+					};
+					var reportGroupState = _previousReportStates?.FirstOrDefault(a => a.Id == reportGroup.Name);
+					if (reportGroupState != null)
+					{
+						reportGroup.IsExpanded = reportGroupState.IsExpanded;
+						reportGroup.IsSelected = reportGroupState.IsSelected;
+					}
+
 					var groupItem = new GroupItem
 					{
 						Name = (GroupType.Type == "Group" ? report.Language : report.Group),
 						Reports = new List<Report> { report }
 					};
-
-					reportGroup = new ReportGroup
+					var groupItemState = _previousReportStates?.FirstOrDefault(a => a.Id == reportGroup.Name + "-" + groupItem.Name);
+					if (groupItemState != null)
 					{
-						Name = (GroupType.Type == "Group" ? report.Group : report.Language)
-					};
+						groupItem.IsExpanded = groupItemState.IsExpanded;
+						groupItem.IsSelected = groupItemState.IsSelected;
+					}
+
 					reportGroup.GroupItems.Add(groupItem);
 					reportGroups.Add(reportGroup);
-
-					UpdateIsExpanded(report, groupItem, reportGroup);
 				}
 			}
 
 			return new List<ReportGroup>(reportGroups);
 		}
 
-		private static void UpdateIsExpanded(Report report, GroupItem groupItem, ReportGroup reportGroup)
+		private List<ReportState> GetReportStates(IEnumerable<ReportGroup> reportGroups)
 		{
-			if (report.IsSelected)
+			var itemStates = new List<ReportState>();
+
+			foreach (var reportGroup in reportGroups)
 			{
-				groupItem.IsExpanded = true;
-				reportGroup.IsExpanded = true;
+				if (!itemStates.Exists(a => a.Id == reportGroup.Name))
+				{
+					itemStates.Add(new ReportState
+					{
+						Id = reportGroup.Name,
+						IsSelected = reportGroup.IsSelected,
+						IsExpanded = reportGroup.IsExpanded
+					});
+				}
+
+				foreach (var groupItem in reportGroup.GroupItems)
+				{
+					if (!itemStates.Exists(a => a.Id == reportGroup.Name + "-" + groupItem.Name))
+					{
+						itemStates.Add(new ReportState
+						{
+							Id = reportGroup.Name + "-" + groupItem.Name,
+							IsSelected = groupItem.IsSelected,
+							IsExpanded = groupItem.IsExpanded
+						});
+					}
+
+					foreach (var report in groupItem.Reports)
+					{
+						if (!itemStates.Exists(a => a.Id == report.Id))
+						{
+							itemStates.Add(new ReportState
+							{
+								Id = report.Id,
+								IsSelected = report.IsSelected
+							});
+						}
+					}
+				}
 			}
-		}
+
+			return itemStates;
+		}		
 
 		private void ExpandAll(object parameter)
 		{

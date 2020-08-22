@@ -101,6 +101,7 @@
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\ReportWithXslt.cs" />
     <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\ReportState.cs" />
     <Compile Include="ReportsViewerController.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

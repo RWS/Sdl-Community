@@ -284,8 +284,8 @@
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 					<TreeView.ItemContainerStyle>
 						<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
-							<Setter Property="IsSelected" Value="{Binding IsSelected}" />
-							<Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+							<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 							<EventSetter Event="PreviewMouseRightButtonDown"
 						             Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
 						</Style>
