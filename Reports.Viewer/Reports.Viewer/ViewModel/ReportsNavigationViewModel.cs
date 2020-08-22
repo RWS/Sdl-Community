@@ -44,6 +44,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _printPreviewCommand;
 		private ICommand _pageSetupCommand;
 		private ICommand _saveAsCommand;
+		private ICommand _mouseDoubleClick;
 
 		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
 		{
@@ -82,6 +83,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand PageSetupCommand => _pageSetupCommand ?? (_pageSetupCommand = new CommandHandler(PageSetup));
 
 		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
+
+		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
 
 		public ReportsNavigationView ReportsNavigationView { get; set; }
 
@@ -133,10 +136,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				OnPropertyChanged(nameof(Reports));
 
-				if (_reportGroups != null && _reportGroups.Count > 0)
+				if (_reportGroups != null)
 				{
 					_previousReportStates = GetReportStates(_reportGroups);
 				}
+
 				_reportGroups = new ObservableCollection<ReportGroup>();
 
 				FilterString = string.Empty;
@@ -250,13 +254,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					return;
 				}
 
-				var previousIsNull = _groupType == null;
+				var previousGroupType = _groupType;
 
 				_groupType = value;
 				OnPropertyChanged(nameof(GroupType));
 
-				if (!previousIsNull)
+				if (previousGroupType != null)
 				{
+					if (_reportGroups != null)
+					{
+						_previousReportStates = GetReportStates(_reportGroups);
+					}
+					
 					ReportGroups = new ObservableCollection<ReportGroup>(BuildReportGroup());
 				}
 
@@ -358,11 +367,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private List<ReportGroup> BuildReportGroup()
 		{
-			if (_reportGroups != null && _reportGroups.Count > 0)
-			{
-				_previousReportStates = GetReportStates(_reportGroups);
-			}
-
 			var reportGroups = new List<ReportGroup>();
 			if (FilteredReports == null)
 			{
@@ -382,11 +386,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					if (groupItem != null)
 					{
 						groupItem.Reports.Add(report);
-						if (report.IsSelected)
-						{
-							groupItem.IsExpanded = true;
-							reportGroup.IsExpanded = true;
-						}
+						UpdateReportParentState(report, groupItem, reportGroup);
 					}
 					else
 					{
@@ -403,6 +403,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						}
 
 						reportGroup.GroupItems.Add(groupItem);
+						foreach (var itemReport in groupItem.Reports)
+						{
+							UpdateReportParentState(itemReport, groupItem, reportGroup);
+						}
 					}
 				}
 				else
@@ -432,10 +436,24 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					reportGroup.GroupItems.Add(groupItem);
 					reportGroups.Add(reportGroup);
+
+					foreach (var itemReport in groupItem.Reports)
+					{
+						UpdateReportParentState(itemReport, groupItem, reportGroup);
+					}
 				}
 			}
 
 			return new List<ReportGroup>(reportGroups);
+		}
+
+		private static void UpdateReportParentState(Report report, GroupItem groupItem, ReportGroup reportGroup)
+		{
+			if (report.IsSelected)
+			{
+				groupItem.IsExpanded = true;
+				reportGroup.IsExpanded = true;
+			}
 		}
 
 		private List<ReportState> GetReportStates(IEnumerable<ReportGroup> reportGroups)
@@ -528,6 +546,15 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			return reportGroups;
 		}
 
+		private void UpdateSettings()
+		{
+			if (Settings.GroupByType != GroupType.Type)
+			{
+				Settings.GroupByType = GroupType.Type;
+				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
+			}
+		}
+
 		private void ClearFilter(object parameter)
 		{
 			FilterString = string.Empty;
@@ -555,15 +582,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					SelectedReport = null;
 					ReportViewModel.UpdateData(reportGroup.GroupItems?.SelectMany(a => a.Reports).ToList());
 				}
-			}
-		}
-
-		private void UpdateSettings()
-		{
-			if (Settings.GroupByType != GroupType.Type)
-			{
-				Settings.GroupByType = GroupType.Type;
-				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
 			}
 		}
 
@@ -655,6 +673,15 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			var action = SdlTradosStudio.Application.GetAction<AddReportAction>();
 			action.Run(report);
+		}
+
+		private void MouseDoubleClick(object parameter)
+		{
+			if (SelectedReport != null)
+			{
+				var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+				action.Run();
+			}
 		}
 
 		public void Dispose()
