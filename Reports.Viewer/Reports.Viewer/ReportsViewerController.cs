@@ -171,8 +171,11 @@ namespace Sdl.Community.Reports.Viewer
 				_reports = _controller.GetReports();
 			}
 
-			_reportsNavigationViewModel.Settings = GetSettings();
-			_reportsNavigationViewModel.Reports = _reports;			
+			if (_reportsNavigationViewModel != null)
+			{
+				_reportsNavigationViewModel.Settings = GetSettings();
+				_reportsNavigationViewModel.Reports = _reports;
+			}
 		}	
 	
 		public IProject GetSelectedProject()
@@ -354,19 +357,21 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void Controller_ProjectReportChanges(object sender, Sdl.Reports.Viewer.API.Events.ProjectReportChangesEventArgs e)
 		{
-			if (e.ClientId != _clientId)
+			if (e.ClientId == _clientId || _reportsNavigationViewControl == null)
 			{
-				if (e.AddedReports.Count > 0 || e.RemovedReports.Count > 0)
+				return;
+			}
+
+			if (e.AddedReports.Count > 0 || e.RemovedReports.Count > 0)
+			{
+				if (_isActive)
 				{
-					if (_isActive)
-					{
-						DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
-					}
-					else
-					{
-						RefreshView(true);
-					}					
+					DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
 				}
+				else
+				{
+					RefreshView(true);
+				}					
 			}
 		}
 	
@@ -431,7 +436,6 @@ namespace Sdl.Community.Reports.Viewer
 
 			if (e.Active)
 			{			
-
 				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportUpdates(_clientId));
 
 				task.ContinueWith(t =>

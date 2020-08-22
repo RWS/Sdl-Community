@@ -195,18 +195,20 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		private void Controller_ProjectReportChanges(object sender, Sdl.Reports.Viewer.API.Events.ProjectReportChangesEventArgs e)
 		{
-			if (e.ClientId != _clientId)
+			if (e.ClientId == _clientId || _dataViewModel == null)
 			{
-				if (e.AddedReports.Count > 0 || e.RemovedReports.Count > 0)
-				{					
-					if (_isActive)
-					{
-						DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
-					}
-					else
-					{
-						RefreshView();
-					}
+				return;
+			}
+
+			if (e.AddedReports.Count > 0 || e.RemovedReports.Count > 0)
+			{					
+				if (_isActive)
+				{
+					DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
+				}
+				else
+				{
+					RefreshView();
 				}
 			}
 		}

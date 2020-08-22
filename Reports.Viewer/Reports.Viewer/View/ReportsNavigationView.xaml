@@ -406,9 +406,10 @@
 												           Margin="2,1,0,1"/>
 
 												<StackPanel Orientation="Horizontal" 
-											            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, 
+											            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, 															
 															Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
-															RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+															RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, 
+													Converter={StaticResource BooleanToVisibilityConverter}}">
 													<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
 													<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding DateToShortString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 													<TextBlock Style="{StaticResource FadedTextBlock}" Text="]" />
