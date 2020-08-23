@@ -29,7 +29,6 @@ namespace Sdl.Community.Reports.Viewer
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class ReportsViewerController : AbstractViewController
 	{
-		private List<Report> _reports;
 		private ReportViewModel _reportViewModel;
 		private ReportsNavigationViewModel _reportsNavigationViewModel;
 		private ReportViewControl _reportViewControl;
@@ -57,7 +56,7 @@ namespace Sdl.Community.Reports.Viewer
 		protected override void Initialize(IViewContext context)
 		{
 			_clientId = Guid.NewGuid().ToString();
-			
+
 			_removeReportAction = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
 			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
 			_editReportAction = SdlTradosStudio.Application.GetAction<EditReportAction>();
@@ -76,10 +75,9 @@ namespace Sdl.Community.Reports.Viewer
 			_controller.ReportsRemoved += Controller_ReportsRemoved;
 			_controller.ReportsUpdated += Controller_ReportsUpdated;
 			_controller.ProjectReportChanges += Controller_ProjectReportChanges;
-			
-			
+
 			ActivationChanged += ReportsViewerController_ActivationChanged;
-		}		
+		}
 
 		protected override Control GetExplorerBarControl()
 		{
@@ -93,10 +91,10 @@ namespace Sdl.Community.Reports.Viewer
 				_reportViewControl = new ReportViewControl();
 				InitializeViews();
 			}
-			
+
 			return _reportViewControl;
 		}
-		
+
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
@@ -113,47 +111,45 @@ namespace Sdl.Community.Reports.Viewer
 
 		public void AddReports(List<Report> reports)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
 			var result = _controller.AddReports(_clientId, reports);
 			if (!result.Success)
 			{
 				MessageBox.Show(result.Message);
 				return;
 			}
-			
-			_reports.AddRange(result.Reports);
-		
-			_reportsNavigationViewModel.Reports = _reports;
+
+			_reportsNavigationViewModel.AddReports(result.Reports);
 		}
 
-		public void UpdateReports(List<Report> updatedReports)
+		public void UpdateReports(List<Report> reports)
 		{
-			foreach (var updatedReport in updatedReports)
+			if (_reportsNavigationViewModel == null)
 			{
-				var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
-				if (report == null)
-				{
-					return;
-				}
-				
-				report.Path = updatedReport.Path;
-				report.Name = updatedReport.Name;
-				report.Description = updatedReport.Description;
-				report.Language = updatedReport.Language;
-				report.Group = updatedReport.Group;
-
-				var result = _controller.UpdateReports(_clientId, new List<Report> { report });
-				if (!result.Success)
-				{
-					MessageBox.Show(result.Message);
-					return;
-				}
+				return;
 			}
-		
-			_reportsNavigationViewModel.Reports = _reports;
+
+			var result = _controller.UpdateReports(_clientId, reports);
+			if (!result.Success)
+			{
+				MessageBox.Show(result.Message);
+				return;
+			}
+
+			_reportsNavigationViewModel.UpdateReports(result.Reports);
 		}
 
 		public void RemoveReports(List<string> reportIds)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
 			var result = _controller.RemoveReports(_clientId, reportIds);
 			if (!result.Success)
 			{
@@ -161,23 +157,29 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			RemoveReportsInternal(result.Reports);
+			_reportsNavigationViewModel.DeleteReorts(GetReports(result.Reports.Select(a => a.Id)));
 		}
 
-		public void RefreshView(bool refreshReports)
+		public void RefreshView()
 		{
-			if (refreshReports)
+			if (_reportsNavigationViewModel == null)
 			{
-				_reports = _controller.GetReports();
+				return;
 			}
 
-			if (_reportsNavigationViewModel != null)
+			_reportsNavigationViewModel.RefreshView(GetSettings(), _controller.GetReports());
+		}
+
+		public void UpdateSettings()
+		{
+			if (_reportsNavigationViewModel == null)
 			{
-				_reportsNavigationViewModel.Settings = GetSettings();
-				_reportsNavigationViewModel.Reports = _reports;
+				return;
 			}
-		}	
-	
+
+			_reportsNavigationViewModel.UpdateSettings(GetSettings());
+		}
+
 		public IProject GetSelectedProject()
 		{
 			return _controller?.SelectedProject;
@@ -199,9 +201,7 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _reportViewModel
 			};
 
-			_reports = _controller.GetReports();
-
-			_reportsNavigationViewModel = new ReportsNavigationViewModel(_reports, GetSettings(), _pathInfo);
+			_reportsNavigationViewModel = new ReportsNavigationViewModel(_controller.GetReports(), GetSettings(), _pathInfo);
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
 			_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
@@ -210,8 +210,6 @@ namespace Sdl.Community.Reports.Viewer
 
 			_reportViewControl.UpdateViewModel(_reportView);
 			_reportsNavigationViewControl.UpdateViewModel(_reportsNavigationView);
-
-			_reports = _controller.GetReports();
 		}
 
 		private Settings GetSettings()
@@ -265,58 +263,61 @@ namespace Sdl.Community.Reports.Viewer
 			_reportViewModel?.SaveReport();
 		}
 
-		private IEnumerable<Report> GetReports(IEnumerable<string> reportIds)
+		private List<Report> GetReports(IEnumerable<string> reportIds)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return null;
+			}
+
 			var reports = new List<Report>();
 			foreach (var reportId in reportIds)
 			{
-				var report = _reports.FirstOrDefault(a => a.Id == reportId);
+				var report = _reportsNavigationViewModel.Reports.FirstOrDefault(a => a.Id == reportId);
 				reports.Add(report);
 			}
 
 			return reports;
 		}
 
-		private void RemoveReportsInternal(IReadOnlyCollection<Report> reports)
-		{
-			foreach (var report in reports)
-			{
-				_reports.RemoveAll(a => a.Id == report.Id);
-			}
-
-			if (_reportsNavigationViewModel != null)
-			{
-				_reportsNavigationViewModel.Reports = _reports;
-			}
-		}		
-
 		private void Controller_ReportsRemoved(object sender, Sdl.Reports.Viewer.API.Events.ReportsRemovedEventArgs e)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
 			if (e.ClientId != _clientId && e.Reports != null)
 			{
-				RemoveReportsInternal(e.Reports);
+				_reportsNavigationViewModel.DeleteReorts(GetReports(e.Reports.Select(a => a.Id)));
 			}
 		}
 
 		private void Controller_ReportsAdded(object sender, Sdl.Reports.Viewer.API.Events.ReportsAddedEventArgs e)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
 			if (e.ClientId != _clientId && e.Reports != null && e.Reports.Count > 0)
 			{
-				_reports.AddRange(e.Reports);
-				if (_reportsNavigationViewModel != null)
-				{
-					_reportsNavigationViewModel.Reports = _reports;
-				}
+				_reportsNavigationViewModel.AddReports(e.Reports);
 			}
 		}
 
 		private void Controller_ReportsUpdated(object sender, Sdl.Reports.Viewer.API.Events.ReportsUpdatedEventArgs e)
 		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
 			if (e.ClientId != _clientId && e.Reports != null)
 			{
 				foreach (var updatedReport in e.Reports)
 				{
-					var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
+					var report = _reportsNavigationViewModel.Reports.FirstOrDefault(a => a.Id == updatedReport.Id);
 					if (report == null)
 					{
 						return;
@@ -327,24 +328,18 @@ namespace Sdl.Community.Reports.Viewer
 					report.Name = updatedReport.Name;
 					report.Description = updatedReport.Description;
 					report.Language = updatedReport.Language;
-					report.Group = updatedReport.Group;					
-				}
-
-				if (_reportsNavigationViewModel != null)
-				{
-					_reportsNavigationViewModel.Reports = _reports;
+					report.Group = updatedReport.Group;
 				}
 			}
 		}
 
 		private void Controller_ProjectChanged(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangedEventArgs e)
 		{
-			_reports = e.Reports;
-
 			if (_reportsNavigationViewModel != null)
 			{
 				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
-				_reportsNavigationViewModel.Reports = _reports;
+				_reportsNavigationViewModel.RefreshView(GetSettings(), e.Reports);
+
 			}
 
 			EnableControls(false);
@@ -370,11 +365,11 @@ namespace Sdl.Community.Reports.Viewer
 				}
 				else
 				{
-					RefreshView(true);
-				}					
+					RefreshView();
+				}
 			}
 		}
-	
+
 		private void EnableControls(bool isLoading)
 		{
 			if (_reportsNavigationViewModel == null)
@@ -392,8 +387,7 @@ namespace Sdl.Community.Reports.Viewer
 				{
 					if (isLoading)
 					{
-						_reports.Clear();
-						_reportsNavigationViewModel.Reports = _reports;
+						_reportsNavigationViewModel.Reports.Clear();
 					}
 
 					_reportsNavigationViewModel.IsLoading = isLoading;
@@ -435,7 +429,7 @@ namespace Sdl.Community.Reports.Viewer
 			}
 
 			if (e.Active)
-			{			
+			{
 				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportUpdates(_clientId));
 
 				task.ContinueWith(t =>
@@ -451,15 +445,15 @@ namespace Sdl.Community.Reports.Viewer
 		private void DisplayRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
 		{
 			var message = "Studio has applied changes in the Reports view."
-			              + Environment.NewLine + Environment.NewLine
-			              + string.Format("Added Reports: {0}", addedRecords.Count) + Environment.NewLine
-			              + string.Format("Removed Reports: {0}", removedRecords.Count)
-			              + Environment.NewLine + Environment.NewLine
-			              + "Click on 'Yes' to refresh the view";
+						  + Environment.NewLine + Environment.NewLine
+						  + string.Format("Added Reports: {0}", addedRecords.Count) + Environment.NewLine
+						  + string.Format("Removed Reports: {0}", removedRecords.Count)
+						  + Environment.NewLine + Environment.NewLine
+						  + "Click on 'Yes' to refresh the view";
 			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
-				RefreshView(true);
+				RefreshView();
 			}
 		}
 	}

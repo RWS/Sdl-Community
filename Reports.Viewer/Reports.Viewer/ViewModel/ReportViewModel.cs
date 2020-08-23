@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -104,7 +105,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public void UpdateData(List<Report> reports)
 		{
 			CurrentView = _dataView;
-			_dataViewModel.Reports = reports;
+			_dataViewModel.Reports = new ObservableCollection<Report>(reports);			
 		}
 
 		public string WindowTitle

@@ -32,7 +32,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
 			{
-				_reportsViewerController.RefreshView(false);
+				_reportsViewerController.UpdateSettings();
 			}
 		}
 

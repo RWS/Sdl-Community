@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 	public class DataViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private string _windowTitle;
-		private List<Report> _reports;
+		private ObservableCollection<Report> _reports;
 		private Report _selectedReport;
 		private IList _selectedReports;
 		private string _projectLocalFolder;
@@ -81,7 +81,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		public List<Report> Reports
+		public ObservableCollection<Report> Reports
 		{
 			get => _reports;
 			set
@@ -111,6 +111,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				});
 
 				OnPropertyChanged(nameof(IsReportSelected));
+				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
@@ -121,7 +122,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_selectedReports = value;
 				OnPropertyChanged(nameof(SelectedReports));
-				OnPropertyChanged(nameof(StatusLabel));
+				
 
 				_selectedReport = _selectedReports?.Cast<Report>().ToList().FirstOrDefault();
 				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
@@ -131,6 +132,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				});
 
 				OnPropertyChanged(nameof(IsReportSelected));
+				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
 
@@ -139,8 +141,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			get
 			{
 				var message = string.Format("Reports: {0}, Selected: {1}",
-					_reports.Count,
-					_selectedReports.Count);
+					_reports?.Count,
+					_selectedReports?.Count);
 				return message;
 			}
 		}

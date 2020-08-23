@@ -33,7 +33,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			if (report == null)
 			{
 				return;
-			}
+			}			
 
 			var settings = GetSettings();
 			var view = new AppendReportWindow();

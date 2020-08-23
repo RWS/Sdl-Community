@@ -18,7 +18,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		protected override void Execute()
 		{
-			_controller.RefreshView(true);
+			_controller.RefreshView();
 		}
 
 		public override void UpdateEnabled(bool loading)

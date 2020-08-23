@@ -49,13 +49,15 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
 		{
 			_reports = reports;
+			_filteredReports = _reports;
+
 			Settings = settings;
 			_pathInfo = pathInfo;
+			_filterString = string.Empty;
 
-			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
+			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
-			FilteredReports = _reports;
-			FilterString = string.Empty;
+			ApplyFilter();
 		}
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
@@ -87,6 +89,61 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
 
 		public ReportsNavigationView ReportsNavigationView { get; set; }
+
+		public void AddReports(List<Report> reports)
+		{
+			_reports.AddRange(reports);
+
+			ApplyFilter();
+		}
+
+		public void UpdateReports(List<Report> reports)
+		{
+			foreach (var updatedReport in reports)
+			{
+				var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
+				if (report == null)
+				{
+					continue;
+				}
+
+				report.Path = updatedReport.Path;
+				report.Name = updatedReport.Name;
+				report.Description = updatedReport.Description;
+				report.Language = updatedReport.Language;
+				report.Group = updatedReport.Group;
+			}
+
+			ApplyFilter();
+		}
+
+		public void DeleteReorts(List<Report> reports)
+		{
+			foreach (var report in reports)
+			{
+				_reports.RemoveAll(a => a.Id == report.Id);
+			}
+
+			ApplyFilter();
+		}
+
+		public void UpdateSettings(Settings settings)
+		{
+			Settings = settings;
+
+			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
+			OnPropertyChanged(nameof(GroupType));
+
+			ApplyFilter();
+		}
+
+		public void RefreshView(Settings settings, List<Report> reports)
+		{
+			Settings = settings;
+			_reports = reports;
+
+			ApplyFilter();
+		}
 
 		public Settings Settings { get; set; }
 
@@ -130,21 +187,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public List<Report> Reports
 		{
 			get => _reports;
-			set
+			private set
 			{
 				_reports = value;
-
 				OnPropertyChanged(nameof(Reports));
-
-				if (_reportGroups != null)
-				{
-					_previousReportStates = GetReportStates(_reportGroups);
-				}
-
-				_reportGroups = new ObservableCollection<ReportGroup>();
-
-				FilterString = string.Empty;
-				FilteredReports = _reports;
 			}
 		}
 
@@ -161,67 +207,30 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_filterString = value;
 				OnPropertyChanged(nameof(FilterString));
 
-				FilteredReports = string.IsNullOrEmpty(_filterString)
-					? _reports
-					: _reports.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
+				ApplyFilter();
 			}
 		}
 
-		public List<Report> FilteredReports
+		private void ApplyFilter()
 		{
-			get => _filteredReports;
-			set
-			{
-				_filteredReports = value;
-				OnPropertyChanged(nameof(FilteredReports));
+			_filteredReports = string.IsNullOrEmpty(_filterString)
+				? _reports
+				: _reports.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
 
-				if (_filteredReports?.Count > 0 && !_filteredReports.Contains(SelectedReport))
-				{
-					SelectedReport = _filteredReports[0];
-				}
-				else if (_filteredReports?.Count == 0)
-				{
-					SelectedReport = null;
-				}
+			_reportGroups = new ObservableCollection<ReportGroup>(BuildReportGroup());
 
-				if (ReportGroups == null || ReportGroups.Count == 0)
-				{
-					var reportGroups = BuildReportGroup();
-					ReportGroups = new ObservableCollection<ReportGroup>(reportGroups);
-				}
-				else
-				{
-					foreach (var reportGroup in ReportGroups)
-					{
-						foreach (var itemGroupItem in reportGroup.GroupItems)
-						{
-							itemGroupItem.Reports = GroupType.Type == "Group"
-								? _filteredReports?.Where(a => a.Group == reportGroup.Name && a.Language == itemGroupItem.Name).ToList()
-								: _filteredReports?.Where(a => a.Language == reportGroup.Name && a.Group == itemGroupItem.Name).ToList();
-						}
-					}
-
-					OnPropertyChanged(nameof(ReportGroups));
-				}
-
-				OnPropertyChanged(nameof(StatusLabel));
-			}
+			OnPropertyChanged(nameof(ReportGroups));
+			OnPropertyChanged(nameof(StatusLabel));
 		}
 
 		public ObservableCollection<ReportGroup> ReportGroups
 		{
 			get => _reportGroups;
-			set
+			private set
 			{
 				_reportGroups = value;
 				OnPropertyChanged(nameof(ReportGroups));
 			}
-		}
-
-		public void UpdateReports(Settings settings)
-		{
-			Settings = settings;
-			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 		}
 
 		public Report SelectedReport
@@ -254,22 +263,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					return;
 				}
 
-				var previousGroupType = _groupType;
-
 				_groupType = value;
+
 				OnPropertyChanged(nameof(GroupType));
 
-				if (previousGroupType != null)
-				{
-					if (_reportGroups != null)
-					{
-						_previousReportStates = GetReportStates(_reportGroups);
-					}
-					
-					ReportGroups = new ObservableCollection<ReportGroup>(BuildReportGroup());
-				}
-
 				UpdateSettings();
+				ApplyFilter();
 			}
 		}
 
@@ -294,7 +293,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			set
 			{
 				_groupTypes = value;
-				OnPropertyChanged(nameof(GroupType));
+				OnPropertyChanged(nameof(GroupTypes));
 			}
 		}
 
@@ -368,21 +367,23 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<ReportGroup> BuildReportGroup()
 		{
 			var reportGroups = new List<ReportGroup>();
-			if (FilteredReports == null)
+			if (_filteredReports == null)
 			{
-				return new List<ReportGroup>(reportGroups);
+				return reportGroups;
 			}
 
-			var orderedReports = GroupType.Type == "Group"
-				? FilteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
-				: FilteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
+			_previousReportStates = GetReportStates(_reportGroups);
+
+			var orderedReports = _groupType.Type == "Group"
+				? _filteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
+				: _filteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
 
 			foreach (var report in orderedReports)
 			{
-				var reportGroup = reportGroups.FirstOrDefault(a => a.Name == (GroupType.Type == "Group" ? report.Group : report.Language));
+				var reportGroup = reportGroups.FirstOrDefault(a => a.Name == (_groupType.Type == "Group" ? report.Group : report.Language));
 				if (reportGroup != null)
 				{
-					var groupItem = reportGroup.GroupItems.FirstOrDefault(a => a.Name == (GroupType.Type == "Group" ? report.Language : report.Group));
+					var groupItem = reportGroup.GroupItems.FirstOrDefault(a => a.Name == (_groupType.Type == "Group" ? report.Language : report.Group));
 					if (groupItem != null)
 					{
 						groupItem.Reports.Add(report);
@@ -392,7 +393,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					{
 						groupItem = new GroupItem
 						{
-							Name = (GroupType.Type == "Group" ? report.Language : report.Group),
+							Name = (_groupType.Type == "Group" ? report.Language : report.Group),
 							Reports = new List<Report> { report }
 						};
 						var groupItemState = _previousReportStates?.FirstOrDefault(a => a.Id == reportGroup.Name + "-" + groupItem.Name);
@@ -413,7 +414,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				{
 					reportGroup = new ReportGroup
 					{
-						Name = (GroupType.Type == "Group" ? report.Group : report.Language)
+						Name = (_groupType.Type == "Group" ? report.Group : report.Language)
 					};
 					var reportGroupState = _previousReportStates?.FirstOrDefault(a => a.Id == reportGroup.Name);
 					if (reportGroupState != null)
@@ -424,7 +425,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					var groupItem = new GroupItem
 					{
-						Name = (GroupType.Type == "Group" ? report.Language : report.Group),
+						Name = (_groupType.Type == "Group" ? report.Language : report.Group),
 						Reports = new List<Report> { report }
 					};
 					var groupItemState = _previousReportStates?.FirstOrDefault(a => a.Id == reportGroup.Name + "-" + groupItem.Name);
@@ -458,13 +459,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private List<ReportState> GetReportStates(IEnumerable<ReportGroup> reportGroups)
 		{
-			var itemStates = new List<ReportState>();
+			var reportStates = new List<ReportState>();
+			if (reportGroups == null)
+			{
+				return reportStates;
+			}
 
 			foreach (var reportGroup in reportGroups)
 			{
-				if (!itemStates.Exists(a => a.Id == reportGroup.Name))
+				if (!reportStates.Exists(a => a.Id == reportGroup.Name))
 				{
-					itemStates.Add(new ReportState
+					reportStates.Add(new ReportState
 					{
 						Id = reportGroup.Name,
 						IsSelected = reportGroup.IsSelected,
@@ -474,9 +479,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				foreach (var groupItem in reportGroup.GroupItems)
 				{
-					if (!itemStates.Exists(a => a.Id == reportGroup.Name + "-" + groupItem.Name))
+					if (!reportStates.Exists(a => a.Id == reportGroup.Name + "-" + groupItem.Name))
 					{
-						itemStates.Add(new ReportState
+						reportStates.Add(new ReportState
 						{
 							Id = reportGroup.Name + "-" + groupItem.Name,
 							IsSelected = groupItem.IsSelected,
@@ -486,9 +491,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					foreach (var report in groupItem.Reports)
 					{
-						if (!itemStates.Exists(a => a.Id == report.Id))
+						if (!reportStates.Exists(a => a.Id == report.Id))
 						{
-							itemStates.Add(new ReportState
+							reportStates.Add(new ReportState
 							{
 								Id = report.Id,
 								IsSelected = report.IsSelected
@@ -498,14 +503,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			return itemStates;
+			return reportStates;
 		}
 
 		private void ExpandAll(object parameter)
 		{
-			var reportGroups = ExpandAll(BuildReportGroup());
-
-			ReportGroups = new ObservableCollection<ReportGroup>(reportGroups);
+			_reportGroups = new ObservableCollection<ReportGroup>(ExpandAll(BuildReportGroup()));
+			OnPropertyChanged(nameof(ReportGroups));
 		}
 
 		private List<ReportGroup> ExpandAll(List<ReportGroup> reportGroups)
@@ -524,8 +528,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void CollapseAll(object parameter)
 		{
-			var reportGroups = CollapseAll(BuildReportGroup());
-			ReportGroups = new ObservableCollection<ReportGroup>(reportGroups);
+			_reportGroups = new ObservableCollection<ReportGroup>(CollapseAll(BuildReportGroup()));
+			OnPropertyChanged(nameof(ReportGroups));
 		}
 
 		private List<ReportGroup> CollapseAll(List<ReportGroup> reportGroups)
@@ -548,9 +552,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void UpdateSettings()
 		{
-			if (Settings.GroupByType != GroupType.Type)
+			if (Settings.GroupByType != _groupType.Type)
 			{
-				Settings.GroupByType = GroupType.Type;
+				Settings.GroupByType = _groupType.Type;
 				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
 			}
 		}
@@ -677,11 +681,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void MouseDoubleClick(object parameter)
 		{
-			if (SelectedReport != null)
-			{
-				var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
-				action.Run();
-			}
+			//if (SelectedReport != null)
+			//{
+			//	ReportsNavigationView.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+			//	{
+			//		var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			//		action.Run();
+			//	}));
+			//}
 		}
 
 		public void Dispose()
