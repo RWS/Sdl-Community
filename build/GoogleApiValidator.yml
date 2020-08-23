@@ -30,24 +30,40 @@ variables:
   value: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 4.5.3'
+  inputs:
+    versionSpec: 4.5.3
 
-  - template: tasks/sign-artifacts/prepare-signing.yml
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(solution)'
+    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
 
-  - template: tasks/sign-artifacts/sign-single-artifact.yml
-    parameters:
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- template: tasks/sign-artifacts/prepare-signing.yml
+
+- template: tasks/sign-artifacts/sign-single-artifact.yml
+  parameters:
      fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator\bin\$(buildConfiguration)\Sdl.Community.GoogleApiValidator.exe'
      description: 'GoogleApiValidator'
 
-  - task: VSBuild@1
-    inputs:
+- task: VSBuild@1
+  inputs:
      solution: '**GoogleApiValidator.Setup.wixproj'
      platform: 'x86'
      configuration: '$(buildConfiguration)'
      msbuildArgs: '/p:RunWixToolsOutOfProc=true'
 
-  - template: tasks/sign-artifacts/sign-single-artifact.yml
-    parameters:
+- template: tasks/sign-artifacts/sign-single-artifact.yml
+  parameters:
      fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
      description: 'GoogleApiValidator'
-  - template: jobs/publish-build-artifact-task.yml
+     
+- template: jobs/publish-build-artifact-task.yml
