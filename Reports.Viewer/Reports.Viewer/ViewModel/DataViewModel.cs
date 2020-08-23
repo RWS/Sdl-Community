@@ -122,7 +122,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_selectedReports = value;
 				OnPropertyChanged(nameof(SelectedReports));
-				
+
 
 				_selectedReport = _selectedReports?.Cast<Report>().ToList().FirstOrDefault();
 				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
@@ -141,8 +141,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			get
 			{
 				var message = string.Format("Reports: {0}, Selected: {1}",
-					_reports?.Count,
-					_selectedReports?.Count);
+					_reports?.Count ?? 0,
+					_selectedReports?.Count ?? 0);
 				return message;
 			}
 		}
