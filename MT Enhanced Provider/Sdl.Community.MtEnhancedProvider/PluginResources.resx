@@ -231,4 +231,10 @@
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WindowDescription" xml:space="preserve">
+    <value>Please choose MT Provider you want to use</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
 </root>

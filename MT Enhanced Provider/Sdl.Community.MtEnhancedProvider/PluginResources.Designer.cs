@@ -19,7 +19,7 @@ namespace Sdl.Community.MtEnhancedProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -388,6 +388,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string UriNotSupportedMessage {
             get {
                 return ResourceManager.GetString("UriNotSupportedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please choose MT Provider you want to use.
+        /// </summary>
+        public static string WindowDescription {
+            get {
+                return ResourceManager.GetString("WindowDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
             }
         }
     }
