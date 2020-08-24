@@ -24,7 +24,6 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLFOLDER" Name="GoogleApiValidator.Setup" />
-				   <Directory Id="GoogleApiValidatorInstalDir"/>
 			</Directory>
 			<Directory Id="DesktopFolder" Name="Desktop" />
 		</Directory>
@@ -77,7 +76,7 @@
 		<ComponentRef Id="Google.Apis.Auth.PlatformServices.dll"/>
 		<ComponentRef Id="MahApps.Metro.dll"/>
 	</ComponentGroup>
-		<DirectoryRef Id="GoogleApiValidatorInstalDir" FileSource="..\GoogleApiValidator\bin\Release\">
+		<DirectoryRef Id="INSTALLFOLDER" FileSource="..\GoogleApiValidator\bin\Release\">
 			<Component>
 				<File Checksum="yes" Name="grpc_csharp_ext.x86.dll"/>
 			</Component>
