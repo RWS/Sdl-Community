@@ -136,7 +136,7 @@ namespace Sdl.Community.Reports.Viewer
 			var result = _controller.UpdateReports(_clientId, reports);
 			if (!result.Success)
 			{
-				MessageBox.Show(result.Message);
+				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 
@@ -153,7 +153,7 @@ namespace Sdl.Community.Reports.Viewer
 			var result = _controller.RemoveReports(_clientId, reportIds);
 			if (!result.Success)
 			{
-				MessageBox.Show(result.Message);
+				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 

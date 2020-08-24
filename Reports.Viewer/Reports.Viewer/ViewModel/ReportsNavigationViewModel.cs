@@ -92,8 +92,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public void AddReports(List<Report> reports)
 		{
-			_reports.AddRange(reports);
-
+			foreach (var report in reports)
+			{
+				if (!_reports.Exists(a => a.Id == report.Id))
+				{
+					_reports.Add(report);
+				}				
+			}
+		
 			ApplyFilter(false);
 		}
 

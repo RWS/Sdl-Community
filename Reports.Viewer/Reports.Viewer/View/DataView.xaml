@@ -65,7 +65,7 @@
 				<DataGridTemplateColumn Header="Name" CanUserSort="True" IsReadOnly="True" SortMemberPath="Name" Width="2*" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
-							<Grid Margin="5,0,10,0">
+							<Grid Margin="5,0,10,0" VerticalAlignment="Top">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
 									<ColumnDefinition Width="*"/>
@@ -100,7 +100,7 @@
 				<DataGridTemplateColumn Header="Group Name" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
-							<TextBlock>
+							<TextBlock VerticalAlignment="Top">
 								<TextBlock.Style>
 									<Style TargetType="TextBlock">
 										<Setter Property="Text" Value="{Binding Group}"/>
@@ -122,7 +122,7 @@
 				<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" SortMemberPath="Name" Width="1*" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
-							<Grid Margin="5,0,10,0">
+							<Grid Margin="5,0,10,0" VerticalAlignment="Top">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
 									<ColumnDefinition Width="*"/>
@@ -169,7 +169,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
 							<TextBlock ToolTip="{Binding Description}"
-								Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap"/>
+								Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

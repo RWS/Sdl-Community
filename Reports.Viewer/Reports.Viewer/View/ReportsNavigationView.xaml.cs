@@ -54,6 +54,6 @@ namespace Sdl.Community.Reports.Viewer.View
 			}
 
 			return source as TreeViewItem;
-		}
+		}			
 	}
 }

@@ -408,20 +408,40 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void BrowseFolder(object parameter)
 		{
-			var fileType = parameter.ToString() == "path" ? "data" : "xslt template";
+			var fileType = parameter.ToString() == "path" ? "report" : "xslt template";
 
 			var openFileDialog = new OpenFileDialog();
 			openFileDialog.Multiselect = false;
 			openFileDialog.Title = string.Format("Select the {0} file", fileType);
-			openFileDialog.InitialDirectory = _project.GetProjectInfo().LocalProjectFolder;
-			openFileDialog.Filter = fileType == "HTML"
+
+			if (fileType == "report")
+			{
+				openFileDialog.InitialDirectory = !string.IsNullOrEmpty(Path) ? GetValidFolderPath(Path) : _project.GetProjectInfo().LocalProjectFolder;				
+			}
+			else
+			{
+				if (!string.IsNullOrEmpty(Xslt))
+				{
+					openFileDialog.InitialDirectory = GetValidFolderPath(Xslt);
+				}
+				else if (!string.IsNullOrEmpty(Path))
+				{
+					openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Path);
+				}
+				else
+				{
+					openFileDialog.InitialDirectory = _project.GetProjectInfo().LocalProjectFolder;
+				}
+			}
+			
+			openFileDialog.Filter = fileType == "report"
 				? "All supported files (*.html;*.htm;*.xml)|*.html;*.htm;*.xml|HTML files(*.html;*.htm)|*.html;*.htm|XML files(*.xml)|*.xml"
 				: "XSLT files(*.xslt)| *.xslt;*.xsl";
 
 			var result = openFileDialog.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				if (fileType == "HTML")
+				if (fileType == "report")
 				{
 					Path = openFileDialog.FileName;
 				}

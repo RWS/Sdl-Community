@@ -28,7 +28,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		protected override void Execute()
 		{
-			AddNewReport(new ReportWithXslt());
+			Run(new ReportWithXslt());
 		}
 
 		private void AddNewReport(ReportWithXslt report)

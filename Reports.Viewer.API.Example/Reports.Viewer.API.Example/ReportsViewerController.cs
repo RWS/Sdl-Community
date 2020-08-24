@@ -71,7 +71,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			var result = _controller.AddReports(_clientId, new List<Report> { report });
 			if (!result.Success)
 			{
-				MessageBox.Show(result.Message);
+				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 
@@ -90,7 +90,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			var result = _controller.RemoveReports(_clientId, reports.Select(a => a.Id).ToList());
 			if (!result.Success)
 			{
-				MessageBox.Show(result.Message);
+				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 

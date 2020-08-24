@@ -278,7 +278,7 @@
 				</Grid>
 
 				<TreeView x:Name="TreeView" Grid.Row="1" Grid.Column="0" Padding="2,5,2,2" 
-						  AllowDrop="True"						  
+						  AllowDrop="True"
 				          ItemsSource="{Binding ReportGroups, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 				          behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"				
 			              behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}"
@@ -295,7 +295,7 @@
 						<HierarchicalDataTemplate 
 							ItemsSource="{Binding GroupItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
 							DataType="{x:Type model1:ReportGroup}">
-							<ContentControl Content="{Binding}" Margin="0,1,0,1">
+							<ContentControl Content="{Binding}" Margin="0,1,0,1" Focusable="False">
 								<ContentControl.Style>
 									<Style TargetType="ContentControl">
 										<Setter Property="ContentTemplate" Value="{StaticResource GroupNodeLevel1}"/>
@@ -309,10 +309,9 @@
 							</ContentControl>
 							<HierarchicalDataTemplate.ItemTemplate>
 								<HierarchicalDataTemplate 
-									ItemsSource="{Binding Reports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+									 ItemsSource="{Binding Reports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
 							         DataType="{x:Type model1:GroupItem}">
-
-									<ContentControl Content="{Binding}" Margin="0,1,0,1">
+									<ContentControl Content="{Binding}" Margin="0,1,0,1" Focusable="False">
 										<ContentControl.Style>
 											<Style TargetType="ContentControl">
 												<Setter Property="ContentTemplate" Value="{StaticResource LanguageNodeLevel2}"/>
@@ -436,7 +435,7 @@
 						<DockPanel HorizontalAlignment="Right" Dock="Right">
 							<Label Content="Group by:"/>
 							<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							MinWidth="95"
+							MinWidth="95"									  
 							HorizontalAlignment="Left"
 							VerticalAlignment="Center"
 							ItemsSource="{Binding GroupTypes}"

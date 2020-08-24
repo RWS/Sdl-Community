@@ -21,18 +21,21 @@ namespace Sdl.Reports.Viewer.API
 		private static readonly object LockObject = new object();
 		private readonly ReportService _reportService;
 		private readonly ProjectsController _projectsController;
+		private readonly EditorController _editorController;
 		private List<Report> _reports;
 		private string _previousProjectId;
 		private IProject _selectedProject;
 		private bool _ignoreChanges;
 
 		private ReportsController()
-		{			
+		{
 			_reportService = new ReportService(new ProjectSettingsService());
 			_reports = new List<Report>();
 
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 
 			SelectedProject = _projectsController.CurrentProject
 							  ?? _projectsController.SelectedProjects.FirstOrDefault();
@@ -113,18 +116,31 @@ namespace Sdl.Reports.Viewer.API
 					}
 				}
 
-				var clonedReports = UpdateReportData(reports);
+				List<Report> clonedReports = null;
 
-				UpdateProjectReports();
-
-				ReportsUpdated?.Invoke(this, new ReportsUpdatedEventArgs
+				try
 				{
-					ClientId = clientId,
-					ProjectId = GetProjectId(),
-					Reports = clonedReports
-				});
+					clonedReports = UpdateReportData(reports);
 
-				return new ActionResult(true) { Reports = clonedReports };
+					UpdateProjectReports();
+
+					ReportsUpdated?.Invoke(this, new ReportsUpdatedEventArgs
+					{
+						ClientId = clientId,
+						ProjectId = GetProjectId(),
+						Reports = clonedReports
+					});
+
+					return new ActionResult(true) { Reports = clonedReports };
+				}
+				catch (Exception e)
+				{
+					return new ActionResult(false)
+					{
+						Reports = clonedReports,
+						Message = e.Message						
+					};
+				}
 			}
 		}
 
@@ -159,19 +175,32 @@ namespace Sdl.Reports.Viewer.API
 						};
 					}
 				}
+	
+				List<Report> clonedReports = null;
 
-				var clonedReports = RemoveReportData(reportIds);
-
-				UpdateProjectReports();
-
-				ReportsRemoved?.Invoke(this, new ReportsRemovedEventArgs
+				try
 				{
-					ClientId = clientId,
-					ProjectId = GetProjectId(),
-					Reports = clonedReports
-				});
+					clonedReports = RemoveReportData(reportIds);
 
-				return new ActionResult(true) { Reports = clonedReports };
+					UpdateProjectReports();
+
+					ReportsRemoved?.Invoke(this, new ReportsRemovedEventArgs
+					{
+						ClientId = clientId,
+						ProjectId = GetProjectId(),
+						Reports = clonedReports
+					});
+
+					return new ActionResult(true) { Reports = clonedReports };
+				}
+				catch (Exception e)
+				{
+					return new ActionResult(false)
+					{
+						Reports = clonedReports,
+						Message = e.Message
+					};
+				}
 			}
 		}
 
@@ -274,7 +303,12 @@ namespace Sdl.Reports.Viewer.API
 
 		private string GetProjectId()
 		{
-			var projectInfo = SelectedProject?.GetProjectInfo();
+			return GetProjectId(SelectedProject);
+		}
+
+		private string GetProjectId(IProject project)
+		{
+			var projectInfo = project?.GetProjectInfo();
 			return projectInfo?.Id.ToString();
 		}
 
@@ -314,9 +348,9 @@ namespace Sdl.Reports.Viewer.API
 		}
 
 		private bool CanOverwriteExistingReports(ReportsViewerSettings reportsViewerSettings)
-		{			
+		{
 			var uiCultureName = reportsViewerSettings.UICultureName;
-	
+
 			if (Thread.CurrentThread.CurrentUICulture.Name != uiCultureName.Value)
 			{
 				uiCultureName.Value = Thread.CurrentThread.CurrentUICulture.Name;
@@ -349,7 +383,7 @@ namespace Sdl.Reports.Viewer.API
 			}
 		}
 
-		private List<Report> AddRecordData(IEnumerable<Report> reports)
+		private List<Report> AddRecordData(List<Report> reports)
 		{
 			var clonedReports = new List<Report>();
 			foreach (var report in reports)
@@ -371,9 +405,24 @@ namespace Sdl.Reports.Viewer.API
 			return clonedReports;
 		}
 
-		private List<Report> UpdateReportData(IEnumerable<Report> reports)
+		private List<Report> UpdateReportData(List<Report> reports)
 		{
 			var clonedReports = new List<Report>();
+			if (reports == null)
+			{
+				return clonedReports;
+			}
+
+			var documents = _editorController.GetDocuments().ToList();
+			var projectId = GetProjectId();
+			var hasStudioReports = reports.Exists(a => a.IsStudioReport);
+			var documentsOpen = documents.Exists(a => GetProjectId(a.Project) == projectId);
+			if (hasStudioReports && documentsOpen)
+			{
+				throw new Exception("Please close project documents that are open in the editor before updating the selected reports");
+			}
+
+
 			foreach (var report in reports)
 			{
 				var existingReport = _reports?.FirstOrDefault(a => a.Id == report.Id);
@@ -393,12 +442,13 @@ namespace Sdl.Reports.Viewer.API
 				clonedReports.Add(existingReport.Clone() as Report);
 			}
 
-			var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
-			if (studioReports.Count > 0)
+
+			if (hasStudioReports)
 			{
 				try
 				{
 					_ignoreChanges = true;
+					var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
 
 					if (SelectedProject is FileBasedProject fileBasedProject)
 					{
@@ -416,9 +466,24 @@ namespace Sdl.Reports.Viewer.API
 			return clonedReports;
 		}
 
-		private List<Report> RemoveReportData(IEnumerable<string> reportIds)
+		private List<Report> RemoveReportData(List<string> reportIds)
 		{
 			var clonedReports = new List<Report>();
+			if (reportIds == null)
+			{
+				return clonedReports;
+			}
+
+			var documents = _editorController.GetDocuments().ToList();
+			var projectId = GetProjectId();
+			var reports = GetReports(reportIds);
+			var hasStudioReports = reports.Exists(a => a.IsStudioReport);
+			var documentsOpen = documents.Exists(a => GetProjectId(a.Project) == projectId);
+			if (hasStudioReports && documentsOpen)
+			{
+				throw new Exception("Please close project documents that are open in the editor before removing the selected reports");
+			}
+
 			foreach (var reportId in reportIds)
 			{
 				var existingReport = _reports?.FirstOrDefault(a => a.Id == reportId);
@@ -444,13 +509,13 @@ namespace Sdl.Reports.Viewer.API
 				_reports.Remove(existingReport);
 			}
 
-			var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
-			if (studioReports.Count > 0)
+			if (hasStudioReports)
 			{
 				try
 				{
 					_ignoreChanges = true;
 
+					var studioReports = clonedReports.Where(a => a.IsStudioReport).ToList();
 					if (SelectedProject is FileBasedProject fileBasedProject)
 					{
 						_projectsController.Close(fileBasedProject);
@@ -465,6 +530,23 @@ namespace Sdl.Reports.Viewer.API
 			}
 
 			return clonedReports;
+		}
+
+		private List<Report> GetReports(List<string> reportIds)
+		{
+			var reports = new List<Report>();
+			foreach (var reportId in reportIds)
+			{
+				var report = _reports?.FirstOrDefault(a => a.Id == reportId);
+				if (report == null)
+				{
+					continue;
+				}
+
+				reports.Add(report);
+			}
+
+			return reports;
 		}
 
 		private List<Report> GetClonedReports()
@@ -533,19 +615,19 @@ namespace Sdl.Reports.Viewer.API
 			if (string.Compare(reportsFolderName, Constants.ReportsViewerFolderName, StringComparison.InvariantCultureIgnoreCase) != 0)
 			{
 				var reportName = Path.GetFileName(report.Path);
-				var reportPath = Path.Combine(reportsFolder, reportName);
+				var reportFullPath = Path.Combine(reportsFolder, reportName);
 				var index = 1;
-				while (File.Exists(reportPath) && index < 1000)
+				while (File.Exists(reportFullPath) && index < 1000)
 				{
 					var extension = Path.GetExtension(reportName);
-					var fileName = reportPath.Substring(0, reportPath.Length - extension.Length);
+					var fileName = reportName.Substring(0, reportName.Length - extension.Length);
 					var newReportName = $"{fileName}({index++}){extension}";
 
-					reportPath = Path.Combine(reportsFolder, newReportName);
+					reportFullPath = Path.Combine(reportsFolder, newReportName);
 				}
 
-				File.Copy(report.Path, reportPath);
-				report.Path = $"{Constants.ReportsViewerFolderName}\\{Path.GetFileName(reportPath)}";
+				File.Copy(report.Path, reportFullPath);
+				report.Path = $"{Constants.ReportsViewerFolderName}\\{Path.GetFileName(reportFullPath)}";
 			}
 		}
 
