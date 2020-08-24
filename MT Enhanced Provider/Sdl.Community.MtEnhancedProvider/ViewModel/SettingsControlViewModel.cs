@@ -14,10 +14,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 	{
 		public IModelBase ViewModel { get; set; }
 		public ICommand ShowMainWindowCommand { get; set; }
+		private readonly IMtTranslationOptions _options;
 
-		public SettingsControlViewModel()
+		public SettingsControlViewModel(IMtTranslationOptions options)
 		{
 			ViewModel = this;
+			_options = options;
 		}
 	}
 }

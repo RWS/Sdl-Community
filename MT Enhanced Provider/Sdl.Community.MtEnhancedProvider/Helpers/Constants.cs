@@ -7,6 +7,7 @@
 		public readonly string SDLMTEnhancedLogFile = "SDLMTEnhancedLogs.txt";
 
 		// Logging messages
+		//TODO: Remove this constants and use name of to get the method name for logging
 		public readonly string GetTaggedSegment = "GetTaggedSegment method: ";
 		public readonly string RemoveTrailingClosingTags = "RemoveTrailingClosingTags method: ";
 		public readonly string DecodeReturnedText = "DecodeReturnedText method: ";

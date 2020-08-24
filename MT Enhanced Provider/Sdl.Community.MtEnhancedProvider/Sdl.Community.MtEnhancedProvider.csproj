@@ -121,6 +121,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -214,10 +217,14 @@
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
     <Compile Include="EditCollection.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Model\Interface\IModelBase.cs" />
+    <Compile Include="Model\Interface\IMtTranslationOptions.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\LanguageDetails.cs" />
@@ -226,6 +233,7 @@
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\Translation.cs" />
     <Compile Include="Model\TranslationDetails.cs" />
+    <Compile Include="Model\TranslationOption.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\ViewDetails.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />

@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
 			 xmlns:mtEnhanced="clr-namespace:Sdl.Community.MtEnhancedProvider"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:helpers ="clr-namespace:Sdl.Community.MtEnhancedProvider.Helpers"
              d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -12,6 +14,11 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -23,7 +30,12 @@
 		<StackPanel Grid.Row="0">
 			<TextBlock Text="{x:Static mtEnhanced:PluginResources.WindowDescription}" Margin="10,10,0,0"/>
 			<DockPanel Margin="10">
-				<ComboBox DockPanel.Dock="Left" Width="200"/>
+				<ComboBox
+					ItemsSource="{Binding TranslationOptions}"
+					SelectedItem="{Binding SelectedTranslationOption}"
+					DisplayMemberPath="Name"
+					DockPanel.Dock="Left" 
+					Width="200"/>
 				<Button Style="{StaticResource TransparentButtonStyle}"
 						Command="{Binding ShowSettingsCommand}">
 					<DockPanel>
@@ -32,6 +44,24 @@
 					</DockPanel>
 				</Button>
 			</DockPanel>
+		</StackPanel>
+		<!--Microsoft API Options-->
+		<StackPanel Grid.Row="1">
+			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
+			<PasswordBox
+				HorizontalAlignment="Left"
+				Margin="10"
+				Width="400"
+				Style="{DynamicResource MetroButtonRevealedPasswordBox}"
+				helpers:PasswordHelper.Attach="True"
+				helpers:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
+				controls:TextBoxHelper.Watermark="API Key"
+				controls:TextBoxHelper.UseFloatingWatermark="True"  
+				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+				>
+				
+			</PasswordBox>
 		</StackPanel>
     </Grid>
 </UserControl>

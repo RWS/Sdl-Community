@@ -13,5 +13,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 	{
 		IModelBase ViewModel { get; set; }
 		ICommand ShowSettingsCommand { get; set; }
+		List<TranslationOption> TranslationOptions { get; set; }
+		TranslationOption SelectedTranslationOption { get; set; }
+		bool IsMicrosoftSelected { get; set; }
+		string ApiKey { get; set; }
 	}
 }

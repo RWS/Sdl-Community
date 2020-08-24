@@ -154,6 +154,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google Translator.
+        /// </summary>
+        public static string Google {
+            get {
+                return ResourceManager.GetString("Google", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MT Enhanced using Google Translate.
         /// </summary>
         public static string Google_Description {
@@ -217,6 +226,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Microsoft Translator.
+        /// </summary>
+        public static string Microsoft {
+            get {
+                return ResourceManager.GetString("Microsoft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
         /// </summary>
         public static string Microsoft_Description {
@@ -259,6 +277,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string Microsoft_Tooltip {
             get {
                 return ResourceManager.GetString("Microsoft_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter your Mictosoft Translate API Key.
+        /// </summary>
+        public static string MicrosoftApiDescription {
+            get {
+                return ResourceManager.GetString("MicrosoftApiDescription", resourceCulture);
             }
         }
         

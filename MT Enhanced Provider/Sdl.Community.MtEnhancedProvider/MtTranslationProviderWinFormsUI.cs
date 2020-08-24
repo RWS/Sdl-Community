@@ -18,6 +18,7 @@ using System.Linq;
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Community.MtEnhancedProvider.View;
 using Sdl.Community.MtEnhancedProvider.ViewModel;
@@ -114,8 +115,9 @@ namespace Sdl.Community.MtEnhancedProvider
 			var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
 
 			//WPF LOGIC
-			var providerControlVm = new ProviderControlViewModel();
-	        var settingsControlVm = new SettingsControlViewModel();
+			var providerControlVm = new ProviderControlViewModel(loadOptions);
+	        var settingsControlVm = new SettingsControlViewModel(loadOptions);
+
 			var mainWindow = new MainWindow
 			{
 				DataContext = new MainWindowViewModel(providerControlVm,settingsControlVm)
