@@ -213,9 +213,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="EditCollection.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Model\Interface\IModelBase.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\LanguageDetails.cs" />
@@ -257,6 +259,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MtWindowWrapper.cs" />
@@ -270,6 +273,7 @@
     <Compile Include="Styles\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\Interface\IMainWindow.cs" />
     <Compile Include="ViewModel\Interface\IProviderControlViewModel.cs" />
     <Compile Include="ViewModel\Interface\ISettingsControlViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -286,6 +290,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Setting.png" />
     <Resource Include="Resources\my_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

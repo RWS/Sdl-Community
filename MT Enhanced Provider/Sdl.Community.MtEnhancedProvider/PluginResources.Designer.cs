@@ -336,6 +336,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PluginsView.
+        /// </summary>
+        public static string PluginsView {
+            get {
+                return ResourceManager.GetString("PluginsView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credentials for Google Translate....
         /// </summary>
         public static string PromptForCredentialsCaption_Google {
@@ -364,12 +373,40 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Setting {
+            get {
+                object obj = ResourceManager.GetObject("Setting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation Provider Settings.
+        /// </summary>
+        public static string SettingsText {
+            get {
+                return ResourceManager.GetString("SettingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SettingsView.
+        /// </summary>
+        public static string SettingsView {
+            get {
+                return ResourceManager.GetString("SettingsView", resourceCulture);
             }
         }
         
@@ -392,7 +429,7 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose MT Provider you want to use.
+        ///   Looks up a localized string similar to Please choose which MT Provider you want to use.
         /// </summary>
         public static string WindowDescription {
             get {

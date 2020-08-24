@@ -113,11 +113,14 @@ namespace Sdl.Community.MtEnhancedProvider
 			var allSupportedLanguages = ApiConnecter.SupportedLangs;
 			var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
 
+			//WPF LOGIC
+			var providerControlVm = new ProviderControlViewModel();
+	        var settingsControlVm = new SettingsControlViewModel();
 			var mainWindow = new MainWindow
 			{
-				DataContext = new MainWindowViewModel()
+				DataContext = new MainWindowViewModel(providerControlVm,settingsControlVm)
 			};
-	        //var mainDialog =mainWindow.ShowDialog();
+
 	        if (mainWindow.ShowDialog().Value == true)
 	        {
 		        return null;

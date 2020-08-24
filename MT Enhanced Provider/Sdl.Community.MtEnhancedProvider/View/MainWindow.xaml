@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:local="clr-namespace:Sdl.Community.MtEnhancedProvider.View"
+        xmlns:ui="clr-namespace:Sdl.Community.MtEnhancedProvider.View"
 		xmlns:styles ="clr-namespace:Sdl.Community.MtEnhancedProvider.Styles"
-		xmlns:viewModel="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
+		xmlns:viewModels="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
 		mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
+		WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 		Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
 		Title="MT Enhanced" Height="450" Width="800"
@@ -18,7 +19,16 @@
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			
+			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
+				<ui:ProviderControl />
+			</DataTemplate>
+			
+			<DataTemplate DataType="{x:Type viewModels:SettingsControlViewModel}">
+				<ui:SettingsControl/>
+			</DataTemplate>
 		</ResourceDictionary>
+		
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}">
 		<Grid Margin="1,0,0,0">
@@ -33,9 +43,10 @@
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
-			<StackPanel Grid.Column="0" Grid.Row="1" Margin="10,10,10,0">
-
-			</StackPanel>
+			
+			<DockPanel Grid.Column="0" Grid.Row="1" Margin="10,10,10,0">
+				<ContentControl Content="{Binding SelectedView.ViewModel}"/>
+			</DockPanel>
 			
 		</Grid>
    </Border>
