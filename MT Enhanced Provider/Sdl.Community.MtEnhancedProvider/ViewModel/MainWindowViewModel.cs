@@ -17,10 +17,13 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 	{
 		private ViewDetails _selectedView;
 
-		public MainWindowViewModel(IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlView)
+		public MainWindowViewModel(IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel)
 		{
 			ShowSettingsViewCommand =  new CommandHandler(ShowSettingsPage, true);
+			ShowMainViewCommand = new CommandHandler(ShowProvidersPage,true);
+
 			providerControlViewModel.ShowSettingsCommand = ShowSettingsViewCommand;
+			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
 
 			AvailableViews = new List<ViewDetails>
 			{
@@ -32,20 +35,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				new ViewDetails
 				{
 					Name = PluginResources.SettingsView,
-					ViewModel = settingsControlView.ViewModel
+					ViewModel = settingsControlViewModel.ViewModel
 				}
 			};
+
 			ShowProvidersPage();
-		}
-
-		private void ShowSettingsPage()
-		{
-			SelectedView = AvailableViews[1];
-		}
-
-		private void ShowProvidersPage()
-		{
-			SelectedView = AvailableViews[0];
 		}
 
 		public ViewDetails SelectedView
@@ -60,7 +54,20 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		public List<ViewDetails> AvailableViews { get; set; }
 		public ICommand ShowSettingsViewCommand { get; set; }
+		public ICommand ShowMainViewCommand { get; set; }
+
+		private void ShowSettingsPage()
+		{
+			SelectedView = AvailableViews[1];
+		}
+
+		private void ShowProvidersPage()
+		{
+			SelectedView = AvailableViews[0];
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
+
 
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -13,6 +13,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		ViewDetails SelectedView { get; set; }
 		List<ViewDetails> AvailableViews { get; set; }
 		ICommand ShowSettingsViewCommand { get; set; }
+		ICommand ShowMainViewCommand { get; set; }
 
 	}
 }

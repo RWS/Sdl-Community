@@ -290,6 +290,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\backImg.png" />
     <Resource Include="Resources\Setting.png" />
     <Resource Include="Resources\my_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

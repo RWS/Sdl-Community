@@ -88,6 +88,25 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translation Provider.
+        /// </summary>
+        public static string BackBtnText {
+            get {
+                return ResourceManager.GetString("BackBtnText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap backImg {
+            get {
+                object obj = ResourceManager.GetObject("backImg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {
@@ -407,6 +426,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string SettingsView {
             get {
                 return ResourceManager.GetString("SettingsView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provider options.
+        /// </summary>
+        public static string SettingsViewTitle {
+            get {
+                return ResourceManager.GetString("SettingsViewTitle", resourceCulture);
             }
         }
         
