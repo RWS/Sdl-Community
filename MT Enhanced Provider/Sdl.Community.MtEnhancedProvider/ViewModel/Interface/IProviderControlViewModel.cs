@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using Sdl.Community.MtEnhancedProvider.Model;
-using Sdl.Community.MtEnhancedProvider.Model.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 {
 	public interface IProviderControlViewModel
 	{
-		IModelBase ViewModel { get; set; }
+		ModelBase ViewModel { get; set; }
 		ICommand ShowSettingsCommand { get; set; }
 		List<TranslationOption> TranslationOptions { get; set; }
+		List<GoogleApiVersion> GoogleApiVersions { get; set; }
+		//TODO: save this value in settings
+		GoogleApiVersion SelectedGoogleApiVersion { get; set; }
 		TranslationOption SelectedTranslationOption { get; set; }
 		bool IsMicrosoftSelected { get; set; }
 		string ApiKey { get; set; }

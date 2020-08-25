@@ -199,6 +199,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select the version of the Google Translate API that you wish to use:.
+        /// </summary>
+        public static string GoogleApiDescription {
+            get {
+                return ResourceManager.GetString("GoogleApiDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem checking language pair support..
         /// </summary>
         public static string LangPairAuthErrorMsg1 {
@@ -281,7 +290,7 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter your Mictosoft Translate API Key.
+        ///   Looks up a localized string similar to Please enter your Microsoft Translate API Key.
         /// </summary>
         public static string MicrosoftApiDescription {
             get {

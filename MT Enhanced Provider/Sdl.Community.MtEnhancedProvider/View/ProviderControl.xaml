@@ -7,6 +7,7 @@
 			 xmlns:mtEnhanced="clr-namespace:Sdl.Community.MtEnhancedProvider"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers ="clr-namespace:Sdl.Community.MtEnhancedProvider.Helpers"
+			 xmlns:converters ="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -16,10 +17,11 @@
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
+
 		</ResourceDictionary>
 	</UserControl.Resources>
     <Grid>
@@ -46,7 +48,7 @@
 			</DockPanel>
 		</StackPanel>
 		<!--Microsoft API Options-->
-		<StackPanel Grid.Row="1">
+		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
 			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
 			<PasswordBox
 				HorizontalAlignment="Left"
@@ -58,10 +60,19 @@
 				controls:TextBoxHelper.Watermark="API Key"
 				controls:TextBoxHelper.UseFloatingWatermark="True"  
 				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-				>
-				
+				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
 			</PasswordBox>
+		</StackPanel>
+		<!--Google API Options-->
+		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
+			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.GoogleApiDescription}"/>
+			<ComboBox
+				ItemsSource="{Binding GoogleApiVersions}"
+				SelectedItem="{Binding SelectedGoogleApiVersion}"
+				DisplayMemberPath="Name"
+				HorizontalAlignment="Left"
+				Margin="10"
+				Width="200"/>
 		</StackPanel>
     </Grid>
 </UserControl>

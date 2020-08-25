@@ -264,7 +264,10 @@
   <data name="WindowsControl_Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="GoogleApiDescription" xml:space="preserve">
+    <value>Please select the version of the Google Translate API that you wish to use:</value>
+  </data>
   <data name="MicrosoftApiDescription" xml:space="preserve">
-    <value>Please enter your Mictosoft Translate API Key</value>
+    <value>Please enter your Microsoft Translate API Key</value>
   </data>
 </root>
