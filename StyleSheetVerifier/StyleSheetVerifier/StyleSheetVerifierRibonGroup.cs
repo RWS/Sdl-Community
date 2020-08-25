@@ -16,11 +16,11 @@ namespace Sdl.Community.StyleSheetVerifier
 	{
 		protected override void Execute()
 		{
-			var verifier = new Form1();
+			var verifier = new StyleSheetVerifierForm();
 			verifier.ShowDialog();
 		}
 	}
-	[Action("StyleSheetVerifierHelpAction", Icon = "question", Name = "StyleSheet Verifier Help", Description = "A Wiki page related to the documentation will be opened in the browser")]
+	[Action("StyleSheetVerifierHelpAction", Icon = "Question", Name = "StyleSheet Verifier Help", Description = "A Wiki documentation will be opened in the browser")]
 	[ActionLayout(typeof(StyleSheetVerifierRibonGroup), 10, DisplayType.Large)]
 	public class StyleSheetVerifierActionHelp : AbstractAction
 	{
