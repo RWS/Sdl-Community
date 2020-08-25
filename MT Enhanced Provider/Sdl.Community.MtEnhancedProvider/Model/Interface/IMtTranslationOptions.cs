@@ -10,5 +10,7 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 	{
 		MtTranslationOptions.ProviderType SelectedProvider { get; set; }
 		string ApiKey { get; set; }
+		bool UseCatID { get; set; }
+		string CatId { get; set; }
 	}
 }

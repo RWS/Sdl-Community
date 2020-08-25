@@ -218,6 +218,7 @@
     <Compile Include="AppInitializer.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="EditCollection.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Enums.cs" />

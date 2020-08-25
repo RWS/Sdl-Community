@@ -15,5 +15,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		TranslationOption SelectedTranslationOption { get; set; }
 		bool IsMicrosoftSelected { get; set; }
 		string ApiKey { get; set; }
+		bool UseCatId { get; set; }
+		string CatId { get; set; }
 	}
 }

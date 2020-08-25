@@ -22,6 +22,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private TranslationOption _selectedTranslationOption;
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private bool _isMicrosoftSelected;
+		private bool _useCatId;
+		private string _catId;
 		private string _apiKey;
 
 		public ProviderControlViewModel(IMtTranslationOptions options)
@@ -106,6 +108,32 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_apiKey == value) return;
 				_apiKey = value;
 				OnPropertyChanged(nameof(ApiKey));
+			}
+		}
+
+		public bool UseCatId
+		{
+			get => _useCatId;
+			set
+			{
+				if (_useCatId == value) return;
+				_useCatId = value;
+				if (!value)
+				{
+					CatId = string.Empty;
+				}
+				OnPropertyChanged(nameof(UseCatId));
+			}
+		}
+
+		public string CatId
+		{
+			get => _catId;
+			set
+			{
+				if (_catId == value) return;
+				_catId = value;
+				OnPropertyChanged(nameof(CatId));
 			}
 		}
 

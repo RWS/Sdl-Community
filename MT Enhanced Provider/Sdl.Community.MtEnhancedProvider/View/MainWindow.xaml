@@ -7,7 +7,7 @@
 		xmlns:styles ="clr-namespace:Sdl.Community.MtEnhancedProvider.Styles"
 		xmlns:viewModels="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
 		mc:Ignorable="d"
-		WindowStartupLocation="CenterOwner"
+		WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 		Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"

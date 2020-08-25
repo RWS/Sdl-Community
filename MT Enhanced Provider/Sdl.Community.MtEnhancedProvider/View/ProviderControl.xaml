@@ -19,9 +19,11 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
-
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
     <Grid>
@@ -62,6 +64,19 @@
 				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
 			</PasswordBox>
+			<CheckBox
+				Content="{x:Static mtEnhanced:PluginResources.CatIdDescription}"
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				Margin="10 0"
+				IsChecked="{Binding UseCatId}"/>
+			<TextBox
+				controls:TextBoxHelper.Watermark="Category Id"
+				Text="{Binding CatId}"
+				IsEnabled="{Binding UseCatId,Converter={StaticResource InvertableBoolEnabledConverter}}"
+				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				Width="200"
+				HorizontalAlignment="Left"
+				Margin="10"/>
 		</StackPanel>
 		<!--Google API Options-->
 		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
