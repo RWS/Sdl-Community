@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 
 namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 {
@@ -12,5 +13,8 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 		string ApiKey { get; set; }
 		bool UseCatID { get; set; }
 		string CatId { get; set; }
+		string JsonFilePath { get; set; }
+		string ProjectName { get; set; }
+		Enums.GoogleApiVersion SelectedGoogleVersion { get; set; }
 	}
 }

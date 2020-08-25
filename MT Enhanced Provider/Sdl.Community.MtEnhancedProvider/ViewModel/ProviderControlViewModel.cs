@@ -23,8 +23,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private bool _isMicrosoftSelected;
 		private bool _useCatId;
+		private bool _isV2Checked;
 		private string _catId;
 		private string _apiKey;
+		private string _jsonFilePath;
+		private string _projectName;
 
 		public ProviderControlViewModel(IMtTranslationOptions options)
 		{
@@ -60,7 +63,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					Version = Enums.GoogleApiVersion.V3
 				}
 			};
-			//TODO: Set the selected google api version from settings
+
+			SetGoogleApiVersion();
 		}
 
 		public ModelBase ViewModel { get; set; }
@@ -74,6 +78,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			set
 			{
 				_selectedGoogleApiVersion = value;
+				IsV2Checked = _selectedGoogleApiVersion.Version == Enums.GoogleApiVersion.V2;
 				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
 			}
 		}
@@ -96,7 +101,22 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_isMicrosoftSelected == value) return;
 				_isMicrosoftSelected = value;
+				if (_isMicrosoftSelected)
+				{
+					IsV2Checked = false;
+				}
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
+			}
+		}
+
+		public bool IsV2Checked
+		{
+			get => _isV2Checked;
+			set
+			{
+				if (_isV2Checked == value) return;
+				_isV2Checked = value;
+				OnPropertyChanged(nameof(IsV2Checked));
 			}
 		}
 
@@ -108,6 +128,28 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_apiKey == value) return;
 				_apiKey = value;
 				OnPropertyChanged(nameof(ApiKey));
+			}
+		}
+
+		public string JsonFilePath
+		{
+			get => _jsonFilePath;
+			set
+			{
+				if (_jsonFilePath == value) return;
+				_jsonFilePath = value;
+				OnPropertyChanged(nameof(JsonFilePath));
+			}
+		}
+
+		public string ProjectName
+		{
+			get => _projectName;
+			set
+			{
+				if (_projectName == value) return;
+				_projectName = value;
+				OnPropertyChanged(nameof(ProjectName));
 			}
 		}
 
@@ -171,10 +213,38 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 		}
 
+		//TODO: Check if the google version is persisted correctly in the provider settings
+		private void SetGoogleApiVersion()
+		{
+			if (_options?.SelectedGoogleVersion != null)
+			{
+				var selectedVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion));
+				if (selectedVersion != null)
+				{
+					SelectedGoogleApiVersion = selectedVersion;
+				}
+				else
+				{
+					SelectGoogleV2();
+				}
+			}
+			else
+			{
+				//Bydefault we'll select Google V2 version - which is the basic one
+				SelectGoogleV2();
+			}
+		}
+
 		private void SelectMicrosoftTranslation()
 		{
 			SelectedTranslationOption = TranslationOptions[0];
 			IsMicrosoftSelected = true;
+		}
+
+		private void SelectGoogleV2()
+		{
+			SelectedGoogleApiVersion = GoogleApiVersions[0];
+			IsV2Checked = true;
 		}
 	}
 }

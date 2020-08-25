@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using static System.Convert;
@@ -107,8 +108,20 @@ namespace Sdl.Community.MtEnhancedProvider
             get => GetStringParameter("postlookupfilename");
 	        set => SetStringParameter("postlookupfilename", value);
         }
+		[JsonIgnore]
+		public string JsonFilePath
+		{
+			get => GetStringParameter("jsonfilepath");
+			set => SetStringParameter("jsonfilepath", value);
+		}
+		[JsonIgnore]
+		public string ProjectName
+		{
+			get => GetStringParameter("projectname");
+			set => SetStringParameter("projectname", value);
+		}
 
-        public enum ProviderType
+		public enum ProviderType
         {
             GoogleTranslate = 1,
             MicrosoftTranslator = 2,
@@ -150,10 +163,46 @@ namespace Sdl.Community.MtEnhancedProvider
             get => GetProviderType(GetStringParameter("selectedprovider"));
 	        set 
             {
-                string typestring = GetProviderTypeDescription(value);
+                var typestring = GetProviderTypeDescription(value);
                 SetStringParameter("selectedprovider", typestring); 
             }
         }
+
+		[JsonIgnore]
+		public Enums.GoogleApiVersion SelectedGoogleVersion
+		{
+			get => GetProviderGoogleApiVersion(GetStringParameter("selectedgoogleversion"));
+			set
+			{
+				var typestring = GetProviderTypeDescription(value);
+				SetStringParameter("selectedgoogleversion", typestring);
+			}
+		}
+
+		public static string GetProviderTypeDescription(Enums.GoogleApiVersion googleVersion)
+		{
+			switch (googleVersion)
+			{
+				case Enums.GoogleApiVersion.V2:
+					return "V2"; 
+				case Enums.GoogleApiVersion.V3:
+					return "V3";
+			}
+			return "V2";
+		}
+
+		public static Enums.GoogleApiVersion GetProviderGoogleApiVersion(string version)
+		{
+			switch (version)
+			{
+				case "V2":
+					return Enums.GoogleApiVersion.V2;
+				case "V3":
+					return Enums.GoogleApiVersion.V3;
+				default:
+					return Enums.GoogleApiVersion.V2;
+			}
+		}
 
 		[JsonIgnore]
 		public string ApiKey //the apiKey is going to be held in a static variable so we don't have to get it from credential store all the time

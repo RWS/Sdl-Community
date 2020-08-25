@@ -502,6 +502,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the local path to the json file associated with your API key:.
+        /// </summary>
+        public static string V3JsonPathDescription {
+            get {
+                return ResourceManager.GetString("V3JsonPathDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the project name for this file from your Google account:.
+        /// </summary>
+        public static string V3ProjectNameDescription {
+            get {
+                return ResourceManager.GetString("V3ProjectNameDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please choose which MT Provider you want to use.
         /// </summary>
         public static string WindowDescription {

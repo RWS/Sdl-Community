@@ -88,6 +88,37 @@
 				HorizontalAlignment="Left"
 				Margin="10"
 				Width="200"/>
+			<!--Google API V2--> 
+			<PasswordBox
+				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+				HorizontalAlignment="Left"
+				Margin="10"
+				Width="400"
+				Style="{DynamicResource MetroButtonRevealedPasswordBox}"
+				helpers:PasswordHelper.Attach="True"
+				helpers:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
+				controls:TextBoxHelper.Watermark="API Key"
+				controls:TextBoxHelper.UseFloatingWatermark="True"  
+				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
+			</PasswordBox>
+			<!--Google API V3-->
+			<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
+				<TextBlock 
+					Margin="10 10 0 0" 
+					Text="{x:Static mtEnhanced:PluginResources.V3JsonPathDescription}"/>
+				<TextBox controls:TextBoxHelper.Watermark="Json file path"
+				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				         Margin="10 10"
+				         Text="{Binding JsonFilePath}"/>
+				<TextBlock 
+					Margin="10 10" 
+					Text="{x:Static mtEnhanced:PluginResources.V3ProjectNameDescription}"/>
+				<TextBox controls:TextBoxHelper.Watermark="Project Name"
+				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				         Margin="10 0"
+				         Text="{Binding ProjectName}"/>
+			</StackPanel>
 		</StackPanel>
     </Grid>
 </UserControl>

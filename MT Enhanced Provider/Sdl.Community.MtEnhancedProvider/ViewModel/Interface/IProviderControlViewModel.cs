@@ -14,8 +14,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		GoogleApiVersion SelectedGoogleApiVersion { get; set; }
 		TranslationOption SelectedTranslationOption { get; set; }
 		bool IsMicrosoftSelected { get; set; }
-		string ApiKey { get; set; }
+		bool IsV2Checked { get; set; }
 		bool UseCatId { get; set; }
 		string CatId { get; set; }
+		string ApiKey { get; set; }
+		string JsonFilePath { get; set; }
+		string ProjectName { get; set; }
 	}
 }
