@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 	[Action(Id = "UnintelligibilityOptionId",
 		Name = "Unintelligibility",
 		Description =
-			"Check/Uncheck Unintelligibility option", //TODO:Move this in a resource file after we confirm the exact string
+			"Check/Uncheck Unintelligibility option", 
 		ContextByType = typeof(EditorController))]
 	public class SetUnintelligibilityAction : AbstractAction, ISDLMTCloudAction
 	{

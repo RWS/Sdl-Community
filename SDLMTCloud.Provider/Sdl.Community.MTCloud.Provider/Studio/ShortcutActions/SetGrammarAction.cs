@@ -7,7 +7,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
 	[Action(Id = "GrammarOptionId",
 		Name = "Grammar",
-		Description = "Check/Uncheck Grammar option", //TODO:Move this in a resource file after we confirm the exact string
+		Description = "Check/Uncheck Grammar option", 
 		ContextByType = typeof(EditorController))]
 	public class SetGrammarAction : AbstractAction, ISDLMTCloudAction
 	{
