@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -19,6 +20,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 	public class OpenSettingsAction : BaseReportAction
 	{
 		private PathInfo _pathInfo;
+		private ImageService _imageService;
 		private ReportsViewerController _reportsViewerController;
 		private bool _canEnable;
 		private bool _isLoading;
@@ -27,7 +29,8 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		{
 			var settings = GetSettings();
 			var view = new SettingsWindow();
-			var viewModel = new SettingsViewModel(view, settings, _pathInfo);
+			var viewModel = new SettingsViewModel(view, settings, _imageService, _pathInfo, 
+				_reportsViewerController.ReportsController, _reportsViewerController.ClientId);
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
@@ -57,6 +60,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		{
 			_canEnable = true;
 			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
 			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 
 			SetEnabled();

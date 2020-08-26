@@ -5,6 +5,12 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"       
         xmlns:sdl="http://schemas.sdl.com/xaml"
         xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
+        xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
+        xmlns:behaviours="clr-namespace:Sdl.Community.Reports.Viewer.Behaviours"
+        xmlns:model="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
+        xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
+
+
         WindowStyle="ThreeDBorderWindow"
 		WindowStartupLocation="CenterScreen"
         AllowsTransparency="False" 
@@ -24,8 +30,12 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+
+			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
+			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
 
 			<Style TargetType="{x:Type Window}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
@@ -46,50 +56,218 @@
 		<Border Grid.Row="0" >
 			<Grid Margin="2">
 			</Grid>
-			
-		</Border>
-		<Grid Grid.Row="1" Margin="10">
-			
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
 
-				<Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,0">
+		</Border>
+		<TabControl Grid.Row="1" >
+
+			<TabItem Header="General">
+				<Grid Margin="10">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto" />
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 
-					<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
-						           Text="Group By:" Margin="0,0,10,0"/>
-					<ComboBox Grid.Row="0" Grid.Column="1" 
-					          Width="150" 
-					          HorizontalAlignment="Left" Height="22"
-					          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							  VerticalAlignment="Center"
-							  VerticalContentAlignment="Center"
-							  ItemsSource="{Binding GroupTypes}"
-							  DisplayMemberPath="Name"
-							  SelectedItem="{Binding GroupType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-				</Grid>
+					<Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
 
-				<CheckBox Grid.Row="1" Margin="0,10,0,0" Grid.Column="0" Content="Display date suffix with report name" 
-				    IsChecked="{Binding DisplayDateSuffixWithReportName, 
+						<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
+						           Text="Group By:" Margin="0,0,10,0"/>
+						<ComboBox Grid.Row="0" Grid.Column="1" 
+						          Width="150" 
+						          HorizontalAlignment="Left" Height="22"
+						          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						          VerticalAlignment="Center"
+						          VerticalContentAlignment="Center"
+						          ItemsSource="{Binding GroupTypes}"
+						          DisplayMemberPath="Name"
+						          SelectedItem="{Binding GroupType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					</Grid>
+
+					<CheckBox Grid.Row="1" Margin="0,10,0,0" Grid.Column="0" Content="Display date suffix with report name" 
+					          IsChecked="{Binding DisplayDateSuffixWithReportName, 
 					Mode=TwoWay, 
 					UpdateSourceTrigger=PropertyChanged}"/>
 
-				
 
-			
-		</Grid>
-		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
+
+
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="Templates" AllowDrop="True">
+				<Grid Margin="10">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,2">
+						<Button Style="{StaticResource BaseButtonStyle}" Command="{Binding AddTemplateCommand}">
+							<StackPanel Orientation="Horizontal">
+								<Image Source="../Resources/Add.ico" Width="15"/>
+								<TextBlock Text="Add" Margin="5,0,0,0"/>
+							</StackPanel>
+						</Button>
+						<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding EditTemplateCommand}">
+							<StackPanel Orientation="Horizontal">
+								<Image Source="../Resources/Edit.ico" Width="15"/>
+								<TextBlock Text="Edit" Margin="5,0,0,0"/>
+							</StackPanel>
+						</Button>
+						<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding RemoveTemplateCommand}">
+							<StackPanel Orientation="Horizontal">
+								<Image Source="../Resources/Delete.ico" Width="15"/>
+								<TextBlock Text="Delete" Margin="5,0,0,0"/>
+							</StackPanel>
+						</Button>
+					</StackPanel>
+					<Grid Grid.Row="1">
+						<controls:SortAwareDataGrid Grid.Row="0"
+							  DefaultColumnName="Date"
+							  DefaultSortDirection="Descending"									
+							  Style="{StaticResource CustomGridStyle}"
+							  Margin="0" 		
+							  AllowDrop="True"
+							  ItemsSource="{Binding ReportTemplates, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
+							  SelectedItem="{Binding SelectedReportTemplates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							  SelectedItems="{Binding SelectedReportTemplates, Mode=OneWayToSource}"
+							  behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+							  behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"			
+							  FontSize="12"
+							  BorderBrush="#C1C0C0"
+							  FontFamily="Segoe UI"
+							  SelectionMode="Extended"
+							  SelectionUnit="FullRow"	
+							  GridLinesVisibility="Horizontal"
+							  VerticalScrollBarVisibility="Auto"
+							  HorizontalScrollBarVisibility="Disabled"
+							  CanUserDeleteRows="False">
+							<DataGrid.Columns>
+
+								<DataGridTextColumn Header="Group" 
+								                    CanUserSort="True" 
+								                    Binding="{Binding Group, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+								                    IsReadOnly="True"
+								                    ElementStyle="{StaticResource TextBlockStyle}" 
+								                    Width="1*"/>
+
+								<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" 
+								                        SortMemberPath="Name" Width="1*" >
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="model:ReportTemplate">
+											<Grid Margin="5,0,10,0" VerticalAlignment="Top">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="Auto"/>
+													<ColumnDefinition Width="*"/>
+												</Grid.ColumnDefinitions>
+
+												<Image 
+													Stretch="UniformToFill"
+													RenderOptions.BitmapScalingMode="HighQuality" 
+													RenderOptions.EdgeMode="Aliased"
+													HorizontalAlignment="Center"
+													VerticalAlignment="Center"
+													Source="{Binding Path=Language, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Source'}">
+													<Image.Style>
+														<Style TargetType="Image">
+															<Setter Property="Width" Value="22"/>
+															<Setter Property="Margin" Value="0,0,2,0"/>
+															<Style.Triggers>
+																<DataTrigger Binding="{Binding Language}" Value="">
+																	<Setter Property="Width" Value="0"/>
+																	<Setter Property="Margin" Value="0"/>
+																</DataTrigger>
+																<DataTrigger Binding="{Binding Language}" Value="{x:Null}">
+																	<Setter Property="Width" Value="0"/>
+																	<Setter Property="Margin" Value="0"/>
+																</DataTrigger>
+															</Style.Triggers>
+														</Style>
+													</Image.Style>
+												</Image>
+
+												<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4,0,2,0"  
+												           Text="{Binding Path=Language, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source'}"/>
+
+											</Grid>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+
+								<DataGridTextColumn Header="Scope" 
+								                    CanUserSort="True" 
+								                    Binding="{Binding Scope, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+								                    IsReadOnly="True"
+								                    ElementStyle="{StaticResource TextBlockStyle}" 
+								                    Width="1*"/>
+
+								<DataGridTemplateColumn Header="Path" CanUserSort="True" IsReadOnly="True"
+								                        SortMemberPath="Name" Width="3*" >
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="model:ReportTemplate">
+											<Grid Margin="5,0,10,0" VerticalAlignment="Top">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="Auto"/>
+													<ColumnDefinition Width="*"/>
+												</Grid.ColumnDefinitions>
+
+												<Image Grid.Column="0" Margin="2,0,0,2" 
+													   VerticalAlignment="Center" 
+													   Stretch="UniformToFill"
+													   Width="17" 									  
+													   RenderOptions.BitmapScalingMode="HighQuality" 
+													   RenderOptions.EdgeMode="Aliased">
+													<Image.Style>
+														<Style TargetType="Image">
+															<Setter Property="Source" Value="../Resources/File.png"/>
+															<Style.Triggers>
+																<DataTrigger Binding="{Binding IsAvailable, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+																	<Setter Property="Source" Value="../Resources/warning-32.png"/>
+																</DataTrigger>
+															</Style.Triggers>
+														</Style>
+													</Image.Style>
+												</Image>
+
+												<controls:TextBoxWithEllipsis Grid.Column="1"  
+												                              Margin="2,0,4,0" 
+												                              IsReadOnly="True" 
+												                              Background="Transparent"
+												                              BorderThickness="0" 
+												                              BorderBrush="Transparent"
+												                              EllipsisPlacement="Left"
+												                              IsEllipsisEnabled="True"							           
+												                              LongText="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 							           
+												                              TextWrapping="NoWrap" />
+											</Grid>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+
+							</DataGrid.Columns>
+							
+						</controls:SortAwareDataGrid>
+					</Grid>
+
+					<Grid Grid.Row="2">
+						<Label HorizontalAlignment="Right" Foreground="#4E4D4D" Content="{Binding TemplateStatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+					</Grid>
+				</Grid>
+			</TabItem>
+		</TabControl>
+
+
+		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,0,0" Height="36">
 			<Grid Height="28">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
 					<Button Margin="0,0,10,0" Width="90" Command="{Binding SaveCommand}" IsDefault="True">
@@ -104,7 +282,7 @@
 					</Button>
 				</StackPanel>
 				<Button Command="{Binding ResetCommand}" 
-				        HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" 
+				        HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" 
 				        Style="{StaticResource LinkButton}"
 				        Width="90" Height="25">
 					<Underline>

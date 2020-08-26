@@ -97,7 +97,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Group Name" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
+				<DataGridTemplateColumn Header="Group" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
 							<TextBlock VerticalAlignment="Top">
