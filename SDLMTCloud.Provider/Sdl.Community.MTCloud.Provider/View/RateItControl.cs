@@ -28,7 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var segmentSupervisor = new SegmentSupervisor(editorController);
 
-			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService);
+			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService, editorController);
 			var rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel

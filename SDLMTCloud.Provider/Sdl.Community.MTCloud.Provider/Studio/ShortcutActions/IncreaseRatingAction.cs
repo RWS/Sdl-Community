@@ -7,7 +7,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
 	[Action(Id = "IncreaseRatingId",
 		Name = "Increase rating",
-		Description = "Increase the rating of the translation", //TODO:Move this in a resource file after we confirm the exact string
+		Description = "Increase the rating of the translation",
 		ContextByType = typeof(EditorController))]
 	public class IncreaseRatingAction : AbstractAction, ISDLMTCloudAction
 	{

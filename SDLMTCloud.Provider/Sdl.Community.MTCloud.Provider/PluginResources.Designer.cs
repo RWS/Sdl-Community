@@ -416,6 +416,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original translation from {0} is missing. Translate again using the {1} if you want to be able to send a feedback for this segment pair.
+        /// </summary>
+        public static string OriginalTranslationMissingMessage {
+            get {
+                return ResourceManager.GetString("OriginalTranslationMissingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original translation missing.
+        /// </summary>
+        public static string OriginalTranslationMissingTitle {
+            get {
+                return ResourceManager.GetString("OriginalTranslationMissingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDLMachineTranslationCloudProvider.
         /// </summary>
         public static string Plugin_Name {
@@ -642,6 +660,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string SendFeedbackResponseFromServer {
             get {
                 return ResourceManager.GetString("SendFeedbackResponseFromServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sent.
+        /// </summary>
+        public static string Sent {
+            get {
+                return ResourceManager.GetString("Sent", resourceCulture);
             }
         }
         

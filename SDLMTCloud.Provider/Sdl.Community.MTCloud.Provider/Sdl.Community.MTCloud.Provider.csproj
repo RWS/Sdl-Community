@@ -54,7 +54,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReachFramework" />
-    <Reference Include="Sdl.Community.RateItControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6073d430a1fe4c62, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Community.RateItControl">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
       <Private>True</Private>
@@ -149,6 +149,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -215,7 +216,7 @@
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetUnintelligibillityAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetUnintelligibilityAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -378,10 +380,6 @@
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\DataGridColumnStyle.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -18,7 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 					SdlTradosStudio.Application?.GetAction<SetCapitalizationAction>(),
 					SdlTradosStudio.Application?.GetAction<SetGrammarAction>(),
 					SdlTradosStudio.Application?.GetAction<SetSpellingAction>(),
-					SdlTradosStudio.Application?.GetAction<SetUnintelligibillityAction>(),
+					SdlTradosStudio.Application?.GetAction<SetUnintelligibilityAction>(),
 					SdlTradosStudio.Application?.GetAction<SetWordChoiceAction>(),
 					SdlTradosStudio.Application?.GetAction<SetWordsAdditionAction>(),
 					SdlTradosStudio.Application?.GetAction<SetWordsOmissionAction>()

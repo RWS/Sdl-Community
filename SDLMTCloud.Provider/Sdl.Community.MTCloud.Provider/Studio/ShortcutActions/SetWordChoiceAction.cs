@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 	[Action(Id = "WordChoiceOptionId",
 		Name = "Word Choice",
 		Description =
-			"Check/Uncheck Word Choice option", //TODO:Move this in a resource file after we confirm the exact string
+			"Check/Uncheck Word Choice option", 
 		ContextByType = typeof(EditorController))]
 	public class SetWordChoiceAction : AbstractAction, ISDLMTCloudAction
 	{

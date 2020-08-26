@@ -47,10 +47,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			get
 			{
-				if (!Improvements.ContainsKey(_docId))
-				{
-					SetIdAndActiveFile();
-				}
+				if (Improvements.ContainsKey(_docId)) return Improvements[_docId];
+				SetIdAndActiveFile();
 
 				return Improvements[_docId];
 			}
@@ -93,7 +91,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			else
 			{
-				if (translationOrigin.OriginSystem != PluginResources.SDLMTCloudName) return;
+				if (translationOrigin.OriginSystem != PluginResources.SDLMTCloudName || ActiveDocumentImprovements.ContainsKey(segmentId)) return;
 				ActiveDocumentImprovements[segmentId] = new ImprovedTarget(originalTarget);
 			}
 		}
@@ -119,8 +117,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
 		{
-			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName && 
-			       ActiveDocumentImprovements.ContainsKey(segmentId) &&
+			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName &&
+				   ActiveDocumentImprovements.ContainsKey(segmentId) &&
 				   ActiveDocumentImprovements[segmentId].OriginalTarget != segment.ToString() &&
 				   translationOrigin?.OriginType == "interactive" &&
 				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
