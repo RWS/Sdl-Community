@@ -1,6 +1,6 @@
 # SDLMTEdge Trados Plugin
 
-The SDLMTEdge (SDL Machine Translation Edge) Trados Plugin's purpose is to allow clients to use their ETS API in
+The SDLMTEdge (SDL Machine Translation Edge) Trados Plugin's purpose is to allow clients to use their MTEdge API in
 combination with Trados Studio. There are two projects that help do this,
 SDLMTEdgeLanguageResourceBuilder and SDLMTEdgeTradosTranslationProvider.
 
