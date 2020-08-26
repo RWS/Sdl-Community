@@ -76,14 +76,14 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
-				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template Path:" Margin="5,10,5,5"/>
+				<TextBlock Grid.Column="0" MinWidth="70" VerticalAlignment="Center" Text="Template:" Margin="5,10,5,5"/>
 				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,10,5,5">
 					<TextBox HorizontalContentAlignment="Stretch" 
 					         Padding="2,0,20,0" Height="24" 
 					         VerticalAlignment="Center"
 							  VerticalContentAlignment="Center"
 				        Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}" IsEnabled="True" />
-					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the report file (*.xml;*.html)"
+					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the template file (*.xslt; *.xsl)"
 					       VerticalAlignment="Center" HorizontalAlignment="Left"
 				           Margin="0" Foreground="DarkGray">
 						<TextBlock.Style>
@@ -154,13 +154,15 @@
 			</Grid>
 
 			<Grid Grid.Row="1" 
-			      Margin="0,5,0,0">
+			      Margin="0,0,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
-				<TextBlock Grid.Column="0" Margin="5,0,5,5" VerticalAlignment="Center" MinWidth="80" Text="Group Name:"/>
-				<TextBox Grid.Column="1" Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
+				<TextBlock Grid.Column="0" Margin="5,0,5,5" VerticalAlignment="Center" MinWidth="70" Text="Group:"/>
+				<ComboBox Grid.Column="1" IsEditable="True" Margin="0,0,30,0"
+						  ItemsSource="{Binding GroupNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</Grid>
 			<Grid Grid.Row="2">
 				<Grid.ColumnDefinitions>
@@ -171,7 +173,7 @@
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
-				<TextBlock VerticalAlignment="Center" Text="Language:" MinWidth="80" 
+				<TextBlock VerticalAlignment="Center" Text="Language:" MinWidth="70" 
 				           Margin="5,10,5,5"/>
 
 				<sdl:MultiSelectComboBox Grid.Row="0" Grid.Column="1" 
@@ -203,7 +205,7 @@
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
-				<TextBlock VerticalAlignment="Center" Text="Scope:" MinWidth="80" 
+				<TextBlock VerticalAlignment="Center" Text="Scope:" MinWidth="70" 
 				           Margin="5,10,5,5"/>
 
 				<sdl:MultiSelectComboBox Grid.Row="0" Grid.Column="1" 
@@ -230,7 +232,7 @@
 		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
 			<Grid Height="28">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-					<Button Margin="0,0,10,0" Width="90" Command="{Binding SaveCommand}"
+					<Button Margin="0,0,10,0" Width="90" Click="ButtonBase_OnClick"
 					      IsEnabled="{Binding IsValid}" IsDefault="True">
 						<StackPanel Orientation="Horizontal">
 							<TextBlock>OK</TextBlock>

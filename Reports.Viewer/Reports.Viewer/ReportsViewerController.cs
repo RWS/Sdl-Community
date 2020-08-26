@@ -112,6 +112,11 @@ namespace Sdl.Community.Reports.Viewer
 			return _dataViewModel?.SelectedReports?.Cast<Report>().ToList();
 		}
 
+		internal List<Report> GetReports()
+		{			
+			return _reportsNavigationViewModel?.Reports;
+		}
+
 		internal void AddReports(List<Report> reports)
 		{
 			if (_reportsNavigationViewModel == null)

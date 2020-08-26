@@ -17,7 +17,7 @@
         ResizeMode="CanResizeWithGrip"
 		mc:Ignorable="d" 
         Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-        MinHeight="400" MinWidth="600" Height="400" Width="600"
+        MinHeight="400" MinWidth="600" Height="400" Width="700"
 		d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -118,13 +118,15 @@
 								<TextBlock Text="Add" Margin="5,0,0,0"/>
 							</StackPanel>
 						</Button>
-						<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding EditTemplateCommand}">
+						<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding EditTemplateCommand}"
+						        IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 							<StackPanel Orientation="Horizontal">
 								<Image Source="../Resources/Edit.ico" Width="15"/>
 								<TextBlock Text="Edit" Margin="5,0,0,0"/>
 							</StackPanel>
 						</Button>
-						<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding RemoveTemplateCommand}">
+						<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding RemoveTemplateCommand}"
+						        IsEnabled="{Binding IsReportsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 							<StackPanel Orientation="Horizontal">
 								<Image Source="../Resources/Delete.ico" Width="15"/>
 								<TextBlock Text="Delete" Margin="5,0,0,0"/>
@@ -154,18 +156,21 @@
 							  CanUserDeleteRows="False">
 							<DataGrid.Columns>
 
-								<DataGridTextColumn Header="Group" 
-								                    CanUserSort="True" 
-								                    Binding="{Binding Group, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-								                    IsReadOnly="True"
-								                    ElementStyle="{StaticResource TextBlockStyle}" 
-								                    Width="1*"/>
-
-								<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" 
-								                        SortMemberPath="Name" Width="1*" >
+								<DataGridTemplateColumn Header="Group" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 									<DataGridTemplateColumn.CellTemplate>
 										<DataTemplate DataType="model:ReportTemplate">
-											<Grid Margin="5,0,10,0" VerticalAlignment="Top">
+											<TextBlock ToolTip="{Binding Group}" VerticalAlignment="Center" Padding="2,0,2,0"
+											           Text="{Binding Group, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+											           TextWrapping="Wrap"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+
+								<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" 
+								                        SortMemberPath="Name" Width="1.5*" >
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="model:ReportTemplate">
+											<Grid Margin="5,0,10,0" VerticalAlignment="Center">
 												<Grid.ColumnDefinitions>
 													<ColumnDefinition Width="Auto"/>
 													<ColumnDefinition Width="*"/>
@@ -204,52 +209,24 @@
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>
 
-								<DataGridTextColumn Header="Scope" 
-								                    CanUserSort="True" 
-								                    Binding="{Binding Scope, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-								                    IsReadOnly="True"
-								                    ElementStyle="{StaticResource TextBlockStyle}" 
-								                    Width="1*"/>
+							
 
-								<DataGridTemplateColumn Header="Path" CanUserSort="True" IsReadOnly="True"
-								                        SortMemberPath="Name" Width="3*" >
+								<DataGridTemplateColumn Header="Scope" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 									<DataGridTemplateColumn.CellTemplate>
 										<DataTemplate DataType="model:ReportTemplate">
-											<Grid Margin="5,0,10,0" VerticalAlignment="Top">
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="Auto"/>
-													<ColumnDefinition Width="*"/>
-												</Grid.ColumnDefinitions>
+											<TextBlock ToolTip="{Binding Scope}" VerticalAlignment="Center" Padding="2,0,2,0"
+											           Text="{Binding Scope, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+								
 
-												<Image Grid.Column="0" Margin="2,0,0,2" 
-													   VerticalAlignment="Center" 
-													   Stretch="UniformToFill"
-													   Width="17" 									  
-													   RenderOptions.BitmapScalingMode="HighQuality" 
-													   RenderOptions.EdgeMode="Aliased">
-													<Image.Style>
-														<Style TargetType="Image">
-															<Setter Property="Source" Value="../Resources/File.png"/>
-															<Style.Triggers>
-																<DataTrigger Binding="{Binding IsAvailable, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
-																	<Setter Property="Source" Value="../Resources/warning-32.png"/>
-																</DataTrigger>
-															</Style.Triggers>
-														</Style>
-													</Image.Style>
-												</Image>
-
-												<controls:TextBoxWithEllipsis Grid.Column="1"  
-												                              Margin="2,0,4,0" 
-												                              IsReadOnly="True" 
-												                              Background="Transparent"
-												                              BorderThickness="0" 
-												                              BorderBrush="Transparent"
-												                              EllipsisPlacement="Left"
-												                              IsEllipsisEnabled="True"							           
-												                              LongText="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 							           
-												                              TextWrapping="NoWrap" />
-											</Grid>
+								<DataGridTemplateColumn Header="Template File" CanUserSort="True" IsReadOnly="True"
+								                        SortMemberPath="Group" Width="3*">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="model:ReportTemplate">
+											<TextBlock ToolTip="{Binding Path}" VerticalAlignment="Center" Padding="2,0,2,0"
+											           Text="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
 										</DataTemplate>
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>

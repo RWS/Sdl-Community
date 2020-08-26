@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data.Odbc;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -15,7 +14,6 @@ using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Community.Reports.Viewer.View;
-using Sdl.ProjectAutomation.Core;
 using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using DataFormats = System.Windows.DataFormats;
@@ -30,8 +28,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private readonly PathInfo _pathInfo;
 		private readonly ImageService _imageService;
 		private readonly ReportsController _controller;
-		private readonly string _projectLocalFolder;
 		private readonly string _clientId;
+		private readonly List<string> _groupNames;
 		private string _windowTitle;
 		private ICommand _saveCommand;
 		private ICommand _resetCommand;
@@ -48,7 +46,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ReportTemplate _selectedReportTemplate;
 
 		public SettingsViewModel(Window window, Settings settings, ImageService imageService,
-			PathInfo pathInfo, ReportsController controller, string clientId)
+			PathInfo pathInfo, ReportsController controller, List<string> groupNames, string clientId)
 		{
 			_window = window;
 			_settings = settings;
@@ -56,13 +54,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			_imageService = imageService;
 			_controller = controller;
 			_clientId = clientId;
+			_groupNames = groupNames;
 
 			WindowTitle = "Settings";
 
 			DisplayDateSuffixWithReportName = settings.DisplayDateSuffixWithReportName;
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-
-			_projectLocalFolder = _controller.GetProjectLocalFolder();
+			
 			var reportTemplates = _controller.GetCustomReportTemplates();
 			foreach (var reportTemplate in reportTemplates)
 			{
@@ -158,8 +156,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			get
 			{
 				var message = string.Format("Files: {0}, Selected: {1}",
-					0,
-					0);
+					ReportTemplates?.Count ?? 0,
+					SelectedReportTemplates?.Count ?? 0);
 				return message;
 			}
 		}
@@ -232,10 +230,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		}
 
 		private void OpenAppendTemplate(ReportTemplate reportTemplate, bool isEditMode)
-		{
-			var window = new AppendTemplateWindow();
-			var viewModel = new AppendTemplateViewModel(window, reportTemplate,
-				_reportTemplates.ToList(), _controller.SelectedProject, _imageService, isEditMode);
+		{			
+			var viewModel = new AppendTemplateViewModel(reportTemplate,
+				_reportTemplates.ToList(), _controller.SelectedProject, _imageService, _groupNames, isEditMode);
+
+			var window = new AppendTemplateWindow(viewModel);
+
 			window.DataContext = viewModel;
 
 			var result = window.ShowDialog();
@@ -266,6 +266,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 
 				OnPropertyChanged(nameof(ReportTemplates));
+				OnPropertyChanged(nameof(TemplateStatusLabel));
 			}
 		}
 
@@ -283,7 +284,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					return;
 				}
 
-				_window.Dispatcher.BeginInvoke(DispatcherPriority.Input, new System.Action(delegate
+				_window.Dispatcher.Invoke(DispatcherPriority.Input, new System.Action(delegate
 				{
 					OpenAppendTemplate(new ReportTemplate
 					{
@@ -294,6 +295,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					}, false);
 				}));
 			}
+
 		}
 
 		private void EditTemplate(object paramter)
@@ -306,10 +308,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void RemoveTemplate(object paramter)
 		{
-			foreach (var reportTemplate in _selectedReportTemplates.Cast<ReportTemplate>())
+			var selectedIds = _selectedReportTemplates.Cast<ReportTemplate>().ToList().Select(a => a.Id);
+			foreach (var id in selectedIds)
 			{
-				_reportTemplates.Remove(reportTemplate);
+				var template = _reportTemplates.FirstOrDefault(a => a.Id == id);
+				if (template != null)
+				{
+					_reportTemplates.Remove(template);
+				}
 			}
+
+			OnPropertyChanged(nameof(ReportTemplates));
+			OnPropertyChanged(nameof(TemplateStatusLabel));
 		}
 
 		private void DragDrop(object parameter)
@@ -338,7 +348,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				if (xsltFilePaths.Count > 0)
 				{
-					_window.Dispatcher.BeginInvoke(DispatcherPriority.Input, new System.Action(delegate
+					_window.Dispatcher.Invoke(DispatcherPriority.Input, new System.Action(delegate
 					{
 						OpenAppendTemplate(new ReportTemplate
 						{
@@ -356,7 +366,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			//if (SelectedReportTemplate != null)
 			//{
-			//	_window.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new System.Action(delegate
+			//	Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Normal, new System.Action(delegate
 			//	{
 			//		OpenAppendTemplate(SelectedReportTemplate, true);
 			//	}));

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Commands;
@@ -19,10 +17,8 @@ using Sdl.Reports.Viewer.API.Model;
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
 	public class AppendTemplateViewModel : INotifyPropertyChanged
-	{
-		private readonly Window _window;
+	{		
 		private string _windowTitle;
-		private ICommand _saveCommand;
 		private ICommand _clearPathCommand;
 		private ICommand _selectedLanguagesChangedCommand;
 		private ICommand _selectedTemplateScopesChangedCommand;
@@ -30,21 +26,25 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private string _path;
 		private string _group;
 		private bool _isEditMode;
-		private List<ReportTemplate> _reportTemplates;
+		private readonly List<ReportTemplate> _reportTemplates;
 		private readonly ReportTemplate _reportTemplate;
 		private readonly IProject _project;
 		private List<LanguageItem> _languageItems;
 		private List<LanguageItem> _selectedLanguageItems;
 		private List<ReportTemplateScope> _templateScopes;
 		private List<ReportTemplateScope> _selectedTemplateScopes;
+		private List<string> _groupNames;
 
-		public AppendTemplateViewModel(Window window, ReportTemplate reportTemplate,
-			List<ReportTemplate> reportTemplates, IProject project, ImageService imageService, bool isEditMode)
+		public AppendTemplateViewModel(ReportTemplate reportTemplate,
+			List<ReportTemplate> reportTemplates, IProject project, ImageService imageService,
+			List<string> groupNames, bool isEditMode)
 		{
-			_window = window;
+			
 			_reportTemplate = reportTemplate ?? new ReportTemplate();
 			_reportTemplates = reportTemplates ?? new List<ReportTemplate>();
 			_project = project;
+
+			GroupNames = groupNames;
 
 			Path = reportTemplate?.Path.Clone() as string;
 			Group = reportTemplate?.Group.Clone() as string;
@@ -81,11 +81,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			WindowTitle = IsEditMode ? "Edit Report Template" : "Add Report Template";
 		}
-
-
-
-		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new CommandHandler(SaveChanges));
-
+		
 		public ICommand SelectedLanguagesChangedCommand => _selectedLanguagesChangedCommand ?? (_selectedLanguagesChangedCommand = new CommandHandler(SelectedLanguagesChanged));
 
 		public ICommand SelectedTemplateScopesChangedCommand => _selectedTemplateScopesChangedCommand ?? (_selectedTemplateScopesChangedCommand = new CommandHandler(SelectedTemplateScopesChanged));
@@ -116,6 +112,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				_isEditMode = value;
 				OnPropertyChanged(nameof(IsEditMode));
+			}
+		}
+
+		public List<string> GroupNames
+		{
+			get => _groupNames;
+			set
+			{
+				_groupNames = value;
+				OnPropertyChanged(nameof(GroupNames));
 			}
 		}
 
@@ -247,15 +253,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			var id = (group + "-" + language + "-" + scope).ToLower();
 			return id;
-		}
-
-		private void SaveChanges(object parameter)
-		{
-			if (IsValid)
-			{
-				_window.DialogResult = true;
-				_window?.Close();
-			}
 		}
 
 		private void ClearPath(object parameter)

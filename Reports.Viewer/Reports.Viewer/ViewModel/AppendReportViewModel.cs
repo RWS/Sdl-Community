@@ -36,9 +36,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _browseFolderCommand;
 		private string _name;
 		private string _description;
-		private string _groupName;
+		private string _group;
 		private List<LanguageItem> _languageItems;
 		private List<LanguageItem> _selectedLanguageItems;
+		private List<string> _groupNames;
 		private DateTime _date;
 		private string _path;
 		private string _xslt;
@@ -48,7 +49,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private bool _canEditXslt;
 
 		public AppendReportViewModel(Window window, Report report, Settings settings,
-			PathInfo pathInfo, ImageService imageService, IProject project, bool isEditMode = false)
+			PathInfo pathInfo, ImageService imageService, IProject project,
+			List<string> groupNames, bool isEditMode = false)
 		{
 			_window = window;
 			Report = report;
@@ -78,9 +80,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			SelectedLanguageItems = new List<LanguageItem> {
 				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, Report.Language, StringComparison.CurrentCultureIgnoreCase)==0) };
 
+			GroupNames = groupNames;
+
 			Date = Report.Date;
 			Name = Report.Name;
-			GroupName = Report.Group;
+			Group = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path ?? string.Empty;
 			Xslt = string.Empty;
@@ -205,18 +209,18 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		public string GroupName
+		public string Group
 		{
-			get => _groupName;
+			get => _group;
 			set
 			{
-				if (_groupName == value)
+				if (_group == value)
 				{
 					return;
 				}
 
-				_groupName = value;
-				OnPropertyChanged(nameof(GroupName));
+				_group = value;
+				OnPropertyChanged(nameof(Group));
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
@@ -238,6 +242,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_selectedLanguageItems = value;
 				OnPropertyChanged(nameof(SelectedLanguageItems));
+			}
+		}
+
+		public List<string> GroupNames
+		{
+			get => _groupNames;
+			set
+			{
+				_groupNames = value;
+				OnPropertyChanged(nameof(GroupNames));
 			}
 		}
 
@@ -346,7 +360,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 
 				Report.Name = Name;
-				Report.Group = GroupName;
+				Report.Group = Group;
 				Report.Description = Description;
 				Report.Path = Path;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;

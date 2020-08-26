@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
@@ -27,10 +28,13 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		protected override void Execute()
 		{
+			var reports = _reportsViewerController.GetReports();
+			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
+
 			var settings = GetSettings();
 			var view = new SettingsWindow();
 			var viewModel = new SettingsViewModel(view, settings, _imageService, _pathInfo, 
-				_reportsViewerController.ReportsController, _reportsViewerController.ClientId);
+				_reportsViewerController.ReportsController, groupNames, _reportsViewerController.ClientId);
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)

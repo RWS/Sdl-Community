@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using Sdl.Community.Reports.Viewer.ViewModel;
 
 namespace Sdl.Community.Reports.Viewer.View
 {	
@@ -17,14 +18,26 @@ namespace Sdl.Community.Reports.Viewer.View
 		private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
 		private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
-		public AppendTemplateWindow()
+		private readonly AppendTemplateViewModel _model;
+
+		public AppendTemplateWindow(AppendTemplateViewModel model)
 		{			
 			InitializeComponent();
+
+			_model = model;
 
 			var windowInteropHelper = new WindowInteropHelper(this);
 			windowInteropHelper.Owner = ApplicationInstance.GetActiveForm().Handle;
 
-			SourceInitialized += MainWindow_SourceInitialized;		
+			SourceInitialized += MainWindow_SourceInitialized;
+
+			Loaded += AppendTemplateWindow_Loaded;
+		}
+
+		private void AppendTemplateWindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			Loaded -= AppendTemplateWindow_Loaded;
+			DataContext = _model;
 		}
 
 		private IntPtr _windowHandle;
@@ -43,6 +56,11 @@ namespace Sdl.Community.Reports.Viewer.View
 			}
 
 			SetWindowLong(_windowHandle, GWL_STYLE, GetWindowLong(_windowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
-		}	
+		}
+
+		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
+		}
 	}
 }

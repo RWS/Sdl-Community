@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
@@ -33,10 +34,12 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		private void AddNewReport(ReportWithXslt report)
 		{
+			var reports = _reportsViewerController.GetReports();
+			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
 			var settings = GetSettings();
 			var view = new AppendReportWindow();
 			var viewModel = new AppendReportViewModel(view, report, settings, _pathInfo, _imageService,
-				_reportsViewerController.GetSelectedProject());
+				_reportsViewerController.GetSelectedProject(), groupNames);
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
