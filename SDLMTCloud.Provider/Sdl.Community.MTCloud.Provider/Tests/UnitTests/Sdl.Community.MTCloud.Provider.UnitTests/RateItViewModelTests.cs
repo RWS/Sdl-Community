@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.ViewModel;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Xunit;
 
 namespace Sdl.Community.MTCloud.Provider.UnitTests
@@ -15,7 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var providerAction = Substitute.For<IActionProvider>();
 			var segmentSupervisor = Substitute.For<ISegmentSupervisor>();
 			var messageBoxService = Substitute.For<IMessageBoxService>();
-			_rateItViewModel = new RateItViewModel(shortcutService, providerAction, segmentSupervisor, messageBoxService);
+			//_rateItViewModel = new RateItViewModel(shortcutService, providerAction, segmentSupervisor, messageBoxService, editorController);
 		}
 
 		//[Theory]

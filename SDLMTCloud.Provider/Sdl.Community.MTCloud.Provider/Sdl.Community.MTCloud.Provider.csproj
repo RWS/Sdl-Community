@@ -206,7 +206,7 @@
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetUnintelligibillityAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetUnintelligibilityAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
@@ -288,6 +288,7 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>

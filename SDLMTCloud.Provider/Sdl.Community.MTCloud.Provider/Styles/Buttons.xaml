@@ -250,5 +250,40 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
+    <Style x:Key="LightGrayButton" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Forground}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+					<Border x:Name="Border" BorderBrush="Transparent" BorderThickness="1,0,1,1" Background="{DynamicResource WindowsControl.Command.Highlight}" TextElement.Foreground="{TemplateBinding Foreground}" Uid="Border">
+                        <ContentPresenter Margin="5" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="Center" RecognizesAccessKey="False" Uid="ContentPresenter_1" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="Border" Value="{DynamicResource WindowsControl.Command.Highlight}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="Border" Value="{DynamicResource WindowsControl.Command.Active}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Highlight.Text}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Active.Text}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 </ResourceDictionary>
