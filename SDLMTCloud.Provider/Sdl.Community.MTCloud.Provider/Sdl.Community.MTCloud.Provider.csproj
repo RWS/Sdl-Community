@@ -72,6 +72,7 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.Control">
       <SpecificVersion>False</SpecificVersion>

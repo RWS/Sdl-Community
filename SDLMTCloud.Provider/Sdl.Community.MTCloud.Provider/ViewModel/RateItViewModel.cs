@@ -144,7 +144,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ClearFeedbackBox));
 
 		public ICommand SendFeedbackCommand
-			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService(), ()=>IsSendFeedbackEnabled));
+			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService()));
 
 		public void IncreaseRating()
 		{
@@ -176,6 +176,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async Task SendFeedbackToService(SegmentId? segmentId = null)
 		{
+			if (!IsSendFeedbackEnabled) return;
 			var improvement = GetImprovement(segmentId);
 			if (improvement == null)
 			{
@@ -227,11 +228,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void ClearFeedbackBox(object obj)
 		{
 			Feedback = string.Empty;
-		}
-
-		private void _translationService_TranslationReceived(FeedbackRequest translationFeedback)
-		{
-
 		}
 
 		private void SetShortcutService()
@@ -336,11 +332,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void Dispose()
 		{
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived -= _translationService_TranslationReceived;
-			}
-
 			if (_shortcutService != null)
 			{
 				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
@@ -349,17 +340,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SetTranslationService(ITranslationService translationService)
 		{
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived -= _translationService_TranslationReceived;
-			}
-
 			_translationService = translationService;
-
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived += _translationService_TranslationReceived;
-			}
 		}
 	}
 }

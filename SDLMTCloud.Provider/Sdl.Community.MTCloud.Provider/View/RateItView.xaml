@@ -18,13 +18,15 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Textboxresources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>
 				<ResourceDictionary Source="../Styles/General.xaml"/>
-				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle" BasedOn="{StaticResource Sdl.Checkbox.GenericStyle}">
+				<Setter Property="Margin" Value="10,10,5,15"/>
+			</Style>
+			<Style TargetType="{x:Type Button}" x:Key="FeedbackButtonStyle" BasedOn="{StaticResource Sdl.Button.PrimaryStyle}">
 				<Setter Property="Margin" Value="10,10,5,15"/>
 			</Style>
 		</ResourceDictionary>
@@ -106,8 +108,8 @@
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
 			<Button Grid.Row="1" Grid.Column="1"
-				    Cursor="Hand"
-					Style="{StaticResource LightGrayButton}"
+					Margin="10 0 0 0"
+					Style="{StaticResource FeedbackButtonStyle}"
 					Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}"
 				    Command="{Binding SendFeedbackCommand}">
 			</Button>

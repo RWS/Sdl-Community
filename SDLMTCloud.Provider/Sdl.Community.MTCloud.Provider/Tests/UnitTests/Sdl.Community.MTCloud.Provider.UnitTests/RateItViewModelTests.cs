@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.ViewModel;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Xunit;
 
 namespace Sdl.Community.MTCloud.Provider.UnitTests
