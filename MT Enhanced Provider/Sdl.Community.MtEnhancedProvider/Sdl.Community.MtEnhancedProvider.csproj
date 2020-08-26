@@ -153,9 +153,11 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -183,6 +185,7 @@
     </Reference>
     <Reference Include="Sdl.TranslationStudio.Common">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudio.Common.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -220,6 +223,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
+    <Compile Include="Converters\InvertableStringEmptyToBoolConverter.cs" />
     <Compile Include="EditCollection.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Enums.cs" />
@@ -279,6 +283,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service\Interface\IOpenFileDialogService.cs" />
+    <Compile Include="Service\OpenFileDialogService.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Styles\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>

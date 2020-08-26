@@ -1,30 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
+using NLog;
 using Sdl.Community.MtEnhancedProvider.Commands;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
+using Sdl.Community.MtEnhancedProvider.Service.Interface;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
 	public class SettingsControlViewModel: ModelBase, ISettingsControlViewModel
 	{
+		private Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly IMtTranslationOptions _options;
+		private readonly IOpenFileDialogService _openFileDialogService;
 		private bool _reSendDraft;
 		private bool _sendPlainText;
 		private bool _doPreLookup;
 		private bool _doPostLookup;
 		private string _preLookupFileName;
 		private string _postLookupFileName;
+		private string _errorMessage;
 
-		public SettingsControlViewModel(IMtTranslationOptions options)
+		public SettingsControlViewModel(IMtTranslationOptions options, IOpenFileDialogService openFileDialogService)
 		{
 			ViewModel = this;
 			_options = options;
 			BrowseCommand = new RelayCommand(Browse);
+			_openFileDialogService = openFileDialogService;
 		}
 
 		public ModelBase ViewModel { get; set; }
@@ -38,6 +47,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_reSendDraft == value) return;
 				_reSendDraft = value;
+				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(ReSendDraft));
 			}
 		}
@@ -49,6 +59,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_sendPlainText == value) return;
 				_sendPlainText = value;
+				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(SendPlainText));
 			}
 		}
@@ -60,6 +71,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_doPreLookup == value) return;
 				_doPreLookup = value;
+				if (!_doPreLookup)
+				{
+					PreLookupFileName = string.Empty;
+				}
+				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(DoPreLookup));
 			}
 		}
@@ -71,6 +87,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_doPostLookup == value) return;
 				_doPostLookup = value;
+				if (!_doPostLookup)
+				{
+					PostLookupFileName = string.Empty;
+				}
 				OnPropertyChanged(nameof(DoPostLookup));
 			}
 		}
@@ -82,6 +102,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_preLookupFileName == value) return;
 				_preLookupFileName = value;
+				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(PreLookupFileName));
 			}
 		}
@@ -93,24 +114,67 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_postLookupFileName == value) return;
 				_postLookupFileName = value;
+				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(PostLookupFileName));
 			}
 		}
 
-		private readonly IMtTranslationOptions _options;
+		public string ErrorMessage
+		{
+			get => _errorMessage;
+			set
+			{
+				if (_errorMessage == value) return;
+				_errorMessage = value;
+				OnPropertyChanged(nameof(ErrorMessage));
+			}
+		}
+
+
 		private void Browse(object commandParameter)
 		{
+			ErrorMessage = string.Empty;
 			if (!string.IsNullOrEmpty(commandParameter.ToString()))
 			{
-				if (commandParameter.Equals(PluginResources.PreLookBrowse))
+				var selectedFile = _openFileDialogService.ShowDialog("XML Files(*.xml) | *.xml");
+				if (!string.IsNullOrEmpty(selectedFile))
 				{
-					
-				}
-				if (commandParameter.Equals(PluginResources.PostLookupBrowse))
-				{
-					
+					if (commandParameter.Equals(PluginResources.PreLookBrowse))
+					{
+						PreLookupFileName = selectedFile;
+						CheckIfIsValidLookupFile(PreLookupFileName);
+					}
+					if (commandParameter.Equals(PluginResources.PostLookupBrowse))
+					{
+						PostLookupFileName = selectedFile;
+						CheckIfIsValidLookupFile(PostLookupFileName);
+					}
 				}
 			}
 		}
+
+		private void CheckIfIsValidLookupFile(string filePath)
+		{
+			try
+			{
+				using (var reader = new System.IO.StreamReader(filePath))
+				{
+					var serializer = new XmlSerializer(typeof(EditCollection));
+					var edcoll = (EditCollection) serializer.Deserialize(reader);
+				}
+			}
+			catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
+			{
+				var fileName = System.IO.Path.GetFileName(filePath);
+				ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption} {fileName}";
+			}
+			catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {exp.Message}\n { exp.StackTrace}");
+
+				ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
+			}
+		}
+
 	}
 }

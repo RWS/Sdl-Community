@@ -54,7 +54,7 @@
 				Cursor="Hand"
 				Grid.Row="3"
 				Content="OK"
-				Margin="10"
+				Margin="10 10 20 10"
 				HorizontalAlignment="Right"
 				Width="100"
 			/>

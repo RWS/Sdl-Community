@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mtEnhanced="clr-namespace:Sdl.Community.MtEnhancedProvider"
              xmlns:viewModels="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
+             xmlns:converters="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -15,13 +16,16 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		
 		<!--Grid's allow objects to be placed on top of each other-->
@@ -61,10 +65,12 @@
 					Content="{x:Static mtEnhanced:PluginResources.BrowseBtn}"
 					Cursor="Hand"
 					Command="{Binding BrowseCommand}"
+					IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					CommandParameter="{x:Static mtEnhanced:PluginResources.PreLookBrowse}"
 					Margin="10 0 0 0"
 					DockPanel.Dock="Right"/>
-				<TextBox 
+				<TextBox
+					IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					Text="{Binding PreLookupFileName}"
 					VerticalContentAlignment="Center"/>
 			</DockPanel>
@@ -79,13 +85,22 @@
 					Content="{x:Static mtEnhanced:PluginResources.BrowseBtn}"
 					Command="{Binding BrowseCommand}"
 					CommandParameter="{x:Static mtEnhanced:PluginResources.PostLookupBrowse}"
+					IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					Cursor="Hand"
 					Margin="10 0 0 0"
 					DockPanel.Dock="Right"/>
-				<TextBox 
+				<TextBox
 					Text="{Binding PostLookupFileName}"
+					IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					VerticalContentAlignment="Center"/>
 			</DockPanel>
+		</StackPanel>
+		<StackPanel Grid.Row="2">
+			<TextBlock
+				Margin="20 10 10 10"
+				TextWrapping="WrapWithOverflow"
+				Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+				Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"/>
 		</StackPanel>
 
 	</Grid>

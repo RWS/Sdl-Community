@@ -115,6 +115,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 		}
 
+		//Moved to the new UI
 		private string BrowseEditFile()
 		{
 			//Note: The current thread culture will not affect the language of message boxes and other dialogs

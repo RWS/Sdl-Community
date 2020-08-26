@@ -20,6 +20,7 @@ using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.Community.MtEnhancedProvider.View;
 using Sdl.Community.MtEnhancedProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -114,8 +115,10 @@ namespace Sdl.Community.MtEnhancedProvider
 			var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
 
 			//WPF LOGIC
+	        var dialogService = new OpenFileDialogService();
 			var providerControlVm = new ProviderControlViewModel(loadOptions);
-			var settingsControlVm = new SettingsControlViewModel(loadOptions);
+
+			var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService);
 
 			var mainWindow = new MainWindow
 			{
@@ -128,7 +131,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 
 
-			//construct form
+			////construct form
 			//var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
 			////we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
 			//if (dialog.ShowDialog(owner) == DialogResult.OK)

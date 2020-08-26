@@ -14,5 +14,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		bool DoPostLookup { get; set; }
 		string PreLookupFileName { get; set; }
 		string PostLookupFileName { get; set; }
+		string ErrorMessage { get; set; }
 	}
 }
