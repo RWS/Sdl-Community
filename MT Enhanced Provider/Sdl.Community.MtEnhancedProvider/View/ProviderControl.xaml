@@ -83,7 +83,6 @@
 				Width="200"
 				HorizontalAlignment="Left"
 				Margin="10"/>
-			
 		</StackPanel>
 		<!--Google API Options-->
 		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
@@ -114,8 +113,7 @@
 				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 				Content="{x:Static mtEnhanced:PluginResources.PersistGoogle}"
 				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				Margin="10 0"
-			/>
+				Margin="10 0"/>
 			<!--Google API V3-->
 			<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
 				<TextBlock 

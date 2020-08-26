@@ -27,7 +27,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				new ViewDetails
 				{
 					Name = PluginResources.PluginsView,
-					ViewModel = providerControlViewModel.ViewModel,
+					ViewModel = providerControlViewModel.ViewModel
 				},
 				new ViewDetails
 				{

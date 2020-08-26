@@ -13,6 +13,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -37,6 +39,54 @@
 			           HorizontalAlignment="Center"
 			           FontSize="14"/>
 		</Grid>
+		<StackPanel Grid.Row="1" Margin="10">
+			<CheckBox
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				IsChecked="{Binding ReSendDraft}"
+				Content="{x:Static mtEnhanced:PluginResources.ReSendDescription}"
+				Margin="10 10"/>
+			<CheckBox
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				IsChecked="{Binding SendPlainText}"
+				Content="{x:Static mtEnhanced:PluginResources.SendPlainDescription}"
+				Margin="10 10"/>
+			<CheckBox
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				IsChecked="{Binding DoPreLookup}"
+				Content="{x:Static mtEnhanced:PluginResources.PreLookDescription}"
+				Margin="10 10"/>
+			<DockPanel Margin="10,0,10,0" >
+				<Button 
+					Style="{StaticResource Sdl.Button.DialogStyle}"
+					Content="{x:Static mtEnhanced:PluginResources.BrowseBtn}"
+					Cursor="Hand"
+					Command="{Binding BrowseCommand}"
+					CommandParameter="{x:Static mtEnhanced:PluginResources.PreLookBrowse}"
+					Margin="10 0 0 0"
+					DockPanel.Dock="Right"/>
+				<TextBox 
+					Text="{Binding PreLookupFileName}"
+					VerticalContentAlignment="Center"/>
+			</DockPanel>
+			<CheckBox
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				IsChecked="{Binding DoPostLookup}"
+				Content="{x:Static mtEnhanced:PluginResources.PostLookupDescription}"
+				Margin="10 10"/>
+			<DockPanel Margin="10,0,10,0" >
+				<Button 
+					Style="{StaticResource Sdl.Button.DialogStyle}"
+					Content="{x:Static mtEnhanced:PluginResources.BrowseBtn}"
+					Command="{Binding BrowseCommand}"
+					CommandParameter="{x:Static mtEnhanced:PluginResources.PostLookupBrowse}"
+					Cursor="Hand"
+					Margin="10 0 0 0"
+					DockPanel.Dock="Right"/>
+				<TextBox 
+					Text="{Binding PostLookupFileName}"
+					VerticalContentAlignment="Center"/>
+			</DockPanel>
+		</StackPanel>
 
 	</Grid>
 </UserControl>

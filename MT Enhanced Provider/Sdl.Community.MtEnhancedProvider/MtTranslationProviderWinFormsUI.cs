@@ -115,7 +115,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 			//WPF LOGIC
 			var providerControlVm = new ProviderControlViewModel(loadOptions);
-	        var settingsControlVm = new SettingsControlViewModel(loadOptions);
+			var settingsControlVm = new SettingsControlViewModel(loadOptions);
 
 			var mainWindow = new MainWindow
 			{
@@ -128,7 +128,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 
 
-			////construct form
+			//construct form
 			//var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
 			////we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
 			//if (dialog.ShowDialog(owner) == DialogResult.OK)

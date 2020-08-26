@@ -264,6 +264,9 @@
   <data name="WindowsControl_Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="BrowseBtn" xml:space="preserve">
+    <value>Browse</value>
+  </data>
   <data name="CatIdDescription" xml:space="preserve">
     <value>Use Category Id</value>
   </data>
@@ -278,6 +281,30 @@
   </data>
   <data name="PersistMicrosoft" xml:space="preserve">
     <value>Save Microsoft key</value>
+  </data>
+  <data name="PostLookupBrowse" xml:space="preserve">
+    <value>PostLookup</value>
+  </data>
+  <data name="PostLookupDescription" xml:space="preserve">
+    <value>Do post-lookup find/replace</value>
+  </data>
+  <data name="PostLookupFileName" xml:space="preserve">
+    <value>Do post-lookup find/replace filename:</value>
+  </data>
+  <data name="PreLookBrowse" xml:space="preserve">
+    <value>PreLookup</value>
+  </data>
+  <data name="PreLookDescription" xml:space="preserve">
+    <value>Do pre-lookup find/replace</value>
+  </data>
+  <data name="PreLookFileName" xml:space="preserve">
+    <value>Do pre-lookup find/replace name:</value>
+  </data>
+  <data name="ReSendDescription" xml:space="preserve">
+    <value>Re-send draft and translated segments</value>
+  </data>
+  <data name="SendPlainDescription" xml:space="preserve">
+    <value>Send plain text only (not tags)</value>
   </data>
   <data name="V3JsonPathDescription" xml:space="preserve">
     <value>Enter the local path to the json file associated with your API key:</value>

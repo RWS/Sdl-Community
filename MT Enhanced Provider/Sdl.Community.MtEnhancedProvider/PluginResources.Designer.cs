@@ -107,6 +107,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string BrowseBtn {
+            get {
+                return ResourceManager.GetString("BrowseBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Category Id.
         /// </summary>
         public static string CatIdDescription {
@@ -427,6 +436,60 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PostLookup.
+        /// </summary>
+        public static string PostLookupBrowse {
+            get {
+                return ResourceManager.GetString("PostLookupBrowse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do post-lookup find/replace.
+        /// </summary>
+        public static string PostLookupDescription {
+            get {
+                return ResourceManager.GetString("PostLookupDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do post-lookup find/replace filename:.
+        /// </summary>
+        public static string PostLookupFileName {
+            get {
+                return ResourceManager.GetString("PostLookupFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PreLookup.
+        /// </summary>
+        public static string PreLookBrowse {
+            get {
+                return ResourceManager.GetString("PreLookBrowse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do pre-lookup find/replace.
+        /// </summary>
+        public static string PreLookDescription {
+            get {
+                return ResourceManager.GetString("PreLookDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do pre-lookup find/replace name:.
+        /// </summary>
+        public static string PreLookFileName {
+            get {
+                return ResourceManager.GetString("PreLookFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credentials for Google Translate....
         /// </summary>
         public static string PromptForCredentialsCaption_Google {
@@ -451,6 +514,24 @@ namespace Sdl.Community.MtEnhancedProvider {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-send draft and translated segments.
+        /// </summary>
+        public static string ReSendDescription {
+            get {
+                return ResourceManager.GetString("ReSendDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send plain text only (not tags).
+        /// </summary>
+        public static string SendPlainDescription {
+            get {
+                return ResourceManager.GetString("SendPlainDescription", resourceCulture);
             }
         }
         

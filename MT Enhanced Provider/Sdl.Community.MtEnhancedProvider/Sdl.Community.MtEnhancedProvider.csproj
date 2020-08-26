@@ -217,6 +217,7 @@
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="EditCollection.cs" />
