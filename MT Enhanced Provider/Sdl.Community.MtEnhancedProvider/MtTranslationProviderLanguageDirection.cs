@@ -224,7 +224,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			else
 			{
-				_mstConnect.ResetCrd(options.ClientId, options.ClientSecret); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				_mstConnect.ResetCrd(options.ClientId); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
 			}
 
 			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);

@@ -127,8 +127,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					if (mstConnect == null) //construct ApiConnecter if necessary 
 						mstConnect = new ApiConnecter(Options);
 					else
-						mstConnect.ResetCrd(Options.ClientId,
-							Options.ClientSecret); //reset in case changed since last time the class was constructed
+						mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
 
 					return mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
 						languageDirection.TargetCulture.Name);

@@ -52,7 +52,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// </summary>
 		/// <param name="cid">the client Id obtained from Microsoft</param>
 		/// <param name="cst">the client secret obtained from Microsoft</param>
-		internal void ResetCrd(string cid, string cst)
+		internal void ResetCrd(string cid)
 		{
 			_subscriptionKey = cid;
 		}

@@ -10,11 +10,16 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 	public interface IMtTranslationOptions
 	{
 		MtTranslationOptions.ProviderType SelectedProvider { get; set; }
-		string ApiKey { get; set; }
 		bool UseCatID { get; set; }
+		bool PersistGoogleKey { get; set; }
+		bool PersistMicrosoftCreds { get; set; }
+
 		string CatId { get; set; }
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
+		string ApiKey { get; set; } //Microsoft Key
+
+		string ClientId { get; set; } // Google key
 		Enums.GoogleApiVersion SelectedGoogleVersion { get; set; }
 	}
 }

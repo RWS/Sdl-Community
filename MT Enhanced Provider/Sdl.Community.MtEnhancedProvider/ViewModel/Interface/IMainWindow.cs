@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using Sdl.Community.MtEnhancedProvider.Model;
 
@@ -14,6 +10,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		List<ViewDetails> AvailableViews { get; set; }
 		ICommand ShowSettingsViewCommand { get; set; }
 		ICommand ShowMainViewCommand { get; set; }
-
+		ICommand SaveCommand { get; set; }
 	}
 }

@@ -51,7 +51,6 @@ namespace Sdl.Community.MtEnhancedProvider
                     var cred2 = new GenericCredentials(cred.Credential);//convert to generic credentials
                     //add creds to options
                     loadOptions.ClientId = cred2.UserName;
-                    loadOptions.ClientSecret = cred2.Password;
                 }
                 else
                 {

@@ -24,8 +24,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private bool _isMicrosoftSelected;
 		private bool _useCatId;
 		private bool _isV2Checked;
+		private bool _persistGoogleKey;
+		private bool _persistMicrosoftKey;
 		private string _catId;
 		private string _apiKey;
+		private string _clientId;
 		private string _jsonFilePath;
 		private string _projectName;
 
@@ -131,6 +134,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 		}
 
+		public string ClientId
+		{
+			get => _clientId;
+			set
+			{
+				if (_clientId == value) return;
+				_clientId = value;
+				OnPropertyChanged(nameof(ClientId));
+			}
+		}
+
 		public string JsonFilePath
 		{
 			get => _jsonFilePath;
@@ -165,6 +179,28 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					CatId = string.Empty;
 				}
 				OnPropertyChanged(nameof(UseCatId));
+			}
+		}
+
+		public bool PersistGoogleKey
+		{
+			get => _persistGoogleKey;
+			set
+			{
+				if (_persistGoogleKey == value) return;
+				_persistGoogleKey = value;
+				OnPropertyChanged(nameof(PersistGoogleKey));
+			}
+		}
+
+		public bool PersistMicrosoftKey
+		{
+			get => _persistMicrosoftKey;
+			set
+			{
+				if (_persistMicrosoftKey == value) return;
+				_persistMicrosoftKey = value;
+				OnPropertyChanged(nameof(PersistMicrosoftKey));
 			}
 		}
 

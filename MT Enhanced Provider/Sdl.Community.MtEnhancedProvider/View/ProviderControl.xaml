@@ -65,9 +65,15 @@
 				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
 			</PasswordBox>
 			<CheckBox
-				Content="{x:Static mtEnhanced:PluginResources.CatIdDescription}"
+				IsChecked="{Binding PersistMicrosoftKey}"
+				Content="{x:Static mtEnhanced:PluginResources.PersistMicrosoft}"
 				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 				Margin="10 0"
+			/>
+			<CheckBox
+				Content="{x:Static mtEnhanced:PluginResources.CatIdDescription}"
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				Margin="10 10"
 				IsChecked="{Binding UseCatId}"/>
 			<TextBox
 				controls:TextBoxHelper.Watermark="Category Id"
@@ -77,6 +83,7 @@
 				Width="200"
 				HorizontalAlignment="Left"
 				Margin="10"/>
+			
 		</StackPanel>
 		<!--Google API Options-->
 		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
@@ -96,12 +103,19 @@
 				Width="400"
 				Style="{DynamicResource MetroButtonRevealedPasswordBox}"
 				helpers:PasswordHelper.Attach="True"
-				helpers:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
+				helpers:PasswordHelper.Password="{Binding ClientId, Mode=TwoWay}"
 				controls:TextBoxHelper.Watermark="API Key"
 				controls:TextBoxHelper.UseFloatingWatermark="True"  
 				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
 			</PasswordBox>
+			<CheckBox
+				IsChecked="{Binding PersistGoogleKey}"
+				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+				Content="{x:Static mtEnhanced:PluginResources.PersistGoogle}"
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				Margin="10 0"
+			/>
 			<!--Google API V3-->
 			<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
 				<TextBlock 

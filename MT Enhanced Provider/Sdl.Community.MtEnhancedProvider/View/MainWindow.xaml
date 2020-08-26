@@ -18,6 +18,7 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			
 			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
@@ -38,7 +39,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/> <!--used to show validation and api response-->
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
@@ -47,7 +48,16 @@
 			<DockPanel Grid.Column="0" Grid.Row="1" Margin="10,10,10,0">
 				<ContentControl Content="{Binding SelectedView.ViewModel}"/>
 			</DockPanel>
-			
+			<Button
+				Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				Command="{Binding SaveCommand}"
+				Cursor="Hand"
+				Grid.Row="3"
+				Content="OK"
+				Margin="10"
+				HorizontalAlignment="Right"
+				Width="100"
+			/>
 		</Grid>
    </Border>
 </Window>

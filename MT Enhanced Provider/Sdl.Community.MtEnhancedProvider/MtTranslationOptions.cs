@@ -205,24 +205,22 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		[JsonIgnore]
-		public string ApiKey //the apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
+		//User for Microsoft authentication
+		//The apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
+		public string ApiKey 
 		{
 			get => _apiKey;
 			set => _apiKey = value;
 		}
 
-		[JsonIgnore]
-        public string ClientId //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
+		[JsonIgnore] 
+		//User for Google authentication
+        public string ClientId 
 		{
 			get => _clientid;
             set => _clientid = value;
 		}
-        [JsonIgnore]
-        public string ClientSecret //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
-		{
-			get => _clientsecret;
-            set => _clientsecret = value;
-        }
+
         [JsonIgnore]
         public bool PersistGoogleKey
         {

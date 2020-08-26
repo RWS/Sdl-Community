@@ -9,12 +9,13 @@ using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
-	public class MainWindowViewModel: INotifyPropertyChanged, IMainWindow
+	public class MainWindowViewModel: ModelBase, IMainWindow
 	{
 		private ViewDetails _selectedView;
 
 		public MainWindowViewModel(IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel)
 		{
+			SaveCommand = new CommandHandler(Save,true);
 			ShowSettingsViewCommand =  new CommandHandler(ShowSettingsPage, true);
 			ShowMainViewCommand = new CommandHandler(ShowProvidersPage,true);
 
@@ -51,6 +52,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public List<ViewDetails> AvailableViews { get; set; }
 		public ICommand ShowSettingsViewCommand { get; set; }
 		public ICommand ShowMainViewCommand { get; set; }
+		public ICommand SaveCommand { get; set; }
 
 		private void ShowSettingsPage()
 		{
@@ -62,13 +64,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			SelectedView = AvailableViews[0];
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
-
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		private void Save()
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			//TODO: Validate the form
+			//TODO: Save all value on Provider option
 		}
 	}
 }

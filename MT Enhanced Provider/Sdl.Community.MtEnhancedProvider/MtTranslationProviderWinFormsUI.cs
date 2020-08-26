@@ -101,7 +101,6 @@ namespace Sdl.Community.MtEnhancedProvider
                 {
                     var creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
                     loadOptions.ClientId = creds.UserName;
-                    loadOptions.ClientSecret = creds.Password;
                     loadOptions.PersistMicrosoftCreds = getCredMt.Persist;
                 }
                 catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program
@@ -120,37 +119,39 @@ namespace Sdl.Community.MtEnhancedProvider
 
 			var mainWindow = new MainWindow
 			{
-				DataContext = new MainWindowViewModel(providerControlVm,settingsControlVm)
+				DataContext = new MainWindowViewModel(providerControlVm, settingsControlVm)
 			};
 
-	        if (mainWindow.ShowDialog().Value == true)
-	        {
-		        return null;
-	        }
-			//construct form
-			//var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
-   //         //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
-   //         if (dialog.ShowDialog(owner) == DialogResult.OK)
-   //         {
-   //             var testProvider = new MtTranslationProvider(dialog.Options);
-   //             var apiKey = dialog.Options.ApiKey;
-                
-   //             //we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
-   //             if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-   //             {
-   //                 //set google credential
-   //                 SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
-   //             }
-   //             else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-   //             {
-   //                 //set mst cred
-   //                 var creds2 = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
-   //                 SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
-   //             }
+			if (mainWindow.ShowDialog().Value == true)
+			{
+				return null;
+			}
 
-   //             return new ITranslationProvider[] { testProvider };
-   //         }
-            return null;
+
+			////construct form
+			//var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
+			////we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
+			//if (dialog.ShowDialog(owner) == DialogResult.OK)
+			//{
+			//	var testProvider = new MtTranslationProvider(dialog.Options);
+			//	var apiKey = dialog.Options.ApiKey;
+
+			//	//we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
+			//	if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+			//	{
+			//		//set google credential
+			//		SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
+			//	}
+			//	else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+			//	{
+			//		//set mst cred
+			//		var creds2 = new GenericCredentials(dialog.Options.ClientId);
+			//		SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
+			//	}
+
+			//	return new ITranslationProvider[] { testProvider };
+			//}
+			return null;
         }
 
         /// <summary>
@@ -198,7 +199,6 @@ namespace Sdl.Community.MtEnhancedProvider
                 {
                     var creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
                     editProvider.Options.ClientId = creds.UserName;
-                    editProvider.Options.ClientSecret = creds.Password;
                     editProvider.Options.PersistMicrosoftCreds = getCredMt.Persist;
                 }
                 catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program 
@@ -228,7 +228,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 {
                     //set mst cred
-                    var credentials = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
+                    var credentials = new GenericCredentials(dialog.Options.ClientId);
                     SetMstCredentials(credentialStore, credentials, dialog.Options.PersistMicrosoftCreds);
                 }
                 return true;
@@ -251,7 +251,6 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            
             var options = new MtTranslationOptions(translationProviderUri);
             var caption = "Credentials"; //default in case any problem retrieving localized resource below
             if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
@@ -274,7 +273,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 {
                     //set mst cred
-                    var creds2 = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
+                    var creds2 = new GenericCredentials(dialog.Options.ClientId);
                     SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
                 }
                 return true;

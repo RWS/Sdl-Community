@@ -364,6 +364,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Google key.
+        /// </summary>
+        public static string PersistGoogle {
+            get {
+                return ResourceManager.GetString("PersistGoogle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Microsoft key.
+        /// </summary>
+        public static string PersistMicrosoft {
+            get {
+                return ResourceManager.GetString("PersistMicrosoft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator.
         /// </summary>
         public static string Plugin_Description {
