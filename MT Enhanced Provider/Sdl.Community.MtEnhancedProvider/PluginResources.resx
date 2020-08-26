@@ -291,6 +291,9 @@
   <data name="PostLookupFileName" xml:space="preserve">
     <value>Do post-lookup find/replace filename:</value>
   </data>
+  <data name="PostLookupWaterMark" xml:space="preserve">
+    <value>Browse or type the location of the post-lookup file</value>
+  </data>
   <data name="PreLookBrowse" xml:space="preserve">
     <value>PreLookup</value>
   </data>
@@ -299,6 +302,9 @@
   </data>
   <data name="PreLookFileName" xml:space="preserve">
     <value>Do pre-lookup find/replace name:</value>
+  </data>
+  <data name="PreLookupWaterMark" xml:space="preserve">
+    <value>Browse or type the location of the pre-lookup file</value>
   </data>
   <data name="ReSendDescription" xml:space="preserve">
     <value>Re-send draft and translated segments</value>

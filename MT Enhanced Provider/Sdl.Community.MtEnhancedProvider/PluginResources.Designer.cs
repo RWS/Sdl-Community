@@ -463,6 +463,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse or type the location of the post-lookup file.
+        /// </summary>
+        public static string PostLookupWaterMark {
+            get {
+                return ResourceManager.GetString("PostLookupWaterMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PreLookup.
         /// </summary>
         public static string PreLookBrowse {
@@ -486,6 +495,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string PreLookFileName {
             get {
                 return ResourceManager.GetString("PreLookFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse or type the location of the pre-lookup file.
+        /// </summary>
+        public static string PreLookupWaterMark {
+            get {
+                return ResourceManager.GetString("PreLookupWaterMark", resourceCulture);
             }
         }
         
