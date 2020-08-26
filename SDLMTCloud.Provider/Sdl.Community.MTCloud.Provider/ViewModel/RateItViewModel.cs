@@ -65,6 +65,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
 		{
+			if (!IsSendFeedbackEnabled) return;
 			await SendFeedbackToService(confirmedSegment);
 		}
 
@@ -109,12 +110,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (_isSendFeedbackEnabled == value) return;
 				if (!value)
 				{
-					StopSegmentSupervisor();
 					ResetFeedbackOptions();
-				}
-				else
-				{
-					_segmentSupervisor.StartSupervising();
 				}
 
 				_isSendFeedbackEnabled = value;
@@ -148,7 +144,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ClearFeedbackBox));
 
 		public ICommand SendFeedbackCommand
-			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService()));
+			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService(), ()=>IsSendFeedbackEnabled));
 
 		public void IncreaseRating()
 		{
@@ -180,9 +176,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async Task SendFeedbackToService(SegmentId? segmentId = null)
 		{
-			var segment = segmentId ?? ActiveSegmentId;
-
-			if (!_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(segment))
+			var improvement = GetImprovement(segmentId);
+			if (improvement == null)
 			{
 				_messageBoxService.ShowWarningMessage(
 					string.Format(PluginResources.OriginalTranslationMissingMessage, PluginResources.SDLMTCloudName,
@@ -190,8 +185,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				return;
 			}
-
-			var improvement = _segmentSupervisor.ActiveDocumentImprovements[segment];
 
 			if (_translationService != null)
 			{
@@ -258,6 +251,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetShortcutService();
 
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+			_segmentSupervisor.StartSupervising();
 
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
@@ -283,18 +277,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
+			if (!IsSendFeedbackEnabled) return;
 			ResetFeedback();
-			ImprovedTarget improvement = null;
 
-			if (_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(ActiveSegmentId))
-			{
-				improvement = _segmentSupervisor.ActiveDocumentImprovements[ActiveSegmentId];
-			}
-
+			var improvement = GetImprovement();
 			if (improvement == null) return;
 
 			var comments = improvement.Comments?.Select(c => (string)c.Clone()).ToList();
-
 			if (comments != null)
 			{
 				Feedback = comments.FirstOrDefault(c => FeedbackOptions.All(fo => fo.OptionName != c));
@@ -307,6 +296,17 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			Rating = improvement.Score;
+		}
+
+		private ImprovedTarget GetImprovement(SegmentId? segmentId = null)
+		{
+			var currentSegment = segmentId ?? ActiveSegmentId;
+			ImprovedTarget improvement = null;
+			if (_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(currentSegment))
+			{
+				improvement = _segmentSupervisor.ActiveDocumentImprovements[currentSegment];
+			}
+			return improvement;
 		}
 
 		private void UpdateActionTooltips()

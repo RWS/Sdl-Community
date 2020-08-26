@@ -48,15 +48,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			get
 			{
 				if (Improvements.ContainsKey(_docId)) return Improvements[_docId];
-
-				if (_docId != Guid.Empty)
-				{
-					SetIdAndActiveFile();
-				}
-				else
-				{
-					return null;
-				}
+				SetIdAndActiveFile();
 
 				return Improvements[_docId];
 			}
