@@ -1,5 +1,4 @@
 ﻿using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -8,15 +7,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
 	[Action(Id = "DecreaseRatingId",
 		Name = "Decrease rating",
-		Description = "Decrease the rating of the translation", //TODO:Move this in a resource file after we confirm the exact string
+		Description = "Decrease the rating of the translation",
 		ContextByType = typeof(EditorController))]
 	public class DecreaseRatingAction : AbstractAction, ISDLMTCloudAction
 	{
-		public override void Initialize()
-		{
-			base.Initialize();
-		}
-
 		protected override void Execute()
 		{
 			var rateItController = SdlTradosStudio.Application.GetController<RateItController>();

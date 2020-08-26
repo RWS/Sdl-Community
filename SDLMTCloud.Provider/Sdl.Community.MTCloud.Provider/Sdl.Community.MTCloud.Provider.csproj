@@ -72,6 +72,7 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.Control">
       <SpecificVersion>False</SpecificVersion>
@@ -206,7 +207,7 @@
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
-    <Compile Include="Studio\ShortcutActions\SetUnintelligibillityAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetUnintelligibilityAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -369,10 +371,6 @@
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\DataGridColumnStyle.xaml">
       <Generator>MSBuild:Compile</Generator>

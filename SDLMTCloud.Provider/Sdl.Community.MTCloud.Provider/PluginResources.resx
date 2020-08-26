@@ -349,4 +349,13 @@
   <data name="SDLMTCloudName" xml:space="preserve">
 	  <value>SDL Machine Translation Cloud Provider</value>
   </data>
+  <data name="OriginalTranslationMissingMessage" xml:space="preserve">
+	  <value>Original translation from {0} is missing. Translate again using the {1} if you want to be able to send a feedback for this segment pair</value>
+  </data>
+  <data name="OriginalTranslationMissingTitle" xml:space="preserve">
+	  <value>Original translation missing</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+	  <value>Sent</value>
+  </data>
 </root>

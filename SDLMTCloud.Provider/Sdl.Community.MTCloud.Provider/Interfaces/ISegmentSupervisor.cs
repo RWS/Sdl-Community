@@ -10,7 +10,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	{
 		event ConfirmationLevelChangedEventHandler ConfirmationLevelChanged;
 
-		Dictionary<SegmentId, ImprovedTarget> ActiveDocumentImprovements { get;}
+		Dictionary<SegmentId, ImprovedTarget> ActiveDocumentImprovements { get; }
 		Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; }
 
 		void StartSupervising();
