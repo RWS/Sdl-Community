@@ -131,21 +131,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 
 			ApplyFilter(false);
-		}
-
-		public void UpdateSettings(Settings settings)
-		{
-			Settings = settings;
-
-			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-			OnPropertyChanged(nameof(GroupType));
-
-			ApplyFilter(false);
-		}
+		}		
 
 		public void RefreshView(Settings settings, List<Report> reports)
 		{
 			Settings = settings;
+			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 			_reports = reports;
 
 			ApplyFilter(true);

@@ -51,7 +51,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			IsEditMode = isEditMode;
 
 			var projectInfo = _project.GetProjectInfo();
-			var allLanguages = new List<Language> { projectInfo.SourceLanguage };
+			var allLanguages = new List<Language>();
 			allLanguages.AddRange(projectInfo.TargetLanguages);
 
 			var languageItems = allLanguages
@@ -246,7 +246,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private string GetUniqueReportId(ReportTemplate reportTemplate)
 		{
-			return GetUniqueReportId(reportTemplate?.Group, reportTemplate?.Language ?? string.Empty, reportTemplate?.Scope.ToString());
+			return GetUniqueReportId(reportTemplate?.Group ?? string.Empty, reportTemplate?.Language ?? string.Empty, reportTemplate?.Scope.ToString());
 		}
 
 		private string GetUniqueReportId(string group, string language, string scope)

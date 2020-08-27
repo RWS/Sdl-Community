@@ -35,13 +35,13 @@ namespace Sdl.Community.Reports.Viewer.Actions
 				return;
 			}
 
+			var reportTemplates = _reportsViewerController.ReportsController.GetCustomReportTemplates();
 			var reports = _reportsViewerController.GetReports();
 			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
-
-			var settings = GetSettings();
+			
 			var view = new AppendReportWindow();
-			var viewModel = new AppendReportViewModel(view, report.Clone() as Report, settings, _pathInfo, _imageService,
-				_reportsViewerController.GetSelectedProject(), groupNames, true);
+			var viewModel = new AppendReportViewModel(view, report.Clone() as Report, _imageService,
+				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, true);
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)

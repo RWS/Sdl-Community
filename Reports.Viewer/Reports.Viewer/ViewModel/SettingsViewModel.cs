@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Community.Reports.Viewer.View;
+using Sdl.Core.Globalization;
 using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using DataFormats = System.Windows.DataFormats;
@@ -60,15 +62,27 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			DisplayDateSuffixWithReportName = settings.DisplayDateSuffixWithReportName;
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-			
-			var reportTemplates = _controller.GetCustomReportTemplates();
-			foreach (var reportTemplate in reportTemplates)
+
+			var projectInfo = controller.SelectedProject.GetProjectInfo();
+			var targetLanguages = projectInfo.TargetLanguages.ToList();
+			var reportTemplates = new List<ReportTemplate>();
+
+			foreach (var reportTemplate in _controller.GetCustomReportTemplates())
 			{
+				if (!string.IsNullOrEmpty(reportTemplate.Language) && !targetLanguages.Exists(a =>
+					string.Compare(a.CultureInfo.Name, reportTemplate.Language, StringComparison.CurrentCultureIgnoreCase) == 0))
+				{
+					continue;
+				}
+
 				if (!string.IsNullOrEmpty(reportTemplate.Path) && File.Exists(reportTemplate.Path))
 				{
 					reportTemplate.IsAvailable = true;
 				}
+
+				reportTemplates.Add(reportTemplate);
 			}
+
 			_reportTemplates = new ObservableCollection<ReportTemplate>(reportTemplates);
 		}
 
@@ -208,6 +222,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public bool IsReportSelected => SelectedReportTemplates?.Cast<ReportTemplate>().ToList().Count == 1;
 
+		public bool UpdatedTemplates { get; private set; }
+
 		private void SaveChanges(object parameter)
 		{
 			_settings.DisplayDateSuffixWithReportName = DisplayDateSuffixWithReportName;
@@ -241,6 +257,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			var result = window.ShowDialog();
 			if (result != null && (bool)result)
 			{
+				UpdatedTemplates = true;
 				if (isEditMode)
 				{
 					var template = _reportTemplates.FirstOrDefault(a => a.Id == reportTemplate.Id);

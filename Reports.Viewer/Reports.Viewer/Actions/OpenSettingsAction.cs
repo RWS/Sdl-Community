@@ -39,7 +39,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
 			{
-				_reportsViewerController.UpdateSettings();
+				_reportsViewerController.UpdateSettings(viewModel.UpdatedTemplates);
 			}
 		}
 

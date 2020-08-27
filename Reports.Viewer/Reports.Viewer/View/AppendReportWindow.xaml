@@ -153,10 +153,9 @@
 				</Grid.Style>
 			</Grid>
 
-			<Grid Grid.Row="1"
+			<Grid Grid.Row="1"	
 			      Visibility="{Binding IsEditMode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}"
 			      IsEnabled="{Binding CanEditXslt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -240,7 +239,7 @@
 			</Grid>
 			
 			<Grid Grid.Row="3" 
-			      IsEnabled="{Binding CanEditLanguages, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 			      Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
@@ -253,7 +252,7 @@
 			</Grid>
 
 			<Grid Grid.Row="4"
-			      IsEnabled="{Binding CanEditLanguages, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />

@@ -39,7 +39,7 @@ namespace Sdl.Community.Reports.Viewer
 		private BrowserView _browserView;
 		private DataViewModel _dataViewModel;
 		private PathInfo _pathInfo;
-		
+
 		private bool _isActive;
 
 		private BaseReportAction _removeReportAction;
@@ -77,7 +77,7 @@ namespace Sdl.Community.Reports.Viewer
 			ReportsController.ReportTemplatesChanged += Controller_ReportTemplatesChanged;
 
 			ActivationChanged += ReportsViewerController_ActivationChanged;
-		}		
+		}
 
 		protected override Control GetExplorerBarControl()
 		{
@@ -94,7 +94,7 @@ namespace Sdl.Community.Reports.Viewer
 
 			return _reportViewControl;
 		}
-	
+
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
 		internal ReportsController ReportsController { get; private set; }
@@ -113,7 +113,7 @@ namespace Sdl.Community.Reports.Viewer
 		}
 
 		internal List<Report> GetReports()
-		{			
+		{
 			return _reportsNavigationViewModel?.Reports;
 		}
 
@@ -168,26 +168,37 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.DeleteReorts(GetReports(result.Reports.Select(a => a.Id)));
 		}
 
-		internal void RefreshView()
+		internal void RefreshView(bool force)
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
 
-			_reportsNavigationViewModel.RefreshView(GetSettings(), ReportsController.GetReports());
+			if (force)
+			{
+				EnableControls(true);
+				var task = System.Threading.Tasks.Task.Run(() => ReportsController.GetReports(true));
+				task.ContinueWith(t =>
+				{
+					_reportsNavigationViewModel.RefreshView(GetSettings(), t.Result);
+					EnableControls(false);
+				});
+			}
+			else
+			{
+				_reportsNavigationViewModel.RefreshView(GetSettings(), ReportsController.GetReports());
+			}
 		}
 
-		internal void UpdateSettings()
+		internal void UpdateSettings(bool updatedTemplates)
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
 			
-			
-
-			_reportsNavigationViewModel.UpdateSettings(GetSettings());
+			RefreshView(true);
 		}
 
 		internal IProject GetSelectedProject()
@@ -375,7 +386,7 @@ namespace Sdl.Community.Reports.Viewer
 				}
 				else
 				{
-					RefreshView();
+					RefreshView(false);
 				}
 			}
 		}
@@ -451,7 +462,6 @@ namespace Sdl.Community.Reports.Viewer
 			if (e.Active)
 			{
 				var task = System.Threading.Tasks.Task.Run(() => ReportsController.GetStudioReportUpdates(ClientId));
-
 				task.ContinueWith(t =>
 				{
 					if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
@@ -473,7 +483,7 @@ namespace Sdl.Community.Reports.Viewer
 			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
-				RefreshView();
+				RefreshView(false);
 			}
 		}
 	}
