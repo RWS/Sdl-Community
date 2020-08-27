@@ -17,7 +17,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://www.sdl.com/software-and-services/translation-software/machine-translation/language-pairs.html");
+			Process.Start("https://www.sdl.com/products-and-solutions/translation/sdl-machine-translation/available-languages");
 		}
 	}
 }
