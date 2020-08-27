@@ -68,7 +68,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Community.Toolkit.LanguagePlatform">
-      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2019.1.9.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+      <HintPath>packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2019.1.9.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
@@ -76,11 +76,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
+      <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
