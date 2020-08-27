@@ -39,8 +39,7 @@ namespace Sdl.Community.Reports.Viewer
 		private BrowserView _browserView;
 		private DataViewModel _dataViewModel;
 		private PathInfo _pathInfo;
-		private ReportsController _controller;
-		private string _clientId;
+		
 		private bool _isActive;
 
 		private BaseReportAction _removeReportAction;
@@ -55,7 +54,7 @@ namespace Sdl.Community.Reports.Viewer
 
 		protected override void Initialize(IViewContext context)
 		{
-			_clientId = Guid.NewGuid().ToString();
+			ClientId = Guid.NewGuid().ToString();
 
 			_removeReportAction = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
 			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
@@ -68,16 +67,17 @@ namespace Sdl.Community.Reports.Viewer
 			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
 
 			_pathInfo = new PathInfo();
-			_controller = ReportsController.Instance;
-			_controller.ProjectChanging += Controller_ProjectChanging;
-			_controller.ProjectChanged += Controller_ProjectChanged;
-			_controller.ReportsAdded += Controller_ReportsAdded;
-			_controller.ReportsRemoved += Controller_ReportsRemoved;
-			_controller.ReportsUpdated += Controller_ReportsUpdated;
-			_controller.ProjectReportChanges += Controller_ProjectReportChanges;
+			ReportsController = ReportsController.Instance;
+			ReportsController.ProjectChanging += Controller_ProjectChanging;
+			ReportsController.ProjectChanged += Controller_ProjectChanged;
+			ReportsController.ReportsAdded += Controller_ReportsAdded;
+			ReportsController.ReportsRemoved += Controller_ReportsRemoved;
+			ReportsController.ReportsUpdated += Controller_ReportsUpdated;
+			ReportsController.ProjectReportChanges += Controller_ProjectReportChanges;
+			ReportsController.ReportTemplatesChanged += Controller_ReportTemplatesChanged;
 
 			ActivationChanged += ReportsViewerController_ActivationChanged;
-		}
+		}		
 
 		protected override Control GetExplorerBarControl()
 		{
@@ -94,11 +94,14 @@ namespace Sdl.Community.Reports.Viewer
 
 			return _reportViewControl;
 		}
-
-
+	
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
-		public List<Report> GetSelectedReports()
+		internal ReportsController ReportsController { get; private set; }
+
+		internal string ClientId { get; private set; }
+
+		internal List<Report> GetSelectedReports()
 		{
 			var selectedReport = _reportsNavigationViewModel?.SelectedReport;
 			if (selectedReport != null)
@@ -109,14 +112,19 @@ namespace Sdl.Community.Reports.Viewer
 			return _dataViewModel?.SelectedReports?.Cast<Report>().ToList();
 		}
 
-		public void AddReports(List<Report> reports)
+		internal List<Report> GetReports()
+		{			
+			return _reportsNavigationViewModel?.Reports;
+		}
+
+		internal void AddReports(List<Report> reports)
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
 
-			var result = _controller.AddReports(_clientId, reports);
+			var result = ReportsController.AddReports(ClientId, reports);
 			if (!result.Success)
 			{
 				MessageBox.Show(result.Message);
@@ -126,14 +134,14 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.AddReports(result.Reports);
 		}
 
-		public void UpdateReports(List<Report> reports)
+		internal void UpdateReports(List<Report> reports)
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
 
-			var result = _controller.UpdateReports(_clientId, reports);
+			var result = ReportsController.UpdateReports(ClientId, reports);
 			if (!result.Success)
 			{
 				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -143,14 +151,14 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.UpdateReports(result.Reports);
 		}
 
-		public void RemoveReports(List<string> reportIds)
+		internal void RemoveReports(List<string> reportIds)
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
 
-			var result = _controller.RemoveReports(_clientId, reportIds);
+			var result = ReportsController.RemoveReports(ClientId, reportIds);
 			if (!result.Success)
 			{
 				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -160,29 +168,31 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.DeleteReorts(GetReports(result.Reports.Select(a => a.Id)));
 		}
 
-		public void RefreshView()
+		internal void RefreshView()
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
 
-			_reportsNavigationViewModel.RefreshView(GetSettings(), _controller.GetReports());
+			_reportsNavigationViewModel.RefreshView(GetSettings(), ReportsController.GetReports());
 		}
 
-		public void UpdateSettings()
+		internal void UpdateSettings()
 		{
 			if (_reportsNavigationViewModel == null)
 			{
 				return;
 			}
+			
+			
 
 			_reportsNavigationViewModel.UpdateSettings(GetSettings());
 		}
 
-		public IProject GetSelectedProject()
+		internal IProject GetSelectedProject()
 		{
-			return _controller?.SelectedProject;
+			return ReportsController?.SelectedProject;
 		}
 
 		private void InitializeViews()
@@ -201,10 +211,10 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _reportViewModel
 			};
 
-			_reportsNavigationViewModel = new ReportsNavigationViewModel(_controller.GetReports(), GetSettings(), _pathInfo);
+			_reportsNavigationViewModel = new ReportsNavigationViewModel(ReportsController.GetReports(), GetSettings(), _pathInfo);
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
-			_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
+			_reportsNavigationViewModel.ProjectLocalFolder = ReportsController.GetProjectLocalFolder();
 			_reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
 			_reportsNavigationViewModel.ReportsNavigationView = _reportsNavigationView;
 
@@ -287,7 +297,7 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			if (e.ClientId != _clientId && e.Reports != null)
+			if (e.ClientId != ClientId && e.Reports != null)
 			{
 				_reportsNavigationViewModel.DeleteReorts(GetReports(e.Reports.Select(a => a.Id)));
 			}
@@ -300,7 +310,7 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			if (e.ClientId != _clientId && e.Reports != null && e.Reports.Count > 0)
+			if (e.ClientId != ClientId && e.Reports != null && e.Reports.Count > 0)
 			{
 				_reportsNavigationViewModel.AddReports(e.Reports);
 			}
@@ -313,7 +323,7 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			if (e.ClientId != _clientId && e.Reports != null)
+			if (e.ClientId != ClientId && e.Reports != null)
 			{
 				foreach (var updatedReport in e.Reports)
 				{
@@ -337,7 +347,7 @@ namespace Sdl.Community.Reports.Viewer
 		{
 			if (_reportsNavigationViewModel != null)
 			{
-				_reportsNavigationViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
+				_reportsNavigationViewModel.ProjectLocalFolder = ReportsController.GetProjectLocalFolder();
 				_reportsNavigationViewModel.RefreshView(GetSettings(), e.Reports);
 
 			}
@@ -352,7 +362,7 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void Controller_ProjectReportChanges(object sender, Sdl.Reports.Viewer.API.Events.ProjectReportChangesEventArgs e)
 		{
-			if (e.ClientId == _clientId || _reportsNavigationViewControl == null)
+			if (e.ClientId == ClientId || _reportsNavigationViewControl == null)
 			{
 				return;
 			}
@@ -368,6 +378,16 @@ namespace Sdl.Community.Reports.Viewer
 					RefreshView();
 				}
 			}
+		}
+
+		private void Controller_ReportTemplatesChanged(object sender, Sdl.Reports.Viewer.API.Events.ReportTemplatesChangedEventArgs e)
+		{
+			if (e.ClientId == ClientId || _reportsNavigationViewControl == null)
+			{
+				return;
+			}
+
+			MessageBox.Show("DEBUG INFO: Custom report templates changed!");
 		}
 
 		private void EnableControls(bool isLoading)
@@ -430,7 +450,7 @@ namespace Sdl.Community.Reports.Viewer
 
 			if (e.Active)
 			{
-				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportUpdates(_clientId));
+				var task = System.Threading.Tasks.Task.Run(() => ReportsController.GetStudioReportUpdates(ClientId));
 
 				task.ContinueWith(t =>
 				{

@@ -293,6 +293,7 @@ namespace Sdl.Community.RateItControl.Themes.Generic
 			if (RateItControlItemsControl.SelectedItems.Count > 0)
 			{
 				Rating = RateItControlItemsControl.SelectedIndex + 1;
+				RateItControlItemsControl.SelectedIndex = -1;
 			}
 		}
 

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Office.Interop.Excel;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
@@ -18,11 +20,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class RateItViewModel : BaseViewModel, IRatingService, IDisposable
 	{
-		private IShortcutService _shortcutService;
+		private readonly IShortcutService _shortcutService;
 		private ITranslationService _translationService;
 		private readonly IActionProvider _actionProvider;
 		private readonly ISegmentSupervisor _segmentSupervisor;
 		private readonly IMessageBoxService _messageBoxService;
+		private readonly EditorController _editorController;
 		private List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 
@@ -30,15 +33,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _feedback;
 		private bool _isSendFeedbackEnabled;
 		private bool _autoSendFeedback;
+		private ICommand _clearCommand;
 
-		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService)
+		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService, EditorController editorController)
 		{
 			_actionProvider = actionProvider;
 			_segmentSupervisor = segmentSupervisor;
 			_messageBoxService = messageBoxService;
-
-			SetShortcutService(shortcutService);
-			ClearCommand = new CommandHandler(ClearFeedbackBox);
+			_editorController = editorController;
+			_shortcutService = shortcutService;
 
 			Initialize();
 			UpdateActionTooltips();
@@ -62,6 +65,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
 		{
+			if (!IsSendFeedbackEnabled) return;
 			await SendFeedbackToService(confirmedSegment);
 		}
 
@@ -93,6 +97,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				if (_rating == value) return;
 				_rating = value;
+
 				OnPropertyChanged(nameof(Rating));
 			}
 		}
@@ -105,12 +110,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (_isSendFeedbackEnabled == value) return;
 				if (!value)
 				{
-					StopSegmentSupervisor();
 					ResetFeedbackOptions();
-				}
-				else
-				{
-					_segmentSupervisor.StartSupervising();
 				}
 
 				_isSendFeedbackEnabled = value;
@@ -120,9 +120,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ResetFeedbackOptions()
 		{
-			Rating = 0;
+			ResetFeedback();
 			AutoSendFeedback = false;
-			FeedbackOptions.ForEach(fo => fo.IsChecked = false);
 		}
 
 		private void StopSegmentSupervisor()
@@ -142,11 +141,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public ICommand ClearCommand { get; }
+		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ClearFeedbackBox));
 
 		public ICommand SendFeedbackCommand
 			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService()));
-
 
 		public void IncreaseRating()
 		{
@@ -178,17 +176,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async Task SendFeedbackToService(SegmentId? segmentId = null)
 		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var segment = segmentId ?? editorController.ActiveDocument.ActiveSegmentPair.Properties.Id;
-
-			if (!_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(segment))
+			if (!IsSendFeedbackEnabled) return;
+			var improvement = GetImprovement(segmentId);
+			if (improvement == null)
 			{
-				_messageBoxService.ShowWarningMessage($"Original translation from {PluginResources.SDLMTCloudName} is missing. Translate again using the {PluginResources.SDLMTCloudName} if you want to be able to send a feedback for this segment pair", "Original translation missing");
+				_messageBoxService.ShowWarningMessage(
+					string.Format(PluginResources.OriginalTranslationMissingMessage, PluginResources.SDLMTCloudName,
+						PluginResources.SDLMTCloudName), PluginResources.OriginalTranslationMissingTitle);
 
 				return;
 			}
-
-			var improvement = _segmentSupervisor.ActiveDocumentImprovements[segment];
 
 			if (_translationService != null)
 			{
@@ -202,7 +199,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				dynamic rating = new ExpandoObject();
 				if (_rating > 0) rating.Score = _rating;
 				if (comments.Count > 0) rating.Comments = comments;
-				if (!((ExpandoObject) rating).Any()) rating = null;
+				if (!((ExpandoObject)rating).Any()) rating = null;
+
+				if (rating != null)
+				{
+					improvement.Score = _rating;
+					improvement.Comments = comments;
+				}
 
 				if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
 				await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
@@ -212,12 +215,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				//TODO: Log that translation service is null
 			}
 
-			SetFeedbackOptionsToDefault();
+			ResetFeedback();
 		}
 
-		private void SetFeedbackOptionsToDefault()
+		private void ResetFeedback()
 		{
 			FeedbackOptions.ForEach(fb => fb.IsChecked = false);
+			Feedback = string.Empty;
 			Rating = 0;
 		}
 
@@ -226,25 +230,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			Feedback = string.Empty;
 		}
 
-		private void _translationService_TranslationReceived(FeedbackRequest translationFeedback)
+		private void SetShortcutService()
 		{
-
+			if (_shortcutService == null) return;
+			_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
+			_shortcutService.StudioShortcutChanged += _shortcutService_ShortcutChanged;
 		}
 
-		private void SetShortcutService(IShortcutService shortcutService)
-		{
-			if (_shortcutService != null)
-			{
-				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
-			}
-
-			_shortcutService = shortcutService;
-
-			if (_shortcutService != null)
-			{
-				_shortcutService.StudioShortcutChanged += _shortcutService_ShortcutChanged;
-			}
-		}
 		private void _shortcutService_ShortcutChanged()
 		{
 			UpdateActionTooltips();
@@ -252,6 +244,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void Initialize()
 		{
+			SetShortcutService();
+
+			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+			_segmentSupervisor.StartSupervising();
+
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
 
@@ -264,6 +261,48 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					StudioActionId = feedbackOption.Id
 				});
 			}
+		}
+
+		private SegmentId ActiveSegmentId => _editorController.ActiveDocument.ActiveSegmentPair.Properties.Id;
+
+		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
+		{
+			_editorController.ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			_editorController.ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+		}
+
+		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
+		{
+			if (!IsSendFeedbackEnabled) return;
+			ResetFeedback();
+
+			var improvement = GetImprovement();
+			if (improvement == null) return;
+
+			var comments = improvement.Comments?.Select(c => (string)c.Clone()).ToList();
+			if (comments != null)
+			{
+				Feedback = comments.FirstOrDefault(c => FeedbackOptions.All(fo => fo.OptionName != c));
+				comments.Remove(Feedback);
+
+				foreach (var feedbackOption in comments.SelectMany(c => FeedbackOptions.Where(fo => fo.OptionName == c)))
+				{
+					feedbackOption.IsChecked = true;
+				}
+			}
+
+			Rating = improvement.Score;
+		}
+
+		private ImprovedTarget GetImprovement(SegmentId? segmentId = null)
+		{
+			var currentSegment = segmentId ?? ActiveSegmentId;
+			ImprovedTarget improvement = null;
+			if (_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(currentSegment))
+			{
+				improvement = _segmentSupervisor.ActiveDocumentImprovements[currentSegment];
+			}
+			return improvement;
 		}
 
 		private void UpdateActionTooltips()
@@ -293,11 +332,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void Dispose()
 		{
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived -= _translationService_TranslationReceived;
-			}
-
 			if (_shortcutService != null)
 			{
 				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
@@ -306,17 +340,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SetTranslationService(ITranslationService translationService)
 		{
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived -= _translationService_TranslationReceived;
-			}
-
 			_translationService = translationService;
-
-			if (_translationService != null)
-			{
-				_translationService.TranslationReceived += _translationService_TranslationReceived;
-			}
 		}
 	}
 }

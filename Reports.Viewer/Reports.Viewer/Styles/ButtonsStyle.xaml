@@ -27,7 +27,7 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="#ED7030" />
+							<Setter Property="Foreground" Value="#716F6F" />
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Cursor" Value="Hand"/>

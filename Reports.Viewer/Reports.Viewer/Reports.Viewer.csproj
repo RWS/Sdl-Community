@@ -99,6 +99,7 @@
     <Compile Include="Model\ProjectSettings\ReportsViewer.cs" />
     <Compile Include="Model\ReportGroup.cs" />
     <Compile Include="Model\GroupItem.cs" />
+    <Compile Include="Model\ReportTemplateScope.cs" />
     <Compile Include="Model\ReportWithXslt.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\ReportState.cs" />
@@ -114,11 +115,15 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
+    <Compile Include="ViewModel\AppendTemplateViewModel.cs" />
     <Compile Include="ViewModel\DataViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
     <Compile Include="ViewModel\AppendReportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\AppendTemplateWindow.xaml.cs">
+      <DependentUpon>AppendTemplateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DataView.xaml.cs">
       <DependentUpon>DataView.xaml</DependentUpon>
     </Compile>
@@ -344,6 +349,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\WindowsBorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\AppendTemplateWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

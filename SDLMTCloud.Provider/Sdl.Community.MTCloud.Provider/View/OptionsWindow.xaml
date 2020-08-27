@@ -34,7 +34,6 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
@@ -173,7 +172,7 @@
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal">
-													<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="5,0,10,0" />
+													<Image Source="../Resources/NMT.ico" Width="15" Height="15" Margin="5,0,10,0" />
 													<TextBlock Text="{Binding DisplayName}" ToolTip="{Binding DisplayName}"
 													   Margin="10,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
 												</StackPanel>

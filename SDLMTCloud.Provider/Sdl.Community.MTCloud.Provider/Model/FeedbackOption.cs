@@ -7,7 +7,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		private bool _isChecked;
 		private string _studioActionId;
 		private string _tooltip;
-		private bool _isEnabled;
 
 		public bool IsChecked
 		{
@@ -19,17 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				OnPropertyChanged(nameof(IsChecked));
 			}
 		}
-		//public bool IsEnabled
-		//{
-		//	get => _isEnabled;
-		//	set
-		//	{
-		//		if (_isEnabled == value) return;
-		//		_isEnabled = value;
-		//		OnPropertyChanged(nameof(IsEnabled));
-		//	}
-		//}
-
+		
 		public string OptionName { get; set; }
 
 		public string StudioActionId

@@ -97,7 +97,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Group Name" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
+				<DataGridTemplateColumn Header="Group" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
 							<TextBlock VerticalAlignment="Top">
@@ -160,11 +160,16 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-
-				<DataGridTextColumn Header="Date" CanUserSort="True" 
-				                    Binding="{Binding DateToString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
-				                    ElementStyle="{StaticResource TextBlockStyle}" Width="1*"/>
 				
+				<DataGridTemplateColumn Header="Date" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="2*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model1:Report">
+							<TextBlock ToolTip="{Binding DateToString}"
+							           Text="{Binding DateToString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
 				<DataGridTemplateColumn Header="Description" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model1:Report">
