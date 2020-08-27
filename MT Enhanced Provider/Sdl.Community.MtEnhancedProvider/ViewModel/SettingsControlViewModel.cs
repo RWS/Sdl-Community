@@ -34,8 +34,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			_options = options;
 			BrowseCommand = new RelayCommand(Browse);
 			_openFileDialogService = openFileDialogService;
-		}
 
+			SetSavedSettings();
+		}
+		
 		public ModelBase ViewModel { get; set; }
 		public ICommand ShowMainWindowCommand { get; set; }
 		public ICommand BrowseCommand { get; set; }
@@ -129,7 +131,15 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
-
+		private void SetSavedSettings()
+		{
+			ReSendDraft = _options.ResendDrafts;
+			SendPlainText = _options.SendPlainTextOnly;
+			DoPreLookup = _options.UsePreEdit;
+			PreLookupFileName = _options.PreLookupFilename;
+			DoPostLookup = _options.UsePostEdit;
+			PostLookupFileName = _options.PostLookupFilename;
+		}
 
 		private void Browse(object commandParameter)
 		{
@@ -152,6 +162,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				}
 			}
 		}
+		
 
 		private void CheckIfIsValidLookupFile(string filePath)
 		{

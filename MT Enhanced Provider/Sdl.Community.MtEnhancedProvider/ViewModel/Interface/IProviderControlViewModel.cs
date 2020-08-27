@@ -18,9 +18,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		bool UseCatId { get; set; }
 		bool PersistGoogleKey { get; set; }
 		bool PersistMicrosoftKey { get; set; }
+		bool IsTellMeAction { get; set; }
 		string CatId { get; set; }
-		string ApiKey { get; set; } //Microsoft
-		string ClientId { get; set; }//Google
+		string ApiKey { get; set; } //Google
+		string ClientId { get; set; }//Microsoft
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
 	}

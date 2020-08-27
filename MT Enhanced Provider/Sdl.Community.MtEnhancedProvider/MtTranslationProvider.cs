@@ -14,6 +14,7 @@
 
 using System;
 using Newtonsoft.Json;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -31,12 +32,12 @@ namespace Sdl.Community.MtEnhancedProvider
 		private MtTranslationProviderGTApiConnecter gtConnect;
 		private ApiConnecter mstConnect;
 
-		public MtTranslationProvider(MtTranslationOptions options)
+		public MtTranslationProvider(IMtTranslationOptions options)
 		{
 			Options = options;
 		}
 
-		public MtTranslationOptions Options { get; set; }
+		public IMtTranslationOptions Options { get; set; }
 
 		public bool IsReadOnly => true;
 

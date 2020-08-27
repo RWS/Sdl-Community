@@ -9,6 +9,7 @@
 		mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+        xmlns:behaviours ="clr-namespace:Sdl.Community.MtEnhancedProvider.Behaviours"
 		Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
 		Title="MT Enhanced" Height="450" Width="800"
@@ -51,8 +52,10 @@
 			<Button
 				Style="{StaticResource Sdl.Button.PrimaryStyle}"
 				Command="{Binding SaveCommand}"
+				behaviours:CloseOnClickBehaviour.IsEnabled="True"
 				Cursor="Hand"
 				Grid.Row="3"
+				IsDefault="True"
 				Content="OK"
 				Margin="10 10 20 10"
 				HorizontalAlignment="Right"

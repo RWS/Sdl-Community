@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -12,7 +13,7 @@ namespace Sdl.Community.MtEnhancedProvider
 	{
 
 		private readonly LanguagePair _languageDirection;
-		private readonly MtTranslationOptions _options;
+		private readonly IMtTranslationOptions _options;
 		private readonly MtTranslationProvider _provider;
 		private MtTranslationProviderGTApiConnecter _gtConnect;
 		private TranslationUnit _inputTu;
@@ -192,7 +193,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			return result;
 		}
 
-		private string LookupGt(string sourcetext, MtTranslationOptions options, string format)
+		private string LookupGt(string sourcetext, IMtTranslationOptions options, string format)
 		{		
 			//instantiate GtApiConnecter if necessary
 			if (_gtConnect == null)
@@ -209,7 +210,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			return translatedText;
 		}
 
-		private string LookupMst(string sourcetext, MtTranslationOptions options, string format)
+		private string LookupMst(string sourcetext, IMtTranslationOptions options, string format)
 		{
 			var catId = "";
 			if (options.UseCatID)

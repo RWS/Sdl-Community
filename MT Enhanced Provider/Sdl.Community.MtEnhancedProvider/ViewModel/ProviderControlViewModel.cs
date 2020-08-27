@@ -13,12 +13,18 @@ using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
 	public class ProviderControlViewModel : ModelBase, IProviderControlViewModel
 	{
 		private readonly IMtTranslationOptions _options;
+		private readonly ITranslationProviderCredentialStore _credentialStore;
+		private readonly List<LanguagePair> _correspondingLanguages;
+		private readonly  Uri _microsoftProviderUri= new Uri(PluginResources.UriMs);
+		private readonly Uri _googleProviderUri = new Uri(PluginResources.UriGt);
 		private TranslationOption _selectedTranslationOption;
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private bool _isMicrosoftSelected;
@@ -26,17 +32,34 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private bool _isV2Checked;
 		private bool _persistGoogleKey;
 		private bool _persistMicrosoftKey;
+		private bool _isTellMeAction;
 		private string _catId;
 		private string _apiKey;
 		private string _clientId;
 		private string _jsonFilePath;
 		private string _projectName;
 
-		public ProviderControlViewModel(IMtTranslationOptions options)
+		public ProviderControlViewModel(IMtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
 		{
 			ViewModel = this;
 			_options = options;
+			_credentialStore = credentialStore;
+			_correspondingLanguages = correspondingLanguages ?? new List<LanguagePair>();
 
+			InitializeComponent();
+		}
+
+		////TODO: If is tell me action hide back button(first page) we need to show only the settings page
+		//public ProviderControlViewModel(IMtTranslationOptions options,bool isTellMeAction)
+		//{
+		//	_options = options;
+		//	_isTellMeAction = isTellMeAction;
+		//	InitializeComponent();
+			
+		//}
+
+		private void InitializeComponent()
+		{
 			TranslationOptions = new List<TranslationOption>
 			{
 				new TranslationOption
@@ -51,8 +74,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				}
 			};
 
-			SetTranslationOption();
-
 			GoogleApiVersions = new List<GoogleApiVersion>
 			{
 				new GoogleApiVersion
@@ -66,6 +87,21 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					Version = Enums.GoogleApiVersion.V3
 				}
 			};
+
+			if (_options != null)
+			{
+				ClientId = _options.ClientId;
+				PersistMicrosoftKey = _options.PersistMicrosoftCreds;
+				UseCatId = _options.UseCatID;
+				CatId = _options.CatId;
+
+				ApiKey = _options.ApiKey;
+				PersistGoogleKey = _options.PersistGoogleKey;
+				JsonFilePath = _options.JsonFilePath;
+				ProjectName = _options.ProjectName;
+			}
+
+			SetTranslationOption();
 
 			SetGoogleApiVersion();
 		}
@@ -201,6 +237,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_persistMicrosoftKey == value) return;
 				_persistMicrosoftKey = value;
 				OnPropertyChanged(nameof(PersistMicrosoftKey));
+			}
+		}
+
+		public bool IsTellMeAction
+		{
+			get => _isTellMeAction;
+			set
+			{
+				if (_isTellMeAction == value) return;
+				_isTellMeAction = value;
+				OnPropertyChanged(nameof(IsTellMeAction));
 			}
 		}
 

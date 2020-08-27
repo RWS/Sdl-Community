@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
@@ -36,18 +37,12 @@ namespace Sdl.Community.MtEnhancedProvider
 
     public class MtTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-		private readonly Constants _constants = new Constants();
-		private Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Show the plug-in settings form when the user is adding the translation provider plug-in
 		/// through the GUI of SDL Trados Studio
 		/// </summary>
-		/// <param name="owner"></param>
-		/// <param name="languagePairs"></param>
-		/// <param name="credentialStore"></param>
-		/// <returns></returns>
-
 		private TranslationProviderCredential GetMyCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
         {
 			var myUri = new Uri(uri);
@@ -63,9 +58,10 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
         private void SetMstCredentials(ITranslationProviderCredentialStore credentialStore, GenericCredentials creds, bool persistCred)
-        { //used to set credentials
+        { 
+			//used to set credentials
             // we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
-            var myUri = new Uri("mtenhancedprovidermst:///");
+            var myUri = new Uri(PluginResources.UriMs);
 
             var cred = new TranslationProviderCredential(creds.ToCredentialString(), persistCred);
             credentialStore.RemoveCredential(myUri);
@@ -73,111 +69,128 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
         private void SetGoogleCredentials(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
-        { //used to set credentials
+        { 
+			//used to set credentials
             // we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
-            var myUri = new Uri("mtenhancedprovidergt:///");
+            var myUri = new Uri(PluginResources.UriGt);
             var cred = new TranslationProviderCredential(apiKey, persistKey);
             credentialStore.RemoveCredential(myUri);
             credentialStore.AddCredential(myUri, cred);
         }
 
-        public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-        {
-            //construct options to send to form
-            var loadOptions = new MtTranslationOptions();
-            //get saved key if there is one and put it into options
-            //get google credentials
-            var getCredGt = GetMyCredentials(credentialStore, "mtenhancedprovidergt:///");
-            if (getCredGt != null)
-            {
-                loadOptions.ApiKey = getCredGt.Credential;
-                loadOptions.PersistGoogleKey = getCredGt.Persist;
-            }
-            
-            //get microsoft credentials
-            var getCredMt = GetMyCredentials(credentialStore, "mtenhancedprovidermst:///");
-            if (getCredMt != null)
-            {
-                try
-                {
-                    var creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
-                    loadOptions.ClientId = creds.UserName;
-                    loadOptions.PersistMicrosoftCreds = getCredMt.Persist;
-                }
-                catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program
-				{
-					_logger.Error($"{_constants.Browse} {ex.Message}\n { ex.StackTrace}");
-				} 
-			}
+	    public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs,
+		    ITranslationProviderCredentialStore credentialStore)
+	    {
+		    //construct options to send to form
+		    var loadOptions = new MtTranslationOptions();
 
-			var apiConnecter = new ApiConnecter(loadOptions);
-			var allSupportedLanguages = ApiConnecter.SupportedLangs;
-			var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
+		    //get saved key if there is one and put it into options
+		    //get google credentials
+		    var getCredGt = GetMyCredentials(credentialStore, PluginResources.UriGt);
+		    if (getCredGt != null)
+		    {
+			    loadOptions.ApiKey = getCredGt.Credential;
+			    loadOptions.PersistGoogleKey = getCredGt.Persist;
+		    }
 
-			//WPF LOGIC
-	        var dialogService = new OpenFileDialogService();
-			var providerControlVm = new ProviderControlViewModel(loadOptions);
+		    //get microsoft credentials
+		    var getCredMt = GetMyCredentials(credentialStore, PluginResources.UriMs);
+		    if (getCredMt != null)
+		    {
+			    try
+			    {
+				    var creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
+				    loadOptions.ClientId = creds.UserName;
+				    loadOptions.PersistMicrosoftCreds = getCredMt.Persist;
+			    }
+			    catch (Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program
+			    {
+				    _logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+			    }
+		    }
 
-			var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService);
+			//Because Microsoft translator is selected by default this call gets called
+			//TODO: Remove this part, this only causes the ui to be slow. Load the languages only when user clicks on ok
+		    var apiConnecter = new ApiConnecter(loadOptions);
+		    var allSupportedLanguages = ApiConnecter.SupportedLangs;
+		    var correspondingLanguages = languagePairs
+			    .Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
 
-			var mainWindow = new MainWindow
-			{
-				DataContext = new MainWindowViewModel(providerControlVm, settingsControlVm)
-			};
+		    //WPF LOGIC
+		    var dialogService = new OpenFileDialogService();
+		    var providerControlVm = new ProviderControlViewModel(loadOptions, credentialStore, correspondingLanguages);
 
-			if (mainWindow.ShowDialog().Value == true)
-			{
-				return null;
-			}
+		    var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService);
+		    var mainWindowVm = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm);
+
+		    var mainWindow = new MainWindow
+		    {
+			    DataContext = mainWindowVm
+		    };
+
+		    mainWindow.ShowDialog();
+		    if (!mainWindowVm.DialogResult) return null;
+
+		    var options = mainWindowVm.Options;
+
+		    var provider = new MtTranslationProvider(options);
+
+		    if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+		    {
+			    SetGoogleCredentials(credentialStore, options.ApiKey, options.PersistGoogleKey);
+		    }
+
+		    if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+		    {
+			    //set mst cred
+			    var microsoftCredentials = new GenericCredentials(options.ClientId,string.Empty);
+			    SetMstCredentials(credentialStore, microsoftCredentials, options.PersistMicrosoftCreds);
+		    }
+		    return new ITranslationProvider[] {provider};
 
 
-			////construct form
-			//var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
-			////we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
-			//if (dialog.ShowDialog(owner) == DialogResult.OK)
-			//{
-			//	var testProvider = new MtTranslationProvider(dialog.Options);
-			//	var apiKey = dialog.Options.ApiKey;
 
-			//	//we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
-			//	if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-			//	{
-			//		//set google credential
-			//		SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
-			//	}
-			//	else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-			//	{
-			//		//set mst cred
-			//		var creds2 = new GenericCredentials(dialog.Options.ClientId);
-			//		SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
-			//	}
+		    ////construct form
+		    //var dialog = new MtProviderConfDialog(loadOptions, credentialStore, correspondingLanguages);
+		    ////we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
+		    //if (dialog.ShowDialog(owner) == DialogResult.OK)
+		    //{
+		    //	var testProvider = new MtTranslationProvider(dialog.Options);
+		    //	var apiKey = dialog.Options.ApiKey;
 
-			//	return new ITranslationProvider[] { testProvider };
-			//}
-			return null;
-        }
+		    //	//we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
+		    //	if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+		    //	{
+		    //		//set google credential
+		    //		SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
+		    //	}
+		    //	else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+		    //	{
+		    //		//set mst cred
+		    //		var creds2 = new GenericCredentials(dialog.Options.ClientId);
+		    //		SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
+		    //	}
 
-        /// <summary>
+		    //	return new ITranslationProvider[] { testProvider };
+		    //}
+		    //return null;
+	    }
+
+	    /// <summary>
         /// Determines whether the plug-in settings can be changed
         /// by displaying the Settings button in SDL Trados Studio.
         /// </summary>
 
         public bool SupportsEditing => true;
 
-	    /// <summary>
-        /// If the plug-in settings can be changed by the user,
-        /// SDL Trados Studio will display a Settings button.
-        /// By clicking this button, users raise the plug-in user interface,
-        /// in which they can modify any applicable settings, in our implementation
-        /// the delimiter character and the list file name.
-        /// </summary>
-        /// <param name="owner"></param>
-        /// <param name="translationProvider"></param>
-        /// <param name="languagePairs"></param>
-        /// <param name="credentialStore"></param>
-        /// <returns></returns>
-
-        public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		/// <summary>
+		/// If the plug-in settings can be changed by the user,
+		/// SDL Trados Studio will display a Settings button.
+		/// By clicking this button, users raise the plug-in user interface,
+		/// in which they can modify any applicable settings, in our implementation
+		/// the delimiter character and the list file name.
+		/// </summary>
+		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             var editProvider = translationProvider as MtTranslationProvider;
             if (editProvider == null)
@@ -187,7 +200,8 @@ namespace Sdl.Community.MtEnhancedProvider
 
             //get saved key if there is one and put it into options
             //get google credentials
-            var getCredGt = GetMyCredentials(credentialStore, "mtenhancedprovidergt:///");
+			//TODO: Refactor this part and move in a new method
+            var getCredGt = GetMyCredentials(credentialStore, PluginResources.UriGt);
             if (getCredGt != null)
             {
                 editProvider.Options.ApiKey = getCredGt.Credential;
@@ -195,7 +209,7 @@ namespace Sdl.Community.MtEnhancedProvider
             }
 
             //get microsoft credentials
-            var getCredMt = GetMyCredentials(credentialStore, "mtenhancedprovidermst:///");
+            var getCredMt = GetMyCredentials(credentialStore, PluginResources.UriMs);
             if (getCredMt != null)
             {
                 try
@@ -206,7 +220,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 }
                 catch(Exception ex) //swallow b/c it will just fail to fill in instead of crashing the whole program 
 				{
-					_logger.Error($"{_constants.Edit} {ex.Message}\n { ex.StackTrace}");
+					_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 				}
 			}
 
@@ -214,30 +228,60 @@ namespace Sdl.Community.MtEnhancedProvider
             var allSupportedLanguages = ApiConnecter.SupportedLangs;
             var correspondingLanguages = languagePairs.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0,2))).ToList();
 
-            var dialog = new MtProviderConfDialog(editProvider.Options, credentialStore, correspondingLanguages);
-            //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
-            if (dialog.ShowDialog(owner) == DialogResult.OK)
-            {
-                editProvider.Options = dialog.Options;
+			//WPF logic
+	        var dialogService = new OpenFileDialogService();
+	        var providerControlVm = new ProviderControlViewModel(editProvider.Options, credentialStore, correspondingLanguages);
 
-                var apiKey = editProvider.Options.ApiKey;
+	        var settingsControlVm = new SettingsControlViewModel(editProvider.Options, dialogService);
+	        var mainWindowVm = new MainWindowViewModel(editProvider.Options, providerControlVm, settingsControlVm);
+
+	        var mainWindow = new MainWindow
+	        {
+		        DataContext = mainWindowVm
+	        };
+
+	        mainWindow.ShowDialog();
+	        if (!mainWindowVm.DialogResult) return false;
+
+	        editProvider.Options = mainWindowVm.Options;
+
+	        if (editProvider.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+	        {
+		        SetGoogleCredentials(credentialStore, editProvider.Options.ApiKey, editProvider.Options.PersistGoogleKey);
+	        }
+
+	        if (editProvider.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+	        {
+		        //set mst cred
+		        var microsoftCredentials = new GenericCredentials(editProvider.Options.ClientId,string.Empty);
+		        SetMstCredentials(credentialStore, microsoftCredentials, editProvider.Options.PersistMicrosoftCreds);
+	        }
+	        return true;
+
+			//var dialog = new MtProviderConfDialog(editProvider.Options, credentialStore, correspondingLanguages);
+   //         //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
+   //         if (dialog.ShowDialog(owner) == DialogResult.OK)
+   //         {
+   //             editProvider.Options = dialog.Options;
+
+   //             var apiKey = editProvider.Options.ApiKey;
                 
-                //we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
-                if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-                {
-                    //set google credential
-                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
-                }
-                else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-                {
-                    //set mst cred
-                    var credentials = new GenericCredentials(dialog.Options.ClientId);
-                    SetMstCredentials(credentialStore, credentials, dialog.Options.PersistMicrosoftCreds);
-                }
-                return true;
-            }
+   //             //we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
+   //             if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+   //             {
+   //                 //set google credential
+   //                 SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
+   //             }
+   //             else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+   //             {
+   //                 //set mst cred
+   //                 var credentials = new GenericCredentials(dialog.Options.ClientId);
+   //                 SetMstCredentials(credentialStore, credentials, dialog.Options.PersistMicrosoftCreds);
+   //             }
+   //             return true;
+   //         }
 
-            return false;
+         //   return false;
         }
 
         /// <summary>
@@ -246,52 +290,15 @@ namespace Sdl.Community.MtEnhancedProvider
         /// any new options set in the form that comes up are never saved to the project XML...
         /// so there is no way to change any options, only to provide the credentials
         /// </summary>
-        /// <param name="owner"></param>
-        /// <param name="translationProviderUri"></param>
-        /// <param name="translationProviderState"></param>
-        /// <param name="credentialStore"></param>
-        /// <returns></returns>
-
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            var options = new MtTranslationOptions(translationProviderUri);
-            var caption = "Credentials"; //default in case any problem retrieving localized resource below
-            if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-                caption = PluginResources.PromptForCredentialsCaption_Google;
-            else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-                caption = PluginResources.PromptForCredentialsCaption_Microsoft;
-            
-            var dialog = new MtProviderConfDialog(options, caption, credentialStore);
-            dialog.DisableForCredentialsOnly(); //only show controls for setting credentials, as that is the only thing that will end up getting saved
-
-            if (dialog.ShowDialog(owner) == DialogResult.OK)
-            {
-                var apiKey = dialog.Options.ApiKey;
-
-                if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-                {
-                    //set google credential
-                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
-                }
-                else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-                {
-                    //set mst cred
-                    var creds2 = new GenericCredentials(dialog.Options.ClientId);
-                    SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
-                }
-                return true;
-            }
-            return false;
-        }
+			throw new NotImplementedException();
+		}
 
         /// <summary>
         /// Used for displaying the plug-in info such as the plug-in name,
         /// tooltip, and icon.
         /// </summary>
-        /// <param name="translationProviderUri"></param>
-        /// <param name="translationProviderState"></param>
-        /// <returns></returns>
-
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
 
@@ -325,7 +332,7 @@ namespace Sdl.Community.MtEnhancedProvider
             {
                 throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
             }
-            return String.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
+            return string.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
         }
 
         public string TypeDescription => PluginResources.Plugin_Description;

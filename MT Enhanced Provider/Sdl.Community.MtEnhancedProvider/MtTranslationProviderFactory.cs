@@ -40,7 +40,7 @@ namespace Sdl.Community.MtEnhancedProvider
             //start with MT...check if we are using MT
             if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
             {
-                var myUri = new Uri("mtenhancedprovidermst:///");
+                var myUri = new Uri(PluginResources.UriMs);
                 if (credentialStore.GetCredential(myUri) != null)
                 {
                     var credPersists = credentialStore.GetCredential(myUri).Persist;
@@ -59,7 +59,7 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             else //if we are using Google as the provider need to get API key
             {
-                var myUri = new Uri("mtenhancedprovidergt:///");
+                var myUri = new Uri(PluginResources.UriGt);
                 if (credentialStore.GetCredential(myUri) != null)
                 {
                     var credPersists = credentialStore.GetCredential(myUri).Persist;

@@ -102,7 +102,8 @@ namespace Sdl.Community.MtEnhancedProvider
             get => GetStringParameter("prelookupfilename");
 	        set => SetStringParameter("prelookupfilename", value);
         }
-        [JsonIgnore]
+
+		[JsonIgnore]
         public string PostLookupFilename
         {
             get => GetStringParameter("postlookupfilename");
@@ -205,7 +206,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		[JsonIgnore]
-		//User for Microsoft authentication
+		//User for Google authentication
 		//The apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
 		public string ApiKey 
 		{
@@ -214,7 +215,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		[JsonIgnore] 
-		//User for Google authentication
+		//User for Microsoft authentication
         public string ClientId 
 		{
 			get => _clientid;

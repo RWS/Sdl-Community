@@ -13,6 +13,7 @@ using NLog;
 using RestSharp;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
@@ -34,7 +35,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
 		/// <param name="options"></param>
-		internal ApiConnecter(MtTranslationOptions options)
+		internal ApiConnecter(IMtTranslationOptions options)
 		{
 			_subscriptionKey = options.ClientId;
 			if (_authToken == null)

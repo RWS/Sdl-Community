@@ -312,6 +312,12 @@
   <data name="SendPlainDescription" xml:space="preserve">
     <value>Send plain text only (not tags)</value>
   </data>
+  <data name="UriGt" xml:space="preserve">
+    <value>mtenhancedprovidergt:///</value>
+  </data>
+  <data name="UriMs" xml:space="preserve">
+    <value>mtenhancedprovidermst:///</value>
+  </data>
   <data name="V3JsonPathDescription" xml:space="preserve">
     <value>Enter the local path to the json file associated with your API key:</value>
   </data>

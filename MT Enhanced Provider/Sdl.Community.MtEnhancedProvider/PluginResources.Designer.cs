@@ -610,6 +610,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to mtenhancedprovidergt:///.
+        /// </summary>
+        public static string UriGt {
+            get {
+                return ResourceManager.GetString("UriGt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to mtenhancedprovidermst:///.
+        /// </summary>
+        public static string UriMs {
+            get {
+                return ResourceManager.GetString("UriMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Translation provider URI not supported..
         /// </summary>
         public static string UriNotSupportedMessage {

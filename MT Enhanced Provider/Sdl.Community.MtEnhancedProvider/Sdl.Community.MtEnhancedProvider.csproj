@@ -219,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
+    <Compile Include="Behaviours\CloseOnClickBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
