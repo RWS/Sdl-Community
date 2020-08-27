@@ -43,7 +43,7 @@
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.9.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform">
       <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2019.1.9.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
