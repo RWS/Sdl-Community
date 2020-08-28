@@ -14,7 +14,6 @@ using System.Xml.Xsl;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.Reports.Viewer.API.Model;

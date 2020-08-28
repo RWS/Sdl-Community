@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,7 +14,6 @@ using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Community.Reports.Viewer.View;
-using Sdl.Core.Globalization;
 using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using DataFormats = System.Windows.DataFormats;
