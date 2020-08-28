@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,11 +25,8 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		public static List<string> SupportedLangs { get; set; }
 		private string _subscriptionKey;
 		private const string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
-
 		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-		private readonly Constants _constants = new Constants();
-
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
@@ -61,12 +59,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <summary>
 		/// translates the text input
 		/// </summary>
-		/// <param name="sourceLang"></param>
-		/// <param name="targetLang"></param>
-		/// <param name="textToTranslate"></param>
-		/// <param name="categoryId"></param>
-		/// <param name="format"></param>
-		/// <returns></returns>
 		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
 		{
 			//convert our language codes
@@ -129,7 +121,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				_logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return translatedText;
@@ -189,9 +181,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <summary>
 		/// Checks of lang pair is supported by MS
 		/// </summary>
-		/// <param name="sourceLang"></param>
-		/// <param name="targetLang"></param>
-		/// <returns></returns>
 		internal bool IsSupportedLangPair(string sourceLang, string targetLang)
 		{
 			//convert our language codes
@@ -243,7 +232,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				_logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return languageCodeList;
@@ -251,8 +240,8 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		private string ProcessWebException(WebException e, string message)
 		{
-			Console.WriteLine("{0}: {1}", message, e);
-
+			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
+			
 			// Obtain detailed error information
 			string strResponse;
 			using (var response = (HttpWebResponse)e.Response)
@@ -282,7 +271,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			if (task.IsFaulted)
 			{
-				throw task.Exception;
+				//throw task.Exception;
 			}
 			if (task.IsCanceled)
 			{

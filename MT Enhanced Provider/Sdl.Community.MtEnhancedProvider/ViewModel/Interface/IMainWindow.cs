@@ -14,5 +14,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		ICommand SaveCommand { get; set; }
 		IMtTranslationOptions Options { get; set; }
 		bool DialogResult { get; set; }
+		string ErrorMessage { get; set; }
+		void AddEncriptionMetaToResponse(string response);
+		bool IsWindowValid();
 	}
 }

@@ -48,7 +48,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
                     cred = credentialStore.GetCredential(myUri); //if credential is there then just get it
 
-                    var cred2 = new GenericCredentials(cred.Credential);//convert to generic credentials
+                    var cred2 = new GenericCredentials(cred.Credential,string.Empty);//convert to generic credentials
                     //add creds to options
                     loadOptions.ClientId = cred2.UserName;
                 }

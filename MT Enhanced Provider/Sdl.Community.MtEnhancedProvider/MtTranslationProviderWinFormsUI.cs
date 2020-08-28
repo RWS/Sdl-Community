@@ -128,7 +128,10 @@ namespace Sdl.Community.MtEnhancedProvider
 			    DataContext = mainWindowVm
 		    };
 
+		    mainWindowVm.CloseEventRaised += () => mainWindow.Close();
+
 		    mainWindow.ShowDialog();
+
 		    if (!mainWindowVm.DialogResult) return null;
 
 		    var options = mainWindowVm.Options;
@@ -234,13 +237,13 @@ namespace Sdl.Community.MtEnhancedProvider
 
 	        var settingsControlVm = new SettingsControlViewModel(editProvider.Options, dialogService);
 	        var mainWindowVm = new MainWindowViewModel(editProvider.Options, providerControlVm, settingsControlVm);
-
 	        var mainWindow = new MainWindow
 	        {
 		        DataContext = mainWindowVm
 	        };
+	        mainWindowVm.CloseEventRaised += () => mainWindow.Close();
 
-	        mainWindow.ShowDialog();
+			mainWindow.ShowDialog();
 	        if (!mainWindowVm.DialogResult) return false;
 
 	        editProvider.Options = mainWindowVm.Options;

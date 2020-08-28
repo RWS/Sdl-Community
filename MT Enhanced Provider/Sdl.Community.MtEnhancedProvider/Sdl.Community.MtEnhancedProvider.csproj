@@ -219,9 +219,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
-    <Compile Include="Behaviours\CloseOnClickBehaviour.cs" />
+    <Compile Include="Behaviours\WebBrowserContentSource.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\EmptyToVisibility.cs" />
     <Compile Include="Converters\InvertableBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Converters\InvertableStringEmptyToBoolConverter.cs" />

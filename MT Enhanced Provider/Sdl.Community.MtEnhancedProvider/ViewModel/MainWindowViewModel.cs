@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.MtEnhancedProvider.Annotations;
 using Sdl.Community.MtEnhancedProvider.Commands;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
@@ -14,8 +18,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 	{
 		private ViewDetails _selectedView;
 		private bool _dialogResult;
+		private string _errorMessage;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
+
+		public delegate void CloseWindowEventRaiser();
+		public event CloseWindowEventRaiser CloseEventRaised;
 
 		public MainWindowViewModel(IMtTranslationOptions options,IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel)
 		{
@@ -23,7 +31,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			_providerControlViewModel = providerControlViewModel;
 			_settingsControlViewModel = settingsControlViewModel;
 
-			SaveCommand = new CommandHandler(Save,true);
+			SaveCommand = new RelayCommand(Save);
 			ShowSettingsViewCommand =  new CommandHandler(ShowSettingsPage, true);
 			ShowMainViewCommand = new CommandHandler(ShowProvidersPage,true);
 
@@ -53,6 +61,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			set
 			{
 				_selectedView = value;
+				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(SelectedView));
 			}
 		}
@@ -73,6 +82,115 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				OnPropertyChanged(nameof(DialogResult));
 			}
 		}
+		
+		public string ErrorMessage
+		{
+			get => _errorMessage;
+			set
+			{
+				if (_errorMessage == value) return;
+				_errorMessage = value;
+				OnPropertyChanged(nameof(ErrorMessage));
+			}
+		}
+
+		public void AddEncriptionMetaToResponse(string errorMessage)
+		{
+			var htmlStart = "<html> \n <meta http-equiv=\'Content-Type\' content=\'text/html;charset=UTF-8\'>\n <body style=\"font-family:Segoe Ui!important;color:red!important;font-size:13px!important\">\n";
+
+			ErrorMessage = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
+		}
+
+		public bool IsWindowValid()
+		{
+			ErrorMessage = string.Empty;
+
+			switch (_providerControlViewModel.SelectedTranslationOption.ProviderType)
+			{
+				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
+					if (!ValidMicrosoftOptions()) return false;
+					break;
+				case MtTranslationOptions.ProviderType.GoogleTranslate:
+					if (!ValidGoogleOptions()) return false;
+					break;
+			}
+			if (ValidSettingsPageOptions())
+			{
+				return true;
+			}
+			return  false;
+		}
+
+		private bool ValidGoogleOptions()
+		{
+			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
+			{
+				if (string.IsNullOrEmpty(Options.ApiKey))
+				{
+					AddEncriptionMetaToResponse(PluginResources.ApiKeyError);
+					return false;
+				}
+			}
+			else
+			{
+				if (string.IsNullOrEmpty(Options.JsonFilePath))
+				{
+					AddEncriptionMetaToResponse(PluginResources.EmptyJsonFilePathMsg);
+					return false;
+				}
+				if (!File.Exists(Options.JsonFilePath))
+				{
+					AddEncriptionMetaToResponse(PluginResources.WrongJsonFilePath);
+					return false;
+				}
+				if (string.IsNullOrEmpty(Options.ProjectName))
+				{
+					AddEncriptionMetaToResponse(PluginResources.InvalidProjectName);
+				}
+			}
+			return true;
+		}
+
+		private bool ValidSettingsPageOptions()
+		{
+			if (Options.UsePreEdit)
+			{
+				if (string.IsNullOrEmpty(Options.PreLookupFilename))
+				{
+					AddEncriptionMetaToResponse(PluginResources.PreLookupEmptyMessage);
+					return false;
+				}
+				if (!File.Exists(Options.PreLookupFilename))
+				{
+					AddEncriptionMetaToResponse(PluginResources.PreLookupWrongPathMessage);
+					return false;
+				}
+			}
+			if (!Options.UsePostEdit) return true;
+			if (string.IsNullOrEmpty(Options.PostLookupFilename))
+			{
+				ErrorMessage = PluginResources.PostLookupEmptyMessage;
+				return false;
+			}
+			if (File.Exists(Options.PostLookupFilename)) return true;
+			ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+			return false;
+		}
+
+		private bool ValidMicrosoftOptions()
+		{
+			if (string.IsNullOrEmpty(_providerControlViewModel.ClientId))
+			{
+				AddEncriptionMetaToResponse(PluginResources.ApiKeyError);
+				return false;
+			}
+			if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
+			{
+				AddEncriptionMetaToResponse(PluginResources.CatIdError);
+				return false;
+			}
+			return true;
+		}
 
 		private void ShowSettingsPage()
 		{
@@ -84,18 +202,21 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			SelectedView = AvailableViews[0];
 		}
 
-		private void Save()
+		private void Save(object window)
 		{
-			//TODO: Validate the form
-			SetMicrosoftProviderOptions();
-			SetGoogleProviderOptions();
+			if (IsWindowValid())
+			{
+				SetMicrosoftProviderOptions();
+				SetGoogleProviderOptions();
 
-			SetGeneralProviderOptions();
+				SetGeneralProviderOptions();
 
-			//TODO: Investigate why we have LanguagesSupported, this dictionary it seems to be used
-			//Options.LanguagesSupported = _correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
-			//	lp => Options.SelectedProvider.ToString());
-			DialogResult = true;
+				//TODO: Investigate why we have LanguagesSupported, this dictionary it seems to be used
+				//Options.LanguagesSupported = _correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
+				//	lp => Options.SelectedProvider.ToString());
+				DialogResult = true;
+				CloseEventRaised?.Invoke();
+			}
 		}
 
 		private void SetGeneralProviderOptions()

@@ -88,6 +88,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please add API key..
+        /// </summary>
+        public static string ApiKeyError {
+            get {
+                return ResourceManager.GetString("ApiKeyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Translation Provider.
         /// </summary>
         public static string BackBtnText {
@@ -125,6 +134,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please add Category Id otherwise uncheck CategoryId checbox..
+        /// </summary>
+        public static string CatIdError {
+            get {
+                return ResourceManager.GetString("CatIdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {
@@ -158,6 +176,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string EditSettingsXmlErrorMessage {
             get {
                 return ResourceManager.GetString("EditSettingsXmlErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The local path to json file cannot be empty..
+        /// </summary>
+        public static string EmptyJsonFilePathMsg {
+            get {
+                return ResourceManager.GetString("EmptyJsonFilePathMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project name cannot be empty..
+        /// </summary>
+        public static string EmptyProjectNameMsd {
+            get {
+                return ResourceManager.GetString("EmptyProjectNameMsd", resourceCulture);
             }
         }
         
@@ -222,6 +258,33 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string GoogleApiDescription {
             get {
                 return ResourceManager.GetString("GoogleApiDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOOGLE_APPLICATION_CREDENTIALS.
+        /// </summary>
+        public static string GoogleApiEnvironmentVariableName {
+            get {
+                return ResourceManager.GetString("GoogleApiEnvironmentVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Response.
+        /// </summary>
+        public static string GoogleResponseDescription {
+            get {
+                return ResourceManager.GetString("GoogleResponseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid project name..
+        /// </summary>
+        public static string InvalidProjectName {
+            get {
+                return ResourceManager.GetString("InvalidProjectName", resourceCulture);
             }
         }
         
@@ -454,6 +517,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Post-lookup filepath cannot be empty. Please add a valid path otherwise uncheck &quot;Do post-lookup checkbox&quot;..
+        /// </summary>
+        public static string PostLookupEmptyMessage {
+            get {
+                return ResourceManager.GetString("PostLookupEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do post-lookup find/replace filename:.
         /// </summary>
         public static string PostLookupFileName {
@@ -468,6 +540,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string PostLookupWaterMark {
             get {
                 return ResourceManager.GetString("PostLookupWaterMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post-lookup file could not be found at the specified path..
+        /// </summary>
+        public static string PostLookupWrongPathMessage {
+            get {
+                return ResourceManager.GetString("PostLookupWrongPathMessage", resourceCulture);
             }
         }
         
@@ -499,11 +580,29 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pre-lookup filepath cannot be empty. Please add a valid path otherwise uncheck &quot;Do pre-lookup checkbox&quot;..
+        /// </summary>
+        public static string PreLookupEmptyMessage {
+            get {
+                return ResourceManager.GetString("PreLookupEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse or type the location of the pre-lookup file.
         /// </summary>
         public static string PreLookupWaterMark {
             get {
                 return ResourceManager.GetString("PreLookupWaterMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre-lookup file could not be found at the specified path..
+        /// </summary>
+        public static string PreLookupWrongPathMessage {
+            get {
+                return ResourceManager.GetString("PreLookupWrongPathMessage", resourceCulture);
             }
         }
         
@@ -669,6 +768,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string WindowsControl_Close {
             get {
                 return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Json file could not be found at the specified path..
+        /// </summary>
+        public static string WrongJsonFilePath {
+            get {
+                return ResourceManager.GetString("WrongJsonFilePath", resourceCulture);
             }
         }
     }

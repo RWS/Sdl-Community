@@ -10,7 +10,8 @@
 		WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         xmlns:behaviours ="clr-namespace:Sdl.Community.MtEnhancedProvider.Behaviours"
-		Icon="../Resources/my_icon.ico"
+		xmlns:converters ="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
+        Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
 		Title="MT Enhanced" Height="450" Width="800"
         d:DesignHeight="450" d:DesignWidth="800">
@@ -21,7 +22,7 @@
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			
+			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter"/>
 			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
 				<ui:ProviderControl />
 			</DataTemplate>
@@ -34,25 +35,24 @@
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}">
 		<Grid Margin="1,0,0,0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
-				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/> <!--used to show validation and api response-->
-				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="auto"/>
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
-			<styles:WindowsControl  Grid.Column="0" Grid.Row="0" Background="White" />
+			<styles:WindowsControl Grid.Row="0" Background="White" />
 			
-			<DockPanel Grid.Column="0" Grid.Row="1" Margin="10,10,10,0">
+			<StackPanel Grid.Row="1" Margin="10,10,10,0">
 				<ContentControl Content="{Binding SelectedView.ViewModel}"/>
-			</DockPanel>
+				<WebBrowser Height="70"
+					behaviours:WebBrowserContentSource.Html ="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}" />
+			</StackPanel>
+
 			<Button
 				Style="{StaticResource Sdl.Button.PrimaryStyle}"
-				Command="{Binding SaveCommand}"
-				behaviours:CloseOnClickBehaviour.IsEnabled="True"
+				Command="{Binding SaveCommand}" 
 				Cursor="Hand"
 				Grid.Row="3"
 				IsDefault="True"
