@@ -186,7 +186,7 @@
 				                         ItemsSource="{Binding LanguageItems}"            
 				                         SelectedItems="{Binding SelectedLanguageItems}"
 				                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedLanguagesChangedCommand}"
-				                         EnableGrouping="False"
+				                         EnableGrouping="True"
 				                         EnableFiltering="True"
 				                         IsEditable="True"
 				                         EnableAutoComplete="True"

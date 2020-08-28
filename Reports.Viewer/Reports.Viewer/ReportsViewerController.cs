@@ -165,7 +165,7 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			_reportsNavigationViewModel.DeleteReorts(GetReports(result.Reports.Select(a => a.Id)));
+			_reportsNavigationViewModel.DeleteReports(GetReports(result.Reports.Select(a => a.Id)));
 		}
 
 		internal void RefreshView(bool force)
@@ -295,6 +295,10 @@ namespace Sdl.Community.Reports.Viewer
 			foreach (var reportId in reportIds)
 			{
 				var report = _reportsNavigationViewModel.Reports.FirstOrDefault(a => a.Id == reportId);
+				if (report == null)
+				{
+					continue;
+				}
 				reports.Add(report);
 			}
 
@@ -310,7 +314,7 @@ namespace Sdl.Community.Reports.Viewer
 
 			if (e.ClientId != ClientId && e.Reports != null)
 			{
-				_reportsNavigationViewModel.DeleteReorts(GetReports(e.Reports.Select(a => a.Id)));
+				_reportsNavigationViewModel.DeleteReports(GetReports(e.Reports.Select(a => a.Id)));
 			}
 		}
 
@@ -382,7 +386,7 @@ namespace Sdl.Community.Reports.Viewer
 			{
 				if (_isActive)
 				{
-					DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
+					DisplayReportsRefreshViewMessage(e.AddedReports, e.RemovedReports);
 				}
 				else
 				{
@@ -398,7 +402,7 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			MessageBox.Show("DEBUG INFO: Custom report templates changed!");
+			DisplayReportTemplatesRefreshViewMessage();
 		}
 
 		private void EnableControls(bool isLoading)
@@ -466,13 +470,13 @@ namespace Sdl.Community.Reports.Viewer
 				{
 					if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
 					{
-						DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
+						DisplayReportsRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
 					}
 				});
 			}
 		}
 
-		private void DisplayRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
+		private void DisplayReportsRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
 		{
 			var message = "Studio has applied changes in the Reports view."
 						  + Environment.NewLine + Environment.NewLine
@@ -483,7 +487,19 @@ namespace Sdl.Community.Reports.Viewer
 			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
-				RefreshView(false);
+				RefreshView(true);
+			}
+		}
+
+		private void DisplayReportTemplatesRefreshViewMessage()
+		{
+			var message = "The custom report templates have been updated."
+			              + Environment.NewLine + Environment.NewLine
+			              + "Click on 'Yes' to refresh the view";
+			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (dialogResult == DialogResult.Yes)
+			{
+				RefreshView(true);
 			}
 		}
 	}

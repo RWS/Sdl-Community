@@ -62,19 +62,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			DisplayDateSuffixWithReportName = settings.DisplayDateSuffixWithReportName;
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-
-			var projectInfo = controller.SelectedProject.GetProjectInfo();
-			var targetLanguages = projectInfo.TargetLanguages.ToList();
+			
 			var reportTemplates = new List<ReportTemplate>();
-
 			foreach (var reportTemplate in _controller.GetCustomReportTemplates())
-			{
-				if (!string.IsNullOrEmpty(reportTemplate.Language) && !targetLanguages.Exists(a =>
-					string.Compare(a.CultureInfo.Name, reportTemplate.Language, StringComparison.CurrentCultureIgnoreCase) == 0))
-				{
-					continue;
-				}
-
+			{				
 				if (!string.IsNullOrEmpty(reportTemplate.Path) && File.Exists(reportTemplate.Path))
 				{
 					reportTemplate.IsAvailable = true;

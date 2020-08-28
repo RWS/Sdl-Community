@@ -95,6 +95,7 @@
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
     <Compile Include="CustomEventArgs\ReportSelectionChangedEventArgs.cs" />
     <Compile Include="Model\GroupType.cs" />
+    <Compile Include="Model\LanguageGroup.cs" />
     <Compile Include="Model\LanguageItem.cs" />
     <Compile Include="Model\ProjectSettings\ReportsViewer.cs" />
     <Compile Include="Model\ReportGroup.cs" />

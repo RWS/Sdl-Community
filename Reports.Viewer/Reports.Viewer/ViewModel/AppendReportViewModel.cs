@@ -63,12 +63,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			WindowTitle = IsEditMode ? "Edit Project Report Information" : "Add Project Report";
 
-			var projectInfo = _project.GetProjectInfo();
-
-			var allLanguages = new List<Language> { projectInfo.SourceLanguage };
-			allLanguages.AddRange(projectInfo.TargetLanguages);
-
-			LanguageItems = allLanguages
+			var projectInfo = _project.GetProjectInfo();			
+			LanguageItems = projectInfo.TargetLanguages
 				.Select(language => new LanguageItem
 				{
 					Name = language.DisplayName,
@@ -92,7 +88,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Xslt = reportWithXslt.Xslt;
 			}
 
-			CanEditProperties = !isEditMode;
+			CanEditProperties = !report.IsStudioReport;
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new CommandHandler(SaveChanges));

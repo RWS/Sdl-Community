@@ -103,7 +103,7 @@
 				</Grid>
 			</TabItem>
 
-			<TabItem Header="Templates" AllowDrop="True">
+			<TabItem Header="Custom Templates" AllowDrop="True">
 				<Grid Margin="10">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>

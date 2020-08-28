@@ -123,7 +123,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			ApplyFilter(false);
 		}
 
-		public void DeleteReorts(List<Report> reports)
+		public void DeleteReports(List<Report> reports)
 		{
 			foreach (var report in reports)
 			{

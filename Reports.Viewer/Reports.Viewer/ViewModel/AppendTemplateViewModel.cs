@@ -34,6 +34,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private List<ReportTemplateScope> _templateScopes;
 		private List<ReportTemplateScope> _selectedTemplateScopes;
 		private List<string> _groupNames;
+		private List<LanguageGroup> _languageGroups;
 
 		public AppendTemplateViewModel(ReportTemplate reportTemplate,
 			List<ReportTemplate> reportTemplates, IProject project, ImageService imageService,
@@ -51,19 +52,19 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			IsEditMode = isEditMode;
 
 			var projectInfo = _project.GetProjectInfo();
-			var allLanguages = new List<Language>();
-			allLanguages.AddRange(projectInfo.TargetLanguages);
+			var projectLanguages = projectInfo.TargetLanguages.ToList();
 
-			var languageItems = allLanguages
+			LanguageItems = Language.GetAllLanguages()
 				.Select(language => new LanguageItem
 				{
 					Name = language.DisplayName,
 					CultureInfo = language.CultureInfo,
-					Image = imageService.GetImage(language.CultureInfo.Name)
+					Image = imageService.GetImage(language.CultureInfo.Name),
+					Group = GetLanguageGroup(language, projectLanguages)
 				})
 				.ToList();
 
-			LanguageItems = new List<LanguageItem>(languageItems);
+			//LanguageItems = new List<LanguageItem>(languageItems);
 
 			SelectedLanguageItems = new List<LanguageItem> {
 				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, reportTemplate?.Language, StringComparison.CurrentCultureIgnoreCase)==0) };
@@ -201,8 +202,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-
-
 		public bool IsValid
 		{
 			get
@@ -242,6 +241,37 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 				return true;
 			}
+		}
+
+		public List<LanguageGroup> LanguageGroups
+		{
+			get
+			{
+				return _languageGroups ?? (_languageGroups = new List<LanguageGroup>
+				{
+					new LanguageGroup
+					{
+						Order = 0,
+						Name = "Available Languages"
+					},
+					new LanguageGroup
+					{
+						Order = 1,
+						Name = "All Languages"
+					}
+				});
+			}
+		}
+
+		private LanguageGroup GetLanguageGroup(Language language, List<Language> projectLanguages)
+		{
+			if (projectLanguages.Exists(a =>
+				string.Compare(a.CultureInfo.Name, language.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) == 0))
+			{
+				return LanguageGroups[0];
+			}
+
+			return LanguageGroups[1];
 		}
 
 		private string GetUniqueReportId(ReportTemplate reportTemplate)
