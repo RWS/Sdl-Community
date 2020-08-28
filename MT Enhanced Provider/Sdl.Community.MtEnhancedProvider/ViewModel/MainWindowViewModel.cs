@@ -123,9 +123,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		private bool ValidGoogleOptions()
 		{
-			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
+			if (_providerControlViewModel.SelectedGoogleApiVersion.Version == Enums.GoogleApiVersion.V2)
 			{
-				if (string.IsNullOrEmpty(Options.ApiKey))
+				if (string.IsNullOrEmpty(_providerControlViewModel.ApiKey))
 				{
 					AddEncriptionMetaToResponse(PluginResources.ApiKeyError);
 					return false;
@@ -133,17 +133,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 			else
 			{
-				if (string.IsNullOrEmpty(Options.JsonFilePath))
+				if (string.IsNullOrEmpty(_providerControlViewModel.JsonFilePath))
 				{
 					AddEncriptionMetaToResponse(PluginResources.EmptyJsonFilePathMsg);
 					return false;
 				}
-				if (!File.Exists(Options.JsonFilePath))
+				if (!File.Exists(_providerControlViewModel.JsonFilePath))
 				{
 					AddEncriptionMetaToResponse(PluginResources.WrongJsonFilePath);
 					return false;
 				}
-				if (string.IsNullOrEmpty(Options.ProjectName))
+				if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
 				{
 					AddEncriptionMetaToResponse(PluginResources.InvalidProjectName);
 				}
@@ -153,26 +153,26 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		private bool ValidSettingsPageOptions()
 		{
-			if (Options.UsePreEdit)
+			if (_settingsControlViewModel.DoPreLookup)
 			{
-				if (string.IsNullOrEmpty(Options.PreLookupFilename))
+				if (string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
 				{
 					AddEncriptionMetaToResponse(PluginResources.PreLookupEmptyMessage);
 					return false;
 				}
-				if (!File.Exists(Options.PreLookupFilename))
+				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
 				{
 					AddEncriptionMetaToResponse(PluginResources.PreLookupWrongPathMessage);
 					return false;
 				}
 			}
-			if (!Options.UsePostEdit) return true;
-			if (string.IsNullOrEmpty(Options.PostLookupFilename))
+			if (!_settingsControlViewModel.DoPostLookup) return true;
+			if (string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
 			{
 				ErrorMessage = PluginResources.PostLookupEmptyMessage;
 				return false;
 			}
-			if (File.Exists(Options.PostLookupFilename)) return true;
+			if (File.Exists(_settingsControlViewModel.PostLookupFileName)) return true;
 			ErrorMessage = PluginResources.PostLookupWrongPathMessage;
 			return false;
 		}
