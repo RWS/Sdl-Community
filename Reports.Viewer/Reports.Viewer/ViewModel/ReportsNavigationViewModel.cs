@@ -137,6 +137,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			Settings = settings;
 			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
+			OnPropertyChanged(nameof(GroupType));
+
 			_reports = reports;
 
 			ApplyFilter(true);
