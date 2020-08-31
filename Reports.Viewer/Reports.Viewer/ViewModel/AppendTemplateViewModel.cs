@@ -39,8 +39,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public AppendTemplateViewModel(ReportTemplate reportTemplate,
 			List<ReportTemplate> reportTemplates, IProject project, ImageService imageService,
 			List<string> groupNames, bool isEditMode)
-		{
-			
+		{			
 			_reportTemplate = reportTemplate ?? new ReportTemplate();
 			_reportTemplates = reportTemplates ?? new List<ReportTemplate>();
 			_project = project;
@@ -62,10 +61,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					Image = imageService.GetImage(language.CultureInfo.Name),
 					Group = GetLanguageGroup(language, projectLanguages)
 				})
-				.ToList();
-
-			//LanguageItems = new List<LanguageItem>(languageItems);
-
+				.OrderBy(a => a.Name).ToList();
+			
 			SelectedLanguageItems = new List<LanguageItem> {
 				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, reportTemplate?.Language, StringComparison.CurrentCultureIgnoreCase)==0) };
 
@@ -74,11 +71,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				templateScopes.Add(GetReportTemplateScope(scope));
 			}
+
 			TemplateScopes = new List<ReportTemplateScope>(templateScopes);
 
 			SelectedTemplateScopes = new List<ReportTemplateScope> {
 				TemplateScopes.FirstOrDefault(a=> a.Scope == reportTemplate?.Scope) ?? TemplateScopes.FirstOrDefault()};
-
 
 			WindowTitle = IsEditMode ? "Edit Report Template" : "Add Report Template";
 		}

@@ -38,7 +38,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var reports = _reportsViewerController.GetReports();
 			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
 		
-			var view = new AppendReportWindow();
+			var view = new AppendReportWindow(null);
 			var viewModel = new AppendReportViewModel(view, report, _imageService,
 				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates);
 			view.DataContext = viewModel;

@@ -60,10 +60,10 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			DisplayDateSuffixWithReportName = settings.DisplayDateSuffixWithReportName;
 			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-			
+
 			var reportTemplates = new List<ReportTemplate>();
 			foreach (var reportTemplate in _controller.GetCustomReportTemplates())
-			{				
+			{
 				if (!string.IsNullOrEmpty(reportTemplate.Path) && File.Exists(reportTemplate.Path))
 				{
 					reportTemplate.IsAvailable = true;
@@ -235,13 +235,15 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		}
 
 		private void OpenAppendTemplate(ReportTemplate reportTemplate, bool isEditMode)
-		{			
+		{
 			var viewModel = new AppendTemplateViewModel(reportTemplate,
 				_reportTemplates.ToList(), _controller.SelectedProject, _imageService, _groupNames, isEditMode);
 
-			var window = new AppendTemplateWindow(viewModel);
+			var window = new AppendTemplateWindow(viewModel, _window)
+			{
+				DataContext = viewModel
+			};
 
-			window.DataContext = viewModel;
 
 			var result = window.ShowDialog();
 			if (result != null && (bool)result)
@@ -370,13 +372,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void MouseDoubleClick(object parameter)
 		{
-			//if (SelectedReportTemplate != null)
-			//{
-			//	Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Normal, new System.Action(delegate
-			//	{
-			//		OpenAppendTemplate(SelectedReportTemplate, true);
-			//	}));
-			//}
+			if (SelectedReportTemplate != null)
+			{
+				if (!_window.Dispatcher.CheckAccess())
+				{
+					_window.Dispatcher.Invoke(() => MouseDoubleClick(parameter));
+				}
+				
+				//TODO investigate why the comboboxes are not prepopulated
+				//OpenAppendTemplate(SelectedReportTemplate, true);
+			}
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

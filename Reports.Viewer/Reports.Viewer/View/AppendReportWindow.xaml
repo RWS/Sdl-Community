@@ -153,8 +153,7 @@
 				</Grid.Style>
 			</Grid>
 
-			<Grid Grid.Row="1"	
-			      Visibility="{Binding IsEditMode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}"
+			<Grid Grid.Row="1"				     
 			      IsEnabled="{Binding CanEditXslt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />

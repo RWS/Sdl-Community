@@ -17,12 +17,19 @@ namespace Sdl.Community.Reports.Viewer.View
 		private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
 		private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
-		public AppendReportWindow()
+		public AppendReportWindow(Window parentWindow)
 		{			
 			InitializeComponent();
 
-			var windowInteropHelper = new WindowInteropHelper(this);
-			windowInteropHelper.Owner = ApplicationInstance.GetActiveForm().Handle;
+			if (parentWindow == null)
+			{
+				var windowInteropHelper = new WindowInteropHelper(this);
+				windowInteropHelper.Owner = ApplicationInstance.GetActiveForm().Handle;
+			}
+			else
+			{
+				Owner = parentWindow;
+			}
 
 			SourceInitialized += MainWindow_SourceInitialized;		
 		}

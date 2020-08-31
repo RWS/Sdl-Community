@@ -20,14 +20,21 @@ namespace Sdl.Community.Reports.Viewer.View
 
 		private readonly AppendTemplateViewModel _model;
 
-		public AppendTemplateWindow(AppendTemplateViewModel model)
+		public AppendTemplateWindow(AppendTemplateViewModel model, Window parentWindow)
 		{			
 			InitializeComponent();
 
 			_model = model;
 
-			var windowInteropHelper = new WindowInteropHelper(this);
-			windowInteropHelper.Owner = ApplicationInstance.GetActiveForm().Handle;
+			if (parentWindow == null)
+			{
+				var windowInteropHelper = new WindowInteropHelper(this);
+				windowInteropHelper.Owner = ApplicationInstance.GetActiveForm().Handle;
+			}
+			else
+			{
+				Owner = parentWindow;
+			}
 
 			SourceInitialized += MainWindow_SourceInitialized;
 

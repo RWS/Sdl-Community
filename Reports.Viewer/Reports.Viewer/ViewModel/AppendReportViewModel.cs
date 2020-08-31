@@ -4,20 +4,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Xsl;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.Reports.Viewer.API.Model;
-using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -81,7 +76,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			Group = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path ?? string.Empty;
-			Xslt = string.Empty;
+			Xslt = Report.XsltPath;
 			if (report is ReportWithXslt reportWithXslt)
 			{
 				Xslt = reportWithXslt.Xslt;
@@ -378,59 +373,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			if (IsValid)
 			{
-				if (Path.ToLower().EndsWith(".xml") && !string.IsNullOrEmpty(Xslt) && File.Exists(Xslt))
-				{
-					var htmlPath = Path + ".html";
-					var result = TransformXmlReport(Path, Xslt, htmlPath);
-					if (result)
-					{
-						Path = htmlPath;
-					}
-					else
-					{
-						return;
-					}
-				}
-
 				Report.Name = Name;
 				Report.Group = Group;
 				Report.Description = Description;
 				Report.Path = Path;
+				Report.XsltPath = Xslt;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
 				_window.DialogResult = true;
 				_window?.Close();
 			}
-		}
-
-		private bool TransformXmlReport(string xml, string xslt, string output)
-		{
-			try
-			{
-				var xsltSetting = new XsltSettings
-				{
-					EnableDocumentFunction = true,
-					EnableScript = true
-				};
-
-				var myXPathDoc = new XPathDocument(xml);
-
-				var myXslTrans = new XslCompiledTransform();
-				myXslTrans.Load(xslt, xsltSetting, null);
-
-				var myWriter = new XmlTextWriter(output, Encoding.UTF8);
-
-				myXslTrans.Transform(myXPathDoc, null, myWriter);
-				myWriter.Flush();
-				myWriter.Close();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return false;
-			}
-
-			return true;
 		}
 
 		private void SelectedItemsChanged(object parameter)
