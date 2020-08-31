@@ -209,12 +209,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					{
 						return false;
 					}
-				}
-
-				if (string.IsNullOrEmpty(Group))
-				{
-					return false;
-				}
+				}				
 
 				var language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name;
 				var scope = SelectedTemplateScopes?.FirstOrDefault()?.Scope ?? ReportTemplate.TemplateScope.All;

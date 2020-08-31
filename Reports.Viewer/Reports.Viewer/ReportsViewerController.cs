@@ -422,7 +422,7 @@ namespace Sdl.Community.Reports.Viewer
 				{
 					if (isLoading)
 					{
-						_reportsNavigationViewModel.RefreshView(GetSettings(), new List<Report>());
+						_reportsNavigationViewModel.ClearReports();
 					}
 
 					_reportsNavigationViewModel.IsLoading = isLoading;

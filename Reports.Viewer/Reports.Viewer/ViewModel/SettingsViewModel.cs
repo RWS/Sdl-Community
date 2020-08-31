@@ -239,11 +239,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			var viewModel = new AppendTemplateViewModel(reportTemplate,
 				_reportTemplates.ToList(), _controller.SelectedProject, _imageService, _groupNames, isEditMode);
 
-			var window = new AppendTemplateWindow(viewModel, _window)
-			{
-				DataContext = viewModel
-			};
-
+			var window = new AppendTemplateWindow(viewModel, _window);
 
 			var result = window.ShowDialog();
 			if (result != null && (bool)result)
@@ -380,7 +376,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 				
 				//TODO investigate why the comboboxes are not prepopulated
-				//OpenAppendTemplate(SelectedReportTemplate, true);
+				OpenAppendTemplate(SelectedReportTemplate, true);
 			}
 		}
 

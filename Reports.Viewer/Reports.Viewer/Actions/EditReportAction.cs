@@ -38,11 +38,12 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var reportTemplates = _reportsViewerController.ReportsController.GetCustomReportTemplates();
 			var reports = _reportsViewerController.GetReports();
 			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
-			
-			var view = new AppendReportWindow(null);
-			var viewModel = new AppendReportViewModel(view, report.Clone() as Report, _imageService,
+
+			var viewModel = new AppendReportViewModel(report.Clone() as Report, _imageService,
 				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, true);
-			view.DataContext = viewModel;
+			var view = new AppendReportWindow(viewModel, null);
+			viewModel.Window = view;
+
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
 			{

@@ -155,7 +155,6 @@
 							  HorizontalScrollBarVisibility="Disabled"
 							  CanUserDeleteRows="False">
 							<DataGrid.Columns>
-
 								<DataGridTemplateColumn Header="Group" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 									<DataGridTemplateColumn.CellTemplate>
 										<DataTemplate DataType="model:ReportTemplate">
@@ -165,7 +164,6 @@
 										</DataTemplate>
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>
-
 								<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" 
 								                        SortMemberPath="Name" Width="1.5*" >
 									<DataGridTemplateColumn.CellTemplate>
@@ -208,9 +206,6 @@
 										</DataTemplate>
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>
-
-							
-
 								<DataGridTemplateColumn Header="Scope" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 									<DataGridTemplateColumn.CellTemplate>
 										<DataTemplate DataType="model:ReportTemplate">
@@ -219,8 +214,6 @@
 										</DataTemplate>
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>
-								
-
 								<DataGridTemplateColumn Header="Template File" CanUserSort="True" IsReadOnly="True"
 								                        SortMemberPath="Group" Width="3*">
 									<DataGridTemplateColumn.CellTemplate>
@@ -230,9 +223,27 @@
 										</DataTemplate>
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>
-
 							</DataGrid.Columns>
-							
+							<DataGrid.ContextMenu>
+								<ContextMenu>
+									<MenuItem Header="Edit report properties" 
+										  IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding EditTemplateCommand}"
+										  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+										<MenuItem.Icon>
+											<Image Source="../Resources/Edit.ico"/>
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Remove report from project" 
+										  IsEnabled="{Binding IsReportsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding RemoveTemplateCommand}"
+										  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+										<MenuItem.Icon>
+											<Image Source="../Resources/Delete.ico"/>
+										</MenuItem.Icon>
+									</MenuItem>
+								</ContextMenu>
+							</DataGrid.ContextMenu>
 						</controls:SortAwareDataGrid>
 					</Grid>
 

@@ -97,9 +97,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				if (!_reports.Exists(a => a.Id == report.Id))
 				{
 					_reports.Add(report);
-				}				
+				}
 			}
-		
+
 			ApplyFilter(false);
 		}
 
@@ -114,6 +114,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 
 				report.Path = updatedReport.Path;
+				report.XsltPath = updatedReport.XsltPath;
 				report.Name = updatedReport.Name;
 				report.Description = updatedReport.Description;
 				report.Language = updatedReport.Language;
@@ -131,7 +132,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 
 			ApplyFilter(false);
-		}		
+		}
 
 		public void RefreshView(Settings settings, List<Report> reports)
 		{
@@ -142,6 +143,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			_reports = reports;
 
 			ApplyFilter(true);
+		}
+
+		public void ClearReports()
+		{
+			_previousReportStates = _reportGroups?.Count > 0 ? GetReportStates(_reportGroups) : _previousReportStates;
+			_reports = new List<Report>();
+			_reportGroups?.Clear();
+			OnPropertyChanged(nameof(ReportGroups));
 		}
 
 		public Settings Settings { get; set; }
@@ -372,7 +381,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				return reportGroups;
 			}
 
-			_previousReportStates = GetReportStates(_reportGroups);
+			_previousReportStates = _reportGroups?.Count > 0 ? GetReportStates(_reportGroups) : _previousReportStates;
 
 			var orderedReports = _groupType.Type == "Group"
 				? _filteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
@@ -388,6 +397,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						string.Compare(a.Name, (_groupType.Type == "Group" ? report.Language : report.Group), StringComparison.CurrentCultureIgnoreCase) == 0);
 					if (groupItem != null)
 					{
+						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, report.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+						if (reportState != null)
+						{
+							report.IsSelected = reportState.IsSelected;
+						}
+
 						groupItem.Reports.Add(report);
 						UpdateReportParentState(report, groupItem, reportGroup);
 					}
@@ -409,6 +424,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						reportGroup.GroupItems.Add(groupItem);
 						foreach (var itemReport in groupItem.Reports)
 						{
+							var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+							if (reportState != null)
+							{
+								itemReport.IsSelected = reportState.IsSelected;
+							}
+
 							UpdateReportParentState(itemReport, groupItem, reportGroup);
 						}
 					}
@@ -445,6 +466,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					foreach (var itemReport in groupItem.Reports)
 					{
+						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+						if (reportState != null)
+						{
+							itemReport.IsSelected = reportState.IsSelected;
+						}
+
 						UpdateReportParentState(itemReport, groupItem, reportGroup);
 					}
 				}
@@ -686,14 +713,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void MouseDoubleClick(object parameter)
 		{
-			//if (SelectedReport != null)
-			//{
-			//	ReportsNavigationView.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
-			//	{
-			//		var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
-			//		action.Run();
-			//	}));
-			//}
+			if (SelectedReport != null)
+			{
+				var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+				action.Run();
+			}
 		}
 
 		public void Dispose()

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using Sdl.Community.Reports.Viewer.ViewModel;
 
 namespace Sdl.Community.Reports.Viewer.View
 {	
@@ -17,9 +18,13 @@ namespace Sdl.Community.Reports.Viewer.View
 		private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
 		private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
-		public AppendReportWindow(Window parentWindow)
+		private readonly AppendReportViewModel _model;
+
+		public AppendReportWindow(AppendReportViewModel model, Window parentWindow)
 		{			
 			InitializeComponent();
+
+			_model = model;
 
 			if (parentWindow == null)
 			{
@@ -31,7 +36,15 @@ namespace Sdl.Community.Reports.Viewer.View
 				Owner = parentWindow;
 			}
 
-			SourceInitialized += MainWindow_SourceInitialized;		
+			SourceInitialized += MainWindow_SourceInitialized;
+
+			Loaded += AppendReportWindow_Loaded;
+		}
+
+		private void AppendReportWindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			Loaded -= AppendReportWindow_Loaded;
+			DataContext = _model;
 		}
 
 		private IntPtr _windowHandle;
