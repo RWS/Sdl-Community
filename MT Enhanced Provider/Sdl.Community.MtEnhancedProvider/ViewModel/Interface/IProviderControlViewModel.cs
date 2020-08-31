@@ -4,6 +4,8 @@ using Sdl.Community.MtEnhancedProvider.Model;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 {
+	public delegate void ClearMessageEventRaiser();
+
 	public interface IProviderControlViewModel
 	{
 		ModelBase ViewModel { get; set; }
@@ -24,5 +26,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		string ClientId { get; set; }//Microsoft
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
+		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }

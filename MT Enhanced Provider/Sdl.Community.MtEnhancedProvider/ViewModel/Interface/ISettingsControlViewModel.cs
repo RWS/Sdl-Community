@@ -8,6 +8,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		ModelBase ViewModel { get; set; }
 		ICommand ShowMainWindowCommand { get; set; }
 		ICommand BrowseCommand { get; set; }
+		ICommand ShowSettingsCommand { get; set; }
 		bool ReSendDraft { get; set; }
 		bool SendPlainText { get; set; }
 		bool DoPreLookup { get; set; }

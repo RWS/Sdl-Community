@@ -41,6 +41,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public ModelBase ViewModel { get; set; }
 		public ICommand ShowMainWindowCommand { get; set; }
 		public ICommand BrowseCommand { get; set; }
+		public ICommand ShowSettingsCommand { get; set; }
 
 		public bool ReSendDraft
 		{
@@ -105,6 +106,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_preLookupFileName == value) return;
 				_preLookupFileName = value;
 				ErrorMessage = string.Empty;
+
 				OnPropertyChanged(nameof(PreLookupFileName));
 			}
 		}
@@ -117,6 +119,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_postLookupFileName == value) return;
 				_postLookupFileName = value;
 				ErrorMessage = string.Empty;
+
 				OnPropertyChanged(nameof(PostLookupFileName));
 			}
 		}

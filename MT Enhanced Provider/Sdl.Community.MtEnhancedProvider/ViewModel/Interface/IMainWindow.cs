@@ -15,6 +15,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		IMtTranslationOptions Options { get; set; }
 		bool DialogResult { get; set; }
 		string ErrorMessage { get; set; }
+		string TranslatorErrorResponse { get; set; }
 		void AddEncriptionMetaToResponse(string response);
 		bool IsWindowValid();
 	}

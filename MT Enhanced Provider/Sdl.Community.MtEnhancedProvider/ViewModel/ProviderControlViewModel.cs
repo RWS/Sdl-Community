@@ -38,7 +38,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _clientId;
 		private string _jsonFilePath;
 		private string _projectName;
-
+		
 		public ProviderControlViewModel(IMtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
 		{
 			ViewModel = this;
@@ -111,6 +111,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public List<TranslationOption> TranslationOptions { get; set; }
 		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
+		public event ClearMessageEventRaiser ClearMessageRaised;
+
 		public GoogleApiVersion SelectedGoogleApiVersion
 		{
 			get => _selectedGoogleApiVersion;
@@ -119,6 +121,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				_selectedGoogleApiVersion = value;
 				IsV2Checked = _selectedGoogleApiVersion.Version == Enums.GoogleApiVersion.V2;
 				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -127,9 +130,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			get => _selectedTranslationOption;
 			set
 			{
-				_selectedTranslationOption = value;
+				_selectedTranslationOption = value;;
 				IsMicrosoftSelected = value.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -145,6 +149,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					IsV2Checked = false;
 				}
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -167,6 +172,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_apiKey == value) return;
 				_apiKey = value;
 				OnPropertyChanged(nameof(ApiKey));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -178,6 +184,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_clientId == value) return;
 				_clientId = value;
 				OnPropertyChanged(nameof(ClientId));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -189,6 +196,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_jsonFilePath == value) return;
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -200,8 +208,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_projectName == value) return;
 				_projectName = value;
 				OnPropertyChanged(nameof(ProjectName));
+				ClearMessageRaised?.Invoke();
 			}
 		}
+
 
 		public bool UseCatId
 		{

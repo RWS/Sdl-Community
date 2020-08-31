@@ -19,6 +19,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private ViewDetails _selectedView;
 		private bool _dialogResult;
 		private string _errorMessage;
+		private string _translatorErrorResponse;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 
@@ -36,7 +37,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			ShowMainViewCommand = new CommandHandler(ShowProvidersPage,true);
 
 			providerControlViewModel.ShowSettingsCommand = ShowSettingsViewCommand;
+			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
 			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
+
 
 			AvailableViews = new List<ViewDetails>
 			{
@@ -94,6 +97,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 		}
 
+		public string TranslatorErrorResponse
+		{
+			get => _translatorErrorResponse;
+			set
+			{
+				if (_translatorErrorResponse == value) return;
+				_translatorErrorResponse = value;
+				OnPropertyChanged(nameof(TranslatorErrorResponse));
+			}
+		}
+
 		public void AddEncriptionMetaToResponse(string errorMessage)
 		{
 			var htmlStart = "<html> \n <meta http-equiv=\'Content-Type\' content=\'text/html;charset=UTF-8\'>\n <body style=\"font-family:Segoe Ui!important;color:red!important;font-size:13px!important\">\n";
@@ -127,7 +141,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (string.IsNullOrEmpty(_providerControlViewModel.ApiKey))
 				{
-					AddEncriptionMetaToResponse(PluginResources.ApiKeyError);
+					ErrorMessage = PluginResources.ApiKeyError;
 					return false;
 				}
 			}
@@ -135,17 +149,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (string.IsNullOrEmpty(_providerControlViewModel.JsonFilePath))
 				{
-					AddEncriptionMetaToResponse(PluginResources.EmptyJsonFilePathMsg);
+					ErrorMessage = PluginResources.EmptyJsonFilePathMsg;
 					return false;
 				}
 				if (!File.Exists(_providerControlViewModel.JsonFilePath))
 				{
-					AddEncriptionMetaToResponse(PluginResources.WrongJsonFilePath);
+					ErrorMessage = PluginResources.WrongJsonFilePath;
 					return false;
 				}
 				if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
 				{
-					AddEncriptionMetaToResponse(PluginResources.InvalidProjectName);
+					ErrorMessage = PluginResources.InvalidProjectName;
 				}
 			}
 			return true;
@@ -157,12 +171,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
 				{
-					AddEncriptionMetaToResponse(PluginResources.PreLookupEmptyMessage);
+					ErrorMessage = PluginResources.PreLookupEmptyMessage;
 					return false;
 				}
 				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
 				{
-					AddEncriptionMetaToResponse(PluginResources.PreLookupWrongPathMessage);
+					ErrorMessage = PluginResources.PreLookupWrongPathMessage;
 					return false;
 				}
 			}
@@ -181,12 +195,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			if (string.IsNullOrEmpty(_providerControlViewModel.ClientId))
 			{
-				AddEncriptionMetaToResponse(PluginResources.ApiKeyError);
+				ErrorMessage=PluginResources.ApiKeyError;
 				return false;
 			}
 			if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
 			{
-				AddEncriptionMetaToResponse(PluginResources.CatIdError);
+				ErrorMessage = PluginResources.CatIdError;
 				return false;
 			}
 			return true;
@@ -202,6 +216,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			SelectedView = AvailableViews[0];
 		}
 
+		private void ClearMessageRaised()
+		{
+			ErrorMessage = string.Empty;
+		}
+
 		private void Save(object window)
 		{
 			if (IsWindowValid())
@@ -214,6 +233,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				//TODO: Investigate why we have LanguagesSupported, this dictionary it seems to be used
 				//Options.LanguagesSupported = _correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
 				//	lp => Options.SelectedProvider.ToString());
+
+			//TODO: Check if the credentials are correct against both providers options
+			//if the credentials are not correct display service response in web browser
 				DialogResult = true;
 				CloseEventRaised?.Invoke();
 			}

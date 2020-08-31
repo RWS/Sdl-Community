@@ -13,7 +13,7 @@
 		xmlns:converters ="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
         Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
-		Title="MT Enhanced" Height="450" Width="800"
+		Title="MT Enhanced" Height="500" Width="800"
         d:DesignHeight="450" d:DesignWidth="800">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -21,6 +21,7 @@
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter"/>
 			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
@@ -46,8 +47,16 @@
 			
 			<StackPanel Grid.Row="1" Margin="10,10,10,0">
 				<ContentControl Content="{Binding SelectedView.ViewModel}"/>
-				<WebBrowser Height="70"
-					behaviours:WebBrowserContentSource.Html ="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}" />
+				<TextBlock 
+					Text="{Binding ErrorMessage}"
+					Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
+					Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+					Margin="10 5 0 0"
+					FontSize="12"/>
+				<WebBrowser 
+					Height="70" 
+					behaviours:WebBrowserContentSource.Html ="{Binding TranslatorErrorResponse,UpdateSourceTrigger=PropertyChanged}"
+					Visibility="{Binding TranslatorErrorResponse,Converter={StaticResource EmptyToVisibilityConverter}}"/>
 			</StackPanel>
 
 			<Button
