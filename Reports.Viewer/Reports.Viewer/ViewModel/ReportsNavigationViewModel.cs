@@ -289,12 +289,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				{
 					new GroupType
 					{
-						Name = "Group Name",
+						Name = PluginResources.GroupType_GroupName,
 						Type = "Group"
 					},
 					new GroupType
 					{
-						Name = "Language",
+						Name = PluginResources.GroupType_Language,
 						Type = "Language"
 					},
 				});

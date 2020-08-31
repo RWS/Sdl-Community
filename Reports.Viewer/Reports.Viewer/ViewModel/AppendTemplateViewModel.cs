@@ -77,7 +77,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			SelectedTemplateScopes = new List<ReportTemplateScope> {
 				TemplateScopes.FirstOrDefault(a=> a.Scope == reportTemplate?.Scope) ?? TemplateScopes.FirstOrDefault()};
 
-			WindowTitle = IsEditMode ? "Edit Report Template" : "Add Report Template";
+			WindowTitle = IsEditMode ? PluginResources.WindowTitle_EditReportTemplate : PluginResources.WindowTitle_AddReportTemplate;
 		}
 		
 		public ICommand SelectedLanguagesChangedCommand => _selectedLanguagesChangedCommand ?? (_selectedLanguagesChangedCommand = new CommandHandler(SelectedLanguagesChanged));
@@ -244,12 +244,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					new LanguageGroup
 					{
 						Order = 0,
-						Name = "Available Languages"
+						Name = PluginResources.LanguageGroup_AvailableLanguages
 					},
 					new LanguageGroup
 					{
 						Order = 1,
-						Name = "All Languages"
+						Name = PluginResources.LanguageGroup_AllLanguages
 					}
 				});
 			}
@@ -291,7 +291,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			var openFileDialog = new OpenFileDialog();
 			openFileDialog.Multiselect = false;
-			openFileDialog.Title = "Select the template file";
+			openFileDialog.Title = PluginResources.WindowTitle_SelectTemplateFile;
 			openFileDialog.InitialDirectory = !string.IsNullOrEmpty(Path) ? GetValidFolderPath(Path) : projectInfo.LocalProjectFolder;
 			openFileDialog.Filter = "XSLT files(*.xslt)| *.xslt;*.xsl";
 
@@ -351,13 +351,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			switch (templateScope)
 			{
 				case ReportTemplate.TemplateScope.All:
-					name = "All";
+					name = PluginResources.TemplateScope_All;
 					break;
 				case ReportTemplate.TemplateScope.StudioOnly:
-					name = "Studio Reports only";
+					name = PluginResources.TemplateScope_StudioOnly;
 					break;
 				case ReportTemplate.TemplateScope.NonStudioOnly:
-					name = "Non Studio Reports only";
+					name = PluginResources.TemplateScope_NonStudioOnly;
 					break;
 			}
 

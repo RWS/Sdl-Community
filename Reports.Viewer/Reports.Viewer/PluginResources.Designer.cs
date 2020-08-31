@@ -91,11 +91,92 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Group Name.
+        /// </summary>
+        internal static string GroupType_GroupName {
+            get {
+                return ResourceManager.GetString("GroupType_GroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string GroupType_Language {
+            get {
+                return ResourceManager.GetString("GroupType_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Languages.
         /// </summary>
         internal static string Label_AllLanguages {
             get {
                 return ResourceManager.GetString("Label_AllLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Languages.
+        /// </summary>
+        internal static string LanguageGroup_AllLanguages {
+            get {
+                return ResourceManager.GetString("LanguageGroup_AllLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available Languages.
+        /// </summary>
+        internal static string LanguageGroup_AvailableLanguages {
+            get {
+                return ResourceManager.GetString("LanguageGroup_AvailableLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added Reports: {0}.
+        /// </summary>
+        internal static string Message_AddedReports {
+            get {
+                return ResourceManager.GetString("Message_AddedReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on &apos;Yes&apos; to refresh the view.
+        /// </summary>
+        internal static string Message_ClickYesToRefresh {
+            get {
+                return ResourceManager.GetString("Message_ClickYesToRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The custom report templates have been updated..
+        /// </summary>
+        internal static string Message_CustomReportTemplatesChanged {
+            get {
+                return ResourceManager.GetString("Message_CustomReportTemplatesChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removed Reports: {0}.
+        /// </summary>
+        internal static string Message_RemovedReports {
+            get {
+                return ResourceManager.GetString("Message_RemovedReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio has applied changes in the Reports view..
+        /// </summary>
+        internal static string Message_StudioUpdatedReports {
+            get {
+                return ResourceManager.GetString("Message_StudioUpdatedReports", resourceCulture);
             }
         }
         
@@ -392,6 +473,105 @@ namespace Sdl.Community.Reports.Viewer {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files: {0}, Selected: {1}.
+        /// </summary>
+        internal static string StatusLabel_FileSelected {
+            get {
+                return ResourceManager.GetString("StatusLabel_FileSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reports: {0}, Selected: {1}.
+        /// </summary>
+        internal static string StatusLabel_ReportsSelected {
+            get {
+                return ResourceManager.GetString("StatusLabel_ReportsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        internal static string TemplateScope_All {
+            get {
+                return ResourceManager.GetString("TemplateScope_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non Studio Reports only.
+        /// </summary>
+        internal static string TemplateScope_NonStudioOnly {
+            get {
+                return ResourceManager.GetString("TemplateScope_NonStudioOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio Reports only.
+        /// </summary>
+        internal static string TemplateScope_StudioOnly {
+            get {
+                return ResourceManager.GetString("TemplateScope_StudioOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Project Report.
+        /// </summary>
+        internal static string WindowTitle_AddProjectReport {
+            get {
+                return ResourceManager.GetString("WindowTitle_AddProjectReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Report Template.
+        /// </summary>
+        internal static string WindowTitle_AddReportTemplate {
+            get {
+                return ResourceManager.GetString("WindowTitle_AddReportTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Project Report.
+        /// </summary>
+        internal static string WindowTitle_EditProjectReport {
+            get {
+                return ResourceManager.GetString("WindowTitle_EditProjectReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Report Template.
+        /// </summary>
+        internal static string WindowTitle_EditReportTemplate {
+            get {
+                return ResourceManager.GetString("WindowTitle_EditReportTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the {0} file.
+        /// </summary>
+        internal static string WindowTitle_SelectReportFile {
+            get {
+                return ResourceManager.GetString("WindowTitle_SelectReportFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the template file.
+        /// </summary>
+        internal static string WindowTitle_SelectTemplateFile {
+            get {
+                return ResourceManager.GetString("WindowTitle_SelectTemplateFile", resourceCulture);
             }
         }
     }

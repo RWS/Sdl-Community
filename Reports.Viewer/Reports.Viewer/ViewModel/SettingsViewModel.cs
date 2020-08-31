@@ -137,12 +137,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				{
 					new GroupType
 					{
-						Name = "Group Name",
+						Name = PluginResources.GroupType_GroupName,
 						Type = "Group"
 					},
 					new GroupType
 					{
-						Name = "Language",
+						Name = PluginResources.GroupType_Language,
 						Type = "Language"
 					},
 				});
@@ -158,7 +158,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			get
 			{
-				var message = string.Format("Files: {0}, Selected: {1}",
+				var message = string.Format(PluginResources.StatusLabel_FileSelected,
 					ReportTemplates?.Count ?? 0,
 					SelectedReportTemplates?.Count ?? 0);
 				return message;
@@ -278,7 +278,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			var openFileDialog = new OpenFileDialog();
 			openFileDialog.Multiselect = false;
-			openFileDialog.Title = "Select the template file";
+			openFileDialog.Title = PluginResources.WindowTitle_SelectTemplateFile;
 			openFileDialog.Filter = "XSLT files(*.xslt)| *.xslt;*.xsl";
 			var result = openFileDialog.ShowDialog();
 			if (result == DialogResult.OK)

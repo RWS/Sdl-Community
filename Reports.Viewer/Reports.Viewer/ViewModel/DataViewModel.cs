@@ -140,7 +140,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			get
 			{
-				var message = string.Format("Reports: {0}, Selected: {1}",
+				var message = string.Format(PluginResources.StatusLabel_ReportsSelected,
 					_reports?.Count ?? 0,
 					_selectedReports?.Count ?? 0);
 				return message;

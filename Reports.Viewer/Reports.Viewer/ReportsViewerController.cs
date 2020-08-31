@@ -478,13 +478,13 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void DisplayReportsRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
 		{
-			var message = "Studio has applied changes in the Reports view."
+			var message = PluginResources.Message_StudioUpdatedReports
 						  + Environment.NewLine + Environment.NewLine
-						  + string.Format("Added Reports: {0}", addedRecords.Count) + Environment.NewLine
-						  + string.Format("Removed Reports: {0}", removedRecords.Count)
+						  + string.Format(PluginResources.Message_AddedReports, addedRecords.Count) + Environment.NewLine
+						  + string.Format(PluginResources.Message_RemovedReports, removedRecords.Count)
 						  + Environment.NewLine + Environment.NewLine
-						  + "Click on 'Yes' to refresh the view";
-			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+						  + PluginResources.Message_ClickYesToRefresh;
+			var dialogResult = MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
 				RefreshView(true);
@@ -493,10 +493,10 @@ namespace Sdl.Community.Reports.Viewer
 
 		private void DisplayReportTemplatesRefreshViewMessage()
 		{
-			var message = "The custom report templates have been updated."
+			var message = PluginResources.Message_CustomReportTemplatesChanged
 			              + Environment.NewLine + Environment.NewLine
-			              + "Click on 'Yes' to refresh the view";
-			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			              + PluginResources.Message_ClickYesToRefresh;
+			var dialogResult = MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
 				RefreshView(true);

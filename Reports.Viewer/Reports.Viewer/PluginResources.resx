@@ -226,4 +226,64 @@
   <data name="PrintPreview" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\printpreview.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WindowTitle_EditProjectReport" xml:space="preserve">
+    <value>Edit Project Report</value>
+  </data>
+  <data name="WindowTitle_AddProjectReport" xml:space="preserve">
+    <value>Add Project Report</value>
+  </data>
+  <data name="WindowTitle_EditReportTemplate" xml:space="preserve">
+    <value>Edit Report Template</value>
+  </data>
+  <data name="WindowTitle_AddReportTemplate" xml:space="preserve">
+    <value>Add Report Template</value>
+  </data>
+  <data name="Message_StudioUpdatedReports" xml:space="preserve">
+    <value>Studio has applied changes in the Reports view.</value>
+  </data>
+  <data name="Message_AddedReports" xml:space="preserve">
+    <value>Added Reports: {0}</value>
+  </data>
+  <data name="Message_RemovedReports" xml:space="preserve">
+    <value>Removed Reports: {0}</value>
+  </data>
+  <data name="Message_ClickYesToRefresh" xml:space="preserve">
+    <value>Click on 'Yes' to refresh the view</value>
+  </data>
+  <data name="Message_CustomReportTemplatesChanged" xml:space="preserve">
+    <value>The custom report templates have been updated.</value>
+  </data>
+  <data name="GroupType_GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="GroupType_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="StatusLabel_FileSelected" xml:space="preserve">
+    <value>Files: {0}, Selected: {1}</value>
+  </data>
+  <data name="WindowTitle_SelectTemplateFile" xml:space="preserve">
+    <value>Select the template file</value>
+  </data>
+	<data name="StatusLabel_ReportsSelected" xml:space="preserve">
+    <value>Reports: {0}, Selected: {1}</value>
+  </data>
+	<data name="LanguageGroup_AvailableLanguages" xml:space="preserve">
+    <value>Available Languages</value>
+  </data>
+	<data name="LanguageGroup_AllLanguages" xml:space="preserve">
+    <value>All Languages</value>
+  </data>
+	<data name="TemplateScope_StudioOnly" xml:space="preserve">
+    <value>Studio Reports only</value>
+  </data>
+	<data name="TemplateScope_NonStudioOnly" xml:space="preserve">
+    <value>Non Studio Reports only</value>
+  </data>
+	<data name="TemplateScope_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+	<data name="WindowTitle_SelectReportFile" xml:space="preserve">
+    <value>Select the {0} file</value>
+  </data>
 </root>

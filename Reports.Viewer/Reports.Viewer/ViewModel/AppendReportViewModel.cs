@@ -51,7 +51,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			IsEditMode = isEditMode;
 
-			WindowTitle = IsEditMode ? "Edit Project Report" : "Add Project Report";
+			WindowTitle = IsEditMode ? PluginResources.WindowTitle_EditProjectReport : PluginResources.WindowTitle_AddProjectReport;
 
 			var projectInfo = _project.GetProjectInfo();			
 			LanguageItems = projectInfo.TargetLanguages
@@ -360,7 +360,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			var openFileDialog = new OpenFileDialog();
 			openFileDialog.Multiselect = false;
-			openFileDialog.Title = string.Format("Select the {0} file", fileType);
+			openFileDialog.Title = string.Format(PluginResources.WindowTitle_SelectReportFile, fileType);
 
 			if (fileType == "report")
 			{
