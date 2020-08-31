@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface ISegmentSupervisor
 	{
-		event ConfirmationLevelChangedEventHandler ConfirmationLevelChanged;
+		event ConfirmationLevelChangedEventHandler SegmentConfirmed;
 
 		Dictionary<SegmentId, ImprovedTarget> ActiveDocumentImprovements { get; }
 		Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; }

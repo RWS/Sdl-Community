@@ -104,7 +104,7 @@
 					  HorizontalAlignment="Stretch"
 					  VerticalAlignment="Top"
 					  MinHeight="30"
-					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding Feedback,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
+					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding FeedbackMessage,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
 			<Button Grid.Row="1" Grid.Column="1"

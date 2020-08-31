@@ -358,4 +358,10 @@
   <data name="Sent" xml:space="preserve">
 	  <value>Sent</value>
   </data>
+  <data name="SourceModifiedTextAndAdvice" xml:space="preserve">
+	  <value>Source has been modified since the {0} translation was received. To send feedback you need the original source for the translation, or translate again using the modified source.</value>
+  </data>
+  <data name="SourceModified" xml:space="preserve">
+	  <value>Source modified</value>
+  </data>
 </root>

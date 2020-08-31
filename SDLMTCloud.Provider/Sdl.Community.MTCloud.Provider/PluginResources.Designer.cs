@@ -701,6 +701,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source modified.
+        /// </summary>
+        public static string SourceModified {
+            get {
+                return ResourceManager.GetString("SourceModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source has been modified since the {0} translation was received. To send feedback you need the original source for the translation, or translate again using the modified source..
+        /// </summary>
+        public static string SourceModifiedTextAndAdvice {
+            get {
+                return ResourceManager.GetString("SourceModifiedTextAndAdvice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon TellMe1 {

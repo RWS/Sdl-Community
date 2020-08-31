@@ -4,9 +4,10 @@ namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class ImprovedTarget
 	{
-		public ImprovedTarget(string originalTarget)
+		public ImprovedTarget(string originalTarget, string originalSource)
 		{
 			OriginalTarget = originalTarget;
+			OriginalSource = originalSource;
 		}
 
 		public List<string> Comments { get; set; }
@@ -14,6 +15,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public string Improvement { get; set; }
 
 		public string OriginalTarget { get; }
+
+		public string OriginalSource { get; }
 
 		public int Score { get; set; }
 	}
