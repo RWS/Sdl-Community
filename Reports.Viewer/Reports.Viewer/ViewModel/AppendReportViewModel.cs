@@ -51,7 +51,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			IsEditMode = isEditMode;
 
-			WindowTitle = IsEditMode ? "Edit Project Report Information" : "Add Project Report";
+			WindowTitle = IsEditMode ? "Edit Project Report" : "Add Project Report";
 
 			var projectInfo = _project.GetProjectInfo();			
 			LanguageItems = projectInfo.TargetLanguages
