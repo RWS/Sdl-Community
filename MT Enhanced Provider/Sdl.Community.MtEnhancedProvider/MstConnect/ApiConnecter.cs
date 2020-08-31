@@ -32,10 +32,10 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
-		/// <param name="options"></param>
-		internal ApiConnecter(IMtTranslationOptions options)
+		/// <param name="clientId">Microsoft API key</param>
+		internal ApiConnecter(string clientId)
 		{
-			_subscriptionKey = options.ClientId;
+			_subscriptionKey = clientId;
 			if (_authToken == null)
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
@@ -271,13 +271,22 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			if (task.IsFaulted)
 			{
-				//throw task.Exception;
+				if (task.Exception != null) throw new Exception(task.Exception.InnerException?.Message);
 			}
 			if (task.IsCanceled)
 			{
 				throw new Exception("Timeout obtaining access token.");
 			}
 			return accessToken;
+		}
+
+		public void RefreshAuthToken()
+		{
+			//Clear the existing token because the api key has changed
+			_authToken = string.Empty;
+
+			//try to get the token for the new api key
+			_authToken = GetAuthToken();
 		}
 
 		public async Task<string> GetAccessTokenAsync()

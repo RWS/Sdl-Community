@@ -221,7 +221,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			//instantiate ApiConnecter if necessary
 			if (_mstConnect == null)
 			{
-				_mstConnect = new ApiConnecter(_options);
+				_mstConnect = new ApiConnecter(_options.ClientId);
 			}
 			else
 			{

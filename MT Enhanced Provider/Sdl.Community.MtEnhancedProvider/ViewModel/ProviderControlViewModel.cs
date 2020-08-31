@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml.Schema;
-using Sdl.Community.MtEnhancedProvider.Annotations;
-using Sdl.Community.MtEnhancedProvider.Commands;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
@@ -39,12 +32,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _jsonFilePath;
 		private string _projectName;
 		
-		public ProviderControlViewModel(IMtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
+		public ProviderControlViewModel(IMtTranslationOptions options, ITranslationProviderCredentialStore credentialStore)
 		{
 			ViewModel = this;
 			_options = options;
 			_credentialStore = credentialStore;
-			_correspondingLanguages = correspondingLanguages ?? new List<LanguagePair>();
+			_correspondingLanguages = new List<LanguagePair>();
 
 			InitializeComponent();
 		}
@@ -170,7 +163,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			set
 			{
 				if (_apiKey == value) return;
-				_apiKey = value;
+				_apiKey = value.Trim();
 				OnPropertyChanged(nameof(ApiKey));
 				ClearMessageRaised?.Invoke();
 			}
@@ -182,7 +175,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			set
 			{
 				if (_clientId == value) return;
-				_clientId = value;
+				_clientId = value.Trim();
 				OnPropertyChanged(nameof(ClientId));
 				ClearMessageRaised?.Invoke();
 			}

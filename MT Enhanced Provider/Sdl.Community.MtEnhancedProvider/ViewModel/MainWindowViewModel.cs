@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Windows;
+using System.Linq;
 using System.Windows.Input;
-using Sdl.Community.MtEnhancedProvider.Annotations;
 using Sdl.Community.MtEnhancedProvider.Commands;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
+using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
+using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
@@ -22,16 +21,18 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _translatorErrorResponse;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
+		private readonly LanguagePair[] _languagePairs;
 
 		public delegate void CloseWindowEventRaiser();
 		public event CloseWindowEventRaiser CloseEventRaised;
 
-		public MainWindowViewModel(IMtTranslationOptions options,IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel)
+		public MainWindowViewModel(IMtTranslationOptions options,IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel, 
+			LanguagePair[] languagePairs)
 		{
 			Options = options;
 			_providerControlViewModel = providerControlViewModel;
 			_settingsControlViewModel = settingsControlViewModel;
-
+			_languagePairs = languagePairs;
 			SaveCommand = new RelayCommand(Save);
 			ShowSettingsViewCommand =  new CommandHandler(ShowSettingsPage, true);
 			ShowMainViewCommand = new CommandHandler(ShowProvidersPage,true);
@@ -112,7 +113,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			var htmlStart = "<html> \n <meta http-equiv=\'Content-Type\' content=\'text/html;charset=UTF-8\'>\n <body style=\"font-family:Segoe Ui!important;color:red!important;font-size:13px!important\">\n";
 
-			ErrorMessage = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
+			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
 		}
 
 		public bool IsWindowValid()
@@ -195,7 +196,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			if (string.IsNullOrEmpty(_providerControlViewModel.ClientId))
 			{
-				ErrorMessage=PluginResources.ApiKeyError;
+				ErrorMessage = PluginResources.ApiKeyError;
 				return false;
 			}
 			if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
@@ -203,7 +204,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				ErrorMessage = PluginResources.CatIdError;
 				return false;
 			}
-			return true;
+			return AreMicrosoftCredentialsValid();
 		}
 
 		private void ShowSettingsPage()
@@ -230,15 +231,45 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 				SetGeneralProviderOptions();
 
-				//TODO: Investigate why we have LanguagesSupported, this dictionary it seems to be used
-				//Options.LanguagesSupported = _correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
-				//	lp => Options.SelectedProvider.ToString());
-
-			//TODO: Check if the credentials are correct against both providers options
-			//if the credentials are not correct display service response in web browser
 				DialogResult = true;
 				CloseEventRaised?.Invoke();
 			}
+		}
+
+		private bool AreMicrosoftCredentialsValid()
+		{
+			try
+			{
+				if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
+				    MtTranslationOptions.ProviderType.MicrosoftTranslator)
+				{
+
+					var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId);
+
+					if (!string.IsNullOrEmpty(Options?.ClientId))
+					{
+						if (!Options.ClientId.Equals(_providerControlViewModel.ClientId))
+						{
+							apiConnecter.RefreshAuthToken();
+						}
+					}
+
+					if (Options == null) return true;
+					var allSupportedLanguages = ApiConnecter.SupportedLangs;
+					var correspondingLanguages = _languagePairs
+						.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
+
+					Options.LanguagesSupported = correspondingLanguages.ToDictionary(lp => lp.TargetCultureName,
+						lp => Options.SelectedProvider.ToString());
+
+					return true;
+				}
+			}
+			catch (Exception e)
+			{
+				AddEncriptionMetaToResponse(e.Message);
+			}
+			return false;
 		}
 
 		private void SetGeneralProviderOptions()

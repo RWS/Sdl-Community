@@ -61,10 +61,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public bool SupportsFilters { get; } = false;
 
-		public bool SupportsFuzzySearch
-		{
-			get { return false; }
-		}
+		public bool SupportsFuzzySearch => false;
 
 		public bool SupportsMultipleResults => false;
 
@@ -126,7 +123,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
 				{
 					if (mstConnect == null) //construct ApiConnecter if necessary 
-						mstConnect = new ApiConnecter(Options);
+						mstConnect = new ApiConnecter(Options.ClientId);
 					else
 						mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
 
