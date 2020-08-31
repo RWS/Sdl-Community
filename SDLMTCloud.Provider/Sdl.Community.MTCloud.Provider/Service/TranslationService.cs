@@ -30,8 +30,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			ConnectionService = connectionService;
 		}
 
-		public event TranslationFeedbackEventRaiser TranslationReceived;
-
 		public IConnectionService ConnectionService { get; }
 		public Options Options { get; set; }
 
