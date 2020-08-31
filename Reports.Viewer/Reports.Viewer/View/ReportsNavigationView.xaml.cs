@@ -18,7 +18,7 @@ namespace Sdl.Community.Reports.Viewer.View
 			InitializeComponent();
 
 			_viewModel = viewModel;
-			Loaded += ReportsNavigationView_Loaded;			
+			Loaded += ReportsNavigationView_Loaded;
 		}
 
 		/// <summary>
@@ -54,6 +54,32 @@ namespace Sdl.Community.Reports.Viewer.View
 			}
 
 			return source as TreeViewItem;
-		}			
+		}
+
+		private void TreeView_OnPreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (sender is TreeView treeView && _viewModel.ReportGroups.Count > 0)
+			{
+				var selectedItem = treeView.SelectedItem;
+				if (e.Key == Key.Up)
+				{
+					if (selectedItem == _viewModel.ReportGroups[0])
+					{
+						e.Handled = true;
+					}
+				}
+				else if (e.Key == Key.Down)
+				{
+					var reprotGroup = _viewModel.ReportGroups[_viewModel.ReportGroups.Count - 1];
+					var reportItem = reprotGroup?.GroupItems?[reprotGroup.GroupItems.Count - 1];
+					var report = reportItem?.Reports?[reportItem.Reports.Count - 1];
+
+					if (selectedItem == report)
+					{
+						e.Handled = true;
+					}
+				}
+			}
+		}
 	}
 }

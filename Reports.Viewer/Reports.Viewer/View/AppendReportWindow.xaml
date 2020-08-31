@@ -76,7 +76,7 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
-				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Report Path:" Margin="5,10,5,5"/>
+				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Path:" Margin="5,10,5,5"/>
 				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,10,5,5">
 					<TextBox HorizontalContentAlignment="Stretch" 
 					         Padding="2,0,20,0" Height="24" 
@@ -160,7 +160,7 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
-				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Xslt Path:" 
+				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template:" 
 				           Margin="5,5,5,5"/>
 				<Grid Grid.Column="1" Height="24" Margin="0,0,5,0">
 					<TextBox HorizontalContentAlignment="Stretch" 
@@ -233,7 +233,7 @@
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
-				<TextBlock  Margin="5,0,5,5" VerticalAlignment="Center" Grid.Column="0" MinWidth="80" Text="Report Name:"/>
+				<TextBlock  Margin="5,0,5,5" VerticalAlignment="Center" Grid.Column="0" MinWidth="80" Text="Name:"/>
 				<TextBox Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
 			</Grid>
 			

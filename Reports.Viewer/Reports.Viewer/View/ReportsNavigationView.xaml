@@ -282,7 +282,8 @@
 				          ItemsSource="{Binding ReportGroups, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 				          behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"				
 			              behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}"
-				          behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"	>
+				          behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"
+				          PreviewKeyDown="TreeView_OnPreviewKeyDown">
 					<TreeView.ItemContainerStyle>
 						<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
 							<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
