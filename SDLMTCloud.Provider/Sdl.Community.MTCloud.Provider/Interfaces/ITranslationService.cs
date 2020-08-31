@@ -9,8 +9,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 	public interface ITranslationService
 	{
-		event TranslationFeedbackEventRaiser TranslationReceived;
-
 		IConnectionService ConnectionService { get; }
 
 		Options Options { get; set; }

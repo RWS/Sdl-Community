@@ -209,8 +209,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		[InlineData("This is the feedback")]
 		public void Set_FeedbackText(string feedback)
 		{
-			_rateItViewModel.Feedback = feedback;
-			Assert.Equal(feedback,_rateItViewModel.Feedback);
+			_rateItViewModel.FeedbackMessage = feedback;
+			Assert.Equal(feedback,_rateItViewModel.FeedbackMessage);
 		}
 
 		[Theory]

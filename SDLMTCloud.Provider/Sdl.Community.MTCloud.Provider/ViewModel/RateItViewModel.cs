@@ -45,22 +45,20 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			Initialize();
 			UpdateActionTooltips();
-
-			_rating = 0;
 		}
 
 		private void SetSegmentSupervisor()
 		{
 			if (_segmentSupervisor == null) return;
 
-			_segmentSupervisor.ConfirmationLevelChanged -= OnConfirmationLevelChanged;
-			_segmentSupervisor.ConfirmationLevelChanged += OnConfirmationLevelChanged;
+			_segmentSupervisor.SegmentConfirmed -= OnConfirmationLevelChanged;
+			_segmentSupervisor.SegmentConfirmed += OnConfirmationLevelChanged;
 		}
 
 		private void ResetSegmentSupervisor()
 		{
 			if (_segmentSupervisor == null) return;
-			_segmentSupervisor.ConfirmationLevelChanged -= OnConfirmationLevelChanged;
+			_segmentSupervisor.SegmentConfirmed -= OnConfirmationLevelChanged;
 		}
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
@@ -110,7 +108,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (_isSendFeedbackEnabled == value) return;
 				if (!value)
 				{
-					ResetFeedbackOptions();
+					ResetRateIt();
 				}
 
 				_isSendFeedbackEnabled = value;
@@ -118,26 +116,20 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void ResetFeedbackOptions()
+		private void ResetRateIt()
 		{
 			ResetFeedback();
 			AutoSendFeedback = false;
 		}
 
-		private void StopSegmentSupervisor()
-		{
-			_segmentSupervisor?.StopSupervising();
-			ResetSegmentSupervisor();
-		}
-
-		public string Feedback
+		public string FeedbackMessage
 		{
 			get => _feedback ?? string.Empty;
 			set
 			{
 				if (_feedback == value) return;
 				_feedback = value;
-				OnPropertyChanged(nameof(Feedback));
+				OnPropertyChanged(nameof(FeedbackMessage));
 			}
 		}
 
@@ -187,24 +179,24 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				return;
 			}
 
+			//Checking for consistency: whether translation corresponds to source
+			if (improvement.OriginalSource !=
+				GetSourceSegment(segmentId))
+			{
+				_messageBoxService.ShowWarningMessage(
+					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName),
+					PluginResources.SourceModified);
+
+				return;
+			}
+
 			if (_translationService != null)
 			{
-				var comments = new List<string>();
-				if (!string.IsNullOrWhiteSpace(Feedback))
-				{
-					comments.Add(Feedback);
-				}
-				comments.AddRange(FeedbackOptions.Where(fo => fo.IsChecked).Select(fo => fo.OptionName).ToList());
-
-				dynamic rating = new ExpandoObject();
-				if (_rating > 0) rating.Score = _rating;
-				if (comments.Count > 0) rating.Comments = comments;
-				if (!((ExpandoObject)rating).Any()) rating = null;
+				var rating = GetRatingObject();
 
 				if (rating != null)
 				{
-					improvement.Score = _rating;
-					improvement.Comments = comments;
+					UpdateImprovement(improvement, rating);
 				}
 
 				if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
@@ -214,20 +206,55 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				//TODO: Log that translation service is null
 			}
+		}
 
-			ResetFeedback();
+		private dynamic GetRatingObject()
+		{
+			var comments = AutoSendFeedback ? PreviousRating.Comments : GetCommentsAndFeedbackFromUi();
+			dynamic rating = new ExpandoObject();
+
+			var score = AutoSendFeedback ? PreviousRating.Score : _rating;
+			if (score > 0) rating.Score = score;
+			if (comments.Count > 0) rating.Comments = comments;
+
+			if (!((ExpandoObject)rating).Any()) rating = null;
+			return rating;
+		}
+
+		private List<string> GetCommentsAndFeedbackFromUi()
+		{
+			var comments = new List<string>();
+			if (!string.IsNullOrWhiteSpace(FeedbackMessage))
+			{
+				comments.Add(FeedbackMessage);
+			}
+			comments.AddRange(FeedbackOptions.Where(fo => fo.IsChecked).Select(fo => fo.OptionName).ToList());
+			return comments;
+		}
+
+		private string GetSourceSegment(SegmentId? segmentId)
+		{
+			var currentSegmentId = segmentId ?? ActiveSegmentId;
+			return _editorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId)?.Source
+				.ToString();
+		}
+
+		private void UpdateImprovement(ImprovedTarget improvement, dynamic rating)
+		{
+			improvement.Score = rating.Score;
+			improvement.Comments = rating.Comments;
 		}
 
 		private void ResetFeedback()
 		{
 			FeedbackOptions.ForEach(fb => fb.IsChecked = false);
-			Feedback = string.Empty;
+			FeedbackMessage = string.Empty;
 			Rating = 0;
 		}
 
 		private void ClearFeedbackBox(object obj)
 		{
-			Feedback = string.Empty;
+			FeedbackMessage = string.Empty;
 		}
 
 		private void SetShortcutService()
@@ -246,8 +273,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			SetShortcutService();
 
-			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 			_segmentSupervisor.StartSupervising();
+			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
@@ -263,7 +290,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private SegmentId ActiveSegmentId => _editorController.ActiveDocument.ActiveSegmentPair.Properties.Id;
+		private SegmentId? ActiveSegmentId => _editorController.ActiveDocument.ActiveSegmentPair?.Properties.Id;
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
@@ -274,33 +301,53 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
 			if (!IsSendFeedbackEnabled) return;
-			ResetFeedback();
+			if (AutoSendFeedback)
+			{
+				BackupFeedback();
+			}
 
+			SetActiveSegmentFeedbackInfo();
+		}
+
+		private void BackupFeedback()
+		{
+			PreviousRating.Score = Rating;
+			PreviousRating.Comments = GetCommentsAndFeedbackFromUi();
+		}
+
+		private Rating PreviousRating { get; set; } = new Rating();
+
+		private void SetActiveSegmentFeedbackInfo()
+		{
 			var improvement = GetImprovement();
-			if (improvement == null) return;
+			var comments = improvement?.Comments?.Select(c => (string) c.Clone()).ToList();
 
-			var comments = improvement.Comments?.Select(c => (string)c.Clone()).ToList();
 			if (comments != null)
 			{
-				Feedback = comments.FirstOrDefault(c => FeedbackOptions.All(fo => fo.OptionName != c));
-				comments.Remove(Feedback);
+				FeedbackMessage = comments.FirstOrDefault(c => FeedbackOptions.All(fo => fo.OptionName != c));
+				comments.Remove(FeedbackMessage);
 
 				foreach (var feedbackOption in comments.SelectMany(c => FeedbackOptions.Where(fo => fo.OptionName == c)))
 				{
 					feedbackOption.IsChecked = true;
 				}
 			}
+			else
+			{
+				FeedbackOptions.ForEach(fb => fb.IsChecked = false);
+				FeedbackMessage = string.Empty;
+			}
 
-			Rating = improvement.Score;
+			Rating = improvement?.Score ?? 0;
 		}
 
 		private ImprovedTarget GetImprovement(SegmentId? segmentId = null)
 		{
 			var currentSegment = segmentId ?? ActiveSegmentId;
 			ImprovedTarget improvement = null;
-			if (_segmentSupervisor.ActiveDocumentImprovements.ContainsKey(currentSegment))
+			if (currentSegment != null && _segmentSupervisor.ActiveDocumentImprovements.ContainsKey(currentSegment.Value))
 			{
-				improvement = _segmentSupervisor.ActiveDocumentImprovements[currentSegment];
+				improvement = _segmentSupervisor.ActiveDocumentImprovements[currentSegment.Value];
 			}
 			return improvement;
 		}
