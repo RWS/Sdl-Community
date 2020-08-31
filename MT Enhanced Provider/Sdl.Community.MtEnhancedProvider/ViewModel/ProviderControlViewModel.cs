@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
 	public class ProviderControlViewModel : ModelBase, IProviderControlViewModel
 	{
 		private readonly IMtTranslationOptions _options;
-		private readonly ITranslationProviderCredentialStore _credentialStore;
-		private readonly List<LanguagePair> _correspondingLanguages;
-		private readonly  Uri _microsoftProviderUri= new Uri(PluginResources.UriMs);
-		private readonly Uri _googleProviderUri = new Uri(PluginResources.UriGt);
 		private TranslationOption _selectedTranslationOption;
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private bool _isMicrosoftSelected;
@@ -32,12 +25,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _jsonFilePath;
 		private string _projectName;
 		
-		public ProviderControlViewModel(IMtTranslationOptions options, ITranslationProviderCredentialStore credentialStore)
+		public ProviderControlViewModel(IMtTranslationOptions options)
 		{
 			ViewModel = this;
 			_options = options;
-			_credentialStore = credentialStore;
-			_correspondingLanguages = new List<LanguagePair>();
 
 			InitializeComponent();
 		}
@@ -71,12 +62,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				new GoogleApiVersion
 				{
-					Name = "V2 - Basic Translation",
+					Name = PluginResources.GoogleApiVersionV2Description,
 					Version = Enums.GoogleApiVersion.V2
 				},
 				new GoogleApiVersion
 				{
-					Name = "V3 - Advanced Translation",
+					Name = PluginResources.GoogleApiVersionV3Description,
 					Version = Enums.GoogleApiVersion.V3
 				}
 			};
@@ -299,7 +290,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 		}
 
-		//TODO: Check if the google version is persisted correctly in the provider settings
 		private void SetGoogleApiVersion()
 		{
 			if (_options?.SelectedGoogleVersion != null)

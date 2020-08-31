@@ -271,6 +271,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to V2 - Basic Translation.
+        /// </summary>
+        public static string GoogleApiVersionV2Description {
+            get {
+                return ResourceManager.GetString("GoogleApiVersionV2Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to V3 - Advanced Translation.
+        /// </summary>
+        public static string GoogleApiVersionV3Description {
+            get {
+                return ResourceManager.GetString("GoogleApiVersionV3Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Google Response.
         /// </summary>
         public static string GoogleResponseDescription {

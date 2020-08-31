@@ -360,4 +360,10 @@
   <data name="WrongJsonFilePath" xml:space="preserve">
     <value>Json file could not be found at the specified path.</value>
   </data>
+	<data name="GoogleApiVersionV2Description" xml:space="preserve">
+    <value>V2 - Basic Translation</value>
+  </data>
+	<data name="GoogleApiVersionV3Description" xml:space="preserve">
+    <value>V3 - Advanced Translation</value>
+  </data>
 </root>

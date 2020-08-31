@@ -17,7 +17,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
 	public class SettingsControlViewModel: ModelBase, ISettingsControlViewModel
 	{
-		private Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IMtTranslationOptions _options;
 		private readonly IOpenFileDialogService _openFileDialogService;
 		private bool _reSendDraft;

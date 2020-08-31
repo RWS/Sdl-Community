@@ -11,7 +11,6 @@ namespace Sdl.Community.MtEnhancedProvider
 {
 	public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-
 		private readonly LanguagePair _languageDirection;
 		private readonly IMtTranslationOptions _options;
 		private readonly MtTranslationProvider _provider;
@@ -25,16 +24,11 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// Instantiates the variables and fills the list file content into
 		/// a Dictionary collection object.
 		/// </summary>
-		/// <param name="provider"></param>
-		/// <param name="languages"></param>
-
 		public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages)
 		{
-
 			_provider = provider;
 			_languageDirection = languages;
 			_options = _provider.Options;
-
 		}
 
 		public bool CanReverseLanguageDirection { get; } = false;
@@ -135,10 +129,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// (in our implementation always 100%, as only exact matches are supported)
 		/// as well as the confirmation level, i.e. Translated.
 		/// </summary>
-		/// <param name="searchSegment"></param>
-		/// <param name="translation"></param>
-		/// <param name="sourceSegment"></param>
-		/// <returns></returns>
 		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
 		{
 			var tu = new TranslationUnit { SourceSegment = searchSegment.Duplicate(), TargetSegment = translation };
@@ -157,9 +147,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Used to do batch find-replace on a segment with tags.
 		/// </summary>
-		/// <param name="inSegment"></param>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
 		private Segment GetEditedSegment(SegmentEditor editor, Segment inSegment)
 		{
 			var newSeg = new Segment(inSegment.Culture);
@@ -184,9 +171,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Used to do batch find-replace on a string of plain text.
 		/// </summary>
-		/// <param name="sourcetext"></param>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
 		private string GetEditedString(SegmentEditor editor, string sourcetext)
 		{
 			var result = editor.EditText(sourcetext);
@@ -238,10 +222,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// Depening on the search mode, a segment lookup (with exact machting) or a source / target
 		/// concordance search is done.
 		/// </summary>
-		/// <param name="settings"></param>
-		/// <param name="segment"></param>
-		/// <returns></returns>
-
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
 			var translation = new Segment(_languageDirection.TargetCulture);//this will be the target segment
@@ -335,10 +315,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="previousTranslationHashes"></param>
-		/// <param name="settings"></param>
-		/// <returns></returns>
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
 			throw new NotImplementedException();
@@ -347,11 +323,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="previousTranslationHashes"></param>
-		/// <param name="settings"></param>
-		/// <param name="mask"></param>
-		/// <returns></returns>
 		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
 		{
 			ImportResult[] result = { AddTranslationUnit(translationUnits[translationUnits.GetLength(0) - 1], settings) };
@@ -372,9 +343,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="settings"></param>
-		/// <returns></returns>
 		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
 		{
 			throw new NotImplementedException();
@@ -383,10 +351,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="settings"></param>
-		/// <param name="mask"></param>
-		/// <returns></returns>
 		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
 		{
 			throw new NotImplementedException();
@@ -395,8 +359,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnit"></param>
-		/// <returns></returns>
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
 		{
 			throw new NotImplementedException();
@@ -405,8 +367,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <returns></returns>
 		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
 		{
 			throw new NotImplementedException();
