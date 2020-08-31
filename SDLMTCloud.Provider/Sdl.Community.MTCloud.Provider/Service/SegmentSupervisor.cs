@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Events;
@@ -21,28 +22,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_editorController = editorController;
 		}
 
-		public void StartSupervising()
-		{
-			StopSupervising();
-
-			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-			if (ActiveDocument == null) return;
-			ActiveDocument.ActiveSegmentChanged += ActiveDocumentOnActiveSegmentChanged;
-			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
-		}
-
-		public void StopSupervising()
-		{
-			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
-			if (ActiveDocument == null) return;
-			ActiveDocument.ActiveSegmentChanged -= ActiveDocumentOnActiveSegmentChanged;
-			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
-		}
-
-		public event ConfirmationLevelChangedEventHandler ConfirmationLevelChanged;
+		public event ConfirmationLevelChangedEventHandler SegmentConfirmed;
 
 		private Document ActiveDocument => _editorController.ActiveDocument;
-		public Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>>();
+
 		public Dictionary<SegmentId, ImprovedTarget> ActiveDocumentImprovements
 		{
 			get
@@ -54,6 +37,36 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
+		public Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>>();
+
+		public void StartSupervising()
+		{
+			StopSupervising();
+
+			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+
+			if (ActiveDocument == null) return;
+			ActiveDocument.ActiveSegmentChanged += ActiveDocumentOnActiveSegmentChanged;
+			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+		}
+
+		public void StopSupervising()
+		{
+			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+
+			if (ActiveDocument == null) return;
+			ActiveDocument.ActiveSegmentChanged -= ActiveDocumentOnActiveSegmentChanged;
+			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
+		}
+
+		private static string GetSourceSegment(ISegment segment)
+		{
+			var paragraph = segment.Parent as IParagraph;
+			var segmentPairs = paragraph?.Parent.SegmentPairs.ToList();
+
+			return segmentPairs?.FirstOrDefault(sp => sp.Properties.Id == segment.Properties.Id)?.Source.ToString();
+		}
+
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
 		{
 			var segment = (ISegment)((ISegmentContainerNode)sender).Item;
@@ -61,28 +74,29 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var segmentId = segment.Properties.Id;
 			var translationOrigin = segment.Properties.TranslationOrigin;
+			var sourceSegment = GetSourceSegment(segment);
 
 			if (IsImprovementToTpTranslation(translationOrigin, segmentId, segment))
 			{
-				EditImprovements(segmentId, segment.ToString(), null, translationOrigin);
+				EditImprovements(segmentId, segment.ToString(), null, translationOrigin, sourceSegment);
 			}
 			else
 			{
-				EditImprovements(segmentId, null, segment.ToString(), translationOrigin);
+				EditImprovements(segmentId, null, segment.ToString(), translationOrigin, sourceSegment);
 			}
 
 			if (segment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
-			ConfirmationLevelChanged?.Invoke(segmentId);
+			SegmentConfirmed?.Invoke(segmentId);
 		}
 
 		private void ActiveDocumentOnActiveSegmentChanged(object sender, EventArgs e)
 		{
 			var activeSegmentPair = _editorController.ActiveDocument.ActiveSegmentPair;
 			if (activeSegmentPair == null) return;
-			EditImprovements(activeSegmentPair.Properties.Id, null, activeSegmentPair.Target.ToString(), activeSegmentPair.Properties.TranslationOrigin);
+			EditImprovements(activeSegmentPair.Properties.Id, null, activeSegmentPair.Target.ToString(), activeSegmentPair.Properties.TranslationOrigin, activeSegmentPair.Source.ToString());
 		}
 
-		private void EditImprovements(SegmentId segmentId, string improvement, string originalTarget, ITranslationOrigin translationOrigin)
+		private void EditImprovements(SegmentId segmentId, string improvement, string originalTarget, ITranslationOrigin translationOrigin, string originalSource)
 		{
 			if (improvement != null && ActiveDocumentImprovements.ContainsKey(segmentId))
 			{
@@ -91,8 +105,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			else
 			{
-				if (translationOrigin.OriginSystem != PluginResources.SDLMTCloudName || ActiveDocumentImprovements.ContainsKey(segmentId)) return;
-				ActiveDocumentImprovements[segmentId] = new ImprovedTarget(originalTarget);
+				if (translationOrigin.OriginSystem != PluginResources.SDLMTCloudName ||
+				    ActiveDocumentImprovements.ContainsKey(segmentId) &&
+				    originalSource == ActiveDocumentImprovements[segmentId].OriginalSource) return;
+
+				ActiveDocumentImprovements[segmentId] = new ImprovedTarget(originalTarget, originalSource);
 			}
 		}
 
@@ -106,15 +123,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 		}
 
-		private void SetIdAndActiveFile()
-		{
-			_docId = ActiveDocument.ActiveFile.Id;
-			if (!Improvements.ContainsKey(_docId))
-			{
-				Improvements[_docId] = new Dictionary<SegmentId, ImprovedTarget>();
-			}
-		}
-
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
 		{
 			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName &&
@@ -122,6 +130,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				   ActiveDocumentImprovements[segmentId].OriginalTarget != segment.ToString() &&
 				   translationOrigin?.OriginType == "interactive" &&
 				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
+		}
+
+		private void SetIdAndActiveFile()
+		{
+			_docId = ActiveDocument.ActiveFile.Id;
+			if (!Improvements.ContainsKey(_docId))
+			{
+				Improvements[_docId] = new Dictionary<SegmentId, ImprovedTarget>();
+			}
 		}
 	}
 }
