@@ -79,10 +79,10 @@
 								       RenderOptions.EdgeMode="Aliased">
 									<Image.Style>
 										<Style TargetType="Image">
-											<Setter Property="Source" Value="../Resources/Report.png"/>
+											<Setter Property="Source" Value="../Resources/StudioReport.ico"/>
 											<Style.Triggers>
 												<DataTrigger Binding="{Binding IsStudioReport}" Value="True">
-													<Setter Property="Source" Value="../Resources/StudioReport.ico"/>
+													<Setter Property="Source" Value="../Resources/Report.png"/>
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>

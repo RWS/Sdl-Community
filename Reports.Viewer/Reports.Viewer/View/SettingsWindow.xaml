@@ -10,7 +10,7 @@
         xmlns:model="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
         xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
 
-
+		Icon="../Resources/Settings.ico"
         WindowStyle="ThreeDBorderWindow"
 		WindowStartupLocation="CenterScreen"
         AllowsTransparency="False" 
