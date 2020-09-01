@@ -97,7 +97,6 @@
     <Compile Include="Model\GroupType.cs" />
     <Compile Include="Model\LanguageGroup.cs" />
     <Compile Include="Model\LanguageItem.cs" />
-    <Compile Include="Model\ProjectSettings\ReportsViewer.cs" />
     <Compile Include="Model\ReportGroup.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\ReportTemplateScope.cs" />
