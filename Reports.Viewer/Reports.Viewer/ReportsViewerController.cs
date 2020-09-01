@@ -168,7 +168,7 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.DeleteReports(GetReports(result.Reports.Select(a => a.Id)));
 		}
 
-		internal void RefreshView(bool force)
+		internal void RefreshView(bool force = true)
 		{
 			if (_reportsNavigationViewModel == null)
 			{
@@ -187,7 +187,8 @@ namespace Sdl.Community.Reports.Viewer
 			}
 			else
 			{
-				_reportsNavigationViewModel.RefreshView(GetSettings(), ReportsController.GetReports());
+				var reports = ReportsController.GetReports(false).Result;
+				_reportsNavigationViewModel.RefreshView(GetSettings(), reports);
 			}
 		}
 
@@ -197,8 +198,8 @@ namespace Sdl.Community.Reports.Viewer
 			{
 				return;
 			}
-			
-			RefreshView(true);
+
+			RefreshView();
 		}
 
 		internal IProject GetSelectedProject()
@@ -222,10 +223,12 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _reportViewModel
 			};
 
-			_reportsNavigationViewModel = new ReportsNavigationViewModel(ReportsController.GetReports(), GetSettings(), _pathInfo);
+			var reports = ReportsController.GetReports(false).Result;
+			_reportsNavigationViewModel = new ReportsNavigationViewModel(reports, GetSettings(), _pathInfo);
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
 			_reportsNavigationViewModel.ProjectLocalFolder = ReportsController.GetProjectLocalFolder();
+
 			_reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
 			_reportsNavigationViewModel.ReportsNavigationView = _reportsNavigationView;
 
@@ -386,7 +389,7 @@ namespace Sdl.Community.Reports.Viewer
 			{
 				if (_isActive)
 				{
-					DisplayReportsRefreshViewMessage(e.AddedReports, e.RemovedReports);
+					DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
 				}
 				else
 				{
@@ -465,18 +468,18 @@ namespace Sdl.Community.Reports.Viewer
 
 			if (e.Active)
 			{
-				var task = System.Threading.Tasks.Task.Run(() => ReportsController.GetStudioReportUpdates(ClientId));
+				var task = System.Threading.Tasks.Task.Run(() => ReportsController.GetUpdatedStudioReports(ClientId));
 				task.ContinueWith(t =>
 				{
 					if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
 					{
-						DisplayReportsRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
+						DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
 					}
 				});
 			}
 		}
 
-		private void DisplayReportsRefreshViewMessage(List<Report> addedRecords, List<Report> removedRecords)
+		private void DisplayRefreshViewMessage(IReadOnlyCollection<Report> addedRecords, IReadOnlyCollection<Report> removedRecords)
 		{
 			var message = PluginResources.Message_StudioUpdatedReports
 						  + Environment.NewLine + Environment.NewLine
@@ -487,19 +490,19 @@ namespace Sdl.Community.Reports.Viewer
 			var dialogResult = MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
-				RefreshView(true);
+				RefreshView();
 			}
 		}
 
 		private void DisplayReportTemplatesRefreshViewMessage()
 		{
 			var message = PluginResources.Message_CustomReportTemplatesChanged
-			              + Environment.NewLine + Environment.NewLine
-			              + PluginResources.Message_ClickYesToRefresh;
+						  + Environment.NewLine + Environment.NewLine
+						  + PluginResources.Message_ClickYesToRefresh;
 			var dialogResult = MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (dialogResult == DialogResult.Yes)
 			{
-				RefreshView(true);
+				RefreshView();
 			}
 		}
 	}

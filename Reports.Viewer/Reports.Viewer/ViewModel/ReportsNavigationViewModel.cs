@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
@@ -57,7 +58,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
-			ApplyFilter(true);
+			Task.Run(() => ApplyFilter(true));
 		}
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
@@ -100,7 +101,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			ApplyFilter(false);
+			Task.Run(() => ApplyFilter(false));
 		}
 
 		public void UpdateReports(List<Report> reports)
@@ -121,7 +122,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				report.Group = updatedReport.Group;
 			}
 
-			ApplyFilter(false);
+			Task.Run(() => ApplyFilter(false));
 		}
 
 		public void DeleteReports(List<Report> reports)
@@ -131,7 +132,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_reports.RemoveAll(a => a.Id == report.Id);
 			}
 
-			ApplyFilter(false);
+			Task.Run(() => ApplyFilter(false));
 		}
 
 		public void RefreshView(Settings settings, List<Report> reports)
@@ -142,7 +143,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			_reports = reports;
 
-			ApplyFilter(true);
+			Task.Run(() => ApplyFilter(true));
 		}
 
 		public void ClearReports()
@@ -215,18 +216,20 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_filterString = value;
 				OnPropertyChanged(nameof(FilterString));
 
-				ApplyFilter(false);
+				Task.Run(() => ApplyFilter(false));
 			}
 		}
 
-		private void ApplyFilter(bool expandAll)
+		private async void ApplyFilter(bool expandAll)
 		{
 			_filteredReports = string.IsNullOrEmpty(_filterString)
 				? _reports
 				: _reports.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
 
-			var reportGroups = expandAll ? ExpandAll(BuildReportGroup()) : BuildReportGroup();
+		
+			var reportGroups = expandAll ? ExpandAll(await BuildReportGroup()) : await BuildReportGroup();
 			_reportGroups = new ObservableCollection<ReportGroup>(reportGroups);
+
 
 			OnPropertyChanged(nameof(ReportGroups));
 			OnPropertyChanged(nameof(StatusLabel));
@@ -277,7 +280,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				OnPropertyChanged(nameof(GroupType));
 
 				UpdateSettings();
-				ApplyFilter(true);
+				Task.Run(() => ApplyFilter(true));
 			}
 		}
 
@@ -373,7 +376,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			return string.Empty;
 		}
 
-		private List<ReportGroup> BuildReportGroup()
+		private async Task<List<ReportGroup>> BuildReportGroup()
 		{
 			var reportGroups = new List<ReportGroup>();
 			if (_filteredReports == null)
@@ -477,7 +480,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			return new List<ReportGroup>(reportGroups);
+			return await Task.FromResult(reportGroups);
 		}
 
 		private static void UpdateReportParentState(Report report, GroupItem groupItem, ReportGroup reportGroup)
@@ -540,7 +543,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void ExpandAll(object parameter)
 		{
-			_reportGroups = new ObservableCollection<ReportGroup>(ExpandAll(BuildReportGroup()));
+			_reportGroups = new ObservableCollection<ReportGroup>(ExpandAll(BuildReportGroup().Result));
 			OnPropertyChanged(nameof(ReportGroups));
 		}
 
@@ -560,7 +563,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void CollapseAll(object parameter)
 		{
-			_reportGroups = new ObservableCollection<ReportGroup>(CollapseAll(BuildReportGroup()));
+			_reportGroups = new ObservableCollection<ReportGroup>(CollapseAll(BuildReportGroup().Result));
 			OnPropertyChanged(nameof(ReportGroups));
 		}
 

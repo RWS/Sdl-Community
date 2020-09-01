@@ -42,9 +42,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			_controller.ReportsUpdated += Controller_ReportsUpdated;
 			_controller.ProjectReportChanges += Controller_ProjectReportChanges;
 
-			ActivationChanged += ReportsViewerController_ActivationChanged;
-
-			_reports = _controller.GetReports();
+			ActivationChanged += ReportsViewerController_ActivationChanged;			
 		}
 
 		protected override Control GetContentControl()
@@ -126,7 +124,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		public void RefreshView()
 		{
-			_reports = _controller.GetReports();
+			_reports = _controller.GetReports(false).Result;
 			if (_dataViewModel != null)
 			{
 				_dataViewModel.Reports = new List<Report>(_reports);
@@ -135,7 +133,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		private void InitializeViews()
 		{
-			_reports = _controller.GetReports();
+			_reports = _controller.GetReports(false).Result;
 
 			_dataViewModel = new DataViewModel(_reports)
 			{
@@ -282,7 +280,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 			if (e.Active)
 			{
-				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportUpdates(_clientId));
+				var task = System.Threading.Tasks.Task.Run(() => _controller.GetUpdatedStudioReports(_clientId));
 
 				task.ContinueWith(t =>
 				{
