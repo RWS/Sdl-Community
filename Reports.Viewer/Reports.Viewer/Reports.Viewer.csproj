@@ -101,7 +101,6 @@
     <Compile Include="Model\ReportGroup.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\ReportTemplateScope.cs" />
-    <Compile Include="Model\ReportWithXslt.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\ReportState.cs" />
     <Compile Include="ReportsViewerController.cs" />

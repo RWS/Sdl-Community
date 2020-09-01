@@ -40,7 +40,6 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			_controller.ReportsAdded += Controller_ReportsAdded;
 			_controller.ReportsRemoved += Controller_ReportsRemoved;
 			_controller.ReportsUpdated += Controller_ReportsUpdated;
-			_controller.ProjectReportChanges += Controller_ProjectReportChanges;
 
 			ActivationChanged += ReportsViewerController_ActivationChanged;			
 		}
@@ -191,26 +190,6 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			}
 		}
 
-		private void Controller_ProjectReportChanges(object sender, Sdl.Reports.Viewer.API.Events.ProjectReportChangesEventArgs e)
-		{
-			if (e.ClientId == _clientId || _dataViewModel == null)
-			{
-				return;
-			}
-
-			if (e.AddedReports.Count > 0 || e.RemovedReports.Count > 0)
-			{					
-				if (_isActive)
-				{
-					DisplayRefreshViewMessage(e.AddedReports, e.RemovedReports);
-				}
-				else
-				{
-					RefreshView();
-				}
-			}
-		}
-
 		private IEnumerable<Report> GetReports(IEnumerable<string> reportIds)
 		{
 			var reports = new List<Report>();
@@ -280,7 +259,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 			if (e.Active)
 			{
-				var task = System.Threading.Tasks.Task.Run(() => _controller.GetUpdatedStudioReports(_clientId));
+				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportChanges());
 
 				task.ContinueWith(t =>
 				{

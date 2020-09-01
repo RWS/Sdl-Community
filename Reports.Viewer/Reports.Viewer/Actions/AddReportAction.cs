@@ -29,10 +29,10 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		protected override void Execute()
 		{
-			Run(new ReportWithXslt());
+			Run(new Report());
 		}
 
-		private void AddNewReport(ReportWithXslt report)
+		private void AddNewReport(Report report)
 		{
 			var reportTemplates = _reportsViewerController.ReportsController.GetCustomReportTemplates();
 			var reports = _reportsViewerController.GetReports();
@@ -56,7 +56,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			SetEnabled();
 		}
 
-		public void Run(ReportWithXslt report)
+		public void Run(Report report)
 		{
 			report.Language = _reportsViewerController.GetSelectedLanguage();
 			report.Group = _reportsViewerController.GetSelectedGroup();

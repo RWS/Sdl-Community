@@ -201,7 +201,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void DragDrop(object parameter)
 		{
-			var report = new ReportWithXslt();
+			var report = new Report();
 
 			if (parameter == null || !(parameter is DragEventArgs eventArgs))
 			{
@@ -216,11 +216,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					var fileAttributes = File.GetAttributes(fullPath);
 					if (!fileAttributes.HasFlag(FileAttributes.Directory))
 					{
-						if (string.IsNullOrEmpty(report.Xslt) &&
+						if (string.IsNullOrEmpty(report.XsltPath) &&
 							(fullPath.ToLower().EndsWith(".xslt")
 							 || fullPath.ToLower().EndsWith(".xsl")))
 						{
-							report.Xslt = fullPath;
+							report.XsltPath = fullPath;
 						}
 						if (string.IsNullOrEmpty(report.Path) &&
 							(fullPath.ToLower().EndsWith(".html")

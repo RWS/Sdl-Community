@@ -72,11 +72,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			Group = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path ?? string.Empty;
-			Xslt = Report.XsltPath;
-			if (report is ReportWithXslt reportWithXslt)
-			{
-				Xslt = reportWithXslt.Xslt;
-			}
+			Xslt = Report.XsltPath ?? string.Empty;			
 
 			CanEditProperties = !report.IsStudioReport;
 		}
