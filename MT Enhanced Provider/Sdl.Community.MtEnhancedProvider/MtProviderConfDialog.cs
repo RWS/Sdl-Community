@@ -139,7 +139,6 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 				{
-					_logger.Error($"{_constants.BrowseEditFile} {ex.Message}\n { ex.StackTrace}");
 
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = string.Format(MtProviderConfDialogResources.lookupFileStructureCheckXmlProblemErrorMessage, System.IO.Path.GetFileName(openFile.FileName));
@@ -148,7 +147,6 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
 				{
-					_logger.Error($"{_constants.BrowseEditFile} {exp.Message}\n { exp.StackTrace}");
 
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage + " " + exp.Message;
@@ -375,7 +373,6 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch(Exception ex)
 			{
-				_logger.Error($"{_constants.UpdateDialog} {ex.Message}\n { ex.StackTrace}");
 			}
 		}
 

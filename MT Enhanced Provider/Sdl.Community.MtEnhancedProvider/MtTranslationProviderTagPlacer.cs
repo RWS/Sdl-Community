@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using NLog;
@@ -76,7 +77,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.GetTaggedSegment} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 				return new Segment();
 			}
 		}
@@ -109,7 +110,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.RemoveTrailingClosingTags} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 				return segment;
 			}
 		}
@@ -124,7 +125,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.DecodeReturnedText} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 				return string.Empty;
 			}
 		}
@@ -221,7 +222,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch(Exception ex)
 			{
-				_logger.Error($"{_constants.GetSourceTagsDict} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 			}
 			return dict;
 		}
@@ -269,7 +270,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch(Exception ex)
 			{
-				_logger.Error($"{_constants.GetTagsWithDecimals} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 			}
 			return translation;
 		}
@@ -288,7 +289,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.GetTags} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 			}
 			return translation;
 		}
@@ -307,7 +308,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.GetAlphanumericTags} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 			}
 			return translation;
 		}

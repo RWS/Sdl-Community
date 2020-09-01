@@ -23,7 +23,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 		private readonly LanguagePair[] _languagePairs;
-		private ITranslationProviderCredentialStore _credentialStore;
+		private readonly ITranslationProviderCredentialStore _credentialStore;
 
 		public delegate void CloseWindowEventRaiser();
 		public event CloseWindowEventRaiser CloseEventRaised;
@@ -122,6 +122,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public bool IsWindowValid()
 		{
 			ErrorMessage = string.Empty;
+			TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
 
 			switch (_providerControlViewModel.SelectedTranslationOption.ProviderType)
 			{
@@ -166,7 +167,13 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					ErrorMessage = PluginResources.InvalidProjectName;
 				}
 			}
-			return true;
+			return AreGoogleCredentialsValid();
+		}
+
+		private bool AreGoogleCredentialsValid()
+		{
+			return AreGoogleV2CredentialsValid();
+			//TODO: Validate for V3
 		}
 
 		private bool ValidSettingsPageOptions()
@@ -287,6 +294,26 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					Options.LanguagesSupported = correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
 						lp => Options.SelectedProvider.ToString());
 
+					return true;
+				}
+			}
+			catch (Exception e)
+			{
+				AddEncriptionMetaToResponse(e.Message);
+			}
+			return false;
+		}
+
+		private bool AreGoogleV2CredentialsValid()
+		{
+			try
+			{
+				if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
+				    MtTranslationOptions.ProviderType.GoogleTranslate &&
+				    _providerControlViewModel.SelectedGoogleApiVersion.Version == Enums.GoogleApiVersion.V2)
+				{
+					var googleApiConecter = new MtTranslationProviderGTApiConnecter(_providerControlViewModel.ApiKey);
+					googleApiConecter.ValidateCredentials();
 					return true;
 				}
 			}
