@@ -205,6 +205,45 @@ namespace Sdl.Community.Reports.Viewer
 		{
 			return ReportsController?.SelectedProject;
 		}
+		internal void Print()
+		{
+			_reportViewModel?.Print();
+		}
+
+		internal string GetSelectedLanguage()
+		{
+			if (_reportsNavigationViewModel != null)
+			{
+				return _reportsNavigationViewModel.GetSelectedLanguage();
+			}
+
+			return string.Empty;
+		}
+
+		internal string GetSelectedGroup()
+		{
+			if (_reportsNavigationViewModel != null)
+			{
+				return _reportsNavigationViewModel.GetSelectedGroup();
+			}
+
+			return string.Empty;
+		}
+
+		internal void ShowPageSetupDialog()
+		{
+			_reportViewModel?.ShowPageSetupDialog();
+		}
+
+		internal void ShowPrintPreviewDialog()
+		{
+			_reportViewModel?.ShowPrintPreviewDialog();
+		}
+
+		internal void SaveReport()
+		{
+			_reportViewModel?.SaveReport();
+		}
 
 		private void InitializeViews()
 		{
@@ -244,46 +283,6 @@ namespace Sdl.Community.Reports.Viewer
 			}
 
 			return new Settings();
-		}
-
-		public void Print()
-		{
-			_reportViewModel?.Print();
-		}
-
-		public string GetSelectedLanguage()
-		{
-			if (_reportsNavigationViewModel != null)
-			{
-				return _reportsNavigationViewModel.GetSelectedLanguage();
-			}
-
-			return string.Empty;
-		}
-
-		public string GetSelectedGroup()
-		{
-			if (_reportsNavigationViewModel != null)
-			{
-				return _reportsNavigationViewModel.GetSelectedGroup();
-			}
-
-			return string.Empty;
-		}
-
-		public void ShowPageSetupDialog()
-		{
-			_reportViewModel?.ShowPageSetupDialog();
-		}
-
-		public void ShowPrintPreviewDialog()
-		{
-			_reportViewModel?.ShowPrintPreviewDialog();
-		}
-
-		public void SaveReport()
-		{
-			_reportViewModel?.SaveReport();
 		}
 
 		private List<Report> GetReports(IEnumerable<string> reportIds)
