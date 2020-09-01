@@ -10,6 +10,7 @@ using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
 using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
@@ -22,16 +23,18 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 		private readonly LanguagePair[] _languagePairs;
+		private ITranslationProviderCredentialStore _credentialStore;
 
 		public delegate void CloseWindowEventRaiser();
 		public event CloseWindowEventRaiser CloseEventRaised;
 
-		public MainWindowViewModel(IMtTranslationOptions options,IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel, 
-			LanguagePair[] languagePairs)
+		public MainWindowViewModel(IMtTranslationOptions options,IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel,
+			ITranslationProviderCredentialStore credentialStore, LanguagePair[] languagePairs)
 		{
 			Options = options;
 			_providerControlViewModel = providerControlViewModel;
 			_settingsControlViewModel = settingsControlViewModel;
+			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			SaveCommand = new RelayCommand(Save);
 			ShowSettingsViewCommand =  new CommandHandler(ShowSettingsPage, true);
@@ -230,9 +233,32 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				SetGoogleProviderOptions();
 
 				SetGeneralProviderOptions();
-
+				DeleteCredentialsIfNecessary();
 				DialogResult = true;
 				CloseEventRaised?.Invoke();
+			}
+		}
+
+		private void DeleteCredentialsIfNecessary()
+		{
+			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
+			    MtTranslationOptions.ProviderType.MicrosoftTranslator && !Options.PersistMicrosoftCreds)
+			{
+				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
+			}
+			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
+			    MtTranslationOptions.ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
+			{
+				RemoveCredentialsFromStore(new Uri(PluginResources.UriGt));
+			}
+		}
+
+		private void RemoveCredentialsFromStore(Uri providerUri)
+		{
+			var credentials = _credentialStore.GetCredential(providerUri);
+			if (credentials != null)
+			{
+				_credentialStore.RemoveCredential(providerUri);
 			}
 		}
 
@@ -256,10 +282,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 					if (Options == null) return true;
 					var allSupportedLanguages = ApiConnecter.SupportedLangs;
-					var correspondingLanguages = _languagePairs
-						.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
+					var correspondingLanguages = _languagePairs?.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
 
-					Options.LanguagesSupported = correspondingLanguages.ToDictionary(lp => lp.TargetCultureName,
+					Options.LanguagesSupported = correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
 						lp => Options.SelectedProvider.ToString());
 
 					return true;

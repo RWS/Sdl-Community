@@ -67,8 +67,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+
 			var translatedText = string.Empty;
 			try
 			{
@@ -207,8 +206,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		{
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
 			var languageCodeList = new List<string>();
 			try
@@ -248,7 +245,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			{
 				using (var responseStream = response.GetResponseStream())
 				{
-					using (var sr = new StreamReader(responseStream, System.Text.Encoding.ASCII))
+					using (var sr = new StreamReader(responseStream, Encoding.ASCII))
 					{
 						strResponse = sr.ReadToEnd();
 					}

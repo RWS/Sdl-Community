@@ -70,17 +70,23 @@ namespace Sdl.Community.MtEnhancedProvider
 	    }
 
 	    /// <summary>
-        /// This gets called when a TranslationProviderAuthenticationException is thrown
-        /// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
-        /// any new options set in the form that comes up are never saved to the project XML...
-        /// so there is no way to change any options, only to provide the credentials
-        /// </summary>
-        public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
-        {
-			throw new NotImplementedException();
-		}
+	    /// This gets called when a TranslationProviderAuthenticationException is thrown
+	    /// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
+	    /// any new options set in the form that comes up are never saved to the project XML...
+	    /// so there is no way to change any options, only to provide the credentials
+	    /// </summary>
+	    public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
+		    ITranslationProviderCredentialStore credentialStore)
+	    {
+		    var options = new MtTranslationOptions();
 
-        /// <summary>
+		    var mainWindowVm = ShowProviderWindow(null, credentialStore, options);
+
+		    if (!mainWindowVm.DialogResult) return false;
+		    return mainWindowVm.DialogResult;
+	    }
+
+	    /// <summary>
         /// Used for displaying the plug-in info such as the plug-in name,
         /// tooltip, and icon.
         /// </summary>
@@ -128,7 +134,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		    var providerControlVm = new ProviderControlViewModel(loadOptions);
 
 		    var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService);
-		    var mainWindowVm = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm, languagePairs);
+		    var mainWindowVm = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm, credentialStore,languagePairs);
 
 		    var mainWindow = new MainWindow
 		    {
