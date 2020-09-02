@@ -339,6 +339,8 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
+
+			preTranslatesegments.RemoveAll(seg => string.IsNullOrWhiteSpace(seg.PlainTranslation));
 			return preTranslatesegments;
 		}
 	}
