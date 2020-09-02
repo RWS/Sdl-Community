@@ -449,9 +449,12 @@ namespace Sdl.Community.Reports.Viewer
 				var task = System.Threading.Tasks.Task.Run(() => ReportsController.GetStudioReportChanges());
 				task.ContinueWith(t =>
 				{
-					if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
+					if (t.IsCompleted && !t.IsFaulted && t.Result != null)
 					{
-						DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
+						if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
+						{
+							DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
+						}
 					}
 				});
 			}
