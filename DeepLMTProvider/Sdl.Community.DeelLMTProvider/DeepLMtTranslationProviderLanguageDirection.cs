@@ -100,6 +100,7 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception e)
 			{
 				_logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
+				throw;
 			}
 			return results;
 		}
