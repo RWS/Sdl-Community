@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Viewer.API.Example", "Reports.Viewer.API.Example\Reports.Viewer.API.Example.csproj", "{4CC9920F-CDD9-425E-9DB1-59C139F8E809}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CC9920F-CDD9-425E-9DB1-59C139F8E809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CC9920F-CDD9-425E-9DB1-59C139F8E809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CC9920F-CDD9-425E-9DB1-59C139F8E809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CC9920F-CDD9-425E-9DB1-59C139F8E809}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E148E5D-592B-4DC5-8863-520AEA6C00E7}
+	EndGlobalSection
+EndGlobal
