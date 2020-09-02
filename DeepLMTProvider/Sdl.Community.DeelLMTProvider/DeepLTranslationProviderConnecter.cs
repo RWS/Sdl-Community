@@ -93,15 +93,18 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-						_logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
-							$"Response content: {response.Content?.ReadAsStringAsync().Result}.");
-						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						var message =
+							$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+							$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
+						_logger.Error(message);
+						throw new HttpRequestException(message);
 					}
 				}
 			}
 			catch (Exception e)
 			{
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
+				throw;
 			}
 
 			return translatedText;

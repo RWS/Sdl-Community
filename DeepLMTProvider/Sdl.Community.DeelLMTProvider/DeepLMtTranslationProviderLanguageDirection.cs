@@ -100,6 +100,7 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception e)
 			{
 				_logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
+				throw;
 			}
 			return results;
 		}
@@ -338,6 +339,8 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
+
+			preTranslatesegments.RemoveAll(seg => string.IsNullOrWhiteSpace(seg.PlainTranslation));
 			return preTranslatesegments;
 		}
 	}
