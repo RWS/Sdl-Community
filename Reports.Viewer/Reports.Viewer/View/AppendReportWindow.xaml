@@ -1,0 +1,319 @@
+﻿<Window x:Class="Sdl.Community.Reports.Viewer.View.AppendReportWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"       
+        xmlns:sdl="http://schemas.sdl.com/xaml"
+        xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
+        xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
+        WindowStyle="ThreeDBorderWindow"
+		WindowStartupLocation="CenterScreen"
+        AllowsTransparency="False" 
+        ResizeMode="CanResizeWithGrip"
+		mc:Ignorable="d" 
+        Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+        MinHeight="400" MinWidth="600" Height="400" Width="600"
+		d:DataContext="{d:DesignInstance viewModel:AppendReportViewModel}">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid Margin="10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Border Grid.Row="0" >
+			<Grid Margin="2">
+			</Grid>
+		</Border>
+		<Grid Grid.Row="1" Margin="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Path:" Margin="5,10,5,5"/>
+				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,10,5,5">
+					<TextBox HorizontalContentAlignment="Stretch" 
+					         Padding="2,0,20,0" Height="24" 
+					         VerticalAlignment="Center"
+							  VerticalContentAlignment="Center"
+				        Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}" IsEnabled="True" />
+					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the report file (*.xml;*.html)"
+					       VerticalAlignment="Center" HorizontalAlignment="Left"
+				           Margin="0" Foreground="DarkGray">
+						<TextBlock.Style>
+							<Style TargetType="{x:Type TextBlock}">
+								<Setter Property="Visibility" Value="Collapsed" />
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding Path}" Value="" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter Property="Visibility" Value="Visible" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+					</TextBlock>
+					<Button Cursor="Hand" ToolTip="Clear"
+						Command="{Binding ClearPathCommand}"
+						CommandParameter="path"
+						HorizontalAlignment="Right" Margin="2,0,0,0" Width="20" VerticalContentAlignment="Center">
+						<Button.Style>
+							<Style TargetType="{x:Type Button}">
+								<Setter Property="Visibility" Value="Visible" />
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="Button">
+											<Border Background="Transparent">
+												<ContentPresenter/>
+											</Border>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding Path}" Value="" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter Property="Visibility" Value="Collapsed" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+
+							</Style>
+						</Button.Style>
+						<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="../Resources/Close.png" Height="10" 
+					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
+					</Button>
+				</Grid>
+				<Button Grid.Row="0" Grid.Column="2" Content="..." 
+				        Command="{Binding BrowseFolderCommand}"
+				        CommandParameter="path"
+						ToolTip="Select the output folder"
+				        HorizontalAlignment="Left" VerticalAlignment="Center" 
+				        Height="24" Width="24" Margin="0,5,0,0"/>
+				<Grid.Style>
+					<Style TargetType="{x:Type Grid}">
+						<Setter Property="IsEnabled" Value="True" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding IsEditMode}" Value="True">
+								<Setter Property="IsEnabled" Value="False"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Grid.Style>
+			</Grid>
+
+			<Grid Grid.Row="1"				     
+			      IsEnabled="{Binding CanEditXslt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template:" 
+				           Margin="5,5,5,5"/>
+				<Grid Grid.Column="1" Height="24" Margin="0,0,5,0">
+					<TextBox HorizontalContentAlignment="Stretch" 
+					         Padding="2,0,20,0" Height="24" 
+					         VerticalAlignment="Center"
+							 VerticalContentAlignment="Center"
+				        Text="{Binding Xslt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}" IsEnabled="True" />
+					<TextBlock IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the xslt file"
+					       VerticalAlignment="Center" HorizontalAlignment="Left"
+				           Margin="0" Foreground="DarkGray">
+						<TextBlock.Style>
+							<Style TargetType="{x:Type TextBlock}">
+								<Setter Property="Visibility" Value="Collapsed" />
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding Xslt}" Value="" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter Property="Visibility" Value="Visible" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+					</TextBlock>
+					<Button Cursor="Hand" ToolTip="Clear"
+						Command="{Binding ClearPathCommand}"
+					    CommandParameter="xslt"
+						HorizontalAlignment="Right" Margin="2,0,0,0" Width="20" VerticalContentAlignment="Center">
+						<Button.Style>
+							<Style TargetType="{x:Type Button}">
+								<Setter Property="Visibility" Value="Visible" />
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="Button">
+											<Border Background="Transparent">
+												<ContentPresenter/>
+											</Border>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding Xslt}" Value="" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter Property="Visibility" Value="Collapsed" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+
+							</Style>
+						</Button.Style>
+						<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="../Resources/Close.png" Height="10" 
+					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
+					</Button>
+				</Grid>
+				<Button Grid.Column="2" Content="..." 
+				        Command="{Binding BrowseFolderCommand}"
+				        CommandParameter="xslt"
+						ToolTip="Select the output folder"
+				        HorizontalAlignment="Left" VerticalAlignment="Center" 
+				        Height="24" Width="24" Margin="0,0,0,0"/>
+			</Grid>
+
+			<Grid Grid.Row="2" Margin="0,5,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<TextBlock  Margin="5,0,5,5" VerticalAlignment="Center" Grid.Column="0" MinWidth="80" Text="Name:"/>
+				<TextBox Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
+			</Grid>
+			
+			<Grid Grid.Row="3" 
+			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+			      Margin="0,5,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Column="0" Margin="5,0,5,5" VerticalAlignment="Center" MinWidth="80" Text="Group:"/>
+				<ComboBox Grid.Column="1" IsEditable="True" Margin="0,0,30,0"
+				          ItemsSource="{Binding GroupNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				          Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+
+			<Grid Grid.Row="4"
+			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<TextBlock VerticalAlignment="Center" Text="Language:" MinWidth="80" 
+					          Margin="5,10,5,5"/>
+
+				<sdl:MultiSelectComboBox Grid.Row="0" Grid.Column="1" 
+					    Margin="0,5,30,0" 
+					    Height="30" 
+					    MaxDropDownHeight="250"							
+				        Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+				        SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+				        DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+					    ItemsSource="{Binding LanguageItems}"            
+					    SelectedItems="{Binding SelectedLanguageItems}"
+					    sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+					    EnableGrouping="False"
+					    EnableFiltering="True"
+					    IsEditable="True"
+					    EnableAutoComplete="True"
+				        SelectionMode ="Single"
+					    ClearFilterOnDropdownClosing="True"
+					    ClearSelectionOnFilterChanged="True"
+					/>
+
+
+			</Grid>
+
+			<Grid Grid.Row="5" Margin="0,5,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<TextBlock  Margin="5,5,5,0" VerticalAlignment="Top" Grid.Column="0" MinWidth="80" Text="Description:"/>
+				<TextBox Grid.Column="1" TextWrapping="Wrap" 
+				         HorizontalScrollBarVisibility="Disabled" 
+				         Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				         Height="70" Margin="0,0,30,0"/>
+			</Grid>
+
+		</Grid>
+		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
+			<Grid Height="28">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+					<Button Margin="0,0,10,0" Width="90" Command="{Binding SaveCommand}"
+					      IsEnabled="{Binding IsValid}" IsDefault="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>OK</TextBlock>
+						</StackPanel>
+					</Button>
+					<Button Margin="0" Width="90" IsCancel="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>Cancel</TextBlock>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+			</Grid>
+		</StackPanel>
+	</Grid>
+</Window>
