@@ -4,7 +4,7 @@
 	<Version>2.0.0.19</Version>
 	<Description>SDL Reports Viewer for SDL Trados Studio</Description>
 	<Author>SDL Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="15.2" maxversion="16.0" />
+	<RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
 	<Include>
 		<File>Sdl.MultiSelectComboBox.dll</File>
 	</Include>
