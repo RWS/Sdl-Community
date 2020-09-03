@@ -30,8 +30,8 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// </summary>
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
 
-		private MtTranslationProviderGTApiConnecter gtConnect;
-		private ApiConnecter mstConnect;
+		private MtTranslationProviderGTApiConnecter _gtConnect;
+		private ApiConnecter _mstConnect;
 
 		public MtTranslationProvider(IMtTranslationOptions options)
 		{
@@ -123,22 +123,23 @@ namespace Sdl.Community.MtEnhancedProvider
 			{
 				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
 				{
-					if (mstConnect == null) //construct ApiConnecter if necessary 
-						mstConnect = new ApiConnecter(Options.ClientId);
+					if (_mstConnect == null) //construct ApiConnecter if necessary 
+						_mstConnect = new ApiConnecter(Options.ClientId);
 					else
-						mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
+						_mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
 
-					return mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
+					return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
 						languageDirection.TargetCulture.Name);
 				}
 				case MtTranslationOptions.ProviderType.GoogleTranslate:
 				{
-					if (gtConnect == null) //instantiate GtApiConnecter if necessary
-						gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
+					//TODO:Check what version of Google should be used v2 or v3
+					if (_gtConnect == null) //instantiate GtApiConnecter if necessary
+						_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
 					else
-						gtConnect.ApiKey =
+						_gtConnect.ApiKey =
 							Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
-					return gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+					return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 				}
 				default:
 					//not likely to get here but...

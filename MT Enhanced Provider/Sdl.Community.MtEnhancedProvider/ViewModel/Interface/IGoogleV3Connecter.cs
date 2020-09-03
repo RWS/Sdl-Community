@@ -9,5 +9,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 	public interface IGoogleV3Connecter
 	{
 		void GetAvailableLanguages();
+		void TryToAuthenticateUser();
 	}
 }

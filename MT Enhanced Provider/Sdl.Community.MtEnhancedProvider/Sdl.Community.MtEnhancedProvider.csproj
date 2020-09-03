@@ -234,6 +234,7 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Model\GoogleApiVersion.cs" />
+    <Compile Include="Model\GoogleV3LanguageModel.cs" />
     <Compile Include="Model\Interface\IMtTranslationOptions.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Error.cs" />

@@ -152,58 +152,37 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					ErrorMessage = PluginResources.ApiKeyError;
 					return false;
 				}
+				return AreGoogleV2CredentialsValid();
 			}
-			else
+			if (string.IsNullOrEmpty(_providerControlViewModel.JsonFilePath))
 			{
-				if (string.IsNullOrEmpty(_providerControlViewModel.JsonFilePath))
-				{
-					ErrorMessage = PluginResources.EmptyJsonFilePathMsg;
-					return false;
-				}
-				if (!File.Exists(_providerControlViewModel.JsonFilePath))
-				{
-					ErrorMessage = PluginResources.WrongJsonFilePath;
-					return false;
-				}
-				if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
-				{
-					ErrorMessage = PluginResources.InvalidProjectName;
-				}
+				ErrorMessage = PluginResources.EmptyJsonFilePathMsg;
+				return false;
 			}
-			return AreGoogleCredentialsValid();
-		}
-
-		private bool AreGoogleCredentialsValid()
-		{
-			//return AreGoogleV2CredentialsValid();
-			//TODO: Validate for V3
+			if (!File.Exists(_providerControlViewModel.JsonFilePath))
+			{
+				ErrorMessage = PluginResources.WrongJsonFilePath;
+				return false;
+			}
+			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
+			{
+				ErrorMessage = PluginResources.InvalidProjectName;
+			}
 			return AreGoogleV3CredentialsValid();
 		}
+
 
 		private bool AreGoogleV3CredentialsValid()
 		{
 			try
 			{
-				Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, _providerControlViewModel.JsonFilePath);
+				var googleV3 = new GoogleV3Connecter(_providerControlViewModel.ProjectName,_providerControlViewModel.JsonFilePath);
+				//googleV3.TryToAuthenticateUser();
 
-
-				var translationServiceClient = TranslationServiceClient.Create();
-
-				var request = new TranslateTextRequest
-				{
-					Contents =
-				 {
-				  "test"
-				 },
-					TargetLanguageCode = "fr-FR",
-					Parent = new ProjectName(_providerControlViewModel.ProjectName).ToString()
-
-				};
-				var response = translationServiceClient.TranslateText(request);
-				////var googleV3 = new GoogleV3Connecter(_providerControlViewModel.ProjectName,_providerControlViewModel.ApiKey);
-				//googleV3.GetAvailableLanguages();
-
+				//TODO:Set languages
+				googleV3.GetAvailableLanguages();
 			}
+
 			catch (Exception e)
 			{
 				var message = e.Message.Contains("Invalid resource name") ? PluginResources.InvalidProjectName : e.Message;
@@ -311,29 +290,26 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-				    MtTranslationOptions.ProviderType.MicrosoftTranslator)
+				var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId);
+
+				if (!string.IsNullOrEmpty(Options?.ClientId))
 				{
-
-					var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId);
-
-					if (!string.IsNullOrEmpty(Options?.ClientId))
+					if (!Options.ClientId.Equals(_providerControlViewModel.ClientId))
 					{
-						if (!Options.ClientId.Equals(_providerControlViewModel.ClientId))
-						{
-							apiConnecter.RefreshAuthToken();
-						}
+						apiConnecter.RefreshAuthToken();
 					}
-
-					if (Options == null) return true;
-					var allSupportedLanguages = ApiConnecter.SupportedLangs;
-					var correspondingLanguages = _languagePairs?.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
-
-					Options.LanguagesSupported = correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
-						lp => Options.SelectedProvider.ToString());
-
-					return true;
 				}
+
+				if (Options == null) return true;
+				var allSupportedLanguages = ApiConnecter.SupportedLangs;
+				var correspondingLanguages = _languagePairs
+					?.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
+
+				Options.LanguagesSupported = correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
+					lp => _providerControlViewModel.SelectedTranslationOption.Name);
+
+				return true;
+
 			}
 			catch (Exception e)
 			{
@@ -346,14 +322,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-				    MtTranslationOptions.ProviderType.GoogleTranslate &&
-				    _providerControlViewModel.SelectedGoogleApiVersion.Version == Enums.GoogleApiVersion.V2)
-				{
-					var googleApiConecter = new MtTranslationProviderGTApiConnecter(_providerControlViewModel.ApiKey);
-					googleApiConecter.ValidateCredentials();
-					return true;
-				}
+				var googleApiConecter = new MtTranslationProviderGTApiConnecter(_providerControlViewModel.ApiKey);
+				googleApiConecter.ValidateCredentials();
+				return true;
 			}
 			catch (Exception e)
 			{

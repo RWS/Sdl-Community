@@ -204,6 +204,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			var targetlang = _languageDirection.TargetCulture.ToString();
 
 			//instantiate ApiConnecter if necessary
+			//TOOD: Check what version of api should be instatiated V2 or V3
 			if (_mstConnect == null)
 			{
 				_mstConnect = new ApiConnecter(_options.ClientId);
