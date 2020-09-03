@@ -25,7 +25,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.LanguagePlatform.Core;
 
-namespace Sdl.Community.MtEnhancedProvider
+namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 {
 	public class MtTranslationProviderGTApiConnecter
 	{

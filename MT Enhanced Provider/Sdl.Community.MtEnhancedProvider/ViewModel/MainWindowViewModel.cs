@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using Google.Api.Gax.ResourceNames;
+using Google.Cloud.Translate.V3;
 using Sdl.Community.MtEnhancedProvider.Commands;
+using Sdl.Community.MtEnhancedProvider.GoogleApi;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
@@ -122,7 +125,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public bool IsWindowValid()
 		{
 			ErrorMessage = string.Empty;
-			TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
+			//TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
 
 			switch (_providerControlViewModel.SelectedTranslationOption.ProviderType)
 			{
@@ -172,8 +175,43 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		private bool AreGoogleCredentialsValid()
 		{
-			return AreGoogleV2CredentialsValid();
+			//return AreGoogleV2CredentialsValid();
 			//TODO: Validate for V3
+			return AreGoogleV3CredentialsValid();
+		}
+
+		private bool AreGoogleV3CredentialsValid()
+		{
+			try
+			{
+				Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, _providerControlViewModel.JsonFilePath);
+
+
+				var translationServiceClient = TranslationServiceClient.Create();
+
+				var request = new TranslateTextRequest
+				{
+					Contents =
+				 {
+				  "test"
+				 },
+					TargetLanguageCode = "fr-FR",
+					Parent = new ProjectName(_providerControlViewModel.ProjectName).ToString()
+
+				};
+				var response = translationServiceClient.TranslateText(request);
+				////var googleV3 = new GoogleV3Connecter(_providerControlViewModel.ProjectName,_providerControlViewModel.ApiKey);
+				//googleV3.GetAvailableLanguages();
+
+			}
+			catch (Exception e)
+			{
+				var message = e.Message.Contains("Invalid resource name") ? PluginResources.InvalidProjectName : e.Message;
+
+				AddEncriptionMetaToResponse(message);
+				return false;
+			}
+			return true;
 		}
 
 		private bool ValidSettingsPageOptions()

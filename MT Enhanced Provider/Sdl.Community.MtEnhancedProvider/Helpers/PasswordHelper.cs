@@ -86,7 +86,7 @@ namespace Sdl.Community.MtEnhancedProvider.Helpers
 		{
 			var passwordBox = sender as PasswordBox;
 			SetIsUpdating(passwordBox, true);
-			SetPassword(passwordBox, passwordBox.Password);
+			SetPassword(passwordBox, passwordBox?.Password);
 			SetIsUpdating(passwordBox, false);
 		}
 	}
