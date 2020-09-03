@@ -36,6 +36,18 @@ steps:
     script: |
       Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
 - task: DownloadPipelineArtifact@2
+  displayName: 'Download Reports.Viewer.Api.dll'
+  inputs:
+    source: 'specific'
+    project: 'AppStoreApplications'
+    artifactName: 'RVC'
+    buildVersionToDownload: 'latestFromBranch'
+    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+    runBranch: '$(StudioBranch)'
+    runId: 107131
+    definition: 58050
+
+- task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
   inputs:
     buildType: 'specific'
@@ -47,17 +59,6 @@ steps:
     runBranch: '$(StudioBranch)'
     tags: 'Package'
 
-- task: DownloadPipelineArtifact@2
-  displayName: 'Download Reports.Viewer.Api.dll'
-  inputs:
-    source: 'specific'
-    project: 'AppStoreApplications'
-    artifactName: 'RVC'
-    buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
-    runBranch: '$(StudioBranch)'
-    runId: 107131
-    definition: 58050 
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet 4.5.3'
   inputs:
