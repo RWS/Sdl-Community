@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Reports.Viewer.API.Example/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Reports.Viewer.API.Example/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Reports.Viewer.API.Example.sln'
+- name: pathToPublish
+  value: ''
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+#  - template: jobs/publish-build-artifact-task.yml
