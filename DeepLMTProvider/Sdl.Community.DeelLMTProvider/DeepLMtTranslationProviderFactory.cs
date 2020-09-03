@@ -12,7 +12,7 @@ namespace Sdl.Community.DeepLMTProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
 			var originalUri = new Uri("deeplprovider:///");
-			var options = new DeepLTranslationOptions(translationProviderUri);
+			var options = new DeepLTranslationOptions(translationProviderUri, translationProviderState);
 
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
@@ -31,7 +31,7 @@ namespace Sdl.Community.DeepLMTProvider
 				var credentials = credentialStore.GetCredential(originalUri);
 				options.Identifier = credentials.Credential;
 			}
-			return new DeepLMtTranslationProvider(options);
+			return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality));
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
