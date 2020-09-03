@@ -55,8 +55,8 @@ steps:
     artifactName: 'RVC'
     buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
-    runBranch: master
-
+    runBranch: '$(StudioBranch)'
+    tags: rvc
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet 4.5.3'
   inputs:
