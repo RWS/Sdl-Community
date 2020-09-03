@@ -50,13 +50,14 @@ steps:
 - task: DownloadPipelineArtifact@2
   displayName: 'Download Reports.Viewer.Api.dll'
   inputs:
-    buildType: 'specific'
+    source: 'specific'
     project: 'AppStoreApplications'
     artifactName: 'RVC'
     buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
-    tags: rvc
+    runId: 107131
+    definition: 58050 
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet 4.5.3'
   inputs:
