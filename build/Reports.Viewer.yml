@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Reports.Viewer.sln'
 - name: pathToPublish
-  value: ''
+  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
 
 steps:
 - task: PowerShell@2
@@ -74,4 +74,4 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-#  - template: jobs/publish-build-artifact-task.yml
+- template: jobs/publish-build-artifact-task.yml
