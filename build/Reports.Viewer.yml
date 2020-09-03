@@ -35,17 +35,15 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+
 - task: DownloadPipelineArtifact@2
-  displayName: 'Download Reports.Viewer.Api.dll'
   inputs:
-    source: 'specific'
-    project: 'AppStoreApplications'
+    buildType: 'specific'
+    project: 'bec36e61-e55d-402c-89cf-e2b28aefe754'
+    definition: '2019'
+    buildVersionToDownload: 'latest'
     artifactName: 'RVC'
-    buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
-    runBranch: '$(StudioBranch)'
-    runId: 107131
-    definition: 58050
 
 - task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
