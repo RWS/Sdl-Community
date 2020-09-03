@@ -51,7 +51,7 @@ steps:
   displayName: 'Download Reports.Viewer.Api.dll'
   inputs:
     buildType: 'specific'
-    project: 'AppStoreApplication'
+    project: 'AppStoreApplications'
     artifactName: 'RVC'
     buildVersionToDownload: 'latestFromBranch'
     targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
