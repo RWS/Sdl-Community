@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using NLog;
@@ -184,7 +180,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 			catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
 			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {exp.Message}\n { exp.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {exp}");
 
 				ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}

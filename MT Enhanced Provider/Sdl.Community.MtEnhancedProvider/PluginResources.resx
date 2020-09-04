@@ -366,4 +366,10 @@
   <data name="GoogleApiVersionV3Description" xml:space="preserve">
     <value>V3 - Advanced Translation</value>
   </data>
+  <data name="GoogleAdvanced" xml:space="preserve">
+    <value>MT Enhanced using Google Translate Advanced</value>
+  </data>
+  <data name="GoogleBasic" xml:space="preserve">
+    <value>MT Enhanced using Google Translate Basic</value>
+  </data>
 </root>

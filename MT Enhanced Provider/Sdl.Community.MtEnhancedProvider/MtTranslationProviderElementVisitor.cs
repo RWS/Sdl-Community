@@ -17,10 +17,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				return _plainText;
 			}
-			set
-			{
-				_plainText = value;
-			}
+			set => _plainText = value;
 		}
 
 		public void Reset()

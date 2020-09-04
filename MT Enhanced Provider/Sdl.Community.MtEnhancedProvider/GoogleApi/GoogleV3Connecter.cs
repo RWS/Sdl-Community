@@ -44,7 +44,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			}
 			catch (Exception e)
 			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n { e.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 				throw;
 			}
 			
@@ -63,22 +63,29 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 
 		public void SetGoogleAvailableLanguages()
 		{
-			var request = new GetSupportedLanguagesRequest
+			try
 			{
-				ParentAsLocationName = new LocationName(ProjectName, "global"),
-			};
-			var response = _translationServiceClient.GetSupportedLanguages(request);
-
-			foreach (var language in response.Languages)
-			{
-				var languageModel = new GoogleV3LanguageModel
+				var request = new GetSupportedLanguagesRequest
 				{
-					GoogleLanguageCode = language.LanguageCode,
-					SupportSource = language.SupportSource,
-					SupportTarget = language.SupportTarget,
-					CultureInfo =  new CultureInfo(language.LanguageCode)
+					ParentAsLocationName = new LocationName(ProjectName, "global"),
 				};
-				SupportedLanguages.Add(languageModel);
+				var response = _translationServiceClient.GetSupportedLanguages(request);
+
+				foreach (var language in response.Languages)
+				{
+					var languageModel = new GoogleV3LanguageModel
+					{
+						GoogleLanguageCode = language.LanguageCode,
+						SupportSource = language.SupportSource,
+						SupportTarget = language.SupportTarget,
+						CultureInfo = new CultureInfo(language.LanguageCode)
+					};
+					SupportedLanguages.Add(languageModel);
+				}
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 			}
 		}
 

@@ -253,6 +253,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MT Enhanced using Google Translate Advanced.
+        /// </summary>
+        public static string GoogleAdvanced {
+            get {
+                return ResourceManager.GetString("GoogleAdvanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select the version of the Google Translate API that you wish to use:.
         /// </summary>
         public static string GoogleApiDescription {
@@ -285,6 +294,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string GoogleApiVersionV3Description {
             get {
                 return ResourceManager.GetString("GoogleApiVersionV3Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MT Enhanced using Google Translate Basic.
+        /// </summary>
+        public static string GoogleBasic {
+            get {
+                return ResourceManager.GetString("GoogleBasic", resourceCulture);
             }
         }
         

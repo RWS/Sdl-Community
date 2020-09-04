@@ -300,8 +300,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			try
 			{
 				var googleV3 = new GoogleV3Connecter(_providerControlViewModel.ProjectName, _providerControlViewModel.JsonFilePath);
-				//TODO:Remove this for final implementation
-				//googleV3.TryToAuthenticateUser(); 
+				googleV3.TryToAuthenticateUser(); 
 			}
 
 			catch (Exception e)

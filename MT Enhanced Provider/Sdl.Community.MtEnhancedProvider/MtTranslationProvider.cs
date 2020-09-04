@@ -49,7 +49,9 @@ namespace Sdl.Community.MtEnhancedProvider
 			get
 			{
 				if (Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-					return PluginResources.Google_Name;
+				{
+					return Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
+				}
 				if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 					return PluginResources.Microsoft_Name;
 				return PluginResources.Plugin_Name;

@@ -16,6 +16,7 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 using NLog;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.Community.MtEnhancedProvider.View;
@@ -95,12 +96,20 @@ namespace Sdl.Community.MtEnhancedProvider
             var info = new TranslationProviderDisplayInfo();
             var options = new MtTranslationOptions(translationProviderUri);
             info.TranslationProviderIcon = PluginResources.my_icon;
-            
-            if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-            {
-                info.Name = PluginResources.Google_NiceName;
-                info.TooltipText = PluginResources.Google_Tooltip;
-                info.SearchResultImage = PluginResources.my_image;
+
+	        if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+	        {
+		        if (options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
+		        {
+			        info.Name = PluginResources.GoogleBasic;
+			        info.TooltipText = PluginResources.GoogleBasic;
+		        }
+		        else
+		        {
+					info.Name = PluginResources.GoogleAdvanced;
+			        info.TooltipText = PluginResources.GoogleAdvanced;
+				}
+		        info.SearchResultImage = PluginResources.my_image;
             }
             else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
             {
