@@ -30,7 +30,7 @@ namespace Sdl.Community.DeepLMTProvider
             dialog.ShowDialog();
             if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
             {
-                var provider = new DeepLMtTranslationProvider(options)
+                var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality), languagePairs)
                 {
                     Options = dialog.Options
                 };
@@ -62,7 +62,6 @@ namespace Sdl.Community.DeepLMTProvider
             dialog.ShowDialog();
             if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
             {
-                editProvider.Options = dialog.Options;
                 var apiKey = editProvider.Options.ApiKey;
                 SetDeeplCredentials(credentialStore, apiKey, true);
                 return true;
