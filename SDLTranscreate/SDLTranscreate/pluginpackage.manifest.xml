@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+	<PlugInName>SDL Transcreate for SDL Trados Studio</PlugInName>
+	<Version>2.0.0.3</Version>
+	<Description>SDL Transcreate for SDL Trados Studio</Description>
+	<Author>SDL</Author>
+	<RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+	<Include>
+		<File>Sdl.MultiSelectComboBox.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
+	</Include>
+</PluginPackage>

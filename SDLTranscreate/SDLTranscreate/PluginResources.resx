@@ -1,0 +1,556 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DefaultLanguageMappings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\defaultlanguagemappings.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Messagel_ResetLanguagesSuccess" xml:space="preserve">
+    <value>Successfully reset language mappings</value>
+  </data>
+  <data name="Message_AccecptRejectTrackChangesBeforeExporting" xml:space="preserve">
+    <value>Accept/Reject all track changes before exporting to XLIFF format</value>
+  </data>
+  <data name="Message_ActionWillRemoveAllProjectData" xml:space="preserve">
+    <value>This action will remove all project data managed by Transcreate Manager</value>
+  </data>
+  <data name="Message_DoYouWantToProceed" xml:space="preserve">
+    <value>Do you want to proceed?</value>
+  </data>
+  <data name="Message_ErrorImportingFrom" xml:space="preserve">
+    <value>Error importing translations from: {0}</value>
+  </data>
+  <data name="Message_Exported_on_0" xml:space="preserve">
+    <value>Exported on: {0}</value>
+  </data>
+  <data name="Message_FileWasExportedOn" xml:space="preserve">
+    <value>This file has been exported on the {0}.</value>
+  </data>
+  <data name="Message_File_already_exported" xml:space="preserve">
+    <value>File already exported</value>
+  </data>
+  <data name="Message_File_already_imported" xml:space="preserve">
+    <value>File already imported</value>
+  </data>
+  <data name="Message_File_Path_0" xml:space="preserve">
+    <value>Path: {0}</value>
+  </data>
+  <data name="Message_Imported_on_0" xml:space="preserve">
+    <value>Imported on: {0}</value>
+  </data>
+  <data name="Message_NoProjectFilesSelected" xml:space="preserve">
+    <value>No project files selected!</value>
+  </data>
+  <data name="Message_SelectOutputFolder" xml:space="preserve">
+    <value>Select the output folder</value>
+  </data>
+  <data name="Message_UnableToProcessFileWithTrackChanges" xml:space="preserve">
+    <value>Unable to process file with revision markers.</value>
+  </data>
+  <data name="Message_WarningTranslationsCanBeOverwrittenDuringImport" xml:space="preserve">
+    <value>Depending on the settings you choose during import, changes made before importing the XLIFF may not be retained and could cause the import to fail.</value>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>SDL Transcreate</value>
+  </data>
+  <data name="StatusLabel_Files_0_Selected_1" xml:space="preserve">
+    <value>Files: {0}, Selected: {1}</value>
+  </data>
+  <data name="StatusLabel_Projects_0_Files_1_Selected_2" xml:space="preserve">
+    <value>Projects: {0}, Files: {1}, Selected: {2}</value>
+  </data>
+  <data name="StatusLabel_Selected_0" xml:space="preserve">
+    <value>Selected: {0}</value>
+  </data>
+  <data name="StatusLabel_TotalLanguages" xml:space="preserve">
+    <value>Total Languages: {0}</value>
+  </data>
+  <data name="StatusLabel_TotalLanguagesFiltered" xml:space="preserve">
+    <value>Total Languages: {0}, Filtered: {1}</value>
+  </data>
+  <data name="Title_WizardPage" xml:space="preserve">
+    <value>{0} {1} Wizard - {2}</value>
+  </data>
+  <data name="TranscreateManager_ActionsGroup_Name" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="TranscreateManager_Description" xml:space="preserve">
+    <value>SDL Transcreate Manager</value>
+  </data>
+  <data name="TranscreateManager_Export_Description" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="TranscreateManager_Export_Name" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="TranscreateManager_Import_Description" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="TranscreateManager_Import_Name" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="TranscreateManager_Name" xml:space="preserve">
+    <value>SDL Transcreate</value>
+  </data>
+  <data name="TranscreateManager_ProjectFileActivity_Description" xml:space="preserve">
+    <value>Project File Activity</value>
+  </data>
+  <data name="TranscreateManager_ProjectFileActivity_Name" xml:space="preserve">
+    <value>Project File Activity</value>
+  </data>
+  <data name="TranscreateManager_SettingsGroup_Name" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="FilesDialog_Title" xml:space="preserve">
+    <value>Please select file(s)</value>
+  </data>
+  <data name="FolderDialog_Title" xml:space="preserve">
+    <value>Please select a folder</value>
+  </data>
+  <data name="JobProcess_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="JobProcess_Finalize" xml:space="preserve">
+    <value>Finalize</value>
+  </data>
+  <data name="JobProcess_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="JobProcess_Preparation" xml:space="preserve">
+    <value>Preparation</value>
+  </data>
+  <data name="Label_ArchiveFile" xml:space="preserve">
+    <value>Archive File: {0}</value>
+  </data>
+  <data name="Label_AssignConfirmationStatus" xml:space="preserve">
+    <value>Assign Confirmation Status: {0}</value>
+  </data>
+  <data name="Label_BackupFile" xml:space="preserve">
+    <value>Backup File: {0}</value>
+  </data>
+  <data name="Label_BackupFiles" xml:space="preserve">
+    <value>Backup Files: {0}</value>
+  </data>
+  <data name="Label_ConfirmationStatus" xml:space="preserve">
+    <value>Confirmation Status: {0}</value>
+  </data>
+  <data name="Label_CopySourceToTarget" xml:space="preserve">
+    <value>Copy Source to Target: {0}</value>
+  </data>
+  <data name="Label_Created" xml:space="preserve">
+    <value>Created: {0}</value>
+  </data>
+  <data name="Label_Customer" xml:space="preserve">
+    <value>Customer: {0}</value>
+  </data>
+  <data name="Label_DueDate" xml:space="preserve">
+    <value>Due Date: {0}</value>
+  </data>
+  <data name="label_ExceptionMessage" xml:space="preserve">
+    <value>Exception: {0}</value>
+  </data>
+  <data name="Label_ExcludeFilters" xml:space="preserve">
+    <value>Exclude Filters: {0}</value>
+  </data>
+  <data name="Label_ExportFiles" xml:space="preserve">
+    <value>Export Files {0}</value>
+  </data>
+  <data name="Label_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="Label_Folder" xml:space="preserve">
+    <value>Folder: {0}</value>
+  </data>
+  <data name="Label_Id" xml:space="preserve">
+    <value>Id: {0}</value>
+  </data>
+  <data name="Label_ImportFiles" xml:space="preserve">
+    <value>Import Files {0}</value>
+  </data>
+  <data name="Label_IncludeTranslations" xml:space="preserve">
+    <value>Include Translations: {0}</value>
+  </data>
+  <data name="Label_Language" xml:space="preserve">
+    <value>Language: {0}</value>
+  </data>
+  <data name="Label_Languages" xml:space="preserve">
+    <value>Languages: {0}</value>
+  </data>
+  <data name="Label_Location" xml:space="preserve">
+    <value>Location: {0}</value>
+  </data>
+  <data name="Label_Name" xml:space="preserve">
+    <value>Name: {0}</value>
+  </data>
+  <data name="Label_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Label_OriginSystem" xml:space="preserve">
+    <value>Origin System: {0}</value>
+  </data>
+  <data name="Label_OverwriteExistingTranslations" xml:space="preserve">
+    <value>Overwrite existing translations: {0}</value>
+  </data>
+  <data name="Label_Polyglot" xml:space="preserve">
+    <value>Polyglot</value>
+  </data>
+  <data name="Label_Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="Label_ProjectType" xml:space="preserve">
+    <value>Project Type: {0}</value>
+  </data>
+  <data name="label_SdlXliffFile" xml:space="preserve">
+    <value>SDLXLIFF File: {0}</value>
+  </data>
+  <data name="Label_SourceLanguage" xml:space="preserve">
+    <value>Soruce Language: {0}</value>
+  </data>
+  <data name="Label_StatusSegmentsNotImported" xml:space="preserve">
+    <value>Status - Segments not imported: {0}</value>
+  </data>
+  <data name="Label_StatusTranslationsNotUpdated" xml:space="preserve">
+    <value>Status - Translations not updated: {0}</value>
+  </data>
+  <data name="Label_StatusTranslationsUpdated" xml:space="preserve">
+    <value>Status - Translations updated: {0}</value>
+  </data>
+  <data name="Label_Success" xml:space="preserve">
+    <value>Success {0}</value>
+  </data>
+  <data name="Label_TargetLanguages" xml:space="preserve">
+    <value>Target Languages: {0}</value>
+  </data>
+  <data name="Label_TotalFiles" xml:space="preserve">
+    <value>Total Files: {0}</value>
+  </data>
+  <data name="Label_WorkingFolder" xml:space="preserve">
+    <value>Working Folder: {0}</value>
+  </data>
+  <data name="label_XliffFile" xml:space="preserve">
+    <value>XLIFF File: {0}</value>
+  </data>
+  <data name="Label_XliffSupport" xml:space="preserve">
+    <value>XLIFF Support: {0}</value>
+  </data>
+  <data name="PageName_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="PageName_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="PageName_Preparation" xml:space="preserve">
+    <value>Preparation</value>
+  </data>
+  <data name="PageName_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Result_Successful" xml:space="preserve">
+    <value>Successful</value>
+  </data>
+  <data name="Result_Unsuccessful" xml:space="preserve">
+    <value>Unsuccessful</value>
+  </data>
+  <data name="WarningMessage_UnableToMapLanguage" xml:space="preserve">
+    <value>Unable to map the target langauge code {0}</value>
+  </data>
+  <data name="Warning_FilePathNull" xml:space="preserve">
+    <value>File path cannot be null!</value>
+  </data>
+  <data name="Warning_LanguagesEmpty" xml:space="preserve">
+    <value>Languages cannot be empty or null!</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="WindowsControl_Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="WindowsControl_Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="WizardMessage_CloseOpenDocumentsInTheEditor" xml:space="preserve">
+    <value>Close all documents that are open in the editor before proceeding</value>
+  </data>
+  <data name="WizardMessage_ConvertingToFormat" xml:space="preserve">
+    <value>Converting to XLIFF format...</value>
+  </data>
+  <data name="WizardMessage_Finalizing" xml:space="preserve">
+    <value>Finalizing procedures...</value>
+  </data>
+  <data name="WizardMessage_ImportingFromFormat" xml:space="preserve">
+    <value>Importing from XLIFF format...</value>
+  </data>
+  <data name="WizardMessage_Initializing" xml:space="preserve">
+    <value>Initialzing procedures...</value>
+  </data>
+  <data name="WizardMessage_MultipleProjectsSelected" xml:space="preserve">
+    <value>Multiple projects selected!</value>
+  </data>
+  <data name="WizardMessage_NoActionSelected" xml:space="preserve">
+    <value>No action selected</value>
+  </data>
+  <data name="WizardMessage_NoProjectSelected" xml:space="preserve">
+    <value>No project selected!</value>
+  </data>
+  <data name="WizardMessage_ProjectIdMissmatch" xml:space="preserve">
+    <value>The project id from the import file does not match that of the current project!</value>
+  </data>
+  <data name="WizardMessage_UnableToLocateSelectedProject" xml:space="preserve">
+    <value>Unable to locate the selected project!</value>
+  </data>
+  <data name="Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Import" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\import.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LanguageMappings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\languagemapping.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TranscreateManager_LanguageMappings_Description" xml:space="preserve">
+    <value>Language Mappings</value>
+  </data>
+  <data name="TranscreateManager_LanguageMappings_Name" xml:space="preserve">
+    <value>Language Mappings</value>
+  </data>
+  <data name="TranscreateManager_Settings_Description" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="TranscreateManager_Settings_Name" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Warning_UnableToLoadProject" xml:space="preserve">
+    <value>Unable to load project: {0}</value>
+  </data>
+  <data name="TranscreateManager_ProjectProperties_Description" xml:space="preserve">
+    <value>Project Properties</value>
+  </data>
+  <data name="TranscreateManager_ProjectProperties_Name" xml:space="preserve">
+    <value>Project Properties</value>
+  </data>
+  <data name="TranscreateManager_ConvertProject_Description" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="TranscreateManager_ConvertProject_Name" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="TranscreateManager_CreateBackTranslationProject_Description" xml:space="preserve">
+    <value>Create Back-Translation Project</value>
+  </data>
+  <data name="TranscreateManager_CreateBackTranslationProject_Name" xml:space="preserve">
+    <value>Create Back-Translation</value>
+  </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\refresh.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TranscreateManager_ViewGroup_Name" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="TranscreateManager_Refresh_Description" xml:space="preserve">
+    <value>Refresh project data</value>
+  </data>
+  <data name="TranscreateManager_Refresh_Name" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="WizardTitle_ConvertProject" xml:space="preserve">
+    <value>Convert Project</value>
+  </data>
+  <data name="WizardTitle_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="WizardTitle_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="JobProcess_ConvertProject" xml:space="preserve">
+    <value>Convert Project</value>
+  </data>
+  <data name="Label_BackupSDLProject" xml:space="preserve">
+    <value>Backup Project: {0}</value>
+  </data>
+  <data name="Label_MaxAlternativeTranslations" xml:space="preserve">
+    <value>Max Alternative Translations: {0}</value>
+  </data>
+  <data name="Label_SelectedFiles" xml:space="preserve">
+    <value>Selected Files: {0}</value>
+  </data>
+  <data name="Label_ProjectBackup" xml:space="preserve">
+    <value>Project Backup Path: {0}</value>
+  </data>
+  <data name="ErrorMessage_ConvertingFile" xml:space="preserve">
+    <value>Unexpected error converting file: {0}</value>
+  </data>
+  <data name="JobProcess_ConvertProjectFiles" xml:space="preserve">
+    <value>Convert Project Files</value>
+  </data>
+  <data name="JobProcess_CreateTranscreateProject" xml:space="preserve">
+    <value>Create Transcreate Project</value>
+  </data>
+  <data name="WarningMessage_UnableToLocateProject" xml:space="preserve">
+    <value>Unable to locate the selected project: {0}</value>
+  </data>
+  <data name="JobProcess_ConvertTranscreateProjectFiles" xml:space="preserve">
+    <value>Convert Transcreate Project Files</value>
+  </data>
+  <data name="Label_ProjectName" xml:space="preserve">
+    <value>Project Name: {0}</value>
+  </data>
+  <data name="Label_ProjectPath" xml:space="preserve">
+    <value>Project Path: {0}</value>
+  </data>
+  <data name="JobProcess_ImportTranslations" xml:space="preserve">
+    <value>Import Translations</value>
+  </data>
+  <data name="Label_UnloadOiriginalProject" xml:space="preserve">
+    <value>Unload original project: {0}</value>
+  </data>
+  <data name="Label_ProjectTemplate" xml:space="preserve">
+    <value>Project Template: {0}</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Export_Description" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Export_Name" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Import_Description" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Import_Name" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Convert_Description" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="TranscreateManager_BatchTasks_Convert_Name" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\sdl_transcreate_view.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>

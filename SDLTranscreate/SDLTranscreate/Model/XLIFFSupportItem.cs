@@ -1,0 +1,16 @@
+﻿using Sdl.Community.Transcreate.Common;
+
+namespace Sdl.Community.Transcreate.Model
+{
+    public class XLIFFSupportItem
+    {
+		public Enumerators.XLIFFSupport SupportType { get; set; }
+
+		public string Name { get; set; }
+
+	    public override string ToString()
+	    {
+		    return Name;
+	    }
+    }
+}
