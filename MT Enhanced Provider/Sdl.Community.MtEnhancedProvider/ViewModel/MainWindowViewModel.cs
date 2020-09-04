@@ -167,6 +167,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
 			{
 				ErrorMessage = PluginResources.InvalidProjectName;
+				return false;
+			}
+			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectLocation))
+			{
+				ErrorMessage = PluginResources.ProjectLocationValidation;
+				return false;
 			}
 			return AreGoogleV3CredentialsValid();
 		}
@@ -278,14 +284,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					}
 				}
 
-				//if (Options == null) return true;
-				//var allSupportedLanguages = ApiConnecter.SupportedLangs;
-				//var correspondingLanguages = _languagePairs
-				//	?.Where(lp => allSupportedLanguages.Contains(lp.TargetCultureName.Substring(0, 2))).ToList();
-
-				//Options.LanguagesSupported = correspondingLanguages?.ToDictionary(lp => lp.TargetCultureName,
-				//	lp => _providerControlViewModel.SelectedTranslationOption.Name);
-
 				return true;
 
 			}
@@ -299,13 +297,32 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				var googleV3 = new GoogleV3Connecter(_providerControlViewModel.ProjectName, _providerControlViewModel.JsonFilePath);
+				var providerOptions = new MtTranslationOptions
+				{
+					ProjectName = _providerControlViewModel.ProjectName,
+					JsonFilePath = _providerControlViewModel.JsonFilePath,
+					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
+					ProjectLocation = _providerControlViewModel.ProjectLocation
+				};
+				var googleV3 = new GoogleV3Connecter(providerOptions);
 				googleV3.TryToAuthenticateUser(); 
 			}
 
 			catch (Exception e)
 			{
-				var message = e.Message.Contains("Invalid resource name") ? PluginResources.InvalidProjectName : e.Message;
+				string message;
+				if (e.Message.Contains("Resource type: models"))
+				{
+					message = PluginResources.GoogleInvalidEngine;
+				}
+				else if (e.Message.Contains("Invalid resource name"))
+				{
+					message = PluginResources.InvalidProjectName;
+				}
+				else
+				{
+					message = e.Message;
+				}
 
 				AddEncriptionMetaToResponse(message);
 				return false;
@@ -358,6 +375,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			Options.JsonFilePath = _providerControlViewModel.JsonFilePath;
 			Options.ProjectName = _providerControlViewModel.ProjectName;
 			Options.SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType;
+			Options.GoogleEngineModel = _providerControlViewModel.GoogleEngineModel;
+			Options.ProjectLocation = _providerControlViewModel.ProjectLocation;
 		}
 
 		private void SetMicrosoftProviderOptions()

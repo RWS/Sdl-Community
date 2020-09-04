@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 {
@@ -10,6 +9,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		bool IsSupportedLanguage(CultureInfo sourceLanguage, CultureInfo targetLanguage);
 		string ProjectName { get; set; }
 		string JsonFilePath { get; set; }
+		string EngineModel { get; set; }
+		string Location { get; set; }
 		string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText);
 	}
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 
 namespace Sdl.Community.MtEnhancedProvider.Model.Interface
@@ -24,6 +21,8 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 		string ProjectName { get; set; }
 		string ApiKey { get; set; } //Google Key
 		string ClientId { get; set; } // Microsoft key
+		string GoogleEngineModel { get; set; }
+		string ProjectLocation { get; set; }
 		Enums.GoogleApiVersion SelectedGoogleVersion { get; set; }
 		Uri Uri { get; }
 		Dictionary<string, string> LanguagesSupported { get; set; }

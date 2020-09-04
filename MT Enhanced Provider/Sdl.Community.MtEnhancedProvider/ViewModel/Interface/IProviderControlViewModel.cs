@@ -26,6 +26,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		string ClientId { get; set; }//Microsoft
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
+		string GoogleEngineModel { get; set; }
+		string ProjectLocation { get; set; }
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }

@@ -7,6 +7,7 @@ using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Translate.V3;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Model;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.GoogleApi
@@ -19,17 +20,42 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 		public  static List<GoogleV3LanguageModel> SupportedLanguages { get; set; }
 		public string ProjectName { get; set; }
 		public string JsonFilePath { get; set; }
+		public string EngineModel { get; set; }
+		public string Location { get; set; }
+
+		public GoogleV3Connecter(IMtTranslationOptions options)
+		{
+			ProjectName = options.ProjectName;
+			JsonFilePath = options.JsonFilePath;
+			EngineModel = options.GoogleEngineModel;
+			Location = options.ProjectLocation;
+			SupportedLanguages = new List<GoogleV3LanguageModel>();
+
+			Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, JsonFilePath);
+			_translationServiceClient = TranslationServiceClient.Create();
+		}
 
 		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText)
 		{
 			try
 			{
+				//We put by default NMT model if the nmt model is not supported for the language pair 
+				//Google knows to use basic model
+
+				var model = "general/nmt";
+				if (!string.IsNullOrEmpty(EngineModel))
+				{
+					model = EngineModel;
+				}
+				var modelPath = $"projects/{ProjectName}/locations/{Location}/models/{model}";
+
 				var request = new TranslateTextRequest
 				{
 					Contents =
 					{
 						sorceText
 					},
+					Model = modelPath,
 					TargetLanguageCode = targetLanguage.Name,
 					SourceLanguageCode = sourceLanguage.Name,
 					Parent = new ProjectName(ProjectName).ToString()
@@ -51,15 +77,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			return string.Empty;
 		}
 
-		public GoogleV3Connecter(string projectName,string jsonFilePath)
-		{
-			ProjectName = projectName;
-			JsonFilePath = jsonFilePath;
-			SupportedLanguages = new List<GoogleV3LanguageModel>();
-
-			Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, jsonFilePath);
-			_translationServiceClient = TranslationServiceClient.Create();
-		}
+		
 
 		public void SetGoogleAvailableLanguages()
 		{
@@ -99,8 +117,11 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				},
 				TargetLanguageCode = "fr-FR",
 				Parent = new ProjectName(ProjectName).ToString()
-
 			};
+			//if (!string.IsNullOrEmpty(EngineModel))
+			//{
+			//	request.Model = EngineModel;
+			//}
 			_translationServiceClient.TranslateText(request);
 		}
 

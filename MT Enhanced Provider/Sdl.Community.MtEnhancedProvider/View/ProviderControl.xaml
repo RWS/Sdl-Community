@@ -130,6 +130,20 @@
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				         Margin="10 0"
 				         Text="{Binding ProjectName}"/>
+				<TextBlock 
+					Margin="10 10" 
+					Text="{x:Static mtEnhanced:PluginResources.GoogleProjectLocation}"/>
+				<TextBox controls:TextBoxHelper.Watermark="Project location"
+				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				         Margin="10 0"
+				         Text="{Binding ProjectLocation}"/>
+				<TextBlock 
+					Margin="10 10" 
+					Text="{x:Static mtEnhanced:PluginResources.GoogleEngineModelDescription}"/>
+				<TextBox controls:TextBoxHelper.Watermark="Engine name"
+				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				         Margin="10 0"
+				         Text="{Binding GoogleEngineModel}"/>
 			</StackPanel>
 		</StackPanel>
     </Grid>

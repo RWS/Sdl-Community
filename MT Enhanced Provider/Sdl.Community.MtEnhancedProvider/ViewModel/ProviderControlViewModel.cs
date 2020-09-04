@@ -24,7 +24,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _clientId;
 		private string _jsonFilePath;
 		private string _projectName;
-		
+		private string _googleEngineModel;
+		private string _projectLocation;
+
 		public ProviderControlViewModel(IMtTranslationOptions options)
 		{
 			ViewModel = this;
@@ -83,6 +85,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				PersistGoogleKey = _options.PersistGoogleKey;
 				JsonFilePath = _options.JsonFilePath;
 				ProjectName = _options.ProjectName;
+				GoogleEngineModel = _options.GoogleEngineModel;
+				ProjectLocation = _options.ProjectLocation;
 			}
 
 			SetTranslationOption();
@@ -94,6 +98,28 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public ICommand ShowSettingsCommand { get; set; }
 		public List<TranslationOption> TranslationOptions { get; set; }
 		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
+
+		public string GoogleEngineModel
+		{
+			get => _googleEngineModel;
+			set
+			{
+				if (_googleEngineModel == value) return;
+				_googleEngineModel = value;
+				OnPropertyChanged(nameof(GoogleEngineModel));
+			}
+		}
+
+		public string ProjectLocation
+		{
+			get => _projectLocation;
+			set
+			{
+				if (_projectLocation == value) return;
+				_projectLocation = value;
+				OnPropertyChanged(nameof(ProjectLocation));
+			}
+		}
 
 		public event ClearMessageEventRaiser ClearMessageRaised;
 
@@ -195,7 +221,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				ClearMessageRaised?.Invoke();
 			}
 		}
-
 
 		public bool UseCatId
 		{

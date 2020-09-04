@@ -307,6 +307,33 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter AutoML Translation model:.
+        /// </summary>
+        public static string GoogleEngineModelDescription {
+            get {
+                return ResourceManager.GetString("GoogleEngineModelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid model name.
+        /// </summary>
+        public static string GoogleInvalidEngine {
+            get {
+                return ResourceManager.GetString("GoogleInvalidEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add project location:.
+        /// </summary>
+        public static string GoogleProjectLocation {
+            get {
+                return ResourceManager.GetString("GoogleProjectLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Google Response.
         /// </summary>
         public static string GoogleResponseDescription {
@@ -643,6 +670,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project location value is required.
+        /// </summary>
+        public static string ProjectLocationValidation {
+            get {
+                return ResourceManager.GetString("ProjectLocationValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credentials for Google Translate....
         /// </summary>
         public static string PromptForCredentialsCaption_Google {
@@ -790,7 +826,7 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose which MT Provider you want to use.
+        ///   Looks up a localized string similar to Please choose which MT Provider you want to use:.
         /// </summary>
         public static string WindowDescription {
             get {

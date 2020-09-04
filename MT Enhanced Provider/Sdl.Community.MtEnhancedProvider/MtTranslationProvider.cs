@@ -144,7 +144,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			if (_googleV3Connecter == null)
 			{
-				_googleV3Connecter = new GoogleV3Connecter(Options.ProjectName, Options.JsonFilePath);
+				_googleV3Connecter = new GoogleV3Connecter(Options);
 			}
 			else
 			{

@@ -122,6 +122,20 @@ namespace Sdl.Community.MtEnhancedProvider
 			set => SetStringParameter("projectname", value);
 		}
 
+		[JsonIgnore]
+		public string GoogleEngineModel
+		{
+			get => GetStringParameter("googleenginemodel");
+			set => SetStringParameter("googleenginemodel", value);
+		}
+
+		[JsonIgnore]
+		public string ProjectLocation
+		{
+			get => GetStringParameter("projectlocation");
+			set => SetStringParameter("projectlocation", value);
+		}
+
 		public enum ProviderType
         {
             GoogleTranslate = 1,
@@ -168,6 +182,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 SetStringParameter("selectedprovider", typestring); 
             }
         }
+
 
 		[JsonIgnore]
 		public Enums.GoogleApiVersion SelectedGoogleVersion
