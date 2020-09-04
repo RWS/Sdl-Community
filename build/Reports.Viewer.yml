@@ -18,7 +18,7 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
-
+- group: 'SDLPLC Authenticode Credentials'
 - template: jobs/branch-variables.yml
 - name: buildPlatform 
   value: 'Any CPU'
