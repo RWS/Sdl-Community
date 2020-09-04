@@ -15,6 +15,7 @@
 using System;
 using Newtonsoft.Json;
 using Sdl.Community.MtEnhancedProvider.GoogleApi;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
@@ -31,6 +32,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
 
 		private MtTranslationProviderGTApiConnecter _gtConnect;
+		private GoogleV3Connecter _googleV3Connecter;
 		private ApiConnecter _mstConnect;
 
 		public MtTranslationProvider(IMtTranslationOptions options)
@@ -119,32 +121,36 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// </summary>
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			switch (Options.SelectedProvider)
+			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 			{
-				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
-				{
-					if (_mstConnect == null) //construct ApiConnecter if necessary 
-						_mstConnect = new ApiConnecter(Options.ClientId);
-					else
-						_mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
+				if (_mstConnect == null) //construct ApiConnecter if necessary 
+					_mstConnect = new ApiConnecter(Options.ClientId);
+				else
+					_mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
 
-					return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
-						languageDirection.TargetCulture.Name);
-				}
-				case MtTranslationOptions.ProviderType.GoogleTranslate:
-				{
-					//TODO:Check what version of Google should be used v2 or v3
-					if (_gtConnect == null) //instantiate GtApiConnecter if necessary
-						_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
-					else
-						_gtConnect.ApiKey =
-							Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
-					return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
-				}
-				default:
-					//not likely to get here but...
-					return true;
+				return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
+					languageDirection.TargetCulture.Name);
 			}
+			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
+			{
+				if (_gtConnect == null) //instantiate GtApiConnecter if necessary
+					_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
+				else
+					_gtConnect.ApiKey =
+						Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
+				return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+			if (_googleV3Connecter == null)
+			{
+				_googleV3Connecter = new GoogleV3Connecter(Options.ProjectName, Options.JsonFilePath);
+			}
+			else
+			{
+				_googleV3Connecter.ProjectName = Options.ProjectName;
+				_googleV3Connecter.JsonFilePath = Options.JsonFilePath;
+			}
+
+			return _googleV3Connecter.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 	}
 }

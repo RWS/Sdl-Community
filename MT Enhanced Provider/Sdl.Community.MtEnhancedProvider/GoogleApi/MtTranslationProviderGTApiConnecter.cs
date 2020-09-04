@@ -31,7 +31,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 	{
 		//holds supported languages so we don't have to keep pinging google once the lang has been checked
 		//the structure is <targetLang, List<sourceLangs>>
-		private static Dictionary<string, List<string>> _dictSupportedLangs;
+		public static Dictionary<string, List<string>> DictSupportedLangs;
 
 		public string ApiKey { get; set; }//for when this is already instantiated but key is changed in dialog
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -49,19 +49,19 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;
 				throw new Exception(message); //b/c list will come back null if key is bad
 			}
-			_dictSupportedLangs.Add(target, list);
+			DictSupportedLangs.Add(target, list);
 		}
 
 		public bool IsSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
 			var sourceLang = GetLanguageCode(sourceCulture);
 			var targetLang = GetLanguageCode(targetCulture);
-			if (_dictSupportedLangs == null)
-				_dictSupportedLangs = new Dictionary<string, List<string>>();
-			if (!_dictSupportedLangs.ContainsKey(targetLang))
+			if (DictSupportedLangs == null)
+				DictSupportedLangs = new Dictionary<string, List<string>>();
+			if (!DictSupportedLangs.ContainsKey(targetLang))
 				UpdateSupportedLangs(targetLang);
 
-			return _dictSupportedLangs[targetLang].Any(source => source == sourceLang);
+			return DictSupportedLangs[targetLang].Any(source => source == sourceLang);
 		}
 
 		/// <summary>

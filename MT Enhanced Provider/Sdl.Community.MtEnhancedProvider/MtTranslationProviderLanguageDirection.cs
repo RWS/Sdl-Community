@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sdl.Community.MtEnhancedProvider.GoogleApi;
+using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Core.Globalization;
@@ -16,6 +17,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		private readonly IMtTranslationOptions _options;
 		private readonly MtTranslationProvider _provider;
 		private MtTranslationProviderGTApiConnecter _gtConnect;
+		private GoogleV3Connecter _googleV3Connecter;
 		private TranslationUnit _inputTu;
 		private ApiConnecter _mstConnect;
 		private SegmentEditor _postLookupSegmentEditor;
@@ -179,20 +181,36 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		private string LookupGt(string sourcetext, IMtTranslationOptions options, string format)
-		{		
-			//instantiate GtApiConnecter if necessary
-			if (_gtConnect == null)
+		{
+			if (options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
 			{
-				// need to get and insert key
-				_gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey); //needs key
+				//instantiate GtApiConnecter if necessary
+				if (_gtConnect == null)
+				{
+					// need to get and insert key
+					_gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey); //needs key
+				}
+				else
+				{
+					_gtConnect.ApiKey = options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				}
+				var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
+
+				return translatedText;
+			}
+			if (_googleV3Connecter == null)
+			{
+				_googleV3Connecter = new GoogleV3Connecter(options.ProjectName, options.JsonFilePath);
 			}
 			else
 			{
-				_gtConnect.ApiKey = options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				_googleV3Connecter.ProjectName = options.ProjectName;
+				_googleV3Connecter.JsonFilePath = options.JsonFilePath;
 			}
-			var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
+			var v3TranslatedText =
+				_googleV3Connecter.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext);
 
-			return translatedText;
+			return v3TranslatedText;
 		}
 
 		private string LookupMst(string sourcetext, IMtTranslationOptions options, string format)
@@ -204,7 +222,6 @@ namespace Sdl.Community.MtEnhancedProvider
 			var targetlang = _languageDirection.TargetCulture.ToString();
 
 			//instantiate ApiConnecter if necessary
-			//TOOD: Check what version of api should be instatiated V2 or V3
 			if (_mstConnect == null)
 			{
 				_mstConnect = new ApiConnecter(_options.ClientId);
