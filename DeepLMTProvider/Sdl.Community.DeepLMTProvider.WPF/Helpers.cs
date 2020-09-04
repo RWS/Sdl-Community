@@ -6,52 +6,24 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public static class Helpers
 	{
-		private static readonly List<string> SourceSupportedLanguages = new List<string>
+		private static readonly List<string> FormalityIncompatibleTargetLanguages = new List<string>
 		{
-			"EN",
-			"DE",
-			"FR",
-			"IT",
-			"NL",
-			"PL",
-			"ES",
-			"PT",
-			"RU",
-			"JA",
-			"ZH"
+			"ja",
+			"es",
+			"zh",
+			"en",
+			"en-gb",
+			"en-us",
 		};
-
-		private static readonly List<string> TargetSupportedLanguages = new List<string>
-		{
-			"EN",
-			"DE",
-			"FR",
-			"IT",
-			"NL",
-			"PL",
-			"ES",
-			"PT",
-			"PT-PT",
-			"PT-BR",
-			"RU",
-			"JA",
-			"ZH"
-		};
-
 		public static bool AreLanguagesCompatibleWithFormalityParameter(List<CultureInfo> targetLanguages)
 		{
-			return targetLanguages.All(tl =>
-			{
-				var twoLetterIsoLanguage = tl.TwoLetterISOLanguageName;
-				return twoLetterIsoLanguage != "ja" &&
-					   twoLetterIsoLanguage != "es" &&
-					   twoLetterIsoLanguage != "zh";
-			});
+			return targetLanguages.All(IsLanguageCompatible);
 		}
 
-		public static bool IsSupportedLanguagePair(string sourceLang, string targetLang)
+		public static bool IsLanguageCompatible(CultureInfo targetLanguage)
 		{
-			return SourceSupportedLanguages.Contains(sourceLang) && TargetSupportedLanguages.Contains(targetLang);
+			var twoLetterIsoLanguage = targetLanguage.TwoLetterISOLanguageName.ToLowerInvariant();
+			return !FormalityIncompatibleTargetLanguages.Contains(twoLetterIsoLanguage);
 		}
 	}
 }

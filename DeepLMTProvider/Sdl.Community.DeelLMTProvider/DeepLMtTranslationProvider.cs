@@ -8,11 +8,18 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLMtTranslationProvider : ITranslationProvider
 	{
+		public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
 
-		public DeepLMtTranslationProvider(DeepLTranslationOptions options)
+		public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderConnecter deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
 		{
+			DeepLTranslationProviderConnecter = deepLTranslationProviderConnecter;
 			Options = options;
+
+			if (languagePairs != null)
+			{
+				GetSupportedTargetLanguages(languagePairs);
+			}
 		}
 
 		public bool IsReadOnly => true;
@@ -23,6 +30,21 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			get;
 			set;
+		}
+
+		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
+		{
+			foreach (var languagePair in languagePairs)
+			{
+				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
+				if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				{
+					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+					{
+						Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+					}
+				}
+			}
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "Deepl");
@@ -67,8 +89,8 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			return Helpers.IsSupportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(),
-				languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper());
+			return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture,
+				languageDirection.TargetCulture);
 		}
 	}
 }
