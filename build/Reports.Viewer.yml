@@ -18,6 +18,7 @@ pool:
   vmImage : '$(DefaultBuildVm)'
 
 variables:
+- group: 'SDLPLC Authenticode Credentials'
 - template: jobs/branch-variables.yml
 - name: buildPlatform 
   value: 'Any CPU'
@@ -68,10 +69,15 @@ steps:
     restoreSolution: '$(solution)'
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
 
+- template: tasks/sign-artifacts/prepare-plugin-signing.yml
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- template: tasks/sign-artifacts/sign-plugin.yml
+  parameters:
+    fileToSign: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
 
 - template: jobs/publish-build-artifact-task.yml
