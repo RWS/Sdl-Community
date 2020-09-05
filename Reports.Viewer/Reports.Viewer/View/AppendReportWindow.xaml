@@ -244,7 +244,7 @@
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
-				<TextBlock Grid.Column="0" Margin="5,0,5,5" VerticalAlignment="Center" MinWidth="80" Text="Group:"/>
+				<TextBlock Grid.Column="0" Margin="5,5,5,5" VerticalAlignment="Center" MinWidth="80" Text="Group:"/>
 				<ComboBox Grid.Column="1" IsEditable="True" Margin="0,0,30,0"
 				          ItemsSource="{Binding GroupNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				          Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
