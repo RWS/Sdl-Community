@@ -36,15 +36,25 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+- task: DownloadBuildArtifacts@0
+  inputs:
+    buildType: 'specific'
+    project: 'bec36e61-e55d-402c-89cf-e2b28aefe754'
+    pipeline: '2019'
+    buildVersionToDownload: 'latest'
+    downloadType: 'specific'
+    downloadPath: '$(System.ArtifactsDirectory)'
 
 - task: DownloadPipelineArtifact@2
+  displayName: 'Download Reports Viewer Components'
   inputs:
     buildType: 'specific'
     project: 'bec36e61-e55d-402c-89cf-e2b28aefe754'
     definition: '2019'
-    buildVersionToDownload: 'latest'
+    buildVersionToDownload: 'latestFromBranch'
     artifactName: 'RVC'
     targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+    runBranch: 'refs/heads/master'
 
 - task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
