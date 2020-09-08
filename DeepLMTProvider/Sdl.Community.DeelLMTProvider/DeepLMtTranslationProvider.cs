@@ -89,8 +89,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture,
-				languageDirection.TargetCulture);
+			return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 	}
 }
