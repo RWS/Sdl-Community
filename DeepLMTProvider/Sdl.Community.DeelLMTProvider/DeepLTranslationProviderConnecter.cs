@@ -24,11 +24,12 @@ namespace Sdl.Community.DeepLMTProvider
 		private Formality _formality;
 		private List<string> _supportedTargetLanguages;
 		private List<string> _supportedSourceLanguages;
-
+		
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
 			var supportedSourceLanguage = GetLanguage(sourceCulture, SupportedSourceLanguages);
-			var supportedTargetLanguage = GetLanguage(targetCulture, SupportedTargetLanguages);
+			// do not make a call again to the server if source languages are not supported, because the return condition requires both source and target languages to be supported
+			var supportedTargetLanguage = !string.IsNullOrEmpty(supportedSourceLanguage) ? GetLanguage(targetCulture, SupportedTargetLanguages) : string.Empty;
 
 			return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
 		}
@@ -64,11 +65,9 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string ApiKey { get; set; }
 
-		private List<string> SupportedTargetLanguages
-			=> _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
+		private List<string> SupportedTargetLanguages => _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
 
-		private List<string> SupportedSourceLanguages
-			=> _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
@@ -165,6 +164,10 @@ namespace Sdl.Community.DeepLMTProvider
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v2/languages", content).Result;
+					
+					// show server message in case the response is not successfully retrieved
+					Helpers.DisplayServerMessage(response);
+
 					if (response.IsSuccessStatusCode)
 					{
 						var languagesResponse = response.Content?.ReadAsStringAsync().Result;
