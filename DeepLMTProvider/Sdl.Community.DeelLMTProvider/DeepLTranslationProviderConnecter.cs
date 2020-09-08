@@ -162,7 +162,7 @@ namespace Sdl.Community.DeepLMTProvider
 					httpClient.Timeout = TimeSpan.FromMinutes(5);
 					var content = new StringContent($"type={type}" + $"&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
 
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v2/languages", content).Result;
 					if (response.IsSuccessStatusCode)
