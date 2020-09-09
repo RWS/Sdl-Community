@@ -61,7 +61,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Looks up a localized string similar to The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key..
+        ///   Looks up a localized string similar to The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key..
         /// </summary>
         public static string Forbidden_Message {
             get {
@@ -89,7 +89,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Looks up a localized string similar to The DeepL provider is returning a &amp;apos;{0}&amp;apos; status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity..
+        ///   Looks up a localized string similar to The DeepL provider is returning a &apos;{0}&apos; status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity..
         /// </summary>
         public static string ServerGeneralResponse_Message {
             get {

@@ -137,9 +137,9 @@ This feature currently works for all target languages except "ES" (Spanish), "JA
     <value>*Not all languages are compatible with this option...</value>
   </data>
   <data name="Forbidden_Message" xml:space="preserve">
-    <value>Looks up a localized string similar to The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key.</value>
+    <value>The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key.</value>
   </data>
   <data name="ServerGeneralResponse_Message" xml:space="preserve">
-    <value>Looks up a localized string similar to The DeepL provider is returning a &amp;apos;{0}&amp;apos; status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity.</value>
+    <value>The DeepL provider is returning a '{0}' status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity.</value>
   </data>
 </root>
