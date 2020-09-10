@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -25,11 +24,14 @@ namespace Sdl.Community.DeepLMTProvider
 		private Formality _formality;
 		private List<string> _supportedTargetLanguages;
 		private List<string> _supportedSourceLanguages;
-
+		
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
-			return GetLanguage(sourceCulture, SupportedSourceLanguages) != null &&
-			       GetLanguage(targetCulture, SupportedTargetLanguages) != null;
+			var supportedSourceLanguage = GetLanguage(sourceCulture, SupportedSourceLanguages);
+			// do not make a call again to the server if source languages are not supported, because the return condition requires both source and target languages to be supported
+			var supportedTargetLanguage = !string.IsNullOrEmpty(supportedSourceLanguage) ? GetLanguage(targetCulture, SupportedTargetLanguages) : string.Empty;
+
+			return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
 		}
 
 		public DeepLTranslationProviderConnecter(string key, Formality formality)
@@ -63,11 +65,9 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string ApiKey { get; set; }
 
-		private List<string> SupportedTargetLanguages
-			=> _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
+		private List<string> SupportedTargetLanguages => _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
 
-		private List<string> SupportedSourceLanguages
-			=> _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
@@ -152,43 +152,53 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private List<string> GetSupportedLanguages(string type)
 		{
-			using (var httpClient = new HttpClient())
+			try
 			{
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 |
-													   SecurityProtocolType.Tls;
-
-				httpClient.Timeout = TimeSpan.FromMinutes(5);
-				var content = new StringContent($"type={type}" +
-												$"&auth_key={ApiKey}",
-					Encoding.UTF8, "application/x-www-form-urlencoded");
-
-				httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
-
-				var response = httpClient.PostAsync("https://api.deepl.com/v2/languages", content).Result;
-				if (response.IsSuccessStatusCode)
+				using (var httpClient = new HttpClient())
 				{
-					var languagesResponse = response.Content?.ReadAsStringAsync().Result;
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
-					return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
+					httpClient.Timeout = TimeSpan.FromMinutes(5);
+					var content = new StringContent($"type={type}" + $"&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
+
+					var response = httpClient.PostAsync("https://api.deepl.com/v2/languages", content).Result;
+					
+					// show server message in case the response is not successfully retrieved
+					Helpers.DisplayServerMessage(response);
+
+					if (response.IsSuccessStatusCode)
+					{
+						var languagesResponse = response.Content?.ReadAsStringAsync().Result;
+
+						return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
+					}
 				}
 			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{ex}");
+			}
 
-			return null;
+			return new List<string>();
 		}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
 		// (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
 		private string GetLanguage(CultureInfo culture, List<string> languageList)
 		{
-			var leftLangTag = culture.IetfLanguageTag.ToUpperInvariant();
-			var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+			if (languageList != null && languageList.Any())
+			{
+				var leftLangTag = culture.IetfLanguageTag.ToUpperInvariant();
+				var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
 
-			var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == leftLangTag) ??
-			                             languageList.FirstOrDefault(tl => tl == twoLetterIso);
+				var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == leftLangTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
 
-			return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso))
-				? twoLetterIso
-				: null);
+				return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
+			}
+
+			return string.Empty;
 		}
 	}
 }

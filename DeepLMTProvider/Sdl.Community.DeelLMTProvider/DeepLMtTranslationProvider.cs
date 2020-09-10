@@ -10,7 +10,7 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-
+		
 		public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderConnecter deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
 		{
 			DeepLTranslationProviderConnecter = deepLTranslationProviderConnecter;
@@ -87,10 +87,18 @@ namespace Sdl.Community.DeepLMTProvider
 			return JsonConvert.SerializeObject(Options);
 		}
 
+		// Check if LanguageDirection is supported (if true, the provider is added in Studio)
+		// 'IsInvalidServerMessage' is used to check if any server error was returned in the first call, if yes, then is no need to make the second call to 
+		// the server to verify if language pairs are supported. (2 calls of SupportsLanguageDirection() are made because of twice instantiation of DeepLTranslationProviderConnecter. 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture,
-				languageDirection.TargetCulture);
+			
+			if (!Helpers.IsInvalidServerMessage)
+			{
+				return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+
+			return false;
 		}
 	}
 }
