@@ -9,7 +9,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
     public class UIResources
     {
         #region public props
-        private Dictionary<String, String> _defaultValues; 
+        private Dictionary<string, string> _defaultValues; 
 
         public string Browse { get { return GetString("Browse"); } }
         public string Slice { get { return GetString("Slice"); } }
@@ -110,7 +110,7 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
 
         private DataSet _resources;
 
-        public UIResources(String culture)
+        public UIResources(string culture)
         {
             try
             {
@@ -210,30 +210,31 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
             if (_resources == null)
             {
                 _resources = new DataSet();
-                _resources.ReadXml(String.Format(File, _culture));
+                _resources.ReadXml(string.Format(File, _culture));
             }
         }
 
-        public String GetString(String token)
-        {
-            if (_resources == null) return Getefault(token);
-            try
-            {
-                DataTable values = _resources.Tables["data"];
-                DataRow[] rows = values.Select(String.Format("name = '{0}'", token));
-                if (rows.Length == 0)
-                {
-                    return Getefault(token);
-                }
-                return rows[0]["Value"].ToString();
+		public string GetString(string token)
+		{
+			if (_resources == null) return GetDefault(token);
+			try
+			{
+				var values = _resources.Tables["data"];
+				var rows = values.Select($"name = '{token}'");
+				if (rows.Length == 0)
+				{
+					return GetDefault(token);
+				}
+				return rows[0]["Value"].ToString();
 
-            } catch
-            {
-                return Getefault(token);
-            }
-        }
-
-        private string Getefault(string token)
+			}
+			catch
+			{
+				return GetDefault(token);
+			}
+		}
+		
+		private string GetDefault(string token)
         {
             if (_defaultValues != null && _defaultValues.ContainsKey(token)) return _defaultValues[token];
             return token;
