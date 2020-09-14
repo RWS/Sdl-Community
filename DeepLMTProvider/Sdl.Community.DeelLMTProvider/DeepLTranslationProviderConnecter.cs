@@ -98,7 +98,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
-					var response = httpClient.PostAsync("https://api.deepl.com/v2/translate", content).Result;
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 					if (response.IsSuccessStatusCode)
 					{
 						var translationResponse = response.Content?.ReadAsStringAsync().Result;
@@ -163,8 +163,8 @@ namespace Sdl.Community.DeepLMTProvider
 
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
-					var response = httpClient.PostAsync("https://api.deepl.com/v2/languages", content).Result;
-					
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+
 					// show server message in case the response is not successfully retrieved
 					Helpers.DisplayServerMessage(response);
 
