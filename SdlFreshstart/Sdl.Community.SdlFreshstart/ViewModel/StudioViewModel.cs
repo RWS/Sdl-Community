@@ -310,18 +310,26 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				AddLocation(latestVersionPath, description, property);
 			}
 
-			var projectApiFolderPath =
-				Path.GetDirectoryName(StudioVersionsCollection.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.ProjectApiPath);
-			var apiPathDescription = LocationsDescription.ProjectApiPath;
-
-			AddLocation(projectApiFolderPath, apiPathDescription, nameof(StudioVersion.ProjectApiPath));
-
+			AddProjectApiFolderLocation();
 			_locations.Move(_locations.Count - 1, _locations.Count - 2);
 
 			foreach (var location in _locations)
 			{
 				location.PropertyChanged += Location_PropertyChanged;
 			}
+		}
+
+		/// <summary>
+		/// This is needed because this folder is not used by all versions of Studio and so the adding of its path must be done differently
+		/// </summary>
+		private void AddProjectApiFolderLocation()
+		{
+			var projectApiFolderPath =
+				Path.GetDirectoryName(
+					StudioVersionsCollection.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.ProjectApiPath);
+			var apiPathDescription = LocationsDescription.ProjectApiPath;
+
+			AddLocation(projectApiFolderPath, apiPathDescription, nameof(StudioVersion.ProjectApiPath));
 		}
 
 		private void AddLocation(string path, string description, string alias)
