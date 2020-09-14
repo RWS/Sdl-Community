@@ -98,7 +98,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
-					var response = httpClient.PostAsync("https://api.deepl.com/v2/translate", content).Result;
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 					if (response.IsSuccessStatusCode)
 					{
 						var translationResponse = response.Content?.ReadAsStringAsync().Result;
@@ -115,14 +115,13 @@ namespace Sdl.Community.DeepLMTProvider
 						var message =
 							$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
 							$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
-						_logger.Error(message);
 						throw new HttpRequestException(message);
 					}
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				_logger.Error($"{e.Message}\n {e.StackTrace}");
+				_logger.Error($"{ex}");
 				throw;
 			}
 
@@ -163,8 +162,8 @@ namespace Sdl.Community.DeepLMTProvider
 
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
-					var response = httpClient.PostAsync("https://api.deepl.com/v2/languages", content).Result;
-					
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+
 					// show server message in case the response is not successfully retrieved
 					Helpers.DisplayServerMessage(response);
 
@@ -174,6 +173,10 @@ namespace Sdl.Community.DeepLMTProvider
 
 						return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
 					}
+					var message =
+						$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+						$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
+					throw new HttpRequestException(message);
 				}
 			}
 			catch (Exception ex)
