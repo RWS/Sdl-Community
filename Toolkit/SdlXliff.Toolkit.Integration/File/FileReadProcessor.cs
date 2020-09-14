@@ -10,98 +10,68 @@ namespace SdlXliff.Toolkit.Integration.File
 	{
 		protected SearchSettings _searchSettings;
 		private DataExtractor _dataExtractor;
-		private string _filePath;
-		private List<SegmentData> _resultSrc;
-		private List<SegmentData> _resultTrg;
 		private DataSearcher _searcher;
 
 		public FileReadProcessor(string filePath, SearchSettings settings)
 		{
-			_filePath = filePath;
 			_searchSettings = settings;
 			_dataExtractor = new DataExtractor();
 			_searcher = new DataSearcher(_searchSettings);
 
-			_resultSrc = new List<SegmentData>();
-			_resultTrg = new List<SegmentData>();
+			ResultInSource = new List<SegmentData>();
+			ResultInTarget = new List<SegmentData>();
 		}
 
 		/// <summary>
 		/// list of SegmentData objects - search matches data in source in one file
 		/// </summary>
-		public List<SegmentData> ResultInSource
-		{
-			get { return _resultSrc; }
-		}
+		public List<SegmentData> ResultInSource { get; }
 
 		/// <summary>
 		/// list of SegmentData objects - search matches data in target in one file
 		/// </summary>
-		public List<SegmentData> ResultInTarget
-		{
-			get { return _resultTrg; }
-		}
-
-		public override void Complete()
-		{
-			base.Complete();
-		}
+		public List<SegmentData> ResultInTarget { get; }
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-			ISegment sourceSegment;
-			string sourceText;
-			List<TagData> sourceTags;
-			List<IndexData> sourceLContent;
-			List<IndexData> sourceResult;
-
-			ISegment targetSegment;
-			string targetText;
-			List<TagData> targetTags;
-			List<IndexData> targetLContent;
-			List<IndexData> targetResult;
-
-			ConfirmationLevel itemStatus;
+			var sourceResult = new List<IndexData>();
+			var targetResult = new List<IndexData>();
 
 			if (!paragraphUnit.IsStructure)
-				foreach (ISegmentPair item in paragraphUnit.SegmentPairs)
+				foreach (var item in paragraphUnit.SegmentPairs)
 				{
-					itemStatus = item.Properties.ConfirmationLevel;
-					sourceTags = null;
-					sourceResult = null;
-					targetTags = null;
-					targetResult = null;
+					var itemStatus = item.Properties.ConfirmationLevel;
 
 					// extract text and tags from Segment
-					sourceSegment = item.Source;
+					var sourceSegment = item.Source;
 					_dataExtractor.Process(sourceSegment);
-					sourceTags = _dataExtractor.Tags;
+					var sourceTags = _dataExtractor.Tags;
 					//we need to add a space before the soft return so the soft return is highlightable when searching for it
-					sourceText = _dataExtractor.PlainText.ToString().Replace("\n", " \n");
-					sourceLContent = _dataExtractor.LockedContent;
+					var sourceText = _dataExtractor.PlainText.ToString().Replace("\n", " \n");
+					var sourceLContent = _dataExtractor.LockedContent;
 
-					targetSegment = item.Target;
+					var targetSegment = item.Target;
 					_dataExtractor.Process(targetSegment);
 					//we need to add a space before the soft return so the soft return is highlightable when searching for it
-					targetText = _dataExtractor.PlainText.ToString().Replace("\n", " \n");
-					targetTags = _dataExtractor.Tags;
-					targetLContent = _dataExtractor.LockedContent;
+					var targetText = _dataExtractor.PlainText.ToString().Replace("\n", " \n");
+					var targetTags = _dataExtractor.Tags;
+					var targetLContent = _dataExtractor.LockedContent;
 
 					// perform search
-					if (_searcher.checkSegment(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
+					if (_searcher.CheckSegment(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
 					{
 						if (_searchSettings.SearchInSource && (sourceText.Length > 0 || sourceTags.Count > 0))
 						{
 							_searcher.SearchInSegment(sourceText, sourceTags, sourceLContent);
-							sourceResult = _searcher.resultsInText;
-							sourceTags = _searcher.resultsInTags;
+							sourceResult = _searcher.ResultsInText;
+							sourceTags = _searcher.ResultsInTags;
 						}
 
 						if (_searchSettings.SearchInTarget && (targetText.Length > 0 || targetTags.Count > 0))
 						{
 							_searcher.SearchInSegment(targetText, targetTags, targetLContent);
-							targetResult = _searcher.resultsInText;
-							targetTags = _searcher.resultsInTags;
+							targetResult = _searcher.ResultsInText;
+							targetTags = _searcher.ResultsInTags;
 						}
 
 						// collect results
@@ -111,73 +81,27 @@ namespace SdlXliff.Toolkit.Integration.File
 							CollectResults(item.Properties.Id.Id, targetText, itemStatus, targetSegment, targetResult, targetTags, false);
 						}
 					}
-
-					// TODO - REMOVE
-					//// process source
-					//if (_searchSettings.SearchInSource)
-					//{
-					//    sSegment = item.Source;
-					//    if (_searcher.checkSegment(sSegment.Properties.IsLocked, sSegment.Properties.ConfirmationLevel))
-					//    {
-					//        _dataExtractor.Process(sSegment, _searchSettings.SearchInLocked);
-					//        sText = _dataExtractor.PlainText.ToString();
-					//        sTags = _dataExtractor.Tags;
-					//        if (sText.Length > 0 || sTags.Count > 0)
-					//        {
-					//            _searcher.SearchInSegment(sText, sTags);
-					//            sResult = _searcher.resultsInText;
-					//            sTags = _searcher.resultsInTags;
-					//            CollectResults(sSegment.Properties.Id.Id, sText, sSegment, sResult, sTags, true);
-					//        }
-					//    }
-					//}
-
-					//// process target
-					//if (_searchSettings.SearchInTarget)
-					//{
-					//    sSegment = item.Target;
-					//    if (_searcher.checkSegment(sSegment.Properties.IsLocked, sSegment.Properties.ConfirmationLevel))
-					//    {
-					//        _dataExtractor.Process(sSegment, _searchSettings.SearchInLocked);
-					//        sText = _dataExtractor.PlainText.ToString();
-					//        sTags = _dataExtractor.Tags;
-					//        if (sText.Length > 0 || sTags.Count > 0)
-					//        {
-					//            _searcher.SearchInSegment(sText, sTags);
-					//            sResult = _searcher.resultsInText;
-					//            sTags = _searcher.resultsInTags;
-					//            CollectResults(sSegment.Properties.Id.Id, sText, sSegment, sResult, sTags, false);
-					//        }
-					//    }
-					//}
 				}
-		}
-
-		public override void SetFileProperties(IFileProperties fileInfo)
-		{
-			base.SetFileProperties(fileInfo);
 		}
 
 		#region private
 
-		private void CollectResults(string segmentID, string segmentText, ConfirmationLevel segmentStatus,
+		private void CollectResults(string segmentId, string segmentText, ConfirmationLevel segmentStatus,
 			ISegment segmentContent, List<IndexData> matches, List<TagData> tags, bool isSource)
 		{
 			int sID;
-			if (int.TryParse(segmentID, out sID))
+			if (int.TryParse(segmentId, out sID))
 				if (isSource)
 				{
-					_resultSrc.Add(new SegmentData(_resultSrc.Count,
-						sID, segmentText, segmentStatus, segmentContent));
-					_resultSrc[_resultSrc.Count - 1].SearchResults = matches;
-					_resultSrc[_resultSrc.Count - 1].Tags = tags;
+					ResultInSource.Add(new SegmentData(ResultInSource.Count, sID, segmentText, segmentStatus, segmentContent));
+					ResultInSource[ResultInSource.Count - 1].SearchResults = matches;
+					ResultInSource[ResultInSource.Count - 1].Tags = tags;
 				}
 				else
 				{
-					_resultTrg.Add(new SegmentData(_resultTrg.Count,
-						sID, segmentText, segmentStatus, segmentContent));
-					_resultTrg[_resultTrg.Count - 1].SearchResults = matches;
-					_resultTrg[_resultTrg.Count - 1].Tags = tags;
+					ResultInTarget.Add(new SegmentData(ResultInTarget.Count, sID, segmentText, segmentStatus, segmentContent));
+					ResultInTarget[ResultInTarget.Count - 1].SearchResults = matches;
+					ResultInTarget[ResultInTarget.Count - 1].Tags = tags;
 				}
 		}
 
