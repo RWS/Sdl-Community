@@ -59,12 +59,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 		}
 
-		private static string GetSourceSegment(ISegment segment)
+		private string GetSourceSegment(ISegment segment)
 		{
-			var paragraph = segment.Parent as IParagraph;
-			var segmentPairs = paragraph?.Parent.SegmentPairs.ToList();
-
-			return segmentPairs?.FirstOrDefault(sp => sp.Properties.Id == segment.Properties.Id)?.Source.ToString();
+			return
+				_editorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == segment.Properties.Id)?.Source
+					.ToString();
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)

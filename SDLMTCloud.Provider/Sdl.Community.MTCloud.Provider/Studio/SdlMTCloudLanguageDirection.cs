@@ -192,19 +192,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			else
 			{
-				var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+				var translations = TranslateSegments(segments.ToArray());
 
 				if (translations.Any(translation => translation != null))
 				{
 					var translationIndex = 0;
 					for (var i = 0; i < segments.Length; i++)
 					{
-						if (mask != null && !mask[i])
-						{
-							results[i] = null;
-							continue;
-						}
-
 						results[i] = new SearchResults();
 						if (segments[i] != null)
 						{

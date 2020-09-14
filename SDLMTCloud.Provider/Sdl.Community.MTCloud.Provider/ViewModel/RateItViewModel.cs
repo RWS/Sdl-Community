@@ -190,32 +190,30 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				return;
 			}
 
-			if (_translationService != null)
+			var rating = GetRatingObject(segmentId);
+			if (rating != null)
 			{
-				var rating = GetRatingObject();
-
-				if (rating != null)
-				{
-					UpdateImprovement(improvement, rating);
-				}
-
-				if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
-				await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
+				UpdateImprovement(improvement, rating);
 			}
-			else
-			{
-				//TODO: Log that translation service is null
-			}
+
+			if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
+
+			await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
 		}
 
-		private dynamic GetRatingObject()
+		private dynamic GetRatingObject(SegmentId? segmentId)
 		{
-			var comments = AutoSendFeedback ? PreviousRating.Comments : GetCommentsAndFeedbackFromUi();
 			dynamic rating = new ExpandoObject();
 
-			var score = AutoSendFeedback ? PreviousRating.Score : _rating;
+			var isFeedbackForPreviousSegment = AutoSendFeedback && segmentId != null && segmentId != ActiveSegmentId;
+
+			var score = isFeedbackForPreviousSegment ? PreviousRating.Score : _rating;
 			if (score > 0) rating.Score = score;
+
+			var comments = isFeedbackForPreviousSegment ? PreviousRating.Comments : GetCommentsAndFeedbackFromUi();
 			if (comments.Count > 0) rating.Comments = comments;
+
+			PreviousRating = null;
 
 			if (!((ExpandoObject)rating).Any()) rating = null;
 			return rating;
@@ -235,14 +233,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string GetSourceSegment(SegmentId? segmentId)
 		{
 			var currentSegmentId = segmentId ?? ActiveSegmentId;
-			return _editorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId)?.Source
+			return _editorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId)?.Source?
 				.ToString();
 		}
 
 		private void UpdateImprovement(ImprovedTarget improvement, dynamic rating)
 		{
-			improvement.Score = rating.Score;
-			improvement.Comments = rating.Comments;
+			if (!(rating is IDictionary<string, object> ratingAsDictionary)) return;
+
+			if (ratingAsDictionary.ContainsKey("Score"))
+				improvement.Score = rating.Score;
+			if (ratingAsDictionary.ContainsKey("Comments"))
+				improvement.Comments = rating.Comments;
 		}
 
 		private void ResetFeedback()
@@ -294,6 +296,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
+			if (_editorController.ActiveDocument == null) return;
 			_editorController.ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
 			_editorController.ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 		}
@@ -311,17 +314,22 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void BackupFeedback()
 		{
-			PreviousRating.Score = Rating;
-			PreviousRating.Comments = GetCommentsAndFeedbackFromUi();
+			PreviousRating = new Rating
+			{
+				Score = Rating,
+				Comments = GetCommentsAndFeedbackFromUi()
+			};
 		}
 
-		private Rating PreviousRating { get; set; } = new Rating();
+		private Rating PreviousRating { get; set; }
 
 		private void SetActiveSegmentFeedbackInfo()
 		{
 			var improvement = GetImprovement();
-			var comments = improvement?.Comments?.Select(c => (string) c.Clone()).ToList();
+			var comments = improvement?.Comments?.Select(c => (string)c.Clone()).ToList();
 
+			FeedbackOptions.ForEach(fb => fb.IsChecked = false);
+			FeedbackMessage = string.Empty;
 			if (comments != null)
 			{
 				FeedbackMessage = comments.FirstOrDefault(c => FeedbackOptions.All(fo => fo.OptionName != c));
@@ -331,11 +339,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					feedbackOption.IsChecked = true;
 				}
-			}
-			else
-			{
-				FeedbackOptions.ForEach(fb => fb.IsChecked = false);
-				FeedbackMessage = string.Empty;
 			}
 
 			Rating = improvement?.Score ?? 0;
