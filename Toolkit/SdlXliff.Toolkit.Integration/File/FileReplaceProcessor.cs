@@ -96,7 +96,7 @@ namespace SdlXliff.Toolkit.Integration.File
                 sourceSegment = item.Source;
                 targetSegment = item.Target;
                 itemStatus = item.Properties.ConfirmationLevel;
-                if (_searcher.checkSegment(item.Properties.IsLocked, itemStatus))
+                if (_searcher.CheckSegment(item.Properties.IsLocked, itemStatus))
                 {
                     _dataExtractor.Process(targetSegment);
                     targetText = _dataExtractor.PlainText.ToString();
@@ -107,14 +107,14 @@ namespace SdlXliff.Toolkit.Integration.File
                         _searcher.SearchInSegment(targetText, targetLContent);
 
                         // if matches in target were found
-                        if (SegmentHelper.ContainMatches(_searcher.resultsInText))
+                        if (SegmentHelper.ContainMatches(_searcher.ResultsInText))
                         {
                             #region extract source text
                             _dataExtractor.Process(sourceSegment);
                             sourceText = _dataExtractor.PlainText.ToString();
                             #endregion
                             CollectResults(item.Properties.Id.Id, sourceText, itemStatus, sourceSegment, null, true);
-                            CollectResults(item.Properties.Id.Id, targetText, itemStatus, targetSegment, _searcher.resultsInText, false);
+                            CollectResults(item.Properties.Id.Id, targetText, itemStatus, targetSegment, _searcher.ResultsInText, false);
 
                             segmentSearch = _resultTrg[_resultTrg.Count - 1];
 
