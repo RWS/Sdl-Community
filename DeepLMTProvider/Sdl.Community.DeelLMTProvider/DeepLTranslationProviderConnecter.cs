@@ -115,14 +115,13 @@ namespace Sdl.Community.DeepLMTProvider
 						var message =
 							$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
 							$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
-						_logger.Error(message);
 						throw new HttpRequestException(message);
 					}
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				_logger.Error($"{e.Message}\n {e.StackTrace}");
+				_logger.Error($"{ex}");
 				throw;
 			}
 
@@ -174,6 +173,10 @@ namespace Sdl.Community.DeepLMTProvider
 
 						return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
 					}
+					var message =
+						$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+						$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
+					throw new HttpRequestException(message);
 				}
 			}
 			catch (Exception ex)
