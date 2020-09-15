@@ -6,7 +6,6 @@
 	<Author>SDL Community Developers</Author>
   <Include>
     <File>SdlXliff.Toolkit.Integration.dll</File>
-    <File>log4net.dll</File>
     <File>SDLXLIFF.toolkit.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Core.Globalization;
@@ -125,9 +124,10 @@ namespace SdlXliff.Toolkit.Integration.Data
 				// check for index overlap, update property if overlapped
 				ValidateIndexes();
 			}
-			catch (Exception ex)
+			catch
 			{
-				// log message
+				// catch all; ignore exceptions thrown when Regex is not correct
+				// (The regex format is also validated on the UI, using the Validating event)
 			}
 		}
 
@@ -153,9 +153,10 @@ namespace SdlXliff.Toolkit.Integration.Data
 					}
 				}
 			}
-			catch (Exception ex)
+			catch
 			{
-				// log message
+				// catch all; ignore exceptions thrown when Regex is not correct
+				// (The regex format is also validated on the UI, using the Validating event)		
 			}
 		}
 
