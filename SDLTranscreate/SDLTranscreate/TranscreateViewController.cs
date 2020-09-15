@@ -59,7 +59,6 @@ namespace Sdl.Community.Transcreate
 		private CustomerProvider _customerProvider;
 		private ProjectSettingsService _projectSettingsService;
 		private ReportService _reportService;
-		private bool _supressProjectControllerEvents;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -77,6 +76,7 @@ namespace Sdl.Community.Transcreate
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			_editorController.Opened += EditorController_Opened;
+			
 
 
 			LoadProjects();
@@ -257,7 +257,7 @@ namespace Sdl.Community.Transcreate
 			CreateHtmlReport(wizardContext, selectedProject, automaticTask);
 			if (!isBatchTask)
 			{
-				UpdateProjectReports(wizardContext, selectedProject, automaticTask);
+				//UpdateProjectReports(wizardContext, selectedProject, automaticTask);
 			}
 
 			UpdateProjectSettingsBundle(project);
@@ -496,36 +496,38 @@ namespace Sdl.Community.Transcreate
 			return languageDirections;
 		}
 
-		private void UpdateProjectReports(WizardContext wizardContext, FileBasedProject project, AutomaticTask automaticTask)
-		{
-			if (project == null)
-			{
-				return;
-			}
+		//private void UpdateProjectReports(WizardContext wizardContext, FileBasedProject project, AutomaticTask automaticTask)
+		//{
+		//	if (project == null)
+		//	{
+		//		return;
+		//	}
 
-			try
-			{
-				_supressProjectControllerEvents = true;
+		//	try
+		//	{
+		//		_supressProjectControllerEvents = true;
 
-				_projectsController.Close(project);
-				_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
-				_projectsController.Add(project.FilePath);
+		//		_projectsController.Close(project);
+		//		_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
+		//		_projectsController.Open(project);
 
-				switch (wizardContext.Owner)
-				{
-					case Enumerators.Controller.Files:
-						_filesController.Activate();
-						break;
-					case Enumerators.Controller.Projects:
-						_projectsController.Activate();
-						break;
-				}
-			}
-			finally
-			{
-				_supressProjectControllerEvents = false;
-			}
-		}
+		//		//_xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id)
+
+		//		switch (wizardContext.Owner)
+		//		{
+		//			case Enumerators.Controller.Files:
+		//				_filesController.Activate();
+		//				break;
+		//			case Enumerators.Controller.Projects:
+		//				_projectsController.Activate();
+		//				break;
+		//		}
+		//	}
+		//	finally
+		//	{
+		//		_supressProjectControllerEvents = false;
+		//	}
+		//}
 
 		private void UpdateProjectSettingsBundle(Project project)
 		{
@@ -588,7 +590,7 @@ namespace Sdl.Community.Transcreate
 
 				selectedProject.UpdateSettings(xliffManagerProject.SettingsBundle);
 
-				selectedProject.Save();
+				selectedProject.Save();				
 			}
 		}
 
@@ -974,12 +976,7 @@ namespace Sdl.Community.Transcreate
 		}
 
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
-		{
-			if (_supressProjectControllerEvents)
-			{
-				return;
-			}
-
+		{			
 			var updated = AddNewProjectToContainer(_projectsController?.CurrentProject);
 			if (!updated)
 			{

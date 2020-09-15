@@ -1,4 +1,6 @@
-﻿using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
+﻿using System;
+using System.Text.RegularExpressions;
+using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
@@ -60,7 +62,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			{
 				return;
 			}
-
+			
 			if (_element is ElementLocked && _currentLockedContentId.ToString() == _elementIdToSearch)
 			{
 				FoundElement = lockedContent;
@@ -86,7 +88,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				return;
 			}
 
-			if (_element is ElementPlaceholder && tag.TagProperties.TagId.Id == _elementIdToSearch)
+			// Dev Notes: should handle the tagContentId differently; potentially have priority
+			var tagContentId = GetTagContentId(tag.TagProperties.TagContent);
+
+			if (_element is ElementPlaceholder && 
+			    (tag.TagProperties.TagId.Id == _elementIdToSearch || tagContentId == _elementIdToSearch))
 			{
 				FoundElement = tag;
 			}
@@ -120,9 +126,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			}
 
 			if (_element is ElementTagPair elementTagPair)
-			{			
+			{
+				// Dev Notes: should handle the tagContentId differently; potentially have priority
+				var tagContentId = GetTagContentId(tagPair.TagProperties.TagContent);
+
 				if ((elementTagPair.Type == Element.TagType.OpeningTag || elementTagPair.Type == Element.TagType.ClosingTag) &&
-					tagPair.TagProperties.TagId.Id == _elementIdToSearch)
+				    (tagPair.TagProperties.TagId.Id == _elementIdToSearch || tagContentId == _elementIdToSearch))
 				{
 					FoundElement = tagPair;
 				}
@@ -131,6 +140,27 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			}
 		}
 
-		public void VisitText(IText text) { }		
+		public void VisitText(IText text) { }
+
+		public string GetTagContentId(string text)
+		{			
+			var regexAttribute = new Regex(@"\s+(?<name>[^\s""]+)\=""(?<value>[^""]*)""", RegexOptions.Singleline | RegexOptions.IgnoreCase);		
+			var mc = regexAttribute.Matches(text);
+			if (mc.Count > 0)
+			{
+				foreach (Match match in mc)
+				{
+					var attValue = match.Groups["value"].Value;
+					var attName = match.Groups["name"].Value;
+
+					if (string.Compare(attName, "id", StringComparison.OrdinalIgnoreCase) == 0)
+					{
+						return attValue;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
 }
