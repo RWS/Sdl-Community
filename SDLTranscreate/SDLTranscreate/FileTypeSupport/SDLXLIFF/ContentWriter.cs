@@ -25,20 +25,20 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 		private SegmentPairProcessor _segmentPairProcessor;
-		private string _productName;
+		private string _productName;		
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, 
-			ImportOptions importOptions, List<AnalysisBand> analysisBands)
+		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder,
+			ImportOptions importOptions, List<AnalysisBand> analysisBands, List<string> tagIds)
 		{
 			_xliff = xliff;
 			_segmentBuilder = segmentBuilder;
 			_importOptions = importOptions;
 			_analysisBands = analysisBands;
 
-			_segmentBuilder.ExistingTagPairIds = _xliff.TagPairIds;
-			_segmentBuilder.ExistingPlaceholderIds = _xliff.PlaceholderIds;
-			
-			Comments = _xliff.DocInfo.Comments;
+			_segmentBuilder.ExistingTagIds = tagIds;
+
+
+			Comments = _xliff.DocInfo.Comments ?? new Dictionary<string, List<IComment>>();
 			ConfirmationStatistics = new ConfirmationStatistics();
 			TranslationOriginStatistics = new TranslationOriginStatistics();
 		}
@@ -90,7 +90,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					foreach (var segmentPair in paragraphUnit.SegmentPairs)
 					{
 						var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 
 						var status = segmentPair.Properties.ConfirmationLevel.ToString();
@@ -108,7 +108,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
 				var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
-				
+
 				var importedSegmentPair = importedTransUnit.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
 				if (importedSegmentPair == null)
 				{
@@ -116,7 +116,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusSegmentNotImportedId, true, out var result);
 						var statusSegmentNotImported = success ? result : ConfirmationLevel.Unspecified;
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 					}
 
@@ -137,8 +137,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
 					excludeFilter = (segmentPair.Properties.IsLocked && _importOptions.ExcludeFilterIds.Exists(a => a == "Locked"))
-					                || _importOptions.ExcludeFilterIds.Exists(a => a == status)
-					                || _importOptions.ExcludeFilterIds.Exists(a => a == match);
+									|| _importOptions.ExcludeFilterIds.Exists(a => a == status)
+									|| _importOptions.ExcludeFilterIds.Exists(a => a == match);
 				}
 
 				if (noOverwrite || excludeFilter)
@@ -147,7 +147,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
 					}
 
@@ -268,14 +268,14 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			SegmentVisitor.VisitSegment(targetSegment);
 			var updatedText = SegmentVisitor.Text;
-			
+
 			if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
 			{
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
 				{
 					if (targetSegment.Properties.TranslationOrigin != null)
 					{
-						var currentTranslationOrigin = (ITranslationOrigin) targetSegment.Properties.TranslationOrigin.Clone();
+						var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
 						targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
 						SetTranslationOrigin(targetSegment);
 					}
@@ -298,7 +298,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
 
 			}
-			else 
+			else
 			{
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 				{
@@ -331,12 +331,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder, ISegment originalTarget, ISegment originalSource,
 			Stack<IAbstractMarkupDataContainer> containers)
 		{
-			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder);
-			if (placeholder == null)
-			{
-				placeholder = _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId,
-					elementPlaceholder.TagContent);
-			}
+			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder) 
+			                  ?? _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId, elementPlaceholder.TagContent);
 
 			var container = containers.Peek();
 			container.Add(placeholder);
@@ -377,11 +373,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		{
 			if (elementTagPair.Type == Element.TagType.OpeningTag)
 			{
-				var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair);
-				if (tagPair == null)
-				{
-					tagPair = _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
-				}
+				var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair) 
+				              ?? _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
 
 				if (tagPair is IAbstractMarkupDataContainer tagPairContainer)
 				{
@@ -401,7 +394,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private void UpdateComment(ElementComment elementComment, Stack<IAbstractMarkupDataContainer> containers)
 		{
 			var comments = Comments.FirstOrDefault(a => a.Key == elementComment.Id);
-			var newestComment = comments.Value.LastOrDefault();
+			var newestComment = comments.Value?.LastOrDefault();
 			if (newestComment != null)
 			{
 				if (elementComment.Type == Element.TagType.OpeningTag)
@@ -436,7 +429,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		private IAbstractMarkupData GetElement(string tagId, IAbstractMarkupDataContainer originalTargetSegment,
 			IAbstractMarkupDataContainer sourceSegment, Element element)
-		{
+		{			
 			var extractor = new ElementExtractor();
 			extractor.GetTag(tagId, originalTargetSegment, element);
 			if (extractor.FoundElement != null)

@@ -203,11 +203,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Finalize);
 					if (job != null)
 					{
-						success = await Finalize(job);
+						success = await Finalize(job);												
 					}
+
+					_controllers.ProjectsController.Open(_newProject);
+					_controllers.ProjectsController.RefreshProjects();
 				}
 
-				FinalizeJobProcesses(success);
+				FinalizeJobProcesses(success);			
 			}
 			finally
 			{
@@ -223,7 +226,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			var projectFiles = WizardContext.Project.ProjectFiles;
 
 			var newProjectInfo = _newProject.GetProjectInfo();
-			WizardContext.Project = _projectAutomationService.GetProject(_newProject, null, projectFiles);			
+			WizardContext.Project = _projectAutomationService.GetProject(_newProject, null, projectFiles);
 			WizardContext.ProjectFiles = WizardContext.Project.ProjectFiles;
 			WizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(_newProject);
 			WizardContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
@@ -233,7 +236,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			{
 				Directory.CreateDirectory(WizardContext.WorkingFolder);
 			}
-		}		
+		}
 
 		private async Task<bool> Preparation(JobProcess jobProcess)
 		{
@@ -316,7 +319,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 							var xliffFilePath = Path.Combine(xliffFolder,
 								projectFile.Name.Substring(0, projectFile.Name.Length - ".sdlxliff".Length) + ".xliff");
 
-
 							projectFile.Date = WizardContext.DateTimeStamp;
 							projectFile.Action = Enumerators.Action.Export;
 							projectFile.Status = Enumerators.Status.Success;
@@ -330,13 +332,15 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 							xliff.DocInfo.ProjectId = project.Id;
 							xliff.DocInfo.SourceLanguage = sourceLanguage;
 							xliff.DocInfo.TargetLanguage = targetLanguage;
-							xliff.TagPairIds = targetFile.XliffData.TagPairIds;
-							xliff.PlaceholderIds = targetFile.XliffData.PlaceholderIds;
-							if (targetFile.XliffData.Files?.Count > 0)
+							xliff.TagPairIds = targetFile?.XliffData.TagPairIds;
+							xliff.PlaceholderIds = targetFile?.XliffData.PlaceholderIds;
+							if (targetFile?.XliffData.Files?.Count > 0)
 							{
-								var file = targetFile.XliffData.Files[0].Clone() as FileTypeSupport.XLIFF.Model.File;
-								file.TargetLanguage = targetLanguage;
-								xliff.Files.Add(file);
+								if (targetFile.XliffData.Files[0].Clone() is FileTypeSupport.XLIFF.Model.File file)
+								{
+									file.TargetLanguage = targetLanguage;
+									xliff.Files.Add(file);
+								}
 							}
 							projectFile.XliffData = xliff;
 
@@ -394,7 +398,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 			return await Task.FromResult(success);
 		}
-		
+
 		private async Task<bool> CreateTranscreateProject(JobProcess jobProcess)
 		{
 			var success = true;
@@ -441,12 +445,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				if (WizardContext.ConvertOptions.CloseProjectOnComplete)
 				{
-					_controllers.ProjectsController.Close(selectedProject);
-					_controllers.ProjectsController.RefreshProjects();
+					_controllers.ProjectsController.Close(selectedProject);					
 				}
-
-				_controllers.ProjectsController.Open(_newProject);
-
+				
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " - Completed " + FormatDateTime(DateTime.UtcNow));
 
@@ -533,7 +534,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						};
 						importFiles.Add(importFile);
 
-						var paragraphMap = GetParagraphMap(sdlxliffReader, targetLanguageFile.Location);												
+						var paragraphMap = GetParagraphMap(sdlxliffReader, targetLanguageFile.Location);
 						AlignParagraphIds(targetLanguageFile.XliffData, paragraphMap.Keys.ToList());
 
 						success = sdlxliffWriter.UpdateFile(targetLanguageFile.XliffData, targetLanguageFile.Location, sdlXliffImportFile);
@@ -640,7 +641,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private void WriteXliffFile(XliffWriter xliffWriter, ProjectFile projectFile)
 		{
-			var exported = xliffWriter.WriteFile(projectFile.XliffData, projectFile.XliffFilePath, true);			
+			var exported = xliffWriter.WriteFile(projectFile.XliffData, projectFile.XliffFilePath, true);
 			if (!exported)
 			{
 				throw new Exception(string.Format(PluginResources.ErrorMessage_ConvertingFile, projectFile.Location));
@@ -855,8 +856,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			{
 				file.TargetLanguage = null;
 				file.Original = "Recommended";
-			
-				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;				
+
+				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
 
 				for (var i = 1; i <= WizardContext.ConvertOptions.MaxAlternativeTranslations; i++)
 				{
@@ -879,7 +880,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						foreach (var segmentPair in transUnit.SegmentPairs)
 						{
 							if (segmentPair.Clone() is SegmentPair sp)
-							{								
+							{
 								tu.SegmentPairs.Add(sp);
 							}
 						}
