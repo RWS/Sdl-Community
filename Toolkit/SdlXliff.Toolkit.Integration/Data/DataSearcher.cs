@@ -103,57 +103,64 @@ namespace SdlXliff.Toolkit.Integration.Data
 		/// <param name="textToSearch">text to search in</param>
 		/// <returns>list of indexes of search string matches</returns>
 		private void SearchText(string text, string textToSearch)
-        {
-            // get the matches of search string
-            var searchResults = Regex.Match(text, GetEscapedText(textToSearch), GetRegexOptions());
-	           
-            while (searchResults.Success)
-            {
-                foreach (Group searchGroup in searchResults.Groups)
-	                if (_settings.SearchInLocked || !IsLockedContent(searchGroup.Index, searchGroup.Length) && searchGroup.Length > 0)
-	                {
-		                ResultsInText.Add(new IndexData(searchGroup.Index, searchGroup.Length));
-	                }
-
-                searchResults = searchResults.NextMatch();
-            }
-
-            // check for index overlap, update property if overlapped
-            ValidateIndexes();
-        }
-
-        private void SearchTag(string textToSearch)
-        {
-            foreach (var data in ResultsInTags)
-            {
-                data.SearchResults = new List<IndexData>();
-
-                // get the matches of search string
-                var searchResults = Regex.Match(data.TagText, GetEscapedText(textToSearch), GetRegexOptions());
-                while (searchResults.Success)
-                {
-                    foreach (Group searchGroup in searchResults.Groups)
-	                    if (searchGroup.Length > 0)
-	                    {
-		                    data.SearchResults.Add(new IndexData(searchGroup.Index, searchGroup.Length));
-	                    }
-
-                    searchResults = searchResults.NextMatch();
-                }
-            }
-        }
-
-        private string GetEscapedText(string textToSearch)
-        {
-			if (!string.IsNullOrEmpty(textToSearch) && textToSearch.Last().Equals('\\'))
+		{
+			try
 			{
-				textToSearch = Regex.Escape(textToSearch);
+				// get the matches of search string
+				var searchResults = Regex.Match(text, textToSearch, GetRegexOptions());
+
+				while (searchResults.Success)
+				{
+					foreach (Group searchGroup in searchResults.Groups)
+						if (_settings.SearchInLocked || !IsLockedContent(searchGroup.Index, searchGroup.Length) &&
+							searchGroup.Length > 0)
+						{
+							ResultsInText.Add(new IndexData(searchGroup.Index, searchGroup.Length));
+						}
+
+					searchResults = searchResults.NextMatch();
+				}
+
+				// check for index overlap, update property if overlapped
+				ValidateIndexes();
 			}
+			catch
+			{
+				// catch all; ignore exceptions thrown when Regex is not correct
+				// (The regex format is also validated on the UI, using the Validating event)
+			}
+		}
 
-			return textToSearch;
-        }
+		private void SearchTag(string textToSearch)
+		{
+			try
+			{
+				foreach (var data in ResultsInTags)
+				{
+					data.SearchResults = new List<IndexData>();
 
-        private void ValidateIndexes()
+					// get the matches of search string
+					var searchResults = Regex.Match(data.TagText, textToSearch, GetRegexOptions());
+					while (searchResults.Success)
+					{
+						foreach (Group searchGroup in searchResults.Groups)
+							if (searchGroup.Length > 0)
+							{
+								data.SearchResults.Add(new IndexData(searchGroup.Index, searchGroup.Length));
+							}
+
+						searchResults = searchResults.NextMatch();
+					}
+				}
+			}
+			catch
+			{
+				// catch all; ignore exceptions thrown when Regex is not correct
+				// (The regex format is also validated on the UI, using the Validating event)		
+			}
+		}
+
+		private void ValidateIndexes()
         {
             var index = ResultsInText;
             int indexSt;
