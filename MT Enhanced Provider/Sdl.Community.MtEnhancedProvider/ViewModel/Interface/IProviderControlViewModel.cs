@@ -12,7 +12,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		ICommand ShowSettingsCommand { get; set; }
 		List<TranslationOption> TranslationOptions { get; set; }
 		List<GoogleApiVersion> GoogleApiVersions { get; set; }
-		//TODO: save this value in settings
 		GoogleApiVersion SelectedGoogleApiVersion { get; set; }
 		TranslationOption SelectedTranslationOption { get; set; }
 		bool IsMicrosoftSelected { get; set; }
@@ -23,11 +22,13 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		bool IsTellMeAction { get; set; }
 		string CatId { get; set; }
 		string ApiKey { get; set; } //Google
-		string ClientId { get; set; }//Microsoft
+		string ClientId { get; set; } //Microsoft
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
 		string GoogleEngineModel { get; set; }
 		string ProjectLocation { get; set; }
+		string GlossaryId { get; set; }
+		string GlossaryPath { get; set; }
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }

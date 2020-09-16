@@ -79,6 +79,7 @@ namespace Sdl.Community.MtEnhancedProvider
 	    public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
 		    ITranslationProviderCredentialStore credentialStore)
 	    {
+			//TODO: Get the language pair from the projects controller
 		    var options = new MtTranslationOptions();
 
 		    var mainWindowVm = ShowProviderWindow(null, credentialStore, options);

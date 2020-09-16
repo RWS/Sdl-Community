@@ -808,6 +808,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the URI whare the glossary is stored.
+        /// </summary>
+        public static string V3Glossary {
+            get {
+                return ResourceManager.GetString("V3Glossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the local path to the json file associated with your API key:.
         /// </summary>
         public static string V3JsonPathDescription {

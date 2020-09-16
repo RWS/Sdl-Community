@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 {
@@ -11,6 +12,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		string JsonFilePath { get; set; }
 		string EngineModel { get; set; }
 		string Location { get; set; }
+		string GlossaryPath { get; set; }
+		string GlossaryId { get; set; }
 		string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText);
+		void CreateGoogleGlossary(LanguagePair[] languagePairs);
 	}
 }

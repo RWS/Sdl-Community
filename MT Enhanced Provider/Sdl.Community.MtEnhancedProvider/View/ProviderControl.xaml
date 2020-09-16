@@ -144,6 +144,13 @@
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				         Margin="10 0"
 				         Text="{Binding GoogleEngineModel}"/>
+				<TextBlock 
+					Margin="10 10" 
+					Text="{x:Static mtEnhanced:PluginResources.V3Glossary}"/>
+				<TextBox controls:TextBoxHelper.Watermark="Glossary URI"
+				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				         Margin="10 0"
+				         Text="{Binding GlossaryPath}"/>
 			</StackPanel>
 		</StackPanel>
     </Grid>

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Input;
-using Google.Api.Gax.ResourceNames;
-using Google.Cloud.Translate.V3;
 using Sdl.Community.MtEnhancedProvider.Commands;
 using Sdl.Community.MtEnhancedProvider.GoogleApi;
 using Sdl.Community.MtEnhancedProvider.Helpers;
@@ -25,9 +22,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _translatorErrorResponse;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
-		private readonly LanguagePair[] _languagePairs;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
-
+		private readonly LanguagePair[] _languagePairs;
 		public delegate void CloseWindowEventRaiser();
 		public event CloseWindowEventRaiser CloseEventRaised;
 
@@ -302,10 +298,15 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					ProjectName = _providerControlViewModel.ProjectName,
 					JsonFilePath = _providerControlViewModel.JsonFilePath,
 					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
-					ProjectLocation = _providerControlViewModel.ProjectLocation
+					ProjectLocation = _providerControlViewModel.ProjectLocation,
+					GlossaryPath = _providerControlViewModel.GlossaryPath
 				};
 				var googleV3 = new GoogleV3Connecter(providerOptions);
-				googleV3.TryToAuthenticateUser(); 
+				googleV3.TryToAuthenticateUser();
+				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath)&& _languagePairs !=null)
+				{
+					googleV3.CreateGoogleGlossary(_languagePairs);
+				}
 			}
 
 			catch (Exception e)
@@ -358,9 +359,10 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				Options.LanguagesSupported = new Dictionary<string, string>();
 			}
+			if (_languagePairs == null) return;
 			foreach (var languagePair in _languagePairs)
 			{
-				Options?.LanguagesSupported.Add(languagePair.TargetCultureName,_providerControlViewModel.SelectedTranslationOption.Name);
+				Options?.LanguagesSupported.Add(languagePair.TargetCultureName, _providerControlViewModel.SelectedTranslationOption.Name);
 			}
 		}
 
@@ -377,6 +379,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			Options.SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType;
 			Options.GoogleEngineModel = _providerControlViewModel.GoogleEngineModel;
 			Options.ProjectLocation = _providerControlViewModel.ProjectLocation;
+			Options.GlossaryPath = _providerControlViewModel.GlossaryPath;
 		}
 
 		private void SetMicrosoftProviderOptions()

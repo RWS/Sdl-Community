@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Sdl.Community.MtEnhancedProvider.GoogleApi;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
@@ -26,12 +27,13 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _projectName;
 		private string _googleEngineModel;
 		private string _projectLocation;
+		private string _glossaryId;
+		private string _glossaryPath;
 
 		public ProviderControlViewModel(IMtTranslationOptions options)
 		{
 			ViewModel = this;
 			_options = options;
-
 			InitializeComponent();
 		}
 
@@ -87,6 +89,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				ProjectName = _options.ProjectName;
 				GoogleEngineModel = _options.GoogleEngineModel;
 				ProjectLocation = _options.ProjectLocation;
+				GlossaryPath = _options.GlossaryPath;
 			}
 
 			SetTranslationOption();
@@ -107,6 +110,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_googleEngineModel == value) return;
 				_googleEngineModel = value;
 				OnPropertyChanged(nameof(GoogleEngineModel));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -118,6 +122,31 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_projectLocation == value) return;
 				_projectLocation = value;
 				OnPropertyChanged(nameof(ProjectLocation));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public string GlossaryId
+		{
+			get => _glossaryId;
+			set
+			{
+				if (_glossaryId == value) return;
+				_glossaryId = value;
+				OnPropertyChanged(nameof(GlossaryId));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public string GlossaryPath
+		{
+			get => _glossaryPath;
+			set
+			{
+				if (_glossaryPath == value) return;
+				_glossaryPath = value;
+				OnPropertyChanged(nameof(GlossaryPath));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 

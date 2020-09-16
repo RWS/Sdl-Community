@@ -150,6 +150,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			{
 				_googleV3Connecter.ProjectName = Options.ProjectName;
 				_googleV3Connecter.JsonFilePath = Options.JsonFilePath;
+				_googleV3Connecter.GlossaryPath = Options.GlossaryPath;
 			}
 
 			return _googleV3Connecter.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);

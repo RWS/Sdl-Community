@@ -384,4 +384,7 @@
   <data name="ProjectLocationValidation" xml:space="preserve">
     <value>Project location value is required</value>
   </data>
+  <data name="V3Glossary" xml:space="preserve">
+    <value>Enter the URI whare the glossary is stored</value>
+  </data>
 </root>

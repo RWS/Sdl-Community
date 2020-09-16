@@ -123,6 +123,12 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		[JsonIgnore]
+		public string GlossaryPath {
+			get => GetStringParameter("glossarypath");
+			set => SetStringParameter("glossarypath", value);
+		}
+
+		[JsonIgnore]
 		public string GoogleEngineModel
 		{
 			get => GetStringParameter("googleenginemodel");

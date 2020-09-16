@@ -19,6 +19,7 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 		string PostLookupFilename { get; set; }
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
+		string GlossaryPath { get; set; }
 		string ApiKey { get; set; } //Google Key
 		string ClientId { get; set; } // Microsoft key
 		string GoogleEngineModel { get; set; }

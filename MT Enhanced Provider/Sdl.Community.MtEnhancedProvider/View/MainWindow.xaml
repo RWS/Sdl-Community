@@ -67,7 +67,7 @@
 				Grid.Row="3"
 				IsDefault="True"
 				Content="OK"
-				Margin="10 10 20 10"
+				Margin="10 0 20 10"
 				HorizontalAlignment="Right"
 				Width="100"
 			/>
