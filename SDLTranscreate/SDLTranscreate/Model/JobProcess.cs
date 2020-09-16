@@ -14,6 +14,9 @@ namespace Sdl.Community.Transcreate.Model
 	    }
 
 	    private ProcessStatus _status;
+	    private int _progress;
+	    private string _name;
+	    private string _description;
 
 	    public JobProcess()
 	    {
@@ -21,13 +24,41 @@ namespace Sdl.Community.Transcreate.Model
 		    Warnings = new List<Exception>();
 		    Status = ProcessStatus.Scheduled;
 	    }
+	    
+	    public string Name
+		{
+		    get => _name;
+		    set
+		    {
+			    if (_name == value)
+			    {
+				    return;
+			    }
 
-	    public string Name { get; set; }
+			    _name = value;
+			    OnPropertyChanged(nameof(Name));
+		    }
+	    }
 
-	    /// <summary>
-	    /// Scheduled, Running, Completed, Failed
-	    /// </summary>
-	    public ProcessStatus Status
+	    public string Description
+	    {
+		    get => _description;
+		    set
+		    {
+			    if (_description == value)
+			    {
+				    return;
+			    }
+
+			    _description = value;
+			    OnPropertyChanged(nameof(Description));
+		    }
+	    }
+
+		/// <summary>
+		/// Scheduled, Running, Completed, Failed
+		/// </summary>
+		public ProcessStatus Status
 	    {
 		    get => _status;
 		    set
@@ -43,7 +74,22 @@ namespace Sdl.Community.Transcreate.Model
 		    }
 	    }
 
-	    public string Message
+	    public int Progress
+	    {
+		    get => _progress;
+		    set
+		    {
+			    if (_progress == value)
+			    {
+				    return;
+			    }
+
+			    _progress = value;
+			    OnPropertyChanged(nameof(Progress));
+		    }
+	    }
+
+		public string Message
 	    {
 		    get { return $"Errors: {Errors.Count}, Warnings: {Warnings.Count}"; }
 	    }

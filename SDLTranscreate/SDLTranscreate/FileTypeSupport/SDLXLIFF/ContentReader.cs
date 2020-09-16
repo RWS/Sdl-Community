@@ -37,7 +37,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
-			
+
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
 
@@ -55,7 +55,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		public CultureInfo SourceLanguage { get; private set; }
 
 		public CultureInfo TargetLanguage { get; private set; }
-		
+
 		private SegmentVisitor SegmentVisitor => _segmentVisitor ?? (_segmentVisitor = new SegmentVisitor(_ignoreTags));
 
 		internal List<string> DummyOutputFiles = new List<string>();
@@ -138,7 +138,16 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
+				SegmentPairInfo segmentPairInfo = null;
+				try
+				{
+					segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
+				}
+				catch
+				{
+					// catch all; ignore
+				}
+
 				var status = segmentPair.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
@@ -250,10 +259,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			if (count != null)
 			{
 				count.Segments++;
-				count.Words += segmentPairInfo.SourceWordCounts.Words;
-				count.Characters += segmentPairInfo.SourceWordCounts.Characters;
-				count.Placeables += segmentPairInfo.SourceWordCounts.Placeables;
-				count.Tags += segmentPairInfo.SourceWordCounts.Tags;			
+				count.Words += segmentPairInfo?.SourceWordCounts?.Words ?? 0;
+				count.Characters += segmentPairInfo?.SourceWordCounts?.Characters ?? 0;
+				count.Placeables += segmentPairInfo?.SourceWordCounts?.Placeables ?? 0;
+				count.Tags += segmentPairInfo?.SourceWordCounts?.Tags ?? 0;
 			}
 			else
 			{
@@ -261,16 +270,16 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				{
 					Category = category,
 					Segments = 1,
-					Words = segmentPairInfo.SourceWordCounts.Words,
-					Characters = segmentPairInfo.SourceWordCounts.Characters,
-					Placeables = segmentPairInfo.SourceWordCounts.Placeables,
-					Tags = segmentPairInfo.SourceWordCounts.Tags
+					Words = segmentPairInfo?.SourceWordCounts?.Words ?? 0,
+					Characters = segmentPairInfo?.SourceWordCounts?.Characters ?? 0,
+					Placeables = segmentPairInfo?.SourceWordCounts?.Placeables ?? 0,
+					Tags = segmentPairInfo?.SourceWordCounts?.Tags ?? 0
 				};
 
 				wordCounts.Add(wordCount);
-			}			
+			}
 		}
-		
+
 		public IBilingualContentHandler Output
 		{
 			get => _output;

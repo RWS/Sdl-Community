@@ -553,4 +553,10 @@
   <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\sdl_transcreate_view.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+	<data name="WizardMessage_ImportingTranslations" xml:space="preserve">
+    <value>Importing translations</value>
+  </data>
+	<data name="WizardMessage_CreatingTranscreateProject" xml:space="preserve">
+    <value>Creating Transcreate Project</value>
+  </data>
 </root>

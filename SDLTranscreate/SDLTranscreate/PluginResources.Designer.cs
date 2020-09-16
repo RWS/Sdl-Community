@@ -1274,6 +1274,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating Transcreate Project.
+        /// </summary>
+        internal static string WizardMessage_CreatingTranscreateProject {
+            get {
+                return ResourceManager.GetString("WizardMessage_CreatingTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finalizing procedures....
         /// </summary>
         internal static string WizardMessage_Finalizing {
@@ -1288,6 +1297,15 @@ namespace Sdl.Community.Transcreate {
         internal static string WizardMessage_ImportingFromFormat {
             get {
                 return ResourceManager.GetString("WizardMessage_ImportingFromFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing translations.
+        /// </summary>
+        internal static string WizardMessage_ImportingTranslations {
+            get {
+                return ResourceManager.GetString("WizardMessage_ImportingTranslations", resourceCulture);
             }
         }
         
