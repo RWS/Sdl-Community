@@ -2,280 +2,241 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
-using log4net;
+using NLog;
 
 namespace SDLXLIFFSliceOrChange
 {
-    public class ClearManager
-    {
-        private static ILog logger = LogManager.GetLogger(typeof (ClearManager));
-        public static void ClearFile(SliceInfo sliceInfo, SDLXLIFFSliceOrChange form)
-        {
-            try
-            {
-                String file = sliceInfo.File;
-                XmlDocument xDoc = new XmlDocument();
-                xDoc.PreserveWhitespace = true;
-                xDoc.Load(file);
-                String xmlEncoding = "utf-8";
-                try
-                {
-                    if (xDoc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
-                    {
-                        // Get the encoding declaration.
-                        XmlDeclaration decl = (XmlDeclaration)xDoc.FirstChild;
-                        xmlEncoding = decl.Encoding;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex.Message, ex);
-                }
-                XmlNodeList fileList = xDoc.DocumentElement.GetElementsByTagName("file");
-                foreach (XmlElement fileElement in fileList.OfType<XmlElement>())
-                {
-                    XmlElement bodyElement = (XmlElement) (fileElement.GetElementsByTagName("body")[0]);
-                    XmlNodeList groupElements = bodyElement.GetElementsByTagName("group");
+	public class ClearManager
+	{
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		public static void ClearFile(SliceInfo sliceInfo, SDLXLIFFSliceOrChange form)
+		{
+			try
+			{
+				var file = sliceInfo.File;
+				var xDoc = new XmlDocument
+				{
+					PreserveWhitespace = true
+				};
+				xDoc.Load(file);
+				var xmlEncoding = "utf-8";
+				if (xDoc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
+				{
+					// Get the encoding declaration.
+					var decl = (XmlDeclaration)xDoc.FirstChild;
+					xmlEncoding = decl.Encoding;
+				}
 
-                    foreach (var groupElement in groupElements.OfType<XmlElement>())
-                    {
-                        //look in segments
-                        XmlNodeList transUnits = ((XmlElement) groupElement).GetElementsByTagName("trans-unit");
-                        foreach (var transUnit in transUnits.OfType<XmlElement>())
-                        {
-                            ClearInTransUnit(sliceInfo, transUnit);
-                        }
-                        transUnits = null;
-                    }
+				var fileList = xDoc.DocumentElement?.GetElementsByTagName("file");
+				if (fileList != null)
+				{
+					foreach (var fileElement in fileList.OfType<XmlElement>())
+					{
+						var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
+						var groupElements = bodyElement.GetElementsByTagName("group");
 
-                    //look in segments
-                    XmlNodeList transUnitsInBody = bodyElement.ChildNodes;
-                    foreach (var transUnit in transUnitsInBody.OfType<XmlElement>())
-                    {
-                        if (((XmlNode)transUnit).Name != "trans-unit")
-                            continue;
-                        ClearInTransUnit(sliceInfo, transUnit);
-                    }
+						foreach (var groupElement in groupElements.OfType<XmlElement>())
+						{
+							//look in segments
+							var transUnits = groupElement.GetElementsByTagName("trans-unit");
+							foreach (var transUnit in transUnits.OfType<XmlElement>())
+							{
+								ClearInTransUnit(sliceInfo, transUnit);
+							}
+						}
 
-                    bodyElement = null;
-                    groupElements = null;
-                    transUnitsInBody = null;
-                }
-                Encoding encoding = new UTF8Encoding();
-                if (!String.IsNullOrEmpty(xmlEncoding))
-                    encoding = Encoding.GetEncoding(xmlEncoding);
+						//look in segments
+						var transUnitsInBody = bodyElement.ChildNodes;
+						foreach (var transUnit in transUnitsInBody.OfType<XmlElement>())
+						{
+							if (transUnit.Name != "trans-unit")
+								continue;
+							ClearInTransUnit(sliceInfo, transUnit);
+						}
+					}
+				}
 
-                using (var writer = new XmlTextWriter(file, encoding))
-                {
-                    //writer.Formatting = Formatting.None;
-                    xDoc.Save(writer);
-                }
-                fileList = null; xDoc = null;
+				Encoding encoding = new UTF8Encoding();
+				if (!string.IsNullOrEmpty(xmlEncoding))
+					encoding = Encoding.GetEncoding(xmlEncoding);
 
-                form.StepProcess("Target segments from file: " + Path.GetFileName(sliceInfo.File) + " are empty.");
-            }
-            catch(Exception ex)
-            {
-                logger.Error(ex.Message, ex);
-            }
-        }
+				using (var writer = new XmlTextWriter(file, encoding))
+				{
+					xDoc.Save(writer);
+				}
+				form.StepProcess("Target segments from file: " + Path.GetFileName(sliceInfo.File) + " are empty.");
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+			}
+		}
 
-        private static void ClearInTransUnit(SliceInfo sliceInfo, object transUnit)
-        {
-            String transUnitID = String.Empty;
-            transUnitID = ((XmlElement) transUnit).Attributes["id"].Value;
+		private static void ClearInTransUnit(SliceInfo sliceInfo, object transUnit)
+		{
+			var transUnitID = ((XmlElement)transUnit).Attributes["id"].Value;
 
-            if (sliceInfo.Segments.All(seg => seg.Key != transUnitID))
-                return;
+			if (sliceInfo.Segments.All(seg => seg.Key != transUnitID))
+				return;
 
-            XmlNodeList segDefs = ((XmlElement) transUnit).GetElementsByTagName("sdl:seg-defs");
+			var segDefs = ((XmlElement)transUnit).GetElementsByTagName("sdl:seg-defs");
 
-            foreach (var segDef in segDefs.OfType<XmlElement>())
-            {
-                XmlNodeList segments = ((XmlElement) segDef).GetElementsByTagName("sdl:seg");
-                foreach (XmlElement segment in segments.OfType<XmlElement>())
-                {
-                    String SegmentId = String.Empty;
-                    SegmentId = segment.Attributes["id"].Value;
+			foreach (var segDef in segDefs.OfType<XmlElement>())
+			{
+				var segments = segDef.GetElementsByTagName("sdl:seg");
+				foreach (var segment in segments.OfType<XmlElement>())
+				{
+					var segmentId = segment.Attributes["id"].Value;
 
-                    if (
-                        !sliceInfo.Segments.Any(
-                            seg => seg.Key == transUnitID && seg.Value.Contains(SegmentId)))
-                        continue;
+					if (!sliceInfo.Segments.Any(seg => seg.Key == transUnitID && seg.Value.Contains(segmentId)))
+						continue;
 
-                    segment.RemoveAllAttributes();
-                    segment.RemoveAll();
-                    segment.SetAttribute("id", SegmentId);
-                }
-                segments = null;
-            }
-            segDefs = null;
-            KeyValuePair<String, List<String>> currentTransUnit =
-                sliceInfo.Segments.FirstOrDefault(seg => seg.Key == transUnitID);
+					segment.RemoveAllAttributes();
+					segment.RemoveAll();
+					segment.SetAttribute("id", segmentId);
+				}
+			}
+			var currentTransUnit = sliceInfo.Segments.FirstOrDefault(seg => seg.Key == transUnitID);
 
-            XmlNodeList target = ((XmlElement) transUnit).GetElementsByTagName("target");
-            if (target.Count > 0)
-                ClearAllChildsInnerText((XmlElement) target[0], currentTransUnit.Value);
-            target = null;
-        }
+			var target = ((XmlElement)transUnit).GetElementsByTagName("target");
+			if (target.Count > 0)
+				ClearAllChildsInnerText((XmlElement)target[0], currentTransUnit.Value);
+		}
 
-        private static void ClearAllChildsInnerText(XmlElement target, List<String> ids)
-        {
-            foreach (XmlElement child in target.ChildNodes.OfType<XmlElement>())
-            {
-                if (child.Name == "mrk")
-                {
-                    if (!child.HasAttribute("mtype") || child.Attributes["mtype"].Value != "seg") 
-                        continue;
+		private static void ClearAllChildsInnerText(XmlElement target, List<string> ids)
+		{
+			foreach (var child in target.ChildNodes.OfType<XmlElement>())
+			{
+				if (child.Name == "mrk")
+				{
+					if (!child.HasAttribute("mtype") || child.Attributes["mtype"].Value != "seg")
+						continue;
 
-                    String id = String.Empty;
-                    if (child.HasAttribute("mid"))
-                        id = child.Attributes["mid"].Value;
-                    if (!ids.Contains(id))
-                        continue;
+					var id = string.Empty;
+					if (child.HasAttribute("mid"))
+						id = child.Attributes["mid"].Value;
+					if (!ids.Contains(id))
+						continue;
 
-                    child.RemoveAll();
-                    child.SetAttribute("mid", id);
-                    child.SetAttribute("mtype", "seg");
-                }
-                else
-                {
-                    ClearAllChildsInnerText(child, ids);
-                }
-            }
-        }
+					child.RemoveAll();
+					child.SetAttribute("mid", id);
+					child.SetAttribute("mtype", "seg");
+				}
+				else
+				{
+					ClearAllChildsInnerText(child, ids);
+				}
+			}
+		}
 
-        public static void CopyFile(SliceInfo sliceInfo, SDLXLIFFSliceOrChange form)
-        {
-            try
-            {
-                String file = sliceInfo.File;
-                XmlDocument xDoc = new XmlDocument();
-                xDoc.PreserveWhitespace = true;
-                xDoc.Load(file);
+		public static void CopyFile(SliceInfo sliceInfo, SDLXLIFFSliceOrChange form)
+		{
+			try
+			{
+				var file = sliceInfo.File;
+				var xDoc = new XmlDocument { PreserveWhitespace = true };
+				xDoc.Load(file);
 
-                String xmlEncoding = "utf-8";
-                try
-                {
-                    if (xDoc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
-                    {
-                        // Get the encoding declaration.
-                        XmlDeclaration decl = (XmlDeclaration)xDoc.FirstChild;
-                        xmlEncoding = decl.Encoding;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex.Message, ex);
-                }
-                XmlNodeList fileList = xDoc.DocumentElement.GetElementsByTagName("file");
-                foreach (XmlElement fileElement in fileList.OfType<XmlElement>())
-                {
-                    XmlElement bodyElement = (XmlElement) (fileElement.GetElementsByTagName("body")[0]);
-                    XmlNodeList groupElements = bodyElement.GetElementsByTagName("group");
+				var xmlEncoding = "utf-8";
 
-                    foreach (var groupElement in groupElements.OfType<XmlElement>())
-                    {
-                        //look in segments
-                        XmlNodeList transUnits = ((XmlElement) groupElement).GetElementsByTagName("trans-unit");
-                        foreach (var transUnit in transUnits.OfType<XmlElement>())
-                        {
-                            CopyInTransUnit(sliceInfo, transUnit);
-                        }
-                        transUnits = null;
-                    }
+				if (xDoc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
+				{
+					// Get the encoding declaration.
+					var decl = (XmlDeclaration)xDoc.FirstChild;
+					xmlEncoding = decl.Encoding;
+				}
 
-                    //look in segments
-                    XmlNodeList transUnitsInBody = ((XmlElement) bodyElement).ChildNodes;//.GetElementsByTagName("trans-unit");
-                    foreach (var transUnit in transUnitsInBody.OfType<XmlElement>())
-                    {
-                        if (((XmlNode)transUnit).Name != "trans-unit")
-                            continue;
-                        CopyInTransUnit(sliceInfo, transUnit);
-                    }
-                    transUnitsInBody = null;
-                    bodyElement = null;
-                    groupElements = null;
-                }
-                fileList = null;
+				var fileList = xDoc.DocumentElement?.GetElementsByTagName("file");
+				if (fileList != null)
+				{
+					foreach (var fileElement in fileList.OfType<XmlElement>())
+					{
+						var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
+						var groupElements = bodyElement.GetElementsByTagName("group");
 
-                Encoding encoding = new UTF8Encoding();
-                if (!String.IsNullOrEmpty(xmlEncoding))
-                    encoding = Encoding.GetEncoding(xmlEncoding);
-                using (var writer = new XmlTextWriter(file, encoding))
-                {
-                    //writer.Formatting = Formatting.None;
-                    xDoc.Save(writer);
-                }
-                xDoc = null;
-                form.StepProcess("Source segments from file: " + Path.GetFileName(sliceInfo.File) + " are copied.");
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex.Message, ex);
-            }
-        }
+						foreach (var groupElement in groupElements.OfType<XmlElement>())
+						{
+							//look in segments
+							var transUnits = groupElement.GetElementsByTagName("trans-unit");
+							foreach (var transUnit in transUnits.OfType<XmlElement>())
+							{
+								CopyInTransUnit(sliceInfo, transUnit);
+							}
+						}
 
-        private static void CopyInTransUnit(SliceInfo sliceInfo, object transUnit)
-        {
-            String transUnitID = String.Empty;
-            transUnitID = ((XmlElement) transUnit).Attributes["id"].Value;
+						//look in segments
+						var transUnitsInBody = bodyElement.ChildNodes;
+						foreach (var transUnit in transUnitsInBody.OfType<XmlElement>())
+						{
+							if (transUnit.Name != "trans-unit")
+								continue;
+							CopyInTransUnit(sliceInfo, transUnit);
+						}
+					}
+				}
 
-            if (sliceInfo.Segments.All(seg => seg.Key != transUnitID))
-                return;
+				Encoding encoding = new UTF8Encoding();
+				if (!string.IsNullOrEmpty(xmlEncoding))
+					encoding = Encoding.GetEncoding(xmlEncoding);
+				using (var writer = new XmlTextWriter(file, encoding))
+				{
+					xDoc.Save(writer);
+				}
+				form.StepProcess("Source segments from file: " + Path.GetFileName(sliceInfo.File) + " are copied.");
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+			}
+		}
 
-            XmlNodeList segDefs = ((XmlElement) transUnit).GetElementsByTagName("sdl:seg-defs");
+		private static void CopyInTransUnit(SliceInfo sliceInfo, object transUnit)
+		{
+			var transUnitID = ((XmlElement)transUnit).Attributes["id"].Value;
 
-            foreach (var segDef in segDefs.OfType<XmlElement>())
-            {
-                XmlNodeList segments = ((XmlElement) segDef).GetElementsByTagName("sdl:seg");
-                foreach (XmlElement segment in segments.OfType<XmlElement>())
-                {
-                    String SegmentId = String.Empty;
-                    SegmentId = segment.Attributes["id"].Value;
+			if (sliceInfo.Segments.All(seg => seg.Key != transUnitID))
+				return;
 
-                    if (
-                        !sliceInfo.Segments.Any(
-                            seg => seg.Key == transUnitID && seg.Value.Contains(SegmentId)))
-                        continue;
+			var segDefs = ((XmlElement)transUnit).GetElementsByTagName("sdl:seg-defs");
 
-                    segment.RemoveAllAttributes();
-                    segment.SetAttribute("id", SegmentId);
-                    segment.SetAttribute("origin", "source");
-                }
-            }
+			foreach (var segDef in segDefs.OfType<XmlElement>())
+			{
+				var segments = segDef.GetElementsByTagName("sdl:seg");
+				foreach (var segment in segments.OfType<XmlElement>())
+				{
+					var segmentId = segment.Attributes["id"].Value;
+					if (!sliceInfo.Segments.Any(seg => seg.Key == transUnitID && seg.Value.Contains(segmentId)))
+						continue;
 
-            var target = ((XmlElement) transUnit).ChildNodes.OfType<XmlElement>()
-                .FirstOrDefault(t => t.Name == "target");
+					segment.RemoveAllAttributes();
+					segment.SetAttribute("id", segmentId);
+					segment.SetAttribute("origin", "source");
+				}
+			}
+			var target = ((XmlElement)transUnit).ChildNodes.OfType<XmlElement>().FirstOrDefault(t => t.Name == "target");
+			var segSource = ((XmlElement)transUnit).ChildNodes.OfType<XmlElement>().FirstOrDefault(t => t.Name == "seg-source");
 
-            var segSource = ((XmlElement)transUnit).ChildNodes.OfType<XmlElement>()
-                .FirstOrDefault(t => t.Name == "seg-source");
+			if (target != null && segSource != null)
+			{
+				var currentTransUnitSliceInfo = sliceInfo.Segments.FirstOrDefault(seg => seg.Key == transUnitID);
 
-            if (target != null && segSource != null)
-            {
-                var currentTransUnitSliceInfo =
-                sliceInfo.Segments.FirstOrDefault(seg => seg.Key == transUnitID);
+				if (currentTransUnitSliceInfo.Value != null)
+				{
+					foreach (var segmentId in currentTransUnitSliceInfo.Value)
+					{
+						var sourceSegment = segSource.GetElementsByTagName("mrk").OfType<XmlElement>().FirstOrDefault(seg => seg.GetAttribute("mid") == segmentId);
+						var targetSegment = target.GetElementsByTagName("mrk").OfType<XmlElement>().FirstOrDefault(seg => seg.GetAttribute("mid") == segmentId);
 
-                if (currentTransUnitSliceInfo.Value != null)
-                {
-                    foreach (var SegmentId in currentTransUnitSliceInfo.Value)
-                    {
-                        var sourceSegment =
-                            segSource.GetElementsByTagName("mrk").OfType<XmlElement>()
-                                .FirstOrDefault(seg => seg.GetAttribute("mid") == SegmentId);
-
-                        var targetSegment = target.GetElementsByTagName("mrk").OfType<XmlElement>()
-                            .FirstOrDefault(seg => seg.GetAttribute("mid") == SegmentId);
-
-                        if (sourceSegment != null && targetSegment != null)
-                        {
-                            targetSegment.InnerXml = sourceSegment.InnerXml;
-                        }
-                    }
-                }
-            }
-        }
-    }
+						if (sourceSegment != null && targetSegment != null)
+						{
+							targetSegment.InnerXml = sourceSegment.InnerXml;
+						}
+					}
+				}
+			}
+		}
+	}
 }

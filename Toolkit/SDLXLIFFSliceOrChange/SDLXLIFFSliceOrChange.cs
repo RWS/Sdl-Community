@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 using FolderSelect;
-using log4net;
+using NLog;
 using Sdl.Community.Toolkit.Core.Services;
 using Sdl.Core.Globalization;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -28,52 +28,35 @@ namespace SDLXLIFFSliceOrChange
 {
 	public partial class SDLXLIFFSliceOrChange : UserControl
 	{
-		public string _folderForSlicedFiles;
-		private readonly SliceManager _sliceManager;
-		private readonly UpdateManager _updateManager;
-		private bool _checkedChangedBeforeClick = false;
-		private bool _doUpdateStatus = false;
-		private ErrorProvider _errorProvider;
-
-		private bool _formSizeChanged = false;
-
-		private FileDataManager _replaceDataManager;
-
-		private List<FileData> _replaceResults;
-
-		private bool _saveCultrue = true;
-
-		private FileDataManager _searchDataManager;
-
-		private List<FileData> _searchResults;
-
-		private SearchResults _searchResultsForm;
-
-		private List<SliceInfo> _segmentsToBeSliced = new List<SliceInfo>();
-
+		private bool _checkedChangedBeforeClick;
+		private bool _doUpdateStatus;
 		private bool _setFormSizeChanged = true;
-
+		private bool _formSizeChanged;
+		private bool _saveCultrue = true;
+		private ErrorProvider _errorProvider;
+		public string _folderForSlicedFiles;
+		private FileDataManager _replaceDataManager;
+		private List<FileData> _replaceResults;
+		private FileDataManager _searchDataManager;
+		private List<FileData> _searchResults;
+		private SearchResults _searchResultsForm;
+		private List<SliceInfo> _segmentsToBeSliced = new List<SliceInfo>();
 		private List<StructureInformationType> _structureInformationTypes = new List<StructureInformationType>();
-
-		private ILog logger = LogManager.GetLogger(typeof(SDLXLIFFSliceOrChange));
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public SDLXLIFFSliceOrChange()
 		{
 			InitializeComponent();
-			_sliceManager = new SliceManager(this);
-			_updateManager = new UpdateManager(this);
+			SliceManager = new SliceManager(this);
+			UpdateManager = new UpdateManager(this);
 			_errorProvider = new ErrorProvider();
 		}
-		public SliceManager SliceManager
-		{
-			get { return _sliceManager; }
-		}
 
-		public UpdateManager UpdateManager
-		{
-			get { return _updateManager; }
-		}
-		public List<String> GetTranslationStatusForSearch()
+		public SliceManager SliceManager { get; }
+
+		public UpdateManager UpdateManager { get; }
+
+		public List<string> GetTranslationStatusForSearch()
 		{
 			var statuses = new List<string>();
 
@@ -102,31 +85,31 @@ namespace SDLXLIFFSliceOrChange
 			_setFormSizeChanged = true;
 		}
 
-		public void StepProcess(String message, bool lastStep = false)
+		public void StepProcess(string message, bool lastStep = false)
 		{
 			Invoke((MethodInvoker)delegate
-			   {
-				   try
-				   {
-					   progressBar.Focus();
-					   if (progressBar.Value + 1 < progressBar.Maximum)
-						   progressBar.Value++;
+			{
+				try
+				{
+					progressBar.Focus();
+					if (progressBar.Value + 1 < progressBar.Maximum)
+						progressBar.Value++;
 
-					   if (lastStep)
-					   {
-						   progressBar.Value = progressBar.Maximum;
-						   HideProcess();
-					   }
-				   }
-				   catch (Exception ex)
-				   {
-					   if (lastStep)
-					   {
-						   HideProcess();
-					   }
-					   logger.Error(ex.Message, ex);
-				   }
-			   });
+					if (lastStep)
+					{
+						progressBar.Value = progressBar.Maximum;
+						HideProcess();
+					}
+				}
+				catch (Exception ex)
+				{
+					if (lastStep)
+					{
+						HideProcess();
+					}
+					_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+				}
+			});
 		}
 
 		protected override bool ProcessCmdKey(ref Message message, Keys keys)
@@ -170,7 +153,7 @@ namespace SDLXLIFFSliceOrChange
 			return sourceSegments;
 		}
 
-		private void BindDDL(ComboBox comboBox, List<KeyValuePair<String, String>> items)
+		private void BindDDL(ComboBox comboBox, List<KeyValuePair<string, string>> items)
 		{
 			comboBox.ValueMember = "Key";
 			comboBox.DisplayMember = "Value";
@@ -193,35 +176,33 @@ namespace SDLXLIFFSliceOrChange
 			grView.Columns.Add("File", "#");
 			SetDetailReplaceGridView(grView);
 
-			grView.DataSource = _replaceDataManager == null || _replaceDataManager.DetailFilteredData == null
-									? null
-									: _replaceDataManager.DetailFilteredData;
+			grView.DataSource = _replaceDataManager?.DetailFilteredData;
 		}
 
 		private void BindReplaceResults()
 		{
 			Invoke((MethodInvoker)delegate
-			   {
-				   gridReplaceResults.DataSource = null;
-				   if (_replaceResults != null)
-				   {
-					   _replaceDataManager = new FileDataManager(_replaceResults);
-					   gridReplaceResults.RowCount = _replaceDataManager.SetDetailDataSearch();
-					   if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
-					   {
-						   _searchResultsForm.SearchResultsGrid.DataSource = null;
-						   _searchResultsForm.SearchResultsGrid.RowCount = gridReplaceResults.RowCount;
-					   }
-					   if (!_replaceDataManager.IsSearchResultEmpty())
-					   {
-						   BindReplaceResults(gridReplaceResults);
-						   if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
-						   {
-							   BindReplaceResults(_searchResultsForm.SearchResultsGrid);
-						   }
-					   }
-				   }
-			   });
+			{
+				gridReplaceResults.DataSource = null;
+				if (_replaceResults != null)
+				{
+					_replaceDataManager = new FileDataManager(_replaceResults);
+					gridReplaceResults.RowCount = _replaceDataManager.SetDetailDataSearch();
+					if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
+					{
+						_searchResultsForm.SearchResultsGrid.DataSource = null;
+						_searchResultsForm.SearchResultsGrid.RowCount = gridReplaceResults.RowCount;
+					}
+					if (!_replaceDataManager.IsSearchResultEmpty())
+					{
+						BindReplaceResults(gridReplaceResults);
+						if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
+						{
+							BindReplaceResults(_searchResultsForm.SearchResultsGrid);
+						}
+					}
+				}
+			});
 		}
 
 		private void BindSearchResults(DataGridView grView)
@@ -234,35 +215,33 @@ namespace SDLXLIFFSliceOrChange
 			grView.Columns.Add("File", "#");
 			SetDetailGridView(grView);
 
-			grView.DataSource = _searchDataManager == null || _searchDataManager.DetailFilteredData == null
-									? null
-									: _searchDataManager.DetailFilteredData;
+			grView.DataSource = _searchDataManager?.DetailFilteredData;
 		}
 
 		private void BindSearchResults()
 		{
 			Invoke((MethodInvoker)delegate
-			   {
-				   gridSearchResults.DataSource = null;
-				   if (_searchResults != null)
-				   {
-					   _searchDataManager = new FileDataManager(_searchResults);
-					   gridSearchResults.RowCount = _searchDataManager.SetDetailDataSearch();
-					   if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
-					   {
-						   _searchResultsForm.SearchResultsGrid.DataSource = null;
-						   _searchResultsForm.SearchResultsGrid.RowCount = gridSearchResults.RowCount;
-					   }
-					   if (!_searchDataManager.IsSearchResultEmpty())
-					   {
-						   BindSearchResults(gridSearchResults);
-						   if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
-						   {
-							   BindSearchResults(_searchResultsForm.SearchResultsGrid);
-						   }
-					   }
-				   }
-			   });
+			{
+				gridSearchResults.DataSource = null;
+				if (_searchResults != null)
+				{
+					_searchDataManager = new FileDataManager(_searchResults);
+					gridSearchResults.RowCount = _searchDataManager.SetDetailDataSearch();
+					if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
+					{
+						_searchResultsForm.SearchResultsGrid.DataSource = null;
+						_searchResultsForm.SearchResultsGrid.RowCount = gridSearchResults.RowCount;
+					}
+					if (!_searchDataManager.IsSearchResultEmpty())
+					{
+						BindSearchResults(gridSearchResults);
+						if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
+						{
+							BindSearchResults(_searchResultsForm.SearchResultsGrid);
+						}
+					}
+				}
+			});
 		}
 
 		private void btnChangeit_Click(object sender, EventArgs e)
@@ -310,7 +289,7 @@ namespace SDLXLIFFSliceOrChange
 			grView.AllowUserToResizeRows = false;
 			grView.BackgroundColor = System.Drawing.SystemColors.Window;
 			grView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			grView.GridColor = System.Drawing.SystemColors.Control;
+			grView.GridColor = SystemColors.Control;
 			grView.Location = new System.Drawing.Point(166, 92);
 			grView.Name = "grView";
 			grView.RowHeadersVisible = false;
@@ -455,70 +434,70 @@ namespace SDLXLIFFSliceOrChange
 			_structureInformationTypes.Clear();
 			StepProcess("Reading Document Structure information from files...", false);
 			var trd = new Thread(() =>
+			{
+				foreach (var file in files)
 				{
-					foreach (var file in files)
+					StepProcess(
+						"Reading Document Structure information from file: " + Path.GetFileName(file) + ".", false);
+					using (var reader = XmlReader.Create(file))
 					{
-						StepProcess(
-							"Reading Document Structure information from file: " + Path.GetFileName(file) + ".", false);
-						using (var reader = XmlReader.Create(file))
+						while (reader.Read())
 						{
-							while (reader.Read())
+							if (reader.Name == "cxt-defs")
 							{
-								if (reader.Name == "cxt-defs")
+								var cxtDoc = new XmlDocument();
+								cxtDoc.PreserveWhitespace = true;
+								cxtDoc.LoadXml(reader.ReadOuterXml());
+								var cxtDefs = cxtDoc.DocumentElement.GetElementsByTagName("cxt-def");
+
+								foreach (var cxtDef in cxtDefs.OfType<XmlElement>())
 								{
-									var cxtDoc = new XmlDocument();
-									cxtDoc.PreserveWhitespace = true;
-									cxtDoc.LoadXml(reader.ReadOuterXml());
-									var cxtDefs = cxtDoc.DocumentElement.GetElementsByTagName("cxt-def");
+									var type = cxtDef.Attributes["type"].Value;
+									var id = cxtDef.Attributes["id"].Value;
 
-									foreach (var cxtDef in cxtDefs.OfType<XmlElement>())
-									{
-										var type = cxtDef.Attributes["type"].Value;
-										var id = cxtDef.Attributes["id"].Value;
-
-										var cxt =
-											_structureInformationTypes.FirstOrDefault(t => t.InternalName == type);
-										if (cxt == null)
-											_structureInformationTypes.Add(new StructureInformationType()
-											{
-												IDs =
-														new List<KeyValuePair<string, List<string>>>()
-															{
+									var cxt =
+										_structureInformationTypes.FirstOrDefault(t => t.InternalName == type);
+									if (cxt == null)
+										_structureInformationTypes.Add(new StructureInformationType()
+										{
+											IDs =
+													new List<KeyValuePair<string, List<string>>>()
+														{
 																new KeyValuePair<string, List<string>>(file,
 																									   new List<string>()
 																										   {
 																											   id
 																										   })
-															},
-												InternalName = type,
-												DisplayName = type
-											});
+														},
+											InternalName = type,
+											DisplayName = type
+										});
+									else
+									{
+										if (cxt.IDs.Any(f => f.Key == file))
+										{
+											var idsPerFile =
+												cxt.IDs.FirstOrDefault(f => f.Key == file);
+											if (!idsPerFile.Value.Contains(id))
+												idsPerFile.Value.Add(id);
+										}
 										else
 										{
-											if (cxt.IDs.Any(f => f.Key == file))
-											{
-												var idsPerFile =
-													cxt.IDs.FirstOrDefault(f => f.Key == file);
-												if (!idsPerFile.Value.Contains(id))
-													idsPerFile.Value.Add(id);
-											}
-											else
-											{
-												cxt.IDs.Add(new KeyValuePair<string, List<string>>(file,
-																								   new List<string>()
-																									   {
+											cxt.IDs.Add(new KeyValuePair<string, List<string>>(file,
+																							   new List<string>()
+																								   {
 																										   id
-																									   }));
-											}
+																								   }));
 										}
 									}
 								}
 							}
 						}
 					}
-					StepProcess("Displaying Document Structure information ...", true);
-					DisplayDSI();
-				});
+				}
+				StepProcess("Displaying Document Structure information ...", true);
+				DisplayDSI();
+			});
 			trd.Start();
 		}
 
@@ -533,12 +512,12 @@ namespace SDLXLIFFSliceOrChange
 			ShowProcess();
 			StepProcess("Generating replace preview ...");
 			var t = new Thread(() =>
-				{
-					DoReplacePreviewOperation();
+			{
+				DoReplacePreviewOperation();
 
-					BindReplaceResults();
-					StepProcess("Preview generated.", true);
-				});
+				BindReplaceResults();
+				StepProcess("Preview generated.", true);
+			});
 			t.Start();
 		}
 
@@ -786,11 +765,11 @@ namespace SDLXLIFFSliceOrChange
 		private void DisplayDSI()
 		{
 			Invoke((MethodInvoker)delegate
-			   {
-				   listDocumentStructure.Items.Clear();
-				   listDocumentStructure.Items.AddRange(
-					   _structureInformationTypes.Select(type => type.DisplayName).ToArray());
-			   });
+			{
+				listDocumentStructure.Items.Clear();
+				listDocumentStructure.Items.AddRange(
+					_structureInformationTypes.Select(type => type.DisplayName).ToArray());
+			});
 		}
 
 		private void DoChangeNow(int selectedTabIndex, IEnumerable<int> indexes, bool doCopySourceToTarget, bool doOR)
@@ -1360,7 +1339,7 @@ namespace SDLXLIFFSliceOrChange
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message, ex);
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return phisicalFilesPath;
 		}
@@ -1395,43 +1374,31 @@ namespace SDLXLIFFSliceOrChange
 			var studioVersionService = new StudioVersionService();
 			var studioVersion = studioVersionService.GetStudioVersion();
 
-			var studioFolder = string.Empty;
-			if (studioVersion != null)
+			if (studioVersion != null && studioVersion.Version.Equals("Studio15"))
 			{
-				if (studioVersion.Version.Equals("Studio15"))
-				{
-					studioFolder = "Studio 2019";
-				}
+				return "Studio 2019";
 			}
 
-			return studioFolder;
+			return string.Empty;
 		}
 
 		private ConfirmationLevel? GetTranslationStatus()
 		{
 			if (!GroupHasCheckedRadioButtons(groupChangeTranslationStatus)) return null;
-			return ckChangeToNotTranslated.Checked
-					   ? ConfirmationLevel.Unspecified
-					   : ckChangeToDraft.Checked
-							 ? ConfirmationLevel.Draft
-							 : ckChangeToTranslated.Checked
-								   ? ConfirmationLevel.Translated
-								   : ckChangeToTranslationRejected.Checked
-										 ? ConfirmationLevel.RejectedTranslation
-										 : ckChangeToTranslationApproved.Checked
-											   ? ConfirmationLevel.ApprovedTranslation
-											   : ckChangeToSignOffRejected.Checked
-													 ? ConfirmationLevel.RejectedSignOff
-													 : ckChangeToSignedOff.Checked
-														   ? ConfirmationLevel.ApprovedSignOff
-														   : ConfirmationLevel.Unspecified;
+			return ckChangeToNotTranslated.Checked ? ConfirmationLevel.Unspecified : ckChangeToDraft.Checked
+							 ? ConfirmationLevel.Draft : ckChangeToTranslated.Checked
+								   ? ConfirmationLevel.Translated : ckChangeToTranslationRejected.Checked
+										 ? ConfirmationLevel.RejectedTranslation : ckChangeToTranslationApproved.Checked
+											   ? ConfirmationLevel.ApprovedTranslation : ckChangeToSignOffRejected.Checked
+													 ? ConfirmationLevel.RejectedSignOff : ckChangeToSignedOff.Checked
+														   ? ConfirmationLevel.ApprovedSignOff : ConfirmationLevel.Unspecified;
 		}
 
 		private void gridReplaceResults_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
 		{
 			try
 			{
-				if ((_replaceDataManager.DetailFilteredData != null) && (_replaceDataManager.DetailFilteredData.Count > 0))
+				if (_replaceDataManager.DetailFilteredData != null && _replaceDataManager.DetailFilteredData.Count > 0)
 				{
 					((DataGridView)sender).Rows[e.RowIndex].MinimumHeight = 0x38;
 					if (e.ColumnIndex == 0)
@@ -1448,15 +1415,13 @@ namespace SDLXLIFFSliceOrChange
 					}
 					else
 					{
-						e.Value = string.Format("{0}\\{1}",
-							Path.GetFileName(Path.GetDirectoryName(_replaceDataManager.DetailFilteredData[e.RowIndex].FileName)),
-							Path.GetFileName(_replaceDataManager.DetailFilteredData[e.RowIndex].FileName));
+						e.Value = $"{Path.GetFileName(Path.GetDirectoryName(_replaceDataManager.DetailFilteredData[e.RowIndex].FileName))}{Path.GetFileName(_replaceDataManager.DetailFilteredData[e.RowIndex].FileName)}";
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message, ex);
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -1479,7 +1444,7 @@ namespace SDLXLIFFSliceOrChange
 		{
 			try
 			{
-				if ((_searchDataManager.DetailFilteredData != null) && (_searchDataManager.DetailFilteredData.Count > 0))
+				if (_searchDataManager?.DetailFilteredData != null && _searchDataManager?.DetailFilteredData.Count > 0)
 				{
 					((DataGridView)sender).Rows[e.RowIndex].MinimumHeight = 0x38;
 					if (e.ColumnIndex == 0)
@@ -1498,15 +1463,13 @@ namespace SDLXLIFFSliceOrChange
 					}
 					else
 					{
-						e.Value = String.Format("{0}\\{1}",
-							Path.GetFileName(Path.GetDirectoryName(_searchDataManager.DetailFilteredData[e.RowIndex].FileName)),
-							Path.GetFileName(_searchDataManager.DetailFilteredData[e.RowIndex].FileName));
+						e.Value = $"{Path.GetFileName(Path.GetDirectoryName(_searchDataManager.DetailFilteredData[e.RowIndex].FileName))}{Path.GetFileName(_searchDataManager.DetailFilteredData[e.RowIndex].FileName)}";
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message, ex);
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -1751,7 +1714,11 @@ namespace SDLXLIFFSliceOrChange
 			StepProcess("Processing file: " + Path.GetFileName(file) + ". ", false);
 			var xDoc = new XmlDocument();
 			xDoc.PreserveWhitespace = true;
-			xDoc.Load(file);
+
+			if (!string.IsNullOrEmpty(file))
+			{
+				xDoc.Load(file);
+			}
 			var xmlEncoding = "utf-8";
 			try
 			{
@@ -1761,48 +1728,48 @@ namespace SDLXLIFFSliceOrChange
 					var decl = (XmlDeclaration)xDoc.FirstChild;
 					xmlEncoding = decl.Encoding;
 				}
+
+				var originalFile = file;
+				if (filesToBeSliced != null)
+				{
+					originalFile = filesToBeSliced.FirstOrDefault(f => f.Value == file).Key;
+					if (string.IsNullOrEmpty(originalFile))
+						originalFile = file;
+				}
+
+				var fileList = xDoc.DocumentElement?.GetElementsByTagName("file");
+				if (fileList != null)
+				{
+					foreach (var fileElement in fileList.OfType<XmlElement>())
+					{
+						var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
+						var groupElements = bodyElement.GetElementsByTagName("group");
+						foreach (var groupElement in groupElements.OfType<XmlElement>())
+						{
+							ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, groupElement);
+						}
+						ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, bodyElement);
+					}
+				}
+
+				if (!forSlice)
+				{
+					Encoding encoding = new UTF8Encoding();
+					if (!string.IsNullOrEmpty(xmlEncoding))
+						encoding = Encoding.GetEncoding(xmlEncoding);
+					using (var writer = new XmlTextWriter(file, encoding))
+					{
+						xDoc.Save(writer);
+					}
+				}
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message, ex);
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
-			var originalFile = file;
-			if (filesToBeSliced != null)
-			{
-				originalFile = filesToBeSliced.FirstOrDefault(f => f.Value == file).Key;
-				if (String.IsNullOrEmpty(originalFile))
-					originalFile = file;
-			}
-			var fileList = xDoc.DocumentElement.GetElementsByTagName("file");
-			foreach (var fileElement in fileList.OfType<XmlElement>())
-			{
-				var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
-				var groupElements = bodyElement.GetElementsByTagName("group");
-				foreach (var groupElement in groupElements.OfType<XmlElement>())
-				{
-					ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, groupElement);
-				}
-				ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, bodyElement);
-				bodyElement = null;
-				groupElements = null;
-			}
-			if (!forSlice)
-			{
-				Encoding encoding = new UTF8Encoding();
-				if (!String.IsNullOrEmpty(xmlEncoding))
-					encoding = Encoding.GetEncoding(xmlEncoding);
-				using (var writer = new XmlTextWriter(file, encoding))
-				{
-					xDoc.Save(writer);
-				}
-			}
-
-			xDoc = null;
-			fileList = null;
 		}
 
-		private void ProcessOnFileBasedOnStatusesInBody(bool forSlice, string file, IEnumerable<int> DSSelectedIndexes,
-														string originalFile, object groupElement)
+		private void ProcessOnFileBasedOnStatusesInBody(bool forSlice, string file, IEnumerable<int> DSSelectedIndexes, string originalFile, object groupElement)
 		{
 			try
 			{
@@ -1822,27 +1789,25 @@ namespace SDLXLIFFSliceOrChange
 					var cxtDefs = ((XmlNode)groupElement).ChildNodes;
 					foreach (var cxtDef in cxtDefs.OfType<XmlElement>())
 					{
-						if (((XmlNode)cxtDef).Name != "sdl:cxts")
+						if (cxtDef.Name != "sdl:cxts")
 							continue;
 
-						var cxts = ((XmlElement)cxtDef).ChildNodes;
+						var cxts = cxtDef.ChildNodes;
 						foreach (var cxt in cxts.OfType<XmlElement>())
 						{
-							if (((XmlNode)cxt).Name != "sdl:cxt")
+							if (cxt.Name != "sdl:cxt")
 								continue;
 
-							var id = ((XmlElement)cxt).Attributes["id"].Value;
+							var id = cxt.Attributes["id"].Value;
 							if (selectedIDs.Contains(id))
 							{
 								doUpdateElement = true;
 								break;
 							}
 						}
-						cxts = null;
 						if (doUpdateElement)
 							break;
 					}
-					cxtDefs = null;
 				}
 				else
 					doUpdateElement = true;
@@ -1855,29 +1820,27 @@ namespace SDLXLIFFSliceOrChange
 				var transUnits = ((XmlElement)groupElement).ChildNodes; ;
 				foreach (var transUnit in transUnits.OfType<XmlElement>())
 				{
-					if (((XmlNode)transUnit).Name != "trans-unit")
+					if ((transUnit).Name != "trans-unit")
 						continue;
 
-					var transUnitID = String.Empty;
-					transUnitID = ((XmlElement)transUnit).Attributes["id"].Value;
+					var transUnitID = (transUnit).Attributes["id"].Value;
 
-					var segDefs = ((XmlElement)transUnit).ChildNodes;
+					var segDefs = (transUnit).ChildNodes;
 					foreach (var segDef in segDefs.OfType<XmlElement>())
 					{
-						if (((XmlNode)segDef).Name != "sdl:seg-defs")
+						if ((segDef).Name != "sdl:seg-defs")
 							continue;
 
-						var segments = ((XmlElement)segDef).ChildNodes;
+						var segments = (segDef).ChildNodes;
 
 						#region segments
 
 						foreach (var segment in segments.OfType<XmlElement>())
 						{
-							if (((XmlNode)segment).Name != "sdl:seg")
+							if (segment.Name != "sdl:seg")
 								continue;
 
-							var SegmentId = String.Empty;
-							SegmentId = ((XmlElement)segment).Attributes["id"].Value;
+							var segmentId = (segment).Attributes["id"].Value;
 							doUpdateElement = true;
 							try
 							{
@@ -1900,63 +1863,49 @@ namespace SDLXLIFFSliceOrChange
 
 								if (doUpdateElement)
 								{
-									if (forSlice && transUnitID != String.Empty && SegmentId != String.Empty)
+									if (forSlice && !string.IsNullOrEmpty(transUnitID) && !string.IsNullOrEmpty(segmentId))
 									{
 										var fileSliceInfo = _segmentsToBeSliced.FirstOrDefault(slice => slice.File == file);
 										if (fileSliceInfo == null)
 										{
-											_segmentsToBeSliced.Add(new SliceInfo()
+											_segmentsToBeSliced.Add(new SliceInfo
 											{
 												File = file,
-												Segments =
-														new List<KeyValuePair<string, List<string>>>()
-															{
-																new KeyValuePair<string, List<string>>(transUnitID,
-																									   new List<String>()
-																										   {
-																											   SegmentId
-																										   })
-															}
+												Segments = new List<KeyValuePair<string, List<string>>>
+												{new KeyValuePair<string, List<string>>(transUnitID, new List<string> {segmentId})}
 											});
 										}
 										else
 										{
 											if (fileSliceInfo.Segments.All(s => s.Key != transUnitID))
-												fileSliceInfo.Segments.Add(new KeyValuePair<string, List<string>>(transUnitID,
-																												  new List
-																													  <String>()
-																													  {
-																														  SegmentId
-																													  }));
+												fileSliceInfo.Segments.Add(new KeyValuePair<string, List<string>>(transUnitID, new List<string> { segmentId }));
 											else
 											{
-												var segSliceInfo =
-													fileSliceInfo.Segments.FirstOrDefault(s => s.Key == transUnitID);
-												if (!segSliceInfo.Value.Contains(SegmentId))
-													segSliceInfo.Value.Add(SegmentId);
+												var segSliceInfo = fileSliceInfo.Segments.FirstOrDefault(s => s.Key == transUnitID);
+												if (!segSliceInfo.Value.Contains(segmentId))
+													segSliceInfo.Value.Add(segmentId);
 											}
 										}
 									}
 									else
 									{
 										//update the element
-										if (ckChangeToUnlocked.Checked &&
-											((XmlElement)segment).HasAttribute("locked"))
-											((XmlElement)segment).RemoveAttribute("locked");
+										if (ckChangeToUnlocked.Checked && segment.HasAttribute("locked"))
+											(segment).RemoveAttribute("locked");
 										if (ckChangeToLocked.Checked)
-											((XmlElement)segment).SetAttribute("locked", "true");
+											(segment).SetAttribute("locked", "true");
 
 										if (GetTranslationStatus() != null)
 										{
 											var translationStatus = GetTranslationStatus().Value.ToString();
-											if (String.IsNullOrEmpty(translationStatus))
+											if (string.IsNullOrEmpty(translationStatus))
 											{
-												if (((XmlElement)segment).HasAttribute("conf"))
-													((XmlElement)segment).RemoveAttribute("conf");
+												if ((segment).HasAttribute("conf"))
+													(segment).RemoveAttribute("conf");
 											}
 											else
 											{
-												((XmlElement)segment).SetAttribute("conf", translationStatus);
+												(segment).SetAttribute("conf", translationStatus);
 											}
 										}
 									}
@@ -1964,21 +1913,18 @@ namespace SDLXLIFFSliceOrChange
 							}
 							catch (Exception ex)
 							{
-								logger.Error(ex.Message, ex);
+								_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 							}
 						}
 
 						#endregion segments
 
-						segments = null;
 					}
-					segDefs = null;
 				}
-				transUnits = null;
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message, ex);
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -2195,7 +2141,7 @@ namespace SDLXLIFFSliceOrChange
 				}
 				catch (Exception ex)
 				{
-					logger.Error(ex.Message, ex);
+					_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				}
 				if (filesPerLanguage.Any(f => f.Key == language))
 				{
@@ -2204,8 +2150,7 @@ namespace SDLXLIFFSliceOrChange
 						languageItem.Value.Add(destinationFile);
 				}
 				else
-					filesPerLanguage.Add(new KeyValuePair<string, List<string>>(language,
-																				new List<string>() { destinationFile }));
+					filesPerLanguage.Add(new KeyValuePair<string, List<string>>(language, new List<string> { destinationFile }));
 
 				SliceManager.SliceFile(destinationFile, sliceInfo);
 			}
@@ -2341,7 +2286,7 @@ namespace SDLXLIFFSliceOrChange
 				new Regex(pattern);
 				_errorProvider.SetError(txtReplaceSourceSearch, "");
 			}
-			catch (Exception ex)
+			catch
 			{
 				_errorProvider.SetError(txtReplaceSourceSearch, "Invalid regular expression");
 			}
@@ -2355,7 +2300,7 @@ namespace SDLXLIFFSliceOrChange
 				new Regex(pattern);
 				_errorProvider.SetError(txtReplaceTargetSearch, "");
 			}
-			catch (Exception ex)
+			catch
 			{
 				_errorProvider.SetError(txtReplaceTargetSearch, "Invalid regular expression");
 			}
@@ -2363,17 +2308,13 @@ namespace SDLXLIFFSliceOrChange
 
 		private FileData UnionSourceAndTarget(FileData fileData, FileData targetFileData, string filePath)
 		{
-			//add all non existing segmens from target (sourceSearchResult) into source
-			var sourceSegments = AddNonExistingSegments(fileData.SearchSourceResults.Values.ToList(),
-																	  targetFileData.SearchSourceResults.Values.ToList());
+			//add all non existing segments from target (sourceSearchResult) into source
+			var sourceSegments = AddNonExistingSegments(fileData.SearchSourceResults.Values.ToList(), targetFileData.SearchSourceResults.Values.ToList());
 
-			//add all non existing segmens from source (targetSearchResult) into target
-			var targetSegments = AddNonExistingSegments(
-				targetFileData.SearchTargetResults.Values.ToList(), fileData.SearchTargetResults.Values.ToList());
+			//add all non existing segments from source (targetSearchResult) into target
+			var targetSegments = AddNonExistingSegments(targetFileData.SearchTargetResults.Values.ToList(), fileData.SearchTargetResults.Values.ToList());
 
-			var fileToBeAdded = new FileData(filePath,
-												  sourceSegments.OrderBy(seg => seg.SegmentId).ToList(),
-												  targetSegments.OrderBy(seg => seg.SegmentId).ToList());
+			var fileToBeAdded = new FileData(filePath, sourceSegments.OrderBy(seg => seg.SegmentId).ToList(), targetSegments.OrderBy(seg => seg.SegmentId).ToList());
 			return fileToBeAdded;
 		}
 
@@ -2399,30 +2340,35 @@ namespace SDLXLIFFSliceOrChange
 						var decl = (XmlDeclaration)xDoc.FirstChild;
 						xmlEncoding = decl.Encoding;
 					}
+
+					var fileList = xDoc.DocumentElement.GetElementsByTagName("file");
+					foreach (var fileElement in fileList.OfType<XmlElement>())
+					{
+						var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
+						var groupElements = bodyElement.GetElementsByTagName("group");
+						foreach (var groupElement in groupElements.OfType<XmlElement>())
+						{
+							UpdateFileBasedOnResultsInBody(groupElement, fileData);
+						}
+
+						UpdateFileBasedOnResultsInBody(bodyElement, fileData);
+					}
+
+					Encoding encoding = new UTF8Encoding();
+					if (!string.IsNullOrEmpty(xmlEncoding))
+						encoding = Encoding.GetEncoding(xmlEncoding);
+					using (var writer = new XmlTextWriter(filePath, encoding))
+					{
+						xDoc.Save(writer);
+					}
+
+					StepProcess("File: " + Path.GetFileName(fileData.FilePath) + " was updated.");
 				}
+
 				catch (Exception ex)
 				{
-					logger.Error(ex.Message, ex);
+					_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				}
-				var fileList = xDoc.DocumentElement.GetElementsByTagName("file");
-				foreach (var fileElement in fileList.OfType<XmlElement>())
-				{
-					var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
-					var groupElements = bodyElement.GetElementsByTagName("group");
-					foreach (var groupElement in groupElements.OfType<XmlElement>())
-					{
-						UpdateFileBasedOnResultsInBody(groupElement, fileData);
-					}
-					UpdateFileBasedOnResultsInBody(bodyElement, fileData);
-				}
-				Encoding encoding = new UTF8Encoding();
-				if (!String.IsNullOrEmpty(xmlEncoding))
-					encoding = Encoding.GetEncoding(xmlEncoding);
-				using (var writer = new XmlTextWriter(filePath, encoding))
-				{
-					xDoc.Save(writer);
-				}
-				StepProcess("File: " + Path.GetFileName(fileData.FilePath) + " was updated.");
 			}
 		}
 
@@ -2433,58 +2379,44 @@ namespace SDLXLIFFSliceOrChange
 			{
 				try
 				{
-					if (!((XmlElement)element).HasAttribute("id"))
-						continue;
+					if (!element.HasAttribute("id")) continue;
 
-					var id = ((XmlElement)element).Attributes["id"].Value;
-					var segmentData =
-						fileData.SearchSourceResults.FirstOrDefault(
-							result =>
-							result.Value.SegmentContent.ParentParagraphUnit.Properties.ParagraphUnitId.Id ==
-							id)
-								.Value;
+					var id = element.Attributes["id"].Value;
+					var segmentData = fileData.SearchSourceResults
+						.FirstOrDefault(result => result.Value.SegmentContent.ParentParagraphUnit.Properties.ParagraphUnitId.Id == id)
+						.Value;
 					if (segmentData != null)
 					{
-						var SegmentId = segmentData.SegmentId;
-						var segDefs = ((XmlElement)element).ChildNodes;
+						var segmentId = segmentData.SegmentId;
+						var segDefs = element.ChildNodes;
 						foreach (var segDef in segDefs.OfType<XmlElement>())
 						{
-							if (((XmlNode)segDef).Name != "sdl:seg-defs")
-								continue;
-							var segments = ((XmlElement)segDef).ChildNodes;
+							if (segDef.Name != "sdl:seg-defs") continue;
+							var segments = segDef.ChildNodes;
 							foreach (var segment in segments.OfType<XmlElement>())
 							{
-								if (((XmlNode)segment).Name != "sdl:seg")
-									continue;
-								try
-								{
-									if (Convert.ToInt32(((XmlElement)segment).Attributes["id"].Value) ==
-										SegmentId)
-									{
-										if (ckChangeToUnlocked.Checked &&
-											((XmlElement)segment).HasAttribute("locked"))
-											((XmlElement)segment).RemoveAttribute("locked");
-										if (ckChangeToLocked.Checked)
-											((XmlElement)segment).SetAttribute("locked", "true");
+								if (segment.Name != "sdl:seg") continue;
 
-										if (GetTranslationStatus() != null)
+								if (Convert.ToInt32(segment.Attributes["id"].Value) == segmentId)
+								{
+									if (ckChangeToUnlocked.Checked && segment.HasAttribute("locked"))
+										segment.RemoveAttribute("locked");
+									if (ckChangeToLocked.Checked)
+										segment.SetAttribute("locked", "true");
+
+									if (GetTranslationStatus() != null)
+									{
+										var translationStatus = GetTranslationStatus().Value.ToString();
+										if (string.IsNullOrEmpty(translationStatus))
 										{
-											var translationStatus = GetTranslationStatus().Value.ToString();
-											if (String.IsNullOrEmpty(translationStatus))
-											{
-												if (((XmlElement)segment).HasAttribute("conf"))
-													((XmlElement)segment).RemoveAttribute("conf");
-											}
-											else
-											{
-												((XmlElement)segment).SetAttribute("conf", translationStatus);
-											}
+											if (segment.HasAttribute("conf"))
+												segment.RemoveAttribute("conf");
+										}
+										else
+										{
+											segment.SetAttribute("conf", translationStatus);
 										}
 									}
-								}
-								catch (Exception ex)
-								{
-									logger.Error(ex.Message, ex);
 								}
 							}
 						}
@@ -2492,7 +2424,7 @@ namespace SDLXLIFFSliceOrChange
 				}
 				catch (Exception ex)
 				{
-					logger.Error(ex.Message, ex);
+					_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				}
 			}
 		}
