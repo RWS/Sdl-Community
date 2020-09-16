@@ -117,11 +117,11 @@
     <Compile Include="Helpers\LocationsDescription.cs" />
     <Compile Include="Helpers\IRegistryHelper.cs" />
     <Compile Include="Helpers\RegistryHelper.cs" />
+    <Compile Include="Model\MultitermVersion.cs" />
     <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Model\IStudioVersion.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Services\MessageService.cs" />
-    <Compile Include="Helpers\MultiTermFolders.cs" />
     <Compile Include="Helpers\Persistence.cs" />
     <Compile Include="Helpers\FileManager.cs" />
     <Compile Include="Model\StudioVersion.cs" />
@@ -148,7 +148,6 @@
     <Compile Include="Model\MultiTermLocationListItem.cs" />
     <Compile Include="Model\LocationDetails.cs" />
     <Compile Include="Model\StudioLocationListItem.cs" />
-    <Compile Include="Model\MultiTermVersionListItem.cs" />
     <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="ViewModel\MultiTermViewModel.cs" />
     <Compile Include="ViewModel\ReadMeViewModel.cs" />

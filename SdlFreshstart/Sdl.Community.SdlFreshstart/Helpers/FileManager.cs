@@ -159,21 +159,21 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				var subdirectories = currentDirInfo.GetDirectories();
 				if (currentDirInfo.Parent != null)
 				{
-					var pathToCorespondingBackupFolder = Path.Combine(backupFolderRoot, currentDirInfo.Name);
-					var subdirectoryFiles = Directory.GetFiles(currentDirInfo.FullName);
-					if (subdirectoryFiles.Length > 0)
+					var pathToCorrespondingBackupFolder = Path.Combine(backupFolderRoot, currentDirInfo.Name);
+					var subDirectoryFiles = Directory.GetFiles(currentDirInfo.FullName);
+					if (subDirectoryFiles.Length > 0)
 					{
-						if (!Directory.Exists(pathToCorespondingBackupFolder))
+						if (!Directory.Exists(pathToCorrespondingBackupFolder))
 						{
-							Directory.CreateDirectory(pathToCorespondingBackupFolder);
+							Directory.CreateDirectory(pathToCorrespondingBackupFolder);
 						}
-						MoveToBackUp(subdirectoryFiles, pathToCorespondingBackupFolder);
+						MoveToBackUp(subDirectoryFiles, pathToCorrespondingBackupFolder);
 					}
 					if (subdirectories.Length > 0)
 					{
-						foreach (var subdirectory in subdirectories)
+						foreach (var subDirectory in subdirectories)
 						{
-							CheckForSubfolders(subdirectory, pathToCorespondingBackupFolder);
+							CheckForSubfolders(subDirectory, pathToCorrespondingBackupFolder);
 						}
 					}
 				}

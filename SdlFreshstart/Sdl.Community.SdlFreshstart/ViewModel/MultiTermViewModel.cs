@@ -5,12 +5,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlFreshstart.Commands;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
+using Sdl.Community.SdlFreshstart.Properties;
 using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
@@ -19,6 +21,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	{
 		private readonly MainWindow _mainWindow;
 		private readonly IMessageService _messageService;
+		private readonly VersionService _versionService;
+		private readonly RegistryHelper _registryHelper;
 		private readonly Persistence _persistence;
 		private readonly string _userName;
 		private bool _checkAll;
@@ -27,7 +31,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool _isRepairEnabled;
 		private bool _isRestoreEnabled;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
-		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
+		private ObservableCollection<MultitermVersion> _multiTermVersionsCollection;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _removeBtnColor;
 		private ICommand _removeCommand;
@@ -38,10 +42,12 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private ICommand _restoreCommand;
 		private MultiTermLocationListItem _selectedLocation;
 
-		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService)
+		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService, VersionService versionService, RegistryHelper registryHelper)
 		{
 			_mainWindow = mainWindow;
 			_messageService = messageService;
+			_versionService = versionService;
+			_registryHelper = registryHelper;
 			_userName = Environment.UserName;
 			_persistence = new Persistence();
 			_folderDescription = string.Empty;
@@ -69,20 +75,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				_checkAll = value;
 				OnPropertyChanged(nameof(CheckAll));
 				CheckAllLocations(value);
-			}
-		}
-
-		public string FolderDescription
-		{
-			get => _folderDescription;
-			set
-			{
-				if (Equals(value, _folderDescription))
-				{
-					return;
-				}
-				_folderDescription = value;
-				OnPropertyChanged(nameof(FolderDescription));
 			}
 		}
 
@@ -145,7 +137,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ObservableCollection<MultiTermVersionListItem> MultiTermVersionsCollection
+		public ObservableCollection<MultitermVersion> MultiTermVersionsCollection
 		{
 			get => _multiTermVersionsCollection;
 			set
@@ -174,7 +166,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFiles, true);
+		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFromLocations, true);
 
 		public string RemoveForeground
 		{
@@ -223,7 +215,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RestoreCommand => _restoreCommand ??= new CommandHandler(RestoreFolders, true);
+		public ICommand RestoreCommand => _restoreCommand ??= new CommandHandler(RestoreLocations, true);
 
 		public MultiTermLocationListItem SelectedLocation
 		{
@@ -253,24 +245,30 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
+		private MultitermVersion LatestMultitermVersion => MultiTermVersionsCollection.FirstOrDefault();
+
 		private void FillMultiTermLocationList()
 		{
-			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>
+			var listOfProperties = new List<string>
 			{
-			 new MultiTermLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm15",
-					IsSelected = false,
-					Description = LocationsDescription.MultiTermLocal,
-					Alias = "appDataLocal"
-				},new MultiTermLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm15",
-					IsSelected = false,
-					Description =LocationsDescription.MultiTermRoaming,
-					Alias = "appDataRoming"
-				}
+				nameof(MultitermVersion.MultiTermRoaming),
+				nameof(MultitermVersion.MultiTermLocal),
+				nameof(MultitermVersion.MultiTermProgramDataSettings),
+				nameof(MultitermVersion.MultiTermProgramDataUpdates),
+				nameof(MultitermVersion.MultiTermRegistryKey)
 			};
+
+			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>();
+			foreach (var property in listOfProperties)
+			{
+				_multiTermLocationCollection.Add(new MultiTermLocationListItem
+				{
+					DisplayName = (string)LatestMultitermVersion?.GetType().GetProperty(property)?.GetValue(LatestMultitermVersion),
+					Description = (string)typeof(LocationsDescription).GetProperty(property)?.GetValue(null, null),
+					IsSelected = true,
+					Alias = property
+				});
+			}
 
 			foreach (var multiTermLocation in _multiTermLocationCollection)
 			{
@@ -280,55 +278,20 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void FillMultiTermVersionList()
 		{
-			_multiTermVersionsCollection = new ObservableCollection<MultiTermVersionListItem>
-			{
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2019",
-					IsSelected = false,
-					MajorVersionNumber = "15",
-					ReleaseNumber = "2019",
-					CacheFolderName = "SDLMultiTermDesktop2019"
-				},
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2017",
-					IsSelected = false,
-					MajorVersionNumber = "14",
-					ReleaseNumber = "2017",
-					CacheFolderName = "SDLMultiTermDesktop2017"
-				},
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2015",
-					IsSelected = false,
-					MajorVersionNumber = "12",
-					ReleaseNumber = "2015",
-					CacheFolderName = "SDLMultiTermDesktop2015"
-				},
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2014",
-					MajorVersionNumber = "11",
-					IsSelected = false,
-					ReleaseNumber = "2014",
-					CacheFolderName = "SDLMultiTermDesktop2014"
-				}
-			};
-
+			_multiTermVersionsCollection = new ObservableCollection<MultitermVersion>(_versionService.GetInstalledMultitermVersions());
 			foreach (var multiTermVersion in _multiTermVersionsCollection)
 			{
 				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
 			}
 		}
 
-		private string GetMsiName(MultiTermVersionListItem selectedVersion)
+		private string GetMsiName(MultitermVersion selectedVersion)
 		{
-			var msiName = $"MTCore{selectedVersion.MajorVersionNumber}.msi";
+			var msiName = $"MTCore{selectedVersion.MajorVersion}.msi";
 			return msiName;
 		}
 
-		private List<LocationDetails> LocationsForSelectedVersions()
+		private List<LocationDetails> GetLocationsForSelectedVersions()
 		{
 			var allFolders = _persistence.Load(false);
 			var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
@@ -337,7 +300,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			{
 				foreach (var version in selectedVersions)
 				{
-					var locations = allFolders.Where(v => v.Version.Equals(version.DisplayName)).ToList();
+					var locations = allFolders.Where(v => v.Version.Equals(version.VersionName)).ToList();
 					locationsForSelectedVersion.AddRange(locations);
 				}
 				return locationsForSelectedVersion;
@@ -354,26 +317,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void MultiTermLocation_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var lastSelectedItem = sender as MultiTermLocationListItem;
-			var selectedLocations = MultiTermLocationCollection.Where(s => s.IsSelected).ToList();
-			if (lastSelectedItem != null)
-			{
-				if (lastSelectedItem.IsSelected)
-				{
-					FolderDescription = lastSelectedItem.Description;
-				}
-				else
-				{
-					if (selectedLocations.Any())
-					{
-						FolderDescription = selectedLocations.First().Description;
-					}
-				}
-			}
-			if (!selectedLocations.Any())
-			{
-				FolderDescription = string.Empty;
-			}
 			SetRemoveBtnColors();
 		}
 
@@ -382,33 +325,40 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			SetRemoveBtnColors();
 		}
 
-		private async void RemoveFiles()
+		private async void RemoveFromLocations()
 		{
 			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RemoveMessage);
 			if (result == MessageBoxResult.Yes)
 			{
 				if (!MultiTermIsRunning())
 				{
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
-					controller.SetIndeterminate();
+					var controller = await ShowProgress(Constants.Wait, Constants.RemoveFilesMessage);
 
 					var foldersToClearOrRestore = new List<LocationDetails>();
-					controller.SetIndeterminate();
+					var registryToClearOrRestore = new List<LocationDetails>();
 
 					var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
 					var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
+					var locations = new List<LocationDetails>();
 					if (selectedMultiTermVersions.Any())
 					{
-						var documentsFolderLocation = await Paths.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
-						foldersToClearOrRestore.AddRange(documentsFolderLocation);
+						locations = Paths.GetMultiTermLocationsFromVersions(selectedMultiTermLocations.Select(l => l.Alias).ToList(),
+							selectedMultiTermVersions);
+
+						var registryLocations = locations.TakeWhile(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+						registryToClearOrRestore.AddRange(registryLocations);
+
+						var folderLocations = locations.TakeWhile(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+						foldersToClearOrRestore.AddRange(folderLocations);
 					}
 
 					//save settings
-					_persistence.SaveSettings(foldersToClearOrRestore, false);
-
+					_persistence.SaveSettings(locations, false);
 					await FileManager.BackupFiles(foldersToClearOrRestore);
+					await _registryHelper.BackupKeys(registryToClearOrRestore);
 
-					FileManager.RemoveFromSelectedFolderLocations(foldersToClearOrRestore);
+					RemoveFromFolders(foldersToClearOrRestore);
+					RemoveFromRegistry(registryToClearOrRestore);
 
 					//to close the message
 					await controller.CloseAsync();
@@ -418,6 +368,37 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.RemoveFoldersMessage);
 				}
 			}
+		}
+
+		private void RemoveFromRegistry(List<LocationDetails> registryToClearOrRestore)
+		{
+			try
+			{
+				_registryHelper.DeleteKeys(registryToClearOrRestore, false);
+			}
+			catch (Exception ex)
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, string.Format(Constants.RegistryNotDeleted, ex.Message));
+			}
+		}
+
+		private void RemoveFromFolders(List<LocationDetails> foldersToClearOrRestore)
+		{
+			try
+			{
+				FileManager.RemoveFromSelectedFolderLocations(foldersToClearOrRestore);
+			}
+			catch
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, Constants.FilesNotDeletedMessage);
+			}
+		}
+
+		private async Task<ProgressDialogController> ShowProgress(string title, string message)
+		{
+			var controller = await _mainWindow.ShowProgressAsync(title, message);
+			controller.SetIndeterminate();
+			return controller;
 		}
 
 		private void RepairMultiTerm()
@@ -439,32 +420,53 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private async void RestoreFolders()
+		private async Task RestoreFolders(List<LocationDetails> locationsToRestore)
 		{
-			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreMessage);
-			if (result == MessageBoxResult.Yes)
+			var foldersToRestore = locationsToRestore
+				.TakeWhile(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+			await FileManager.RestoreBackupFiles(foldersToRestore);
+		}
+
+		private async Task RestoreRegistry(List<LocationDetails> locationsToRestore)
+		{
+			var registryToRestore = locationsToRestore
+				.TakeWhile(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+			try
 			{
-				if (!MultiTermIsRunning())
-				{
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RestoringMessage);
-					controller.SetIndeterminate();
-
-					var foldersToRestore = LocationsForSelectedVersions();
-					await FileManager.RestoreBackupFiles(foldersToRestore);
-					UnselectGrids();
-					CheckAll = false;
-
-					//to close the message
-					await controller.CloseAsync();
-				}
-				else
-				{
-					_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.MultitermCloseMessage);
-				}
+				await _registryHelper.RestoreKeys(registryToRestore);
+			}
+			catch (Exception e)
+			{
+				_messageService.ShowWarningMessage(Constants.Warning,
+					string.Format(Resources.NotAllRegistriesCouldBeRestored, e.Message));
 			}
 		}
 
-		private void RunRepair(MultiTermVersionListItem selectedVersion)
+		private async void RestoreLocations()
+		{
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreMessage);
+
+			if (result != MessageBoxResult.Yes) return;
+			if (!MultiTermIsRunning())
+			{
+				var controller = await ShowProgress(Constants.Wait, Constants.RestoringMessage);
+
+				var locationsToRestore = GetLocationsForSelectedVersions();
+
+				await RestoreFolders(locationsToRestore);
+				await RestoreRegistry(locationsToRestore);
+
+				UnselectGrids();
+
+				await controller.CloseAsync();
+			}
+			else
+			{
+				_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.MultitermCloseMessage);
+			}
+		}
+
+		private void RunRepair(MultitermVersion selectedVersion)
 		{
 			var directoriesPath = new DirectoryInfo(_packageCache)
 				.GetDirectories()
@@ -535,6 +537,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			{
 				selectedLocation.IsSelected = false;
 			}
+			CheckAll = false;
 		}
 	}
 }

@@ -46,7 +46,7 @@
 
 		public static string ProgramDataStudioPath => "Settings.xml: It stores information about your MultiTerm server connections.  Deleting it might help troubleshoot server connectivity, but you may need to recreate your logins to MultiTerm servers you may be using.";
 
-		public static string ProgramDataStudioDataSubfolderPath => "This folder contains two folders:" +
+		public static string ProgramDataStudioDataSubfolderPath => "The parent folder contains two subfolders:" +
 				"\n - Data: this contains your Studio.lic which is your encrypted Studio licence file.  This application will not delete the lic file because otherwise you would have to reset your licence.  So this file is left in place." +
 				"\n - Updates: this folder contains the file necessary to use the Automatic Update.  This folder will be deleted because sometimes the problem we are trying to solve relates to a corrupted update mechanism.  If you choose to delete this you need to run a repair afterwards or the automatic update in Studio won't work.  You can run the repair with this tool.";
 
@@ -60,5 +60,14 @@
 				"\n - UserSettings.xml: This file contains most of the personalisation you may have carried out in MultiTerm.  So things like customised keyboard shortcuts, window locations, choice of colour scheme, Termbase lists, your preferences in File -> Options, recently used locations for Termbases etc.  This isn't a comprehensive list but hopefully illustrates how much of your personalised settings are held in this one file.  So deleting it is going to mean you spending time setting them all up again.  Most of the things in this file cannot be exported through the User Interface in MultiTerm so starting again will be a manual process.";
 
 		public static string MultiTermLocal => "This folder contains nothing but log files. They can be very useful for a developer in troubleshooting errors, but are unlikely to be useful to most users and can be deleted without cause for concern.  Might be worth backing up if you are trying to solve an error in the software however since you may be asked for them if you have a Support contract.";
+
+		public static string MultiTermProgramDataSettings => "Holds termbase connections and other settings";
+		public static string MultiTermRegistryKey => "Holds the UI language setting (if changed from default)";
+
+		public static string MultiTermProgramDataUpdates
+			=>
+				"This folder contains the file necessary to use the Automatic Update.  This folder will be deleted because sometimes the problem we are trying to solve relates to a corrupted update mechanism.  If you choose to delete this you need to run a repair afterwards or the automatic update in Studio won't work.  You can run the repair with this tool."
+			;
+
 	}
 }
