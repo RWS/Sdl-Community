@@ -26,6 +26,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.Reports.Viewer.API;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using AutomaticTask = Sdl.Community.Transcreate.Model.Tasks.AutomaticTask;
@@ -50,7 +51,7 @@ namespace Sdl.Community.Transcreate
 		private ProjectFilesViewControl _projectFilesViewControl;
 		private ProjectsNavigationViewControl _projectsNavigationViewControl;
 		private ProjectFileActivityViewController _projectFileActivityViewController;
-		//private ProjectPropertiesViewController _projectPropertiesViewController;
+		//private ProjectPropertiesViewController _projectPropertiesViewController; 
 		private ProjectsController _projectsController;
 		private EditorController _editorController;
 		private FilesController _filesController;
@@ -62,6 +63,8 @@ namespace Sdl.Community.Transcreate
 
 		protected override void Initialize(IViewContext context)
 		{
+			ClientId = Guid.NewGuid().ToString();
+
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_customerProvider = new CustomerProvider();
@@ -76,9 +79,9 @@ namespace Sdl.Community.Transcreate
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			_editorController.Opened += EditorController_Opened;
+
+			ReportsController = ReportsController.Instance;
 			
-
-
 			LoadProjects();
 		}
 
@@ -262,6 +265,10 @@ namespace Sdl.Community.Transcreate
 
 			UpdateProjectSettingsBundle(project);
 		}
+
+		internal ReportsController ReportsController { get; private set; }
+
+		internal string ClientId { get; private set; }
 
 		private bool UpdateCustomerInfo(FileBasedProject project, Project xliffProject)
 		{
@@ -976,7 +983,7 @@ namespace Sdl.Community.Transcreate
 		}
 
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
-		{			
+		{
 			var updated = AddNewProjectToContainer(_projectsController?.CurrentProject);
 			if (!updated)
 			{
@@ -993,12 +1000,10 @@ namespace Sdl.Community.Transcreate
 		public override void Dispose()
 		{
 			_projectFilesViewModel?.Dispose();
-
 			if (_projectsController != null)
 			{
 				_projectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
 			}
-
 			if (_editorController != null)
 			{
 				_editorController.Opened -= EditorController_Opened;

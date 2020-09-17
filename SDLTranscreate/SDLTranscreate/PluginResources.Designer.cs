@@ -128,6 +128,24 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Converting language files: {0}.
+        /// </summary>
+        internal static string JobProcess_ConvertingLanguageFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ConvertingLanguageFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting project files....
+        /// </summary>
+        internal static string JobProcess_ConvertingProjectFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ConvertingProjectFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Convert Project.
         /// </summary>
         internal static string JobProcess_ConvertProject {
@@ -164,6 +182,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string JobProcess_Done {
+            get {
+                return ResourceManager.GetString("JobProcess_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string JobProcess_Export {
@@ -191,6 +218,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importing translations: {0}.
+        /// </summary>
+        internal static string JobProcess_ImportingTranslations {
+            get {
+                return ResourceManager.GetString("JobProcess_ImportingTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Translations.
         /// </summary>
         internal static string JobProcess_ImportTranslations {
@@ -205,6 +241,24 @@ namespace Sdl.Community.Transcreate {
         internal static string JobProcess_Preparation {
             get {
                 return ResourceManager.GetString("JobProcess_Preparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing language files: {0}.
+        /// </summary>
+        internal static string JobProcess_ProcessingLanguageFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ProcessingLanguageFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing... please wait.
+        /// </summary>
+        internal static string JobProcess_ProcessingPleaseWait {
+            get {
+                return ResourceManager.GetString("JobProcess_ProcessingPleaseWait", resourceCulture);
             }
         }
         

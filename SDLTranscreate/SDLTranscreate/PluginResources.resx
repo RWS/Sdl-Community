@@ -559,4 +559,22 @@
 	<data name="WizardMessage_CreatingTranscreateProject" xml:space="preserve">
     <value>Creating Transcreate Project</value>
   </data>
+	<data name="JobProcess_ProcessingPleaseWait" xml:space="preserve">
+    <value>Processing... please wait</value>
+  </data>
+	<data name="JobProcess_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+	<data name="JobProcess_ConvertingProjectFiles" xml:space="preserve">
+    <value>Converting project files...</value>
+  </data>
+	<data name="JobProcess_ProcessingLanguageFiles" xml:space="preserve">
+    <value>Processing language files: {0}</value>
+  </data>
+	<data name="JobProcess_ConvertingLanguageFiles" xml:space="preserve">
+    <value>Converting language files: {0}</value>
+  </data>
+	<data name="JobProcess_ImportingTranslations" xml:space="preserve">
+    <value>Importing translations: {0}</value>
+  </data>
 </root>

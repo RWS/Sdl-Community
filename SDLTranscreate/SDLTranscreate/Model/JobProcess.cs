@@ -89,10 +89,7 @@ namespace Sdl.Community.Transcreate.Model
 		    }
 	    }
 
-		public string Message
-	    {
-		    get { return $"Errors: {Errors.Count}, Warnings: {Warnings.Count}"; }
-	    }
+		public string Message => $"Errors: {Errors.Count}, Warnings: {Warnings.Count}";
 
 	    public bool HasErrors
 	    {
