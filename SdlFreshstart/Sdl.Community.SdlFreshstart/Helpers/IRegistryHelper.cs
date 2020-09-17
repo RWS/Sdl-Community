@@ -8,7 +8,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 	{
 		Task BackupKeys(List<LocationDetails> location);
 
-		void DeleteKeys(List<LocationDetails> locations);
+		void DeleteKeys(List<LocationDetails> locations, bool tradosKeys);
 
 		Task RestoreKeys(List<LocationDetails> pathsToKeys);
 	}

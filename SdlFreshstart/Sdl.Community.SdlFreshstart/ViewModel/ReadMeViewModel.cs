@@ -6,12 +6,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 {
 	public class ReadMeViewModel
 	{
-		public ReadMeViewModel(VersionService studioVersionService)
+		public ReadMeViewModel(VersionService versioningService)
 		{
-			StudioVersions = studioVersionService.GetListOfStudioVersions();
+			StudioVersions = versioningService.GetListOfStudioVersions();
 			StudioVersions.Reverse();
+
+			MultitermVersions = versioningService.GetInstalledMultitermVersions();
 		}
 
 		public List<StudioVersion> StudioVersions { get; set; }
+		public List<MultitermVersion> MultitermVersions { get; set; }
 	}
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using Sdl.Community.SdlFreshstart.Model;
@@ -11,7 +10,8 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public class RegistryHelper : IRegistryHelper
 	{
-		private const string ProductRegistryPath = @"Software\SDL\SDL Trados Studio";
+		private const string MultitermRegistryPath = @"Software\SDL\SDL MultiTerm";
+		private const string TradosStudioRegistryPath = @"Software\SDL\SDL Trados Studio";
 		private RegistryKey BaseKey { get; } = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
 
 		public async Task BackupKeys(List<LocationDetails> locations)
@@ -43,12 +43,12 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 		}
 
-		public void DeleteKeys(List<LocationDetails> locations)
+		public void DeleteKeys(List<LocationDetails> locations, bool tradosKeys)
 		{
 			var errorMessages = new List<string>();
 			foreach (var location in locations)
 			{
-				var productRegistry = BaseKey.OpenSubKey(ProductRegistryPath, true);
+				var productRegistry = BaseKey.OpenSubKey(tradosKeys ? TradosStudioRegistryPath : MultitermRegistryPath, true);
 				var subKey = Path.GetFileName(location.OriginalPath);
 
 				try
@@ -64,12 +64,6 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			ThrowAggregateExceptions(errorMessages);
 		}
 
-		private static void ThrowAggregateExceptions(List<string> errorMessages)
-		{
-			if (errorMessages.Count > 0)
-				throw new Exception(string.Join(Environment.NewLine, errorMessages));
-		}
-
 		public async Task RestoreKeys(List<LocationDetails> pathsToKeys)
 		{
 			var errorMessages = new List<string>();
@@ -79,10 +73,8 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				{
 					await Task.Run(() =>
 					{
-						//Process.Start(pathToKey.BackupFilePath);
-
 						var regeditProcess = Process.Start("regedit.exe", $"/s \"{pathToKey.BackupFilePath}\"");
-						regeditProcess.WaitForExit();
+						regeditProcess?.WaitForExit();
 					});
 				}
 				catch (Exception ex)
@@ -92,6 +84,12 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 
 			ThrowAggregateExceptions(errorMessages);
+		}
+
+		private static void ThrowAggregateExceptions(List<string> errorMessages)
+		{
+			if (errorMessages.Count > 0)
+				throw new Exception(string.Join(Environment.NewLine, errorMessages));
 		}
 	}
 }

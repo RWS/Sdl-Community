@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
@@ -20,73 +19,48 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 				{
 					var location = (string)studioVersions[0]?.GetType().GetProperty(locationName)?.GetValue(version);
 
-					var fileName = string.Empty;
-					if (File.Exists(location))
-					{
-						fileName = location != null ? Path.GetFileName(location) : fileName;
-					}
+					var fileName = File.Exists(location) ? Path.GetFileName(location) : string.Empty;
+					fileName = locationName == nameof(StudioVersion.SdlRegistryKey) ? "sdlregkeys.reg" : fileName;
 
-					if (locationName == nameof(StudioVersion.SdlRegistryKey))
-					{
-						fileName = "sdlregkeys.reg";
-					}
-					//TODO: make accommodations for registry
-					//BackUpFile path for registry also
-					var locationDetails = new LocationDetails
+					locations.Add(new LocationDetails
 					{
 						Alias = locationName,
 						BackupFilePath = Path.Combine(BackupFolderPath, version.VersionWithEdition, locationName, fileName),
 						OriginalPath = location,
 						Version = version.ShortVersion
-					};
-
-					locations.Add(locationDetails);
+					});
 				}
 			}
 
 			return locations;
 		}
 
-		public static async Task<List<LocationDetails>> GetMultiTermFoldersPath(
-			string userName,
-			List<MultiTermVersionListItem> multiTermVersions,
-			List<MultiTermLocationListItem> locations)
+		public static List<LocationDetails> GetMultiTermLocationsFromVersions(
+			List<string> locationNames,
+			List<MultitermVersion> multitermVersions)
 		{
-			var foldersLocationList = new List<LocationDetails>();
-			try
+			var locations = new List<LocationDetails>();
+			foreach (var locationName in locationNames)
 			{
-				foreach (var location in locations)
+				foreach (var version in multitermVersions)
 				{
-					if (location.Alias != null)
+					if (version == null) continue;
+					var location = (string)version.GetType().GetProperty(locationName)?.GetValue(version);
+
+					var fileName = File.Exists(location) ? Path.GetFileName(location) : string.Empty;
+					fileName = locationName == nameof(MultitermVersion.MultiTermRegistryKey) ? "multitermregkeys.reg" : fileName;
+
+					locations.Add(new LocationDetails
 					{
-						if (location.Alias.Equals("packageCache"))
-						{
-							var packageCacheLocations = await Task.FromResult(MultiTermFolders.GetPackageCachePaths(multiTermVersions));
-							foldersLocationList.AddRange(packageCacheLocations);
-						}
-						if (location.Alias.Equals("programFiles"))
-						{
-							var programFilesLocations = await Task.FromResult(MultiTermFolders.ProgramFilesPaths(multiTermVersions));
-							foldersLocationList.AddRange(programFilesLocations);
-						}
-						if (location.Alias.Equals("appDataLocal"))
-						{
-							var appDataLocal = await Task.FromResult(MultiTermFolders.AppDataLocalPaths(userName, multiTermVersions));
-							foldersLocationList.AddRange(appDataLocal);
-						}
-						if (location.Alias.Equals("appDataRoming"))
-						{
-							var appDataRoaming = await Task.FromResult(MultiTermFolders.AppDataRoamingPaths(userName, multiTermVersions));
-							foldersLocationList.AddRange(appDataRoaming);
-						}
-					}
+						Alias = locationName,
+						BackupFilePath = Path.Combine(BackupFolderPath, version.VersionName, locationName, fileName),
+						OriginalPath = location,
+						Version = version.VersionName
+					});
 				}
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{Constants.GetMultiTermFoldersPath} {ex.Message}\n {ex.StackTrace}");
-			}
-			return foldersLocationList;
+
+			return locations;
 		}
 	}
 }
