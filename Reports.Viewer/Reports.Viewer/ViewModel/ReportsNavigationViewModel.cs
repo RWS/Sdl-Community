@@ -226,7 +226,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				? _reports
 				: _reports.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
 
-		
+
 			var reportGroups = expandAll ? ExpandAll(await BuildReportGroup()) : await BuildReportGroup();
 			_reportGroups = new ObservableCollection<ReportGroup>(reportGroups);
 
@@ -387,17 +387,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			_previousReportStates = _reportGroups?.Count > 0 ? GetReportStates(_reportGroups) : _previousReportStates;
 
 			var orderedReports = _groupType.Type == "Group"
-				? _filteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
-				: _filteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
+				? _filteredReports.OrderBy(a => a.Group ?? string.Empty).ThenBy(a => a.Language ?? string.Empty).ThenByDescending(a => a.Date).ToList()
+				: _filteredReports.OrderBy(a => a.Language ?? string.Empty).ThenBy(a => a.Group ?? string.Empty).ThenByDescending(a => a.Date).ToList();
 
 			foreach (var report in orderedReports)
 			{
 				var reportGroup = reportGroups.FirstOrDefault(a =>
-					string.Compare(a.Name, (_groupType.Type == "Group" ? report.Group : report.Language), StringComparison.CurrentCultureIgnoreCase) == 0);
+					string.Compare(a.Name ?? string.Empty, (_groupType.Type == "Group" ? report.Group ?? string.Empty : report.Language ?? string.Empty), StringComparison.CurrentCultureIgnoreCase) == 0);
 				if (reportGroup != null)
 				{
 					var groupItem = reportGroup.GroupItems.FirstOrDefault(a =>
-						string.Compare(a.Name, (_groupType.Type == "Group" ? report.Language : report.Group), StringComparison.CurrentCultureIgnoreCase) == 0);
+						string.Compare(a.Name ?? string.Empty, (_groupType.Type == "Group" ? report.Language ?? string.Empty : report.Group ?? string.Empty), StringComparison.CurrentCultureIgnoreCase) == 0);
 					if (groupItem != null)
 					{
 						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, report.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
@@ -413,7 +413,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					{
 						groupItem = new GroupItem
 						{
-							Name = (_groupType.Type == "Group" ? report.Language : report.Group),
+							Name = (_groupType.Type == "Group" ? report.Language ?? string.Empty : report.Group ?? string.Empty),
 							Reports = new List<Report> { report }
 						};
 						var groupItemState = _previousReportStates?.FirstOrDefault(a =>
@@ -441,7 +441,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				{
 					reportGroup = new ReportGroup
 					{
-						Name = (_groupType.Type == "Group" ? report.Group : report.Language)
+						Name = (_groupType.Type == "Group" ? report.Group ?? string.Empty : report.Language ?? string.Empty)
 					};
 					var reportGroupState = _previousReportStates?.FirstOrDefault(a =>
 						string.Compare(a.Id, reportGroup.Name, StringComparison.CurrentCultureIgnoreCase) == 0);
@@ -453,7 +453,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					var groupItem = new GroupItem
 					{
-						Name = (_groupType.Type == "Group" ? report.Language : report.Group),
+						Name = (_groupType.Type == "Group" ? report.Language ?? string.Empty : report.Group ?? string.Empty),
 						Reports = new List<Report> { report }
 					};
 					var groupItemState = _previousReportStates?.FirstOrDefault(a =>
