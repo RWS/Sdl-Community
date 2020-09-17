@@ -43,35 +43,35 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 			<Component Id="Sdl.Community.SdlFreshstart">
-				<File Id="Sdl.Community.SdlFreshstart.exe" Name="Sdl.Community.SdlFreshstart.exe" Source="$(var.Sdl.Community.SdlFreshstart.TargetPath)" KeyPath="yes" />
+				<File Id="Sdl.Community.SdlFreshstart.exe" Name="Sdl.Community.SdlFreshstart.exe" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16" KeyPath="yes" />
 			</Component>
 
 			<Component Id="Sdl.Community.SdlFreshstart.exe.config" Guid="749595ae-e1ec-4afa-93ef-3a9ae3b938f7">
-				<File Id="Sdl.Community.SdlFreshstart.exe.config" Name="Sdl.Community.SdlFreshstart.exe.config" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Community.SdlFreshstart.exe.config" />
+				<File Id="Sdl.Community.SdlFreshstart.exe.config" Name="Sdl.Community.SdlFreshstart.exe.config" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.SdlFreshstart.exe.config" />
 			</Component>
 
 			<Component Id="MahApps.Metro.dll" Guid="*">
-				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\MahApps.Metro.dll"></File>
+				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll"></File>
 			</Component>
 
 			<Component Id="Newtonsoft.Json.dll" Guid="*">
-				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Newtonsoft.Json.dll"></File>
+				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll"></File>
 			</Component>
 
 			<Component Id="System.Windows.Interactivity.dll" Guid="*">
-				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\System.Windows.Interactivity.dll"></File>
+				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\System.Windows.Interactivity.dll"></File>
 			</Component>
 
 			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
-				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
+				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.Toolkit.Core.dll"></File>
 			</Component>
 
 			<Component Id="NLog.dll" Guid="*">
-				<File Id="NLog.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\NLog.dll"></File>
+				<File Id="NLog.dll" KeyPath="yes" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\NLog.dll"></File>
 			</Component>
 
 			<Component Id="Sdl.Versioning.dll" Guid="*">
-				<File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.Sdl.Community.SdlFreshstart.TargetDir)\Sdl.Versioning.dll"></File>
+				<File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll"></File>
 			</Component>
 		</ComponentGroup>
 	</Fragment>	
