@@ -193,27 +193,22 @@ namespace Sdl.Community.NumberVerifier.Helpers
 		// Is not corresponding to decimal/thousand separator, it's used as simple punctuation letter (Eg: ,123 or 245, )
 		public string RemovePunctuationChar(string text, char[] sepChars, bool omitLeadingZero)
 		{
-			if (text.Length - 1 == text.LastIndexOfAny(sepChars))
+			// we don't want to remove the punctuation marks when OmitLeading Zero is checked so the verification would
+			// be processed correctly
+			if (!omitLeadingZero)
 			{
-				text = text.Remove(text.Length - 1, 1);
+				if (text.Length - 1 == text.LastIndexOfAny(sepChars))
+				{
+					text = text.Remove(text.Length - 1, 1);
+				}
+
+				if (text.IndexOfAny(sepChars) == 0)
+				{
+					text = text.Remove(0, 1);
+				}
 			}
 
-			if (text.IndexOfAny(sepChars) == 0 && !omitLeadingZero)
-			{
-				text = text.Remove(0, 1);
-			}
-
-			if (!string.IsNullOrWhiteSpace(text) && IsPunctuationChar(text, sepChars))
-			{
-				text = RemovePunctuationChar(text, sepChars, omitLeadingZero);
-			}
-			
 			return text.Trim();
-		}
-
-		private bool IsPunctuationChar(string text, char[] sepChars)
-		{
-			return text.IndexOfAny(sepChars) == 0 || text.Length - 1 == text.LastIndexOfAny(sepChars);
 		}
 	}
 }

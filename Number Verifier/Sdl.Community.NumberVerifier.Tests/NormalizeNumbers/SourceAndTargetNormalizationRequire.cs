@@ -376,12 +376,13 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// </summary>
 		[Theory]
 		[InlineData("This is a simple test with 3000 and a comma before second number...3000", "This is a simple test with 3000 and second number 3,000")]
-		[InlineData("This is a simple test with...*+12000 and a comma before second number...3000", "This is a simple test with 12.000 and second number 3,000")]
+		[InlineData("This is a simple test with sum of 10 + 12000 and a comma before second number...3000", "This is a simple test with sum of 10 + 12.000 and second number 3,000")]
 		public void ValidateSource_ThousandBeforeComma_WithMultiplePunctuationMarks_NoErrors(string source, string target)
 		{
 			//target settings
 			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
 			numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+			numberVerifierSettings.Setup(t => t.TargetThousandsPeriod).Returns(true);
 
 			// source settings
 			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
@@ -835,6 +836,55 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	        // source settings
 	        numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
 	        numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        //run initialize method in order to set chosen separators
+	        numberVerifierMain.Initialize(_documentProperties.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+        }
+
+        /// <summary>
+        /// Validate groups of numbers without any words between them
+        /// No validation errors should be reported
+        /// </summary>
+        [Theory]
+        [InlineData("It was October 13, 1978.", "Es war der 13. Oktober 1978.")]
+        [InlineData("I will buy 14, 15 chocolates and it will cost 1.200 dollars", "I will buy 14, 15 chocolates and it will cost 1,200 dollars")]
+		public void ValidateMultipleNumbers_WithNoErrors(string source, string target)
+        {
+	        // target settings
+	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+	        numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
+
+	        // source settings
+			numberVerifierSettings.Setup(t => t.SourceThousandsPeriod).Returns(true);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        // run initialize method in order to set chosen separators
+	        numberVerifierMain.Initialize(_documentProperties.Object);
+
+	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+	        Assert.True(errorMessage.Count == 0);
+		}
+
+        /// <summary>
+        /// Validate groups of numbers without any words between them
+        /// Validation errors should be reported
+        /// </summary>
+        [Theory]
+        [InlineData("It was October 13, 1978.", "Es war der 13. Oktober 2000.")]
+        public void ValidateMultipleNumbers_WithErrors(string source, string target)
+        {
+	        //target settings
+	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
 
 	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);

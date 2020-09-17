@@ -543,16 +543,13 @@ namespace Sdl.Community.NumberVerifier
 			var targetNormalizedNumberList = targetNumbersTuple?.Item2;
 
 			// remove identical numbers found both in source and target from respective list
-			RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList,
-				sourceNormalizedNumberList);
+			RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList, sourceNormalizedNumberList);
 
 			// remove numbers found both in source and target from respective list disregarding difference in thousands and decimal separators
-			RemoveNumbersIgnoreThousandsAndDecimalSeparators(sourceNumberList, targetNormalizedNumberList,
-				sourceNormalizedNumberList, targetNumberList);
+			RemoveNumbersIgnoreThousandsAndDecimalSeparators(sourceNumberList, targetNormalizedNumberList, sourceNormalizedNumberList, targetNumberList);
 
 			// remove numbers found both in source and target from respective list disregarding difference when thousands and decimal separators are undefined due to ambiguity 
-			RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList,
-				sourceNormalizedNumberList, targetNormalizedNumberList);
+			RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList, sourceNormalizedNumberList, targetNormalizedNumberList);
 
 			var sourceHindiList = initialSourceHindiText.Equals(numberModel.SourceText) ? new List<string> { numberModel.SourceText } : new List<string> { initialSourceHindiText };
 			var targetHindiList = initialTargetHindiText.Equals(numberModel.TargetText) ? new List<string> { numberModel.TargetText } : new List<string> { initialTargetHindiText };
@@ -833,52 +830,60 @@ namespace Sdl.Community.NumberVerifier
 			{
 				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator, VerificationSettings.SourceDecimalCustomSeparator, VerificationSettings.TargetDecimalCustomSeparator);
 				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator);
-				var sepChars = _textFormatter.GetSeparatorsChars(customDecimalSeparators, customThousandSeparators);
+				var separatorChars = _textFormatter.GetSeparatorsChars(customDecimalSeparators, customThousandSeparators);
+				var separators = $".,{customDecimalSeparators}{customThousandSeparators}{Constants.SpaceSeparators}";
+				var pattern = $@"[+-−]?\d+[{separators}\s]{{0,1}}\d{{0,3}}(?<![{separators}\s])[{separators}\s]{{0,1}}\d{{0,3}}(?<![{separators}\s])[{separators}\s]{{0,1}}\d{{0,3}}(?<![{separators}\s])[{separators}\s]{{0,1}}\d*";
 
-				var numbers = Regex.Split(normalizedNumber.Text, $@"[^−\-\0-9 ０-９\[.,{customDecimalSeparators}{customThousandSeparators}{Constants.SpaceSeparators}]+").Where(c => c != "." && c.Trim() != "");
-				
-				if (numbers.Any())
+				var numbers = Regex.Matches(normalizedNumber.Text, pattern);
+
+				foreach (Match item in numbers)
 				{
-					foreach (var item in numbers)
+					if (!string.IsNullOrEmpty(item.Value))
 					{
-						var text = item.Trim();
-						text = !string.IsNullOrWhiteSpace(text) ? _textFormatter.RemovePunctuationChar(text, sepChars, _omitLeadingZero) : string.Empty;
-						
+						var text = item.Value.Trim();
+						text = !string.IsNullOrWhiteSpace(text)
+							? _textFormatter.RemovePunctuationChar(text, separatorChars, _omitLeadingZero)
+							: string.Empty;
+
 						if (string.IsNullOrWhiteSpace(text)) continue;
-
-						var separatorModel = GetSeparatorModel(normalizedNumber, text, customDecimalSeparators, customThousandSeparators);
-
-						if (IsNumberDecimal(text, separatorModel))
-						{
-							_isNoSeparator = false; // the 'NoSeparator' option can be checked only for thousand or thousand-decimal numbers 
-							normalizedNumber.Separators = $"{normalizedNumber.DecimalSeparators}{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}";
-							ConfigureNormalizedNumber(normalizedNumber, text);
-						}
-						else if (IsNumberThousandDecimal(text, separatorModel))
-						{
-							var separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}" +
-											 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
-
-							_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
-							var customSeparators = $"{separatorModel.ThousandCustomSeparators}{separatorModel.DecimalCustomSeparators}";
-							SetSeparatorInformation(separatorModel, customSeparators, true);
-							normalizedNumber.Separators = separators;
-							ConfigureNormalizedNumber(normalizedNumber, text);
-						}
-						else
-						{
-							// number is only thousand
-							_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
-							SetSeparatorInformation(separatorModel, separatorModel.ThousandCustomSeparators, false);
-							normalizedNumber.Separators = normalizedNumber.ThousandSeparators;
-							ConfigureNormalizedNumber(normalizedNumber, text);
-						}
+						ProcessText(normalizedNumber, text, customDecimalSeparators, customThousandSeparators);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex}");
+			}
+		}
+		
+		private void ProcessText(NormalizedNumber normalizedNumber, string text, string customDecimalSeparators, string customThousandSeparators)
+		{
+			var separatorModel = GetSeparatorModel(normalizedNumber, text, customDecimalSeparators, customThousandSeparators);
+
+			if (IsNumberDecimal(text, separatorModel))
+			{
+				_isNoSeparator = false; // the 'NoSeparator' option can be checked only for thousand or thousand-decimal numbers 
+				normalizedNumber.Separators = $"{normalizedNumber.DecimalSeparators}{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}";
+				ConfigureNormalizedNumber(normalizedNumber, text);
+			}
+			else if (IsNumberThousandDecimal(text, separatorModel))
+			{
+				var separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}" +
+				                 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
+
+				_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
+				var customSeparators = $"{separatorModel.ThousandCustomSeparators}{separatorModel.DecimalCustomSeparators}";
+				SetSeparatorInformation(separatorModel, customSeparators, true);
+				normalizedNumber.Separators = separators;
+				ConfigureNormalizedNumber(normalizedNumber, text);
+			}
+			else
+			{
+				// number is only thousand
+				_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
+				SetSeparatorInformation(separatorModel, separatorModel.ThousandCustomSeparators, false);
+				normalizedNumber.Separators = normalizedNumber.ThousandSeparators;
+				ConfigureNormalizedNumber(normalizedNumber, text);
 			}
 		}
 
