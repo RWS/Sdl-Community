@@ -275,7 +275,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				nameof(StudioVersion.AppDataRoamingPluginsPath),
 				nameof(StudioVersion.AppDataLocalStudioPath),
 				nameof(StudioVersion.AppDataLocalPluginsPath),
-				nameof(StudioVersion.ProgramDataStudioPath),
 				nameof(StudioVersion.ProgramDataPluginsPath),
 				nameof(StudioVersion.ProgramDataStudioDataSubfolderPath),
 				nameof(StudioVersion.ProjectsXmlPath),

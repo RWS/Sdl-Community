@@ -30,8 +30,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool _isRemoveEnabled;
 		private bool _isRepairEnabled;
 		private bool _isRestoreEnabled;
-		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
-		private ObservableCollection<MultitermVersion> _multiTermVersionsCollection;
+		private List<MultiTermLocationListItem> _multiTermLocationCollection;
+		private List<MultitermVersion> _multiTermVersionsCollection;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _removeBtnColor;
 		private ICommand _removeCommand;
@@ -123,7 +123,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ObservableCollection<MultiTermLocationListItem> MultiTermLocationCollection
+		public List<MultiTermLocationListItem> MultiTermLocationCollection
 		{
 			get => _multiTermLocationCollection;
 			set
@@ -137,7 +137,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ObservableCollection<MultitermVersion> MultiTermVersionsCollection
+		public List<MultitermVersion> MultiTermVersionsCollection
 		{
 			get => _multiTermVersionsCollection;
 			set
@@ -258,7 +258,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				nameof(MultitermVersion.MultiTermRegistryKey)
 			};
 
-			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>();
+			_multiTermLocationCollection = new List<MultiTermLocationListItem>();
 			foreach (var property in listOfProperties)
 			{
 				_multiTermLocationCollection.Add(new MultiTermLocationListItem
@@ -278,7 +278,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void FillMultiTermVersionList()
 		{
-			_multiTermVersionsCollection = new ObservableCollection<MultitermVersion>(_versionService.GetInstalledMultitermVersions());
+			_multiTermVersionsCollection = new List<MultitermVersion>(_versionService.GetInstalledMultitermVersions());
 			foreach (var multiTermVersion in _multiTermVersionsCollection)
 			{
 				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
