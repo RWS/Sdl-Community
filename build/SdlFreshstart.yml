@@ -28,10 +28,25 @@ variables:
     value: '**/Sdl.Community.SdlFreshstart.sln'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
 
   - template: tasks/sign-artifacts/prepare-signing.yml
 
+  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+    parameters:
+      FileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.exe'
+
+  - task: VSBuild@1
+    inputs:
+      solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
+      platform: 'x86'
+      configuration: '$(buildConfiguration)'
+      msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+     
   - template: tasks/sign-artifacts/sign-artifacts-azure.yml
     parameters:
       SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
