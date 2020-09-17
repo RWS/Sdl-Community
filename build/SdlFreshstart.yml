@@ -28,10 +28,50 @@ variables:
     value: '**/Sdl.Community.SdlFreshstart.sln'
 
 steps:
-  - template: jobs/build-sdlplugin.yml
+  - task: PowerShell@2
+    displayName: 'set x86path'
+    inputs:
+      targetType: 'inline'
+      script: |
+        Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download Trados Studio Binaries Pipeline Artifact'
+    inputs:
+      buildType: 'specific'
+      project: 'TradosStudio'
+      definition: '1258'
+      artifactName: 'binaries'
+      buildVersionToDownload: 'latestFromBranch'
+      targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+      runBranch: '$(StudioBranch)'
+      tags: 'Package'
+
+  - task: NuGetToolInstaller@0
+
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
+
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
 
   - template: tasks/sign-artifacts/prepare-signing.yml
 
+  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+    parameters:
+      FileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.exe'
+
+  - task: VSBuild@1
+    inputs:
+      solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
+      platform: 'x86'
+      configuration: '$(buildConfiguration)'
+      msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+     
   - template: tasks/sign-artifacts/sign-artifacts-azure.yml
     parameters:
       SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
