@@ -206,6 +206,20 @@ namespace Sdl.Community.NumberVerifier.Helpers
 				{
 					text = text.Remove(0, 1);
 				}
+				// remove only if the first char is not digit (0-9) and is not representing the negative symbol(- or −)
+				if (!char.IsDigit(text[0]) && text[0].Equals('−'))
+				{
+					return text.Trim();
+				}
+				if(!char.IsDigit(text[0]) && text[0].Equals('-'))
+				{
+					return text.Trim();
+				}
+
+				if (!char.IsDigit(text[0]))
+				{
+					text = text.Remove(0, 1);
+				}
 			}
 
 			return text.Trim();

@@ -376,7 +376,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// </summary>
 		[Theory]
 		[InlineData("This is a simple test with 3000 and a comma before second number...3000", "This is a simple test with 3000 and second number 3,000")]
-		[InlineData("This is a simple test with sum of 10 + 12000 and a comma before second number...3000", "This is a simple test with sum of 10 + 12.000 and second number 3,000")]
+		[InlineData("This is a simple test with sum of 10 +12000 and a comma before second number...3000", "This is a simple test with sum of 10 +12.000 and second number 3,000")]
 		public void ValidateSource_ThousandBeforeComma_WithMultiplePunctuationMarks_NoErrors(string source, string target)
 		{
 			//target settings
