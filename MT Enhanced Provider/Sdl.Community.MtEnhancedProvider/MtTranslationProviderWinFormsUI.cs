@@ -13,6 +13,7 @@
    limitations under the License.*/
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using NLog;
@@ -23,6 +24,7 @@ using Sdl.Community.MtEnhancedProvider.View;
 using Sdl.Community.MtEnhancedProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
@@ -79,10 +81,21 @@ namespace Sdl.Community.MtEnhancedProvider
 	    public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
 		    ITranslationProviderCredentialStore credentialStore)
 	    {
-			//TODO: Get the language pair from the projects controller
+		    var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+		    var projectInfo = projectController?.CurrentProject?.GetProjectInfo();
+		    var languagePairs = new List<LanguagePair>();
+
+			if (projectInfo != null)
+			{
+				foreach (var targetLanguage in projectInfo.TargetLanguages)
+				{
+					var languagePair = new LanguagePair(projectInfo.SourceLanguage.CultureInfo,targetLanguage.CultureInfo);
+					languagePairs.Add(languagePair);
+				}
+			}
 		    var options = new MtTranslationOptions();
 
-		    var mainWindowVm = ShowProviderWindow(null, credentialStore, options);
+		    var mainWindowVm = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options);
 
 		    if (!mainWindowVm.DialogResult) return false;
 		    return mainWindowVm.DialogResult;
