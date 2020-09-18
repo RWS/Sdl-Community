@@ -195,31 +195,31 @@ namespace Sdl.Community.NumberVerifier.Helpers
 		{
 			// we don't want to remove the punctuation marks when OmitLeading Zero is checked so the verification would
 			// be processed correctly
-			if (!omitLeadingZero)
+			if (omitLeadingZero && sepChars.ToList().Contains(text[0]))
 			{
-				if (text.Length - 1 == text.LastIndexOfAny(sepChars))
-				{
-					text = text.Remove(text.Length - 1, 1);
-				}
+				return text.Trim();
+			}
+			// if punctuation marks are found at the end of number, remove it (Ex: 245,) because is not part of a thousand or decimal number
+			if (text.Length - 1 == text.LastIndexOfAny(sepChars))
+			{
+				text = text.Remove(text.Length - 1, 1);
+			}
 
-				if (text.IndexOfAny(sepChars) == 0)
-				{
-					text = text.Remove(0, 1);
-				}
-				// remove only if the first char is not digit (0-9) and is not representing the negative symbol(- or −)
-				if (!char.IsDigit(text[0]) && text[0].Equals('−'))
-				{
-					return text.Trim();
-				}
-				if(!char.IsDigit(text[0]) && text[0].Equals('-'))
-				{
-					return text.Trim();
-				}
+			// remove only if the first char is not digit (0-9) and is not representing the negative symbol(−)
+			if (!char.IsDigit(text[0]) && text[0].Equals('−'))
+			{
+				return text.Trim();
+			}
+			// remove only if the first char is not digit (0-9) and is not representing the negative symbol (-)
+			if (!char.IsDigit(text[0]) && text[0].Equals('-'))
+			{
+				return text.Trim();
+			}
 
-				if (!char.IsDigit(text[0]))
-				{
-					text = text.Remove(0, 1);
-				}
+			// remove if the first char is not a digit 
+			if (!char.IsDigit(text[0]))
+			{
+				text = text.Remove(0, 1);
 			}
 
 			return text.Trim();

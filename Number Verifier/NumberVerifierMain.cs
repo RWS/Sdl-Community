@@ -832,7 +832,8 @@ namespace Sdl.Community.NumberVerifier
 				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator);
 				var separatorChars = _textFormatter.GetSeparatorsChars(customDecimalSeparators, customThousandSeparators);
 				var separators = $".,{customDecimalSeparators}{customThousandSeparators}{Constants.SpaceSeparators}";
-				var pattern = $@"[+-−]?\d+[{separators}\s]{{0,1}}\d{{0,3}}(?<![{separators}\s])[{separators}\s]{{0,1}}\d{{0,3}}(?<![{separators}\s])[{separators}\s]{{0,1}}\d{{0,3}}(?<![{separators}\s])[{separators}\s]{{0,1}}\d*";
+				var pattern = $"[+-−]?\\d+[{separators}\\s]{{0,1}}\\d{{0,3}}(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d{{0,3}}" +
+				              $"(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d{{0,3}}(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d*";
 
 				var numbers = Regex.Matches(normalizedNumber.Text, pattern);
 
