@@ -28,54 +28,25 @@ variables:
     value: '**/Sdl.Community.SdlFreshstart.sln'
 
 steps:
-  - task: PowerShell@2
-    displayName: 'set x86path'
-    inputs:
-      targetType: 'inline'
-      script: |
-        Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
-
-  - task: DownloadPipelineArtifact@2
-    displayName: 'Download Trados Studio Binaries Pipeline Artifact'
-    inputs:
-      buildType: 'specific'
-      project: 'TradosStudio'
-      definition: '1258'
-      artifactName: 'binaries'
-      buildVersionToDownload: 'latestFromBranch'
-      targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
-      runBranch: '$(StudioBranch)'
-      tags: 'Package'
-
-  - task: NuGetToolInstaller@0
-
-  - task: NuGetCommand@2
-    inputs:
-      restoreSolution: '$(solution)'
-
-  - task: VSBuild@1
-    inputs:
-      solution: '$(solution)'
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
-
+  - template: jobs/build-sdlplugin.yml
   - template: tasks/sign-artifacts/prepare-signing.yml
 
-  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-      FileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.SdlFreshstart.exe'
-
+       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.SdlFreshstart.exe'
+       description: 'SdlFreshstart'
   - task: VSBuild@1
     inputs:
-      solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
-      platform: 'x86'
-      configuration: '$(buildConfiguration)'
-      msbuildArgs: '/p:RunWixToolsOutOfProc=true'
-     
-  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+       solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
+       platform: 'x86'
+       configuration: '$(buildConfiguration)'
+       msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+  
+  - template: tasks/sign-artifacts/prepare-signing.yml
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-      SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
-      SigningFileList: '$(Build.Repository.LocalPath)\SdlFreshstart\Signing.csv'
+     fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
+     description: 'SdlFreshstart'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
