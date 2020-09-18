@@ -226,6 +226,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private void ClearMessageRaised()
 		{
 			ErrorMessage = string.Empty;
+			TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
 		}
 
 		private void Save(object window)
@@ -300,7 +301,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
 					ProjectLocation = _providerControlViewModel.ProjectLocation,
 					GlossaryPath = _providerControlViewModel.GlossaryPath,
-					BasicCsv = _providerControlViewModel.BasicCsvGlossary
+					BasicCsv = _providerControlViewModel.BasicCsvGlossary,
+					SelectedProvider =  _providerControlViewModel.SelectedTranslationOption.ProviderType,
+					SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version
 				};
 				var googleV3 = new GoogleV3Connecter(providerOptions);
 				googleV3.TryToAuthenticateUser();

@@ -51,7 +51,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			}
 			catch (Exception e)
 			{
-
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 			}
 		}
 
@@ -123,11 +123,11 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			}
 			catch (Exception e)
 			{
-
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 			}
 			finally
 			{
-				GetProjectGlossaries(_options);
+				//GetProjectGlossaries(_options);
 			}
 		}
 

@@ -171,7 +171,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			get => _selectedTranslationOption;
 			set
 			{
-				_selectedTranslationOption = value;;
+				_selectedTranslationOption = value;
 				IsMicrosoftSelected = value.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
 				ClearMessageRaised?.Invoke();
@@ -185,9 +185,13 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				if (_isMicrosoftSelected == value) return;
 				_isMicrosoftSelected = value;
-				if (_isMicrosoftSelected)
+				if (_isMicrosoftSelected || SelectedGoogleApiVersion.Version == Enums.GoogleApiVersion.V3)
 				{
 					IsV2Checked = false;
+				}
+				else
+				{
+					IsV2Checked = true;
 				}
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
 				ClearMessageRaised?.Invoke();
