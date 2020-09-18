@@ -29,10 +29,9 @@ namespace Sdl.Community.MtEnhancedProvider
     public class MtTranslationOptions: IMtTranslationOptions
 	{
         private static string _apiKey;
-        private static string _clientsecret;
         private static string _clientid;
-        const string msTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
-        const string gTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
+        const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
+        const string GTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
         //The translation method affects when/if the plugin gets called by Studio
         public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
@@ -84,7 +83,14 @@ namespace Sdl.Community.MtEnhancedProvider
             get => ToBoolean(usePostEdit);
 			set => usePostEdit = value.ToString();
 		}
-        [JsonIgnore]
+		[JsonIgnore]
+		public bool BasicCsv
+		{
+			get => ToBoolean(SimpleCsv);
+			set => SimpleCsv = value.ToString();
+		}
+
+		[JsonIgnore]
         private string usePreEdit
         {
             get => GetStringParameter("usepreedit");
@@ -102,6 +108,12 @@ namespace Sdl.Community.MtEnhancedProvider
             get => GetStringParameter("prelookupfilename");
 	        set => SetStringParameter("prelookupfilename", value);
         }
+
+		public string SimpleCsv
+		{
+			get => GetStringParameter("basiccsv");
+			set => SetStringParameter("basiccsv", value);
+		}
 
 		[JsonIgnore]
         public string PostLookupFilename
@@ -154,9 +166,9 @@ namespace Sdl.Community.MtEnhancedProvider
 	        switch (type)
 	        {
 		        case ProviderType.GoogleTranslate:
-			        return gTranslateString; //these strings should not be localized and are therefore hard-coded
+			        return GTranslateString; //these strings should not be localized and are therefore hard-coded
 		        case ProviderType.MicrosoftTranslator:
-			        return msTranslatorString; //these strings should not be localized and are therefore hard-coded
+			        return MsTranslatorString; //these strings should not be localized and are therefore hard-coded
 	        }
 	        return "";
         }
@@ -169,9 +181,9 @@ namespace Sdl.Community.MtEnhancedProvider
 	        {
 		        case null:
 			        return ProviderType.None;
-		        case gTranslateString:
+		        case GTranslateString:
 			        return ProviderType.GoogleTranslate;
-		        case msTranslatorString:
+		        case MsTranslatorString:
 			        return ProviderType.MicrosoftTranslator;
 		        default:
 			        return ProviderType.None;

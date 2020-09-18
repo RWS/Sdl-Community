@@ -151,6 +151,11 @@
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				         Margin="10 0"
 				         Text="{Binding GlossaryPath}"/>
+				<CheckBox
+					IsChecked="{Binding BasicCsvGlossary}"
+					Content="{x:Static mtEnhanced:PluginResources.UnidirectionalGlossary}"
+					Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					Margin="10 5"/>
 			</StackPanel>
 		</StackPanel>
     </Grid>

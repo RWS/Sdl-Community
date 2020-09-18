@@ -142,16 +142,8 @@ namespace Sdl.Community.MtEnhancedProvider
 						Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
 				return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 			}
-			if (_googleV3Connecter == null)
-			{
-				_googleV3Connecter = new GoogleV3Connecter(Options);
-			}
-			else
-			{
-				_googleV3Connecter.ProjectName = Options.ProjectName;
-				_googleV3Connecter.JsonFilePath = Options.JsonFilePath;
-				_googleV3Connecter.GlossaryPath = Options.GlossaryPath;
-			}
+			_googleV3Connecter = new GoogleV3Connecter(Options);
+
 
 			return _googleV3Connecter.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}

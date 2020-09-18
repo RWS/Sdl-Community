@@ -192,21 +192,15 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				else
 				{
-					_gtConnect.ApiKey = options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+					_gtConnect.ApiKey =
+						options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
 				}
 				var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
 
 				return translatedText;
 			}
-			if (_googleV3Connecter == null)
-			{
-				_googleV3Connecter = new GoogleV3Connecter(options);
-			}
-			else
-			{
-				_googleV3Connecter.ProjectName = options.ProjectName;
-				_googleV3Connecter.JsonFilePath = options.JsonFilePath;
-			}
+			_googleV3Connecter = new GoogleV3Connecter(options);
+
 			var v3TranslatedText =
 				_googleV3Connecter.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext);
 

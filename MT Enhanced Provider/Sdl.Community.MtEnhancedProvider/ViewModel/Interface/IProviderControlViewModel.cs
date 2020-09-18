@@ -20,6 +20,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		bool PersistGoogleKey { get; set; }
 		bool PersistMicrosoftKey { get; set; }
 		bool IsTellMeAction { get; set; }
+		bool BasicCsvGlossary { get; set; }
 		string CatId { get; set; }
 		string ApiKey { get; set; } //Google
 		string ClientId { get; set; } //Microsoft

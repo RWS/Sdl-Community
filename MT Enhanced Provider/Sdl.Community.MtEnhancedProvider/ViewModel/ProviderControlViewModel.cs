@@ -20,6 +20,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private bool _persistGoogleKey;
 		private bool _persistMicrosoftKey;
 		private bool _isTellMeAction;
+		private bool _basicCsvGlossary;
 		private string _catId;
 		private string _apiKey;
 		private string _clientId;
@@ -90,6 +91,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				GoogleEngineModel = _options.GoogleEngineModel;
 				ProjectLocation = _options.ProjectLocation;
 				GlossaryPath = _options.GlossaryPath;
+				BasicCsvGlossary = _options.BasicCsv;
 			}
 
 			SetTranslationOption();
@@ -296,6 +298,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_isTellMeAction == value) return;
 				_isTellMeAction = value;
 				OnPropertyChanged(nameof(IsTellMeAction));
+			}
+		}
+
+		public bool BasicCsvGlossary
+		{
+			get => _basicCsvGlossary;
+			set
+			{
+				if (_basicCsvGlossary == value) return;
+				_basicCsvGlossary = value;
+				OnPropertyChanged(nameof(BasicCsvGlossary));
 			}
 		}
 

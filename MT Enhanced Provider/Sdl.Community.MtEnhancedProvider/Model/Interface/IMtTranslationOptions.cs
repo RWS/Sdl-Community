@@ -14,6 +14,7 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 		bool ResendDrafts { get; set; }
 		bool UsePreEdit { get; set; }
 		bool UsePostEdit { get; set; }
+		bool BasicCsv { get; set; }
 		string CatId { get; set; }
 		string PreLookupFilename { get; set; }	
 		string PostLookupFilename { get; set; }

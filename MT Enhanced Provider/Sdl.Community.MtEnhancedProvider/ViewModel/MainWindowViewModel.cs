@@ -43,7 +43,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
 			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
 
-
 			AvailableViews = new List<ViewDetails>
 			{
 				new ViewDetails
@@ -289,6 +288,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 			return false;
 		}
+
 		private bool AreGoogleV3CredentialsValid()
 		{
 			try
@@ -299,16 +299,16 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					JsonFilePath = _providerControlViewModel.JsonFilePath,
 					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
 					ProjectLocation = _providerControlViewModel.ProjectLocation,
-					GlossaryPath = _providerControlViewModel.GlossaryPath
+					GlossaryPath = _providerControlViewModel.GlossaryPath,
+					BasicCsv = _providerControlViewModel.BasicCsvGlossary
 				};
 				var googleV3 = new GoogleV3Connecter(providerOptions);
 				googleV3.TryToAuthenticateUser();
-				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath)&& _languagePairs !=null)
+				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath) && _languagePairs != null)
 				{
 					googleV3.CreateGoogleGlossary(_languagePairs);
 				}
 			}
-
 			catch (Exception e)
 			{
 				string message;
@@ -330,6 +330,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 			return true;
 		}
+
 		private bool AreGoogleV2CredentialsValid()
 		{
 			try
@@ -380,6 +381,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			Options.GoogleEngineModel = _providerControlViewModel.GoogleEngineModel;
 			Options.ProjectLocation = _providerControlViewModel.ProjectLocation;
 			Options.GlossaryPath = _providerControlViewModel.GlossaryPath;
+			Options.BasicCsv = _providerControlViewModel.BasicCsvGlossary;
 		}
 
 		private void SetMicrosoftProviderOptions()

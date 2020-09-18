@@ -20,45 +20,33 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 		private readonly TranslationServiceClient _translationServiceClient;
 		private readonly string _modelPath;
 		private readonly string _glossaryResourceLocation;
-
+		private readonly IMtTranslationOptions _options;
 		public static List<GoogleV3LanguageModel> SupportedLanguages { get; set; }
-		public string ProjectName { get; set; }
-		public string JsonFilePath { get; set; }
-		public string EngineModel { get; set; }
-		public string Location { get; set; }
-		public string GlossaryPath { get; set; }
 		public string GlossaryId { get; set; }
-
-		private IMtTranslationOptions _options; //TODO: Remove this for the final implementation
 
 		public GoogleV3Connecter(IMtTranslationOptions options)
 		{
-			ProjectName = options.ProjectName;
-			JsonFilePath = options.JsonFilePath;
-			EngineModel = options.GoogleEngineModel;
-			Location = options.ProjectLocation;
-			GlossaryPath = options.GlossaryPath;
 			_options = options;
 			SupportedLanguages = new List<GoogleV3LanguageModel>();
 
 			//We put by default NMT model if the nmt model is not supported for the language pair 
 			//Google knows to use basic model
 			var model = "general/nmt";
-			if (!string.IsNullOrEmpty(EngineModel))
+			if (!string.IsNullOrEmpty(_options.GoogleEngineModel))
 			{
-				model = EngineModel;
+				model = _options.GoogleEngineModel;
 			}
 
-			_modelPath = $"projects/{ProjectName}/locations/{Location}/models/{model}";
-			if (!string.IsNullOrEmpty(GlossaryPath))
+			_modelPath = $"projects/{_options.ProjectName}/locations/{_options.ProjectLocation}/models/{model}";
+			if (!string.IsNullOrEmpty(_options.GlossaryPath))
 			{
-				_glossaryResourceLocation = $"projects/{ProjectName}/locations/{Location}/glossaries/{GlossaryPath}";
-				GlossaryId = Path.GetFileNameWithoutExtension(GlossaryPath).Replace(" ",string.Empty); //Google doesn't allow spaces in glossary id
+				GlossaryId = Path.GetFileNameWithoutExtension(_options.GlossaryPath).Replace(" ",string.Empty); //Google doesn't allow spaces in glossary id
+				_glossaryResourceLocation = $"projects/{_options.ProjectName}/locations/{_options.ProjectLocation}/glossaries/{GlossaryId}";
 			}
 
 			try
 			{
-				Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, JsonFilePath);
+				Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, _options.JsonFilePath);
 				_translationServiceClient = TranslationServiceClient.Create();
 			}
 			catch (Exception e)
@@ -80,7 +68,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 					Model = _modelPath,
 					TargetLanguageCode = targetLanguage.Name,
 					SourceLanguageCode = sourceLanguage.Name,
-					Parent = new ProjectName(ProjectName).ToString()
+					Parent = new ProjectName(_options.ProjectName).ToString()
 				};
 				if (!string.IsNullOrEmpty(_glossaryResourceLocation))
 				{
@@ -114,16 +102,23 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 		{
 			try
 			{
-				if (!string.IsNullOrEmpty(GlossaryPath))
+				if (!string.IsNullOrEmpty(_options.GlossaryPath))
 				{
-					//var glossaryLanguages = GetGlossaryLanguages(languagePairs);
-					//var glossary = CreatetCsvGlossary(glossaryLanguages);
-					var sourceLang = languagePairs[0].SourceCultureName;
-					var targetLang = languagePairs[0].TargetCultureName;
-					var glossary = CreateTmxGlossary(sourceLang, targetLang);
+					Glossary glossary;
+					if (_options.BasicCsv)
+					{
+						var sourceLang = languagePairs[0].SourceCultureName;
+						var targetLang = languagePairs[0].TargetCultureName;
+						glossary = CreateUnidirectionalCsvGlossary(sourceLang, targetLang);
+					}
+					else
+					{
+						var glossaryLanguages = GetGlossaryLanguages(languagePairs);
+						glossary = CreatetCsvGlossary(glossaryLanguages);
+					}
 
 					var glossaryResponse = _translationServiceClient.CreateGlossary(
-						new LocationName(ProjectName, Location).ToString(), glossary);
+						new LocationName(_options.ProjectName, _options.ProjectLocation).ToString(), glossary);
 				}
 			}
 			catch (Exception e)
@@ -140,13 +135,13 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 		{
 			var glossary = new Glossary
 			{
-				Name = new GlossaryName(ProjectName, Location, GlossaryId).ToString(),
+				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, GlossaryId).ToString(),
 				LanguageCodesSet = new Glossary.Types.LanguageCodesSet(),
 				InputConfig = new GlossaryInputConfig
 				{
 					GcsSource = new GcsSource
 					{
-						InputUri = GlossaryPath,
+						InputUri = _options.GlossaryPath
 					}
 				}
 			};
@@ -196,11 +191,11 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			return googleGlosaries;
 		}
 
-		private Glossary CreateTmxGlossary(string sourceLanguage,string targetLanguage)
+		private Glossary CreateUnidirectionalCsvGlossary(string sourceLanguage,string targetLanguage)
 		{
 			var glossary = new Glossary
 			{
-				Name = new GlossaryName(ProjectName, Location, GlossaryId).ToString(),
+				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, GlossaryId).ToString(),
 				LanguagePair = new Glossary.Types.LanguageCodePair
 				{
 					SourceLanguageCode = sourceLanguage,
@@ -210,7 +205,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				{
 					GcsSource = new GcsSource
 					{
-						InputUri = GlossaryPath
+						InputUri = _options.GlossaryPath
 					}
 				}
 			};
@@ -224,7 +219,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			{
 				var request = new GetSupportedLanguagesRequest
 				{
-					ParentAsLocationName = new LocationName(ProjectName, "global"),
+					ParentAsLocationName = new LocationName(_options.ProjectName, "global"),
 				};
 				var response = _translationServiceClient.GetSupportedLanguages(request);
 
@@ -255,12 +250,8 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 					"test"
 				},
 				TargetLanguageCode = "fr-FR",
-				Parent = new ProjectName(ProjectName).ToString()
+				Parent = new ProjectName(_options.ProjectName).ToString()
 			};
-			//if (!string.IsNullOrEmpty(EngineModel))
-			//{
-			//	request.Model = EngineModel;
-			//}
 			_translationServiceClient.TranslateText(request);
 		}
 
