@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
@@ -20,6 +23,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	{
 		private readonly RestOfFilesParser _restOfFilesParser = new RestOfFilesParser();
 		private AnonymizerSettings _settings;
+		private List<string> _ignoredFiles;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -49,7 +53,17 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted))));
 
 			_restOfFilesParser.ParseRestOfFiles(projectController, TaskFiles,
-				new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted)));
+				new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted)),
+				out _ignoredFiles);
+		}
+
+		public override void TaskComplete()
+		{
+			if (_ignoredFiles.Count > 0)
+			{
+				MessageBox.Show(string.Format(PluginResources.FilesIgnoredByParser, string.Join(Environment.NewLine, _ignoredFiles.ToArray())), PluginResources.IgnoredFiles);
+			}
+			base.TaskComplete();
 		}
 
 		protected override void OnInitializeTask()

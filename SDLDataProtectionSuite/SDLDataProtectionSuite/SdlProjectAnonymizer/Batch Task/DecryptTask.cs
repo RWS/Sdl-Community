@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Process_Xliff;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
@@ -18,6 +20,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	public class DecryptTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private readonly RestOfFilesParser _restOfFilesParser = new RestOfFilesParser();
+		private List<string> _ignoredFiles;
 		private AnonymizerSettings _settings;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -27,8 +30,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		public override void TaskComplete()
 		{
+			if (_ignoredFiles.Count > 0)
+			{
+				MessageBox.Show(string.Format(PluginResources.FilesIgnoredByParser, string.Join(Environment.NewLine, _ignoredFiles.ToArray())), PluginResources.IgnoredFiles);
+			}
 			base.TaskComplete();
-
 			_settings.HasBeenCheckedByControl = false;
 		}
 
@@ -47,7 +53,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
 
-			_restOfFilesParser.ParseRestOfFiles(projectController, TaskFiles, new DecryptDataProcessor(_settings));
+			_restOfFilesParser.ParseRestOfFiles(projectController, TaskFiles, new DecryptDataProcessor(_settings), out _ignoredFiles);
 		}
 
 		protected override void OnInitializeTask()

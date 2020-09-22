@@ -15,10 +15,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private bool _restOfFilesParsed;
+		private readonly List<string> _ignoredList = new List<string>();
 
 		public void ParseRestOfFiles(ProjectsController projectController, ProjectFile[] taskFiles,
-			AbstractBilingualContentProcessor contentProcessor)
+			AbstractBilingualContentProcessor contentProcessor, out List<string> ignoredFiles)
 		{
+			ignoredFiles = _ignoredList;
 			if (_restOfFilesParsed) return;
 
 			var unParsedProjectFiles = GetUnparsedFiles(projectController, taskFiles);
@@ -29,7 +31,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			{
 				if (Path.GetExtension(file.LocalFilePath) != ".sdlxliff")
 				{
-					_logger.Error(PluginResources.FileIgnoredByParser, file.LocalFilePath);
+					_logger.Info(PluginResources.FileIgnoredByParser, file.LocalFilePath);
+					ignoredFiles.Add(file.LocalFilePath);
 					continue;
 				}
 
