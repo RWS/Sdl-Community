@@ -32,9 +32,9 @@ steps:
 # - template: tasks/sign-artifacts/prepare-signing.yml
 
 #  - template: tasks/sign-artifacts/sign-single-artifact.yml
-#     parameters:
-#       fileToSign: 'bin\$(Configuration)\*.exe'
-#       description: 'ChangeScalingBehavior'
+#    parameters:
+#      fileToSign: 'bin\$(Configuration)\*.exe'
+#      description: 'ChangeScalingBehavior'
   
 
 #  - task: PublishBuildArtifacts@1
