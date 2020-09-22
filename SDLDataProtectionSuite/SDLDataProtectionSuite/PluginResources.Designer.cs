@@ -101,6 +101,15 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} was ignored by the parser because it was not in the correct format (.sdlxliff).
+        /// </summary>
+        internal static string FileIgnoredByParser {
+            get {
+                return ResourceManager.GetString("FileIgnoredByParser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon help {
