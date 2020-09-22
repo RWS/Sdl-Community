@@ -193,27 +193,36 @@ namespace Sdl.Community.NumberVerifier.Helpers
 		// Is not corresponding to decimal/thousand separator, it's used as simple punctuation letter (Eg: ,123 or 245, )
 		public string RemovePunctuationChar(string text, char[] sepChars, bool omitLeadingZero)
 		{
+			// we don't want to remove the punctuation marks when OmitLeading Zero is checked so the verification would
+			// be processed correctly
+			if (omitLeadingZero && sepChars.ToList().Contains(text[0]))
+			{
+				return text.Trim();
+			}
+			// if punctuation marks are found at the end of number, remove it (Ex: 245,) because is not part of a thousand or decimal number
 			if (text.Length - 1 == text.LastIndexOfAny(sepChars))
 			{
 				text = text.Remove(text.Length - 1, 1);
 			}
 
-			if (text.IndexOfAny(sepChars) == 0 && !omitLeadingZero)
+			// remove only if the first char is not digit (0-9) and is not representing the negative symbol(−)
+			if (!char.IsDigit(text[0]) && text[0].Equals('−'))
+			{
+				return text.Trim();
+			}
+			// remove only if the first char is not digit (0-9) and is not representing the negative symbol (-)
+			if (!char.IsDigit(text[0]) && text[0].Equals('-'))
+			{
+				return text.Trim();
+			}
+
+			// remove if the first char is not a digit 
+			if (!char.IsDigit(text[0]))
 			{
 				text = text.Remove(0, 1);
 			}
 
-			if (!string.IsNullOrWhiteSpace(text) && IsPunctuationChar(text, sepChars))
-			{
-				text = RemovePunctuationChar(text, sepChars, omitLeadingZero);
-			}
-			
 			return text.Trim();
-		}
-
-		private bool IsPunctuationChar(string text, char[] sepChars)
-		{
-			return text.IndexOfAny(sepChars) == 0 || text.Length - 1 == text.LastIndexOfAny(sepChars);
 		}
 	}
 }

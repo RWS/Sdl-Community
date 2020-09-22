@@ -134,7 +134,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		[InlineData("-.55", "-.55")]
 		public void SourceOmitCheckedTargetUncheckedNegativeNumbersNoError(string source, string target)
 		{
-			var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
+			var errorMessage = SourceOmitUncheckedTargetUnchecked(source, target);
 			Assert.True(errorMessage.Count == 0);
 		}
 
