@@ -33,6 +33,19 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
+       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.HunspellDictionaryManager.exe'
+       description: 'HunspellDictionaryManager'
+  - task: VSBuild@1
+    inputs:
+       solution: '**Sdl.Community.HunspellDictionaryManager.Installer.wixproj'
+       platform: 'x86'
+       configuration: '$(buildConfiguration)'
+       msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
      fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
      description: 'HunspellDictionaryManager'
 
