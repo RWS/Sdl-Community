@@ -40,13 +40,21 @@ namespace ProjectController
 			////projects controler
 			//var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			//var activeProject = projectsController?.CurrentProject;
+
+
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var doc = editorController?.ActiveDocument;
+			//Delete using editor controller available in SR1
+
+			//doc.DeleteAllCommentsWithoutNotification();
+
+
 			if (doc != null)
 			{
 				doc.ContentChanged += Doc_ContentChanged;
-				MessageBox.Show("Subscribed to Content Changed Event",string.Empty , MessageBoxButtons.OK);
+				MessageBox.Show("Subscribed to Content Changed Event", string.Empty, MessageBoxButtons.OK);
 			}
+
 		}
 
 		private void Doc_ContentChanged(object sender, DocumentContentEventArgs e)
