@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ChangeScalingBehavior/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ChangeScalingBehavior/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+  - group: 'SDLPLC Authenticode Credentials'
+  - template: jobs/branch-variables.yml
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: solution
+    value: '**/ChangeScalingBehavior.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+# - template: tasks/sign-artifacts/prepare-signing.yml
+
+#  - template: tasks/sign-artifacts/sign-single-artifact.yml
+#     parameters:
+#       fileToSign: 'bin\$(Configuration)\*.exe'
+#       description: 'ChangeScalingBehavior'
+  
+
+#  - task: PublishBuildArtifacts@1
+#    displayName: 'Publish Artifact'
+#    inputs:
+#      artifactName: SdlFreshstartInstaller
+#      pathToPublish: '$(Build.Repository.LocalPath)\\bin\$(buildConfiguration)'
