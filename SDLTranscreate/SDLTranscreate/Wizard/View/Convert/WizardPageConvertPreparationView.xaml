@@ -28,7 +28,11 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<TextBlock Grid.Row="0" Text="{Binding TextMessage}" Margin="0,10,0,15" FontFamily="Segoe UI" Foreground="{Binding TextMessageBrush}" FontSize="20" TextAlignment="Center" />
+		<TextBlock Grid.Row="0" 
+		           Text="{Binding TextMessage, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+		           Margin="0,10,0,15" FontFamily="Segoe UI" 
+		           Foreground="{Binding TextMessageBrush, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+		           FontSize="20" TextAlignment="Center" />
 
 		<DataGrid
 				Margin="0" 
@@ -40,27 +44,32 @@
 		        Background="White" 
 		        HeadersVisibility="None"
 		        SelectionUnit="FullRow"
-				ItemsSource="{Binding JobProcesses}"
+				ItemsSource="{Binding JobProcesses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 				Style="{StaticResource CustomGridStyle}">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="#" Width="Auto" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:JobProcess">
-							<Button Margin="0" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" 
+							<Button Margin="0" 
+							        VerticalAlignment="Top"
+							        Background="Transparent" 
+							        BorderBrush="Transparent" Cursor="Hand" 
 							        Command="{Binding DataContext.ViewExceptionCommand, ElementName=PreparationViewUserControl}"
 							        CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-								<Image Margin="1" Width="14" Height="14" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased">
+								<Image Margin="1" Width="14" Height="14" 									   
+								       RenderOptions.BitmapScalingMode="HighQuality" 
+								       RenderOptions.EdgeMode="Aliased">
 									<Image.Style>
 										<Style TargetType="Image">
 											<Setter Property="Source" Value="../../../Resources/job_scheduled.gif"/>
 											<Style.Triggers>
-												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Failed">
+												<DataTrigger Binding="{Binding Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="Failed">
 													<Setter Property="Source" Value="../../../Resources/job_failed.gif"/>
 												</DataTrigger>
-												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Running">
+												<DataTrigger Binding="{Binding Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="Running">
 													<Setter Property="Source" Value="../../../Resources/job_running.gif"/>
 												</DataTrigger>
-												<DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="Completed">
+												<DataTrigger Binding="{Binding Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="Completed">
 													<Setter Property="Source" Value="../../../Resources/job_completed.gif"/>
 												</DataTrigger>
 											</Style.Triggers>
@@ -71,11 +80,14 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="Name" Width="Auto" SortMemberPath="Name" IsReadOnly="True">
+				<DataGridTemplateColumn Header="Name" Width="1*" SortMemberPath="Name" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:JobProcess">
-							<TextBlock Text="{Binding Name}" Background="Transparent"
-							           TextWrapping="NoWrap" HorizontalAlignment="Left"  Margin="1" Padding="2,0,0,0">
+							<TextBlock Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+									   VerticalAlignment="Top"
+							           Background="Transparent"
+							           TextWrapping="NoWrap" 
+							           HorizontalAlignment="Left" Margin="2" Padding="2,0,0,0">
 							</TextBlock>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -83,24 +95,60 @@
 				<DataGridTemplateColumn Header="Status" Width="Auto" SortMemberPath="Status" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:JobProcess">
-							<TextBlock Text="{Binding Status}" Background="Transparent"
-							           TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="1" Padding="10,0,0,0">
+							<TextBlock Text="{Binding Status, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+									   VerticalAlignment="Top"
+							           Background="Transparent"
+							           TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="2" Padding="10,0,0,0">
 							</TextBlock>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="Message" Width="*" SortMemberPath="Message" IsReadOnly="True">
+				<DataGridTemplateColumn Header="Progress" Width="1*" SortMemberPath="Status" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:JobProcess">
-							<TextBlock Text="{Binding Message}" Background="Transparent"
-								         TextWrapping="NoWrap" HorizontalAlignment="Right" Margin="1" Padding="5,0,10,0">
+							<Grid VerticalAlignment="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<ProgressBar Grid.Column="0" Minimum="0" Maximum="100" Margin="2" 
+										Height="15"
+							            Value="{Binding Progress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+								<StackPanel Grid.Column="1" Orientation="Horizontal" 
+								            Width="40">
+									<TextBlock Margin="1,2,1,0" 
+									           Text="{Binding Progress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+									<TextBlock Text="%" Margin="1,2,0,0"/>
+								</StackPanel>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="Description" Width="2*" SortMemberPath="Message" IsReadOnly="True">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:JobProcess">
+							<TextBlock Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+							           Background="Transparent" VerticalAlignment="Top"
+							           TextWrapping="Wrap" HorizontalAlignment="Left" Margin="10,2,2,2" >
+							</TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="Message" Width="1*" SortMemberPath="Message" IsReadOnly="True">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:JobProcess">
+							<TextBlock Text="{Binding Message, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+									   VerticalAlignment="Top"
+							           Background="Transparent"
+								       TextWrapping="NoWrap" HorizontalAlignment="Right" Margin="1" Padding="5,0,10,0">
 							</TextBlock>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 		</DataGrid>
-		
+
 		<Grid Grid.Row="2" Margin="0,5,0,5">
 			<Button Content="Open Folder in Explorer" Style="{StaticResource LinkButton}" 
 			        HorizontalAlignment="Left"

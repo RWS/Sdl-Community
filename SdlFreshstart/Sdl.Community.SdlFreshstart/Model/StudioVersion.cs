@@ -107,7 +107,6 @@ namespace Sdl.Community.SdlFreshstart.Model
 			}
 		}
 
-		public string PluginFolder => $"{MajorVersion}{Edition}";
 		public string ProgramDataPluginsPath { get; set; }
 		public string ProgramDataStudioDataSubfolderPath { get; set; }
 		public string ProgramDataStudioPath { get; set; }
