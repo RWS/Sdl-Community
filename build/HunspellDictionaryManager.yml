@@ -38,7 +38,7 @@ steps:
        description: 'HunspellDictionaryManager'
   - task: VSBuild@1
     inputs:
-       solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
+       solution: '**Sdl.Community.HunspellDictionaryManager.Installer.wixproj'
        platform: 'x86'
        configuration: '$(buildConfiguration)'
        msbuildArgs: '/p:RunWixToolsOutOfProc=true'
