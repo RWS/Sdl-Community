@@ -368,6 +368,6 @@
     <value>If this option is enabled, feedback is sent when the segment is confirmed</value>
   </data>
   <data name="SendFeedback_ButtonTooltip" xml:space="preserve">
-	  <value>All the information from Rate It form is sent to the server</value>
+    <value>All the information from the Rate It form is sent to the server</value>
   </data>
 </root>
