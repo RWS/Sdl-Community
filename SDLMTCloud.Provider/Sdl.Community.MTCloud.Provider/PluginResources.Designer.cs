@@ -90,6 +90,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If this option is enabled, feedback is sent when the segment is confirmed.
+        /// </summary>
+        public static string AutoSendFeedback_CheckBoxTooltip {
+            get {
+                return ResourceManager.GetString("AutoSendFeedback_CheckBoxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap defaultStar {
@@ -651,6 +660,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("selectedStar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All the information from Rate It form is sent to the server.
+        /// </summary>
+        public static string SendFeedback_ButtonTooltip {
+            get {
+                return ResourceManager.GetString("SendFeedback_ButtonTooltip", resourceCulture);
             }
         }
         

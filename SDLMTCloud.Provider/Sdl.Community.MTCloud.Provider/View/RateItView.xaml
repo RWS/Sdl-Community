@@ -98,7 +98,8 @@
 			          Style="{StaticResource OptionsCheckboxesStyle}"
 			          IsEnabled="{Binding IsSendFeedbackEnabled}"
 			          Content="{x:Static rsx:PluginResources.AutoSendFeedback}"
-			          IsChecked="{Binding AutoSendFeedback}" />
+			          IsChecked="{Binding AutoSendFeedback}" 
+			          ToolTip="{x:Static rsx:PluginResources.AutoSendFeedback_CheckBoxTooltip}"/>
 
 			<TextBox  Style="{DynamicResource WatermarkTextBox}" watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
 					  HorizontalAlignment="Stretch"
@@ -111,7 +112,8 @@
 					Margin="10 0 0 0"
 					Style="{StaticResource FeedbackButtonStyle}"
 					Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}"
-				    Command="{Binding SendFeedbackCommand}">
+				    Command="{Binding SendFeedbackCommand}"
+					ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
 			</Button>
 		</Grid>
 	</ScrollViewer>
