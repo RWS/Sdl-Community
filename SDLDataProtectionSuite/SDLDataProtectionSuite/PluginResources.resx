@@ -225,4 +225,17 @@
   <data name="question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FileIgnoredByParser" xml:space="preserve">
+    <value>{0} was ignored by the parser because it was not in the correct format (.sdlxliff)</value>
+  </data>
+  <data name="IgnoredFiles" xml:space="preserve">
+    <value>Ignored files</value>
+  </data>
+  <data name="FilesIgnoredByParser" xml:space="preserve">
+    <value>Files: 
+
+   {0}
+
+were ignored by the parser because they were not in the correct format (.sdlxliff)</value>
+  </data>
 </root>

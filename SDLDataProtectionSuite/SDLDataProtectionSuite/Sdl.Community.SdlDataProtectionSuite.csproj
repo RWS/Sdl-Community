@@ -56,7 +56,13 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -167,6 +173,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Log.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -181,6 +188,7 @@
     <Compile Include="SdlProjectAnonymizer\ApplicationInitializer.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptSettingsPage.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptTask.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\RestOfFilesParser.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\StateEnum.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\AgreementMethods.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\CheckBoxHeaderCellEventArgs.cs" />

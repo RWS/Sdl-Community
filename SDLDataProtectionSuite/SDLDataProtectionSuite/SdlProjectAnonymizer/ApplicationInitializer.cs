@@ -10,6 +10,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer
 		public void Execute()
 		{
 			ActiveViewService.Instance.Initialize();
+			Log.Setup();
 		}
 	}
 }
