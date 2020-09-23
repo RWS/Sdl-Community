@@ -23,7 +23,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	{
 		private readonly RestOfFilesParser _restOfFilesParser = new RestOfFilesParser();
 		private AnonymizerSettings _settings;
-		private List<string> _ignoredFiles = new List<string>();
+		private List<string> _ignoredFiles;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -59,7 +59,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		public override void TaskComplete()
 		{
-			if (_ignoredFiles.Count > 0)
+			if (_ignoredFiles?.Count > 0)
 			{
 				MessageBox.Show(string.Format(PluginResources.FilesIgnoredByParser, string.Join(Environment.NewLine, _ignoredFiles.ToArray())), PluginResources.IgnoredFiles);
 			}
