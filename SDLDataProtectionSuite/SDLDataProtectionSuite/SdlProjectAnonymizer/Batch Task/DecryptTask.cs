@@ -19,8 +19,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	[RequiresSettings(typeof(AnonymizerSettings), typeof(DecryptSettingsPage))]
 	public class DecryptTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private readonly RestOfFilesParser _restOfFilesParser = new RestOfFilesParser();
 		private List<string> _ignoredFiles;
+		private RestOfFilesParser _restOfFilesParser;
 		private AnonymizerSettings _settings;
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -30,9 +30,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		public override void TaskComplete()
 		{
-			if (_ignoredFiles.Count > 0)
+			if (_ignoredFiles?.Count > 0)
 			{
-				MessageBox.Show(string.Format(PluginResources.FilesIgnoredByParser, string.Join(Environment.NewLine, _ignoredFiles.ToArray())), PluginResources.IgnoredFiles);
+				MessageBox.Show(string.Format(PluginResources.FilesIgnoredByParser, string.Join(Environment.NewLine, _ignoredFiles.ToArray())), PluginResources.SDLDataProtectionSuite);
 			}
 			base.TaskComplete();
 			_settings.HasBeenCheckedByControl = false;
@@ -58,6 +58,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		protected override void OnInitializeTask()
 		{
+			_restOfFilesParser = new RestOfFilesParser();
 			_settings = GetSetting<AnonymizerSettings>();
 		}
 	}

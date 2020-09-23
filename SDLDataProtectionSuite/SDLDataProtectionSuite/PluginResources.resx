@@ -228,8 +228,8 @@
   <data name="FileIgnoredByParser" xml:space="preserve">
     <value>{0} was ignored by the parser because it was not in the correct format (.sdlxliff)</value>
   </data>
-  <data name="IgnoredFiles" xml:space="preserve">
-    <value>Ignored files</value>
+  <data name="SDLDataProtectionSuite" xml:space="preserve">
+    <value>SDL Data Protection Suite</value>
   </data>
   <data name="FilesIgnoredByParser" xml:space="preserve">
     <value>Files: 
