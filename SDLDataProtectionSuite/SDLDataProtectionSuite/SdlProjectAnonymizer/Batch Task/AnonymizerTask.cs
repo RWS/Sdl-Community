@@ -23,7 +23,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	{
 		private readonly RestOfFilesParser _restOfFilesParser = new RestOfFilesParser();
 		private AnonymizerSettings _settings;
-		private List<string> _ignoredFiles;
+		private List<string> _ignoredFiles = new List<string>();
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
