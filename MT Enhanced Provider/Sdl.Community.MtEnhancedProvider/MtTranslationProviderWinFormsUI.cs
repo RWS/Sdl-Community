@@ -156,7 +156,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			var dialogService = new OpenFileDialogService();
 		    var providerControlVm = new ProviderControlViewModel(loadOptions);
 
-		    var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService);
+		    var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService,false);
 		    var mainWindowVm = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm, credentialStore,languagePairs);
 
 		    var mainWindow = new MainWindow

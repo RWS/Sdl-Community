@@ -20,14 +20,16 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private bool _sendPlainText;
 		private bool _doPreLookup;
 		private bool _doPostLookup;
+		private bool _isTellMeAction;
 		private string _preLookupFileName;
 		private string _postLookupFileName;
 		private string _errorMessage;
 
-		public SettingsControlViewModel(IMtTranslationOptions options, IOpenFileDialogService openFileDialogService)
+		public SettingsControlViewModel(IMtTranslationOptions options, IOpenFileDialogService openFileDialogService,bool isTellMeAction)
 		{
 			ViewModel = this;
 			_options = options;
+			IsTellMeAction = isTellMeAction;
 			BrowseCommand = new RelayCommand(Browse);
 			_openFileDialogService = openFileDialogService;
 
@@ -130,6 +132,18 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
+
+		public bool IsTellMeAction
+		{
+			get => _isTellMeAction;
+			set
+			{
+				if (_isTellMeAction == value) return;
+				_isTellMeAction = value;
+				OnPropertyChanged(nameof(IsTellMeAction));
+			}
+		}
+
 		private void SetSavedSettings()
 		{
 			ReSendDraft = _options.ResendDrafts;

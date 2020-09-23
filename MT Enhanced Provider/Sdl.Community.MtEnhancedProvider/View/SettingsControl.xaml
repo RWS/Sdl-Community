@@ -37,6 +37,7 @@
 		<Grid Grid.Row="0">
 			<Button Style="{StaticResource TransparentButtonStyle}"
 			        HorizontalAlignment="Left"
+					IsEnabled="{Binding IsTellMeAction, Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 			        Command="{Binding ShowMainWindowCommand}">
 				<DockPanel>
 					<Image Source="../Resources/backImg.png" Width="auto" Height="15"/>

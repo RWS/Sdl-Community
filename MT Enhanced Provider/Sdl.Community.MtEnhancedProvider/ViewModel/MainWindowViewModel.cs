@@ -18,6 +18,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 	{
 		private ViewDetails _selectedView;
 		private bool _dialogResult;
+		private readonly bool _isTellMeAction;
 		private string _errorMessage;
 		private string _translatorErrorResponse;
 		private readonly IProviderControlViewModel _providerControlViewModel;
@@ -58,6 +59,28 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			};
 
 			ShowProvidersPage();
+		}
+
+		public MainWindowViewModel(IMtTranslationOptions options, ISettingsControlViewModel settingsControlViewModel,bool isTellMeAction)
+		{
+			Options = options;
+			_isTellMeAction = isTellMeAction;
+			_settingsControlViewModel = settingsControlViewModel;
+			SaveCommand = new RelayCommand(Save);
+
+			AvailableViews = new List<ViewDetails>
+			{
+				new ViewDetails
+				{
+					Name = PluginResources.SettingsView,
+					ViewModel = settingsControlViewModel.ViewModel
+				}
+			};
+
+			if (_isTellMeAction)
+			{
+				SelectedView = AvailableViews[0];
+			}
 		}
 
 		public ViewDetails SelectedView
@@ -231,11 +254,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		private void Save(object window)
 		{
-			if (IsWindowValid())
+			if (_isTellMeAction)
 			{
+				SetGeneralProviderOptions();
+				DialogResult = true;
+				CloseEventRaised?.Invoke();
+			}
+			else
+			{
+				if (!IsWindowValid()) return;
 				SetMicrosoftProviderOptions();
 				SetGoogleProviderOptions();
-
 				SetGeneralProviderOptions();
 				DeleteCredentialsIfNecessary();
 				DialogResult = true;
@@ -352,12 +381,15 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		private void SetGeneralProviderOptions()
 		{
-			Options.SendPlainTextOnly = _settingsControlViewModel.SendPlainText;
-			Options.ResendDrafts = _settingsControlViewModel.ReSendDraft;
-			Options.UsePreEdit = _settingsControlViewModel.DoPreLookup;
-			Options.PreLookupFilename = _settingsControlViewModel.PreLookupFileName;
-			Options.UsePostEdit = _settingsControlViewModel.DoPostLookup;
-			Options.PostLookupFilename = _settingsControlViewModel.PostLookupFileName;
+			if (_settingsControlViewModel != null)
+			{
+				Options.SendPlainTextOnly = _settingsControlViewModel.SendPlainText;
+				Options.ResendDrafts = _settingsControlViewModel.ReSendDraft;
+				Options.UsePreEdit = _settingsControlViewModel.DoPreLookup;
+				Options.PreLookupFilename = _settingsControlViewModel.PreLookupFileName;
+				Options.UsePostEdit = _settingsControlViewModel.DoPostLookup;
+				Options.PostLookupFilename = _settingsControlViewModel.PostLookupFileName;
+			}
 
 			if (Options != null && Options.LanguagesSupported == null)
 			{
