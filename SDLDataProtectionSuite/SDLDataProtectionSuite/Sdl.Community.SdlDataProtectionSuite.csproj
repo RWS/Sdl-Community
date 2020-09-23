@@ -48,6 +48,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
@@ -161,6 +164,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Log.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,6 +179,7 @@
     <Compile Include="SdlProjectAnonymizer\ApplicationInitializer.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptSettingsPage.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\DecryptTask.cs" />
+    <Compile Include="SdlProjectAnonymizer\Batch Task\RestOfFilesParser.cs" />
     <Compile Include="SdlProjectAnonymizer\Batch Task\StateEnum.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\AgreementMethods.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\CheckBoxHeaderCellEventArgs.cs" />
@@ -535,8 +540,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
     <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\de\de.zip" />
     <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\en\en.zip" />
     <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\es\es.zip" />
@@ -551,6 +554,8 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SdlTmAnonymizer\Connected Services\" />
