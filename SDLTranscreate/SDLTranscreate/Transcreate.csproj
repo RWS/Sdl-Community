@@ -210,6 +210,7 @@
     <Compile Include="FileTypeSupport\SDLXLIFF\SegmentBuilder.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SegmentVisitor.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Body.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Context.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\DocInfo.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Element.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementComment.cs" />

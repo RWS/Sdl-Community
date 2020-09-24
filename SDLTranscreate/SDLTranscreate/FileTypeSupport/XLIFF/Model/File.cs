@@ -30,9 +30,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 				SourceLanguage = SourceLanguage,
 				TargetLanguage = TargetLanguage,
 				DataType = DataType,
+				Header = Header.Clone() as Header,
 				Body = Body.Clone() as Body
 			};
-
+			
 			return file;
 		}
 	}

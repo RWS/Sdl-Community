@@ -12,7 +12,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 	{
 		private const string NsPrefix = "sdlxliff";
 		private Dictionary<string, List<IComment>> Comments { get; set; }
-		
+
 		private bool IncludeTranslations { get; set; }
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
@@ -52,7 +52,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 					//writer.WriteAttributeString("datatype", xliffFile.DataType);
 					writer.WriteAttributeString("datatype", "xml");
-					
+
 					WriterFileHeader(writer, xliffFile);
 					WriteFileBody(writer, xliffFile);
 
@@ -70,8 +70,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
-			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);			
-			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);			
+			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
+			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
 
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
@@ -150,6 +150,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			WriteSegSource(writer, transUnit);
 			WriteTargetParagraph(writer, transUnit);
 			WriteSdlSegDefs(writer, transUnit);
+			WriteSdlSegCtxs(writer, transUnit);
 
 			writer.WriteEndElement(); // trans-unit
 		}
@@ -190,6 +191,27 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			}
 
 			writer.WriteEndElement(); //sdl:seg
+		}
+
+		private void WriteSdlSegCtxs(XmlWriter writer, TransUnit transUnit)
+		{
+			writer.WriteStartElement(NsPrefix, "seg-cxts", null);
+
+			foreach (var context in transUnit.Contexts)
+			{
+				WriteSdlSegCtx(writer, context);
+			}
+
+			writer.WriteEndElement(); //sdl:seg-cxts
+		}
+
+		private void WriteSdlSegCtx(XmlWriter writer, Context context)
+		{
+			writer.WriteStartElement(NsPrefix, "cxt", null);
+
+			writer.WriteAttributeString("id", context.Id);
+
+			writer.WriteEndElement(); //sdl:cxt
 		}
 
 		private static void WriteTranslationOrigin(XmlWriter writer, ITranslationOrigin translationOrigin)
@@ -396,7 +418,38 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 				writer.WriteEndElement(); // skl
 			}
+
+			WriterContextDefinitions(writer, xliffFile);
+
 			writer.WriteEndElement(); // header
+		}
+
+		private void WriterContextDefinitions(XmlWriter writer, File xliffFile)
+		{
+			writer.WriteStartElement("cxt-defs");
+
+			foreach (var context in xliffFile.Header.Contexts)
+			{
+				writer.WriteStartElement("cxt-def");
+				writer.WriteAttributeString("id", context.Id);
+				writer.WriteAttributeString("type", context.ContextType);
+				writer.WriteAttributeString("code", context.DisplayCode.Trim());
+				writer.WriteAttributeString("name", context.DisplayName.Trim());
+				writer.WriteAttributeString("descr", context.Description);
+				writer.WriteEndElement(); // cxt-def
+
+				writer.WriteStartElement("props");
+				foreach (var metaData in context.MetaData)
+				{
+					writer.WriteStartElement("value");
+					writer.WriteAttributeString("key", metaData.Key);
+					writer.WriteString(metaData.Value);
+					writer.WriteEndElement(); // value
+				}
+				writer.WriteEndElement(); // props
+			}
+
+			writer.WriteEndElement(); // cxt-defs
 		}
 
 		private bool AddSpaceBetweenSegmentationPosition(TransUnit transUnit, int index)
@@ -438,6 +491,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			}
 
 			return value;
-		}		
+		}
 	}
 }
