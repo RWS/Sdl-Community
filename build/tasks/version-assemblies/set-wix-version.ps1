@@ -18,7 +18,7 @@ $vers=[Version]::new($ProductVersion)
 #$vers.Build is the third part of the version type in which we store the patch/cu number
 #$vers.Revision is the fourth part of the version type in which we store the build number
 
-$InstallerVersion="$($vers.Major).$($vers.Minor).$($vers.Patch).$($vers.Revision)"
+$InstallerVersion="$($vers.Major).$($vers.Minor).$($vers.Build).$($vers.Revision)"
 
 write-output "InstallerVersion=$InstallerVersion"
 write-output "ProductIdentifier=$ProductIdentifier"
