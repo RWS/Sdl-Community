@@ -13,4 +13,4 @@ write-output "`$VersionString=$VersionString"
 
 & "$PSScriptRoot\apply-version-to-sourcefiles.ps1" "$PathToVersion" "$VersionString" "*Info.cs" "AssemblyVersionAttribute;AssemblyVersionAttribute;FileVersion" "$ProductIdentifier"
 
-& "$PSScriptRoot\set-wix-version.ps1" "$VersionString" "$ProductIdentifier" "$FullProductName" "$InstallerDisplayName" "$PathToVersion\*Installer\defines.wxi"
+& "$PSScriptRoot\set-wix-version.ps1" "$VersionString" "$ProductIdentifier" "$FullProductName" "$InstallerDisplayName" "$PathToVersion\..\*Installer\defines.wxi"
