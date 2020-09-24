@@ -11,12 +11,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 	public class Xliff12PolyglotWriter : IXliffWriter
 	{
 		private const string NsPrefix = "sdlxliff";
-		private Dictionary<string, List<IComment>> Comments { get; set; }
-		
+		private Dictionary<string, List<IComment>> Comments { get; set; }		
+
 		private bool IncludeTranslations { get; set; }
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
-		{
+		{			
 			Comments = xliff.DocInfo.Comments;
 			IncludeTranslations = includeTranslations;
 
@@ -96,8 +96,30 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			writer.WriteAttributeString("id", transUnit.Id);
 
 			WriteTransUnitPolytlot(writer, transUnit);
+			WriteSdlSegCtxs(writer, transUnit);
 
 			writer.WriteEndElement(); // group
+		}
+
+		private void WriteSdlSegCtxs(XmlWriter writer, TransUnit transUnit)
+		{
+			writer.WriteStartElement(NsPrefix, "seg-cxts", null);
+
+			foreach (var context in transUnit.Contexts)
+			{
+				WriteSdlSegCtx(writer, context);
+			}
+
+			writer.WriteEndElement(); //sdl:seg-cxts
+		}
+
+		private void WriteSdlSegCtx(XmlWriter writer, Context context)
+		{
+			writer.WriteStartElement(NsPrefix, "cxt", null);
+			
+			writer.WriteAttributeString("id", context.Id);
+
+			writer.WriteEndElement(); //sdl:cxt
 		}
 
 		private void WriteTransUnitPolytlot(XmlWriter writer, TransUnit transUnit)
@@ -280,7 +302,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 						break;
 				}
 			}
-		}
+		}		
 
 		private void WriterFileHeader(XmlWriter writer, File xliffFile)
 		{
@@ -296,7 +318,39 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 				writer.WriteEndElement(); // skl
 			}
+
+			WriterContextDefinitions(writer, xliffFile);
+
 			writer.WriteEndElement(); // header
+		}
+
+		private void WriterContextDefinitions(XmlWriter writer, File xliffFile)
+		{
+			writer.WriteStartElement("cxt-defs");
+
+			foreach (var context in xliffFile.Header.Contexts)
+			{
+				writer.WriteStartElement("cxt-def");
+				writer.WriteAttributeString("id", context.Id);
+				writer.WriteAttributeString("type", context.ContextType);
+				writer.WriteAttributeString("code", context.DisplayCode.Trim());
+				writer.WriteAttributeString("name", context.DisplayName.Trim());
+				writer.WriteAttributeString("descr", context.Description);
+
+				writer.WriteStartElement("props");
+				foreach (var metaData in context.MetaData)
+				{
+					writer.WriteStartElement("value");
+					writer.WriteAttributeString("key", metaData.Key);
+					writer.WriteString(metaData.Value);
+					writer.WriteEndElement(); // value
+				}
+				writer.WriteEndElement(); // props
+
+				writer.WriteEndElement(); // cxt-def
+			}
+
+			writer.WriteEndElement(); // cxt-defs
 		}
 
 		private string GetDateToString(DateTime date)

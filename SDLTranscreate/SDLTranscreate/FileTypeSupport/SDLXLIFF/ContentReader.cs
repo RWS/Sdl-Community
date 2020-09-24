@@ -29,6 +29,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private SegmentVisitor _segmentVisitor;
 		private SegmentPairProcessor _segmentPairProcessor;
 		private string _productName;
+		private int _contextIndex;
 
 		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
 			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
@@ -37,6 +38,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
+			_contextIndex = 0;
 
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
@@ -124,6 +126,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			// not used for this implementation
 		}
 
+
+
 		public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			if (paragraphUnit.IsStructure || !paragraphUnit.SegmentPairs.Any())
@@ -135,6 +139,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			{
 				Id = paragraphUnit.Properties.ParagraphUnitId.Id
 			};
+
+			UpdateContexts(paragraphUnit, transUnit);
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
@@ -232,6 +238,50 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			if (transUnit.SegmentPairs.Count > 0)
 			{
 				Xliff.Files[Xliff.Files.Count - 1].Body.TransUnits.Add(transUnit);
+			}
+		}
+
+		private void UpdateContexts(IParagraphUnit paragraphUnit, TransUnit transUnit)
+		{
+			if (paragraphUnit.Properties.Contexts?.Contexts != null)
+			{
+				foreach (var context in paragraphUnit.Properties.Contexts.Contexts)
+				{
+					var existingContext = Xliff.Files[Xliff.Files.Count - 1].Header.Contexts.FirstOrDefault(a =>
+						string.Compare(a.ContextType, context.ContextType, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+						string.Compare(a.DisplayCode, context.DisplayCode, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+						string.Compare(a.DisplayName, context.DisplayName, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+						string.Compare(a.Description, context.Description, StringComparison.CurrentCultureIgnoreCase) == 0);
+
+					if (existingContext != null)
+					{
+						transUnit.Contexts.Add(existingContext);
+					}
+					else
+					{
+						_contextIndex++;
+
+						var newContext = new Context
+						{
+							Id = _contextIndex.ToString(),
+							ContextType = context.ContextType,
+							Description = context.Description,
+							DisplayCode = context.DisplayCode,
+							DisplayName = context.DisplayName
+						};
+
+						if (context.MetaData != null)
+						{
+							foreach (var metaData in context.MetaData)
+							{
+								newContext.MetaData.Add(metaData.Key, metaData.Value);
+							}
+						}
+						
+						Xliff.Files[Xliff.Files.Count - 1].Header.Contexts.Add(newContext);
+						transUnit.Contexts.Add(newContext);
+					}
+				}
 			}
 		}
 

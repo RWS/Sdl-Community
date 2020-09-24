@@ -1,0 +1,61 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ChangeScalingBehavior/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ChangeScalingBehavior/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- group: 'SDLPLC Authenticode Credentials'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/ChangeScalingBehavior.sln'
+
+- name: Version.MajorMinorPatch
+  value: 1.0.3
+
+- name: Version.Year
+  value: 2021
+
+- name: Version.Revision
+  value: $[counter(variables['Version.MajorMinorPatch'], 0)]
+
+- name: PipelineVersion
+  value: $(Version.MajorMinorPatch).$(Version.Revision)
+
+name: $(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+steps:
+  - template: tasks/version-assemblies/version-assemblies.yml
+    parameters:
+      PathToVersion: '$(Build.SourcesDirectory)\ChangeScalingBehavior\ChangeScalingBehavior\Properties'
+  - template: jobs/build-sdlplugin.yml
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+      fileToSign: '$(Build.Repository.LocalPath)\ChangeScalingBehavior\ChangeScalingBehavior\bin\$(buildConfiguration)\ChangeScalingBehavior.exe'
+      description: 'ChangeScalingBehavior'
+  
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      artifactName: ChangeScalingBehavior
+      pathToPublish: '$(Build.Repository.LocalPath)\ChangeScalingBehavior\ChangeScalingBehavior\bin\$(buildConfiguration)\ChangeScalingBehavior.exe'

@@ -78,7 +78,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				base.ProcessParagraphUnit(paragraphUnit);
 				return;
 			}
-
+			
 			var importedTransUnit = GetTransUnit(paragraphUnit);
 			if (importedTransUnit == null)
 			{
@@ -111,6 +111,25 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 				base.ProcessParagraphUnit(paragraphUnit);
 				return;
+			}
+
+			if (importedTransUnit.Contexts.Count > 0)
+			{
+				var contexts = paragraphUnit.Properties.Contexts.Contexts;
+				foreach (var importContext in importedTransUnit.Contexts)
+				{
+					var existingContext = contexts.FirstOrDefault(a =>
+						string.Compare(a.ContextType, importContext.ContextType, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+						string.Compare(a.DisplayCode, importContext.DisplayCode, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+						string.Compare(a.DisplayName, importContext.DisplayName, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+						string.Compare(a.Description, importContext.Description, StringComparison.CurrentCultureIgnoreCase) == 0);
+
+					if (existingContext == null)
+					{
+						var newContext = _segmentBuilder.CreateContextInfo(importContext);
+						contexts.Add(newContext);
+					}
+				}
 			}
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)

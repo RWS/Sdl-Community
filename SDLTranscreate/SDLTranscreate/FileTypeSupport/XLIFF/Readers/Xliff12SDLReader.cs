@@ -29,7 +29,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 			var xmlTextReader = new XmlTextReader(filePath);
 			var xmlReaderSettings = new XmlReaderSettings
 			{
-				ValidationType = ValidationType.None, IgnoreWhitespace = true, IgnoreComments = true
+				ValidationType = ValidationType.None,
+				IgnoreWhitespace = true,
+				IgnoreComments = true
 			};
 			using (var xmlReader = XmlReader.Create(xmlTextReader, xmlReaderSettings))
 			{
@@ -76,7 +78,36 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 				}
 			}
 
+			UpdateTransUnitContextInfo(xliff);
+
 			return xliff;
+		}
+
+		private static void UpdateTransUnitContextInfo(Xliff xliff)
+		{
+			foreach (var file in xliff.Files)
+			{
+				foreach (var transUnit in file.Body.TransUnits)
+				{
+					if (transUnit.Contexts.Count <= 0)
+					{
+						continue;
+					}
+
+					foreach (var context in transUnit.Contexts)
+					{
+						var existingContext = file.Header.Contexts.FirstOrDefault(a => a.Id == context.Id);
+						if (existingContext != null)
+						{
+							context.ContextType = existingContext.ContextType;
+							context.DisplayName = existingContext.DisplayName;
+							context.DisplayCode = existingContext.DisplayCode;
+							context.Description = existingContext.Description;
+							context.MetaData = existingContext.MetaData;
+						}
+					}
+				}
+			}
 		}
 
 		private DocInfo ReadDocInfo(XmlReader xmlReader)
@@ -331,11 +362,182 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 							file.Body = ReadBody(xmlReaderSub);
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "header", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							file.Header = ReadHeader(xmlReaderSub);
+							xmlReaderSub.Close();
+						}
 						break;
 				}
 			}
 
 			return file;
+		}
+
+		private Header ReadHeader(XmlReader xmlReader)
+		{
+			var header = new Header();
+
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (string.Compare(xmlReader.Name, "cxt-defs", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							header.Contexts = ReadContextDefinitions(xmlReaderSub);
+							xmlReaderSub.Close();
+						}
+						break;
+				}
+			}
+
+			return header;
+		}
+
+		private List<Context> ReadContextDefinitions(XmlReader xmlReader)
+		{
+			var contexts = new List<Context>();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "cxt-defs", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							//ignore
+						}
+						else if (string.Compare(xmlReader.Name, "cxt-def", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							contexts.Add(ReadContextDefinition(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
+						else if (string.Compare(xmlReader.Name, "props", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							contexts[contexts.Count - 1].MetaData = ReadContextProperties(xmlReaderSub);
+							xmlReaderSub.Close();
+						}
+						break;
+				}
+			}
+
+			return contexts;
+		}
+
+		private Context ReadContextDefinition(XmlReader xmlReader)
+		{
+			var context = new Context();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "cxt-def", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.Id = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "type", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.ContextType = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "name", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.DisplayName = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "code", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.DisplayCode = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "descr", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.Description = xmlReader.Value;
+								}
+							}
+						}						
+						break;
+				}
+			}
+
+			return context;
+		}
+
+		private Dictionary<string, string> ReadContextProperties(XmlReader xmlReader)
+		{
+			var dict = new Dictionary<string, string>();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "props", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							// ignore
+						}
+
+						if (string.Compare(xmlReader.Name, "value", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							var kvp = ReadContextMetaData(xmlReaderSub);
+							dict.Add(kvp.Key, kvp.Value);
+							xmlReaderSub.Close();
+						}
+						break;
+
+				}
+			}
+
+			return dict;
+		}
+
+		private KeyValuePair<string, string> ReadContextMetaData(XmlReader xmlReader)
+		{
+			var key = string.Empty;
+			var value = string.Empty;
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "value", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "key", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									key = xmlReader.Value;
+								}
+							}
+						}
+						break;
+					case XmlNodeType.Text:
+						{
+							value += xmlReader.Value;
+						}
+						break;
+				}
+			}
+
+			return new KeyValuePair<string, string>(key, value);
 		}
 
 		private Body ReadBody(XmlReader xmlReader)
@@ -399,6 +601,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 			var sourceSegments = new List<Source>();
 			var targetSegments = new List<Target>();
 			var segmentPairProperties = new List<ISegmentPairProperties>();
+			var contexts = new List<Context>();
 
 			var index = 0;
 			while (xmlReader.Read())
@@ -435,6 +638,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 							segmentPairProperties = ReadSegmentPairPropertyDefinitions(xmlReaderSub);
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, NsPrefix + ":seg-cxts", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							contexts = ReadTransUnitContexts(xmlReaderSub);
+							xmlReaderSub.Close();
+						}
 
 						break;
 				}
@@ -463,7 +672,31 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 				transUnit.SegmentPairs.Add(segmentPair);
 			}
 
+			transUnit.Contexts = contexts;
+
 			return transUnit;
+		}
+
+		private List<Context> ReadTransUnitContexts(XmlReader xmlReader)
+		{
+			var contexts = new List<Context>();
+
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (string.Compare(xmlReader.Name, NsPrefix + ":cxt", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							contexts.Add(ReadSdlCtx(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
+						break;
+				}
+			}
+
+			return contexts;
 		}
 
 		private List<ISegmentPairProperties> ReadSegmentPairPropertyDefinitions(XmlReader xmlReader)
@@ -487,7 +720,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 
 			return segmentPairProperties;
 		}
-
 
 		private List<Source> ReadSourceSegments(XmlReader xmlReader)
 		{
@@ -1011,6 +1243,50 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 			}
 
 			return elements;
+		}
+
+		private Context ReadSdlCtx(XmlReader xmlReader)
+		{
+			var context = new Context();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, NsPrefix + ":cxt", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.Id = xmlReader.Value;
+								}
+								else if (string.Compare(xmlReader.Name, "type", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.ContextType = xmlReader.Value;
+								}
+								else if (string.Compare(xmlReader.Name, "name", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.DisplayName = xmlReader.Value;
+								}
+								else if (string.Compare(xmlReader.Name, "code", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.DisplayCode = xmlReader.Value;
+								}
+								else if (string.Compare(xmlReader.Name, "descr", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									context.Description = xmlReader.Value;
+								}
+							}
+						}
+						break;
+				}
+			}
+
+			return context;
 		}
 
 		private ISegmentPairProperties ReadSdlSeg(XmlReader xmlReader)

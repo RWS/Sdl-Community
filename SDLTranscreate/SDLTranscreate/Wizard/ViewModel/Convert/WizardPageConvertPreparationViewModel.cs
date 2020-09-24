@@ -15,6 +15,7 @@ using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
+using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
@@ -291,6 +292,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					WizardContext.ExportOptions, WizardContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
 
+				var xliffReader = new XliffReder(new XliffSniffer(), _segmentBuilder);
+
 				var sourceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name;
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.Label_Language, sourceLanguage));
@@ -304,9 +307,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				var targetProjectFiles = new List<ProjectFile>();
 				var targetLangauges = GetTargetLangauges(project);
-				for (var i = 0; i < targetLangauges.Count; i++)
+				foreach (var targetLanguage in targetLangauges)
 				{
-					var targetLanguage = targetLangauges[i];
 					var cultureInfo = new Language(new CultureInfo(targetLanguage));
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, jobProcess.Progress + unit, string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, cultureInfo.DisplayName));
 
@@ -858,6 +860,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 							{
 								tu.SegmentPairs.Add(sp);
 							}
+						}
+
+						foreach (var context in transUnit.Contexts)
+						{
+							tu.Contexts.Add(context.Clone() as Context);
 						}
 
 						newFile.Body.TransUnits.Add(tu);

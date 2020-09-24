@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
@@ -26,7 +27,21 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		public ITranslationOrigin CreateTranslationOrigin()
 		{
-			return _factory.CreateTranslationOrigin();
+			return _factory.CreateTranslationOrigin();			
+		}
+
+		public IContextInfo CreateContextInfo(Context context)
+		{
+			var contextInfo = _propertiesFactory.CreateContextInfo(context.ContextType);
+			contextInfo.DisplayName = context.DisplayName;
+			contextInfo.DisplayCode = context.DisplayCode;
+			contextInfo.Description = context.Description;
+			foreach (var metaData in context.MetaData)
+			{
+				contextInfo.SetMetaData(metaData.Key, metaData.Value);
+			}
+
+			return contextInfo;
 		}
 
 		public IAbstractMarkupData CreatePlaceholder(string tagId, string tagContent)
