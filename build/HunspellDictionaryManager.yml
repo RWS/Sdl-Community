@@ -44,7 +44,7 @@ steps:
   - template: tasks/version-assemblies/version-assemblies.yml
     parameters:
       PathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\HunspellDictionaryManager\Properties'
-      InstallPathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer'
+      InstallPathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\defines.wxi'
  
   - template: jobs/build-sdlplugin.yml
 
