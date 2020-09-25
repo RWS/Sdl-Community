@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="$(var.productVersion)" Manufacturer="Sdl Community" UpgradeCode="F6741828-198D-43B2-A0F8-2D96C5443390">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
