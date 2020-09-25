@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <?define productVersion = "3.0.1.2"?>
+  <?define versionedName = "Studio16"?>
+  <!--Upgrade code only change per new baseline (rtm or SP release).-->
+  <?define upgradeCode = "4D8ED4AB-A267-4E57-9EDF-783DD990E9DE"?>
+  <?define AppName = "HunspellDictionaryManager"?>
+
+  <!--InstallFolder=Studio16;Version=3.0.1.2;StudioVersion=16;Manufacturer=SDL Community;AppName=HunspellDictionaryManager;SourcePath=../build-->
+</Include>

@@ -12,14 +12,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio16\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants>Debug;Version=3.0.1.6</DefineConstants>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Version=3.0.1.6</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="defines.wxi" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
   </ItemGroup>
