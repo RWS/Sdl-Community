@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.10</ProductVersion>
-    <ProjectGuid>680a51b9-3b9c-4022-a7a5-f2aa309fe967</ProjectGuid>
+    <ProjectGuid>BA98AC17-29F3-4664-BAD9-A02C569BC558</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Sdl.Community.HunspellDictionaryManager.Installer</OutputName>
     <OutputType>Package</OutputType>
