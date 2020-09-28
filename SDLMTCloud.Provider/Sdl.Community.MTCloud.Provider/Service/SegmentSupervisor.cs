@@ -120,6 +120,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			ActiveDocument.ActiveSegmentChanged += ActiveDocumentOnActiveSegmentChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+			ActiveDocumentOnActiveSegmentChanged(((EditorController)sender).ActiveDocument, e);
 		}
 
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
