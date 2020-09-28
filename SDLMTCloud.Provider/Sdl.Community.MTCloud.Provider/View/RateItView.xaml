@@ -109,35 +109,46 @@
 					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding FeedbackMessage,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
-			<StackPanel Grid.Row="1" Grid.Column="1">
-				<Button 
-				        Margin="10 0 0 0"
-				        Cursor="Hand"
+			
+				<Button Grid.Row="1"
+						Grid.Column="1"
+						Margin="10 0 10 0"
+						Cursor="Hand"
+						HorizontalAlignment="Stretch"
+						HorizontalContentAlignment="Stretch"
 						IsEnabled="{Binding IsSendFeedbackEnabled}"
-				        Style="{StaticResource FeedbackButtonStyle}"
-				        Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}"
-				        Command="{Binding SendFeedbackCommand}"
-				        ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
-				</Button>
-				<Label Content="{Binding FeedbackSendingStatus.Message, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center">
-					<Label.Style>
-						<Style TargetType="Label">
-							<Setter Property="FontWeight" Value="Bold"/>
-							<Setter Property="Foreground" Value="Black"/>
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding FeedbackSendingStatus.Status}" Value="{x:Static status:Status.Sent}">
-									<Setter Property="Foreground" Value="#FF25BD59"/>
-								</DataTrigger>
-								<DataTrigger Binding="{Binding FeedbackSendingStatus.Status}" Value="{x:Static status:Status.NotSent}">
-									<Setter Property="Foreground" Value="Red"/>
-									<Setter Property="ToolTip" Value="{x:Static rsx:PluginResources.FeedbackNotSent_TooltipMessage}"/>
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</Label.Style>
-				</Label>
-
-			</StackPanel>
+						Style="{StaticResource FeedbackButtonStyle}"
+						Command="{Binding SendFeedbackCommand}"
+						ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
+					<DockPanel LastChildFill="False">
+						<TextBlock Margin="0 0 10 0"
+						           DockPanel.Dock="Left"
+						           Text="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" />
+						<Image DockPanel.Dock="Right"
+							   HorizontalAlignment="Right"
+						       ToolTip="{Binding FeedbackSendingStatus.Message}">
+							<Image.Style>
+								<Style TargetType="{x:Type Image}">
+									<Setter Property="Visibility" Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding FeedbackSendingStatus.Status}" Value="{x:Static status:Status.Sent}">
+											<Setter Property="Source" Value="../Resources/checked.png" />
+											<Setter Property="Visibility" Value="Visible" />
+											<Setter Property="Width" Value="15" />
+											<Setter Property="Height" Value="15" />
+										</DataTrigger>
+										<DataTrigger Binding="{Binding FeedbackSendingStatus.Status}" Value="{x:Static status:Status.NotSent}">
+											<Setter Property="Source" Value="../Resources/Unchecked.ico" />
+											<Setter Property="Width" Value="10" />
+											<Setter Property="Height" Value="10" />
+											<Setter Property="Visibility" Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</Image.Style>
+						</Image>
+					</DockPanel>
+			</Button>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

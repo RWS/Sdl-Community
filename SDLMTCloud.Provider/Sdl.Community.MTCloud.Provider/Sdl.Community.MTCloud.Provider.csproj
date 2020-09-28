@@ -292,6 +292,9 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Checked.ico" />
+    <Content Include="Resources\success.png" />
+    <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
