@@ -351,13 +351,13 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			{
 				switch (tag.Type)
 				{
-					case Element.TagType.OpeningTag:
+					case Element.TagType.TagOpen:
 						writer.WriteStartElement("bpt");
 						writer.WriteAttributeString("id", tag.TagId);
 						writer.WriteString(tag.TagContent);
 						writer.WriteEndElement();
 						break;
-					case Element.TagType.ClosingTag:
+					case Element.TagType.TagClose:
 						writer.WriteStartElement("ept");
 						writer.WriteAttributeString("id", tag.TagId);
 						writer.WriteString(tag.TagContent);
@@ -378,11 +378,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			{
 				switch (locked.Type)
 				{
-					case Element.TagType.OpeningTag:
+					case Element.TagType.TagOpen:
 						writer.WriteStartElement("mrk");
 						writer.WriteAttributeString("mtype", "protected");
 						break;
-					case Element.TagType.ClosingTag:
+					case Element.TagType.TagClose:
 						writer.WriteEndElement();
 						break;
 				}
@@ -392,12 +392,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			{
 				switch (comment.Type)
 				{
-					case Element.TagType.OpeningTag:
+					case Element.TagType.TagOpen:
 						writer.WriteStartElement("mrk");
 						writer.WriteAttributeString("mtype", "x-sdl-comment");
 						writer.WriteAttributeString("cid", comment.Id);
 						break;
-					case Element.TagType.ClosingTag:
+					case Element.TagType.TagClose:
 						writer.WriteEndElement();
 						break;
 				}

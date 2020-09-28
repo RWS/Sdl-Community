@@ -37,7 +37,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			_segmentBuilder.ExistingTagIds = tagIds;
 
-
 			Comments = _xliff.DocInfo.Comments ?? new Dictionary<string, List<IComment>>();
 			ConfirmationStatistics = new ConfirmationStatistics();
 			TranslationOriginStatistics = new TranslationOriginStatistics();
@@ -55,12 +54,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		private SegmentVisitor SegmentVisitor => _segmentVisitor ?? (_segmentVisitor = new SegmentVisitor());
 
-		public override void SetFileProperties(IFileProperties fileInfo)
-		{
-			_fileProperties = fileInfo;
-			base.SetFileProperties(fileInfo);
-		}
-
 		public override void Initialize(IDocumentProperties documentInfo)
 		{
 			_documentProperties = documentInfo;
@@ -69,6 +62,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? SourceLanguage;
 
 			base.Initialize(documentInfo);
+		}
+
+		public override void SetFileProperties(IFileProperties fileInfo)
+		{
+			_fileProperties = fileInfo;
+			base.SetFileProperties(fileInfo);
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -377,7 +376,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private int UpdateLockedContent(ElementLocked elementLocked, int lockedContentId, ISegment originalTarget,
 			ISegment originalSource, Stack<IAbstractMarkupDataContainer> containers)
 		{
-			if (elementLocked.Type == Element.TagType.OpeningTag)
+			if (elementLocked.Type == Element.TagType.TagOpen)
 			{
 				var lockedContent = GetElement(lockedContentId.ToString(), originalTarget, originalSource, elementLocked);
 				if (lockedContent == null)
@@ -396,7 +395,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					lockedContentId++;
 				}
 			}
-			else if (elementLocked.Type == Element.TagType.ClosingTag)
+			else if (elementLocked.Type == Element.TagType.TagClose)
 			{
 				containers.Pop();
 			}
@@ -407,7 +406,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private void UpdateTagPair(ElementTagPair elementTagPair, ISegment originalTarget, ISegment originalSource,
 			Stack<IAbstractMarkupDataContainer> containers)
 		{
-			if (elementTagPair.Type == Element.TagType.OpeningTag)
+			if (elementTagPair.Type == Element.TagType.TagOpen)
 			{
 				var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair) 
 				              ?? _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
@@ -421,7 +420,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					containers.Push(tagPairContainer);
 				}
 			}
-			else if (elementTagPair.Type == Element.TagType.ClosingTag)
+			else if (elementTagPair.Type == Element.TagType.TagClose)
 			{
 				containers.Pop();
 			}
@@ -433,7 +432,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			var newestComment = comments.Value?.LastOrDefault();
 			if (newestComment != null)
 			{
-				if (elementComment.Type == Element.TagType.OpeningTag)
+				if (elementComment.Type == Element.TagType.TagOpen)
 				{
 					var comment = _segmentBuilder.CreateCommentContainer(newestComment.Text,
 						newestComment.Author, newestComment.Severity,
@@ -449,7 +448,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 						containers.Push(commentContainer);
 					}
 				}
-				else if (elementComment.Type == Element.TagType.ClosingTag)
+				else if (elementComment.Type == Element.TagType.TagClose)
 				{
 					containers.Pop();
 				}
@@ -533,6 +532,5 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			return _productName;
 		}
-
 	}
 }

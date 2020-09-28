@@ -130,7 +130,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				// Dev Notes: should handle the tagContentId differently; potentially have priority
 				var tagContentId = GetTagContentId(tagPair.TagProperties.TagContent);
 
-				if ((elementTagPair.Type == Element.TagType.OpeningTag || elementTagPair.Type == Element.TagType.ClosingTag) &&
+				if ((elementTagPair.Type == Element.TagType.TagOpen || elementTagPair.Type == Element.TagType.TagClose) &&
 				    (tagPair.TagProperties.TagId.Id == _elementIdToSearch || tagContentId == _elementIdToSearch))
 				{
 					FoundElement = tagPair;

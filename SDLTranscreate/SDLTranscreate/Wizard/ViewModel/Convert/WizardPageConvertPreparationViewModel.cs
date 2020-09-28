@@ -292,8 +292,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					WizardContext.ExportOptions, WizardContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
 
-				var xliffReader = new XliffReder(new XliffSniffer(), _segmentBuilder);
-
 				var sourceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name;
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.Label_Language, sourceLanguage));

@@ -55,7 +55,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			{
 				var element = new ElementTagPair
 				{
-					Type = Element.TagType.OpeningTag,
+					Type = Element.TagType.TagOpen,
 					TagId = tagPair.TagProperties.TagId.Id,
 					TagContent = tagPair.TagProperties.TagContent,
 					DisplayText = tagPair.TagProperties.DisplayText
@@ -80,7 +80,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 				var element = new ElementTagPair
 				{
-					Type = Element.TagType.ClosingTag,
+					Type = Element.TagType.TagClose,
 					TagId = currentTag.TagProperties.TagId.Id,
 					TagContent = currentTag.EndTagProperties.TagContent
 				};
@@ -164,7 +164,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			var commentOpen = new ElementComment
 			{
-				Type = Element.TagType.OpeningTag,
+				Type = Element.TagType.TagOpen,
 				Id = id
 			};
 			Elements.Add(commentOpen);
@@ -173,7 +173,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			var commentClose = new ElementComment
 			{
-				Type = Element.TagType.ClosingTag,
+				Type = Element.TagType.TagClose,
 				Id = id
 			};
 			Elements.Add(commentClose);
@@ -193,7 +193,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			var element = new ElementLocked
 			{
-				Type = Element.TagType.OpeningTag
+				Type = Element.TagType.TagOpen
 			};
 
 			Elements.Add(element);
@@ -202,7 +202,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			element = new ElementLocked
 			{
-				Type = Element.TagType.ClosingTag
+				Type = Element.TagType.TagClose
 			};
 
 			Elements.Add(element);

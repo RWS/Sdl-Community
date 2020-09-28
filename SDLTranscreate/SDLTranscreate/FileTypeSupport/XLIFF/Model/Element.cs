@@ -6,8 +6,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 	{
 		public enum TagType
 		{
-			OpeningTag,
-			ClosingTag,
+			TagOpen,
+			TagClose,
 		}
 
 		public object Clone()

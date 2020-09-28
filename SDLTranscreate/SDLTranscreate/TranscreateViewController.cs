@@ -78,6 +78,8 @@ namespace Sdl.Community.Transcreate
 
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
+
+
 			_editorController.Opened += EditorController_Opened;
 
 			ReportsController = ReportsController.Instance;

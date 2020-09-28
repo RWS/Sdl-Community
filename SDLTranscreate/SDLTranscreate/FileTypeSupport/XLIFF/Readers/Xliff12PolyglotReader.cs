@@ -874,7 +874,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 		{
 			var elementTagPair = new ElementTagPair
 			{
-				Type = Element.TagType.OpeningTag
+				Type = Element.TagType.TagOpen
 			};
 
 			var index = 0;
@@ -921,7 +921,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 		{
 			var elementTagPair = new ElementTagPair
 			{
-				Type = Element.TagType.ClosingTag
+				Type = Element.TagType.TagClose
 			};
 
 			var index = 0;
@@ -1120,11 +1120,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 			{
 				elements.Insert(0, new ElementLocked
 				{
-					Type = Element.TagType.OpeningTag
+					Type = Element.TagType.TagOpen
 				});
 				elements.Add(new ElementLocked
 				{
-					Type = Element.TagType.ClosingTag
+					Type = Element.TagType.TagClose
 				});
 			}
 			if (string.Compare(mtype, "seg", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -1132,12 +1132,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 				elements.Insert(0, new ElementSegment
 				{
 					Id = mid,
-					Type = Element.TagType.OpeningTag
+					Type = Element.TagType.TagOpen
 				});
 				elements.Add(new ElementSegment
 				{
 					Id = cid,
-					Type = Element.TagType.ClosingTag
+					Type = Element.TagType.TagClose
 				});
 			}
 			if (string.Compare(mtype, "x-sdl-comment", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -1145,12 +1145,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 				elements.Insert(0, new ElementComment
 				{
 					Id = cid,
-					Type = Element.TagType.OpeningTag
+					Type = Element.TagType.TagOpen
 				});
 				elements.Add(new ElementComment
 				{
 					Id = cid,
-					Type = Element.TagType.ClosingTag
+					Type = Element.TagType.TagClose
 				});
 			}
 

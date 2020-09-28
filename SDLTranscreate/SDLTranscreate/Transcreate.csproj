@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Reports.Viewer.API">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Reports.Viewer.API.dll</HintPath>
     </Reference>
@@ -88,12 +91,6 @@
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -200,8 +197,19 @@
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\Comment.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\DocInfo.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\GeneratorSettings.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\SegmentStatus.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\SourceCopyDocument.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\SourceCopyRecord.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\TooManyParagraphsException.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\UpdatedSegmentContent.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Processor.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Visitors\ElementExtractor.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Readers\ContentReader.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Writers\ContentWriter.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Readers\WordReader.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Visitors\TokenVisitor.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Writers\WordWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
@@ -229,6 +237,7 @@
     <Compile Include="FileTypeSupport\XLIFF\Model\Skl.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Source.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Target.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\Model\Token.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\TransUnit.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Xliff.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Readers\Xliff12PolyglotReader.cs" />
@@ -310,6 +319,11 @@
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="StringResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="TranscreateViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -436,6 +450,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StringResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -655,10 +673,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FileTypeSupport\MSOffice\Readers\" />
-    <Folder Include="FileTypeSupport\MSOffice\Writers\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
