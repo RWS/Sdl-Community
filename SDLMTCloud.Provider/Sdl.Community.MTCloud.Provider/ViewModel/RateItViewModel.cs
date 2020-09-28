@@ -240,12 +240,44 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ResetFeedbackSendingStatus(object sender, PropertyChangedEventArgs e)
 		{
-			if (!(sender is FeedbackOption fo && RateItControlProperties.Contains(fo.OptionName)) &&
-			    !(sender is RateItViewModel && RateItControlProperties.Contains(e.PropertyName))) return;
+			if (!IsRateItOption(sender, e)) return;
 
 			FeedbackSendingStatus.Status = Status.Default;
 			OnPropertyChanged(nameof(FeedbackSendingStatus));
 			SwitchListeningForPropertyChanges(false);
+		}
+
+		private bool IsRateItOption(object sender, PropertyChangedEventArgs e)
+		{
+			var isRateItOption = false;
+			switch (sender)
+			{
+				case FeedbackOption feedbackOption:
+				{
+					if (RateItControlProperties.Contains(feedbackOption.OptionName))
+					{
+						isRateItOption = true;
+					}
+					break;
+				}
+				case RateItViewModel _:
+				{
+					if (RateItControlProperties.Contains(e.PropertyName))
+					{
+						isRateItOption = true;
+					}
+					break;
+				}
+				case Document _:
+				{
+					if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
+					{
+						isRateItOption = true;
+					}
+					break;
+				}
+			}
+			return isRateItOption;
 		}
 
 		private dynamic GetRatingObject(SegmentId? segmentId)
@@ -362,6 +394,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			SetActiveSegmentFeedbackInfo();
+			ResetFeedbackSendingStatus(sender,
+				new PropertyChangedEventArgs(nameof(_editorController.ActiveDocument.ActiveSegmentChanged)));
 		}
 
 		private void BackupFeedback()
