@@ -370,4 +370,7 @@
   <data name="SendFeedback_ButtonTooltip" xml:space="preserve">
     <value>All the information from the Rate It form is sent to the server</value>
   </data>
+  <data name="FeedbackNotSent_TooltipMessage" xml:space="preserve">
+	  <value>Check whether you have any feedback to send (rating, feedback message, improvement, comments)</value>
+  </data>
 </root>

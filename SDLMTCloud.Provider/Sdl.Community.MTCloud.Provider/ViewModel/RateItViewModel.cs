@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Office.Interop.Excel;
@@ -69,6 +71,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public List<FeedbackOption> FeedbackOptions { get; set; }
 
+		public FeedbackSendingStatus FeedbackSendingStatus { get; set; } = new FeedbackSendingStatus();
+
 		public bool AutoSendFeedback
 		{
 			get => _autoSendFeedback;
@@ -77,6 +81,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				_autoSendFeedback = value;
 				if (value)
 				{
+
 					SetSegmentSupervisor();
 				}
 				else
@@ -120,6 +125,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			ResetFeedback();
 			AutoSendFeedback = false;
+			FeedbackSendingStatus.Status = Status.Default;
 		}
 
 		public string FeedbackMessage
@@ -168,7 +174,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async Task SendFeedbackToService(SegmentId? segmentId = null)
 		{
-			if (!IsSendFeedbackEnabled) return;
+			OnFeedbackSendingStatusChanged(await SendFeedback(segmentId) ? Status.Sent : Status.NotSent);
+		}
+
+		private async Task<bool> SendFeedback(SegmentId? segmentId)
+		{
+			if (!IsSendFeedbackEnabled) return false;
 			var improvement = GetImprovement(segmentId);
 			if (improvement == null)
 			{
@@ -176,18 +187,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					string.Format(PluginResources.OriginalTranslationMissingMessage, PluginResources.SDLMTCloudName,
 						PluginResources.SDLMTCloudName), PluginResources.OriginalTranslationMissingTitle);
 
-				return;
+				return false;
 			}
 
 			//Checking for consistency: whether translation corresponds to source
 			if (improvement.OriginalSource !=
-				GetSourceSegment(segmentId))
+			    GetSourceSegment(segmentId))
 			{
 				_messageBoxService.ShowWarningMessage(
 					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName),
 					PluginResources.SourceModified);
 
-				return;
+				return false;
 			}
 
 			var rating = GetRatingObject(segmentId);
@@ -196,9 +207,45 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				UpdateImprovement(improvement, rating);
 			}
 
-			if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return;
+			if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return false;
 
 			await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
+			return true;
+		}
+
+		private void OnFeedbackSendingStatusChanged(Status status)
+		{
+			FeedbackSendingStatus.Status = status;
+			OnPropertyChanged(nameof(FeedbackSendingStatus));
+
+			SwitchListeningForPropertyChanges(true);
+		}
+
+		private void SwitchListeningForPropertyChanges(bool listen)
+		{
+			if(listen)
+			{
+				FeedbackOptions.ForEach(
+					fo => fo.PropertyChanged += ResetFeedbackSendingStatus);
+				PropertyChanged += ResetFeedbackSendingStatus;
+			}
+			else
+			{
+				FeedbackOptions.ForEach(fo => fo.PropertyChanged -= ResetFeedbackSendingStatus);
+				PropertyChanged -= ResetFeedbackSendingStatus;
+            }
+		}
+
+		private List<string> RateItControlProperties { get; set; }
+
+		private void ResetFeedbackSendingStatus(object sender, PropertyChangedEventArgs e)
+		{
+			if (!(sender is FeedbackOption fo && RateItControlProperties.Contains(fo.OptionName)) &&
+			    !(sender is RateItViewModel && RateItControlProperties.Contains(e.PropertyName))) return;
+
+			FeedbackSendingStatus.Status = Status.Default;
+			OnPropertyChanged(nameof(FeedbackSendingStatus));
+			SwitchListeningForPropertyChanges(false);
 		}
 
 		private dynamic GetRatingObject(SegmentId? segmentId)
@@ -281,16 +328,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
 
+            RateItControlProperties = new List<string>();
 			FeedbackOptions = new List<FeedbackOption>();
 			foreach (var feedbackOption in feedbackOptions)
 			{
+                RateItControlProperties.Add(feedbackOption.Text);
 				FeedbackOptions.Add(new FeedbackOption
 				{
 					OptionName = feedbackOption.Text,
 					StudioActionId = feedbackOption.Id
 				});
 			}
-		}
+
+			RateItControlProperties.Add(nameof(FeedbackMessage));
+			RateItControlProperties.Add(nameof(Rating));
+        }
 
 		private SegmentId? ActiveSegmentId => _editorController.ActiveDocument.ActiveSegmentPair?.Properties.Id;
 

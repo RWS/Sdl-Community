@@ -9,6 +9,7 @@
 			 xmlns:converters ="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
              xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:status="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
              d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -108,13 +109,35 @@
 					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding FeedbackMessage,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
-			<Button Grid.Row="1" Grid.Column="1"
-					Margin="10 0 0 0"
-					Style="{StaticResource FeedbackButtonStyle}"
-					Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}"
-				    Command="{Binding SendFeedbackCommand}"
-					ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
-			</Button>
+			<StackPanel Grid.Row="1" Grid.Column="1">
+				<Button 
+				        Margin="10 0 0 0"
+				        Cursor="Hand"
+						IsEnabled="{Binding IsSendFeedbackEnabled}"
+				        Style="{StaticResource FeedbackButtonStyle}"
+				        Content="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}"
+				        Command="{Binding SendFeedbackCommand}"
+				        ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
+				</Button>
+				<Label Content="{Binding FeedbackSendingStatus.Message, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center">
+					<Label.Style>
+						<Style TargetType="Label">
+							<Setter Property="FontWeight" Value="Bold"/>
+							<Setter Property="Foreground" Value="Black"/>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding FeedbackSendingStatus.Status}" Value="{x:Static status:Status.Sent}">
+									<Setter Property="Foreground" Value="#FF25BD59"/>
+								</DataTrigger>
+								<DataTrigger Binding="{Binding FeedbackSendingStatus.Status}" Value="{x:Static status:Status.NotSent}">
+									<Setter Property="Foreground" Value="Red"/>
+									<Setter Property="ToolTip" Value="{x:Static rsx:PluginResources.FeedbackNotSent_TooltipMessage}"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Label.Style>
+				</Label>
+
+			</StackPanel>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

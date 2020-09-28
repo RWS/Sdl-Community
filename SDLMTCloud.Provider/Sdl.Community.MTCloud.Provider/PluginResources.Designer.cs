@@ -128,6 +128,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check whether you have any feedback to send (rating, feedback message, improvement, comments).
+        /// </summary>
+        public static string FeedbackNotSent_TooltipMessage {
+            get {
+                return ResourceManager.GetString("FeedbackNotSent_TooltipMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ForumIcon {
