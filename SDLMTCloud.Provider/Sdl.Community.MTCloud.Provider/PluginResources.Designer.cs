@@ -673,7 +673,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All the information from the Rate It form is sent to the server.
+        ///   Looks up a localized string similar to When this button is clicked all the information applied to the checkboxes, any comment and suggestion will be sent to the server..
         /// </summary>
         public static string SendFeedback_ButtonTooltip {
             get {
