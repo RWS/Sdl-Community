@@ -322,7 +322,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 
 				foreach (var projectFile in targetProjectFiles)
-				{					
+				{
 					var cultureInfo = new Language(new CultureInfo(projectFile.TargetLanguage));
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, jobProcess.Progress + unit, string.Format(PluginResources.JobProcess_ConvertingLanguageFiles, cultureInfo.DisplayName));
 
@@ -334,6 +334,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					{
 						continue;
 					}
+
+					projectFile.Action = Enumerators.Action.Convert;
 
 					// add alternative files to the target
 					for (var i = 1; i < sourceProjectFile.XliffData.Files.Count; i++)
@@ -516,7 +518,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						if (success)
 						{
 							targetLanguageFile.Date = WizardContext.DateTimeStamp;
-							targetLanguageFile.Action = Enumerators.Action.Import;
+							targetLanguageFile.Action = Enumerators.Action.Convert;
 							targetLanguageFile.Status = Enumerators.Status.Success;
 							targetLanguageFile.Report = string.Empty;
 							targetLanguageFile.XliffFilePath = xliffArchiveFile;
@@ -528,7 +530,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						{
 							ProjectFileId = targetLanguageFile.FileId,
 							ActivityId = Guid.NewGuid().ToString(),
-							Action = Enumerators.Action.Import,
+							Action = Enumerators.Action.Convert,
 							Status = success ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetLanguageFile.Date,
 							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),

@@ -206,6 +206,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 					ProjectPropertiesViewModel.SelectedProject = _selectedProject;
 				}
 
+
 				ProjectSelectionChanged?.Invoke(this, new ProjectSelectionChangedEventArgs { SelectedProject = _selectedProject });
 
 				IsProjectSelected = _selectedProject != null;

@@ -26,10 +26,6 @@ namespace Sdl.Community.Transcreate.Service
 				Indent = false
 			};
 
-			var actionName = wizardContext.Action == Enumerators.Action.Export
-				? "Export"
-				: "Import";
-
 			var projectFiles = wizardContext.ProjectFiles.Where(a => a.Selected &&
 				string.Compare(a.TargetLanguage, targetLanguageCode, 
 					StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
@@ -37,7 +33,7 @@ namespace Sdl.Community.Transcreate.Service
 			using (var writer = XmlWriter.Create(reportFile, settings))
 			{
 				writer.WriteStartElement("task");
-				writer.WriteAttributeString("name", actionName);
+				writer.WriteAttributeString("name", wizardContext.Action.ToString());
 				writer.WriteAttributeString("created", wizardContext.DateTimeStampToString);
 
 				WriteReportTaskInfo(writer, wizardContext, selectedProject, targetLanguageCode);
@@ -167,7 +163,7 @@ namespace Sdl.Community.Transcreate.Service
 				writer.WriteAttributeString("copySourceToTarget", wizardContext.ExportOptions.CopySourceToTarget.ToString());
 				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExportOptions.ExcludeFilterIds));
 			}
-			else
+			else if (wizardContext.Action == Enumerators.Action.Import)
 			{
 				writer.WriteAttributeString("overwriteTranslations", wizardContext.ImportOptions.OverwriteTranslations.ToString());
 				writer.WriteAttributeString("originSystem", wizardContext.ImportOptions.OriginSystem);
@@ -175,6 +171,11 @@ namespace Sdl.Community.Transcreate.Service
 				writer.WriteAttributeString("statusTranslationNotUpdatedId", GetSegmentStatus(wizardContext.ImportOptions.StatusTranslationNotUpdatedId));
 				writer.WriteAttributeString("statusSegmentNotImportedId", GetSegmentStatus(wizardContext.ImportOptions.StatusSegmentNotImportedId));
 				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ImportOptions.ExcludeFilterIds));
+			}
+			else if (wizardContext.Action == Enumerators.Action.Convert)
+			{
+				writer.WriteAttributeString("maxAlternativeTranslations", wizardContext.ConvertOptions.MaxAlternativeTranslations.ToString());
+				writer.WriteAttributeString("closeProjectOnComplete", wizardContext.ConvertOptions.CloseProjectOnComplete.ToString());
 			}
 
 			writer.WriteEndElement(); //settings
@@ -198,6 +199,7 @@ namespace Sdl.Community.Transcreate.Service
 			{
 				WriteConfirmationWordCountStatistics(writer, wordCounts?.NotProcessed, "notProcessed");
 			}
+			WriteConfirmationWordCountStatistics(writer, wordCounts?.Total, "total");
 
 			writer.WriteEndElement(); //confirmation
 		}
@@ -212,6 +214,7 @@ namespace Sdl.Community.Transcreate.Service
 			{
 				WriteAnalysisWordCountStatistics(writer, wordCounts?.NotProcessed, analysisBands, "notProcessed");
 			}
+			WriteAnalysisWordCountStatistics(writer, wordCounts?.Total, analysisBands, "total");
 
 			writer.WriteEndElement(); //analysis
 		}
@@ -266,6 +269,20 @@ namespace Sdl.Community.Transcreate.Service
 							{
 								statistics.WordCounts.NotProcessed.Add(wordCount);
 							}
+						}
+					}
+
+					foreach (var wordCount in projectFile.TranslationOriginStatistics?.WordCounts?.Total)
+					{
+						var totalWordCount = statistics.WordCounts.Total.FirstOrDefault(a =>
+							a.Category == wordCount.Category);
+						if (totalWordCount != null)
+						{
+							UpdateTotalWordCount(wordCount, totalWordCount);
+						}
+						else
+						{
+							statistics.WordCounts.Total.Add(wordCount);
 						}
 					}
 				}
@@ -326,6 +343,20 @@ namespace Sdl.Community.Transcreate.Service
 							}
 						}
 					}
+
+					foreach (var wordCount in projectFile.ConfirmationStatistics?.WordCounts?.Total)
+					{
+						var totalWordCount = statistics.WordCounts.Total.FirstOrDefault(a =>
+							a.Category == wordCount.Category);
+						if (totalWordCount != null)
+						{
+							UpdateTotalWordCount(wordCount, totalWordCount);
+						}
+						else
+						{
+							statistics.WordCounts.Total.Add(wordCount);
+						}
+					}
 				}
 			}
 
@@ -350,7 +381,6 @@ namespace Sdl.Community.Transcreate.Service
 
 			return items;
 		}
-
 
 		private void WriteAnalysisWordCountStatistics(XmlWriter writer,
 		IReadOnlyCollection<WordCount> wordCounts, IEnumerable<AnalysisBand> analysisBands, string name)
@@ -502,7 +532,5 @@ namespace Sdl.Community.Transcreate.Service
 			writer.WriteAttributeString("tags", wordCount.Tags.ToString());
 			writer.WriteEndElement(); //name
 		}
-
-
 	}
 }

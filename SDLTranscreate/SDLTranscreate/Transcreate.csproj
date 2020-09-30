@@ -210,8 +210,8 @@
     <Compile Include="FileTypeSupport\MSOffice\Readers\WordReader.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Visitors\TokenVisitor.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Writers\WordWriter.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\ContentReader.cs" />
-    <Compile Include="FileTypeSupport\SDLXLIFF\ContentWriter.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\XliffContentReader.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\XliffContentWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\SdlxliffWriter.cs" />
@@ -458,7 +458,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\sdl_transcreate_view.ico" />
-    <EmbeddedResource Include="BatchTasks\Report.xsl" />
+    <EmbeddedResource Include="BatchTasks\TranscreateReport.xsl" />
     <Content Include="pluginpackage.manifest.xml" />
     <Resource Include="Resources\Checked.png" />
     <Resource Include="Resources\Close.png" />

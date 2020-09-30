@@ -16,8 +16,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly IDialogService _dialogService;
-		private List<XLIFFSupportItem> _xliffSupportItems;
-		private XLIFFSupportItem _selectedXliffSupportItemModel;
 		private string _outputFolder;
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
@@ -33,10 +31,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			: base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
-			XLIFFSupportItems = Enumerators.GetXLIFFSupportItems();
 			
-
-			SelectedXliffSupportItem = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == WizardContext.ExportOptions.XliffSupport);
 			OutputFolder = WizardContext.TransactionFolder;
 			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
 			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
@@ -55,35 +50,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
 
 		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
-
-		public List<XLIFFSupportItem> XLIFFSupportItems
-		{
-			get => _xliffSupportItems;
-			set
-			{
-				_xliffSupportItems = value;
-				OnPropertyChanged(nameof(XLIFFSupportItems));
-			}
-		}
-
-		public XLIFFSupportItem SelectedXliffSupportItem
-		{
-			get
-			{
-				return _selectedXliffSupportItemModel
-					   ?? (_selectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
-			}
-			set
-			{
-				if (_selectedXliffSupportItemModel == value)
-				{
-					return;
-				}
-
-				_selectedXliffSupportItemModel = value;
-				OnPropertyChanged(nameof(SelectedXliffSupportItem));
-			}
-		}
 
 		public List<FilterItem> FilterItems
 		{
@@ -261,7 +227,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private void OnLeavePage(object sender, EventArgs e)
 		{
 			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ExportOptions.XliffSupport = SelectedXliffSupportItem.SupportType;
 			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
 			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
 			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();

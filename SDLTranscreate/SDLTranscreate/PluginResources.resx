@@ -577,4 +577,10 @@
 	<data name="JobProcess_ImportingTranslations" xml:space="preserve">
     <value>Importing translations: {0}</value>
   </data>
+  <data name="ReportsGroup_ProjectConversion" xml:space="preserve">
+	  <value>Project Conversion</value>
+  </data>
+  <data name="ReportsGroupDescription_ConvertedToTranscreateProject" xml:space="preserve">
+	  <value>Converted to a Transcreate project</value>
+  </data>
 </root>
