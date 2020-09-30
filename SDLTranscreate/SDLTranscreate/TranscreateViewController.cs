@@ -61,6 +61,7 @@ namespace Sdl.Community.Transcreate
 		private ProjectSettingsService _projectSettingsService;
 		private ReportService _reportService;
 
+
 		protected override void Initialize(IViewContext context)
 		{
 			ClientId = Guid.NewGuid().ToString();
@@ -78,12 +79,10 @@ namespace Sdl.Community.Transcreate
 
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
-
-
 			_editorController.Opened += EditorController_Opened;
 
 			ReportsController = ReportsController.Instance;
-			
+
 			LoadProjects();
 		}
 
@@ -175,7 +174,12 @@ namespace Sdl.Community.Transcreate
 
 		public List<Project> GetSelectedProjects()
 		{
-			return _projectsNavigationViewModel.SelectedProjects?.Cast<Project>().ToList();
+			if (_projectsNavigationViewModel.SelectedProjects != null)
+			{
+				return _projectsNavigationViewModel.SelectedProjects?.Cast<Project>().ToList();
+			}
+
+			return new List<Project> { _projectsNavigationViewModel.SelectedProject };
 		}
 
 		public List<ProjectFile> GetSelectedProjectFiles()
@@ -192,7 +196,7 @@ namespace Sdl.Community.Transcreate
 
 			var sourceLanguage = wizardContext.Project.SourceLanguage.CultureInfo.Name;
 			wizardContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
-				                                                 StringComparison.CurrentCultureIgnoreCase) == 0);
+																 StringComparison.CurrentCultureIgnoreCase) == 0);
 
 			var project = _xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
 			if (project == null)
@@ -258,12 +262,7 @@ namespace Sdl.Community.Transcreate
 				return;
 			}
 
-			var automaticTask = CreateAutomaticTask(wizardContext, selectedProject, isBatchTask);
-			CreateHtmlReport(wizardContext, selectedProject, automaticTask);
-			if (!isBatchTask)
-			{
-				//UpdateProjectReports(wizardContext, selectedProject, automaticTask);
-			}
+			CreateReports(wizardContext, selectedProject);
 
 			UpdateProjectSettingsBundle(project);
 		}
@@ -271,6 +270,15 @@ namespace Sdl.Community.Transcreate
 		internal ReportsController ReportsController { get; private set; }
 
 		internal string ClientId { get; private set; }
+
+		private void CreateReports(WizardContext wizardContext, FileBasedProject selectedProject)
+		{
+			var automaticTask = CreateAutomaticTask(wizardContext, selectedProject);
+			var reports = CreateHtmlReports(wizardContext, selectedProject, automaticTask);
+
+			// add to reports controller
+			ReportsController.AddReports(ClientId, reports);
+		}
 
 		private bool UpdateCustomerInfo(FileBasedProject project, Project xliffProject)
 		{
@@ -315,10 +323,14 @@ namespace Sdl.Community.Transcreate
 			wcProjectFile.Report = GetRelativePath(project.Path, wcProjectFile.Report);
 		}
 
-		private void CreateHtmlReport(WizardContext wizardContext, FileBasedProject selectedProject, AutomaticTask automaticTask)
+		private List<Reports.Viewer.API.Model.Report> CreateHtmlReports(WizardContext wizardContext, FileBasedProject selectedProject, AutomaticTask automaticTask)
 		{
+			var reports = new List<Reports.Viewer.API.Model.Report>();
+
 			var project = _xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id);
 			var languageDirections = _projectSettingsService.GetLanguageDirections(selectedProject.FilePath);
+			var reportTemplate = GetReportTemplatePath();
+
 			foreach (var taskReport in automaticTask.Reports)
 			{
 				var languageDirection = languageDirections.FirstOrDefault(a =>
@@ -326,7 +338,22 @@ namespace Sdl.Community.Transcreate
 
 				var reportName = Path.GetFileName(taskReport.PhysicalPath);
 				var reportFilePath = Path.Combine(wizardContext.WorkingFolder, reportName);
-				var htmlReportFilePath = CreateHtmlReportFile(reportFilePath);
+
+				var htmlReportFilePath = CreateHtmlReportFile(reportFilePath, reportTemplate);
+
+				var report =
+					new Reports.Viewer.API.Model.Report
+					{
+						Path = reportFilePath,
+						XsltPath = reportTemplate,
+						Group = PluginResources.ReportsGroup_ProjectConversion,
+						Date = DateTime.Now,
+						Name = selectedProject.GetProjectInfo().Name,
+						Language = languageDirection?.TargetLanguageCode,
+						Description = PluginResources.ReportsGroupDescription_ConvertedToTranscreateProject
+					};
+
+				reports.Add(report);
 
 				foreach (var wcProjectFile in wizardContext.ProjectFiles)
 				{
@@ -349,9 +376,11 @@ namespace Sdl.Community.Transcreate
 					}
 				}
 			}
+
+			return reports;
 		}
 
-		private AutomaticTask CreateAutomaticTask(WizardContext wizardContext, FileBasedProject selectedProject, bool isBatchTask)
+		private AutomaticTask CreateAutomaticTask(WizardContext wizardContext, FileBasedProject selectedProject)
 		{
 			var projectInfo = selectedProject.GetProjectInfo();
 			var automaticTask = new AutomaticTask(wizardContext.Action)
@@ -384,12 +413,8 @@ namespace Sdl.Community.Transcreate
 
 			foreach (var languageDirection in languageDirections)
 			{
-				var actionName = wizardContext.Action == Enumerators.Action.Export
-					? "Export"
-					: "Import";
-
 				var reportName = string.Format("{0}_{1}_{2}_{3}.xml",
-					actionName.Replace(" ", ""),
+					wizardContext.Action.ToString().Replace(" ", ""),
 					wizardContext.DateTimeStampToString,
 					languageDirection.Key.SourceLanguageCode,
 					languageDirection.Key.TargetLanguageCode);
@@ -408,15 +433,12 @@ namespace Sdl.Community.Transcreate
 				_reportService.CreateReport(wizardContext, reportFile, selectedProject, languageDirection.Key.TargetLanguageCode);
 
 				// Copy to project reports folder
-				if (!isBatchTask)
-				{
-					File.Copy(reportFile, projectReportsFilePath, true);
-				}
+				File.Copy(reportFile, projectReportsFilePath, true);
 
 				var report = new Report(wizardContext.Action)
 				{
-					Name = actionName,
-					Description = actionName,
+					Name = wizardContext.Action.ToString(),
+					Description = wizardContext.Action.ToString(),
 					LanguageDirectionGuid = languageDirection.Key.Guid,
 					PhysicalPath = relativeProjectReportsFilePath
 				};
@@ -425,6 +447,17 @@ namespace Sdl.Community.Transcreate
 			}
 
 			return automaticTask;
+		}
+
+		public string GetReportTemplatePath()
+		{
+			var name = "TranscreateReport.xsl";
+			var filePath = Path.Combine(_pathInfo.SettingsFolderPath, name);
+			var resourceName = "Sdl.Community.Transcreate.BatchTasks.TranscreateReport.xsl";
+
+			WriteResourceToFile(resourceName, filePath);
+
+			return filePath;
 		}
 
 		public void WriteResourceToFile(string resourceName, string fullFilePath)
@@ -443,15 +476,10 @@ namespace Sdl.Community.Transcreate
 			}
 		}
 
-		private string CreateHtmlReportFile(string xmlReportFullPath)
+		private string CreateHtmlReportFile(string xmlReportFullPath, string xsltFilePath)
 		{
 			var htmlReportFilePath = xmlReportFullPath + ".html";
-			var xsltName = "Report.xsl";
-			var xsltFilePath = Path.Combine(_pathInfo.SettingsFolderPath, xsltName);
-			var xsltResourceFilePath = "Sdl.Community.Transcreate.BatchTasks.Report.xsl";
-
-			WriteResourceToFile(xsltResourceFilePath, xsltFilePath);
-
+			
 			var xsltSetting = new XsltSettings
 			{
 				EnableDocumentFunction = true,
@@ -504,39 +532,6 @@ namespace Sdl.Community.Transcreate
 
 			return languageDirections;
 		}
-
-		//private void UpdateProjectReports(WizardContext wizardContext, FileBasedProject project, AutomaticTask automaticTask)
-		//{
-		//	if (project == null)
-		//	{
-		//		return;
-		//	}
-
-		//	try
-		//	{
-		//		_supressProjectControllerEvents = true;
-
-		//		_projectsController.Close(project);
-		//		_projectSettingsService.UpdateAnalysisTaskReportInfo(project, automaticTask);
-		//		_projectsController.Open(project);
-
-		//		//_xliffProjects.FirstOrDefault(a => a.Id == wizardContext.Project.Id)
-
-		//		switch (wizardContext.Owner)
-		//		{
-		//			case Enumerators.Controller.Files:
-		//				_filesController.Activate();
-		//				break;
-		//			case Enumerators.Controller.Projects:
-		//				_projectsController.Activate();
-		//				break;
-		//		}
-		//	}
-		//	finally
-		//	{
-		//		_supressProjectControllerEvents = false;
-		//	}
-		//}
 
 		private void UpdateProjectSettingsBundle(Project project)
 		{
@@ -599,7 +594,7 @@ namespace Sdl.Community.Transcreate
 
 				selectedProject.UpdateSettings(xliffManagerProject.SettingsBundle);
 
-				selectedProject.Save();				
+				selectedProject.Save();
 			}
 		}
 

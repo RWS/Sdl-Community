@@ -877,6 +877,24 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Conversion.
+        /// </summary>
+        internal static string ReportsGroup_ProjectConversion {
+            get {
+                return ResourceManager.GetString("ReportsGroup_ProjectConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converted to a Transcreate project.
+        /// </summary>
+        internal static string ReportsGroupDescription_ConvertedToTranscreateProject {
+            get {
+                return ResourceManager.GetString("ReportsGroupDescription_ConvertedToTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successful.
         /// </summary>
         internal static string Result_Successful {

@@ -11,6 +11,7 @@ namespace Sdl.Community.Transcreate.Model
 			Processed = new List<WordCount>();
 			Excluded = new List<WordCount>();
 			NotProcessed = new List<WordCount>();
+			Total = new List<WordCount>();
 		}
 
 		[XmlArray]
@@ -24,6 +25,10 @@ namespace Sdl.Community.Transcreate.Model
 		[XmlArray]
 		[XmlArrayItem("WordCount", Type = typeof(WordCount))]
 		public List<WordCount> NotProcessed { get; set; }
+
+		[XmlArray]
+		[XmlArrayItem("WordCount", Type = typeof(WordCount))]
+		public List<WordCount> Total { get; set; }
 
 		public object Clone()
 		{
@@ -45,6 +50,12 @@ namespace Sdl.Community.Transcreate.Model
 			foreach (var wordCount in NotProcessed)
 			{
 				wordCounts.NotProcessed.Add(wordCount.Clone() as WordCount);
+			}
+
+			wordCounts.Total = new List<WordCount>();
+			foreach (var wordCount in Total)
+			{
+				wordCounts.Total.Add(wordCount.Clone() as WordCount);
 			}
 
 			return wordCounts;

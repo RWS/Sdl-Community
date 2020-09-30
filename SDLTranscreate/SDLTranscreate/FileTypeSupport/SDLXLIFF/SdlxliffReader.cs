@@ -35,7 +35,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
-			var contentReader = new ContentReader(projectId, filePath, false, _segmentBuilder, 
+			var contentReader = new XliffContentReader(projectId, filePath, false, _segmentBuilder, 
 				_exportOptions, _analysisBands);		
 			converter.AddBilingualProcessor(contentReader);
 			

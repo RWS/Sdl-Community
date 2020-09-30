@@ -35,7 +35,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 			var tagIds = GetTagIds(filePathInput);
 
-			var contentWriter = new ContentWriter(xliff, _segmentBuilder, _importOptions, _analysisBands, tagIds);
+			var contentWriter = new XliffContentWriter(xliff, _segmentBuilder, _importOptions, _analysisBands, tagIds);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

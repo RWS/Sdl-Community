@@ -15,7 +15,7 @@ using Sdl.Versioning;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 {
-	public class ContentWriter : AbstractBilingualContentProcessor
+	public class XliffContentWriter : AbstractBilingualContentProcessor
 	{
 		private readonly Xliff _xliff;
 		private readonly SegmentBuilder _segmentBuilder;
@@ -27,7 +27,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private SegmentPairProcessor _segmentPairProcessor;
 		private string _productName;		
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder,
+		public XliffContentWriter(Xliff xliff, SegmentBuilder segmentBuilder,
 			ImportOptions importOptions, List<AnalysisBand> analysisBands, List<string> tagIds)
 		{
 			_xliff = xliff;
@@ -105,6 +105,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 						AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
 						AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 					}
 				}
 
@@ -160,6 +162,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 					AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
 					AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
+					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 
 					continue;
 				}
@@ -191,6 +195,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 					AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
 					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 
 					continue;
 				}
@@ -331,6 +337,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
 				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 
 			}
 			else
@@ -348,6 +356,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 				AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
 				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 			}
 		}
 

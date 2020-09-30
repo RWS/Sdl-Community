@@ -15,7 +15,7 @@ using File = Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model.File;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 {
-	internal class ContentReader : IBilingualContentProcessor
+	internal class XliffContentReader : IBilingualContentProcessor
 	{
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly ExportOptions _exportOptions;
@@ -31,7 +31,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private string _productName;
 		private int _contextIndex;
 
-		internal ContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
+		internal XliffContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
 			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_projectId = projectId;
@@ -126,8 +126,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			// not used for this implementation
 		}
 
-
-
 		public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			if (paragraphUnit.IsStructure || !paragraphUnit.SegmentPairs.Any())
@@ -165,6 +163,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					{
 						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
 						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 						continue;
 					}
 				}
@@ -233,6 +233,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
 				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 			}
 
 			if (transUnit.SegmentPairs.Count > 0)

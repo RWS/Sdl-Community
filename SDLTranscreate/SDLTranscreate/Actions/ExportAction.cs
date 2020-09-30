@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Windows;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
@@ -53,30 +52,26 @@ namespace Sdl.Community.Transcreate.Actions
 			//var process = new Processor(fileTypeManager, tokenVisitor, settings, analysisBands);
 
 			//var fullPath = Path.Combine(selectedFile.Project.Path, selectedFile.Location);
-			
+
 			//process.ExportFile(fullPath);
 
 
 
 
+			var settings = GetSettings();
 
+			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
+				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider,
+				_projectAutomationService);
 
+			var wizardContext = wizardService.ShowWizard(Controller, out var message);
+			if (wizardContext == null && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
 
-
-
-
-			//var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
-			//	_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider,
-			//	_projectAutomationService);
-
-			//var wizardContext = wizardService.ShowWizard(Controller, out var message);
-			//if (wizardContext == null && !string.IsNullOrEmpty(message))
-			//{
-			//	MessageBox.Show(message, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-			//	return;
-			//}
-
-			//_controllers.TranscreateController.UpdateProjectData(wizardContext);
+			_controllers.TranscreateController.UpdateProjectData(wizardContext);
 		}
 
 		public void LaunchWizard()
