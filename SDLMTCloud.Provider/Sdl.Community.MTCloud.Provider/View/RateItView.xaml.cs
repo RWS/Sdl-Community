@@ -11,5 +11,10 @@ namespace Sdl.Community.MTCloud.Provider.View
 		{
 			InitializeComponent();
 		}
+
+		public void FocusFeedbackTextBox()
+		{
+			FeedbackTextBox.Focus();
+		}
 	}
 }

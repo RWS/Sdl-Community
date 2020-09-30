@@ -103,7 +103,9 @@
 			          IsChecked="{Binding AutoSendFeedback}" 
 			          ToolTip="{x:Static rsx:PluginResources.AutoSendFeedback_CheckBoxTooltip}"/>
 
-			<TextBox  Style="{DynamicResource WatermarkTextBox}" watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
+			<TextBox  Name="FeedbackTextBox" 
+			          Style="{DynamicResource WatermarkTextBox}" 
+			          watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{x:Static rsx:PluginResources.RateIt_FeedbackWatermark}"
 					  HorizontalAlignment="Stretch"
 					  VerticalAlignment="Top"
 					  MinHeight="30"
@@ -143,6 +145,7 @@
 				</Image.Style>
 			</Image>
 			<Button Grid.Row="1"
+					IsDefault="True"
 					Name="SendFeedbackButton"
 					Visibility="{Binding AutoSendFeedback, Converter={StaticResource VisibilityConverter}, ConverterParameter=False}"
 					Grid.Column="1"

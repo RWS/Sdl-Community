@@ -9,13 +9,18 @@ namespace Sdl.Community.MTCloud.Provider.View
 {
 	public partial class RateItControl : UserControl
 	{
+		private RateItView _rateItWindow;
 		public IRatingService RatingService { get; private set; }
 
 		public RateItControl()
 		{
 			InitializeComponent();
-
 			LoadDataContext();
+		}
+
+		public void FocusFeedbackTextBox()
+		{
+			_rateItWindow.FocusFeedbackTextBox();
 		}
 
 		private void LoadDataContext()
@@ -28,14 +33,14 @@ namespace Sdl.Community.MTCloud.Provider.View
 			var segmentSupervisor = new SegmentSupervisor(editorController);
 
 			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService, editorController);
-			var rateItWindow = new RateItView
+			_rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel
 			};
 
 			RatingService = rateItViewModel;
 
-			rateItElementHost.Child = rateItWindow;
+			rateItElementHost.Child = _rateItWindow;
 		}
 	}
 }

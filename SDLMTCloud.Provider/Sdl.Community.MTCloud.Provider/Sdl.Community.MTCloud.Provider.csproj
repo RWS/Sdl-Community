@@ -205,6 +205,7 @@
     <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\FocusFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
     <Compile Include="Studio\ShortcutActions\SendFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />

@@ -13,20 +13,25 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Description = "SDL MT Cloud Rate Translations",
 		Icon = "")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
-	public  class RateItController : AbstractViewPartController
-	{		
+	public class RateItController : AbstractViewPartController
+	{
 		private Lazy<View.RateItControl> _control;
 
-		protected override void Initialize()
-		{
-			_control = new Lazy<View.RateItControl>(()=>new View.RateItControl());						
-		}
-
 		public IRatingService RateIt => _control?.Value.RatingService;
+
+		public void FocusFeedbackTextBox()
+		{
+			_control.Value.FocusFeedbackTextBox();
+		}
 
 		protected override Control GetContentControl()
 		{
 			return _control.Value;
+		}
+
+		protected override void Initialize()
+		{
+			_control = new Lazy<View.RateItControl>(() => new View.RateItControl());
 		}
 	}
 }
