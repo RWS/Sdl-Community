@@ -31,7 +31,7 @@ variables:
   value: 2021
 
 - name: Version.Revision
-  value: $[counter(variables['Version.MajorMinor'], 0)]
+  value: $[counter(variables['Version.MajorMinor'], 22)]
 
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision).$(VersionPatch)
