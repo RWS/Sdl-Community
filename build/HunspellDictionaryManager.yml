@@ -24,7 +24,7 @@ variables:
 - name: solution 
   value: '**/HunspellDictionaryManager.sln'
 - name: Version.MajorMinor
-  value: 3.0
+  value: 3.1
 
 - name: Version.Year
   value: 2021
