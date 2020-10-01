@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="Sdl.Community.Transcreate.Wizard.View.Export.WizardPageExportOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.Wizard.ViewModel.Export"
+             mc:Ignorable="d" 
+             d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:WizardPageExportOptionsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Options">
+			<Grid Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<!--<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Output Folder:" Margin="5,10,5,5"/>
+				<Grid Grid.Row="1" Grid.Column="1" Height="24" Margin="0,10,5,5">
+					<TextBox HorizontalContentAlignment="Stretch" 
+					         Padding="2,0,20,0" Height="24" 
+					         VerticalAlignment="Center"
+							  VerticalContentAlignment="Center"
+				        Text="{Binding OutputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True" />
+					<TextBlock  IsHitTestVisible="False" Padding="5,0,20,0" Text="Select the output folder"
+					       VerticalAlignment="Center" HorizontalAlignment="Left"
+				           Margin="0" Foreground="DarkGray">
+						<TextBlock.Style>
+							<Style TargetType="{x:Type TextBlock}">
+								<Setter Property="Visibility" Value="Collapsed" />
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding OutputFolder}" Value="" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter Property="Visibility" Value="Visible" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+					</TextBlock>
+					<Button Cursor="Hand" ToolTip="Clear"
+						Command="{Binding ClearExportFileCommand}"
+						HorizontalAlignment="Right" Margin="2,0,0,0" Width="20" VerticalContentAlignment="Center">
+						<Button.Style>
+							<Style TargetType="{x:Type Button}">
+								<Setter Property="Visibility" Value="Visible" />
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="Button">
+											<Border Background="Transparent">
+												<ContentPresenter/>
+											</Border>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding OutputFolder}" Value="" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter Property="Visibility" Value="Collapsed" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+
+							</Style>
+						</Button.Style>
+						<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="../../../Resources/Close.png" Height="10" 
+					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
+					</Button>
+				</Grid>
+				<Button Grid.Row="1" Grid.Column="2" Content="..." 
+				        Command="{Binding BrowseFolderCommand}"
+						ToolTip="Select the output folder"
+				        HorizontalAlignment="Left" VerticalAlignment="Center" 
+				        Height="24" Width="24" Margin="0,5,0,0"/>-->
+
+				<CheckBox Grid.Row="2" Margin="5,10,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Include Translations" 
+				          IsChecked="{Binding IncludeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<CheckBox Grid.Row="3" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Copy Source to Target for empty translations" 
+						  IsEnabled="{Binding CopySourceToTargetEnabled}"
+				          IsChecked="{Binding CopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+				<Grid Grid.Row="4" Grid.Column="0" ColumnSpan="3" >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<TextBlock VerticalAlignment="Center" Text="Exclude Segments" Style="{StaticResource TextBlockColor}" Margin="5,10,5,5"/>
+
+					<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+				                Margin="5,0,5,0" 
+				                Height="55" 
+								MaxDropDownHeight="250"
+								Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+				                SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+				                DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+					            ItemsSource="{Binding FilterItems}"            
+					            SelectedItems="{Binding SelectedExcludeFilterItems}"
+					            sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+								EnableGrouping="True"
+								EnableFiltering="True"
+					            IsEditable="True"
+					            EnableAutoComplete="True"
+					            ClearFilterOnDropdownClosing="True"
+					            ClearSelectionOnFilterChanged="True"
+					            />
+					<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+				        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
+						<Underline>Clear selected items</Underline>
+					</Button>
+				</Grid>
+
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

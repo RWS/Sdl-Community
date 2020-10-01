@@ -23,12 +23,44 @@ variables:
   value: 'Release'
 - name: solution 
   value: '**/HunspellDictionaryManager.sln'
+- name: Version.MajorMinorPatch
+  value: 3.0.1
+
+- name: Version.Year
+  value: 2021
+
+- name: Version.Revision
+  value: $[counter(variables['Version.MajorMinorPatch'], 0)]
+
+- name: PipelineVersion
+  value: $(Version.MajorMinorPatch).$(Version.Revision)
+
+name: $(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 pool: 
  vmImage : '$(DefaultBuildVm)'
 
 steps:
+  - template: tasks/version-assemblies/version-assemblies.yml
+    parameters:
+      PathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\HunspellDictionaryManager\Properties'
+      InstallPathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\defines.wxi'
+ 
   - template: jobs/build-sdlplugin.yml
+
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.HunspellDictionaryManager.exe'
+       description: 'HunspellDictionaryManager'
+  - task: VSBuild@1
+    inputs:
+       solution: '**Sdl.Community.HunspellDictionaryManager.Installer.wixproj'
+       platform: 'x86'
+       configuration: '$(buildConfiguration)'
+       msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+ 
   - template: tasks/sign-artifacts/prepare-signing.yml
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml

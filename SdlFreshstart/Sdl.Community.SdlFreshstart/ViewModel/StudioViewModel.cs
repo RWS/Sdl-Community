@@ -81,21 +81,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public string FolderDescription
-		{
-			get => _folderDescription;
-
-			set
-			{
-				if (Equals(value, _folderDescription))
-				{
-					return;
-				}
-				_folderDescription = value;
-				OnPropertyChanged(nameof(FolderDescription));
-			}
-		}
-
 		public ObservableCollection<StudioLocationListItem> Locations
 		{
 			get => _locations;
@@ -155,8 +140,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				OnPropertyChanged(nameof(RemoveBtnColor));
 			}
 		}
-
-		public string RegistryPath => $"Registry: {LatestStudioVersion.SdlRegistryKey}";
 
 		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFromLocations, true);
 
@@ -292,7 +275,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				nameof(StudioVersion.AppDataRoamingPluginsPath),
 				nameof(StudioVersion.AppDataLocalStudioPath),
 				nameof(StudioVersion.AppDataLocalPluginsPath),
-				nameof(StudioVersion.ProgramDataStudioPath),
 				nameof(StudioVersion.ProgramDataPluginsPath),
 				nameof(StudioVersion.ProgramDataStudioDataSubfolderPath),
 				nameof(StudioVersion.ProjectsXmlPath),
@@ -310,18 +292,26 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				AddLocation(latestVersionPath, description, property);
 			}
 
-			var projectApiFolderPath =
-				Path.GetDirectoryName(StudioVersionsCollection.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.ProjectApiPath);
-			var apiPathDescription = LocationsDescription.ProjectApiPath;
-
-			AddLocation(projectApiFolderPath, apiPathDescription, nameof(StudioVersion.ProjectApiPath));
-
+			AddProjectApiFolderLocation();
 			_locations.Move(_locations.Count - 1, _locations.Count - 2);
 
 			foreach (var location in _locations)
 			{
 				location.PropertyChanged += Location_PropertyChanged;
 			}
+		}
+
+		/// <summary>
+		/// This is needed because this folder is not used by all versions of Studio and so the adding of its path must be done differently
+		/// </summary>
+		private void AddProjectApiFolderLocation()
+		{
+			var projectApiFolderPath =
+				Path.GetDirectoryName(
+					StudioVersionsCollection.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.ProjectApiPath);
+			var apiPathDescription = LocationsDescription.ProjectApiPath;
+
+			AddLocation(projectApiFolderPath, apiPathDescription, nameof(StudioVersion.ProjectApiPath));
 		}
 
 		private void AddLocation(string path, string description, string alias)
@@ -337,12 +327,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void GetInstalledVersions()
 		{
-			var installedVersions = _versionService.GetInstalledStudioVersions();
-			installedVersions.Sort((item1, item2) =>
-				item1.MajorVersion < item2.MajorVersion ? 1 :
-				item1.MajorVersion > item2.MajorVersion ? -1 : 0);
-
-			_studioVersionsCollection = new ObservableCollection<StudioVersion>(installedVersions);
+			_studioVersionsCollection = new ObservableCollection<StudioVersion>(_versionService.GetInstalledStudioVersions());
 
 			foreach (var studioVersion in _studioVersionsCollection)
 			{
@@ -367,27 +352,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var lastSelectedItem = sender as StudioLocationListItem;
-			var selectedLocations = Locations.Where(s => s.IsSelected).ToList();
-			if (lastSelectedItem != null)
-			{
-				if (lastSelectedItem.IsSelected)
-				{
-					FolderDescription = lastSelectedItem.Description;
-				}
-				else
-				{
-					if (selectedLocations.Any())
-					{
-						FolderDescription = selectedLocations.First().Description;
-					}
-				}
-			}
-			if (!selectedLocations.Any())
-			{
-				FolderDescription = string.Empty;
-			}
-
 			SetButtonColors();
 		}
 
@@ -428,7 +392,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			{
 				if (!IsStudioRunning())
 				{
-					var controller = await ShowProgress();
+					var controller = await ShowProgress(Constants.Wait, Constants.RemoveFilesMessage);
 
 					var foldersToClearOrRestore = new List<LocationDetails>();
 					var registryToClearOrRestore = new List<LocationDetails>();
@@ -471,7 +435,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			try
 			{
-				_registryHelper.DeleteKeys(registryToClearOrRestore);
+				_registryHelper.DeleteKeys(registryToClearOrRestore, true);
 			}
 			catch (Exception ex)
 			{
@@ -515,27 +479,22 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			var result =
 				_messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreRemovedFoldersMessage);
 
-			if (result == MessageBoxResult.Yes)
+			if (result != MessageBoxResult.Yes) return;
+			if (!IsStudioRunning())
 			{
-				if (!IsStudioRunning())
-				{
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RestoringMessage);
-					controller.SetIndeterminate();
+				var controller = await ShowProgress(Constants.Wait, Constants.RestoringMessage);
 
-					//load saved locations path
-					var locationsToRestore = GetLocationsForSelectedVersions();
+				var locationsToRestore = GetLocationsForSelectedVersions();
 
-					await RestoreFolders(locationsToRestore);
-					await RestoreRegistry(locationsToRestore);
+				await RestoreFolders(locationsToRestore);
+				await RestoreRegistry(locationsToRestore);
 
-					UnselectGrids();
-					//to close the message
-					await controller.CloseAsync();
-				}
-				else
-				{
-					_messageService.ShowWarningMessage(Constants.StudioRunMessage, Constants.CloseStudioRestoreMessage);
-				}
+				UnselectGrids();
+				await controller.CloseAsync();
+			}
+			else
+			{
+				_messageService.ShowWarningMessage(Constants.StudioRunMessage, Constants.CloseStudioRestoreMessage);
 			}
 		}
 
@@ -616,9 +575,9 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private async Task<ProgressDialogController> ShowProgress()
+		private async Task<ProgressDialogController> ShowProgress(string title, string message)
 		{
-			var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
+			var controller = await _mainWindow.ShowProgressAsync(title, message);
 			controller.SetIndeterminate();
 			return controller;
 		}

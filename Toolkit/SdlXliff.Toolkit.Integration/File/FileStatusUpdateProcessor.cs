@@ -85,20 +85,20 @@ namespace SdlXliff.Toolkit.Integration.File
                     targetLContent = _dataExtractor.LockedContent;
 
                     // perform search
-                    if (_searcher.checkSegment(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
+                    if (_searcher.CheckSegment(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
                     {
                         if (_searchSettings.SearchInSource && (sourceText.Length > 0 || sourceTags.Count > 0))
                         {
                             _searcher.SearchInSegment(sourceText, sourceTags, sourceLContent);
-                            sourceResult = _searcher.resultsInText;
-                            sourceTags = _searcher.resultsInTags;
+                            sourceResult = _searcher.ResultsInText;
+                            sourceTags = _searcher.ResultsInTags;
                         }
 
                         if (_searchSettings.SearchInTarget && (targetText.Length > 0 || targetTags.Count > 0))
                         {
                             _searcher.SearchInSegment(targetText, targetTags, targetLContent);
-                            targetResult = _searcher.resultsInText;
-                            targetTags = _searcher.resultsInTags;
+                            targetResult = _searcher.ResultsInText;
+                            targetTags = _searcher.ResultsInTags;
                         }
 
                         // collect results

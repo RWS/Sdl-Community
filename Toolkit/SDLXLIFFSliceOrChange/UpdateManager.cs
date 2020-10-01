@@ -1,25 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Reflection;
 using System.Xml;
-using log4net;
+using NLog;
 using Sdl.Core.Globalization;
 
 namespace SDLXLIFFSliceOrChange
 {
-    public class UpdateManager
+	public class UpdateManager
     {
         private SDLXLIFFSliceOrChange _sdlxliffSliceOrChange;
-        private ILog logger = LogManager.GetLogger(typeof (SliceManager));
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateManager(SDLXLIFFSliceOrChange sdlxliffSliceOrChange)
+		public UpdateManager(SDLXLIFFSliceOrChange sdlxliffSliceOrChange)
         {
             _sdlxliffSliceOrChange = sdlxliffSliceOrChange;
         }
 
         public bool DoUpdateElementBasedOnSystemInformation(object segment)
         {
-            bool doUpdateElement = false;
-            String originValue = String.Empty;
+            var doUpdateElement = false;
+            var originValue = string.Empty;
             if (((XmlElement)segment).HasAttribute("origin"))
             {
                 originValue = ((XmlElement)segment).Attributes["origin"].Value;
@@ -43,13 +43,13 @@ namespace SDLXLIFFSliceOrChange
 
             if (!doUpdateElement)
             {
-                XmlNodeList prevSegs = ((XmlElement) segment).GetElementsByTagName("sdl:prev-origin");
+                var prevSegs = ((XmlElement) segment).GetElementsByTagName("sdl:prev-origin");
                 if (prevSegs.Count == 0) return doUpdateElement;
-                XmlElement prevSeg = (XmlElement) prevSegs[0];
+                var prevSeg = (XmlElement) prevSegs[0];
 
-                if (((XmlElement)prevSeg).HasAttribute("origin"))
+                if (prevSeg.HasAttribute("origin"))
                 {
-                    originValue = ((XmlElement)prevSeg).Attributes["origin"].Value;
+                    originValue = prevSeg.Attributes["origin"].Value;
                 }
 
                 switch (originValue)
@@ -73,14 +73,14 @@ namespace SDLXLIFFSliceOrChange
 
         public bool DoUpdateElementBasedOnScoreInformation(object segment)
         {
-            bool doUpdateElement = true;
-            String expression = RemoveSpaces(_sdlxliffSliceOrChange.txtMatchValuesExpression.Text);
-            if (_sdlxliffSliceOrChange.ckMatchValues.Checked && !String.IsNullOrEmpty(expression))
+	        var doUpdateElement = true;
+            var expression = RemoveSpaces(_sdlxliffSliceOrChange.txtMatchValuesExpression.Text);
+            if (_sdlxliffSliceOrChange.ckMatchValues.Checked && !string.IsNullOrEmpty(expression))
             {
                 decimal percentValue = 0;
                 if (((XmlElement)segment).HasAttribute("percent"))
                 {
-                    String textMatch = String.Empty;
+	                var textMatch = string.Empty;
                     if (((XmlElement)segment).HasAttribute("text-match"))
                         textMatch = ((XmlElement)segment).Attributes["text-match"].Value;
 
@@ -90,8 +90,8 @@ namespace SDLXLIFFSliceOrChange
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(ex.Message, ex);
-                    }
+						_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+					}
 
                     doUpdateElement = EvaluateExpression(expression, percentValue);
                     if (percentValue == 100 && (textMatch == "Source" || textMatch == "SourceAndTarget")) doUpdateElement = false;
@@ -107,9 +107,9 @@ namespace SDLXLIFFSliceOrChange
 
             if (_sdlxliffSliceOrChange.ckPerfectMatch.Checked)
             {
-                String percent = String.Empty;
-                String structMatch = String.Empty;
-                String textMatch = String.Empty;
+                var percent = string.Empty;
+                var structMatch = string.Empty;
+                var textMatch = string.Empty;
                 if (((XmlElement) segment).HasAttribute("percent"))
                     percent = ((XmlElement)segment).Attributes["percent"].Value;
                 if (((XmlElement) segment).HasAttribute("struct-match"))
@@ -122,10 +122,10 @@ namespace SDLXLIFFSliceOrChange
 
             if (_sdlxliffSliceOrChange.ckContextMatch.Checked)
             {
-                String percent = String.Empty;
-                String structMatch = String.Empty;
-                String textMatch = String.Empty;
-                String conf = String.Empty;
+	            var percent = string.Empty;
+	            var structMatch = string.Empty;
+	            var textMatch = string.Empty;
+	            var conf = string.Empty;
                 if (((XmlElement)segment).HasAttribute("percent"))
                     percent = ((XmlElement)segment).Attributes["percent"].Value;
                 if (((XmlElement)segment).HasAttribute("struct-match"))
@@ -140,16 +140,16 @@ namespace SDLXLIFFSliceOrChange
 
             if (!doUpdateElement)
             {
-                XmlNodeList prevSegs = ((XmlElement) segment).GetElementsByTagName("sdl:prev-origin");
+	            var prevSegs = ((XmlElement) segment).GetElementsByTagName("sdl:prev-origin");
                 if (prevSegs.Count == 0) return doUpdateElement;
-                XmlElement prevSeg = (XmlElement) prevSegs[0];
+                var prevSeg = (XmlElement) prevSegs[0];
 
-                if (_sdlxliffSliceOrChange.ckMatchValues.Checked && !String.IsNullOrEmpty(_sdlxliffSliceOrChange.txtMatchValuesExpression.Text))
+                if (_sdlxliffSliceOrChange.ckMatchValues.Checked && !string.IsNullOrEmpty(_sdlxliffSliceOrChange.txtMatchValuesExpression.Text))
                 {
                     decimal percentValue = 0;
                     if (prevSeg.HasAttribute("percent"))
                     {
-                        String textMatch = String.Empty;
+	                    var textMatch = string.Empty;
                         if (prevSeg.HasAttribute("text-match"))
                             textMatch = prevSeg.Attributes["text-match"].Value;
 
@@ -159,8 +159,8 @@ namespace SDLXLIFFSliceOrChange
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(ex.Message, ex);
-                        }
+							_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+						}
 
                         doUpdateElement = EvaluateExpression(_sdlxliffSliceOrChange.txtMatchValuesExpression.Text, percentValue);
                         if (percentValue == 100 && (textMatch == "Source" || textMatch == "SourceAndTarget")) doUpdateElement = false;
@@ -169,9 +169,9 @@ namespace SDLXLIFFSliceOrChange
 
                 if (_sdlxliffSliceOrChange.ckPerfectMatch.Checked)
                 {
-                    String percent = String.Empty;
-                    String structMatch = String.Empty;
-                    String textMatch = String.Empty;
+	                var percent = string.Empty;
+	                var structMatch = string.Empty;
+	                var textMatch = string.Empty;
                     if (prevSeg.HasAttribute("percent"))
                         percent = prevSeg.Attributes["percent"].Value;
                     if (prevSeg.HasAttribute("struct-match"))
@@ -184,9 +184,9 @@ namespace SDLXLIFFSliceOrChange
 
                 if (_sdlxliffSliceOrChange.ckContextMatch.Checked)
                 {
-                    String percent = String.Empty;
-                    String structMatch = String.Empty;
-                    String textMatch = String.Empty;
+	                var percent = string.Empty;
+	                var structMatch = string.Empty;
+	                var textMatch = string.Empty;
                     if (prevSeg.HasAttribute("percent"))
                         percent = prevSeg.Attributes["percent"].Value;
                     if (prevSeg.HasAttribute("struct-match"))
@@ -210,15 +210,15 @@ namespace SDLXLIFFSliceOrChange
             return text;
         }
 
-        private bool EvaluateExpression(String expression, decimal percentValue)
+        private bool EvaluateExpression(string expression, decimal percentValue)
         {
             //Relational operators: = != < > <= >=
             //Logical Operators:  AND OR && ||
             //Brackets: ( )            
             try
             {
-                //remove empty spaces 
-                while (expression.IndexOf(" ") != -1)
+                // remove empty spaces 
+                while (expression.IndexOf(" ", StringComparison.Ordinal) != -1)
                 {
                     expression = expression.Replace(" ", "");
                 }
@@ -227,7 +227,7 @@ namespace SDLXLIFFSliceOrChange
                 expression = expression.Replace("AND", "&&").Replace("OR", "||");
                 expression = expression.Replace("!{0}=", "!="); expression = expression.Replace("<{0}=", "<="); expression = expression.Replace(">{0}=", ">=");
                 expression = expression.Replace("{0}=", "{0}==");
-                expression = String.Format(expression, percentValue);
+                expression = string.Format(expression, percentValue);
                 var p = new ExpressionEvaluator.CompiledExpression(expression);
                 p.Parse();
                 p.Compile();
@@ -235,15 +235,15 @@ namespace SDLXLIFFSliceOrChange
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message, ex);
-                return false;
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+				return false;
             }
         }
 
         public bool DoUpdateElementBasedOnTranslationOriginInformation(object segment)
         {
-            bool doUpdateElement = false;
-            String originValue = String.Empty;
+            var doUpdateElement = false;
+            var originValue = string.Empty;
             if (((XmlElement) segment).HasAttribute("origin"))
             {
                 originValue = ((XmlElement) segment).Attributes["origin"].Value;
@@ -273,13 +273,13 @@ namespace SDLXLIFFSliceOrChange
 
             if (!doUpdateElement)
             {
-                XmlNodeList prevSegs = ((XmlElement) segment).GetElementsByTagName("sdl:prev-origin");
+	            var prevSegs = ((XmlElement) segment).GetElementsByTagName("sdl:prev-origin");
                 if (prevSegs.Count == 0) return doUpdateElement;
-                XmlElement prevSeg = (XmlElement) prevSegs[0];
+                var prevSeg = (XmlElement) prevSegs[0];
 
-                if (((XmlElement)prevSeg).HasAttribute("origin"))
+                if (prevSeg.HasAttribute("origin"))
                 {
-                    originValue = ((XmlElement)prevSeg).Attributes["origin"].Value;
+                    originValue = prevSeg.Attributes["origin"].Value;
                 }
 
                 switch (originValue)
@@ -310,14 +310,13 @@ namespace SDLXLIFFSliceOrChange
 
         public bool DoUpdateElementBasedOnLockedInformation(object segment)
         {
-            bool doUpdateElement = true;
+	        var doUpdateElement = true;
             if (_sdlxliffSliceOrChange.ckLocked.Checked != _sdlxliffSliceOrChange.ckUnlocked.Checked)
             {
                 if (((XmlElement) segment).HasAttribute("locked"))
                 {
-                    String lockedValue =
-                        ((XmlElement) segment).Attributes["locked"].Value;
-                    if ((lockedValue == "true" && !_sdlxliffSliceOrChange.ckLocked.Checked) || (lockedValue == "false" && _sdlxliffSliceOrChange.ckLocked.Checked))
+	                var lockedValue = ((XmlElement) segment).Attributes["locked"].Value;
+                    if (lockedValue == "true" && !_sdlxliffSliceOrChange.ckLocked.Checked || lockedValue == "false" && _sdlxliffSliceOrChange.ckLocked.Checked)
                         doUpdateElement = false;
                 }
                 else
@@ -331,21 +330,19 @@ namespace SDLXLIFFSliceOrChange
 
         public bool DoUpdateElementBasedOnTranslatioStatus(object segment)
         {
-            bool doUpdateElement = true;
-            List<String> translationStatuses = _sdlxliffSliceOrChange.GetTranslationStatusForSearch();
+	        var doUpdateElement = true;
+	        var translationStatuses = _sdlxliffSliceOrChange.GetTranslationStatusForSearch();
             if (translationStatuses.Count > 0)
             {
                 if (((XmlElement) segment).HasAttribute("conf"))
                 {
-                    String confStatus = ((XmlElement) segment).Attributes["conf"].Value;
+	                var confStatus = ((XmlElement) segment).Attributes["conf"].Value;
                     if (!translationStatuses.Contains(confStatus))
                         doUpdateElement = false;
                 }
                 else
                 {
-                    if (
-                        !translationStatuses.Contains(
-                            ConfirmationLevel.Unspecified.ToString()))
+                    if (!translationStatuses.Contains(ConfirmationLevel.Unspecified.ToString()))
                         doUpdateElement = false;
                 }
             }

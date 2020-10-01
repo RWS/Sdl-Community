@@ -29,13 +29,24 @@ variables:
 
 steps:
   - template: jobs/build-sdlplugin.yml
-
   - template: tasks/sign-artifacts/prepare-signing.yml
 
-  - template: tasks/sign-artifacts/sign-artifacts-azure.yml
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-      SigningRoot: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)'
-      SigningFileList: '$(Build.Repository.LocalPath)\SdlFreshstart\Signing.csv'
+       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.SdlFreshstart.exe'
+       description: 'SdlFreshstart'
+  - task: VSBuild@1
+    inputs:
+       solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
+       platform: 'x86'
+       configuration: '$(buildConfiguration)'
+       msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+  
+  - template: tasks/sign-artifacts/prepare-signing.yml
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
+     description: 'SdlFreshstart'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'

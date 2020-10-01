@@ -60,7 +60,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 
 			ProjectsXmlPath = Path.Combine(DocumentsPath, "Projects", "projects.xml");
 
-			ProgramDataStudioDataSubfolderPath = $@"{ProgramDataStudioPath}\Data";
+			ProgramDataStudioDataSubfolderPath = $@"{ProgramDataStudioPath}\Updates";
 
 			ProjectTemplatesPath = $@"{DocumentsPath}\Project Templates";
 
@@ -107,7 +107,6 @@ namespace Sdl.Community.SdlFreshstart.Model
 			}
 		}
 
-		public string PluginFolder => $"{MajorVersion}{Edition}";
 		public string ProgramDataPluginsPath { get; set; }
 		public string ProgramDataStudioDataSubfolderPath { get; set; }
 		public string ProgramDataStudioPath { get; set; }

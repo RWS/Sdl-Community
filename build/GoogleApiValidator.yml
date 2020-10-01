@@ -1,0 +1,69 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - GoogleApiValidator/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - GoogleApiValidator/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- group: 'SDLPLC Authenticode Credentials'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.GoogleApiValidator.sln'
+- name: pathToPublish
+  value: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 4.5.3'
+  inputs:
+    versionSpec: 4.5.3
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(solution)'
+    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- template: tasks/sign-artifacts/prepare-signing.yml
+
+- template: tasks/sign-artifacts/sign-single-artifact.yml
+  parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator\bin\$(buildConfiguration)\Sdl.Community.GoogleApiValidator.exe'
+     description: 'GoogleApiValidator'
+
+- task: VSBuild@1
+  inputs:
+     solution: '**GoogleApiValidator.Setup.wixproj'
+     platform: 'x86'
+     configuration: '$(buildConfiguration)'
+     msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+
+- template: tasks/sign-artifacts/sign-single-artifact.yml
+  parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\GoogleApiValidator\GoogleApiValidator.Setup\bin\$(buildConfiguration)\GoogleApiValidator.Setup.msi'
+     description: 'GoogleApiValidator'
+     
+- template: jobs/publish-build-artifact-task.yml

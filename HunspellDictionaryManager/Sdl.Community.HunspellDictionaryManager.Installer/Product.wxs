@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="3.0.1.0" Manufacturer="Sdl Community" UpgradeCode="F6741828-198D-43B2-A0F8-2D96C5443390">
+  <Product Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="$(var.productVersion)" Manufacturer="Sdl Community" UpgradeCode="F6741828-198D-43B2-A0F8-2D96C5443390">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -72,11 +73,11 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="Studio16">
       <Component Id="Sdl.Community.HunspellDictionaryManager">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetPath)" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
       </Component>
 
       <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="7080065D-6A4A-436A-AE01-1D1CAF804499">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\Sdl.Community.HunspellDictionaryManager.exe.config" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.HunspellDictionaryManager.exe.config" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>

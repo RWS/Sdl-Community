@@ -1,17 +1,17 @@
-# ETS Trados Plugin
+# SDLMTEdge Trados Plugin
 
-The ETS Trados Plugin's purpose is to allow clients to use their ETS API in
+The SDLMTEdge (SDL Machine Translation Edge) Trados Plugin's purpose is to allow clients to use their MTEdge API in
 combination with Trados Studio. There are two projects that help do this,
-ETSLanguageResourceBuilder and ETSTradosTranslationProvider.
+SDLMTEdgeLanguageResourceBuilder and SDLMTEdgeTradosTranslationProvider.
 
-## ETSLanguageResourceBuilder
+## SDLMTEdgeLanguageResourceBuilder
 
 The purpose of this project is to create a build task (in the form of a dll)
 that will be accessed via the other project. The build task will take the
 languages.xml file from xmt-externals and parse it into a resources file, which
-will then be referenced by ETSTradosTranslationProvider.
+will then be referenced by SDLMTEdgeTradosTranslationProvider.
 
-## ETSTradosTranslationProvider
+## SDLMTEdgeTradosTranslationProvider
 
 ### Requirements
 
@@ -31,14 +31,14 @@ you can skip setting this environmental variable. Leaving it unset will allow
 your builds to build much faster, so it's generally recommended not to set it
 unless necessary.
 
-You also must have built ETSLanguageResourceBuilder. 
-ETSTradosTranslationProvider will access the dll from that location (referred
+You also must have built SDLMTEdgeLanguageResourceBuilder. 
+SDLMTEdgeTradosTranslationProvider will access the dll from that location (referred
 to using the UsingTask tag in the csproj).
 
 ### Flow of Code
 
 #### TranslationProvider
-Here we set all settings related specifically to ETS and the settings we want
+Here we set all settings related specifically to SDLMTEdge and the settings we want
 to be applied that aren't being entered by the client. This gets used directly
 by Trados Studio and features many required settings (required via interface-
 ITranslationProvider).
@@ -59,16 +59,16 @@ contained within.
 
 Certain functions, such as UpdatingTranslations throw
 NotImplementedException(), which Trados Studio will catch and silence. We
-throw the exception because we don't train ETS based on corrections that users
-make on translations. If we did ever want to support training ETS, we would
+throw the exception because we don't train SDLMTEdge based on corrections that users
+make on translations. If we did ever want to support training SDLMTEdge, we would
 modify these functions.
 
-#### ETSApi
+#### MTEdgeApi
 
 The purpose of this folder and all files enclosed within is to create a
-centralized location for accessing the ETS API and related classes used for
-serializing. Any functions that call to ETS should be contained within
-(ideally using ContactETSServer).
+centralized location for accessing the MTEdge API and related classes used for
+serializing. Any functions that call to MTEdge should be contained within
+(ideally using ContactMTEdgeServer).
 
 #### TranslationProviderWinFormsUI and ProviderConfDialog
 

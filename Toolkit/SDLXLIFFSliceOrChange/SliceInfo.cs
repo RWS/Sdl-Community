@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SDLXLIFFSliceOrChange
 {
     public class SliceInfo
     {
-        public String File { get; set; }
+        public string File { get; set; }
+
         /// <summary>
         /// list of (trans unit ID and list of segments ID)
         /// </summary>

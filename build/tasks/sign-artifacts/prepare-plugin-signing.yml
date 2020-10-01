@@ -1,0 +1,6 @@
+steps:
+
+- task: DownloadSecureFile@1
+  name: OpenXCert
+  inputs:
+    secureFile: 'OpenXCert.pfx'

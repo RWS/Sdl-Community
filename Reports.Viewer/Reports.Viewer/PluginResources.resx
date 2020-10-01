@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Reports Viewer</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ReportsView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\report_viewer.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SDLReportsViewer_Description" xml:space="preserve">
+    <value>Reports Viewer</value>
+  </data>
+  <data name="SDLReportsViewer_Name" xml:space="preserve">
+    <value>Reports Viewer</value>
+  </data>
+  <data name="Label_AllLanguages" xml:space="preserve">
+    <value>All Languages</value>
+  </data>
+  <data name="ReportsViewer_ReportGroup_Name" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="ReportsViewer_SettingsGroup_Name" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="ReportsViewer_ViewGroup_Name" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ReportsViewer_Refresh_Description" xml:space="preserve">
+    <value>Refresh View</value>
+  </data>
+  <data name="ReportsViewer_Refresh_Name" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="ReportsViewer_OpenSettings_Description" xml:space="preserve">
+    <value>Open Settings</value>
+  </data>
+  <data name="ReportsViewer_OpenSettings_Name" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ReportsViewer_AddReport_Description" xml:space="preserve">
+    <value>Add Report</value>
+  </data>
+  <data name="ReportsViewer_AddReport_Name" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ReportsViewer_EditReport_Description" xml:space="preserve">
+    <value>Edit Report</value>
+  </data>
+  <data name="ReportsViewer_EditReport_Name" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ReportsViewer_RemoveReport_Description" xml:space="preserve">
+    <value>Remove Report</value>
+  </data>
+  <data name="ReportsViewer_RemoveReport_Name" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\refresh.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Report" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\report.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReportsViewer_SaveAsReport_Description" xml:space="preserve">
+    <value>Save Report As</value>
+  </data>
+  <data name="ReportsViewer_SaveAsReport_Name" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\add.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\edit.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\save.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReportsViewer_PageSetup_Description" xml:space="preserve">
+    <value>Open Page Setup</value>
+  </data>
+  <data name="ReportsViewer_PageSetup_Name" xml:space="preserve">
+    <value>Page Setup</value>
+  </data>
+  <data name="ReportsViewer_PrintPreviewReport_Description" xml:space="preserve">
+    <value>Open Print Preview</value>
+  </data>
+  <data name="ReportsViewer_PrintPreviewReport_Name" xml:space="preserve">
+    <value>Print Preview</value>
+  </data>
+  <data name="ReportsViewer_PrintReport_Description" xml:space="preserve">
+    <value>Print Report</value>
+  </data>
+  <data name="ReportsViewer_PrintReport_Name" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="PageSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\pagesetup.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Print" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\print.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PrintPreview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\printpreview.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WindowTitle_EditProjectReport" xml:space="preserve">
+    <value>Edit Project Report</value>
+  </data>
+  <data name="WindowTitle_AddProjectReport" xml:space="preserve">
+    <value>Add Project Report</value>
+  </data>
+  <data name="WindowTitle_EditReportTemplate" xml:space="preserve">
+    <value>Edit Report Template</value>
+  </data>
+  <data name="WindowTitle_AddReportTemplate" xml:space="preserve">
+    <value>Add Report Template</value>
+  </data>
+  <data name="Message_StudioUpdatedReports" xml:space="preserve">
+    <value>Studio has applied changes in the Reports view.</value>
+  </data>
+  <data name="Message_AddedReports" xml:space="preserve">
+    <value>Added Reports: {0}</value>
+  </data>
+  <data name="Message_RemovedReports" xml:space="preserve">
+    <value>Removed Reports: {0}</value>
+  </data>
+  <data name="Message_ClickYesToRefresh" xml:space="preserve">
+    <value>Click on 'Yes' to refresh the view</value>
+  </data>
+  <data name="Message_CustomReportTemplatesChanged" xml:space="preserve">
+    <value>The custom report templates have been updated.</value>
+  </data>
+  <data name="GroupType_GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="GroupType_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="StatusLabel_FileSelected" xml:space="preserve">
+    <value>Files: {0}, Selected: {1}</value>
+  </data>
+  <data name="WindowTitle_SelectTemplateFile" xml:space="preserve">
+    <value>Select the template file</value>
+  </data>
+	<data name="StatusLabel_ReportsSelected" xml:space="preserve">
+    <value>Reports: {0}, Selected: {1}</value>
+  </data>
+	<data name="LanguageGroup_AvailableLanguages" xml:space="preserve">
+    <value>Available Languages</value>
+  </data>
+	<data name="LanguageGroup_AllLanguages" xml:space="preserve">
+    <value>All Languages</value>
+  </data>
+	<data name="TemplateScope_StudioOnly" xml:space="preserve">
+    <value>Studio Reports only</value>
+  </data>
+	<data name="TemplateScope_NonStudioOnly" xml:space="preserve">
+    <value>Non Studio Reports only</value>
+  </data>
+	<data name="TemplateScope_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+	<data name="WindowTitle_SelectReportFile" xml:space="preserve">
+    <value>Select the {0} file</value>
+  </data>
+</root>
