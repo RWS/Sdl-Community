@@ -25,7 +25,8 @@ variables:
   value: '**/HunspellDictionaryManager.sln'
 - name: Version.MajorMinor
   value: 3.1
-
+- name: VersionPatch
+  value: 0
 - name: Version.Year
   value: 2021
 
@@ -33,9 +34,9 @@ variables:
   value: $[counter(variables['Version.MajorMinor'], 0)]
 
 - name: PipelineVersion
-  value: $(Version.MajorMinor).$(Version.Revision)
+  value: $(Version.MajorMinor).$(Version.Revision).$(VersionPatch)
 
-name: $(Build.DefinitionName)_$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)_$(Date:yyyyMMdd)$(Rev:.r)
+name: $(Build.DefinitionName)_$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision).$(VersionPatch)_$(Date:yyyyMMdd)$(Rev:.r)
 
 pool: 
  vmImage : '$(DefaultBuildVm)'
