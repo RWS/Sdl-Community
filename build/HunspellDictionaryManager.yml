@@ -23,19 +23,20 @@ variables:
   value: 'Release'
 - name: solution 
   value: '**/HunspellDictionaryManager.sln'
-- name: Version.MajorMinorPatch
-  value: 2.0.1
-
+- name: Version.MajorMinor
+  value: 2.1
+- name: Version.Patch
+  value: 0
 - name: Version.Year
   value: 2019
 
 - name: Version.Revision
-  value: $[counter(variables['Version.MajorMinorPatch'], 0)]
+  value: $[counter(variables['Version.MajorMinor'], 5)]
 
 - name: PipelineVersion
-  value: $(Version.MajorMinorPatch).$(Version.Revision)
+  value: $(Version.MajorMinor).$(Version.Revision).$(Version.Patch)
 
-name: $(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+name: $(Build.DefinitionName)_$(SourceBranchName)_ $(Version.MajorMinor).$(Version.Revision).$(Version.Patch)_$(Date:yyyyMMdd)$(Rev:.r)
 
 pool: 
  vmImage : '$(DefaultBuildVm)'
