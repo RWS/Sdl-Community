@@ -8,31 +8,31 @@
         /// <summary>
         /// The string data type.
         /// </summary>
-        String,
+        @string,
 
         /// <summary>
         /// The number data type.
         /// </summary>
-        Number,
+        @number,
 
         /// <summary>
         /// The integer data type.
         /// </summary>
-        Integer,
+        @integer,
 
         /// <summary>
         /// The boolean data type.
         /// </summary>
-        Boolean,
+        @boolean,
 
         /// <summary>
         /// The date time data type.
         /// </summary>
-        DateTime,
+        @dateTime,
 
         /// <summary>
         /// The secret data type.
         /// </summary>
-        Secret
+        @secret
     }
 }

@@ -20,7 +20,7 @@ namespace Sdl.LC.AddonBlueprint.Services
         /// <summary>
         /// The secret data type.
         /// </summary>
-        private const DataTypeEnum SecretDataType = DataTypeEnum.Secret;
+        private const DataTypeEnum SecretDataType = DataTypeEnum.secret;
 
         /// <summary>
         /// The secret mask const string.
