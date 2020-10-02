@@ -39,6 +39,34 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         }
 
         [Theory]
+        [InlineData("The apartment is 23F. ", "The apartment is 23E.")]
+        public void AlphanumericVerification_WithErrors(string source, string target)
+        {
+	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+	        Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
+
+        [Theory]
+        [InlineData("The apartment number is 125H. ", "The apartment number is 125H.")]
+        public void AlphanumericVerification_NoErrors(string source, string target)
+        {
+	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+	        Assert.True(errorMessage.Count == 0);
+        }
+
+		[Theory]
         [InlineData("12AC and CDE45", "12AB Wrong alphanumeric CE45")]
         public void WrongAlphanumerics(string source, string target)
         {

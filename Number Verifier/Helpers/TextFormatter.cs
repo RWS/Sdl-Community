@@ -189,6 +189,17 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			return separatorsChars;
 		}
 
+		public string GetAlphanumericsCustomSeparators(string[] separators)
+		{
+			var customSeparatorsBuilder = new StringBuilder();
+			foreach (var separator in separators)
+			{
+				customSeparatorsBuilder.Append(separator);
+			}
+
+			return customSeparatorsBuilder.ToString();
+		}
+
 		// When number has the last or first char one of the separators, remove it because we don't need it.
 		// Is not corresponding to decimal/thousand separator, it's used as simple punctuation letter (Eg: ,123 or 245, )
 		public string RemovePunctuationChar(string text, char[] sepChars, bool omitLeadingZero)
