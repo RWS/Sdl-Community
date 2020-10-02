@@ -112,6 +112,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationInitializer.cs" />
     <Compile Include="Composers\AlphanumericErrorComposer.cs" />
     <Compile Include="Composers\TargetThousandSeparatorsExtractComposer.cs" />
     <Compile Include="Composers\SourceThousandSeparatorsExtractComposer.cs" />

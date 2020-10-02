@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using NLog;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Helpers;
@@ -41,10 +42,9 @@ namespace Sdl.Community.NumberVerifier
 		private string _sourceText;
 		private string _thousandWithoutDecimal;
 		private string _decimalAfterThousand;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		#endregion
-
-		public static readonly Log Log = Log.Instance;
 
 		public NumberVerifierMain() : this(null)
 		{
@@ -414,7 +414,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -456,7 +456,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return new List<ErrorReporting>();
 			}
 		}
@@ -700,7 +700,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -735,7 +735,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -759,7 +759,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -819,7 +819,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return separators.ToString();
 		}
@@ -853,7 +853,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 		
@@ -1002,7 +1002,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return number;
 		}
@@ -1038,7 +1038,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return string.Empty;
 			}
 		}
@@ -1075,7 +1075,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return string.Empty;
 			}
 		}
@@ -1100,7 +1100,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 
 			return normalizedNumber.Normalize(NormalizationForm.FormKC);
@@ -1329,7 +1329,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return new Tuple<List<string>, List<string>>(new List<string>(), new List<string>());
 			}
 		}
@@ -1342,7 +1342,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return string.Empty;
 			}
 		}
@@ -1429,7 +1429,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return result;
 		}
@@ -1531,7 +1531,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return result;
 		}
