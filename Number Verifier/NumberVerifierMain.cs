@@ -1265,6 +1265,22 @@ namespace Sdl.Community.NumberVerifier
 					sourceAlphanumericsList.RemoveAt(nJ);
 				}
 			}
+
+			// Remove the items which are not alphanumerics and where not identified within the sourceAlphanumericsList
+			RemoveNoAlphanumerics(targetAlphanumericsList);
+		}
+
+		// Remove the items which are not alphanumerics
+		private void RemoveNoAlphanumerics(ICollection<string> targetAlphanumericsList)
+		{
+			var itemsToRemove = targetAlphanumericsList.Where(item => !item.Any(char.IsDigit) || item.All(char.IsDigit)).ToList();
+			if (itemsToRemove.Any())
+			{
+				foreach (var item in itemsToRemove.Where(targetAlphanumericsList.Contains))
+				{
+					targetAlphanumericsList.Remove(item);
+				}
+			}
 		}
 
 		public Tuple<List<string>, List<string>> GetAlphanumericList(string text)
