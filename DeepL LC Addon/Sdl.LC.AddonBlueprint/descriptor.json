@@ -1,7 +1,7 @@
 ﻿{
 	"Descriptor": {
 		"name": "DeepL Translation Provider",
-		"version": "1.0.0",
+		"version": "1.0.5",
 		"description": "This Add on provides machine translation results from the DeepL Translator.",
 		"extensions": [
 			{
@@ -67,7 +67,7 @@
 				"id": "apiKey",
 				"description": "Please add DeepL Api Key",
 				"optional": false,
-				"defaultValue": "null",
+				"defaultValue": "",
 				"dataType": "secret"
 			}
 			//{
@@ -98,7 +98,7 @@
 		"releaseNotes": "incididunt",
 		"minimumVersion": "1.0.0",
 		"vendor": {
-			"name": "ACME",
+			"name": "SDL Community",
 			"url": "acme.com"
 		}
 	}

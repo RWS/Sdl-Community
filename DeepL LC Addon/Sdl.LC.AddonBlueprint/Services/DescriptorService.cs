@@ -39,21 +39,20 @@ namespace Sdl.LC.AddonBlueprint.Services
         /// <summary>
         /// Gets the descriptor.
         /// </summary>
-        /// <returns></returns>
         public AddonDescriptorModel GetDescriptor()
         {
-            foreach (var configuration in _addonDescriptor.Configurations.Where(c => c.DataType == SecretDataType))
-            {
-                configuration.DefaultValue = SecretMask;
-            }
+			//TODO: Commented for the time being it puts *** characters in the value of the api key bey default when you want to install the provider
+			//foreach (var configuration in _addonDescriptor.Configurations.Where(c => c.DataType == SecretDataType))
+			//{
+			//	//configuration.DefaultValue = SecretMask;
+			//}
 
-            return _addonDescriptor;
+			return _addonDescriptor;
         }
 
         /// <summary>
         /// Gets the secret configurations ids.
         /// </summary>
-        /// <returns></returns>
         public List<string> GetSecretConfigurations()
         {
             return _addonDescriptor.Configurations.Where(c => c.DataType == SecretDataType).Select(s => s.Id).ToList();
