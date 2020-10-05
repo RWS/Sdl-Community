@@ -1,58 +1,25 @@
 ﻿{
 	"Descriptor": {
 		"name": "DeepL Translation Provider",
-		"version": "1.0.5",
+		"version": "1.0.6",
 		"description": "This Add on provides machine translation results from the DeepL Translator.",
 		"extensions": [
 			{
-				"id": "FIRST_AUTO_TASK_TYPE",
-				"extensionPointId": "AUTO_TASK_TYPE",
-				"name": "Fist Auto Task Type",
-				"description": "Provides some automated task types.",
+				"id": "MT_DeepL",
+				"extensionPointId": "lc.mtprovider",
+				"name": "DeepL Translation Provider",
+				"description": "rovides translation using DeepL",
 				"extensionPointVersion": "1",
 				"configuration": {
 					"endpoints": {
-						"lcautomatictasksubmit": "submit",
 						"sdl.lc.extensionpoint.machinetranslationprovider.translate": "api/translate",
 						"sdl.lc.extensionpoint.machinetranslationprovider.engines": "api/translation-engines"
 					},
-					"scope": "file",
-					"supportedInputFileType": "nativeSource",
-					"outputFileType": "bcmSource",
-					"outcomes": [
-						{
-							"outcome": "outcome1",
-							"description": "The first outcome of the taskType",
-							"default": false
-						},
-						{
-							"outcome": "outcome2",
-							"description": "The second outcone of the taskType",
-							"default": true
-						}
-					],
-					"workflowTemplateConfigurations": [
-						{
-							"name": "Sample Configuration 1",
-							"id": "SAMPLE_1",
-							"description": "Sample description",
-							"optional": false,
-							"defaultValue": "null",
-							"dataType": "string"
-						},
-						{
-							"name": "Sample Configuration 2",
-							"id": "SAMPLE_2",
-							"description": "Sample description",
-							"optional": false,
-							"defaultValue": "null",
-							"dataType": "number"
-						}
-					]
+					"format": "html"
 				}
 			}
 		],
-		"baseUrl": "http://10.111.138.193:2509",
+		"baseUrl": "http://10.111.138.179:2509",
 		"standardEndpoints": {
 			"health": "/api/health",
 			"addonLifecycle": "/api/addon-lifecycle",
@@ -70,30 +37,6 @@
 				"defaultValue": "",
 				"dataType": "secret"
 			}
-			//{
-			//  "name": "Sample Configuration 2",
-			//  "id": "SAMPLE_2",
-			//  "description": "Sample description",
-			//  "optional": false,
-			//  "defaultValue": "null",
-			//  "dataType": "number"
-			//},
-			//{
-			//  "name": "Sample Configuration 2",
-			//  "id": "SAMPLE_3",
-			//  "description": "Sample description",
-			//  "optional": false,
-			//  "defaultValue": "null",
-			//  "dataType": "secret"
-			//},
-			//{
-			//  "name": "Sample Configuration 13",
-			//  "id": "SAMPLE_4",
-			//  "description": "Sample description",
-			//  "optional": false,
-			//  "defaultValue": "null",
-			//  "dataType": "boolean"
-			//}
 		],
 		"releaseNotes": "incididunt",
 		"minimumVersion": "1.0.0",
