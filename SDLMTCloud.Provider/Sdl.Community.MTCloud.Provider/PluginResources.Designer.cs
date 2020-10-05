@@ -119,11 +119,20 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Rating.
+        ///   Looks up a localized string similar to Enable &quot;Rate Translations&quot;.
         /// </summary>
         public static string EnableRating {
             get {
                 return ResourceManager.GetString("EnableRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki..
+        /// </summary>
+        public static string EnableRatingCheckboxTooltip {
+            get {
+                return ResourceManager.GetString("EnableRatingCheckboxTooltip", resourceCulture);
             }
         }
         
@@ -133,6 +142,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string FeedbackNotSent_TooltipMessage {
             get {
                 return ResourceManager.GetString("FeedbackNotSent_TooltipMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feedback sent successfully.
+        /// </summary>
+        public static string FeedbackSentSuccessfully {
+            get {
+                return ResourceManager.GetString("FeedbackSentSuccessfully", resourceCulture);
             }
         }
         
@@ -585,6 +603,16 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string RateIt_Option_WordsOmission {
             get {
                 return ResourceManager.GetString("RateIt_Option_WordsOmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon rating {
+            get {
+                object obj = ResourceManager.GetObject("rating", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

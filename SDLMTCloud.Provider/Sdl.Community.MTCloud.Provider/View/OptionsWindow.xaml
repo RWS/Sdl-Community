@@ -211,7 +211,10 @@
 				</controls:SortAwareDataGrid>
 				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
-					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding SendFeedback}" Content="{x:Static rsx:PluginResources.EnableRating}"  />
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
+					          IsChecked="{Binding SendFeedback}" 
+					          Content="{x:Static rsx:PluginResources.EnableRating}" 
+					          ToolTip="{x:Static rsx:PluginResources.EnableRatingCheckboxTooltip}"/>
 				</StackPanel>
 			</Grid >
 

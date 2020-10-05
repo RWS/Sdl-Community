@@ -171,13 +171,14 @@
     <Compile Include="Interfaces\IShortcutService.cs" />
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
+    <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
     <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
     <Compile Include="Model\FeedbackSendingStatus.cs" />
-    <Compile Include="Model\ImprovedTarget.cs" />
+    <Compile Include="Model\Feedback.cs" />
     <Compile Include="Model\Improvement.cs" />
     <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
@@ -198,7 +199,6 @@
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
     <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
-    <Compile Include="Service\ImprovementAvailableEventArgs.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
@@ -294,6 +294,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Checked.ico" />
+    <Resource Include="Resources\rating.ico" />
     <Content Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />

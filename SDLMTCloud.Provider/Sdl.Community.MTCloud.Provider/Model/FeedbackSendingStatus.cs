@@ -1,30 +1,34 @@
-﻿namespace Sdl.Community.MTCloud.Provider.Model
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
+
+namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class FeedbackSendingStatus
 	{
-		private Status _status;
 		public string Message { get; private set; }
 
-		public Status Status
+		public Status Status { get; set; }
+
+		public void ChangeStatus(HttpResponseMessage responseMessage)
 		{
-			get => _status;
-			set
+			if (responseMessage.IsSuccessStatusCode)
 			{
-				_status = value;
-				switch (value)
-				{
-					default:
-						Message = "";
-						return;
+				Status = Status.Sent;
+				Message = PluginResources.FeedbackSentSuccessfully;
+			}
+			else
+			{
+				Status = Status.NotSent;
+				var jObj = JObject.Parse(responseMessage.ReasonPhrase);
+				jObj.TryGetValue("errors", out var jErrors);
 
-					case Status.Sent:
-						Message = "Feedback sent";
-						return;
+				var reasons = jErrors?.ToObject<List<Error>>();
+				var formattedReasons = reasons != null ? string.Join("\r\n", reasons.Select(r => r.Description)) : null;
 
-					case Status.NotSent:
-						Message = "Feedback was not sent";
-						return;
-				}
+				Message = $"{responseMessage.StatusCode}: {Environment.NewLine}{formattedReasons}";
 			}
 		}
 	}

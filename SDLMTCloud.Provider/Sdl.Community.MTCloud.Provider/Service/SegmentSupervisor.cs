@@ -38,6 +38,22 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		}
 
 		public Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>>();
+		public ImprovedTarget GetImprovement(SegmentId? segmentId = null)
+		{
+			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
+			ImprovedTarget improvement = null;
+
+			var segmentHasImprovement = currentSegment != null &&
+			                            ActiveDocumentImprovements.ContainsKey(currentSegment.Value);
+			if (segmentHasImprovement)
+			{
+				improvement = ActiveDocumentImprovements[currentSegment.Value];
+			}
+			return improvement;
+		}
+
+		public Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; } =
+			new Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>>();
 
 		public void StartSupervising()
 		{

@@ -11,7 +11,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		Id = "SDL MT Cloud Rate Translations",
 		Name = "SDL MT Cloud Rate Translations",
 		Description = "SDL MT Cloud Rate Translations",
-		Icon = "")]
+		Icon = "rating")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	public class RateItController : AbstractViewPartController
 	{

@@ -123,13 +123,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		public async Task SendFeedback(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
+		public async Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
 		{
 			var feedbackRequest = CreateFeedbackRequest(segmentId, rating, originalText, improvement);
-			await SendFeedback(feedbackRequest);
+			return await SendFeedback(feedbackRequest);
 		}
 
-		private async Task SendFeedback(dynamic translationFeedback)
+		private async Task<HttpResponseMessage> SendFeedback(dynamic translationFeedback)
 		{
 			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
 			{
@@ -142,6 +142,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				}
 			}
 
+			HttpResponseMessage responseMessage;
 			using (var httpClient = new HttpClient())
 			{
 				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -157,11 +158,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 
-				var responseMessage = await httpClient.SendAsync(request);
+				responseMessage = await httpClient.SendAsync(request);
 				var response = await responseMessage.Content.ReadAsStringAsync();
+				responseMessage.ReasonPhrase = response;
 
 				_logger.Info(PluginResources.SendFeedbackResponseFromServer, responseMessage.StatusCode, response);
 			}
+
+			return responseMessage;
 		}
 
 		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)

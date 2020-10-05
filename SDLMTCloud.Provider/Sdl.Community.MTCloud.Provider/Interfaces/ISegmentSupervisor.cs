@@ -16,5 +16,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		void StartSupervising();
 
 		void StopSupervising();
+		ImprovedTarget GetImprovement(SegmentId? segmentId = null);
 	}
 }

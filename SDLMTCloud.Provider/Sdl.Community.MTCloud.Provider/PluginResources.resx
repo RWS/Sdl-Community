@@ -341,7 +341,7 @@
     <value>Auto Send Feedback</value>
   </data>
   <data name="EnableRating" xml:space="preserve">
-    <value>Enable Rating</value>
+    <value>Enable "Rate Translations"</value>
   </data>
   <data name="ToEnableRatingChangeTheSettings" xml:space="preserve">
     <value>To enable rating change the settings...</value>
@@ -371,6 +371,15 @@
     <value>When this button is clicked all the information applied to the checkboxes, any comment and suggestion will be sent to the server.</value>
   </data>
   <data name="FeedbackNotSent_TooltipMessage" xml:space="preserve">
-	  <value>Check whether you have any feedback to send (rating, feedback message, improvement, comments)</value>
+    <value>Check whether you have any feedback to send (rating, feedback message, improvement, comments)</value>
+  </data>
+  <data name="FeedbackSentSuccessfully" xml:space="preserve">
+    <value>Feedback sent successfully</value>
+  </data>
+  <data name="rating" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\rating.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnableRatingCheckboxTooltip" xml:space="preserve">
+	  <value>To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.</value>
   </data>
 </root>

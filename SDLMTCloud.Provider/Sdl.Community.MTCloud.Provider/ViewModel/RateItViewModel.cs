@@ -66,7 +66,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
 		{
 			if (!IsSendFeedbackEnabled) return;
-			await SendFeedbackToService(confirmedSegment);
+			await SendFeedback(confirmedSegment);
 		}
 
 		public List<FeedbackOption> FeedbackOptions { get; set; }
@@ -142,7 +142,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ClearFeedbackBox));
 
 		public ICommand SendFeedbackCommand
-			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedbackToService()));
+			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedback(null)));
 
 		public void IncreaseRating()
 		{
@@ -172,22 +172,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private async Task SendFeedbackToService(SegmentId? segmentId = null)
+		private async Task SendFeedback(SegmentId? segmentId)
 		{
-			OnFeedbackSendingStatusChanged(await SendFeedback(segmentId) ? Status.Sent : Status.NotSent);
-		}
-
-		private async Task<bool> SendFeedback(SegmentId? segmentId)
-		{
-			if (!IsSendFeedbackEnabled) return false;
+			if (!IsSendFeedbackEnabled) return;
 			var improvement = GetImprovement(segmentId);
 			if (improvement == null)
 			{
 				_messageBoxService.ShowWarningMessage(
 					string.Format(PluginResources.OriginalTranslationMissingMessage, PluginResources.SDLMTCloudName,
 						PluginResources.SDLMTCloudName), PluginResources.OriginalTranslationMissingTitle);
-
-				return false;
+				return;
 			}
 
 			//Checking for consistency: whether translation corresponds to source
@@ -198,7 +192,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName),
 					PluginResources.SourceModified);
 
-				return false;
+				return;
 			}
 
 			var rating = GetRatingObject(segmentId);
@@ -207,17 +201,20 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				UpdateImprovement(improvement, rating);
 			}
 
-			if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null) return false;
+			//if (string.IsNullOrWhiteSpace(improvement.Improvement) && rating == null)
+			//{
+			//	improvement.Improvement = 
+			//}
+			var responseMessage = await _translationService.SendFeedback(segmentId, rating, improvement.OriginalMtCloudTranslation,
+				improvement.ActualTranslation);
 
-			await _translationService.SendFeedback(segmentId, rating, improvement.OriginalTarget, improvement.Improvement);
-			return true;
+			FeedbackSendingStatus.ChangeStatus(responseMessage);
+			OnFeedbackSendingStatusChanged();
 		}
 
-		private void OnFeedbackSendingStatusChanged(Status status)
+		private void OnFeedbackSendingStatusChanged()
 		{
-			FeedbackSendingStatus.Status = status;
 			OnPropertyChanged(nameof(FeedbackSendingStatus));
-
 			SwitchListeningForPropertyChanges(true);
 		}
 
@@ -432,13 +429,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private ImprovedTarget GetImprovement(SegmentId? segmentId = null)
 		{
-			var currentSegment = segmentId ?? ActiveSegmentId;
-			ImprovedTarget improvement = null;
-			if (currentSegment != null && _segmentSupervisor.ActiveDocumentImprovements.ContainsKey(currentSegment.Value))
-			{
-				improvement = _segmentSupervisor.ActiveDocumentImprovements[currentSegment.Value];
-			}
-			return improvement;
+			return _segmentSupervisor.GetImprovement();
 		}
 
 		private void UpdateActionTooltips()
