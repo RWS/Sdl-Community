@@ -19,7 +19,7 @@
 				}
 			}
 		],
-		"baseUrl": "http://10.111.138.179:2509",
+		"baseUrl": "http://192.168.68.113:2509",
 		"standardEndpoints": {
 			"health": "/api/health",
 			"addonLifecycle": "/api/addon-lifecycle",
@@ -34,8 +34,16 @@
 				"id": "apiKey",
 				"description": "Please add DeepL Api Key",
 				"optional": false,
-				"defaultValue": "",
+				"defaultValue": null,
 				"dataType": "secret"
+			},
+			{
+				"name": "Translation formality",
+				"id": "translationFormality",
+				"description": "Please choose if translated text should lean towards formal or informal language. Possible options are 'Default','More','Less'",
+				"optional": true,
+				"defaultValue": null,
+				"dataType": "string"
 			}
 		],
 		"releaseNotes": "incididunt",

@@ -22,30 +22,12 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 	[ApiController]
 	public class StandardController : ControllerBase
 	{
-		/// <summary>
-		/// The configuration
-		/// </summary>
 		private IConfiguration _configuration;
-
-		/// <summary>
-		/// The logger.
-		/// </summary>
-		private ILogger _logger;
-
-		/// <summary>
-		/// The descriptor service.
-		/// </summary>
-		private IDescriptorService _descriptorService;
-
-		/// <summary>
-		/// The account service.
-		/// </summary>
-		private IAccountService _accountService;
-
-		/// <summary>
-		/// The health reporter.
-		/// </summary>
-		private IHealthReporter _healthReporter;
+		private readonly ILogger _logger;
+		private readonly IDescriptorService _descriptorService;
+		private readonly IAccountService _accountService;
+		private readonly IHealthReporter _healthReporter;
+		private readonly ITranslationService _translationService;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AccountService"/> class.
@@ -61,13 +43,14 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			IDescriptorService descriptorService,
 			IAccountService accountService,
 			IHttpContextAccessor httpContextAccessor,
-			IHealthReporter healthReporter)
+			IHealthReporter healthReporter,ITranslationService translationService)
 		{
 			_configuration = configuration;
 			_logger = logger;
 			_descriptorService = descriptorService;
 			_accountService = accountService;
 			_healthReporter = healthReporter;
+			_translationService = translationService;
 		}
 
 		/// <summary>
@@ -230,7 +213,13 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		[HttpGet("translation-engines")]
 		public async Task<IActionResult> GetTranslationEngines()
 		{
-			return Ok("test");
+
+			//var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
+			//var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, CancellationToken.None).ConfigureAwait(false);
+			var translationService = new TranslationService();
+
+			var test = await translationService.GetCorrespondingEngines(apiKey, "en-us", new List<string> { "de-de" });
+			return Ok();
 		}
 
 		//[Authorize]
