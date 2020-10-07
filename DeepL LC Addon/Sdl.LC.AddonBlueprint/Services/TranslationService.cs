@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Sdl.LC.AddonBlueprint.Enums;
-using Sdl.LC.AddonBlueprint.Helpers;
 using Sdl.LC.AddonBlueprint.Interfaces;
 using Sdl.LC.AddonBlueprint.Models;
 
@@ -68,14 +67,44 @@ namespace Sdl.LC.AddonBlueprint.Services
 		public async Task<List<TranslationEngineResponse>> GetCorrespondingEngines(string apiKey, string sourceLanguageCode, List<string> targetLanguagesCode)
 		{
 			var deeplAvailableSourceLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.source);
-			var deepLAvailableTargetLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.target);
+			var deeplAvailableTargetLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.target);
 
-			var sourceEngineCode = GetLcCorrespondingSourceLanguageCodeEngine("en-us", deeplAvailableSourceLanguages);
-			return null;
+			var sourceEngineCode = GetLcCorrespondingSourceLanguageCodeEngine(sourceLanguageCode, deeplAvailableSourceLanguages);
+			var targetEngineCodes = GetLCCorrespondingTargetLanguagesEngineCode(targetLanguagesCode, deeplAvailableTargetLanguages);
+
+			var translationEngineResponse = new TranslationEngineResponse
+			{
+				Id = Guid.NewGuid().ToString(),
+				MatchingSourceLanguage = sourceEngineCode,
+				MatchingTargetLanguages = targetEngineCodes
+			};
+			return new List<TranslationEngineResponse> { translationEngineResponse};
 		}
 
 		/// <summary>
-		/// Gets the corresponding language code for source
+		/// Gets the corresponding language code for target language
+		/// </summary>
+		/// <param name="targetEngineCodes">LC target languages code</param>
+		/// <param name="deeplAvailableTargetLanguages">List of the DeepL Target language</param>
+		/// <returns>List of LC codes which are supported by DeepL</returns>
+		private List<string> GetLCCorrespondingTargetLanguagesEngineCode(List<string> targetEngineCodes, List<string> deeplAvailableTargetLanguages)
+		{
+			var matchingTargetLanguageCode = new List<string>();
+
+			foreach (var lcLanguageCode in targetEngineCodes)
+			{
+				var matchingLanguage = GetLanguage(new CultureInfo(lcLanguageCode), deeplAvailableTargetLanguages);
+				if (!string.IsNullOrEmpty(matchingLanguage))
+				{
+					matchingTargetLanguageCode.Add(lcLanguageCode);
+				}
+			}
+
+			return matchingTargetLanguageCode;
+		}
+
+		/// <summary>
+		/// Gets the corresponding language code for source language
 		/// </summary>
 		/// <param name="sourceLanguageCode">LC source language code</param>
 		/// <param name="deeplAvailableLanguages">List of the DeepL Source language</param>
@@ -93,7 +122,7 @@ namespace Sdl.LC.AddonBlueprint.Services
 		}
 
 		/// <summary>
-		/// Used for translation step
+		/// In target languages we also have flavours of the language "en-us", "en-gb"
 		/// Get the language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
 		/// (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor) 
 		/// </summary>
@@ -103,8 +132,8 @@ namespace Sdl.LC.AddonBlueprint.Services
 		{
 			if (languageList != null && languageList.Any())
 			{
-				var leftLangTag = culture.IetfLanguageTag.ToUpperInvariant();
-				var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+				var leftLangTag = culture.IetfLanguageTag.ToLowerInvariant();
+				var twoLetterIso = culture.TwoLetterISOLanguageName;
 
 				var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == leftLangTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
 

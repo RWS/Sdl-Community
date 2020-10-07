@@ -211,15 +211,18 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 
 		//[Authorize]
 		[HttpGet("translation-engines")]
-		public async Task<IActionResult> GetTranslationEngines()
+		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request)
 		{
-
 			//var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
 			//var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, CancellationToken.None).ConfigureAwait(false);
 			var translationService = new TranslationService();
 
-			var test = await translationService.GetCorrespondingEngines(apiKey, "en-us", new List<string> { "de-de" });
-			return Ok();
+			if(!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguages.Any())
+			{
+				var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguages);
+				return Ok(translationEngineResponse);
+			}
+			return Ok(new TranslationEngineResponse());
 		}
 
 		//[Authorize]

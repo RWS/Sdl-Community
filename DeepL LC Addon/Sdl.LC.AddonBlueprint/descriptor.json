@@ -19,7 +19,7 @@
 				}
 			}
 		],
-		"baseUrl": "http://192.168.68.113:2509",
+		"baseUrl": "http://10.111.138.179:2509",
 		"standardEndpoints": {
 			"health": "/api/health",
 			"addonLifecycle": "/api/addon-lifecycle",
