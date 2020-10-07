@@ -13,9 +13,11 @@ namespace Sdl.Community.Transcreate.Common
 		public enum Action
 		{
 			None = 0,
-			Export = 1,
-			Import = 2,
-			Convert = 3
+			Convert = 1,
+			Export = 2,
+			Import = 3,
+			ExportBackTranslation = 4,
+			ImportBackTranslation = 5
 		}
 
 		public enum Controller

@@ -20,12 +20,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 			_tokens = new List<Token>();
 		}
 
-		public GeneratorSettings Settings
-		{
-			get;
-			set;
-		}
-
 		public List<string> Comments => _comments;
 
 		public StringBuilder PlainText => _plainText;
@@ -74,11 +68,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 				//process text 
 				if (item.Index != currentPosition)
 				{
-					_tokens.Add(new Token(textToProcess.Substring(currentPosition, (item.Index - currentPosition)), Token.TokenType.Text));
+					_tokens.Add(new Token { Content = textToProcess.Substring(currentPosition, (item.Index - currentPosition)), Type = Token.TokenType.Text });
 				}
 
 				//add special token
-				_tokens.Add(new Token(new DocumentFormat.OpenXml.Wordprocessing.Break(), Token.TokenType.SpecialType));
+				_tokens.Add(new Token { SpecialContent = new DocumentFormat.OpenXml.Wordprocessing.Break(), Type = Token.TokenType.SpecialType });
 
 				//reset position
 				currentPosition = item.Index + item.Length;
@@ -87,34 +81,28 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 			//process rest of the string
 			if (currentPosition < textToProcess.Length)
 			{
-				_tokens.Add(new Token(textToProcess.Substring(currentPosition), Token.TokenType.Text));
+				_tokens.Add(new Token { Content = textToProcess.Substring(currentPosition), Type = Token.TokenType.Text });
 			}
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
-			if (Settings.ExtractComments)
+			for (var i = 0; i < commentMarker.Comments.Count; i++)
 			{
-				for (var i = 0; i < commentMarker.Comments.Count; i++)
-				{
-					var comment = commentMarker.Comments.GetItem(i);
-					var startComment = new Token(comment.Text, Token.TokenType.CommentStart);
-					startComment.Author = comment.Author;
-					startComment.Date = comment.Date;
-					_tokens.Add(startComment);
+				var comment = commentMarker.Comments.GetItem(i);
+				var startComment = new Token { Content = comment.Text, Type = Token.TokenType.CommentStart };
+				startComment.Author = comment.Author;
+				startComment.Date = comment.Date;
+				_tokens.Add(startComment);
 
-					Comments.Add("[" + comment.Author + " " + comment.Date + "] " + comment.Text);
-				}
+				Comments.Add("[" + comment.Author + " " + comment.Date + "] " + comment.Text);
 			}
 
 			VisitChildren(commentMarker);
 
-			if (Settings.ExtractComments)
+			for (int i = 0; i < commentMarker.Comments.Count; i++)
 			{
-				for (int i = 0; i < commentMarker.Comments.Count; i++)
-				{
-					_tokens.Add(new Token("commentend", Token.TokenType.CommentEnd));
-				}
+				_tokens.Add(new Token { Content = "commentend", Type = Token.TokenType.CommentEnd });
 			}
 		}
 
@@ -126,7 +114,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
 			var lockedText = RemoveTags(lockedContent.ToString());
-			_tokens.Add(new Token(lockedText, Token.TokenType.LockedContent));
+			_tokens.Add(new Token { Content = lockedText, Type = Token.TokenType.LockedContent });
 			PlainText.Append(lockedText);
 		}
 
@@ -137,13 +125,13 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-			_tokens.Add(new Token(tag.Properties.TagId.Id, Token.TokenType.TagPlaceholder));
+			_tokens.Add(new Token { Content = tag.Properties.TagId.Id, Type = Token.TokenType.TagPlaceholder });
 			PlainText.Append(tag.Properties.TextEquivalent);
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
-			var revisionMarkerTokenStart = new Token(Token.TokenType.RevisionMarker);
+			var revisionMarkerTokenStart = new Token { Type = Token.TokenType.RevisionMarker };
 			revisionMarkerTokenStart.Author = revisionMarker.Properties.Author;
 			revisionMarkerTokenStart.Date = (DateTime)revisionMarker.Properties.Date;
 
@@ -164,7 +152,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 
 			VisitChildren(revisionMarker);
 
-			var revisionMarkerTokenEnd = new Token(Token.TokenType.RevisionMarker);
+			var revisionMarkerTokenEnd = new Token { Type = Token.TokenType.RevisionMarker };
 			switch (revisionMarker.Properties.RevisionType)
 			{
 				case RevisionType.Delete:
@@ -188,9 +176,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-			_tokens.Add(new Token(tagPair.StartTagProperties.TagId.Id, Token.TokenType.TagOpen));
+			_tokens.Add(new Token { Content = tagPair.StartTagProperties.TagId.Id, Type = Token.TokenType.TagOpen });
 			VisitChildren(tagPair);
-			_tokens.Add(new Token(tagPair.StartTagProperties.TagId.Id, Token.TokenType.TagClose));
+			_tokens.Add(new Token { Content = tagPair.StartTagProperties.TagId.Id, Type = Token.TokenType.TagClose });
 		}
 
 		public void VisitText(IText text)

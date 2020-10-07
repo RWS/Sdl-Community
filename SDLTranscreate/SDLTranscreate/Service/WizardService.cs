@@ -113,7 +113,7 @@ namespace Sdl.Community.Transcreate.Service
 					? Enumerators.Controller.Projects
 					: Enumerators.Controller.Files;
 
-				// activate the selected project if diffrent to the current project
+				// activate the selected project if different to the current project
 				if (_controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id != selectedProject.GetProjectInfo().Id)
 				{
 					_controllers.ProjectsController.Open(selectedProject);

@@ -6,7 +6,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
+using Sdl.Community.Transcreate.Model;
 using Comment = DocumentFormat.OpenXml.Wordprocessing.Comment;
 
 
@@ -15,7 +15,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 	internal class WordReader
 	{
 		private readonly List<Token> _comments = new List<Token>();
-		private readonly GeneratorSettings _settings;
+		private readonly ImportOptions _settings;
+		private readonly string _sourceLanguage;
+		private readonly string _targetLanguage;
+
 		private readonly Type[] _trackedRevisionsElements = {
 			typeof(CellDeletion),
 			typeof(CellInsertion),
@@ -52,9 +55,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 			typeof(TableRowPropertiesChange),
 		};
 
-		public WordReader(GeneratorSettings settings)
+		public WordReader(ImportOptions settings, string sourceLanguage, string targetLanguage)
 		{
 			_settings = settings;
+			_sourceLanguage = sourceLanguage;
+			_targetLanguage = targetLanguage;
 		}
 
 		public Dictionary<string, UpdatedSegmentContent> ReadFile(string filePath)
@@ -81,9 +86,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		{
 			if (commentsPart?.Comments != null)
 			{
-				foreach (Comment comment in commentsPart.Comments.Elements<Comment>())
+				foreach (var comment in commentsPart.Comments.Elements<Comment>())
 				{
-					var commentToken = new Token(comment.InnerText, Token.TokenType.CommentStart);
+					var commentToken = new Token { Content = comment.InnerText, Type = Token.TokenType.CommentStart };
 					commentToken.Author = comment.Author;
 					commentToken.Date = comment.Date;
 					_comments.Add(commentToken);
@@ -99,10 +104,21 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 				try
 				{
 					//process the target segment
-					var currentContentList = new UpdatedSegmentContent();
-					var columnIndex = _settings.ImportBackTranslations ? 5 : 4;
-					var targetCell = rowItem.Elements<TableCell>().ElementAt(columnIndex);
-					ProcessTargetCellContent(targetCell, ref currentContentList, ref collector, segmentIdCell);
+					var targetCell = rowItem.Elements<TableCell>().ElementAt(4);
+
+					TableCell backTranslationCel = null;
+					var columnCount = rowItem.ChildElements.Count;
+					if (columnCount > 5)
+					{
+						backTranslationCel = rowItem.Elements<TableCell>().ElementAt(5);
+					}
+
+					var currentContentList = ProcessTargetCellContent(segmentIdCell, targetCell, backTranslationCel);
+					if (currentContentList.TranslationTokens?.Count > 0 || currentContentList.BackTranslationTokens?.Count > 0)
+					{
+						collector.Add(segmentIdCell, currentContentList);
+					}
+
 				}
 				catch (ArgumentException)
 				{
@@ -132,41 +148,55 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		/// <summary>
 		/// Reads the target cell content and add tokens into collector
 		/// </summary>
-		/// <param name="targetCell"></param>
-		/// <param name="currentContentList"></param>
-		/// <param name="collector"></param>
 		/// <param name="segmentIdCell"></param>
-		private void ProcessTargetCellContent(TableCell targetCell, ref UpdatedSegmentContent currentContentList,
-			ref Dictionary<string, UpdatedSegmentContent> collector, string segmentIdCell)
+		/// <param name="targetCell"></param>
+		/// <param name="backTranslationCell"></param>
+		private UpdatedSegmentContent ProcessTargetCellContent(string segmentIdCell, TableCell targetCell, TableCell backTranslationCell)
 		{
-			if (targetCell != null)
+			if (targetCell == null)
 			{
-				CheckParagraphCount(targetCell, segmentIdCell);
-				currentContentList.SegmentHasTrackedChanges = SegmentHasChanges(targetCell);
-				//We should not update segments without tracked changes, so do not store them 
-
-				if (!currentContentList.SegmentHasTrackedChanges &&
-					_settings.ImportUpdateSegmentMode == GeneratorSettings.UpdateSegmentMode.TrackedOnly)
-				{
-					return;
-				}
-				//start collecting data
-				var targetContent = targetCell.GetFirstChild<Paragraph>();
-				if (targetContent != null)
-				{
-					var tagBuffer = "";//sometimes word is so stupid that tags are not in single runs, buffering is required.
-
-					//we need to iterate whole paragraph and process OpenXMLElement appropriately
-					foreach (var item in targetContent.Elements())
-					{
-						ProcessOpenXmlElement(item, ref currentContentList, ref tagBuffer);
-					}
-				}
-				if (currentContentList.Tokens.Count > 0)
-				{
-					collector.Add(segmentIdCell, currentContentList);
-				}
+				return null;
 			}
+
+			var currentContentList = new UpdatedSegmentContent();
+
+			CheckParagraphCount(targetCell);
+			currentContentList.TranslationHasTrackedChanges = SegmentHasChanges(targetCell);
+
+			var translationContent = targetCell.GetFirstChild<Paragraph>();
+			if (translationContent != null)
+			{
+				var tagBuffer = "";//sometimes word is so stupid that tags are not in single runs, buffering is required.
+				var translationTokens = new List<Token>();
+				//we need to iterate whole paragraph and process OpenXMLElement appropriately
+				foreach (var item in translationContent.Elements())
+				{
+					ProcessOpenXmlElement(item, ref translationTokens, ref tagBuffer);
+				}
+
+				currentContentList.TranslationTokens = translationTokens;
+			}
+
+			var backTranslationContent = backTranslationCell?.GetFirstChild<Paragraph>();
+			if (backTranslationContent != null)
+			{
+				CheckParagraphCount(backTranslationCell);
+				currentContentList.BackTranslationHasTrackedChanges = SegmentHasChanges(backTranslationCell);
+
+				var tagBuffer = "";//sometimes word is so stupid that tags are not in single runs, buffering is required.
+				var backTranslationTokens = new List<Token>();
+				//we need to iterate whole paragraph and process OpenXMLElement appropriately
+				foreach (var item in backTranslationContent.Elements())
+				{
+					ProcessOpenXmlElement(item, ref backTranslationTokens, ref tagBuffer);
+				}
+
+				currentContentList.BackTranslationTokens = backTranslationTokens;
+			}
+
+
+			return currentContentList;
+
 		}
 
 
@@ -195,76 +225,80 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		/// Recursively iterate the sub items in the OpenXmlElement
 		/// </summary>
 		/// <param name="item"></param>
-		/// <param name="currentContentList"></param>
+		/// <param name="tokens"></param>
 		/// <param name="tagBuffer"></param>
-		private void ProcessOpenXmlElement(OpenXmlElement item, ref UpdatedSegmentContent currentContentList, ref string tagBuffer)
+		private void ProcessOpenXmlElement(OpenXmlElement item, ref List<Token> tokens, ref string tagBuffer)
 		{
 			if (item is InsertedRun insertedRun)
 			{
 				var revisionTokenStart =
-					new Token(Token.TokenType.RevisionMarker)
+					new Token
 					{
+						Type = Token.TokenType.RevisionMarker,
 						RevisionType = Token.RevisionMarkerType.InsertStart,
 						Date = insertedRun.Date,
 						Author = insertedRun.Author
 					};
 
-				currentContentList.Tokens.Add(revisionTokenStart);
+				tokens.Add(revisionTokenStart);
 
 				foreach (var element in item.Elements())
 				{
-					ProcessOpenXmlElement(element, ref currentContentList, ref tagBuffer);
+					ProcessOpenXmlElement(element, ref tokens, ref tagBuffer);
 				}
 
 				var revisionTokenEnd =
-					new Token(Token.TokenType.RevisionMarker)
+					new Token
 					{
+						Type = Token.TokenType.RevisionMarker,
 						RevisionType = Token.RevisionMarkerType.InsertEnd
 					};
 
-				currentContentList.Tokens.Add(revisionTokenEnd);
+				tokens.Add(revisionTokenEnd);
 				return;
 			}
 			if (item is DeletedRun deletedRun)
 			{
 				var revisionTokenStart =
-					new Token(Token.TokenType.RevisionMarker)
+					new Token
 					{
+						Type = Token.TokenType.RevisionMarker,
 						RevisionType = Token.RevisionMarkerType.DeleteStart,
 						Date = deletedRun.Date,
 						Author = deletedRun.Author
 					};
 
-				currentContentList.Tokens.Add(revisionTokenStart);
+				tokens.Add(revisionTokenStart);
 
 				foreach (var element in item.Elements())
 				{
-					ProcessOpenXmlElement(element, ref currentContentList, ref tagBuffer);
+					ProcessOpenXmlElement(element, ref tokens, ref tagBuffer);
 				}
 
 				var revisionTokenEnd =
-					new Token(Token.TokenType.RevisionMarker)
+					new Token
 					{
+						Type = Token.TokenType.RevisionMarker,
 						RevisionType = Token.RevisionMarkerType.DeleteEnd
 					};
 
-				currentContentList.Tokens.Add(revisionTokenEnd);
+				tokens.Add(revisionTokenEnd);
 				return;
 			}
 			if (item is Run run)
 			{
-				ProcessTextRun(ref currentContentList, run, ref tagBuffer);
+				ProcessTextRun(ref tokens, run, ref tagBuffer);
 				return;
 			}
 			if (item is CommentRangeStart)
 			{
-				currentContentList.Tokens.Add(_comments.First<Token>());
+				tokens.Add(_comments.First<Token>());
 				_comments.RemoveAt(0);
 				return;
 			}
 			if (item is CommentRangeEnd)
 			{
-				currentContentList.Tokens.Add(new Token("commentend", Token.TokenType.CommentEnd));
+				tokens.Add(new Token { Content = "commentend", Type = Token.TokenType.CommentEnd });
 				return;
 			}
 			//SmartTag feature is obsolete since Office 2007 and not supported since OpenXML 2.5
@@ -275,7 +309,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 					//only extract text runs
 					if (possibleRun.LocalName == "r")
 					{
-						ProcessTextRun(ref currentContentList, new Run(new Text(item.InnerText)), ref tagBuffer);
+						ProcessTextRun(ref tokens, new Run(new Text(item.InnerText)), ref tagBuffer);
 					}
 				}
 			}
@@ -286,8 +320,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		/// Check if there is only one paragraph in the target cell, in case somebody pressed Enter, throw an exception.
 		/// </summary>
 		/// <param name="targetCell"></param>
-		/// <param name="segmentId"></param>
-		private void CheckParagraphCount(TableCell targetCell, string segmentId)
+		private void CheckParagraphCount(TableCell targetCell)
 		{
 			if (targetCell.Elements<Paragraph>().Count() > 1)
 			{
@@ -295,7 +328,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 			}
 		}
 
-		private void ProcessTextRun(ref UpdatedSegmentContent currentContentList, Run textRun, ref string tagbuffer)
+		private void ProcessTextRun(ref List<Token> tokens, Run textRun, ref string tagbuffer)
 		{
 			string tagContent = "";
 
@@ -328,18 +361,18 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 			if (textRun.RunProperties != null &&
 				textRun.RunProperties.Elements<RunStyle>().Count(s => s.Val == "Tag") != 0)
 			{
-				tagbuffer = ProcessTaggedText(matches, tagContent, ref currentContentList, false);
+				tagbuffer = ProcessTaggedText(matches, tagContent, ref tokens, false);
 			}
 
 			//process locked content
 			else if (textRun.RunProperties != null &&
 					 textRun.RunProperties.Elements<RunStyle>().Count(s => s.Val == "LockedContent") != 0)
 			{
-				tagbuffer = ProcessTaggedText(matches, tagContent, ref currentContentList, true);
+				tagbuffer = ProcessTaggedText(matches, tagContent, ref tokens, true);
 			}
 			else
 			{
-				ProcessOtherRunTypes(ref currentContentList, textRun);
+				ProcessOtherRunTypes(ref tokens, textRun);
 			}
 		}
 
@@ -348,10 +381,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		/// </summary>
 		/// <param name="matches"></param>
 		/// <param name="tagContent"></param>
-		/// <param name="currentContentList"></param>
+		/// <param name="tokens"></param>
 		/// <param name="isLockedContent"></param>
 		/// <returns></returns>
-		private string ProcessTaggedText(MatchCollection matches, string tagContent, ref UpdatedSegmentContent currentContentList, bool isLockedContent)
+		private string ProcessTaggedText(MatchCollection matches, string tagContent, ref List<Token> tokens, bool isLockedContent)
 		{
 			var lastPosition = 0;
 			foreach (Match item in matches)
@@ -359,16 +392,20 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 				if (item.Index > lastPosition)
 				{
 					//overlapping style, most likely problem when style is applied to non tag text
-					currentContentList.Tokens.Add(new Token(tagContent.Substring(lastPosition, tagContent.Length - item.Index), Token.TokenType.Text));
+					tokens.Add(new Token
+					{
+						Content = tagContent.Substring(lastPosition, tagContent.Length - item.Index),
+						Type = Token.TokenType.Text
+					});
 				}
 
 				if (isLockedContent)
 				{
-					currentContentList.Tokens.Add(new Token(item.Value, Token.TokenType.LockedContent));
+					tokens.Add(new Token { Content = item.Value, Type = Token.TokenType.LockedContent });
 				}
 				else
 				{
-					currentContentList.Tokens.Add(GetTagType(item.Value));
+					tokens.Add(GetTagType(item.Value));
 				}
 
 				lastPosition = item.Index + item.Length;
@@ -380,45 +417,45 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		/// <summary>
 		/// Special handling for plain text, deleted text and special content like breaks etc.
 		/// </summary>
-		/// <param name="currentContentList"></param>
+		/// <param name="tokens"></param>
 		/// <param name="textRun"></param>
-		private void ProcessOtherRunTypes(ref UpdatedSegmentContent currentContentList, Run textRun)
+		private void ProcessOtherRunTypes(ref List<Token> tokens, Run textRun)
 		{
 			foreach (var item in textRun.Elements())
 			{
 				if (item is Text textItem)
 				{
-					currentContentList.Tokens.Add(new Token(textRun.GetFirstChild<Text>().InnerText, Token.TokenType.Text));
+					tokens.Add(new Token { Content = textRun.GetFirstChild<Text>().InnerText, Type = Token.TokenType.Text });
 					continue;
 				}
 
 				if (item is DeletedText deletedTextItem)
 				{
-					currentContentList.Tokens.Add(new Token(deletedTextItem.Text, Token.TokenType.Text));
+					tokens.Add(new Token { Content = deletedTextItem.Text, Type = Token.TokenType.Text });
 					continue;
 				}
 
 				if (item is TabChar tabItem)
 				{
-					currentContentList.Tokens.Add(new Token("\t", Token.TokenType.Text));
+					tokens.Add(new Token { Content = "\t", Type = Token.TokenType.Text });
 					continue;
 				}
 
 				if (item is Break breakItem)
 				{
-					currentContentList.Tokens.Add(new Token("\n", Token.TokenType.Text));
+					tokens.Add(new Token { Content = "\n", Type = Token.TokenType.Text });
 					continue;
 				}
 
 				if (item is NoBreakHyphen noBreakHyphenItem)
 				{
-					currentContentList.Tokens.Add(new Token(" ", Token.TokenType.Text));
+					tokens.Add(new Token { Content = " ", Type = Token.TokenType.Text });
 					continue;
 				}
 
 				if (item is SoftHyphen softHyphenItem)
 				{
-					currentContentList.Tokens.Add(new Token("¬", Token.TokenType.Text));
+					tokens.Add(new Token { Content = "¬", Type = Token.TokenType.Text });
 					continue;
 				}
 			}
@@ -428,15 +465,15 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		{
 			if (matchedText.StartsWith("</"))
 			{
-				return new Token(matchedText, Token.TokenType.TagClose);
+				return new Token { Content = matchedText, Type = Token.TokenType.TagClose };
 			}
 			if (matchedText.EndsWith("/>"))
 			{
-				return new Token(matchedText, Token.TokenType.TagPlaceholder);
+				return new Token { Content = matchedText, Type = Token.TokenType.TagPlaceholder };
 			}
 			if (!matchedText.StartsWith("</") && !matchedText.EndsWith("/>"))
 			{
-				return new Token(matchedText, Token.TokenType.TagOpen);
+				return new Token { Content = matchedText, Type = Token.TokenType.TagOpen };
 			}
 
 			return null;

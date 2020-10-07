@@ -13,10 +13,12 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Wizard.View;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 {
@@ -228,12 +230,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 				Refresh();
 
-				var project = WizardContext.ProjectFiles[0].Project;
-
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
-					WizardContext.ExportOptions, WizardContext.AnalysisBands);
-				var xliffWriter = new XliffWriter(WizardContext.ExportOptions.XliffSupport);
-
+				var tokenVisitor = new TokenVisitor();
+				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
+				var processor = new ExportProcessor(WizardContext.Project.Id, fileTypeManager, tokenVisitor, WizardContext.ExportOptions, WizardContext.AnalysisBands);
 				var selectedLanguages = GetSelectedLanguages();
 
 				foreach (var name in selectedLanguages)
@@ -245,14 +244,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 					var targetFiles = GetSelectedTargetFiles(name);
 					foreach (var targetFile in targetFiles)
 					{
-						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
-						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
+						var folder = GetXliffFolder(languageFolder, targetFile);
+						var outputFilePath = Path.Combine(folder, targetFile.Name + ".docx");
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
-						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, outputFilePath));
 
-						var xliffData = sdlxliffReader.ReadFile(project.Id, targetFile.Location);
-						var exported = xliffWriter.WriteFile(xliffData, xliffFilePath, WizardContext.ExportOptions.IncludeTranslations);
+						var exported  = processor.ExportFile(targetFile.Location, outputFilePath, targetFile.TargetLanguage);
 
 						_logReport.AppendLine(string.Format(PluginResources.Label_Success, exported));
 						_logReport.AppendLine();
@@ -262,9 +260,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 							targetFile.Date = WizardContext.DateTimeStamp;
 							targetFile.Action = Enumerators.Action.Export;
 							targetFile.Status = Enumerators.Status.Success;
-							targetFile.XliffFilePath = xliffFilePath;
-							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
-							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
+							targetFile.XliffFilePath = outputFilePath;
+							targetFile.ConfirmationStatistics = processor.ConfirmationStatistics;
+							targetFile.TranslationOriginStatistics = processor.TranslationOriginStatistics;
 						}
 
 						var activityFile = new ProjectFileActivity

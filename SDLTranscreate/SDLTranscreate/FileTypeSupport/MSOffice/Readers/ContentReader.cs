@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Community.Transcreate.Common;
@@ -11,32 +11,39 @@ using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Versioning;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 {
 	internal class ContentReader : AbstractBilingualContentProcessor
 	{
+		private readonly string _projectId;
 		private readonly TokenVisitor _tokenVisitor;
-		private readonly GeneratorSettings _generatorSettings;
+		private readonly ExportOptions _exportOptions;
 		private readonly List<AnalysisBand> _analysisBands;
 		private readonly string _originalFilePath;
 		private readonly List<string> _contextTypes;
+		private readonly string _outputFilePath;
+		private readonly string _targetLanguage;
 		private IDocumentProperties _documentProperties;
 		private WordWriter _wordWriter;
 		private bool _exportingSameFile;
-		private string _previousTextFunction;
+		private string _previousTextFunctionDescription;
 		private SegmentPairProcessor _segmentPairProcessor;
 		private string _productName;
 
-		public ContentReader(TokenVisitor tokenVisitor, GeneratorSettings generatorSettings, List<AnalysisBand> analysisBands, string filePath)
+
+		public ContentReader(string projectId, TokenVisitor tokenVisitor, ExportOptions exportOptions,
+			List<AnalysisBand> analysisBands, string filePath, string outputFilePath, string targetLanguage)
 		{
+			_projectId = projectId;
 			_tokenVisitor = tokenVisitor;
-			_generatorSettings = generatorSettings;
+			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
 			_originalFilePath = filePath;
 			_contextTypes = new List<string>();
+			_outputFilePath = outputFilePath;
+			_targetLanguage = targetLanguage;
 
 			ConfirmationStatistics = new ConfirmationStatistics();
 			TranslationOriginStatistics = new TranslationOriginStatistics();
@@ -55,7 +62,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 			_documentProperties = documentInfo;
 
 			SourceLanguage = documentInfo.SourceLanguage.CultureInfo;
-			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? SourceLanguage;
+			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? new CultureInfo(_targetLanguage);
 
 			base.Initialize(documentInfo);
 		}
@@ -72,16 +79,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 				return;
 			}
 
-			//get output file name
-			var info = new FileInfo(_originalFilePath);
-			var outputFile = info.DirectoryName + Path.DirectorySeparatorChar +
-			                 info.Name.Substring(0, info.Name.IndexOf(info.Extension, StringComparison.Ordinal));
+			_wordWriter = new WordWriter(SourceLanguage.Name, TargetLanguage.Name);
 
-			_wordWriter = new WordWriter(
-				fileInfo.FileConversionProperties.SourceLanguage.IsoAbbreviation,
-				fileInfo.FileConversionProperties.TargetLanguage.IsoAbbreviation);
-
-			_wordWriter.Initialize(fileInfo.FileConversionProperties.FileId.Id, outputFile + ".Export.docx", _generatorSettings);
+			_wordWriter.Initialize(_projectId, fileInfo.FileConversionProperties.FileId.Id,
+				_originalFilePath, _outputFilePath, _exportOptions);
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -91,30 +92,25 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 				return;
 			}
 
-			var relevance = paragraphUnit.Properties.Contexts.Contexts.FirstOrDefault(
+			var priority = paragraphUnit.Properties.Contexts.Contexts.FirstOrDefault(
 				a => a.ContextType == "Recommended" || a.ContextType.StartsWith("Alternative"));
 
 			var textFunction = paragraphUnit.Properties.Contexts.Contexts.FirstOrDefault(
 				a => string.Compare(a.DisplayName, "Text Function", StringComparison.CurrentCultureIgnoreCase) == 0);
 
-			if (relevance == null)
+			if (priority == null)
 			{
 				return;
 			}
 
 			if (_contextTypes.Count == 0)
 			{
-				_contextTypes.Add(relevance.ContextType);
-				_wordWriter.AddNewTable(relevance.ContextType);
+				_contextTypes.Add(priority.ContextType);
+				_wordWriter.AddNewTable(priority.ContextType);
 			}
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				if (SkipSegment(segmentPair))
-				{
-					continue;
-				}
-
 				SegmentPairInfo segmentPairInfo = null;
 				try
 				{
@@ -128,8 +124,20 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 				var status = segmentPair.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+				if (SkipSegment(segmentPair))
+				{
+					AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+
+					continue;
+				}
+
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 
 				_tokenVisitor.Process(segmentPair.Source);
 				var sourceText = _tokenVisitor.PlainText.ToString();
@@ -140,26 +148,37 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 				var targetTokens = CloneList(_tokenVisitor.Tokens);
 				var comments = _tokenVisitor.Comments;
 
-				var textFunction1 = textFunction?.Description;
-				if (string.IsNullOrEmpty(textFunction1))
+				List<Token> backTranslationTokens = null;
+				if (segmentPair.Target.Properties.TranslationOrigin != null &&
+					segmentPair.Target.Properties.TranslationOrigin.MetaDataContainsKey("back-translation"))
 				{
-					textFunction1 = _previousTextFunction;
+					//TODO check if we need to create TranslationOrigin??
+
+					var backTranslation =
+						segmentPair.Target.Properties.TranslationOrigin.GetMetaData("back-translation");
+
+					backTranslationTokens = JsonConvert.DeserializeObject<List<Token>>(backTranslation);
+				}
+
+				var textFunctionDescription = textFunction?.Description;
+				if (string.IsNullOrEmpty(textFunctionDescription))
+				{
+					textFunctionDescription = _previousTextFunctionDescription;
 				}
 				else
 				{
-					_previousTextFunction = textFunction1;
+					_previousTextFunctionDescription = textFunctionDescription;
 				}
 
-				//TODO: recover the back-translation tokens
 				_wordWriter.WriteEntry(
 					segmentPair.Properties.Id.Id,
 					paragraphUnit.Properties.ParagraphUnitId.Id,
-					relevance.ContextType,
-					textFunction1,
+					priority.ContextType,
+					textFunctionDescription,
 					sourceTokens,
 					targetTokens,
 					segmentPair.Properties,
-					sourceTokens);
+					backTranslationTokens);
 			}
 		}
 
@@ -193,45 +212,18 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 
 		private bool SkipSegment(ISegmentPair segmentPair)
 		{
-			var origin = segmentPair.Properties.TranslationOrigin;
-			var confLevel = segmentPair.Properties.ConfirmationLevel;
-
-			if (_generatorSettings.ExcludeExportType == GeneratorSettings.ExclusionType.Status)
+			if (_exportOptions.ExcludeFilterIds == null)
 			{
-				if (_generatorSettings.ExcludedStatuses.Contains(confLevel))
-				{
-					return true;
-				}
+				return false;
 			}
-			else
-			{
-				if (origin == null)
-				{
-					return _generatorSettings.DontExportNoMatch;
-				}
 
-				if (origin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget &&
-				    _generatorSettings.DontExportContext)
-				{
-					return true;
-				}
 
-				if (origin.MatchPercent == 100 && _generatorSettings.DontExportExact)
-				{
-					return true;
-				}
+			var status = segmentPair.Properties.ConfirmationLevel.ToString();
+			var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-				if ((origin.MatchPercent > 0 && origin.MatchPercent < 100) && _generatorSettings.DontExportFuzzy)
-				{
-					return true;
-				}
-
-				if (origin.MatchPercent == 0 && _generatorSettings.DontExportNoMatch)
-				{
-					return true;
-				}
-			}
-			return false;
+			return segmentPair.Properties.IsLocked && _exportOptions.ExcludeFilterIds.Exists(a => a == "Locked")
+				   || _exportOptions.ExcludeFilterIds.Exists(a => a == status)
+				   || _exportOptions.ExcludeFilterIds.Exists(a => a == match);
 		}
 
 		private List<Token> CloneList(IEnumerable<Token> list)
@@ -306,4 +298,3 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 		}
 	}
 }
- 

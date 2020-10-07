@@ -64,6 +64,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_IncludeBackTranslations, WizardContext.ExportOptions.IncludeBackTranslations) + Environment.NewLine;
 			if (WizardContext.ExportOptions.ExcludeFilterIds.Count > 0)
 			{
 				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExportOptions.ExcludeFilterIds)) + Environment.NewLine;
@@ -89,11 +90,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
-					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
+					var folder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
+					var filePath = Path.Combine(folder, targetLanguageFile.Name + ".docx");
 
 					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
-					summaryText += indent + string.Format(PluginResources.label_XliffFile, xliffFilePath + Environment.NewLine) + Environment.NewLine;										
+					summaryText += indent + string.Format(PluginResources.label_OutputFile, filePath) + Environment.NewLine + Environment.NewLine;										
 				}
 			}
 

@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Xml.Serialization;
-using Sdl.Core.Globalization;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 {
 	public class GeneratorSettings
 	{
-		public enum ExclusionType { Category, Status }
+		//public enum ExclusionType { Category, Status }
 
-		public enum UpdateSegmentMode { All, TrackedOnly }
+		//public enum UpdateSegmentMode { All, TrackedOnly }
 
 		private decimal _columnWidth;
 
@@ -20,47 +18,49 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 
 		public void ResetToDefaults()
 		{
-			FileNamePrefix = "";
+			//FileNamePrefix = "";
 			ColumnWidth = 75;
 			ExtractComments = true;
 			ContextMatchColor = Color.LightGray;
 			ExactMatchColor = Color.PaleGreen;
 			FuzzyMatchColor = Color.Wheat;
 			NoMatchColor = Color.White;
-			IsContextMatchLocked = false;
-			IsExactMatchLocked = false;
-			IsFuzzyMatchLocked = false;
-			IsNoMatchLocked = false;
-			DontExportContext = false;
-			DontExportExact = false;
-			DontExportFuzzy = false;
-			DontExportNoMatch = false;
-			UpdateSegmentStatusNoTracked = false;
-			UpdateSegmentStatusTracked = false;
-			NewSegmentStatusAll = ConfirmationLevel.Draft;
-			NewSegmentStatusTrackedChanges = ConfirmationLevel.Draft;
-			ExcludeExportType = ExclusionType.Category;
-			ExcludedStatuses = new List<ConfirmationLevel>();
-			ImportUpdateSegmentMode = UpdateSegmentMode.All;
-			WarningWhenOverwrite = false;
-			BackupImport = false;
+			//IsContextMatchLocked = false;
+			//IsExactMatchLocked = false;
+			//IsFuzzyMatchLocked = false;
+			//IsNoMatchLocked = false;
+			//DontExportContext = false;
+			//DontExportExact = false;
+			//DontExportFuzzy = false;
+			//DontExportNoMatch = false;
+
+			//UpdateSegmentStatusNoTracked = false;
+			//UpdateSegmentStatusTracked = false;
+			//NewSegmentStatusAll = ConfirmationLevel.Draft;
+			//NewSegmentStatusTrackedChanges = ConfirmationLevel.Draft;
+
+			//ExcludeExportType = ExclusionType.Category;
+			//ExcludedStatuses = new List<ConfirmationLevel>();
+
+			//ImportUpdateSegmentMode = UpdateSegmentMode.All;
+			//WarningWhenOverwrite = false;
+			//BackupImport = false;
 			ExportBackTranslations = false;
 			ImportBackTranslations = false;
 		}
-
 
 		public bool ExportBackTranslations { get; set; }
 
 		public bool ImportBackTranslations { get; set; }
 
-		/// <summary>
-		/// Prefix which will be used for generated file names.
-		/// </summary>
-		public string FileNamePrefix
-		{
-			get;
-			set;
-		}
+		///// <summary>
+		///// Prefix which will be used for generated file names.
+		///// </summary>
+		//public string FileNamePrefix
+		//{
+		//	get;
+		//	set;
+		//}
 
 		/// <summary>
 		/// Specify if comments from the bilingual file should be extracted
@@ -90,50 +90,50 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 			set { _columnWidth = value; }
 		}
 
-		/// <summary>
-		/// Not used yet
-		/// </summary>
-		public string LockPassword
-		{
-			get;
-			set;
-		}
+		///// <summary>
+		///// Not used yet
+		///// </summary>
+		//public string LockPassword
+		//{
+		//	get;
+		//	set;
+		//}
 
-		/// <summary>
-		/// Specify if the no matches will be locked
-		/// </summary>
-		public bool IsNoMatchLocked
-		{
-			get;
-			set;
-		}
+		///// <summary>
+		///// Specify if the no matches will be locked
+		///// </summary>
+		//public bool IsNoMatchLocked
+		//{
+		//	get;
+		//	set;
+		//}
 
-		/// <summary>
-		/// Specify if the fuzzy matches will be locked
-		/// </summary>
-		public bool IsFuzzyMatchLocked
-		{
-			get;
-			set;
-		}
+		///// <summary>
+		///// Specify if the fuzzy matches will be locked
+		///// </summary>
+		//public bool IsFuzzyMatchLocked
+		//{
+		//	get;
+		//	set;
+		//}
 
-		/// <summary>
-		/// Specify if the exact matches will be locked
-		/// </summary>
-		public bool IsExactMatchLocked
-		{
-			get;
-			set;
-		}
+		///// <summary>
+		///// Specify if the exact matches will be locked
+		///// </summary>
+		//public bool IsExactMatchLocked
+		//{
+		//	get;
+		//	set;
+		//}
 
-		/// <summary>
-		/// Specify if the context/perfect matches will be locked
-		/// </summary>
-		public bool IsContextMatchLocked
-		{
-			get;
-			set;
-		}
+		///// <summary>
+		///// Specify if the context/perfect matches will be locked
+		///// </summary>
+		//public bool IsContextMatchLocked
+		//{
+		//	get;
+		//	set;
+		//}
 
 		/// <summary>
 		/// Color used to represent no match
@@ -223,82 +223,82 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 			set;
 		}
 
-		public ConfirmationLevel NewSegmentStatusAll
-		{
-			get;
-			set;
-		}
+		//public ConfirmationLevel NewSegmentStatusAll
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public ConfirmationLevel NewSegmentStatusTrackedChanges
-		{
-			get;
-			set;
-		}
+		//public ConfirmationLevel NewSegmentStatusTrackedChanges
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool DontExportContext
-		{
-			get;
-			set;
-		}
+		//public bool DontExportContext
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool DontExportExact
-		{
-			get;
-			set;
-		}
+		//public bool DontExportExact
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool DontExportFuzzy
-		{
-			get;
-			set;
-		}
+		//public bool DontExportFuzzy
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool DontExportNoMatch
-		{
-			get;
-			set;
-		}
+		//public bool DontExportNoMatch
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public ExclusionType ExcludeExportType
-		{
-			get;
-			set;
-		}
+		//public ExclusionType ExcludeExportType
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public List<ConfirmationLevel> ExcludedStatuses
-		{
-			get;
-			set;
-		}
+		//public List<ConfirmationLevel> ExcludedStatuses
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public UpdateSegmentMode ImportUpdateSegmentMode
-		{
-			get;
-			set;
-		}
+		//public UpdateSegmentMode ImportUpdateSegmentMode
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool WarningWhenOverwrite
-		{
-			get;
-			set;
-		}
+		//public bool WarningWhenOverwrite
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool BackupImport
-		{
-			get;
-			set;
-		}
+		//public bool BackupImport
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool UpdateSegmentStatusTracked
-		{
-			get;
-			set;
-		}
+		//public bool UpdateSegmentStatusTracked
+		//{
+		//	get;
+		//	set;
+		//}
 
-		public bool UpdateSegmentStatusNoTracked
-		{
-			get;
-			set;
-		}
+		//public bool UpdateSegmentStatusNoTracked
+		//{
+		//	get;
+		//	set;
+		//}
 	}
 }

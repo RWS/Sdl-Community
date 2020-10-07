@@ -20,6 +20,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
 		private bool _includeTranslations;
+		private bool _includeBackTranslations;
 		private List<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
@@ -35,6 +36,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			OutputFolder = WizardContext.TransactionFolder;
 			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
 			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
+			ShowIncludeBackTranslations = !wizardContext.Project.IsBackTranslationProject;
 
 			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, WizardContext.ExportOptions.ExcludeFilterIds));
@@ -157,6 +159,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			}
 		}
 
+		public bool IncludeBackTranslations
+		{
+			get => _includeBackTranslations;
+			set
+			{
+				if (_includeBackTranslations == value)
+				{
+					return;
+				}
+
+				_includeBackTranslations = value;
+				OnPropertyChanged(nameof(IncludeBackTranslations));
+			}
+		}
+
+		public bool ShowIncludeBackTranslations { get; set; }
+
 		public override string DisplayName => PluginResources.PageName_Options;
 
 		public override bool IsValid { get; set; }
@@ -229,8 +248,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			WizardContext.TransactionFolder = OutputFolder;
 			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
 			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
+			WizardContext.ExportOptions.IncludeBackTranslations = IncludeBackTranslations;
 			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-			//WizardContext.ExcludeFilterItemIds =
 		}
 
 		public void Dispose()

@@ -416,6 +416,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include Back-Translations: {0}.
+        /// </summary>
+        internal static string Label_IncludeBackTranslations {
+            get {
+                return ResourceManager.GetString("Label_IncludeBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include Translations: {0}.
         /// </summary>
         internal static string Label_IncludeTranslations {
@@ -484,6 +493,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_OriginSystem {
             get {
                 return ResourceManager.GetString("Label_OriginSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output File: {0}.
+        /// </summary>
+        internal static string label_OutputFile {
+            get {
+                return ResourceManager.GetString("label_OutputFile", resourceCulture);
             }
         }
         

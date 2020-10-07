@@ -4,9 +4,6 @@ using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.LanguageMapping;
@@ -15,7 +12,6 @@ using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.Actions
 {
@@ -40,27 +36,23 @@ namespace Sdl.Community.Transcreate.Actions
 		protected override void Execute()
 		{
 
-			//TODO Testing
-			//var selectedFile = _controllers.TranscreateController.GetSelectedProjectFiles()[0];
+			if (!_controllers.TranscreateController.IsActive)
+			{
+				return;
+			}
 
-			//var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			//var tokenVisitor = new TokenVisitor();
-			//var settings = new GeneratorSettings();
-			//var project = _controllers.ProjectsController.GetAllProjects().ToList()
-			//	.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == selectedFile.ProjectId);
-			//var analysisBands = _projectAutomationService.GetAnalysisBands(project);
-			//var process = new Processor(fileTypeManager, tokenVisitor, settings, analysisBands);
+			var selectedProject = _controllers.TranscreateController.GetSelectedProjects()?.FirstOrDefault();
+			if (selectedProject == null)
+			{
+				return;
+			}
 
-			//var fullPath = Path.Combine(selectedFile.Project.Path, selectedFile.Location);
-
-			//process.ExportFile(fullPath);
-
-
-
+			var exportType = selectedProject.IsBackTranslationProject
+				? Enumerators.Action.ExportBackTranslation
+				: Enumerators.Action.Export;
 
 			var settings = GetSettings();
-
-			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
+			var wizardService = new WizardService(exportType, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider,
 				_projectAutomationService);
 

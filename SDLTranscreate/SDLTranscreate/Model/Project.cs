@@ -80,6 +80,8 @@ namespace Sdl.Community.Transcreate.Model
 
 		public string CreatedToString => GetDateTimeToString(Created);
 
+		public bool IsBackTranslationProject { get; set; }
+
 		public string ProjectType { get; set; }
 
 		public LanguageInfo SourceLanguage { get; set; }

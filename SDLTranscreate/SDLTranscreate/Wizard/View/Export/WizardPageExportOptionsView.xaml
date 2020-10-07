@@ -22,8 +22,8 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-			
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Margin="0">
@@ -39,6 +39,7 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 
@@ -106,15 +107,21 @@
 				        HorizontalAlignment="Left" VerticalAlignment="Center" 
 				        Height="24" Width="24" Margin="0,5,0,0"/>-->
 
-				<CheckBox Grid.Row="2" Margin="5,10,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Include Translations" 
+				<CheckBox Grid.Row="2" Margin="5,10,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
+				          Content="Include Translations" 
 				          IsChecked="{Binding IncludeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				<CheckBox Grid.Row="3" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" Content="Copy Source to Target for empty translations" 
+				<CheckBox Grid.Row="3" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
+				          Content="Copy Source to Target for empty translations" 
 						  IsEnabled="{Binding CopySourceToTargetEnabled}"
 				          IsChecked="{Binding CopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+				<CheckBox Grid.Row="4" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
+				          Content="Include Back-Translations" 
+				          Visibility="{Binding ShowIncludeBackTranslations, Converter={StaticResource BooleanToVisibilityConverter}}"
+				          IsChecked="{Binding IncludeBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-				<Grid Grid.Row="4" Grid.Column="0" ColumnSpan="3" >
+				<Grid Grid.Row="5" Grid.Column="0" ColumnSpan="3" >
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
