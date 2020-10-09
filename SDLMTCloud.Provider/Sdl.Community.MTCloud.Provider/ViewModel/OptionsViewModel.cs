@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
@@ -29,6 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
+		private ICommand _navigateToWikiCommand;
 
 		private bool _reSendChecked;
 		private LanguageMappingModel _selectedLanguageMappingModel;
@@ -50,6 +52,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
+		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
+
+		private void NavigateToWiki(object obj)
+		{
+			Process.Start(
+				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
+		}
 
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
 														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));

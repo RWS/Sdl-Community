@@ -124,4 +124,10 @@
 	<data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
     <value>No shortcut was set in Studio for this option</value>
   </data>
+  <data name="AutoSendFeedback_CheckBoxTooltip" xml:space="preserve">
+	  <value>If this option is enabled, feedback is sent when the segment is confirmed</value>
+  </data>
+  <data name="SendFeedback_ButtonTooltip" xml:space="preserve">
+	  <value>All the information from Rate It form is sent to the server</value>
+  </data>
 </root>

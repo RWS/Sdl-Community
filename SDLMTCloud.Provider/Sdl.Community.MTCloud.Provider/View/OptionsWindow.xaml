@@ -211,7 +211,20 @@
 				</controls:SortAwareDataGrid>
 				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
-					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding SendFeedback}" Content="{x:Static rsx:PluginResources.EnableRating}"  />
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
+						          IsChecked="{Binding SendFeedback}"
+						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
+					<Button Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					        Content="To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki."
+					        Command="{Binding NavigateToWikiCommand}"
+							FontSize="13"
+							HorizontalAlignment="Left"
+					        Margin="15 5 0 5"/>
+					<!--<TextBlock Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}" Margin="15 5 0 5">
+							<Hyperlink Command="{Binding NavigateToWikiCommand}">
+								To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.
+							</Hyperlink>
+					</TextBlock>-->
 				</StackPanel>
 			</Grid >
 
