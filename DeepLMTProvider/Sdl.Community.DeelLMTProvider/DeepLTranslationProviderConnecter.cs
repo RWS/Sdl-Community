@@ -164,9 +164,6 @@ namespace Sdl.Community.DeepLMTProvider
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/languages", content).Result;
 
-					// show server message in case the response is not successfully retrieved
-					Helpers.DisplayServerMessage(response);
-
 					if (response.IsSuccessStatusCode)
 					{
 						var languagesResponse = response.Content?.ReadAsStringAsync().Result;
