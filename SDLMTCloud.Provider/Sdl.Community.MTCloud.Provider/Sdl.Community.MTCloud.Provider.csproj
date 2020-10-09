@@ -14,6 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -133,6 +134,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Printing" />
+    <Reference Include="System.Reactive, Version=4.3.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -149,6 +154,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -179,11 +185,14 @@
     <Compile Include="Interfaces\IShortcutService.cs" />
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
+    <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
     <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
-    <Compile Include="Model\ImprovedTarget.cs" />
+    <Compile Include="Model\FeedbackSendingStatus.cs" />
+    <Compile Include="Model\Feedback.cs" />
     <Compile Include="Model\Improvement.cs" />
     <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
@@ -204,13 +213,14 @@
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
     <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
-    <Compile Include="Service\ImprovementAvailableEventArgs.cs" />
+    <Compile Include="Service\Events\TranslationReceivedEventHandler.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
     <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\FocusFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
     <Compile Include="Studio\ShortcutActions\SendFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
@@ -298,6 +308,14 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\SendFeedbackButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="Resources\Checked.ico" />
+    <Resource Include="Resources\rating.ico" />
+    <Content Include="Resources\success.png" />
+    <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>

@@ -93,5 +93,19 @@ namespace Sdl.Community.MTCloud.Provider
 				//ignore; catch all
 			}
 		}
+
+		public static ProjectsController GetProjectsController()
+		{
+			try
+			{
+				return SdlTradosStudio.Application?.GetController<ProjectsController>();
+			}
+			catch
+			{
+				//catch all; ignore
+			}
+
+			return null;
+		}
 	}
 }
