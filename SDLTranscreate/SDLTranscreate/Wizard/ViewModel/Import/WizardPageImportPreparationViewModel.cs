@@ -13,8 +13,9 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
@@ -225,13 +226,12 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 				Refresh();
 
+				var tokenVisitor = new TokenVisitor();
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-				
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, 
-					WizardContext.ImportOptions, WizardContext.AnalysisBands);
+				var processor = new ImportProcessor(fileTypeManager, tokenVisitor, WizardContext.ImportOptions, WizardContext.AnalysisBands);
 
-				var sniffer = new XliffSniffer();
-				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
+				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder,
+					WizardContext.ImportOptions, WizardContext.AnalysisBands);
 
 				var targetLanguages = WizardContext.ProjectFiles.Where(
 									a => a.Selected &&
@@ -281,12 +281,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 							XliffArchiveFile = xliffArchiveFile
 						};
 						importFiles.Add(importFile);
-						
 
-						var xliff = xliffReader.ReadXliff(targetLanguageFile.XliffFilePath);
-						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, sdlXliffImportFile);
-
-
+						success = processor.ImportUpdatedFile(targetLanguageFile.Location, 
+							sdlXliffImportFile, targetLanguageFile.XliffFilePath, targetLanguage);
 						if (success)
 						{
 							targetLanguageFile.Date = WizardContext.DateTimeStamp;

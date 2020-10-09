@@ -18,7 +18,6 @@ using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.Community.Transcreate.Model.Tasks;
 using Sdl.Community.Transcreate.Service;
-using Sdl.Community.Transcreate.TestData;
 using Sdl.Community.Transcreate.ViewModel;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
@@ -60,7 +59,6 @@ namespace Sdl.Community.Transcreate
 		private CustomerProvider _customerProvider;
 		private ProjectSettingsService _projectSettingsService;
 		private ReportService _reportService;
-
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -121,6 +119,8 @@ namespace Sdl.Community.Transcreate
 		}
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
+
+		public bool IsActive { get; set; }
 
 		public void RefreshProjects()
 		{
@@ -742,6 +742,8 @@ namespace Sdl.Community.Transcreate
 
 		private void OnActivationChanged(object sender, ActivationChangedEventArgs e)
 		{
+			IsActive = e.Active;
+
 			if (e.Active)
 			{
 				//SetProjectPropertiesViewController();

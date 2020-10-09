@@ -6,10 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using DocumentFormat.OpenXml.Packaging;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.LanguageMapping.Model;
@@ -161,7 +160,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private void AddFiles()
 		{
 			var selectedFiles = _dialogService.ShowFileDialog(
-				"Xliff (*.xliff) |*.xliff;*.xlf",
+				"Word Document (*.docx)",
 				PluginResources.FilesDialog_Title,
 				GetDefaultPath());
 			AddFilesToGrid(selectedFiles);
@@ -294,7 +293,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					var fileAttributes = File.GetAttributes(fullPath);
 					if (fileAttributes.HasFlag(FileAttributes.Directory))
 					{
-						var files = GetAllXliffsFromDirectory(fullPath);
+						var files = GetAllFilesFromDirectory(fullPath);
 						AddFilesToGrid(files);
 					}
 					else
@@ -307,10 +306,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private void AddFilesToGrid(IEnumerable<string> filesPath)
 		{
-			var sniffer = new XliffSniffer();
-			var segmentBuilder = new SegmentBuilder();
-			var xliffReader = new XliffReder(sniffer, segmentBuilder);
-
 			foreach (var filePath in filesPath)
 			{
 				if (!string.IsNullOrEmpty(filePath) && !File.Exists(filePath))
@@ -318,32 +313,89 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					continue;
 				}
 
-				var xliff = xliffReader.ReadXliff(filePath);
-				var docInfoSourceFile = xliff.DocInfo?.Source;
-				var xliffTargetLanguage = xliff.Files?.FirstOrDefault()?.TargetLanguage;
-				// take the default target from <doc-info> when not specified in <File>
-				if (string.IsNullOrEmpty(xliffTargetLanguage))
+				string documentLanguage;
+				var projectId = string.Empty;
+				var documentId = string.Empty;
+				var documentFullPath = string.Empty;
+				var sourceLanguage = string.Empty;
+				var targetLanguage = string.Empty;
+
+				using (var wordDoc = WordprocessingDocument.Open(filePath, false))
 				{
-					xliffTargetLanguage = xliff.DocInfo?.TargetLanguage;
+					documentLanguage = wordDoc.PackageProperties.Language;
+					if (!wordDoc.PackageProperties.Keywords.Contains(";")) continue;
+					var keywords = wordDoc.PackageProperties.Keywords.Split(';');
+					foreach (var keyword in keywords)
+					{
+						if (!wordDoc.PackageProperties.Keywords.Contains(":"))
+						{
+							continue;
+						}
+
+						var key = keyword.Substring(0, keyword.IndexOf(":", StringComparison.Ordinal));
+						var value = keyword.Substring(keyword.IndexOf(":", StringComparison.Ordinal) + 1);
+
+						switch (key)
+						{
+							case "ProjectId":
+								projectId = value;
+								break;
+							case "DocumentId":
+								documentId = value;
+								break;
+							case "SourceLanguage":
+								sourceLanguage = value;
+								break;
+							case "TargetLanguage":
+								targetLanguage = value;
+								break;
+							case "DocumentFullPath":
+								documentFullPath = value;
+								break;
+						}
+					}
 				}
+
+				if (string.IsNullOrEmpty(projectId))
+				{
+					MessageBox.Show("The project id parameter cannot be null!", PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+					return;
+				}
+
+				if (string.IsNullOrEmpty(sourceLanguage))
+				{
+					sourceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name; ;
+				}
+
+				if (string.IsNullOrEmpty(targetLanguage))
+				{
+					if (string.IsNullOrEmpty(documentLanguage))
+					{
+
+						MessageBox.Show("The document language parameter cannot be null!", PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+						return;
+					}
+					targetLanguage = documentLanguage;
+				}
+
 
 				// Get the mapped language code
 				var mappedLanguage = _languageMappings.FirstOrDefault(a =>
-					string.Compare(a.LanguageCode, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0
-					|| string.Compare(a.MappedCode, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
+					string.Compare(a.MappedCode, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0
+					|| string.Compare(a.LanguageCode, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
 
 				if (mappedLanguage == null)
 				{
-					MessageBox.Show(string.Format(PluginResources.WarningMessage_UnableToMapLanguage, xliffTargetLanguage),
+					MessageBox.Show(string.Format(PluginResources.WarningMessage_UnableToMapLanguage, targetLanguage),
 						PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 					return;
 				}
 
 				// Assign the SDL Studio language code
-				xliffTargetLanguage = mappedLanguage.LanguageCode;
-				var projectLanguages = GetProjectLanguages(xliff.DocInfo?.TargetLanguage);
+				targetLanguage = mappedLanguage.LanguageCode;
+				var projectLanguages = GetProjectLanguages(targetLanguage);
 
-				var xliffTargetPath = GetPathLocation(docInfoSourceFile, projectLanguages, out var foundTargetLanguage);
+				var documentTargetPath = GetPathLocation(documentFullPath, projectLanguages, out var foundTargetLanguage);
 				if (!foundTargetLanguage)
 				{
 					continue;
@@ -351,25 +403,25 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 				foreach (var projectFile in ProjectFiles)
 				{
-					if (string.Compare(projectFile.Project.Id, xliff.DocInfo?.ProjectId, StringComparison.CurrentCultureIgnoreCase) != 0)
+					if (string.Compare(projectFile.Project.Id, projectId, StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
 						MessageBox.Show(PluginResources.WizardMessage_ProjectIdMissmatch, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 						return;
 					}
 
 					var projectFileTargetLanguage = projectFile.TargetLanguage;
-					if (string.Compare(projectFileTargetLanguage, xliffTargetLanguage, StringComparison.CurrentCultureIgnoreCase) != 0)
+					if (string.Compare(projectFileTargetLanguage, targetLanguage, StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
 						continue;
 					}
-					
-					var projectFileTargetPath = GetPathLocation(projectFile.Location, xliffTargetLanguage, out var foundXliffTargetLanguage);
+
+					var projectFileTargetPath = GetPathLocation(projectFile.Location, targetLanguage, out var foundXliffTargetLanguage);
 					if (!foundXliffTargetLanguage)
 					{
 						continue;
 					}
 
-					if (string.Compare(projectFileTargetPath, xliffTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
+					if (string.Compare(projectFileTargetPath, documentTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
 						projectFile.XliffFilePath = filePath;
 						projectFile.Selected = true;
@@ -397,7 +449,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		}
 
 		private string GetPathLocation(string path, string targetLanguage, out bool foundLanguage)
-		{			
+		{
 			var location = string.Empty;
 			while (path.Contains("\\"))
 			{
@@ -432,11 +484,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			return null;
 		}
 
-		private IEnumerable<string> GetAllXliffsFromDirectory(string directoryPath)
+		private IEnumerable<string> GetAllFilesFromDirectory(string directoryPath)
 		{
 			var files = new List<string>();
-			files.AddRange(Directory.GetFiles(directoryPath, "*.xliff", SearchOption.AllDirectories).ToList());
-			files.AddRange(Directory.GetFiles(directoryPath, "*.xlf", SearchOption.AllDirectories).ToList());
+			files.AddRange(Directory.GetFiles(directoryPath, "*.docx", SearchOption.AllDirectories).ToList());
 
 			return files;
 		}
@@ -446,7 +497,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title, GetDefaultPath());
 			if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
 			{
-				var files = GetAllXliffsFromDirectory(folderPath);
+				var files = GetAllFilesFromDirectory(folderPath);
 				AddFilesToGrid(files);
 			}
 		}

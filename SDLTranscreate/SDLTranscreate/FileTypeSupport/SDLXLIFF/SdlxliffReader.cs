@@ -3,7 +3,6 @@ using System.Globalization;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 {

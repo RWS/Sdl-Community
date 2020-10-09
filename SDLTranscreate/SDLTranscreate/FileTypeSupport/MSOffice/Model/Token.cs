@@ -9,23 +9,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 
 		public enum RevisionMarkerType { DeleteStart, DeleteEnd, InsertStart, InsertEnd };
 
-		public Token(TokenType type)
-		{
-			Type = type;
-		}
-
-		public Token(string tokenContent, TokenType type)
-		{
-			Content = tokenContent;
-			Type = type;
-		}
-
-		public Token(OpenXmlElement specialContent, TokenType type)
-		{
-			Type = type;
-			SpecialContent = specialContent;
-		}
-
 		public string Content
 		{
 			get;

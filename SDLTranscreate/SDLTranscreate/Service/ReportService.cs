@@ -156,14 +156,14 @@ namespace Sdl.Community.Transcreate.Service
 		private void WriteReportSettings(XmlWriter writer, WizardContext wizardContext)
 		{
 			writer.WriteStartElement("settings");
-			if (wizardContext.Action == Enumerators.Action.Export)
+			if (wizardContext.Action == Enumerators.Action.Export || wizardContext.Action == Enumerators.Action.ExportBackTranslation)
 			{
 				writer.WriteAttributeString("xliffSupport", wizardContext.ExportOptions.XliffSupport.ToString());
 				writer.WriteAttributeString("includeTranslations", wizardContext.ExportOptions.IncludeTranslations.ToString());
 				writer.WriteAttributeString("copySourceToTarget", wizardContext.ExportOptions.CopySourceToTarget.ToString());
 				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExportOptions.ExcludeFilterIds));
 			}
-			else if (wizardContext.Action == Enumerators.Action.Import)
+			else if (wizardContext.Action == Enumerators.Action.Import || wizardContext.Action == Enumerators.Action.ImportBackTranslation)
 			{
 				writer.WriteAttributeString("overwriteTranslations", wizardContext.ImportOptions.OverwriteTranslations.ToString());
 				writer.WriteAttributeString("originSystem", wizardContext.ImportOptions.OriginSystem);

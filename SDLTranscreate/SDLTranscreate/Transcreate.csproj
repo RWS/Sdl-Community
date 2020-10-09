@@ -195,6 +195,7 @@
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\ImportProcessor.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\Comment.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\DocInfo.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\GeneratorSettings.cs" />
@@ -203,7 +204,7 @@
     <Compile Include="FileTypeSupport\MSOffice\Model\SourceCopyRecord.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\TooManyParagraphsException.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Model\UpdatedSegmentContent.cs" />
-    <Compile Include="FileTypeSupport\MSOffice\Processor.cs" />
+    <Compile Include="FileTypeSupport\MSOffice\ExportProcessor.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Visitors\ElementExtractor.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Readers\ContentReader.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Writers\ContentWriter.cs" />

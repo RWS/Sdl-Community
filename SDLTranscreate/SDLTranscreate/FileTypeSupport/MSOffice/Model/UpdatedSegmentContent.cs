@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 {
@@ -8,16 +7,29 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
 
 		public UpdatedSegmentContent()
 		{
-			Tokens = new List<Token>();
+			TranslationTokens = new List<Token>();
+			BackTranslationTokens = new List<Token>();
 		}
 
-		public List<Token> Tokens
+		public List<Token> TranslationTokens
 		{
 			get;
 			set;
 		}
 
-		public bool SegmentHasTrackedChanges
+		public List<Token> BackTranslationTokens
+		{
+			get;
+			set;
+		}
+
+		public bool TranslationHasTrackedChanges
+		{
+			get;
+			set;
+		}
+
+		public bool BackTranslationHasTrackedChanges
 		{
 			get;
 			set;

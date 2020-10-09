@@ -583,4 +583,10 @@
   <data name="ReportsGroupDescription_ConvertedToTranscreateProject" xml:space="preserve">
 	  <value>Converted to a Transcreate project</value>
   </data>
+  <data name="Label_IncludeBackTranslations" xml:space="preserve">
+	  <value>Include Back-Translations: {0}</value>
+  </data>
+  <data name="label_OutputFile" xml:space="preserve">
+	  <value>Output File: {0}</value>
+  </data>
 </root>
