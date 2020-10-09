@@ -17,7 +17,7 @@ using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.ProjectAutomation.Settings.Events;
+//using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -338,7 +338,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetShortcutService();
 
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-			_eventAggregator.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
+			//_eventAggregator.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
 
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
@@ -361,15 +361,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			PropertyChanged += RateItViewModel_PropertyChanged;
 		}
 
-		private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
-		{
-			if (!tpInfo.TpUri.ToString().Contains(PluginResources.SDLMTCloudUri)) return;
+		//private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
+		//{
+		//	if (!tpInfo.TpUri.ToString().Contains(PluginResources.SDLMTCloudUri)) return;
 
-			if (!tpInfo.NewStatus ?? true)
-			{
-				IsSendFeedbackEnabled = false;
-			}
-		}
+		//	if (!tpInfo.NewStatus ?? true)
+		//	{
+		//		IsSendFeedbackEnabled = false;
+		//	}
+		//}
 
 		private void RateItViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
