@@ -52,7 +52,40 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 	        Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
         }
 
+
         [Theory]
+        [InlineData("The bus number is 30F. ", "The bus number is 30E.")]
+        public void AlphanumericReportModifiedVerification_WithErrors(string source, string target)
+        {
+	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+	        numberVerifierSettings.Setup(d => d.ReportModifiedAlphanumerics).Returns(true);
+	        numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(false);
+
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+	        Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
+
+        [Theory]
+        [InlineData("The bus number is 30F. ", "The bus number is 30E.")]
+        public void NoAlphanumericReportModifiedVerification_NoErrors(string source, string target)
+        {
+	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+	        numberVerifierSettings.Setup(d => d.ReportModifiedAlphanumerics).Returns(false);
+	        numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+
+	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+	        Assert.True(errorMessage.Count == 0);
+        }
+
+		[Theory]
         [InlineData("The apartment number is 125H. ", "The apartment number is 125H.")]
         public void AlphanumericVerification_NoErrors(string source, string target)
         {

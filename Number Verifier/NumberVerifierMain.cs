@@ -589,7 +589,7 @@ namespace Sdl.Community.NumberVerifier
 				TargetText = targetText
 			};
 
-			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
+			if (_verificationSettings.ReportModifiedAlphanumerics || _verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
 				var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
 				errorList.AddRange(errorsListFromAlphanumerics);
@@ -1328,7 +1328,9 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				var separators = _textFormatter.GetAlphanumericsCustomSeparators(customsSeparators);
+				var separators = _verificationSettings.CustomsSeparatorsAlphanumerics 
+					? _textFormatter.GetAlphanumericsCustomSeparators(customsSeparators)
+					: string.Empty;
 				var regex = $"(?i)(?=.*[0-9])(?=.*[a-z])([a-z0-9{separators}]+)";
 
 				normalizedAlphaList.AddRange(
