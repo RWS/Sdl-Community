@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Sdl.Community.MTCloud.Provider.Model
@@ -14,21 +13,24 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		public void ChangeStatus(HttpResponseMessage responseMessage)
 		{
+			var jObj = JToken.Parse(responseMessage.ReasonPhrase);
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				Status = Status.Sent;
-				Message = PluginResources.FeedbackSentSuccessfully;
+				var response = $"{jObj.ToString(Formatting.Indented)}";
+				Message = string.Format(PluginResources.ResponseFromServer, PluginResources.FeedbackSentSuccessfully, response);
 			}
 			else
 			{
-				Status = Status.NotSent;
-				var jObj = JObject.Parse(responseMessage.ReasonPhrase);
-				jObj.TryGetValue("errors", out var jErrors);
+				Status = Status.RequestFailed;
+				var response = jObj["errors"].ToString(Formatting.Indented);
+				var extraInfo = "";
+				extraInfo = Regex.Match(response, "translation.targetMTText").Success
+					? PluginResources.OriginalMtCloudTranslationMissing
+					: extraInfo;
 
-				var reasons = jErrors?.ToObject<List<Error>>();
-				var formattedReasons = reasons != null ? string.Join("\r\n", reasons.Select(r => r.Description)) : null;
-
-				Message = $"{responseMessage.StatusCode}: {Environment.NewLine}{formattedReasons}";
+				var title = $"{PluginResources.FeedbackNotSent_TooltipMessage}{extraInfo}.";
+				Message = string.Format(PluginResources.ResponseFromServer, title, response);
 			}
 		}
 	}

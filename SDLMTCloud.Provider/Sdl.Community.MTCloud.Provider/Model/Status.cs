@@ -4,6 +4,6 @@
 	{
 		Default = 0,
 		Sent = 1,
-		NotSent = 2
+		RequestFailed = 2
 	}
 }

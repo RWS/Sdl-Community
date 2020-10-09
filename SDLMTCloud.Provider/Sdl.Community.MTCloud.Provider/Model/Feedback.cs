@@ -2,12 +2,13 @@
 {
 	public class Feedback
 	{
-		public Feedback(string originalSource)
+		public Feedback(string originalTarget, string originalSource)
 		{
+			OriginalMtCloudTranslation = originalTarget;
 			OriginalSource = originalSource;
 		}
 
-		public string ActualTranslation { get; set; }
+		public string Suggestion { get; set; }
 
 		public string OriginalMtCloudTranslation { get; set; }
 

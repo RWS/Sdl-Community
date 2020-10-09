@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
@@ -11,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service.Events;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.ProjectAutomation.Core;
@@ -24,6 +26,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	public class TranslationService : ITranslationService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+		public event TranslationReceivedEventHandler TranslationReceived;
 
 		public TranslationService(IConnectionService connectionService)
 		{
@@ -221,28 +225,32 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					return null;
 				}
 
-				if (JsonConvert.DeserializeObject<TranslationResponse>(response) is TranslationResponse translationResponse)
+				if (!(JsonConvert.DeserializeObject<TranslationResponse>(response) is TranslationResponse translationResponse))
+					return null;
+
+				var dataResponse = await GetTranslations(httpClient, translationResponse.RequestId);
+				if (!(JsonConvert.DeserializeObject<TranslationResponse>(dataResponse) is TranslationResponse translations))
+					return null;
+
+				var translation = translations.Translation.FirstOrDefault();
+				if (translation == null)
 				{
-					var dataResponse = await GetTranslations(httpClient, translationResponse.RequestId);
-					if (JsonConvert.DeserializeObject<TranslationResponse>(dataResponse) is TranslationResponse translations)
-					{
-						var translation = translations.Translation.FirstOrDefault();
-						if (translation == null)
-						{
-							return null;
-						}
-
-						var translatedXliff = Converter.ParseXliffString(translation);
-						if (translatedXliff != null)
-						{
-							var segments = translatedXliff.GetTargetSegments();
-							return segments;
-						}
-					}
+					return null;
 				}
-			}
 
-			return null;
+				var translatedXliff = Converter.ParseXliffString(translation);
+				if (translatedXliff == null) return null;
+
+				var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
+
+				OnTranslationReceived(sourceSegments, targetSegments.Select(seg=>seg.ToString()).ToList());
+				return targetSegments;
+			}
+		}
+
+		private void OnTranslationReceived(List<string> sourceSegments, List<string> targetSegments)
+		{
+			TranslationReceived?.Invoke(sourceSegments, targetSegments);
 		}
 
 		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)

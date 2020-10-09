@@ -2,6 +2,7 @@
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
@@ -31,8 +32,10 @@ namespace Sdl.Community.MTCloud.Provider.View
 
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var segmentSupervisor = new SegmentSupervisor(editorController);
+			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 
-			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService, editorController);
+			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService,
+				editorController, eventAggregator);
 			_rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel

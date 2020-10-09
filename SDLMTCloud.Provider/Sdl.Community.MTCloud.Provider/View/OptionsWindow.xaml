@@ -212,9 +212,24 @@
 				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
-					          IsChecked="{Binding SendFeedback}" 
-					          Content="{x:Static rsx:PluginResources.EnableRating}" 
-					          ToolTip="{x:Static rsx:PluginResources.EnableRatingCheckboxTooltip}"/>
+						          IsChecked="{Binding SendFeedback}"
+						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
+						<TextBlock Margin="15 5 0 5">
+							<Hyperlink Command="{Binding NavigateToWikiCommand}">
+								To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.
+								<Hyperlink.Style>
+									<Style TargetType="Hyperlink">
+										<Setter Property="TextDecorations" Value="None"/>
+										<Setter Property="Foreground" Value="CornflowerBlue"/>
+										<Style.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="TextDecorations" Value="Underline"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</Hyperlink.Style>
+							</Hyperlink>
+						</TextBlock>
 				</StackPanel>
 			</Grid >
 

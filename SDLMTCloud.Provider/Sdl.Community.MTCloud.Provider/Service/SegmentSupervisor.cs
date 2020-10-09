@@ -12,21 +12,26 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public partial class SegmentSupervisor : ISegmentSupervisor
+	public class SegmentSupervisor : ISegmentSupervisor
 	{
 		private readonly EditorController _editorController;
 		private Guid _docId;
+		private ITranslationService _translationService;
+		private bool _translationReceivedButNotHandled;
+		private string _translationSource;
+		private string _translationTarget;
 
 		public SegmentSupervisor(EditorController editorController)
 		{
 			_editorController = editorController;
+
 		}
 
 		public event ConfirmationLevelChangedEventHandler SegmentConfirmed;
 
 		private Document ActiveDocument => _editorController.ActiveDocument;
 
-		public Dictionary<SegmentId, ImprovedTarget> ActiveDocumentImprovements
+		public Dictionary<SegmentId, Feedback> ActiveDocumentImprovements
 		{
 			get
 			{
@@ -37,14 +42,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>>();
-		public ImprovedTarget GetImprovement(SegmentId? segmentId = null)
+		public Dictionary<Guid, Dictionary<SegmentId, Feedback>> Improvements { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, Feedback>>();
+
+		public Feedback GetImprovement(SegmentId? segmentId = null)
 		{
 			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
-			ImprovedTarget improvement = null;
+			Feedback improvement = null;
 
 			var segmentHasImprovement = currentSegment != null &&
-			                            ActiveDocumentImprovements.ContainsKey(currentSegment.Value);
+										ActiveDocumentImprovements.ContainsKey(currentSegment.Value);
 			if (segmentHasImprovement)
 			{
 				improvement = ActiveDocumentImprovements[currentSegment.Value];
@@ -52,99 +58,77 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return improvement;
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>> Improvements { get; set; } =
-			new Dictionary<Guid, Dictionary<SegmentId, ImprovedTarget>>();
-
-		public void StartSupervising()
+		public void StartSupervising(ITranslationService translationService)
 		{
 			StopSupervising();
+
+			_translationService = translationService;
+
+			SubscribeUnsubscribeToTranslationReceivedEvent(true);
 
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			if (ActiveDocument == null) return;
-			ActiveDocument.ActiveSegmentChanged += ActiveDocumentOnActiveSegmentChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 		}
 
 		public void StopSupervising()
 		{
+			SubscribeUnsubscribeToTranslationReceivedEvent(false);
 			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 
 			if (ActiveDocument == null) return;
-			ActiveDocument.ActiveSegmentChanged -= ActiveDocumentOnActiveSegmentChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
-		}
-
-		private string GetSourceSegment(ISegment segment)
-		{
-			return
-				_editorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == segment.Properties.Id)?.Source
-					.ToString();
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
 		{
+
 			var segment = (ISegment)((ISegmentContainerNode)sender).Item;
 			if (segment == null) return;
 
 			var segmentId = segment.Properties.Id;
 			var translationOrigin = segment.Properties.TranslationOrigin;
-			var sourceSegment = GetSourceSegment(segment);
+			var targetSegmentText = segment.ToString();
 
 			if (IsImprovementToTpTranslation(translationOrigin, segmentId, segment))
 			{
-				EditImprovements(segmentId, segment.ToString(), null, translationOrigin, sourceSegment);
-			}
-			else
-			{
-				EditImprovements(segmentId, null, segment.ToString(), translationOrigin, sourceSegment);
+				AddImprovement(segmentId, targetSegmentText);
 			}
 
 			if (segment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
 			SegmentConfirmed?.Invoke(segmentId);
 		}
 
-		private void ActiveDocumentOnActiveSegmentChanged(object sender, EventArgs e)
+		
+
+		public void AddImprovement(SegmentId segmentId, string improvement)
 		{
-			var activeSegmentPair = _editorController.ActiveDocument.ActiveSegmentPair;
-			if (activeSegmentPair == null) return;
-			EditImprovements(activeSegmentPair.Properties.Id, null, activeSegmentPair.Target.ToString(), activeSegmentPair.Properties.TranslationOrigin, activeSegmentPair.Source.ToString());
+			if (!ActiveDocumentImprovements.ContainsKey(segmentId)) return;
+
+			var item = ActiveDocumentImprovements[segmentId];
+			if (item.Suggestion != improvement) item.Suggestion = improvement;
 		}
 
-		private void EditImprovements(SegmentId segmentId, string improvement, string originalTarget, ITranslationOrigin translationOrigin, string originalSource)
+		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
+			string source)
 		{
-			if (improvement != null && ActiveDocumentImprovements.ContainsKey(segmentId))
-			{
-				var item = ActiveDocumentImprovements[segmentId];
-				if (item.Improvement != improvement) item.Improvement = improvement;
-			}
-			else
-			{
-				if (translationOrigin.OriginSystem != PluginResources.SDLMTCloudName ||
-				    ActiveDocumentImprovements.ContainsKey(segmentId) &&
-				    originalSource == ActiveDocumentImprovements[segmentId].OriginalSource) return;
-
-				ActiveDocumentImprovements[segmentId] = new ImprovedTarget(originalTarget, originalSource);
-			}
+			if (targetOrigin != PluginResources.SDLMTCloudName ) return;
+			ActiveDocumentImprovements[segmentId] = new Feedback(originalTarget, source);
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			if (ActiveDocument == null) return;
-
 			SetIdAndActiveFile();
-
-			ActiveDocument.ActiveSegmentChanged += ActiveDocumentOnActiveSegmentChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
-			ActiveDocumentOnActiveSegmentChanged(((EditorController)sender).ActiveDocument, e);
 		}
 
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
 		{
 			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName &&
 				   ActiveDocumentImprovements.ContainsKey(segmentId) &&
-				   ActiveDocumentImprovements[segmentId].OriginalTarget != segment.ToString() &&
-				   translationOrigin?.OriginType == "interactive" &&
+				   ActiveDocumentImprovements[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
 				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
 		}
 
@@ -153,7 +137,40 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Improvements.ContainsKey(_docId))
 			{
-				Improvements[_docId] = new Dictionary<SegmentId, ImprovedTarget>();
+				Improvements[_docId] = new Dictionary<SegmentId, Feedback>();
+			}
+		}
+
+		public void SubscribeUnsubscribeToTranslationReceivedEvent(bool subSwitch)
+		{
+			if (_translationService == null) return;
+			if (subSwitch)
+			{
+				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
+				_translationService.TranslationReceived += TranslationService_TranslationReceived;
+			}
+			else
+			{
+				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
+			}
+		}
+
+		private void TranslationService_TranslationReceived(List<string> sources, List<string> targets)
+		{
+			for (var i = 0; i < sources.Count; i++)
+			{
+				var currentSegmentId = _editorController.ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sources[i])?.Properties.Id;
+
+				if (currentSegmentId != null)
+				{
+					CreateFeedbackEntry(currentSegmentId.Value, targets[i], PluginResources.SDLMTCloudName,
+						sources[i]);
+				}
+				else
+				{
+					CreateFeedbackEntry(ActiveDocument.ActiveSegmentPair.Properties.Id, targets[i], PluginResources.SDLMTCloudName,
+						ActiveDocument.ActiveSegmentPair.Source.ToString());
+				}
 			}
 		}
 	}

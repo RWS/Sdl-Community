@@ -79,7 +79,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.DesktopEditor.Control.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.DesktopEditor.EditorApi, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.DesktopEditor.EditorApi">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.DesktopEditor.EditorApi.dll</HintPath>
     </Reference>
@@ -111,6 +111,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
@@ -126,6 +127,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Printing" />
+    <Reference Include="System.Reactive.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\System.Reactive.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -142,6 +147,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -199,6 +205,7 @@
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
     <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
+    <Compile Include="Service\Events\TranslationReceivedEventHandler.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
@@ -293,6 +300,10 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\SendFeedbackButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Resource Include="Resources\Checked.ico" />
     <Resource Include="Resources\rating.ico" />
     <Content Include="Resources\success.png" />
