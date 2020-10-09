@@ -218,6 +218,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			// source settings
 			numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+			numberVerifierSettings.Setup(s => s.ReportModifiedAlphanumerics).Returns(false);
 			numberVerifierSettings.Setup(s => s.CustomsSeparatorsAlphanumerics).Returns(false);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
