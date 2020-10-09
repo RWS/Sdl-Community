@@ -24,7 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				Status = Status.RequestFailed;
 				var response = jObj["errors"].ToString(Formatting.Indented);
-				var extraInfo = "";
+				var extraInfo = string.Empty;
 				extraInfo = Regex.Match(response, "translation.targetMTText").Success
 					? PluginResources.OriginalMtCloudTranslationMissing
 					: extraInfo;

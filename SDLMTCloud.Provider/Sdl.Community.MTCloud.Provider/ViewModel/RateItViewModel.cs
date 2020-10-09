@@ -185,7 +185,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			string suggestionReplacement = null;
 			if (segmentId == null && improvement != null && improvement.Suggestion == null)
 			{
-				suggestionReplacement = _editorController.ActiveDocument.ActiveSegmentPair.Target.ToString();
+				suggestionReplacement = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
 			}
 
 			var rating = GetRatingObject(segmentId);

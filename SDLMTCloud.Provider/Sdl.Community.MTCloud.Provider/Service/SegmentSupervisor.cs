@@ -29,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public event ConfirmationLevelChangedEventHandler SegmentConfirmed;
 
-		private Document ActiveDocument => _editorController.ActiveDocument;
+		private Document ActiveDocument => _editorController?.ActiveDocument;
 
 		public Dictionary<SegmentId, Feedback> ActiveDocumentImprovements
 		{
@@ -157,9 +157,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void TranslationService_TranslationReceived(List<string> sources, List<string> targets)
 		{
+			if (ActiveDocument == null) return;
+
 			for (var i = 0; i < sources.Count; i++)
 			{
-				var currentSegmentId = _editorController.ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sources[i])?.Properties.Id;
+				var currentSegmentId = ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sources[i])?.Properties.Id;
 
 				if (currentSegmentId != null)
 				{

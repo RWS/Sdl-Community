@@ -214,22 +214,17 @@
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
 						          IsChecked="{Binding SendFeedback}"
 						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
-						<TextBlock Margin="15 5 0 5">
+					<Button Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					        Content="To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki."
+					        Command="{Binding NavigateToWikiCommand}"
+							FontSize="13"
+							HorizontalAlignment="Left"
+					        Margin="15 5 0 5"/>
+					<!--<TextBlock Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}" Margin="15 5 0 5">
 							<Hyperlink Command="{Binding NavigateToWikiCommand}">
 								To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.
-								<Hyperlink.Style>
-									<Style TargetType="Hyperlink">
-										<Setter Property="TextDecorations" Value="None"/>
-										<Setter Property="Foreground" Value="CornflowerBlue"/>
-										<Style.Triggers>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter Property="TextDecorations" Value="Underline"/>
-											</Trigger>
-										</Style.Triggers>
-									</Style>
-								</Hyperlink.Style>
 							</Hyperlink>
-						</TextBlock>
+					</TextBlock>-->
 				</StackPanel>
 			</Grid >
 
