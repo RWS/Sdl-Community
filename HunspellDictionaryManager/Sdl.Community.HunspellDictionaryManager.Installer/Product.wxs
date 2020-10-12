@@ -13,7 +13,7 @@
     <!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
     <UIRef Id="WixUI_Minimal"/>
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
     <MediaTemplate EmbedCab="yes"/>
 
     <!-- Compoments needed for the installation - by defining the below components, installer knows to install the application to Desktop and Program Data. -->
