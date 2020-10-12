@@ -30,6 +30,6 @@
         /// <summary>
         /// The configuration.
         /// </summary>
-        public ExtensionConfiguration Configuration { get; set; }
+        public dynamic Configuration { get; set; }
     }
 }

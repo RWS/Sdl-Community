@@ -2,7 +2,7 @@
 
 namespace Sdl.LC.AddonBlueprint.Models
 {
-    public class ExtensionConfiguration
+    public class MTExtensionConfiguration
     {
         /// <summary>
         /// The endpoints

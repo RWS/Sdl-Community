@@ -186,14 +186,17 @@ namespace Sdl.LC.AddonBlueprint.Services
         /// <returns></returns>
         private ConfigurationSettingsResult MaskSecretConfigurations(List<ConfigurationValueModel> configurations)
         {
-            var secretConfigurationIds = _descriptorService.GetSecretConfigurations();
+			var secretConfigurationIds = _descriptorService.GetSecretConfigurations();
 
-            foreach (var config in configurations.Where(config => secretConfigurationIds.Contains(config.Id)))
-            {
-                config.Value = SecretMask;
-            }
+			foreach (var config in configurations.Where(config => secretConfigurationIds.Contains(config.Id)))
+			{
+				if (config.Value != null)
+				{
+					config.Value = SecretMask;
+				}
+			}
 
-            return new ConfigurationSettingsResult(configurations);
-        }
+			return new ConfigurationSettingsResult(configurations);
+		}
     }
 }

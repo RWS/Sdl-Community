@@ -36,13 +36,11 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		/// <param name="logger">The logger.</param>
 		/// <param name="descriptorService">The descriptor service.</param>
 		/// <param name="accountService">The account service.</param>
-		/// <param name="httpContextAccessor">The http context accessor.</param>
 		/// <param name="healthReporter">The health reporter.</param>
 		public StandardController(IConfiguration configuration,
 			ILogger<StandardController> logger,
 			IDescriptorService descriptorService,
 			IAccountService accountService,
-			IHttpContextAccessor httpContextAccessor,
 			IHealthReporter healthReporter,ITranslationService translationService)
 		{
 			_configuration = configuration;
@@ -60,10 +58,23 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		[HttpGet("descriptor")]
 		public IActionResult Descriptor()
 		{
+			// This endpoint provides the descriptor for the Language Cloud to inspect and register correctly.
+			// It can be implemented in any number of ways. The example implementation is to load the descriptor.json file
+			// into the AddonDescriptorModel object and then serialize it as a result.
+			// Alternative implementation can be generating the descriptor based on config settings, environment variables,
+			// etc.
 			_logger.LogInformation("Entered Descriptor endpoint.");
+
+			// Descriptor service will provide an object describing the descriptor.
 			var descriptor = _descriptorService.GetDescriptor();
 
-			return Content(JsonSerializer.Serialize(descriptor, JsonSettings.Default()), "application/json", Encoding.UTF8);
+			var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings
+			{
+				ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver(),
+				
+			};
+
+			return Content(Newtonsoft.Json.JsonConvert.SerializeObject(descriptor, serializerSettings), "application/json", Encoding.UTF8);
 		}
 
 		/// <summary>
@@ -114,14 +125,18 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			switch (lifecycle.Id)
 			{
 				case AddOnLifecycleEventEnum.REGISTERED:
+					_logger.LogInformation("Addon Registered Event Received.");
 					// This is the event notifying that the Add-On has been registered in Language Cloud.
 					// No further details are available for that event.
-					_logger.LogInformation("Addon Registered Event Received.");
 					break;
 				case AddOnLifecycleEventEnum.ACTIVATED:
-					// This is an Activation event, tenant id and it's public key must be saved to the database.
+					// This is an Activation event, tenant id and it's public key must be saved to db.
 					_logger.LogInformation("Addon Activated Event Received.");
 					var activatedEvent = JsonSerializer.Deserialize<AddOnLifecycleEvent<ActivatedEvent>>(payload, JsonSettings.Default());
+
+					 var tenantId = activatedEvent.Data.TenantId;
+					_logger.LogInformation($"Addon Activated Event Received for tenant id {tenantId}.");
+
 					await _accountService.SaveAccountInfo(activatedEvent.Data, CancellationToken.None).ConfigureAwait(false);
 					break;
 				case AddOnLifecycleEventEnum.UNREGISTERED:
@@ -144,14 +159,15 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		[HttpPost("account-lifecycle")]
 		public async Task<IActionResult> AccountLifecycle()
 		{
-			string payload;
-			using (var sr = new StreamReader(Request.Body))
-			{
-				payload = await sr.ReadToEndAsync();
-			}
-
+			// This endpoint receives events related to an Account where the Add-On has been activated
+			// and the requests are authenticated.
+			// Currently this is only the DEACTIVATED event.
 			var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
+
+			var sr = new StreamReader(Request.Body);
+			var payload = await sr.ReadToEndAsync();
 			var lifecycle = JsonSerializer.Deserialize<AccountLifecycleEvent>(payload, JsonSettings.Default());
+
 			switch (lifecycle.Id)
 			{
 				case AccountLifecycleEventEnum.DEACTIVATED:
@@ -173,6 +189,9 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		[HttpGet("configuration")]
 		public async Task<IActionResult> GetConfigurationSettings()
 		{
+			// All configuration settings must be returned to the caller.
+			// Configurations that are secret will be returned with the value set to "*****", if they have a value.
+
 			_logger.LogInformation("Retrieving the configuration settings.");
 
 			var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;

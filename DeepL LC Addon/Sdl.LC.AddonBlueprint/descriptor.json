@@ -1,14 +1,13 @@
 ﻿{
-	"Descriptor": {
 		"name": "DeepL Translation Provider",
-		"version": "1.0.6",
+		"version": "1.0.14",
 		"description": "This Add on provides machine translation results from the DeepL Translator.",
 		"extensions": [
 			{
 				"id": "MT_DeepL",
 				"extensionPointId": "lc.mtprovider",
 				"name": "DeepL Translation Provider",
-				"description": "rovides translation using DeepL",
+				"description": "Provides translation using DeepL",
 				"extensionPointVersion": "1",
 				"configuration": {
 					"endpoints": {
@@ -19,7 +18,7 @@
 				}
 			}
 		],
-		"baseUrl": "http://10.111.138.179:2509",
+		"baseUrl": "http://10.111.138.110:2509",
 		"standardEndpoints": {
 			"health": "/api/health",
 			"addonLifecycle": "/api/addon-lifecycle",
@@ -42,7 +41,7 @@
 				"id": "translationFormality",
 				"description": "Please choose if translated text should lean towards formal or informal language. Possible options are 'Default','More','Less'",
 				"optional": true,
-				"defaultValue": null,
+				"defaultValue": "",
 				"dataType": "string"
 			}
 		],
@@ -52,5 +51,4 @@
 			"name": "SDL Community",
 			"url": "acme.com"
 		}
-	}
 }

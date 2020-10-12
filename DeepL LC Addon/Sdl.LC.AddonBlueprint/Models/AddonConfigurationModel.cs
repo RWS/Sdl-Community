@@ -1,4 +1,6 @@
-﻿using Sdl.LC.AddonBlueprint.Enums;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Sdl.LC.AddonBlueprint.Enums;
 
 namespace Sdl.LC.AddonBlueprint.Models
 {
@@ -29,9 +31,10 @@ namespace Sdl.LC.AddonBlueprint.Models
         /// </summary>
         public object DefaultValue { get; set; }
 
-        /// <summary>
-        /// The data type.
-        /// </summary>
-        public DataTypeEnum DataType { get; set; }
+		/// <summary>
+		/// The data type.
+		/// </summary>
+		[JsonConverter(typeof(StringEnumConverter))]
+		public DataTypeEnum DataType { get; set; }
     }
 }
