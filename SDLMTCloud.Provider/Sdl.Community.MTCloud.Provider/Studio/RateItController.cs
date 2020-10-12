@@ -8,25 +8,30 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[ViewPart(
-		Id = "SDL MT Cloud RateIt",
-		Name = "SDL MT Cloud RateIt",
-		Description = "SDL MT Cloud RateIt",
-		Icon = "")]
+		Id = "SDL MT Cloud Rate Translations",
+		Name = "SDL MT Cloud Rate Translations",
+		Description = "SDL MT Cloud Rate Translations",
+		Icon = "rating")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
-	public  class RateItController : AbstractViewPartController
-	{		
+	public class RateItController : AbstractViewPartController
+	{
 		private Lazy<View.RateItControl> _control;
 
-		protected override void Initialize()
-		{
-			_control = new Lazy<View.RateItControl>(()=>new View.RateItControl());						
-		}
-
 		public IRatingService RateIt => _control?.Value.RatingService;
+
+		public void FocusFeedbackTextBox()
+		{
+			_control.Value.FocusFeedbackTextBox();
+		}
 
 		protected override Control GetContentControl()
 		{
 			return _control.Value;
+		}
+
+		protected override void Initialize()
+		{
+			_control = new Lazy<View.RateItControl>(() => new View.RateItControl());
 		}
 	}
 }

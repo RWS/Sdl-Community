@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.XliffConverter.Models;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
@@ -43,11 +46,13 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 			File?.Body?.Add(sourceSegment, targetSegment, toolId);
 		}
 
-		public Segment[] GetTargetSegments()
+		public Segment[] GetTargetSegments(out List<string> sources)
 		{
-			return File.Body.TranslationUnits.Select(x =>
+			sources = new List<string>();
+			var segments = new List<Segment>();
+			foreach (var tu in File.Body.TranslationUnits)
 			{
-				var option = x.TranslationList?.FirstOrDefault();
+				var option = tu.TranslationList?.FirstOrDefault();
 				var segment = option?.Translation?.TargetSegment;
 
 				if (segment == null)
@@ -55,10 +60,12 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 					return null;
 				}
 
+				sources.Add(tu.SourceText);
 				segment.Culture = File.TargetCulture ?? File.SourceCulture;
+				segments.Add(segment);
+			}
 
-				return segment;
-			}).ToArray();
+			return segments.ToArray();
 		}
 
 		public override string ToString()

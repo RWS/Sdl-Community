@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -61,6 +61,15 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If this option is enabled, feedback is sent when the segment is confirmed.
+        /// </summary>
+        public static string AutoSendFeedback_CheckBoxTooltip {
+            get {
+                return ResourceManager.GetString("AutoSendFeedback_CheckBoxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] DefaultMTLanguageCodes {
@@ -76,6 +85,15 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
         public static string RateItViewModel_SetOptionTooltip_No_shortcut_was_set {
             get {
                 return ResourceManager.GetString("RateItViewModel_SetOptionTooltip_No_shortcut_was_set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All the information from Rate It form is sent to the server.
+        /// </summary>
+        public static string SendFeedback_ButtonTooltip {
+            get {
+                return ResourceManager.GetString("SendFeedback_ButtonTooltip", resourceCulture);
             }
         }
     }
