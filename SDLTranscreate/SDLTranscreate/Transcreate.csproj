@@ -111,10 +111,14 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\AbstractOpenFileInEditorAction.cs" />
     <Compile Include="Actions\ExportAction.cs" />
     <Compile Include="Actions\ImportAction.cs" />
     <Compile Include="Actions\CreateBackTranslationProjectAction.cs" />
     <Compile Include="Actions\ConvertProjectAction.cs" />
+    <Compile Include="Actions\OpenFileForReviewAction.cs" />
+    <Compile Include="Actions\OpenFileForSignOffAction.cs" />
+    <Compile Include="Actions\OpenFileForTranslationAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
@@ -143,6 +147,7 @@
     </Compile>
     <Compile Include="BatchTasks\ImportSettingsPage.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
@@ -193,6 +198,7 @@
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
     <Compile Include="Converters\GteConverter.cs" />
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="CustomEventArgs\ProjectFileSelectionChangedEventArgs.cs" />
     <Compile Include="CustomEventArgs\ProjectSelectionChangedEventArgs.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="FileTypeSupport\MSOffice\ImportProcessor.cs" />
@@ -301,7 +307,7 @@
     <Compile Include="Model\Tasks\TaskFile.cs" />
     <Compile Include="Model\Tasks\TemplateId.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
-    <Compile Include="Model\WizardContext.cs" />
+    <Compile Include="Model\TaskContext.cs" />
     <Compile Include="Model\WizardException.cs" />
     <Compile Include="Model\WordCount.cs" />
     <Compile Include="Model\WordCounts.cs" />
@@ -458,7 +464,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\sdl_transcreate_view.ico" />
+    <Resource Include="Resources\sdl_transcreate_wizard.ico" />
+    <Resource Include="Resources\OpenForReview.ico" />
+    <Resource Include="Resources\OpenForSignOff.ico" />
+    <Resource Include="Resources\OpenForTranslation.ico" />
+    <Resource Include="Resources\sdl_transcreate_back.ico" />
+    <Resource Include="Resources\sdl_transcreate_view.ico" />
     <EmbeddedResource Include="BatchTasks\TranscreateReport.xsl" />
     <Content Include="pluginpackage.manifest.xml" />
     <Resource Include="Resources\Checked.png" />

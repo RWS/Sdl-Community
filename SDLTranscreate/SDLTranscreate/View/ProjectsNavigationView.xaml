@@ -100,7 +100,6 @@
 
 			<TreeView Grid.Column="0" Padding="2,5,2,2" Grid.Row="1" 					  
 			          ItemsSource="{Binding CustomerGroups}"
-					
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 				<TreeView.ItemContainerStyle>
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
@@ -121,6 +120,15 @@
 							<HierarchicalDataTemplate ItemsSource="{Binding BackTranslationProjects }" 
 							                          DataType="{x:Type model:Project}">
 								<StackPanel Orientation="Horizontal" Margin="0,1,0,1">
+									<Image Focusable="False"
+									       Stretch="UniformToFill"
+									       RenderOptions.BitmapScalingMode="HighQuality" 
+									       RenderOptions.EdgeMode="Aliased"
+									       HorizontalAlignment="Center"
+									       VerticalAlignment="Center"		
+									       Width="17"
+									       Source="../Resources/sdl_transcreate_view.ico"
+									       Margin="0,0,2,0"/>
 									<TextBlock FontWeight="Bold" FontSize="13" Text="{Binding Name}" Margin="0"/>
 									<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=" (" />
 									<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Text="back-projects: "  />
@@ -129,7 +137,18 @@
 								</StackPanel>
 								<HierarchicalDataTemplate.ItemTemplate>
 									<DataTemplate DataType="{x:Type model:BackTranslationProject}" >
-										<TextBlock FontWeight="Regular" FontSize="13" Text="{Binding Name}" Margin="0,1,0,1"/>
+										<StackPanel Orientation="Horizontal" Margin="0,1,0,1">
+											<Image Focusable="False"
+											       Stretch="UniformToFill"
+											       RenderOptions.BitmapScalingMode="HighQuality" 
+											       RenderOptions.EdgeMode="Aliased"
+											       HorizontalAlignment="Center"
+											       VerticalAlignment="Center"		
+											       Width="17"
+											       Source="../Resources/sdl_transcreate_back.ico"
+											       Margin="0,0,2,0"/>
+											<TextBlock FontWeight="Regular" FontSize="13" Text="{Binding Name}" Margin="0,1,0,1"/>
+										</StackPanel>
 									</DataTemplate>
 								</HierarchicalDataTemplate.ItemTemplate>
 							</HierarchicalDataTemplate>

@@ -10,6 +10,7 @@ namespace Sdl.Community.Transcreate.Model
 		{			
 			Status = Enumerators.Status.None;
 			Action = Enumerators.Action.None;
+			WorkFlow = Enumerators.WorkFlow.None;
 		}
 
 		[XmlIgnore]
@@ -23,8 +24,10 @@ namespace Sdl.Community.Transcreate.Model
 
 		public Enumerators.Status Status { get; set; }
 
-		public Enumerators.Action Action { get; set; }	
-		
+		public Enumerators.Action Action { get; set; }
+
+		public Enumerators.WorkFlow WorkFlow { get; set; }
+
 		public bool Selected { get; set; }
 
 		public string ActivityId { get; set; }
@@ -64,6 +67,7 @@ namespace Sdl.Community.Transcreate.Model
 			{
 				ProjectFileId = ProjectFileId,
 				Action = Action,
+				WorkFlow =  WorkFlow,
 				Status = Status,
 				ActivityId = ActivityId,
 				Name = Name,

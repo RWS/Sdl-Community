@@ -37,9 +37,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private string _textMessage;
 		private StringBuilder _logReport;
 
-		public WizardPageExportPreparationViewModel(Window owner, UserControl view, WizardContext wizardContext,
+		public WizardPageExportPreparationViewModel(Window owner, UserControl view, TaskContext taskContext,
 			SegmentBuilder segmentBuilder, PathInfo pathInfo)
-			: base(owner, view, wizardContext)
+			: base(owner, view, taskContext)
 		{
 			_segmentBuilder = segmentBuilder;
 			_pathInfo = pathInfo;
@@ -109,9 +109,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private void OpenFolderInExplorer(object parameter)
 		{
-			if (Directory.Exists(WizardContext.WorkingFolder))
+			if (Directory.Exists(TaskContext.WorkingFolder))
 			{
-				Process.Start(WizardContext.WorkingFolder);
+				Process.Start(TaskContext.WorkingFolder);
 			}
 		}
 
@@ -140,9 +140,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			{
 				WriteLogReportHeader();
 
-				if (!Directory.Exists(WizardContext.WorkingFolder))
+				if (!Directory.Exists(TaskContext.WorkingFolder))
 				{
-					Directory.CreateDirectory(WizardContext.WorkingFolder);
+					Directory.CreateDirectory(TaskContext.WorkingFolder);
 				}
 
 				var success = true;
@@ -232,7 +232,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 				var tokenVisitor = new TokenVisitor();
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-				var processor = new ExportProcessor(WizardContext.Project.Id, fileTypeManager, tokenVisitor, WizardContext.ExportOptions, WizardContext.AnalysisBands);
+				var processor = new ExportProcessor(TaskContext.Project.Id, fileTypeManager, tokenVisitor, TaskContext.ExportOptions, TaskContext.AnalysisBands);
 				var selectedLanguages = GetSelectedLanguages();
 
 				foreach (var name in selectedLanguages)
@@ -257,10 +257,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 						if (exported)
 						{
-							targetFile.Date = WizardContext.DateTimeStamp;
-							targetFile.Action = Enumerators.Action.Export;
+							targetFile.Date = TaskContext.DateTimeStamp;
+							targetFile.Action = TaskContext.Action;
+							targetFile.WorkFlow = TaskContext.WorkFlow;
 							targetFile.Status = Enumerators.Status.Success;
-							targetFile.XliffFilePath = outputFilePath;
+							targetFile.ExternalFilePath = outputFilePath;
 							targetFile.ConfirmationStatistics = processor.ConfirmationStatistics;
 							targetFile.TranslationOriginStatistics = processor.TranslationOriginStatistics;
 						}
@@ -269,11 +270,12 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 						{
 							ProjectFileId = targetFile.FileId,
 							ActivityId = Guid.NewGuid().ToString(),
-							Action = Enumerators.Action.Export,
+							Action = TaskContext.Action,
+							WorkFlow = TaskContext.WorkFlow,
 							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetFile.Date,
-							Name = Path.GetFileName(targetFile.XliffFilePath),
-							Path = Path.GetDirectoryName(targetFile.XliffFilePath),
+							Name = Path.GetFileName(targetFile.ExternalFilePath),
+							Path = Path.GetDirectoryName(targetFile.ExternalFilePath),
 							ProjectFile = targetFile,
 							ConfirmationStatistics = targetFile.ConfirmationStatistics,
 							TranslationOriginStatistics = targetFile.TranslationOriginStatistics
@@ -286,7 +288,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: Export - Completed " + FormatDateTime(DateTime.UtcNow));
 
-				WizardContext.Completed = true;
+				TaskContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -346,7 +348,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private string GetLanguageFolder(string name)
 		{
-			var languageFolder = WizardContext.GetLanguageFolder(name);
+			var languageFolder = TaskContext.GetLanguageFolder(name);
 			if (!Directory.Exists(languageFolder))
 			{
 				Directory.CreateDirectory(languageFolder);
@@ -376,8 +378,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private void SaveLogReport()
 		{
-			var logFileName = "log." + WizardContext.DateTimeStampToString + ".txt";
-			var outputFile = Path.Combine(WizardContext.WorkingFolder, logFileName);
+			var logFileName = "log." + TaskContext.DateTimeStampToString + ".txt";
+			var outputFile = Path.Combine(TaskContext.WorkingFolder, logFileName);
 			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
 			{
 				writer.Write(_logReport);
@@ -394,7 +396,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			_logReport.AppendLine();
 
 			var indent = "   ";
-			var project = WizardContext.ProjectFiles[0].Project;
+			var project = TaskContext.ProjectFiles[0].Project;
 			_logReport.AppendLine(PluginResources.Label_Project);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
@@ -408,19 +410,19 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Options);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportOptions.XliffSupport));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget));
-			if (WizardContext.ExportOptions.ExcludeFilterIds.Count > 0)
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_XliffSupport, TaskContext.ExportOptions.XliffSupport));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, TaskContext.WorkingFolder));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, TaskContext.ExportOptions.IncludeTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, TaskContext.ExportOptions.CopySourceToTarget));
+			if (TaskContext.ExportOptions.ExcludeFilterIds.Count > 0)
 			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExportOptions.ExcludeFilterIds)));
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(TaskContext.ExportOptions.ExcludeFilterIds)));
 			}
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Files);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
 			_logReport.AppendLine();
 		}
@@ -439,7 +441,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private string GetSelectedLanguagesString()
 		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+			var selected = TaskContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
 			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())
@@ -452,14 +454,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private IEnumerable<ProjectFile> GetSelectedTargetFiles(string name)
 		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+			var selected = TaskContext.ProjectFiles.Where(a => a.Selected);
 			var targetFiles = selected.Where(a => Equals(a.TargetLanguage, name));
 			return targetFiles;
 		}
 
 		private IEnumerable<string> GetSelectedLanguages()
 		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+			var selected = TaskContext.ProjectFiles.Where(a => a.Selected);
 			var selectedLanguages = selected.Select(a => a.TargetLanguage).Distinct();
 			return selectedLanguages;
 		}

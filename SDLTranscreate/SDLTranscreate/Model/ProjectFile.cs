@@ -11,7 +11,7 @@ namespace Sdl.Community.Transcreate.Model
 		private DateTime _date;
 		private bool _selected;
 		private string _path;
-		private string _xliffFilePath;
+		private string _externalFilePath;
 		private string _targetLanguage;
 		private Enumerators.Status _status;
 
@@ -19,6 +19,7 @@ namespace Sdl.Community.Transcreate.Model
 		{
 			Status = Enumerators.Status.None;
 			Action = Enumerators.Action.None;
+			WorkFlow = Enumerators.WorkFlow.None;
 			ProjectFileActivities = new List<ProjectFileActivity>();
 		}
 
@@ -37,6 +38,8 @@ namespace Sdl.Community.Transcreate.Model
 		public List<ProjectFileActivity> ProjectFileActivities { get; set; }
 
 		public Enumerators.Action Action { get; set; }
+
+		public Enumerators.WorkFlow WorkFlow { get; set; }
 
 		public string FileType { get; set; }
 
@@ -91,18 +94,18 @@ namespace Sdl.Community.Transcreate.Model
 
 		public string Location { get; set; }
 
-		public string XliffFilePath
+		public string ExternalFilePath
 		{
-			get => _xliffFilePath;
+			get => _externalFilePath;
 			set
 			{
-				if (value == _xliffFilePath)
+				if (value == _externalFilePath)
 				{
 					return;
 				}
 
-				_xliffFilePath = value;
-				OnPropertyChanged(nameof(XliffFilePath));
+				_externalFilePath = value;
+				OnPropertyChanged(nameof(ExternalFilePath));
 			}
 		}
 
@@ -169,13 +172,14 @@ namespace Sdl.Community.Transcreate.Model
 				FileId = FileId,
 				Name = Name,
 				Action = Action,
+				WorkFlow = WorkFlow,
 				Status = Status,
 				Date = new DateTime(Date.Ticks, DateTimeKind.Utc),
 				Location = Location,
 				Path = Path,
 				Selected = Selected,
 				TargetLanguage = TargetLanguage,
-				XliffFilePath = XliffFilePath,
+				ExternalFilePath = ExternalFilePath,
 				Report = Report,
 				FileType = FileType
 			};

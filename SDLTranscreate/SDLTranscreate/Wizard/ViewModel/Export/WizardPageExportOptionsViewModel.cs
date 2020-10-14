@@ -28,18 +28,18 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private ICommand _clearFiltersCommand;
 		private ICommand _selectedItemsChangedCommand;	
 
-		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
-			: base(owner, view, wizardContext)
+		public WizardPageExportOptionsViewModel(Window owner, object view, TaskContext taskContext, IDialogService dialogService) 
+			: base(owner, view, taskContext)
 		{
 			_dialogService = dialogService;
 			
-			OutputFolder = WizardContext.TransactionFolder;
-			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
-			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
-			ShowIncludeBackTranslations = !wizardContext.Project.IsBackTranslationProject;
+			OutputFolder = TaskContext.WorkflowFolder;
+			CopySourceToTarget = taskContext.ExportOptions.CopySourceToTarget;
+			IncludeTranslations = taskContext.ExportOptions.IncludeTranslations;
+			ShowIncludeBackTranslations = !taskContext.Project.IsBackTranslationProject;
 
 			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, WizardContext.ExportOptions.ExcludeFilterIds));
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, TaskContext.ExportOptions.ExcludeFilterIds));
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -245,11 +245,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
-			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
-			WizardContext.ExportOptions.IncludeBackTranslations = IncludeBackTranslations;
-			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
+			TaskContext.WorkflowFolder = OutputFolder;
+			TaskContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
+			TaskContext.ExportOptions.IncludeTranslations = IncludeTranslations;
+			TaskContext.ExportOptions.IncludeBackTranslations = IncludeBackTranslations;
+			TaskContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 		}
 
 		public void Dispose()

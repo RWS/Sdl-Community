@@ -407,6 +407,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import File: {0}.
+        /// </summary>
+        internal static string Label_ImportFile {
+            get {
+                return ResourceManager.GetString("Label_ImportFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Files {0}.
         /// </summary>
         internal static string Label_ImportFiles {
@@ -822,7 +831,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Depending on the settings you choose during import, changes made before importing the XLIFF may not be retained and could cause the import to fail..
+        ///   Looks up a localized string similar to Depending on the settings you choose during import, changes made before importing translations may not be retained and could cause the import to fail..
         /// </summary>
         internal static string Message_WarningTranslationsCanBeOverwrittenDuringImport {
             get {
@@ -836,6 +845,36 @@ namespace Sdl.Community.Transcreate {
         internal static string Messagel_ResetLanguagesSuccess {
             get {
                 return ResourceManager.GetString("Messagel_ResetLanguagesSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon OpenForReview {
+            get {
+                object obj = ResourceManager.GetObject("OpenForReview", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon OpenForSignOff {
+            get {
+                object obj = ResourceManager.GetObject("OpenForSignOff", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon OpenForTranslation {
+            get {
+                object obj = ResourceManager.GetObject("OpenForTranslation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -904,6 +943,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Creation.
+        /// </summary>
+        internal static string ReportsGroup_ProjectCreation {
+            get {
+                return ResourceManager.GetString("ReportsGroup_ProjectCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Converted to a Transcreate project.
         /// </summary>
         internal static string ReportsGroupDescription_ConvertedToTranscreateProject {
@@ -927,6 +975,36 @@ namespace Sdl.Community.Transcreate {
         internal static string Result_Unsuccessful {
             get {
                 return ResourceManager.GetString("Result_Unsuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon sdl_transcreate_back {
+            get {
+                object obj = ResourceManager.GetObject("sdl_transcreate_back", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon sdl_transcreate_view {
+            get {
+                object obj = ResourceManager.GetObject("sdl_transcreate_view", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon sdl_transcreate_wizard {
+            get {
+                object obj = ResourceManager.GetObject("sdl_transcreate_wizard", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -1162,6 +1240,69 @@ namespace Sdl.Community.Transcreate {
         internal static string TranscreateManager_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open for Review.
+        /// </summary>
+        internal static string TranscreateManager_OpenFileForReview_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenFileForReview_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open for Review.
+        /// </summary>
+        internal static string TranscreateManager_OpenFileForReview_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenFileForReview_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open for Sign-off.
+        /// </summary>
+        internal static string TranscreateManager_OpenFileForSignOff_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenFileForSignOff_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open for Sign-off.
+        /// </summary>
+        internal static string TranscreateManager_OpenFileForSignOff_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenFileForSignOff_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open For Translation.
+        /// </summary>
+        internal static string TranscreateManager_OpenFileForTranslation_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenFileForTranslation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open For Translation.
+        /// </summary>
+        internal static string TranscreateManager_OpenFileForTranslation_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenFileForTranslation_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string TranscreateManager_OpenGroup_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_OpenGroup_Name", resourceCulture);
             }
         }
         

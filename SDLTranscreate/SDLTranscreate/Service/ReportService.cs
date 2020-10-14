@@ -17,7 +17,7 @@ namespace Sdl.Community.Transcreate.Service
 {
 	public class ReportService
 	{
-		public void CreateReport(WizardContext wizardContext, string reportFile, 
+		public void CreateReport(TaskContext taskContext, string reportFile, 
 			FileBasedProject selectedProject, string targetLanguageCode)
 		{
 			var settings = new XmlWriterSettings
@@ -26,70 +26,94 @@ namespace Sdl.Community.Transcreate.Service
 				Indent = false
 			};
 
-			var projectFiles = wizardContext.ProjectFiles.Where(a => a.Selected &&
+			var projectFiles = taskContext.ProjectFiles.Where(a => a.Selected &&
 				string.Compare(a.TargetLanguage, targetLanguageCode, 
 					StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+
+			var reportName = "";
+			switch (taskContext.Action)
+			{
+				case Enumerators.Action.Convert:
+					reportName = "Create Transcreate Project Report";
+					break;
+				case Enumerators.Action.CreateBackTranslation:
+					reportName = "Create Back-Translation Project Report";
+					break;
+				case Enumerators.Action.Export:
+					reportName = "Export Translations Report";
+					break;
+				case Enumerators.Action.Import:
+					reportName = "Import Translations Report";
+					break;
+				case Enumerators.Action.ExportBackTranslation:
+					reportName = "Export Back-Translations Report";
+					break;
+				case Enumerators.Action.ImportBackTranslation:
+					reportName = "Import Back-Translations Report";
+					break;
+			}
 
 			using (var writer = XmlWriter.Create(reportFile, settings))
 			{
 				writer.WriteStartElement("task");
-				writer.WriteAttributeString("name", wizardContext.Action.ToString());
-				writer.WriteAttributeString("created", wizardContext.DateTimeStampToString);
+				writer.WriteAttributeString("name", reportName);
+				writer.WriteAttributeString("created", taskContext.DateTimeStampToString);
 
-				WriteReportTaskInfo(writer, wizardContext, selectedProject, targetLanguageCode);
+				WriteReportTaskInfo(writer, taskContext, selectedProject, targetLanguageCode);
 
 				foreach (var projectFile in projectFiles)
 				{
-					WriteReportFile(writer, wizardContext, projectFile);
+					WriteReportFile(writer, taskContext, projectFile);
 				}
 
-				WriteReportTotal(writer, wizardContext, projectFiles);
+				WriteReportTotal(writer, taskContext, projectFiles);
 
 				writer.WriteEndElement(); //task
 			}
 		}
 
-		private void WriteReportTotal(XmlWriter writer, WizardContext wizardContext, IReadOnlyCollection<ProjectFile> projectFiles)
+		private void WriteReportTotal(XmlWriter writer, TaskContext taskContext, IReadOnlyCollection<ProjectFile> projectFiles)
 		{
 			writer.WriteStartElement("batchTotal");
 
-			var totalTranslationOriginStatistics = GetTotalTranslationOriginStatistics(projectFiles, wizardContext.Action);
-			WriteAnalysisXml(writer, totalTranslationOriginStatistics?.WordCounts, wizardContext.AnalysisBands, wizardContext.Action);
+			var totalTranslationOriginStatistics = GetTotalTranslationOriginStatistics(projectFiles, taskContext.Action);
+			WriteAnalysisXml(writer, totalTranslationOriginStatistics?.WordCounts, taskContext.AnalysisBands, taskContext.Action);
 
-			var totalConfirmationStatistics = GetTotalConfirmationStatistics(projectFiles, wizardContext.Action);
-			WriteConfirmationXml(writer, totalConfirmationStatistics?.WordCounts, wizardContext.Action);
+			var totalConfirmationStatistics = GetTotalConfirmationStatistics(projectFiles, taskContext.Action);
+			WriteConfirmationXml(writer, totalConfirmationStatistics?.WordCounts, taskContext.Action);
 
 			writer.WriteEndElement(); //batchTotal
 		}
 
-		private void WriteReportFile(XmlWriter writer, WizardContext wizardContext, ProjectFile projectFile)
+		private void WriteReportFile(XmlWriter writer, TaskContext taskContext, ProjectFile projectFile)
 		{
 			writer.WriteStartElement("file");
 			writer.WriteAttributeString("name", Path.Combine(projectFile.Path, projectFile.Name));
 			writer.WriteAttributeString("guid", projectFile.FileId);
 
-			WriteAnalysisXml(writer, projectFile.TranslationOriginStatistics?.WordCounts, wizardContext.AnalysisBands, wizardContext.Action);
-			WriteConfirmationXml(writer, projectFile.ConfirmationStatistics?.WordCounts, wizardContext.Action);
+			WriteAnalysisXml(writer, projectFile.TranslationOriginStatistics?.WordCounts, taskContext.AnalysisBands, taskContext.Action);
+			WriteConfirmationXml(writer, projectFile.ConfirmationStatistics?.WordCounts, taskContext.Action);
 
 			writer.WriteEndElement(); //file
 		}
 
-		private void WriteReportTaskInfo(XmlWriter writer, WizardContext wizardContext, IProject fileBasedProject, string languageCode)
+		private void WriteReportTaskInfo(XmlWriter writer, TaskContext taskContext, IProject fileBasedProject, string languageCode)
 		{
 			writer.WriteStartElement("taskInfo");
-			writer.WriteAttributeString("action", wizardContext.Action.ToString());
+			writer.WriteAttributeString("action", taskContext.Action.ToString());
+			writer.WriteAttributeString("workflow", taskContext.WorkFlow.ToString());
 			writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
-			writer.WriteAttributeString("runAt", wizardContext.DateTimeStamp.ToShortDateString() + " " + wizardContext.DateTimeStamp.ToShortTimeString());
+			writer.WriteAttributeString("runAt", taskContext.DateTimeStamp.ToShortDateString() + " " + taskContext.DateTimeStamp.ToShortTimeString());
 
-			WriteReportProject(writer, wizardContext);
+			WriteReportProject(writer, taskContext);
 
 			WriteReportLanguage(writer, languageCode);
 
-			WriteReportCustomer(writer, wizardContext);
+			WriteReportCustomer(writer, taskContext);
 
 			WriteReportTranslationProviders(writer, fileBasedProject);
 
-			WriteReportSettings(writer, wizardContext);
+			WriteReportSettings(writer, taskContext);
 
 			writer.WriteEndElement(); //taskInfo
 		}
@@ -128,54 +152,54 @@ namespace Sdl.Community.Transcreate.Service
 			writer.WriteEndElement(); //language
 		}
 
-		private static void WriteReportCustomer(XmlWriter writer, WizardContext wizardContext)
+		private static void WriteReportCustomer(XmlWriter writer, TaskContext taskContext)
 		{
-			if (!string.IsNullOrEmpty(wizardContext.Project.Customer?.Name))
+			if (!string.IsNullOrEmpty(taskContext.Project.Customer?.Name))
 			{
 				writer.WriteStartElement("customer");
-				writer.WriteAttributeString("name", wizardContext.Project.Customer.Name);
-				writer.WriteAttributeString("email", wizardContext.Project.Customer.Email);
+				writer.WriteAttributeString("name", taskContext.Project.Customer.Name);
+				writer.WriteAttributeString("email", taskContext.Project.Customer.Email);
 				writer.WriteEndElement(); //customer												  
 			}
 		}
 
-		private static void WriteReportProject(XmlWriter writer, WizardContext wizardContext)
+		private static void WriteReportProject(XmlWriter writer, TaskContext taskContext)
 		{
 			writer.WriteStartElement("project");
-			writer.WriteAttributeString("name", wizardContext.Project.Name);
-			writer.WriteAttributeString("number", wizardContext.Project.Id);
-			if (wizardContext.Project.DueDate != DateTime.MinValue && wizardContext.Project.DueDate != DateTime.MaxValue)
+			writer.WriteAttributeString("name", taskContext.Project.Name);
+			writer.WriteAttributeString("number", taskContext.Project.Id);
+			if (taskContext.Project.DueDate != DateTime.MinValue && taskContext.Project.DueDate != DateTime.MaxValue)
 			{
 				writer.WriteAttributeString("dueDate",
-					wizardContext.Project.DueDate.ToShortDateString() + " " + wizardContext.Project.DueDate.ToShortTimeString());
+					taskContext.Project.DueDate.ToShortDateString() + " " + taskContext.Project.DueDate.ToShortTimeString());
 			}
 
 			writer.WriteEndElement(); //project
 		}
 
-		private void WriteReportSettings(XmlWriter writer, WizardContext wizardContext)
+		private void WriteReportSettings(XmlWriter writer, TaskContext taskContext)
 		{
 			writer.WriteStartElement("settings");
-			if (wizardContext.Action == Enumerators.Action.Export || wizardContext.Action == Enumerators.Action.ExportBackTranslation)
+			if (taskContext.Action == Enumerators.Action.Export || taskContext.Action == Enumerators.Action.ExportBackTranslation)
 			{
-				writer.WriteAttributeString("xliffSupport", wizardContext.ExportOptions.XliffSupport.ToString());
-				writer.WriteAttributeString("includeTranslations", wizardContext.ExportOptions.IncludeTranslations.ToString());
-				writer.WriteAttributeString("copySourceToTarget", wizardContext.ExportOptions.CopySourceToTarget.ToString());
-				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ExportOptions.ExcludeFilterIds));
+				writer.WriteAttributeString("xliffSupport", taskContext.ExportOptions.XliffSupport.ToString());
+				writer.WriteAttributeString("includeTranslations", taskContext.ExportOptions.IncludeTranslations.ToString());
+				writer.WriteAttributeString("copySourceToTarget", taskContext.ExportOptions.CopySourceToTarget.ToString());
+				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(taskContext.ExportOptions.ExcludeFilterIds));
 			}
-			else if (wizardContext.Action == Enumerators.Action.Import || wizardContext.Action == Enumerators.Action.ImportBackTranslation)
+			else if (taskContext.Action == Enumerators.Action.Import || taskContext.Action == Enumerators.Action.ImportBackTranslation)
 			{
-				writer.WriteAttributeString("overwriteTranslations", wizardContext.ImportOptions.OverwriteTranslations.ToString());
-				writer.WriteAttributeString("originSystem", wizardContext.ImportOptions.OriginSystem);
-				writer.WriteAttributeString("statusTranslationUpdatedId", GetSegmentStatus(wizardContext.ImportOptions.StatusTranslationUpdatedId));
-				writer.WriteAttributeString("statusTranslationNotUpdatedId", GetSegmentStatus(wizardContext.ImportOptions.StatusTranslationNotUpdatedId));
-				writer.WriteAttributeString("statusSegmentNotImportedId", GetSegmentStatus(wizardContext.ImportOptions.StatusSegmentNotImportedId));
-				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(wizardContext.ImportOptions.ExcludeFilterIds));
+				writer.WriteAttributeString("overwriteTranslations", taskContext.ImportOptions.OverwriteTranslations.ToString());
+				writer.WriteAttributeString("originSystem", taskContext.ImportOptions.OriginSystem);
+				writer.WriteAttributeString("statusTranslationUpdatedId", GetSegmentStatus(taskContext.ImportOptions.StatusTranslationUpdatedId));
+				writer.WriteAttributeString("statusTranslationNotUpdatedId", GetSegmentStatus(taskContext.ImportOptions.StatusTranslationNotUpdatedId));
+				writer.WriteAttributeString("statusSegmentNotImportedId", GetSegmentStatus(taskContext.ImportOptions.StatusSegmentNotImportedId));
+				writer.WriteAttributeString("excludeFilterItems", GetFitlerItemsString(taskContext.ImportOptions.ExcludeFilterIds));
 			}
-			else if (wizardContext.Action == Enumerators.Action.Convert)
+			else if (taskContext.Action == Enumerators.Action.Convert)
 			{
-				writer.WriteAttributeString("maxAlternativeTranslations", wizardContext.ConvertOptions.MaxAlternativeTranslations.ToString());
-				writer.WriteAttributeString("closeProjectOnComplete", wizardContext.ConvertOptions.CloseProjectOnComplete.ToString());
+				writer.WriteAttributeString("maxAlternativeTranslations", taskContext.ConvertOptions.MaxAlternativeTranslations.ToString());
+				writer.WriteAttributeString("closeProjectOnComplete", taskContext.ConvertOptions.CloseProjectOnComplete.ToString());
 			}
 
 			writer.WriteEndElement(); //settings

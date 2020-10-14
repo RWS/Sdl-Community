@@ -10,6 +10,7 @@ namespace Sdl.Community.Transcreate.Model.ProjectSettings
 		{
 			Status = Enumerators.Status.None.ToString();
 			Action = Enumerators.Action.None.ToString();
+			WorkFlow = Enumerators.WorkFlow.None.ToString();
 			Date = FormatDateTime(DateTime.MinValue);
 			Activities = new List<SDLTranscreateProjectFileActivity>();
 		}
@@ -23,6 +24,8 @@ namespace Sdl.Community.Transcreate.Model.ProjectSettings
 		public string Status { get; set; }
 
 		public string Action { get; set; }
+
+		public string WorkFlow { get; set; }
 
 		public string FileId { get; set; }
 
@@ -40,7 +43,7 @@ namespace Sdl.Community.Transcreate.Model.ProjectSettings
 
 		public string Report { get; set; }
 
-		public string XliffFilePath { get; set; }
+		public string ExternalFilePath { get; set; }
 
 		public string ShortMessage { get; set; }
 	

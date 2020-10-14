@@ -14,10 +14,18 @@ namespace Sdl.Community.Transcreate.Common
 		{
 			None = 0,
 			Convert = 1,
-			Export = 2,
-			Import = 3,
-			ExportBackTranslation = 4,
-			ImportBackTranslation = 5
+			CreateBackTranslation = 2,
+			Export = 3,
+			Import = 4,
+			ExportBackTranslation = 5,
+			ImportBackTranslation = 6
+		}
+
+		public enum WorkFlow
+		{
+			None = 0,
+			Internal = 1,
+			External = 2
 		}
 
 		public enum Controller
@@ -201,9 +209,9 @@ namespace Sdl.Community.Transcreate.Common
 		}
 
 		public static ConfirmationStatus GetConfirmationStatus(List<ConfirmationStatus> list, string id, string defaultId)
-		{			
+		{
 			var selected = list.FirstOrDefault(a => a.Id == id);
-			
+
 			return selected ?? list.FirstOrDefault(a => a.Id == defaultId);
 		}
 

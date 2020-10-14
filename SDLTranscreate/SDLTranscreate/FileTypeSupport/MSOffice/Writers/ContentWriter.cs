@@ -8,9 +8,11 @@ using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers;
+using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Versioning;
 
@@ -22,17 +24,20 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 		private readonly string _updatedFilePath;
 		private readonly List<AnalysisBand> _analysisBands;
 		private readonly string _targetLanguage;
+		private readonly SegmentBuilder _segmentBuilder;
 		private IDocumentProperties _documentProperties;
 		private Dictionary<string, UpdatedSegmentContent> _updatedSegments;
 		private SegmentPairProcessor _segmentPairProcessor;
 		private string _productName;
 
-		public ContentWriter(ImportOptions importOptions, List<AnalysisBand> analysisBands, string updatedFilePath, string targetLanguage)
+		public ContentWriter(ImportOptions importOptions, List<AnalysisBand> analysisBands, string updatedFilePath, string targetLanguage,
+			SegmentBuilder segmentBuilder)
 		{
 			_importOptions = importOptions;
 			_analysisBands = analysisBands;
 			_updatedFilePath = updatedFilePath;
 			_targetLanguage = targetLanguage;
+			_segmentBuilder = segmentBuilder;
 
 			ConfirmationStatistics = new ConfirmationStatistics();
 			TranslationOriginStatistics = new TranslationOriginStatistics();
@@ -114,6 +119,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 							var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
 
 							segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+							segmentPair.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+
+							status = segmentPair.Properties.ConfirmationLevel.ToString();
+							match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 						}
 
 						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
@@ -126,6 +135,18 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 					try
 					{
+						if (segmentPair.Target.Properties.TranslationOrigin == null)
+						{
+							targetSegment.Properties.TranslationOrigin = _segmentBuilder.CreateTranslationOrigin();
+						}
+						else
+						{
+							var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
+							targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
+						}
+
+						SetTranslationOrigin(targetSegment);
+
 						var updatedSegment = _updatedSegments[segmentIdentifier];
 						if (updatedSegment.TranslationTokens.Count > 0)
 						{
@@ -137,7 +158,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 							var backTranslations = JsonConvert.SerializeObject(updatedSegment.BackTranslationTokens);
 							segmentPair.Target.Properties.TranslationOrigin.SetMetaData("back-translation", backTranslations);
 						}
-
 					}
 					catch (Exception ex)
 					{
@@ -148,8 +168,13 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true,
 							out var result);
+
 						var statusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
 						targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
+						segmentPair.Properties.ConfirmationLevel = statusTranslationUpdated;
+
+						status = segmentPair.Properties.ConfirmationLevel.ToString();
+						match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 					}
 
 					AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
@@ -165,6 +190,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
 
 						segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+						segmentPair.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+
+						status = segmentPair.Properties.ConfirmationLevel.ToString();
+						match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 					}
 
 					AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
@@ -175,6 +204,23 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
+		}
+
+		private void SetTranslationOrigin(ISegment targetSegment)
+		{
+			targetSegment.Properties.TranslationOrigin.MatchPercent = byte.Parse("0");
+			targetSegment.Properties.TranslationOrigin.OriginSystem = _importOptions.OriginSystem;
+			targetSegment.Properties.TranslationOrigin.OriginType = DefaultTranslationOrigin.Interactive;
+			targetSegment.Properties.TranslationOrigin.IsStructureContextMatch = false;
+			targetSegment.Properties.TranslationOrigin.TextContextMatchLevel = TextContextMatchLevel.None;
+
+			targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", _importOptions.OriginSystem);
+			targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
+		}
+
+		private string FormatAsInvariantDateTime(DateTime date)
+		{
+			return date.ToString(DateTimeFormatInfo.InvariantInfo);
 		}
 
 		private ISegment GetUpdatedSegment(ISegment segment, IEnumerable<Token> tokens, ISegment sourceSegment)

@@ -5,11 +5,12 @@ using Sdl.Community.Transcreate.Common;
 
 namespace Sdl.Community.Transcreate.Model
 {
-	public class WizardContext : BaseModel
+	public class TaskContext : BaseModel
 	{		
-		public WizardContext(Enumerators.Action action, Settings settings)
+		public TaskContext(Enumerators.Action action, Enumerators.WorkFlow workFlow, Settings settings)
 		{
 			Action = action;
+			WorkFlow = workFlow;
 			ProjectFiles = new List<ProjectFile>();
 			DateTimeStamp = DateTime.UtcNow;
 			
@@ -21,6 +22,8 @@ namespace Sdl.Community.Transcreate.Model
 		}
 	
 		public Enumerators.Action Action { get; set; }
+
+		public Enumerators.WorkFlow WorkFlow { get; set; }
 
 		public List<AnalysisBand> AnalysisBands { get; set; }
 
@@ -34,11 +37,11 @@ namespace Sdl.Community.Transcreate.Model
 
 		public List<ProjectFile> ProjectFiles { get; set; }
 
-		public string TransactionFolder { get; set; }
+		public string WorkflowFolder { get; set; }
 
-		public string WorkingFolder => Path.Combine(TransactionFolder, DateTimeStampToString);
+		public string WorkingFolder => Path.Combine(WorkflowFolder, DateTimeStampToString);
 
-		public string ProjectBackupFolder => Path.Combine(TransactionFolder, "Original");
+		public string ProjectBackupFolder => Path.Combine(WorkflowFolder, "Original");
 
 		public string ProjectBackupPath => Path.Combine(ProjectBackupFolder, Project.Name + ".zip");
 
@@ -69,9 +72,9 @@ namespace Sdl.Community.Transcreate.Model
 
 		public ConvertOptions ConvertOptions { get; set; }
 
-		public string GetDefaultTransactionPath()
+		public string GetWorkflowPath()
 		{
-			var rootPath = Path.Combine(LocalProjectFolder, "Transcreate");
+			var rootPath = Path.Combine(LocalProjectFolder, "WF");
 			var path = Path.Combine(rootPath, Action.ToString());
 
 			if (!Directory.Exists(rootPath))

@@ -31,7 +31,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private ICommand _importFilesCommand;
 		private ICommand _exportFilesCommand;
 		private ICommand _selectedItemChanged;
-		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
 		public ProjectsNavigationViewModel(List<Project> projects, ProjectsController projectsController)
 		{
@@ -41,6 +40,8 @@ namespace Sdl.Community.Transcreate.ViewModel
 			FilteredProjects = _projects;
 			FilterString = string.Empty;
 		}
+
+		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
 		public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
 
@@ -277,12 +278,25 @@ namespace Sdl.Community.Transcreate.ViewModel
 				selectedProject.UpdateSettings(settingsBundle);
 				selectedProject.Save();
 
-				var xliffFolderPath = Path.Combine(SelectedProject.Path, "Transcreate");
-				if (Directory.Exists(xliffFolderPath))
+				var wfFolderPath = Path.Combine(SelectedProject.Path, "WF");
+				if (Directory.Exists(wfFolderPath))
 				{
 					try
 					{
-						Directory.Delete(xliffFolderPath, true);
+						Directory.Delete(wfFolderPath, true);
+					}
+					catch
+					{
+						// ignore; catch all
+					}
+				}
+
+				var bpFolderPath = Path.Combine(SelectedProject.Path, "BP");
+				if (Directory.Exists(wfFolderPath))
+				{
+					try
+					{
+						Directory.Delete(bpFolderPath, true);
 					}
 					catch
 					{

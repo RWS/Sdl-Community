@@ -26,6 +26,7 @@ namespace Sdl.Community.Transcreate.Service
 	public class WizardService
 	{
 		private readonly Enumerators.Action _action;
+		private readonly Enumerators.WorkFlow _workFlow;
 		private readonly PathInfo _pathInfo;
 		private readonly CustomerProvider _customerProvider;
 		private readonly Controllers _controllers;
@@ -37,14 +38,15 @@ namespace Sdl.Community.Transcreate.Service
 		private readonly ProjectAutomationService _projectAutomationService;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
-		private WizardContext _wizardContext;
+		private TaskContext _taskContext;
 		private bool _isCancelled;
 
-		public WizardService(Enumerators.Action action, PathInfo pathInfo, CustomerProvider customerProvider,
+		public WizardService(Enumerators.Action action, Enumerators.WorkFlow workFlow, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
 			IDialogService dialogService, ILanguageProvider languageProvider, ProjectAutomationService projectAutomationService)
 		{
 			_action = action;
+			_workFlow = workFlow;
 			_pathInfo = pathInfo;
 			_customerProvider = customerProvider;
 			_imageService = imageService;
@@ -56,7 +58,7 @@ namespace Sdl.Community.Transcreate.Service
 			_projectAutomationService = projectAutomationService;
 		}
 
-		public WizardContext ShowWizard(AbstractController controller, out string message)
+		public TaskContext ShowWizard(AbstractController controller, out string message)
 		{
 			message = string.Empty;
 
@@ -85,14 +87,14 @@ namespace Sdl.Community.Transcreate.Service
 			_wizardWindow.Loaded += WizardWindowLoaded;
 			_wizardWindow.ShowDialog();
 
-			if (!_isCancelled && _wizardContext.Completed)
+			if (!_isCancelled && _taskContext.Completed)
 			{
 				if (_action == Enumerators.Action.Import)
 				{
 					_controllers.ProjectsController.RefreshProjects();
 				}
 
-				return _wizardContext;
+				return _taskContext;
 			}
 
 			return null;
@@ -100,7 +102,7 @@ namespace Sdl.Community.Transcreate.Service
 
 		private bool CreateWizardContext(AbstractController controller, out string message)
 		{
-			_wizardContext = new WizardContext(_action, _settings);
+			_taskContext = new TaskContext(_action, _workFlow, _settings);
 
 			message = string.Empty;
 
@@ -109,7 +111,7 @@ namespace Sdl.Community.Transcreate.Service
 				var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault()
 									  ?? _controllers.ProjectsController.CurrentProject;
 
-				_wizardContext.Owner = controller is ProjectsController
+				_taskContext.Owner = controller is ProjectsController
 					? Enumerators.Controller.Projects
 					: Enumerators.Controller.Files;
 
@@ -119,7 +121,7 @@ namespace Sdl.Community.Transcreate.Service
 					_controllers.ProjectsController.Open(selectedProject);
 				}
 
-				_wizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
+				_taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
 
 				var projectInfo = selectedProject.GetProjectInfo();
 				var selectedFileIds = new List<string>();
@@ -141,17 +143,17 @@ namespace Sdl.Community.Transcreate.Service
 					}
 				}
 
-				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
-				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
+				_taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
+				_taskContext.WorkflowFolder = _taskContext.GetWorkflowPath();
 
 				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);				
 
-				_wizardContext.Project = project;
-				_wizardContext.ProjectFiles = project.ProjectFiles;
+				_taskContext.Project = project;
+				_taskContext.ProjectFiles = project.ProjectFiles;
 			}
 			else if (controller is TranscreateViewController)
 			{
-				_wizardContext.Owner = Enumerators.Controller.Manager;
+				_taskContext.Owner = Enumerators.Controller.Manager;
 
 				var selectedProjectFiles = _controllers.TranscreateController.GetSelectedProjectFiles();
 				var selectedProjects = _controllers.TranscreateController.GetSelectedProjects();
@@ -177,15 +179,15 @@ namespace Sdl.Community.Transcreate.Service
 					return false;
 				}
 
-				_wizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
+				_taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
 
 				var projectInfo = selectedProject.GetProjectInfo();
-				_wizardContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
-				_wizardContext.TransactionFolder = _wizardContext.GetDefaultTransactionPath();
+				_taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
+				_taskContext.WorkflowFolder = _taskContext.GetWorkflowPath();
 
 				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);				
-				_wizardContext.Project = project;
-				_wizardContext.ProjectFiles = project.ProjectFiles;
+				_taskContext.Project = project;
+				_taskContext.ProjectFiles = project.ProjectFiles;
 			}
 
 			return true;
@@ -195,40 +197,40 @@ namespace Sdl.Community.Transcreate.Service
 		{
 			_wizardWindow.Loaded -= WizardWindowLoaded;
 
-			_pages = CreatePages(_wizardContext);
+			_pages = CreatePages(_taskContext);
 			AddDataTemplates(_wizardWindow, _pages);
 
-			var viewModel = new WizardViewModel(_wizardWindow, _pages, _wizardContext, _action);
+			var viewModel = new WizardViewModel(_wizardWindow, _pages, _taskContext, _action);
 			viewModel.RequestClose += ViewModel_RequestClose;
 			viewModel.RequestCancel += ViewModel_RequestCancel;
 			_wizardWindow.DataContext = viewModel;
 		}
 
-		private ObservableCollection<WizardPageViewModelBase> CreatePages(WizardContext wizardContext)
+		private ObservableCollection<WizardPageViewModelBase> CreatePages(TaskContext taskContext)
 		{
 			var pages = new List<WizardPageViewModelBase>();
 
 			if (_action == Enumerators.Action.Export)
 			{
-				pages.Add(new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), wizardContext));
-				pages.Add(new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), wizardContext, _dialogService));
-				pages.Add(new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), wizardContext));
-				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), wizardContext,
+				pages.Add(new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), taskContext));
+				pages.Add(new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), taskContext, _dialogService));
+				pages.Add(new WizardPageExportSummaryViewModel(_wizardWindow, new WizardPageExportSummaryView(), taskContext));
+				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), taskContext,
 					_segmentBuilder, _pathInfo));
 			}
 			else if (_action == Enumerators.Action.Import)
 			{
-				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), wizardContext, _dialogService, _languageProvider));
-				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), wizardContext));
-				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), wizardContext));
-				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), wizardContext,
+				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), taskContext, _dialogService, _languageProvider));
+				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), taskContext));
+				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), taskContext));
+				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), taskContext,
 					_segmentBuilder, _pathInfo));
 			}
 			else if (_action == Enumerators.Action.Convert)
 			{				
-				pages.Add(new WizardPageConvertOptionsViewModel(_wizardWindow, new WizardPageConvertOptionsView(), wizardContext, _dialogService));
-				pages.Add(new WizardPageConvertSummaryViewModel(_wizardWindow, new WizardPageConvertSummaryView(), wizardContext));
-				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), wizardContext,
+				pages.Add(new WizardPageConvertOptionsViewModel(_wizardWindow, new WizardPageConvertOptionsView(), taskContext, _dialogService));
+				pages.Add(new WizardPageConvertSummaryViewModel(_wizardWindow, new WizardPageConvertSummaryView(), taskContext));
+				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), taskContext,
 					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService));
 			}
 

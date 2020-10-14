@@ -21,19 +21,19 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearFiltersCommand;
 
-		public WizardPageImportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		public WizardPageImportOptionsViewModel(Window owner, object view, TaskContext taskContext) : base(owner, view, taskContext)
 		{
-			BackupFiles = wizardContext.ImportOptions.BackupFiles;
-			OverwriteTranslations = wizardContext.ImportOptions.OverwriteTranslations;
-			OriginSystem = wizardContext.ImportOptions.OriginSystem;
+			BackupFiles = taskContext.ImportOptions.BackupFiles;
+			OverwriteTranslations = taskContext.ImportOptions.OverwriteTranslations;
+			OriginSystem = taskContext.ImportOptions.OriginSystem;
 
 			ConfirmationStatuses = Enumerators.GetConfirmationStatuses();
-			StatusTranslationUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationUpdatedId, "Draft");
-			StatusTranslationNotUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationNotUpdatedId, string.Empty);
-			StatusSegmentNotImported = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusSegmentNotImportedId, string.Empty);
+			StatusTranslationUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, taskContext.ImportOptions.StatusTranslationUpdatedId, "Draft");
+			StatusTranslationNotUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, taskContext.ImportOptions.StatusTranslationNotUpdatedId, string.Empty);
+			StatusSegmentNotImported = Enumerators.GetConfirmationStatus(ConfirmationStatuses, taskContext.ImportOptions.StatusSegmentNotImportedId, string.Empty);
 
 			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, wizardContext.ImportOptions.ExcludeFilterIds));
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, taskContext.ImportOptions.ExcludeFilterIds));
 
 			VerifyIsValid();
 
@@ -159,20 +159,20 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{
-			OriginSystem = WizardContext.ImportOptions.OriginSystem;
+			OriginSystem = TaskContext.ImportOptions.OriginSystem;
 			VerifyIsValid();
 		}
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-			WizardContext.ImportOptions.BackupFiles = BackupFiles;
-			WizardContext.ImportOptions.OverwriteTranslations = OverwriteTranslations;
-			WizardContext.ImportOptions.OriginSystem = OriginSystem;
+			TaskContext.ImportOptions.BackupFiles = BackupFiles;
+			TaskContext.ImportOptions.OverwriteTranslations = OverwriteTranslations;
+			TaskContext.ImportOptions.OriginSystem = OriginSystem;
 
-			WizardContext.ImportOptions.StatusTranslationUpdatedId = StatusTranslationUpdated.Id;
-			WizardContext.ImportOptions.StatusTranslationNotUpdatedId = StatusTranslationNotUpdated.Id;
-			WizardContext.ImportOptions.StatusSegmentNotImportedId = StatusSegmentNotImported.Id;
-			WizardContext.ImportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
+			TaskContext.ImportOptions.StatusTranslationUpdatedId = StatusTranslationUpdated.Id;
+			TaskContext.ImportOptions.StatusTranslationNotUpdatedId = StatusTranslationNotUpdated.Id;
+			TaskContext.ImportOptions.StatusSegmentNotImportedId = StatusSegmentNotImported.Id;
+			TaskContext.ImportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 			//WizardContext.ExcludeFilterItemIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 		}
 

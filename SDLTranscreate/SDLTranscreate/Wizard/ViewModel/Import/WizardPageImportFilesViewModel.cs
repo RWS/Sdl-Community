@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DocumentFormat.OpenXml.Packaging;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
@@ -13,6 +14,7 @@ using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.LanguageMapping.Model;
 using Sdl.Community.Transcreate.Model;
+using Sdl.Versioning;
 
 namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 {
@@ -31,13 +33,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private List<ProjectFile> _projectFiles;
 		private bool _checkedAll;
 		private bool _checkingAllAction;
+		private string _productName;
 
-		public WizardPageImportFilesViewModel(Window owner, object view, WizardContext wizardContext,
-			IDialogService dialogService, ILanguageProvider languageProvider) : base(owner, view, wizardContext)
+		public WizardPageImportFilesViewModel(Window owner, object view, TaskContext taskContext,
+			IDialogService dialogService, ILanguageProvider languageProvider) : base(owner, view, taskContext)
 		{
 			_dialogService = dialogService;
 			_languageProvider = languageProvider;
-			ProjectFiles = wizardContext.ProjectFiles;
+			ProjectFiles = taskContext.ProjectFiles;
 			VerifyProjectFiles();
 			VerifyIsValid();
 
@@ -130,7 +133,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private int? GetValidProjectFilesCount()
 		{
 			var count = ProjectFiles.Count(a => a.Selected &&
-						!string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath));
+						!string.IsNullOrEmpty(a.ExternalFilePath) && File.Exists(a.ExternalFilePath));
 
 			return count;
 		}
@@ -139,9 +142,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		{
 			foreach (var projectFile in ProjectFiles)
 			{
-				if (projectFile.Action == Enumerators.Action.Import)
+				if (projectFile.Action == Enumerators.Action.Import || projectFile.Action == Enumerators.Action.ImportBackTranslation)
 				{
-					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
+					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => 
+						a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import ||
+						                            a.Action == Enumerators.Action.ImportBackTranslation);
 
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);
@@ -153,24 +158,29 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					projectFile.Report = string.Empty;
 				}
 
-				projectFile.XliffFilePath = string.Empty;
+				projectFile.ExternalFilePath = string.Empty;
 			}
 		}
 
 		private void AddFiles()
 		{
-			var selectedFiles = _dialogService.ShowFileDialog(
-				"Word Document (*.docx)",
-				PluginResources.FilesDialog_Title,
-				GetDefaultPath());
-			AddFilesToGrid(selectedFiles);
+			Dispatcher.CurrentDispatcher.Invoke(new Action(delegate
+			{
+				var selectedFiles = _dialogService.ShowFileDialog(
+					"Word Documents (*.docx)|*.docx",
+					PluginResources.FilesDialog_Title,
+					GetDefaultPath());
+
+				AddFilesToGrid(selectedFiles);
+			}));
 		}
 
 		private string GetDefaultPath()
 		{
 			var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
-			var studioFolder = Path.Combine(path, "Studio 2019");
+			var productName = GetProductName();
+			var studioFolder = Path.Combine(path, productName);
 			if (Directory.Exists(studioFolder))
 			{
 				path = studioFolder;
@@ -183,6 +193,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			}
 
 			return path;
+		}
+
+		private string GetProductName()
+		{
+			if (!string.IsNullOrEmpty(_productName))
+			{
+				return _productName;
+			}
+
+			var studioVersionService = new StudioVersionService();
+			var studioVersion = studioVersionService.GetStudioVersion();
+			if (studioVersion != null)
+			{
+				_productName = studioVersion.StudioDocumentsFolderName;
+			}
+
+			return _productName;
 		}
 
 		private void UpdateCheckAll()
@@ -200,7 +227,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 			foreach (var selectedFile in SelectedProjectFiles.Cast<ProjectFile>())
 			{
-				selectedFile.XliffFilePath = string.Empty;
+				selectedFile.ExternalFilePath = string.Empty;
 			}
 
 			UpdateCheckAll();
@@ -271,7 +298,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					continue;
 				}
 
-				if (string.IsNullOrEmpty(projectFile.XliffFilePath) || !File.Exists(projectFile.XliffFilePath))
+				if (string.IsNullOrEmpty(projectFile.ExternalFilePath) || !File.Exists(projectFile.ExternalFilePath))
 				{
 					projectFile.Selected = false;
 				}
@@ -364,7 +391,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 				if (string.IsNullOrEmpty(sourceLanguage))
 				{
-					sourceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name; ;
+					sourceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name; ;
 				}
 
 				if (string.IsNullOrEmpty(targetLanguage))
@@ -423,7 +450,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 					if (string.Compare(projectFileTargetPath, documentTargetPath, StringComparison.CurrentCultureIgnoreCase) == 0)
 					{
-						projectFile.XliffFilePath = filePath;
+						projectFile.ExternalFilePath = filePath;
 						projectFile.Selected = true;
 					}
 				}
@@ -434,15 +461,15 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private List<string> GetProjectLanguages(string targetLanguage)
 		{
-			var projectLanguages = WizardContext.Project.TargetLanguages.Select(a => a.CultureInfo.Name).ToList();
+			var projectLanguages = TaskContext.Project.TargetLanguages.Select(a => a.CultureInfo.Name).ToList();
 			if (!string.IsNullOrEmpty(targetLanguage) && !projectLanguages.Contains(targetLanguage))
 			{
 				projectLanguages.Insert(0, targetLanguage);
 			}
 
-			if (!projectLanguages.Contains(WizardContext.Project.SourceLanguage.CultureInfo.Name))
+			if (!projectLanguages.Contains(TaskContext.Project.SourceLanguage.CultureInfo.Name))
 			{
-				projectLanguages.Add(WizardContext.Project.SourceLanguage.CultureInfo.Name);
+				projectLanguages.Add(TaskContext.Project.SourceLanguage.CultureInfo.Name);
 			}
 
 			return projectLanguages;
@@ -494,12 +521,15 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private void SelectFolder()
 		{
-			var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title, GetDefaultPath());
-			if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+			Dispatcher.CurrentDispatcher.Invoke(new Action(delegate
 			{
-				var files = GetAllFilesFromDirectory(folderPath);
-				AddFilesToGrid(files);
-			}
+				var folderPath = _dialogService.ShowFolderDialog(PluginResources.FolderDialog_Title, GetDefaultPath());
+				if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+				{
+					var files = GetAllFilesFromDirectory(folderPath);
+					AddFilesToGrid(files);
+				}
+			}));
 		}
 
 		public void Dispose()

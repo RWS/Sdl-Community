@@ -333,8 +333,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 				writer.WriteStartElement("cxt-def");
 				writer.WriteAttributeString("id", context.Id);
 				writer.WriteAttributeString("type", context.ContextType);
-				writer.WriteAttributeString("code", context.DisplayCode.Trim());
-				writer.WriteAttributeString("name", context.DisplayName.Trim());
+				writer.WriteAttributeString("code", context.DisplayCode?.Trim());
+				writer.WriteAttributeString("name", context.DisplayName?.Trim());
 				writer.WriteAttributeString("descr", context.Description);
 
 				writer.WriteStartElement("props");

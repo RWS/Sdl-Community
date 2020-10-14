@@ -2,6 +2,7 @@
 using System.Globalization;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers;
+using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
@@ -13,13 +14,15 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice
 		private readonly List<AnalysisBand> _analysisBands;
 		private readonly TokenVisitor _tokenVisitor;
 		private readonly IFileTypeManager _fileTypeManager;
+		private readonly SegmentBuilder _segmentBuilder;
 
 		public ImportProcessor(IFileTypeManager fileTypeManager, TokenVisitor tokenVisitor, 
-			ImportOptions settings, List<AnalysisBand> analysisBands)
+			ImportOptions settings, List<AnalysisBand> analysisBands, SegmentBuilder segmentBuilder)
 		{
 			_fileTypeManager = fileTypeManager;
 			_analysisBands = analysisBands;
 			_settings = settings;
+			_segmentBuilder = segmentBuilder;
 
 			_tokenVisitor = tokenVisitor;
 		}
@@ -41,7 +44,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice
 		/// <param name="filePathUpdated">Updated DOCX file</param>		
 		public bool ImportUpdatedFile(string filePathInput, string filePathOutput, string filePathUpdated, string targetLanguage)
 		{
-			var contentWriter = new ContentWriter(_settings, _analysisBands, filePathUpdated, targetLanguage);
+			var contentWriter = new ContentWriter(_settings, _analysisBands, filePathUpdated, targetLanguage, _segmentBuilder);
 			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 			converter.AddBilingualProcessor(contentWriter);
 

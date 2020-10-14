@@ -25,7 +25,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private IDocumentProperties _documentProperties;
 		private SegmentVisitor _segmentVisitor;
 		private SegmentPairProcessor _segmentPairProcessor;
-		private string _productName;		
+		private string _productName;
 
 		public XliffContentWriter(Xliff xliff, SegmentBuilder segmentBuilder,
 			ImportOptions importOptions, List<AnalysisBand> analysisBands, List<string> tagIds)
@@ -77,7 +77,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				base.ProcessParagraphUnit(paragraphUnit);
 				return;
 			}
-			
+
 			var importedTransUnit = GetTransUnit(paragraphUnit);
 			if (importedTransUnit == null)
 			{
@@ -97,7 +97,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 						{
 							// catch all; ignore
 						}
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 
 						var status = segmentPair.Properties.ConfirmationLevel.ToString();
@@ -170,7 +170,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 				var noOverwrite = !_importOptions.OverwriteTranslations && segmentPair.Target.Any();
 				var excludeFilter = false;
-				if (_importOptions.ExcludeFilterIds != null)
+				if (_importOptions.ExcludeFilterIds?.Count > 0)
 				{
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
@@ -188,6 +188,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
 
 						segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+					}
+					else
+					{
+						segmentPair.Target.Properties.ConfirmationLevel = importedSegmentPair.ConfirmationLevel;
 					}
 
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
@@ -292,7 +296,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				}
 			}
 
-			UpdateTranslationOrigin(originalTarget, targetSegment, segmentPairInfo);
+			UpdateTranslationOrigin(originalTarget, targetSegment, segmentPairInfo, importedSegmentPair.ConfirmationLevel);
 		}
 
 		private void UpdateText(ElementText elementText, Stack<IAbstractMarkupDataContainer> containers)
@@ -302,7 +306,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			container.Add(text);
 		}
 
-		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment, SegmentPairInfo segmentPairInfo)
+		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment, SegmentPairInfo segmentPairInfo, ConfirmationLevel importedConfirmationLevel)
 		{
 			SegmentVisitor.VisitSegment(originalTarget);
 			var originalText = SegmentVisitor.Text;
@@ -327,9 +331,13 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 					}
 
 					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true, out var result);
-					var statusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
+					var statusTranslationUpdated = success ? result : importedConfirmationLevel;
 
 					targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
+				}
+				else
+				{
+					targetSegment.Properties.ConfirmationLevel = importedConfirmationLevel;
 				}
 
 				var status = targetSegment.Properties.ConfirmationLevel.ToString();
@@ -346,9 +354,13 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 				{
 					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
-					var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
+					var statusTranslationNotUpdated = success ? result : importedConfirmationLevel;
 
 					targetSegment.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+				}
+				else
+				{
+					targetSegment.Properties.ConfirmationLevel = importedConfirmationLevel;
 				}
 
 				var status = targetSegment.Properties.ConfirmationLevel.ToString();
@@ -376,8 +388,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder, ISegment originalTarget, ISegment originalSource,
 			Stack<IAbstractMarkupDataContainer> containers)
 		{
-			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder) 
-			                  ?? _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId, elementPlaceholder.TagContent);
+			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder)
+							  ?? _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId, elementPlaceholder.TagContent);
 
 			var container = containers.Peek();
 			container.Add(placeholder);
@@ -418,8 +430,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		{
 			if (elementTagPair.Type == Element.TagType.TagOpen)
 			{
-				var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair) 
-				              ?? _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
+				var tagPair = GetElement(elementTagPair.TagId, originalTarget, originalSource, elementTagPair)
+							  ?? _segmentBuilder.CreateTagPair(elementTagPair.TagId, elementTagPair.TagContent);
 
 				if (tagPair is IAbstractMarkupDataContainer tagPairContainer)
 				{
@@ -474,7 +486,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		private IAbstractMarkupData GetElement(string tagId, IAbstractMarkupDataContainer originalTargetSegment,
 			IAbstractMarkupDataContainer sourceSegment, Element element)
-		{			
+		{
 			var extractor = new ElementExtractor();
 			extractor.GetTag(tagId, originalTargetSegment, element);
 			if (extractor.FoundElement != null)

@@ -21,10 +21,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private bool _checkedAll;
 		private bool _checkingAllAction;
 
-		public WizardPageExportFilesViewModel(Window owner, object view, WizardContext wizardContext)
-			: base(owner, view, wizardContext)
+		public WizardPageExportFilesViewModel(Window owner, object view, TaskContext taskContext)
+			: base(owner, view, taskContext)
 		{
-			ProjectFiles = wizardContext.ProjectFiles;
+			ProjectFiles = taskContext.ProjectFiles;
 
 			VerifyProjectFiles();
 
@@ -165,16 +165,18 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		{
 			foreach (var projectFile in ProjectFiles)
 			{
-				if (projectFile.Action == Enumerators.Action.Export)
+				if (projectFile.Action == Enumerators.Action.Export || projectFile.Action == Enumerators.Action.ExportBackTranslation)
 				{
-					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Export);
+					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => 
+						a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Export || a.Action == Enumerators.Action.ExportBackTranslation);
 
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = string.Format(PluginResources.Message_Exported_on_0, activityfile?.DateToString);					
 				}
-				else if (projectFile.Action == Enumerators.Action.Import)
+				else if (projectFile.Action == Enumerators.Action.Import || projectFile.Action == Enumerators.Action.ImportBackTranslation)
 				{
-					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.Import);
+					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault(a => 
+						a.Action == Enumerators.Action.Import || a.Action == Enumerators.Action.ImportBackTranslation);
 
 					projectFile.Status = Enumerators.Status.Warning;
 					projectFile.ShortMessage = string.Format(PluginResources.Message_Imported_on_0, activityfile?.DateToString);					

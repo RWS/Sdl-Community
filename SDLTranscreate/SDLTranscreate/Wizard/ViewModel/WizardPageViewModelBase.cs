@@ -16,11 +16,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 		private double _labelLineWidth;
 		private double _labelTextWidth;
 
-		protected WizardPageViewModelBase(Window owner, object view, WizardContext wizardContext)
+		protected WizardPageViewModelBase(Window owner, object view, TaskContext taskContext)
 		{			
 			Owner = owner;
 			View = view;
-			WizardContext = wizardContext;
+			TaskContext = taskContext;
 			IsProcessing = false;
 		}
 
@@ -28,7 +28,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 
 		public event EventHandler LeavePage;
 
-		public WizardContext WizardContext { get; set; }
+		public TaskContext TaskContext { get; set; }
 
 		public double LabelLineWidth
 		{

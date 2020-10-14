@@ -31,7 +31,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private string _productName;
 		private int _contextIndex;
 
-		internal XliffContentReader(string projectId, string inputPath, bool ignoreTags, SegmentBuilder segmentBuilder,
+		internal XliffContentReader(string projectId, string inputPath, string targetLanguage, bool ignoreTags, SegmentBuilder segmentBuilder,
 			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_projectId = projectId;
@@ -42,6 +42,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
+
+			TargetLanguage = new CultureInfo(targetLanguage);
 
 			Xliff = new Xliff();
 			ConfirmationStatistics = new ConfirmationStatistics();
@@ -67,7 +69,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			_documentProperties = documentInfo;
 
 			SourceLanguage = documentInfo.SourceLanguage.CultureInfo;
-			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? SourceLanguage;
+			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? TargetLanguage;
 
 			Xliff.DocInfo.Created = DateTime.UtcNow;
 			Xliff.DocInfo.Source = _inputPath;
@@ -92,7 +94,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			};
 
 			var originalFilePath = fileInfo.FileConversionProperties.OriginalFilePath ??
-								   fileInfo.FileConversionProperties.InputFilePath;
+			                       fileInfo.FileConversionProperties.InputFilePath;
 
 			var systemFileInfo = new FileInfo(originalFilePath);
 			file.Original = fileInfo.FileConversionProperties.OriginalFilePath;

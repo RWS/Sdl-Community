@@ -11,6 +11,6 @@ namespace Sdl.Community.Transcreate.Interfaces
 
 		List<Project> GetProjects();
 
-		void UpdateProjectData(WizardContext wizardContext, bool isBatchTask = false);	
+		void UpdateProjectData(TaskContext taskContext, bool isBatchTask = false);	
 	}
 }

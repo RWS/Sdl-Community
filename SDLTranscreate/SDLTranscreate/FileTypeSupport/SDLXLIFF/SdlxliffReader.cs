@@ -29,19 +29,21 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		public CultureInfo TargetLanguage { get; private set; }
 
-		public Xliff ReadFile(string projectId, string filePath)
+		public Xliff ReadFile(string projectId, string filePath, string targetLanguage)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
 
-			var contentReader = new XliffContentReader(projectId, filePath, false, _segmentBuilder, 
+			var contentReader = new XliffContentReader(projectId, filePath, targetLanguage, false, _segmentBuilder, 
 				_exportOptions, _analysisBands);		
 			converter.AddBilingualProcessor(contentReader);
+
 			
-			SourceLanguage = contentReader.SourceLanguage;
-			TargetLanguage = contentReader.TargetLanguage;			
 
 			converter.Parse();
+
+			SourceLanguage = contentReader.SourceLanguage;
+			TargetLanguage = contentReader.TargetLanguage;
 
 			ConfirmationStatistics = contentReader.ConfirmationStatistics;
 			TranslationOriginStatistics = contentReader.TranslationOriginStatistics;

@@ -49,18 +49,21 @@ namespace Sdl.Community.Transcreate.Actions
 			settings.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
 			settings.ImportOptions.OverwriteTranslations = true;
 
-			var wizardService = new WizardService(Enumerators.Action.Convert, _pathInfo, _customerProvider,
+			var action = Enumerators.Action.Convert;
+			var workFlow = Enumerators.WorkFlow.Internal;
+
+			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider, 
 				_projectAutomationService);
 
-			var wizardContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
-			if (wizardContext == null && !string.IsNullOrEmpty(message))
+			var taskContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
+			if (taskContext == null && !string.IsNullOrEmpty(message))
 			{
 				MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 
-			_controllers.TranscreateController.UpdateProjectData(wizardContext);
+			_controllers.TranscreateController.UpdateProjectData(taskContext);
 		}
 	
 

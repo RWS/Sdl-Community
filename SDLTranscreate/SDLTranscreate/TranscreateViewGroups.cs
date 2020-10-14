@@ -16,6 +16,12 @@ namespace Sdl.Community.Transcreate
 	{
 	}
 
+	[RibbonGroup("TranscreateManager_OpenGroup", Name = "TranscreateManager_OpenGroup_Name")]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	public class TranscreateManagerOpenGroup : AbstractRibbonGroup
+	{
+	}
+
 	[RibbonGroup("TranscreateManager_ViewGroup", Name = "TranscreateManager_ViewGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class TranscreateManagerViewGroup : AbstractRibbonGroup

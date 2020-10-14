@@ -17,7 +17,7 @@ namespace Sdl.Community.Transcreate.Service
 {
 	public class ProjectAutomationService
 	{
-		private string _projectNameSuffix = "-Transcreate";
+		private string _projectNameSuffix;
 		private readonly ImageService _imageService;
 		private readonly TranscreateViewController _controller;
 		private readonly CustomerProvider _customerProvider;
@@ -30,36 +30,40 @@ namespace Sdl.Community.Transcreate.Service
 			_customerProvider = customerProvider;
 		}
 
-		public FileBasedProject CreateTranscreateProject(FileBasedProject project,
-			List<ProjectFile> projectFiles, string projectNameSuffix = null)
+		public FileBasedProject CreateTranscreateProject(FileBasedProject project, string iconPath,
+			List<ProjectFile> projectFiles, string projectNameSuffix)
 		{
-			if (!string.IsNullOrEmpty(projectNameSuffix))
+			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
-				_projectNameSuffix = projectNameSuffix;
+				throw new Exception("The project name suffix cannot be null!");
 			}
+
+			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
 
 			var projectReference = new ProjectReference(project.FilePath);
 			var newProjectInfo = new ProjectInfo
 			{
-				Name = projectInfo.Name + _projectNameSuffix,
+				Name = projectInfo.Name + "-" + _projectNameSuffix,
 				Description = projectInfo.Description,
-				LocalProjectFolder = projectInfo.LocalProjectFolder + _projectNameSuffix,
+				LocalProjectFolder = projectInfo.LocalProjectFolder + "-" + _projectNameSuffix,
 				SourceLanguage = projectInfo.SourceLanguage,
 				TargetLanguages = projectInfo.TargetLanguages,
-				DueDate = projectInfo.DueDate
+				DueDate = projectInfo.DueDate,
+				ProjectOrigin = "Transcreate Project",
+				IconPath = iconPath,
 			};
 
 			var newProject = new FileBasedProject(newProjectInfo, projectReference);
 			foreach (var contextProjectFile in projectFiles)
 			{
-				if (!string.IsNullOrEmpty(contextProjectFile.XliffFilePath) &&
-					File.Exists(contextProjectFile.XliffFilePath))
+				if (!string.IsNullOrEmpty(contextProjectFile.ExternalFilePath) &&
+					File.Exists(contextProjectFile.ExternalFilePath))
 				{
-					newProject.AddFiles(new[] {contextProjectFile.XliffFilePath}, contextProjectFile.Path);
+					newProject.AddFiles(new[] { contextProjectFile.ExternalFilePath }, contextProjectFile.Path);
 				}
-			}			
+			}
 
 			var sourceLanguageFiles = newProject.GetSourceLanguageFiles();
 			var scanResult = newProject.RunAutomaticTask(
@@ -89,7 +93,7 @@ namespace Sdl.Community.Transcreate.Service
 			return newProject;
 		}
 
-		public Project GetProject(FileBasedProject selectedProject, 
+		public Project GetProject(FileBasedProject selectedProject,
 			IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)
 		{
 			if (selectedProject == null)
@@ -123,7 +127,7 @@ namespace Sdl.Community.Transcreate.Service
 						clonedProjectFile.Project = project;
 						clonedProjectFile.Location = GeFullPath(project.Path, clonedProjectFile.Location);
 						clonedProjectFile.Report = GeFullPath(project.Path, clonedProjectFile.Report);
-						clonedProjectFile.XliffFilePath = GeFullPath(project.Path, clonedProjectFile.XliffFilePath);
+						clonedProjectFile.ExternalFilePath = GeFullPath(project.Path, clonedProjectFile.ExternalFilePath);
 						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.FileId.ToString());
 						project.ProjectFiles.Add(clonedProjectFile);
 					}
@@ -237,7 +241,7 @@ namespace Sdl.Community.Transcreate.Service
 				if (targetFile != null)
 				{
 					targetFile.XliffData = projectFile.XliffData;
-					targetFile.XliffFilePath = projectFile.XliffFilePath;
+					targetFile.ExternalFilePath = projectFile.ExternalFilePath;
 					targetFile.ConfirmationStatistics = projectFile.ConfirmationStatistics;
 					targetFile.TranslationOriginStatistics = projectFile.TranslationOriginStatistics;
 					targetFile.Selected = true;
@@ -256,6 +260,7 @@ namespace Sdl.Community.Transcreate.Service
 				Path = projectFile.Folder,
 				Location = projectFile.LocalFilePath,
 				Action = Enumerators.Action.None,
+				WorkFlow = Enumerators.WorkFlow.None,
 				Status = Enumerators.Status.Ready,
 				Date = DateTime.MinValue,
 				TargetLanguage = projectFile.Language.CultureInfo.Name,

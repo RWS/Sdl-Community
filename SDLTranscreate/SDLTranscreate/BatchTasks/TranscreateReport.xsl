@@ -465,7 +465,7 @@
 										<tr>
 												<td width="100%">
 														<h1>
-																<xsl:value-of select="//@name"/>&#160;Report
+																<xsl:value-of select="//@name"/>
 														</h1>
 												</td>
 												<td valign="top">
@@ -488,7 +488,15 @@
 														Task:
 												</td>
 												<td class="InfoData">
-														<xsl:value-of select="//@name"/>
+														<xsl:value-of select="//taskInfo/@action"/>
+												</td>
+										</tr>
+										<tr>
+												<td class="InfoItem">
+														Workflow:
+												</td>
+												<td class="InfoData">
+														<xsl:value-of select="//taskInfo/@workflow"/>
 												</td>
 										</tr>
 
@@ -677,7 +685,7 @@
 
 														<tr>
 																<td class="InfoItem">
-																	Close Project on Complete:
+																		Close Project on Complete:
 																</td>
 																<td class="InfoData">
 																		<xsl:value-of select="//taskInfo/settings/@closeProjectOnComplete"/>
@@ -700,10 +708,10 @@
 
 								<h2 class="firstWithEmphasis">
 										<xsl:choose>
-												<xsl:when  test="//@action = 'Export'">
+												<xsl:when  test="//@action = 'Export' or //@action = 'ExportBackTranslation'">
 														Exported
 												</xsl:when>
-												<xsl:when  test="//@action = 'Import'">
+												<xsl:when  test="//@action = 'Import' or //@action = 'ImportBackTranslation'">
 														Imported (Translations updated)
 												</xsl:when>
 												<xsl:otherwise>
@@ -795,10 +803,10 @@
 								<xsl:if test="//taskInfo/@action != 'Convert'">
 										<h2 class="firstWithEmphasis">
 												<xsl:choose>
-														<xsl:when  test="//@action = 'Export'">
+														<xsl:when  test="//@action = 'Export' or //@action = 'ExportBackTranslation'">
 																Not Exported
 														</xsl:when>
-														<xsl:when  test="//@action = 'Export'">
+														<xsl:when  test="//@action = 'Import' or //@action = 'ImportBackTranslation'">
 																Imported (Translations not updated)
 														</xsl:when>
 														<xsl:otherwise>
@@ -875,7 +883,7 @@
 
 										</table>
 
-										<xsl:if test="//taskInfo/@action = 'Import'">
+										<xsl:if test="//taskInfo/@action = 'Import' or //@action = 'ImportBackTranslation'">
 												<h2 class="firstWithEmphasis">
 														Not Imported
 												</h2>

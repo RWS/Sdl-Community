@@ -47,23 +47,25 @@ namespace Sdl.Community.Transcreate.Actions
 				return;
 			}
 
-			var exportType = selectedProject.IsBackTranslationProject
+			var action = selectedProject.IsBackTranslationProject
 				? Enumerators.Action.ExportBackTranslation
 				: Enumerators.Action.Export;
 
+			var workFlow = Enumerators.WorkFlow.External;
+
 			var settings = GetSettings();
-			var wizardService = new WizardService(exportType, _pathInfo, _customerProvider,
+			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider,
 				_projectAutomationService);
 
-			var wizardContext = wizardService.ShowWizard(Controller, out var message);
-			if (wizardContext == null && !string.IsNullOrEmpty(message))
+			var taskContext = wizardService.ShowWizard(Controller, out var message);
+			if (taskContext == null && !string.IsNullOrEmpty(message))
 			{
 				MessageBox.Show(message, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 
-			_controllers.TranscreateController.UpdateProjectData(wizardContext);
+			_controllers.TranscreateController.UpdateProjectData(taskContext);
 		}
 
 		public void LaunchWizard()
@@ -104,7 +106,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
 		{
-			//Enabled = e.SelectedProject != null;
+			Enabled = e.SelectedProject != null;
 		}
 	}
 }

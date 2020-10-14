@@ -13,8 +13,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 	{
 		private string _summaryText;
 
-		public WizardPageExportSummaryViewModel(Window owner, object view, WizardContext wizardContext) 
-			: base(owner, view, wizardContext)
+		public WizardPageExportSummaryViewModel(Window owner, object view, TaskContext taskContext) 
+			: base(owner, view, taskContext)
 		{
 			IsValid = true;
 
@@ -43,7 +43,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private string GetSummaryText()
 		{
-			var project = WizardContext.ProjectFiles[0].Project;
+			var project = TaskContext.ProjectFiles[0].Project;
 
 			var indent = "   ";
 
@@ -60,34 +60,34 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, WizardContext.ExportOptions.XliffSupport) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, WizardContext.WorkingFolder) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, WizardContext.ExportOptions.IncludeTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, WizardContext.ExportOptions.CopySourceToTarget) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_IncludeBackTranslations, WizardContext.ExportOptions.IncludeBackTranslations) + Environment.NewLine;
-			if (WizardContext.ExportOptions.ExcludeFilterIds.Count > 0)
+			summaryText += indent + string.Format(PluginResources.Label_XliffSupport, TaskContext.ExportOptions.XliffSupport) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_WorkingFolder, TaskContext.WorkingFolder) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_IncludeTranslations, TaskContext.ExportOptions.IncludeTranslations) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTarget, TaskContext.ExportOptions.CopySourceToTarget) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_IncludeBackTranslations, TaskContext.ExportOptions.IncludeBackTranslations) + Environment.NewLine;
+			if (TaskContext.ExportOptions.ExcludeFilterIds.Count > 0)
 			{
-				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ExportOptions.ExcludeFilterIds)) + Environment.NewLine;
+				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(TaskContext.ExportOptions.ExcludeFilterIds)) + Environment.NewLine;
 			}
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_ExportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_ExportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
-			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected)
+			var targetLanguages = TaskContext.ProjectFiles.Where(a => a.Selected)
 				.Select(a => a.TargetLanguage).Distinct();
 
 			foreach (var targetLanguage in targetLanguages)
 			{
-				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
+				var languageFolder = TaskContext.GetLanguageFolder(targetLanguage);
 			
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
 				
 				var targetLanguageFiles =
-					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
+					TaskContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
 					var folder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
@@ -134,7 +134,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private string GetSelectedLanguagesString()
 		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+			var selected = TaskContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
 			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())

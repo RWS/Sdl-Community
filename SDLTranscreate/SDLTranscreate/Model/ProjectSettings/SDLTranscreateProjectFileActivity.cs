@@ -9,6 +9,7 @@ namespace Sdl.Community.Transcreate.Model.ProjectSettings
 		{
 			Status = Enumerators.Status.None.ToString();
 			Action = Enumerators.Action.None.ToString();
+			WorkFlow = Enumerators.WorkFlow.None.ToString();
 			Date = FormatDateTime(DateTime.MinValue);
 		}
 		public string ProjectFileId { get; set; }
@@ -16,6 +17,8 @@ namespace Sdl.Community.Transcreate.Model.ProjectSettings
 		public string Status { get; set; }
 
 		public string Action { get; set; }
+
+		public string WorkFlow { get; set; }
 
 		public string ActivityId { get; set; }
 

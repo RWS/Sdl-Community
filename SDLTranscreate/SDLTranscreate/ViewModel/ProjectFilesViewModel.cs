@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.Transcreate.Actions;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.CustomEventArgs;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.View;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -15,7 +17,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 {
 	public class ProjectFilesViewModel : BaseModel, IDisposable
 	{
-		private List<ProjectFile> _projectFileActions;
+		private List<ProjectFile> _projectFiles;
 		private IList _selectedProjectFiles;
 		private ProjectFile _selectedProjectFile;
 		private bool _isProjectFileSelected;
@@ -24,6 +26,10 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private ICommand _exportFilesCommand;
 		private ICommand _openFolderCommand;
 		private ICommand _viewReportCommand;
+		private ICommand _openFileForTranslationCommand;
+		private ICommand _openFileForReviewCommand;
+		private ICommand _openFileForSignOffCommand;
+		private ICommand _mouseDoubleClick;
 
 		public ProjectFilesViewModel(List<ProjectFile> projectFiles)
 		{
@@ -32,6 +38,8 @@ namespace Sdl.Community.Transcreate.ViewModel
 			SelectedProjectFile = ProjectFiles?.Count > 0 ? projectFiles[0] : null;
 			SelectedProjectFiles = new List<ProjectFile> { SelectedProjectFile };
 		}
+
+		public EventHandler<ProjectFileSelectionChangedEventArgs> ProjectFileSelectionChanged;
 
 		public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
 
@@ -43,6 +51,14 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		public ICommand ViewReportCommand => _viewReportCommand ?? (_viewReportCommand = new CommandHandler(ViewReport));
 
+		public ICommand OpenFileForTranslationCommand => _openFileForTranslationCommand ?? (_openFileForTranslationCommand = new CommandHandler(OpenFileForTranslation));
+
+		public ICommand OpenFileForReviewCommand => _openFileForReviewCommand ?? (_openFileForReviewCommand = new CommandHandler(OpenFileForReview));
+
+		public ICommand OpenFileForSignOffCommand => _openFileForSignOffCommand ?? (_openFileForSignOffCommand = new CommandHandler(OpenFileForSignOff));
+
+		//public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
+
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
 
 		public void Refresh()
@@ -52,10 +68,10 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		public List<ProjectFile> ProjectFiles
 		{
-			get => _projectFileActions ?? (_projectFileActions = new List<ProjectFile>());
+			get => _projectFiles ?? (_projectFiles = new List<ProjectFile>());
 			set
 			{
-				_projectFileActions = value;
+				_projectFiles = value;
 				OnPropertyChanged(nameof(ProjectFiles));
 				OnPropertyChanged(nameof(StatusLabel));
 			}
@@ -69,6 +85,11 @@ namespace Sdl.Community.Transcreate.ViewModel
 				_selectedProjectFiles = value;
 				OnPropertyChanged(nameof(SelectedProjectFiles));
 				OnPropertyChanged(nameof(StatusLabel));
+
+				ProjectFileSelectionChanged?.Invoke(this, new ProjectFileSelectionChangedEventArgs
+				{
+					SelectedFiles = _selectedProjectFiles?.Cast<ProjectFile>().ToList()
+				});
 			}
 		}
 
@@ -86,6 +107,11 @@ namespace Sdl.Community.Transcreate.ViewModel
 				}
 
 				IsProjectFileSelected = _selectedProjectFile != null;
+
+				ProjectFileSelectionChanged?.Invoke(this, new ProjectFileSelectionChangedEventArgs
+				{
+					SelectedFiles = new List<ProjectFile> { _selectedProjectFile }
+				});
 			}
 		}
 
@@ -100,8 +126,8 @@ namespace Sdl.Community.Transcreate.ViewModel
 			get
 			{
 				var message = string.Format(PluginResources.StatusLabel_Projects_0_Files_1_Selected_2,
-					_projectFileActions.Select(a => a.Project).Distinct().Count(),
-					_projectFileActions?.Count,
+					_projectFiles.Select(a => a.Project).Distinct().Count(),
+					_projectFiles?.Count,
 					_selectedProjectFiles?.Count);
 				return message;
 			}
@@ -167,14 +193,44 @@ namespace Sdl.Community.Transcreate.ViewModel
 				var viewModel = new ReportViewModel
 				{
 					HtmlUri = path,
-					WindowTitle = SelectedProjectFile.Action == Enumerators.Action.Export
-						? "Export Report"
-						: "Import Report"
+					WindowTitle = "Report",
+					//WindowTitle = SelectedProjectFile.Action == Enumerators.Action.Export
+					//	? "Export Report"
+					//	: "Import Report"
 				};
 
 				var view = new ReportWindow(viewModel);
 				view.ShowDialog();
 			}
+		}
+
+		//private void MouseDoubleClick(object parameter)
+		//{
+		//	if (SelectedProjectFile != null)
+		//	{
+		//		var action = SdlTradosStudio.Application.GetAction<OpenFileForTranslationAction>();
+		//		action.OpenFile()
+
+		//		OpenFileForTranslation(parameter);
+		//	}
+		//}
+
+		private void OpenFileForTranslation(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<OpenFileForTranslationAction>();
+			action.OpenFile();
+		}
+
+		private void OpenFileForReview(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<OpenFileForReviewAction>();
+			action.OpenFile();
+		}
+
+		private void OpenFileForSignOff(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<OpenFileForSignOffAction>();
+			action.OpenFile();
 		}
 
 		public void Dispose()

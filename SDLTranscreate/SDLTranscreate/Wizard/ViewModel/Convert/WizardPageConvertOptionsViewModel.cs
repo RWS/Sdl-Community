@@ -17,13 +17,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 		
-		public WizardPageConvertOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
-			: base(owner, view, wizardContext)
+		public WizardPageConvertOptionsViewModel(Window owner, object view, TaskContext taskContext, IDialogService dialogService) 
+			: base(owner, view, taskContext)
 		{
 			_dialogService = dialogService;
-			OutputFolder = WizardContext.TransactionFolder;
-			MaxAlternativeTranslations = wizardContext.ConvertOptions.MaxAlternativeTranslations;
-			CloseProjectOnComplete = wizardContext.ConvertOptions.CloseProjectOnComplete;
+			OutputFolder = TaskContext.WorkflowFolder;
+			MaxAlternativeTranslations = taskContext.ConvertOptions.MaxAlternativeTranslations;
+			CloseProjectOnComplete = taskContext.ConvertOptions.CloseProjectOnComplete;
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -136,9 +136,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ConvertOptions.MaxAlternativeTranslations = MaxAlternativeTranslations;
-			WizardContext.ConvertOptions.CloseProjectOnComplete = CloseProjectOnComplete;
+			TaskContext.WorkflowFolder = OutputFolder;
+			TaskContext.ConvertOptions.MaxAlternativeTranslations = MaxAlternativeTranslations;
+			TaskContext.ConvertOptions.CloseProjectOnComplete = CloseProjectOnComplete;
 		}
 
 		public void Dispose()
