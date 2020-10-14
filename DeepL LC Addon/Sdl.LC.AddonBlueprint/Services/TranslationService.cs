@@ -63,8 +63,8 @@ namespace Sdl.LC.AddonBlueprint.Services
 		/// <param name="apiKey">DeepL API Key</param>
 		/// <param name="sourceLanguageCode">LC source language code</param>
 		/// <param name="targetLanguagesCode">LC list of target language codes</param>
-		/// <returns>List of <see cref="TranslationEngineResponse"/>/returns>
-		public async Task<List<TranslationEngineResponse>> GetCorrespondingEngines(string apiKey, string sourceLanguageCode, List<string> targetLanguagesCode)
+		/// <returns><see cref="TranslationEngineResponse"/>/returns>
+		public async Task<TranslationEngineResponse> GetCorrespondingEngines(string apiKey, string sourceLanguageCode, List<string> targetLanguagesCode)
 		{
 			var deeplAvailableSourceLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.source);
 			var deeplAvailableTargetLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.target);
@@ -72,13 +72,35 @@ namespace Sdl.LC.AddonBlueprint.Services
 			var sourceEngineCode = GetLcCorrespondingSourceLanguageCodeEngine(sourceLanguageCode, deeplAvailableSourceLanguages);
 			var targetEngineCodes = GetLCCorrespondingTargetLanguagesEngineCode(targetLanguagesCode, deeplAvailableTargetLanguages);
 
+			var translationEngines = new List<TranslationEngine>();
+
+			foreach (var targetCode in targetEngineCodes)
+			{
+				var engine = new TranslationEngine
+				{
+					//Id = Guid.NewGuid().ToString(),
+					//Model = "nmt",
+					//MatchingSourceLanguage = sourceEngineCode,
+					//EngineSourceLanguage = sourceEngineCode,
+					//EngineTargetLanguage = targetCode,
+					//MatchingTargetLanguages = new List<string> { targetCode },
+
+					//Id = Guid.NewGuid().ToString(),
+					//Model = "nmt",
+					//MatchingSourceLanguage = "en",
+					//EngineSourceLanguage = "en",
+					//EngineTargetLanguage = "fr",
+					//MatchingTargetLanguages = new List<string> { "fr-fr","fr-ca" },
+				};
+				translationEngines.Add(engine);
+			}
+
 			var translationEngineResponse = new TranslationEngineResponse
 			{
-				Id = Guid.NewGuid().ToString(),
-				MatchingSourceLanguage = sourceEngineCode,
-				MatchingTargetLanguages = targetEngineCodes
+				Items = translationEngines,
+				ItemCount = translationEngines.Count
 			};
-			return new List<TranslationEngineResponse> { translationEngineResponse};
+			return translationEngineResponse;
 		}
 
 		/// <summary>

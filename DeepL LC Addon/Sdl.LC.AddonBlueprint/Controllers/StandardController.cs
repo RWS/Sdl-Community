@@ -236,9 +236,9 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			//var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, CancellationToken.None).ConfigureAwait(false);
 			var translationService = new TranslationService();
 
-			if(!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguages.Any())
+			if(!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
 			{
-				var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguages);
+				var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
 				return Ok(translationEngineResponse);
 			}
 			return Ok(new TranslationEngineResponse());
