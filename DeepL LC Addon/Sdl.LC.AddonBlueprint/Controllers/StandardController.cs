@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System;
 
 namespace Sdl.LC.AddonBlueprint.Controllers
 {
@@ -27,7 +28,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		private readonly IDescriptorService _descriptorService;
 		private readonly IAccountService _accountService;
 		private readonly IHealthReporter _healthReporter;
-		private readonly ITranslationService _translationService;
+		private readonly ILanguageService _translationService;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AccountService"/> class.
@@ -41,7 +42,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			ILogger<StandardController> logger,
 			IDescriptorService descriptorService,
 			IAccountService accountService,
-			IHealthReporter healthReporter,ITranslationService translationService)
+			IHealthReporter healthReporter,ILanguageService translationService)
 		{
 			_configuration = configuration;
 			_logger = logger;
@@ -234,14 +235,14 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		{
 			//var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
 			//var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, CancellationToken.None).ConfigureAwait(false);
-			var translationService = new TranslationService();
+			var translationService = new LanguagesService();
 
-			if(!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
+			if (!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
 			{
 				var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
 				return Ok(translationEngineResponse);
 			}
-			return Ok(new TranslationEngineResponse());
+			return Ok();			
 		}
 
 		//[Authorize]

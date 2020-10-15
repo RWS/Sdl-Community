@@ -13,5 +13,6 @@
         public const string AccountAlreadyActivated = "ACCOUNT_ALREADY_ACTIVATED";
         public const string InvalidInput = "INVALID_INPUT";
         public const string InternalError = "INTERNAL_ERROR";
+		public const string GeneralError = "GENERAL_ERROR";
     }
 }

@@ -7,12 +7,13 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Sdl.LC.AddonBlueprint.Enums;
+using Sdl.LC.AddonBlueprint.Exceptions;
 using Sdl.LC.AddonBlueprint.Interfaces;
 using Sdl.LC.AddonBlueprint.Models;
 
 namespace Sdl.LC.AddonBlueprint.Services
 {
-	public class TranslationService : ITranslationService
+	public class LanguagesService : ILanguageService
 	{
 		private readonly string LanguagesUrl = "https://api.deepl.com/v1/languages";
 
@@ -46,14 +47,12 @@ namespace Sdl.LC.AddonBlueprint.Services
 				else
 				{
 					var responseContent = await responseMessage.Content?.ReadAsStringAsync();
-					var message = $"Request to DeepL Translate REST API endpoint failed with status code {responseMessage.StatusCode}. Response content: {responseContent}";
-
-					throw new HttpRequestException(message);
+					throw new AddonValidationException($"Request to DeepL Translate REST API get languages endpoint failed with status code {responseMessage.StatusCode}", new Details { Code = ErrorCodes.GeneralError, Value = responseContent });
 				}
 			}
 			catch (Exception e)
-			{
-				throw e;
+			{				
+				throw new AddonValidationException(e.Message,e.InnerException);
 			}
 		}
 
@@ -67,10 +66,20 @@ namespace Sdl.LC.AddonBlueprint.Services
 		public async Task<TranslationEngineResponse> GetCorrespondingEngines(string apiKey, string sourceLanguageCode, List<string> targetLanguagesCode)
 		{
 			var deeplAvailableSourceLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.source);
-			var deeplAvailableTargetLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.target);
-
 			var sourceEngineCode = GetLcCorrespondingSourceLanguageCodeEngine(sourceLanguageCode, deeplAvailableSourceLanguages);
+
+			if (string.IsNullOrEmpty(sourceEngineCode))
+			{
+				throw new AddonValidationException($"Source Language not supported", new Details { Code = ErrorCodes.InvalidInput, Name = nameof(TranslationEngineRequest.SourceLanguage), Value = sourceLanguageCode });
+			}
+
+			var deeplAvailableTargetLanguages = await GetAvailableDeeplLanguages(apiKey, LanguageEnum.target);
 			var targetEngineCodes = GetLCCorrespondingTargetLanguagesEngineCode(targetLanguagesCode, deeplAvailableTargetLanguages);
+
+			if (!targetEngineCodes.Any())
+			{
+				throw new AddonValidationException($"Target Language(s) not supported", new Details { Code = ErrorCodes.InvalidInput, Name = nameof(TranslationEngineRequest.TargetLanguage), Value = string.Join(" ", targetEngineCodes.ToArray()) });
+			}
 
 			var translationEngines = new List<TranslationEngine>();
 
