@@ -83,23 +83,16 @@ namespace Sdl.LC.AddonBlueprint.Services
 
 			var translationEngines = new List<TranslationEngine>();
 
-			foreach (var targetCode in targetEngineCodes)
+			foreach (var languageCodeMapping in targetEngineCodes)
 			{
 				var engine = new TranslationEngine
 				{
-					//Id = Guid.NewGuid().ToString(),
-					//Model = "nmt",
-					//MatchingSourceLanguage = sourceEngineCode,
-					//EngineSourceLanguage = sourceEngineCode,
-					//EngineTargetLanguage = targetCode,
-					//MatchingTargetLanguages = new List<string> { targetCode },
-
-					//Id = Guid.NewGuid().ToString(),
-					//Model = "nmt",
-					//MatchingSourceLanguage = "en",
-					//EngineSourceLanguage = "en",
-					//EngineTargetLanguage = "fr",
-					//MatchingTargetLanguages = new List<string> { "fr-fr","fr-ca" },
+					Id = Guid.NewGuid().ToString(),
+					Model = "nmt",
+					MatchingSourceLanguage = sourceEngineCode,
+					EngineSourceLanguage = sourceEngineCode,
+					EngineTargetLanguage = languageCodeMapping.Key,
+					MatchingTargetLanguages = languageCodeMapping.Value,
 				};
 				translationEngines.Add(engine);
 			}
@@ -117,9 +110,10 @@ namespace Sdl.LC.AddonBlueprint.Services
 		/// </summary>
 		/// <param name="targetEngineCodes">LC target languages code</param>
 		/// <param name="deeplAvailableTargetLanguages">List of the DeepL Target language</param>
-		/// <returns>List of LC codes which are supported by DeepL</returns>
-		private List<string> GetLCCorrespondingTargetLanguagesEngineCode(List<string> targetEngineCodes, List<string> deeplAvailableTargetLanguages)
+		/// <returns>List of LC codes which are supported by DeepL grouped by the parent language code</returns>
+		private Dictionary<string, List<string>> GetLCCorrespondingTargetLanguagesEngineCode(List<string> targetEngineCodes, List<string> deeplAvailableTargetLanguages)
 		{
+			var languageMapping = new Dictionary<string, List<string>>();
 			var matchingTargetLanguageCode = new List<string>();
 
 			foreach (var lcLanguageCode in targetEngineCodes)
@@ -127,11 +121,23 @@ namespace Sdl.LC.AddonBlueprint.Services
 				var matchingLanguage = GetLanguage(new CultureInfo(lcLanguageCode), deeplAvailableTargetLanguages);
 				if (!string.IsNullOrEmpty(matchingLanguage))
 				{
-					matchingTargetLanguageCode.Add(lcLanguageCode);
-				}
+					if (!languageMapping.ContainsKey(matchingLanguage))
+					{
+						var languageFlovours = new List<string> { lcLanguageCode };
+						languageMapping.TryAdd(matchingLanguage, languageFlovours);
+					}
+					else
+					{
+						var flavourExist = languageMapping[matchingLanguage].Any(l => l.Equals(lcLanguageCode));
+						if (!flavourExist)
+						{
+							languageMapping[matchingLanguage].Add(lcLanguageCode);
+						}
+					}
+				}				
 			}
 
-			return matchingTargetLanguageCode;
+			return languageMapping;
 		}
 
 		/// <summary>
@@ -143,10 +149,10 @@ namespace Sdl.LC.AddonBlueprint.Services
 		private string GetLcCorrespondingSourceLanguageCodeEngine(string sourceLanguageCode, List<string> deeplAvailableLanguages)
 		{
 			var sourceCultureInfo = new CultureInfo(sourceLanguageCode);
-			var isSourceLanguageAvailable = deeplAvailableLanguages.Any(d => d.Equals(sourceCultureInfo.TwoLetterISOLanguageName));
-			if (isSourceLanguageAvailable)
+			var deeplSourceCode = deeplAvailableLanguages.FirstOrDefault(d => d.Equals(sourceCultureInfo.TwoLetterISOLanguageName));
+			if (!string.IsNullOrEmpty(deeplSourceCode))
 			{
-				return sourceLanguageCode;
+				return deeplSourceCode;
 			}
 
 			return string.Empty;
