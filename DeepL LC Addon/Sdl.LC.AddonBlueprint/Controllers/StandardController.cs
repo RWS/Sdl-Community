@@ -23,12 +23,13 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 	[ApiController]
 	public class StandardController : ControllerBase
 	{
-		private IConfiguration _configuration;
+		private IConfiguration _configuration;	
 		private readonly ILogger _logger;
 		private readonly IDescriptorService _descriptorService;
 		private readonly IAccountService _accountService;
 		private readonly IHealthReporter _healthReporter;
 		private readonly ILanguageService _translationService;
+		private const string ApiKeyId = "apikey";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AccountService"/> class.
@@ -196,7 +197,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			_logger.LogInformation("Retrieving the configuration settings.");
 
 			var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
-			var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, CancellationToken.None).ConfigureAwait(false);
+			var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId,true, CancellationToken.None).ConfigureAwait(false);
 
 			var resultValue = Content(JsonSerializer.Serialize(configurationSettingsResult, JsonSettings.Default()), "application/json", Encoding.UTF8);
 			resultValue.StatusCode = 200;
@@ -231,17 +232,28 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 
 		//[Authorize]
 		[HttpGet("translation-engines")]
-		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request)
+		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request,[FromHeader(Name = "X-LC-Tenant")]string tenantId, [FromHeader(Name = "TR_ID")]string traceId)
 		{
-			//var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
-			//var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, CancellationToken.None).ConfigureAwait(false);
-			var translationService = new LanguagesService();
-
-			if (!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
+			var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId,false, CancellationToken.None).ConfigureAwait(false);
+			if(configurationSettingsResult != null)
 			{
-				var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
-				return Ok(translationEngineResponse);
+				var apiKey = (string)configurationSettingsResult.Items.FirstOrDefault(c => c.Id.ToLower().Equals(ApiKeyId))?.Value;
+				if (!string.IsNullOrEmpty(apiKey))
+				{
+					var translationService = new LanguagesService();
+
+					if (!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
+					{
+						var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
+						return Ok(translationEngineResponse);
+					}
+				}
+				else
+				{
+					return Unauthorized("DeepL API Key is not valid");
+				}
 			}
+			
 			return Ok();			
 		}
 

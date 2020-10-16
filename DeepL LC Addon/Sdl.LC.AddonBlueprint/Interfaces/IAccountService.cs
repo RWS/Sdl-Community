@@ -47,6 +47,6 @@ namespace Sdl.LC.AddonBlueprint.Interfaces
         /// <param name="tenantId">The tenant id.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The configuration settings result.</returns>
-        Task<ConfigurationSettingsResult> GetConfigurationSettings(string tenantId, CancellationToken cancellationToken);
+        Task<ConfigurationSettingsResult> GetConfigurationSettings(string tenantId, bool maskConfiguration, CancellationToken cancellationToken);
     }
 }

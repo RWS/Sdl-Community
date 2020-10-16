@@ -68,7 +68,7 @@ namespace Sdl.LC.AddonBlueprint.Services
                 throw new AddonValidationException($"Invalid {nameof(activatedEvent.ClientCredentials.ClientSecret)} provided.", new Details { Code = ErrorCodes.InvalidInput, Name = nameof(activatedEvent.ClientCredentials.ClientSecret), Value = null });
             }
 
-            AccountInfoEntity accountInfoEntity = new AccountInfoEntity()
+            var accountInfoEntity = new AccountInfoEntity()
             {
                 PublicKey = activatedEvent.PublicKey,
                 TenantId = activatedEvent.TenantId,
@@ -111,7 +111,7 @@ namespace Sdl.LC.AddonBlueprint.Services
         /// <param name="tenantId">The tenant id.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The configuration settings result.</returns>
-        public async Task<ConfigurationSettingsResult> GetConfigurationSettings(string tenantId, CancellationToken cancellationToken)
+        public async Task<ConfigurationSettingsResult> GetConfigurationSettings(string tenantId,bool maskConfiguration, CancellationToken cancellationToken)
         {
             var accountInfo = await _repository.GetAccountInfoByTenantId(tenantId).ConfigureAwait(false);
             if (accountInfo == null)
@@ -123,6 +123,11 @@ namespace Sdl.LC.AddonBlueprint.Services
             {
                 return new ConfigurationSettingsResult(new List<ConfigurationValueModel>());
             }
+
+			if (!maskConfiguration)
+			{
+				return new ConfigurationSettingsResult(accountInfo.ConfigurationValues);
+			}
 
             return MaskSecretConfigurations(accountInfo.ConfigurationValues);
         }
@@ -197,6 +202,6 @@ namespace Sdl.LC.AddonBlueprint.Services
 			}
 
 			return new ConfigurationSettingsResult(configurations);
-		}
-    }
+		}		
+	}
 }
