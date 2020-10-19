@@ -72,6 +72,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 
 			var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings
 			{
+				NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 				ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver(),
 				
 			};
@@ -259,7 +260,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 
 		//[Authorize]
 		[HttpPost("translate")]
-		public async Task<IActionResult> Translate()
+		public async Task<IActionResult> Translate([FromBody]TranslationRequest request, [FromHeader(Name = "X-LC-Tenant")]string tenantId)
 		{
 			return Ok("postTranslate");
 		}

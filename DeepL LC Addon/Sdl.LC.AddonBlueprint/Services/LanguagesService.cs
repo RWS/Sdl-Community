@@ -87,7 +87,8 @@ namespace Sdl.LC.AddonBlueprint.Services
 			{
 				var engine = new TranslationEngine
 				{
-					Id = Guid.NewGuid().ToString(),
+					Name="base",
+					Id = $"{sourceEngineCode}_{languageCodeMapping.Key}_base",
 					Model = "nmt",
 					MatchingSourceLanguage = sourceEngineCode,
 					EngineSourceLanguage = sourceEngineCode,
