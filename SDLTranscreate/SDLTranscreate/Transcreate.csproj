@@ -255,6 +255,7 @@
     <Compile Include="FileTypeSupport\XLIFF\Writers\Xliff12SDLWriter.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Writers\XliffWriter.cs" />
     <Compile Include="Interfaces\IDialogService.cs" />
+    <Compile Include="Interfaces\IProject.cs" />
     <Compile Include="Interfaces\ITranscreateController.cs" />
     <Compile Include="Interfaces\IXLIFFReader.cs" />
     <Compile Include="Interfaces\IXLIFFWriter.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\CustomerGroup.cs" />
     <Compile Include="Model\ExportOptions.cs" />
+    <Compile Include="Model\FileData.cs" />
     <Compile Include="Model\FilterItem.cs" />
     <Compile Include="Model\FilterItemGroup.cs" />
     <Compile Include="Model\ImportFile.cs" />
@@ -685,7 +687,10 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Wizard\ViewModel\BackProject\" />
+    <Folder Include="Wizard\View\BackProject\" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

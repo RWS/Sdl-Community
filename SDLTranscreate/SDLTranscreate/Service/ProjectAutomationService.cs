@@ -93,8 +93,73 @@ namespace Sdl.Community.Transcreate.Service
 			return newProject;
 		}
 
-		public Project GetProject(FileBasedProject selectedProject,
-			IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)
+		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string iconPath,
+			List<string> projectFiles, string projectNameSuffix)
+		{
+			if (string.IsNullOrEmpty(projectNameSuffix))
+			{
+				throw new Exception("The project name suffix cannot be null!");
+			}
+
+			_projectNameSuffix = projectNameSuffix;
+
+			var projectInfo = project.GetProjectInfo();
+
+			var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
+			var targetLanguage = projectInfo.TargetLanguages[0].CultureInfo.Name;
+			var localProjectFolder = Path.Combine(projectInfo.LocalProjectFolder, "BackProjects", targetLanguage);
+			var projectReference = new ProjectReference(project.FilePath);
+			var newProjectInfo = new ProjectInfo
+			{
+				Name = projectInfo.Name + "-" + _projectNameSuffix + "-" + targetLanguage,
+				Description = projectInfo.Description,
+				LocalProjectFolder = localProjectFolder,
+				SourceLanguage = projectInfo.TargetLanguages[0],
+				TargetLanguages = new Language[]{ projectInfo.SourceLanguage},
+				DueDate = projectInfo.DueDate,
+				ProjectOrigin = "Back-Translation Project",
+				IconPath = iconPath,
+			};
+
+			var newProject = new FileBasedProject(newProjectInfo, projectReference);
+			foreach (var contextProjectFile in projectFiles)
+			{
+				if (!string.IsNullOrEmpty(contextProjectFile) &&
+					File.Exists(contextProjectFile))
+				{
+					newProject.AddFiles(new[] { contextProjectFile }, string.Empty);
+				}
+			}
+
+			var sourceLanguageFiles = newProject.GetSourceLanguageFiles();
+			var scanResult = newProject.RunAutomaticTask(
+				sourceLanguageFiles.GetIds(),
+				AutomaticTaskTemplateIds.Scan
+			);
+
+			sourceLanguageFiles = newProject.GetSourceLanguageFiles();
+			foreach (var projectFile in sourceLanguageFiles)
+			{
+				if (projectFile.Role == FileRole.Translatable)
+				{
+					Guid[] currentFileId = { projectFile.Id };
+					var convertTask = newProject.RunAutomaticTask(
+						currentFileId,
+						AutomaticTaskTemplateIds.ConvertToTranslatableFormat
+					);
+
+					var copyTask = newProject.RunAutomaticTask(
+						currentFileId,
+						AutomaticTaskTemplateIds.CopyToTargetLanguages
+					);
+				}
+			}
+
+			newProject.Save();
+			return newProject;
+		}
+
+		public Interfaces.IProject GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)
 		{
 			if (selectedProject == null)
 			{
@@ -103,19 +168,22 @@ namespace Sdl.Community.Transcreate.Service
 
 			var projectInfo = selectedProject.GetProjectInfo();
 
-			var project = new Project
-			{
-				Id = projectInfo.Id.ToString(),
-				Name = projectInfo.Name,
-				AbsoluteUri = projectInfo.Uri.AbsoluteUri,
-				Customer = _customerProvider.GetProjectCustomer(selectedProject),
-				Created = projectInfo.CreatedAt.ToUniversalTime(),
-				DueDate = projectInfo.DueDate?.ToUniversalTime() ?? DateTime.MaxValue,
-				Path = projectInfo.LocalProjectFolder,
-				SourceLanguage = GetLanguageInfo(projectInfo.SourceLanguage.CultureInfo),
-				TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages),
-				ProjectType = GetProjectType(selectedProject)
-			};
+			Interfaces.IProject project = projectInfo.ProjectOrigin == "Back-Translation Project"
+				? new BackTranslationProject() 
+				: new Project();
+
+
+			project.Id = projectInfo.Id.ToString();
+			project.Name = projectInfo.Name;
+			project.AbsoluteUri = projectInfo.Uri.AbsoluteUri;
+			project.Customer = _customerProvider.GetProjectCustomer(selectedProject);
+			project.Created = projectInfo.CreatedAt.ToUniversalTime();
+			project.DueDate = projectInfo.DueDate?.ToUniversalTime() ?? DateTime.MaxValue;
+			project.Path = projectInfo.LocalProjectFolder;
+			project.SourceLanguage = GetLanguageInfo(projectInfo.SourceLanguage.CultureInfo);
+			project.TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages);
+			project.ProjectType = GetProjectType(selectedProject);
+
 
 			var existingProject = _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
 			if (existingProject != null)
@@ -217,7 +285,7 @@ namespace Sdl.Community.Transcreate.Service
 			return null;
 		}
 
-		private void AssignProjectFileXliffData(Project project, IEnumerable<ProjectFile> projectfiles)
+		private void AssignProjectFileXliffData(Interfaces.IProject project, IEnumerable<ProjectFile> projectfiles)
 		{
 			if (projectfiles == null)
 			{
@@ -249,7 +317,7 @@ namespace Sdl.Community.Transcreate.Service
 			}
 		}
 
-		private ProjectFile GetProjectFile(Project project, ProjectAutomation.Core.ProjectFile projectFile,
+		private ProjectFile GetProjectFile(Interfaces.IProject project, ProjectAutomation.Core.ProjectFile projectFile,
 			IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile
@@ -272,7 +340,7 @@ namespace Sdl.Community.Transcreate.Service
 			return projectFileModel;
 		}
 
-		private List<ProjectFile> GetProjectFiles(IProject project, Project projectModel, IReadOnlyCollection<string> selectedFileIds)
+		private List<ProjectFile> GetProjectFiles(IProject project, Interfaces.IProject projectModel, IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectInfo = project.GetProjectInfo();
 			var projectFiles = new List<ProjectFile>();

@@ -15,7 +15,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private readonly ImportOptions _importOptions;
 		private readonly List<AnalysisBand> _analysisBands;
 
-		public SdlxliffWriter(IFileTypeManager fileTypeManager, SegmentBuilder segmentBuilder,
+		public SdlxliffWriter(IFileTypeManager fileTypeManager, SegmentBuilder segmentBuilder, 
 			ImportOptions importOptions, List<AnalysisBand> analysisBands)
 		{
 			_fileTypeManager = fileTypeManager;

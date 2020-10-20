@@ -23,6 +23,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private readonly string _inputPath;
 		private readonly string _projectId;
 		private readonly List<AnalysisBand> _analysisBands;
+		private readonly string _documentId;
 		private IBilingualContentHandler _output;
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
@@ -31,10 +32,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private string _productName;
 		private int _contextIndex;
 
-		internal XliffContentReader(string projectId, string inputPath, string targetLanguage, bool ignoreTags, SegmentBuilder segmentBuilder,
+		internal XliffContentReader(string projectId, string documentId, string inputPath, string targetLanguage, bool ignoreTags, SegmentBuilder segmentBuilder,
 			ExportOptions exportOptions, List<AnalysisBand> analysisBands)
 		{
 			_projectId = projectId;
+			_documentId = documentId;
 			_inputPath = inputPath;
 			_ignoreTags = ignoreTags;
 			_segmentBuilder = segmentBuilder;
@@ -42,6 +44,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			_exportOptions = exportOptions;
 			_analysisBands = analysisBands;
+
 
 			TargetLanguage = new CultureInfo(targetLanguage);
 
@@ -74,6 +77,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			Xliff.DocInfo.Created = DateTime.UtcNow;
 			Xliff.DocInfo.Source = _inputPath;
 			Xliff.DocInfo.ProjectId = _projectId;
+			Xliff.DocInfo.DocumentId = _documentId;
 			Xliff.DocInfo.SourceLanguage = SourceLanguage.Name;
 			Xliff.DocInfo.TargetLanguage = TargetLanguage.Name;
 		}
@@ -94,7 +98,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			};
 
 			var originalFilePath = fileInfo.FileConversionProperties.OriginalFilePath ??
-			                       fileInfo.FileConversionProperties.InputFilePath;
+								   fileInfo.FileConversionProperties.InputFilePath;
 
 			var systemFileInfo = new FileInfo(originalFilePath);
 			file.Original = fileInfo.FileConversionProperties.OriginalFilePath;
@@ -140,7 +144,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				Id = paragraphUnit.Properties.ParagraphUnitId.Id
 			};
 
-			UpdateContexts(paragraphUnit, transUnit);
+			var file = GetFileContainer(paragraphUnit);
+
+			UpdateContexts(file, paragraphUnit, transUnit);
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
@@ -241,17 +247,17 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			if (transUnit.SegmentPairs.Count > 0)
 			{
-				Xliff.Files[Xliff.Files.Count - 1].Body.TransUnits.Add(transUnit);
+				file.Body.TransUnits.Add(transUnit);
 			}
 		}
 
-		private void UpdateContexts(IParagraphUnit paragraphUnit, TransUnit transUnit)
+		private void UpdateContexts(File file, IParagraphUnit paragraphUnit, TransUnit transUnit)
 		{
 			if (paragraphUnit.Properties.Contexts?.Contexts != null)
 			{
 				foreach (var context in paragraphUnit.Properties.Contexts.Contexts)
 				{
-					var existingContext = Xliff.Files[Xliff.Files.Count - 1].Header.Contexts.FirstOrDefault(a =>
+					var existingContext = file.Header.Contexts.FirstOrDefault(a =>
 						string.Compare(a.ContextType, context.ContextType, StringComparison.CurrentCultureIgnoreCase) == 0 &&
 						string.Compare(a.DisplayCode, context.DisplayCode, StringComparison.CurrentCultureIgnoreCase) == 0 &&
 						string.Compare(a.DisplayName, context.DisplayName, StringComparison.CurrentCultureIgnoreCase) == 0 &&
@@ -281,12 +287,65 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 								newContext.MetaData.Add(metaData.Key, metaData.Value);
 							}
 						}
-						
-						Xliff.Files[Xliff.Files.Count - 1].Header.Contexts.Add(newContext);
+
 						transUnit.Contexts.Add(newContext);
+						file.Header.Contexts.Add(newContext);
 					}
 				}
 			}
+		}
+
+		private File GetFileContainer(IParagraphUnit paragraphUnit)
+		{
+			var contextType = GetContextType(paragraphUnit);
+			var file = Xliff.Files[Xliff.Files.Count - 1];
+			if (contextType != null)
+			{
+				if (contextType != "Recommended")
+				{
+					var alternativeFile = Xliff.Files.FirstOrDefault(a => a.Original == contextType);
+					if (alternativeFile != null)
+					{
+						file = alternativeFile;
+					}
+					else
+					{
+						file = new File
+						{
+							Original = contextType,
+							SourceLanguage = SourceLanguage.Name,
+							TargetLanguage = TargetLanguage.Name,
+							DataType = "xml"
+						};
+						Xliff.Files.Add(file);
+					}
+				}
+				else
+				{
+					file.Original = "Recommended";
+				}
+			}
+
+			return file;
+		}
+
+		private string GetContextType(IParagraphUnit paragraphUnit)
+		{
+			if (paragraphUnit.Properties.Contexts?.Contexts != null)
+			{
+				var contextType = "Recommended";
+				foreach (var context in paragraphUnit.Properties.Contexts.Contexts)
+				{
+					if (context.ContextType.StartsWith("Alternative "))
+					{
+						return context.ContextType;
+					}
+				}
+
+				return contextType;
+			}
+
+			return null;
 		}
 
 		private void UpdateTagIds()

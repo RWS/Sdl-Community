@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sdl.Community.Transcreate.Model
 {
-	public class Project : BaseModel, ICloneable
+	public class Project : BaseModel, ICloneable, Interfaces.IProject
 	{
 		private Customer _customer;
 		private List<ProjectFile> _projectFiles;
@@ -80,8 +80,6 @@ namespace Sdl.Community.Transcreate.Model
 
 		public string CreatedToString => GetDateTimeToString(Created);
 
-		public bool IsBackTranslationProject { get; set; }
-
 		public string ProjectType { get; set; }
 
 		public LanguageInfo SourceLanguage { get; set; }
@@ -148,6 +146,11 @@ namespace Sdl.Community.Transcreate.Model
 					projectFileCloned.Project = project;
 					project.ProjectFiles.Add(projectFileCloned);
 				}
+			}
+
+			foreach (var backTranslationProject in BackTranslationProjects)
+			{
+				project.BackTranslationProjects.Add(backTranslationProject.Clone() as BackTranslationProject);
 			}
 
 			return project;

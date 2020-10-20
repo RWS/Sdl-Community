@@ -27,7 +27,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		private SegmentPairProcessor _segmentPairProcessor;
 		private string _productName;
 
-		public XliffContentWriter(Xliff xliff, SegmentBuilder segmentBuilder,
+		public XliffContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, 
 			ImportOptions importOptions, List<AnalysisBand> analysisBands, List<string> tagIds)
 		{
 			_xliff = xliff;

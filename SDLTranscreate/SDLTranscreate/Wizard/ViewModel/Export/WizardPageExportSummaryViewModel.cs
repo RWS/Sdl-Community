@@ -120,7 +120,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			return items;
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)

@@ -7,10 +7,12 @@ namespace Sdl.Community.Transcreate.Interfaces
 	{
 		List<ProjectFile> GetSelectedProjectFiles();
 
-		List<Project> GetSelectedProjects();
+		List<IProject> GetSelectedProjects();
 
-		List<Project> GetProjects();
+		List<IProject> GetProjects();
 
-		void UpdateProjectData(TaskContext taskContext, bool isBatchTask = false);	
+		void UpdateProjectData(TaskContext taskContext);
+
+		void UpdateBackTranslationProjectData(Project project, TaskContext taskContext);
 	}
 }

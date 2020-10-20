@@ -33,7 +33,7 @@ namespace Sdl.Community.Transcreate.Model
 
 		public Enumerators.Controller Owner { get; set; }
 
-		public Project Project { get; set; }
+		public Interfaces.IProject Project { get; set; }
 
 		public List<ProjectFile> ProjectFiles { get; set; }
 
@@ -74,7 +74,7 @@ namespace Sdl.Community.Transcreate.Model
 
 		public string GetWorkflowPath()
 		{
-			var rootPath = Path.Combine(LocalProjectFolder, "WF");
+			var rootPath = Path.Combine(LocalProjectFolder, "WorkFlow");
 			var path = Path.Combine(rootPath, Action.ToString());
 
 			if (!Directory.Exists(rootPath))

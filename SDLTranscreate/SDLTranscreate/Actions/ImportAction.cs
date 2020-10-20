@@ -46,7 +46,7 @@ namespace Sdl.Community.Transcreate.Actions
 				return;
 			}
 
-			var action = selectedProject.IsBackTranslationProject
+			var action = selectedProject is BackTranslationProject
 				? Enumerators.Action.ImportBackTranslation
 				: Enumerators.Action.Import;
 			var workFlow = Enumerators.WorkFlow.External;

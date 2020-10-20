@@ -32,6 +32,7 @@ using Sdl.Reports.Viewer.API;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using AutomaticTask = Sdl.Community.Transcreate.Model.Tasks.AutomaticTask;
+using IProject = Sdl.Community.Transcreate.Interfaces.IProject;
 using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
 using TaskFile = Sdl.Community.Transcreate.Model.Tasks.TaskFile;
 
@@ -47,7 +48,7 @@ namespace Sdl.Community.Transcreate
 	public class TranscreateViewController : AbstractViewController, ITranscreateController
 	{
 		private readonly object _lockObject = new object();
-		private List<Project> _transcreateProjects;
+		private List<Interfaces.IProject> _transcreateProjects;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
 		private ProjectFilesViewControl _projectFilesViewControl;
@@ -92,7 +93,7 @@ namespace Sdl.Community.Transcreate
 		{
 			if (_projectsNavigationViewControl == null)
 			{
-				_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<Project>(), _projectsController);
+				_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<Interfaces.IProject>(), _projectsController);
 				_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
 
 				_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
@@ -170,24 +171,29 @@ namespace Sdl.Community.Transcreate
 
 			if (refresh)
 			{
-				_projectsNavigationViewModel.Projects = new List<Project>();
+				_projectsNavigationViewModel.Projects = new List<Interfaces.IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
 			}
 		}
 
-		public List<Project> GetProjects()
+		public List<Interfaces.IProject> GetProjects()
 		{
 			return _transcreateProjects;
 		}
 
-		public List<Project> GetSelectedProjects()
+		public List<Interfaces.IProject> GetSelectedProjects()
 		{
-			if (_projectsNavigationViewModel.SelectedProjects != null)
+			if (_projectsNavigationViewModel == null)
 			{
-				return _projectsNavigationViewModel.SelectedProjects?.Cast<Project>().ToList();
+				return null;
 			}
 
-			return new List<Project> { _projectsNavigationViewModel.SelectedProject };
+			if (_projectsNavigationViewModel?.SelectedProjects != null)
+			{
+				return _projectsNavigationViewModel.SelectedProjects?.Cast<Interfaces.IProject>().ToList();
+			}
+
+			return new List<Interfaces.IProject> { _projectsNavigationViewModel.SelectedProject };
 		}
 
 		public List<ProjectFile> GetSelectedProjectFiles()
@@ -205,8 +211,7 @@ namespace Sdl.Community.Transcreate
 			return new List<ProjectFile> { _projectFilesViewModel.SelectedProjectFile };
 		}
 
-
-		public void UpdateProjectData(TaskContext taskContext, bool isBatchTask = false)
+		public void UpdateProjectData(TaskContext taskContext)
 		{
 			if (taskContext == null || !taskContext.Completed)
 			{
@@ -271,7 +276,7 @@ namespace Sdl.Community.Transcreate
 
 			if (_projectsNavigationViewModel != null)
 			{
-				_projectsNavigationViewModel.Projects = new List<Project>();
+				_projectsNavigationViewModel.Projects = new List<Interfaces.IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
 			}
 
@@ -287,6 +292,90 @@ namespace Sdl.Community.Transcreate
 			UpdateProjectSettingsBundle(project);
 		}
 
+		
+
+		public void UpdateBackTranslationProjectData(Project selectedProject, TaskContext taskContext)
+		{
+			if (taskContext == null || !taskContext.Completed)
+			{
+				return;
+			}
+
+			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
+			taskContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
+																 StringComparison.CurrentCultureIgnoreCase) == 0);
+
+			var transcreateProject = _transcreateProjects.FirstOrDefault(a => a.Id == selectedProject.Id);
+			var backTranslationProject = transcreateProject.BackTranslationProjects.FirstOrDefault(a => a.Id == taskContext.Project.Id);
+			if (backTranslationProject == null)
+			{
+				foreach (var wcProjectFile in taskContext.ProjectFiles)
+				{
+					ConvertToRelativePaths(taskContext.Project, wcProjectFile);
+				}
+
+				backTranslationProject = taskContext.Project as BackTranslationProject;
+				transcreateProject.BackTranslationProjects.Add(backTranslationProject);
+			}
+			else
+			{
+				foreach (var wcProjectFile in taskContext.ProjectFiles)
+				{
+					var projectFile = backTranslationProject.ProjectFiles.FirstOrDefault(a => a.FileId == wcProjectFile.FileId);
+					if (projectFile == null)
+					{
+						wcProjectFile.Project = backTranslationProject;
+						ConvertToRelativePaths(backTranslationProject, wcProjectFile);
+						backTranslationProject.ProjectFiles.Add(wcProjectFile);
+					}
+					else if (wcProjectFile.Selected)
+					{
+						foreach (var fileActivity in wcProjectFile.ProjectFileActivities)
+						{
+							fileActivity.ProjectFile = projectFile;
+						}
+
+						ConvertToRelativePaths(backTranslationProject, wcProjectFile);
+
+						projectFile.ExternalFilePath = wcProjectFile.ExternalFilePath;
+						projectFile.Location = wcProjectFile.Location;
+						projectFile.Report = wcProjectFile.Report;
+						projectFile.Status = wcProjectFile.Status;
+						projectFile.Action = wcProjectFile.Action;
+						projectFile.WorkFlow = wcProjectFile.WorkFlow;
+						projectFile.Date = wcProjectFile.Date;
+						projectFile.ConfirmationStatistics = wcProjectFile.ConfirmationStatistics;
+						projectFile.TranslationOriginStatistics = wcProjectFile.TranslationOriginStatistics;
+						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
+					}
+				}
+			}
+
+			//if (_projectFilesViewModel != null)
+			//{
+			//	_projectFilesViewModel.ProjectFiles = new List<ProjectFile>();
+			//	_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
+			//}
+
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = new List<Interfaces.IProject>();
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
+
+			//var selectedProject = _projectsController.GetProjects()
+			//	.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == taskContext.Project.Id);
+			//if (selectedProject == null)
+			//{
+			//	return;
+			//}
+
+			//CreateReports(taskContext, selectedProject);
+
+			// TODO
+			UpdateBackTranslationProjectSettingsBundle(selectedProject, backTranslationProject);
+		}
+
 		internal ReportsController ReportsController { get; private set; }
 
 		internal string ClientId { get; private set; }
@@ -300,7 +389,7 @@ namespace Sdl.Community.Transcreate
 			ReportsController.AddReports(ClientId, reports);
 		}
 
-		private bool UpdateCustomerInfo(FileBasedProject project, Project xliffProject)
+		private bool UpdateCustomerInfo(FileBasedProject project, Interfaces.IProject xliffProject)
 		{
 			var customer = _customerProvider.GetProjectCustomer(project);
 			var customerName = customer?.Name ?? string.Empty;
@@ -330,7 +419,7 @@ namespace Sdl.Community.Transcreate
 			return false;
 		}
 
-		private void ConvertToRelativePaths(Project project, ProjectFile wcProjectFile)
+		private void ConvertToRelativePaths(Interfaces.IProject project, ProjectFile wcProjectFile)
 		{
 			foreach (var fileActivity in wcProjectFile.ProjectFileActivities)
 			{
@@ -590,7 +679,74 @@ namespace Sdl.Community.Transcreate
 			return languageDirections;
 		}
 
-		private void UpdateProjectSettingsBundle(Project project)
+		private void UpdateProjectSettingsBundle(Interfaces.IProject project)
+		{
+			var selectedProject = _projectsController.GetProjects()
+				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
+
+			if (selectedProject != null)
+			{
+				var settingsBundle = selectedProject.GetSettings();
+				var xliffManagerProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
+
+				var projectFiles = new List<SDLTranscreateProjectFile>();
+				foreach (var projectFile in project.ProjectFiles)
+				{
+					var fileActivities = new List<SDLTranscreateProjectFileActivity>();
+
+					foreach (var fileActivity in projectFile.ProjectFileActivities)
+					{
+						var settingFileActivity = new SDLTranscreateProjectFileActivity
+						{
+							ProjectFileId = projectFile.FileId,
+							ActivityId = fileActivity.ActivityId,
+							Status = fileActivity.Status.ToString(),
+							Action = fileActivity.Action.ToString(),
+							WorkFlow = fileActivity.WorkFlow.ToString(),
+							Path = GetRelativePath(project.Path, fileActivity.Path),
+							Name = fileActivity.Name,
+							Date = GetDateToString(fileActivity.Date),
+							Report = GetRelativePath(project.Path, fileActivity.Report),
+							ConfirmationStatistics = fileActivity.ConfirmationStatistics,
+							TranslationOriginStatistics = fileActivity.TranslationOriginStatistics
+						};
+
+						fileActivities.Add(settingFileActivity);
+					}
+
+					var settingProjectFile = new SDLTranscreateProjectFile
+					{
+						Activities = fileActivities,
+						Path = GetRelativePath(project.Path, projectFile.Path),
+						Action = projectFile.Action.ToString(),
+						WorkFlow = projectFile.WorkFlow.ToString(),
+						Status = projectFile.Status.ToString(),
+						FileId = projectFile.FileId,
+						Name = projectFile.Name,
+						Location = GetRelativePath(project.Path, projectFile.Location),
+						Date = GetDateToString(projectFile.Date),
+						FileType = projectFile.FileType,
+						ExternalFilePath = GetRelativePath(project.Path, projectFile.ExternalFilePath),
+						TargetLanguage = projectFile.TargetLanguage,
+						Report = GetRelativePath(project.Path, projectFile.Report),
+						ShortMessage = projectFile.ShortMessage,
+						ConfirmationStatistics = projectFile.ConfirmationStatistics,
+						TranslationOriginStatistics = projectFile.TranslationOriginStatistics
+					};
+
+					projectFiles.Add(settingProjectFile);
+				}
+
+
+				xliffManagerProject.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles);
+
+				selectedProject.UpdateSettings(xliffManagerProject.SettingsBundle);
+
+				selectedProject.Save();
+			}
+		}
+
+		private void UpdateBackTranslationProjectSettingsBundle(Project project, BackTranslationProject backTranslationProject)
 		{
 			var selectedProject = _projectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
@@ -659,7 +815,7 @@ namespace Sdl.Community.Transcreate
 
 		private void LoadProjects()
 		{
-			_transcreateProjects = new List<Project>();
+			_transcreateProjects = new List<Interfaces.IProject>();
 
 			foreach (var project in _projectsController.GetAllProjects())
 			{
@@ -738,7 +894,7 @@ namespace Sdl.Community.Transcreate
 				var segmentBuilder = new SegmentBuilder();
 				var projectAutomationService = new ProjectAutomationService(_imageService, this, _customerProvider);
 
-				var action = transcreateProject.IsBackTranslationProject
+				var action = transcreateProject is BackTranslationProject
 					? Enumerators.Action.ExportBackTranslation
 					: Enumerators.Action.Export;
 				var workFlow = Enumerators.WorkFlow.Internal;
@@ -768,7 +924,7 @@ namespace Sdl.Community.Transcreate
 				var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
 
 				var inputPath = Path.Combine(taskContext.LocalProjectFolder, targetFile.Location);
-				var data = sdlxliffReader.ReadFile(transcreateProject.Id, inputPath, targetFile.TargetLanguage);
+				var data = sdlxliffReader.ReadFile(transcreateProject.Id, targetFile.FileId, inputPath, targetFile.TargetLanguage);
 				var exported = xliffWriter.WriteFile(data, xliffFilePath, true);
 
 				if (exported)
@@ -837,7 +993,7 @@ namespace Sdl.Community.Transcreate
 				var segmentBuilder = new SegmentBuilder();
 				var projectAutomationService = new ProjectAutomationService(_imageService, this, _customerProvider);
 
-				var action = transcreateProject.IsBackTranslationProject
+				var action = transcreateProject is BackTranslationProject
 					? Enumerators.Action.ImportBackTranslation
 					: Enumerators.Action.Import;
 				var workFlow = Enumerators.WorkFlow.Internal;
@@ -875,7 +1031,7 @@ namespace Sdl.Community.Transcreate
 				var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
 
 				var inputPath = Path.Combine(taskContext.LocalProjectFolder, targetFile.Location);
-				var data = sdlxliffReader.ReadFile(transcreateProject.Id, inputPath, targetFile.TargetLanguage);
+				var data = sdlxliffReader.ReadFile(transcreateProject.Id, targetFile.FileId, inputPath, targetFile.TargetLanguage);
 
 				var exported = xliffWriter.WriteFile(data, xliffFilePath, true);
 
@@ -890,7 +1046,7 @@ namespace Sdl.Community.Transcreate
 
 				if (File.Exists(tmpInputFile))
 				{
-					File.Delete(tmpInputFile);  
+					File.Delete(tmpInputFile);
 				}
 
 				if (imported)
@@ -1219,7 +1375,7 @@ namespace Sdl.Community.Transcreate
 			return false;
 		}
 
-		private bool AddNewProjectFiles(FileBasedProject project, Project xliffProject)
+		private bool AddNewProjectFiles(FileBasedProject project, Interfaces.IProject xliffProject)
 		{
 			var addedNewFiles = false;
 			var projectInfo = project.GetProjectInfo();
@@ -1279,9 +1435,9 @@ namespace Sdl.Community.Transcreate
 			return updated;
 		}
 
-		private List<Project> GetRemovedProjects()
+		private List<Interfaces.IProject> GetRemovedProjects()
 		{
-			var removedProjects = new List<Project>();
+			var removedProjects = new List<Interfaces.IProject>();
 			var studioProjects = _projectsController.GetAllProjects().ToList();
 			foreach (var project in _transcreateProjects)
 			{
@@ -1305,7 +1461,7 @@ namespace Sdl.Community.Transcreate
 
 			if (updated && _projectsNavigationViewModel != null)
 			{
-				_projectsNavigationViewModel.Projects = new List<Project>();
+				_projectsNavigationViewModel.Projects = new List<Interfaces.IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
 			}
 		}

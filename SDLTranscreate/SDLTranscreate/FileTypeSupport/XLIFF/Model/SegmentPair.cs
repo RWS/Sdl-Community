@@ -39,18 +39,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 				Id = Id,
 				IsLocked = IsLocked,
 				ConfirmationLevel = (ConfirmationLevel)Enum.Parse(typeof(ConfirmationLevel), ConfirmationLevel.ToString(), true),
-				TranslationOrigin = TranslationOrigin?.Clone() as ITranslationOrigin
+				TranslationOrigin = TranslationOrigin?.Clone() as ITranslationOrigin,
+				Source = Source.Clone() as Source,
+				Target = Target.Clone() as Target
 			};
-
-			foreach (var element in Source.Elements)
-			{
-				segmentPair.Source.Elements.Add(element.Clone() as Element);
-			}
-
-			foreach (var element in Target.Elements)
-			{
-				segmentPair.Target.Elements.Add(element.Clone() as Element);
-			}
 
 			return segmentPair;
 		}

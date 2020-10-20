@@ -28,7 +28,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private const string ForegroundError = "#7F0505";
 		private const string ForegroundProcessing = "#0096D6";
 
-		private readonly SegmentBuilder _segmentBuilder;
+		private readonly FileTypeSupport.SDLXLIFF.SegmentBuilder _segmentBuilder;
 		private readonly PathInfo _pathInfo;
 		private List<JobProcess> _jobProcesses;
 		private ICommand _viewExceptionCommand;
@@ -38,7 +38,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private StringBuilder _logReport;
 
 		public WizardPageExportPreparationViewModel(Window owner, UserControl view, TaskContext taskContext,
-			SegmentBuilder segmentBuilder, PathInfo pathInfo)
+			FileTypeSupport.SDLXLIFF.SegmentBuilder segmentBuilder, PathInfo pathInfo)
 			: base(owner, view, taskContext)
 		{
 			_segmentBuilder = segmentBuilder;
@@ -427,7 +427,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			_logReport.AppendLine();
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)

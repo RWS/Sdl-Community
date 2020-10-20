@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
+using Sdl.Community.Transcreate.Interfaces;
 
 namespace Sdl.Community.Transcreate.Model
 {
@@ -26,7 +27,7 @@ namespace Sdl.Community.Transcreate.Model
 		public string ProjectId { get; set; }
 
 		[XmlIgnore]
-		public Project Project { get; set; }
+		public IProject Project { get; set; }
 
 		[XmlIgnore]
 		public Xliff XliffData { get; set; }

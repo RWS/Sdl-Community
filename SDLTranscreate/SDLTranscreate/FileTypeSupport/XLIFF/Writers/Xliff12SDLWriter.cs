@@ -69,10 +69,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		{
 			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
+			writer.WriteAttributeString("document-id", xliff.DocInfo.DocumentId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
 			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
 			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
-
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
 			WriteCommentDefinitions(xliff, writer);

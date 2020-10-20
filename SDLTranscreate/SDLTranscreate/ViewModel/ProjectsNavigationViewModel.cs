@@ -17,11 +17,11 @@ namespace Sdl.Community.Transcreate.ViewModel
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
 		private readonly ProjectsController _projectsController;
-		private List<Project> _projects;
+		private List<Interfaces.IProject> _projects;
 		private string _filterString;
-		private List<Project> _filteredProjects;
+		private List<Interfaces.IProject> _filteredProjects;
 		private List<CustomerGroup> _customerGroups;
-		private Project _selectedProject;
+		private Interfaces.IProject _selectedProject;
 		private IList _selectedProjects;
 		private bool _isProjectSelected;
 		private ICommand _clearSelectionCommand;
@@ -32,7 +32,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private ICommand _exportFilesCommand;
 		private ICommand _selectedItemChanged;
 
-		public ProjectsNavigationViewModel(List<Project> projects, ProjectsController projectsController)
+		public ProjectsNavigationViewModel(List<Interfaces.IProject> projects, ProjectsController projectsController)
 		{
 			_projects = projects;
 			_projectsController = projectsController;
@@ -57,7 +57,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChanged ?? (_selectedItemChanged = new CommandHandler(SelectedItemChanged));
 
-		public List<Project> Projects
+		public List<Interfaces.IProject> Projects
 		{
 			get => _projects;
 			set
@@ -103,7 +103,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 			}
 		}
 
-		public List<Project> FilteredProjects
+		public List<Interfaces.IProject> FilteredProjects
 		{
 			get => _filteredProjects;
 			set
@@ -132,7 +132,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 							customer = new CustomerGroup
 							{
 								Customer = filteredProject.Customer,
-								Projects = new List<Project> { filteredProject }
+								Projects = new List<Interfaces.IProject> { filteredProject }
 							};
 
 							customerGroups.Add(customer);
@@ -189,7 +189,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 			}
 		}
 
-		public Project SelectedProject
+		public Interfaces.IProject SelectedProject
 		{
 			get => _selectedProject;
 			set
@@ -278,7 +278,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 				selectedProject.UpdateSettings(settingsBundle);
 				selectedProject.Save();
 
-				var wfFolderPath = Path.Combine(SelectedProject.Path, "WF");
+				var wfFolderPath = Path.Combine(SelectedProject.Path, "WorkFlow");
 				if (Directory.Exists(wfFolderPath))
 				{
 					try
@@ -291,7 +291,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 					}
 				}
 
-				var bpFolderPath = Path.Combine(SelectedProject.Path, "BP");
+				var bpFolderPath = Path.Combine(SelectedProject.Path, "BackProjects");
 				if (Directory.Exists(wfFolderPath))
 				{
 					try

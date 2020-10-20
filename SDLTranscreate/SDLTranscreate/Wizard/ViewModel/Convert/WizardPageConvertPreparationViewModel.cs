@@ -156,14 +156,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			};
 		}
 
-		private void UpdateWizardContext()
+		private void UpdateWizardContext(FileBasedProject project)
 		{
 			var projectFiles = TaskContext.Project.ProjectFiles;
 
-			var newProjectInfo = _newProject.GetProjectInfo();
-			TaskContext.Project = _projectAutomationService.GetProject(_newProject, null, projectFiles);
+			var newProjectInfo = project.GetProjectInfo();
+			TaskContext.Project = _projectAutomationService.GetProject(project, null, projectFiles);
 			TaskContext.ProjectFiles = TaskContext.Project.ProjectFiles;
-			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(_newProject);
+			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
 			TaskContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
 			TaskContext.WorkflowFolder = TaskContext.GetWorkflowPath();
 
@@ -402,7 +402,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				var iconPath = GetTranscreateIconPath();
 
 				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, iconPath, projectFiles, "T");
-				UpdateWizardContext();
+				UpdateWizardContext(_newProject);
 
 				var newProjectInfo = _newProject.GetProjectInfo();
 
@@ -512,7 +512,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						};
 						importFiles.Add(importFile);
 
-						var paragraphMap = GetParagraphMap(sdlxliffReader, targetLanguageFile.Location, targetLanguageFile.TargetLanguage);
+						var paragraphMap = GetParagraphMap(sdlxliffReader, targetLanguageFile.FileId, targetLanguageFile.Location, targetLanguageFile.TargetLanguage);
 						AlignParagraphIds(targetLanguageFile.XliffData, paragraphMap.Keys.ToList());
 
 						success = sdlxliffWriter.UpdateFile(targetLanguageFile.XliffData, targetLanguageFile.Location, sdlXliffImportFile);
@@ -618,9 +618,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			return await Task.FromResult(success);
 		}
 
-		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string path, string targetLanguage)
+		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string fileId, string path, string targetLanguage)
 		{
-			var xliffData = sdlxliffReader.ReadFile(TaskContext.Project.Id, path, targetLanguage);
+			var xliffData = sdlxliffReader.ReadFile(TaskContext.Project.Id, fileId, path, targetLanguage);
 			return GetParagraphMap(xliffData);
 		}
 
@@ -766,28 +766,28 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			}
 		}
 
-		private IEnumerable<string> GetAllLanguages(Project project)
+		private IEnumerable<string> GetAllLanguages(Interfaces.IProject project)
 		{
 			var languages = project.TargetLanguages.Select(a => a.CultureInfo.Name).ToList();
 			languages.Add(project.SourceLanguage.CultureInfo.Name);
 			return languages;
 		}
 
-		private string GetFirstTargetLanguage(Project project)
+		private string GetFirstTargetLanguage(Interfaces.IProject project)
 		{
 			var language = GetAllLanguages(project).FirstOrDefault(a =>
 				string.Compare(a, project.SourceLanguage.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) != 0);
 			return language;
 		}
 
-		private List<string> GetTargetLangauges(Project project)
+		private List<string> GetTargetLangauges(Interfaces.IProject project)
 		{
 			var languages = GetAllLanguages(project).Where(a =>
 				string.Compare(a, project.SourceLanguage.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) != 0).ToList();
 			return languages;
 		}
 
-		private List<ProjectFile> ProcessProjectFiles(string language, Project project, SdlxliffReader sdlxliffReader)
+		private List<ProjectFile> ProcessProjectFiles(string language, Interfaces.IProject project, SdlxliffReader sdlxliffReader)
 		{
 			var languageFolder = GetLanguageFolder(language);
 			var projectFiles = TaskContext.ProjectFiles.Where(a => Equals(a.TargetLanguage, language)).ToList();
@@ -819,7 +819,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, projectFile.Location));
 				_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
 
-				projectFile.XliffData = sdlxliffReader.ReadFile(project.Id, isSource ? targetFile.Location : projectFile.Location,
+				projectFile.XliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId,
+					isSource ? targetFile.Location : projectFile.Location,
 					isSource ? targetFile.TargetLanguage : projectFile.TargetLanguage);
 				projectFile.Date = TaskContext.DateTimeStamp;
 				projectFile.Action = Enumerators.Action.Export;
@@ -988,7 +989,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			_logReport.AppendLine();
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)

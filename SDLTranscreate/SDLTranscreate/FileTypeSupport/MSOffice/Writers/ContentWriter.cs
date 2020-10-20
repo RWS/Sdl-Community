@@ -137,7 +137,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 					{
 						if (segmentPair.Target.Properties.TranslationOrigin == null)
 						{
-							targetSegment.Properties.TranslationOrigin = _segmentBuilder.CreateTranslationOrigin();
+							targetSegment.Properties.TranslationOrigin = _segmentBuilder.ItemFactory.CreateTranslationOrigin();
 						}
 						else
 						{
@@ -150,7 +150,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						var updatedSegment = _updatedSegments[segmentIdentifier];
 						if (updatedSegment.TranslationTokens.Count > 0)
 						{
-							targetSegment = GetUpdatedSegment(targetSegment, updatedSegment.TranslationTokens, segmentPair.Source);
+							targetSegment = _segmentBuilder.GetUpdatedSegment(targetSegment, updatedSegment.TranslationTokens, segmentPair.Source);
 						}
 
 						if (updatedSegment.BackTranslationTokens.Count > 0)
@@ -223,91 +223,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			return date.ToString(DateTimeFormatInfo.InvariantInfo);
 		}
 
-		private ISegment GetUpdatedSegment(ISegment segment, IEnumerable<Token> tokens, ISegment sourceSegment)
-		{
-			var vector = new List<int>();
-			var lockedContentId = 0;
-
-			//store original segment
-			var originalSegment = (ISegment)segment.Clone();
-
-			//remove old content
-			segment.Clear();
-
-			foreach (var item in tokens)
-			{
-				switch (item.Type)
-				{
-					case Token.TokenType.TagOpen:
-						var tagPairOpen = (IAbstractMarkupDataContainer)GetElement(
-							GetTagID(item.Content), originalSegment, sourceSegment, item.Type);
-						tagPairOpen.Clear();
-						InsertItemOnLocation(vector, ref segment,
-							(IAbstractMarkupData)tagPairOpen);
-						vector.Add(((ITagPair)tagPairOpen).IndexInParent);
-						break;
-					case Token.TokenType.TagClose:
-						vector.RemoveAt(vector.Count - 1);
-						break;
-					case Token.TokenType.TagPlaceholder:
-						InsertItemOnLocation(vector, ref segment,
-							GetElement(GetTagID(item.Content), originalSegment, sourceSegment,
-								item.Type));
-						break;
-					case Token.TokenType.Text:
-						InsertItemOnLocation(vector, ref segment, ItemFactory.CreateText(
-							PropertiesFactory.CreateTextProperties(item.Content)));
-						break;
-					case Token.TokenType.LockedContent:
-						InsertItemOnLocation(vector, ref segment,
-							GetElement(lockedContentId.ToString(), originalSegment, sourceSegment,
-								item.Type));
-						lockedContentId++;
-						break;
-					case Token.TokenType.CommentStart:
-						var commentContainer = GetComment(item);
-						InsertItemOnLocation(vector, ref segment,
-							(IAbstractMarkupData)commentContainer);
-						vector.Add(((ICommentMarker)commentContainer).IndexInParent);
-						break;
-					case Token.TokenType.CommentEnd:
-						if (vector.Count > 0)
-						{
-							vector.RemoveAt(vector.Count - 1);
-						}
-
-						break;
-					case Token.TokenType.RevisionMarker:
-						//hasTrackedChanges = true;
-						if (item.RevisionType == Token.RevisionMarkerType.InsertStart)
-						{
-							var insertContainer = GetRevisionMarker(item, RevisionType.Insert);
-							InsertItemOnLocation(vector, ref segment,
-								(IAbstractMarkupData)insertContainer);
-							vector.Add(((IRevisionMarker)insertContainer).IndexInParent);
-						}
-						else if (item.RevisionType == Token.RevisionMarkerType.DeleteStart)
-						{
-							var insertContainer = GetRevisionMarker(item, RevisionType.Delete);
-							InsertItemOnLocation(vector, ref segment,
-								(IAbstractMarkupData)insertContainer);
-							vector.Add(((IRevisionMarker)insertContainer).IndexInParent);
-						}
-						else
-						{
-							if (vector.Count > 0)
-							{
-								vector.RemoveAt(vector.Count - 1);
-							}
-						}
-
-						break;
-				}
-			}
-
-			return segment;
-		}
-
+		
 		/// <summary>
 		/// Need to find out the segment identifier, there is a possibility that the old files 
 		/// are processed and the paragraph unit ID is not entered
@@ -365,99 +281,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			return originalStatus;
 		}
 
-		/// <summary>
-		/// Create IRevisionMarker from specified Token
-		/// </summary>
-		/// <param name="item"></param>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		private IAbstractMarkupDataContainer GetRevisionMarker(Token item, RevisionType type)
-		{
-			var revisionProperties = ItemFactory.CreateRevisionProperties(type);
-			revisionProperties.Author = item.Author;
-			revisionProperties.Date = item.Date;
-			var revision = ItemFactory.CreateRevision(revisionProperties);
-			return revision;
-		}
-
-		/// <summary>
-		/// Create ICommentMarker from specified Token
-		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		private IAbstractMarkupDataContainer GetComment(Token item)
-		{
-			var commentProperties = PropertiesFactory.CreateCommentProperties();
-			var comment = PropertiesFactory.CreateComment(item.Content, item.Author, Severity.Low);
-			comment.Date = item.Date;
-			commentProperties.Add(comment);
-			var commentMarker = ItemFactory.CreateCommentMarker(commentProperties);
-			return commentMarker;
-		}
-
-		/// <summary>
-		/// Insert item to the proper container
-		/// </summary>
-		/// <param name="vector"></param>
-		/// <param name="segment"></param>
-		/// <param name="abstractItem"></param>
-		private void InsertItemOnLocation(IEnumerable<int> vector, ref ISegment segment, IAbstractMarkupData abstractItem)
-		{
-			IAbstractMarkupDataContainer currentContainer = segment;
-
-			foreach (var index in vector)
-			{
-				currentContainer = (IAbstractMarkupDataContainer)currentContainer[index];
-			}
-
-			currentContainer.Add(abstractItem);
-		}
-
-		/// <summary>
-		/// Get the MarkupData ID
-		/// </summary>
-		/// <param name="tagContent"></param>
-		/// <returns></returns>
-		private string GetTagID(string tagContent)
-		{
-			return tagContent.Replace("<", "").Replace(">", "").Replace("/", "");
-		}
-
-		/// <summary>
-		/// Get the required MarkupData from the original segment, if the tag doesn't exist in original target, source segment will be searched as well.
-		/// </summary>
-		/// <param name="tagId"></param>
-		/// <param name="originalTargetSegment"></param>
-		/// <param name="sourceSegment"></param>
-		/// <param name="tokenType"></param>
-		/// <returns></returns>
-		private IAbstractMarkupData GetElement(string tagId, ISegment originalTargetSegment, ISegment sourceSegment, Token.TokenType tokenType)
-		{
-			var extractor = new Visitors.ElementExtractor();
-			extractor.GetTag(tagId, originalTargetSegment, tokenType);
-			if (extractor.FoundElement != null)
-			{
-				return (IAbstractMarkupData)extractor.FoundElement.Clone();
-			}
-
-			//tag not found in original target, try to search in source
-			extractor.GetTag(tagId, sourceSegment, tokenType);
-			if (extractor.FoundElement != null)
-			{
-				return (IAbstractMarkupData)extractor.FoundElement.Clone();
-			}
-
-			if (tokenType == Token.TokenType.TagOpen || tokenType == Token.TokenType.TagClose || tokenType == Token.TokenType.TagPlaceholder)
-			{
-				throw new Exception("Tags in segment ID " + originalTargetSegment.Properties.Id.Id + " are corrupted!");
-			}
-			if (tokenType == Token.TokenType.LockedContent)
-			{
-				throw new Exception("Locked contents in segment ID " + originalTargetSegment.Properties.Id.Id + " are corrupted!");
-			}
-
-			throw new Exception("Problem when reading segment #" + originalTargetSegment.Properties.Id.Id);
-		}
 
 		private SegmentPairProcessor SegmentPairProcessor
 		{

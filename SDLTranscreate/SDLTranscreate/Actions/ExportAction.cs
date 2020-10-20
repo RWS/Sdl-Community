@@ -47,7 +47,7 @@ namespace Sdl.Community.Transcreate.Actions
 				return;
 			}
 
-			var action = selectedProject.IsBackTranslationProject
+			var action = selectedProject is BackTranslationProject
 				? Enumerators.Action.ExportBackTranslation
 				: Enumerators.Action.Export;
 
