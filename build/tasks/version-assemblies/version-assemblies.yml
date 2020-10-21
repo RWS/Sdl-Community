@@ -1,0 +1,13 @@
+parameters:
+  PathToVersion: '$(Build.SourcesDirectory)'
+  TasksFolder: './build/tasks'
+  InstallPathToVersion: '$(Build.SourcesDirectory)/'
+steps:
+
+- task: PowerShell@2
+  displayName: 'Overall Version Assemblies'
+  inputs:
+    pwsh: True
+    targetType: filePath
+    filePath: '${{ parameters.TasksFolder }}/version-assemblies/update-all-versions.ps1'
+    arguments: ' "${{ parameters.PathToVersion }}" "$(PipelineVersion)" "$(StudioProductIdentifier)" "${{ parameters.InstallPathToVersion }}"'

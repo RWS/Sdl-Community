@@ -21,7 +21,9 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			InitializeComponent();
 			_isTellMeAction = isTellMeAction;
 
-			var currentLanguagePairs = isTellMeAction ? options.LanguagesSupported.Keys.Select(key => new CultureInfo(key)).ToList() : languagePairs.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
+			var currentLanguagePairs = isTellMeAction
+				? options?.LanguagesSupported?.Keys.Select(key => new CultureInfo(key)).ToList()
+				: languagePairs?.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
 
 			NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs)
 				? Visibility.Collapsed
@@ -41,27 +43,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 				{
 					ApiKeyBox.Password = credentialStore.Credential;
 				}
-
-				GetSupportedTargetLanguages(languagePairs);
 			}
 		}
 
 		public DeepLTranslationOptions Options { get; set; }
-
-		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
-		{
-			foreach (var languagePair in languagePairs)
-			{
-				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
-				if (Helpers.IsSupportedLanguagePair(languagePair.SourceCulture.TwoLetterISOLanguageName.ToUpper(), languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper()) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
-				{
-					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
-					{
-						Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
-					}
-				}
-			}
-		}
 
 		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{

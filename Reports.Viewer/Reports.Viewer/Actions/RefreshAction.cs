@@ -1,5 +1,4 @@
-﻿using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions;
+﻿using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
@@ -11,20 +10,34 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		Icon = "Refresh"
 	)]
 	[ActionLayout(typeof(ReportsViewerViewGroups), 2, DisplayType.Large)]
-	public class RefreshAction : AbstractViewControllerAction<ReportsViewerController>
+	public class RefreshAction : BaseReportAction
 	{	
 		private ReportsViewerController _controller;
+		private bool _canEnable;
+		private bool _isLoading;
 
 		protected override void Execute()
 		{
-			_controller.RefreshView();
+			_controller.RefreshView(true);
+		}
+
+		public override void UpdateEnabled(bool loading)
+		{
+			_isLoading = loading;
+			SetEnabled();
 		}
 
 		public override void Initialize()
 		{
-			Enabled = false;
+			_canEnable = true;
+			_controller = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 
-			_controller = SdlTradosStudio.Application.GetController<ReportsViewerController>();			
+			SetEnabled();
+		}
+
+		private void SetEnabled()
+		{
+			Enabled = !_isLoading && _canEnable;
 		}
 	}
 }

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using log4net;
-
-//using Sdl.Utilities.BatchSearchReplace.Lib;
+using NLog;
 
 namespace SDLXLIFFSliceOrChange
 {
 	public static class ReplaceManager
 	{
-		private static ILog logger = LogManager.GetLogger(typeof(ReplaceManager));
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public static void DoReplaceInFile(string file, ReplaceSettings settings, SDLXLIFFSliceOrChange sdlxliffSliceOrChange)
 		{
@@ -20,117 +20,109 @@ namespace SDLXLIFFSliceOrChange
 			{
 				sdlxliffSliceOrChange.StepProcess("Replaceing in file: " + file + "...");
 
-				String fileContent = String.Empty;
-				using (StreamReader sr = new StreamReader(file))
+				string fileContent;
+				using (var sr = new StreamReader(file))
 				{
 					fileContent = sr.ReadToEnd();
 				}
 				fileContent = Regex.Replace(fileContent, "\t", "");
 
-				using (StreamWriter sw = new StreamWriter(file, false))
+				using (var sw = new StreamWriter(file, false))
 				{
 					sw.Write(fileContent);
 				}
 
-				XmlDocument xDoc = new XmlDocument();
-				xDoc.PreserveWhitespace = true;
+				var xDoc = new XmlDocument
+				{
+					PreserveWhitespace = true
+				};
 				xDoc.Load(file);
 
-				String xmlEncoding = "utf-8";
-				try
+				var xmlEncoding = "utf-8";
+				if (xDoc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
 				{
-					if (xDoc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
-					{
-						// Get the encoding declaration.
-						XmlDeclaration decl = (XmlDeclaration)xDoc.FirstChild;
-						xmlEncoding = decl.Encoding;
-					}
-				}
-				catch (Exception ex)
-				{
-					logger.Error(ex.Message, ex);
+					// Get the encoding declaration.
+					var decl = (XmlDeclaration)xDoc.FirstChild;
+					xmlEncoding = decl.Encoding;
 				}
 
-				XmlNodeList fileList = xDoc.DocumentElement.GetElementsByTagName("file");
-				foreach (XmlElement fileElement in fileList.OfType<XmlElement>())
+				var fileList = xDoc.DocumentElement?.GetElementsByTagName("file");
+				if (fileList != null)
 				{
-					XmlElement bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
-					XmlNodeList groupElements = bodyElement.GetElementsByTagName("group");
-
-					foreach (var groupElement in groupElements.OfType<XmlElement>())
-					{
-						//look in segments
-						XmlNodeList transUnits = ((XmlElement)groupElement).GetElementsByTagName("trans-unit");
-						foreach (XmlElement transUnit in transUnits.OfType<XmlElement>())
-						{
-							XmlNodeList source = transUnit.GetElementsByTagName("source");
-							if (source.Count > 0) //in mrk, g si innertext
-								ReplaceAllChildsValue((XmlElement)source[0], settings);
-							source = null;
-							XmlNodeList segSource = transUnit.GetElementsByTagName("seg-source");
-							if (segSource.Count > 0) //in mrk, g si innertext
-								ReplaceAllChildsValue((XmlElement)segSource[0], settings);
-							segSource = null;
-							XmlNodeList target = transUnit.GetElementsByTagName("target");
-							if (target.Count > 0) //in mrk, g si innertext
-								ReplaceAllChildsValue((XmlElement)target[0], settings, false);
-							target = null;
-						}
-					}
-
-					//look in segments not located in groups
-					XmlNodeList transUnitsInBody = bodyElement.ChildNodes;//.GetElementsByTagName("trans-unit");
-					foreach (XmlElement transUnit in transUnitsInBody.OfType<XmlElement>())
-					{
-						if (transUnit.Name != "trans-unit")
-							continue;
-						XmlNodeList source = transUnit.GetElementsByTagName("source");
-						if (source.Count > 0) //in mrk, g si innertext
-							ReplaceAllChildsValue((XmlElement)source[0], settings);
-						source = null;
-						XmlNodeList segSource = transUnit.GetElementsByTagName("seg-source");
-						if (segSource.Count > 0) //in mrk, g si innertext
-							ReplaceAllChildsValue((XmlElement)segSource[0], settings);
-						segSource = null;
-						XmlNodeList target = transUnit.GetElementsByTagName("target");
-						if (target.Count > 0) //in mrk, g si innertext
-							ReplaceAllChildsValue((XmlElement)target[0], settings, false);
-						target = null;
-					}
-
-					bodyElement = null;
-					groupElements = null;
-					transUnitsInBody = null;
+					ParseFileElements(fileList, settings);
 				}
+
 				Encoding encoding = new UTF8Encoding();
-				if (!String.IsNullOrEmpty(xmlEncoding))
+				if (!string.IsNullOrEmpty(xmlEncoding))
 					encoding = Encoding.GetEncoding(xmlEncoding);
 
 				using (var writer = new XmlTextWriter(file, encoding))
 				{
-					////writer.Formatting = Formatting.None;
 					xDoc.Save(writer);
 				}
 
-				fileContent = String.Empty;
-				using (StreamReader sr = new StreamReader(file))
+				using (var sr = new StreamReader(file))
 				{
 					fileContent = sr.ReadToEnd();
 				}
 				fileContent = Regex.Replace(fileContent, "", "\t");
 
-				using (StreamWriter sw = new StreamWriter(file, false))
+				using (var sw = new StreamWriter(file, false))
 				{
 					sw.Write(fileContent);
 				}
-
-				xDoc = null;
-				fileList = null;
 				sdlxliffSliceOrChange.StepProcess("All information replaced in file: " + file + ".");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message, ex);
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+			}
+		}
+
+		private static void ParseFileElements(XmlNodeList fileList, ReplaceSettings settings)
+		{
+			if (fileList != null)
+			{
+				foreach (var fileElement in fileList.OfType<XmlElement>())
+				{
+					var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
+					var groupElements = bodyElement.GetElementsByTagName("group");
+
+					foreach (var groupElement in groupElements.OfType<XmlElement>())
+					{
+						//look in segments
+						var transUnits = groupElement.GetElementsByTagName("trans-unit");
+						foreach (var transUnit in transUnits.OfType<XmlElement>())
+						{
+							var source = transUnit.GetElementsByTagName("source");
+							if (source.Count > 0) //in mrk, g si innertext
+								ReplaceAllChildsValue((XmlElement)source[0], settings);
+							var segSource = transUnit.GetElementsByTagName("seg-source");
+							if (segSource.Count > 0) //in mrk, g si innertext
+								ReplaceAllChildsValue((XmlElement)segSource[0], settings);
+							var target = transUnit.GetElementsByTagName("target");
+							if (target.Count > 0) //in mrk, g si innertext
+								ReplaceAllChildsValue((XmlElement)target[0], settings, false);
+						}
+					}
+
+					//look in segments not located in groups
+					var transUnitsInBody = bodyElement.ChildNodes;
+					foreach (var transUnit in transUnitsInBody.OfType<XmlElement>())
+					{
+						if (transUnit.Name != "trans-unit")
+							continue;
+						var source = transUnit.GetElementsByTagName("source");
+						if (source.Count > 0) //in mrk, g si innertext
+							ReplaceAllChildsValue((XmlElement)source[0], settings);
+						var segSource = transUnit.GetElementsByTagName("seg-source");
+						if (segSource.Count > 0) //in mrk, g si innertext
+							ReplaceAllChildsValue((XmlElement)segSource[0], settings);
+						var target = transUnit.GetElementsByTagName("target");
+						if (target.Count > 0) //in mrk, g si innertext
+							ReplaceAllChildsValue((XmlElement)target[0], settings, false);
+					}
+				}
 			}
 		}
 
@@ -140,9 +132,9 @@ namespace SDLXLIFFSliceOrChange
 
 			foreach (var innerChild in childNodes)
 			{
-				if (innerChild.Name == "mrk" && innerChild.HasAttribute("mtype"))
+				if (innerChild.Name.Equals("mrk") && innerChild.HasAttribute("mtype"))
 				{
-					ReplaceTheVaue(settings, inSource, innerChild);
+					ReplaceValue(settings, inSource, innerChild);
 				}
 				GetLastNode(settings, inSource, innerChild);
 			}
@@ -150,13 +142,13 @@ namespace SDLXLIFFSliceOrChange
 
 		private static void ReplaceAllChildsValue(XmlElement target, ReplaceSettings settings, bool inSource = true)
 		{
-			foreach (XmlElement child in target.ChildNodes.OfType<XmlElement>())
+			foreach (var child in target.ChildNodes.OfType<XmlElement>())
 			{
 				if (!child.IsEmpty)
 				{
-					if (child.Name == "mrk" && child.HasAttribute("mtype"))
+					if (child.Name.Equals("mrk") && child.HasAttribute("mtype"))
 					{
-						ReplaceTheVaue(settings, inSource, child);
+						ReplaceValue(settings, inSource, child);
 					}
 					else
 					{
@@ -165,46 +157,47 @@ namespace SDLXLIFFSliceOrChange
 				}
 			}
 		}
-		private static void ReplaceTheVaue(ReplaceSettings settings, bool inSource, XmlElement child)
+
+		private static void ReplaceValue(ReplaceSettings settings, bool inSource, XmlElement child)
 		{
 			var segmentHtml = child.InnerXml;
-
-			if (settings.UseRegEx)
+			if (!string.IsNullOrEmpty(segmentHtml))
 			{
-				var options = RegexOptions.None & RegexOptions.Multiline;
-
-				if (!settings.MatchCase)
-					options = RegexOptions.IgnoreCase & RegexOptions.Multiline;
-
-				if (segmentHtml != string.Empty)
+				if (settings.UseRegEx)
 				{
-					if (inSource && settings.SourceSearchText != string.Empty &&
-						settings.SourceReplaceText != string.Empty)
+					var options = !settings.MatchCase ? RegexOptions.IgnoreCase & RegexOptions.Multiline : RegexOptions.None & RegexOptions.Multiline;
+
+					if (!string.IsNullOrEmpty(segmentHtml))
 					{
-						var sourceRg = new Regex(settings.SourceSearchText, options);
-						var replacedText = sourceRg.Replace(segmentHtml, settings.SourceReplaceText);
-						child.InnerXml = replacedText;
-					}
-					if (!inSource && settings.TargetSearchText != string.Empty)
-					{
-						var targetRg = new Regex(settings.TargetSearchText, options);
-						var replacedText = targetRg.Replace(segmentHtml, settings.TargetReplaceText);
-						child.InnerXml = replacedText;
+						ReplaceRegexText(settings, options, segmentHtml, child, inSource);
 					}
 				}
-			}
-			else
-			{
-				if (segmentHtml != string.Empty)
+				else
 				{
 					var remove = Regex.Escape(inSource ? settings.SourceSearchText : settings.TargetSearchText);
-					var pattern = settings.MatchWholeWord
-											 ? string.Format(@"(\b(?<!\w){0}\b|(?<=^|\s){0}(?=\s|$))", remove)
-											 : remove;
+					var pattern = settings.MatchWholeWord ? string.Format(@"(\b(?<!\w){0}\b|(?<=^|\s){0}(?=\s|$))", remove) : remove;
 					var replace = inSource ? settings.SourceReplaceText : settings.TargetReplaceText;
-					child.InnerXml = Regex.Replace(segmentHtml, pattern, replace,
-														!settings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None);
+					child.InnerXml = Regex.Replace(segmentHtml, pattern, replace, !settings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None);
 				}
+			}
+		}
+
+		// Replace the text identified by Regex.
+		// SegmentHtml needs to be encoded, because the settings.SourceReplaceText/settings.TargetReplaceText is encoded
+		// and it should be the same for a correct replacement (ex: words which contains symbols)
+		private static void ReplaceRegexText(ReplaceSettings settings, RegexOptions options, string segmentHtml, XmlElement child, bool inSource)
+		{
+			if (inSource && !string.IsNullOrEmpty(settings.SourceSearchText) && !string.IsNullOrEmpty(settings.SourceReplaceText))
+			{
+				var sourceRg = new Regex(settings.SourceSearchText, options);
+				var replacedText = sourceRg.Replace(WebUtility.HtmlEncode(segmentHtml), settings.SourceReplaceText);
+				child.InnerXml = replacedText;
+			}
+			if (!inSource && !string.IsNullOrEmpty(settings.TargetSearchText))
+			{
+				var targetRg = new Regex(settings.TargetSearchText, options);
+				var replacedText = targetRg.Replace(WebUtility.HtmlEncode(segmentHtml), settings.TargetReplaceText);
+				child.InnerXml = replacedText;
 			}
 		}
 	}

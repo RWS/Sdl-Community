@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Xml;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
@@ -17,9 +19,20 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _pluginVersion = "";
 		private Formality _formality;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private List<string> _supportedTargetLanguages;
+		private List<string> _supportedSourceLanguages;
+		
+		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
+		{
+			var supportedSourceLanguage = GetLanguage(sourceCulture, SupportedSourceLanguages);
+			// do not make a call again to the server if source languages are not supported, because the return condition requires both source and target languages to be supported
+			var supportedTargetLanguage = !string.IsNullOrEmpty(supportedSourceLanguage) ? GetLanguage(targetCulture, SupportedTargetLanguages) : string.Empty;
+
+			return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
+		}
 
 		public DeepLTranslationProviderConnecter(string key, Formality formality)
 		{
@@ -52,12 +65,16 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string ApiKey { get; set; }
 
+		private List<string> SupportedTargetLanguages => _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
+
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
+
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			_formality = IsFormalityParameterCompatible(languageDirection) ? _formality : Formality.Default;
+			_formality = Helpers.IsLanguageCompatible(languageDirection.TargetCulture) ? _formality : Formality.Default;
 
-			var targetLanguage = GetTargetLanguage(languageDirection);
-			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
+			var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
+			var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
 			var translatedText = string.Empty;
 			var normalizeHelper = new NormalizeSourceTextHelper();
 
@@ -75,7 +92,9 @@ namespace Sdl.Community.DeepLMTProvider
 													$"&target_lang={targetLanguage}" +
 													$"&formality={_formality.ToString().ToLower()}" +
 													"&preserve_formatting=1" +
-													$"&tag_handling=xml&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+													"&tag_handling=xml" +
+													$"&auth_key={ApiKey}",
+						Encoding.UTF8, "application/x-www-form-urlencoded");
 
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
 
@@ -93,27 +112,20 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					else
 					{
-						_logger.Error($"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
-							$"Response content: {response.Content?.ReadAsStringAsync().Result}.");
-						MessageBox.Show(response.ReasonPhrase, string.Empty, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						var message =
+							$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+							$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
+						throw new HttpRequestException(message);
 					}
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				_logger.Error($"{e.Message}\n {e.StackTrace}");
+				_logger.Error($"{ex}");
+				throw;
 			}
 
 			return translatedText;
-		}
-
-		private static bool IsFormalityParameterCompatible(LanguagePair languageDirection)
-		{
-			var twoLetterIsoLanguageName = languageDirection.TargetCulture.TwoLetterISOLanguageName;
-			var isFormalityParameterCompatible = !(twoLetterIsoLanguageName == "ja" ||
-												 twoLetterIsoLanguageName == "es" ||
-												 twoLetterIsoLanguageName == "zh");
-			return isFormalityParameterCompatible;
 		}
 
 		private string DecodeWhenNeeded(string translatedText)
@@ -137,13 +149,56 @@ namespace Sdl.Community.DeepLMTProvider
 			return translatedText;
 		}
 
-		// Get the target language based on language direction
-		// (for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
-		private string GetTargetLanguage(LanguagePair languageDirection)
+		private List<string> GetSupportedLanguages(string type)
 		{
-			return languageDirection.TargetCulture.DisplayName.Contains("Portuguese")
-				? languageDirection.TargetCulture.Name
-				: languageDirection.TargetCulture.TwoLetterISOLanguageName;
+			try
+			{
+				using (var httpClient = new HttpClient())
+				{
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
+					httpClient.Timeout = TimeSpan.FromMinutes(5);
+					var content = new StringContent($"type={type}" + $"&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+
+					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {_pluginVersion}");
+
+					var response = httpClient.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+
+					if (response.IsSuccessStatusCode)
+					{
+						var languagesResponse = response.Content?.ReadAsStringAsync().Result;
+
+						return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
+					}
+					var message =
+						$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
+						$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
+					throw new HttpRequestException(message);
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{ex}");
+			}
+
+			return new List<string>();
+		}
+
+		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
+		// (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
+		private string GetLanguage(CultureInfo culture, List<string> languageList)
+		{
+			if (languageList != null && languageList.Any())
+			{
+				var leftLangTag = culture.IetfLanguageTag.ToUpperInvariant();
+				var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
+
+				var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == leftLangTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
+
+				return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
+			}
+
+			return string.Empty;
 		}
 	}
 }

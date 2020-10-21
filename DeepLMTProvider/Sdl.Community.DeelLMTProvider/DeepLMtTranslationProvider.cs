@@ -8,11 +8,18 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLMtTranslationProvider : ITranslationProvider
 	{
+		public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-
-		public DeepLMtTranslationProvider(DeepLTranslationOptions options)
+		
+		public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderConnecter deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
 		{
+			DeepLTranslationProviderConnecter = deepLTranslationProviderConnecter;
 			Options = options;
+
+			if (languagePairs != null)
+			{
+				GetSupportedTargetLanguages(languagePairs);
+			}
 		}
 
 		public bool IsReadOnly => true;
@@ -23,6 +30,21 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			get;
 			set;
+		}
+
+		private void GetSupportedTargetLanguages(LanguagePair[] languagePairs)
+		{
+			foreach (var languagePair in languagePairs)
+			{
+				var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
+				if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
+				{
+					if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+					{
+						Options.LanguagesSupported.Add(languagePair.TargetCultureName, "DeepLTranslator");
+					}
+				}
+			}
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "Deepl");
@@ -65,10 +87,18 @@ namespace Sdl.Community.DeepLMTProvider
 			return JsonConvert.SerializeObject(Options);
 		}
 
+		// Check if LanguageDirection is supported (if true, the provider is added in Studio)
+		// 'IsInvalidServerMessage' is used to check if any server error was returned in the first call, if yes, then is no need to make the second call to 
+		// the server to verify if language pairs are supported. (2 calls of SupportsLanguageDirection() are made because of twice instantiation of DeepLTranslationProviderConnecter. 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			return Helpers.IsSupportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(),
-				languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper());
+			
+			if (!Helpers.IsInvalidServerMessage)
+			{
+				return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+
+			return false;
 		}
 	}
 }

@@ -1,6 +1,14 @@
-﻿using System.Windows;
-using Sdl.Desktop.IntegrationApi;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Community.Reports.Viewer.Service;
+using Sdl.Community.Reports.Viewer.View;
+using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Reports.Viewer.API.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
 {
@@ -11,16 +19,79 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		Icon = "Edit"
 	)]
 	[ActionLayout(typeof(ReportsViewerReportGroups), 8, DisplayType.Normal)]
-	public class EditReportAction : AbstractViewControllerAction<ReportsViewerController>
-	{		
+	public class EditReportAction : BaseReportAction
+	{
+		private PathInfo _pathInfo;
+		private ImageService _imageService;
+		private ReportsViewerController _reportsViewerController;
+		private bool _canEnable;
+		private bool _isLoading;
+
 		protected override void Execute()
-		{		
-			MessageBox.Show("TODO");
+		{
+			var report = _reportsViewerController.GetSelectedReports().FirstOrDefault();
+			if (report == null)
+			{
+				return;
+			}
+
+			var reportTemplates = _reportsViewerController.ReportsController.GetCustomReportTemplates();
+			var reports = _reportsViewerController.GetReports();
+			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
+
+			var viewModel = new AppendReportViewModel(report.Clone() as Report, _imageService,
+				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, true);
+			var view = new AppendReportWindow(viewModel, null);
+			viewModel.Window = view;
+
+			var result = view.ShowDialog();
+			if (result != null && (bool)result)
+			{
+				_reportsViewerController.UpdateReports(new List<Report> {viewModel.Report});
+			}
+		}
+
+		public override void UpdateEnabled(bool loading)
+		{
+			_isLoading = loading;
+			SetEnabled();
 		}
 
 		public override void Initialize()
 		{
-			Enabled = false;
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
+			_reportsViewerController.ReportSelectionChanged += ReportsViewerController_ReportSelectionChanged;
+
+			SetEnabled();
+		}
+
+		public void Run()
+		{
+			Execute();
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
+		}
+
+		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
+		{
+			_canEnable = e.SelectedReports?.Count == 1;
+			SetEnabled();
+		}
+
+		private void SetEnabled()
+		{
+			Enabled = !_isLoading && _canEnable;
 		}
 	}
 }

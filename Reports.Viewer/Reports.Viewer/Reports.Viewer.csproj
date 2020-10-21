@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -50,6 +53,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\BaseReportAction.cs" />
     <Compile Include="Actions\PrintPreviewReportAction.cs" />
     <Compile Include="Actions\PageSetupAction.cs" />
     <Compile Include="Actions\PrintReportAction.cs" />
@@ -60,7 +64,9 @@
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="Actions\RefreshAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
+    <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
     <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
@@ -89,13 +95,13 @@
     <Compile Include="Converters\CultureInfoNameToImageConverter.cs" />
     <Compile Include="CustomEventArgs\ReportSelectionChangedEventArgs.cs" />
     <Compile Include="Model\GroupType.cs" />
+    <Compile Include="Model\LanguageGroup.cs" />
     <Compile Include="Model\LanguageItem.cs" />
-    <Compile Include="Model\PathInfo.cs" />
-    <Compile Include="Model\ProjectSettings\ReportsViewer.cs" />
-    <Compile Include="Model\Report.cs" />
     <Compile Include="Model\ReportGroup.cs" />
     <Compile Include="Model\GroupItem.cs" />
+    <Compile Include="Model\ReportTemplateScope.cs" />
     <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\ReportState.cs" />
     <Compile Include="ReportsViewerController.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -108,12 +114,15 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
-    <Compile Include="ViewModel\BrowserViewModel.cs" />
+    <Compile Include="ViewModel\AppendTemplateViewModel.cs" />
     <Compile Include="ViewModel\DataViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
     <Compile Include="ViewModel\AppendReportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\AppendTemplateWindow.xaml.cs">
+      <DependentUpon>AppendTemplateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DataView.xaml.cs">
       <DependentUpon>DataView.xaml</DependentUpon>
     </Compile>
@@ -134,6 +143,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Reports.Viewer.API">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Reports.Viewer.API.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
@@ -180,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\StudioReport.ico" />
     <Resource Include="Resources\Add.ico" />
     <Resource Include="Resources\Edit.ico" />
     <Resource Include="Resources\Delete.ico" />
@@ -188,7 +201,7 @@
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\Print.ico" />
     <Resource Include="Resources\PrintPreview.ico" />
-    <Content Include="Resources\Save.ico" />
+    <Resource Include="Resources\Save.ico" />
     <Resource Include="Resources\analytics.png" />
     <Resource Include="Resources\document.png" />
     <Resource Include="Resources\Edit-No-32.png" />
@@ -338,6 +351,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\AppendTemplateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\DataView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -363,6 +380,5 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

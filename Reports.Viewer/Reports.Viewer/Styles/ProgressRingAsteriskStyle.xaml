@@ -103,14 +103,25 @@
 									</Canvas>
 								</Canvas>
 							</Grid>
-							<!--<TextBlock x:Uid="TextBlock_1" Text="One moment" 
+							<TextBlock x:Uid="TextBlock_1" Text="Loading reports..." 
                                        HorizontalAlignment="Center"
-                                       Grid.Row="1"
-                                       Foreground="#636463"/>-->
-              
-              <!--<Grid.Background>
-                <SolidColorBrush Opacity="0.5" Color="White"/>
-              </Grid.Background>-->
+                                       Grid.Row="1"									  
+                                       Foreground="#636463">
+								<TextBlock.Style>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="Visibility" Value="Hidden"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Path=IsLoading}" Value="True">
+												<Setter Property="Visibility" Value="Visible"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+
+							<!--<Grid.Background>
+								<SolidColorBrush Opacity="0.5" Color="White"/>
+						  </Grid.Background>-->
 						</Grid>
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Uid="SizeStates" x:Name="SizeStates">

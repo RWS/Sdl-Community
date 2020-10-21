@@ -47,6 +47,10 @@
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
@@ -62,6 +66,9 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -80,11 +87,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="ApplicationInitializer.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="StyleSheetVeriferForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="StyleSheetVeriferForm.Designer.cs">
+      <DependentUpon>StyleSheetVeriferForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -93,8 +102,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StyleSheetVerifierRibonGroup.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="TellMe\StyleSheetVerifierCommunityAction.cs" />
+    <Compile Include="TellMe\StyleSheetVerifierProvider.cs" />
+    <Compile Include="TellMe\StyleSheetVerifierStoreAction.cs" />
+    <Compile Include="TellMe\StyleSheetVerifierWikiAction.cs" />
+    <EmbeddedResource Include="StyleSheetVeriferForm.resx">
+      <DependentUpon>StyleSheetVeriferForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -130,7 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
-    <None Include="Resources\question.ico" />
+    <None Include="Resources\Question.ico" />
+    <None Include="Resources\ForumIcon.ico" />
+    <None Include="Resources\Download.ico" />
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

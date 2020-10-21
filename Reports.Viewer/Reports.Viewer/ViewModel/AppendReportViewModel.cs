@@ -7,25 +7,20 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Newtonsoft.Json;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
-using Sdl.ProjectAutomation.FileBased;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Sdl.ProjectAutomation.Core;
+using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
 	public class AppendReportViewModel : INotifyPropertyChanged
-	{
-		private readonly Window _window;
-		private readonly Settings _settings;
-		private readonly PathInfo _pathInfo;
+	{		
 		private readonly ImageService _imageService;
-		private readonly DialogService _dialogService;
-		private readonly FileBasedProject _project;
+		private readonly IProject _project;
+		private readonly List<ReportTemplate> _reportTemplates;
 		private string _windowTitle;
 		private ICommand _saveCommand;
 		private ICommand _selectedItemsChangedCommand;
@@ -33,32 +28,33 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _browseFolderCommand;
 		private string _name;
 		private string _description;
-		private string _groupName;
+		private string _group;
 		private List<LanguageItem> _languageItems;
 		private List<LanguageItem> _selectedLanguageItems;
+		private List<string> _groupNames;
 		private DateTime _date;
 		private string _path;
 		private string _xslt;
+		private bool _isEditMode;
+		private bool _canEditProperties;
+		private bool _canEditXslt;
 
-
-		public AppendReportViewModel(Window window, Report report, Settings settings,
-			PathInfo pathInfo, ImageService imageService, FileBasedProject project)
-		{
-			_window = window;
+		public AppendReportViewModel(Report report,
+			ImageService imageService, IProject project,
+			List<string> groupNames, List<ReportTemplate> reportTemplates, bool isEditMode = false)
+		{			
 			Report = report;
-			_settings = settings;
-			_pathInfo = pathInfo;
 			_imageService = imageService;
 			_project = project;
+			_reportTemplates = reportTemplates;
+			GroupNames = groupNames;
 
-			WindowTitle = "Add Report to Project";
+			IsEditMode = isEditMode;
 
-			var projectInfo = _project.GetProjectInfo();
+			WindowTitle = IsEditMode ? PluginResources.WindowTitle_EditProjectReport : PluginResources.WindowTitle_AddProjectReport;
 
-			var allLanguages = new List<Language> { projectInfo.SourceLanguage };
-			allLanguages.AddRange(projectInfo.TargetLanguages);
-
-			LanguageItems = allLanguages
+			var projectInfo = _project.GetProjectInfo();			
+			LanguageItems = projectInfo.TargetLanguages
 				.Select(language => new LanguageItem
 				{
 					Name = language.DisplayName,
@@ -68,16 +64,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				.ToList();
 
 			SelectedLanguageItems = new List<LanguageItem> {
-				LanguageItems.FirstOrDefault(a=> a.CultureInfo.Name == Report.Language) };
+				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, Report.Language, 
+					                                 StringComparison.CurrentCultureIgnoreCase)==0) };
 
 			Date = Report.Date;
 			Name = Report.Name;
-			GroupName = Report.Group;
+			Group = Report.Group;
 			Description = Report.Description;
-			Path = Report.Path;
-			Xslt = Report.XsltPath;
+			Path = Report.Path ?? string.Empty;
+			Xslt = Report.XsltPath ?? string.Empty;			
 
-
+			CanEditProperties = !report.IsStudioReport;
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new CommandHandler(SaveChanges));
@@ -87,6 +84,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand ClearPathCommand => _clearPathCommand ?? (_clearPathCommand = new CommandHandler(ClearPath));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
+
+		public Window Window { get; set; }
 
 		public string WindowTitle
 		{
@@ -116,6 +115,51 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		public bool CanEditProperties
+		{
+			get => _canEditProperties;
+			set
+			{
+				if (_canEditProperties == value)
+				{
+					return;
+				}
+
+				_canEditProperties = value;
+				OnPropertyChanged(nameof(CanEditProperties));
+			}
+		}
+
+		public bool CanEditXslt
+		{
+			get => _canEditXslt;
+			set
+			{
+				if (_canEditXslt == value)
+				{
+					return;
+				}
+
+				_canEditXslt = value;
+				OnPropertyChanged(nameof(CanEditXslt));
+			}
+		}
+
+		public bool IsEditMode
+		{
+			get => _isEditMode;
+			set
+			{
+				if (_isEditMode == value)
+				{
+					return;
+				}
+
+				_isEditMode = value;
+				OnPropertyChanged(nameof(IsEditMode));
+			}
+		}
+
 		public string Description
 		{
 			get => _description;
@@ -132,19 +176,20 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		public string GroupName
+		public string Group
 		{
-			get => _groupName;
+			get => _group;
 			set
 			{
-				if (_groupName == value)
+				if (_group == value)
 				{
 					return;
 				}
 
-				_groupName = value;
-				OnPropertyChanged(nameof(GroupName));
-				OnPropertyChanged(nameof(IsValid));
+				_group = value;
+				ValidateReportTemplate();
+				OnPropertyChanged(nameof(Group));
+				OnPropertyChanged(nameof(IsValid));				
 			}
 		}
 
@@ -165,6 +210,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				_selectedLanguageItems = value;
 				OnPropertyChanged(nameof(SelectedLanguageItems));
+			}
+		}
+
+		public List<string> GroupNames
+		{
+			get => _groupNames;
+			set
+			{
+				_groupNames = value;
+				OnPropertyChanged(nameof(GroupNames));
 			}
 		}
 
@@ -196,16 +251,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_path = value;
 				OnPropertyChanged(nameof(Path));
 
-
-				if (File.Exists(Path) && string.IsNullOrEmpty(Name))
+				if (File.Exists(_path) && string.IsNullOrEmpty(Name))
 				{
-					Name = System.IO.Path.GetFileName(Path);
+					Name = System.IO.Path.GetFileName(_path);
 					while (!string.IsNullOrEmpty(System.IO.Path.GetExtension(Name)))
 					{
 						Name = Name?.Substring(0, Name.Length - System.IO.Path.GetExtension(Name).Length);
 					}
 				}
 
+				ValidateReportTemplate();
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
@@ -220,7 +275,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					return;
 				}
 
-				_xslt = value;
+				_xslt = value ?? "";
 				OnPropertyChanged(nameof(Xslt));
 				OnPropertyChanged(nameof(IsValid));
 			}
@@ -230,19 +285,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(Path) || !File.Exists(Path))
+				if (!IsEditMode)
 				{
-					return false;
-				}
+					if (string.IsNullOrEmpty(Path) || !File.Exists(Path))
+					{
+						return false;
+					}
 
-				if (!string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
-				{
-					return false;
-				}
-
-				if (string.IsNullOrEmpty(GroupName))
-				{
-					return false;
+					if (!string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
+					{
+						return false;
+					}
 				}
 
 				if (string.IsNullOrEmpty(Name))
@@ -254,20 +307,25 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		private void ValidateReportTemplate()
+		{
+			CanEditXslt = _path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml");
+			OnPropertyChanged(nameof(IsValid));
+		}			
+
 		private void SaveChanges(object parameter)
 		{
 			if (IsValid)
 			{
 				Report.Name = Name;
-				Report.Date = Date;
-				Report.Group = GroupName;
+				Report.Group = Group;
 				Report.Description = Description;
 				Report.Path = Path;
 				Report.XsltPath = Xslt;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
-				_window.DialogResult = true;
-				_window?.Close();
+				Window.DialogResult = true;
+				Window?.Close();
 			}
 		}
 
@@ -276,6 +334,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			if (parameter is SelectedItemsChangedEventArgs)
 			{
 				OnPropertyChanged(nameof(SelectedLanguageItems));
+				ValidateReportTemplate();
 			}
 		}
 
@@ -293,20 +352,40 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void BrowseFolder(object parameter)
 		{
-			var fileType = parameter.ToString() == "path" ? "HTML" : "XSLT";
+			var fileType = parameter.ToString() == "path" ? "report" : "xslt template";
 
-			var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			var openFileDialog = new OpenFileDialog();
 			openFileDialog.Multiselect = false;
-			openFileDialog.Title = string.Format("Select the {0} file", fileType);
-			openFileDialog.InitialDirectory = _project.GetProjectInfo().LocalProjectFolder;
-			openFileDialog.Filter = fileType == "HTML"
-				? "HTML files(*.html;*.htm)| *.html;*.htm"
+			openFileDialog.Title = string.Format(PluginResources.WindowTitle_SelectReportFile, fileType);
+
+			if (fileType == "report")
+			{
+				openFileDialog.InitialDirectory = !string.IsNullOrEmpty(Path) ? GetValidFolderPath(Path) : _project.GetProjectInfo().LocalProjectFolder;
+			}
+			else
+			{
+				if (!string.IsNullOrEmpty(Xslt))
+				{
+					openFileDialog.InitialDirectory = GetValidFolderPath(Xslt);
+				}
+				else if (!string.IsNullOrEmpty(Path))
+				{
+					openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Path);
+				}
+				else
+				{
+					openFileDialog.InitialDirectory = _project.GetProjectInfo().LocalProjectFolder;
+				}
+			}
+
+			openFileDialog.Filter = fileType == "report"
+				? "All supported files (*.html;*.htm;*.xml)|*.html;*.htm;*.xml|HTML files(*.html;*.htm)|*.html;*.htm|XML files(*.xml)|*.xml"
 				: "XSLT files(*.xslt)| *.xslt;*.xsl";
 
 			var result = openFileDialog.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				if (fileType == "HTML")
+				if (fileType == "report")
 				{
 					Path = openFileDialog.FileName;
 				}

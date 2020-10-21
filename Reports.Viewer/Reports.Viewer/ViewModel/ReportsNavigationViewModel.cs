@@ -1,50 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
+using Sdl.Community.Reports.Viewer.View;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
 	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
 	{
-		private readonly ProjectsController _projectsController;
 		private readonly PathInfo _pathInfo;
 		private List<Report> _reports;
 		private string _filterString;
 		private List<Report> _filteredReports;
 		private Report _selectedReport;
 		private bool _isReportSelected;
-		private List<ReportGroup> _reportGroups;
+		private ObservableCollection<ReportGroup> _reportGroups;
 		private GroupType _groupType;
 		private List<GroupType> _groupTypes;
+		private string _projectLocalFolder;
+		private bool _isLoading;
+		private List<ReportState> _previousReportStates;
 		private ICommand _expandAllCommand;
 		private ICommand _collapseAllCommand;
 		private ICommand _clearFilterCommand;
 		private ICommand _selectedItemChangedCommand;
+		private ICommand _dragDropCommand;
+		private ICommand _editReportCommand;
+		private ICommand _removeReportCommand;
+		private ICommand _openFolderCommand;
+		private ICommand _printReportCommand;
+		private ICommand _printPreviewCommand;
+		private ICommand _pageSetupCommand;
+		private ICommand _saveAsCommand;
+		private ICommand _mouseDoubleClick;
 
-		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo, ProjectsController projectsController)
+		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
 		{
 			_reports = reports;
+			_filteredReports = _reports;
+
 			Settings = settings;
 			_pathInfo = pathInfo;
-			_projectsController = projectsController;
+			_filterString = string.Empty;
 
-			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
+			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
-			FilteredReports = _reports;
-			FilterString = string.Empty;
+			Task.Run(() => ApplyFilter(true));
 		}
 
-		public EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
+		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
 		public ICommand ExpandAllCommand => _expandAllCommand ?? (_expandAllCommand = new CommandHandler(ExpandAll));
 
@@ -54,21 +71,135 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ?? (_selectedItemChangedCommand = new CommandHandler(SelectedItemChanged));
 
+		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
+
+		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
+
+		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
+
+		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
+
+		public ICommand PrintReportCommand => _printReportCommand ?? (_printReportCommand = new CommandHandler(PrintReport));
+
+		public ICommand PrintPreviewCommand => _printPreviewCommand ?? (_printPreviewCommand = new CommandHandler(PrintPreview));
+
+		public ICommand PageSetupCommand => _pageSetupCommand ?? (_pageSetupCommand = new CommandHandler(PageSetup));
+
+		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
+
+		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
+
+		public ReportsNavigationView ReportsNavigationView { get; set; }
+
+		public void AddReports(List<Report> reports)
+		{
+			foreach (var report in reports)
+			{
+				if (!_reports.Exists(a => a.Id == report.Id))
+				{
+					_reports.Add(report);
+				}
+			}
+
+			Task.Run(() => ApplyFilter(false));
+		}
+
+		public void UpdateReports(List<Report> reports)
+		{
+			foreach (var updatedReport in reports)
+			{
+				var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
+				if (report == null)
+				{
+					continue;
+				}
+
+				report.Path = updatedReport.Path;
+				report.XsltPath = updatedReport.XsltPath;
+				report.Name = updatedReport.Name;
+				report.Description = updatedReport.Description;
+				report.Language = updatedReport.Language;
+				report.Group = updatedReport.Group;
+			}
+
+			Task.Run(() => ApplyFilter(false));
+		}
+
+		public void DeleteReports(List<Report> reports)
+		{
+			foreach (var report in reports)
+			{
+				_reports.RemoveAll(a => a.Id == report.Id);
+			}
+
+			Task.Run(() => ApplyFilter(false));
+		}
+
+		public void RefreshView(Settings settings, List<Report> reports)
+		{
+			Settings = settings;
+			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
+			OnPropertyChanged(nameof(GroupType));
+
+			_reports = reports;
+
+			Task.Run(() => ApplyFilter(true));
+		}
+
+		public void ClearReports()
+		{
+			_previousReportStates = _reportGroups?.Count > 0 ? GetReportStates(_reportGroups) : _previousReportStates;
+			_reports = new List<Report>();
+			_reportGroups?.Clear();
+			OnPropertyChanged(nameof(ReportGroups));
+		}
+
 		public Settings Settings { get; set; }
 
 		public ReportViewModel ReportViewModel { get; internal set; }
 
+		public bool IsLoading
+		{
+			get => _isLoading;
+			set
+			{
+				if (_isLoading == value)
+				{
+					return;
+				}
+
+				_isLoading = value;
+				OnPropertyChanged(nameof(IsLoading));
+			}
+		}
+
+		public string ProjectLocalFolder
+		{
+			get => _projectLocalFolder;
+			set
+			{
+				if (_projectLocalFolder == value)
+				{
+					return;
+				}
+
+				_projectLocalFolder = value;
+				OnPropertyChanged(nameof(ProjectLocalFolder));
+
+				if (ReportViewModel != null)
+				{
+					ReportViewModel.ProjectLocalFolder = ProjectLocalFolder;
+				}
+			}
+		}
+
 		public List<Report> Reports
 		{
 			get => _reports;
-			set
+			private set
 			{
 				_reports = value;
-
 				OnPropertyChanged(nameof(Reports));
-
-				FilterString = string.Empty;
-				FilteredReports = _reports;
 			}
 		}
 
@@ -85,51 +216,33 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_filterString = value;
 				OnPropertyChanged(nameof(FilterString));
 
-				FilteredReports = string.IsNullOrEmpty(_filterString)
-					? _reports
-					: _reports.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
+				Task.Run(() => ApplyFilter(false));
 			}
 		}
 
-		public List<Report> FilteredReports
+		private async void ApplyFilter(bool expandAll)
 		{
-			get => _filteredReports;
-			set
-			{
-				_filteredReports = value;
-				OnPropertyChanged(nameof(FilteredReports));
+			_filteredReports = string.IsNullOrEmpty(_filterString)
+				? _reports
+				: _reports.Where(a => a.Name.ToLower().Contains(_filterString.ToLower())).ToList();
 
-				if (_filteredReports?.Count > 0 && !_filteredReports.Contains(SelectedReport))
-				{
-					SelectedReport = _filteredReports[0];
-				}
-				else if (_filteredReports?.Count == 0)
-				{
-					SelectedReport = null;
-				}
+		
+			var reportGroups = expandAll ? ExpandAll(await BuildReportGroup()) : await BuildReportGroup();
+			_reportGroups = new ObservableCollection<ReportGroup>(reportGroups);
 
-				var reportGroups = BuildReportGroup();
-				ReportGroups = ExpandAll(reportGroups);
 
-				OnPropertyChanged(nameof(StatusLabel));
-			}
+			OnPropertyChanged(nameof(ReportGroups));
+			OnPropertyChanged(nameof(StatusLabel));
 		}
 
-		public List<ReportGroup> ReportGroups
+		public ObservableCollection<ReportGroup> ReportGroups
 		{
 			get => _reportGroups;
-			set
+			private set
 			{
 				_reportGroups = value;
 				OnPropertyChanged(nameof(ReportGroups));
 			}
-		}
-
-		public void Refresh(Settings settings)
-		{
-			Settings = settings;
-			GroupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
-			ReportGroups = BuildReportGroup();
 		}
 
 		public Report SelectedReport
@@ -140,10 +253,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_selectedReport = value;
 				OnPropertyChanged(nameof(SelectedReport));
 
-				if (_selectedReport != null)
+				ReportViewModel?.UpdateReport(_selectedReport);
+
+				ReportSelectionChanged?.Invoke(this, new ReportSelectionChangedEventArgs
 				{
-					ReportViewModel?.UpdateReport(_selectedReport.Path ?? string.Empty);
-				}
+					SelectedReport = _selectedReport,
+					SelectedReports = _selectedReport != null ? new List<Report> { _selectedReport } : null
+				});
 
 				IsReportSelected = _selectedReport != null;
 			}
@@ -160,11 +276,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 
 				_groupType = value;
+
 				OnPropertyChanged(nameof(GroupType));
 
-				ReportGroups = BuildReportGroup();
-
 				UpdateSettings();
+				Task.Run(() => ApplyFilter(true));
 			}
 		}
 
@@ -176,12 +292,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				{
 					new GroupType
 					{
-						Name = "Group Name",
+						Name = PluginResources.GroupType_GroupName,
 						Type = "Group"
 					},
 					new GroupType
 					{
-						Name = "Language",
+						Name = PluginResources.GroupType_Language,
 						Type = "Language"
 					},
 				});
@@ -189,7 +305,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			set
 			{
 				_groupTypes = value;
-				OnPropertyChanged(nameof(GroupType));
+				OnPropertyChanged(nameof(GroupTypes));
 			}
 		}
 
@@ -218,109 +334,156 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		private List<ReportGroup> BuildReportGroup()
+		public object SelectedItem { get; set; }
+
+		public string GetSelectedLanguage()
+		{
+			if (SelectedItem is Report report)
+			{
+				return report.Language;
+			}
+
+			if (SelectedItem is GroupItem groupItem)
+			{
+				return groupItem.Reports?.FirstOrDefault()?.Language;
+			}
+
+			if (SelectedItem is ReportGroup reportGroup)
+			{
+				return reportGroup.GroupItems.FirstOrDefault()?.Reports?.FirstOrDefault()?.Language;
+			}
+
+			return string.Empty;
+		}
+
+		public string GetSelectedGroup()
+		{
+			if (SelectedItem is Report report)
+			{
+				return report.Group;
+			}
+
+			if (SelectedItem is GroupItem groupItem)
+			{
+				return groupItem.Reports?.FirstOrDefault()?.Group;
+			}
+
+			if (SelectedItem is ReportGroup reportGroup)
+			{
+				return reportGroup.GroupItems.FirstOrDefault()?.Reports?.FirstOrDefault()?.Group;
+			}
+
+			return string.Empty;
+		}
+
+		private async Task<List<ReportGroup>> BuildReportGroup()
 		{
 			var reportGroups = new List<ReportGroup>();
-			if (FilteredReports == null)
+			if (_filteredReports == null)
 			{
 				return reportGroups;
 			}
 
-			var orderedReports = GroupType.Type == "Group" 
-				? FilteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
-				: FilteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
+			_previousReportStates = _reportGroups?.Count > 0 ? GetReportStates(_reportGroups) : _previousReportStates;
+
+			var orderedReports = _groupType.Type == "Group"
+				? _filteredReports.OrderBy(a => a.Group).ThenBy(a => a.Language).ThenByDescending(a => a.Date).ToList()
+				: _filteredReports.OrderBy(a => a.Language).ThenBy(a => a.Group).ThenByDescending(a => a.Date).ToList();
 
 			foreach (var report in orderedReports)
 			{
-				if (GroupType.Type == "Group")
+				var reportGroup = reportGroups.FirstOrDefault(a =>
+					string.Compare(a.Name, (_groupType.Type == "Group" ? report.Group : report.Language), StringComparison.CurrentCultureIgnoreCase) == 0);
+				if (reportGroup != null)
 				{
-					var reportGroup = reportGroups.FirstOrDefault(a => a.Name == report.Group);
-					if (reportGroup != null)
+					var groupItem = reportGroup.GroupItems.FirstOrDefault(a =>
+						string.Compare(a.Name, (_groupType.Type == "Group" ? report.Language : report.Group), StringComparison.CurrentCultureIgnoreCase) == 0);
+					if (groupItem != null)
 					{
-						var groupItem = reportGroup.GroupItems.FirstOrDefault(a => a.Name == report.Language);
-						if (groupItem != null)
+						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, report.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+						if (reportState != null)
 						{
-							groupItem.Reports.Add(report);
-							UpdateIsExpanded(report, groupItem, reportGroup);
+							report.IsSelected = reportState.IsSelected;
 						}
-						else
-						{
-							groupItem = new GroupItem
-							{
-								Name = report.Language,
-								Reports = new List<Report> { report }
-							};
 
-							reportGroup.GroupItems.Add(groupItem);
-
-							UpdateIsExpanded(report, groupItem, reportGroup);
-						}
+						groupItem.Reports.Add(report);
+						UpdateReportParentState(report, groupItem, reportGroup);
 					}
 					else
 					{
-						// new
-						var groupItem = new GroupItem
+						groupItem = new GroupItem
 						{
-							Name = report.Language,
+							Name = (_groupType.Type == "Group" ? report.Language : report.Group),
 							Reports = new List<Report> { report }
 						};
+						var groupItemState = _previousReportStates?.FirstOrDefault(a =>
+							string.Compare(a.Id, reportGroup.Name + "-" + groupItem.Name, StringComparison.CurrentCultureIgnoreCase) == 0);
+						if (groupItemState != null)
+						{
+							groupItem.IsExpanded = groupItemState.IsExpanded;
+							groupItem.IsSelected = groupItemState.IsSelected;
+						}
 
-						reportGroup = new ReportGroup();
-						reportGroup.Name = report.Group;
 						reportGroup.GroupItems.Add(groupItem);
-						reportGroups.Add(reportGroup);
+						foreach (var itemReport in groupItem.Reports)
+						{
+							var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+							if (reportState != null)
+							{
+								itemReport.IsSelected = reportState.IsSelected;
+							}
 
-						UpdateIsExpanded(report, groupItem, reportGroup);
+							UpdateReportParentState(itemReport, groupItem, reportGroup);
+						}
 					}
 				}
 				else
 				{
-					var reportGroup = reportGroups.FirstOrDefault(a => a.Name == report.Language);
-					if (reportGroup != null)
+					reportGroup = new ReportGroup
 					{
-						var groupItem = reportGroup.GroupItems.FirstOrDefault(a => a.Name == report.Group);
-						if (groupItem != null)
-						{
-							groupItem.Reports.Add(report);
-
-							UpdateIsExpanded(report, groupItem, reportGroup);
-						}
-						else
-						{
-							groupItem = new GroupItem
-							{
-								Name = report.Group,
-								Reports = new List<Report> { report }
-							};
-
-							reportGroup.GroupItems.Add(groupItem);
-
-							UpdateIsExpanded(report, groupItem, reportGroup);
-						}
+						Name = (_groupType.Type == "Group" ? report.Group : report.Language)
+					};
+					var reportGroupState = _previousReportStates?.FirstOrDefault(a =>
+						string.Compare(a.Id, reportGroup.Name, StringComparison.CurrentCultureIgnoreCase) == 0);
+					if (reportGroupState != null)
+					{
+						reportGroup.IsExpanded = reportGroupState.IsExpanded;
+						reportGroup.IsSelected = reportGroupState.IsSelected;
 					}
-					else
+
+					var groupItem = new GroupItem
 					{
-						// new
-						var groupItem = new GroupItem
+						Name = (_groupType.Type == "Group" ? report.Language : report.Group),
+						Reports = new List<Report> { report }
+					};
+					var groupItemState = _previousReportStates?.FirstOrDefault(a =>
+						string.Compare(a.Id, reportGroup.Name + "-" + groupItem.Name, StringComparison.CurrentCultureIgnoreCase) == 0);
+					if (groupItemState != null)
+					{
+						groupItem.IsExpanded = groupItemState.IsExpanded;
+						groupItem.IsSelected = groupItemState.IsSelected;
+					}
+
+					reportGroup.GroupItems.Add(groupItem);
+					reportGroups.Add(reportGroup);
+
+					foreach (var itemReport in groupItem.Reports)
+					{
+						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+						if (reportState != null)
 						{
-							Name = report.Group,
-							Reports = new List<Report> { report }
-						};
+							itemReport.IsSelected = reportState.IsSelected;
+						}
 
-						reportGroup = new ReportGroup();
-						reportGroup.Name = report.Language;
-						reportGroup.GroupItems.Add(groupItem);
-						reportGroups.Add(reportGroup);
-
-						UpdateIsExpanded(report, groupItem, reportGroup);
+						UpdateReportParentState(itemReport, groupItem, reportGroup);
 					}
 				}
 			}
 
-			return reportGroups;
+			return await Task.FromResult(reportGroups);
 		}
 
-		private static void UpdateIsExpanded(Report report, GroupItem groupItem, ReportGroup reportGroup)
+		private static void UpdateReportParentState(Report report, GroupItem groupItem, ReportGroup reportGroup)
 		{
 			if (report.IsSelected)
 			{
@@ -329,11 +492,59 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		private List<ReportState> GetReportStates(IEnumerable<ReportGroup> reportGroups)
+		{
+			var reportStates = new List<ReportState>();
+			if (reportGroups == null)
+			{
+				return reportStates;
+			}
+
+			foreach (var reportGroup in reportGroups)
+			{
+				if (!reportStates.Exists(a => string.Compare(a.Id, reportGroup.Name, StringComparison.CurrentCultureIgnoreCase) == 0))
+				{
+					reportStates.Add(new ReportState
+					{
+						Id = reportGroup.Name,
+						IsSelected = reportGroup.IsSelected,
+						IsExpanded = reportGroup.IsExpanded
+					});
+				}
+
+				foreach (var groupItem in reportGroup.GroupItems)
+				{
+					if (!reportStates.Exists(a => string.Compare(a.Id, reportGroup.Name + "-" + groupItem.Name, StringComparison.CurrentCultureIgnoreCase) == 0))
+					{
+						reportStates.Add(new ReportState
+						{
+							Id = reportGroup.Name + "-" + groupItem.Name,
+							IsSelected = groupItem.IsSelected,
+							IsExpanded = groupItem.IsExpanded
+						});
+					}
+
+					foreach (var report in groupItem.Reports)
+					{
+						if (!reportStates.Exists(a => a.Id == report.Id))
+						{
+							reportStates.Add(new ReportState
+							{
+								Id = report.Id,
+								IsSelected = report.IsSelected
+							});
+						}
+					}
+				}
+			}
+
+			return reportStates;
+		}
+
 		private void ExpandAll(object parameter)
 		{
-			var reportGroups = ExpandAll(BuildReportGroup());
-
-			ReportGroups = reportGroups;
+			_reportGroups = new ObservableCollection<ReportGroup>(ExpandAll(BuildReportGroup().Result));
+			OnPropertyChanged(nameof(ReportGroups));
 		}
 
 		private List<ReportGroup> ExpandAll(List<ReportGroup> reportGroups)
@@ -352,8 +563,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void CollapseAll(object parameter)
 		{
-			var reportGroups = CollapseAll(BuildReportGroup());
-			ReportGroups = reportGroups;
+			_reportGroups = new ObservableCollection<ReportGroup>(CollapseAll(BuildReportGroup().Result));
+			OnPropertyChanged(nameof(ReportGroups));
 		}
 
 		private List<ReportGroup> CollapseAll(List<ReportGroup> reportGroups)
@@ -374,12 +585,19 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			return reportGroups;
 		}
 
+		private void UpdateSettings()
+		{
+			if (Settings.GroupByType != _groupType.Type)
+			{
+				Settings.GroupByType = _groupType.Type;
+				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
+			}
+		}
+
 		private void ClearFilter(object parameter)
 		{
 			FilterString = string.Empty;
 		}
-
-		public object SelectedItem { get; set; }
 
 		private void SelectedItemChanged(object parameter)
 		{
@@ -406,12 +624,102 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
-		private void UpdateSettings()
+		private void EditReport(object parameter)
 		{
-			if (Settings.GroupByType != GroupType.Type)
+			var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			action.Run();
+		}
+
+		private void RemoveReport(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
+			action.Run();
+		}
+
+		private void OpenFolder(object parameter)
+		{
+			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
+				|| !Directory.Exists(ProjectLocalFolder))
 			{
-				Settings.GroupByType = GroupType.Type;
-				File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(Settings));
+				return;
+			}
+
+			var path = Path.Combine(ProjectLocalFolder, SelectedReport.Path.Trim('\\'));
+
+			if (File.Exists(path))
+			{
+				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
+			}
+		}
+
+		private void PrintReport(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PrintReportAction>();
+			action.Run();
+		}
+
+		private void PrintPreview(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			action.Run();
+		}
+
+		private void PageSetup(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			action.Run();
+		}
+
+		private void SaveAs(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
+			action.Run();
+		}
+
+		private void DragDrop(object parameter)
+		{
+			var report = new Report();
+
+			if (parameter == null || !(parameter is DragEventArgs eventArgs))
+			{
+				return;
+			}
+
+			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+			if (fileDrop is string[] files && files.Length > 0 && files.Length <= 2)
+			{
+				foreach (var fullPath in files)
+				{
+					var fileAttributes = File.GetAttributes(fullPath);
+					if (!fileAttributes.HasFlag(FileAttributes.Directory))
+					{
+						if (string.IsNullOrEmpty(report.XsltPath) &&
+							(fullPath.ToLower().EndsWith(".xslt")
+							 || fullPath.ToLower().EndsWith(".xsl")))
+						{
+							report.XsltPath = fullPath;
+						}
+						if (string.IsNullOrEmpty(report.Path) &&
+							(fullPath.ToLower().EndsWith(".html")
+							 || fullPath.ToLower().EndsWith(".htm")
+							 || fullPath.ToLower().EndsWith(".xml")))
+						{
+							report.Path = fullPath;
+						}
+					}
+				}
+			}
+
+			var action = SdlTradosStudio.Application.GetAction<AddReportAction>();
+			action.Run(report);
+		}
+
+		private void MouseDoubleClick(object parameter)
+		{
+			if (SelectedReport != null)
+			{
+				var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
+				action.Run();
 			}
 		}
 
@@ -424,6 +732,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		protected virtual void OnReportSelectionChanged(ReportSelectionChangedEventArgs e)
+		{
+			ReportSelectionChanged?.Invoke(this, e);
 		}
 	}
 }

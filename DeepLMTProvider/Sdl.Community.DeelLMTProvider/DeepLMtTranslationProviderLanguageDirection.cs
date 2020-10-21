@@ -18,7 +18,6 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly LanguagePair _languageDirection;
 		private readonly DeepLTranslationOptions _options;
-		private DeepLTranslationProviderConnecter _deeplConnect;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
@@ -26,8 +25,6 @@ namespace Sdl.Community.DeepLMTProvider
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
-
-			
 		}
 
 		public bool CanReverseLanguageDirection => throw new NotImplementedException();
@@ -74,7 +71,7 @@ namespace Sdl.Community.DeepLMTProvider
 				if (newseg.HasTags && !_options.SendPlainText)
 				{
 					var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-					var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+					var translatedText = LookupDeepL(tagPlacer.PreparedSourceText);
 					if (!string.IsNullOrEmpty(translatedText))
 					{
 						translation = tagPlacer.GetTaggedSegment(translatedText);
@@ -87,7 +84,7 @@ namespace Sdl.Community.DeepLMTProvider
 				{
 					var sourcetext = newseg.ToPlain();
 
-					var translatedText = LookupDeepl(sourcetext);
+					var translatedText = LookupDeepL(sourcetext);
 					if (!string.IsNullOrEmpty(translatedText))
 					{
 						translation.Add(translatedText);
@@ -100,6 +97,7 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception e)
 			{
 				_logger.Error($"SearchSegment method: {e.Message}\n {e.StackTrace}");
+				throw;
 			}
 			return results;
 		}
@@ -282,49 +280,39 @@ namespace Sdl.Community.DeepLMTProvider
 			return resultsList;
 		}
 
-		private string LookupDeepl(string sourcetext)
+		private string LookupDeepL(string sourceText)
 		{
-			if (_deeplConnect == null)
-			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Formality);
-			}
-			else
-			{
-				_deeplConnect.ApiKey = _options.ApiKey;
-			}
-
-			var translatedText = _deeplConnect.Translate(_languageDirection, sourcetext);
-			return translatedText;
+			return _deepLMtTranslationProvider.DeepLTranslationProviderConnecter.Translate(_languageDirection, sourceText);
 		}
 
-		private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslatesegments)
+		private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
 		{
 			try
 			{
-				for (var i = 0; i < preTranslatesegments.Count; i++)
+				for (var i = 0; i < preTranslateSegments.Count; i++)
 				{
-					if (preTranslatesegments[i] != null)
+					if (preTranslateSegments[i] != null)
 					{
 						string sourceText;
-						var newseg = preTranslatesegments[i].TranslationUnit.SourceSegment.Duplicate();
+						var newSeg = preTranslateSegments[i].TranslationUnit.SourceSegment.Duplicate();
 
-						if (newseg.HasTags)
+						if (newSeg.HasTags)
 						{
-							var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+							var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
 							sourceText = tagPlacer.PreparedSourceText;
 						}
 						else
 						{
-							sourceText = newseg.ToPlain();
+							sourceText = newSeg.ToPlain();
 						}
 
-						preTranslatesegments[i].SourceText = sourceText;
+						preTranslateSegments[i].SourceText = sourceText;
 					}
 				}
 
 				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Formality);
 
-				await Task.Run(() => Parallel.ForEach(preTranslatesegments, segment =>
+				await Task.Run(() => Parallel.ForEach(preTranslateSegments, segment =>
 				{
 					if (segment != null)
 					{
@@ -332,13 +320,19 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				})).ConfigureAwait(true);
 
-				return preTranslatesegments;
+				return preTranslateSegments;
 			}
 			catch (Exception e)
 			{
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
-			return preTranslatesegments;
+
+			preTranslateSegments.ForEach(seg =>
+			{
+				if (seg.PlainTranslation == null)
+					seg.PlainTranslation = string.Empty;
+			});
+			return preTranslateSegments;
 		}
 	}
 }

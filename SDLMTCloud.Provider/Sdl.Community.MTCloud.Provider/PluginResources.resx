@@ -331,4 +331,70 @@
   <data name="RateIt_Option_DisabledMessage" xml:space="preserve">
     <value>Enable "Send feedback option" from Settings</value>
   </data>
+  <data name="Tooltip_DisabledMessage" xml:space="preserve">
+    <value>To enable RateIt check the "Enable Rating" checkbox in the SDL MT Cloud settings page.</value>
+  </data>
+  <data name="SendFeedbackResponseFromServer" xml:space="preserve">
+    <value>Send feedback response from server: Status: {0} Response: {1}</value>
+  </data>
+  <data name="AutoSendFeedback" xml:space="preserve">
+    <value>Auto Send Feedback</value>
+  </data>
+  <data name="EnableRating" xml:space="preserve">
+    <value>Enable "Rate Translations"</value>
+  </data>
+  <data name="ToEnableRatingChangeTheSettings" xml:space="preserve">
+    <value>To enable rating change the settings...</value>
+  </data>
+  <data name="SDLMTCloudName" xml:space="preserve">
+    <value>SDL Machine Translation Cloud Provider</value>
+  </data>
+  <data name="OriginalTranslationMissingMessage" xml:space="preserve">
+    <value>Original translation from {0} is missing. Translate again using the {1} if you want to be able to send a feedback for this segment pair</value>
+  </data>
+  <data name="OriginalTranslationMissingTitle" xml:space="preserve">
+    <value>Original translation missing</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent</value>
+  </data>
+  <data name="SourceModifiedTextAndAdvice" xml:space="preserve">
+    <value>Source has been modified since the {0} translation was received. To send feedback you need the original source for the translation, or translate again using the modified source.</value>
+  </data>
+  <data name="SourceModified" xml:space="preserve">
+    <value>Source modified</value>
+  </data>
+  <data name="AutoSendFeedback_CheckBoxTooltip" xml:space="preserve">
+    <value>If this option is enabled, feedback is sent when the segment is confirmed</value>
+  </data>
+  <data name="SendFeedback_ButtonTooltip" xml:space="preserve">
+    <value>When this button is clicked all the information applied to the checkboxes, any comment and suggestion (or whatever there is in the target segment) will be sent to the server.</value>
+  </data>
+  <data name="FeedbackNotSent_TooltipMessage" xml:space="preserve">
+    <value>Request failed</value>
+  </data>
+  <data name="FeedbackSentSuccessfully" xml:space="preserve">
+    <value>Feedback sent successfully.</value>
+  </data>
+  <data name="rating" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\rating.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnableRatingCheckboxTooltip" xml:space="preserve">
+    <value>To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.</value>
+  </data>
+  <data name="OriginalMtCloudTranslationMissing" xml:space="preserve">
+    <value> (original MT Cloud translation is missing)</value>
+  </data>
+  <data name="ResponseFromServer" xml:space="preserve">
+	  <value>{0}
+Response from SDL MT Cloud: 
+{1}
+</value>
+  </data>
+  <data name="SentWithNoImprovement" xml:space="preserve">
+	  <value>Sent with the original translation as improvement.</value>
+  </data>
+  <data name="SDLMTCloudUri" xml:space="preserve">
+	  <value>sdlmtcloud:///</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
@@ -29,11 +30,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
+		private ICommand _navigateToWikiCommand;
 
 		private bool _reSendChecked;
 		private LanguageMappingModel _selectedLanguageMappingModel;
 		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
 		private bool _isWaiting;
+		private bool _sendFeedback;
 
 		public OptionsViewModel(Window owner, SdlMTCloudTranslationProvider provider, List<LanguagePair> languagePairs)
 		{
@@ -43,10 +46,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_languagePairs = languagePairs;
 
 			ReSendChecked = provider.Options?.ResendDraft ?? true;
+			SendFeedback = provider.Options?.SendFeedback ?? true;
+
 			LoadLanguageMappings();
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
+		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
+
+		private void NavigateToWiki(object obj)
+		{
+			Process.Start(
+				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
+		}
 
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
 														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
@@ -107,8 +119,17 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				OnPropertyChanged(nameof(ReSendChecked));
 			}
 		}
-		
-		
+
+		public bool SendFeedback
+		{
+			get => _sendFeedback;
+			set
+			{
+				_sendFeedback = value; 
+				OnPropertyChanged(nameof(SendFeedback));
+			}
+		}
+
 		public bool IsWaiting
 		{
 			get => _isWaiting;
@@ -145,6 +166,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			try
 			{
 				ReSendChecked = true;
+				SendFeedback = true;
 
 				_provider.Options = new Options();
 
@@ -258,6 +280,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					_provider.Options.ResendDraft = ReSendChecked;
 					_provider.Options.LanguageMappings = LanguageMappingModels.ToList();
+					_provider.Options.SendFeedback = SendFeedback;
 
 					Dispose();
 
