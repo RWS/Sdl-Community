@@ -16,6 +16,8 @@ namespace Sdl.LC.AddonBlueprint.Services
 	public class LanguagesService : ILanguageService
 	{
 		private readonly string LanguagesUrl = "https://api.deepl.com/v1/languages";
+		private const string EngineModel = "nmt";
+		private const string EngineName = "NEURAL";
 
 		public async Task<List<string>> GetAvailableDeeplLanguages(string apiKey, LanguageEnum languageType)
 		{
@@ -87,9 +89,9 @@ namespace Sdl.LC.AddonBlueprint.Services
 			{
 				var engine = new TranslationEngine
 				{
-					Name="base",
-					Id = $"{sourceEngineCode}_{languageCodeMapping.Key}_base",
-					Model = "nmt",
+					Name=EngineName,
+					Id = $"{sourceEngineCode}_{languageCodeMapping.Key}_{EngineName}",
+					Model = EngineModel,
 					MatchingSourceLanguage = sourceEngineCode,
 					EngineSourceLanguage = sourceEngineCode,
 					EngineTargetLanguage = languageCodeMapping.Key,
