@@ -34,6 +34,8 @@ steps:
       SonarCloud: 'BringBackTheButtonInSonar'
       organization: 'sdl'
       scannerMode: 'MSBuild'
+      projectKey: 'bring-back-the-button'
+      projectName: 'Bring back the button'
   - template: jobs/build-sdlplugin.yml
   - task: SonarCloudAnalyze@1
   - template: jobs/publish-build-artifact-task.yml
