@@ -18,7 +18,7 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly LanguagePair _languageDirection;
 		private readonly DeepLTranslationOptions _options;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
 
 		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
 		{

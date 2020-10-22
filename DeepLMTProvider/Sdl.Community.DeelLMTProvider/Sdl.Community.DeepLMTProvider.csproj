@@ -120,7 +120,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationInitializer.cs" />
     <Compile Include="DeepLMtTranslationProvider.cs" />
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
