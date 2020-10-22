@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
 		private readonly string _pluginVersion = "";
 		private Formality _formality;
 		private List<string> _supportedTargetLanguages;

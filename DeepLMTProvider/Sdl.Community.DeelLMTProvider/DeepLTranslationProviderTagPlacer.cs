@@ -14,7 +14,7 @@ namespace Sdl.Community.DeepLMTProvider
         private string _returnedText;
         private Segment _sourceSegment;
         private Dictionary<string, DeepLTag> _tagsDictionary;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderTagPlacer));
 
         public DeepLTranslationProviderTagPlacer(Segment sourceSegment)
         {
