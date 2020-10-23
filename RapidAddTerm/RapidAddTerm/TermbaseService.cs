@@ -19,7 +19,7 @@ namespace Sdl.Community.RapidAddTerm
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var activeDocument = editorController?.ActiveDocument;
-			if (activeDocument != null)
+			if (activeDocument?.ActiveFile != null)
 			{
 				var sourceSelection = activeDocument.Selection?.Source?.ToString().TrimStart().TrimEnd();
 				var targetSelection = activeDocument.Selection?.Target?.ToString().TrimStart().TrimEnd();
@@ -37,8 +37,8 @@ namespace Sdl.Community.RapidAddTerm
 						var sourceLanguageCode = GetLanguageCode(sourceIndexName, sourceLanguage);
 
 						var targetIndexName = GetTermbaseIndex(languageIndexes, targetLanguage);
-						var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
-						
+						var targetLanguageCode = GetLanguageCode(targetIndexName, targetLanguage);
+
 						var sourceEntry = SearchEntries(defaultTermbasePath, sourceSelection, sourceIndexName);
 						var targetEntries = SearchTargetEntries(defaultTermbasePath, targetSelection, targetIndexName);
 						targetSelection = HttpUtility.HtmlEncode(targetSelection);
@@ -68,6 +68,10 @@ namespace Sdl.Community.RapidAddTerm
 					MessageBox.Show(@"Please select source and target text.", @"Empty selection", MessageBoxButtons.OK,
 						MessageBoxIcon.Exclamation);
 				}
+			}
+			else
+			{
+				MessageBox.Show(@"Please close and reopen the file", @"Active file cannot be optain",MessageBoxButtons.OK,MessageBoxIcon.Warning);
 			}
 		}
 		private  string GetTermbaseIndex(List<TermbaseLanguageIndex> termbaseIndexes, Language currentLanguage)
