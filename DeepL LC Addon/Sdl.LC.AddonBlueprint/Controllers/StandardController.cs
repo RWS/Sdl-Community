@@ -28,8 +28,10 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 		private readonly IDescriptorService _descriptorService;
 		private readonly IAccountService _accountService;
 		private readonly IHealthReporter _healthReporter;
-		private readonly ILanguageService _translationService;
+		private readonly ITranslationService _translationService;
+		private readonly ILanguageService _languageService;
 		private const string ApiKeyId = "apikey";
+		private const string FormalityId = "translationFormality";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AccountService"/> class.
@@ -43,7 +45,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			ILogger<StandardController> logger,
 			IDescriptorService descriptorService,
 			IAccountService accountService,
-			IHealthReporter healthReporter,ILanguageService translationService)
+			IHealthReporter healthReporter,ILanguageService languageService,ITranslationService translationService)
 		{
 			_configuration = configuration;
 			_logger = logger;
@@ -51,6 +53,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			_accountService = accountService;
 			_healthReporter = healthReporter;
 			_translationService = translationService;
+			_languageService = languageService;
 		}
 
 		/// <summary>
@@ -233,36 +236,57 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 
 		//[Authorize]
 		[HttpGet("translation-engines")]
-		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request,[FromHeader(Name = "X-LC-Tenant")]string tenantId, [FromHeader(Name = "TR_ID")]string traceId)
+		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request, [FromHeader(Name = "X-LC-Tenant")]string tenantId, [FromHeader(Name = "TR_ID")]string traceId)
 		{
-			var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId,false, CancellationToken.None).ConfigureAwait(false);
-			if(configurationSettingsResult != null)
-			{
-				var apiKey = (string)configurationSettingsResult.Items.FirstOrDefault(c => c.Id.ToLower().Equals(ApiKeyId))?.Value;
-				if (!string.IsNullOrEmpty(apiKey))
-				{
-					var translationService = new LanguagesService();
+			var apiKey = await GetSettingValue(tenantId, ApiKeyId);
 
-					if (!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
-					{
-						var translationEngineResponse = await translationService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
-						return Ok(translationEngineResponse);
-					}
-				}
-				else
+			if (!string.IsNullOrEmpty(apiKey))
+			{
+				if (!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
 				{
-					return Unauthorized("DeepL API Key is not valid");
+					var engineResponse = await _languageService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
+					return Ok(engineResponse);
 				}
 			}
-			
-			return Ok();			
+			else
+			{
+				return Unauthorized("DeepL API Key is not valid");
+			}
+
+			return Ok();
 		}
 
 		//[Authorize]
 		[HttpPost("translate")]
 		public async Task<IActionResult> Translate([FromBody]TranslationRequest request, [FromHeader(Name = "X-LC-Tenant")]string tenantId)
 		{
-			return Ok("postTranslate");
+			var apiKey = await GetSettingValue(tenantId,ApiKeyId);
+			var formality = await GetSettingValue(tenantId, FormalityId);
+
+			if (!string.IsNullOrEmpty(apiKey))
+			{
+				var translationResponse = await _translationService.Translate(request, apiKey,formality);
+				return Ok(translationResponse);
+			}
+			else
+			{
+				return Unauthorized("DeepL API Key is not valid");
+			}
+		}
+
+		private async Task<string> GetSettingValue(string tenantId,string propertyId)
+		{
+			var propertyValue = string.Empty;
+			if (!string.IsNullOrEmpty(tenantId))
+			{
+				var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, false, CancellationToken.None).ConfigureAwait(false);
+				if (configurationSettingsResult != null)
+				{
+					propertyValue = (string)configurationSettingsResult.Items.FirstOrDefault(c => c.Id.ToLower().Equals(propertyId.ToLower()))?.Value;
+				}
+			}
+			
+			return propertyValue;
 		}
 	}
 }

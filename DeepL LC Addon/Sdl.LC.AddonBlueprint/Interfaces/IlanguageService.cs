@@ -9,5 +9,6 @@ namespace Sdl.LC.AddonBlueprint.Interfaces
 	{
 		Task<List<string>> GetAvailableDeeplLanguages(string apiKey, LanguageEnum languageType);
 		Task<TranslationEngineResponse> GetCorrespondingEngines(string apiKey, string sourceLanguageCode, List<string> targetLanguagesCode);
+		TranslationEngine GetLanguagesFromEngineId(string engineId);
 	}
 }

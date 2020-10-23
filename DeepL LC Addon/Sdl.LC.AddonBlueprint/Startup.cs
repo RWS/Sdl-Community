@@ -39,6 +39,7 @@ namespace Sdl.LC.AddonBlueprint
 			services.AddSingleton<IDescriptorService, DescriptorService>();
 			services.AddSingleton<IAccountService, AccountService>();
 			services.AddSingleton<ILanguageService, LanguagesService>();
+			services.AddSingleton<ITranslationService, TranslationService>();
 
 			services.Configure<AddonDescriptorModel>(Configuration.GetSection(
 										AddonDescriptorModel.Descriptor));

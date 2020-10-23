@@ -18,6 +18,7 @@ namespace Sdl.LC.AddonBlueprint.Services
 		private readonly string LanguagesUrl = "https://api.deepl.com/v1/languages";
 		private const string EngineModel = "nmt";
 		private const string EngineName = "NEURAL";
+		private const string EngineIdSeparator = "_";
 
 		public async Task<List<string>> GetAvailableDeeplLanguages(string apiKey, LanguageEnum languageType)
 		{
@@ -90,9 +91,9 @@ namespace Sdl.LC.AddonBlueprint.Services
 				var engine = new TranslationEngine
 				{
 					Name=EngineName,
-					Id = $"{sourceEngineCode}_{languageCodeMapping.Key}_{EngineName}",
+					Id = $"{sourceEngineCode}{EngineIdSeparator}{languageCodeMapping.Key}{EngineIdSeparator}{EngineName}",
 					Model = EngineModel,
-					MatchingSourceLanguage = sourceEngineCode,
+					MatchingSourceLanguage = sourceLanguageCode,
 					EngineSourceLanguage = sourceEngineCode,
 					EngineTargetLanguage = languageCodeMapping.Key,
 					MatchingTargetLanguages = languageCodeMapping.Value,
@@ -106,6 +107,30 @@ namespace Sdl.LC.AddonBlueprint.Services
 				ItemCount = translationEngines.Count
 			};
 			return translationEngineResponse;
+		}
+
+		public TranslationEngine GetLanguagesFromEngineId(string engineId)
+		{
+			if (!string.IsNullOrEmpty(engineId))
+			{
+				var engineSplitValues = engineId.Split(EngineIdSeparator);
+				if (engineSplitValues.Length >= 2)
+				{
+					var translationEngine = new TranslationEngine
+					{
+						EngineSourceLanguage = engineSplitValues[0],
+						EngineTargetLanguage = engineSplitValues[1]
+					};
+
+					return translationEngine;
+				}
+			}
+			else
+			{
+				throw new AddonValidationException($"EngineId is not provided", new Details { Code = ErrorCodes.InvalidInput, Name = nameof(TranslationRequest.EngineId), Value = engineId });
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -182,5 +207,7 @@ namespace Sdl.LC.AddonBlueprint.Services
 
 			return string.Empty;
 		}
+
+	
 	}
 }
