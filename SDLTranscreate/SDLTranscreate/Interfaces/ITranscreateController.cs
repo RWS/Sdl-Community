@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sdl.Community.Transcreate.Model;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.Transcreate.Interfaces
 {
@@ -13,6 +14,6 @@ namespace Sdl.Community.Transcreate.Interfaces
 
 		void UpdateProjectData(TaskContext taskContext);
 
-		void UpdateBackTranslationProjectData(Project project, TaskContext taskContext);
+		void UpdateBackTranslationProjectData(IProject parentProject, TaskContext taskContext);
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using File = System.IO.File;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 {
@@ -32,7 +34,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 		public Xliff ReadFile(string projectId, string documentId, string filePath, string targetLanguage)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
+			var tempFile = Path.GetTempFileName();
+			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, tempFile, null);
 
 			var contentReader = new XliffContentReader(projectId, documentId, filePath, targetLanguage, false, _segmentBuilder,
 				_exportOptions, _analysisBands);
@@ -47,6 +50,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			TranslationOriginStatistics = contentReader.TranslationOriginStatistics;
 
 
+			if (File.Exists(tempFile))
+			{
+				File.Delete(tempFile);
+			}
 
 			return contentReader.Xliff;
 		}

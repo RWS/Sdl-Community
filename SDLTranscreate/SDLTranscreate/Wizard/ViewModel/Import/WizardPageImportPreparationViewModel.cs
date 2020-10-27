@@ -351,8 +351,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			return await Task.FromResult(success);
 		}
 
-		
-
 		private async Task<bool> Finalize(JobProcess jobProcess)
 		{
 			var success = true;

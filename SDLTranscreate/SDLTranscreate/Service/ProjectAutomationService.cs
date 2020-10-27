@@ -89,6 +89,26 @@ namespace Sdl.Community.Transcreate.Service
 				}
 			}
 
+			var targetGuids = new List<Guid>();
+			var targetLanguageFiles = newProject.GetTargetLanguageFiles();
+			foreach (var projectFile in targetLanguageFiles)
+			{
+				if (projectFile.Role == FileRole.Translatable)
+				{
+					targetGuids.Add(projectFile.Id);
+				}
+			}
+
+			var pretranslate = newProject.RunAutomaticTask(
+				targetGuids.ToArray(),
+				AutomaticTaskTemplateIds.PreTranslateFiles
+			);
+
+			var analyTask = newProject.RunAutomaticTask(
+				targetGuids.ToArray(),
+				AutomaticTaskTemplateIds.AnalyzeFiles
+			);
+
 			newProject.Save();
 			return newProject;
 		}
@@ -108,6 +128,13 @@ namespace Sdl.Community.Transcreate.Service
 			var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
 			var targetLanguage = projectInfo.TargetLanguages[0].CultureInfo.Name;
 			var localProjectFolder = Path.Combine(projectInfo.LocalProjectFolder, "BackProjects", targetLanguage);
+
+			if (Directory.Exists(localProjectFolder))
+			{
+				Directory.Delete(localProjectFolder, true);
+			}
+
+
 			var projectReference = new ProjectReference(project.FilePath);
 			var newProjectInfo = new ProjectInfo
 			{
@@ -115,7 +142,7 @@ namespace Sdl.Community.Transcreate.Service
 				Description = projectInfo.Description,
 				LocalProjectFolder = localProjectFolder,
 				SourceLanguage = projectInfo.TargetLanguages[0],
-				TargetLanguages = new Language[]{ projectInfo.SourceLanguage},
+				TargetLanguages = new Language[] { projectInfo.SourceLanguage },
 				DueDate = projectInfo.DueDate,
 				ProjectOrigin = "Back-Translation Project",
 				IconPath = iconPath,
@@ -155,6 +182,26 @@ namespace Sdl.Community.Transcreate.Service
 				}
 			}
 
+			var targetGuids = new List<Guid>();
+			var targetLanguageFiles = newProject.GetTargetLanguageFiles();
+			foreach (var projectFile in targetLanguageFiles)
+			{
+				if (projectFile.Role == FileRole.Translatable)
+				{
+					targetGuids.Add(projectFile.Id);
+				}
+			}
+
+			var pretranslate = newProject.RunAutomaticTask(
+				targetGuids.ToArray(),
+				AutomaticTaskTemplateIds.PreTranslateFiles
+			);
+
+			var analyTask = newProject.RunAutomaticTask(
+				targetGuids.ToArray(),
+				AutomaticTaskTemplateIds.AnalyzeFiles
+			);
+
 			newProject.Save();
 			return newProject;
 		}
@@ -169,13 +216,12 @@ namespace Sdl.Community.Transcreate.Service
 			var projectInfo = selectedProject.GetProjectInfo();
 
 			Interfaces.IProject project = projectInfo.ProjectOrigin == "Back-Translation Project"
-				? new BackTranslationProject() 
+				? new BackTranslationProject()
 				: new Project();
 
 
 			project.Id = projectInfo.Id.ToString();
 			project.Name = projectInfo.Name;
-			project.AbsoluteUri = projectInfo.Uri.AbsoluteUri;
 			project.Customer = _customerProvider.GetProjectCustomer(selectedProject);
 			project.Created = projectInfo.CreatedAt.ToUniversalTime();
 			project.DueDate = projectInfo.DueDate?.ToUniversalTime() ?? DateTime.MaxValue;
@@ -184,8 +230,9 @@ namespace Sdl.Community.Transcreate.Service
 			project.TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages);
 			project.ProjectType = GetProjectType(selectedProject);
 
-
-			var existingProject = _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+			var existingProject = projectInfo.ProjectOrigin == "Back-Translation Project"
+				? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out _)
+				: _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
 			if (existingProject != null)
 			{
 				foreach (var projectFile in existingProject.ProjectFiles)
@@ -209,6 +256,24 @@ namespace Sdl.Community.Transcreate.Service
 			AssignProjectFileXliffData(project, projectFiles);
 
 			return project;
+		}
+
+		public Interfaces.IProject GetBackTranslationProjectProject(string projectId, out Interfaces.IProject parentProject)
+		{
+			parentProject = null;
+			var projects = _controller.GetProjects();
+			foreach (var project in projects)
+			{
+				var backTranslationProject =
+					project.BackTranslationProjects.FirstOrDefault(a => a.Id == projectId);
+				if (backTranslationProject != null)
+				{
+					parentProject = project;
+					return backTranslationProject;
+				}
+			}
+
+			return null;
 		}
 
 		public List<AnalysisBand> GetAnalysisBands(FileBasedProject project)

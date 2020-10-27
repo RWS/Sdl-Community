@@ -7,7 +7,6 @@ using System.Windows.Markup;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.Community.Transcreate.Wizard.View.Convert;
@@ -34,7 +33,6 @@ namespace Sdl.Community.Transcreate.Service
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly Settings _settings;
 		private readonly IDialogService _dialogService;
-		private readonly ILanguageProvider _languageProvider;
 		private readonly ProjectAutomationService _projectAutomationService;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
@@ -43,7 +41,7 @@ namespace Sdl.Community.Transcreate.Service
 
 		public WizardService(Enumerators.Action action, Enumerators.WorkFlow workFlow, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
-			IDialogService dialogService, ILanguageProvider languageProvider, ProjectAutomationService projectAutomationService)
+			IDialogService dialogService, ProjectAutomationService projectAutomationService)
 		{
 			_action = action;
 			_workFlow = workFlow;
@@ -54,7 +52,6 @@ namespace Sdl.Community.Transcreate.Service
 			_dialogService = dialogService;
 			_segmentBuilder = segmentBuilder;
 			_settings = settings;
-			_languageProvider = languageProvider;
 			_projectAutomationService = projectAutomationService;
 		}
 
@@ -146,7 +143,7 @@ namespace Sdl.Community.Transcreate.Service
 				_taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_taskContext.WorkflowFolder = _taskContext.GetWorkflowPath();
 
-				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);				
+				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
 
 				_taskContext.Project = project;
 				_taskContext.ProjectFiles = project.ProjectFiles;
@@ -185,7 +182,10 @@ namespace Sdl.Community.Transcreate.Service
 				_taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 				_taskContext.WorkflowFolder = _taskContext.GetWorkflowPath();
 
-				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);				
+				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
+
+				project.ProjectFiles.RemoveAll(a => a.TargetLanguage == projectInfo.SourceLanguage.CultureInfo.Name);
+
 				_taskContext.Project = project;
 				_taskContext.ProjectFiles = project.ProjectFiles;
 			}
@@ -210,7 +210,7 @@ namespace Sdl.Community.Transcreate.Service
 		{
 			var pages = new List<WizardPageViewModelBase>();
 
-			if (_action == Enumerators.Action.Export)
+			if (_action == Enumerators.Action.Export || _action == Enumerators.Action.ExportBackTranslation)
 			{
 				pages.Add(new WizardPageExportFilesViewModel(_wizardWindow, new WizardPageExportFilesView(), taskContext));
 				pages.Add(new WizardPageExportOptionsViewModel(_wizardWindow, new WizardPageExportOptionsView(), taskContext, _dialogService));
@@ -218,9 +218,9 @@ namespace Sdl.Community.Transcreate.Service
 				pages.Add(new WizardPageExportPreparationViewModel(_wizardWindow, new WizardPageExportPreparationView(), taskContext,
 					_segmentBuilder, _pathInfo));
 			}
-			else if (_action == Enumerators.Action.Import)
+			else if (_action == Enumerators.Action.Import || _action == Enumerators.Action.ImportBackTranslation)
 			{
-				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), taskContext, _dialogService, _languageProvider));
+				pages.Add(new WizardPageImportFilesViewModel(_wizardWindow, new WizardPageImportFilesView(), taskContext, _dialogService));
 				pages.Add(new WizardPageImportOptionsViewModel(_wizardWindow, new WizardPageImportOptionsView(), taskContext));
 				pages.Add(new WizardPageImportSummaryViewModel(_wizardWindow, new WizardPageImportSummaryView(), taskContext));
 				pages.Add(new WizardPageImportPreparationViewModel(_wizardWindow, new WizardPageImportPreparationView(), taskContext,

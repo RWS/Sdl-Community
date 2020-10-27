@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.Desktop.IntegrationApi.Extensions;
+﻿using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.Actions

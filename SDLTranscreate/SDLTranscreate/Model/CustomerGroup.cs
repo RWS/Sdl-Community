@@ -5,6 +5,7 @@ namespace Sdl.Community.Transcreate.Model
 	public class CustomerGroup : BaseModel
 	{
 		private Customer _customer;
+
 		private List<Interfaces.IProject> _projects;	
 
 		public Customer Customer

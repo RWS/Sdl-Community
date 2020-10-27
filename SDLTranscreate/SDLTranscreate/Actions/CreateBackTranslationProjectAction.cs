@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
-using Sdl.Community.Transcreate.LanguageMapping;
-using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -28,7 +24,7 @@ namespace Sdl.Community.Transcreate.Actions
 		Name = "TranscreateManager_CreateBackTranslationProject_Name",
 		Description = "TranscreateManager_CreateBackTranslationProject_Description",
 		ContextByType = typeof(TranscreateViewController),
-		Icon = "Icon"
+		Icon = "sdl_transcreate_back"
 		)]
 	[ActionLayout(typeof(TranscreateManagerActionsGroup), 3, DisplayType.Large)]
 	public class CreateBackTranslationProjectAction : AbstractViewControllerAction<TranscreateViewController>
@@ -39,7 +35,6 @@ namespace Sdl.Community.Transcreate.Actions
 		private ImageService _imageService;
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
-
 		private Controllers _controllers;
 
 
@@ -83,11 +78,10 @@ namespace Sdl.Community.Transcreate.Actions
 			importOptions.OriginSystem = "Transcreate Automation";
 			importOptions.StatusTranslationUpdatedId = string.Empty;
 
-			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var analysisBands = _projectAutomationService.GetAnalysisBands(studioProject);
 
 			var sdlxliffReader = new SdlxliffReader(_segmentBuilder, exportOptions, analysisBands);
-			var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, importOptions, analysisBands);
+			var sdlxliffWriter = new SdlxliffWriter(_segmentBuilder, importOptions, analysisBands);
 			var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
 
 			var proceed = true;
@@ -113,7 +107,6 @@ namespace Sdl.Community.Transcreate.Actions
 			{
 				foreach (var targetLanguage in project.TargetLanguages)
 				{
-
 					var sourceFiles = new List<string>();
 					var languageFolder = GetPath(workingFolder, targetLanguage.CultureInfo.Name);
 
@@ -121,6 +114,7 @@ namespace Sdl.Community.Transcreate.Actions
 						string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
 							StringComparison.CurrentCultureIgnoreCase) == 0);
 
+					var languageFileData = new List<FileData>();
 					foreach (var projectFile in targetFiles)
 					{
 						var fileData = fileDataList.FirstOrDefault(a => a.Data.DocInfo.DocumentId == projectFile.FileId);
@@ -169,21 +163,6 @@ namespace Sdl.Community.Transcreate.Actions
 
 									segmentPair.Source.Elements = target.Elements;
 									segmentPair.Target.Elements = new List<Element>();
-
-
-									// TODO: target elements should be inherited from the back-translations automatically
-
-									//List<Token> backTranslationTokens = null;
-									//if (segmentPair.TranslationOrigin != null &&
-									//    segmentPair.TranslationOrigin.MetaDataContainsKey("back-translation"))
-									//{
-									//	//TODO check if we need to create TranslationOrigin??
-
-									//	var backTranslation =
-									//		segmentPair.TranslationOrigin.GetMetaData("back-translation");
-
-									//	backTranslationTokens = JsonConvert.DeserializeObject<List<Token>>(backTranslation);
-									//}
 								}
 							}
 						}
@@ -194,34 +173,18 @@ namespace Sdl.Community.Transcreate.Actions
 
 						// Write the XLIFF file
 						var success = xliffWriter.WriteFile(fileData.Data, xliffFilePath, true);
-
 						if (!success)
 						{
-							throw new Exception("TODO: error message: file not converted!");
+							throw new Exception(string.Format("Unexpected error when converting the file: {0}", xliffFilePath));
 						}
 
 						sourceFiles.Add(xliffFilePath);
-
-
-						//var sdlXliffFilePath = Path.Combine(languageFolder, projectFile.Path);
-						//var tempFileName = Path.GetTempFileName();
-						//var tmpInputFile = tempFileName + ".tmp.sdlxliff";
-						//var s1 = sdlxliffWriter.UpdateFile(fileData.Data, sdlXliffFilePath, tmpInputFile);
-
-						//File.Copy(tmpInputFile, sdlXliffFilePath + ".tmp.sdlxliff");
-						//File.Delete(tempFileName);
-						//File.Delete(tmpInputFile);
+						languageFileData.Add(fileData);
 					}
-
 
 					var iconPath = GetBackTranslationIconPath();
 					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(studioProject, iconPath, sourceFiles, "BT");
 					var newStudioProjectInfo = newStudioProject.GetProjectInfo();
-
-
-					//var backTranslateProject = _projectAutomationService.GetProject(newStudioProject, null);
-					//backTranslateProject.ProjectFiles.RemoveAll(a => a.TargetLanguage == backTranslateProject.SourceLanguage.CultureInfo.Name);
-
 
 					var action = Enumerators.Action.CreateBackTranslation;
 					var workFlow = Enumerators.WorkFlow.Internal;
@@ -241,24 +204,151 @@ namespace Sdl.Community.Transcreate.Actions
 					taskContext.Project = workingProject;
 					taskContext.ProjectFiles = workingProject.ProjectFiles;
 
+					foreach (var projectFile in taskContext.ProjectFiles)
+					{
+						projectFile.Selected = true;
+						var fileData = GetFileData(languageFileData, studioProjectInfo.LocalProjectFolder, projectFile);
 
-					//TODO inject the back-translations
+						var tmpInputFile = Path.GetTempFileName();
+						File.Move(tmpInputFile, tmpInputFile + ".sdlxliff");
+						tmpInputFile = tmpInputFile + ".sdlxliff";
 
+						var paragraphMap = GetParagraphMap(sdlxliffReader, projectFile.ProjectId, projectFile.FileId, projectFile.Location, projectFile.TargetLanguage);
+						AlignParagraphIds(fileData.Data, paragraphMap.Keys.ToList());
 
-					//TODO create backproject
-					//project.BackTranslationProjects.Add(backTranslateProject as BackTranslationProject);
+						var filePath = Path.Combine(taskContext.WorkingFolder, projectFile.Path.Trim('\\'));
+						//var externalFilePath = Path.Combine(filePath, projectFile.Name.Substring(0, projectFile.Name.Length - ".sdlxliff".Length));
+						var externalFilePath = Path.Combine(filePath, projectFile.Name + ".xliff");
+						if (!Directory.Exists(filePath))
+						{
+							Directory.CreateDirectory(filePath);
+						}
+
+						xliffWriter.WriteFile(fileData.Data, externalFilePath, true);
+
+						var success = sdlxliffWriter.UpdateFile(fileData.Data, projectFile.Location, tmpInputFile, true);
+						if (success)
+						{
+							projectFile.Date = taskContext.DateTimeStamp;
+							projectFile.Action = action;
+							projectFile.WorkFlow = workFlow;
+							projectFile.Status = Enumerators.Status.Success;
+							projectFile.Report = string.Empty;
+							projectFile.ExternalFilePath = externalFilePath;
+							projectFile.ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics;
+							projectFile.TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics;
+						}
+
+						var activityFile = new ProjectFileActivity
+						{
+							ProjectFileId = projectFile.FileId,
+							ActivityId = Guid.NewGuid().ToString(),
+							Action = action,
+							WorkFlow = workFlow,
+							Status = success ? Enumerators.Status.Success : Enumerators.Status.Error,
+							Date = projectFile.Date,
+							Name = Path.GetFileName(projectFile.ExternalFilePath),
+							Path = Path.GetDirectoryName(projectFile.ExternalFilePath),
+							Report = string.Empty,
+							ProjectFile = projectFile,
+							ConfirmationStatistics = projectFile.ConfirmationStatistics,
+							TranslationOriginStatistics = projectFile.TranslationOriginStatistics
+						};
+
+						projectFile.ProjectFileActivities.Add(activityFile);
+
+						File.Copy(projectFile.Location, Path.Combine(filePath, projectFile.Name));
+						File.Delete(projectFile.Location);
+
+						File.Copy(tmpInputFile, projectFile.Location, true);
+						File.Delete(tmpInputFile);
+					}
+
+					_controllers.ProjectsController.Close(newStudioProject);
+					_controllers.ProjectsController.Add(newStudioProject.FilePath);
 
 					taskContext.Completed = true;
+					_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
 
-					_controllers.TranscreateController.UpdateBackTranslationProjectData(project as Project, taskContext);
+					Enabled = false;
 				}
-
-
-
-				
-
-
 			}
+		}
+
+		public void Run()
+		{
+			Execute();
+		}
+
+		private Dictionary<string, List<string>> GetParagraphMap(Xliff xliffData)
+		{
+			var paragraphMap = new Dictionary<string, List<string>>();
+
+			foreach (var file in xliffData.Files)
+			{
+				foreach (var transUnit in file.Body.TransUnits)
+				{
+					if (paragraphMap.ContainsKey(transUnit.Id))
+					{
+						continue;
+					}
+
+					var segmentIds = new List<string>();
+					foreach (var segmentPair in transUnit.SegmentPairs)
+					{
+						segmentIds.Add(segmentPair.Id);
+					}
+
+					paragraphMap.Add(transUnit.Id, segmentIds);
+				}
+			}
+
+			return paragraphMap;
+		}
+
+		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string projectId, string fileId, string path, string targetLanguage)
+		{
+			var xliffData = sdlxliffReader.ReadFile(projectId, fileId, path, targetLanguage);
+			return GetParagraphMap(xliffData);
+		}
+
+		private void AlignParagraphIds(Xliff xliffData, IReadOnlyList<string> paragraphIds)
+		{
+			var i = 0;
+			foreach (var file in xliffData.Files)
+			{
+				foreach (var transUnit in file.Body.TransUnits)
+				{
+					transUnit.Id = paragraphIds[i++];
+				}
+			}
+		}
+
+		private FileData GetFileData(IEnumerable<FileData> languageFileData, string localProjectFolder, ProjectFile projectFile)
+		{
+			foreach (var fileData in languageFileData)
+			{
+				var fileDataFullPath = GetRelativePath(localProjectFolder, fileData.Data.DocInfo.Source);
+				var projectFilePth = Path.Combine(projectFile.TargetLanguage, projectFile.Path.Trim('\\'));
+				var projectFileFullPath = Path.Combine(projectFilePth, projectFile.Name);
+
+				if (string.Compare(fileDataFullPath, projectFileFullPath, StringComparison.CurrentCultureIgnoreCase) == 0)
+				{
+					return fileData;
+				}
+			}
+
+			return null;
+		}
+
+		private string GetRelativePath(string projectPath, string path)
+		{
+			if (string.IsNullOrEmpty(path))
+			{
+				return string.Empty;
+			}
+
+			return path.Replace(projectPath.Trim('\\') + '\\', string.Empty);
 		}
 
 		private string GetBackTranslationIconPath()
@@ -434,9 +524,10 @@ namespace Sdl.Community.Transcreate.Actions
 			_controllers = new Controllers();
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
 
-			_controllers.TranscreateController.ProjectFileSelectionChanged += ProjectsController_SelectedProjectsChanged;
+			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
 
-			SetEnabled();
+			var projects = _controllers?.TranscreateController?.GetSelectedProjects();
+			SetEnabled(projects?[0]);
 		}
 
 		private Settings GetSettings()
@@ -450,21 +541,23 @@ namespace Sdl.Community.Transcreate.Actions
 			return new Settings();
 		}
 
-		private void ProjectsController_SelectedProjectsChanged(object sender, ProjectFileSelectionChangedEventArgs e)
+		private void ProjectsController_SelectedProjectsChanged(object sender, ProjectSelectionChangedEventArgs e)
 		{
-			SetEnabled();
+			SetEnabled(e.SelectedProject);
 		}
 
-		private void SetEnabled()
+		private void SetEnabled(Interfaces.IProject selectedProject)
 		{
-			var projects = _controllers.TranscreateController.GetSelectedProjects();
-			if (projects == null)
+			if (selectedProject == null ||
+				selectedProject is BackTranslationProject ||
+				selectedProject.BackTranslationProjects?.Count > 0)
 			{
 				Enabled = false;
-				return;
 			}
-
-			Enabled = projects.Count == 1 && !(projects[0] is BackTranslationProject);
+			else
+			{
+				Enabled = true;
+			}
 		}
 	}
 }

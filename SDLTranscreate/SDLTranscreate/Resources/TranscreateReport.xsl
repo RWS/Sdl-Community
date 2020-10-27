@@ -715,7 +715,7 @@
 														Imported (Translations updated)
 												</xsl:when>
 												<xsl:otherwise>
-														Converted
+														Processed
 												</xsl:otherwise>
 										</xsl:choose>
 								</h2>
@@ -747,12 +747,12 @@
 														Tags
 												</th>
 										</tr>
-										<xsl:if test="//taskInfo/@action != 'Convert'">
+										<xsl:if test="//taskInfo/@action != 'Convert' and //taskInfo/@action != 'CreateBackTranslation'">
 												<xsl:apply-templates select="//batchTotal">
 														<xsl:with-param name="type" select="'processed'" />
 												</xsl:apply-templates>
 										</xsl:if>
-										<xsl:if test="//taskInfo/@action = 'Convert'">
+										<xsl:if test="//taskInfo/@action = 'Convert' or //taskInfo/@action = 'CreateBackTranslation'">
 												<xsl:apply-templates select="//batchTotal">
 														<xsl:with-param name="type" select="'total'" />
 												</xsl:apply-templates>
@@ -788,19 +788,19 @@
 														Tags
 												</th>
 										</tr>
-										<xsl:if test="//taskInfo/@action != 'Convert'">
+										<xsl:if test="//taskInfo/@action != 'Convert' and //taskInfo/@action != 'CreateBackTranslation'">
 												<xsl:apply-templates select="//file">
 														<xsl:with-param name="type" select="'processed'" />
 												</xsl:apply-templates>
 										</xsl:if>
-										<xsl:if test="//taskInfo/@action = 'Convert'">
+										<xsl:if test="//taskInfo/@action = 'Convert' or //taskInfo/@action = 'CreateBackTranslation'">
 												<xsl:apply-templates select="//file">
 														<xsl:with-param name="type" select="'total'" />
 												</xsl:apply-templates>
 										</xsl:if>
 								</table>
 
-								<xsl:if test="//taskInfo/@action != 'Convert'">
+								<xsl:if test="//taskInfo/@action != 'Convert' and //taskInfo/@action != 'CreateBackTranslation'">
 										<h2 class="firstWithEmphasis">
 												<xsl:choose>
 														<xsl:when  test="//@action = 'Export' or //@action = 'ExportBackTranslation'">
@@ -883,7 +883,7 @@
 
 										</table>
 
-										<xsl:if test="//taskInfo/@action = 'Import' or //@action = 'ImportBackTranslation'">
+										<xsl:if test="//taskInfo/@action = 'Import'">
 												<h2 class="firstWithEmphasis">
 														Not Imported
 												</h2>

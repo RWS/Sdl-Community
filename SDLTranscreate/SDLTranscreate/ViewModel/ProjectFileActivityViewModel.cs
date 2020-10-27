@@ -109,9 +109,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 				var viewModel = new ReportViewModel
 				{
 					HtmlUri = path,
-					WindowTitle = SelectedProjectFileActivity.Action == Enumerators.Action.Export
-						? "Export Report"
-						: "Import Report"
+					WindowTitle = "Report"
 				};
 
 				var view = new ReportWindow(viewModel);

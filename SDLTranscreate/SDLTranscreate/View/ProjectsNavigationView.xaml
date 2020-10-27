@@ -34,6 +34,40 @@
 				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
 			</Style>
 
+			<Style x:Key="ContextMenuStyle" TargetType="{x:Type StackPanel}">
+				<Setter Property="ContextMenu" Value="{DynamicResource TreeViewContextMenu}"/>
+			</Style>
+			<ContextMenu x:Key="TreeViewContextMenu">
+				<MenuItem Header="Create Back-Projects" 
+							IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
+							Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/sdl_transcreate_back.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Remove Back-Projects" 
+							IsEnabled="{Binding DataContext.IsEnabledRemoveBackProjects, 
+							Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							Command="{Binding DataContext.RemoveBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/Delete.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<MenuItem Header="Open folder in explorer" 
+				          Command="{Binding DataContext.OpenProjectFolderCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+				       >
+					<MenuItem.Icon>
+						<Image Source="../Resources/Folder.png"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</ContextMenu>
+
+			
+
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Border BorderBrush="Gainsboro" BorderThickness="1" Background="White">
@@ -103,12 +137,12 @@
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 				<TreeView.ItemContainerStyle>
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
-						<Setter Property="IsSelected" Value="{Binding IsSelected}" />
-						<Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+						<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 					</Style>
 				</TreeView.ItemContainerStyle>
 				<TreeView.ItemTemplate >
-					<HierarchicalDataTemplate ItemsSource="{Binding Projects}" DataType="{x:Type model:CustomerGroup}">
+					<HierarchicalDataTemplate ItemsSource="{Binding Projects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataType="{x:Type model:CustomerGroup}">
 						<StackPanel Orientation="Horizontal" Margin="0,1,0,1">
 							<TextBlock FontWeight="Bold" FontSize="13" Text="{Binding Customer.Name}" Margin="0"/>
 							<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=" (" />
@@ -117,9 +151,11 @@
 							<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=")" />
 						</StackPanel>
 						<HierarchicalDataTemplate.ItemTemplate>
-							<HierarchicalDataTemplate ItemsSource="{Binding BackTranslationProjects }" 
+							<HierarchicalDataTemplate ItemsSource="{Binding BackTranslationProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" 
 							                          DataType="{x:Type model:Project}">
-								<StackPanel Orientation="Horizontal" Margin="0,1,0,1">
+								
+								<StackPanel Orientation="Horizontal" Margin="0,1,0,1"
+								            Style="{StaticResource ContextMenuStyle}">
 									<Image Focusable="False"
 									       Stretch="UniformToFill"
 									       RenderOptions.BitmapScalingMode="HighQuality" 

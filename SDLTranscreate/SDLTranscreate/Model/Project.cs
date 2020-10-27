@@ -70,8 +70,6 @@ namespace Sdl.Community.Transcreate.Model
 			}
 		}
 
-		public string AbsoluteUri { get; set; }
-
 		public DateTime DueDate { get; set; }
 
 		public string DueDateToString => GetDateTimeToString(DueDate);
@@ -124,7 +122,6 @@ namespace Sdl.Community.Transcreate.Model
 			var project = new Project
 			{
 				Id = Id,
-				AbsoluteUri = AbsoluteUri,
 				Name = Name,
 				Customer = Customer?.Clone() as Customer,
 				Created = new DateTime(Created.Ticks, DateTimeKind.Utc),

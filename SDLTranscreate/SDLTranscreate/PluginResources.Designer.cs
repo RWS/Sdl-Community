@@ -61,16 +61,6 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DefaultLanguageMappings {
-            get {
-                object obj = ResourceManager.GetObject("DefaultLanguageMappings", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unexpected error converting file: {0}.
         /// </summary>
         internal static string ErrorMessage_ConvertingFile {
@@ -723,7 +713,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This action will remove all project data managed by Transcreate Manager.
+        ///   Looks up a localized string similar to This action will remove all back-projects from the selected project.
         /// </summary>
         internal static string Message_ActionWillRemoveAllProjectData {
             get {

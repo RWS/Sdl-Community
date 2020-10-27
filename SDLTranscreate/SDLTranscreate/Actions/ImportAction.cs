@@ -6,8 +6,6 @@ using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.LanguageMapping;
-using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -30,15 +28,14 @@ namespace Sdl.Community.Transcreate.Actions
 		private ImageService _imageService;
 		private SegmentBuilder _segmentBuilder;
 		private IDialogService _dialogService;
-		private ILanguageProvider _languageProvider;
 		private ProjectAutomationService _projectAutomationService;
 
 		protected override void Execute()
 		{
-			if (!_controllers.TranscreateController.IsActive)
-			{
-				return;
-			}
+			//if (!_controllers.TranscreateController.IsActive)
+			//{
+			//	return;
+			//}
 
 			var selectedProject = _controllers.TranscreateController.GetSelectedProjects()?.FirstOrDefault();
 			if (selectedProject == null)
@@ -53,7 +50,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 			var settings = GetSettings();
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
-				_imageService, _controllers, _segmentBuilder, settings, _dialogService, _languageProvider,
+				_imageService, _controllers, _segmentBuilder, settings, _dialogService,
 				_projectAutomationService);
 
 			var taskContext = wizardService.ShowWizard(_controllers.TranscreateController, out var message);
@@ -63,7 +60,17 @@ namespace Sdl.Community.Transcreate.Actions
 				return;
 			}
 
-			_controllers.TranscreateController.UpdateProjectData(taskContext);
+			if (selectedProject is BackTranslationProject)
+			{
+				var projects = _controllers.TranscreateController.GetProjects();
+				var parentProject = projects.FirstOrDefault(project => project.BackTranslationProjects.Exists(a => a.Id == selectedProject.Id));
+
+				_controllers.TranscreateController.UpdateBackTranslationProjectData(parentProject, taskContext);
+			}
+			else
+			{
+				_controllers.TranscreateController.UpdateProjectData(taskContext);
+			}
 		}
 
 		public void LaunchWizard()
@@ -80,7 +87,6 @@ namespace Sdl.Community.Transcreate.Actions
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_languageProvider = new LanguageProvider(_pathInfo);
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
 
 			Enabled = false;

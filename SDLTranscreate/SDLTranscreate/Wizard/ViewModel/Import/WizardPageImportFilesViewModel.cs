@@ -11,8 +11,6 @@ using DocumentFormat.OpenXml.Packaging;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
-using Sdl.Community.Transcreate.LanguageMapping.Model;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Versioning;
 
@@ -21,8 +19,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 	public class WizardPageImportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
 		private readonly IDialogService _dialogService;
-		private readonly ILanguageProvider _languageProvider;
-		private readonly List<MappedLanguage> _languageMappings;
 		private ICommand _clearSelectedComand;
 		private ICommand _checkSelectedComand;
 		private ICommand _addFolderCommand;
@@ -36,15 +32,12 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private string _productName;
 
 		public WizardPageImportFilesViewModel(Window owner, object view, TaskContext taskContext,
-			IDialogService dialogService, ILanguageProvider languageProvider) : base(owner, view, taskContext)
+			IDialogService dialogService) : base(owner, view, taskContext)
 		{
 			_dialogService = dialogService;
-			_languageProvider = languageProvider;
 			ProjectFiles = taskContext.ProjectFiles;
 			VerifyProjectFiles();
 			VerifyIsValid();
-
-			_languageMappings = _languageProvider.GetMappedLanguages(false);
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -405,23 +398,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					targetLanguage = documentLanguage;
 				}
 
-
-				// Get the mapped language code
-				var mappedLanguage = _languageMappings.FirstOrDefault(a =>
-					string.Compare(a.MappedCode, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0
-					|| string.Compare(a.LanguageCode, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
-
-				if (mappedLanguage == null)
-				{
-					MessageBox.Show(string.Format(PluginResources.WarningMessage_UnableToMapLanguage, targetLanguage),
-						PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
-					return;
-				}
-
-				// Assign the SDL Studio language code
-				targetLanguage = mappedLanguage.LanguageCode;
 				var projectLanguages = GetProjectLanguages(targetLanguage);
-
 				var documentTargetPath = GetPathLocation(documentFullPath, projectLanguages, out var foundTargetLanguage);
 				if (!foundTargetLanguage)
 				{

@@ -18,8 +18,6 @@ namespace Sdl.Community.Transcreate.Interfaces
 
 		Customer Customer { get; set; }
 
-		string AbsoluteUri { get; set; }
-
 		DateTime DueDate { get; set; }
 
 		string DueDateToString { get; }

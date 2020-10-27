@@ -112,11 +112,15 @@
 										<Style TargetType="Image">
 											<Style.Triggers>
 												<DataTrigger Binding="{Binding Action}" Value="None">
-													<Setter Property="Source" Value="../Resources/Fie.png"/>
+													<Setter Property="Source" Value="../Resources/File.png"/>
+													<Setter Property="ToolTip" Value="Ready"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="CreateBackTranslation">
+													<Setter Property="Source" Value="../Resources/File.png"/>
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Convert">
-													<Setter Property="Source" Value="../Resources/Fie.png"/>
+													<Setter Property="Source" Value="../Resources/File.png"/>
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
@@ -124,6 +128,14 @@
 													<Setter Property="ToolTip" Value="Exported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Import">
+													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="ToolTip" Value="Imported"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="ExportBackTranslation">
+													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="ToolTip" Value="Exported"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="ImportBackTranslation">
 													<Setter Property="Source" Value="../Resources/Imported.png"/>
 													<Setter Property="ToolTip" Value="Imported"/>
 												</DataTrigger>

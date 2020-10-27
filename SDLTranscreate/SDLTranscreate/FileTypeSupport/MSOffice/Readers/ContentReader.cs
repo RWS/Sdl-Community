@@ -64,7 +64,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 			SourceLanguage = documentInfo.SourceLanguage.CultureInfo;
 			TargetLanguage = documentInfo.TargetLanguage?.CultureInfo ?? new CultureInfo(_targetLanguage);
 
-			base.Initialize(documentInfo);
+			//base.Initialize(documentInfo);
 		}
 
 		/// <summary>
@@ -83,6 +83,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 
 			_wordWriter.Initialize(_projectId, fileInfo.FileConversionProperties.FileId.Id,
 				_originalFilePath, _outputFilePath, _exportOptions);
+
+			//base.SetFileProperties(fileInfo);
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)

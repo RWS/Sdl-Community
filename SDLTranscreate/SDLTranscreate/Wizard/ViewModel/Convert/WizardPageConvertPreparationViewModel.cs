@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -460,9 +459,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " - Started " + FormatDateTime(DateTime.UtcNow));
 
-				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder,
+				var sdlxliffWriter = new SdlxliffWriter(_segmentBuilder,
 					TaskContext.ImportOptions, TaskContext.AnalysisBands);
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, TaskContext.ExportOptions,
@@ -501,6 +498,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						CreateArchiveFile(targetLanguageFile.ExternalFilePath, archiveFile);
 
 						var sdlXliffImportFile = Path.GetTempFileName();
+						File.Move(sdlXliffImportFile, sdlXliffImportFile + ".sdlxliff");
+						sdlXliffImportFile = sdlXliffImportFile + ".sdlxliff";
 
 						var importFile = new ImportFile
 						{

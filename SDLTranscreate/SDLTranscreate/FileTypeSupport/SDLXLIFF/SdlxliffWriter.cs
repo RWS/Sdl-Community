@@ -4,21 +4,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.Model;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	public class SdlxliffWriter
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		private readonly IFileTypeManager _fileTypeManager;
 		private readonly ImportOptions _importOptions;
 		private readonly List<AnalysisBand> _analysisBands;
 
-		public SdlxliffWriter(IFileTypeManager fileTypeManager, SegmentBuilder segmentBuilder, 
+		public SdlxliffWriter(SegmentBuilder segmentBuilder, 
 			ImportOptions importOptions, List<AnalysisBand> analysisBands)
 		{
-			_fileTypeManager = fileTypeManager;
 			_segmentBuilder = segmentBuilder;
 			_importOptions = importOptions;
 			_analysisBands = analysisBands;
@@ -30,12 +28,13 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		public TranslationOriginStatistics TranslationOriginStatistics { get; private set; }
 
-		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput)
+		public bool UpdateFile(Xliff xliff, string filePathInput, string filePathOutput, bool importBackTranslations=false)
 		{
-			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
+			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
+			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 			var tagIds = GetTagIds(filePathInput);
 
-			var contentWriter = new XliffContentWriter(xliff, _segmentBuilder, _importOptions, _analysisBands, tagIds);
+			var contentWriter = new XliffContentWriter(xliff, _segmentBuilder, _importOptions, _analysisBands, tagIds, importBackTranslations);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

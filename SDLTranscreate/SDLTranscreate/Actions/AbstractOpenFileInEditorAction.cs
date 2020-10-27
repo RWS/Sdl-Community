@@ -42,7 +42,6 @@ namespace Sdl.Community.Transcreate.Actions
 
 			var project = _controllers.ProjectsController.GetAllProjects().FirstOrDefault(
 				a => a.GetProjectInfo().Id.ToString() == selectedFiles[0].ProjectId);
-
 			if (project == null)
 			{
 				return null;

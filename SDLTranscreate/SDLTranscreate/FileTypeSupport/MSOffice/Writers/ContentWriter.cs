@@ -63,7 +63,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 		public override void SetFileProperties(IFileProperties fileInfo)
 		{
-			base.SetFileProperties(fileInfo);
+			//base.SetFileProperties(fileInfo);
 			//Read the updated DOCX file and collect all the segments
 			var reader = new WordReader(_importOptions, SourceLanguage.Name, TargetLanguage.Name);
 			_updatedSegments = reader.ReadFile(_updatedFilePath);
