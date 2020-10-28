@@ -46,6 +46,7 @@ namespace Sdl.LC.AddonBlueprint.Services
 		/// <returns></returns>
 		public AddonDescriptorModel GetDescriptor()
 		{
+			//TODO: ovveride baseurl property cu ce vine din appsettings.json
 			foreach (var configuration in _addonDescriptor.Configurations.Where(c => c.DataType == SecretDataType))
 			{
 				configuration.DefaultValue = SecretMask;

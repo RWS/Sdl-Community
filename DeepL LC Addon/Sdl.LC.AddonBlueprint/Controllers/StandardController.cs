@@ -234,6 +234,8 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			return resultValue;
 		}
 
+
+		//TODO: Move to another controller
 		//[Authorize]
 		[HttpGet("translation-engines")]
 		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request, [FromHeader(Name = "X-LC-Tenant")]string tenantId, [FromHeader(Name = "TR_ID")]string traceId)

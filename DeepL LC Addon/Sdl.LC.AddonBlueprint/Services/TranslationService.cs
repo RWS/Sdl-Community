@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 using Sdl.LC.AddonBlueprint.Exceptions;
 using Sdl.LC.AddonBlueprint.Helpers;
 using Sdl.LC.AddonBlueprint.Interfaces;
@@ -43,12 +44,10 @@ namespace Sdl.LC.AddonBlueprint.Services
 
 			Parallel.ForEach(translationRequest.Contents, (text) =>
 			{
-				using var httpClient = new HttpClient
-				{
-					Timeout = TimeSpan.FromMinutes(5)
-				};
+				var encodedText = HttpUtility.UrlEncode(text);
+				using var httpClient = new HttpClient();			
 
-				var content = new StringContent($"text={text}" +
+				var content = new StringContent($"text={encodedText}" +
 												$"&source_lang={translationEngine.EngineSourceLanguage}" +
 												$"&target_lang={translationEngine.EngineTargetLanguage}" +
 												$"&formality={formality.ToLower()}" +
@@ -63,7 +62,6 @@ namespace Sdl.LC.AddonBlueprint.Services
 					var translatedObject = JsonSerializer.Deserialize<DeeplTranslationResponse>(translationResponse, JsonSettings.Default());
 					var translatedText = translatedObject.Translations[0].Text;
 
-					//translationsResponse.Translations.Add(translatedText);
 					translations.Add(translatedText);
 				}
 				else

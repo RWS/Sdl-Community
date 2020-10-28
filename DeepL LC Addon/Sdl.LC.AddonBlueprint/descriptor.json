@@ -1,6 +1,6 @@
 ﻿{
 	"name": "DeepL Translation Provider",
-	"version": "1.0.26",
+	"version": "1.0.27",
 	"description": "This Add on provides machine translation results from the DeepL Translator.",
 	"extensions": [
 		{
@@ -18,7 +18,7 @@
 			}
 		}
 	],
-	"baseUrl": "http://10.111.138.150:2509",
+	"baseUrl": "http://10.111.138.129:2509",
 	"standardEndpoints": {
 		"health": "/api/health",
 		"addonLifecycle": "/api/addon-lifecycle",

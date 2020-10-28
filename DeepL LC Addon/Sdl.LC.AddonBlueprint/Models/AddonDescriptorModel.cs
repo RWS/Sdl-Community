@@ -33,7 +33,7 @@ namespace Sdl.LC.AddonBlueprint.Models
 
 		/// <summary>
 		/// The base url.
-		/// </summary>
+		/// </summary> 
 		public string BaseUrl { get; set; }
 
 		/// <summary>
