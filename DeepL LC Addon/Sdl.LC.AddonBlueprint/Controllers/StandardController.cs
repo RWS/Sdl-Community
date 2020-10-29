@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,7 +14,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
-using System;
 
 namespace Sdl.LC.AddonBlueprint.Controllers
 {
@@ -23,15 +21,11 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 	[ApiController]
 	public class StandardController : ControllerBase
 	{
-		private IConfiguration _configuration;	
+		private IConfiguration _configuration;
 		private readonly ILogger _logger;
 		private readonly IDescriptorService _descriptorService;
 		private readonly IAccountService _accountService;
 		private readonly IHealthReporter _healthReporter;
-		private readonly ITranslationService _translationService;
-		private readonly ILanguageService _languageService;
-		private const string ApiKeyId = "apikey";
-		private const string FormalityId = "translationFormality";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AccountService"/> class.
@@ -45,15 +39,13 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			ILogger<StandardController> logger,
 			IDescriptorService descriptorService,
 			IAccountService accountService,
-			IHealthReporter healthReporter,ILanguageService languageService,ITranslationService translationService)
+			IHealthReporter healthReporter)
 		{
 			_configuration = configuration;
 			_logger = logger;
 			_descriptorService = descriptorService;
 			_accountService = accountService;
 			_healthReporter = healthReporter;
-			_translationService = translationService;
-			_languageService = languageService;
 		}
 
 		/// <summary>
@@ -77,7 +69,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			{
 				NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
 				ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver(),
-				
+
 			};
 
 			return Content(Newtonsoft.Json.JsonConvert.SerializeObject(descriptor, serializerSettings), "application/json", Encoding.UTF8);
@@ -140,7 +132,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 					_logger.LogInformation("Addon Activated Event Received.");
 					var activatedEvent = JsonSerializer.Deserialize<AddOnLifecycleEvent<ActivatedEvent>>(payload, JsonSettings.Default());
 
-					 var tenantId = activatedEvent.Data.TenantId;
+					var tenantId = activatedEvent.Data.TenantId;
 					_logger.LogInformation($"Addon Activated Event Received for tenant id {tenantId}.");
 
 					await _accountService.SaveAccountInfo(activatedEvent.Data, CancellationToken.None).ConfigureAwait(false);
@@ -201,7 +193,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			_logger.LogInformation("Retrieving the configuration settings.");
 
 			var tenantId = Request.HttpContext.User.Claims.Single(c => c.Type == "X-LC-Tenant").Value;
-			var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId,true, CancellationToken.None).ConfigureAwait(false);
+			var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, true, CancellationToken.None).ConfigureAwait(false);
 
 			var resultValue = Content(JsonSerializer.Serialize(configurationSettingsResult, JsonSettings.Default()), "application/json", Encoding.UTF8);
 			resultValue.StatusCode = 200;
@@ -232,63 +224,6 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 			resultValue.StatusCode = 200;
 
 			return resultValue;
-		}
-
-
-		//TODO: Move to another controller
-		//[Authorize]
-		[HttpGet("translation-engines")]
-		public async Task<IActionResult> GetTranslationEngines([FromQuery]TranslationEngineRequest request, [FromHeader(Name = "X-LC-Tenant")]string tenantId, [FromHeader(Name = "TR_ID")]string traceId)
-		{
-			var apiKey = await GetSettingValue(tenantId, ApiKeyId);
-
-			if (!string.IsNullOrEmpty(apiKey))
-			{
-				if (!string.IsNullOrEmpty(request.SourceLanguage) && request.TargetLanguage.Any())
-				{
-					var engineResponse = await _languageService.GetCorrespondingEngines(apiKey, request.SourceLanguage, request.TargetLanguage);
-					return Ok(engineResponse);
-				}
-			}
-			else
-			{
-				return Unauthorized("DeepL API Key is not valid");
-			}
-
-			return Ok();
-		}
-
-		//[Authorize]
-		[HttpPost("translate")]
-		public async Task<IActionResult> Translate([FromBody]TranslationRequest request, [FromHeader(Name = "X-LC-Tenant")]string tenantId)
-		{
-			var apiKey = await GetSettingValue(tenantId,ApiKeyId);
-			var formality = await GetSettingValue(tenantId, FormalityId);
-
-			if (!string.IsNullOrEmpty(apiKey))
-			{
-				var translationResponse = await _translationService.Translate(request, apiKey,formality);
-				return Ok(translationResponse);
-			}
-			else
-			{
-				return Unauthorized("DeepL API Key is not valid");
-			}
-		}
-
-		private async Task<string> GetSettingValue(string tenantId,string propertyId)
-		{
-			var propertyValue = string.Empty;
-			if (!string.IsNullOrEmpty(tenantId))
-			{
-				var configurationSettingsResult = await _accountService.GetConfigurationSettings(tenantId, false, CancellationToken.None).ConfigureAwait(false);
-				if (configurationSettingsResult != null)
-				{
-					propertyValue = (string)configurationSettingsResult.Items.FirstOrDefault(c => c.Id.ToLower().Equals(propertyId.ToLower()))?.Value;
-				}
-			}
-			
-			return propertyValue;
 		}
 	}
 }
