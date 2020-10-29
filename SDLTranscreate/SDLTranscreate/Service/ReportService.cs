@@ -219,7 +219,7 @@ namespace Sdl.Community.Transcreate.Service
 
 			WriteConfirmationWordCountStatistics(writer, wordCounts?.Processed, "processed");
 			WriteConfirmationWordCountStatistics(writer, wordCounts?.Excluded, "excluded");
-			if (action == Enumerators.Action.Import)
+			if (action == Enumerators.Action.Import || action == Enumerators.Action.ImportBackTranslation)
 			{
 				WriteConfirmationWordCountStatistics(writer, wordCounts?.NotProcessed, "notProcessed");
 			}
@@ -234,7 +234,7 @@ namespace Sdl.Community.Transcreate.Service
 
 			WriteAnalysisWordCountStatistics(writer, wordCounts?.Processed, analysisBands, "processed");
 			WriteAnalysisWordCountStatistics(writer, wordCounts?.Excluded, analysisBands, "excluded");
-			if (action == Enumerators.Action.Import)
+			if (action == Enumerators.Action.Import || action == Enumerators.Action.ImportBackTranslation)
 			{
 				WriteAnalysisWordCountStatistics(writer, wordCounts?.NotProcessed, analysisBands, "notProcessed");
 			}
@@ -279,7 +279,7 @@ namespace Sdl.Community.Transcreate.Service
 						}
 					}
 
-					if (action == Enumerators.Action.Import)
+					if (action == Enumerators.Action.Import || action == Enumerators.Action.ImportBackTranslation)
 					{
 						foreach (var wordCount in projectFile.TranslationOriginStatistics?.WordCounts?.NotProcessed)
 						{
@@ -351,7 +351,7 @@ namespace Sdl.Community.Transcreate.Service
 						}
 					}
 
-					if (action == Enumerators.Action.Import)
+					if (action == Enumerators.Action.Import || action == Enumerators.Action.ImportBackTranslation)
 					{
 						foreach (var wordCount in projectFile.ConfirmationStatistics?.WordCounts?.NotProcessed)
 						{

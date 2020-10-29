@@ -36,7 +36,17 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			OutputFolder = TaskContext.WorkflowFolder;
 			CopySourceToTarget = taskContext.ExportOptions.CopySourceToTarget;
 			IncludeTranslations = taskContext.ExportOptions.IncludeTranslations;
-			ShowIncludeBackTranslations = !(taskContext.Project is BackTranslationProject);
+			
+			if (!(taskContext.Project is BackTranslationProject))
+			{
+				ShowIncludeBackTranslations = true;
+				IncludeBackTranslations = taskContext.ExportOptions.IncludeBackTranslations;
+			}
+			else
+			{
+				IncludeBackTranslations = false;
+				ShowIncludeBackTranslations = false;
+			}
 
 			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, TaskContext.ExportOptions.ExcludeFilterIds));

@@ -112,7 +112,10 @@ namespace Sdl.Community.Transcreate.ViewModel
 		{
 			get
 			{
-				var message = string.Format(PluginResources.StatusLabel_Selected_0, _selectedProjects?.Count);
+				var message = string.Format(PluginResources.StatusLabel_Selected_0,
+					_selectedProjects != null 
+						? _selectedProjects?.Count 
+						: (_selectedProject != null ? 1 : 0));
 				return message;
 			}
 		}

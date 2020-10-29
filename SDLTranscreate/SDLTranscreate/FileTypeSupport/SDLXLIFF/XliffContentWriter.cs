@@ -141,7 +141,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				//var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
 				SegmentPairInfo segmentPairInfo = null;
 				try
 				{

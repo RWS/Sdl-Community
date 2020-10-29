@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Sdl.Community.Transcreate.Model;
-using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.Transcreate.Interfaces
 {

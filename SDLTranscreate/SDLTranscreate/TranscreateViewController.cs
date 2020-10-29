@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -25,7 +26,6 @@ using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.Reports.Viewer.API;
@@ -48,7 +48,7 @@ namespace Sdl.Community.Transcreate
 	public class TranscreateViewController : AbstractViewController, ITranscreateController
 	{
 		private readonly object _lockObject = new object();
-		private List<Interfaces.IProject> _transcreateProjects;
+		private List<IProject> _transcreateProjects;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
 		private ProjectFilesViewControl _projectFilesViewControl;
@@ -129,6 +129,10 @@ namespace Sdl.Community.Transcreate
 		public bool IsActive { get; set; }
 
 		public bool OverrideEditorWarningMessage { get; set; }
+
+		internal ReportsController ReportsController { get; private set; }
+
+		internal string ClientId { get; private set; }
 
 		public void RefreshProjects()
 		{
@@ -333,7 +337,6 @@ namespace Sdl.Community.Transcreate
 				backTranslationProject = taskContext.Project as BackTranslationProject;
 				if (backTranslationProject != null)
 				{
-					//backTranslationProject.Path = GetRelativePath(parentProject.Path, backTranslationProject.Path);
 					parentProject.BackTranslationProjects.Add(backTranslationProject);
 				}
 			}
@@ -439,7 +442,6 @@ namespace Sdl.Community.Transcreate
 			var automaticTask = CreateAutomaticTask(taskContext, selectedProject);
 			var reports = CreateHtmlReports(taskContext, selectedProject, automaticTask, project);
 
-			// add to reports controller
 			ReportsController.AddReports(ClientId, reports);
 		}
 
@@ -560,11 +562,6 @@ namespace Sdl.Community.Transcreate
 
 					if (backProjects?.Count > 0)
 					{
-						//foreach (var backProject in backProjects)
-						//{
-						//	backProject.Path = Path.Combine(projectInfo.LocalProjectFolder, backProject.Path);
-						//}
-
 						xliffProject.BackTranslationProjects.AddRange(backProjects);
 					}
 
@@ -672,9 +669,7 @@ namespace Sdl.Community.Transcreate
 			return backProjects;
 		}
 
-		internal ReportsController ReportsController { get; private set; }
 
-		internal string ClientId { get; private set; }
 
 		private bool UpdateCustomerInfo(FileBasedProject project, IProject xliffProject)
 		{

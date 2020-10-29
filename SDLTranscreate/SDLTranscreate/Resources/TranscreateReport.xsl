@@ -883,7 +883,7 @@
 
 										</table>
 
-										<xsl:if test="//taskInfo/@action = 'Import'">
+										<xsl:if test="//taskInfo/@action = 'Import' or //@action = 'ImportBackTranslation'">
 												<h2 class="firstWithEmphasis">
 														Not Imported
 												</h2>

@@ -113,7 +113,7 @@ namespace Sdl.Community.Transcreate.Service
 			return newProject;
 		}
 
-		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string iconPath,
+		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string targetLanguage, string iconPath,
 			List<string> projectFiles, string projectNameSuffix)
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
@@ -124,16 +124,16 @@ namespace Sdl.Community.Transcreate.Service
 			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
-
-			var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
-			var targetLanguage = projectInfo.TargetLanguages[0].CultureInfo.Name;
+			
 			var localProjectFolder = Path.Combine(projectInfo.LocalProjectFolder, "BackProjects", targetLanguage);
 
+			var newSourceLanguage = projectInfo.TargetLanguages.FirstOrDefault(a =>
+				string.Compare(a.CultureInfo.Name, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
+			var newTargetLanguage = projectInfo.SourceLanguage;
 			if (Directory.Exists(localProjectFolder))
 			{
 				Directory.Delete(localProjectFolder, true);
 			}
-
 
 			var projectReference = new ProjectReference(project.FilePath);
 			var newProjectInfo = new ProjectInfo
@@ -141,8 +141,8 @@ namespace Sdl.Community.Transcreate.Service
 				Name = projectInfo.Name + "-" + _projectNameSuffix + "-" + targetLanguage,
 				Description = projectInfo.Description,
 				LocalProjectFolder = localProjectFolder,
-				SourceLanguage = projectInfo.TargetLanguages[0],
-				TargetLanguages = new Language[] { projectInfo.SourceLanguage },
+				SourceLanguage = newSourceLanguage,
+				TargetLanguages = new Language[] { newTargetLanguage },
 				DueDate = projectInfo.DueDate,
 				ProjectOrigin = "Back-Translation Project",
 				IconPath = iconPath,

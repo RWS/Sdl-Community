@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
@@ -10,11 +13,13 @@ using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Model;
+using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.Reports.Viewer.API;
 using File = System.IO.File;
 using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
 
@@ -183,7 +188,10 @@ namespace Sdl.Community.Transcreate.Actions
 					}
 
 					var iconPath = GetBackTranslationIconPath();
-					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(studioProject, iconPath, sourceFiles, "BT");
+					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(studioProject, targetLanguage.CultureInfo.Name, iconPath, sourceFiles, "BT");
+					//UpdateProjectSettingsBundle(newStudioProject);
+
+
 					var newStudioProjectInfo = newStudioProject.GetProjectInfo();
 
 					var action = Enumerators.Action.CreateBackTranslation;
@@ -217,7 +225,7 @@ namespace Sdl.Community.Transcreate.Actions
 						AlignParagraphIds(fileData.Data, paragraphMap.Keys.ToList());
 
 						var filePath = Path.Combine(taskContext.WorkingFolder, projectFile.Path.Trim('\\'));
-						//var externalFilePath = Path.Combine(filePath, projectFile.Name.Substring(0, projectFile.Name.Length - ".sdlxliff".Length));
+
 						var externalFilePath = Path.Combine(filePath, projectFile.Name + ".xliff");
 						if (!Directory.Exists(filePath))
 						{
@@ -265,9 +273,13 @@ namespace Sdl.Community.Transcreate.Actions
 					}
 
 					_controllers.ProjectsController.Close(newStudioProject);
+
+					CleanupProjectSettings(newStudioProject);
+
 					_controllers.ProjectsController.Add(newStudioProject.FilePath);
 
 					taskContext.Completed = true;
+
 					_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
 
 					Enabled = false;
@@ -275,9 +287,77 @@ namespace Sdl.Community.Transcreate.Actions
 			}
 		}
 
+		private static void CleanupProjectSettings(FileBasedProject newStudioProject)
+		{
+			string content;
+			using (var sr = new StreamReader(newStudioProject.FilePath, Encoding.UTF8))
+			{
+				content = sr.ReadToEnd();
+				sr.Close();
+			}
+
+			var regex1 = new Regex(@"<SettingsGroup\s+Id\=""ReportsViewerSettings"">(.*?|)</SettingsGroup>",
+				RegexOptions.Singleline | RegexOptions.IgnoreCase);
+			var match1 = regex1.Match(content);
+			if (match1.Success)
+			{
+				var prefix = content.Substring(0, match1.Index).TrimEnd();
+				var suffix = content.Substring(match1.Index + match1.Length).TrimStart();
+				content = prefix + suffix;
+			}
+
+			var regex2 = new Regex(@"<SettingsGroup\s+Id\=""SDLTranscreateProject"">(.*?|)</SettingsGroup>",
+				RegexOptions.Singleline | RegexOptions.IgnoreCase);
+			var match2 = regex2.Match(content);
+			if (match2.Success)
+			{
+				var prefix = content.Substring(0, match2.Index).TrimEnd();
+				var suffix = content.Substring(match2.Index + match2.Length).TrimStart();
+				content = prefix + suffix;
+			}
+
+			var regex3 = new Regex(@"<SettingsGroup\s+Id\=""SDLTranscreateBackProjects"">(.*?|)</SettingsGroup>",
+				RegexOptions.Singleline | RegexOptions.IgnoreCase);
+			var match3 = regex3.Match(content);
+			if (match3.Success)
+			{
+				var prefix = content.Substring(0, match3.Index).TrimEnd();
+				var suffix = content.Substring(match3.Index + match3.Length).TrimStart();
+				content = prefix + suffix;
+			}
+
+
+			using (var writer = new StreamWriter(newStudioProject.FilePath, false, Encoding.UTF8))
+			{
+				writer.Write(content);
+				writer.Flush();
+				writer.Close();
+			}
+		}
+
 		public void Run()
 		{
 			Execute();
+		}
+
+		private void UpdateProjectSettingsBundle(FileBasedProject project)
+		{
+			var settingsBundle = project.GetSettings();
+			var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
+
+			var projectFiles = new List<SDLTranscreateProjectFile>();
+			sdlTranscreateProject.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles);
+
+			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
+			project.Save();
+
+
+			var sdlBackTranslateProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+			var backProjects = new List<SDLTranscreateBackProject>();
+			sdlBackTranslateProjects.BackProjectsJson.Value = JsonConvert.SerializeObject(backProjects);
+
+			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
+			project.Save();
 		}
 
 		private Dictionary<string, List<string>> GetParagraphMap(Xliff xliffData)

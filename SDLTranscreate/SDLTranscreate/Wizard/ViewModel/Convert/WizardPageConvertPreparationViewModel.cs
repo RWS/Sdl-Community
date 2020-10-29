@@ -20,7 +20,6 @@ using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
 using Button = System.Windows.Controls.Button;
 using File = System.IO.File;

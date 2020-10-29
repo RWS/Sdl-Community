@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
@@ -133,6 +135,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						continue;
 					}
 
+					var tokenVisitor = new TokenVisitor();
+					tokenVisitor.VisitSegment(targetSegment);
+					var originalText = tokenVisitor.PlainText.ToString();
+
 					try
 					{
 						if (segmentPair.Target.Properties.TranslationOrigin == null)
@@ -164,27 +170,51 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						throw new Exception("Problem when merging content of segment " + segmentPair.Properties.Id.Id, ex);
 					}
 
-					if (!string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
+					tokenVisitor.Process(targetSegment);
+					var updatedText = tokenVisitor.PlainText.ToString();
+
+					if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
 					{
-						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true,
-							out var result);
+						if (!string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
+						{
+							var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true,
+								out var result);
+							var statusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
 
-						var statusTranslationUpdated = success ? result : ConfirmationLevel.Unspecified;
-						targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
-						segmentPair.Properties.ConfirmationLevel = statusTranslationUpdated;
+							targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
+							segmentPair.Properties.ConfirmationLevel = statusTranslationUpdated;
 
-						status = segmentPair.Properties.ConfirmationLevel.ToString();
-						match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+							status = segmentPair.Properties.ConfirmationLevel.ToString();
+							match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+						}
+
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 					}
+					else
+					{
+						if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+						{
+							var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
+							var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
 
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+							targetSegment.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+						}
+
+						status = targetSegment.Properties.ConfirmationLevel.ToString();
+						match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
+
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+					}
 				}
 				else
 				{
-					if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+					if (!string.IsNullOrEmpty(_importOptions.StatusSegmentNotImportedId))
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
@@ -223,7 +253,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			return date.ToString(DateTimeFormatInfo.InvariantInfo);
 		}
 
-		
+
 		/// <summary>
 		/// Need to find out the segment identifier, there is a possibility that the old files 
 		/// are processed and the paragraph unit ID is not entered
