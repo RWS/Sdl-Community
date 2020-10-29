@@ -15,6 +15,7 @@ namespace Sdl.Community.Transcreate.Model
 			ExportOptions.XliffSupport = Enumerators.XLIFFSupport.xliff12sdl;
 			ExportOptions.IncludeTranslations = true;
 			ExportOptions.CopySourceToTarget = true;
+			ExportOptions.IncludeBackTranslations = false;
 			ExportOptions.ExcludeFilterIds = new List<string>();
 
 			ImportOptions = new ImportOptions();			

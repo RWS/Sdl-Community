@@ -8,8 +8,17 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public static class Log
 	{
+		private static bool _isInitialized;
+
+		public static Logger GetLogger(string name)
+		{
+			if (!_isInitialized) Log.Setup();
+			return LogManager.GetLogger(name);
+		}
+
 		public static void Setup()
 		{
+			_isInitialized = true;
 			if (LogManager.Configuration == null)
 			{
 				LogManager.Configuration = new LoggingConfiguration();

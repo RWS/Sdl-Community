@@ -184,7 +184,7 @@ namespace Sdl.Community.Transcreate.TestData
 						projectFile.Date));
 			}
 
-			projectFile.XliffFilePath = "\\XLIFF File\\" + (projectFile.ProjectFileActivities.Count - 1);
+			projectFile.ExternalFilePath = "\\XLIFF File\\" + (projectFile.ProjectFileActivities.Count - 1);
 
 			return projectFile;
 		}

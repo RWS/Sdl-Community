@@ -20,6 +20,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private bool _copySourceToTarget;
 		private bool _copySourceToTargetEnabled;
 		private bool _includeTranslations;
+		private bool _includeBackTranslations;
 		private List<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 		private ICommand _clearExportFileCommand;
@@ -27,17 +28,28 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 		private ICommand _clearFiltersCommand;
 		private ICommand _selectedItemsChangedCommand;	
 
-		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
-			: base(owner, view, wizardContext)
+		public WizardPageExportOptionsViewModel(Window owner, object view, TaskContext taskContext, IDialogService dialogService) 
+			: base(owner, view, taskContext)
 		{
 			_dialogService = dialogService;
 			
-			OutputFolder = WizardContext.TransactionFolder;
-			CopySourceToTarget = wizardContext.ExportOptions.CopySourceToTarget;
-			IncludeTranslations = wizardContext.ExportOptions.IncludeTranslations;
+			OutputFolder = TaskContext.WorkflowFolder;
+			CopySourceToTarget = taskContext.ExportOptions.CopySourceToTarget;
+			IncludeTranslations = taskContext.ExportOptions.IncludeTranslations;
+			
+			if (!(taskContext.Project is BackTranslationProject))
+			{
+				ShowIncludeBackTranslations = true;
+				IncludeBackTranslations = taskContext.ExportOptions.IncludeBackTranslations;
+			}
+			else
+			{
+				IncludeBackTranslations = false;
+				ShowIncludeBackTranslations = false;
+			}
 
 			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, WizardContext.ExportOptions.ExcludeFilterIds));
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, TaskContext.ExportOptions.ExcludeFilterIds));
 
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
@@ -157,6 +169,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			}
 		}
 
+		public bool IncludeBackTranslations
+		{
+			get => _includeBackTranslations;
+			set
+			{
+				if (_includeBackTranslations == value)
+				{
+					return;
+				}
+
+				_includeBackTranslations = value;
+				OnPropertyChanged(nameof(IncludeBackTranslations));
+			}
+		}
+
+		public bool ShowIncludeBackTranslations { get; set; }
+
 		public override string DisplayName => PluginResources.PageName_Options;
 
 		public override bool IsValid { get; set; }
@@ -226,11 +255,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-			WizardContext.TransactionFolder = OutputFolder;
-			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
-			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
-			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-			//WizardContext.ExcludeFilterItemIds =
+			TaskContext.WorkflowFolder = OutputFolder;
+			TaskContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
+			TaskContext.ExportOptions.IncludeTranslations = IncludeTranslations;
+			TaskContext.ExportOptions.IncludeBackTranslations = IncludeBackTranslations;
+			TaskContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 		}
 
 		public void Dispose()

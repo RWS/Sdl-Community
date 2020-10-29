@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using File = System.IO.File;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 {
@@ -30,24 +31,29 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 		public CultureInfo TargetLanguage { get; private set; }
 
-		public Xliff ReadFile(string projectId, string filePath)
+		public Xliff ReadFile(string projectId, string documentId, string filePath, string targetLanguage)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, null, null);
+			var tempFile = Path.GetTempFileName();
+			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePath, tempFile, null);
 
-			var contentReader = new XliffContentReader(projectId, filePath, false, _segmentBuilder, 
-				_exportOptions, _analysisBands);		
+			var contentReader = new XliffContentReader(projectId, documentId, filePath, targetLanguage, false, _segmentBuilder,
+				_exportOptions, _analysisBands);
 			converter.AddBilingualProcessor(contentReader);
-			
-			SourceLanguage = contentReader.SourceLanguage;
-			TargetLanguage = contentReader.TargetLanguage;			
 
 			converter.Parse();
+
+			SourceLanguage = contentReader.SourceLanguage;
+			TargetLanguage = contentReader.TargetLanguage;
 
 			ConfirmationStatistics = contentReader.ConfirmationStatistics;
 			TranslationOriginStatistics = contentReader.TranslationOriginStatistics;
 
-			
+
+			if (File.Exists(tempFile))
+			{
+				File.Delete(tempFile);
+			}
 
 			return contentReader.Xliff;
 		}

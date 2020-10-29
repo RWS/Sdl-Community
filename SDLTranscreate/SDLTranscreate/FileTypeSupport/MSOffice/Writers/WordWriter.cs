@@ -7,20 +7,28 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
+using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Color = System.Drawing.Color;
 using Comment = DocumentFormat.OpenXml.Wordprocessing.Comment;
+using Settings = DocumentFormat.OpenXml.Wordprocessing.Settings;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 {
 	internal class WordWriter
 	{
+		private static Color ContextMatchColor = Color.LightGray;
+		private static Color ExactMatchColor = Color.PaleGreen;
+		private static Color FuzzyMatchColor = Color.Wheat;
+		private static Color NoMatchColor = Color.White;
+
 		private readonly string _sourceLang;
 
 		private readonly string _targetLang;
 
 		private readonly List<int> _listOfUsedComments;
 
-		private GeneratorSettings _conversionSettings;
+		private ExportOptions _conversionSettings;
 
 		private WordprocessingDocument _wordDocument;
 
@@ -49,7 +57,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 		private int _commentId;
 
 		private int _trackChangeId;
-
 
 		public WordWriter(string sourceLang, string targetLang)
 		{
@@ -99,7 +106,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 			var styleRunProperties = new StyleRunProperties();
 			var italic = new Italic();
-			DocumentFormat.OpenXml.Wordprocessing.Color color = new DocumentFormat.OpenXml.Wordprocessing.Color
+			var color = new DocumentFormat.OpenXml.Wordprocessing.Color
 			{
 				Val = "FF0066"
 			};
@@ -143,7 +150,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			var primaryStyle = new PrimaryStyle();
 
 			var styleRunProperties = new StyleRunProperties();
-			DocumentFormat.OpenXml.Wordprocessing.Color color = new DocumentFormat.OpenXml.Wordprocessing.Color() { Val = "auto" };
+			var color = new DocumentFormat.OpenXml.Wordprocessing.Color() { Val = "auto" };
 			styleRunProperties.Append(color);
 
 			style.Append(styleName);
@@ -184,7 +191,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			var styleRunProperties = new StyleRunProperties();
 			var italic = new Italic();
 
-			DocumentFormat.OpenXml.Wordprocessing.Color color =
+			var color =
 				new DocumentFormat.OpenXml.Wordprocessing.Color
 				{
 					Val = "808080",
@@ -233,7 +240,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			var styleRunProperties = new StyleRunProperties();
 			var vanish = new Vanish();
 
-			DocumentFormat.OpenXml.Wordprocessing.Color color = new DocumentFormat.OpenXml.Wordprocessing.Color
+			var color = new DocumentFormat.OpenXml.Wordprocessing.Color
 			{
 				Val = "auto"
 			};
@@ -261,11 +268,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			CreateNewTable(name);
 		}
 
-		internal void Initialize(string fileId, string outputFile, GeneratorSettings settings)
+		internal void Initialize(string projectId, string fileId, string originalFullPath, string outputFullPath, ExportOptions settings)
 		{
 			_conversionSettings = settings;
 
-			_wordDocument = WordprocessingDocument.Create(outputFile, WordprocessingDocumentType.Document);
+			_wordDocument = WordprocessingDocument.Create(outputFullPath, WordprocessingDocumentType.Document);
 			_wordMainDocumentPart = _wordDocument.AddMainDocumentPart();
 
 			var document = new Document
@@ -302,7 +309,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			_wordBody = new Body();
 			_wordTables = new List<Table>();
 
-			SetPackageProperties(fileId);
+			SetPackageProperties(projectId, fileId, originalFullPath);
 		}
 
 		internal void Complete()
@@ -323,7 +330,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			string relevance,
 			string textFunction,
 			List<Token> sourceTokens,
-			List<Token> targetToken,
+			List<Token> targetTokens,
 			ISegmentPairProperties segmentProperties,
 			List<Token> backTranslationTokens)
 		{
@@ -334,7 +341,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 				GetCell(GenerateContextTypeCellContent(relevance, _sourceLang, SourceCulture), null),
 				GetCell(GenerateContextTypeCellContent(textFunction, _sourceLang, SourceCulture), null),
 				GetCell(GenerateCellContent(sourceTokens, _sourceLang, SourceCulture), null),
-				GetCell(GenerateCellContent(targetToken, _targetLang, TargetCulture), null),
+				GetCell(GenerateCellContent(targetTokens, _targetLang, TargetCulture), null),
 				GetCell(GenerateCellContent(backTranslationTokens, _sourceLang, SourceCulture), null));
 		}
 
@@ -344,7 +351,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			{
 				if (_exactMatch == null)
 				{
-					_exactMatch = ColorTranslator.ToHtml(_conversionSettings.ExactMatchColor);
+					_exactMatch = ColorTranslator.ToHtml(ExactMatchColor);
 				}
 				return _exactMatch;
 			}
@@ -360,7 +367,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			{
 				if (_fuzzyMatch == null)
 				{
-					_fuzzyMatch = ColorTranslator.ToHtml(_conversionSettings.FuzzyMatchColor).Replace("#", "");
+					_fuzzyMatch = ColorTranslator.ToHtml(FuzzyMatchColor).Replace("#", "");
 				}
 				return _fuzzyMatch;
 			}
@@ -376,7 +383,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			{
 				if (_contextMatch == null)
 				{
-					_contextMatch = ColorTranslator.ToHtml(_conversionSettings.ContextMatchColor).Replace("#", "");
+					_contextMatch = ColorTranslator.ToHtml(ContextMatchColor).Replace("#", "");
 				}
 				return _contextMatch;
 			}
@@ -392,7 +399,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			{
 				if (_noMatch == null)
 				{
-					_noMatch = ColorTranslator.ToHtml(_conversionSettings.NoMatchColor).Replace("#", "");
+					_noMatch = ColorTranslator.ToHtml(NoMatchColor).Replace("#", "");
 				}
 				return _noMatch;
 			}
@@ -620,7 +627,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 		/// <param name="lang"></param>
 		/// <param name="langCulture"></param>
 		/// <returns></returns>
-		private Paragraph GenerateCellContent(List<Token> listTokens, string lang, CultureInfo langCulture)
+		private Paragraph GenerateCellContent(IReadOnlyCollection<Token> listTokens, string lang, CultureInfo langCulture)
 		{
 			var paragraph = new Paragraph();
 			var paragraphProperties = new ParagraphProperties();
@@ -638,160 +645,150 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			var inDeletedRun = false;
 			var inInsertedRun = false;
 
-			foreach (var item in listTokens)
+			if (listTokens != null)
 			{
-				var run = new Run();
-
-				var deletedText = new DeletedText
+				foreach (var item in listTokens)
 				{
-					Space = SpaceProcessingModeValues.Preserve
-				};
+					var run = new Run();
 
-				var text = new Text
-				{
-					Space = SpaceProcessingModeValues.Preserve
-				};
+					var deletedText = new DeletedText { Space = SpaceProcessingModeValues.Preserve };
 
-				var runProperties = new RunProperties();
-				var runTagStyle = new RunStyle
-				{
-					Val = "Tag"
-				};
+					var text = new Text { Space = SpaceProcessingModeValues.Preserve };
 
-				var runLockedStyle = new RunStyle
-				{
-					Val = "LockedContent"
-				};
+					var runProperties = new RunProperties();
+					var runTagStyle = new RunStyle { Val = "Tag" };
 
-				var languages2 = CreateLanguage(lang, langCulture);
-				CommentRangeStart commentRangeStart = null;
-				CommentRangeEnd commentRangeEnd = null;
+					var runLockedStyle = new RunStyle { Val = "LockedContent" };
 
-				switch (item.Type)
-				{
-					case Token.TokenType.TagOpen:
-						runProperties.Append(runTagStyle);
-						run.Append(runProperties);
-						HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, "<" + item.Content + ">", run);
-						break;
-					case Token.TokenType.TagClose:
-						runProperties.Append(runTagStyle);
-						run.Append(runProperties);
-						HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, "</" + item.Content + ">", run);
-						break;
-					case Token.TokenType.TagPlaceholder:
-						runProperties.Append(runTagStyle);
-						run.Append(runProperties);
-						HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, "<" + item.Content + "/>", run);
-						break;
-					case Token.TokenType.LockedContent:
-						runProperties.Append(runLockedStyle);
-						run.Append(runProperties);
-						HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, "<" + item.Content + "/>", run);
-						break;
-					case Token.TokenType.Text:
-						run.Append(runProperties);
-						HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, item.Content, run);
-						break;
-					case Token.TokenType.CommentStart:
-						GenerateComment(item);
-						var commentReference1 = new CommentReference
-						{
-							Id = (_commentId - 1).ToString()
-						};
-						commentRangeStart = new CommentRangeStart
-						{
-							Id = (_commentId - 1).ToString()
-						};
-						_listOfUsedComments.Add(_commentId - 1);
-						break;
-					case Token.TokenType.CommentEnd:
-						commentRangeEnd = new CommentRangeEnd
-						{
-							Id = _listOfUsedComments.Last().ToString()
-						};
-						break;
-					case Token.TokenType.SpecialType:
-						run.Append(item.SpecialContent);
-						break;
-					case Token.TokenType.RevisionMarker:
-						PrepareTrackChangesRuns(ref deletedRun, ref insertedRun, item, ref inDeletedRun, ref inInsertedRun);
-						//switch to next token item
-						break;
-					default:
-						run.Append(runProperties);
-						HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, item.Content, run);
-						break;
-				}
+					var languages2 = CreateLanguage(lang, langCulture);
+					CommentRangeStart commentRangeStart = null;
+					CommentRangeEnd commentRangeEnd = null;
 
-				//Set run language - needs to be here to generate valid document
-				runProperties.Append(languages2);
-
-				if (commentRangeStart != null)
-				{
-					if (deletedRun != null)
+					switch (item.Type)
 					{
-						deletedRun.Append(commentRangeStart);
+						case Token.TokenType.TagOpen:
+							runProperties.Append(runTagStyle);
+							run.Append(runProperties);
+							HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText,
+								"<" + item.Content + ">", run);
+							break;
+						case Token.TokenType.TagClose:
+							runProperties.Append(runTagStyle);
+							run.Append(runProperties);
+							HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText,
+								"</" + item.Content + ">", run);
+							break;
+						case Token.TokenType.TagPlaceholder:
+							runProperties.Append(runTagStyle);
+							run.Append(runProperties);
+							HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText,
+								"<" + item.Content + "/>", run);
+							break;
+						case Token.TokenType.LockedContent:
+							runProperties.Append(runLockedStyle);
+							run.Append(runProperties);
+							HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText,
+								"<" + item.Content + "/>", run);
+							break;
+						case Token.TokenType.Text:
+							run.Append(runProperties);
+							HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, item.Content, run);
+							break;
+						case Token.TokenType.CommentStart:
+							GenerateComment(item);
+							var commentReference1 = new CommentReference { Id = (_commentId - 1).ToString() };
+							commentRangeStart = new CommentRangeStart { Id = (_commentId - 1).ToString() };
+							_listOfUsedComments.Add(_commentId - 1);
+							break;
+						case Token.TokenType.CommentEnd:
+							commentRangeEnd = new CommentRangeEnd { Id = _listOfUsedComments.Last().ToString() };
+							break;
+						case Token.TokenType.SpecialType:
+							run.Append(item.SpecialContent);
+							break;
+						case Token.TokenType.RevisionMarker:
+							PrepareTrackChangesRuns(ref deletedRun, ref insertedRun, item, ref inDeletedRun,
+								ref inInsertedRun);
+							//switch to next token item
+							break;
+						default:
+							run.Append(runProperties);
+							HandleText(ref deletedRun, ref insertedRun, ref text, ref deletedText, item.Content, run);
+							break;
+					}
+
+					//Set run language - needs to be here to generate valid document
+					runProperties.Append(languages2);
+
+					if (commentRangeStart != null)
+					{
+						if (deletedRun != null)
+						{
+							deletedRun.Append(commentRangeStart);
+						}
+						else if (insertedRun != null)
+						{
+							insertedRun.Append(commentRangeStart);
+						}
+						else
+						{
+							paragraph.Append(commentRangeStart);
+						}
+
+						continue;
+					}
+
+					if (commentRangeEnd != null)
+					{
+						//prepare comment reference
+						var commentReferenceRun = CreateCommentReference();
+						if (deletedRun != null)
+						{
+							deletedRun.Append(commentRangeEnd);
+							deletedRun.Append(commentReferenceRun);
+						}
+						else if (insertedRun != null)
+						{
+							insertedRun.Append(commentRangeEnd);
+							insertedRun.Append(commentReferenceRun);
+						}
+						else
+						{
+							paragraph.Append(commentRangeEnd);
+							paragraph.Append(commentReferenceRun);
+						}
+
+						continue;
+					}
+
+					//handle track changes insertion into current paragraph
+					if (deletedRun != null && inDeletedRun == false)
+					{
+						deletedRun.Append(run);
+						paragraph.Append(deletedRun);
+						deletedRun = null;
+					}
+					else if (deletedRun != null)
+					{
+						deletedRun.Append(run);
+					}
+					else if (insertedRun != null && inInsertedRun == false)
+					{
+						insertedRun.Append(run);
+						paragraph.Append(insertedRun);
+						insertedRun = null;
 					}
 					else if (insertedRun != null)
 					{
-						insertedRun.Append(commentRangeStart);
+						insertedRun.Append(run);
 					}
 					else
 					{
-						paragraph.Append(commentRangeStart);
+						paragraph.Append(run);
 					}
-					continue;
-				}
-
-				if (commentRangeEnd != null)
-				{
-					//prepare comment reference
-					Run commentReferenceRun = CreateCommentReference();
-					if (deletedRun != null)
-					{
-						deletedRun.Append(commentRangeEnd);
-						deletedRun.Append(commentReferenceRun);
-					}
-					else if (insertedRun != null)
-					{
-						insertedRun.Append(commentRangeEnd);
-						insertedRun.Append(commentReferenceRun);
-					}
-					else
-					{
-						paragraph.Append(commentRangeEnd);
-						paragraph.Append(commentReferenceRun);
-					}
-					continue;
-				}
-
-				//handle track changes insertion into current paragraph
-				if (deletedRun != null && inDeletedRun == false)
-				{
-					deletedRun.Append(run);
-					paragraph.Append(deletedRun);
-					deletedRun = null;
-				}
-				else if (deletedRun != null)
-				{
-					deletedRun.Append(run);
-				}
-				else if (insertedRun != null && inInsertedRun == false)
-				{
-					insertedRun.Append(run);
-					paragraph.Append(insertedRun);
-					insertedRun = null;
-				}
-				else if (insertedRun != null)
-				{
-					insertedRun.Append(run);
-				}
-				else
-				{
-					paragraph.Append(run);
 				}
 			}
+
 			return paragraph;
 		}
 
@@ -835,8 +832,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			if (_wordSettings == null)
 			{
 				_wordSettings = _wordMainDocumentPart.AddNewPart<DocumentSettingsPart>("rId3");
-				Settings settings = new Settings();
-				TrackRevisions trackRevisions = new TrackRevisions();
+				var settings = new Settings();
+				var trackRevisions = new TrackRevisions();
 				settings.Append(trackRevisions);
 				_wordSettings.Settings = settings;
 			}
@@ -916,7 +913,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 		{
 			if (langculture.TextInfo.IsRightToLeft)
 			{
-				BiDi biDi = new BiDi();
+				var biDi = new BiDi();
 				paragraphProperties.Append(biDi);
 			}
 		}
@@ -924,27 +921,27 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 		private void GenerateComment(Token commentToken)
 		{
 			_commentId++;
-			Comment comment = new Comment() { Initials = GetInitials(commentToken.Author), Author = commentToken.Author, Date = commentToken.Date, Id = (_commentId - 1).ToString() };
-			Paragraph paragraph = new Paragraph();
+			var comment = new Comment() { Initials = GetInitials(commentToken.Author), Author = commentToken.Author, Date = commentToken.Date, Id = (_commentId - 1).ToString() };
+			var paragraph = new Paragraph();
 
-			ParagraphProperties paragraphProperties = new ParagraphProperties();
-			ParagraphStyleId paragraphStyleId = new ParagraphStyleId() { Val = "CommentText" };
+			var paragraphProperties = new ParagraphProperties();
+			var paragraphStyleId = new ParagraphStyleId() { Val = "CommentText" };
 
 			paragraphProperties.Append(paragraphStyleId);
 
-			Run run1 = new Run();
+			var run1 = new Run();
 
-			RunProperties runProperties = new RunProperties();
-			RunStyle runStyle = new RunStyle() { Val = "CommentReference" };
+			var runProperties = new RunProperties();
+			var runStyle = new RunStyle() { Val = "CommentReference" };
 
 			runProperties.Append(runStyle);
-			AnnotationReferenceMark annotationReferenceMark1 = new AnnotationReferenceMark();
+			var annotationReferenceMark1 = new AnnotationReferenceMark();
 
 			run1.Append(runProperties);
 			run1.Append(annotationReferenceMark1);
 
-			Run run2 = new Run();
-			Text text1 = new Text();
+			var run2 = new Run();
+			var text1 = new Text();
 			text1.Text = commentToken.Content;
 
 			run2.Append(text1);
@@ -959,8 +956,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 		private string GetInitials(string authorFullName)
 		{
-			string[] splitName = authorFullName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-			string initials = "";
+			var splitName = authorFullName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+			var initials = "";
 			foreach (var item in splitName)
 			{
 				initials += item.Substring(0, 1).ToUpper();
@@ -968,14 +965,19 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			return initials;
 		}
 
-		private void SetPackageProperties(string projectId)
+		private void SetPackageProperties(string projectId, string fileId, string fileFullPath)
 		{
-			_wordDocument.PackageProperties.Keywords = "FileId:" + projectId;
+			_wordDocument.PackageProperties.Keywords =
+				"ProjectId:" + projectId +
+				";DocumentId:" + fileId +
+				";SourceLanguage:" + _sourceCulture.Name +
+				";TargetLanguage:" + _targetCulture.Name +
+				";DocumentFullPath:" + fileFullPath;
 		}
 
 		private void GenerateCommentsPartContent(WordprocessingCommentsPart part)
 		{
-			Comments comments = new Comments { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 wp14" } };
+			var comments = new Comments { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 wp14" } };
 			comments.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
 			comments.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
 			comments.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
@@ -997,9 +999,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 		private void SetPageLayout()
 		{
-			SectionProperties sectionProperties = new SectionProperties();
-			PageSize pageSize = new PageSize() { Width = (UInt32Value)15840U, Height = (UInt32Value)12240U, Orient = PageOrientationValues.Landscape };
-			PageMargin pageMargin1 = new PageMargin() { Top = 720, Right = (UInt32Value)720U, Bottom = 720, Left = (UInt32Value)720U, Header = (UInt32Value)720U, Footer = (UInt32Value)720U, Gutter = (UInt32Value)0U };
+			var sectionProperties = new SectionProperties();
+			var pageSize = new PageSize() { Width = (UInt32Value)15840U, Height = (UInt32Value)12240U, Orient = PageOrientationValues.Landscape };
+			var pageMargin1 = new PageMargin() { Top = 720, Right = (UInt32Value)720U, Bottom = 720, Left = (UInt32Value)720U, Header = (UInt32Value)720U, Footer = (UInt32Value)720U, Gutter = (UInt32Value)0U };
 			sectionProperties.Append(pageSize);
 			sectionProperties.Append(pageMargin1);
 			_wordBody.Append(sectionProperties);
@@ -1056,7 +1058,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 			CreateSideBySideRow(
 				GetCell(GenerateCellContent("Segment ID", _sourceLang, SourceCulture), "8DB3E2"),
-				GetCell(GenerateCellContent("Relevance", _sourceLang, SourceCulture), "8DB3E2"),
+				GetCell(GenerateCellContent("Priority", _sourceLang, SourceCulture), "8DB3E2"),
 				GetCell(GenerateCellContent("Text Function", _sourceLang, SourceCulture), "8DB3E2"),
 				GetCell(GenerateCellContent("Source Segment", _sourceLang, SourceCulture), "8DB3E2"),
 				GetCell(GenerateCellContent("Target Segment", _targetLang, SourceCulture), "8DB3E2"),
@@ -1073,7 +1075,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			tableRow1.Append(textFunction);
 			tableRow1.Append(sourceCell);
 			tableRow1.Append(targetCell);
-			if (_conversionSettings.ExportBackTranslations)
+			if (_conversionSettings.IncludeBackTranslations)
 			{
 				tableRow1.Append(backTranslationCell);
 			}
@@ -1083,7 +1085,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 		private string GetSegmentMatchColor(ITranslationOrigin origin)
 		{
-			string result = NoMatch;
+			var result = NoMatch;
 			if (origin == null)
 			{
 				return NoMatch;
@@ -1149,144 +1151,144 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			docDefaults1.Append(runPropertiesDefault1);
 			docDefaults1.Append(paragraphPropertiesDefault1);
 
-			LatentStyles latentStyles1 = new LatentStyles() { DefaultLockedState = false, DefaultUiPriority = 99, DefaultSemiHidden = true, DefaultUnhideWhenUsed = true, DefaultPrimaryStyle = false, Count = 267 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo1 = new LatentStyleExceptionInfo() { Name = "Normal", UiPriority = 0, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo2 = new LatentStyleExceptionInfo() { Name = "heading 1", UiPriority = 9, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo3 = new LatentStyleExceptionInfo() { Name = "heading 2", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo4 = new LatentStyleExceptionInfo() { Name = "heading 3", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo5 = new LatentStyleExceptionInfo() { Name = "heading 4", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo6 = new LatentStyleExceptionInfo() { Name = "heading 5", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo7 = new LatentStyleExceptionInfo() { Name = "heading 6", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo8 = new LatentStyleExceptionInfo() { Name = "heading 7", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo9 = new LatentStyleExceptionInfo() { Name = "heading 8", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo10 = new LatentStyleExceptionInfo() { Name = "heading 9", UiPriority = 9, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo11 = new LatentStyleExceptionInfo() { Name = "toc 1", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo12 = new LatentStyleExceptionInfo() { Name = "toc 2", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo13 = new LatentStyleExceptionInfo() { Name = "toc 3", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo14 = new LatentStyleExceptionInfo() { Name = "toc 4", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo15 = new LatentStyleExceptionInfo() { Name = "toc 5", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo16 = new LatentStyleExceptionInfo() { Name = "toc 6", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo17 = new LatentStyleExceptionInfo() { Name = "toc 7", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo18 = new LatentStyleExceptionInfo() { Name = "toc 8", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo19 = new LatentStyleExceptionInfo() { Name = "toc 9", UiPriority = 39 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo20 = new LatentStyleExceptionInfo() { Name = "caption", UiPriority = 35, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo21 = new LatentStyleExceptionInfo() { Name = "Title", UiPriority = 10, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo22 = new LatentStyleExceptionInfo() { Name = "Default Paragraph Font", UiPriority = 1 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo23 = new LatentStyleExceptionInfo() { Name = "Subtitle", UiPriority = 11, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo24 = new LatentStyleExceptionInfo() { Name = "Strong", UiPriority = 22, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo25 = new LatentStyleExceptionInfo() { Name = "Emphasis", UiPriority = 20, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo26 = new LatentStyleExceptionInfo() { Name = "Table Grid", UiPriority = 59, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo27 = new LatentStyleExceptionInfo() { Name = "Placeholder Text", UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo28 = new LatentStyleExceptionInfo() { Name = "No Spacing", UiPriority = 1, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo29 = new LatentStyleExceptionInfo() { Name = "Light Shading", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo30 = new LatentStyleExceptionInfo() { Name = "Light List", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo31 = new LatentStyleExceptionInfo() { Name = "Light Grid", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo32 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo33 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo34 = new LatentStyleExceptionInfo() { Name = "Medium List 1", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo35 = new LatentStyleExceptionInfo() { Name = "Medium List 2", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo36 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo37 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo38 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo39 = new LatentStyleExceptionInfo() { Name = "Dark List", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo40 = new LatentStyleExceptionInfo() { Name = "Colorful Shading", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo41 = new LatentStyleExceptionInfo() { Name = "Colorful List", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo42 = new LatentStyleExceptionInfo() { Name = "Colorful Grid", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo43 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 1", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo44 = new LatentStyleExceptionInfo() { Name = "Light List Accent 1", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo45 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 1", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo46 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 1", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo47 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 1", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo48 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 1", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo49 = new LatentStyleExceptionInfo() { Name = "Revision", UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo50 = new LatentStyleExceptionInfo() { Name = "List Paragraph", UiPriority = 34, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo51 = new LatentStyleExceptionInfo() { Name = "Quote", UiPriority = 29, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo52 = new LatentStyleExceptionInfo() { Name = "Intense Quote", UiPriority = 30, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo53 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 1", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo54 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 1", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo55 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 1", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo56 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 1", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo57 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 1", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo58 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 1", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo59 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 1", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo60 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 1", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo61 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 2", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo62 = new LatentStyleExceptionInfo() { Name = "Light List Accent 2", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo63 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 2", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo64 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 2", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo65 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 2", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo66 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 2", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo67 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 2", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo68 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 2", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo69 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 2", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo70 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 2", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo71 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 2", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo72 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 2", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo73 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 2", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo74 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 2", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo75 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 3", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo76 = new LatentStyleExceptionInfo() { Name = "Light List Accent 3", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo77 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 3", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo78 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 3", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo79 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 3", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo80 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 3", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo81 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 3", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo82 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 3", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo83 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 3", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo84 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 3", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo85 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 3", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo86 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 3", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo87 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 3", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo88 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 3", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo89 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 4", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo90 = new LatentStyleExceptionInfo() { Name = "Light List Accent 4", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo91 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 4", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo92 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 4", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo93 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 4", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo94 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 4", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo95 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 4", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo96 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 4", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo97 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 4", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo98 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 4", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo99 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 4", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo100 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 4", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo101 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 4", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo102 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 4", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo103 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 5", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo104 = new LatentStyleExceptionInfo() { Name = "Light List Accent 5", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo105 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 5", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo106 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 5", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo107 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 5", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo108 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 5", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo109 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 5", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo110 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 5", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo111 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 5", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo112 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 5", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo113 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 5", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo114 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 5", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo115 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 5", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo116 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 5", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo117 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 6", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo118 = new LatentStyleExceptionInfo() { Name = "Light List Accent 6", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo119 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 6", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo120 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 6", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo121 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 6", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo122 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 6", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo123 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 6", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo124 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 6", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo125 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 6", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo126 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 6", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo127 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 6", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo128 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 6", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo129 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 6", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo130 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 6", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
-			LatentStyleExceptionInfo latentStyleExceptionInfo131 = new LatentStyleExceptionInfo() { Name = "Subtle Emphasis", UiPriority = 19, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo132 = new LatentStyleExceptionInfo() { Name = "Intense Emphasis", UiPriority = 21, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo133 = new LatentStyleExceptionInfo() { Name = "Subtle Reference", UiPriority = 31, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo134 = new LatentStyleExceptionInfo() { Name = "Intense Reference", UiPriority = 32, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo135 = new LatentStyleExceptionInfo() { Name = "Book Title", UiPriority = 33, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
-			LatentStyleExceptionInfo latentStyleExceptionInfo136 = new LatentStyleExceptionInfo() { Name = "Bibliography", UiPriority = 37 };
-			LatentStyleExceptionInfo latentStyleExceptionInfo137 = new LatentStyleExceptionInfo() { Name = "TOC Heading", UiPriority = 39, PrimaryStyle = true };
+			var latentStyles1 = new LatentStyles() { DefaultLockedState = false, DefaultUiPriority = 99, DefaultSemiHidden = true, DefaultUnhideWhenUsed = true, DefaultPrimaryStyle = false, Count = 267 };
+			var latentStyleExceptionInfo1 = new LatentStyleExceptionInfo() { Name = "Normal", UiPriority = 0, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo2 = new LatentStyleExceptionInfo() { Name = "heading 1", UiPriority = 9, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo3 = new LatentStyleExceptionInfo() { Name = "heading 2", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo4 = new LatentStyleExceptionInfo() { Name = "heading 3", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo5 = new LatentStyleExceptionInfo() { Name = "heading 4", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo6 = new LatentStyleExceptionInfo() { Name = "heading 5", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo7 = new LatentStyleExceptionInfo() { Name = "heading 6", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo8 = new LatentStyleExceptionInfo() { Name = "heading 7", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo9 = new LatentStyleExceptionInfo() { Name = "heading 8", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo10 = new LatentStyleExceptionInfo() { Name = "heading 9", UiPriority = 9, PrimaryStyle = true };
+			var latentStyleExceptionInfo11 = new LatentStyleExceptionInfo() { Name = "toc 1", UiPriority = 39 };
+			var latentStyleExceptionInfo12 = new LatentStyleExceptionInfo() { Name = "toc 2", UiPriority = 39 };
+			var latentStyleExceptionInfo13 = new LatentStyleExceptionInfo() { Name = "toc 3", UiPriority = 39 };
+			var latentStyleExceptionInfo14 = new LatentStyleExceptionInfo() { Name = "toc 4", UiPriority = 39 };
+			var latentStyleExceptionInfo15 = new LatentStyleExceptionInfo() { Name = "toc 5", UiPriority = 39 };
+			var latentStyleExceptionInfo16 = new LatentStyleExceptionInfo() { Name = "toc 6", UiPriority = 39 };
+			var latentStyleExceptionInfo17 = new LatentStyleExceptionInfo() { Name = "toc 7", UiPriority = 39 };
+			var latentStyleExceptionInfo18 = new LatentStyleExceptionInfo() { Name = "toc 8", UiPriority = 39 };
+			var latentStyleExceptionInfo19 = new LatentStyleExceptionInfo() { Name = "toc 9", UiPriority = 39 };
+			var latentStyleExceptionInfo20 = new LatentStyleExceptionInfo() { Name = "caption", UiPriority = 35, PrimaryStyle = true };
+			var latentStyleExceptionInfo21 = new LatentStyleExceptionInfo() { Name = "Title", UiPriority = 10, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo22 = new LatentStyleExceptionInfo() { Name = "Default Paragraph Font", UiPriority = 1 };
+			var latentStyleExceptionInfo23 = new LatentStyleExceptionInfo() { Name = "Subtitle", UiPriority = 11, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo24 = new LatentStyleExceptionInfo() { Name = "Strong", UiPriority = 22, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo25 = new LatentStyleExceptionInfo() { Name = "Emphasis", UiPriority = 20, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo26 = new LatentStyleExceptionInfo() { Name = "Table Grid", UiPriority = 59, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo27 = new LatentStyleExceptionInfo() { Name = "Placeholder Text", UnhideWhenUsed = false };
+			var latentStyleExceptionInfo28 = new LatentStyleExceptionInfo() { Name = "No Spacing", UiPriority = 1, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo29 = new LatentStyleExceptionInfo() { Name = "Light Shading", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo30 = new LatentStyleExceptionInfo() { Name = "Light List", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo31 = new LatentStyleExceptionInfo() { Name = "Light Grid", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo32 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo33 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo34 = new LatentStyleExceptionInfo() { Name = "Medium List 1", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo35 = new LatentStyleExceptionInfo() { Name = "Medium List 2", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo36 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo37 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo38 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo39 = new LatentStyleExceptionInfo() { Name = "Dark List", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo40 = new LatentStyleExceptionInfo() { Name = "Colorful Shading", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo41 = new LatentStyleExceptionInfo() { Name = "Colorful List", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo42 = new LatentStyleExceptionInfo() { Name = "Colorful Grid", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo43 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 1", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo44 = new LatentStyleExceptionInfo() { Name = "Light List Accent 1", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo45 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 1", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo46 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 1", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo47 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 1", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo48 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 1", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo49 = new LatentStyleExceptionInfo() { Name = "Revision", UnhideWhenUsed = false };
+			var latentStyleExceptionInfo50 = new LatentStyleExceptionInfo() { Name = "List Paragraph", UiPriority = 34, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo51 = new LatentStyleExceptionInfo() { Name = "Quote", UiPriority = 29, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo52 = new LatentStyleExceptionInfo() { Name = "Intense Quote", UiPriority = 30, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo53 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 1", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo54 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 1", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo55 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 1", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo56 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 1", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo57 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 1", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo58 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 1", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo59 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 1", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo60 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 1", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo61 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 2", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo62 = new LatentStyleExceptionInfo() { Name = "Light List Accent 2", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo63 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 2", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo64 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 2", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo65 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 2", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo66 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 2", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo67 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 2", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo68 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 2", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo69 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 2", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo70 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 2", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo71 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 2", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo72 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 2", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo73 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 2", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo74 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 2", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo75 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 3", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo76 = new LatentStyleExceptionInfo() { Name = "Light List Accent 3", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo77 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 3", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo78 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 3", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo79 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 3", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo80 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 3", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo81 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 3", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo82 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 3", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo83 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 3", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo84 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 3", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo85 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 3", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo86 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 3", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo87 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 3", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo88 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 3", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo89 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 4", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo90 = new LatentStyleExceptionInfo() { Name = "Light List Accent 4", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo91 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 4", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo92 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 4", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo93 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 4", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo94 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 4", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo95 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 4", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo96 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 4", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo97 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 4", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo98 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 4", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo99 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 4", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo100 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 4", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo101 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 4", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo102 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 4", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo103 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 5", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo104 = new LatentStyleExceptionInfo() { Name = "Light List Accent 5", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo105 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 5", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo106 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 5", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo107 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 5", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo108 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 5", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo109 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 5", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo110 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 5", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo111 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 5", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo112 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 5", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo113 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 5", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo114 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 5", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo115 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 5", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo116 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 5", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo117 = new LatentStyleExceptionInfo() { Name = "Light Shading Accent 6", UiPriority = 60, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo118 = new LatentStyleExceptionInfo() { Name = "Light List Accent 6", UiPriority = 61, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo119 = new LatentStyleExceptionInfo() { Name = "Light Grid Accent 6", UiPriority = 62, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo120 = new LatentStyleExceptionInfo() { Name = "Medium Shading 1 Accent 6", UiPriority = 63, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo121 = new LatentStyleExceptionInfo() { Name = "Medium Shading 2 Accent 6", UiPriority = 64, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo122 = new LatentStyleExceptionInfo() { Name = "Medium List 1 Accent 6", UiPriority = 65, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo123 = new LatentStyleExceptionInfo() { Name = "Medium List 2 Accent 6", UiPriority = 66, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo124 = new LatentStyleExceptionInfo() { Name = "Medium Grid 1 Accent 6", UiPriority = 67, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo125 = new LatentStyleExceptionInfo() { Name = "Medium Grid 2 Accent 6", UiPriority = 68, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo126 = new LatentStyleExceptionInfo() { Name = "Medium Grid 3 Accent 6", UiPriority = 69, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo127 = new LatentStyleExceptionInfo() { Name = "Dark List Accent 6", UiPriority = 70, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo128 = new LatentStyleExceptionInfo() { Name = "Colorful Shading Accent 6", UiPriority = 71, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo129 = new LatentStyleExceptionInfo() { Name = "Colorful List Accent 6", UiPriority = 72, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo130 = new LatentStyleExceptionInfo() { Name = "Colorful Grid Accent 6", UiPriority = 73, SemiHidden = false, UnhideWhenUsed = false };
+			var latentStyleExceptionInfo131 = new LatentStyleExceptionInfo() { Name = "Subtle Emphasis", UiPriority = 19, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo132 = new LatentStyleExceptionInfo() { Name = "Intense Emphasis", UiPriority = 21, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo133 = new LatentStyleExceptionInfo() { Name = "Subtle Reference", UiPriority = 31, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo134 = new LatentStyleExceptionInfo() { Name = "Intense Reference", UiPriority = 32, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo135 = new LatentStyleExceptionInfo() { Name = "Book Title", UiPriority = 33, SemiHidden = false, UnhideWhenUsed = false, PrimaryStyle = true };
+			var latentStyleExceptionInfo136 = new LatentStyleExceptionInfo() { Name = "Bibliography", UiPriority = 37 };
+			var latentStyleExceptionInfo137 = new LatentStyleExceptionInfo() { Name = "TOC Heading", UiPriority = 39, PrimaryStyle = true };
 
 			latentStyles1.Append(latentStyleExceptionInfo1);
 			latentStyles1.Append(latentStyleExceptionInfo2);
@@ -1426,38 +1428,38 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			latentStyles1.Append(latentStyleExceptionInfo136);
 			latentStyles1.Append(latentStyleExceptionInfo137);
 
-			Style style1 = new Style() { Type = StyleValues.Paragraph, StyleId = "Normal", Default = true };
-			StyleName styleName1 = new StyleName() { Val = "Normal" };
-			PrimaryStyle primaryStyle1 = new PrimaryStyle();
+			var style1 = new Style() { Type = StyleValues.Paragraph, StyleId = "Normal", Default = true };
+			var styleName1 = new StyleName() { Val = "Normal" };
+			var primaryStyle1 = new PrimaryStyle();
 
 			style1.Append(styleName1);
 			style1.Append(primaryStyle1);
 
-			Style style2 = new Style() { Type = StyleValues.Character, StyleId = "DefaultParagraphFont", Default = true };
-			StyleName styleName2 = new StyleName() { Val = "Default Paragraph Font" };
-			UIPriority uIPriority1 = new UIPriority() { Val = 1 };
-			SemiHidden semiHidden1 = new SemiHidden();
-			UnhideWhenUsed unhideWhenUsed1 = new UnhideWhenUsed();
+			var style2 = new Style() { Type = StyleValues.Character, StyleId = "DefaultParagraphFont", Default = true };
+			var styleName2 = new StyleName() { Val = "Default Paragraph Font" };
+			var uIPriority1 = new UIPriority() { Val = 1 };
+			var semiHidden1 = new SemiHidden();
+			var unhideWhenUsed1 = new UnhideWhenUsed();
 
 			style2.Append(styleName2);
 			style2.Append(uIPriority1);
 			style2.Append(semiHidden1);
 			style2.Append(unhideWhenUsed1);
 
-			Style style3 = new Style() { Type = StyleValues.Table, StyleId = "TableNormal", Default = true };
-			StyleName styleName3 = new StyleName() { Val = "Normal Table" };
-			UIPriority uIPriority2 = new UIPriority() { Val = 99 };
-			SemiHidden semiHidden2 = new SemiHidden();
-			UnhideWhenUsed unhideWhenUsed2 = new UnhideWhenUsed();
+			var style3 = new Style() { Type = StyleValues.Table, StyleId = "TableNormal", Default = true };
+			var styleName3 = new StyleName() { Val = "Normal Table" };
+			var uIPriority2 = new UIPriority() { Val = 99 };
+			var semiHidden2 = new SemiHidden();
+			var unhideWhenUsed2 = new UnhideWhenUsed();
 
-			StyleTableProperties styleTableProperties1 = new StyleTableProperties();
-			TableIndentation tableIndentation1 = new TableIndentation() { Width = 0, Type = TableWidthUnitValues.Dxa };
+			var styleTableProperties1 = new StyleTableProperties();
+			var tableIndentation1 = new TableIndentation() { Width = 0, Type = TableWidthUnitValues.Dxa };
 
-			TableCellMarginDefault tableCellMarginDefault1 = new TableCellMarginDefault();
-			TopMargin topMargin1 = new TopMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
-			TableCellLeftMargin tableCellLeftMargin1 = new TableCellLeftMargin() { Width = 108, Type = TableWidthValues.Dxa };
-			BottomMargin bottomMargin1 = new BottomMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
-			TableCellRightMargin tableCellRightMargin1 = new TableCellRightMargin() { Width = 108, Type = TableWidthValues.Dxa };
+			var tableCellMarginDefault1 = new TableCellMarginDefault();
+			var topMargin1 = new TopMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
+			var tableCellLeftMargin1 = new TableCellLeftMargin() { Width = 108, Type = TableWidthValues.Dxa };
+			var bottomMargin1 = new BottomMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
+			var tableCellRightMargin1 = new TableCellRightMargin() { Width = 108, Type = TableWidthValues.Dxa };
 
 			tableCellMarginDefault1.Append(topMargin1);
 			tableCellMarginDefault1.Append(tableCellLeftMargin1);
@@ -1473,38 +1475,38 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			style3.Append(unhideWhenUsed2);
 			style3.Append(styleTableProperties1);
 
-			Style style4 = new Style() { Type = StyleValues.Numbering, StyleId = "NoList", Default = true };
-			StyleName styleName4 = new StyleName() { Val = "No List" };
-			UIPriority uIPriority3 = new UIPriority() { Val = 99 };
-			SemiHidden semiHidden3 = new SemiHidden();
-			UnhideWhenUsed unhideWhenUsed3 = new UnhideWhenUsed();
+			var style4 = new Style() { Type = StyleValues.Numbering, StyleId = "NoList", Default = true };
+			var styleName4 = new StyleName() { Val = "No List" };
+			var uIPriority3 = new UIPriority() { Val = 99 };
+			var semiHidden3 = new SemiHidden();
+			var unhideWhenUsed3 = new UnhideWhenUsed();
 
 			style4.Append(styleName4);
 			style4.Append(uIPriority3);
 			style4.Append(semiHidden3);
 			style4.Append(unhideWhenUsed3);
 
-			Style style5 = new Style() { Type = StyleValues.Table, StyleId = "TableGrid" };
-			StyleName styleName5 = new StyleName() { Val = "Table Grid" };
-			BasedOn basedOn1 = new BasedOn() { Val = "TableNormal" };
-			UIPriority uIPriority4 = new UIPriority() { Val = 59 };
-			Rsid rsid1 = new Rsid() { Val = "00B439FD" };
+			var style5 = new Style() { Type = StyleValues.Table, StyleId = "TableGrid" };
+			var styleName5 = new StyleName() { Val = "Table Grid" };
+			var basedOn1 = new BasedOn() { Val = "TableNormal" };
+			var uIPriority4 = new UIPriority() { Val = 59 };
+			var rsid1 = new Rsid() { Val = "00B439FD" };
 
-			StyleParagraphProperties styleParagraphProperties1 = new StyleParagraphProperties();
-			SpacingBetweenLines spacingBetweenLines2 = new SpacingBetweenLines() { After = "0", Line = "240", LineRule = LineSpacingRuleValues.Auto };
+			var styleParagraphProperties1 = new StyleParagraphProperties();
+			var spacingBetweenLines2 = new SpacingBetweenLines() { After = "0", Line = "240", LineRule = LineSpacingRuleValues.Auto };
 
 			styleParagraphProperties1.Append(spacingBetweenLines2);
 
-			StyleTableProperties styleTableProperties2 = new StyleTableProperties();
-			TableIndentation tableIndentation2 = new TableIndentation() { Width = 0, Type = TableWidthUnitValues.Dxa };
+			var styleTableProperties2 = new StyleTableProperties();
+			var tableIndentation2 = new TableIndentation() { Width = 0, Type = TableWidthUnitValues.Dxa };
 
-			TableBorders tableBorders1 = new TableBorders();
-			TopBorder topBorder1 = new TopBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
-			LeftBorder leftBorder1 = new LeftBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
-			BottomBorder bottomBorder1 = new BottomBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
-			RightBorder rightBorder1 = new RightBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
-			InsideHorizontalBorder insideHorizontalBorder1 = new InsideHorizontalBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
-			InsideVerticalBorder insideVerticalBorder1 = new InsideVerticalBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
+			var tableBorders1 = new TableBorders();
+			var topBorder1 = new TopBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
+			var leftBorder1 = new LeftBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
+			var bottomBorder1 = new BottomBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
+			var rightBorder1 = new RightBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
+			var insideHorizontalBorder1 = new InsideHorizontalBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
+			var insideVerticalBorder1 = new InsideVerticalBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)4U, Space = (UInt32Value)0U };
 
 			tableBorders1.Append(topBorder1);
 			tableBorders1.Append(leftBorder1);
@@ -1513,11 +1515,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			tableBorders1.Append(insideHorizontalBorder1);
 			tableBorders1.Append(insideVerticalBorder1);
 
-			TableCellMarginDefault tableCellMarginDefault2 = new TableCellMarginDefault();
-			TopMargin topMargin2 = new TopMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
-			TableCellLeftMargin tableCellLeftMargin2 = new TableCellLeftMargin() { Width = 108, Type = TableWidthValues.Dxa };
-			BottomMargin bottomMargin2 = new BottomMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
-			TableCellRightMargin tableCellRightMargin2 = new TableCellRightMargin() { Width = 108, Type = TableWidthValues.Dxa };
+			var tableCellMarginDefault2 = new TableCellMarginDefault();
+			var topMargin2 = new TopMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
+			var tableCellLeftMargin2 = new TableCellLeftMargin() { Width = 108, Type = TableWidthValues.Dxa };
+			var bottomMargin2 = new BottomMargin() { Width = "0", Type = TableWidthUnitValues.Dxa };
+			var tableCellRightMargin2 = new TableCellRightMargin() { Width = 108, Type = TableWidthValues.Dxa };
 
 			tableCellMarginDefault2.Append(topMargin2);
 			tableCellMarginDefault2.Append(tableCellLeftMargin2);

@@ -5,7 +5,8 @@ namespace Sdl.Community.Transcreate.Model
 	public class CustomerGroup : BaseModel
 	{
 		private Customer _customer;
-		private List<Project> _projects;	
+
+		private List<Interfaces.IProject> _projects;	
 
 		public Customer Customer
 		{
@@ -21,7 +22,7 @@ namespace Sdl.Community.Transcreate.Model
 
 		public bool IsExpanded { get; set; }
 
-		public List<Project> Projects
+		public List<Interfaces.IProject> Projects
 		{
 			get => _projects;
 			set

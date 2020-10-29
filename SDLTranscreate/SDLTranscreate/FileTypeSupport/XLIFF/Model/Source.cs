@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 {
-	public class Source : Segment
+	public class Source : Segment, ICloneable
 	{
 		public Source()
 		{
@@ -10,5 +11,17 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 		}
 
 		public string Id { get; set; }
+
+		public object Clone()
+		{
+			var source = new Source();
+			source.Id = Id;
+			foreach (var element in Elements)
+			{
+				source.Elements.Add(element.Clone() as Element);
+			}
+
+			return source;
+		}
 	}
 }

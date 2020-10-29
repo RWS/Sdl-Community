@@ -92,31 +92,16 @@
 						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 
-					<Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto"/>
-						</Grid.RowDefinitions>
 
-						<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
-						           Text="XLIFF Support:" Margin="0,0,10,0"/>
-						<ComboBox Grid.Row="0" Grid.Column="1" Width="150" HorizontalAlignment="Left" Height="22"
-				          VerticalAlignment="Center"
-				          VerticalContentAlignment="Center"
-				          ItemsSource="{Binding XLIFFSupportItems}"
-				          DisplayMemberPath="Name"
-				          SelectedItem="{Binding ExportSelectedXliffSupportItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-					</Grid>
-
-					<CheckBox Grid.Row="2" Margin="0,10,0,0" Grid.Column="0" Content="Include Translations" 
+					<CheckBox Grid.Row="1" Margin="0,10,0,0" Grid.Column="0" Content="Include Translations" 
 				          IsChecked="{Binding ExportIncludeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-					<CheckBox Grid.Row="3" Margin="0,10,0,0" Grid.Column="0" Content="Copy Source to Target for empty translations" 
+					<CheckBox Grid.Row="2" Margin="0,10,0,0" Grid.Column="0" Content="Copy Source to Target for empty translations" 
 				          IsEnabled="{Binding ExportCopySourceToTargetEnabled}"
 				          IsChecked="{Binding ExportCopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<CheckBox Grid.Row="3" Margin="0,10,0,0" Grid.Column="0" Content="Include Back-Translations" 
+					          IsChecked="{Binding ExportIncludeBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 					<Grid Grid.Row="4" Margin="0,5,0,0">
 						<Grid.ColumnDefinitions>

@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
 		private readonly string _pluginVersion = "";
 		private Formality _formality;
 		private List<string> _supportedTargetLanguages;
@@ -163,9 +163,6 @@ namespace Sdl.Community.DeepLMTProvider
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
 
 					var response = httpClient.PostAsync("https://api.deepl.com/v1/languages", content).Result;
-
-					// show server message in case the response is not successfully retrieved
-					Helpers.DisplayServerMessage(response);
 
 					if (response.IsSuccessStatusCode)
 					{

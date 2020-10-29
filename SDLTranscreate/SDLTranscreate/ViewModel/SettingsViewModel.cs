@@ -29,12 +29,11 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private int _maxAlternativeTranslations;
 
 		// Export options
-		private List<XLIFFSupportItem> _xliffSupportItems;
 		private List<FilterItem> _excludeFilterItems;
-		private XLIFFSupportItem _exportSelectedXliffSupportItemModel;
 		private bool _exportCopySourceToTarget;
 		private bool _exportCopySourceToTargetEnabled;
 		private bool _exportIncludeTranslations;
+		private bool _exportIncludeBackTranslations;
 		private ObservableCollection<FilterItem> _exportSelectedExcludeFilterItems;
 
 		// Import options
@@ -113,16 +112,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		#region  |  Export Options Tab  |
 
-		public List<XLIFFSupportItem> XLIFFSupportItems
-		{
-			get => _xliffSupportItems;
-			set
-			{
-				_xliffSupportItems = value;
-				OnPropertyChanged(nameof(XLIFFSupportItems));
-			}
-		}
-
 
 		public List<FilterItem> ExcludeFilterItems
 		{
@@ -136,25 +125,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 				_excludeFilterItems = value;
 				OnPropertyChanged(nameof(ExcludeFilterItems));
-			}
-		}
-
-		public XLIFFSupportItem ExportSelectedXliffSupportItem
-		{
-			get
-			{
-				return _exportSelectedXliffSupportItemModel
-					   ?? (_exportSelectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
-			}
-			set
-			{
-				if (_exportSelectedXliffSupportItemModel == value)
-				{
-					return;
-				}
-
-				_exportSelectedXliffSupportItemModel = value;
-				OnPropertyChanged(nameof(ExportSelectedXliffSupportItem));
 			}
 		}
 
@@ -185,8 +155,21 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 				_exportCopySourceToTarget = value;
 				OnPropertyChanged(nameof(ExportCopySourceToTarget));
+			}
+		}
 
-				//VerifyIsValid();
+		public bool ExportIncludeBackTranslations
+		{
+			get => _exportIncludeBackTranslations;
+			set
+			{
+				if (_exportIncludeBackTranslations == value)
+				{
+					return;
+				}
+
+				_exportIncludeBackTranslations = value;
+				OnPropertyChanged(nameof(ExportIncludeBackTranslations));
 			}
 		}
 
@@ -347,7 +330,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 		{
 			_settings.ConvertOptions.MaxAlternativeTranslations = MaxAlternativeTranslations;
 
-			_settings.ExportOptions.XliffSupport = ExportSelectedXliffSupportItem.SupportType;
+			_settings.ExportOptions.IncludeBackTranslations = ExportIncludeBackTranslations;
 			_settings.ExportOptions.IncludeTranslations = ExportIncludeTranslations;
 			_settings.ExportOptions.CopySourceToTarget = ExportCopySourceToTarget;
 			_settings.ExportOptions.ExcludeFilterIds = ExportSelectedExcludeFilterItems.Select(a => a.Id).ToList();
@@ -433,20 +416,14 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		private void LoadExportSettings(ExportOptions exportOptions)
 		{
-			if (XLIFFSupportItems == null)
-			{
-				XLIFFSupportItems = Enumerators.GetXLIFFSupportItems();
-			}
-
 			if (ExcludeFilterItems == null)
 			{
 				ExcludeFilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
 			}
 
-
-			ExportSelectedXliffSupportItem = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == exportOptions.XliffSupport);
 			ExportCopySourceToTarget = exportOptions.CopySourceToTarget;
-			ExportIncludeTranslations = exportOptions.IncludeTranslations;			
+			ExportIncludeTranslations = exportOptions.IncludeTranslations;
+			ExportIncludeBackTranslations = exportOptions.IncludeBackTranslations;
 			ExportSelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(ExcludeFilterItems, exportOptions.ExcludeFilterIds));
 		}
 

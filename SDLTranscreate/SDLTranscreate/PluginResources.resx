@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="DefaultLanguageMappings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\defaultlanguagemappings.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Messagel_ResetLanguagesSuccess" xml:space="preserve">
     <value>Successfully reset language mappings</value>
   </data>
@@ -128,7 +125,7 @@
     <value>Accept/Reject all track changes before exporting to XLIFF format</value>
   </data>
   <data name="Message_ActionWillRemoveAllProjectData" xml:space="preserve">
-    <value>This action will remove all project data managed by Transcreate Manager</value>
+    <value>This action will remove all back-projects from the selected project</value>
   </data>
   <data name="Message_DoYouWantToProceed" xml:space="preserve">
     <value>Do you want to proceed?</value>
@@ -164,7 +161,7 @@
     <value>Unable to process file with revision markers.</value>
   </data>
   <data name="Message_WarningTranslationsCanBeOverwrittenDuringImport" xml:space="preserve">
-    <value>Depending on the settings you choose during import, changes made before importing the XLIFF may not be retained and could cause the import to fail.</value>
+    <value>Depending on the settings you choose during import, changes made before importing translations may not be retained and could cause the import to fail.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>SDL Transcreate</value>
@@ -553,34 +550,85 @@
   <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\sdl_transcreate_view.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-	<data name="WizardMessage_ImportingTranslations" xml:space="preserve">
+  <data name="WizardMessage_ImportingTranslations" xml:space="preserve">
     <value>Importing translations</value>
   </data>
-	<data name="WizardMessage_CreatingTranscreateProject" xml:space="preserve">
+  <data name="WizardMessage_CreatingTranscreateProject" xml:space="preserve">
     <value>Creating Transcreate Project</value>
   </data>
-	<data name="JobProcess_ProcessingPleaseWait" xml:space="preserve">
+  <data name="JobProcess_ProcessingPleaseWait" xml:space="preserve">
     <value>Processing... please wait</value>
   </data>
-	<data name="JobProcess_Done" xml:space="preserve">
+  <data name="JobProcess_Done" xml:space="preserve">
     <value>Done</value>
   </data>
-	<data name="JobProcess_ConvertingProjectFiles" xml:space="preserve">
+  <data name="JobProcess_ConvertingProjectFiles" xml:space="preserve">
     <value>Converting project files...</value>
   </data>
-	<data name="JobProcess_ProcessingLanguageFiles" xml:space="preserve">
+  <data name="JobProcess_ProcessingLanguageFiles" xml:space="preserve">
     <value>Processing language files: {0}</value>
   </data>
-	<data name="JobProcess_ConvertingLanguageFiles" xml:space="preserve">
+  <data name="JobProcess_ConvertingLanguageFiles" xml:space="preserve">
     <value>Converting language files: {0}</value>
   </data>
-	<data name="JobProcess_ImportingTranslations" xml:space="preserve">
+  <data name="JobProcess_ImportingTranslations" xml:space="preserve">
     <value>Importing translations: {0}</value>
   </data>
   <data name="ReportsGroup_ProjectConversion" xml:space="preserve">
-	  <value>Project Conversion</value>
+    <value>Project Conversion</value>
   </data>
   <data name="ReportsGroupDescription_ConvertedToTranscreateProject" xml:space="preserve">
-	  <value>Converted to a Transcreate project</value>
+    <value>Converted to a Transcreate project</value>
+  </data>
+  <data name="Label_IncludeBackTranslations" xml:space="preserve">
+    <value>Include Back-Translations: {0}</value>
+  </data>
+  <data name="label_OutputFile" xml:space="preserve">
+    <value>Output File: {0}</value>
+  </data>
+  <data name="Label_ImportFile" xml:space="preserve">
+    <value>Import File: {0}</value>
+  </data>
+  <data name="ReportsGroup_ProjectCreation" xml:space="preserve">
+    <value>Project Creation</value>
+  </data>
+  <data name="TranscreateManager_OpenFileForTranslation_Description" xml:space="preserve">
+    <value>Open For Translation</value>
+  </data>
+  <data name="TranscreateManager_OpenFileForTranslation_Name" xml:space="preserve">
+    <value>Open For Translation</value>
+  </data>
+  <data name="TranscreateManager_OpenGroup_Name" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OpenForReview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\openforreview.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenForSignOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\openforsignoff.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenForTranslation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\openfortranslation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TranscreateManager_OpenFileForReview_Description" xml:space="preserve">
+    <value>Open for Review</value>
+  </data>
+  <data name="TranscreateManager_OpenFileForReview_Name" xml:space="preserve">
+    <value>Open for Review</value>
+  </data>
+  <data name="TranscreateManager_OpenFileForSignOff_Description" xml:space="preserve">
+    <value>Open for Sign-off</value>
+  </data>
+  <data name="TranscreateManager_OpenFileForSignOff_Name" xml:space="preserve">
+    <value>Open for Sign-off</value>
+  </data>
+  <data name="sdl_transcreate_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\sdl_transcreate_back.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sdl_transcreate_view" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\sdl_transcreate_view.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sdl_transcreate_wizard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\sdl_transcreate_wizard.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

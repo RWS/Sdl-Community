@@ -8,8 +8,8 @@
 
 		public string SdlXliffBackupFile { get; set; }
 
-		public string XliffFile { get; set; }
+		public string ImportFilePath { get; set; }
 
-		public string XliffArchiveFile { get; set; }
+		public string ArchiveFilePath { get; set; }
 	}
 }

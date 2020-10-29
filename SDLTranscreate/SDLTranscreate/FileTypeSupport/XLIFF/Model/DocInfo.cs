@@ -11,6 +11,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
 			Comments = new Dictionary<string, List<IComment>>();
 		}
 
+		// SDLXLIFF document id
+		public string DocumentId { get; set; }
+
 		/// SDL Studio Project Id
 		public string ProjectId { get; set; }
 

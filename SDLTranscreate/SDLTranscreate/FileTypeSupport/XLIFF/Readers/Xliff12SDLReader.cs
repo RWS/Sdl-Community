@@ -129,6 +129,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 								{
 									docInfo.ProjectId = xmlReader.Value;
 								}
+								if (string.Compare(xmlReader.Name, "document-id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									docInfo.DocumentId = xmlReader.Value;
+								}
 								else if (string.Compare(xmlReader.Name, "source", StringComparison.OrdinalIgnoreCase) == 0)
 								{
 									docInfo.Source = xmlReader.Value;

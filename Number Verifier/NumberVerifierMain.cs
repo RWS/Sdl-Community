@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using NLog;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Helpers;
@@ -41,10 +42,9 @@ namespace Sdl.Community.NumberVerifier
 		private string _sourceText;
 		private string _thousandWithoutDecimal;
 		private string _decimalAfterThousand;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		#endregion
-
-		public static readonly Log Log = Log.Instance;
 
 		public NumberVerifierMain() : this(null)
 		{
@@ -414,7 +414,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -456,7 +456,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return new List<ErrorReporting>();
 			}
 		}
@@ -589,7 +589,7 @@ namespace Sdl.Community.NumberVerifier
 				TargetText = targetText
 			};
 
-			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
+			if (_verificationSettings.ReportModifiedAlphanumerics || _verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
 				var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
 				errorList.AddRange(errorsListFromAlphanumerics);
@@ -700,7 +700,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -735,7 +735,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -759,7 +759,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 
@@ -819,7 +819,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return separators.ToString();
 		}
@@ -853,7 +853,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
 		
@@ -1002,7 +1002,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return number;
 		}
@@ -1038,7 +1038,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return string.Empty;
 			}
 		}
@@ -1075,7 +1075,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return string.Empty;
 			}
 		}
@@ -1100,7 +1100,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 
 			return normalizedNumber.Normalize(NormalizationForm.FormKC);
@@ -1253,15 +1253,33 @@ namespace Sdl.Community.NumberVerifier
 			return regExExpression;
 		}
 
+		// Remove the matching items which are the same in both sourceAlphanumeric and targetAlphanumeric lists
+		// or in case sourceAlphanumericsList contains items which are not alphanumerics (ex: ABCD) 
 		private void RemoveMatchingAlphanumerics(IList<string> sourceAlphanumericsList, ICollection<string> targetAlphanumericsList)
 		{
-
 			for (var nJ = sourceAlphanumericsList.Count - 1; nJ >= 0; nJ--)
 			{
-				if (!targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ])) continue;
+				if (targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ]) || !sourceAlphanumericsList[nJ].Any(c => char.IsDigit(c)))
+				{
+					targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
+					sourceAlphanumericsList.RemoveAt(nJ);
+				}
+			}
 
-				targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
-				sourceAlphanumericsList.RemoveAt(nJ);
+			// Remove the items which are not alphanumerics and where not identified within the sourceAlphanumericsList
+			RemoveNoAlphanumerics(targetAlphanumericsList);
+		}
+
+		// Remove the items which are not alphanumerics
+		private void RemoveNoAlphanumerics(ICollection<string> targetAlphanumericsList)
+		{
+			var itemsToRemove = targetAlphanumericsList.Where(item => !item.Any(char.IsDigit) || item.All(char.IsDigit)).ToList();
+			if (itemsToRemove.Any())
+			{
+				foreach (var item in itemsToRemove.Where(targetAlphanumericsList.Contains))
+				{
+					targetAlphanumericsList.Remove(item);
+				}
 			}
 		}
 
@@ -1271,7 +1289,10 @@ namespace Sdl.Community.NumberVerifier
 			{
 				var normalizedAlphaList = new List<string>();
 				var words = Regex.Split(text, @"\s");
-
+				var customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
+					? _verificationSettings.GetAlphanumericsCustomSeparator.Split(',')
+					: new string[0];
+				
 				// The below foreach is used when checking those tags like Source: "<color=70236>Word" and Target:<color=70236>OtherWord
 				// and no empty space is between the '>' and 'Word' or between the '>' and 'OtherWord'.
 				// Because of the missing of empty space, the functionality recognize as beeing alphanumeric and when source and target were not that same('Word' different than 'OtherWord'
@@ -1281,7 +1302,7 @@ namespace Sdl.Community.NumberVerifier
 				{
 					if (w.Contains('<') || w.Contains('>'))
 					{
-						string[] wRes = new string[] { };
+						var wRes = new string[] { };
 						if (w.Contains('<'))
 						{
 							var charIndex = w.IndexOf('<');
@@ -1307,45 +1328,26 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				if (_verificationSettings.CustomsSeparatorsAlphanumerics)
-				{
-					string[] customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
-					? _verificationSettings.GetAlphanumericsCustomSeparator.Split(',')
-					: new string[0];
+				var separators = _verificationSettings.CustomsSeparatorsAlphanumerics 
+					? _textFormatter.GetAlphanumericsCustomSeparators(customsSeparators)
+					: string.Empty;
+				var regex = $"(?i)(?=.*[0-9])(?=.*[a-z])([a-z0-9{separators}]+)";
 
-					var res = string.Join(string.Empty, customsSeparators);
-
-					// replace \ with \\ in order to recognize the regex expression
-					if (res.Contains(@"\"))
-					{
-						res = res.Replace(@"\", @"\\");
-					}
-					var regex = string.Format(@"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)", res);
-
-					normalizedAlphaList.AddRange(
-						from word in wordsRes
-						from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
-						select Regex.Replace(match.Value, "\u2212|-", "m"));
-				}
-				else
-				{
-					normalizedAlphaList.AddRange(
-						from word in wordsRes
-						from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z-])(?=.*[0-9]).+$)")
-						select Regex.Replace(match.Value, "\u2212|-", "m"));
-				}
-
-				//get all the words which are normalized and put them in source tuple item
+				normalizedAlphaList.AddRange(
+					from word in wordsRes
+					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
+					select Regex.Replace(match.Value, "\u2212|-", "m"));
+				
 				var unNormalizedAlphanumerics = new List<string>();
 				unNormalizedAlphanumerics.AddRange(from word in wordsRes
-												   from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z-])(?=.*[0-9]).+$)")
+												   from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 												   select word);
-
+				
 				return GetAlphnumericsTuple(unNormalizedAlphanumerics, normalizedAlphaList);
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return new Tuple<List<string>, List<string>>(new List<string>(), new List<string>());
 			}
 		}
@@ -1358,7 +1360,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return string.Empty;
 			}
 		}
@@ -1445,7 +1447,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return result;
 		}
@@ -1547,7 +1549,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 			return result;
 		}

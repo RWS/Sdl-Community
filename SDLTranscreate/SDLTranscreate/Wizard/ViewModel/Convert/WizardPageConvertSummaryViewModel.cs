@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using Sdl.Community.Transcreate.Model;
@@ -11,8 +10,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 	{
 		private string _summaryText;
 
-		public WizardPageConvertSummaryViewModel(Window owner, object view, WizardContext wizardContext)
-			: base(owner, view, wizardContext)
+		public WizardPageConvertSummaryViewModel(Window owner, object view, TaskContext taskContext)
+			: base(owner, view, taskContext)
 		{
 			IsValid = true;
 
@@ -41,7 +40,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private string GetSummaryText()
 		{
-			var project = WizardContext.ProjectFiles[0].Project;
+			var project = TaskContext.ProjectFiles[0].Project;
 
 			var indent = "   ";
 
@@ -58,17 +57,17 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_MaxAlternativeTranslations, WizardContext.ConvertOptions.MaxAlternativeTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_UnloadOiriginalProject, WizardContext.ConvertOptions.CloseProjectOnComplete) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_MaxAlternativeTranslations, TaskContext.ConvertOptions.MaxAlternativeTranslations) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_UnloadOiriginalProject, TaskContext.ConvertOptions.CloseProjectOnComplete) + Environment.NewLine;
 
-			var soruceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name;
+			var soruceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name;
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count(a => a.TargetLanguage != soruceLanguage)) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_Languages, GetProjectTargetLanguagesString(WizardContext.Project)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count(a => a.TargetLanguage != soruceLanguage)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_Languages, GetProjectTargetLanguagesString(TaskContext.Project)) + Environment.NewLine;
 
-			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected && a.TargetLanguage != soruceLanguage)
+			var targetLanguages = TaskContext.ProjectFiles.Where(a => a.Selected && a.TargetLanguage != soruceLanguage)
 				.Select(a => a.TargetLanguage).Distinct();
 
 			foreach (var targetLanguage in targetLanguages)
@@ -77,7 +76,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
 
 				var targetLanguageFiles =
-					WizardContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
+					TaskContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
 					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
@@ -87,7 +86,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			return summaryText;
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)

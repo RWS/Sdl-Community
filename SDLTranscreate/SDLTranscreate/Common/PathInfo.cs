@@ -9,6 +9,7 @@ namespace Sdl.Community.Transcreate.Common
 		private const string ApplicationPathName = "Transcreate";
 		private const string SettingsPathName = "Settings";
 		private const string LogsPathName = "Logs";
+		private const string IconsPathName = "Icons";
 		private const string SettingsFileName = "Settings.xml";
 		private const string LanguageMappingsFileName = "LanguageMappings.xlsx";
 
@@ -16,6 +17,7 @@ namespace Sdl.Community.Transcreate.Common
 		private string _applicationFolderPath;
 		private string _settingsFolderPath;
 		private string _logsFolderPath;
+		private string _iconsFolderPath;
 
 		public string SdlCommunityFolderPath
 		{
@@ -73,6 +75,25 @@ namespace Sdl.Community.Transcreate.Common
 				}
 
 				return _logsFolderPath;
+			}
+		}
+
+		public string ApplicationIconsFolderPath
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(_iconsFolderPath))
+				{
+					return _iconsFolderPath;
+				}
+
+				_iconsFolderPath = Path.Combine(ApplicationFolderPath, IconsPathName);
+				if (!Directory.Exists(_iconsFolderPath))
+				{
+					Directory.CreateDirectory(_iconsFolderPath);
+				}
+
+				return _iconsFolderPath;
 			}
 		}
 

@@ -9,6 +9,7 @@
              xmlns:model="clr-namespace:Sdl.Community.Transcreate.Model"
              xmlns:converters="clr-namespace:Sdl.Community.Transcreate.Converters"
              xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.ViewModel"
+             xmlns:behaviours="clr-namespace:Sdl.Community.Transcreate.Behaviours"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFilesViewModel}">
 	<UserControl.Resources>
@@ -82,6 +83,7 @@
 					  ItemsSource="{Binding Source={StaticResource ProjectFiles}}"                
 					  SelectedItem="{Binding SelectedProjectFile, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 		              SelectedItems="{Binding SelectedProjectFiles, Mode=OneWayToSource}"
+		              behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"
 					  FontSize="12"
 					  BorderBrush="#C1C0C0"
 					  FontFamily="Segoe UI"
@@ -110,11 +112,15 @@
 										<Style TargetType="Image">
 											<Style.Triggers>
 												<DataTrigger Binding="{Binding Action}" Value="None">
-													<Setter Property="Source" Value="../Resources/Fie.png"/>
+													<Setter Property="Source" Value="../Resources/File.png"/>
+													<Setter Property="ToolTip" Value="Ready"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="CreateBackTranslation">
+													<Setter Property="Source" Value="../Resources/File.png"/>
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Convert">
-													<Setter Property="Source" Value="../Resources/Fie.png"/>
+													<Setter Property="Source" Value="../Resources/File.png"/>
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
@@ -122,6 +128,14 @@
 													<Setter Property="ToolTip" Value="Exported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Import">
+													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="ToolTip" Value="Imported"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="ExportBackTranslation">
+													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="ToolTip" Value="Exported"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding Action}" Value="ImportBackTranslation">
 													<Setter Property="Source" Value="../Resources/Imported.png"/>
 													<Setter Property="ToolTip" Value="Imported"/>
 												</DataTrigger>
@@ -150,7 +164,7 @@
 							                              BorderThickness="0" BorderBrush="Transparent"
 							                              EllipsisPlacement="Left"
 							                              IsEllipsisEnabled="True"							           
-							                              LongText="{Binding XliffFilePath, UpdateSourceTrigger=PropertyChanged}" 							           
+							                              LongText="{Binding ExternalFilePath, UpdateSourceTrigger=PropertyChanged}" 							           
 							                              TextWrapping="NoWrap" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -182,10 +196,30 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
+					<MenuItem Header="Open For Translation" 
+					          Command="{Binding OpenFileForTranslationCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/OpenForTranslation.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Open For Review" 
+					          Command="{Binding OpenFileForReviewCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/OpenForReview.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Open For Sign-off" 
+					          Command="{Binding OpenFileForSignOffCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/OpenForSignOff.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					
+					<Separator/>
 					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}" IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/Folder.png"/>
-						</MenuItem.Icon>
+						</MenuItem.Icon> 
 					</MenuItem>
 				</ContextMenu>
 			</DataGrid.ContextMenu>

@@ -8,8 +8,10 @@ using System.Windows.Input;
 using Sdl.Community.Transcreate.Actions;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.CustomEventArgs;
+using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Model.ProjectSettings;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.ViewModel
@@ -17,46 +19,59 @@ namespace Sdl.Community.Transcreate.ViewModel
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
 		private readonly ProjectsController _projectsController;
-		private List<Project> _projects;
+		private readonly EditorController _editorController;
+		private List<IProject> _projects;
 		private string _filterString;
-		private List<Project> _filteredProjects;
+		private List<IProject> _filteredProjects;
 		private List<CustomerGroup> _customerGroups;
-		private Project _selectedProject;
+		private IProject _selectedProject;
 		private IList _selectedProjects;
 		private bool _isProjectSelected;
+		private List<NavigationNodeState> _navigationNodeStates;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
-		private ICommand _removeProjectDataCommand;
+		//private ICommand _removeProjectDataCommand;
 		private ICommand _openProjectFolderCommand;
-		private ICommand _importFilesCommand;
-		private ICommand _exportFilesCommand;
+		//private ICommand _importFilesCommand;
+		//private ICommand _exportFilesCommand;
 		private ICommand _selectedItemChanged;
-		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
+		private ICommand _createBackProjectsCommand;
+		private ICommand _removeBackProjectsCommand;
 
-		public ProjectsNavigationViewModel(List<Project> projects, ProjectsController projectsController)
+		public ProjectsNavigationViewModel(List<IProject> projects, ProjectsController projectsController, EditorController editorController)
 		{
 			_projects = projects;
 			_projectsController = projectsController;
+			_editorController = editorController;
 
 			FilteredProjects = _projects;
 			FilterString = string.Empty;
 		}
 
-		public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
+		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
-		public ICommand ImportFilesCommand => _importFilesCommand ?? (_importFilesCommand = new CommandHandler(ImportFiles));
+		//public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
+
+		//public ICommand ImportFilesCommand => _importFilesCommand ?? (_importFilesCommand = new CommandHandler(ImportFiles));
 
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand ClearFilterCommand => _clearFilterCommand ?? (_clearFilterCommand = new CommandHandler(ClearFilter));
 
-		public ICommand RemoveProjectDataCommand => _removeProjectDataCommand ?? (_removeProjectDataCommand = new CommandHandler(RemoveProjectData));
+		public ICommand CreateBackProjectsCommand => _createBackProjectsCommand ?? (_createBackProjectsCommand = new CommandHandler(CreateBackProjects));
+
+
+		public ICommand RemoveBackProjectsCommand => _removeBackProjectsCommand ?? (_removeBackProjectsCommand = new CommandHandler(RemoveBackProjects));
 
 		public ICommand OpenProjectFolderCommand => _openProjectFolderCommand ?? (_openProjectFolderCommand = new CommandHandler(OpenProjectFolder));
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChanged ?? (_selectedItemChanged = new CommandHandler(SelectedItemChanged));
 
-		public List<Project> Projects
+		public bool IsEnabledCreateBackProjects { get; set; }
+
+		public bool IsEnabledRemoveBackProjects { get; set; }
+
+		public List<IProject> Projects
 		{
 			get => _projects;
 			set
@@ -97,12 +112,15 @@ namespace Sdl.Community.Transcreate.ViewModel
 		{
 			get
 			{
-				var message = string.Format(PluginResources.StatusLabel_Selected_0, _selectedProjects?.Count);
+				var message = string.Format(PluginResources.StatusLabel_Selected_0,
+					_selectedProjects != null 
+						? _selectedProjects?.Count 
+						: (_selectedProject != null ? 1 : 0));
 				return message;
 			}
 		}
 
-		public List<Project> FilteredProjects
+		public List<IProject> FilteredProjects
 		{
 			get => _filteredProjects;
 			set
@@ -113,46 +131,144 @@ namespace Sdl.Community.Transcreate.ViewModel
 				if (_filteredProjects?.Count > 0 && !_filteredProjects.Contains(SelectedProject))
 				{
 					SelectedProject = _filteredProjects[0];
+					if (_navigationNodeStates == null)
+					{
+						_navigationNodeStates = new List<NavigationNodeState>();
+						_navigationNodeStates.Add(new NavigationNodeState
+						{
+							Id = SelectedProject.Customer?.Id,
+							IsSelected = false,
+							IsExpanded = true
+						});
+
+						_navigationNodeStates.Add(new NavigationNodeState
+						{
+							Id = SelectedProject.Id,
+							IsSelected = true,
+							IsExpanded = false
+						});
+					}
 				}
 				else if (_filteredProjects?.Count == 0)
 				{
 					SelectedProject = null;
 				}
 
+				CustomerGroups = BuildGroups();
+				OnPropertyChanged(nameof(StatusLabel));
+			}
+		}
 
-				var customerGroups = new List<CustomerGroup>();
-				if (_filteredProjects != null)
+		private List<CustomerGroup> BuildGroups()
+		{
+			_navigationNodeStates = _customerGroups?.Count > 0 ? GetReportStates(_customerGroups) : _navigationNodeStates;
+
+			var customerGroups = new List<CustomerGroup>();
+			if (_filteredProjects != null)
+			{
+				foreach (var filteredProject in _filteredProjects)
 				{
-					foreach (var filteredProject in _filteredProjects)
+					var customer = customerGroups.FirstOrDefault(a => a.Customer?.Name == filteredProject.Customer?.Name);
+					if (customer == null)
 					{
-						var customer = customerGroups.FirstOrDefault(a => a.Customer?.Name == filteredProject.Customer?.Name);
-						if (customer == null)
+						customer = new CustomerGroup
 						{
-							customer = new CustomerGroup
-							{
-								Customer = filteredProject.Customer,
-								Projects = new List<Project> { filteredProject }
-							};
+							Customer = filteredProject.Customer,
+							Projects = new List<IProject> { filteredProject },
+						};
+						customerGroups.Add(customer);
+					}
+					else
+					{
+						customer.Projects.Add(filteredProject);
+					}
 
-							customerGroups.Add(customer);
-						}
-						else
-						{
-							customer.Projects.Add(filteredProject);
-						}
+					var customerState = _navigationNodeStates?.FirstOrDefault(a => a.Id == customer?.Customer.Id);
+					if (customerState != null)
+					{
+						customer.IsExpanded = customerState.IsExpanded;
+						customer.IsSelected = customerState.IsSelected;
+					}
 
-						if (filteredProject.IsSelected)
+					var projectState = _navigationNodeStates?.FirstOrDefault(a => a.Id == filteredProject.Id);
+					if (projectState != null)
+					{
+						filteredProject.IsExpanded = projectState.IsExpanded;
+						filteredProject.IsSelected = projectState.IsSelected;
+
+						if (!customer.IsExpanded && filteredProject.IsExpanded)
 						{
 							customer.IsExpanded = true;
 						}
 					}
+
+					foreach (var backTranslationProject in filteredProject.BackTranslationProjects)
+					{
+						var backTranslationProjectState = _navigationNodeStates?.FirstOrDefault(a => a.Id == backTranslationProject.Id);
+						if (backTranslationProjectState != null)
+						{
+							backTranslationProject.IsExpanded = backTranslationProjectState.IsExpanded;
+							backTranslationProject.IsSelected = backTranslationProjectState.IsSelected;
+
+							if (!filteredProject.IsExpanded && backTranslationProject.IsExpanded)
+							{
+								filteredProject.IsExpanded = true;
+							}
+						}
+					}
+				}
+			}
+
+			return customerGroups;
+		}
+
+		private List<NavigationNodeState> GetReportStates(IEnumerable<CustomerGroup> customerGroups)
+		{
+			var navigationNodeStates = new List<NavigationNodeState>();
+			if (customerGroups == null)
+			{
+				return navigationNodeStates;
+			}
+
+			foreach (var customerGroup in customerGroups)
+			{
+				if (!navigationNodeStates.Exists(a => string.Compare(a.Id, customerGroup.Customer?.Id, StringComparison.CurrentCultureIgnoreCase) == 0))
+				{
+					navigationNodeStates.Add(new NavigationNodeState
+					{
+						Id = customerGroup.Customer?.Id,
+						IsSelected = customerGroup.IsSelected,
+						IsExpanded = customerGroup.IsExpanded
+					});
 				}
 
-				CustomerGroups = customerGroups;
+				foreach (var project in customerGroup.Projects)
+				{
+					if (!navigationNodeStates.Exists(a => string.Compare(a.Id, project.Id, StringComparison.CurrentCultureIgnoreCase) == 0))
+					{
+						navigationNodeStates.Add(new NavigationNodeState
+						{
+							Id = project.Id,
+							IsSelected = project.IsSelected,
+							IsExpanded = project.IsExpanded
+						});
+					}
 
-
-				OnPropertyChanged(nameof(StatusLabel));
+					foreach (var backTranslationProject in project.BackTranslationProjects)
+					{
+						if (!navigationNodeStates.Exists(a => a.Id == backTranslationProject.Id))
+						{
+							navigationNodeStates.Add(new NavigationNodeState
+							{
+								Id = backTranslationProject.Id,
+								IsSelected = backTranslationProject.IsSelected
+							});
+						}
+					}
+				}
 			}
+
+			return navigationNodeStates;
 		}
 
 		public List<CustomerGroup> CustomerGroups
@@ -188,7 +304,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 			}
 		}
 
-		public Project SelectedProject
+		public IProject SelectedProject
 		{
 			get => _selectedProject;
 			set
@@ -210,6 +326,28 @@ namespace Sdl.Community.Transcreate.ViewModel
 				ProjectSelectionChanged?.Invoke(this, new ProjectSelectionChangedEventArgs { SelectedProject = _selectedProject });
 
 				IsProjectSelected = _selectedProject != null;
+
+				if (SelectedProject == null || SelectedProject is BackTranslationProject)
+				{
+					IsEnabledCreateBackProjects = false;
+					IsEnabledRemoveBackProjects = false;
+				}
+				else
+				{
+					if (SelectedProject.BackTranslationProjects.Count > 0)
+					{
+						IsEnabledCreateBackProjects = false;
+						IsEnabledRemoveBackProjects = true;
+					}
+					else
+					{
+						IsEnabledCreateBackProjects = true;
+						IsEnabledRemoveBackProjects = false;
+					}
+				}
+
+				OnPropertyChanged(nameof(IsEnabledCreateBackProjects));
+				OnPropertyChanged(nameof(IsEnabledRemoveBackProjects));
 			}
 		}
 
@@ -228,17 +366,17 @@ namespace Sdl.Community.Transcreate.ViewModel
 			}
 		}
 
-		private void ImportFiles(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<ImportAction>();
-			action.LaunchWizard();
-		}
+		//private void ImportFiles(object parameter)
+		//{
+		//	var action = SdlTradosStudio.Application.GetAction<ImportAction>();
+		//	action.LaunchWizard();
+		//}
 
-		private void ExportFiles(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<ExportAction>();
-			action.LaunchWizard();
-		}
+		//private void ExportFiles(object parameter)
+		//{
+		//	var action = SdlTradosStudio.Application.GetAction<ExportAction>();
+		//	action.LaunchWizard();
+		//}
 
 		private void ClearSelection(object parameter)
 		{
@@ -251,7 +389,19 @@ namespace Sdl.Community.Transcreate.ViewModel
 			FilterString = string.Empty;
 		}
 
-		private void RemoveProjectData(object parameter)
+		private void CreateBackProjects(object parameter)
+		{
+			var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationProjectAction>();
+			action.Run();
+
+			IsEnabledCreateBackProjects = false;
+			IsEnabledRemoveBackProjects = true;
+
+			OnPropertyChanged(nameof(IsEnabledCreateBackProjects));
+			OnPropertyChanged(nameof(IsEnabledRemoveBackProjects));
+		}
+
+		private void RemoveBackProjects(object parameter)
 		{
 			var message1 = PluginResources.Message_ActionWillRemoveAllProjectData;
 			var message2 = PluginResources.Message_DoYouWantToProceed;
@@ -269,20 +419,35 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 			if (selectedProject != null)
 			{
-				var settingsBundle = selectedProject.GetSettings();
-				var managerProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
+				// close any open project documents from the editor
+				// TODO decide whether it is better to display a message and ask the user to complete this task manually
+				CloseProjectDocuments(selectedProject);
 
-				managerProject.ProjectFilesJson.Value = string.Empty;
+				// close the back-projects from the projects controller
+				foreach (var backTranslationProject in SelectedProject.BackTranslationProjects)
+				{
+					var backProject = _projectsController.GetProjects()
+						.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == backTranslationProject.Id);
+					if (backProject != null)
+					{
+						_projectsController.Close(backProject);
+					}
+				}
+
+				var settingsBundle = selectedProject.GetSettings();
+				var managerProject = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+
+				managerProject.BackProjectsJson.Value = string.Empty;
 
 				selectedProject.UpdateSettings(settingsBundle);
 				selectedProject.Save();
 
-				var xliffFolderPath = Path.Combine(SelectedProject.Path, "Transcreate");
-				if (Directory.Exists(xliffFolderPath))
+				var folderPath = Path.Combine(SelectedProject.Path, "BackProjects");
+				if (Directory.Exists(folderPath))
 				{
 					try
 					{
-						Directory.Delete(xliffFolderPath, true);
+						Directory.Delete(folderPath, true);
 					}
 					catch
 					{
@@ -290,10 +455,32 @@ namespace Sdl.Community.Transcreate.ViewModel
 					}
 				}
 
-				// TODO: remove reports
+				//TODO remove reports
 
 
-				Projects = Projects.Where(a => a.Id != SelectedProject.Id).ToList();
+				SelectedProject.BackTranslationProjects = new List<BackTranslationProject>();
+
+				var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationProjectAction>();
+				action.Enabled = true;
+
+				IsEnabledCreateBackProjects = true;
+				IsEnabledRemoveBackProjects = false;
+
+				OnPropertyChanged(nameof(IsEnabledCreateBackProjects));
+				OnPropertyChanged(nameof(IsEnabledRemoveBackProjects));
+			}
+		}
+
+		private void CloseProjectDocuments(FileBasedProject selectedProject)
+		{
+			var documents = _editorController.GetDocuments();
+			foreach (var document in documents)
+			{
+				if (document.Project.GetProjectInfo().Id.ToString() == selectedProject.GetProjectInfo().Id.ToString())
+				{
+					_editorController.Save(document);
+					_editorController.Close(document);
+				}
 			}
 		}
 

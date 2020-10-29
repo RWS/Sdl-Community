@@ -23,12 +23,12 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 		private RelayCommand _cancelCommand;
 
 		public WizardViewModel(Window window, ObservableCollection<WizardPageViewModelBase> pages, 
-			WizardContext wizardContext, Enumerators.Action action)
+			TaskContext taskContext, Enumerators.Action action)
 		{
 			SetWindow(window);		
 			Pages = pages;
 			Action = action;
-			WizardContext = wizardContext;
+			TaskContext = taskContext;
 			UpdateWizardHeader(_window.ActualWidth);
 			SetCurrentPage(Pages[0]);
 		}
@@ -39,7 +39,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 
 		public Enumerators.Action Action { get; set; }
 
-		public WizardContext WizardContext { get; set; }
+		public TaskContext TaskContext { get; set; }
 
 		private void SetWindow(Window window)
 		{

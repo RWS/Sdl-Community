@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
 using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.View;
 
@@ -109,9 +108,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 				var viewModel = new ReportViewModel
 				{
 					HtmlUri = path,
-					WindowTitle = SelectedProjectFileActivity.Action == Enumerators.Action.Export
-						? "Export Report"
-						: "Import Report"
+					WindowTitle = "Report"
 				};
 
 				var view = new ReportWindow(viewModel);

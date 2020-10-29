@@ -13,8 +13,9 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
+using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
@@ -27,7 +28,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private const string ForegroundError = "#7F0505";
 		private const string ForegroundProcessing = "#0096D6";
 
-		private readonly SegmentBuilder _segmentBuilder;
+		private readonly FileTypeSupport.SDLXLIFF.SegmentBuilder _segmentBuilder;
 		private readonly PathInfo _pathInfo;
 		private List<JobProcess> _jobProcesses;
 		private ICommand _viewExceptionCommand;
@@ -36,8 +37,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 		private string _textMessage;
 		private StringBuilder _logReport;
 
-		public WizardPageImportPreparationViewModel(Window owner, object view, WizardContext wizardContext,
-			SegmentBuilder segmentBuilder, PathInfo pathInfo) : base(owner, view, wizardContext)
+		public WizardPageImportPreparationViewModel(Window owner, object view, TaskContext taskContext,
+			FileTypeSupport.SDLXLIFF.SegmentBuilder segmentBuilder, PathInfo pathInfo) : base(owner, view, taskContext)
 		{
 			_segmentBuilder = segmentBuilder;
 			_pathInfo = pathInfo;
@@ -107,9 +108,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private void OpenFolderInExplorer(object parameter)
 		{
-			if (Directory.Exists(WizardContext.WorkingFolder))
+			if (Directory.Exists(TaskContext.WorkingFolder))
 			{
-				Process.Start(WizardContext.WorkingFolder);
+				Process.Start(TaskContext.WorkingFolder);
 			}
 		}
 
@@ -138,9 +139,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			{				
 				WriteLogReportHeader();
 
-				if (!Directory.Exists(WizardContext.WorkingFolder))
+				if (!Directory.Exists(TaskContext.WorkingFolder))
 				{
-					Directory.CreateDirectory(WizardContext.WorkingFolder);
+					Directory.CreateDirectory(TaskContext.WorkingFolder);
 				}
 
 				var success = true;
@@ -225,18 +226,15 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 				Refresh();
 
+				var tokenVisitor = new TokenVisitor();
 				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-				
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder, 
-					WizardContext.ImportOptions, WizardContext.AnalysisBands);
+				var segmentBuilder = new SegmentBuilder();
+				var processor = new ImportProcessor(fileTypeManager, tokenVisitor, TaskContext.ImportOptions, TaskContext.AnalysisBands, segmentBuilder);
 
-				var sniffer = new XliffSniffer();
-				var xliffReader = new XliffReder(sniffer, _segmentBuilder);
-
-				var targetLanguages = WizardContext.ProjectFiles.Where(
+				var targetLanguages = TaskContext.ProjectFiles.Where(
 									a => a.Selected &&
-									!string.IsNullOrEmpty(a.XliffFilePath) &&
-									File.Exists(a.XliffFilePath))
+									!string.IsNullOrEmpty(a.ExternalFilePath) &&
+									File.Exists(a.ExternalFilePath))
 									.Select(a => a.TargetLanguage).Distinct();
 
 				foreach (var targetLanguage in targetLanguages)
@@ -246,29 +244,29 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					_logReport.AppendLine();
 					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage));
 
-					var targetLanguageFiles = WizardContext.ProjectFiles.Where(
+					var targetLanguageFiles = TaskContext.ProjectFiles.Where(
 												a => a.Selected &&
-												!string.IsNullOrEmpty(a.XliffFilePath) &&
-												File.Exists(a.XliffFilePath) &&
+												!string.IsNullOrEmpty(a.ExternalFilePath) &&
+												File.Exists(a.ExternalFilePath) &&
 												string.Compare(a.TargetLanguage, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
 					{
-						var xliffFolder = GetXliffFolder(languageFolder, targetLanguageFile);
-						var xliffArchiveFile = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
-						var sdlXliffBackupFile = Path.Combine(xliffFolder, targetLanguageFile.Name);
+						var folder = GetXliffFolder(languageFolder, targetLanguageFile);
+						var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".docx");
+						var sdlXliffBackupFile = Path.Combine(folder, targetLanguageFile.Name);
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
-						if (WizardContext.ImportOptions.BackupFiles)
+						if (TaskContext.ImportOptions.BackupFiles)
 						{
 							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackupFile));
 						}
 
-						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, targetLanguageFile.XliffFilePath));
-						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, xliffArchiveFile));
+						_logReport.AppendLine(string.Format(PluginResources.Label_ImportFile, targetLanguageFile.ExternalFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, archiveFile));
 
 						CreateBackupFile(targetLanguageFile.Location, sdlXliffBackupFile);
-						CreateArchiveFile(targetLanguageFile.XliffFilePath, xliffArchiveFile);
+						CreateArchiveFile(targetLanguageFile.ExternalFilePath, archiveFile);
 
 						var sdlXliffImportFile = Path.GetTempFileName();
 
@@ -277,36 +275,35 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 							SdlXliffFile = targetLanguageFile.Location,
 							SdlXliffBackupFile = sdlXliffBackupFile,
 							SdlXliffImportFile = sdlXliffImportFile,
-							XliffFile = targetLanguageFile.XliffFilePath,
-							XliffArchiveFile = xliffArchiveFile
+							ImportFilePath = targetLanguageFile.ExternalFilePath,
+							ArchiveFilePath = archiveFile
 						};
 						importFiles.Add(importFile);
-						
 
-						var xliff = xliffReader.ReadXliff(targetLanguageFile.XliffFilePath);
-						success = sdlxliffWriter.UpdateFile(xliff, targetLanguageFile.Location, sdlXliffImportFile);
-
-
+						success = processor.ImportUpdatedFile(targetLanguageFile.Location, 
+							sdlXliffImportFile, targetLanguageFile.ExternalFilePath, targetLanguage);
 						if (success)
 						{
-							targetLanguageFile.Date = WizardContext.DateTimeStamp;
-							targetLanguageFile.Action = Enumerators.Action.Import;
+							targetLanguageFile.Date = TaskContext.DateTimeStamp;
+							targetLanguageFile.Action = TaskContext.Action;
+							targetLanguageFile.WorkFlow = TaskContext.WorkFlow;
 							targetLanguageFile.Status = Enumerators.Status.Success;
 							targetLanguageFile.Report = string.Empty;
-							targetLanguageFile.XliffFilePath = xliffArchiveFile;
-							targetLanguageFile.ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics;
-							targetLanguageFile.TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics;
+							targetLanguageFile.ExternalFilePath = archiveFile;
+							targetLanguageFile.ConfirmationStatistics = processor.ConfirmationStatistics;
+							targetLanguageFile.TranslationOriginStatistics = processor.TranslationOriginStatistics;
 						}
 
 						var activityFile = new ProjectFileActivity
 						{
 							ProjectFileId = targetLanguageFile.FileId,
 							ActivityId = Guid.NewGuid().ToString(),
-							Action = Enumerators.Action.Import,
+							Action = TaskContext.Action,
+							WorkFlow = TaskContext.WorkFlow,
 							Status = success ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetLanguageFile.Date,
-							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),
-							Path = Path.GetDirectoryName(targetLanguageFile.XliffFilePath),
+							Name = Path.GetFileName(targetLanguageFile.ExternalFilePath),
+							Path = Path.GetDirectoryName(targetLanguageFile.ExternalFilePath),
 							Report = string.Empty,
 							ProjectFile = targetLanguageFile,
 							ConfirmationStatistics = targetLanguageFile.ConfirmationStatistics,
@@ -320,14 +317,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 						if (!success)
 						{
-							throw new Exception(string.Format(PluginResources.Message_ErrorImportingFrom, targetLanguageFile.XliffFilePath));
+							throw new Exception(string.Format(PluginResources.Message_ErrorImportingFrom, targetLanguageFile.ExternalFilePath));
 						}
 					}
 				}
 
 				_logReport.AppendLine("Phase: Import - Completed " + FormatDateTime(DateTime.UtcNow));
 
-				WizardContext.Completed = true;
+				TaskContext.Completed = true;
 				jobProcess.Status = JobProcess.ProcessStatus.Completed;
 			}
 			catch (Exception ex)
@@ -353,8 +350,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 			return await Task.FromResult(success);
 		}
-
-		
 
 		private async Task<bool> Finalize(JobProcess jobProcess)
 		{
@@ -448,7 +443,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			_logReport.AppendLine("Start Process: Import " + FormatDateTime(DateTime.UtcNow));
 			_logReport.AppendLine();
 
-			var project = WizardContext.ProjectFiles[0].Project;
+			var project = TaskContext.ProjectFiles[0].Project;
 
 			var indent = "   ";
 			_logReport.AppendLine(PluginResources.Label_Project);
@@ -464,29 +459,29 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Options);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportOptions.BackupFiles));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOptions.OverwriteTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOptions.OriginSystem));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationUpdatedId)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationNotUpdatedId)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(WizardContext.ImportOptions.StatusSegmentNotImportedId)));
-			if (WizardContext.ImportOptions.ExcludeFilterIds.Count > 0)
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_BackupFiles, TaskContext.ImportOptions.BackupFiles));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, TaskContext.ImportOptions.OverwriteTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OriginSystem, TaskContext.ImportOptions.OriginSystem));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(TaskContext.ImportOptions.StatusTranslationUpdatedId)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(TaskContext.ImportOptions.StatusTranslationNotUpdatedId)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(TaskContext.ImportOptions.StatusSegmentNotImportedId)));
+			if (TaskContext.ImportOptions.ExcludeFilterIds.Count > 0)
 			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ImportOptions.ExcludeFilterIds)));
+				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(TaskContext.ImportOptions.ExcludeFilterIds)));
 			}
 
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Files);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ImportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ImportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
 		}
 
 		private void SaveLogReport()
 		{
-			var logFileName = "log." + WizardContext.DateTimeStampToString + ".txt";
-			var outputFile = Path.Combine(WizardContext.WorkingFolder, logFileName);
+			var logFileName = "log." + TaskContext.DateTimeStampToString + ".txt";
+			var outputFile = Path.Combine(TaskContext.WorkingFolder, logFileName);
 			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
 			{
 				writer.Write(_logReport);
@@ -498,7 +493,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private string GetLanguageFolder(string name)
 		{
-			var languageFolder = WizardContext.GetLanguageFolder(name);
+			var languageFolder = TaskContext.GetLanguageFolder(name);
 			if (!Directory.Exists(languageFolder))
 			{
 				Directory.CreateDirectory(languageFolder);
@@ -538,7 +533,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			File.Copy(sdlXliffFile, sdlXliffBackup, true);
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)
@@ -552,7 +547,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private string GetSelectedLanguagesString()
 		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+			var selected = TaskContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
 			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())

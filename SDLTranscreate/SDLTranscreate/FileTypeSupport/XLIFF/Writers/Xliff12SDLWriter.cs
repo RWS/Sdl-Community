@@ -69,10 +69,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		{
 			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
+			writer.WriteAttributeString("document-id", xliff.DocInfo.DocumentId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
 			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
 			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
-
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
 			WriteCommentDefinitions(xliff, writer);
@@ -433,8 +433,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 				writer.WriteStartElement("cxt-def");
 				writer.WriteAttributeString("id", context.Id);
 				writer.WriteAttributeString("type", context.ContextType);
-				writer.WriteAttributeString("code", context.DisplayCode.Trim());
-				writer.WriteAttributeString("name", context.DisplayName.Trim());
+				writer.WriteAttributeString("code", context.DisplayCode?.Trim());
+				writer.WriteAttributeString("name", context.DisplayName?.Trim());
 				writer.WriteAttributeString("descr", context.Description);
 				writer.WriteEndElement(); // cxt-def
 

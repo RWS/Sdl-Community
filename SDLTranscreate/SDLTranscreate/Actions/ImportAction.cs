@@ -4,18 +4,12 @@ using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.LanguageMapping;
-using Sdl.Community.Transcreate.LanguageMapping.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.Actions
 {
@@ -34,53 +28,49 @@ namespace Sdl.Community.Transcreate.Actions
 		private ImageService _imageService;
 		private SegmentBuilder _segmentBuilder;
 		private IDialogService _dialogService;
-		private ILanguageProvider _languageProvider;
 		private ProjectAutomationService _projectAutomationService;
 
 		protected override void Execute()
 		{
-			// TODO: testing
-			//var selectedFile = _controllers.TranscreateController.GetSelectedProjectFiles()[0];
-
-			//var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			//var tokenVisitor = new TokenVisitor();
-			//var settings = new GeneratorSettings();
-			
-			//var project = _controllers.ProjectsController.GetAllProjects().ToList()
-			//	.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == selectedFile.ProjectId);
-			//var analysisBands = _projectAutomationService.GetAnalysisBands(project);
-			//var process = new Processor(fileTypeManager, tokenVisitor, settings, analysisBands);
-
-
-			//var fullPath = Path.Combine(selectedFile.Project.Path, selectedFile.Location);
-			//var fullPathOutput = fullPath + ".new.sdlxliff";
-			//var fullPathUpdated = fullPath.Substring(0, fullPath.LastIndexOf(".")) + ".Export.docx";
-
-			//if (File.Exists(fullPathOutput))
+			//if (!_controllers.TranscreateController.IsActive)
 			//{
-			//	File.Delete(fullPathOutput);
-			//}
-			//var success = process.ImportUpdatedFile(fullPath, fullPathOutput, fullPathUpdated);
-
-
-
-
-
-
-
-
-			//var wizardService = new WizardService(Enumerators.Action.Import, _pathInfo, _customerProvider,
-			//	_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider, 
-			//	_projectAutomationService);
-
-			//var wizardContext = wizardService.ShowWizard(_controllers.TranscreateController, out var message);
-			//if (wizardContext == null && !string.IsNullOrEmpty(message))
-			//{
-			//	MessageBox.Show(message, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 			//	return;
 			//}
 
-			//_controllers.TranscreateController.UpdateProjectData(wizardContext);
+			var selectedProject = _controllers.TranscreateController.GetSelectedProjects()?.FirstOrDefault();
+			if (selectedProject == null)
+			{
+				return;
+			}
+
+			var action = selectedProject is BackTranslationProject
+				? Enumerators.Action.ImportBackTranslation
+				: Enumerators.Action.Import;
+			var workFlow = Enumerators.WorkFlow.External;
+
+			var settings = GetSettings();
+			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
+				_imageService, _controllers, _segmentBuilder, settings, _dialogService,
+				_projectAutomationService);
+
+			var taskContext = wizardService.ShowWizard(_controllers.TranscreateController, out var message);
+			if (taskContext == null && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+
+			if (selectedProject is BackTranslationProject)
+			{
+				var projects = _controllers.TranscreateController.GetProjects();
+				var parentProject = projects.FirstOrDefault(project => project.BackTranslationProjects.Exists(a => a.Id == selectedProject.Id));
+
+				_controllers.TranscreateController.UpdateBackTranslationProjectData(parentProject, taskContext);
+			}
+			else
+			{
+				_controllers.TranscreateController.UpdateProjectData(taskContext);
+			}
 		}
 
 		public void LaunchWizard()
@@ -97,7 +87,6 @@ namespace Sdl.Community.Transcreate.Actions
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_languageProvider = new LanguageProvider(_pathInfo);
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
 
 			Enabled = false;
@@ -121,7 +110,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
 		{
-			//Enabled = e.SelectedProject != null;
+			Enabled = e.SelectedProject != null;
 		}
 	}
 }

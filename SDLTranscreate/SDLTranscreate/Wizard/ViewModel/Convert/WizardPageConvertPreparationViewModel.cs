@@ -15,13 +15,11 @@ using Sdl.Community.Transcreate.Commands;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
 using Button = System.Windows.Controls.Button;
 using File = System.IO.File;
@@ -48,10 +46,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 		private StringBuilder _logReport;
 		private FileBasedProject _newProject;
 
-		public WizardPageConvertPreparationViewModel(Window owner, object view, WizardContext wizardContext,
+		public WizardPageConvertPreparationViewModel(Window owner, object view, TaskContext taskContext,
 			SegmentBuilder segmentBuilder, PathInfo pathInfo, Controllers controllers,
 			ProjectAutomationService projectAutomationService)
-			: base(owner, view, wizardContext)
+			: base(owner, view, taskContext)
 		{
 			_segmentBuilder = segmentBuilder;
 			_pathInfo = pathInfo;
@@ -123,9 +121,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private void OpenFolderInExplorer(object parameter)
 		{
-			if (Directory.Exists(WizardContext.WorkingFolder))
+			if (Directory.Exists(TaskContext.WorkingFolder))
 			{
-				Process.Start(WizardContext.WorkingFolder);
+				Process.Start(TaskContext.WorkingFolder);
 			}
 		}
 
@@ -156,20 +154,20 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			};
 		}
 
-		private void UpdateWizardContext()
+		private void UpdateWizardContext(FileBasedProject project)
 		{
-			var projectFiles = WizardContext.Project.ProjectFiles;
+			var projectFiles = TaskContext.Project.ProjectFiles;
 
-			var newProjectInfo = _newProject.GetProjectInfo();
-			WizardContext.Project = _projectAutomationService.GetProject(_newProject, null, projectFiles);
-			WizardContext.ProjectFiles = WizardContext.Project.ProjectFiles;
-			WizardContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(_newProject);
-			WizardContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
-			WizardContext.TransactionFolder = WizardContext.GetDefaultTransactionPath();
+			var newProjectInfo = project.GetProjectInfo();
+			TaskContext.Project = _projectAutomationService.GetProject(project, null, projectFiles);
+			TaskContext.ProjectFiles = TaskContext.Project.ProjectFiles;
+			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
+			TaskContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
+			TaskContext.WorkflowFolder = TaskContext.GetWorkflowPath();
 
-			if (!Directory.Exists(WizardContext.WorkingFolder))
+			if (!Directory.Exists(TaskContext.WorkingFolder))
 			{
-				Directory.CreateDirectory(WizardContext.WorkingFolder);
+				Directory.CreateDirectory(TaskContext.WorkingFolder);
 			}
 		}
 
@@ -179,9 +177,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			{
 				WriteLogReportHeader();
 
-				if (!Directory.Exists(WizardContext.WorkingFolder))
+				if (!Directory.Exists(TaskContext.WorkingFolder))
 				{
-					Directory.CreateDirectory(WizardContext.WorkingFolder);
+					Directory.CreateDirectory(TaskContext.WorkingFolder);
 				}
 
 				var success = true;
@@ -240,7 +238,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				}));
 			}
 		}
-		
+
 		private async Task<bool> Preparation(JobProcess jobProcess)
 		{
 			var success = true;
@@ -286,17 +284,17 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ConvertingProjectFiles);
 
-				var project = WizardContext.ProjectFiles[0].Project;
+				var project = TaskContext.ProjectFiles[0].Project;
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
-					WizardContext.ExportOptions, WizardContext.AnalysisBands);
+					TaskContext.ExportOptions, TaskContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
 
-				var sourceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name;
+				var sourceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name;
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.Label_Language, sourceLanguage));
 
-				var total = GetTargetLangauges(WizardContext.Project).Count;
+				var total = GetTargetLangauges(TaskContext.Project).Count;
 				var unit = System.Convert.ToInt32(Math.Truncate(System.Convert.ToDouble(100 / ((total * 2) + 1))));
 
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, project.SourceLanguage.CultureInfo.DisplayName));
@@ -351,7 +349,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				}
 
 				_logReport.AppendLine("Phase: " + phase + " - Complete " + FormatDateTime(DateTime.UtcNow));
-				
+
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
 			}
 			catch (Exception ex)
@@ -378,29 +376,31 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				TextMessage = PluginResources.WizardMessage_CreatingTranscreateProject;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-			
+
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ProcessingPleaseWait);
 
 				var selectedProject = _controllers.ProjectsController.GetProjects()
-					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == WizardContext.Project.Id);
+					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
 
 				if (selectedProject == null)
 				{
-					throw new Exception(string.Format(PluginResources.WarningMessage_UnableToLocateProject, WizardContext.Project.Name));
+					throw new Exception(string.Format(PluginResources.WarningMessage_UnableToLocateProject, TaskContext.Project.Name));
 				}
 
-				var sourceLanguage = WizardContext.Project.SourceLanguage.CultureInfo.Name;
-				var projectFiles = WizardContext.ProjectFiles.Where(a => IsSourceLanguage(a.TargetLanguage, sourceLanguage)).ToList();
+				var sourceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name;
+				var projectFiles = TaskContext.ProjectFiles.Where(a => IsSourceLanguage(a.TargetLanguage, sourceLanguage)).ToList();
 
 				if (projectFiles.Count == 0)
 				{
 					throw new Exception("No source files found!");
 				}
-			
+
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 30, PluginResources.JobProcess_ProcessingPleaseWait);
 
-				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, projectFiles);
-				UpdateWizardContext();
+				var iconPath = GetTranscreateIconPath();
+
+				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, iconPath, projectFiles, "T");
+				UpdateWizardContext(_newProject);
 
 				var newProjectInfo = _newProject.GetProjectInfo();
 
@@ -413,23 +413,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				_logReport.AppendLine(PluginResources.Label_Files);
 				foreach (var projectFile in projectFiles)
 				{
-					_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, projectFile.XliffFilePath));
+					_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, projectFile.ExternalFilePath));
 				}
 
-				if (WizardContext.ConvertOptions.CloseProjectOnComplete)
+				if (TaskContext.ConvertOptions.CloseProjectOnComplete)
 				{
 					_controllers.ProjectsController.Close(selectedProject);
 				}
 
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " - Completed " + FormatDateTime(DateTime.UtcNow));
-				
+
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
 			}
 			catch (Exception ex)
 			{
 				jobProcess.Errors.Add(ex);
-				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);			
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
 
 				_logReport.AppendLine();
@@ -449,79 +449,80 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			{
 				TextMessage = PluginResources.WizardMessage_ImportingTranslations;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-			
+
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ProcessingPleaseWait);
 
-				var totalFilesCount = WizardContext.ProjectFiles.Count(a => a.XliffData != null);
+				var totalFilesCount = TaskContext.ProjectFiles.Count(a => a.XliffData != null);
 				var unit = System.Convert.ToInt32(Math.Truncate(System.Convert.ToDouble(100 / totalFilesCount)));
 
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " - Started " + FormatDateTime(DateTime.UtcNow));
 
-				var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
+				var sdlxliffWriter = new SdlxliffWriter(_segmentBuilder,
+					TaskContext.ImportOptions, TaskContext.AnalysisBands);
 
-				var sdlxliffWriter = new SdlxliffWriter(fileTypeManager, _segmentBuilder,
-					WizardContext.ImportOptions, WizardContext.AnalysisBands);
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, TaskContext.ExportOptions,
+					TaskContext.AnalysisBands);
 
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, WizardContext.ExportOptions,
-					WizardContext.AnalysisBands);
-
-				foreach (var targetLanguage in GetTargetLangauges(WizardContext.Project))
+				foreach (var targetLanguage in GetTargetLangauges(TaskContext.Project))
 				{
 					var languageFolder = GetLanguageFolder(targetLanguage);
 
 					_logReport.AppendLine();
 					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage));
 
-					var targetLanguageFiles = WizardContext.ProjectFiles.Where(
+					var targetLanguageFiles = TaskContext.ProjectFiles.Where(
 						a => a.XliffData != null &&
 							 string.Compare(a.TargetLanguage, targetLanguage,
 								 StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
 
 					foreach (var targetLanguageFile in targetLanguageFiles)
-					{						
+					{
 						await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, jobProcess.Progress + unit, string.Format(PluginResources.JobProcess_ImportingTranslations, targetLanguageFile.Name));
 
-						var xliffFolder = GetXliffFolder(languageFolder, targetLanguageFile);
-						var xliffArchiveFile = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
-						var sdlXliffBackupFile = Path.Combine(xliffFolder, targetLanguageFile.Name);
+						var folder = GetXliffFolder(languageFolder, targetLanguageFile);
+						var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".xliff");
+						var sdlXliffBackupFile = Path.Combine(folder, targetLanguageFile.Name);
 
 						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
-						if (WizardContext.ImportOptions.BackupFiles)
+						if (TaskContext.ImportOptions.BackupFiles)
 						{
 							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackupFile));
 						}
 
-						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, targetLanguageFile.XliffFilePath));
-						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, xliffArchiveFile));
+						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, targetLanguageFile.ExternalFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, archiveFile));
 
 						CreateBackupFile(targetLanguageFile.Location, sdlXliffBackupFile);
-						CreateArchiveFile(targetLanguageFile.XliffFilePath, xliffArchiveFile);
+						CreateArchiveFile(targetLanguageFile.ExternalFilePath, archiveFile);
 
 						var sdlXliffImportFile = Path.GetTempFileName();
+						File.Move(sdlXliffImportFile, sdlXliffImportFile + ".sdlxliff");
+						sdlXliffImportFile = sdlXliffImportFile + ".sdlxliff";
 
 						var importFile = new ImportFile
 						{
 							SdlXliffFile = targetLanguageFile.Location,
 							SdlXliffBackupFile = sdlXliffBackupFile,
 							SdlXliffImportFile = sdlXliffImportFile,
-							XliffFile = targetLanguageFile.XliffFilePath,
-							XliffArchiveFile = xliffArchiveFile
+							ImportFilePath = targetLanguageFile.ExternalFilePath,
+							ArchiveFilePath = archiveFile
 						};
 						importFiles.Add(importFile);
 
-						var paragraphMap = GetParagraphMap(sdlxliffReader, targetLanguageFile.Location);
+						var paragraphMap = GetParagraphMap(sdlxliffReader, targetLanguageFile.FileId, targetLanguageFile.Location, targetLanguageFile.TargetLanguage);
 						AlignParagraphIds(targetLanguageFile.XliffData, paragraphMap.Keys.ToList());
 
 						success = sdlxliffWriter.UpdateFile(targetLanguageFile.XliffData, targetLanguageFile.Location, sdlXliffImportFile);
 
 						if (success)
 						{
-							targetLanguageFile.Date = WizardContext.DateTimeStamp;
+							targetLanguageFile.Date = TaskContext.DateTimeStamp;
 							targetLanguageFile.Action = Enumerators.Action.Convert;
+							targetLanguageFile.WorkFlow = Enumerators.WorkFlow.Internal;
 							targetLanguageFile.Status = Enumerators.Status.Success;
 							targetLanguageFile.Report = string.Empty;
-							targetLanguageFile.XliffFilePath = xliffArchiveFile;
+							targetLanguageFile.ExternalFilePath = archiveFile;
 							targetLanguageFile.ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics;
 							targetLanguageFile.TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics;
 						}
@@ -531,10 +532,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 							ProjectFileId = targetLanguageFile.FileId,
 							ActivityId = Guid.NewGuid().ToString(),
 							Action = Enumerators.Action.Convert,
+							WorkFlow = Enumerators.WorkFlow.Internal,
 							Status = success ? Enumerators.Status.Success : Enumerators.Status.Error,
 							Date = targetLanguageFile.Date,
-							Name = Path.GetFileName(targetLanguageFile.XliffFilePath),
-							Path = Path.GetDirectoryName(targetLanguageFile.XliffFilePath),
+							Name = Path.GetFileName(targetLanguageFile.ExternalFilePath),
+							Path = Path.GetDirectoryName(targetLanguageFile.ExternalFilePath),
 							Report = string.Empty,
 							ProjectFile = targetLanguageFile,
 							ConfirmationStatistics = targetLanguageFile.ConfirmationStatistics,
@@ -548,7 +550,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 						if (!success)
 						{
-							throw new Exception(string.Format(PluginResources.Message_ErrorImportingFrom, targetLanguageFile.XliffFilePath));
+							throw new Exception(string.Format(PluginResources.Message_ErrorImportingFrom, targetLanguageFile.ExternalFilePath));
 						}
 					}
 				}
@@ -556,8 +558,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " - Completed " + FormatDateTime(DateTime.UtcNow));
 
-				WizardContext.Completed = true;
-				
+				TaskContext.Completed = true;
+
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
 			}
 			catch (Exception ex)
@@ -614,9 +616,9 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			return await Task.FromResult(success);
 		}
 
-		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string path)
+		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string fileId, string path, string targetLanguage)
 		{
-			var xliffData = sdlxliffReader.ReadFile(WizardContext.Project.Id, path);
+			var xliffData = sdlxliffReader.ReadFile(TaskContext.Project.Id, fileId, path, targetLanguage);
 			return GetParagraphMap(xliffData);
 		}
 
@@ -646,9 +648,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			return paragraphMap;
 		}
 
+		private string GetTranscreateIconPath()
+		{
+			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "Transcreate.ico");
+			if (!File.Exists(iconPath))
+			{
+				using (var fs = new FileStream(iconPath, FileMode.Create))
+				{
+					PluginResources.sdl_transcreate_view.Save(fs);
+				}
+			}
+
+			return iconPath;
+		}
+
 		private void WriteXliffFile(XliffWriter xliffWriter, ProjectFile projectFile)
 		{
-			var exported = xliffWriter.WriteFile(projectFile.XliffData, projectFile.XliffFilePath, true);
+			var exported = xliffWriter.WriteFile(projectFile.XliffData, projectFile.ExternalFilePath, true);
 			if (!exported)
 			{
 				throw new Exception(string.Format(PluginResources.ErrorMessage_ConvertingFile, projectFile.Location));
@@ -748,31 +764,31 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			}
 		}
 
-		private IEnumerable<string> GetAllLanguages(Project project)
+		private IEnumerable<string> GetAllLanguages(Interfaces.IProject project)
 		{
 			var languages = project.TargetLanguages.Select(a => a.CultureInfo.Name).ToList();
 			languages.Add(project.SourceLanguage.CultureInfo.Name);
 			return languages;
 		}
 
-		private string GetFirstTargetLanguage(Project project)
+		private string GetFirstTargetLanguage(Interfaces.IProject project)
 		{
 			var language = GetAllLanguages(project).FirstOrDefault(a =>
 				string.Compare(a, project.SourceLanguage.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) != 0);
 			return language;
 		}
 
-		private List<string> GetTargetLangauges(Project project)
+		private List<string> GetTargetLangauges(Interfaces.IProject project)
 		{
 			var languages = GetAllLanguages(project).Where(a =>
 				string.Compare(a, project.SourceLanguage.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) != 0).ToList();
 			return languages;
 		}
 
-		private List<ProjectFile> ProcessProjectFiles(string language, Project project, SdlxliffReader sdlxliffReader)
+		private List<ProjectFile> ProcessProjectFiles(string language, Interfaces.IProject project, SdlxliffReader sdlxliffReader)
 		{
 			var languageFolder = GetLanguageFolder(language);
-			var projectFiles = WizardContext.ProjectFiles.Where(a => Equals(a.TargetLanguage, language)).ToList();
+			var projectFiles = TaskContext.ProjectFiles.Where(a => Equals(a.TargetLanguage, language)).ToList();
 			var sourceLanguage = project.SourceLanguage.CultureInfo.Name;
 			List<ProjectFile> targetFiles = null;
 
@@ -780,7 +796,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			if (isSource)
 			{
 				var targetLanguage = GetFirstTargetLanguage(project);
-				targetFiles = WizardContext.ProjectFiles.Where(a => Equals(a.TargetLanguage, targetLanguage)).ToList();
+				targetFiles = TaskContext.ProjectFiles.Where(a => Equals(a.TargetLanguage, targetLanguage)).ToList();
 			}
 
 			foreach (var projectFile in projectFiles)
@@ -801,11 +817,14 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, projectFile.Location));
 				_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
 
-				projectFile.XliffData = sdlxliffReader.ReadFile(project.Id, isSource ? targetFile.Location : projectFile.Location);
-				projectFile.Date = WizardContext.DateTimeStamp;
+				projectFile.XliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId,
+					isSource ? targetFile.Location : projectFile.Location,
+					isSource ? targetFile.TargetLanguage : projectFile.TargetLanguage);
+				projectFile.Date = TaskContext.DateTimeStamp;
 				projectFile.Action = Enumerators.Action.Export;
+				projectFile.WorkFlow = Enumerators.WorkFlow.Internal;
 				projectFile.Status = Enumerators.Status.Success;
-				projectFile.XliffFilePath = xliffFilePath;
+				projectFile.ExternalFilePath = xliffFilePath;
 				projectFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
 				projectFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
 
@@ -836,7 +855,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
 
-				for (var i = 1; i <= WizardContext.ConvertOptions.MaxAlternativeTranslations; i++)
+				for (var i = 1; i <= TaskContext.ConvertOptions.MaxAlternativeTranslations; i++)
 				{
 					var newFile = new FileTypeSupport.XLIFF.Model.File
 					{
@@ -893,7 +912,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private string GetLanguageFolder(string name)
 		{
-			var languageFolder = WizardContext.GetLanguageFolder(name);
+			var languageFolder = TaskContext.GetLanguageFolder(name);
 			if (!Directory.Exists(languageFolder))
 			{
 				Directory.CreateDirectory(languageFolder);
@@ -925,8 +944,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private void SaveLogReport()
 		{
-			var logFileName = "log." + WizardContext.DateTimeStampToString + ".txt";
-			var outputFile = Path.Combine(WizardContext.WorkingFolder, logFileName);
+			var logFileName = "log." + TaskContext.DateTimeStampToString + ".txt";
+			var outputFile = Path.Combine(TaskContext.WorkingFolder, logFileName);
 			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
 			{
 				writer.Write(_logReport);
@@ -943,7 +962,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			_logReport.AppendLine();
 
 			var indent = "   ";
-			var project = WizardContext.ProjectFiles[0].Project;
+			var project = TaskContext.ProjectFiles[0].Project;
 			_logReport.AppendLine(PluginResources.Label_Project);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
@@ -958,17 +977,17 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Options);
 
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_MaxAlternativeTranslations, WizardContext.ConvertOptions.MaxAlternativeTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_UnloadOiriginalProject, WizardContext.ConvertOptions.CloseProjectOnComplete));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_MaxAlternativeTranslations, TaskContext.ConvertOptions.MaxAlternativeTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_UnloadOiriginalProject, TaskContext.ConvertOptions.CloseProjectOnComplete));
 
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Files);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetProjectTargetLanguagesString(WizardContext.Project)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetProjectTargetLanguagesString(TaskContext.Project)));
 			_logReport.AppendLine();
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)
@@ -991,10 +1010,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						+ "." + dateTime.Millisecond.ToString().PadLeft(2, '0');
 
 			return value;
-		}		
+		}
 
 		private async Task UpdateProgress(JobProcess jobProcess, JobProcess.ProcessStatus status, int progress, string description)
-		{			
+		{
 			await Owner.Dispatcher.InvokeAsync(delegate
 			{
 				jobProcess.Status = status;

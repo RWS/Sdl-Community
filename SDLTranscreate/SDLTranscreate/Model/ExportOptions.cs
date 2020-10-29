@@ -14,6 +14,7 @@ namespace Sdl.Community.Transcreate.Model
 			IncludeTranslations = false;
 			CopySourceToTarget = false;
 			ExcludeFilterIds = new List<string>();
+			IncludeBackTranslations = false;
 		}
 
 		public Enumerators.XLIFFSupport XliffSupport { get; set; }
@@ -21,6 +22,8 @@ namespace Sdl.Community.Transcreate.Model
 	    public bool IncludeTranslations { get; set; }
 
 	    public bool CopySourceToTarget { get; set; }
+
+		public bool IncludeBackTranslations { get; set; }
 
 		public List<string> ExcludeFilterIds
 		{

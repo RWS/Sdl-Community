@@ -13,7 +13,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 	{
 		private string _summaryText;
 
-		public WizardPageImportSummaryViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
+		public WizardPageImportSummaryViewModel(Window owner, object view, TaskContext taskContext) : base(owner, view, taskContext)
 		{
 			IsValid = true;
 
@@ -42,7 +42,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private string GetSummaryText()
 		{
-			var project = WizardContext.ProjectFiles[0].Project;
+			var project = TaskContext.ProjectFiles[0].Project;
 
 			var indent = "   ";
 
@@ -59,52 +59,52 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, WizardContext.ImportOptions.BackupFiles) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, WizardContext.ImportOptions.OverwriteTranslations) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_OriginSystem, WizardContext.ImportOptions.OriginSystem) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationUpdatedId)) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(WizardContext.ImportOptions.StatusTranslationNotUpdatedId)) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(WizardContext.ImportOptions.StatusSegmentNotImportedId)) + Environment.NewLine;
-			if (WizardContext.ImportOptions.ExcludeFilterIds.Count > 0)
+			summaryText += indent + string.Format(PluginResources.Label_BackupFiles, TaskContext.ImportOptions.BackupFiles) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingTranslations, TaskContext.ImportOptions.OverwriteTranslations) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_OriginSystem, TaskContext.ImportOptions.OriginSystem) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsUpdated, GetConfirmationStatusName(TaskContext.ImportOptions.StatusTranslationUpdatedId)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_StatusTranslationsNotUpdated, GetConfirmationStatusName(TaskContext.ImportOptions.StatusTranslationNotUpdatedId)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_StatusSegmentsNotImported, GetConfirmationStatusName(TaskContext.ImportOptions.StatusSegmentNotImportedId)) + Environment.NewLine;
+			if (TaskContext.ImportOptions.ExcludeFilterIds.Count > 0)
 			{
-				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(WizardContext.ImportOptions.ExcludeFilterIds)) + Environment.NewLine;
+				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(TaskContext.ImportOptions.ExcludeFilterIds)) + Environment.NewLine;
 			}
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, WizardContext.ProjectFiles.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_ImportFiles, WizardContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_ImportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
-			var targetLanguages = WizardContext.ProjectFiles.Where(a => a.Selected &&
-				 !string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath))
+			var targetLanguages = TaskContext.ProjectFiles.Where(a => a.Selected &&
+				 !string.IsNullOrEmpty(a.ExternalFilePath) && File.Exists(a.ExternalFilePath))
 					.Select(a => a.TargetLanguage).Distinct();
 
 			foreach (var targetLanguage in targetLanguages)
 			{
-				var languageFolder = WizardContext.GetLanguageFolder(targetLanguage);
+				var languageFolder = TaskContext.GetLanguageFolder(targetLanguage);
 
 				summaryText += Environment.NewLine;
 				summaryText += string.Format(PluginResources.Label_Language, targetLanguage) + Environment.NewLine;
 
 				var targetLanguageFiles =
-					WizardContext.ProjectFiles.Where(a => a.Selected &&
-						  !string.IsNullOrEmpty(a.XliffFilePath) && File.Exists(a.XliffFilePath) &&
+					TaskContext.ProjectFiles.Where(a => a.Selected &&
+						  !string.IsNullOrEmpty(a.ExternalFilePath) && File.Exists(a.ExternalFilePath) &&
 						  Equals(a.TargetLanguage, targetLanguage));
 
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					var xliffFolder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
-					var xliffFilePath = Path.Combine(xliffFolder, targetLanguageFile.Name + ".xliff");
-					var sdlXliffBackup = Path.Combine(xliffFolder, targetLanguageFile.Name);
+					var folder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
+					var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".docx");
+					var sdlXliffBackup = Path.Combine(folder, targetLanguageFile.Name);
 
 					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
-					if (WizardContext.ImportOptions.BackupFiles)
+					if (TaskContext.ImportOptions.BackupFiles)
 					{
 						summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;
 					}
-					summaryText += indent + string.Format(PluginResources.label_XliffFile, targetLanguageFile.XliffFilePath) + Environment.NewLine;
-					summaryText += indent + string.Format(PluginResources.Label_ArchiveFile, xliffFilePath) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_ImportFile, targetLanguageFile.ExternalFilePath) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_ArchiveFile, archiveFile) + Environment.NewLine;
 
 					summaryText += Environment.NewLine;
 				}
@@ -137,7 +137,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 			return items;
 		}
 
-		private string GetProjectTargetLanguagesString(Project project)
+		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
 		{
 			var targetLanguages = string.Empty;
 			foreach (var languageInfo in project.TargetLanguages)
@@ -151,7 +151,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 
 		private string GetSelectedLanguagesString()
 		{
-			var selected = WizardContext.ProjectFiles.Where(a => a.Selected);
+			var selected = TaskContext.ProjectFiles.Where(a => a.Selected);
 
 			var selectedLanguages = string.Empty;
 			foreach (var name in selected.Select(a => a.TargetLanguage).Distinct())

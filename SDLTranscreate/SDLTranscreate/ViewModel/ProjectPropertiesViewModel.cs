@@ -5,19 +5,19 @@ namespace Sdl.Community.Transcreate.ViewModel
 {
 	public class ProjectPropertiesViewModel : BaseModel, IDisposable
 	{
-		private Project _projects;
+		private Interfaces.IProject _project;
 
-		public ProjectPropertiesViewModel(Project project)
+		public ProjectPropertiesViewModel(Interfaces.IProject project)
 		{
 			SelectedProject = project;
 		}
 
-		public Project SelectedProject
+		public Interfaces.IProject SelectedProject
 		{
-			get => _projects;
+			get => _project;
 			set
 			{
-				_projects = value;
+				_project = value;
 				OnPropertyChanged(nameof(Project));				
 			}
 		}

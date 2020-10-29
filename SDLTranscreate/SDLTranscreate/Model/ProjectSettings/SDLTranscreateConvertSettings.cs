@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.Core.Settings;
+﻿using Sdl.Core.Settings;
 
 namespace Sdl.Community.Transcreate.Model.ProjectSettings
 {

@@ -4,14 +4,20 @@ namespace Sdl.Community.Transcreate.Model.Tasks
 {
 	public class Report
 	{
-		private Enumerators.Action _action;
-
 		public Report(Enumerators.Action action)
 		{
-			_action = action;
-			var actionName = _action == Enumerators.Action.Export
-				? "Export"
-				: "Import";
+			var actionName = action.ToString();
+			switch (action)
+			{
+				case Enumerators.Action.Export:
+				case Enumerators.Action.ExportBackTranslation:
+					actionName = "Export";
+					break;
+				case Enumerators.Action.Import:
+				case Enumerators.Action.ImportBackTranslation:
+					actionName = "Import";
+					break;
+			}
 
 			Guid = System.Guid.NewGuid().ToString();
 			TaskTemplateId = "Transcreate.BatchTasks." + actionName;
