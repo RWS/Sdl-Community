@@ -46,7 +46,7 @@ namespace Sdl.LC.AddonBlueprint.Infrastructure
 				return AuthenticateResult.Fail("Could not authenticate.");
 			}
 
-			var path = Request.Path.Value;
+			var path = Request.Path.Value + Request.QueryString;
 			var contents = await Request.BodyReader.ReadAsync();
 			// Reset the request body stream position
 			Request.Body.Position = 0;

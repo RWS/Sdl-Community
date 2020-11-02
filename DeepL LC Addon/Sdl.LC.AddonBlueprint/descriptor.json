@@ -1,6 +1,6 @@
 ﻿{
 	"name": "DeepL Translation Provider",
-	"version": "1.0.28",
+	"version": "1.0.30",
 	"description": "This Add on provides machine translation results from the DeepL Translator.",
 	"extensions": [
 		{
@@ -11,14 +11,14 @@
 			"extensionPointVersion": "1",
 			"configuration": {
 				"endpoints": {
-					"lc.mtprovider.translate": "api/deepl/translate",
-					"lc.mtprovider.engines": "api/deepl/translation-engines"
+					"lc.mtprovider.translate": "/api/deepl/translate",
+					"lc.mtprovider.engines": "/api/deepl/translation-engines"
 				},
 				"format": "html"
 			}
 		}
 	],
-	"baseUrl": "http://10.111.138.129:2509",
+	"baseUrl": "http://10.111.138.157:2509",
 	"standardEndpoints": {
 		"health": "/api/health",
 		"addonLifecycle": "/api/addon-lifecycle",
