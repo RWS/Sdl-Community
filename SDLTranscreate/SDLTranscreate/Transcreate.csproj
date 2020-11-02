@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\AbstractOpenFileInEditorAction.cs" />
+    <Compile Include="Actions\CreateReport.cs" />
     <Compile Include="Actions\ExportAction.cs" />
     <Compile Include="Actions\ImportAction.cs" />
     <Compile Include="Actions\CreateBackTranslationProjectAction.cs" />
@@ -420,6 +421,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Report.ico" />
+    <Resource Include="Resources\Report.png" />
     <Resource Include="Resources\sdl_transcreate_wizard.ico" />
     <Resource Include="Resources\OpenForReview.ico" />
     <Resource Include="Resources\OpenForSignOff.ico" />

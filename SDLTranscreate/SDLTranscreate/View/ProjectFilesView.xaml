@@ -184,39 +184,45 @@
 			</DataGrid.Columns>
 			<DataGrid.ContextMenu>
 				<ContextMenu>
-					<MenuItem Header="Export files" Command="{Binding ExportFilesCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+					<MenuItem Header="Export files" Command="{Binding ExportFilesCommand}" 
+					          IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/export.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Import files" 
-					          Command="{Binding ImportFilesCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+					          Command="{Binding ImportFilesCommand}" 
+					          IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/import.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Open For Translation" 
-					          Command="{Binding OpenFileForTranslationCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+					          Command="{Binding OpenFileForTranslationCommand}" 
+					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForTranslation.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Open For Review" 
-					          Command="{Binding OpenFileForReviewCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+					          Command="{Binding OpenFileForReviewCommand}"
+					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForReview.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Open For Sign-off" 
-					          Command="{Binding OpenFileForSignOffCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+					          Command="{Binding OpenFileForSignOffCommand}" 
+					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForSignOff.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					
 					<Separator/>
-					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}" IsEnabled="{Binding IsProjectFileSelected}">
+					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}" 
+					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/Folder.png"/>
 						</MenuItem.Icon> 

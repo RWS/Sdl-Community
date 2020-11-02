@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -56,7 +55,6 @@ namespace Sdl.Community.Transcreate
 		private ProjectFileActivityViewController _projectFileActivityViewController;
 		private ProjectsController _projectsController;
 		private EditorController _editorController;
-		private FilesController _filesController;
 		private ImageService _imageService;
 		private PathInfo _pathInfo;
 		private CustomerProvider _customerProvider;
@@ -78,7 +76,6 @@ namespace Sdl.Community.Transcreate
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
 
-			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			_editorController.Opened += EditorController_Opened;
 			_editorController.Closed += EditorController_Closed;
@@ -111,10 +108,8 @@ namespace Sdl.Community.Transcreate
 
 				_projectFilesViewModel.ProjectFileSelectionChanged += ProjectFilesViewModel_ProjectFileSelectionChanged;
 
-				if (_transcreateProjects.Count > 0)
-				{
-					_transcreateProjects[0].IsSelected = true;
-				}
+				UpdateProjectSelectionFromProjectsController();
+
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
 
 			}
@@ -134,7 +129,7 @@ namespace Sdl.Community.Transcreate
 
 		internal string ClientId { get; private set; }
 
-		public void RefreshProjects()
+		public void RefreshProjects(bool force)
 		{
 			if (_projectsNavigationViewModel == null)
 			{
@@ -152,11 +147,11 @@ namespace Sdl.Community.Transcreate
 				else
 				{
 					var projectInfo = project.GetProjectInfo();
-					var xliffProject = _transcreateProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
-					if (xliffProject != null)
+					var transcreateProject = _transcreateProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+					if (transcreateProject != null)
 					{
-						var updatedCustomer = UpdateCustomerInfo(project, xliffProject);
-						var addedNewFiles = AddNewProjectFiles(project, xliffProject);
+						var updatedCustomer = UpdateCustomerInfo(project, transcreateProject);
+						var addedNewFiles = AddNewProjectFiles(project, transcreateProject);
 
 						if (updatedCustomer || addedNewFiles)
 						{
@@ -172,7 +167,7 @@ namespace Sdl.Community.Transcreate
 				}
 			}
 
-			if (refresh)
+			if (refresh || force)
 			{
 				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
@@ -230,15 +225,12 @@ namespace Sdl.Community.Transcreate
 
 			if (taskContext.Project.Id != _projectsController.CurrentProject?.GetProjectInfo().Id.ToString())
 			{
-				_projectsController.SelectedProjects = new FileBasedProject[] { fileBasedProject };
 				_projectsController.Open(fileBasedProject);
-				Activate();
 			}
 
 			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
 			taskContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
 																 StringComparison.CurrentCultureIgnoreCase) == 0);
-
 			var project = _transcreateProjects.FirstOrDefault(a => a.Id == taskContext.Project.Id);
 			if (project == null)
 			{
@@ -315,12 +307,12 @@ namespace Sdl.Community.Transcreate
 				return;
 			}
 
+
 			if (taskContext.Project.Id != _projectsController.CurrentProject?.GetProjectInfo().Id.ToString())
 			{
-				_projectsController.SelectedProjects = new[] { fileBasedProject };
 				_projectsController.Open(fileBasedProject);
-				Activate();
 			}
+
 
 			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
 			taskContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
@@ -503,7 +495,7 @@ namespace Sdl.Community.Transcreate
 
 		private void LoadProjects()
 		{
-			_transcreateProjects = new List<Interfaces.IProject>();
+			_transcreateProjects = new List<IProject>();
 
 			foreach (var project in _projectsController.GetAllProjects())
 			{
@@ -551,7 +543,6 @@ namespace Sdl.Community.Transcreate
 
 				var sdlProjectFiles = SerializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
 				var projectFiles = GetProjectFiles(sdlProjectFiles, xliffProject);
-
 
 				if (projectFiles?.Count > 0)
 				{
@@ -654,7 +645,6 @@ namespace Sdl.Community.Transcreate
 						TargetLanguages = GetLanguageInfos(backTranslationProject.TargetLanguages),
 						Customer = backTranslationProject.Customer,
 						Path = Path.Combine(parentProjectPath, backTranslationProject.Path),
-						//Path = Path.Combine(parentProjectPath, backTranslationProject.Path),
 						ProjectType = backTranslationProject.ProjectType,
 						Created = GetDateTime(backTranslationProject.Created),
 						DueDate = GetDateTime(backTranslationProject.DueDate),
@@ -668,8 +658,6 @@ namespace Sdl.Community.Transcreate
 
 			return backProjects;
 		}
-
-
 
 		private bool UpdateCustomerInfo(FileBasedProject project, IProject xliffProject)
 		{
@@ -1164,7 +1152,7 @@ namespace Sdl.Community.Transcreate
 
 				IProject parentProject = null;
 				var transcreateProject = projectInfo.ProjectOrigin == "Back-Translation Project"
-					? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out parentProject)
+					? GetBackTranslationProjectProject(projectId, out parentProject)
 					: GetProjects().FirstOrDefault(a => a.Id == projectId);
 
 				var projectFile = transcreateProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
@@ -1433,15 +1421,6 @@ namespace Sdl.Community.Transcreate
 			return languageInfos;
 		}
 
-		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
-		{
-			ProjectSelectionChanged?.Invoke(this, e);
-		}
-
-		private void ProjectFilesViewModel_ProjectFileSelectionChanged(object sender, ProjectFileSelectionChangedEventArgs e)
-		{
-			ProjectFileSelectionChanged?.Invoke(sender, e);
-		}
 
 		private void OnActivationChanged(object sender, ActivationChangedEventArgs e)
 		{
@@ -1552,6 +1531,31 @@ namespace Sdl.Community.Transcreate
 			return removedProjects;
 		}
 
+		private void OnProjectSelectionChanged(object sender, ProjectSelectionChangedEventArgs e)
+		{
+			ProjectSelectionChanged?.Invoke(this, e);
+
+			if (e.SelectedProject != null)
+			{
+				if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
+				{
+					var fileBasedProject = _projectsController.GetAllProjects()
+						.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
+
+					if (fileBasedProject != null)
+					{
+						_projectsController.Open(fileBasedProject);
+						_projectsController.SelectedProjects = new[] { fileBasedProject };
+					}
+				}
+			}
+		}
+
+		private void ProjectFilesViewModel_ProjectFileSelectionChanged(object sender, ProjectFileSelectionChangedEventArgs e)
+		{
+			ProjectFileSelectionChanged?.Invoke(sender, e);
+		}
+
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
 			var updated = AddNewProjectToContainer(_projectsController?.CurrentProject);
@@ -1560,11 +1564,50 @@ namespace Sdl.Community.Transcreate
 				updated = UnloadRemovedProjectsFromContainer();
 			}
 
+			var updatedProjectSelection = UpdateProjectSelectionFromProjectsController();
+
 			if (updated && _projectsNavigationViewModel != null)
 			{
-				_projectsNavigationViewModel.Projects = new List<Interfaces.IProject>();
+				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
 			}
+		}
+
+		private bool UpdateProjectSelectionFromProjectsController()
+		{
+			if (_projectsController?.CurrentProject != null)
+			{
+				var selectedProject = GetSelectedProjects()?.FirstOrDefault();
+
+				var projectInfo = _projectsController.CurrentProject.GetProjectInfo();
+				var projectId = projectInfo.Id.ToString();
+				IProject parentProject = null;
+				var transcreateProject = projectInfo.ProjectOrigin == "Back-Translation Project"
+					? GetBackTranslationProjectProject(projectId, out parentProject)
+					: GetProjects().FirstOrDefault(a => a.Id == projectId);
+
+				if (transcreateProject != null)
+				{
+					if (selectedProject?.Id != transcreateProject.Id)
+					{
+						if (selectedProject != null)
+						{
+							selectedProject.IsSelected = false;
+						}
+
+						if (parentProject != null)
+						{
+							parentProject.IsExpanded = true;
+						}
+
+						transcreateProject.IsSelected = true;
+
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		public override void Dispose()

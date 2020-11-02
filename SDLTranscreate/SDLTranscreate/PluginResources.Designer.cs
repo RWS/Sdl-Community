@@ -924,6 +924,16 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Report {
+            get {
+                object obj = ResourceManager.GetObject("Report", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Conversion.
         /// </summary>
         internal static string ReportsGroup_ProjectConversion {
@@ -1158,6 +1168,24 @@ namespace Sdl.Community.Transcreate {
         internal static string TranscreateManager_CreateBackTranslationProject_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_CreateBackTranslationProject_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Final Report.
+        /// </summary>
+        internal static string TranscreateManager_CreateReport_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_CreateReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Final Report.
+        /// </summary>
+        internal static string TranscreateManager_CreateReport_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_CreateReport_Name", resourceCulture);
             }
         }
         

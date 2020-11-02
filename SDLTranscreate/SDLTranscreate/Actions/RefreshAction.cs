@@ -19,7 +19,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 		protected override void Execute()
 		{
-			_controller.RefreshProjects();
+			_controller.RefreshProjects(true);
 		}
 
 		public override void Initialize()

@@ -32,11 +32,6 @@ namespace Sdl.Community.Transcreate.Actions
 
 		protected override void Execute()
 		{
-			//if (!_controllers.TranscreateController.IsActive)
-			//{
-			//	return;
-			//}
-
 			var selectedProject = _controllers.TranscreateController.GetSelectedProjects()?.FirstOrDefault();
 			if (selectedProject == null)
 			{
