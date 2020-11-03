@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Sdl.LC.AddonBlueprint.Helpers
+namespace Sdl.Community.DeeplAddon.Helpers
 {
     /// <summary>
     /// Helper class for Json Serializer Options

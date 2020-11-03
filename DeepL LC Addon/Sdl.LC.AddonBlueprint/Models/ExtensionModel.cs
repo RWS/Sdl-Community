@@ -1,4 +1,4 @@
-﻿namespace Sdl.LC.AddonBlueprint.Models
+﻿namespace Sdl.Community.DeeplAddon.Models
 {
     public class ExtensionModel
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Sdl.LC.AddonBlueprint.Interfaces;
+using Sdl.Community.DeeplAddon.Interfaces;
 using System;
 using System.Buffers;
 using System.Globalization;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace Sdl.LC.AddonBlueprint.Infrastructure
+namespace Sdl.Community.DeeplAddon.Infrastructure
 {
     public class AddonAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 	{

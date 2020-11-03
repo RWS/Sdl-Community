@@ -1,7 +1,7 @@
-﻿using Sdl.LC.AddonBlueprint.Models;
+﻿using Sdl.Community.DeeplAddon.Models;
 using System.Collections.Generic;
 
-namespace Sdl.LC.AddonBlueprint.Interfaces
+namespace Sdl.Community.DeeplAddon.Interfaces
 {
     /// <summary>
     /// Used to return the addon descriptor

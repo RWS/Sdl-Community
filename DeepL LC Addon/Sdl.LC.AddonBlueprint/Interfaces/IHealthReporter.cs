@@ -1,4 +1,4 @@
-﻿namespace Sdl.LC.AddonBlueprint.Services
+﻿namespace Sdl.Community.DeeplAddon.Services
 {
     /// <summary>
     /// Used to check whether the service is healthy.

@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Sdl.LC.AddonBlueprint.Enums;
+using Sdl.Community.DeeplAddon.Enums;
 
-namespace Sdl.LC.AddonBlueprint.Models
+namespace Sdl.Community.DeeplAddon.Models
 {
-    public class AddonConfigurationModel
+	public class AddonConfigurationModel
     {
         /// <summary>
         /// The name.

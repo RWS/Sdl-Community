@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Sdl.LC.AddonBlueprint.Infrastructure
+namespace Sdl.Community.DeeplAddon.Infrastructure
 {
     /// <summary>
     /// A simple class that implements the CRC32 algorithm.

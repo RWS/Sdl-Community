@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Sdl.LC.AddonBlueprint.Enums;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
+using Sdl.Community.DeeplAddon.Enums;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Sdl.LC.AddonBlueprint.Services
+namespace Sdl.Community.DeeplAddon.Services
 {
 	/// <summary>
 	/// Used to return the addon descriptor

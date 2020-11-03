@@ -6,12 +6,12 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Sdl.LC.AddonBlueprint.Enums;
-using Sdl.LC.AddonBlueprint.Exceptions;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
+using Sdl.Community.DeeplAddon.Enums;
+using Sdl.Community.DeeplAddon.Exceptions;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
 
-namespace Sdl.LC.AddonBlueprint.Services
+namespace Sdl.Community.DeeplAddon.Services
 {
 	public class LanguagesService : ILanguageService
 	{

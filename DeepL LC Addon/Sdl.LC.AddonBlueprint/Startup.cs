@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sdl.LC.AddonBlueprint.DAL;
-using Sdl.LC.AddonBlueprint.Exceptions;
-using Sdl.LC.AddonBlueprint.Infrastructure;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
-using Sdl.LC.AddonBlueprint.Services;
+using Sdl.Community.DeeplAddon.DAL;
+using Sdl.Community.DeeplAddon.Exceptions;
+using Sdl.Community.DeeplAddon.Infrastructure;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
+using Sdl.Community.DeeplAddon.Services;
 using System.Net;
 using System.Text.Json;
 
 
-namespace Sdl.LC.AddonBlueprint
+namespace Sdl.Community.DeeplAddon
 {
-    public class Startup
+	public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{

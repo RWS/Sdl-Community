@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Sdl.LC.AddonBlueprint.Enums
+namespace Sdl.Community.DeeplAddon.Enums
 {
 	public enum AddOnLifecycleEventEnum
 	{

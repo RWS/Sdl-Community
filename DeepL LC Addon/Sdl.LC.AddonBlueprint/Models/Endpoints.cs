@@ -1,7 +1,7 @@
 ﻿
 using System.Text.Json.Serialization;
 
-namespace Sdl.LC.AddonBlueprint.Models
+namespace Sdl.Community.DeeplAddon.Models
 {
     public class Endpoints
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.LC.AddonBlueprint.Models
+namespace Sdl.Community.DeeplAddon.Models
 {
 	public class TranslationEngineRequest
 	{

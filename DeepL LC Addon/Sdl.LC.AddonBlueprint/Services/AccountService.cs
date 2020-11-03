@@ -1,18 +1,18 @@
-﻿using Sdl.LC.AddonBlueprint.DAL;
-using Sdl.LC.AddonBlueprint.Exceptions;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
+﻿using Sdl.Community.DeeplAddon.DAL;
+using Sdl.Community.DeeplAddon.Exceptions;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sdl.LC.AddonBlueprint.Services
+namespace Sdl.Community.DeeplAddon.Services
 {
-    /// <summary>
-    /// Defines a service that allows creation and manipulation of account related data.
-    /// </summary>
-    public class AccountService : IAccountService
+	/// <summary>
+	/// Defines a service that allows creation and manipulation of account related data.
+	/// </summary>
+	public class AccountService : IAccountService
     {
         /// <summary>
         /// The repository.

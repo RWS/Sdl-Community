@@ -1,12 +1,12 @@
 ﻿using MongoDB.Driver;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sdl.LC.AddonBlueprint.DAL
+namespace Sdl.Community.DeeplAddon.DAL
 {
-    public class Repository : IRepository
+	public class Repository : IRepository
 	{
 		/// <summary>
 		/// The accounts info entity collection.
@@ -74,10 +74,10 @@ namespace Sdl.LC.AddonBlueprint.DAL
 		/// <param name="accountInfoEntity">The account info entity.</param>
 		/// <returns>The updated account info entity.</returns>
 		public async Task<AccountInfoEntity> SaveOrUpdateConfigurationSettings(AccountInfoEntity accountInfoEntity)
-		{			
+		{
 			var filter = Builders<AccountInfoEntity>.Filter
 				.Where(accountInfo => accountInfo.TenantId == accountInfoEntity.TenantId);
-			
+
 			var options = new FindOneAndUpdateOptions<AccountInfoEntity>
 			{
 				ReturnDocument = ReturnDocument.After
@@ -88,7 +88,7 @@ namespace Sdl.LC.AddonBlueprint.DAL
 				.Set(account => account.PublicKey, accountInfoEntity.PublicKey)
 				.Set(account => account.ConfigurationValues, accountInfoEntity.ConfigurationValues);
 
-			return await _accounts.FindOneAndUpdateAsync<AccountInfoEntity>(filter, update, options);
+			return await _accounts.FindOneAndUpdateAsync(filter, update, options);
 		}
 
 		/// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Sdl.LC.AddonBlueprint.Models;
+using Sdl.Community.DeeplAddon.Models;
 
-namespace Sdl.LC.AddonBlueprint.Interfaces
+namespace Sdl.Community.DeeplAddon.Interfaces
 {
 	public interface ITranslationService
 	{

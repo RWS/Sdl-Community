@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace Sdl.LC.AddonBlueprint.Interfaces
+namespace Sdl.Community.DeeplAddon.Interfaces
 {
     public interface IDatabaseContext
     {

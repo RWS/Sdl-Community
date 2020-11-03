@@ -1,9 +1,9 @@
-﻿using Sdl.LC.AddonBlueprint.Models;
+﻿using Sdl.Community.DeeplAddon.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sdl.LC.AddonBlueprint.Interfaces
+namespace Sdl.Community.DeeplAddon.Interfaces
 {
     /// <summary>
     /// Defines a service that allows creation and manipulation of account related data.

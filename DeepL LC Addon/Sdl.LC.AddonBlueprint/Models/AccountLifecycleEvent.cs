@@ -1,6 +1,6 @@
-﻿using Sdl.LC.AddonBlueprint.Enums;
+﻿using Sdl.Community.DeeplAddon.Enums;
 
-namespace Sdl.LC.AddonBlueprint.Models
+namespace Sdl.Community.DeeplAddon.Models
 {
 	public class AccountLifecycleEvent<T> : AccountLifecycleEvent where T: class
 	{

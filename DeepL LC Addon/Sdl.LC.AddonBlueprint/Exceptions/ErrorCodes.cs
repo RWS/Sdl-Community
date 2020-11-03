@@ -1,4 +1,4 @@
-﻿namespace Sdl.LC.AddonBlueprint.Exceptions
+﻿namespace Sdl.Community.DeeplAddon.Exceptions
 {
     /// <summary>
     /// The error codes as string constants.

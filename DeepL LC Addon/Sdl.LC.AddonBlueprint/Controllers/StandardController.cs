@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Sdl.LC.AddonBlueprint.Enums;
-using Sdl.LC.AddonBlueprint.Helpers;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
-using Sdl.LC.AddonBlueprint.Services;
+using Sdl.Community.DeeplAddon.Helpers;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
+using Sdl.Community.DeeplAddon.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,8 +13,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Sdl.Community.DeeplAddon.Enums;
 
-namespace Sdl.LC.AddonBlueprint.Controllers
+namespace Sdl.Community.DeeplAddon.Controllers
 {
 	[Route("api")]
 	[ApiController]

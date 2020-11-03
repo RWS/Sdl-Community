@@ -1,4 +1,4 @@
-﻿namespace Sdl.LC.AddonBlueprint.DAL
+﻿namespace Sdl.Community.DeeplAddon.DAL
 {
 	public class TenantSecret
 	{

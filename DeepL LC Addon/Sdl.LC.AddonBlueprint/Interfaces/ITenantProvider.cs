@@ -1,7 +1,7 @@
-﻿using Sdl.LC.AddonBlueprint.DAL;
+﻿using Sdl.Community.DeeplAddon.DAL;
 using System.Threading.Tasks;
 
-namespace Sdl.LC.AddonBlueprint.Interfaces
+namespace Sdl.Community.DeeplAddon.Interfaces
 {
     public interface ITenantProvider
 	{

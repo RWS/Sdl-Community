@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Sdl.LC.AddonBlueprint/Sdl.LC.AddonBlueprint.csproj", "Sdl.LC.AddonBlueprint/"]
-RUN dotnet restore "Sdl.LC.AddonBlueprint/Sdl.LC.AddonBlueprint.csproj"
+COPY ["Sdl.Community.DeeplAddon/Sdl.Community.DeeplAddon.csproj", "Sdl.Community.DeeplAddon/"]
+RUN dotnet restore "Sdl.Community.DeeplAddon/Sdl.Community.DeeplAddon.csproj"
 COPY . .
-WORKDIR "/src/Sdl.LC.AddonBlueprint"
-RUN dotnet build "Sdl.LC.AddonBlueprint.csproj" -c Release -o /app/build
+WORKDIR "/src/Sdl.Community.DeeplAddon"
+RUN dotnet build "Sdl.Community.DeeplAddon.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Sdl.LC.AddonBlueprint.csproj" -c Release -o /app/publish
+RUN dotnet publish "Sdl.Community.DeeplAddon.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Sdl.LC.AddonBlueprint.dll"]
+ENTRYPOINT ["dotnet", "Sdl.Community.DeeplAddon.dll"]

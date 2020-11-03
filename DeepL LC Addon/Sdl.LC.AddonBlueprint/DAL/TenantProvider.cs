@@ -1,9 +1,10 @@
-﻿using Sdl.LC.AddonBlueprint.Interfaces;
+﻿using Sdl.Community.DeeplAddon.DAL;
+using Sdl.Community.DeeplAddon.Interfaces;
 using System.Threading.Tasks;
 
-namespace Sdl.LC.AddonBlueprint.DAL
+namespace Sdl.Community.DeeplAddon.DAL
 {
-    public class TenantProvider : ITenantProvider
+	public class TenantProvider : ITenantProvider
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TenantProvider"/> class.
@@ -26,10 +27,10 @@ namespace Sdl.LC.AddonBlueprint.DAL
 		/// <returns>The tenant secret.</returns>
 		public async Task<TenantSecret> GetTenantSecret(string tenantId)
 		{
-            if (string.IsNullOrEmpty(tenantId))
-            {
+			if (string.IsNullOrEmpty(tenantId))
+			{
 				return null;
-            }
+			}
 
 			var publicKey = await _repository.GetPublicKeyByTenantId(tenantId);
 			return new TenantSecret

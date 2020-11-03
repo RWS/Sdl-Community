@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
-namespace Sdl.LC.AddonBlueprint.Models
+namespace Sdl.Community.DeeplAddon.Models
 {
     public class AccountInfoEntity
     {

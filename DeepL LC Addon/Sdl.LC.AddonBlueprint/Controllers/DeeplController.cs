@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sdl.LC.AddonBlueprint.Interfaces;
-using Sdl.LC.AddonBlueprint.Models;
+using Sdl.Community.DeeplAddon.Interfaces;
+using Sdl.Community.DeeplAddon.Models;
 
-namespace Sdl.LC.AddonBlueprint.Controllers
+namespace Sdl.Community.DeeplAddon.Controllers
 {
 	[Route("api/deepl")]
     [ApiController]

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sdl.LC.AddonBlueprint.Enums;
-using Sdl.LC.AddonBlueprint.Models;
+using Sdl.Community.DeeplAddon.Enums;
+using Sdl.Community.DeeplAddon.Models;
 
-namespace Sdl.LC.AddonBlueprint.Interfaces
+namespace Sdl.Community.DeeplAddon.Interfaces
 {
 	public interface ILanguageService
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Sdl.LC.AddonBlueprint.Exceptions
+namespace Sdl.Community.DeeplAddon.Exceptions
 {
     public class AccountValidationException : AddonException
     {

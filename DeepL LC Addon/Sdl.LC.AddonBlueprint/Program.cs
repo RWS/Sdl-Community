@@ -8,7 +8,7 @@ using NLog.Web.LayoutRenderers;
 using System;
 using System.Linq;
 
-namespace Sdl.LC.AddonBlueprint
+namespace Sdl.Community.DeeplAddon
 {
     public class Program
 	{
