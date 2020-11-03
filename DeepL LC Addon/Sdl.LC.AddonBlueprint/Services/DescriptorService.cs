@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Sdl.LC.AddonBlueprint.Enums;
-using Sdl.LC.AddonBlueprint.Helpers;
 using Sdl.LC.AddonBlueprint.Interfaces;
 using Sdl.LC.AddonBlueprint.Models;
 using System.Collections.Generic;
@@ -15,38 +15,40 @@ namespace Sdl.LC.AddonBlueprint.Services
 	public class DescriptorService : IDescriptorService
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DescriptorService"/> class.
-		/// </summary>
-		public DescriptorService()
-		{
-			// Reading from the descriptor.json file, the descriptor for this Add-On. 
-			// Customize it to represent your Add-On behavior.
-			var descriptorText = File.ReadAllText("descriptor.json");
-			_addonDescriptor = JsonConvert.DeserializeObject<AddonDescriptorModel>(descriptorText);
-		}
-
-		/// <summary>
 		/// The addon descriptor.
 		/// </summary>
 		private readonly AddonDescriptorModel _addonDescriptor;
-
+		private readonly IConfiguration _configuration;
+		private const string BaseUrl = "AddonBaseUrl";
 		/// <summary>
 		/// The secret data type.
 		/// </summary>
 		private const DataTypeEnum SecretDataType = DataTypeEnum.secret;
 
 		/// <summary>
-		/// The secret mask const string.
+		/// The secret mask const string. This is used to show *** on the LC UI when there is an secret saved in db
 		/// </summary>
 		private const string SecretMask = "*****";
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="DescriptorService"/> class.
+		/// </summary>
+		public DescriptorService(IConfiguration configuration)
+		{
+			// Reading from the descriptor.json file, the descriptor for this Add-On. 
+			// Customize it to represent your Add-On behavior.
+			var descriptorText = File.ReadAllText("descriptor.json");
+			_addonDescriptor = JsonConvert.DeserializeObject<AddonDescriptorModel>(descriptorText);
+			_configuration = configuration;
+		}
+
+		/// <summary>
 		/// Gets the descriptor.
 		/// </summary>
-		/// <returns></returns>
 		public AddonDescriptorModel GetDescriptor()
 		{
-			//TODO: ovveride baseurl property cu ce vine din appsettings.json
+			_addonDescriptor.BaseUrl = _configuration.GetValue<string>(BaseUrl);
+
 			foreach (var configuration in _addonDescriptor.Configurations.Where(c => c.DataType == SecretDataType))
 			{
 				configuration.DefaultValue = SecretMask;
@@ -58,7 +60,6 @@ namespace Sdl.LC.AddonBlueprint.Services
 		/// <summary>
 		/// Gets the secret configurations ids.
 		/// </summary>
-		/// <returns></returns>
 		public List<string> GetSecretConfigurations()
 		{
 			return _addonDescriptor.Configurations.Where(c => c.DataType == SecretDataType).Select(s => s.Id).ToList();

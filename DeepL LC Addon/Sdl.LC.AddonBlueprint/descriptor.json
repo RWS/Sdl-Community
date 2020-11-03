@@ -18,7 +18,7 @@
 			}
 		}
 	],
-	"baseUrl": "http://10.111.138.157:2509",
+	"baseUrl": null, // moved the value to appsettings.json file
 	"standardEndpoints": {
 		"health": "/api/health",
 		"addonLifecycle": "/api/addon-lifecycle",

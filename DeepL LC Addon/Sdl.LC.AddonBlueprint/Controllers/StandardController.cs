@@ -21,7 +21,7 @@ namespace Sdl.LC.AddonBlueprint.Controllers
 	[ApiController]
 	public class StandardController : ControllerBase
 	{
-		private IConfiguration _configuration;
+		private readonly IConfiguration _configuration;
 		private readonly ILogger _logger;
 		private readonly IDescriptorService _descriptorService;
 		private readonly IAccountService _accountService;

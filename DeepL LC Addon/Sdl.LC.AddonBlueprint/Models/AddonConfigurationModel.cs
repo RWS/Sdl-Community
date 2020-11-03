@@ -32,6 +32,11 @@ namespace Sdl.LC.AddonBlueprint.Models
         public object DefaultValue { get; set; }
 
 		/// <summary>
+		/// Base url which will be read from appsettings.json
+		/// </summary>
+		public bool BaseUrl { get; set; }
+
+		/// <summary>
 		/// The data type.
 		/// </summary>
 		[JsonConverter(typeof(StringEnumConverter))]

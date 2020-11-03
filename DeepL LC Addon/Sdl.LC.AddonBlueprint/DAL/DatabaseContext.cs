@@ -18,10 +18,10 @@ namespace Sdl.LC.AddonBlueprint.DAL
         /// <param name="config">The configuration.</param>
         public DatabaseContext(IConfiguration config)
         {
-            var connectionString = config.GetValue<string>("MongoDb:Connection");
+            var connectionString = config.GetValue<string>("Logging:MongoDb:Connection");
             var connection = new MongoClient(connectionString);
-            Mongo = connection.GetDatabase(config.GetValue<string>("MongoDb:Name"));
-        }
+            Mongo = connection.GetDatabase(config.GetValue<string>("Logging:MongoDb:Name"));
+		}
 
         /// <summary>
         /// Checks if the Mongo Connection is healthy.
@@ -29,7 +29,7 @@ namespace Sdl.LC.AddonBlueprint.DAL
         /// <returns>True if it's healthy.</returns>
         public bool IsConnectionHealthy()
         {
-            bool isMongoLive = Mongo.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
+            var isMongoLive = Mongo.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
             return isMongoLive;
         }
     }
