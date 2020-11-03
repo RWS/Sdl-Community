@@ -421,6 +421,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TranscreateFinalReport.xsl" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\Report.png" />
     <Resource Include="Resources\sdl_transcreate_wizard.ico" />

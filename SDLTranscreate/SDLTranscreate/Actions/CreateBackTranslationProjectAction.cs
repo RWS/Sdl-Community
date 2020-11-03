@@ -164,8 +164,19 @@ namespace Sdl.Community.Transcreate.Actions
 										target.Elements = (source.Clone() as Source).Elements;
 									}
 
-									segmentPair.Source.Elements = target.Elements;
+									segmentPair.Source.Elements = new List<Element>();
 									segmentPair.Target.Elements = new List<Element>();
+
+									// Remove comment tags
+									// TODO: consider adding them as comments on source segment!
+									foreach (var targetElement in target.Elements)
+									{
+										if (targetElement is ElementComment)
+										{
+											continue;
+										}
+										segmentPair.Source.Elements.Add(targetElement);
+									}
 								}
 							}
 						}
@@ -186,9 +197,8 @@ namespace Sdl.Community.Transcreate.Actions
 					}
 
 					var iconPath = GetBackTranslationIconPath();
-					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(studioProject, targetLanguage.CultureInfo.Name, iconPath, sourceFiles, "BT");
-					//UpdateProjectSettingsBundle(newStudioProject);
-
+					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(
+						studioProject, targetLanguage.CultureInfo.Name, iconPath, sourceFiles, "BT");
 
 					var newStudioProjectInfo = newStudioProject.GetProjectInfo();
 

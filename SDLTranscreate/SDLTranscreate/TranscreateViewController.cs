@@ -59,6 +59,8 @@ namespace Sdl.Community.Transcreate
 		private PathInfo _pathInfo;
 		private CustomerProvider _customerProvider;
 		private ProjectSettingsService _projectSettingsService;
+		private ProjectAutomationService _projectAutomationService;
+		private SegmentBuilder _segmentBuilder;
 		private ReportService _reportService;
 
 		protected override void Initialize(IViewContext context)
@@ -69,7 +71,9 @@ namespace Sdl.Community.Transcreate
 			_imageService = new ImageService();
 			_customerProvider = new CustomerProvider();
 			_projectSettingsService = new ProjectSettingsService();
-			_reportService = new ReportService();
+			_segmentBuilder = new SegmentBuilder();
+			_projectAutomationService = new ProjectAutomationService(_imageService, this, _customerProvider);
+			_reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
 
 			ActivationChanged += OnActivationChanged;
 
@@ -708,7 +712,7 @@ namespace Sdl.Community.Transcreate
 			var reports = new List<Reports.Viewer.API.Model.Report>();
 
 			var languageDirections = _projectSettingsService.GetLanguageDirections(selectedProject.FilePath);
-			var reportTemplate = GetReportTemplatePath();
+			var reportTemplate = GetReportTemplatePath("TranscreateReport.xsl");
 
 			foreach (var taskReport in automaticTask.Reports)
 			{
@@ -852,7 +856,7 @@ namespace Sdl.Community.Transcreate
 				var projectReportsFilePath = Path.Combine(projectsReportsFolder, reportName);
 				var relativeProjectReportsFilePath = Path.Combine("Reports", reportName);
 
-				_reportService.CreateReport(taskContext, reportFile, selectedProject, languageDirection.Key.TargetLanguageCode);
+				_reportService.CreateTaskReport(taskContext, reportFile, selectedProject, languageDirection.Key.TargetLanguageCode);
 
 				// Copy to project reports folder
 				File.Copy(reportFile, projectReportsFilePath, true);
@@ -871,11 +875,10 @@ namespace Sdl.Community.Transcreate
 			return automaticTask;
 		}
 
-		public string GetReportTemplatePath()
+		public string GetReportTemplatePath(string name)
 		{
-			var name = "TranscreateReport.xsl";
 			var filePath = Path.Combine(_pathInfo.SettingsFolderPath, name);
-			var resourceName = "Sdl.Community.Transcreate.Resources.TranscreateReport.xsl";
+			var resourceName = "Sdl.Community.Transcreate.Resources."+ name;
 
 			WriteResourceToFile(resourceName, filePath);
 

@@ -632,10 +632,10 @@
     <value>resources\sdl_transcreate_wizard.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TranscreateManager_CreateReport_Description" xml:space="preserve">
-    <value>Create Final Report</value>
+    <value>Create Final Reports</value>
   </data>
   <data name="TranscreateManager_CreateReport_Name" xml:space="preserve">
-    <value>Create Final Report</value>
+    <value>Create Final Reports</value>
   </data>
   <data name="Report" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\report.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

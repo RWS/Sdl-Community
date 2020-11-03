@@ -3,21 +3,357 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 using Sdl.Community.Transcreate.Common;
+using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
+using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.Reports.Viewer.API.Model;
 using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
 using ConfirmationStatistics = Sdl.Community.Transcreate.Model.ConfirmationStatistics;
+using File = Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model.File;
+using PathInfo = Sdl.Community.Transcreate.Common.PathInfo;
 using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
 
 namespace Sdl.Community.Transcreate.Service
 {
 	public class ReportService
 	{
-		public void CreateReport(TaskContext taskContext, string reportFile, 
+		private readonly PathInfo _pathInfo;
+		private readonly ProjectAutomationService _projectAutomationService;
+		private readonly SegmentBuilder _segmentBuilder;
+
+		public ReportService(PathInfo pathInfo, ProjectAutomationService projectAutomationService, SegmentBuilder segmentBuilder)
+		{
+			_pathInfo = pathInfo;
+			_projectAutomationService = projectAutomationService;
+			_segmentBuilder = segmentBuilder;
+		}
+
+		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, out string workingPath)
+		{
+			var reports = new List<Report>();
+
+			var settings = new XmlWriterSettings
+			{
+				OmitXmlDeclaration = true,
+				Indent = false
+			};
+			var reportName = "Final Report";
+
+			var studioProjectInfo = studioProject.GetProjectInfo();
+			var dateTimeStamp = DateTime.UtcNow;
+			var dataTimeStampToString = DateTimeStampToString(dateTimeStamp);
+			var workflowPath = GetPath(studioProjectInfo.LocalProjectFolder, "Workflow");
+			var actionPath = GetPath(workflowPath, "Report");
+			workingPath = GetPath(actionPath, dataTimeStampToString);
+
+			var exportOptions = new ExportOptions();
+			exportOptions.IncludeBackTranslations = true;
+			exportOptions.IncludeTranslations = true;
+			exportOptions.CopySourceToTarget = false;
+
+			var analysisBands = _projectAutomationService.GetAnalysisBands(studioProject);
+
+			var sdlxliffReader = new SdlxliffReader(_segmentBuilder, exportOptions, analysisBands);
+
+			foreach (var targetLanguage in project.TargetLanguages)
+			{
+				var projectFiles = project.ProjectFiles.Where(a => string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
+														   StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+
+				var workingLanguageFolder = GetPath(workingPath, targetLanguage.CultureInfo.Name);
+				foreach (var projectFile in projectFiles)
+				{
+					var projectFilePath = Path.Combine(project.Path, projectFile.Location);
+					var xliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId, projectFilePath,
+						targetLanguage.CultureInfo.Name);
+
+					var backTranslationProject = GetBackTranslationProject(project, targetLanguage.CultureInfo.Name);
+					var backTranslationFile = GetBackTranslationProjectFile(backTranslationProject, projectFile);
+					var xliffDataBackTranslation = GetBackTranslationXliffData(backTranslationProject, backTranslationFile, sdlxliffReader);
+
+					var fileName = projectFile.Name.Substring(0, projectFile.Name.LastIndexOf(".", StringComparison.Ordinal));
+					var reportFile = Path.Combine(workingLanguageFolder, fileName + ".xml");
+
+					using (var writer = XmlWriter.Create(reportFile, settings))
+					{
+						writer.WriteStartElement("task");
+						writer.WriteAttributeString("name", reportName);
+						writer.WriteAttributeString("created", dataTimeStampToString);
+
+						writer.WriteStartElement("taskInfo");
+						writer.WriteAttributeString("action", "Final Report");
+						writer.WriteAttributeString("file", projectFile.Path + projectFile.Name);
+						writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
+						writer.WriteAttributeString("runAt", GetDisplayDateTime(dateTimeStamp));
+
+						
+						WriteReportProject(writer, "project", project);
+						WriteReportProject(writer, "backProject", backTranslationProject);
+
+						WriteReportLanguage(writer, "source", project.SourceLanguage.CultureInfo.Name);
+						WriteReportLanguage(writer, "target", targetLanguage.CultureInfo.Name);
+
+						WriteReportCustomer(writer, project);
+
+						WriteReportTranslationProviders(writer, studioProject);
+
+						writer.WriteEndElement(); //taskInfo
+
+
+						writer.WriteStartElement("translations");
+						foreach (var dataFile in xliffData.Files)
+						{
+							writer.WriteStartElement("version");
+							writer.WriteAttributeString("type", dataFile.Original);
+
+							var backTranslationDataFile =
+								xliffDataBackTranslation?.Files.FirstOrDefault(a => a.Original == dataFile.Original);
+
+							writer.WriteStartElement("segments");
+							foreach (var transUnit in dataFile.Body.TransUnits)
+							{
+								var textFunction = transUnit.Contexts.FirstOrDefault(
+									a => string.Compare(a.DisplayName, "Text Function", StringComparison.CurrentCultureIgnoreCase) == 0);
+
+								foreach (var segmentPair in transUnit.SegmentPairs)
+								{
+									writer.WriteStartElement("segment");
+
+									var backTranslationSegmentPair = GetBackTranslationSegmentPair(backTranslationDataFile, segmentPair);
+
+									writer.WriteAttributeString("id", segmentPair.Id);
+									writer.WriteAttributeString("textFunction", textFunction?.Description ?? string.Empty);
+
+									writer.WriteStartElement("source");
+									writer.WriteString(segmentPair.Source.ToString());
+									writer.WriteEndElement(); //source
+
+									writer.WriteStartElement("target");
+									writer.WriteString(segmentPair.Target.ToString());
+									writer.WriteEndElement(); //source
+
+									writer.WriteStartElement("back");
+									writer.WriteString(backTranslationSegmentPair?.Target?.ToString() ?? string.Empty);
+									writer.WriteEndElement(); //backTranslation
+
+									writer.WriteStartElement("comments");
+									var comments = GetSegmentComments(segmentPair.Target, xliffData.DocInfo);
+									if (comments != null)
+									{
+										foreach (var comment in comments)
+										{
+											writer.WriteStartElement("comment");
+											writer.WriteAttributeString("version", comment.Version);
+											writer.WriteAttributeString("author", comment.Author);
+											writer.WriteAttributeString("severity", comment.Severity.ToString());
+											writer.WriteAttributeString("date", GetDisplayDateTime(comment.Date));
+											writer.WriteString(comment.Text ?? string.Empty);
+											writer.WriteEndElement(); //comment
+										}
+									}
+
+									writer.WriteEndElement(); //comments
+
+									writer.WriteEndElement(); //segment
+								}
+							}
+							writer.WriteEndElement(); //segments
+
+							writer.WriteEndElement(); //version
+						}
+						writer.WriteEndElement(); //translations
+					}
+
+					// transform the file against an xslt
+					var templatePath = GetReportTemplatePath("TranscreateFinalReport.xsl");
+					var reportFilePath = CreateHtmlReportFile(reportFile, templatePath);
+
+
+					var report = new Report
+					{
+						Name = fileName,
+						Date = dateTimeStamp,
+						Description = "Transcreate Report",
+						Group = "Transcreate Report",
+						Language = targetLanguage.CultureInfo.Name,
+						Path = reportFilePath
+					};
+					reports.Add(report);
+				}
+			}
+
+			return reports;
+
+		}
+
+		private string CreateHtmlReportFile(string xmlReportFullPath, string xsltFilePath)
+		{
+			var htmlReportFilePath = xmlReportFullPath + ".html";
+
+			var xsltSetting = new XsltSettings
+			{
+				EnableDocumentFunction = true,
+				EnableScript = true
+			};
+
+			var myXPathDoc = new XPathDocument(xmlReportFullPath);
+
+			var myXslTrans = new XslCompiledTransform();
+			myXslTrans.Load(xsltFilePath, xsltSetting, null);
+
+			var myWriter = new XmlTextWriter(htmlReportFilePath, Encoding.UTF8);
+
+			myXslTrans.Transform(myXPathDoc, null, myWriter);
+
+			myWriter.Flush();
+			myWriter.Close();
+
+			return htmlReportFilePath;
+		}
+
+		public string GetReportTemplatePath(string name)
+		{
+			var filePath = Path.Combine(_pathInfo.SettingsFolderPath, name);
+			var resourceName = "Sdl.Community.Transcreate.Resources." + name;
+
+			WriteResourceToFile(resourceName, filePath);
+
+			return filePath;
+		}
+
+		public void WriteResourceToFile(string resourceName, string fullFilePath)
+		{
+			if (System.IO.File.Exists(fullFilePath))
+			{
+				System.IO.File.Delete(fullFilePath);
+			}
+
+			using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+			{
+				using (var file = new FileStream(fullFilePath, FileMode.Create, FileAccess.Write))
+				{
+					resource?.CopyTo(file);
+				}
+			}
+		}
+
+		private string GetDisplayDateTime(DateTime dateTime)
+		{
+			if (dateTime == DateTime.MaxValue || dateTime == DateTime.MinValue)
+			{
+				return string.Empty;
+			}
+			return dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
+		}
+
+		private List<IComment> GetSegmentComments(Segment segment, DocInfo docInfo)
+		{
+			if (docInfo?.Comments == null || docInfo.Comments?.Keys.Count == 0)
+			{
+				return null;
+			}
+
+			var comments = new List<IComment>();
+			foreach (var element in segment.Elements)
+			{
+				if (element is ElementComment comment && comment.Type == Element.TagType.TagOpen)
+				{
+					if (docInfo.Comments.ContainsKey(comment.Id))
+					{
+						var commentList = docInfo.Comments[comment.Id];
+						comments.AddRange(commentList);
+					}
+				}
+			}
+
+			return comments;
+		}
+
+		private Xliff GetBackTranslationXliffData(Interfaces.IProject project, ProjectFile projectFile, SdlxliffReader sdlxliffReader)
+		{
+			if (project != null && projectFile != null)
+			{
+				var backTranslationFilePath =
+					Path.Combine(project.Path, projectFile.Location);
+
+				if (System.IO.File.Exists(backTranslationFilePath))
+				{
+					return sdlxliffReader.ReadFile(project.Id, projectFile.FileId,
+						backTranslationFilePath,
+						projectFile.TargetLanguage);
+				}
+			}
+
+			return null;
+		}
+
+		private static ProjectFile GetBackTranslationProjectFile(Interfaces.IProject backTranslationProject, ProjectFile projectFile)
+		{
+			if (backTranslationProject == null)
+			{
+				return null;
+			}
+
+			foreach (var translationProjectFile in backTranslationProject.ProjectFiles)
+			{
+				if (string.Compare(projectFile.Name, translationProjectFile.Name,
+						StringComparison.CurrentCultureIgnoreCase) == 0 &&
+					string.Compare(projectFile.Path, translationProjectFile.Path,
+						StringComparison.CurrentCultureIgnoreCase) == 0)
+				{
+					return translationProjectFile;
+				}
+			}
+
+			return null;
+		}
+
+		private Interfaces.IProject GetBackTranslationProject(Interfaces.IProject project, string targetLanguage)
+		{
+			foreach (var backTranslationProject in project.BackTranslationProjects)
+			{
+				if (string.Compare(backTranslationProject.SourceLanguage.CultureInfo.Name,
+					targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0)
+				{
+					return backTranslationProject;
+				}
+			}
+
+			return null;
+		}
+
+		private static SegmentPair GetBackTranslationSegmentPair(File backTranslationDataFile, SegmentPair segmentPair)
+		{
+			if (backTranslationDataFile?.Body == null)
+			{
+				return null;
+			}
+
+			foreach (var transUnit in backTranslationDataFile.Body.TransUnits)
+			{
+				foreach (var pair in transUnit.SegmentPairs)
+				{
+					if (pair.Id == segmentPair.Id)
+					{
+						return pair;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		public void CreateTaskReport(TaskContext taskContext, string reportFile,
 			FileBasedProject selectedProject, string targetLanguageCode)
 		{
 			var settings = new XmlWriterSettings
@@ -27,7 +363,7 @@ namespace Sdl.Community.Transcreate.Service
 			};
 
 			var projectFiles = taskContext.ProjectFiles.Where(a => a.Selected &&
-				string.Compare(a.TargetLanguage, targetLanguageCode, 
+				string.Compare(a.TargetLanguage, targetLanguageCode,
 					StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
 
 			var reportName = "";
@@ -105,11 +441,11 @@ namespace Sdl.Community.Transcreate.Service
 			writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
 			writer.WriteAttributeString("runAt", taskContext.DateTimeStamp.ToShortDateString() + " " + taskContext.DateTimeStamp.ToShortTimeString());
 
-			WriteReportProject(writer, taskContext);
+			WriteReportProject(writer, "project", taskContext.Project);
 
-			WriteReportLanguage(writer, languageCode);
+			WriteReportLanguage(writer, "language", languageCode);
 
-			WriteReportCustomer(writer, taskContext);
+			WriteReportCustomer(writer, taskContext.Project);
 
 			WriteReportTranslationProviders(writer, fileBasedProject);
 
@@ -144,34 +480,48 @@ namespace Sdl.Community.Transcreate.Service
 			}
 		}
 
-		private static void WriteReportLanguage(XmlWriter writer, string languageCode)
+		private static void WriteReportLanguage(XmlWriter writer, string elementName, string languageCode)
 		{
-			writer.WriteStartElement("language");
+			writer.WriteStartElement(elementName);
 			writer.WriteAttributeString("id", languageCode);
 			writer.WriteAttributeString("name", new CultureInfo(languageCode).DisplayName);
 			writer.WriteEndElement(); //language
 		}
 
-		private static void WriteReportCustomer(XmlWriter writer, TaskContext taskContext)
+		private static void WriteReportCustomer(XmlWriter writer, Interfaces.IProject project)
 		{
-			if (!string.IsNullOrEmpty(taskContext.Project.Customer?.Name))
+			if (!string.IsNullOrEmpty(project.Customer?.Name))
 			{
 				writer.WriteStartElement("customer");
-				writer.WriteAttributeString("name", taskContext.Project.Customer.Name);
-				writer.WriteAttributeString("email", taskContext.Project.Customer.Email);
+				writer.WriteAttributeString("name", project.Customer.Name);
+				writer.WriteAttributeString("email", project.Customer.Email);
 				writer.WriteEndElement(); //customer												  
 			}
 		}
 
-		private static void WriteReportProject(XmlWriter writer, TaskContext taskContext)
+		private  void WriteReportProject(XmlWriter writer, string elementName, Interfaces.IProject project)
 		{
-			writer.WriteStartElement("project");
-			writer.WriteAttributeString("name", taskContext.Project.Name);
-			writer.WriteAttributeString("number", taskContext.Project.Id);
-			if (taskContext.Project.DueDate != DateTime.MinValue && taskContext.Project.DueDate != DateTime.MaxValue)
+			if (project == null)
 			{
-				writer.WriteAttributeString("dueDate",
-					taskContext.Project.DueDate.ToShortDateString() + " " + taskContext.Project.DueDate.ToShortTimeString());
+				return;
+			}
+
+			writer.WriteStartElement(elementName);
+			writer.WriteAttributeString("name", project.Name);
+			writer.WriteAttributeString("number", project.Id);
+
+			var minValue = DateTime.MinValue.ToString(CultureInfo.InvariantCulture);
+			var maxValue = DateTime.MaxValue.ToString(CultureInfo.InvariantCulture);
+
+			var utcMinValue = DateTime.MinValue.ToUniversalTime().ToString(CultureInfo.InvariantCulture);
+			var utcMaxValue = DateTime.MaxValue.ToUniversalTime().ToString(CultureInfo.InvariantCulture);
+
+			var dueDateValue = project.DueDate.ToString(CultureInfo.InvariantCulture);
+
+			if (dueDateValue != minValue && dueDateValue != maxValue &&
+			    dueDateValue != utcMinValue && dueDateValue != utcMaxValue)
+			{
+				writer.WriteAttributeString("dueDate", GetDisplayDateTime(project.DueDate));
 			}
 
 			writer.WriteEndElement(); //project
@@ -395,7 +745,7 @@ namespace Sdl.Community.Transcreate.Service
 			foreach (var filterItem in filterItems)
 			{
 				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-				         filterItem.Name;
+						 filterItem.Name;
 			}
 
 			if (string.IsNullOrEmpty(items))
@@ -555,6 +905,31 @@ namespace Sdl.Community.Transcreate.Service
 			writer.WriteAttributeString("placeables", wordCount.Placeables.ToString());
 			writer.WriteAttributeString("tags", wordCount.Tags.ToString());
 			writer.WriteEndElement(); //name
+		}
+
+		public string DateTimeStampToString(DateTime dt)
+		{
+
+			var value = dt.Year
+						+ "" + dt.Month.ToString().PadLeft(2, '0')
+						+ "" + dt.Day.ToString().PadLeft(2, '0')
+						+ "" + dt.Hour.ToString().PadLeft(2, '0')
+						+ "" + dt.Minute.ToString().PadLeft(2, '0')
+						+ "" + dt.Second.ToString().PadLeft(2, '0');
+
+			return value;
+		}
+
+		public string GetPath(string path1, string path2)
+		{
+			var path = Path.Combine(path1, path2.TrimStart('\\'));
+
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+
+			return path;
 		}
 	}
 }

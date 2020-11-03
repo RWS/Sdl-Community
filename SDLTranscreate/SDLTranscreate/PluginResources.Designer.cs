@@ -1172,7 +1172,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Final Report.
+        ///   Looks up a localized string similar to Create Final Reports.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Description {
             get {
@@ -1181,7 +1181,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Final Report.
+        ///   Looks up a localized string similar to Create Final Reports.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Name {
             get {
