@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
@@ -41,8 +42,8 @@ namespace Sdl.Community.RapidAddTerm
 
 						var sourceEntry = SearchEntries(defaultTermbasePath, sourceSelection, sourceIndexName);
 						var targetEntries = SearchTargetEntries(defaultTermbasePath, targetSelection, targetIndexName);
-						targetSelection = HttpUtility.HtmlEncode(targetSelection);
-						sourceSelection = HttpUtility.HtmlEncode(sourceSelection);
+						targetSelection = SecurityElement.Escape(targetSelection);
+						sourceSelection = HttpUtility.HtmlEncode(sourceSelection); sourceSelection = SecurityElement.Escape(sourceSelection);
 						if (sourceEntry != null)
 						{
 							var targetAlreadyExists = TargetAlreadyAdded(targetEntries, sourceEntry.ID);
