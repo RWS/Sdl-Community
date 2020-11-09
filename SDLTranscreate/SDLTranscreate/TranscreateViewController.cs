@@ -1424,7 +1424,6 @@ namespace Sdl.Community.Transcreate
 			return languageInfos;
 		}
 
-
 		private void OnActivationChanged(object sender, ActivationChangedEventArgs e)
 		{
 			IsActive = e.Active;

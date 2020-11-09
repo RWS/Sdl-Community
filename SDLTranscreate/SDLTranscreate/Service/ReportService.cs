@@ -47,7 +47,7 @@ namespace Sdl.Community.Transcreate.Service
 				OmitXmlDeclaration = true,
 				Indent = false
 			};
-			var reportName = "Final Report";
+			var reportName = "SDL Transcreate Report";
 
 			var studioProjectInfo = studioProject.GetProjectInfo();
 			var dateTimeStamp = DateTime.UtcNow;
@@ -91,7 +91,7 @@ namespace Sdl.Community.Transcreate.Service
 						writer.WriteAttributeString("created", dataTimeStampToString);
 
 						writer.WriteStartElement("taskInfo");
-						writer.WriteAttributeString("action", "Final Report");
+						writer.WriteAttributeString("action", "SDL Transcreate Report");
 						writer.WriteAttributeString("file", projectFile.Path + projectFile.Name);
 						writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
 						writer.WriteAttributeString("runAt", GetDisplayDateTime(dateTimeStamp));
@@ -194,6 +194,61 @@ namespace Sdl.Community.Transcreate.Service
 
 			return reports;
 
+		}
+
+		public void CreateTaskReport(TaskContext taskContext, string reportFile,
+			FileBasedProject selectedProject, string targetLanguageCode)
+		{
+			var settings = new XmlWriterSettings
+			{
+				OmitXmlDeclaration = true,
+				Indent = false
+			};
+
+			var projectFiles = taskContext.ProjectFiles.Where(a => a.Selected &&
+			                                                       string.Compare(a.TargetLanguage, targetLanguageCode,
+				                                                       StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+
+			var reportName = "";
+			switch (taskContext.Action)
+			{
+				case Enumerators.Action.Convert:
+					reportName = "Create Transcreate Project Report";
+					break;
+				case Enumerators.Action.CreateBackTranslation:
+					reportName = "Create Back-Translation Project Report";
+					break;
+				case Enumerators.Action.Export:
+					reportName = "Export Translations Report";
+					break;
+				case Enumerators.Action.Import:
+					reportName = "Import Translations Report";
+					break;
+				case Enumerators.Action.ExportBackTranslation:
+					reportName = "Export Back-Translations Report";
+					break;
+				case Enumerators.Action.ImportBackTranslation:
+					reportName = "Import Back-Translations Report";
+					break;
+			}
+
+			using (var writer = XmlWriter.Create(reportFile, settings))
+			{
+				writer.WriteStartElement("task");
+				writer.WriteAttributeString("name", reportName);
+				writer.WriteAttributeString("created", taskContext.DateTimeStampToString);
+
+				WriteReportTaskInfo(writer, taskContext, selectedProject, targetLanguageCode);
+
+				foreach (var projectFile in projectFiles)
+				{
+					WriteReportFile(writer, taskContext, projectFile);
+				}
+
+				WriteReportTotal(writer, taskContext, projectFiles);
+
+				writer.WriteEndElement(); //task
+			}
 		}
 
 		private string CreateHtmlReportFile(string xmlReportFullPath, string xsltFilePath)
@@ -353,60 +408,7 @@ namespace Sdl.Community.Transcreate.Service
 			return null;
 		}
 
-		public void CreateTaskReport(TaskContext taskContext, string reportFile,
-			FileBasedProject selectedProject, string targetLanguageCode)
-		{
-			var settings = new XmlWriterSettings
-			{
-				OmitXmlDeclaration = true,
-				Indent = false
-			};
-
-			var projectFiles = taskContext.ProjectFiles.Where(a => a.Selected &&
-				string.Compare(a.TargetLanguage, targetLanguageCode,
-					StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
-
-			var reportName = "";
-			switch (taskContext.Action)
-			{
-				case Enumerators.Action.Convert:
-					reportName = "Create Transcreate Project Report";
-					break;
-				case Enumerators.Action.CreateBackTranslation:
-					reportName = "Create Back-Translation Project Report";
-					break;
-				case Enumerators.Action.Export:
-					reportName = "Export Translations Report";
-					break;
-				case Enumerators.Action.Import:
-					reportName = "Import Translations Report";
-					break;
-				case Enumerators.Action.ExportBackTranslation:
-					reportName = "Export Back-Translations Report";
-					break;
-				case Enumerators.Action.ImportBackTranslation:
-					reportName = "Import Back-Translations Report";
-					break;
-			}
-
-			using (var writer = XmlWriter.Create(reportFile, settings))
-			{
-				writer.WriteStartElement("task");
-				writer.WriteAttributeString("name", reportName);
-				writer.WriteAttributeString("created", taskContext.DateTimeStampToString);
-
-				WriteReportTaskInfo(writer, taskContext, selectedProject, targetLanguageCode);
-
-				foreach (var projectFile in projectFiles)
-				{
-					WriteReportFile(writer, taskContext, projectFile);
-				}
-
-				WriteReportTotal(writer, taskContext, projectFiles);
-
-				writer.WriteEndElement(); //task
-			}
-		}
+		
 
 		private void WriteReportTotal(XmlWriter writer, TaskContext taskContext, IReadOnlyCollection<ProjectFile> projectFiles)
 		{

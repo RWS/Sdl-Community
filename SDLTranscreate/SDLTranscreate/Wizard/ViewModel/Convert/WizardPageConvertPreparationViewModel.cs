@@ -154,23 +154,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			};
 		}
 
-		private void UpdateWizardContext(FileBasedProject project)
-		{
-			var projectFiles = TaskContext.Project.ProjectFiles;
-
-			var newProjectInfo = project.GetProjectInfo();
-			TaskContext.Project = _projectAutomationService.GetProject(project, null, projectFiles);
-			TaskContext.ProjectFiles = TaskContext.Project.ProjectFiles;
-			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
-			TaskContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
-			TaskContext.WorkflowFolder = TaskContext.GetWorkflowPath();
-
-			if (!Directory.Exists(TaskContext.WorkingFolder))
-			{
-				Directory.CreateDirectory(TaskContext.WorkingFolder);
-			}
-		}
-
 		private async void StartProcessing()
 		{
 			try
@@ -285,6 +268,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ConvertingProjectFiles);
 
 				var project = TaskContext.ProjectFiles[0].Project;
+
+				var selectedProject = _controllers.ProjectsController.GetProjects()
+					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
+				await _projectAutomationService.UpdateProjectFiles(selectedProject);
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
 					TaskContext.ExportOptions, TaskContext.AnalysisBands);
@@ -761,6 +748,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						}
 					}
 				}
+			}
+		}
+
+		private void UpdateWizardContext(FileBasedProject project)
+		{
+			var projectFiles = TaskContext.Project.ProjectFiles;
+
+			var newProjectInfo = project.GetProjectInfo();
+			TaskContext.Project = _projectAutomationService.GetProject(project, null, projectFiles);
+			TaskContext.ProjectFiles = TaskContext.Project.ProjectFiles;
+			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
+			TaskContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
+			TaskContext.WorkflowFolder = TaskContext.GetWorkflowPath();
+
+			if (!Directory.Exists(TaskContext.WorkingFolder))
+			{
+				Directory.CreateDirectory(TaskContext.WorkingFolder);
 			}
 		}
 

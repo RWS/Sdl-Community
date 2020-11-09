@@ -640,4 +640,13 @@
   <data name="Report" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\report.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Unexpected_error_while_converting_the_file" xml:space="preserve">
+	  <value>Unexpected error while converting the file: {0}</value>
+  </data>
+  <data name="Proceed_and_copy_source_to_target_for_empty_translations" xml:space="preserve">
+	  <value>Do you want to proceed and copy source to target for empty translations</value>
+  </data>
+  <data name="Found_empty_translations_in_0_files" xml:space="preserve">
+	  <value>Found empty translations in {0} files</value>
+  </data>
 </root>

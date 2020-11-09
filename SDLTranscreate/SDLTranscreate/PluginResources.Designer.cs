@@ -98,6 +98,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found empty translations in {0} files.
+        /// </summary>
+        internal static string Found_empty_translations_in_0_files {
+            get {
+                return ResourceManager.GetString("Found_empty_translations_in_0_files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Icon {
@@ -914,6 +923,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to proceed and copy source to target for empty translations.
+        /// </summary>
+        internal static string Proceed_and_copy_source_to_target_for_empty_translations {
+            get {
+                return ResourceManager.GetString("Proceed_and_copy_source_to_target_for_empty_translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Refresh {
@@ -1411,6 +1429,15 @@ namespace Sdl.Community.Transcreate {
         internal static string TranscreateManager_ViewGroup_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_ViewGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error while converting the file: {0}.
+        /// </summary>
+        internal static string Unexpected_error_while_converting_the_file {
+            get {
+                return ResourceManager.GetString("Unexpected_error_while_converting_the_file", resourceCulture);
             }
         }
         

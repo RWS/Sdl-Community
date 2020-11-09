@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
@@ -41,8 +42,8 @@ namespace Sdl.Community.Transcreate.Service
 			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
-
 			var projectReference = new ProjectReference(project.FilePath);
+
 			var newProjectInfo = new ProjectInfo
 			{
 				Name = projectInfo.Name + "-" + _projectNameSuffix,
@@ -51,7 +52,7 @@ namespace Sdl.Community.Transcreate.Service
 				SourceLanguage = projectInfo.SourceLanguage,
 				TargetLanguages = projectInfo.TargetLanguages,
 				DueDate = projectInfo.DueDate,
-				ProjectOrigin = "Transcreate Project",
+				ProjectOrigin = "Transcreate project",
 				IconPath = iconPath,
 			};
 
@@ -64,53 +65,73 @@ namespace Sdl.Community.Transcreate.Service
 					newProject.AddFiles(new[] { contextProjectFile.ExternalFilePath }, contextProjectFile.Path);
 				}
 			}
+			newProject.Save();
 
-			var sourceLanguageFiles = newProject.GetSourceLanguageFiles();
-			var scanResult = newProject.RunAutomaticTask(
-				sourceLanguageFiles.GetIds(),
-				AutomaticTaskTemplateIds.Scan
+			newProject.RunAutomaticTask(
+			   newProject.GetSourceLanguageFiles().GetIds(),
+			   AutomaticTaskTemplateIds.Scan
+		   );
+
+			var sourceGuids = GetProjectFileGuids(newProject.GetSourceLanguageFiles());
+
+			newProject.RunAutomaticTask(
+				sourceGuids.ToArray(),
+				AutomaticTaskTemplateIds.ConvertToTranslatableFormat
 			);
 
-			sourceLanguageFiles = newProject.GetSourceLanguageFiles();
-			foreach (var projectFile in sourceLanguageFiles)
+			newProject.RunAutomaticTask(
+				sourceGuids.ToArray(),
+				AutomaticTaskTemplateIds.CopyToTargetLanguages
+			);
+
+
+			foreach (var language in newProjectInfo.TargetLanguages)
 			{
-				if (projectFile.Role == FileRole.Translatable)
-				{
-					Guid[] currentFileId = { projectFile.Id };
-					var convertTask = newProject.RunAutomaticTask(
-						currentFileId,
-						AutomaticTaskTemplateIds.ConvertToTranslatableFormat
-					);
+				var targetGuids = GetProjectFileGuids(newProject.GetTargetLanguageFiles(language));
 
-					var copyTask = newProject.RunAutomaticTask(
-						currentFileId,
-						AutomaticTaskTemplateIds.CopyToTargetLanguages
-					);
-				}
+				newProject.RunAutomaticTask(
+					targetGuids.ToArray(),
+					AutomaticTaskTemplateIds.AnalyzeFiles
+				);
+
+				newProject.RunAutomaticTask(
+					targetGuids.ToArray(),
+					AutomaticTaskTemplateIds.PreTranslateFiles
+				);
 			}
-
-			var targetGuids = new List<Guid>();
-			var targetLanguageFiles = newProject.GetTargetLanguageFiles();
-			foreach (var projectFile in targetLanguageFiles)
-			{
-				if (projectFile.Role == FileRole.Translatable)
-				{
-					targetGuids.Add(projectFile.Id);
-				}
-			}
-
-			var pretranslate = newProject.RunAutomaticTask(
-				targetGuids.ToArray(),
-				AutomaticTaskTemplateIds.PreTranslateFiles
-			);
-
-			var analyTask = newProject.RunAutomaticTask(
-				targetGuids.ToArray(),
-				AutomaticTaskTemplateIds.AnalyzeFiles
-			);
 
 			newProject.Save();
+
 			return newProject;
+		}
+
+		public async System.Threading.Tasks.Task UpdateProjectFiles(FileBasedProject project)
+		{
+			var projectInfo = project.GetProjectInfo();
+			var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
+			var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
+			translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+			project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
+
+			foreach (var language in project.GetProjectInfo().TargetLanguages)
+			{
+				var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
+				project.RunAutomaticTask(
+					targetGuids.ToArray(),
+					AutomaticTaskTemplateIds.PreTranslateFiles
+				);
+			}
+
+			project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
+			project.UpdateProject(projectInfo);
+			project.Save();
+
+			var reports = await System.Threading.Tasks.Task.Run(() => _controller.ReportsController.GetReports(true));
+			var report = reports?.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Group == "Translate");
+			if (report != null)
+			{
+				_controller.ReportsController.RemoveReports(_controller.ClientId, new List<string> { report.Id });
+			}
 		}
 
 		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string targetLanguage, string iconPath,
@@ -124,7 +145,7 @@ namespace Sdl.Community.Transcreate.Service
 			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
-			
+
 			var localProjectFolder = Path.Combine(projectInfo.LocalProjectFolder, "BackProjects", targetLanguage);
 
 			var newSourceLanguage = projectInfo.TargetLanguages.FirstOrDefault(a =>
@@ -144,7 +165,7 @@ namespace Sdl.Community.Transcreate.Service
 				SourceLanguage = newSourceLanguage,
 				TargetLanguages = new Language[] { newTargetLanguage },
 				DueDate = projectInfo.DueDate,
-				ProjectOrigin = "Back-Translation Project",
+				ProjectOrigin = "Back-Translation project",
 				IconPath = iconPath,
 			};
 
@@ -157,50 +178,40 @@ namespace Sdl.Community.Transcreate.Service
 					newProject.AddFiles(new[] { contextProjectFile }, string.Empty);
 				}
 			}
+			newProject.Save();
 
-			var sourceLanguageFiles = newProject.GetSourceLanguageFiles();
-			var scanResult = newProject.RunAutomaticTask(
-				sourceLanguageFiles.GetIds(),
-				AutomaticTaskTemplateIds.Scan
-			);
+			// Remove any TMs that don't correspond to the language directions of the project
+			UpdateTmConfiguration(newProject);
 
-			sourceLanguageFiles = newProject.GetSourceLanguageFiles();
-			foreach (var projectFile in sourceLanguageFiles)
+			newProject.RunAutomaticTask(
+				newProject.GetSourceLanguageFiles().GetIds(),
+				AutomaticTaskTemplateIds.Scan);
+
+			var sourceGuids = GetProjectFileGuids(newProject.GetSourceLanguageFiles());
+
+			newProject.RunAutomaticTask(
+				sourceGuids.ToArray(),
+				AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+
+			newProject.RunAutomaticTask(
+				sourceGuids.ToArray(),
+				AutomaticTaskTemplateIds.CopyToTargetLanguages);
+
+
+			foreach (var language in newProjectInfo.TargetLanguages)
 			{
-				if (projectFile.Role == FileRole.Translatable)
-				{
-					Guid[] currentFileId = { projectFile.Id };
-					var convertTask = newProject.RunAutomaticTask(
-						currentFileId,
-						AutomaticTaskTemplateIds.ConvertToTranslatableFormat
-					);
+				var targetGuids = GetProjectFileGuids(newProject.GetTargetLanguageFiles(language));
 
-					var copyTask = newProject.RunAutomaticTask(
-						currentFileId,
-						AutomaticTaskTemplateIds.CopyToTargetLanguages
-					);
-				}
+				newProject.RunAutomaticTask(
+					targetGuids.ToArray(),
+					AutomaticTaskTemplateIds.AnalyzeFiles
+				);
+
+				newProject.RunAutomaticTask(
+					targetGuids.ToArray(),
+					AutomaticTaskTemplateIds.PreTranslateFiles
+				);
 			}
-
-			var targetGuids = new List<Guid>();
-			var targetLanguageFiles = newProject.GetTargetLanguageFiles();
-			foreach (var projectFile in targetLanguageFiles)
-			{
-				if (projectFile.Role == FileRole.Translatable)
-				{
-					targetGuids.Add(projectFile.Id);
-				}
-			}
-
-			var pretranslate = newProject.RunAutomaticTask(
-				targetGuids.ToArray(),
-				AutomaticTaskTemplateIds.PreTranslateFiles
-			);
-
-			var analyTask = newProject.RunAutomaticTask(
-				targetGuids.ToArray(),
-				AutomaticTaskTemplateIds.AnalyzeFiles
-			);
 
 			newProject.Save();
 			return newProject;
@@ -215,7 +226,7 @@ namespace Sdl.Community.Transcreate.Service
 
 			var projectInfo = selectedProject.GetProjectInfo();
 
-			Interfaces.IProject project = projectInfo.ProjectOrigin == "Back-Translation Project"
+			Interfaces.IProject project = IsBackTranslationProject(projectInfo.ProjectOrigin)
 				? new BackTranslationProject()
 				: new Project();
 
@@ -230,7 +241,7 @@ namespace Sdl.Community.Transcreate.Service
 			project.TargetLanguages = GetLanguageInfos(projectInfo.TargetLanguages);
 			project.ProjectType = GetProjectType(selectedProject);
 
-			var existingProject = projectInfo.ProjectOrigin == "Back-Translation Project"
+			var existingProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 				? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out _)
 				: _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
 			if (existingProject != null)
@@ -303,6 +314,107 @@ namespace Sdl.Community.Transcreate.Service
 			}
 
 			return analysisBands;
+		}
+
+		private void UpdateTmConfiguration(FileBasedProject project)
+		{
+			if (project == null)
+			{
+				return;
+			}
+
+			try
+			{
+				var projectInfo = project.GetProjectInfo();
+				var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
+				var cascadeEntries = new List<TranslationProviderCascadeEntry>();
+				foreach (var cascadeEntry in translationProviderConfiguration.Entries)
+				{
+					var uri = cascadeEntry.MainTranslationProvider.Uri;
+					if (FileBasedTranslationMemory.IsFileBasedTranslationMemory(uri))
+					{
+						var filePath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(uri);
+						var memory = new FileBasedTranslationMemory(filePath);
+
+						foreach (var languageDirection in memory.SupportedLanguageDirections)
+						{
+							if (IsSame(languageDirection?.SourceCulture.Name, projectInfo.SourceLanguage.CultureInfo.Name, true) &&
+								LanguageExistsIn(projectInfo.TargetLanguages.ToList(), languageDirection?.TargetCulture.Name, true))
+							{
+								cascadeEntries.Add(cascadeEntry);
+							}
+						}
+					}
+					else
+					{
+						if (string.Compare(cascadeEntry.MainTranslationProvider.Uri.Scheme, "anytm.sdltm.file", StringComparison.CurrentCultureIgnoreCase) == 0)
+						{
+							var filePath = cascadeEntry.MainTranslationProvider.Uri.LocalPath;
+							if (File.Exists(filePath))
+							{
+								var memory = new FileBasedTranslationMemory(filePath);
+								foreach (var languageDirection in memory.SupportedLanguageDirections)
+								{
+									if ((IsSame(projectInfo.SourceLanguage.CultureInfo.Name, languageDirection?.SourceCulture.Name, true) &&
+										LanguageExistsIn(projectInfo.TargetLanguages.ToList(), languageDirection?.TargetCulture.Name, true))
+										||
+										IsSame(projectInfo.SourceLanguage.CultureInfo.Name, languageDirection?.TargetCulture.Name, true) &&
+										LanguageExistsIn(projectInfo.TargetLanguages.ToList(), languageDirection?.SourceCulture.Name, true))
+									{
+										cascadeEntries.Add(cascadeEntry);
+									}
+								}
+							}
+						}
+						else
+						{
+							cascadeEntries.Add(cascadeEntry);
+						}
+					}
+				}
+
+				translationProviderConfiguration.Entries = cascadeEntries;
+				project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
+				project.Save();
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+		}
+
+		private bool IsSame(string value1, string value2, bool ignoreCase)
+		{
+			return ignoreCase
+				? string.Compare(value1, value2, StringComparison.CurrentCultureIgnoreCase) == 0
+				: string.CompareOrdinal(value1, value2) == 0;
+		}
+
+		private bool LanguageExistsIn(List<Language> values, string value, bool ignoreCase)
+		{
+			return ignoreCase
+				? values.Exists(a => string.Compare(a.CultureInfo.Name, value, StringComparison.CurrentCultureIgnoreCase) == 0)
+				: values.Exists(a => string.CompareOrdinal(a.CultureInfo.Name, value) == 0);
+		}
+
+		private bool IsBackTranslationProject(string projectOrigin)
+		{
+			return string.Compare(projectOrigin, "Back-Translation project",
+				StringComparison.CurrentCultureIgnoreCase) == 0;
+		}
+
+		private List<Guid> GetProjectFileGuids(ProjectAutomation.Core.ProjectFile[] projectFiles)
+		{
+			var fileGuids = new List<Guid>();
+			foreach (var projectFile in projectFiles)
+			{
+				if (projectFile.Role == FileRole.Translatable)
+				{
+					fileGuids.Add(projectFile.Id);
+				}
+			}
+
+			return fileGuids;
 		}
 
 		private string GeFullPath(string projectPath, string path)
