@@ -121,7 +121,7 @@
     <Compile Include="Actions\CreateReport.cs" />
     <Compile Include="Actions\ExportAction.cs" />
     <Compile Include="Actions\ImportAction.cs" />
-    <Compile Include="Actions\CreateBackTranslationProjectAction.cs" />
+    <Compile Include="Actions\CreateBackTranslationAction.cs" />
     <Compile Include="Actions\ConvertProjectAction.cs" />
     <Compile Include="Actions\OpenFileForReviewAction.cs" />
     <Compile Include="Actions\OpenFileForSignOffAction.cs" />

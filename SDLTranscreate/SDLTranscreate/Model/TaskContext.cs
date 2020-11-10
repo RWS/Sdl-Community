@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Sdl.Community.Transcreate.Common;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.Transcreate.Model
 {
@@ -34,6 +35,8 @@ namespace Sdl.Community.Transcreate.Model
 		public Enumerators.Controller Owner { get; set; }
 
 		public Interfaces.IProject Project { get; set; }
+
+		public FileBasedProject FileBasedProject { get; set; }
 
 		public List<ProjectFile> ProjectFiles { get; set; }
 

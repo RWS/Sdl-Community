@@ -62,7 +62,7 @@ namespace Sdl.Community.Transcreate.Actions
 				var dr = MessageBox.Show("The transcreate reports have been created successfully."
 				                         +Environment.NewLine+Environment.NewLine+
 					"Open folder in explorer?", 
-					"SDL Transcreate", MessageBoxButtons.YesNo);
+					PluginResources.Plugin_Name, MessageBoxButtons.YesNo);
 
 				if (dr == DialogResult.Yes)
 				{

@@ -418,7 +418,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		private void CreateBackProjects(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationProjectAction>();
+			var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationAction>();
 			action.Run();
 
 			IsEnabledCreateBackProjects = false;
@@ -487,7 +487,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 				SelectedProject.BackTranslationProjects = new List<BackTranslationProject>();
 
-				var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationProjectAction>();
+				var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationAction>();
 				action.Enabled = true;
 
 				IsEnabledCreateBackProjects = true;

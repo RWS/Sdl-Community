@@ -31,7 +31,7 @@ namespace Sdl.Community.Transcreate.Actions
 		Icon = "sdl_transcreate_back"
 		)]
 	[ActionLayout(typeof(TranscreateManagerActionsGroup), 3, DisplayType.Large)]
-	public class CreateBackTranslationProjectAction : AbstractViewControllerAction<TranscreateViewController>
+	public class CreateBackTranslationAction : AbstractViewControllerAction<TranscreateViewController>
 	{
 		private Settings _settings;
 		private CustomerProvider _customerProvider;
@@ -63,121 +63,182 @@ namespace Sdl.Community.Transcreate.Actions
 				return;
 			}
 
-			//var progressSettings = new ProgressDialogSettings(ApplicationInstance.GetActiveForm(), true, true, true);
-			//var result = ProgressDialog.Execute("Create Back-Translation Projects", () =>
-			//{
-			//ProgressDialog.Current.Report(0, "Preparation");
-
 			var studioProjectInfo = studioProject.GetProjectInfo();
-			var dateTimeStamp = DateTime.UtcNow;
-			var dataTimeStampToString = DateTimeStampToString(dateTimeStamp);
-			var workFlowPath = GetPath(studioProjectInfo.LocalProjectFolder, "WorkFlow");
-			var workingActionPath = GetPath(workFlowPath, "Convert");
-			var workingFolder = GetPath(workingActionPath, dataTimeStampToString);
 
-			var exportOptions = new ExportOptions();
-			exportOptions.IncludeBackTranslations = true;
-			exportOptions.IncludeTranslations = true;
-			exportOptions.CopySourceToTarget = false;
 
-			var importOptions = new ImportOptions();
-			importOptions.OverwriteTranslations = true;
-			importOptions.OriginSystem = "Transcreate Automation";
-			importOptions.StatusTranslationUpdatedId = string.Empty;
-
-			var analysisBands = _projectAutomationService.GetAnalysisBands(studioProject);
-
-			var sdlxliffReader = new SdlxliffReader(_segmentBuilder, exportOptions, analysisBands);
-			var sdlxliffWriter = new SdlxliffWriter(_segmentBuilder, importOptions, analysisBands);
-			var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
-
-			var proceed = true;
-
-			// Read the SDLXLIFF data
-			var fileDataList = GetFileDataList(project, studioProjectInfo, sdlxliffReader);
-			var filesWithEmptyTranslations = fileDataList.Count(a => a.HasEmptyTranslations);
-			if (filesWithEmptyTranslations > 0)
+			var backTranslationsFolder = Path.Combine(studioProjectInfo.LocalProjectFolder, "BackProjects");
+			if (Directory.Exists(backTranslationsFolder))
 			{
-				var message01 = string.Format(PluginResources.Found_empty_translations_in_0_files,
-									filesWithEmptyTranslations)
-								+ Environment.NewLine + Environment.NewLine;
-				var message02 = PluginResources.Proceed_and_copy_source_to_target_for_empty_translations;
+				var message01 = "The Back-Translations folder is not empty."
+				                + Environment.NewLine + Environment.NewLine
+				                + "'" + backTranslationsFolder + "'"
+				                + Environment.NewLine + Environment.NewLine;
+				var message02 = "Do you want to proceed and delete this folder?";
 
 				var response = MessageBox.Show(message01 + message02, PluginResources.Plugin_Name,
 					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 				if (response != DialogResult.Yes)
 				{
-					proceed = false;
+					return;
+				}
+
+				try
+				{
+					Directory.Delete(backTranslationsFolder, true);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK,
+						MessageBoxIcon.Exclamation);
+					return;
 				}
 			}
 
-			if (!proceed)
+
+			var taskContexts = new List<TaskContext>();
+
+			var progressSettings = new ProgressDialogSettings(ApplicationInstance.GetActiveForm(), true, true, true);
+			var result = ProgressDialog.Execute("Create Back-Translation Projects", () =>
 			{
+				ProgressDialog.Current.Report(0, "Reading language files...");
+
+				var dateTimeStamp = DateTime.UtcNow;
+				var dataTimeStampToString = DateTimeStampToString(dateTimeStamp);
+				var workFlowPath = GetPath(studioProjectInfo.LocalProjectFolder, "WorkFlow");
+				var workingActionPath = GetPath(workFlowPath, "Convert");
+				var workingFolder = GetPath(workingActionPath, dataTimeStampToString);
+
+				var exportOptions = new ExportOptions();
+				exportOptions.IncludeBackTranslations = true;
+				exportOptions.IncludeTranslations = true;
+				exportOptions.CopySourceToTarget = false;
+
+				var importOptions = new ImportOptions();
+				importOptions.OverwriteTranslations = true;
+				importOptions.OriginSystem = "Transcreate Automation";
+				importOptions.StatusTranslationUpdatedId = string.Empty;
+
+				var analysisBands = _projectAutomationService.GetAnalysisBands(studioProject);
+
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, exportOptions, analysisBands);
+				var sdlxliffWriter = new SdlxliffWriter(_segmentBuilder, importOptions, analysisBands);
+				var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
+
+				// Read the SDLXLIFF data
+				var fileDataList = GetFileDataList(project, studioProjectInfo, sdlxliffReader);
+				var filesWithEmptyTranslations = fileDataList.Count(a => a.HasEmptyTranslations);
+				if (filesWithEmptyTranslations > 0)
+				{
+					var message01 = string.Format(PluginResources.Found_empty_translations_in_0_files,
+										filesWithEmptyTranslations)
+									+ Environment.NewLine + Environment.NewLine;
+					var message02 = PluginResources.Proceed_and_copy_source_to_target_for_empty_translations;
+
+					var response = MessageBox.Show(message01 + message02, PluginResources.Plugin_Name,
+						MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+					if (response != DialogResult.Yes)
+					{
+						return;
+					}
+				}
+
+				ProgressDialog.Current.ProgressBarIsIndeterminate = false;
+
+				decimal maximum = project.TargetLanguages.Count;
+				decimal current = 0;
+				foreach (var targetLanguage in project.TargetLanguages)
+				{
+					if (ProgressDialog.Current.CheckCancellationPending())
+					{
+						ProgressDialog.Current.ThrowIfCancellationPending();
+					}
+
+					current++;
+					var progress = current / maximum * 100;
+					ProgressDialog.Current.Report((int)progress, "Language: " + targetLanguage.CultureInfo.DisplayName);
+
+
+					var sourceFiles = new List<string>();
+					var languageFolder = GetPath(workingFolder, targetLanguage.CultureInfo.Name);
+
+					var targetFiles = project.ProjectFiles.Where(a =>
+						string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
+							StringComparison.CurrentCultureIgnoreCase) == 0);
+
+					var languageFileData = new List<FileData>();
+					foreach (var projectFile in targetFiles)
+					{
+						var fileData =
+							fileDataList.FirstOrDefault(a => a.Data.DocInfo.DocumentId == projectFile.FileId);
+						if (fileData == null)
+						{
+							continue;
+						}
+
+						SwitchSourceWithTargetSegments(fileData);
+
+						var xliffFolder = GetPath(languageFolder, projectFile.Path);
+						var xliffFilePath = Path.Combine(xliffFolder,
+							projectFile.Name.Substring(0, projectFile.Name.Length - ".sdlxliff".Length));
+
+						// Write the XLIFF file
+						var success = xliffWriter.WriteFile(fileData.Data, xliffFilePath, true);
+						if (!success)
+						{
+							throw new Exception(string.Format(
+								PluginResources.Unexpected_error_while_converting_the_file, xliffFilePath));
+						}
+
+						sourceFiles.Add(xliffFilePath);
+						languageFileData.Add(fileData);
+					}
+
+					var iconPath = GetBackTranslationIconPath();
+
+					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(
+						studioProject, targetLanguage.CultureInfo.Name, iconPath, sourceFiles, "BT");
+
+					var taskContext = CreateBackTranslationTaskContext(newStudioProject, languageFileData,
+						studioProjectInfo.LocalProjectFolder, sdlxliffReader, sdlxliffWriter, xliffWriter);
+
+					taskContext.Completed = true;
+					taskContexts.Add(taskContext);
+				}
+
+			}, progressSettings);
+
+			Enabled = false;
+
+			if (result.Cancelled || result.OperationFailed)
+			{
+				if (Directory.Exists(backTranslationsFolder))
+				{
+					try
+					{
+						Directory.Delete(backTranslationsFolder, true);
+					}
+					catch
+					{
+						// ignore catch all;
+					}
+				}
+
+				var message = result.Cancelled ? "Process cancelled by user." : result.Error?.Message;
+				MessageBox.Show(message, PluginResources.Plugin_Name);
 				return;
 			}
 
-			foreach (var targetLanguage in project.TargetLanguages)
+			foreach (var taskContext in taskContexts)
 			{
-				//ProgressDialog.Current.Report(0, targetLanguage.CultureInfo.DisplayName);
-
-				var sourceFiles = new List<string>();
-				var languageFolder = GetPath(workingFolder, targetLanguage.CultureInfo.Name);
-
-				var targetFiles = project.ProjectFiles.Where(a =>
-					string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
-						StringComparison.CurrentCultureIgnoreCase) == 0);
-
-				var languageFileData = new List<FileData>();
-				foreach (var projectFile in targetFiles)
-				{
-					var fileData =
-						fileDataList.FirstOrDefault(a => a.Data.DocInfo.DocumentId == projectFile.FileId);
-					if (fileData == null)
-					{
-						continue;
-					}
-
-					SwitchSourceWithTargetSegments(fileData);
-
-					var xliffFolder = GetPath(languageFolder, projectFile.Path);
-					var xliffFilePath = Path.Combine(xliffFolder,
-						projectFile.Name.Substring(0, projectFile.Name.Length - ".sdlxliff".Length));
-
-					// Write the XLIFF file
-					var success = xliffWriter.WriteFile(fileData.Data, xliffFilePath, true);
-					if (!success)
-					{
-						throw new Exception(string.Format(
-							PluginResources.Unexpected_error_while_converting_the_file, xliffFilePath));
-					}
-
-					sourceFiles.Add(xliffFilePath);
-					languageFileData.Add(fileData);
-				}
-
-				var iconPath = GetBackTranslationIconPath();
-
-				var newStudioProject = _projectAutomationService.CreateBackTranslationProject(
-					studioProject, targetLanguage.CultureInfo.Name, iconPath, sourceFiles, "BT");
-
-				var taskContext = ImportTranslations(newStudioProject, languageFileData,
-					studioProjectInfo.LocalProjectFolder, sdlxliffReader, sdlxliffWriter, xliffWriter);
-
-				CleanupProjectSettings(newStudioProject);
-
-				taskContext.Completed = true;
+				CleanupProjectSettings(taskContext.FileBasedProject);
 
 				_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
-
-				Enabled = false;
 			}
-
-			//}, progressSettings);
 		}
 
 
-		private TaskContext ImportTranslations(FileBasedProject newStudioProject,
-			List<FileData> languageFileData, string localProjectFolder,
+		private TaskContext CreateBackTranslationTaskContext(FileBasedProject newStudioProject,
+			IReadOnlyCollection<FileData> languageFileData, string localProjectFolder,
 			SdlxliffReader sdlxliffReader, SdlxliffWriter sdlxliffWriter, XliffWriter xliffWriter)
 		{
 
@@ -193,6 +254,7 @@ namespace Sdl.Community.Transcreate.Actions
 			taskContext.ExportOptions.IncludeTranslations = true;
 			taskContext.ExportOptions.CopySourceToTarget = false;
 
+			taskContext.FileBasedProject = newStudioProject;
 			taskContext.LocalProjectFolder = newStudioProjectInfo.LocalProjectFolder;
 			taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
 
