@@ -1102,60 +1102,6 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to Convert to Transcreate Project.
         /// </summary>
-        internal static string TranscreateManager_BatchTasks_Convert_Description {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Convert_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Convert_Name {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Convert_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Export_Description {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Export_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Export_Name {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Export_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Import_Description {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Import_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Import_Name {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Import_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
-        /// </summary>
         internal static string TranscreateManager_ConvertProject_Description {
             get {
                 return ResourceManager.GetString("TranscreateManager_ConvertProject_Description", resourceCulture);
@@ -1172,7 +1118,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation Project.
+        ///   Looks up a localized string similar to Create Back-Translation Projects.
         /// </summary>
         internal static string TranscreateManager_CreateBackTranslationProject_Description {
             get {
@@ -1181,7 +1127,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation.
+        ///   Looks up a localized string similar to Create Back-Translations.
         /// </summary>
         internal static string TranscreateManager_CreateBackTranslationProject_Name {
             get {
@@ -1190,7 +1136,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Final Reports.
+        ///   Looks up a localized string similar to Create Transcreate Reports.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Description {
             get {
@@ -1199,7 +1145,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Final Reports.
+        ///   Looks up a localized string similar to Create Reports.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Name {
             get {

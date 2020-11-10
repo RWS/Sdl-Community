@@ -18,7 +18,6 @@ using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
 using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Model.ProjectSettings;
-using Sdl.Community.Transcreate.Model.Tasks;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Community.Transcreate.ViewModel;
 using Sdl.Core.Globalization;
@@ -28,12 +27,13 @@ using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.Reports.Viewer.API;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using AutomaticTask = Sdl.Community.Transcreate.Model.Tasks.AutomaticTask;
 using IProject = Sdl.Community.Transcreate.Interfaces.IProject;
+using LanguageDirectionInfo = Sdl.Community.Transcreate.Model.LanguageDirectionInfo;
+using PathInfo = Sdl.Community.Transcreate.Common.PathInfo;
 using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
-using TaskFile = Sdl.Community.Transcreate.Model.Tasks.TaskFile;
 
 namespace Sdl.Community.Transcreate
 {
@@ -435,9 +435,7 @@ namespace Sdl.Community.Transcreate
 
 		private void CreateReports(TaskContext taskContext, FileBasedProject selectedProject, IProject project)
 		{
-			var automaticTask = CreateAutomaticTask(taskContext, selectedProject);
-			var reports = CreateHtmlReports(taskContext, selectedProject, automaticTask, project);
-
+			var reports = CreateHtmlReports(taskContext, project, selectedProject);
 			ReportsController.AddReports(ClientId, reports);
 		}
 
@@ -706,135 +704,12 @@ namespace Sdl.Community.Transcreate
 			wcProjectFile.Report = GetRelativePath(project.Path, wcProjectFile.Report);
 		}
 
-		private List<Reports.Viewer.API.Model.Report> CreateHtmlReports(TaskContext taskContext,
-			FileBasedProject selectedProject, AutomaticTask automaticTask, IProject project)
+		private List<Report> CreateHtmlReports(TaskContext taskContext,  IProject project, FileBasedProject selectedProject)
 		{
-			var reports = new List<Reports.Viewer.API.Model.Report>();
-
-			var languageDirections = _projectSettingsService.GetLanguageDirections(selectedProject.FilePath);
+			var reports = new List<Report>();
 			var reportTemplate = GetReportTemplatePath("TranscreateReport.xsl");
-
-			foreach (var taskReport in automaticTask.Reports)
-			{
-				var languageDirection = languageDirections.FirstOrDefault(a =>
-					string.Compare(taskReport.LanguageDirectionGuid, a.Guid, StringComparison.CurrentCultureIgnoreCase) == 0);
-
-				var reportName = Path.GetFileName(taskReport.PhysicalPath);
-				var reportFilePath = Path.Combine(taskContext.WorkingFolder, reportName);
-
-				var htmlReportFilePath = CreateHtmlReportFile(reportFilePath, reportTemplate);
-
-				var name = string.Empty;
-				var groupName = string.Empty;
-				var description = string.Empty;
-				switch (taskContext.Action)
-				{
-					case Enumerators.Action.Convert:
-						name = "Create Transcreate Project";
-						groupName = PluginResources.ReportsGroup_ProjectCreation;
-						description = "Created transcreate project";
-						break;
-					case Enumerators.Action.CreateBackTranslation:
-						name = "Create Back-Translation Project";
-						groupName = PluginResources.ReportsGroup_ProjectCreation;
-						description = "Created back-translation project";
-						break;
-					case Enumerators.Action.Export:
-						name = "Export Translations";
-						groupName = "Export";
-						description = "Exported for translation";
-						break;
-					case Enumerators.Action.Import:
-						name = "Import Translations";
-						groupName = "Import";
-						description = "Imported translations";
-						break;
-					case Enumerators.Action.ExportBackTranslation:
-						name = "Export Back-Translations";
-						groupName = "Export";
-						description = "Exported for back-translation";
-						break;
-					case Enumerators.Action.ImportBackTranslation:
-						name = "Import Back-Translations";
-						groupName = "Import";
-						description = "Imported back-translation";
-						break;
-				}
-
-				var report =
-					new Reports.Viewer.API.Model.Report
-					{
-						Path = reportFilePath,
-						XsltPath = reportTemplate,
-						Group = groupName,
-						Date = DateTime.Now,
-						Name = name,
-						Language = languageDirection?.TargetLanguageCode,
-						Description = description
-					};
-
-				reports.Add(report);
-
-				foreach (var wcProjectFile in taskContext.ProjectFiles)
-				{
-					if (!wcProjectFile.Selected || string.Compare(wcProjectFile.TargetLanguage, languageDirection?.TargetLanguageCode,
-							StringComparison.CurrentCultureIgnoreCase) != 0)
-					{
-						continue;
-					}
-
-					UpdateTaskContextFiles(taskContext.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
-					UpdateTaskContextFiles(project.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
-				}
-			}
-
-			return reports;
-		}
-
-		private void UpdateTaskContextFiles(IEnumerable<ProjectFile> projectFiles, string localProjectFolder, string fileId, string htmlReportFilePath)
-		{
-			var projectFile = projectFiles.FirstOrDefault(a => a.FileId == fileId);
-			if (projectFile != null)
-			{
-				projectFile.Report = GetRelativePath(localProjectFolder, htmlReportFilePath);
-
-				var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
-				if (activityfile != null)
-				{
-					activityfile.Report = projectFile.Report;
-				}
-			}
-		}
-
-		private AutomaticTask CreateAutomaticTask(TaskContext taskContext, FileBasedProject selectedProject)
-		{
 			var projectInfo = selectedProject.GetProjectInfo();
-			var automaticTask = new AutomaticTask(taskContext.Action)
-			{
-				CreatedAt = GetDateToString(taskContext.DateTimeStamp),
-				StartedAt = GetDateToString(taskContext.DateTimeStamp),
-				CompletedAt = GetDateToString(taskContext.DateTimeStamp),
-				CreatedBy = Environment.UserDomainName + "\\" + Environment.UserName
-			};
-
-			foreach (var wcProjectFile in taskContext.ProjectFiles)
-			{
-				if (wcProjectFile.Selected)
-				{
-					var taskFile = new TaskFile
-					{
-						LanguageFileGuid = wcProjectFile.FileId
-					};
-					automaticTask.TaskFiles.Add(taskFile);
-
-					var outputFile = new OutputFile
-					{
-						LanguageFileGuid = wcProjectFile.FileId
-					};
-					automaticTask.OutputFiles.Add(outputFile);
-				}
-			}
-
+		
 			var languageDirections = GetLanguageDirectionFiles(selectedProject.FilePath, taskContext);
 
 			foreach (var languageDirection in languageDirections)
@@ -854,25 +729,91 @@ namespace Sdl.Community.Transcreate
 				var reportFile = Path.Combine(taskContext.WorkingFolder, reportName);
 
 				var projectReportsFilePath = Path.Combine(projectsReportsFolder, reportName);
-				var relativeProjectReportsFilePath = Path.Combine("Reports", reportName);
 
 				_reportService.CreateTaskReport(taskContext, reportFile, selectedProject, languageDirection.Key.TargetLanguageCode);
 
 				// Copy to project reports folder
 				File.Copy(reportFile, projectReportsFilePath, true);
 
-				var report = new Report(taskContext.Action)
+				var htmlReportFilePath = CreateHtmlReportFile(reportFile, reportTemplate);
+				
+				var report = new Report
 				{
-					Name = taskContext.Action.ToString(),
-					Description = taskContext.Action.ToString(),
-					LanguageDirectionGuid = languageDirection.Key.Guid,
-					PhysicalPath = relativeProjectReportsFilePath
+					Language = languageDirection.Key.TargetLanguageCode,
+					Path = reportFile,
+					XsltPath = reportTemplate,
+					Date = DateTime.Now
 				};
+				AssingReportProperties(taskContext.Action, report);
 
-				automaticTask.Reports.Add(report);
+				reports.Add(report);
+
+				foreach (var wcProjectFile in taskContext.ProjectFiles)
+				{
+					if (!wcProjectFile.Selected || string.Compare(wcProjectFile.TargetLanguage, report.Language,
+						StringComparison.CurrentCultureIgnoreCase) != 0)
+					{
+						continue;
+					}
+
+					UpdateTaskContextFiles(taskContext.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
+					UpdateTaskContextFiles(project.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
+				}
 			}
 
-			return automaticTask;
+			return reports;
+		}
+
+		private void AssingReportProperties(Enumerators.Action action, Report report)
+		{
+			switch (action)
+			{
+				case Enumerators.Action.Convert:
+					report.Name = "Create Transcreate Project";
+					report.Group = "Project Creation";
+					report.Description = "Created transcreate project";
+					break;
+				case Enumerators.Action.CreateBackTranslation:
+					report.Name = "Create Back-Translation Project";
+					report.Group = "Project Creation";
+					report.Description = "Created back-translation project";
+					break;
+				case Enumerators.Action.Export:
+					report.Name = "Export Translations";
+					report.Group = "Export";
+					report.Description = "Exported for translation";
+					break;
+				case Enumerators.Action.Import:
+					report.Name = "Import Translations";
+					report.Group = "Import";
+					report.Description = "Imported translations";
+					break;
+				case Enumerators.Action.ExportBackTranslation:
+					report.Name = "Export Back-Translations";
+					report.Group = "Export";
+					report.Description = "Exported for back-translation";
+					break;
+				case Enumerators.Action.ImportBackTranslation:
+					report.Name = "Import Back-Translations";
+					report.Group = "Import";
+					report.Description = "Imported back-translation";
+					break;
+			}
+		}
+
+		private void UpdateTaskContextFiles(IEnumerable<ProjectFile> projectFiles, string localProjectFolder, string fileId, string htmlReportFilePath)
+		{
+			var projectFile = projectFiles.FirstOrDefault(a => a.FileId == fileId);
+			if (projectFile != null)
+			{
+				projectFile.Report = GetRelativePath(localProjectFolder, htmlReportFilePath);
+
+				var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
+				if (activityfile != null)
+				{
+					activityfile.Report = projectFile.Report;
+				}
+			}
 		}
 
 		public string GetReportTemplatePath(string name)

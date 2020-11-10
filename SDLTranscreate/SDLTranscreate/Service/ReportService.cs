@@ -12,6 +12,7 @@ using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.Community.Transcreate.Model;
+using Sdl.Community.Transcreate.Service.ProgressDialog;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
@@ -38,10 +39,9 @@ namespace Sdl.Community.Transcreate.Service
 			_segmentBuilder = segmentBuilder;
 		}
 
-		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, out string workingPath)
+		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, out string workingPathOut)
 		{
 			var reports = new List<Report>();
-
 			var settings = new XmlWriterSettings
 			{
 				OmitXmlDeclaration = true,
@@ -54,7 +54,7 @@ namespace Sdl.Community.Transcreate.Service
 			var dataTimeStampToString = DateTimeStampToString(dateTimeStamp);
 			var workflowPath = GetPath(studioProjectInfo.LocalProjectFolder, "Workflow");
 			var actionPath = GetPath(workflowPath, "Report");
-			workingPath = GetPath(actionPath, dataTimeStampToString);
+			var workingPath = GetPath(actionPath, dataTimeStampToString);
 
 			var exportOptions = new ExportOptions();
 			exportOptions.IncludeBackTranslations = true;
@@ -63,133 +63,157 @@ namespace Sdl.Community.Transcreate.Service
 
 			var analysisBands = _projectAutomationService.GetAnalysisBands(studioProject);
 
-			var sdlxliffReader = new SdlxliffReader(_segmentBuilder, exportOptions, analysisBands);
-
-			foreach (var targetLanguage in project.TargetLanguages)
+			var progressSettings = new ProgressDialogSettings(ApplicationInstance.GetActiveForm(), true, true, false);
+			var result = ProgressDialog.ProgressDialog.Execute("Create Transcreate Reports", () =>
 			{
-				var projectFiles = project.ProjectFiles.Where(a => string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
-														   StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
-
-				var workingLanguageFolder = GetPath(workingPath, targetLanguage.CultureInfo.Name);
-				foreach (var projectFile in projectFiles)
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, exportOptions, analysisBands);
+				decimal maximum = project.ProjectFiles.Count;
+				decimal current = 0;
+				foreach (var targetLanguage in project.TargetLanguages)
 				{
-					var projectFilePath = Path.Combine(project.Path, projectFile.Location);
-					var xliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId, projectFilePath,
-						targetLanguage.CultureInfo.Name);
+					var projectFiles = project.ProjectFiles.Where(a => string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
+																   StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
 
-					var backTranslationProject = GetBackTranslationProject(project, targetLanguage.CultureInfo.Name);
-					var backTranslationFile = GetBackTranslationProjectFile(backTranslationProject, projectFile);
-					var xliffDataBackTranslation = GetBackTranslationXliffData(backTranslationProject, backTranslationFile, sdlxliffReader);
-
-					var fileName = projectFile.Name.Substring(0, projectFile.Name.LastIndexOf(".", StringComparison.Ordinal));
-					var reportFile = Path.Combine(workingLanguageFolder, fileName + ".xml");
-
-					using (var writer = XmlWriter.Create(reportFile, settings))
+					var workingLanguageFolder = GetPath(workingPath, targetLanguage.CultureInfo.Name);
+					foreach (var projectFile in projectFiles)
 					{
-						writer.WriteStartElement("task");
-						writer.WriteAttributeString("name", reportName);
-						writer.WriteAttributeString("created", dataTimeStampToString);
-
-						writer.WriteStartElement("taskInfo");
-						writer.WriteAttributeString("action", "SDL Transcreate Report");
-						writer.WriteAttributeString("file", projectFile.Path + projectFile.Name);
-						writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
-						writer.WriteAttributeString("runAt", GetDisplayDateTime(dateTimeStamp));
-
-						
-						WriteReportProject(writer, "project", project);
-						WriteReportProject(writer, "backProject", backTranslationProject);
-
-						WriteReportLanguage(writer, "source", project.SourceLanguage.CultureInfo.Name);
-						WriteReportLanguage(writer, "target", targetLanguage.CultureInfo.Name);
-
-						WriteReportCustomer(writer, project);
-
-						WriteReportTranslationProviders(writer, studioProject);
-
-						writer.WriteEndElement(); //taskInfo
-
-
-						writer.WriteStartElement("translations");
-						foreach (var dataFile in xliffData.Files)
+						if (ProgressDialog.ProgressDialog.Current.CheckCancellationPending())
 						{
-							writer.WriteStartElement("version");
-							writer.WriteAttributeString("type", dataFile.Original);
-
-							var backTranslationDataFile =
-								xliffDataBackTranslation?.Files.FirstOrDefault(a => a.Original == dataFile.Original);
-
-							writer.WriteStartElement("segments");
-							foreach (var transUnit in dataFile.Body.TransUnits)
-							{
-								var textFunction = transUnit.Contexts.FirstOrDefault(
-									a => string.Compare(a.DisplayName, "Text Function", StringComparison.CurrentCultureIgnoreCase) == 0);
-
-								foreach (var segmentPair in transUnit.SegmentPairs)
-								{
-									writer.WriteStartElement("segment");
-
-									var backTranslationSegmentPair = GetBackTranslationSegmentPair(backTranslationDataFile, segmentPair);
-
-									writer.WriteAttributeString("id", segmentPair.Id);
-									writer.WriteAttributeString("textFunction", textFunction?.Description ?? string.Empty);
-
-									writer.WriteStartElement("source");
-									writer.WriteString(segmentPair.Source.ToString());
-									writer.WriteEndElement(); //source
-
-									writer.WriteStartElement("target");
-									writer.WriteString(segmentPair.Target.ToString());
-									writer.WriteEndElement(); //source
-
-									writer.WriteStartElement("back");
-									writer.WriteString(backTranslationSegmentPair?.Target?.ToString() ?? string.Empty);
-									writer.WriteEndElement(); //backTranslation
-
-									writer.WriteStartElement("comments");
-									var comments = GetSegmentComments(segmentPair.Target, xliffData.DocInfo);
-									if (comments != null)
-									{
-										foreach (var comment in comments)
-										{
-											writer.WriteStartElement("comment");
-											writer.WriteAttributeString("version", comment.Version);
-											writer.WriteAttributeString("author", comment.Author);
-											writer.WriteAttributeString("severity", comment.Severity.ToString());
-											writer.WriteAttributeString("date", GetDisplayDateTime(comment.Date));
-											writer.WriteString(comment.Text ?? string.Empty);
-											writer.WriteEndElement(); //comment
-										}
-									}
-
-									writer.WriteEndElement(); //comments
-
-									writer.WriteEndElement(); //segment
-								}
-							}
-							writer.WriteEndElement(); //segments
-
-							writer.WriteEndElement(); //version
+							ProgressDialog.ProgressDialog.Current.ThrowIfCancellationPending();
 						}
-						writer.WriteEndElement(); //translations
+
+						current++;
+						var progress = current / maximum * 100;
+						ProgressDialog.ProgressDialog.Current.Report((int)progress, "File: " + projectFile.Name);
+
+
+						var projectFilePath = Path.Combine(project.Path, projectFile.Location);
+						var xliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId, projectFilePath,
+								targetLanguage.CultureInfo.Name);
+
+						var backTranslationProject = GetBackTranslationProject(project, targetLanguage.CultureInfo.Name);
+						var backTranslationFile = GetBackTranslationProjectFile(backTranslationProject, projectFile);
+						var xliffDataBackTranslation = GetBackTranslationXliffData(backTranslationProject, backTranslationFile, sdlxliffReader);
+
+						var fileName = projectFile.Name.Substring(0, projectFile.Name.LastIndexOf(".", StringComparison.Ordinal));
+						var reportFile = Path.Combine(workingLanguageFolder, fileName + ".xml");
+
+						using (var writer = XmlWriter.Create(reportFile, settings))
+						{
+							writer.WriteStartElement("task");
+							writer.WriteAttributeString("name", reportName);
+							writer.WriteAttributeString("created", dataTimeStampToString);
+
+							writer.WriteStartElement("taskInfo");
+							writer.WriteAttributeString("action", "SDL Transcreate Report");
+							writer.WriteAttributeString("file", projectFile.Path + projectFile.Name);
+							writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
+							writer.WriteAttributeString("runAt", GetDisplayDateTime(dateTimeStamp));
+
+
+							WriteReportProject(writer, "project", project);
+							WriteReportProject(writer, "backProject", backTranslationProject);
+
+							WriteReportLanguage(writer, "source", project.SourceLanguage.CultureInfo.Name);
+							WriteReportLanguage(writer, "target", targetLanguage.CultureInfo.Name);
+
+							WriteReportCustomer(writer, project);
+
+							WriteReportTranslationProviders(writer, studioProject);
+
+							writer.WriteEndElement(); //taskInfo
+
+
+							writer.WriteStartElement("translations");
+							foreach (var dataFile in xliffData.Files)
+							{
+								writer.WriteStartElement("version");
+								writer.WriteAttributeString("type", dataFile.Original);
+
+								var backTranslationDataFile =
+										xliffDataBackTranslation?.Files.FirstOrDefault(a => a.Original == dataFile.Original);
+
+								writer.WriteStartElement("segments");
+								foreach (var transUnit in dataFile.Body.TransUnits)
+								{
+									var textFunction = transUnit.Contexts.FirstOrDefault(
+											a => string.Compare(a.DisplayName, "Text Function", StringComparison.CurrentCultureIgnoreCase) == 0);
+
+									foreach (var segmentPair in transUnit.SegmentPairs)
+									{
+										writer.WriteStartElement("segment");
+
+										var backTranslationSegmentPair = GetBackTranslationSegmentPair(backTranslationDataFile, segmentPair);
+
+										writer.WriteAttributeString("id", segmentPair.Id);
+										writer.WriteAttributeString("textFunction", textFunction?.Description ?? string.Empty);
+
+										writer.WriteStartElement("source");
+										writer.WriteString(segmentPair.Source.ToString());
+										writer.WriteEndElement(); //source
+
+										writer.WriteStartElement("target");
+										writer.WriteString(segmentPair.Target.ToString());
+										writer.WriteEndElement(); //source
+
+										writer.WriteStartElement("back");
+										writer.WriteString(backTranslationSegmentPair?.Target?.ToString() ?? string.Empty);
+										writer.WriteEndElement(); //backTranslation
+
+										writer.WriteStartElement("comments");
+										var comments = GetSegmentComments(segmentPair.Target, xliffData.DocInfo);
+										if (comments != null)
+										{
+											foreach (var comment in comments)
+											{
+												writer.WriteStartElement("comment");
+												writer.WriteAttributeString("version", comment.Version);
+												writer.WriteAttributeString("author", comment.Author);
+												writer.WriteAttributeString("severity", comment.Severity.ToString());
+												writer.WriteAttributeString("date", GetDisplayDateTime(comment.Date));
+												writer.WriteString(comment.Text ?? string.Empty);
+												writer.WriteEndElement(); //comment
+											}
+										}
+
+										writer.WriteEndElement(); //comments
+
+										writer.WriteEndElement(); //segment
+									}
+								}
+								writer.WriteEndElement(); //segments
+
+								writer.WriteEndElement(); //version
+							}
+							writer.WriteEndElement(); //translations
+						}
+
+						// transform the file against an xslt
+						var templatePath = GetReportTemplatePath("TranscreateFinalReport.xsl");
+						var reportFilePath = CreateHtmlReportFile(reportFile, templatePath);
+
+
+						var report = new Report
+						{
+							Name = fileName,
+							Date = dateTimeStamp,
+							Description = "Transcreate Report",
+							Group = "Transcreate Report",
+							Language = targetLanguage.CultureInfo.Name,
+							Path = reportFilePath
+						};
+						reports.Add(report);
 					}
-
-					// transform the file against an xslt
-					var templatePath = GetReportTemplatePath("TranscreateFinalReport.xsl");
-					var reportFilePath = CreateHtmlReportFile(reportFile, templatePath);
-
-
-					var report = new Report
-					{
-						Name = fileName,
-						Date = dateTimeStamp,
-						Description = "Transcreate Report",
-						Group = "Transcreate Report",
-						Language = targetLanguage.CultureInfo.Name,
-						Path = reportFilePath
-					};
-					reports.Add(report);
 				}
+
+			}, progressSettings);
+
+			workingPathOut = workingPath;
+
+			if (result.Cancelled)
+			{
+				System.Windows.Forms.MessageBox.Show("Process cancelled by user.", PluginResources.Plugin_Name);
+				return new List<Report>();
 			}
 
 			return reports;
@@ -206,8 +230,8 @@ namespace Sdl.Community.Transcreate.Service
 			};
 
 			var projectFiles = taskContext.ProjectFiles.Where(a => a.Selected &&
-			                                                       string.Compare(a.TargetLanguage, targetLanguageCode,
-				                                                       StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+																   string.Compare(a.TargetLanguage, targetLanguageCode,
+																	   StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
 
 			var reportName = "";
 			switch (taskContext.Action)
@@ -408,7 +432,7 @@ namespace Sdl.Community.Transcreate.Service
 			return null;
 		}
 
-		
+
 
 		private void WriteReportTotal(XmlWriter writer, TaskContext taskContext, IReadOnlyCollection<ProjectFile> projectFiles)
 		{
@@ -501,7 +525,7 @@ namespace Sdl.Community.Transcreate.Service
 			}
 		}
 
-		private  void WriteReportProject(XmlWriter writer, string elementName, Interfaces.IProject project)
+		private void WriteReportProject(XmlWriter writer, string elementName, Interfaces.IProject project)
 		{
 			if (project == null)
 			{
@@ -521,7 +545,7 @@ namespace Sdl.Community.Transcreate.Service
 			var dueDateValue = project.DueDate.ToString(CultureInfo.InvariantCulture);
 
 			if (dueDateValue != minValue && dueDateValue != maxValue &&
-			    dueDateValue != utcMinValue && dueDateValue != utcMaxValue)
+				dueDateValue != utcMinValue && dueDateValue != utcMaxValue)
 			{
 				writer.WriteAttributeString("dueDate", GetDisplayDateTime(project.DueDate));
 			}

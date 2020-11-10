@@ -274,11 +274,6 @@
     <Compile Include="Model\ProjectSettings\SDLTranscreateProjectFileActivity.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\TaskReport.cs" />
-    <Compile Include="Model\Tasks\AutomaticTask.cs" />
-    <Compile Include="Model\Tasks\OutputFile.cs" />
-    <Compile Include="Model\Tasks\Report.cs" />
-    <Compile Include="Model\Tasks\TaskFile.cs" />
-    <Compile Include="Model\Tasks\TemplateId.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
     <Compile Include="Model\TaskContext.cs" />
     <Compile Include="Model\WizardException.cs" />
@@ -295,6 +290,13 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\FilterService.cs" />
     <Compile Include="Service\ImageService.cs" />
+    <Compile Include="Service\ProgressDialog\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ProgressDialog\ProgressDialogCancellationExcpetion.cs" />
+    <Compile Include="Service\ProgressDialog\ProgressDialogContext.cs" />
+    <Compile Include="Service\ProgressDialog\ProgressDialogResult.cs" />
+    <Compile Include="Service\ProgressDialog\ProgressDialogSettings.cs" />
     <Compile Include="Service\ProjectAutomationService.cs" />
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
@@ -483,6 +485,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\WizardProgressHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Service\ProgressDialog\ProgressDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

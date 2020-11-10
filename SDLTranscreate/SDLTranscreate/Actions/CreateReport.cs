@@ -52,8 +52,6 @@ namespace Sdl.Community.Transcreate.Actions
 				return;
 			}
 
-
-
 			var reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
 
 			var reports = reportService.CreateFinalReport(project, studioProject, out var workingPath);
@@ -74,8 +72,6 @@ namespace Sdl.Community.Transcreate.Actions
 					}
 				}
 			}
-
-
 		}
 
 		public void Run()

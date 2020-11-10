@@ -206,6 +206,7 @@ namespace Sdl.Community.Reports.Viewer
 		{
 			return ReportsController?.SelectedProject;
 		}
+
 		internal void Print()
 		{
 			_reportViewModel?.Print();
