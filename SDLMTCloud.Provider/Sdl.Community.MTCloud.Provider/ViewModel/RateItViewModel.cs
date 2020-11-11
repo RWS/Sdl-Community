@@ -172,12 +172,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			var improvement = GetImprovement(segmentId);
 
 			//Checking for consistency: whether translation corresponds to source
-			if (improvement != null && improvement.OriginalSource !=
-			    GetSourceSegment(segmentId))
+			if (improvement != null && improvement.OriginalSource != GetSourceSegment(segmentId))
 			{
 				_messageBoxService.ShowWarningMessage(
-					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName),
-					PluginResources.SourceModified);
+					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName), PluginResources.SourceModified);
 
 				return;
 			}

@@ -22,7 +22,5 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Feedback GetImprovement(SegmentId? segmentId = null);
 
 		void StartSupervising(ITranslationService translationService);
-
-		void StopSupervising();
 	}
 }
