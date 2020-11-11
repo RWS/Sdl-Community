@@ -15,6 +15,7 @@ using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Community.Transcreate.Service.ProgressDialog;
+using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Core;
@@ -70,9 +71,9 @@ namespace Sdl.Community.Transcreate.Actions
 			if (Directory.Exists(backTranslationsFolder))
 			{
 				var message01 = "The Back-Translations folder is not empty."
-				                + Environment.NewLine + Environment.NewLine
-				                + "'" + backTranslationsFolder + "'"
-				                + Environment.NewLine + Environment.NewLine;
+								+ Environment.NewLine + Environment.NewLine
+								+ "'" + backTranslationsFolder + "'"
+								+ Environment.NewLine + Environment.NewLine;
 				var message02 = "Do you want to proceed and delete this folder?";
 
 				var response = MessageBox.Show(message01 + message02, PluginResources.Plugin_Name,
@@ -82,16 +83,7 @@ namespace Sdl.Community.Transcreate.Actions
 					return;
 				}
 
-				try
-				{
-					Directory.Delete(backTranslationsFolder, true);
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK,
-						MessageBoxIcon.Exclamation);
-					return;
-				}
+				TryDeleteDirectory(backTranslationsFolder);
 			}
 
 
@@ -143,9 +135,9 @@ namespace Sdl.Community.Transcreate.Actions
 				}
 
 				ProgressDialog.Current.ProgressBarIsIndeterminate = false;
-
 				decimal maximum = project.TargetLanguages.Count;
 				decimal current = 0;
+
 				foreach (var targetLanguage in project.TargetLanguages)
 				{
 					if (ProgressDialog.Current.CheckCancellationPending())
@@ -198,6 +190,8 @@ namespace Sdl.Community.Transcreate.Actions
 					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(
 						studioProject, targetLanguage.CultureInfo.Name, iconPath, sourceFiles, "BT");
 
+					_projectAutomationService.RunPretranslationWithoutTm(newStudioProject);
+
 					var taskContext = CreateBackTranslationTaskContext(newStudioProject, languageFileData,
 						studioProjectInfo.LocalProjectFolder, sdlxliffReader, sdlxliffWriter, xliffWriter);
 
@@ -207,21 +201,9 @@ namespace Sdl.Community.Transcreate.Actions
 
 			}, progressSettings);
 
-			Enabled = false;
-
 			if (result.Cancelled || result.OperationFailed)
 			{
-				if (Directory.Exists(backTranslationsFolder))
-				{
-					try
-					{
-						Directory.Delete(backTranslationsFolder, true);
-					}
-					catch
-					{
-						// ignore catch all;
-					}
-				}
+				TryDeleteDirectory(backTranslationsFolder);
 
 				var message = result.Cancelled ? "Process cancelled by user." : result.Error?.Message;
 				MessageBox.Show(message, PluginResources.Plugin_Name);
@@ -232,10 +214,35 @@ namespace Sdl.Community.Transcreate.Actions
 			{
 				CleanupProjectSettings(taskContext.FileBasedProject);
 
+				ActivateProject(taskContext.FileBasedProject);
+				_projectAutomationService.RemoveLastReportOfType("Translate");
+
 				_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
+			}
+
+			Enabled = false;
+		}
+
+		private static void TryDeleteDirectory(string backTranslationsFolder)
+		{
+			if (Directory.Exists(backTranslationsFolder))
+			{
+				try
+				{
+					Directory.Delete(backTranslationsFolder, true);
+				}
+				catch
+				{
+					// ignore catch all;
+				}
 			}
 		}
 
+		private void ActivateProject(FileBasedProject project)
+		{
+			_controllers.ProjectsController.Close(project);
+			_controllers.ProjectsController.Add(project.FilePath);
+		}
 
 		private TaskContext CreateBackTranslationTaskContext(FileBasedProject newStudioProject,
 			IReadOnlyCollection<FileData> languageFileData, string localProjectFolder,
@@ -254,13 +261,14 @@ namespace Sdl.Community.Transcreate.Actions
 			taskContext.ExportOptions.IncludeTranslations = true;
 			taskContext.ExportOptions.CopySourceToTarget = false;
 
-			taskContext.FileBasedProject = newStudioProject;
+			
 			taskContext.LocalProjectFolder = newStudioProjectInfo.LocalProjectFolder;
 			taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
 
 			var workingProject = _projectAutomationService.GetProject(newStudioProject, null);
 			workingProject.ProjectFiles.RemoveAll(a => a.TargetLanguage == workingProject.SourceLanguage.CultureInfo.Name);
 			taskContext.Project = workingProject;
+			taskContext.FileBasedProject = newStudioProject;
 			taskContext.ProjectFiles = workingProject.ProjectFiles;
 
 			foreach (var projectFile in taskContext.ProjectFiles)
@@ -381,6 +389,17 @@ namespace Sdl.Community.Transcreate.Actions
 							}
 
 							segmentPair.Source.Elements.Add(targetElement);
+						}
+
+						var backTranslation = segmentPair.TranslationOrigin?.GetMetaData("back-translation");
+						if (backTranslation == null)
+						{
+							segmentPair.TranslationOrigin = null;
+							segmentPair.ConfirmationLevel = ConfirmationLevel.Unspecified;
+						}
+						else
+						{
+							segmentPair.ConfirmationLevel = ConfirmationLevel.Translated;
 						}
 					}
 				}

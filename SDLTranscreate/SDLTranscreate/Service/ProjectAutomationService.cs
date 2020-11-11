@@ -31,6 +31,47 @@ namespace Sdl.Community.Transcreate.Service
 			_customerProvider = customerProvider;
 		}
 
+		/// <summary>
+		/// Work around to ensure the project files have a segment pair container (e.g. segmented)
+		/// </summary>
+		/// <param name="project"></param>
+		public void RunPretranslationWithoutTm(FileBasedProject project)
+		{
+			var projectInfo = project.GetProjectInfo();
+			var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
+			var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
+
+			// temporarily remove tm resources, prior to performing a pretranslation task
+			translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+			project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
+
+			foreach (var language in project.GetProjectInfo().TargetLanguages)
+			{
+				var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
+				project.RunAutomaticTask(
+					targetGuids.ToArray(),
+					AutomaticTaskTemplateIds.PreTranslateFiles
+				);
+			}
+
+			// add back the tm resources
+			project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
+			project.UpdateProject(projectInfo);
+			project.Save();
+		}
+
+		public void RemoveLastReportOfType(string groupType)
+		{
+			var task = System.Threading.Tasks.Task.Run(async () => await _controller.ReportsController.GetReports(true));
+			System.Threading.Tasks.Task.WaitAll(task);
+
+			var report = task.Result?.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Group == groupType);
+			if (report != null)
+			{
+				_controller.ReportsController.RemoveReports(_controller.ClientId, new List<string> { report.Id });
+			}
+		}
+
 		public FileBasedProject CreateTranscreateProject(FileBasedProject project, string iconPath,
 			List<ProjectFile> projectFiles, string projectNameSuffix)
 		{
@@ -84,54 +125,9 @@ namespace Sdl.Community.Transcreate.Service
 				AutomaticTaskTemplateIds.CopyToTargetLanguages
 			);
 
-
-			foreach (var language in newProjectInfo.TargetLanguages)
-			{
-				var targetGuids = GetProjectFileGuids(newProject.GetTargetLanguageFiles(language));
-
-				newProject.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.AnalyzeFiles
-				);
-
-				newProject.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.PreTranslateFiles
-				);
-			}
-
 			newProject.Save();
 
 			return newProject;
-		}
-
-		public async System.Threading.Tasks.Task UpdateProjectFiles(FileBasedProject project)
-		{
-			var projectInfo = project.GetProjectInfo();
-			var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
-			var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
-			translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
-			project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
-
-			foreach (var language in project.GetProjectInfo().TargetLanguages)
-			{
-				var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
-				project.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.PreTranslateFiles
-				);
-			}
-
-			project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
-			project.UpdateProject(projectInfo);
-			project.Save();
-
-			var reports = await System.Threading.Tasks.Task.Run(() => _controller.ReportsController.GetReports(true));
-			var report = reports?.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Group == "Translate");
-			if (report != null)
-			{
-				_controller.ReportsController.RemoveReports(_controller.ClientId, new List<string> { report.Id });
-			}
 		}
 
 		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string targetLanguage, string iconPath,
@@ -196,22 +192,6 @@ namespace Sdl.Community.Transcreate.Service
 			newProject.RunAutomaticTask(
 				sourceGuids.ToArray(),
 				AutomaticTaskTemplateIds.CopyToTargetLanguages);
-
-
-			foreach (var language in newProjectInfo.TargetLanguages)
-			{
-				var targetGuids = GetProjectFileGuids(newProject.GetTargetLanguageFiles(language));
-
-				newProject.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.AnalyzeFiles
-				);
-
-				newProject.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.PreTranslateFiles
-				);
-			}
 
 			newProject.Save();
 			return newProject;

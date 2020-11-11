@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -271,7 +270,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 				var selectedProject = _controllers.ProjectsController.GetProjects()
 					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
-				await _projectAutomationService.UpdateProjectFiles(selectedProject);
+				_projectAutomationService.RunPretranslationWithoutTm(selectedProject);
+				_projectAutomationService.RemoveLastReportOfType("Translate");
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
 					TaskContext.ExportOptions, TaskContext.AnalysisBands);
@@ -1018,24 +1018,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private async Task UpdateProgress(JobProcess jobProcess, JobProcess.ProcessStatus status, int progress, string description)
 		{
-			await Owner.Dispatcher.InvokeAsync(delegate
-			{
-				jobProcess.Status = status;
-				jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
-				jobProcess.Description = description;
-			}, DispatcherPriority.ContextIdle);
+			jobProcess.Status = status;
+			jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
+			jobProcess.Description = description;
 
+			Refresh();
+		}
+
+		private void Refresh()
+		{
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{
-			void MethodInvokerDelegate()
-			{
-				IsProcessing = true;
-				StartProcessing();
-			}
-			ApplicationInstance.GetActiveForm().Invoke((MethodInvoker)MethodInvokerDelegate);
+			IsProcessing = true;
+			Refresh();
+			StartProcessing();
 		}
 
 		private void OnLeavePage(object sender, EventArgs e)
