@@ -30,6 +30,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		//	}
 		//}
 
+		public string OptionName { get; set; }
+
 		public string StudioActionId
 		{
 			get => _studioActionId;

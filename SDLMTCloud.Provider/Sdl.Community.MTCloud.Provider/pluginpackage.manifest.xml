@@ -5,8 +5,12 @@
 	<Description>SDL Machine Translation Cloud provider</Description>
 	<Author>SDL Community Developers</Author>
 	<Include>
+		<File>MahApps.Metro.dll</File>
+		<File>System.Windows.Interactivity.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Microsoft.Office.Interop.Excel.dll</File>
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>
+		<File>Sdl.Community.RateItControl.dll</File>
 	</Include>
 	<RequiredProduct name="SDLTradosStudio" minversion="16.0" />
 </PluginPackage>
