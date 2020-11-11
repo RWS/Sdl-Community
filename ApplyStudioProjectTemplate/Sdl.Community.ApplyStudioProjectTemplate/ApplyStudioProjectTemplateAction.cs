@@ -269,6 +269,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 						if (selectedTemplate.TerminologyTermbases == ApplyTemplateOptions.Merge)
 						{
+							if (targetTermbaseConfig.TermbaseServerUri is null)
+							{
+								targetTermbaseConfig.TermbaseServerUri = sourceTermbaseConfig.TermbaseServerUri;
+							}
+							if (!targetTermbaseConfig.Termbases.Any())
+							{
+								targetTermbaseConfig.Termbases?.AddRange(sourceTermbaseConfig.Termbases);
+							}
 							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig);
 						}
 						else
@@ -482,7 +490,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					try
 					{
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
-						project.GetType().GetMethod("UpdateServerProjectSettings").Invoke(project, new object[] { false });
+						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
+						updateServerMethod?.Invoke(project, new object[] { "UpdateServerProjectSettingsOperation", new object[] { true } });
 					}
 					catch (Exception e)
 					{
@@ -654,7 +663,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			// Merge the language indexes
 			foreach (var sourceLanguageIndex in sourceTermbaseConfig.LanguageIndexes)
 			{
-				bool foundIndex = targetTermbaseConfig.LanguageIndexes.Any(targetLanguageIndex => sourceLanguageIndex.ProjectLanguage.Equals(targetLanguageIndex.ProjectLanguage));
+				var foundIndex = targetTermbaseConfig.LanguageIndexes.Any(targetLanguageIndex => sourceLanguageIndex.ProjectLanguage.Equals(targetLanguageIndex.ProjectLanguage));
 
 				// If we didn't find an entry for this language then add it to the target project
 				if (!foundIndex)
