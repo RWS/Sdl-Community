@@ -17,9 +17,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private readonly EditorController _editorController;
 		private Guid _docId;
 		private ITranslationService _translationService;
-		private bool _translationReceivedButNotHandled;
-		private string _translationSource;
-		private string _translationTarget;
 
 		public SegmentSupervisor(EditorController editorController)
 		{
@@ -49,8 +46,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
 			Feedback improvement = null;
 
-			var segmentHasImprovement = currentSegment != null &&
-										ActiveDocumentImprovements.ContainsKey(currentSegment.Value);
+			var segmentHasImprovement = currentSegment != null && ActiveDocumentImprovements.ContainsKey(currentSegment.Value);
 			if (segmentHasImprovement)
 			{
 				improvement = ActiveDocumentImprovements[currentSegment.Value];
@@ -60,25 +56,27 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public void StartSupervising(ITranslationService translationService)
 		{
-			StopSupervising();
+			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+
+			if (ActiveDocument != null)
+			{
+				ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
+			}
 
 			_translationService = translationService;
 
-			SubscribeUnsubscribeToTranslationReceivedEvent(true);
+			if (_translationService != null)
+			{
+				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
+				_translationService.TranslationReceived += TranslationService_TranslationReceived;
+			}
 
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
-			if (ActiveDocument == null) return;
-			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
-		}
-
-		public void StopSupervising()
-		{
-			SubscribeUnsubscribeToTranslationReceivedEvent(false);
-			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
-
-			if (ActiveDocument == null) return;
-			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
+			if (ActiveDocument != null)
+			{
+				ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+			}
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
@@ -138,20 +136,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (!Improvements.ContainsKey(_docId))
 			{
 				Improvements[_docId] = new Dictionary<SegmentId, Feedback>();
-			}
-		}
-
-		public void SubscribeUnsubscribeToTranslationReceivedEvent(bool subSwitch)
-		{
-			if (_translationService == null) return;
-			if (subSwitch)
-			{
-				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
-				_translationService.TranslationReceived += TranslationService_TranslationReceived;
-			}
-			else
-			{
-				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
 			}
 		}
 

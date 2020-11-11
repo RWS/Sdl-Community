@@ -29,19 +29,22 @@
 	</ControlTemplate>
 	<ControlTemplate x:Key="SendFeedbackControlTemplateSecondary" TargetType="{x:Type Button}">
 		<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="4" SnapsToDevicePixels="True" Uid="Border_1">
-			<ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Uid="ContentPresenter_2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+			<ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" 
+			                  ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+			                  Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Uid="ContentPresenter_2" 
+			                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 		</Border>
 		<ControlTemplate.Triggers>
 			<Trigger Property="IsDefaulted" Value="True">
-				<Setter Property="BorderBrush" TargetName="border" Value="#FFCACFD3"/>
+				<Setter Property="BorderBrush" TargetName="border" Value="#358AF8"/>
 			</Trigger>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Background" TargetName="border" Value="#FFCFD4D7"/>
-				<Setter Property="BorderBrush" TargetName="border" Value="#FFCACFD3"/>
+				<Setter Property="Background" TargetName="border" Value="#3372BF"/>
+				<Setter Property="BorderBrush" TargetName="border" Value="#3372BF"/>
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Background" TargetName="border" Value="#FFCFD4D7"/>
-				<Setter Property="BorderBrush" TargetName="border" Value="#FFCACFD3"/>
+				<Setter Property="Background" TargetName="border" Value="#358AF8"/>
+				<Setter Property="BorderBrush" TargetName="border" Value="#358AF8"/>
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
 				<Setter Property="Background" TargetName="border" Value="#88E1E7EB"/>
@@ -56,8 +59,8 @@
 		<Style.Triggers>
 			<DataTrigger Binding="{Binding AutoSendFeedback}" Value="True">
 				<Setter Property="Template" Value="{StaticResource SendFeedbackControlTemplateSecondary}"/>
-				<Setter Property="Background" Value="#FFE1E7EB"/>
-				<Setter Property="BorderBrush" Value="#CACFD3"/>
+				<Setter Property="Background" Value="#358AF8"/>
+				<Setter Property="BorderBrush" Value="#3372BF"/>
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>
