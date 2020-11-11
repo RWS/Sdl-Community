@@ -386,15 +386,15 @@
     <value> (original MT Cloud translation is missing)</value>
   </data>
   <data name="ResponseFromServer" xml:space="preserve">
-	  <value>{0}
+    <value>{0}
 Response from SDL MT Cloud: 
 {1}
 </value>
   </data>
   <data name="SentWithNoImprovement" xml:space="preserve">
-	  <value>Sent with the original translation as improvement.</value>
+    <value>Sent with the original translation as improvement.</value>
   </data>
   <data name="SDLMTCloudUri" xml:space="preserve">
-	  <value>sdlmtcloud:///</value>
+    <value>sdlmtcloud:///</value>
   </data>
 </root>
