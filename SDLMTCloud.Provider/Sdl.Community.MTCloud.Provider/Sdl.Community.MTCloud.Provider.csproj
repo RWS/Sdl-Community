@@ -61,7 +61,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\Bin\Mixed Platforms\Debug\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
