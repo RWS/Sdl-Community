@@ -137,6 +137,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public void RefreshView(Settings settings, List<Report> reports)
 		{
+			ClearVisibleReports();
+
 			Settings = settings;
 			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 			OnPropertyChanged(nameof(GroupType));
@@ -489,6 +491,26 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			{
 				groupItem.IsExpanded = true;
 				reportGroup.IsExpanded = true;
+			}
+		}
+
+		private void ClearVisibleReports()
+		{
+			if (SelectedItem is Report)
+			{
+				SelectedReport = null;
+			}
+
+			if (SelectedItem is GroupItem)
+			{
+				SelectedReport = null;
+				ReportViewModel.UpdateData(new List<Report>());
+			}
+
+			if (SelectedItem is ReportGroup)
+			{
+				SelectedReport = null;
+				ReportViewModel.UpdateData(new List<Report>());
 			}
 		}
 
