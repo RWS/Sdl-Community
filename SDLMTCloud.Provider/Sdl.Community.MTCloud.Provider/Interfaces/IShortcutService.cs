@@ -3,7 +3,7 @@
 	public delegate void ShortcutChangedEventRaiser();
 	public interface IShortcutService
 	{
-		string GetShotcutDetails(string actionId);
+		string GetShortcutDetails(string actionId);
 		event ShortcutChangedEventRaiser StudioShortcutChanged;
 	}
 }
