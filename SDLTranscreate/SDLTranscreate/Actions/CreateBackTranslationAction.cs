@@ -217,8 +217,13 @@ namespace Sdl.Community.Transcreate.Actions
 				ActivateProject(taskContext.FileBasedProject);
 				_projectAutomationService.RemoveLastReportOfType("Translate");
 
+				var reports = _controllers.TranscreateController.CreateHtmlReports(taskContext, taskContext.FileBasedProject, taskContext.Project);
+				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId, reports);
+
 				_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
 			}
+
+			_controllers.TranscreateController.InvalidateProjectsContainer();
 
 			Enabled = false;
 		}

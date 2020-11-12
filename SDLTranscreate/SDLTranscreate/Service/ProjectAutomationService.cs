@@ -41,6 +41,17 @@ namespace Sdl.Community.Transcreate.Service
 			var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
 			var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
 
+			var languageTranslationProviderConfigurations = new Dictionary<Language, TranslationProviderConfiguration>();
+			foreach (var language in projectInfo.TargetLanguages)
+			{
+				var languageTranslationProviderConfigurationClone = project.GetTranslationProviderConfiguration(language);
+				languageTranslationProviderConfigurations.Add(language, languageTranslationProviderConfigurationClone);
+				
+				var languageTranslationProviderConfiguration = project.GetTranslationProviderConfiguration(language);
+				languageTranslationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfiguration);
+			}
+
 			// temporarily remove tm resources, prior to performing a pretranslation task
 			translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
 			project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
@@ -56,6 +67,11 @@ namespace Sdl.Community.Transcreate.Service
 
 			// add back the tm resources
 			project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
+			foreach (var language in projectInfo.TargetLanguages)
+			{
+				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfigurations[language]);
+			}
+
 			project.UpdateProject(projectInfo);
 			project.Save();
 		}

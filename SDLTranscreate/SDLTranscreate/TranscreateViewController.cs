@@ -178,6 +178,15 @@ namespace Sdl.Community.Transcreate
 			}
 		}
 
+		public void InvalidateProjectsContainer()
+		{
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = new List<IProject>();
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
+		}
+
 		public List<IProject> GetProjects()
 		{
 			return _transcreateProjects;
@@ -311,15 +320,10 @@ namespace Sdl.Community.Transcreate
 				return;
 			}
 
-			if (taskContext.Project.Id != _projectsController.CurrentProject?.GetProjectInfo().Id.ToString())
-			{
-				_projectsController.Open(fileBasedProject);
-			}
 
 			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
 			taskContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
 																 StringComparison.CurrentCultureIgnoreCase) == 0);
-
 			var backTranslationProject = parentProject.BackTranslationProjects.FirstOrDefault(a => a.Id == taskContext.Project.Id);
 			if (backTranslationProject == null)
 			{
@@ -368,15 +372,74 @@ namespace Sdl.Community.Transcreate
 				}
 			}
 
-			CreateReports(taskContext, fileBasedProject, backTranslationProject);
 			UpdateBackTranslationProjectSettingsBundle(parentProject);
+		}
 
+		public List<Report> CreateHtmlReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject backTranslationProject)
+		{
+			var reports = new List<Report>();
+			var reportTemplate = GetReportTemplatePath("TranscreateReport.xsl");
+			var projectInfo = studioParentProject.GetProjectInfo();
 
-			if (_projectsNavigationViewModel != null)
+			var languageDirections = GetLanguageDirectionFiles(studioParentProject.FilePath, taskContext);
+
+			foreach (var languageDirection in languageDirections)
 			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
+				var reportName = string.Format("{0}_{1}_{2}_{3}.xml",
+					taskContext.Action.ToString().Replace(" ", ""),
+					taskContext.DateTimeStampToString,
+					languageDirection.Key.SourceLanguageCode,
+					languageDirection.Key.TargetLanguageCode);
+
+				var projectsReportsFolder = Path.Combine(projectInfo.LocalProjectFolder, "Reports");
+				if (!Directory.Exists(projectsReportsFolder))
+				{
+					Directory.CreateDirectory(projectsReportsFolder);
+				}
+
+				var reportFile = Path.Combine(taskContext.WorkingFolder, reportName);
+
+				var projectReportsFilePath = Path.Combine(projectsReportsFolder, reportName);
+
+				_reportService.CreateTaskReport(taskContext, reportFile, studioParentProject, languageDirection.Key.TargetLanguageCode);
+
+				// Copy to project reports folder
+				File.Copy(reportFile, projectReportsFilePath, true);
+
+				var htmlReportFilePath = CreateHtmlReportFile(reportFile, reportTemplate);
+
+				var report = new Report
+				{
+					Language = languageDirection.Key.TargetLanguageCode,
+					Path = reportFile,
+					XsltPath = reportTemplate,
+					Date = DateTime.Now
+				};
+				AssingReportProperties(taskContext.Action, report);
+
+				reports.Add(report);
+
+				foreach (var wcProjectFile in taskContext.ProjectFiles)
+				{
+					if (!wcProjectFile.Selected || string.Compare(wcProjectFile.TargetLanguage, report.Language,
+						StringComparison.CurrentCultureIgnoreCase) != 0)
+					{
+						continue;
+					}
+
+					UpdateTaskContextFiles(taskContext.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
+					UpdateTaskContextFiles(backTranslationProject.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
+				}
 			}
+
+			return reports;
+		}
+
+		private void CreateReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject backTranslationProject)
+		{
+			var reports = CreateHtmlReports(taskContext, studioParentProject, backTranslationProject);
+
+			ReportsController.AddReports(ClientId, reports);
 		}
 
 		private List<SDLTranscreateProjectFile> GetSDLTranscreateProjectFiles(IProject project)
@@ -430,13 +493,6 @@ namespace Sdl.Community.Transcreate
 			}
 
 			return projectFiles;
-		}
-
-		private void CreateReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject backTranslationProject)
-		{
-			var reports = CreateHtmlReports(taskContext, studioParentProject, backTranslationProject);
-
-			ReportsController.AddReports(ClientId, reports);
 		}
 
 		private void UpdateProjectSettingsBundle(IProject project)
@@ -521,7 +577,7 @@ namespace Sdl.Community.Transcreate
 					return false;
 				}
 
-				if (projectInfo.ProjectOrigin == "Back-Translation Project")
+				if (IsBackTranslationProject(projectInfo.ProjectOrigin))
 				{
 					return false;
 				}
@@ -704,66 +760,6 @@ namespace Sdl.Community.Transcreate
 			wcProjectFile.Report = GetRelativePath(project.Path, wcProjectFile.Report);
 		}
 
-		private List<Report> CreateHtmlReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject backTranslationProject)
-		{
-			var reports = new List<Report>();
-			var reportTemplate = GetReportTemplatePath("TranscreateReport.xsl");
-			var projectInfo = studioParentProject.GetProjectInfo();
-
-			var languageDirections = GetLanguageDirectionFiles(studioParentProject.FilePath, taskContext);
-
-			foreach (var languageDirection in languageDirections)
-			{
-				var reportName = string.Format("{0}_{1}_{2}_{3}.xml",
-					taskContext.Action.ToString().Replace(" ", ""),
-					taskContext.DateTimeStampToString,
-					languageDirection.Key.SourceLanguageCode,
-					languageDirection.Key.TargetLanguageCode);
-
-				var projectsReportsFolder = Path.Combine(projectInfo.LocalProjectFolder, "Reports");
-				if (!Directory.Exists(projectsReportsFolder))
-				{
-					Directory.CreateDirectory(projectsReportsFolder);
-				}
-
-				var reportFile = Path.Combine(taskContext.WorkingFolder, reportName);
-
-				var projectReportsFilePath = Path.Combine(projectsReportsFolder, reportName);
-
-				_reportService.CreateTaskReport(taskContext, reportFile, studioParentProject, languageDirection.Key.TargetLanguageCode);
-
-				// Copy to project reports folder
-				File.Copy(reportFile, projectReportsFilePath, true);
-
-				var htmlReportFilePath = CreateHtmlReportFile(reportFile, reportTemplate);
-
-				var report = new Report
-				{
-					Language = languageDirection.Key.TargetLanguageCode,
-					Path = reportFile,
-					XsltPath = reportTemplate,
-					Date = DateTime.Now
-				};
-				AssingReportProperties(taskContext.Action, report);
-
-				reports.Add(report);
-
-				foreach (var wcProjectFile in taskContext.ProjectFiles)
-				{
-					if (!wcProjectFile.Selected || string.Compare(wcProjectFile.TargetLanguage, report.Language,
-						StringComparison.CurrentCultureIgnoreCase) != 0)
-					{
-						continue;
-					}
-
-					UpdateTaskContextFiles(taskContext.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
-					UpdateTaskContextFiles(backTranslationProject.ProjectFiles, taskContext.LocalProjectFolder, wcProjectFile.FileId, htmlReportFilePath);
-				}
-			}
-
-			return reports;
-		}
-
 		private void AssingReportProperties(Enumerators.Action action, Report report)
 		{
 			switch (action)
@@ -929,6 +925,50 @@ namespace Sdl.Community.Transcreate
 			return null;
 		}
 
+		private bool AddNewProjectFiles(FileBasedProject fileBasedProject, IProject project)
+		{
+			var addedNewFiles = false;
+			var projectInfo = fileBasedProject.GetProjectInfo();
+
+			foreach (var targetLanguage in projectInfo.TargetLanguages)
+			{
+				var projectFiles = fileBasedProject.GetTargetLanguageFiles(targetLanguage);
+				foreach (var projectFile in projectFiles)
+				{
+					if (projectFile.Role != FileRole.Translatable)
+					{
+						continue;
+					}
+
+					var xliffFile = project.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.Id.ToString());
+					if (xliffFile == null)
+					{
+						addedNewFiles = true;
+						var file = new ProjectFile
+						{
+							ProjectId = projectInfo.Id.ToString(),
+							FileId = projectFile.Id.ToString(),
+							Name = projectFile.Name,
+							Path = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.Folder),
+							Location = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.LocalFilePath),
+							Action = Enumerators.Action.None,
+							WorkFlow = Enumerators.WorkFlow.None,
+							Status = Enumerators.Status.Ready,
+							Date = DateTime.MinValue,
+							TargetLanguage = targetLanguage.CultureInfo.Name,
+							Selected = false,
+							FileType = projectFile.FileTypeId,
+							Project = project
+						};
+
+						project.ProjectFiles.Add(file);
+					}
+				}
+			}
+
+			return addedNewFiles;
+		}
+
 		private string GetRelativePath(string projectPath, string path)
 		{
 			if (string.IsNullOrEmpty(path))
@@ -937,6 +977,12 @@ namespace Sdl.Community.Transcreate
 			}
 
 			return path.Replace(projectPath.Trim('\\') + '\\', string.Empty);
+		}
+
+		private bool IsBackTranslationProject(string projectOrigin)
+		{
+			return string.Compare(projectOrigin, "Back-Translation project",
+				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 
 		private void EditorController_Opened(object sender, DocumentEventArgs e)
@@ -956,7 +1002,7 @@ namespace Sdl.Community.Transcreate
 				var language = document?.Language;
 
 				IProject parentProject = null;
-				var transcreateProject = projectInfo.ProjectOrigin == "Back-Translation Project"
+				var transcreateProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 					? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out parentProject)
 					: GetProjects().FirstOrDefault(a => a.Id == projectId);
 
@@ -1096,7 +1142,7 @@ namespace Sdl.Community.Transcreate
 				var language = document?.Language;
 
 				IProject parentProject = null;
-				var transcreateProject = projectInfo.ProjectOrigin == "Back-Translation Project"
+				var transcreateProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 					? GetBackTranslationProjectProject(projectId, out parentProject)
 					: GetProjects().FirstOrDefault(a => a.Id == projectId);
 
@@ -1400,50 +1446,6 @@ namespace Sdl.Community.Transcreate
 			}
 		}
 
-		private bool AddNewProjectFiles(FileBasedProject project, IProject xliffProject)
-		{
-			var addedNewFiles = false;
-			var projectInfo = project.GetProjectInfo();
-
-			foreach (var targetLanguage in projectInfo.TargetLanguages)
-			{
-				var projectFiles = project.GetTargetLanguageFiles(targetLanguage);
-				foreach (var projectFile in projectFiles)
-				{
-					if (projectFile.Role != FileRole.Translatable)
-					{
-						continue;
-					}
-
-					var xliffFile = xliffProject.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.Id.ToString());
-					if (xliffFile == null)
-					{
-						addedNewFiles = true;
-						var file = new ProjectFile
-						{
-							ProjectId = projectInfo.Id.ToString(),
-							FileId = projectFile.Id.ToString(),
-							Name = projectFile.Name,
-							Path = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.Folder),
-							Location = GetRelativePath(projectInfo.LocalProjectFolder, projectFile.LocalFilePath),
-							Action = Enumerators.Action.None,
-							WorkFlow = Enumerators.WorkFlow.None,
-							Status = Enumerators.Status.Ready,
-							Date = DateTime.MinValue,
-							TargetLanguage = targetLanguage.CultureInfo.Name,
-							Selected = false,
-							FileType = projectFile.FileTypeId,
-							Project = xliffProject
-						};
-
-						xliffProject.ProjectFiles.Add(file);
-					}
-				}
-			}
-
-			return addedNewFiles;
-		}
-
 		private bool UnloadRemovedProjectsFromContainer()
 		{
 			var updated = false;
@@ -1463,7 +1465,7 @@ namespace Sdl.Community.Transcreate
 		private List<IProject> GetRemovedProjects()
 		{
 			var removedProjects = new List<Interfaces.IProject>();
-			var studioProjects = _projectsController.GetAllProjects().ToList();
+			var studioProjects = _projectsController.GetProjects().ToList();
 			foreach (var project in _transcreateProjects)
 			{
 				var studioProject = studioProjects.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
@@ -1484,7 +1486,7 @@ namespace Sdl.Community.Transcreate
 			{
 				if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
 				{
-					var fileBasedProject = _projectsController.GetAllProjects()
+					var fileBasedProject = _projectsController.GetProjects()
 						.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
 
 					if (fileBasedProject != null)
@@ -1516,6 +1518,7 @@ namespace Sdl.Community.Transcreate
 				updated = UnloadRemovedProjectsFromContainer();
 			}
 
+			// TODO
 			var updatedProjectSelection = UpdateProjectSelectionFromProjectsController();
 
 			if (updated && _projectsNavigationViewModel != null)
@@ -1534,7 +1537,7 @@ namespace Sdl.Community.Transcreate
 				var projectInfo = _projectsController.CurrentProject.GetProjectInfo();
 				var projectId = projectInfo.Id.ToString();
 				IProject parentProject = null;
-				var transcreateProject = projectInfo.ProjectOrigin == "Back-Translation Project"
+				var transcreateProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 					? GetBackTranslationProjectProject(projectId, out parentProject)
 					: GetProjects().FirstOrDefault(a => a.Id == projectId);
 
