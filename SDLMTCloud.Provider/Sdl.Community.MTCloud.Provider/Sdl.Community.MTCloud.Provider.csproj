@@ -155,7 +155,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Presentation" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -441,6 +440,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.19</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.0.0</Version>

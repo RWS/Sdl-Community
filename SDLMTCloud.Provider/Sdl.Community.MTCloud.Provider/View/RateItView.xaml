@@ -8,7 +8,7 @@
 			 xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
 			 xmlns:converters ="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
              xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:status="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
              d:DataContext="{d:DesignInstance viewModel:RateItViewModel}"
              mc:Ignorable="d" 
