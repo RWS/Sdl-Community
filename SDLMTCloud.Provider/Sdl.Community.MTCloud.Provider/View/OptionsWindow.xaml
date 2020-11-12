@@ -34,13 +34,12 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
-				<Setter Property="Margin" Value="15,5,15,15"/>
+				<Setter Property="Margin" Value="15 5 0 5"/>
 				<Setter Property="FontFamily" Value="Segoe UI"/>
 				<Setter Property="Foreground" Value="#333232"/>
 				<Setter Property="FontSize" Value="13"/>
@@ -173,7 +172,7 @@
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal">
-													<Image Source="../Resources/AdaptiveEngine.ico" Width="15" Height="15" Margin="5,0,10,0" />
+													<Image Source="../Resources/NMT.ico" Width="15" Height="15" Margin="5,0,10,0" />
 													<TextBlock Text="{Binding DisplayName}" ToolTip="{Binding DisplayName}"
 													   Margin="10,2,10,0" FontFamily="Calibri" VerticalAlignment="Center"/>
 												</StackPanel>
@@ -210,9 +209,23 @@
 						</DataGridTemplateColumn>
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
-				<DockPanel Grid.Row="1">
+				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
-				</DockPanel>
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
+						          IsChecked="{Binding SendFeedback}"
+						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
+					<Button Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					        Content="To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki."
+					        Command="{Binding NavigateToWikiCommand}"
+							FontSize="13"
+							HorizontalAlignment="Left"
+					        Margin="15 5 0 5"/>
+					<!--<TextBlock Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}" Margin="15 5 0 5">
+							<Hyperlink Command="{Binding NavigateToWikiCommand}">
+								To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.
+							</Hyperlink>
+					</TextBlock>-->
+				</StackPanel>
 			</Grid >
 
 			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">
