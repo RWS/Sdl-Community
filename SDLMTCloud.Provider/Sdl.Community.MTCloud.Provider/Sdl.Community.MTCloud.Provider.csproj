@@ -134,7 +134,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Printing" />
-    <Reference Include="System.Reactive, Version=4.3.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+    <Reference Include="System.Reactive, Version=4.3.0.0">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\System.Reactive.dll</HintPath>
     </Reference>

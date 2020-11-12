@@ -10,9 +10,12 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.FileTypeSupport.Framework.Formatting;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using LogManager = NLog.LogManager;
 
@@ -37,6 +40,27 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_projectsController = projectsController;
 
 			LoadState(translationProviderState);
+
+			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
+			eventAggregator.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
+		}
+
+		private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
+		{
+			if (!tpInfo.TpUri.ToString().Contains(PluginResources.SDLMTCloudUri)) return;
+			SwitchRateTranslationsControllerVisibility(tpInfo.NewStatus ?? false);
+		}
+
+		private void SwitchRateTranslationsControllerVisibility(bool onOffSwitch)
+		{
+			if (!onOffSwitch)
+			{
+				_rateItController?.Hide();
+			}
+			if (onOffSwitch)
+			{
+				_rateItController?.Activate();
+			}
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
@@ -86,7 +110,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public Options Options
 		{
 			get => TranslationService.Options;
-			set => TranslationService.Options = value;
+			set
+			{
+				TranslationService.Options = value;
+				TranslationService.Options.PropertyChanged += (s, e) => 
+				{
+					SwitchRateTranslationsControllerVisibility(((Options)s).SendFeedback);
+				};
+			}
 		}
 
 		public ITranslationService TranslationService { get; }
@@ -380,9 +411,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					_rateItController = SdlTradosStudio.Application.GetController<RateItController>();
 
 					if (_rateItController == null) return;
-
 					_rateItController.RateIt.SetTranslationService(TranslationService);
-					_rateItController.Activate();
+					SwitchRateTranslationsControllerVisibility(TranslationService?.Options?.SendFeedback ?? true);
 				});
 			}
 			catch
