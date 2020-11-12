@@ -16,7 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			set
 			{
 				sendFeedback = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(SendFeedback);
 			}
 		}
 	}
