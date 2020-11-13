@@ -44,14 +44,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		}
 
 		/// <summary>
-		/// Get installed version for Studio 2019
+		/// Get current Studio version 
 		/// </summary>
 		/// <returns>studio version</returns>
 		public string GetStudioVersion()
 		{
 			try
 			{
-				var studioVersion = new StudioVersionService().GetInstalledStudioVersions()?.FirstOrDefault(v => v.Version.Equals("Studio15"));
+				var studioVersion = new StudioVersionService().GetStudioVersion();
 				if (studioVersion != null)
 				{
 					return $"{studioVersion.PublicVersion}-{studioVersion.ExecutableVersion}";
