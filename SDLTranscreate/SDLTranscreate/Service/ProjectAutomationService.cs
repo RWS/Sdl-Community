@@ -46,7 +46,7 @@ namespace Sdl.Community.Transcreate.Service
 			{
 				var languageTranslationProviderConfigurationClone = project.GetTranslationProviderConfiguration(language);
 				languageTranslationProviderConfigurations.Add(language, languageTranslationProviderConfigurationClone);
-				
+
 				var languageTranslationProviderConfiguration = project.GetTranslationProviderConfiguration(language);
 				languageTranslationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
 				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfiguration);
@@ -85,6 +85,17 @@ namespace Sdl.Community.Transcreate.Service
 			if (report != null)
 			{
 				_controller.ReportsController.RemoveReports(_controller.ClientId, new List<string> { report.Id });
+			}
+		}
+
+		public void RemoveAllReports()
+		{
+			var task = System.Threading.Tasks.Task.Run(async () => await _controller.ReportsController.GetReports(true));
+			System.Threading.Tasks.Task.WaitAll(task);
+
+			if (task.Result != null)
+			{
+				_controller.ReportsController.RemoveReports(_controller.ClientId, task.Result.Select(a => a.Id).ToList());
 			}
 		}
 

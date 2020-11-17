@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.CustomEventArgs;
@@ -29,7 +30,7 @@ namespace Sdl.Community.Transcreate.Actions
 		Name = "TranscreateManager_CreateBackTranslationProject_Name",
 		Description = "TranscreateManager_CreateBackTranslationProject_Description",
 		ContextByType = typeof(TranscreateViewController),
-		Icon = "sdl_transcreate_back"
+		Icon = "back_translation"
 		)]
 	[ActionLayout(typeof(TranscreateManagerActionsGroup), 3, DisplayType.Large)]
 	public class CreateBackTranslationAction : AbstractViewControllerAction<TranscreateViewController>
@@ -212,14 +213,9 @@ namespace Sdl.Community.Transcreate.Actions
 
 			foreach (var taskContext in taskContexts)
 			{
-				CleanupProjectSettings(taskContext.FileBasedProject);
-
 				ActivateProject(taskContext.FileBasedProject);
-				_projectAutomationService.RemoveLastReportOfType("Translate");
-
-				var reports = _controllers.TranscreateController.CreateHtmlReports(taskContext, taskContext.FileBasedProject, taskContext.Project);
-				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId, reports);
-
+				_projectAutomationService.RemoveAllReports();
+				UpdateProjectSettingsBundle(taskContext.FileBasedProject);
 				_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
 			}
 
@@ -245,8 +241,17 @@ namespace Sdl.Community.Transcreate.Actions
 
 		private void ActivateProject(FileBasedProject project)
 		{
-			_controllers.ProjectsController.Close(project);
-			_controllers.ProjectsController.Add(project.FilePath);
+			var projectId = project.GetProjectInfo().Id.ToString();
+			var selectedProjectId = _controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id.ToString();
+			if (projectId != selectedProjectId)
+			{
+				Dispatcher.CurrentDispatcher.Invoke(delegate
+				{
+					_controllers.ProjectsController.Open(project);
+				}, DispatcherPriority.ContextIdle);
+			}
+
+			Dispatcher.CurrentDispatcher.Invoke(delegate{}, DispatcherPriority.ContextIdle);
 		}
 
 		private TaskContext CreateBackTranslationTaskContext(FileBasedProject newStudioProject,
@@ -464,7 +469,7 @@ namespace Sdl.Community.Transcreate.Actions
 			}
 			finally
 			{
-				_controllers.ProjectsController.Add(newStudioProject.FilePath);
+				_controllers.ProjectsController.Open(newStudioProject);
 			}
 		}
 
@@ -477,19 +482,15 @@ namespace Sdl.Community.Transcreate.Actions
 		{
 			var settingsBundle = project.GetSettings();
 			var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
-
 			var projectFiles = new List<SDLTranscreateProjectFile>();
 			sdlTranscreateProject.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles);
-
 			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
-			project.Save();
-
-
+			
 			var sdlBackTranslateProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
 			var backProjects = new List<SDLTranscreateBackProject>();
 			sdlBackTranslateProjects.BackProjectsJson.Value = JsonConvert.SerializeObject(backProjects);
-
 			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
+
 			project.Save();
 		}
 
@@ -566,12 +567,12 @@ namespace Sdl.Community.Transcreate.Actions
 
 		private string GetBackTranslationIconPath()
 		{
-			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "BackTranslation.ico");
+			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "SDLBackTranslation.ico");
 			if (!File.Exists(iconPath))
 			{
 				using (var fs = new FileStream(iconPath, FileMode.Create))
 				{
-					PluginResources.sdl_transcreate_back.Save(fs);
+					PluginResources.back_translation_small.Save(fs);
 				}
 			}
 

@@ -124,19 +124,19 @@
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
-													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="Source" Value="../Resources/export_small.ico"/>
 													<Setter Property="ToolTip" Value="Exported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Import">
-													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="Source" Value="../Resources/import_small.ico"/>
 													<Setter Property="ToolTip" Value="Imported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="ExportBackTranslation">
-													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="Source" Value="../Resources/export_small.ico"/>
 													<Setter Property="ToolTip" Value="Exported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="ImportBackTranslation">
-													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="Source" Value="../Resources/import_small.ico"/>
 													<Setter Property="ToolTip" Value="Imported"/>
 												</DataTrigger>
 											</Style.Triggers>
@@ -187,14 +187,14 @@
 					<MenuItem Header="Export files" Command="{Binding ExportFilesCommand}" 
 					          IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
-							<Image Source="../Resources/export.ico"/>
+							<Image Source="../Resources/export_small.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Import files" 
 					          Command="{Binding ImportFilesCommand}" 
 					          IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
-							<Image Source="../Resources/import.ico"/>
+							<Image Source="../Resources/import_small.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>

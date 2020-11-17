@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -115,7 +116,6 @@ namespace Sdl.Community.Transcreate
 				UpdateProjectSelectionFromProjectsController();
 
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
-
 			}
 
 			return _projectFilesViewControl;
@@ -184,6 +184,15 @@ namespace Sdl.Community.Transcreate
 			{
 				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
+		}
+
+		public void InvalidateProjectFilesContainer(IProject project)
+		{
+			if (_projectFilesViewModel != null)
+			{
+				_projectFilesViewModel.ProjectFiles = new List<ProjectFile>();
+				_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
 			}
 		}
 
@@ -290,20 +299,13 @@ namespace Sdl.Community.Transcreate
 				}
 			}
 
-			if (_projectFilesViewModel != null)
-			{
-				_projectFilesViewModel.ProjectFiles = new List<ProjectFile>();
-				_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
-			}
+			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, taskContext.Project);
+			ReportsController.AddReports(ClientId, reports);
 
-			if (_projectsNavigationViewModel != null)
-			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
-			}
-
-			CreateReports(taskContext, fileBasedProject, project);
 			UpdateProjectSettingsBundle(project);
+
+			InvalidateProjectFilesContainer(project);
+			InvalidateProjectsContainer();
 		}
 
 		public void UpdateBackTranslationProjectData(IProject parentProject, TaskContext taskContext)
@@ -372,6 +374,9 @@ namespace Sdl.Community.Transcreate
 				}
 			}
 
+			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, taskContext.Project);
+			ReportsController.AddReports(ClientId, reports);
+
 			UpdateBackTranslationProjectSettingsBundle(parentProject);
 		}
 
@@ -435,11 +440,22 @@ namespace Sdl.Community.Transcreate
 			return reports;
 		}
 
-		private void CreateReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject backTranslationProject)
+		public IProject GetBackTranslationProjectProject(string projectId, out IProject parentProject)
 		{
-			var reports = CreateHtmlReports(taskContext, studioParentProject, backTranslationProject);
+			parentProject = null;
+			var projects = GetProjects();
+			foreach (var project in projects)
+			{
+				var backTranslationProject =
+					project.BackTranslationProjects.FirstOrDefault(a => a.Id == projectId);
+				if (backTranslationProject != null)
+				{
+					parentProject = project;
+					return backTranslationProject;
+				}
+			}
 
-			ReportsController.AddReports(ClientId, reports);
+			return null;
 		}
 
 		private List<SDLTranscreateProjectFile> GetSDLTranscreateProjectFiles(IProject project)
@@ -1113,9 +1129,12 @@ namespace Sdl.Community.Transcreate
 					targetFile.ProjectFileActivities.Add(activityFile);
 					taskContext.Completed = true;
 
+					ActivateProject(project);
 					if (transcreateProject is BackTranslationProject)
 					{
 						UpdateBackTranslationProjectData(parentProject, taskContext);
+						InvalidateProjectsContainer();
+						InvalidateProjectFilesContainer(transcreateProject);
 					}
 					else
 					{
@@ -1254,9 +1273,12 @@ namespace Sdl.Community.Transcreate
 					targetFile.ProjectFileActivities.Add(activityFile);
 					taskContext.Completed = true;
 
+					ActivateProject(project);
 					if (transcreateProject is BackTranslationProject)
 					{
 						UpdateBackTranslationProjectData(parentProject, taskContext);
+						InvalidateProjectsContainer();
+						InvalidateProjectFilesContainer(transcreateProject);
 					}
 					else
 					{
@@ -1266,22 +1288,19 @@ namespace Sdl.Community.Transcreate
 			}
 		}
 
-		public IProject GetBackTranslationProjectProject(string projectId, out IProject parentProject)
+		private void ActivateProject(FileBasedProject project)
 		{
-			parentProject = null;
-			var projects = GetProjects();
-			foreach (var project in projects)
+			var projectId = project.GetProjectInfo().Id.ToString();
+			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
+			if (projectId != selectedProjectId)
 			{
-				var backTranslationProject =
-					project.BackTranslationProjects.FirstOrDefault(a => a.Id == projectId);
-				if (backTranslationProject != null)
+				Dispatcher.CurrentDispatcher.Invoke(delegate
 				{
-					parentProject = project;
-					return backTranslationProject;
-				}
+					_projectsController.Open(project);
+				}, DispatcherPriority.ContextIdle);
 			}
 
-			return null;
+			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
 		private Settings GetSettings()
@@ -1518,10 +1537,13 @@ namespace Sdl.Community.Transcreate
 				updated = UnloadRemovedProjectsFromContainer();
 			}
 
-			// TODO
 			var updatedProjectSelection = UpdateProjectSelectionFromProjectsController();
+			if (_projectsNavigationViewModel == null)
+			{
+				return;
+			}
 
-			if (updated && _projectsNavigationViewModel != null)
+			if (updated || updatedProjectSelection)
 			{
 				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;

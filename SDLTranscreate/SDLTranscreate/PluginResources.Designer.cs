@@ -61,6 +61,26 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon back_translation {
+            get {
+                object obj = ResourceManager.GetObject("back_translation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon back_translation_small {
+            get {
+                object obj = ResourceManager.GetObject("back_translation_small", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected error converting file: {0}.
         /// </summary>
         internal static string ErrorMessage_ConvertingFile {
@@ -993,16 +1013,6 @@ namespace Sdl.Community.Transcreate {
         internal static string Result_Unsuccessful {
             get {
                 return ResourceManager.GetString("Result_Unsuccessful", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon sdl_transcreate_back {
-            get {
-                object obj = ResourceManager.GetObject("sdl_transcreate_back", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

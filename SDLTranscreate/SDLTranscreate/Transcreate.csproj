@@ -468,6 +468,10 @@
     <Resource Include="Resources\Add.ico" />
     <Resource Include="Resources\Delete.ico" />
     <Resource Include="Resources\Edit.ico" />
+    <Resource Include="Resources\export_small.ico" />
+    <Resource Include="Resources\import_small.ico" />
+    <Resource Include="Resources\back_translation.ico" />
+    <Resource Include="Resources\back_translation_small.ico" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />
