@@ -30,7 +30,7 @@ namespace Sdl.Community.Transcreate.Actions
 		Name = "TranscreateManager_CreateBackTranslationProject_Name",
 		Description = "TranscreateManager_CreateBackTranslationProject_Description",
 		ContextByType = typeof(TranscreateViewController),
-		Icon = "back_translation"
+		Icon = "back_translation_small"
 		)]
 	[ActionLayout(typeof(TranscreateManagerActionsGroup), 3, DisplayType.Large)]
 	public class CreateBackTranslationAction : AbstractViewControllerAction<TranscreateViewController>
