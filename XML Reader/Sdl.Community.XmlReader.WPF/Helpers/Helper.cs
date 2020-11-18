@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Xml;
+using Sdl.Community.Toolkit.Core.Services;
 
 namespace Sdl.Community.XmlReader.WPF.Helpers
 {
@@ -41,7 +42,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
         #region Studio language's flags
         public static string GetStudioInstalationPath()
         {
-            var studioService = new Toolkit.Core.Services.StudioVersionService();
+            var studioService = new StudioVersionService();
             return Path.GetDirectoryName(studioService.GetStudioVersion().InstallPath);
         }
 
