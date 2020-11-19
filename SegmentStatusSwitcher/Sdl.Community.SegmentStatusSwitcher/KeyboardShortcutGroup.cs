@@ -1,6 +1,8 @@
-﻿using Sdl.Core.Globalization;
+﻿using System.Linq;
+using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.FileTypeSupport.Framework.Native;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -17,21 +19,18 @@ namespace Sdl.Community.SegmentStatusSwitcher
 
         public static void ChangeSegmentStatus(ConfirmationLevel confirmationLevel)
         {
-            var _editorController = GetEditorController();
+            var activeDocument = GetEditorController().ActiveDocument;
+	        if (activeDocument == null) return;
 
-            if (_editorController != null && _editorController.ActiveDocument != null)
-            {
-                var segmentPair = _editorController.ActiveDocument.ActiveSegmentPair;
-
-                if (segmentPair != null)
-                {
-                    segmentPair.Properties.ConfirmationLevel = confirmationLevel;
-                    _editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
-                }
-            }
+	        var selectedSegmentPairs = activeDocument.GetSelectedSegmentPairs();
+	        foreach (var segmentPair in selectedSegmentPairs)
+	        {
+		        segmentPair.Properties.ConfirmationLevel = confirmationLevel;
+		        activeDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+	        }
         }
 
-        [Action("NotTranslatedStatusAction", Name = "Not Translated", Description = "Not Translated", Icon = "ConfirmationLevel_Unspecified")]
+		[Action("NotTranslatedStatusAction", Name = "Not Translated", Description = "Not Translated", Icon = "ConfirmationLevel_Unspecified")]
         [ActionLayout(typeof(KeyboardShortcutGroup), DisplayType = DisplayType.ImageOnly)]
         public class NotTranslatedStatusAction : AbstractAction
         {        
