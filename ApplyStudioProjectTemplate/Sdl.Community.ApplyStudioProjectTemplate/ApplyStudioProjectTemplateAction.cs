@@ -491,7 +491,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					{
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
 						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
+						//For GS projects
 						updateServerMethod?.Invoke(project,new object[]{ "UpdateServerProjectSettingsOperation", new object[]{true} });
+						//For LC projects
+						updateServerMethod?.Invoke(project, new object[] { "SynchronizeServerProjectDataOperation", new object[] { null } });
 					}
 					catch (Exception e)
 					{
