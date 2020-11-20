@@ -273,22 +273,39 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private string GetAuthToken()
 		{
 			string accessToken = null;
-			var task = Task.Run(async () =>
-			{
-				accessToken = await GetAccessTokenAsync();
-			});
 
-			while (!task.IsCompleted)
+			try
 			{
-				System.Threading.Thread.Yield();
+				var task = Task.Run(async () =>
+				{
+					accessToken = await GetAccessTokenAsync();
+				});
+
+				while (!task.IsCompleted)
+				{
+					System.Threading.Thread.Yield();
+				}
+				if (task.IsFaulted)
+				{
+					throw task.Exception;
+				}
+				if (task.IsCanceled)
+				{
+					throw new Exception("Timeout obtaining access token.");
+				}
 			}
-			if (task.IsFaulted)
+			catch (AggregateException aEx)
 			{
-				throw task.Exception;
+				_logger.Error(aEx);
+				foreach (var innerEx in aEx.InnerExceptions)
+				{
+					_logger.Error($"{innerEx}{Environment.NewLine}");
+				}
 			}
-			if (task.IsCanceled)
+			catch (Exception ex)
 			{
-				throw new Exception("Timeout obtaining access token.");
+				_logger.Error(ex);
+				throw;
 			}
 			return accessToken;
 		}
