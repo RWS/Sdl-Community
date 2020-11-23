@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -154,23 +153,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			};
 		}
 
-		private void UpdateWizardContext(FileBasedProject project)
-		{
-			var projectFiles = TaskContext.Project.ProjectFiles;
-
-			var newProjectInfo = project.GetProjectInfo();
-			TaskContext.Project = _projectAutomationService.GetProject(project, null, projectFiles);
-			TaskContext.ProjectFiles = TaskContext.Project.ProjectFiles;
-			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
-			TaskContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
-			TaskContext.WorkflowFolder = TaskContext.GetWorkflowPath();
-
-			if (!Directory.Exists(TaskContext.WorkingFolder))
-			{
-				Directory.CreateDirectory(TaskContext.WorkingFolder);
-			}
-		}
-
 		private async void StartProcessing()
 		{
 			try
@@ -285,6 +267,11 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ConvertingProjectFiles);
 
 				var project = TaskContext.ProjectFiles[0].Project;
+
+				var selectedProject = _controllers.ProjectsController.GetProjects()
+					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
+				_projectAutomationService.RunPretranslationWithoutTm(selectedProject);
+				_projectAutomationService.RemoveLastReportOfType("Translate");
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
 					TaskContext.ExportOptions, TaskContext.AnalysisBands);
@@ -764,6 +751,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 			}
 		}
 
+		private void UpdateWizardContext(FileBasedProject project)
+		{
+			var projectFiles = TaskContext.Project.ProjectFiles;
+
+			var newProjectInfo = project.GetProjectInfo();
+			TaskContext.Project = _projectAutomationService.GetProject(project, null, projectFiles);
+			TaskContext.ProjectFiles = TaskContext.Project.ProjectFiles;
+			TaskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
+			TaskContext.LocalProjectFolder = newProjectInfo.LocalProjectFolder;
+			TaskContext.WorkflowFolder = TaskContext.GetWorkflowPath();
+
+			if (!Directory.Exists(TaskContext.WorkingFolder))
+			{
+				Directory.CreateDirectory(TaskContext.WorkingFolder);
+			}
+		}
+
 		private IEnumerable<string> GetAllLanguages(Interfaces.IProject project)
 		{
 			var languages = project.TargetLanguages.Select(a => a.CultureInfo.Name).ToList();
@@ -1014,24 +1018,23 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 
 		private async Task UpdateProgress(JobProcess jobProcess, JobProcess.ProcessStatus status, int progress, string description)
 		{
-			await Owner.Dispatcher.InvokeAsync(delegate
-			{
-				jobProcess.Status = status;
-				jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
-				jobProcess.Description = description;
-			}, DispatcherPriority.ContextIdle);
+			jobProcess.Status = status;
+			jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
+			jobProcess.Description = description;
 
+			Refresh();
+		}
+
+		private void Refresh()
+		{
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
 		private void OnLoadPage(object sender, EventArgs e)
 		{
-			void MethodInvokerDelegate()
-			{
-				IsProcessing = true;
-				StartProcessing();
-			}
-			ApplicationInstance.GetActiveForm().Invoke((MethodInvoker)MethodInvokerDelegate);
+			IsProcessing = true;
+			Refresh();
+			StartProcessing();
 		}
 
 		private void OnLeavePage(object sender, EventArgs e)

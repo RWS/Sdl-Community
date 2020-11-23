@@ -102,19 +102,19 @@
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
-													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="Source" Value="../Resources/export_small.ico"/>
 													<Setter Property="ToolTip" Value="Export Action"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Import">
-													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="Source" Value="../Resources/import_small.ico"/>
 													<Setter Property="ToolTip" Value="Import Action"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="ExportBackTranslation">
-													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="Source" Value="../Resources/export_small.ico"/>
 													<Setter Property="ToolTip" Value="Export Action"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="ImportBackTranslation">
-													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="Source" Value="../Resources/import_small.ico"/>
 													<Setter Property="ToolTip" Value="Import Action"/>
 												</DataTrigger>
 											</Style.Triggers>

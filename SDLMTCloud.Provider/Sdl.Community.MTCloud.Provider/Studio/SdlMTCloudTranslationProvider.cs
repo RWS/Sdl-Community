@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using LogManager = NLog.LogManager;
 
@@ -19,20 +21,43 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	public class SdlMTCloudTranslationProvider : ITranslationProvider
 	{
 		private readonly EditorController _editorController;
+		private readonly ProjectsController _projectsController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private RateItController _rateItController;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
-		 ILanguageProvider languageProvider, EditorController editorController)
+		 ILanguageProvider languageProvider, EditorController editorController, ProjectsController projectsController)
 		{
 			Uri = uri;
-
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
 			_editorController = editorController;
+			_projectsController = projectsController;
 
 			LoadState(translationProviderState);
+
+			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
+			eventAggregator.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
+		}
+
+		private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
+		{
+			if (!tpInfo.TpUri.ToString().Contains(PluginResources.SDLMTCloudUri)) return;
+			SwitchRateTranslationsControllerVisibility(tpInfo.NewStatus ?? false);
+		}
+
+		private void SwitchRateTranslationsControllerVisibility(bool onOffSwitch)
+		{
+			if (!onOffSwitch)
+			{
+				_rateItController?.Hide();
+			}
+			if (onOffSwitch)
+			{
+				_rateItController?.Activate();
+			}
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
@@ -79,7 +104,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public bool IsReadOnly => true;
 
-		public Options Options { get; set; }
+		public Options Options
+		{
+			get => TranslationService.Options;
+			set
+			{
+				TranslationService.Options = value;
+				TranslationService.Options.PropertyChanged += (s, e) => 
+				{
+					SwitchRateTranslationsControllerVisibility(((Options)s).SendFeedback);
+				};
+			}
+		}
 
 		public ITranslationService TranslationService { get; }
 
@@ -135,12 +171,21 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			try
 			{
-				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
+				Options = JsonConvert.DeserializeObject<Options>(translationProviderState) ?? new Options
+				{
+					AutoSendFeedback = true,
+					LanguageMappings = new List<LanguageMappingModel>(),
+					ResendDraft = true,
+					SendFeedback = true
+				};
 			}
 			catch
 			{
 				// ignore any casting errors and simply create a new options instance
-				Options = new Options();
+			}
+			finally
+			{
+				ActivateRatingController();
 			}
 		}
 
@@ -249,7 +294,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			// assign the selected model
 			var selectedModel = mapping.EngineModels.FirstOrDefault(a => a.DisplayName.Equals(mapping.SavedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-			                    ?? mapping.EngineModels.FirstOrDefault(a => a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
+			                    ?? mapping.EngineModels.FirstOrDefault(a => a.Model != null && a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
 			                    ?? mapping.EngineModels[0];
 
 			var dictionaries = LanguageMappingsService.GetDictionaries(mapping.SelectedSourceLanguageMapping, mapping.SelectedTargetLanguageMapping);
@@ -348,6 +393,29 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			return Options.LanguageMappings.Any(l => l.SourceTradosCode.Equals(languagePair.SourceCulture.Name)
 			                                        && l.TargetTradosCode.Equals(languagePair.TargetCulture.Name));
+		}
+
+		private void ActivateRatingController()
+		{
+			var tpStatus = _projectsController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(
+				e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider.Enabled;
+			if (!(tpStatus ?? true)) return;
+
+			try
+			{
+				Application.Current?.Dispatcher?.Invoke(() =>
+				{
+					_rateItController = SdlTradosStudio.Application.GetController<RateItController>();
+
+					if (_rateItController == null) return;
+					_rateItController.RateIt.SetTranslationService(TranslationService);
+					SwitchRateTranslationsControllerVisibility(TranslationService?.Options?.SendFeedback ?? true);
+				});
+			}
+			catch
+			{
+				// catch all; unable to locate the controller
+			}
 		}
 	}
 }

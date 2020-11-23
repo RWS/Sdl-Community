@@ -84,16 +84,17 @@ namespace Sdl.Community.DeepLMTProvider
 
 				using (var httpClient = new HttpClient())
 				{
-					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 |
+					                                       SecurityProtocolType.Tls;
 
 					httpClient.Timeout = TimeSpan.FromMinutes(5);
 					var content = new StringContent($"text={sourceText}" +
-													$"&source_lang={sourceLanguage}" +
-													$"&target_lang={targetLanguage}" +
-													$"&formality={_formality.ToString().ToLower()}" +
-													"&preserve_formatting=1" +
-													"&tag_handling=xml" +
-													$"&auth_key={ApiKey}",
+					                                $"&source_lang={sourceLanguage}" +
+					                                $"&target_lang={targetLanguage}" +
+					                                $"&formality={_formality.ToString().ToLower()}" +
+					                                "&preserve_formatting=1" +
+					                                "&tag_handling=xml" +
+					                                $"&auth_key={ApiKey}",
 						Encoding.UTF8, "application/x-www-form-urlencoded");
 
 					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
@@ -119,9 +120,16 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 			}
+			catch (AggregateException aEx)
+			{
+				foreach (var innerEx in aEx.InnerExceptions)
+				{
+					_logger.Error(innerEx);
+				}
+			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{ex}");
+				_logger.Error(ex);
 				throw;
 			}
 

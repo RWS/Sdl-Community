@@ -146,6 +146,7 @@ namespace Sdl.Community.Transcreate.Service
 				var project = _projectAutomationService.GetProject(selectedProject, selectedFileIds);
 
 				_taskContext.Project = project;
+				_taskContext.FileBasedProject = selectedProject;
 				_taskContext.ProjectFiles = project.ProjectFiles;
 			}
 			else if (controller is TranscreateViewController)
@@ -187,6 +188,7 @@ namespace Sdl.Community.Transcreate.Service
 				project.ProjectFiles.RemoveAll(a => a.TargetLanguage == projectInfo.SourceLanguage.CultureInfo.Name);
 
 				_taskContext.Project = project;
+				_taskContext.FileBasedProject = selectedProject;
 				_taskContext.ProjectFiles = project.ProjectFiles;
 			}
 

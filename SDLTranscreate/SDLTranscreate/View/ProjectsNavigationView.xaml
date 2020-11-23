@@ -38,16 +38,16 @@
 				<Setter Property="ContextMenu" Value="{DynamicResource TreeViewContextMenu}"/>
 			</Style>
 			<ContextMenu x:Key="TreeViewContextMenu">
-				<MenuItem Header="Create Back-Projects" 
+				<MenuItem Header="Create Back-Translation projects" 
 							IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
 							Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
 							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
 							Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 					<MenuItem.Icon>
-						<Image Source="../Resources/sdl_transcreate_back.ico"/>
+						<Image Source="../Resources/back_translation_small.ico"/>
 					</MenuItem.Icon>
 				</MenuItem>
-				<MenuItem Header="Remove Back-Projects" 
+				<MenuItem Header="Remove Back-Translation projects" 
 							IsEnabled="{Binding DataContext.IsEnabledRemoveBackProjects, 
 							Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
 							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -181,7 +181,7 @@
 											       HorizontalAlignment="Center"
 											       VerticalAlignment="Center"		
 											       Width="17"
-											       Source="../Resources/sdl_transcreate_back.ico"
+											       Source="../Resources/back_translation_small.ico"
 											       Margin="0,0,2,0"/>
 											<TextBlock FontWeight="Regular" FontSize="13" Text="{Binding Name}" Margin="0,1,0,1"/>
 										</StackPanel>

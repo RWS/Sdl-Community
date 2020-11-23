@@ -113,8 +113,8 @@ namespace Sdl.Community.Transcreate.ViewModel
 			get
 			{
 				var message = string.Format(PluginResources.StatusLabel_Selected_0,
-					_selectedProjects != null 
-						? _selectedProjects?.Count 
+					_selectedProjects != null
+						? _selectedProjects?.Count
 						: (_selectedProject != null ? 1 : 0));
 				return message;
 			}
@@ -130,8 +130,8 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 				if (_filteredProjects?.Count > 0 && !_filteredProjects.Contains(SelectedProject))
 				{
-					SelectedProject = _filteredProjects[0];
-					if (_navigationNodeStates == null)
+					SelectedProject = GetSelectedFilteredProject();
+					if (_navigationNodeStates == null && SelectedProject != null)
 					{
 						_navigationNodeStates = new List<NavigationNodeState>();
 						_navigationNodeStates.Add(new NavigationNodeState
@@ -157,6 +157,33 @@ namespace Sdl.Community.Transcreate.ViewModel
 				CustomerGroups = BuildGroups();
 				OnPropertyChanged(nameof(StatusLabel));
 			}
+		}
+
+		private IProject GetSelectedFilteredProject()
+		{
+			IProject selectedProject = null;
+			foreach (var filteredProject in _filteredProjects)
+			{
+				if (filteredProject.IsSelected)
+				{
+					selectedProject = filteredProject;
+				}
+				else
+				{
+					foreach (var backTranslationProject in filteredProject.BackTranslationProjects.Where(p => p.IsSelected))
+					{
+						selectedProject = backTranslationProject;
+						break;
+					}
+				}
+
+				if (selectedProject != null)
+				{
+					break;
+				}
+			}
+
+			return selectedProject;
 		}
 
 		private List<CustomerGroup> BuildGroups()
@@ -391,7 +418,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		private void CreateBackProjects(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationProjectAction>();
+			var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationAction>();
 			action.Run();
 
 			IsEnabledCreateBackProjects = false;
@@ -460,7 +487,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 				SelectedProject.BackTranslationProjects = new List<BackTranslationProject>();
 
-				var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationProjectAction>();
+				var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationAction>();
 				action.Enabled = true;
 
 				IsEnabledCreateBackProjects = true;

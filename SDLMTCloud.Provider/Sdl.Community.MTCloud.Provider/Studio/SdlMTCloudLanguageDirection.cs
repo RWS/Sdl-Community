@@ -7,6 +7,7 @@ using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.XliffConverter.Models;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -114,7 +115,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		/// Translate an array of segments.
 		/// </summary>
 		/// <param name="settings"></param>
-		/// <param name="segments">Array of segments to be translated (depending on the truthfulness of
+		/// <param name="segments">Array of segments to be translated (depending on the value of the
 		/// corresponding mask)</param>
 		/// <param name="mask">Whether to translate a segment or not</param>
 		/// <returns></returns>
@@ -123,7 +124,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			var results = new SearchResults[segments.Length];
 			var mtCloudSegments = new List<MTCloudSegment>();
 			var alreadyTranslatedSegments = new List<MTCloudSegment>();
-
+			
 			if (!_translationProvider.Options.ResendDraft)
 			{
 				// Re-send draft segment logic
@@ -192,19 +193,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			else
 			{
-				var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+				var translations = TranslateSegments(segments.ToArray());
 
 				if (translations.Any(translation => translation != null))
 				{
 					var translationIndex = 0;
 					for (var i = 0; i < segments.Length; i++)
 					{
-						if (mask != null && !mask[i])
-						{
-							results[i] = null;
-							continue;
-						}
-
 						results[i] = new SearchResults();
 						if (segments[i] != null)
 						{

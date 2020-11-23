@@ -99,8 +99,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 			Xliff.Files.Add(file);
 
 			CreateDummyOutputFiles(fileInfo);
-
-			//base.SetFileProperties(fileInfo);
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)

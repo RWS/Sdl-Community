@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.RateItControl.Implementation;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
-	public class Options
+	public class Options : BaseModel
 	{
-		public Options()
-		{			
-			ResendDraft = true;
-			SendFeedback = true;
-			LanguageMappings = new List<LanguageMappingModel>();
-		}
+		private bool sendFeedback;
 
-		public bool ResendDraft { get; set; }
-		public bool SendFeedback { get; set; }
-
+		public bool AutoSendFeedback { get; set; }
 		public List<LanguageMappingModel> LanguageMappings { get; set; }
+		public bool ResendDraft { get; set; }
+		public bool SendFeedback
+		{
+			get => sendFeedback; 
+			set
+			{
+				sendFeedback = value;
+				OnPropertyChanged(nameof(SendFeedback));
+			}
+		}
 	}
 }

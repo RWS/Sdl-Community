@@ -61,6 +61,26 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon back_translation {
+            get {
+                object obj = ResourceManager.GetObject("back_translation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon back_translation_small {
+            get {
+                object obj = ResourceManager.GetObject("back_translation_small", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected error converting file: {0}.
         /// </summary>
         internal static string ErrorMessage_ConvertingFile {
@@ -94,6 +114,15 @@ namespace Sdl.Community.Transcreate {
         internal static string FolderDialog_Title {
             get {
                 return ResourceManager.GetString("FolderDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found empty translations in {0} files.
+        /// </summary>
+        internal static string Found_empty_translations_in_0_files {
+            get {
+                return ResourceManager.GetString("Found_empty_translations_in_0_files", resourceCulture);
             }
         }
         
@@ -914,11 +943,30 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to proceed and copy source to target for empty translations.
+        /// </summary>
+        internal static string Proceed_and_copy_source_to_target_for_empty_translations {
+            get {
+                return ResourceManager.GetString("Proceed_and_copy_source_to_target_for_empty_translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Refresh {
             get {
                 object obj = ResourceManager.GetObject("Refresh", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Report {
+            get {
+                object obj = ResourceManager.GetObject("Report", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -965,16 +1013,6 @@ namespace Sdl.Community.Transcreate {
         internal static string Result_Unsuccessful {
             get {
                 return ResourceManager.GetString("Result_Unsuccessful", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon sdl_transcreate_back {
-            get {
-                object obj = ResourceManager.GetObject("sdl_transcreate_back", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -1074,60 +1112,6 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to Convert to Transcreate Project.
         /// </summary>
-        internal static string TranscreateManager_BatchTasks_Convert_Description {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Convert_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Convert_Name {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Convert_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Export_Description {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Export_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Export_Name {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Export_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Import_Description {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Import_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import.
-        /// </summary>
-        internal static string TranscreateManager_BatchTasks_Import_Name {
-            get {
-                return ResourceManager.GetString("TranscreateManager_BatchTasks_Import_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
-        /// </summary>
         internal static string TranscreateManager_ConvertProject_Description {
             get {
                 return ResourceManager.GetString("TranscreateManager_ConvertProject_Description", resourceCulture);
@@ -1144,7 +1128,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation Project.
+        ///   Looks up a localized string similar to Create Back-Translation Projects.
         /// </summary>
         internal static string TranscreateManager_CreateBackTranslationProject_Description {
             get {
@@ -1153,11 +1137,29 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation.
+        ///   Looks up a localized string similar to Create Back-Translations.
         /// </summary>
         internal static string TranscreateManager_CreateBackTranslationProject_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_CreateBackTranslationProject_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Transcreate Reports.
+        /// </summary>
+        internal static string TranscreateManager_CreateReport_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_CreateReport_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Reports.
+        /// </summary>
+        internal static string TranscreateManager_CreateReport_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_CreateReport_Name", resourceCulture);
             }
         }
         
@@ -1383,6 +1385,15 @@ namespace Sdl.Community.Transcreate {
         internal static string TranscreateManager_ViewGroup_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_ViewGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error while converting the file: {0}.
+        /// </summary>
+        internal static string Unexpected_error_while_converting_the_file {
+            get {
+                return ResourceManager.GetString("Unexpected_error_while_converting_the_file", resourceCulture);
             }
         }
         

@@ -25,12 +25,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			connectionService.SaveCredential(credentialStore);
 
+			var editorController = StudioInstance.GetEditorController();
 			var translationService = new TranslationService(connectionService);
 			var languageProvider = new LanguageProvider();
-			var editorController = StudioInstance.GetEditorController();
+			var projectsController = StudioInstance.GetProjectsController();
 
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
-				translationService, languageProvider, editorController);
+				translationService, languageProvider, editorController, projectsController);
 			return provider;
 		}
 

@@ -80,7 +80,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			StudioShortcutChanged?.Invoke();
 		}
 
-		public string GetShotcutDetails(string actionId)
+		public string GetShortcutDetails(string actionId)
 		{			
 			return _customShortcuts.FirstOrDefault(a => a.ActionId.Equals(actionId))?.ShortcutText;
 		}

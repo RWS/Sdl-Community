@@ -14,6 +14,7 @@ namespace Sdl.Community.Transcreate.Model
 		private string _path;
 		private string _externalFilePath;
 		private string _targetLanguage;
+		private string _report;
 		private Enumerators.Status _status;
 
 		public ProjectFile()
@@ -159,7 +160,20 @@ namespace Sdl.Community.Transcreate.Model
 
 		public string ShortMessage { get; set; }
 
-		public string Report { get; set; }
+		public string Report
+		{
+			get => _report;
+			set
+			{
+				if (_report == value)
+				{
+					return;
+				}
+
+				_report = value;
+				OnPropertyChanged(nameof(Report));
+			}
+		}
 
 		public void Dispose()
 		{
