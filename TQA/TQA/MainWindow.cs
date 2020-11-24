@@ -22,9 +22,12 @@ namespace Sdl.Community.TQA
 				var currentProjectName = selectedProjectInfo.Name;
 				ProjectNameLabel.Text = $"Currently working on: {currentProjectName}";
 		        outputSaveDialog.FileName = "QRF-121_XXX_XXXXXX_XXX_XX";
-				LanguageSelector.Items.AddRange(selectedProjectInfo.TargetLanguages.Select( l => l.DisplayName ).ToArray() );
+		        var targetLanguages = selectedProjectInfo.TargetLanguages.Select(l => l.DisplayName).ToArray();
+				LanguageSelector.Items.AddRange(targetLanguages);
+		        LanguageSelector.SelectedItem =targetLanguages[0];
 	        }
-        }
+	        QualityCombo.SelectedItem = (string)QualityCombo.Items[0];
+		}
 
         private void StartButton_Click(object sender, EventArgs e)
         {
@@ -33,7 +36,7 @@ namespace Sdl.Community.TQA
 
             _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, ReportFormat.Xml );
 
-	        var extractedData = DataConverter.ExtractFromXml(tempPath);
+	        var extractedData = DataConverter.ExtractFromXml(tempPath,(string)QualityCombo.SelectedItem);
 
             if( outputSaveDialog.ShowDialog() == DialogResult.OK )
             {

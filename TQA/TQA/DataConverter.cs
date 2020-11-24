@@ -10,14 +10,15 @@ namespace Sdl.Community.TQA
 {
     public static class DataConverter
     {
-	    public static ReportResults ExtractFromXml(string path)
+	    public static ReportResults ExtractFromXml(string path,string qualityLevel)
 	    {
 		    var report = XDocument.Load(path);
 		    var languages = report.Descendants("language");
 		    var reportResults = new ReportResults
 		    {
 			    Entries = new List<Entry>(),
-			    EvaluationComments = new List<string>()
+			    EvaluationComments = new List<string>(),
+				QualityLevel = qualityLevel
 		    };
 		    foreach (var language in languages)
 		    {
@@ -192,13 +193,17 @@ namespace Sdl.Community.TQA
 
 		    wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
 		    wsReport.Cell("L8").Value = "TQA";
+		    wsReport.Cell("L11").Value = reportResults.QualityLevel;
 		    for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
 		    {
 			    wsReport.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
 		    }
 
+		    var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
+		    wsFinalResult.Protect();
+		    wsFinalResult.Range(1, 1, 60, 60).Style.Protection.SetLocked(true);
 
-		    wb.CalculateMode = XLCalculateMode.Auto;
+			wb.CalculateMode = XLCalculateMode.Auto;
 		    wb.Save();
 	    }
     }
