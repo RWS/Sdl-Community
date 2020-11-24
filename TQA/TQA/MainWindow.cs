@@ -20,7 +20,7 @@ namespace Sdl.Community.TQA
 	        {
 		        var selectedProjectInfo = _controller.CurrentProject.GetProjectInfo();
 				var currentProjectName = selectedProjectInfo.Name;
-				ProjectNameLabel.Text = string.Format( "Currently working on: {0}",currentProjectName );
+				ProjectNameLabel.Text = $"Currently working on: {currentProjectName}";
 		        outputSaveDialog.FileName = "QRF-121_XXX_XXXXXX_XXX_XX";
 				LanguageSelector.Items.AddRange(selectedProjectInfo.TargetLanguages.Select( l => l.DisplayName ).ToArray() );
 	        }
@@ -43,8 +43,6 @@ namespace Sdl.Community.TQA
                 }
                 catch(IOException  ex )
                 {
-                    //MessageBox.Show( "Unable to open file:\n" + outputSaveDialog.FileName+"\n\n Please check if it not opened in another application and try again." );
-                   // return;
 	                throw ex;
                 }
                 catch( Exception ex )

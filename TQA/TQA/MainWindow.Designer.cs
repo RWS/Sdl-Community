@@ -34,6 +34,8 @@
 			this.LanguageInfoLabel = new System.Windows.Forms.Label();
 			this.StartButton = new System.Windows.Forms.Button();
 			this.outputSaveDialog = new System.Windows.Forms.SaveFileDialog();
+			this.QualityLevelLbl = new System.Windows.Forms.Label();
+			this.QualityCombo = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// ProjectNameLabel
@@ -47,14 +49,12 @@
 			// 
 			// LanguageSelector
 			// 
-			this.LanguageSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.LanguageSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.LanguageSelector.FormattingEnabled = true;
 			this.LanguageSelector.Location = new System.Drawing.Point(15, 42);
 			this.LanguageSelector.MaxDropDownItems = 16;
 			this.LanguageSelector.Name = "LanguageSelector";
-			this.LanguageSelector.Size = new System.Drawing.Size(351, 21);
+			this.LanguageSelector.Size = new System.Drawing.Size(240, 21);
 			this.LanguageSelector.TabIndex = 1;
 			// 
 			// LanguageInfoLabel
@@ -69,7 +69,7 @@
 			// StartButton
 			// 
 			this.StartButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.StartButton.Location = new System.Drawing.Point(372, 41);
+			this.StartButton.Location = new System.Drawing.Point(271, 86);
 			this.StartButton.Name = "StartButton";
 			this.StartButton.Size = new System.Drawing.Size(75, 23);
 			this.StartButton.TabIndex = 3;
@@ -82,11 +82,35 @@
 			this.outputSaveDialog.DefaultExt = "*.xlsm";
 			this.outputSaveDialog.Filter = "Excel Macro-Enabled Workbook|*.xlsm";
 			// 
+			// QualityLevelLbl
+			// 
+			this.QualityLevelLbl.AutoSize = true;
+			this.QualityLevelLbl.Location = new System.Drawing.Point(12, 70);
+			this.QualityLevelLbl.Name = "QualityLevelLbl";
+			this.QualityLevelLbl.Size = new System.Drawing.Size(131, 13);
+			this.QualityLevelLbl.TabIndex = 4;
+			this.QualityLevelLbl.Text = "Please select quality level:";
+			// 
+			// QualityCombo
+			// 
+			this.QualityCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.QualityCombo.FormattingEnabled = true;
+			this.QualityCombo.Items.AddRange(new object[] {
+            "Premium",
+            "Value",
+            "Economy"});
+			this.QualityCombo.Location = new System.Drawing.Point(15, 86);
+			this.QualityCombo.Name = "QualityCombo";
+			this.QualityCombo.Size = new System.Drawing.Size(240, 21);
+			this.QualityCombo.TabIndex = 5;
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(456, 74);
+			this.ClientSize = new System.Drawing.Size(358, 128);
+			this.Controls.Add(this.QualityCombo);
+			this.Controls.Add(this.QualityLevelLbl);
 			this.Controls.Add(this.StartButton);
 			this.Controls.Add(this.LanguageInfoLabel);
 			this.Controls.Add(this.LanguageSelector);
@@ -107,5 +131,7 @@
         private System.Windows.Forms.Label LanguageInfoLabel;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.SaveFileDialog outputSaveDialog;
-    }
+		private System.Windows.Forms.Label QualityLevelLbl;
+		private System.Windows.Forms.ComboBox QualityCombo;
+	}
 }
