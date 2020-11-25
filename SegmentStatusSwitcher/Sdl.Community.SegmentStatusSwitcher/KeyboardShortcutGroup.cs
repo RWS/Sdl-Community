@@ -1,8 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.Native;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -22,7 +23,9 @@ namespace Sdl.Community.SegmentStatusSwitcher
             var activeDocument = GetEditorController().ActiveDocument;
 	        if (activeDocument == null) return;
 
-	        var selectedSegmentPairs = activeDocument.GetSelectedSegmentPairs();
+	        var selectedSegmentPairs = activeDocument.GetSelectedSegmentPairs().ToList();
+	        AddSegmentPair(selectedSegmentPairs, activeDocument.ActiveSegmentPair);
+
 	        foreach (var segmentPair in selectedSegmentPairs)
 	        {
 		        segmentPair.Properties.ConfirmationLevel = confirmationLevel;
@@ -30,7 +33,15 @@ namespace Sdl.Community.SegmentStatusSwitcher
 	        }
         }
 
-		[Action("NotTranslatedStatusAction", Name = "Not Translated", Description = "Not Translated", Icon = "ConfirmationLevel_Unspecified")]
+	    private static void AddSegmentPair(List<ISegmentPair> selectedSegmentPairs, ISegmentPair newSegmentPair)
+	    {
+		    if (selectedSegmentPairs.All(sp => sp.Properties.Id != newSegmentPair.Properties.Id))
+		    {
+			    selectedSegmentPairs.Add(newSegmentPair);
+		    }
+	    }
+
+	    [Action("NotTranslatedStatusAction", Name = "Not Translated", Description = "Not Translated", Icon = "ConfirmationLevel_Unspecified")]
         [ActionLayout(typeof(KeyboardShortcutGroup), DisplayType = DisplayType.ImageOnly)]
         public class NotTranslatedStatusAction : AbstractAction
         {        
