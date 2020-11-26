@@ -200,7 +200,7 @@ namespace Sdl.Community.TQA
 		    }
 
 		    var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
-		    wsFinalResult.Protect();
+		    wsFinalResult.Protect("Thames");
 		    wsFinalResult.Range(1, 1, 60, 60).Style.Protection.SetLocked(true);
 
 			wb.CalculateMode = XLCalculateMode.Auto;

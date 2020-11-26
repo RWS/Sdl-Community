@@ -69,7 +69,7 @@
 			// StartButton
 			// 
 			this.StartButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.StartButton.Location = new System.Drawing.Point(271, 86);
+			this.StartButton.Location = new System.Drawing.Point(386, 86);
 			this.StartButton.Name = "StartButton";
 			this.StartButton.Size = new System.Drawing.Size(75, 23);
 			this.StartButton.TabIndex = 3;
@@ -108,7 +108,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(358, 128);
+			this.ClientSize = new System.Drawing.Size(473, 128);
 			this.Controls.Add(this.QualityCombo);
 			this.Controls.Add(this.QualityLevelLbl);
 			this.Controls.Add(this.StartButton);
