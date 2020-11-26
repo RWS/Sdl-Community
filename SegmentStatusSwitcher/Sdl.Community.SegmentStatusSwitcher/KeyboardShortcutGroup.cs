@@ -35,6 +35,7 @@ namespace Sdl.Community.SegmentStatusSwitcher
 
 	    private static void AddSegmentPair(List<ISegmentPair> selectedSegmentPairs, ISegmentPair newSegmentPair)
 	    {
+			if (newSegmentPair == null) return;
 		    if (selectedSegmentPairs.All(sp => sp.Properties.Id != newSegmentPair.Properties.Id))
 		    {
 			    selectedSegmentPairs.Add(newSegmentPair);
