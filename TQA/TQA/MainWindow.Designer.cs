@@ -40,6 +40,7 @@
 			// 
 			// ProjectNameLabel
 			// 
+			this.ProjectNameLabel.AutoEllipsis = true;
 			this.ProjectNameLabel.AutoSize = true;
 			this.ProjectNameLabel.Location = new System.Drawing.Point(12, 9);
 			this.ProjectNameLabel.Name = "ProjectNameLabel";
@@ -69,7 +70,7 @@
 			// StartButton
 			// 
 			this.StartButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.StartButton.Location = new System.Drawing.Point(271, 86);
+			this.StartButton.Location = new System.Drawing.Point(402, 86);
 			this.StartButton.Name = "StartButton";
 			this.StartButton.Size = new System.Drawing.Size(75, 23);
 			this.StartButton.TabIndex = 3;
@@ -96,9 +97,9 @@
 			this.QualityCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.QualityCombo.FormattingEnabled = true;
 			this.QualityCombo.Items.AddRange(new object[] {
-			"Premium",
-			"Value",
-			"Economy"});
+            "Premium",
+            "Value",
+            "Economy"});
 			this.QualityCombo.Location = new System.Drawing.Point(15, 86);
 			this.QualityCombo.Name = "QualityCombo";
 			this.QualityCombo.Size = new System.Drawing.Size(240, 21);
@@ -108,7 +109,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(358, 128);
+			this.ClientSize = new System.Drawing.Size(489, 130);
 			this.Controls.Add(this.QualityCombo);
 			this.Controls.Add(this.QualityLevelLbl);
 			this.Controls.Add(this.StartButton);
