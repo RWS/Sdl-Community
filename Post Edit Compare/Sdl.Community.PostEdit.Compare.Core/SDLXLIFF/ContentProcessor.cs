@@ -29,12 +29,15 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguageId == null ? "Source" : "Target"));
 			    }
 
-			    _segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguageId), new CultureInfo(TargetLanguageId)),
+				var sourceLanguage = GetSpecificCulture(new CultureInfo(SourceLanguageId));
+				var targetLanguage = GetSpecificCulture(new CultureInfo(TargetLanguageId));
+
+				_segmentPairProcessor = new SegmentPairProcessor(
+					new Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage),
 					new Toolkit.LanguagePlatform.Models.PathInfo());
 
 				return _segmentPairProcessor;
-		    }
+			}
 	    }
 
         public string SourceLanguageId { get; set; }
@@ -49,24 +52,19 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
         internal bool CreatedDummyOutput = false;
         internal List<string> DummyOutputFiles = new List<string>();
 
-        #region  |  Content Generator  |
+       
         private ContentGenerator _contentGeneratorProcessor;
 
         public ContentGenerator ContentGeneratorProcessor
         {
             get { return _contentGeneratorProcessor ?? (_contentGeneratorProcessor = new ContentGenerator()); }
         }
-        #endregion
-
-        #region  |  IBilingualContentProcessor Members  |
-
-
+            
         public ContentProcessor()
         {
 
             FileParagraphUnits = new Dictionary<string, Dictionary<string, ParagraphUnit>>();
         }
-
 
         public IBilingualContentHandler Output
         {
@@ -74,13 +72,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             set;
         }
 
-        #endregion
-
-        #region  |  IBilingualContentHandler Members  |
-
-
-
-
+      
+    
         public void Complete()
         {
             //not needed for this implementation
@@ -115,14 +108,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             if (documentInfo.SourceLanguage != null && documentInfo.SourceLanguage.CultureInfo != null)
                 SourceLanguageId = documentInfo.SourceLanguage.CultureInfo.Name;
             if (documentInfo.TargetLanguage != null && documentInfo.TargetLanguage.CultureInfo != null)
-                TargetLanguageId = documentInfo.TargetLanguage.CultureInfo.Name;
-
-
-            var st = new Settings();
-            var tmName = "TM_" + SourceLanguageId + ".sdltm";
-            var tmFullPath = Path.Combine(st.ApplicationSettingsPathTm, tmName);
-            TM.Tm.SetTm(tmFullPath, SourceLanguageId, "it-IT");
-
+                TargetLanguageId = documentInfo.TargetLanguage.CultureInfo.Name;       
         }
 
         public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -240,15 +226,27 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             }
         }
 
-
         public void SetFileProperties(IFileProperties fileInfo)
         {
             CurrentFileProperties = fileInfo;
             ParagraphUnits = new Dictionary<string, ParagraphUnit>();
         }
 
-        #endregion
+		private CultureInfo GetSpecificCulture(CultureInfo cultureInfo)
+		{
+			if (cultureInfo.CultureTypes.HasFlag(CultureTypes.NeutralCultures))
+			{
+				var specificCultures = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.SpecificCultures);
+				foreach (var specificCulture in specificCultures)
+				{
+					if (cultureInfo.Name == specificCulture.Parent?.Name)
+					{
+						return specificCulture;
+					}
+				}
+			}
 
-
-    }
+			return cultureInfo;
+		}
+	}
 }
