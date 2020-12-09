@@ -1,10 +1,14 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Sdl.Community.TQA.Model;
+using Color = DocumentFormat.OpenXml.Spreadsheet.Color;
 
 namespace Sdl.Community.TQA
 {
@@ -69,7 +73,7 @@ namespace Sdl.Community.TQA
 						var revisedTranslations = segment.Element("revisedTranslation").Elements()
 							.Where(e => e.Name == "group" && (e.Attribute("category") != null || e.Attribute("severity") != null));
 
-						foreach (XElement revisedTranslation in revisedTranslations)
+						foreach (var revisedTranslation in revisedTranslations)
 						{
 							var translation = revisedTranslation.Element("item").Attribute("content").Value;
 							var category = revisedTranslation.Attribute("category").Value;
@@ -77,7 +81,7 @@ namespace Sdl.Community.TQA
 							var comment = revisedTranslation.Attribute("comment").Value;
 
 							var revisedTranslationText = new List<Tuple<string, TextType>>();
-							foreach (XElement rTrans in segment.Element("revisedTranslation").Descendants().Where(e => e.Name == "item"))
+							foreach (var rTrans in segment.Element("revisedTranslation").Descendants().Where(e => e.Name == "item"))
 							{
 								switch (rTrans.Attribute("type").Value)
 								{
@@ -188,23 +192,65 @@ namespace Sdl.Community.TQA
 				}
 			}
 
-
 			var wsReport = wb.Worksheet("Evaluation Report_Initial");
 
 			wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
 			wsReport.Cell("L8").Value = "TQA";
 			wsReport.Cell("L11").Value = reportResults.QualityLevel;
+			ChangeStyleForEvaluationReport(wsReport);
+
 			for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
 			{
 				wsReport.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
 			}
 
 			var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
+			ChangeStyleForEvaluationReport(wsFinalResult);
 			wsFinalResult.Protect("Thames");
 			wsFinalResult.Range(1, 1, 60, 60).Style.Protection.SetLocked(true);
 
 			wb.CalculateMode = XLCalculateMode.Auto;
 			wb.Save();
+
+			var spreadsheet = SpreadsheetDocument.Open(path, true);
+			AddGradient(spreadsheet, "B6B6B6", "FFFF0000", "FFFFC000");
+			AddGradient(spreadsheet, "B6B6B7", "FFFFC000", "FF009B00");
+			spreadsheet.Save();
+			spreadsheet.Close();
 		}
+
+		private static void AddGradient(SpreadsheetDocument spreadSheet, string dummyColorCode, string firstColorCode, string secondColorCode)
+		{
+			var wbPart = spreadSheet.GetPartsOfType<WorkbookPart>().FirstOrDefault();
+			var wbStylePart = wbPart?.GetPartsOfType<WorkbookStylesPart>().FirstOrDefault();
+			var stylesheet = wbStylePart?.Stylesheet;
+
+			var oldFill =
+				stylesheet?.Fills.FirstOrDefault(f => f.OuterXml.Contains(dummyColorCode)); // find the fill that uses your unique color
+			if (oldFill == null) return;
+			var gradientFill = new GradientFill { Degree = 0 };
+			gradientFill.Append(new GradientStop { Position = 0D, Color = new Color { Rgb = firstColorCode } });
+			gradientFill.Append(new GradientStop { Position = 1D, Color = new Color { Rgb = secondColorCode } });
+			oldFill.ReplaceChild(gradientFill, oldFill.FirstChild); // inside the fill replace the patternFill with your gradientFill
+		}
+
+		/// <summary>
+		/// Overwrithe the excel styles for "Evaluation Report Initial and Final result" to match the template 
+		/// </summary>
+		private static void ChangeStyleForEvaluationReport(IXLWorksheet wsReport)
+		{
+			//Remove border which crosses the logo from first table
+			wsReport.Range("A1:Q1").Style.Border.BottomBorder = XLBorderStyleValues.None;
+			wsReport.Range("A2:Q2").Style.Border.TopBorder = XLBorderStyleValues.None;
+			var sdlGreen = XLColor.FromHtml("#24BD59");
+			wsReport.Style.Border.SetOutsideBorderColor(sdlGreen);
+
+			//Dummy collor used later to replace with gradient
+			wsReport.Cell("C32").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B6")); // use some unique color
+			wsReport.Cell("F32").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B7")); // use some unique color
+
+			wsReport.Cell("C32").Style.Border.SetRightBorderColor(XLColor.White);
+		}
+
 	}
 }
