@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
@@ -16,25 +15,21 @@ namespace IATETerminologyProvider.Service
 
 		public async Task<ObservableCollection<ItemsResponseModel>> GetTermTypes()
 		{
-			var itateTermTypes = new ObservableCollection<ItemsResponseModel>();
-			var httpClient = new HttpClient
-			{
-				BaseAddress = new Uri(ApiUrls.GetTermTypeUri("true", "en", "100", "0")),
-				Timeout = TimeSpan.FromMinutes(2)
-			};
-
-			Utils.AddDefaultParameters(httpClient);
 			var httpRequest = new HttpRequestMessage
 			{
-				Method = HttpMethod.Get
+				Method = HttpMethod.Get,
+				RequestUri = new Uri(ApiUrls.GetTermTypeUri("true", "en", "100", "0")),
 			};
 
+			var httpResponse = await IateApplicationInitializer.Clinet.SendAsync(httpRequest);
 			try
 			{
-				var httpResponse = await httpClient.SendAsync(httpRequest);
-				if (httpResponse.StatusCode == HttpStatusCode.OK)
+				httpResponse?.EnsureSuccessStatusCode();
+
+				if (httpResponse?.Content != null)
 				{
 					var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
+
 					var jsonTermTypesModel = JsonConvert.DeserializeObject<TermTypeResponseModel>(httpResponseAsString);
 
 					if (jsonTermTypesModel?.Items != null)
@@ -43,17 +38,14 @@ namespace IATETerminologyProvider.Service
 
 						return IateTermType;
 					}
-				}
-				else
-				{
-					Log.Logger.Error($"Get Term Type status code:{httpResponse.StatusCode}");
+
 				}
 			}
-			catch (Exception e)
+			finally
 			{
-				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+				httpResponse?.Dispose();
 			}
-			return itateTermTypes;
+			return new ObservableCollection<ItemsResponseModel>();
 		}
 	}
 }

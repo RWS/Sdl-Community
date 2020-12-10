@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -9,12 +12,26 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace IATETerminologyProvider
 {
 	[ApplicationInitializer]
-	public class IateApplicationInitializer: IApplicationInitializer
+	public class IateApplicationInitializer : IApplicationInitializer
 	{
+		public static HttpClient Clinet = new HttpClient();
+		private static readonly AccessTokenService AccessTokenService = new AccessTokenService();
+
 		public void Execute()
 		{
 			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 			eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
+			InitializeHttpClientSettings();
+		}
+
+		public static void SetAccessToken()
+		{
+			RefreshAccessToken();
+			if (!string.IsNullOrEmpty(AccessTokenService.AccessToken))
+			{
+				Clinet.DefaultRequestHeaders.Authorization =
+					new AuthenticationHeaderValue("Bearer", AccessTokenService.AccessToken);
+			}
 		}
 
 		private async void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent e)
@@ -23,6 +40,34 @@ namespace IATETerminologyProvider
 			var termTypeService = new TermTypeService();
 			await domanService.GetDomains();
 			await termTypeService.GetTermTypes();
+		}
+
+		private void InitializeHttpClientSettings()
+		{
+			Utils.AddDefaultParameters(Clinet);
+			SetAccessToken();
+		}
+
+		private static void RefreshAccessToken()
+		{
+			if (AccessTokenService.RefreshTokenExpired
+			    || AccessTokenService.RequestedAccessToken == DateTime.MinValue
+			    || string.IsNullOrEmpty(AccessTokenService.AccessToken))
+			{
+				var success = AccessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
+				if (!success)
+				{
+					throw new Exception(PluginResources.TermSearchService_Error_in_requesting_access_token);
+				}
+			}
+			else if (AccessTokenService.AccessTokenExpired && !AccessTokenService.AccessTokenExtended)
+			{
+				var success = AccessTokenService.ExtendAccessToken();
+				if (!success)
+				{
+					throw new Exception(PluginResources.TermSearchService_Error_in_refreshing_access_token);
+				}
+			}
 		}
 	}
 }
