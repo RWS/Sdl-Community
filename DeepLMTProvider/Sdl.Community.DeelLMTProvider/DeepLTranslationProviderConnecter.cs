@@ -54,12 +54,12 @@ namespace Sdl.Community.DeepLMTProvider
 				sourceText = normalizeHelper.NormalizeText(sourceText);
 
 				var content = new StringContent($"text={sourceText}" +
-				                                $"&source_lang={sourceLanguage}" +
-				                                $"&target_lang={targetLanguage}" +
-				                                $"&formality={_formality.ToString().ToLower()}" +
-				                                "&preserve_formatting=1" +
-				                                "&tag_handling=xml" +
-				                                $"&auth_key={ApiKey}",
+												$"&source_lang={sourceLanguage}" +
+												$"&target_lang={targetLanguage}" +
+												$"&formality={_formality.ToString().ToLower()}" +
+												"&preserve_formatting=1" +
+												"&tag_handling=xml" +
+												$"&auth_key={ApiKey}",
 					Encoding.UTF8, "application/x-www-form-urlencoded");
 
 				var response = DeeplApplicationInitializer.Clinet.PostAsync("https://api.deepl.com/v1/translate", content).Result;
@@ -128,8 +128,8 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception ex)
 			{
 				_logger.Error($"{ex}");
-				throw;
 			}
+			return new List<string>();
 		}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
