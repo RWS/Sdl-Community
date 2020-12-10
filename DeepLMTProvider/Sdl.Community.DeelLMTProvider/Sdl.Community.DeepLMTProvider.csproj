@@ -116,6 +116,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeeplApplicationInitializer.cs" />
     <Compile Include="DeepLMtTranslationProvider.cs" />
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
