@@ -156,7 +156,6 @@
     <Compile Include="SDLXLIFF\TranslationOrigin.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TERp.cs" />
-    <Compile Include="TM\TM.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\PostEdit.Compare.Report.01.xslt">
