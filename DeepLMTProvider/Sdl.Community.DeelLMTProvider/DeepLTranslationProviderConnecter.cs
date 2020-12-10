@@ -128,8 +128,8 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (Exception ex)
 			{
 				_logger.Error($"{ex}");
-				throw;
 			}
+			return  new List<string>();
 		}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null

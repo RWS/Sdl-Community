@@ -70,7 +70,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new DeepLMtTranslationProviderLanguageDirection(this, languageDirection);
+			return new DeepLMtTranslationProviderLanguageDirection(this, languageDirection, DeepLTranslationProviderConnecter);
 		}
 
 		public void LoadState(string translationProviderState)
