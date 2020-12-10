@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
@@ -22,14 +22,12 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
 		private readonly TermTypeService _termTypeService;
 		private readonly List<string> _subdomains = new List<string>();
-		private readonly AccessTokenService _accessTokenService;
+		private int _termIndexId;
 		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateTermTypes { get; set; }
 		public ObservableCollection<TermTypeModel> TermTypes { get; set; }
-		private int _termIndexId;
 
 		public TermSearchService(SettingsModel providerSettings)
 		{
-			_accessTokenService = new AccessTokenService();
 			TermTypes = new ObservableCollection<TermTypeModel>();
 			_domains = DomainService.Domains;
 			_termTypeService = new TermTypeService();
@@ -49,61 +47,42 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
 		{
 			var results = new List<ISearchResult>();
-			SetAccessToken();
 
-			var httpClient = new HttpClient
-			{
-				BaseAddress = new Uri(ApiUrls.BaseUri("true", "0", maxResultsCount.ToString())),
-				Timeout = TimeSpan.FromMinutes(2)
-			};
-			Utils.AddDefaultParameters(httpClient);
+			var timer1 = new Stopwatch();
+			timer1.Start();
+			var bodyModel = SetApiRequestBodyValues(source, target, text);
 
 			var httpRequest = new HttpRequestMessage
 			{
-				Method = HttpMethod.Post
+				Method = HttpMethod.Post,
+				RequestUri = new Uri(ApiUrls.BaseUri("true", "0", "500")),
+				Content = new StringContent(JsonConvert.SerializeObject(bodyModel), Encoding.UTF8, "application/json")
 			};
 
-			if (!string.IsNullOrEmpty(_accessTokenService.AccessToken))
-			{
-				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessTokenService.AccessToken);
-			}
+			//Refresh the Access token on Http client in case it expired
+			IateApplicationInitializer.SetAccessToken();
 
-			var bodyModel = SetApiRequestBodyValues(source, target, text);
-			httpRequest.Content = new StringContent(JsonConvert.SerializeObject(bodyModel), Encoding.UTF8, "application/json");
+			var httpResponse = IateApplicationInitializer.Clinet.SendAsync(httpRequest)?.Result;
 
-			var httpResponse = httpClient.SendAsync(httpRequest)?.Result;
-			if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.OK)
+			httpResponse?.EnsureSuccessStatusCode();
+			try
 			{
-				var httpResponseString = httpResponse.Content?.ReadAsStringAsync().Result;
+				timer1.Stop();
+				var elapsed1 = timer1.Elapsed.Milliseconds;
+				var timer2 = new Stopwatch();
+				timer2.Start();
+				var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
 				results = MapResponseValues(httpResponseString, domainsJsonResponse);
+				timer2.Stop();
+				var elapsed2 = timer2.Elapsed.Milliseconds;
+
 				return results;
 			}
-			Log.Logger.Error($"Get Terms Status code:{httpResponse?.StatusCode}");
-
-			return results;
-		}
-
-		private void SetAccessToken()
-		{
-			if (_accessTokenService.RefreshTokenExpired
-			    || _accessTokenService.RequestedAccessToken == DateTime.MinValue
-			    || string.IsNullOrEmpty(_accessTokenService.AccessToken))
+			finally
 			{
-				var success = _accessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
-				if (!success)
-				{
-					throw new Exception(PluginResources.TermSearchService_Error_in_requesting_access_token);
-				}
-			}
-			else if (_accessTokenService.AccessTokenExpired && !_accessTokenService.AccessTokenExtended)
-			{
-				var success = _accessTokenService.ExtendAccessToken();
-				if (!success)
-				{
-					throw new Exception(PluginResources.TermSearchService_Error_in_refreshing_access_token);
-				}
+				httpResponse?.Dispose();
 			}
 		}
 
@@ -128,7 +107,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguges,
-				include_subdomains = false,
+				include_subdomains = "true",
 				query_operator = 0,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
@@ -349,6 +328,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				IateTermTypes.PropertyChanged += IateTermTypes_PropertyChanged;
 			}
 		}
+
 		private void SetTermTypes(ObservableCollection<ItemsResponseModel> termTypesResponse)
 		{
 			foreach (var item in termTypesResponse)
