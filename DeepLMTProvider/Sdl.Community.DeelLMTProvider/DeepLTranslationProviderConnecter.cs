@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -20,10 +17,19 @@ namespace Sdl.Community.DeepLMTProvider
 	public class DeepLTranslationProviderConnecter
 	{
 		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
-		private readonly string _pluginVersion = "";
 		private Formality _formality;
 		private List<string> _supportedTargetLanguages;
 		private List<string> _supportedSourceLanguages;
+
+		public DeepLTranslationProviderConnecter(string key, Formality formality)
+		{
+			ApiKey = key;
+			_formality = formality;
+		}
+
+		public string ApiKey { get; set; }
+		private List<string> SupportedTargetLanguages => _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
 
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
@@ -33,41 +39,6 @@ namespace Sdl.Community.DeepLMTProvider
 
 			return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
 		}
-
-		public DeepLTranslationProviderConnecter(string key, Formality formality)
-		{
-			ApiKey = key;
-			_formality = formality;
-
-			try
-			{
-				// fetch the version of the plugin from the manifest deployed
-				var pexecutingAsseblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-				pexecutingAsseblyPath = Path.Combine(pexecutingAsseblyPath, "pluginpackage.manifest.xml");
-				var doc = new XmlDocument();
-				doc.Load(pexecutingAsseblyPath);
-
-				if (doc.DocumentElement == null) return;
-				foreach (XmlNode n in doc.DocumentElement.ChildNodes)
-				{
-					if (n.Name == "Version")
-					{
-						_pluginVersion = n.InnerText;
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
-				_logger.Error($"{e.Message}\n {e.StackTrace}");
-			}
-		}
-
-		public string ApiKey { get; set; }
-
-		private List<string> SupportedTargetLanguages => _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
-
-		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
@@ -82,42 +53,25 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				sourceText = normalizeHelper.NormalizeText(sourceText);
 
-				using (var httpClient = new HttpClient())
+				var content = new StringContent($"text={sourceText}" +
+												$"&source_lang={sourceLanguage}" +
+												$"&target_lang={targetLanguage}" +
+												$"&formality={_formality.ToString().ToLower()}" +
+												"&preserve_formatting=1" +
+												"&tag_handling=xml" +
+												$"&auth_key={ApiKey}",
+					Encoding.UTF8, "application/x-www-form-urlencoded");
+
+				var response = DeeplApplicationInitializer.Clinet.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+				response.EnsureSuccessStatusCode();
+
+				var translationResponse = response.Content?.ReadAsStringAsync().Result;
+				var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
+
+				if (translatedObject != null && translatedObject.Translations.Any())
 				{
-					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 |
-					                                       SecurityProtocolType.Tls;
-
-					httpClient.Timeout = TimeSpan.FromMinutes(5);
-					var content = new StringContent($"text={sourceText}" +
-					                                $"&source_lang={sourceLanguage}" +
-					                                $"&target_lang={targetLanguage}" +
-					                                $"&formality={_formality.ToString().ToLower()}" +
-					                                "&preserve_formatting=1" +
-					                                "&tag_handling=xml" +
-					                                $"&auth_key={ApiKey}",
-						Encoding.UTF8, "application/x-www-form-urlencoded");
-
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
-
-					var response = httpClient.PostAsync("https://api.deepl.com/v1/translate", content).Result;
-					if (response.IsSuccessStatusCode)
-					{
-						var translationResponse = response.Content?.ReadAsStringAsync().Result;
-						var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
-
-						if (translatedObject != null && translatedObject.Translations.Any())
-						{
-							translatedText = translatedObject.Translations[0].Text;
-							translatedText = DecodeWhenNeeded(translatedText);
-						}
-					}
-					else
-					{
-						var message =
-							$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
-							$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
-						throw new HttpRequestException(message);
-					}
+					translatedText = translatedObject.Translations[0].Text;
+					translatedText = DecodeWhenNeeded(translatedText);
 				}
 			}
 			catch (AggregateException aEx)
@@ -161,35 +115,21 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			try
 			{
-				using (var httpClient = new HttpClient())
-				{
-					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+				var content = new StringContent($"type={type}" + $"&auth_key={ApiKey}", Encoding.UTF8,
+					"application/x-www-form-urlencoded");
 
-					httpClient.Timeout = TimeSpan.FromMinutes(5);
-					var content = new StringContent($"type={type}" + $"&auth_key={ApiKey}", Encoding.UTF8, "application/x-www-form-urlencoded");
+				var response = DeeplApplicationInitializer.Clinet.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+				response.EnsureSuccessStatusCode();
 
-					httpClient.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {_pluginVersion}");
+				var languagesResponse = response.Content?.ReadAsStringAsync().Result;
 
-					var response = httpClient.PostAsync("https://api.deepl.com/v1/languages", content).Result;
-
-					if (response.IsSuccessStatusCode)
-					{
-						var languagesResponse = response.Content?.ReadAsStringAsync().Result;
-
-						return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
-					}
-					var message =
-						$"HTTP Request to DeepL Translate REST API endpoint failed with status code '{response.StatusCode}'. " +
-						$"Response content: {response.Content?.ReadAsStringAsync().Result}.";
-					throw new HttpRequestException(message);
-				}
+				return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
 			}
 			catch (Exception ex)
 			{
 				_logger.Error($"{ex}");
+				throw;
 			}
-
-			return new List<string>();
 		}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
