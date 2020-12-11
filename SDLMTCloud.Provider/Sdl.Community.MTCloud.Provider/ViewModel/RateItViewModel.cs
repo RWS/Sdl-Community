@@ -282,7 +282,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (score > 0) rating.Score = score;
 
 			var comments = isFeedbackForPreviousSegment ? PreviousRating.Comments : GetCommentsAndFeedbackFromUi();
-			if (comments.Count > 0) rating.Comments = comments;
+			if (comments?.Count > 0) rating.Comments = comments;
 
 			PreviousRating = null;
 
@@ -424,7 +424,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			};
 		}
 
-		private Rating PreviousRating { get; set; }
+		private Rating PreviousRating { get; set; } = new Rating();
 
 		private Feedback GetImprovement(SegmentId? segmentId = null)
 		{
