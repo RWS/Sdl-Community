@@ -98,6 +98,16 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			{
 				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
 				filteredDomains.AddRange(domains);
+
+				//TODO: Check if the "Include subdomains is true"
+				var subdomainsIds = new List<string>();
+				var correspondingSubdomains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
+				foreach (var subdomainIds in correspondingSubdomains)
+				{
+					subdomainsIds.AddRange(subdomainIds);
+				}
+				filteredDomains.AddRange(subdomainsIds);
+
 				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
 			}

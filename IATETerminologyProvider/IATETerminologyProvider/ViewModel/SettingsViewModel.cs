@@ -217,7 +217,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 					var domainModel = new DomainModel
 					{
 						Code = domain.Code,
-						Name = selectedDomainName
+						Name = selectedDomainName,
+						SubdomainsIds = domain.SubdomainIds
 					};
 					domainModel.PropertyChanged += DomainModel_PropertyChanged;
 					Domains.Add(domainModel);
