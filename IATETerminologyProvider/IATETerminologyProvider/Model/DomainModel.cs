@@ -1,9 +1,11 @@
-﻿namespace IATETerminologyProvider.Model
+﻿using System.Collections.Generic;
+
+namespace IATETerminologyProvider.Model
 {
 	public class DomainModel : ViewModelBase
-	{		
+	{
 		private bool _isSelected;
-	
+
 		public string Code { get; set; }
 		public string Name { get; set; }
 		public bool IsSelected
@@ -14,6 +16,7 @@
 				_isSelected = value;
 				OnPropertyChanged(nameof(IsSelected));
 			}
-		}	
+		}
+		public List<string> SubdomainsIds { get; set; }
 	}
 }

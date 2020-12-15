@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
@@ -15,13 +16,13 @@ namespace IATETerminologyProvider.Helpers
 
 		public static string UppercaseFirstLetter(string s)
 		{
-			// Check for empty string.
 			if (string.IsNullOrEmpty(s))
 			{
 				return string.Empty;
 			}
-			// Return char and concat substring.
-			return char.ToUpper(s[0]) + s.Substring(1);
+
+			var textInfo = CultureInfo.CurrentCulture.TextInfo;
+			return textInfo.ToTitleCase(s);
 		}
 
 		public static void AddDefaultParameters(HttpClient httpClient)

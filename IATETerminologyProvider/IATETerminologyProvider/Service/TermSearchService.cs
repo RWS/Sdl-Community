@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -46,6 +47,9 @@ namespace IATETerminologyProvider.Service
 		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
 		{
 			var results = new List<ISearchResult>();
+
+			var timer1 = new Stopwatch();
+			timer1.Start();
 			var bodyModel = SetApiRequestBodyValues(source, target, text);
 
 			var httpRequest = new HttpRequestMessage
@@ -63,10 +67,16 @@ namespace IATETerminologyProvider.Service
 			httpResponse?.EnsureSuccessStatusCode();
 			try
 			{
+				timer1.Stop();
+				var elapsed1 = timer1.Elapsed.Milliseconds;
+				var timer2 = new Stopwatch();
+				timer2.Start();
 				var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
 				results = MapResponseValues(httpResponseString, domainsJsonResponse);
+				timer2.Stop();
+				var elapsed2 = timer2.Elapsed.Milliseconds;
 
 				return results;
 			}
@@ -88,6 +98,16 @@ namespace IATETerminologyProvider.Service
 			{
 				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
 				filteredDomains.AddRange(domains);
+
+				//TODO: Check if the "Include subdomains is true"
+				var subdomainsIds = new List<string>();
+				var correspondingSubdomains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
+				foreach (var subdomainIds in correspondingSubdomains)
+				{
+					subdomainsIds.AddRange(subdomainIds);
+				}
+				filteredDomains.AddRange(subdomainsIds);
+
 				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
 			}

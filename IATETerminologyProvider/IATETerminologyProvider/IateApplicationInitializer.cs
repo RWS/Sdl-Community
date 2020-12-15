@@ -5,9 +5,6 @@ using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.Desktop.IntegrationApi.Notifications.Events;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace IATETerminologyProvider
 {
@@ -17,11 +14,14 @@ namespace IATETerminologyProvider
 		public static HttpClient Clinet = new HttpClient();
 		private static readonly AccessTokenService AccessTokenService = new AccessTokenService();
 
-		public void Execute()
+		public async void Execute()
 		{
-			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
-			eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
 			InitializeHttpClientSettings();
+
+			var domanService = new DomainService();
+			var termTypeService = new TermTypeService();
+			await domanService.GetDomains();
+			await termTypeService.GetTermTypes();
 		}
 
 		public static void SetAccessToken()
@@ -29,17 +29,8 @@ namespace IATETerminologyProvider
 			RefreshAccessToken();
 			if (!string.IsNullOrEmpty(AccessTokenService.AccessToken))
 			{
-				Clinet.DefaultRequestHeaders.Authorization =
-					new AuthenticationHeaderValue("Bearer", AccessTokenService.AccessToken);
+				Clinet.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessTokenService.AccessToken);
 			}
-		}
-
-		private async void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent e)
-		{
-			var domanService = new DomainService();
-			var termTypeService = new TermTypeService();
-			await domanService.GetDomains();
-			await termTypeService.GetTermTypes();
 		}
 
 		private void InitializeHttpClientSettings()

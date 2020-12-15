@@ -16,7 +16,7 @@ namespace IATETerminologyProvider.ViewModel
 	{
 		private ICommand _saveSettingsCommand;
 		private ICommand _resetToDefault;
-		private DomainModel _selectedDomain;		
+		private DomainModel _selectedDomain;
 		private TermTypeModel _selectedTermType;
 		private readonly DomainService _domainService;
 		private readonly TermTypeService _termTypeService;
@@ -25,8 +25,8 @@ namespace IATETerminologyProvider.ViewModel
 		private ObservableCollection<TermTypeModel> _termTypes;
 		private bool _dialogResult;
 
-		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService)
-		{			
+		public SettingsViewModel(SettingsModel providerSettings, IIateSettingsService settingsService)
+		{
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
 			_termTypeService = new TermTypeService();
@@ -47,7 +47,7 @@ namespace IATETerminologyProvider.ViewModel
 			get => _selectedDomain;
 			set
 			{
-				_selectedDomain = value;				
+				_selectedDomain = value;
 				OnPropertyChanged(nameof(SelectedDomain));
 			}
 		}
@@ -207,7 +207,7 @@ namespace IATETerminologyProvider.ViewModel
 			SetDomains(IateDomains.Result);
 		}
 
-		private void SetDomains(ObservableCollection<ItemsResponseModel>iateDomains)
+		private void SetDomains(ObservableCollection<ItemsResponseModel> iateDomains)
 		{
 			foreach (var domain in iateDomains)
 			{
@@ -217,7 +217,8 @@ namespace IATETerminologyProvider.ViewModel
 					var domainModel = new DomainModel
 					{
 						Code = domain.Code,
-						Name = selectedDomainName
+						Name = selectedDomainName,
+						SubdomainsIds = domain.SubdomainIds
 					};
 					domainModel.PropertyChanged += DomainModel_PropertyChanged;
 					Domains.Add(domainModel);
