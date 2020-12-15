@@ -115,7 +115,7 @@ namespace Sdl.Community.Transcreate.Service
 				// activate the selected project if different to the current project
 				if (_controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id != selectedProject.GetProjectInfo().Id)
 				{
-					_controllers.ProjectsController.Open(selectedProject);
+					_projectAutomationService.ActivateProject(selectedProject);
 				}
 
 				_taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);

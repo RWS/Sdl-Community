@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -213,7 +214,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 			foreach (var taskContext in taskContexts)
 			{
-				ActivateProject(taskContext.FileBasedProject);
+				_projectAutomationService.ActivateProject(taskContext.FileBasedProject);
 				_projectAutomationService.RemoveAllReports();
 				UpdateProjectSettingsBundle(taskContext.FileBasedProject);
 				_controllers.TranscreateController.UpdateBackTranslationProjectData(project, taskContext);
@@ -239,20 +240,6 @@ namespace Sdl.Community.Transcreate.Actions
 			}
 		}
 
-		private void ActivateProject(FileBasedProject project)
-		{
-			var projectId = project.GetProjectInfo().Id.ToString();
-			var selectedProjectId = _controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id.ToString();
-			if (projectId != selectedProjectId)
-			{
-				Dispatcher.CurrentDispatcher.Invoke(delegate
-				{
-					_controllers.ProjectsController.Open(project);
-				}, DispatcherPriority.ContextIdle);
-			}
-
-			Dispatcher.CurrentDispatcher.Invoke(delegate{}, DispatcherPriority.ContextIdle);
-		}
 
 		private TaskContext CreateBackTranslationTaskContext(FileBasedProject newStudioProject,
 			IReadOnlyCollection<FileData> languageFileData, string localProjectFolder,
@@ -469,7 +456,7 @@ namespace Sdl.Community.Transcreate.Actions
 			}
 			finally
 			{
-				_controllers.ProjectsController.Open(newStudioProject);
+				_projectAutomationService.ActivateProject(newStudioProject);
 			}
 		}
 
@@ -735,7 +722,7 @@ namespace Sdl.Community.Transcreate.Actions
 			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = new Controllers();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
+			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
 
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
 

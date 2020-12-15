@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Threading;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
 using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
 
@@ -21,14 +23,38 @@ namespace Sdl.Community.Transcreate.Service
 		private string _projectNameSuffix;
 		private readonly ImageService _imageService;
 		private readonly TranscreateViewController _controller;
+		private readonly ProjectsController _projectsController;
 		private readonly CustomerProvider _customerProvider;
 
-		public ProjectAutomationService(ImageService imageService, TranscreateViewController controller,
+		public ProjectAutomationService(ImageService imageService, TranscreateViewController controller, ProjectsController projectsController,
 			CustomerProvider customerProvider)
 		{
 			_imageService = imageService;
 			_controller = controller;
+			_projectsController = projectsController;
 			_customerProvider = customerProvider;
+		}
+
+		public void ActivateProject(FileBasedProject project)
+		{
+			var projectId = project.GetProjectInfo().Id.ToString();
+			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
+			if (projectId != selectedProjectId)
+			{
+				Dispatcher.CurrentDispatcher.Invoke(delegate
+				{
+					var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
+						BindingFlags.NonPublic | BindingFlags.Instance);
+					var projectInstance = internalProjectType?.GetValue(project);
+
+					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
+
+				}, DispatcherPriority.ContextIdle);
+			}
+
+			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
 		}
 
 		/// <summary>

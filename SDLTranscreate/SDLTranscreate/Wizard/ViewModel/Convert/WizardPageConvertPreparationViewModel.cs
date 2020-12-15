@@ -206,7 +206,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						success = await Finalize(job);
 					}
 
-					_controllers.ProjectsController.Open(_newProject);
+					_projectAutomationService.ActivateProject(_newProject);
 					_controllers.ProjectsController.RefreshProjects();
 				}
 
