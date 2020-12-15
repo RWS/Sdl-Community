@@ -13,13 +13,15 @@
 		Title="IATE Real-time Terminology"
 		ResizeMode="CanResizeWithGrip"
 		WindowStartupLocation="CenterScreen"
-        Height="700" Width="800">
+        Height="750" Width="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -27,6 +29,7 @@
 	<Border Style="{DynamicResource WindowControlBorderStyle}">
 		<Grid>
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
@@ -38,11 +41,17 @@
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 			<uiHelpers:WindowsControl  Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top"/>
+			<CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10"
+			          Style="{DynamicResource Sdl.Checkbox.GenericStyle}" 
+					  Content="{x:Static resx:PluginResources.Search_Subdomains}" 
+					  ToolTip="{x:Static resx:PluginResources.Subdomains_Tooltip}"
+					  IsChecked="{Binding SearchInSubdomains}"/>
+
 			<TextBlock Grid.Row="1" Grid.Column="0" Margin="10" 
 					   Style="{DynamicResource Sdl.TextBlock.TitleStyle}" Text="{x:Static resx:PluginResources.Settings_Descr}" FontSize="15" />
 
-			<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="2" Grid.Column="0" Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>
-			<DataGrid Grid.Row="3" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False" 
+			<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="3" Grid.Column="0" Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>
+			<DataGrid Grid.Row="4" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False" 
                   ItemsSource="{Binding Domains,UpdateSourceTrigger=PropertyChanged}"   
 		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
                   SelectionMode ="Extended"
@@ -59,7 +68,7 @@
 								IsChecked="{Binding Path=DataContext.AllDomainsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},UpdateSourceTrigger=PropertyChanged}"
 								Margin ="5,0,0,0"/>
 						</DataGridTemplateColumn.Header>
-						
+
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin ="10,0,0,0" />
@@ -76,8 +85,8 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
-			<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="2" Margin="10,5,0,0" Grid.Column="1" Text="{x:Static resx:PluginResources.TermType_Description}"/>
-			<DataGrid Grid.Row="3" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False" 
+			<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="3" Margin="10,5,0,0" Grid.Column="1" Text="{x:Static resx:PluginResources.TermType_Description}"/>
+			<DataGrid Grid.Row="4" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes,UpdateSourceTrigger=PropertyChanged}"
 		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
                   SelectionMode ="Extended"
@@ -109,9 +118,9 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
-			<Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
+			<Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
 					Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default"/>
-			<Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.1,0,0" BorderBrush="#ABB0B3">
+			<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.1,0,0" BorderBrush="#ABB0B3">
 				<DockPanel>
 					<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
 					         ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
@@ -131,7 +140,7 @@
 					</Button>
 				</DockPanel>
 			</Border>
-			
+
 		</Grid>
 	</Border>
 </Window>

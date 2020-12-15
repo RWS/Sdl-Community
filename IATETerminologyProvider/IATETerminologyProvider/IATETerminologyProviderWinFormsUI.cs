@@ -12,11 +12,10 @@ namespace IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
 	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
-	{	
+	{
 		private SettingsViewModel _settingsViewModel;
 		private SettingsWindow _settingsWindow;
 		private readonly IateSettingsService _settingsService = new IateSettingsService();
-
 
 		public string TypeName => PluginResources.IATETerminologyProviderName;
 		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
@@ -24,9 +23,9 @@ namespace IATETerminologyProvider
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
 			var result = SetTerminologyProvider(null, null);
-			return result;					
+			return result;
 		}
-		
+
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
 			var savedSettings = _settingsService.GetProviderSettings();
@@ -39,6 +38,7 @@ namespace IATETerminologyProvider
 			{
 				providerSettings.Domains.AddRange(savedSettings.Domains);
 				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
+				providerSettings.SearchInSubdomains = savedSettings.SearchInSubdomains;
 			}
 			SetTerminologyProvider(terminologyProvider as IATETerminologyProvider, providerSettings);
 
@@ -67,7 +67,7 @@ namespace IATETerminologyProvider
 			{
 				DataContext = _settingsViewModel
 			};
-			
+
 			_settingsWindow.ShowDialog();
 			if (!_settingsViewModel.DialogResult) return null;
 			providerSettings = _settingsViewModel.ProviderSettings;

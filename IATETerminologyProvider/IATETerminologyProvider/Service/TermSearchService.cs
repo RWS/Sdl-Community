@@ -99,14 +99,10 @@ namespace IATETerminologyProvider.Service
 				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
 				filteredDomains.AddRange(domains);
 
-				//TODO: Check if the "Include subdomains is true"
-				var subdomainsIds = new List<string>();
-				var correspondingSubdomains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
-				foreach (var subdomainIds in correspondingSubdomains)
+				if (_providerSettings.SearchInSubdomains)
 				{
-					subdomainsIds.AddRange(subdomainIds);
+					IncludeSubdomainsId(filteredDomains);
 				}
-				filteredDomains.AddRange(subdomainsIds);
 
 				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
@@ -124,6 +120,22 @@ namespace IATETerminologyProvider.Service
 			};
 
 			return bodyModel;
+		}
+
+		/// <summary>
+		/// Add subdomains ids for selected domains
+		/// </summary>
+		/// <param name="filteredDomainsIds">Subdomains ids which needs to be sent to IATE</param>
+		private void IncludeSubdomainsId(List<string> filteredDomainsIds)
+		{
+			var subdomainsIds = new List<string>();
+			var correspondingSubdomains =
+				_providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
+			foreach (var subdomainIds in correspondingSubdomains)
+			{
+				subdomainsIds.AddRange(subdomainIds);
+			}
+			filteredDomainsIds.AddRange(subdomainsIds);
 		}
 
 		/// <summary>

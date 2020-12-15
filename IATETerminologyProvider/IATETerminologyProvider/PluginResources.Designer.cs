@@ -155,11 +155,29 @@ namespace IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search in subdomains.
+        /// </summary>
+        public static string Search_Subdomains {
+            get {
+                return ResourceManager.GetString("Search_Subdomains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {
             get {
                 return ResourceManager.GetString("Settings_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching in subdomains will increase the response time from IATE service.
+        /// </summary>
+        public static string Subdomains_Tooltip {
+            get {
+                return ResourceManager.GetString("Subdomains_Tooltip", resourceCulture);
             }
         }
         
