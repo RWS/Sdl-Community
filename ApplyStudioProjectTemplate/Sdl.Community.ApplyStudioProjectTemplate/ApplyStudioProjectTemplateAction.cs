@@ -489,6 +489,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					// Use reflection to synch the project to the server
 					try
 					{
+						targetProject.Save();
+
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
 						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
 						//For GS projects
