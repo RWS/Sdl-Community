@@ -24,7 +24,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/Sdl.Community.IATETerminologyProvider.sln'
+  value: '**/IATETerminologyProvider.sln'
 - name: pathToPublish
   value: 'IATETerminologyProvider\IATETerminologyProvider\bin\Release\Sdl.Community.IATETerminologyProvider.sdlplugin'
 
