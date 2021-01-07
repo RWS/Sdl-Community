@@ -249,6 +249,7 @@
     <Compile Include="Model\Controllers.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\CustomerGroup.cs" />
+    <Compile Include="Model\BackTranslationOptions.cs" />
     <Compile Include="Model\ExportOptions.cs" />
     <Compile Include="Model\FileData.cs" />
     <Compile Include="Model\FilterItem.cs" />
@@ -660,10 +661,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Wizard\ViewModel\BackTranslation\" />
-    <Folder Include="Wizard\View\BackTranslation\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

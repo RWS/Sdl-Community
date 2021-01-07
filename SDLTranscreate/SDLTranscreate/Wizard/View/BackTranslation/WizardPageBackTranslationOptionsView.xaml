@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="Sdl.Community.Transcreate.Wizard.View.BackTranslation.WizardPageBackTranslationOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation"
+             mc:Ignorable="d" 
+             d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:WizardPageBackTranslationOptionsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Options">
+			<Grid Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<CheckBox Grid.Row="0" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
+				          Content="Copy Source to Target for empty translations" 
+				          IsEnabled="{Binding CopySourceToTargetForEmptyTranslationsEnabled}"
+				          IsChecked="{Binding CopySourceToTargetForEmptyTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+
+				<CheckBox Grid.Row="1" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
+				          Content="Overwrite existing Back-Translations" 
+				          IsEnabled="{Binding OverwriteExistingBackTranslationsEnabled}"
+				          IsChecked="{Binding OverwriteExistingBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+
+			
+				
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

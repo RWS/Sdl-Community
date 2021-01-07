@@ -246,7 +246,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -346,7 +346,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -400,7 +400,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				_logReport.AppendLine(PluginResources.Label_Files);
 				foreach (var projectFile in projectFiles)
 				{
-					_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, projectFile.ExternalFilePath));
+					_logReport.AppendLine(string.Format(PluginResources.Label_XliffFile, projectFile.ExternalFilePath));
 				}
 
 				if (TaskContext.ConvertOptions.CloseProjectOnComplete)
@@ -420,7 +420,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -471,13 +471,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 						var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".xliff");
 						var sdlXliffBackupFile = Path.Combine(folder, targetLanguageFile.Name);
 
-						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
+						_logReport.AppendLine(string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location));
 						if (TaskContext.ImportOptions.BackupFiles)
 						{
 							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackupFile));
 						}
 
-						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, targetLanguageFile.ExternalFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_XliffFile, targetLanguageFile.ExternalFilePath));
 						_logReport.AppendLine(string.Format(PluginResources.Label_ArchiveFile, archiveFile));
 
 						CreateBackupFile(targetLanguageFile.Location, sdlXliffBackupFile);
@@ -556,7 +556,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 			finally
 			{
@@ -597,7 +597,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -818,8 +818,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					throw new Exception(string.Format(PluginResources.ErrorMessage_ConvertingFile, projectFile.Location));
 				}
 
-				_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, projectFile.Location));
-				_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, xliffFilePath));
+				_logReport.AppendLine(string.Format(PluginResources.Label_SdlXliffFile, projectFile.Location));
+				_logReport.AppendLine(string.Format(PluginResources.Label_XliffFile, xliffFilePath));
 
 				projectFile.XliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId,
 					isSource ? targetFile.Location : projectFile.Location,

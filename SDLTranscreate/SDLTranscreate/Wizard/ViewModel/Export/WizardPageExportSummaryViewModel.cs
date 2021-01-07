@@ -93,7 +93,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 					var folder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
 					var filePath = Path.Combine(folder, targetLanguageFile.Name + ".docx");
 
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 					summaryText += indent + string.Format(PluginResources.label_OutputFile, filePath) + Environment.NewLine + Environment.NewLine;										
 				}
 			}

@@ -10,11 +10,11 @@ namespace Sdl.Community.Transcreate.Model
 
 		public ExportOptions()
 		{
-			XliffSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-			IncludeTranslations = false;
-			CopySourceToTarget = false;
-			ExcludeFilterIds = new List<string>();
+			XliffSupport = Enumerators.XLIFFSupport.xliff12sdl;
+			IncludeTranslations = true;
+			CopySourceToTarget = true;
 			IncludeBackTranslations = false;
+			ExcludeFilterIds = new List<string>();
 		}
 
 		public Enumerators.XLIFFSupport XliffSupport { get; set; }
