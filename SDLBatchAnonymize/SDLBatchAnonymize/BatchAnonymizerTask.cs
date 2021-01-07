@@ -7,6 +7,7 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 
@@ -40,7 +41,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			{
 				foreach (Window window in Application.Current.Windows)
 				{
-					if (!window.Title.Equals("Batch Processing")) continue;
+					if (!window.Title.Equals("Batch Processing") && !window.Title.Contains("Create a New Project")) continue;
 					_batchTaskWindow = window;
 					_batchTaskWindow.Closing += Window_Closing;
 				}
@@ -95,9 +96,8 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 			var anonymizeProjService = new AnonymizeSdlProjService();
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var proj = projectController.CurrentProject;
 
-			if (proj != null)
+			if (Project is FileBasedProject proj)
 			{
 				proj.Save();
 				projectController.Close(proj);
