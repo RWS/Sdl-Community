@@ -6,8 +6,26 @@
              xmlns:local="clr-namespace:StudioViews.View"
              xmlns:viewModel="clr-namespace:StudioViews.ViewModel"
              xmlns:behaviours="clr-namespace:StudioViews.Behaviours"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewModel:StudioViewsEditorViewModel}" Height="300" Width="595">
+             d:DataContext="{d:DesignInstance viewModel:StudioViewsEditorViewModel}" Height="320" Width="595">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/StudioViews;component/Styles/TextBlockStyle.xaml"/>
+
+
+			</ResourceDictionary.MergedDictionaries>
+
+		</ResourceDictionary>
+	</UserControl.Resources>
 	<Grid AllowDrop="True"
 	      Background="Transparent"
 	      behaviours:PreviewDragDropBehaviour.PreviewDragDrop="{Binding DragDropCommand}">
@@ -28,10 +46,12 @@
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 
 					<Grid Grid.Row="0" Margin="5">
 						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
 							<RowDefinition Height="Auto"/>
 						</Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
@@ -65,20 +85,27 @@
 					        Height="22" 
 					        Command="{Binding ExportPathBrowseCommand}" 
 					        VerticalAlignment="Top" Width="Auto"/>
+
+						<Button Grid.Row="1" Grid.Column="1" 
+						        Command="{Binding OpenFolderInExplorerCommand}" 
+						        HorizontalAlignment="Right" 
+						        Style="{StaticResource LinkButton}" 
+						        IsEnabled="{Binding ExportPathIsValid}"
+						        Content="Open folder in file explorer" Margin="4,2,4,2"/>
 					</Grid>
 
 					<Grid Grid.Row="1" Margin="5">
 						<GroupBox Header="Options">
-							<StackPanel Orientation="Vertical" Margin="2">
-								<RadioButton Content="Selected segments" Margin="5"
+							<StackPanel Orientation="Vertical" Margin="5">
+								<RadioButton Content="Selected segments" Margin="5" VerticalContentAlignment="Center"
 								             IsChecked="{Binding ExportSelectedSegments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-								<RadioButton Content="Visible segments" Margin="5"
+								<RadioButton Content="Visible segments" Margin="5" VerticalContentAlignment="Center"
 								             IsChecked="{Binding ExportVisibleSegments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 							</StackPanel>
 						</GroupBox>
 					</Grid>
 
-					<Grid Grid.Row="2" Margin="5">
+					<Grid Grid.Row="2" Margin="5,10,5,5">
 						<Button Content="Export" 
 						        Grid.Column="0"
 								HorizontalAlignment="Right"
@@ -90,7 +117,7 @@
 				</Grid>
 
 			</TabItem>
-			<TabItem>
+			<TabItem IsSelected="True">
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal">
 						<Image Source="../Resources/import.ico" Width="24"
@@ -99,8 +126,7 @@
 						<TextBlock Text="Import" VerticalAlignment="Center" Padding="5,0,5,0" />
 					</StackPanel>
 				</TabItem.Header>
-				<Grid Margin="10"
-					  AllowDrop="True">
+				<Grid Margin="10" AllowDrop="True">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
@@ -145,16 +171,57 @@
 
 					</Grid>
 
-					<Grid Grid.Row="1" Margin="5">
-						<GroupBox Header="Options">
-							<StackPanel Orientation="Vertical" Margin="2">
-								<CheckBox Content="Overwrite translations"  Margin="5"
-								          IsChecked="{Binding OverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-							</StackPanel>
-						</GroupBox>
-					</Grid>
+					<!--<GroupBox Grid.Row="1"  Margin="5" Header="Options">-->
+					<Grid  Grid.Row="1" Margin="0">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
 
-					<Grid Grid.Row="2" Margin="5">
+
+							<!--<StackPanel Orientation="Vertical" Margin="2,5,2,2">
+								<CheckBox Content="Overwrite translations"  Margin="5" VerticalContentAlignment="Center"
+								          IsChecked="{Binding OverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+							</StackPanel>-->
+
+							<Grid Grid.Row="1">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+								</Grid.RowDefinitions>
+
+								<TextBlock VerticalAlignment="Center" Text="Exclude Segments"  Margin="5,5,5,5"/>
+
+								<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+							                         Margin="5,0,5,0" 
+							                         Height="55" 
+							                         MaxDropDownHeight="250"
+							                         Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+							                         SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+							                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+							                         ItemsSource="{Binding FilterItems}"            
+							                         SelectedItems="{Binding SelectedExcludeFilterItems}"
+							                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+							                         EnableGrouping="True"
+							                         EnableFiltering="True"
+							                         IsEditable="True"
+							                         EnableAutoComplete="True"
+							                         ClearFilterOnDropdownClosing="True"
+							                         ClearSelectionOnFilterChanged="True"
+							/>
+								<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+							        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
+									<Underline>Clear selected items</Underline>
+								</Button>
+							</Grid>
+						</Grid>
+					<!--</GroupBox>-->
+
+					<Grid Grid.Row="2" Margin="5,15,5,5">
 						<Button Content="Import" 
 						        Grid.Column="0"
 						        HorizontalAlignment="Right"

@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.MultiSelectComboBox.EventArgs;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using StudioViews.Commands;
 using StudioViews.Controls.Folder;
@@ -18,8 +23,14 @@ namespace StudioViews.ViewModel
 	{
 		private readonly EditorController _editorController;
 		private readonly FileInfoService _fileInfoService;
+		private readonly FilterItemHelper _filterItemHelper;
+		private readonly ProjectHelper _projectHelper;
 
 		private IStudioDocument _activeDocument;
+
+		private ICommand _openFolderInExplorerCommand;
+		private ICommand _clearFiltersCommand;
+		private ICommand _selectedItemsChangedCommand;
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
 		private ICommand _importPathBrowseCommand;
@@ -30,16 +41,20 @@ namespace StudioViews.ViewModel
 		private string _exportPath;
 		private bool _importPathIsValid;
 		private bool _exportPathIsValid;
+		private List<FilterItem> _filterItems;
+		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
 
-		private bool _overwriteTranslations;
 		private bool _exportSelectedSegments;
 		private bool _exportVisibleSegments;
 
 		private int _selectedTabItem;
 
-		public StudioViewsEditorViewModel(EditorController editorController, FileInfoService fileInfoService)
+		public StudioViewsEditorViewModel(EditorController editorController, FileInfoService fileInfoService,
+			FilterItemHelper filterItemHelper, ProjectHelper projectHelper)
 		{
 			_fileInfoService = fileInfoService;
+			_filterItemHelper = filterItemHelper;
+			_projectHelper = projectHelper;
 
 			_editorController = editorController;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
@@ -48,8 +63,18 @@ namespace StudioViews.ViewModel
 
 			// Default values
 			ExportSelectedSegments = true;
+			//OverwriteTranslations = true;
+			FilterItems = new List<FilterItem>(_filterItemHelper.GetFilterItems());
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
+				_filterItemHelper.GetFilterItems(FilterItems, new List<string> { "Locked" }));
 			SelectedTabItem = 0;
 		}
+
+		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
+
+		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
+
+		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
 
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export));
 
@@ -60,6 +85,36 @@ namespace StudioViews.ViewModel
 		public ICommand ImportPathBrowseCommand => _importPathBrowseCommand ?? (_importPathBrowseCommand = new CommandHandler(ImportPathBrowse));
 
 		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragAndDrop));
+
+		public List<FilterItem> FilterItems
+		{
+			get => _filterItems;
+			set
+			{
+				if (_filterItems == value)
+				{
+					return;
+				}
+
+				_filterItems = value;
+				OnPropertyChanged(nameof(FilterItems));
+			}
+		}
+
+		public ObservableCollection<FilterItem> SelectedExcludeFilterItems
+		{
+			get => _selectedExcludeFilterItems ?? (_selectedExcludeFilterItems = new ObservableCollection<FilterItem>());
+			set
+			{
+				if (_selectedExcludeFilterItems == value)
+				{
+					return;
+				}
+
+				_selectedExcludeFilterItems = value;
+				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+			}
+		}
 
 		public int SelectedTabItem
 		{
@@ -140,20 +195,20 @@ namespace StudioViews.ViewModel
 			}
 		}
 
-		public bool OverwriteTranslations
-		{
-			get => _overwriteTranslations;
-			set
-			{
-				if (_overwriteTranslations == value)
-				{
-					return;
-				}
+		//public bool OverwriteTranslations
+		//{
+		//	get => _overwriteTranslations;
+		//	set
+		//	{
+		//		if (_overwriteTranslations == value)
+		//		{
+		//			return;
+		//		}
 
-				_overwriteTranslations = value;
-				OnPropertyChanged(nameof(OverwriteTranslations));
-			}
-		}
+		//		_overwriteTranslations = value;
+		//		OnPropertyChanged(nameof(OverwriteTranslations));
+		//	}
+		//}
 
 		public bool ExportSelectedSegments
 		{
@@ -186,6 +241,28 @@ namespace StudioViews.ViewModel
 		}
 
 		private List<ProjectFileInfo> ProjectFiles { get; set; }
+
+		private void OpenFolderInExplorer(object parameter)
+		{
+			if (Directory.Exists(ExportPath))
+			{
+				Process.Start(ExportPath);
+			}
+		}
+
+		private void ClearFilters(object parameter)
+		{
+			SelectedExcludeFilterItems.Clear();
+			OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+		}
+
+		private void SelectedItemsChanged(object parameter)
+		{
+			if (parameter is SelectedItemsChangedEventArgs)
+			{
+				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+			}
+		}
 
 		private void ExportPathBrowse(object parameter)
 		{
@@ -305,20 +382,45 @@ namespace StudioViews.ViewModel
 
 			if (string.IsNullOrEmpty(ExportPath) || !Directory.Exists(ExportPath) || File.Exists(ExportPath))
 			{
-				MessageBox.Show("Directory not found!");
+				MessageBox.Show("Directory not found!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
 			var segmentPairs = ExportSelectedSegments
-					? _activeDocument.GetSelectedSegmentPairs()
-					: _activeDocument.FilteredSegmentPairs;
-			var segmentPairContexts = GetSegmentPairContexts(segmentPairs);
+					? _activeDocument.GetSelectedSegmentPairs().ToList()
+					: _activeDocument.FilteredSegmentPairs.ToList();
 
+			var fileNames = string.Empty;
+			var projectFiles = new List<ProjectFile>();
+			foreach (var segmentPair in segmentPairs)
+			{
+				var projectFile = segmentPair.GetProjectFile();
+				var projectFileId = projectFile.Id.ToString();
+				if (!projectFiles.Exists(a => a.Id.ToString() == projectFileId))
+				{
+					projectFiles.Add(projectFile);
+					fileNames = fileNames + "\r\n" + Path.GetFileName(projectFile.LocalFilePath);
+				}
+			}
+
+			var segmentPairContexts = GetSegmentPairContexts(segmentPairs);
 			var exporter = new SdlxliffExporter();
 
-			var filePathInput = GetDocumentPath(_activeDocument);
-			var filePathOutput = GetUniqueFileName(Path.Combine(ExportPath, filePathInput), "filtered");
+			try
+			{
+				foreach (var documentFile in projectFiles)
+				{
+					var filePathInput = documentFile.LocalFilePath;
+					var filePathOutput = GetUniqueFileName(Path.Combine(ExportPath, filePathInput), "filtered");
+					var success = exporter.ExportFile(segmentPairContexts, filePathInput, filePathOutput);
+				}
 
-			exporter.ExportFile(segmentPairContexts, filePathInput, filePathOutput);
+				MessageBox.Show(string.Format("Exported {0} segments\r\n\r\nFiles {1}", segmentPairs.Count, fileNames), 
+					"Studio Views", MessageBoxButton.OK, MessageBoxImage.Information);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void Import(object param)
@@ -330,20 +432,98 @@ namespace StudioViews.ViewModel
 
 			if (string.IsNullOrEmpty(ImportPath) || !File.Exists(ImportPath))
 			{
-				MessageBox.Show("File not found!");
+				MessageBox.Show("File not found!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
 			if (!ImportPath.EndsWith(".sdlxliff", StringComparison.InvariantCultureIgnoreCase))
 			{
-				MessageBox.Show("Expected bilingual SDLXLIFF format!");
+				MessageBox.Show("Expected bilingual SDLXLIFF format!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
-			var importer = new SdlxliffImporter();
+			try
+			{
+				var analysisBands = _projectHelper.GetAnalysisBands(_activeDocument.Project);
+				var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 
-			var filePathInput = GetDocumentPath(_activeDocument);
-			var filePathOutput = filePathInput + ".updated.sdlxliff";
+				var reader = new SdlxliffReader();
+				var updatedParagraphUnits = reader.GetParagraphUnits(ImportPath);
 
-			importer.UpdateFile(ImportPath, filePathInput, filePathOutput);
+				var importedCount = 0;
+				var ignoredCount = 0;
+
+				foreach (var updatedParagraphUnit in updatedParagraphUnits)
+				{
+					if (updatedParagraphUnit.IsStructure || !updatedParagraphUnit.SegmentPairs.Any())
+					{
+						continue;
+					}
+
+					foreach (var updatedSegmentPair in updatedParagraphUnit.SegmentPairs)
+					{
+						var segmentPair = GetSegmentPair(updatedParagraphUnit.Properties.ParagraphUnitId.Id, updatedSegmentPair.Properties.Id.Id);
+						if (segmentPair == null)
+						{
+							continue;
+						}
+
+
+						var exclude = false;
+						if (excludeFilterIds.Count > 0)
+						{
+							var status = segmentPair.Properties.ConfirmationLevel.ToString();
+							var match = _filterItemHelper.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, analysisBands);
+
+							exclude = (segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
+											|| excludeFilterIds.Exists(a => a == status)
+											|| excludeFilterIds.Exists(a => a == match);
+						}
+
+						if (exclude)
+						{
+							ignoredCount++;
+							continue;
+						}
+
+						segmentPair.Target.Clear();
+						foreach (var item in updatedSegmentPair.Target)
+						{
+							segmentPair.Target.Add(item.Clone() as IAbstractMarkupData);
+						}
+
+						_activeDocument.UpdateSegmentPair(segmentPair);
+
+						//segmentPair.Properties.ConfirmationLevel = updatedSegmentPair.Properties.ConfirmationLevel;
+						//segmentPair.Properties.TranslationOrigin = updatedSegmentPair.Properties.TranslationOrigin;
+						
+						//_activeDocument.UpdateSegmentPair(segmentPair);
+
+						_activeDocument.UpdateSegmentPairProperties(segmentPair, updatedSegmentPair.Properties);
+
+						importedCount++;
+					}
+				}
+
+				MessageBox.Show(string.Format("Successfully updated the document\r\n\r\nImported: {0}\r\nIgnored: {1}\r\nFile: {2}", 
+					importedCount, ignoredCount, Path.GetFileName(ImportPath)), "Studio Views", MessageBoxButton.OK, MessageBoxImage.Information);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		private ISegmentPair GetSegmentPair(string paragraphUnitId, string segmentId)
+		{
+			foreach (var segmentPair in _activeDocument.SegmentPairs)
+			{
+				if (paragraphUnitId == segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id
+					&& segmentId == segmentPair.Properties.Id.Id)
+				{
+					return segmentPair;
+				}
+			}
+
+			return null;
 		}
 
 		private List<SegmentPairContext> GetSegmentPairContexts(IEnumerable<ISegmentPair> selectedSegmentPairs)
@@ -352,6 +532,8 @@ namespace StudioViews.ViewModel
 
 			foreach (var selectedSegmentPair in selectedSegmentPairs)
 			{
+				var pp = selectedSegmentPair.GetParagraphUnitProperties();
+				
 				var segmentPairContext =
 					new SegmentPairContext
 					{
@@ -472,7 +654,7 @@ namespace StudioViews.ViewModel
 				{
 					index++;
 					uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
-					                                             + "." + suffix + "." + index.ToString().PadLeft(3, '0') + fileExtension);
+																 + "." + suffix + "." + index.ToString().PadLeft(3, '0') + fileExtension);
 				}
 			}
 
@@ -502,10 +684,18 @@ namespace StudioViews.ViewModel
 			}
 
 			_activeDocument = document;
-
 			if (_activeDocument != null)
 			{
-				ProjectFiles = _fileInfoService.GetProjectFiles(GetDocumentPath(_activeDocument));
+				ProjectFiles = new List<ProjectFileInfo>();
+				foreach (var documentFile in _activeDocument.Files)
+				{
+					var files = _fileInfoService.GetProjectFiles(documentFile.LocalFilePath);
+					foreach (var projectFileInfo in files)
+					{
+						ProjectFiles.Add(projectFileInfo);
+					}
+				}
+
 				ExportPath = Path.GetDirectoryName(GetDocumentPath(_activeDocument));
 			}
 		}

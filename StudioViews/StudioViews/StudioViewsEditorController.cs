@@ -19,13 +19,18 @@ namespace StudioViews
 	{
 		private StudioViewsEditorView _control = new StudioViewsEditorView();
 		private EditorController _editorController;
+		private ProjectsController _projectsController;
 		
 		protected override void Initialize()
 		{
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 			var fileInfoService = new FileInfoService();
-			var model = new StudioViewsEditorViewModel(_editorController, fileInfoService);
+			var filterItemHelper = new FilterItemHelper();
+			var projectHelper = new ProjectHelper(_projectsController);
+			
+			var model = new StudioViewsEditorViewModel(_editorController, fileInfoService, filterItemHelper, projectHelper);
 			_control = new StudioViewsEditorView {DataContext = model};
 		}
 

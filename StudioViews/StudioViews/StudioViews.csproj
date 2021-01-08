@@ -78,6 +78,9 @@
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
@@ -121,6 +124,9 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\Folder\FolderSelectDialog.cs" />
     <Compile Include="Controls\Folder\Reflector.cs" />
+    <Compile Include="Model\AnalysisBand.cs" />
+    <Compile Include="Model\ConfirmationStatus.cs" />
+    <Compile Include="Model\FilterItem.cs" />
     <Compile Include="Model\MrkInfo.cs" />
     <Compile Include="Model\ParagraphInfo.cs" />
     <Compile Include="Model\ProjectFileInfo.cs" />
@@ -128,6 +134,9 @@
     <Compile Include="Model\SegmentPairContext.cs" />
     <Compile Include="Services\ContentExporter.cs" />
     <Compile Include="Services\FileInfoService.cs" />
+    <Compile Include="Services\FilterItemHelper.cs" />
+    <Compile Include="Services\ProjectHelper.cs" />
+    <Compile Include="Services\SdlxliffReader.cs" />
     <Compile Include="Services\SdlxliffImporter.cs" />
     <Compile Include="Services\SdlxliffExporter.cs" />
     <Compile Include="ViewModel\BaseModel.cs" />
@@ -144,6 +153,7 @@
     <Compile Include="StudioViewsEditorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Model\FilterItemGroup.cs" />
     <Compile Include="ViewModel\StudioViewsEditorViewModel.cs" />
     <Compile Include="View\StudioViewsEditorView.xaml.cs">
       <DependentUpon>StudioViewsEditorView.xaml</DependentUpon>
@@ -175,6 +185,54 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Styles\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\General.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ImageStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.ControlTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.DropdownItemTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.Image.Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Custom.SelectedItemTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBlockProjectInfoToolTipStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBlockStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\StudioViewsEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
