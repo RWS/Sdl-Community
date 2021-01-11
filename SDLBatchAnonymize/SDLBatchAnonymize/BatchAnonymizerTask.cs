@@ -7,6 +7,7 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 
@@ -40,13 +41,34 @@ namespace Sdl.Community.SDLBatchAnonymize
 			{
 				foreach (Window window in Application.Current.Windows)
 				{
-					if (!window.Title.Equals("Batch Processing")) continue;
+					if (!window.Title.Equals("Batch Processing") && !window.Title.Contains("Create a New Project")) continue;
 					_batchTaskWindow = window;
-					_batchTaskWindow.Closing += Window_Closing;
+					_batchTaskWindow.Closed += BatchTaskWindow_Closed; ;
 				}
 			});
 
 			backupService.BackupProject(projectInfo.LocalProjectFolder, projectInfo.Name);
+		}
+
+		private void BatchTaskWindow_Closed(object sender, System.EventArgs e)
+		{
+			var projectFilePath = Project.GetProjectInfo()?.Uri?.LocalPath;
+			if (string.IsNullOrEmpty(projectFilePath)) return;
+
+			var anonymizeProjService = new AnonymizeSdlProjService();
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+
+			if (Project is FileBasedProject proj)
+			{
+				proj.Save();
+				projectController.Close(proj);
+				//Remove the comment and task template id any way
+				anonymizeProjService.RemoveFileVersionComment(projectFilePath);
+				anonymizeProjService.RemoveTraces(projectFilePath);
+
+				projectController.Add(projectFilePath);
+			}
+			_batchTaskWindow.Closed -= BatchTaskWindow_Closed;
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -86,27 +108,6 @@ namespace Sdl.Community.SDLBatchAnonymize
 					Project.UpdateSettings(targetLanguage, projectSettings);
 				}
 			}
-		}
-
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			var projectFilePath = Project.GetProjectInfo()?.Uri?.LocalPath;
-			if (string.IsNullOrEmpty(projectFilePath)) return;
-
-			var anonymizeProjService = new AnonymizeSdlProjService();
-			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var proj = projectController.CurrentProject;
-
-			if (proj != null)
-			{
-				proj.Save();
-				projectController.Close(proj);
-				//Remove the comment and task template id any way
-				anonymizeProjService.RemoveFileVersionComment(projectFilePath);
-				anonymizeProjService.RemoveTemplateId(projectFilePath);
-				projectController.Add(projectFilePath);
-			}
-			_batchTaskWindow.Closing -= Window_Closing;
 		}
 
 		private void RemoveSettings(ISettingsBundle projectSettingsBundle)

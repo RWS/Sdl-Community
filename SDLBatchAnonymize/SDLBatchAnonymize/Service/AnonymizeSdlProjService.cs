@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Linq;
 using Sdl.Community.SDLBatchAnonymize.Interface;
+using System.Linq;
 
 namespace Sdl.Community.SDLBatchAnonymize.Service
 {
@@ -47,37 +49,20 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			sdlProj.Save(projectPath);
 		}
 
-		public void RemoveTemplateId(string projectPath)
+		public void RemoveTraces(string projectPath)
 		{
-			var taskTemplateId = "SDL Batch Anonymizer".ToLower();
-			var sdlProj = new XmlDocument();
-			sdlProj.Load(projectPath);
-			var tasksNodes = sdlProj.GetElementsByTagName("Tasks");
-			foreach (XmlNode taskNode in tasksNodes)
-			{
-				foreach (XmlNode taskChild in taskNode.ChildNodes)
-				{
-					var templateIdsNode = taskChild.SelectSingleNode("TaskTemplateIds");
-					if (templateIdsNode is null) continue;
-					foreach (XmlNode templateChild in templateIdsNode.ChildNodes)
-					{
-						for (var i = 0; i < templateChild.ChildNodes.Count; i++)
-						{
-							var templateChildNode = templateIdsNode.ChildNodes[i];
-							for (var j = 0; j < templateChildNode.ChildNodes.Count; j++)
-							{
-								var node = templateChildNode.ChildNodes[j];
-								if (string.IsNullOrEmpty(node.Value)) continue;
-								if (node.Value.ToLower().Equals(taskTemplateId))
-								{
-									node.ParentNode?.RemoveChild(node);
-								}
-							}
-						}
-					}
-				}
-			}
-			sdlProj.Save(projectPath);
+			var taskTemplateId = "SDL Batch Anonymizer";
+			var rootElement = XElement.Load(projectPath);
+			
+			rootElement.Element("Tasks")?.Elements()
+				.FirstOrDefault(el=>el.Value == taskTemplateId)
+				?.Remove();
+
+			rootElement.Element("InitialTaskTemplate")?.Elements().Elements()
+				.FirstOrDefault(el => el.Attribute("TaskTemplateId")?.Value == taskTemplateId)
+				?.Remove();
+
+			rootElement.Save(projectPath);
 		}
 	}
 }

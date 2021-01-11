@@ -1,4 +1,5 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System.Windows;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.SDLBatchAnonymize
@@ -8,6 +9,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 	{
 		public void Execute()
 		{
+			var app = new Application();
 			Log.Setup();
 		}
 	}
