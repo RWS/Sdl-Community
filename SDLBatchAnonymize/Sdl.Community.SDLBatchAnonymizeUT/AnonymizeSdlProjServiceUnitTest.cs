@@ -17,7 +17,7 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 		public void AnonymizeFileVersions(string projectPath)
 		{
 			_anonymizeSdlProjService.RemoveFileVersionComment(projectPath);
-			_anonymizeSdlProjService.RemoveTemplateId(projectPath);
+			_anonymizeSdlProjService.RemoveTraces(projectPath);
 		}
 	}
 }
