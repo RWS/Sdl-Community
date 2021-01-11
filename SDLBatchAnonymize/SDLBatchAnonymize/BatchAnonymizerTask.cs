@@ -64,7 +64,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 				projectController.Close(proj);
 				//Remove the comment and task template id any way
 				anonymizeProjService.RemoveFileVersionComment(projectFilePath);
-				anonymizeProjService.RemoveTemplateId(projectFilePath);
+				anonymizeProjService.RemoveTraces(projectFilePath);
 
 				projectController.Add(projectFilePath);
 			}

@@ -49,13 +49,17 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			sdlProj.Save(projectPath);
 		}
 
-		public void RemoveTemplateId(string projectPath)
+		public void RemoveTraces(string projectPath)
 		{
 			var taskTemplateId = "SDL Batch Anonymizer";
 			var rootElement = XElement.Load(projectPath);
 			
 			rootElement.Element("Tasks")?.Elements()
 				.FirstOrDefault(el=>el.Value == taskTemplateId)
+				?.Remove();
+
+			rootElement.Element("InitialTaskTemplate")?.Elements().Elements()
+				.FirstOrDefault(el => el.Attribute("TaskTemplateId")?.Value == taskTemplateId)
 				?.Remove();
 
 			rootElement.Save(projectPath);
