@@ -13,11 +13,11 @@ namespace Sdl.Community.SDLBatchAnonymizeUT
 		}
 
 		[Theory]
-		[InlineData(@"C:\Users\aghisa\Documents\Studio 2019\Projects\AnonDel\AnonDel.sdlproj")]
+		[InlineData(@"C:\Code\SDLCOM - Studio 2021\SDLBatchAnonymize\Sdl.Community.SDLBatchAnonymizeUT\Project 1\Project 1.sdlproj")]
 		public void AnonymizeFileVersions(string projectPath)
 		{
 			_anonymizeSdlProjService.RemoveFileVersionComment(projectPath);
-			_anonymizeSdlProjService.RemoveTemplateId(projectPath);
+			_anonymizeSdlProjService.RemoveTraces(projectPath);
 		}
 	}
 }
