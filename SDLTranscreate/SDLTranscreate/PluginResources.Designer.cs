@@ -19,7 +19,7 @@ namespace Sdl.Community.Transcreate {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -300,6 +300,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back-Translations created on: {0}.
+        /// </summary>
+        internal static string Label_BackTranslationsCreatedOn {
+            get {
+                return ResourceManager.GetString("Label_BackTranslationsCreatedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup File: {0}.
         /// </summary>
         internal static string Label_BackupFile {
@@ -345,6 +354,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy source to target for empty translations: {0}.
+        /// </summary>
+        internal static string Label_CopySourceToTargetForEmptyTranslations {
+            get {
+                return ResourceManager.GetString("Label_CopySourceToTargetForEmptyTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created: {0}.
         /// </summary>
         internal static string Label_Created {
@@ -374,9 +392,9 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to Exception: {0}.
         /// </summary>
-        internal static string label_ExceptionMessage {
+        internal static string Label_ExceptionMessage {
             get {
-                return ResourceManager.GetString("label_ExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("Label_ExceptionMessage", resourceCulture);
             }
         }
         
@@ -534,6 +552,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwrite existing Back-Translations: {0}.
+        /// </summary>
+        internal static string Label_OverwriteExistingBackTranslations {
+            get {
+                return ResourceManager.GetString("Label_OverwriteExistingBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite existing translations: {0}.
         /// </summary>
         internal static string Label_OverwriteExistingTranslations {
@@ -608,9 +635,9 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to SDLXLIFF File: {0}.
         /// </summary>
-        internal static string label_SdlXliffFile {
+        internal static string Label_SdlXliffFile {
             get {
-                return ResourceManager.GetString("label_SdlXliffFile", resourceCulture);
+                return ResourceManager.GetString("Label_SdlXliffFile", resourceCulture);
             }
         }
         
@@ -707,9 +734,9 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to XLIFF File: {0}.
         /// </summary>
-        internal static string label_XliffFile {
+        internal static string Label_XliffFile {
             get {
-                return ResourceManager.GetString("label_XliffFile", resourceCulture);
+                return ResourceManager.GetString("Label_XliffFile", resourceCulture);
             }
         }
         
@@ -747,6 +774,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Message_ActionWillRemoveAllProjectData {
             get {
                 return ResourceManager.GetString("Message_ActionWillRemoveAllProjectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Back-Translations folder is not empty..
+        /// </summary>
+        internal static string Message_BackTranslationsFolderIsEmpty {
+            get {
+                return ResourceManager.GetString("Message_BackTranslationsFolderIsEmpty", resourceCulture);
             }
         }
         
@@ -828,6 +864,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Message_NoProjectFilesSelected {
             get {
                 return ResourceManager.GetString("Message_NoProjectFilesSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to proceed and delete this folder?.
+        /// </summary>
+        internal static string Message_ProceedAndDeleteFolder {
+            get {
+                return ResourceManager.GetString("Message_ProceedAndDeleteFolder", resourceCulture);
             }
         }
         

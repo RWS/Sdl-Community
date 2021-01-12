@@ -98,7 +98,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".docx");
 					var sdlXliffBackup = Path.Combine(folder, targetLanguageFile.Name);
 
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 					if (TaskContext.ImportOptions.BackupFiles)
 					{
 						summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;

@@ -86,7 +86,7 @@ namespace Sdl.Community.Transcreate.Service
 
 			if (!_isCancelled && _taskContext.Completed)
 			{
-				if (_action == Enumerators.Action.Import)
+				if (_action == Enumerators.Action.Import || _action == Enumerators.Action.ImportBackTranslation)
 				{
 					_controllers.ProjectsController.RefreshProjects();
 				}
@@ -115,7 +115,7 @@ namespace Sdl.Community.Transcreate.Service
 				// activate the selected project if different to the current project
 				if (_controllers.ProjectsController.CurrentProject?.GetProjectInfo().Id != selectedProject.GetProjectInfo().Id)
 				{
-					_controllers.ProjectsController.Open(selectedProject);
+					_projectAutomationService.ActivateProject(selectedProject);
 				}
 
 				_taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(selectedProject);
@@ -235,6 +235,14 @@ namespace Sdl.Community.Transcreate.Service
 				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), taskContext,
 					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService));
 			}
+			//else if (_action == Enumerators.Action.CreateBackTranslation)
+			//{
+			//	pages.Add(new WizardPageBackTranslationFilesViewModel(_wizardWindow, new WizardPageBackTranslationFilesView(), taskContext));
+			//	pages.Add(new WizardPageBackTranslationOptionsViewModel(_wizardWindow, new WizardPageBackTranslationOptionsView(), taskContext, _dialogService));
+			//	pages.Add(new WizardPageBackTranslationSummaryViewModel(_wizardWindow, new WizardPageBackTranslationSummaryView(), taskContext));
+			//	pages.Add(new WizardPageBackTranslationPreparationViewModel(_wizardWindow, new WizardPageBackTranslationPreparationView(), taskContext,
+			//		_segmentBuilder, _pathInfo));
+			//}
 
 			UpdatePageIndexes(pages);
 

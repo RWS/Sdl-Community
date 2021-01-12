@@ -89,7 +89,7 @@ namespace Sdl.Community.Transcreate.Actions
 			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = new Controllers();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
+			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
 
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
 

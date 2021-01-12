@@ -4,7 +4,7 @@
 	{		
 		public ConvertOptions()
 		{
-			MaxAlternativeTranslations = 2;
+			MaxAlternativeTranslations = 3;
 			CloseProjectOnComplete = true;
 		}
 

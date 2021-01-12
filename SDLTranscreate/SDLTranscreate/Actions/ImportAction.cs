@@ -87,7 +87,7 @@ namespace Sdl.Community.Transcreate.Actions
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
+			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
 
 			Enabled = false;
 		}

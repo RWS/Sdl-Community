@@ -208,7 +208,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -246,8 +246,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 						var folder = GetXliffFolder(languageFolder, targetFile);
 						var outputFilePath = Path.Combine(folder, targetFile.Name + ".docx");
 
-						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
-						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, outputFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_SdlXliffFile, targetFile.Location));
+						_logReport.AppendLine(string.Format(PluginResources.Label_XliffFile, outputFilePath));
 
 						var exported  = processor.ExportFile(targetFile.Location, outputFilePath, targetFile.TargetLanguage);
 
@@ -297,7 +297,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -328,7 +328,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);

@@ -191,7 +191,7 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports Viewer.
+        ///   Looks up a localized string similar to Reports Viewer Plus.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -449,7 +449,7 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports Viewer.
+        ///   Looks up a localized string similar to Reports Viewer Plus.
         /// </summary>
         internal static string SDLReportsViewer_Description {
             get {
@@ -458,7 +458,7 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports Viewer.
+        ///   Looks up a localized string similar to Reports Viewer Plus.
         /// </summary>
         internal static string SDLReportsViewer_Name {
             get {

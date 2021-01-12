@@ -204,7 +204,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -256,7 +256,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 						var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".docx");
 						var sdlXliffBackupFile = Path.Combine(folder, targetLanguageFile.Name);
 
-						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location));
+						_logReport.AppendLine(string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location));
 						if (TaskContext.ImportOptions.BackupFiles)
 						{
 							_logReport.AppendLine(string.Format(PluginResources.Label_BackupFile, sdlXliffBackupFile));
@@ -334,7 +334,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 			finally
 			{
@@ -376,7 +376,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);

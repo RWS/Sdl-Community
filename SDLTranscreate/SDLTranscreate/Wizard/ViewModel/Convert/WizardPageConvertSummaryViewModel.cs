@@ -79,7 +79,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					TaskContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 				}
 			}
 

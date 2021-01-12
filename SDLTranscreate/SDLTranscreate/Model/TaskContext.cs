@@ -18,6 +18,7 @@ namespace Sdl.Community.Transcreate.Model
 			ExportOptions = settings.ExportOptions;
 			ImportOptions = settings.ImportOptions;
 			ConvertOptions = settings.ConvertOptions;
+			BackTranslationOptions = settings.BackTranslationOptions;
 
 			Owner = Enumerators.Controller.None;
 		}
@@ -74,6 +75,8 @@ namespace Sdl.Community.Transcreate.Model
 		public ImportOptions ImportOptions { get; set; }
 
 		public ConvertOptions ConvertOptions { get; set; }
+		
+		public BackTranslationOptions BackTranslationOptions { get; set; }
 
 		public string GetWorkflowPath()
 		{
