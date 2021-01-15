@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.StudioViews.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.MultiSelectComboBox.API;
-using StudioViews.Model;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class FilterItemHelper
 	{

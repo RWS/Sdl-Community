@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace StudioViews.Commands
+namespace Sdl.Community.StudioViews.Commands
 {
 	public class CommandHandler : ICommand
 	{

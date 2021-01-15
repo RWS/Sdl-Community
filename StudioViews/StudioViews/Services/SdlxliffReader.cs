@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class SdlxliffReader
 	{
-		public List<IParagraphUnit> GetParagraphUnits(string filePathInput)
+		public List<SegmentPairInfo> GetSegmentPairs(string filePathInput)
 		{
 			var dummyFile = Path.GetTempFileName();
 			
@@ -23,7 +23,7 @@ namespace StudioViews.Services
 
 			DeleteFile(dummyFile);
 
-			return contentReader.ParagraphUnits;
+			return contentReader.SegmentPairInfos;
 		}
 
 		private bool DeleteFile(string dummyFile)

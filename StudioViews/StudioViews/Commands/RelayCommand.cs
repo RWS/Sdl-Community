@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace StudioViews.Commands
+namespace Sdl.Community.StudioViews.Commands
 {
 	/// <summary>
 	/// A command whose sole purpose is to 

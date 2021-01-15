@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace StudioViews.View
+namespace Sdl.Community.StudioViews.View
 {
 	/// <summary>
 	/// Interaction logic for StudioViewsEditorView.xaml

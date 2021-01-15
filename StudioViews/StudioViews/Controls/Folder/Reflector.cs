@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace StudioViews.Controls.Folder
+namespace Sdl.Community.StudioViews.Controls.Folder
 {
 	public class Reflector
 	{

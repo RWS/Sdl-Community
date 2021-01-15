@@ -2,10 +2,10 @@
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
+using Sdl.Community.StudioViews.ViewModel;
 using Sdl.MultiSelectComboBox.API;
-using StudioViews.ViewModel;
 
-namespace StudioViews.Model
+namespace Sdl.Community.StudioViews.Model
 {
 	public class FilterItem : BaseModel, IItemEnabledAware, IItemGroupAware
 	{

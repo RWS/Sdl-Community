@@ -4,7 +4,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Application = System.Windows.Application;
 
-namespace StudioViews
+namespace Sdl.Community.StudioViews
 {
 	[ApplicationInitializer]
 	internal class ApplicationInstance : IApplicationInitializer

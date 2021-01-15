@@ -1,4 +1,4 @@
-﻿namespace StudioViews.Model
+﻿namespace Sdl.Community.StudioViews.Model
 {
 	public class ConfirmationStatus
 	{

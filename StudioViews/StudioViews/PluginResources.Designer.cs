@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StudioViews {
+namespace Sdl.Community.StudioViews {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StudioViews {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StudioViews.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.StudioViews.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,6 +88,42 @@ namespace StudioViews {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import into the selected files.
+        /// </summary>
+        internal static string StudioViews_ImportToSelectedFilesAction_Description {
+            get {
+                return ResourceManager.GetString("StudioViews_ImportToSelectedFilesAction_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import into the selected files.
+        /// </summary>
+        internal static string StudioViews_ImportToSelectedFilesAction_Name {
+            get {
+                return ResourceManager.GetString("StudioViews_ImportToSelectedFilesAction_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split the selected files.
+        /// </summary>
+        internal static string StudioViews_SplitSelectedFiles_Description {
+            get {
+                return ResourceManager.GetString("StudioViews_SplitSelectedFiles_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split the selected files.
+        /// </summary>
+        internal static string StudioViews_SplitSelectedFiles_Name {
+            get {
+                return ResourceManager.GetString("StudioViews_SplitSelectedFiles_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Studio Views.
         /// </summary>
         internal static string StudioViewsEditorController_Description {
@@ -102,6 +138,26 @@ namespace StudioViews {
         internal static string StudioViewsEditorController_Name {
             get {
                 return ResourceManager.GetString("StudioViewsEditorController_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon StudioViewsExport_Icon {
+            get {
+                object obj = ResourceManager.GetObject("StudioViewsExport_Icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon StudioViewsImport_Icon {
+            get {
+                object obj = ResourceManager.GetObject("StudioViewsImport_Icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
