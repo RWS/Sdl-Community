@@ -13,6 +13,7 @@ using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Events;
+using Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.ProjectAutomation.Core;
