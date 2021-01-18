@@ -4,20 +4,20 @@ using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
 namespace Sdl.Community.MTCloud.Provider.View
 {
 	public partial class RateItControl : UserControl
 	{
 		private RateItView _rateItWindow;
-		public IRatingService RatingService { get; private set; }
 
 		public RateItControl()
 		{
 			InitializeComponent();
 			LoadDataContext();
 		}
+
+		public IRatingService RatingService { get; private set; }
 
 		public void FocusFeedbackTextBox()
 		{

@@ -8,29 +8,29 @@ using Sdl.LanguagePlatform.Core;
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Parser
 	{
+		private static readonly Regex EndingTag = new Regex(@"</(\d+)>");
+		private static readonly Regex PlaceholderTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""(.*)""/>");
+		private static readonly Regex StandaloneTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)/>");
 		private static readonly Regex StartingTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)>");
-        private static readonly Regex EndingTag = new Regex(@"</(\d+)>");
-        private static readonly Regex StandaloneTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)/>");
-        private static readonly Regex PlaceholderTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""(.*)""/>");
 
-        /// <summary>
-        /// Method used in Unit tests
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns cref="Segment">Array of Segments</returns>
-        public static Segment[] ParseFile(string path)
-        {
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException("File not found: " + path);
-            }
-            var text = File.ReadAllLines(path);
-            return text.Select(ParseLine).ToArray();
-        }
+		/// <summary>
+		/// Method used in Unit tests
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns cref="Segment">Array of Segments</returns>
+		public static Segment[] ParseFile(string path)
+		{
+			if (!File.Exists(path))
+			{
+				throw new FileNotFoundException("File not found: " + path);
+			}
+			var text = File.ReadAllLines(path);
+			return text.Select(ParseLine).ToArray();
+		}
 
 		/// <summary>
 		/// Converts plain text into Segment
@@ -95,7 +95,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 		/// </summary>
 		/// <param name="tag"></param>
 		/// <returns cref="Tag"/>
-		public static Tag ParseTag(string tag) 
+		public static Tag ParseTag(string tag)
 		{
 			Match match;
 			if ((match = StartingTag.Match(tag)).Success)
@@ -112,19 +112,19 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 				return new Tag(TagType.Standalone, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
 					!string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, null);
 			}
-            if ((match = PlaceholderTag.Match(tag)).Success)
-            {
-	            if (match.Groups[4].Value.Contains("<locked>") || match.Groups[4].Value.Contains(@"translate status=""no"""))
-	            {
-		            var tagContent = match.Groups[4].Value;
-                    return new Tag(TagType.LockedContent, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
-	                    !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, tagContent);
-                }
-                return new Tag(TagType.TextPlaceholder, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
-                    !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, match.Groups[4].Value);
-            }
+			if ((match = PlaceholderTag.Match(tag)).Success)
+			{
+				if (match.Groups[4].Value.Contains("<locked>") || match.Groups[4].Value.Contains(@"translate status=""no"""))
+				{
+					var tagContent = match.Groups[4].Value;
+					return new Tag(TagType.LockedContent, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
+						!string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, tagContent);
+				}
+				return new Tag(TagType.TextPlaceholder, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
+					!string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, match.Groups[4].Value);
+			}
 
-            return null;
+			return null;
 		}
 	}
 }
