@@ -12,31 +12,39 @@ using Sdl.Community.MTCloud.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class ShortcutService : IShortcutService,IDisposable
+	public class ShortcutService : IShortcutService, IDisposable
 	{
 		private readonly List<StudioShortcut> _customShortcuts;
-		private readonly string _settingsXmlPath;
-		private readonly string _settingsFolderPath;
-		private readonly string _settingsFileName;
 		private readonly KeysConverter _keysConverter;
-		private FileSystemWatcher _fileWatcher;
-		public event ShortcutChangedEventRaiser StudioShortcutChanged;
+
 		// Instantiate a SafeHandle instance.
 		private readonly SafeHandle _safeHandle;
-		// Public implementation of Dispose pattern callable by consumers.
-		public void Dispose() => Dispose(true);
 
-		public ShortcutService()
+		private readonly string _settingsFileName;
+		private readonly string _settingsFolderPath;
+		private readonly string _settingsXmlPath;
+		private FileSystemWatcher _fileWatcher;
+
+		public ShortcutService(VersionService versionService)
 		{
 			_settingsFileName = "UserSettings.xml";
-			_settingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
-				"SDL Trados Studio", "15.0.0.0");
-			_settingsXmlPath =  Path.Combine(_settingsFolderPath,_settingsFileName);
+			_settingsFolderPath = versionService.GetAppDataStudioFolder();
+			_settingsXmlPath = Path.Combine(_settingsFolderPath, _settingsFileName);
 			_safeHandle = new SafeFileHandle(IntPtr.Zero, true);
 			_customShortcuts = new List<StudioShortcut>();
 			_keysConverter = new KeysConverter();
 
 			ReadCustomShortcutsFromUserSettingsXml();
+		}
+
+		public event ShortcutChangedEventRaiser StudioShortcutChanged;
+
+		// Public implementation of Dispose pattern callable by consumers.
+		public void Dispose() => Dispose(true);
+
+		public string GetShortcutDetails(string actionId)
+		{
+			return _customShortcuts.FirstOrDefault(a => a.ActionId.Equals(actionId))?.ShortcutText;
 		}
 
 		/// <summary>
@@ -60,6 +68,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return false;
 		}
 
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposing) return;
+			// Dispose managed state (managed objects).
+			_safeHandle?.Dispose();
+			if (_fileWatcher != null)
+			{
+				_fileWatcher.Changed -= UserSettingsFileChanged;
+				_fileWatcher.Dispose();
+			}
+			_fileWatcher = null;
+		}
+
 		private void InitializeSettingsFileWatcher()
 		{
 			_fileWatcher = new FileSystemWatcher(_settingsFolderPath)
@@ -69,20 +90,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			_fileWatcher.Changed += UserSettingsFileChanged;
 			_fileWatcher.EnableRaisingEvents = true;
-		}
-
-		private void UserSettingsFileChanged(object sender, FileSystemEventArgs e)
-		{
-			if (e.ChangeType != WatcherChangeTypes.Changed) return;
-			Dispose();
-
-			ReadCustomShortcutsFromUserSettingsXml();
-			StudioShortcutChanged?.Invoke();
-		}
-
-		public string GetShortcutDetails(string actionId)
-		{			
-			return _customShortcuts.FirstOrDefault(a => a.ActionId.Equals(actionId))?.ShortcutText;
 		}
 
 		private void ReadCustomShortcutsFromUserSettingsXml()
@@ -120,7 +127,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					};
 					if (!string.IsNullOrEmpty(studioShortcut.ShortcutCombination))
 					{
-						var keyCombination = (Keys) Enum.Parse(typeof(Keys), studioShortcut.ShortcutCombination, true);
+						var keyCombination = (Keys)Enum.Parse(typeof(Keys), studioShortcut.ShortcutCombination, true);
 
 						studioShortcut.ShortcutText = _keysConverter.ConvertToString(keyCombination);
 					}
@@ -137,17 +144,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		protected virtual void Dispose(bool disposing)
+		private void UserSettingsFileChanged(object sender, FileSystemEventArgs e)
 		{
-			if (!disposing) return;
-			// Dispose managed state (managed objects).
-			_safeHandle?.Dispose();
-			if (_fileWatcher != null)
-			{
-				_fileWatcher.Changed -= UserSettingsFileChanged;
-				_fileWatcher.Dispose();
-			}
-			_fileWatcher = null;
+			if (e.ChangeType != WatcherChangeTypes.Changed) return;
+			Dispose();
+
+			ReadCustomShortcutsFromUserSettingsXml();
+			StudioShortcutChanged?.Invoke();
 		}
 	}
 }
