@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class ContentImporter : AbstractBilingualContentProcessor
 	{

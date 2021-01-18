@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace StudioViews.Model
+namespace Sdl.Community.StudioViews.Model
 {
 	public class ProjectFileInfo
 	{

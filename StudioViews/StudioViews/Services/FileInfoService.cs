@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using StudioViews.Model;
+using Sdl.Community.StudioViews.Model;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class FileInfoService
 	{
@@ -206,6 +206,12 @@ namespace StudioViews.Services
 								projectFileInfo.ParagraphInfos.Add(paragraphInfos);
 							}
 						}
+						if (string.Compare(group.Name.LocalName, "trans-unit", StringComparison.InvariantCultureIgnoreCase) == 0)
+						{
+							var paragraphInfos = GetParagraphInfo(group, ref segmentIdCounter);
+							paragraphInfos.ContextDefinitions = new List<ParagraphUnitContext>();
+							projectFileInfo.ParagraphInfos.Add(paragraphInfos);
+						}
 					}
 				}
 			}
@@ -318,13 +324,13 @@ namespace StudioViews.Services
 			foreach (var attribute in value.Attributes())
 			{
 				if (string.Compare(attribute.Name.LocalName, "key", StringComparison.InvariantCultureIgnoreCase) == 0
-				    && string.Compare(attribute.Value, "SDL:FileId", StringComparison.InvariantCultureIgnoreCase) == 0)
+					&& string.Compare(attribute.Value, "SDL:FileId", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					documentFileInfo.FileId = value.Value;
 				}
 
 				if (string.Compare(attribute.Name.LocalName, "key", StringComparison.InvariantCultureIgnoreCase) == 0
-				    && string.Compare(attribute.Value, "SDL:OriginalFilePath", StringComparison.InvariantCultureIgnoreCase) == 0)
+					&& string.Compare(attribute.Value, "SDL:OriginalFilePath", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					documentFileInfo.OriginalFilePath = value.Value;
 				}

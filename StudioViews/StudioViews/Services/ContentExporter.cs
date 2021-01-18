@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using StudioViews.Model;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class ContentExporter : AbstractBilingualContentProcessor
 	{
-		private readonly List<SegmentPairContext> _selectedSegments;
+		private readonly List<SegmentPairInfo> _selectedSegments;
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly List<string> _projectFilesFiltered;
 
 		private IFileProperties _fileProperties;
 		
-		public ContentExporter(List<SegmentPairContext> selectedSegments, SegmentBuilder segmentBuilder)
+		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder)
 		{
 			_selectedSegments = selectedSegments;
 			_segmentBuilder = segmentBuilder;

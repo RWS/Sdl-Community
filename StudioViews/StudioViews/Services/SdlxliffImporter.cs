@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class SdlxliffImporter
 	{
@@ -42,7 +38,16 @@ namespace StudioViews.Services
 
 			converter.Parse();
 
-			return contentReader.ParagraphUnits;
+			var paragraphUnits = new List<IParagraphUnit>();
+			foreach (var segmentPairInfo in contentReader.SegmentPairInfos)
+			{
+				if (paragraphUnits.Exists(a => a.Properties.ParagraphUnitId.Id != segmentPairInfo.ParagraphUnitId))
+				{
+					paragraphUnits.Add(segmentPairInfo.ParagraphUnit);
+				}
+			}
+			
+			return paragraphUnits;
 		}
 
 		private List<string> GetTagIds(string filePath)

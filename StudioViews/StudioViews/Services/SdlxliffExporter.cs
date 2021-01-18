@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using StudioViews.Model;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class SdlxliffExporter
 	{
-		public bool ExportFile(List<SegmentPairContext> selectedSegments, string filePathInput, string filePathOutput)
+		public bool ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);

@@ -1,21 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Sdl.Community.StudioViews.Model;
+using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.Versioning;
 
-namespace StudioViews.Services
+namespace Sdl.Community.StudioViews.Services
 {
 	public class ContentReader : AbstractBilingualContentProcessor
 	{
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
-		
+		private string _productName;
+		private SegmentPairProcessor _segmentPairProcessor;
+
 		public ContentReader()
 		{
-			ParagraphUnits = new List<IParagraphUnit>();
+			SegmentPairInfos = new List<SegmentPairInfo>();
 		}
 
-		public List<IParagraphUnit> ParagraphUnits { get; }
+		public List<SegmentPairInfo> SegmentPairInfos { get; }
 
 		public CultureInfo SourceLanguage { get; private set; }
 
@@ -44,7 +50,69 @@ namespace StudioViews.Services
 				return;
 			}
 
-			ParagraphUnits.Add(paragraphUnit);
+			foreach (var segmentPair in paragraphUnit.SegmentPairs)
+			{
+				var segmentPairInfo = new SegmentPairInfo
+				{
+					FileId = _fileProperties.FileConversionProperties.FileId.Id,
+					ParagraphUnit = paragraphUnit,
+					SegmentPair = segmentPair,
+					ParagraphUnitId = paragraphUnit.Properties.ParagraphUnitId.Id,
+					SegmentId = segmentPair.Properties.Id.Id
+				};
+
+				try
+				{
+					segmentPairInfo.SourceWordCounts = SegmentPairProcessor.GetSegmentPairInfo(segmentPair)?.SourceWordCounts;
+				}
+				catch
+				{
+					// catch all; ignore
+				}
+
+				SegmentPairInfos.Add(segmentPairInfo);
+			}
+		}
+
+		private SegmentPairProcessor SegmentPairProcessor
+		{
+			get
+			{
+				if (_segmentPairProcessor != null)
+				{
+					return _segmentPairProcessor;
+				}
+
+				if (SourceLanguage == null || TargetLanguage == null)
+				{
+					throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
+				}
+
+				var productName = GetProductName();
+				var pathInfo = new Toolkit.LanguagePlatform.Models.PathInfo(productName);
+
+				_segmentPairProcessor = new SegmentPairProcessor(
+					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
+
+				return _segmentPairProcessor;
+			}
+		}
+
+		private string GetProductName()
+		{
+			if (!string.IsNullOrEmpty(_productName))
+			{
+				return _productName;
+			}
+
+			var studioVersionService = new StudioVersionService();
+			var studioVersion = studioVersionService.GetStudioVersion();
+			if (studioVersion != null)
+			{
+				_productName = studioVersion.StudioDocumentsFolderName;
+			}
+
+			return _productName;
 		}
 	}
 }

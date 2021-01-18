@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace StudioViews.Behaviours
+namespace Sdl.Community.StudioViews.Behaviours
 {
 	public static class PreviewDragDropBehaviour
 	{

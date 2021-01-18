@@ -1,7 +1,7 @@
-﻿using Sdl.MultiSelectComboBox.API;
-using StudioViews.ViewModel;
+﻿using Sdl.Community.StudioViews.ViewModel;
+using Sdl.MultiSelectComboBox.API;
 
-namespace StudioViews.Model
+namespace Sdl.Community.StudioViews.Model
 {
 	public class FilterItemGroup : BaseModel, IItemGroup
 	{

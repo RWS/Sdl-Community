@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace StudioViews.ViewModel
+namespace Sdl.Community.StudioViews.ViewModel
 {
 	public class BaseModel : INotifyPropertyChanged
 	{
