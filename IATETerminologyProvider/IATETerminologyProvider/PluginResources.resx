@@ -172,4 +172,10 @@
   <data name="Reset_Tooltip" xml:space="preserve">
     <value>Reset all settings to default</value>
   </data>
+  <data name="Search_Subdomains" xml:space="preserve">
+    <value>Search in subdomains</value>
+  </data>
+  <data name="Subdomains_Tooltip" xml:space="preserve">
+    <value>Searching in subdomains will increase the response time from IATE service</value>
+  </data>
 </root>

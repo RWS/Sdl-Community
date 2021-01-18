@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,28 +18,25 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// <summary>
 		/// Get domains from IATE database.
 		/// </summary>
-		/// <returns>domains</returns>
+		/// <returns>IATE Domains</returns>
 		public async Task<ObservableCollection<ItemsResponseModel>> GetDomains()
 		{
 			var domains = new ObservableCollection<ItemsResponseModel>();
-			var httpClient = new HttpClient
-			{
-				BaseAddress = new Uri(ApiUrls.GetDomainUri()),
-				Timeout = TimeSpan.FromMinutes(2)
-			};
-			Utils.AddDefaultParameters(httpClient);
 
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Get,
+				RequestUri = new Uri(ApiUrls.GetDomainUri())
 			};
+			var httpResponse = await IateApplicationInitializer.Clinet.SendAsync(httpRequest);
 
 			try
 			{
-				var httpResponse = await httpClient.SendAsync(httpRequest);
-				if (httpResponse.StatusCode == HttpStatusCode.OK)
+				httpResponse?.EnsureSuccessStatusCode();
+
+				if (httpResponse?.Content != null)
 				{
-					var httpResponseAsString = await httpResponse.Content.ReadAsStringAsync();
+					var httpResponseAsString = await httpResponse.Content?.ReadAsStringAsync();
 
 					var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
 					if (jsonDomainsModel?.Items != null)
@@ -49,21 +47,62 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 							{
 								Code = item.Code,
 								Name = item.Name,
-								Subdomains = item.Subdomains
+								Subdomains = item.Subdomains,
+								SubdomainIds = new List<string>()
 							};
+							SetSubdomainsIds(domain);
 							domains.Add(domain);
 						}
 					}
-					Domains = domains;
-					return domains;
 				}
-				Log.Logger.Error($"Get Domains status code:{httpResponse.StatusCode}");
+				Domains = domains;
+				return domains;
 			}
-			catch (Exception e)
+			finally
 			{
-				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+				httpResponse?.Dispose();
 			}
-			return domains;
+		}
+
+		private void SetSubdomainsIds(ItemsResponseModel domain)
+		{
+			var subdomainsIds= new List<string>();
+			if (domain.Subdomains != null)
+			{
+				foreach (var subdomain in domain.Subdomains)
+				{
+					AddUniqueSubdomainId(subdomain.Code, subdomainsIds);
+					GetSubdomainsId(subdomain.Subdomains, subdomainsIds);
+					if (subdomainsIds.Any())
+					{
+						domain.SubdomainIds.AddRange(subdomainsIds);
+					}
+				}
+			}
+		}
+
+		private void GetSubdomainsId(List<SubdomainsResponseModel> subdomains, List<string>subdomainsIds)
+		{
+			if (subdomains != null)
+			{
+				foreach (var subdomain in subdomains)
+				{
+					AddUniqueSubdomainId(subdomain.Code, subdomainsIds);
+
+					GetSubdomainsId(subdomain.Subdomains, subdomainsIds);
+				}
+			}
+		}
+
+		private void AddUniqueSubdomainId(string subdomainId, List<string> subdomainsIds)
+		{
+			if (!string.IsNullOrEmpty(subdomainId))
+			{
+				if (!subdomainsIds.Any(s => s.Equals(subdomainId)))
+				{
+					subdomainsIds.Add(subdomainId);
+				}
+			}
 		}
 	}
 }

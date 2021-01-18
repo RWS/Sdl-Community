@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -44,7 +45,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		private readonly Constants _constants = new Constants();
 		private Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public MtProviderConfDialog(MtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
+		public MtProviderConfDialog(IMtTranslationOptions options, ITranslationProviderCredentialStore credentialStore, List<LanguagePair> correspondingLanguages)
 		{
 			this._credstore = credentialStore;
 			uriMs = new Uri("mtenhancedprovidermst:///");
@@ -59,7 +60,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 		}
 
-		public MtProviderConfDialog(MtTranslationOptions options, bool isTellMeAction)
+		public MtProviderConfDialog(IMtTranslationOptions options, bool isTellMeAction)
 		{
 			_isTellMeAction = isTellMeAction;
 			uriMs = new Uri("mtenhancedprovidermst:///");
@@ -71,18 +72,18 @@ namespace Sdl.Community.MtEnhancedProvider
 			tabPage1.Enabled = false;
 		}
 
-		public MtProviderConfDialog(MtTranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
-		{
-			this._credstore = credentialStore;
-			uriMs = new Uri("mtenhancedprovidermst:///");
-			uriGt = new Uri("mtenhancedprovidergt:///");
-			Options = options;
-			InitializeComponent();
-			UpdateDialog();
-			this.Text = caption;
-		}
+		//public MtProviderConfDialog(MtTranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
+		//{
+		//	this._credstore = credentialStore;
+		//	uriMs = new Uri("mtenhancedprovidermst:///");
+		//	uriGt = new Uri("mtenhancedprovidergt:///");
+		//	Options = options;
+		//	InitializeComponent();
+		//	UpdateDialog();
+		//	this.Text = caption;
+		//}
 
-		public MtTranslationOptions Options
+		public IMtTranslationOptions Options
 		{
 			get;
 			set;
@@ -115,6 +116,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 		}
 
+		//Moved to the new UI
 		private string BrowseEditFile()
 		{
 			//Note: The current thread culture will not affect the language of message boxes and other dialogs
@@ -137,7 +139,6 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 				{
-					_logger.Error($"{_constants.BrowseEditFile} {ex.Message}\n { ex.StackTrace}");
 
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = string.Format(MtProviderConfDialogResources.lookupFileStructureCheckXmlProblemErrorMessage, System.IO.Path.GetFileName(openFile.FileName));
@@ -146,7 +147,6 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
 				{
-					_logger.Error($"{_constants.BrowseEditFile} {exp.Message}\n { exp.StackTrace}");
 
 					string caption = MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption;
 					string message = MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage + " " + exp.Message;
@@ -373,7 +373,6 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch(Exception ex)
 			{
-				_logger.Error($"{_constants.UpdateDialog} {ex.Message}\n { ex.StackTrace}");
 			}
 		}
 

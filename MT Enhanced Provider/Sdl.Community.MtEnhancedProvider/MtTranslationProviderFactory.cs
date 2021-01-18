@@ -17,7 +17,6 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-
     [TranslationProviderFactory(
         Id = "MtTranslationProviderFactory",
         Name = "MtTranslationProviderFactory",
@@ -28,7 +27,6 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-
             if (!SupportsTranslationProviderUri(translationProviderUri))
             {
                 throw new Exception(PluginResources.UriNotSupportedMessage);
@@ -40,18 +38,12 @@ namespace Sdl.Community.MtEnhancedProvider
             //start with MT...check if we are using MT
             if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
             {
-                var myUri = new Uri("mtenhancedprovidermst:///");
+                var myUri = new Uri(PluginResources.UriMs);
                 if (credentialStore.GetCredential(myUri) != null)
                 {
-                    var credPersists = credentialStore.GetCredential(myUri).Persist;
-                    var cred = new TranslationProviderCredential("", credPersists); //will this work??
-
-                    cred = credentialStore.GetCredential(myUri); //if credential is there then just get it
-
-                    var cred2 = new GenericCredentials(cred.Credential);//convert to generic credentials
-                    //add creds to options
-                    loadOptions.ClientId = cred2.UserName;
-                    loadOptions.ClientSecret = cred2.Password;
+					var cred = new TranslationProviderCredential(credentialStore.GetCredential(myUri).Credential, credentialStore.GetCredential(myUri).Persist);
+                    loadOptions.ClientId = cred.Credential;
+	                loadOptions.PersistMicrosoftCreds = cred.Persist;
                 }
                 else
                 {
@@ -60,15 +52,12 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             else //if we are using Google as the provider need to get API key
             {
-                var myUri = new Uri("mtenhancedprovidergt:///");
+                var myUri = new Uri(PluginResources.UriGt);
                 if (credentialStore.GetCredential(myUri) != null)
                 {
-                    var credPersists = credentialStore.GetCredential(myUri).Persist;
-                    var cred = new TranslationProviderCredential("", credPersists); //will this work??
-
-                    cred = credentialStore.GetCredential(myUri); //if credential is there then just get it
-                    //add gt key to options
+	              var cred = new TranslationProviderCredential(credentialStore.GetCredential(myUri).Credential, credentialStore.GetCredential(myUri).Persist);
                     loadOptions.ApiKey = cred.Credential;
+	                loadOptions.PersistGoogleKey = cred.Persist;
                 }
                 else
                 {
@@ -96,13 +85,12 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
-            var info = new TranslationProviderInfo();
-
-            info.TranslationMethod = MtTranslationOptions.ProviderTranslationMethod;
-
-            info.Name = PluginResources.Plugin_NiceName;
-
-            return info;
+	        var info = new TranslationProviderInfo
+	        {
+		        TranslationMethod = MtTranslationOptions.ProviderTranslationMethod,
+		        Name = PluginResources.Plugin_NiceName
+	        };
+	        return info;
         }
 
     }

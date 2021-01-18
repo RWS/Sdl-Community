@@ -279,9 +279,11 @@ namespace Sdl.Community.IATETerminologyProvider.Ui
 				File.Delete(fullFilePath);
 			}
 
-			var reportTemplate = "IATETerminologyProvider.Resources.report.xslt";
+			var executingAssembly = Assembly.GetExecutingAssembly();
+			var assemblyName = executingAssembly.GetName().Name;
+			var reportTemplate = $"{assemblyName}.Resources.report.xslt";
 
-			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportTemplate))
+			using (var stream = executingAssembly.GetManifestResourceStream(reportTemplate))
 			{
 				if (stream != null)
 				{
