@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using Sdl.Community.Toolkit.Core;
+using Sdl.Community.Toolkit.Core.Services;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
@@ -42,6 +45,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return string.Empty;
 		}
 
+		private StudioVersion StudioVersion { get; } = new StudioVersionService().GetStudioVersion();
+
 		/// <summary>
 		/// Get installed version for Studio 2019
 		/// </summary>
@@ -50,10 +55,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			try
 			{
-				var studioVersion = new Toolkit.Core.Studio().GetInstalledStudioVersion()?.FirstOrDefault(v => v.Version.Equals("Studio15"));
-				if (studioVersion != null)
+				if (StudioVersion != null)
 				{
-					return $"{studioVersion.PublicVersion}-{studioVersion.ExecutableVersion}";
+					return $"{StudioVersion.PublicVersion}-{StudioVersion.ExecutableVersion}";
 				}
 			}
 			catch
@@ -62,6 +66,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return string.Empty;
+		}
+
+		public string GetAppDataStudioFolder()
+		{
+			return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
+				"SDL Trados Studio", $"{StudioVersion.ExecutableVersion.Major}.0.0.0");
 		}
 	}
 }

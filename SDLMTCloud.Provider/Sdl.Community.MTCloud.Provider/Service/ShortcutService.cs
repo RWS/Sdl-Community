@@ -26,11 +26,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		// Public implementation of Dispose pattern callable by consumers.
 		public void Dispose() => Dispose(true);
 
-		public ShortcutService()
+		public ShortcutService(VersionService versionService)
 		{
 			_settingsFileName = "UserSettings.xml";
-			_settingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
-				"SDL Trados Studio", "15.0.0.0");
+			_settingsFolderPath = versionService.GetAppDataStudioFolder();
 			_settingsXmlPath =  Path.Combine(_settingsFolderPath,_settingsFileName);
 			_safeHandle = new SafeFileHandle(IntPtr.Zero, true);
 			_customShortcuts = new List<StudioShortcut>();

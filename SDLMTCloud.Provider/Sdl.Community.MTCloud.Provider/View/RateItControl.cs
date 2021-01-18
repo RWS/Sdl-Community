@@ -26,7 +26,8 @@ namespace Sdl.Community.MTCloud.Provider.View
 
 		private void LoadDataContext()
 		{
-			var shortcutService = new ShortcutService();
+			var versionService = new VersionService();
+			var shortcutService = new ShortcutService(versionService);
 			var actionProvider = new ActionProvider();
 			var messageBoxService = new MessageBoxService();
 
