@@ -172,6 +172,16 @@ namespace Sdl.Community.StudioViews {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon StudioViewsSplit_Icon {
+            get {
+                object obj = ResourceManager.GetObject("StudioViewsSplit_Icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to parse the file; {0} language cannot be null!.
         /// </summary>
         internal static string WarningMessage_UnableToParseFileLanguageCannotBeNull {

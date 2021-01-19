@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
+using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
 using Sdl.Community.StudioViews.ViewModel;
@@ -8,6 +10,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.StudioViews.Actions
 {
@@ -20,7 +23,7 @@ namespace Sdl.Community.StudioViews.Actions
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 0, DisplayType.Default, "", true)]
 	public class ImportSelectedFilesAction : AbstractAction
 	{
-		private StudioViewsFilesSplitView _window;
+		private StudioViewsFilesImportView _window;
 		private FilesController _filesController;
 		private ProjectsController _projectsController;
 
@@ -33,21 +36,52 @@ namespace Sdl.Community.StudioViews.Actions
 		protected override void Execute()
 		{
 			var selectedFiles = _filesController.SelectedFiles?.ToList();
-			if (selectedFiles?.Count == 0)
+			if (selectedFiles == null || selectedFiles.Count == 0)
 			{
 				MessageBox.Show("No files selected", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
 			}
 
-			var sdlxliffMerger = new SdlxliffMerger();
-			var sdlxliffExporter = new SdlxliffExporter();
+			var projectHelper = new ProjectHelper(_projectsController);
+			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
+			var filterItemHelper = new FilterItemHelper();
+			var fileInfoService = new FileInfoService();
+			var commonService = new CommonService(fileInfoService);
+			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemHelper, analysisBands);
 			var sdlXliffReader = new SdlxliffReader();
 
-			_window = new StudioViewsFilesSplitView();
-			var model = new StudioViewsFilesSplitViewModel(_window, selectedFiles, 
-				sdlxliffMerger, sdlxliffExporter, sdlXliffReader);
+			_window = new StudioViewsFilesImportView();
+			var model = new StudioViewsFilesImportViewModel(_window, selectedFiles, filterItemHelper, sdlxliffImporter, sdlXliffReader);
 
 			_window.DataContext = model;
 			_window.ShowDialog();
+
+			if (model.DialogResult != DialogResult.OK)
+			{
+				return;
+			}
+			
+			_window.Dispatcher.Invoke(
+				delegate
+				{
+					var messageInfo = new MessageInfo
+					{
+						Title = "Task Result",
+						Message = model.Message,
+						LogFilePath = model.LogFilePath,
+						Folder = model.ExportPath,
+						ShowImage = true,
+						ImageUrl = model.Success
+							? "/Sdl.Community.StudioViews;component/Resources/information.png"
+							: "/Sdl.Community.StudioViews;component/Resources/warning.png"
+					};
+
+					var messageView = new MessageBoxView();
+					var messageViewModel = new MessageBoxViewModel(messageView, messageInfo);
+					messageView.DataContext = messageViewModel;
+
+					messageView.ShowDialog();
+				});
 		}
 	}
 }

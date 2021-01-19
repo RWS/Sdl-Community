@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -124,6 +126,72 @@ namespace Sdl.Community.StudioViews.Services
 			}
 
 			return null;
+		}
+
+		public string GetUniqueFileName(string filePath, string suffix)
+		{
+			var directoryName = Path.GetDirectoryName(filePath);
+			var fileName = Path.GetFileName(filePath);
+			var fileExtension = Path.GetExtension(fileName);
+			var fileNameWithoutExtension = GetFileNameWithoutExtension(fileName, fileExtension);
+
+			var index = 1;
+			var uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
+															 + "." + (string.IsNullOrEmpty(suffix) ? string.Empty : suffix + "_")
+															 + index.ToString().PadLeft(4, '0') + fileExtension);
+
+			if (File.Exists(uniqueFilePath))
+			{
+				while (File.Exists(uniqueFilePath))
+				{
+					index++;
+					uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
+																 + "." + (string.IsNullOrEmpty(suffix) ? string.Empty : suffix + "_")
+																 + index.ToString().PadLeft(4, '0') + fileExtension);
+				}
+			}
+
+			return uniqueFilePath;
+		}
+
+		public string GetValidFolderPath(string initialPath)
+		{
+			if (string.IsNullOrWhiteSpace(initialPath))
+			{
+				return string.Empty;
+			}
+
+			var outputFolder = initialPath;
+			if (Directory.Exists(outputFolder))
+			{
+				return outputFolder;
+			}
+
+			while (outputFolder.Contains("\\"))
+			{
+				outputFolder = outputFolder.Substring(0, outputFolder.LastIndexOf("\\", StringComparison.Ordinal));
+				if (Directory.Exists(outputFolder))
+				{
+					return outputFolder;
+				}
+			}
+
+			return outputFolder;
+		}
+
+		private string GetFileNameWithoutExtension(string fileName, string extension)
+		{
+			if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(extension))
+			{
+				return fileName;
+			}
+
+			if (extension.Length > fileName.Length || !fileName.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
+			{
+				return fileName;
+			}
+
+			return fileName.Substring(0, fileName.Length - extension.Length);
 		}
 	}
 }

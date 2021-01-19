@@ -13,7 +13,7 @@ namespace Sdl.Community.StudioViews.Services
 		/// deletes the input <param name="files"/> if <param name="cleanup"/> is set to true
 		/// </summary>
 		/// <param name="files">List of files to merge</param>
-		/// <param name="mergeFilePath">The full path to the output merged file</param>
+		/// <param name="mergeFilePath">The full path to the output merged systemFile</param>
 		/// <param name="cleanup">Deletes the input files if set to true</param>
 		/// <returns></returns>
 		public bool MergeFiles(IReadOnlyList<string> files, string mergeFilePath, bool cleanup)
@@ -53,72 +53,6 @@ namespace Sdl.Community.StudioViews.Services
 			return true;
 		}
 
-		public string GetUniqueFileName(string filePath, string suffix)
-		{
-			var directoryName = Path.GetDirectoryName(filePath);
-			var fileName = Path.GetFileName(filePath);
-			var fileExtension = Path.GetExtension(fileName);
-			var fileNameWithoutExtension = GetFileNameWithoutExtension(fileName, fileExtension);
-
-			var index = 1;
-			var uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
-			                                                 + "." + (string.IsNullOrEmpty(suffix) ? string.Empty : suffix + "_")
-			                                                 + index.ToString().PadLeft(4, '0') + fileExtension);
-
-			if (File.Exists(uniqueFilePath))
-			{
-				while (File.Exists(uniqueFilePath))
-				{
-					index++;
-					uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
-					                                             + "." + (string.IsNullOrEmpty(suffix) ? string.Empty : suffix + "_")
-					                                             + index.ToString().PadLeft(4, '0') + fileExtension);
-				}
-			}
-
-			return uniqueFilePath;
-		}
-
-		public string GetValidFolderPath(string initialPath)
-		{
-			if (string.IsNullOrWhiteSpace(initialPath))
-			{
-				return string.Empty;
-			}
-
-			var outputFolder = initialPath;
-			if (Directory.Exists(outputFolder))
-			{
-				return outputFolder;
-			}
-
-			while (outputFolder.Contains("\\"))
-			{
-				outputFolder = outputFolder.Substring(0, outputFolder.LastIndexOf("\\", StringComparison.Ordinal));
-				if (Directory.Exists(outputFolder))
-				{
-					return outputFolder;
-				}
-			}
-
-			return outputFolder;
-		}
-
-		private string GetFileNameWithoutExtension(string fileName, string extension)
-		{
-			if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(extension))
-			{
-				return fileName;
-			}
-
-			if (extension.Length > fileName.Length || !fileName.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
-			{
-				return fileName;
-			}
-
-			return fileName.Substring(0, fileName.Length - extension.Length);
-		}
-		
 		private static string GetXliffFileContent(string content)
 		{
 			var regexXliff = new Regex(@"(?<xliff><xliff\s+[^\>]*?>)", RegexOptions.IgnoreCase);

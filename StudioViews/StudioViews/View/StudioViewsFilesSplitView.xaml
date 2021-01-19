@@ -7,6 +7,7 @@
         ResizeMode="CanResizeWithGrip"
         WindowStyle="ThreeDBorderWindow"
         AllowsTransparency="False" 
+		Icon="../Resources/StudioViews_split.ico"
         WindowStartupLocation="CenterScreen"
         Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
         xmlns:behaviours="clr-namespace:Sdl.Community.StudioViews.Behaviours"

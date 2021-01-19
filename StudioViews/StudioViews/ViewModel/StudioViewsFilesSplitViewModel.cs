@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
 using Sdl.ProjectAutomation.Core;
+using MessageBox = System.Windows.MessageBox;
 using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StudioViews.ViewModel
@@ -23,6 +26,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly List<ProjectFile> _selectedFiles;
+		private readonly CommonService _commonService;
 
 		private int _maxNumberOfWords;
 		private int _numberOfEqualParts;
@@ -41,17 +45,19 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _exportPathBrowseCommand;
 		private ICommand _openFolderInExplorerCommand;
 
-		public StudioViewsFilesSplitViewModel(Window window, List<ProjectFile> selectedFiles,
+		public StudioViewsFilesSplitViewModel(Window window, List<ProjectFile> selectedFiles, CommonService commonService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
 			_window = window;
 			_selectedFiles = selectedFiles;
+			_commonService = commonService;
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
 
 			WindowTitle = PluginResources.StudioViews_SplitSelectedFiles_Name;
 
+			DialogResult = DialogResult.None;
 			Reset(null);
 		}
 
@@ -274,6 +280,16 @@ namespace Sdl.Community.StudioViews.ViewModel
 				return ExportPathIsValid && FileNameIsValid && segmentIdsIsValid;
 			}
 		}
+		
+		public DialogResult DialogResult { get; set; }
+
+		public string Message { get; private set; }
+
+		public bool Success { get; private set; }
+
+		public string LogFilePath { get; private set; }
+
+		public DateTime ProcessingDateTime { get; private set; }
 
 		private void ExportPathBrowse(object parameter)
 		{
@@ -322,27 +338,99 @@ namespace Sdl.Community.StudioViews.ViewModel
 			try
 			{
 				ProgressIsVisible = true;
+				ProcessingDateTime = DateTime.Now;
+				LogFilePath = Path.Combine(ExportPath, GetLogFileName("Split", ProcessingDateTime));
 
 				var task = Task.Run(ExportFiles);
 				task.ContinueWith(t =>
 				{
-					MessageBox.Show(t.Result.Item2, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					Success = t.Result.Success;
+					Message = t.Result.Message;
 
-					if (t.Result.Item1)
-					{
-						AttemptToCloseWindow();
-					}
-					else
-					{
-						ProgressIsVisible = false;
-					}
+					WriteLogFile(t.Result);
+
+					DialogResult = DialogResult.OK;
+					
+					AttemptToCloseWindow();
 				});
 			}
 			catch (Exception e)
 			{
+				DialogResult = DialogResult.Abort;
 				ProgressIsVisible = false;
 				MessageBox.Show(e.Message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
+		}
+
+
+		private string GetLogFileName(string task, DateTime dateTime)
+		{
+			return "StudioViews_" + task + "Task_"
+			       + GetDateTimeToFilePartString(dateTime) + ".log";
+		}
+
+		private void WriteLogFile(ExportResult exportResult)
+		{
+			_window.Dispatcher.Invoke(
+				delegate
+				{
+					using (var sr = new StreamWriter(LogFilePath, false, Encoding.UTF8))
+					{
+						sr.WriteLine("Studio Views");
+						sr.WriteLine("Task: Split Files");
+						sr.WriteLine("Start Processing: " + GetDateTimeToString(ProcessingDateTime));
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("Input Files (" + exportResult.InputFiles.Count + "):");
+						var fileIndex = 0;
+						foreach (var filePath in exportResult.InputFiles)
+						{
+							fileIndex++;
+							sr.WriteLine("  File (" + fileIndex + "): " + filePath);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("Output Files (" + exportResult.OutputFiles.Count + "):");
+						fileIndex = 0;
+						foreach (var filePath in exportResult.OutputFiles)
+						{
+							fileIndex++;
+							sr.WriteLine("  File (" + fileIndex + "): " + filePath);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("End Processing: " + GetDateTimeToString(DateTime.Now));
+
+						sr.Flush();
+						sr.Close();
+					}
+				});
+		}
+
+		private string GetDateTimeToFilePartString(DateTime dateTime)
+		{
+			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
+				? dateTime.Year
+				  + "" + dateTime.Month.ToString().PadLeft(2, '0')
+				  + "" + dateTime.Day.ToString().PadLeft(2, '0')
+				  + "T" + dateTime.Hour.ToString().PadLeft(2, '0')
+				  + "" + dateTime.Minute.ToString().PadLeft(2, '0')
+				  + "" + dateTime.Second.ToString().PadLeft(2, '0')
+				: "none";
+			return value;
+		}
+		
+		private string GetDateTimeToString(DateTime dateTime)
+		{
+			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
+				? dateTime.Year
+				  + "-" + dateTime.Month.ToString().PadLeft(2, '0')
+				  + "-" + dateTime.Day.ToString().PadLeft(2, '0')
+				  + " " + dateTime.Hour.ToString().PadLeft(2, '0')
+				  + ":" + dateTime.Minute.ToString().PadLeft(2, '0')
+				  + ":" + dateTime.Second.ToString().PadLeft(2, '0')
+				: "[none]";
+			return value;
 		}
 
 		private void Reset(object paramter)
@@ -356,16 +444,22 @@ namespace Sdl.Community.StudioViews.ViewModel
 			OnPropertyChanged(nameof(IsValid));
 		}
 
-		private async Task<Tuple<bool, string>> ExportFiles()
+		private async Task<ExportResult> ExportFiles()
 		{
 			var filePathInput = _selectedFiles[0].LocalFilePath;
+
+			var exportResult = new ExportResult
+			{
+				InputFiles = _selectedFiles.Select(a => a.LocalFilePath).ToList(),
+				OutputFiles = new List<string>()
+			};
 
 			if (_selectedFiles.Count > 1)
 			{
 				var files = _selectedFiles.Select(a => a.LocalFilePath).ToList();
 				var fileDirectory = Path.GetDirectoryName(files[0]);
 				var filePathOutput =
-					_sdlxliffMerger.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
+					_commonService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
 
 				var mergedFile = _sdlxliffMerger.MergeFiles(files, filePathOutput, false);
 				if (mergedFile)
@@ -374,14 +468,20 @@ namespace Sdl.Community.StudioViews.ViewModel
 				}
 				else
 				{
-					return await Task.FromResult(new Tuple<bool, string>(false, "Unexpected error while merging files."));
+					exportResult.Success = false;
+					exportResult.Message = "Unexpected error while merging files.";
+					return await Task.FromResult(exportResult);
 				}
 			}
-
-			var segmentPairSplits = GetSegmentPairSplits(filePathInput);
+			
+			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
+			
+			var segmentPairSplits = GetSegmentPairSplits(segmentPairs);
 			if (segmentPairSplits == null)
 			{
-				return await Task.FromResult(new Tuple<bool, string>(false, "No segments available."));
+				exportResult.Success = false;
+				exportResult.Message = "No segments available.";
+				return await Task.FromResult(exportResult);
 			}
 
 			var fileIndex = 0;
@@ -390,6 +490,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 				fileIndex++;
 				var filePathOutput = GetFilePathOutput(FileName, ExportPath, fileIndex);
 				_sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput);
+
+				exportResult.OutputFiles.Add(filePathOutput);
 			}
 
 			if (_selectedFiles.Count > 1)
@@ -400,14 +502,15 @@ namespace Sdl.Community.StudioViews.ViewModel
 				}
 			}
 
-			return await Task.FromResult(new Tuple<bool, string>(true, 
-				string.Format("Successfully separated the content into {0} individual files", fileIndex)));
+			exportResult.Success = true;
+			exportResult.Message = Message = "Successfully completed the split operation.\r\n\r\n";
+			exportResult.Message += string.Format("Exported {0} segments into {1} separate files", segmentPairs.Count, fileIndex);
+			
+			return await Task.FromResult(exportResult);
 		}
 
-		private IEnumerable<List<SegmentPairInfo>> GetSegmentPairSplits(string filePathInput)
+		private IEnumerable<List<SegmentPairInfo>> GetSegmentPairSplits(List<SegmentPairInfo> segmentPairs)
 		{
-			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
-
 			IEnumerable<List<SegmentPairInfo>> segmentPairSplits = null;
 			if (SplitByWordCount)
 			{
@@ -417,7 +520,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				var splitWordCount = GetTotalWordCount(segmentPairs);
 				var maxNumberOfWords =
-					(int) Math.Round(Convert.ToDecimal(splitWordCount) / Convert.ToDecimal(NumberOfEqualParts), 0,
+					(int)Math.Round(Convert.ToDecimal(splitWordCount) / Convert.ToDecimal(NumberOfEqualParts), 0,
 						MidpointRounding.AwayFromZero);
 				segmentPairSplits = GetSegmentPairsSplitByMaxWordCount(segmentPairs, maxNumberOfWords);
 			}
@@ -500,11 +603,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 						{
 							_window?.Close();
 						}));
-
 				}
 			);
 		}
-		
+
 		private List<string> GetSegmentIds(string segmentIdsString)
 		{
 			var segmentIds = segmentIdsString.Replace(" ", "").Trim().Split(',').ToList();

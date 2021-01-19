@@ -1,21 +1,39 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.StudioViews.Services
 {
 	public class ContentImporter : AbstractBilingualContentProcessor
 	{
-		private readonly List<IParagraphUnit> _updatedParagraphUnits;
+		private readonly List<SegmentPairInfo> _updatedSegmentPairs;
+		private readonly List<string> _excludeFilterIds;
+		private readonly FilterItemHelper _filterItemHelper;
+		private readonly List<AnalysisBand> _analysisBands;
 
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 
-		public ContentImporter(List<IParagraphUnit> updatedParagraphUnits)
+		public ContentImporter(List<SegmentPairInfo> updatedSegmentPairs, List<string> excludeFilterIds,
+			FilterItemHelper filterItemHelper, List<AnalysisBand> analysisBands)
 		{
-			_updatedParagraphUnits = updatedParagraphUnits;
+			_updatedSegmentPairs = updatedSegmentPairs;
+			_excludeFilterIds = excludeFilterIds;
+			_filterItemHelper = filterItemHelper;
+			_analysisBands = analysisBands;
+
+			UpdatedSegments = 0;
+			IgnoredSegments = 0;
+			TotalSegments = 0;
 		}
+
+		public int UpdatedSegments { get; private set; }
+
+		public int IgnoredSegments { get; private set; }
+
+		public int TotalSegments { get; private set; }
 
 		public CultureInfo SourceLanguage { get; private set; }
 
@@ -45,31 +63,71 @@ namespace Sdl.Community.StudioViews.Services
 				return;
 			}
 
-			var updatedParagraphUnit = _updatedParagraphUnits.FirstOrDefault(a =>
-				a.Properties.ParagraphUnitId.Id == paragraphUnit.Properties.ParagraphUnitId.Id);
+			var updatedSegmentPairs = _updatedSegmentPairs.Where(a =>
+				a.ParagraphUnitId == paragraphUnit.Properties.ParagraphUnitId.Id).ToList();
 
-			if (updatedParagraphUnit != null)
+			TotalSegments = paragraphUnit.SegmentPairs.Count();
+
+			if (updatedSegmentPairs.Any())
 			{
 				foreach (var segmentPair in paragraphUnit.SegmentPairs)
 				{
-					var updatedSegmentPair =
-						updatedParagraphUnit.SegmentPairs.FirstOrDefault(a =>
-							a.Properties.Id.Id == segmentPair.Properties.Id.Id);
+					var updatedSegmentPair = updatedSegmentPairs.FirstOrDefault(a =>
+						a.SegmentId == segmentPair.Properties.Id.Id);
 
-					if (updatedSegmentPair != null)
+					if (updatedSegmentPair?.SegmentPair?.Target == null 
+					    || IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target)
+					    || IsEmpty(updatedSegmentPair.SegmentPair.Target))
 					{
-						segmentPair.Target.Clear();
-						foreach (var item in updatedSegmentPair.Target)
-						{
-							segmentPair.Target.Add(item);
-						}
-
-						segmentPair.Properties = updatedSegmentPair.Properties;
+						continue;
 					}
+					
+					
+					if (_excludeFilterIds.Count > 0)
+					{
+						var status = segmentPair.Properties.ConfirmationLevel.ToString();
+						var match = _filterItemHelper.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
+							_analysisBands);
+
+						if ((segmentPair.Properties.IsLocked && _excludeFilterIds.Exists(a => a == "Locked"))
+							|| _excludeFilterIds.Exists(a => a == status)
+							|| _excludeFilterIds.Exists(a => a == match))
+						{
+							IgnoredSegments++;
+							continue;
+						}
+					}
+
+					segmentPair.Target.Clear();
+					foreach (var item in updatedSegmentPair.SegmentPair.Target)
+					{
+						segmentPair.Target.Add(item.Clone() as IAbstractMarkupData);
+					}
+
+					segmentPair.Properties = updatedSegmentPair.SegmentPair.Properties;
+
+					UpdatedSegments++;
 				}
 			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
+		}
+
+		private static bool IsSame(ISegment segment, ISegment updatedSegment)
+		{
+			var originalTarget = segment.ToString();
+			var updatedTarget = updatedSegment.ToString();
+
+			var isSame = (originalTarget == updatedTarget) &&
+			             (segment.Properties.IsLocked == updatedSegment.Properties.IsLocked) &&
+			             (segment.Properties.ConfirmationLevel == updatedSegment.Properties.ConfirmationLevel);
+
+			return isSame;
+		}
+
+		private static bool IsEmpty(ISegment segment)
+		{
+			return segment.ToString().Trim() == string.Empty;
 		}
 	}
 }

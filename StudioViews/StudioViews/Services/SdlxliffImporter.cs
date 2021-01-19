@@ -2,31 +2,55 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StudioViews.Services
 {
+	
 	public class SdlxliffImporter
 	{
-		public bool UpdateFile(string importFilePath, string filePathInput, string filePathOutput)
-		{
-			var updatedParagraphUnits = GetUpdatedParagraphUnits(importFilePath);
+		private readonly CommonService _commonService;
+		private readonly FilterItemHelper _filterItemHelper;
+		private readonly List<AnalysisBand> _analysisBands;
 
+		public SdlxliffImporter(CommonService commonService, FilterItemHelper filterItemHelper, List<AnalysisBand> analysisBands)
+		{
+			_commonService = commonService;
+			_filterItemHelper = filterItemHelper;
+			_analysisBands = analysisBands;
+		}
+		
+		public ImportResult UpdateFile( string importFilePath, List<string> excludeFilterIds, string filePathInput, string filePathOutput)
+		{
+			var updatedSegmentPairs = GetSegmentPairs(importFilePath);
+			return UpdateFile(updatedSegmentPairs, excludeFilterIds, filePathInput, filePathOutput);
+		}
+
+		public ImportResult UpdateFile(List<SegmentPairInfo> updatedSegmentPairs, List<string> excludeFilterIds, string filePathInput, string filePathOutput)
+		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
-			
-			var contentWriter = new ContentImporter(updatedParagraphUnits);
+
+			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds, _filterItemHelper, _analysisBands);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();
 
 			converter.Parse();
 
-			return true;
+			return new ImportResult
+			{
+				Success = true,
+				UpdatedSegments = contentWriter.UpdatedSegments,
+				IgnoredSegments = contentWriter.IgnoredSegments,
+				FilePath = filePathInput,
+				UpdatedFilePath = filePathOutput,
+				BackupFilePath = _commonService.GetUniqueFileName(filePathInput, "Backup")
+			};
 		}
 
-		private List<IParagraphUnit> GetUpdatedParagraphUnits(string filePathInput)
+		private List<SegmentPairInfo> GetSegmentPairs(string filePathInput)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, null, null);
@@ -38,17 +62,9 @@ namespace Sdl.Community.StudioViews.Services
 
 			converter.Parse();
 
-			var paragraphUnits = new List<IParagraphUnit>();
-			foreach (var segmentPairInfo in contentReader.SegmentPairInfos)
-			{
-				if (paragraphUnits.Exists(a => a.Properties.ParagraphUnitId.Id != segmentPairInfo.ParagraphUnitId))
-				{
-					paragraphUnits.Add(segmentPairInfo.ParagraphUnit);
-				}
-			}
-			
-			return paragraphUnits;
+			return contentReader.SegmentPairInfos;
 		}
+
 
 		private List<string> GetTagIds(string filePath)
 		{
