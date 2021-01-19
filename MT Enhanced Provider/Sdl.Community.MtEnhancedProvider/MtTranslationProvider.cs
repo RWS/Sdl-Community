@@ -14,6 +14,9 @@
 
 using System;
 using Newtonsoft.Json;
+using Sdl.Community.MtEnhancedProvider.GoogleApi;
+using Sdl.Community.MtEnhancedProvider.Helpers;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -28,15 +31,16 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// </summary>
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
 
-		private MtTranslationProviderGTApiConnecter gtConnect;
-		private ApiConnecter mstConnect;
+		private MtTranslationProviderGTApiConnecter _gtConnect;
+		private GoogleV3Connecter _googleV3Connecter;
+		private ApiConnecter _mstConnect;
 
-		public MtTranslationProvider(MtTranslationOptions options)
+		public MtTranslationProvider(IMtTranslationOptions options)
 		{
 			Options = options;
 		}
 
-		public MtTranslationOptions Options { get; set; }
+		public IMtTranslationOptions Options { get; set; }
 
 		public bool IsReadOnly => true;
 
@@ -45,7 +49,9 @@ namespace Sdl.Community.MtEnhancedProvider
 			get
 			{
 				if (Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-					return PluginResources.Google_Name;
+				{
+					return Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
+				}
 				if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 					return PluginResources.Microsoft_Name;
 				return PluginResources.Plugin_Name;
@@ -60,10 +66,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public bool SupportsFilters { get; } = false;
 
-		public bool SupportsFuzzySearch
-		{
-			get { return false; }
-		}
+		public bool SupportsFuzzySearch => false;
 
 		public bool SupportsMultipleResults => false;
 
@@ -120,32 +123,29 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// </summary>
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			switch (Options.SelectedProvider)
+			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 			{
-				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
-				{
-					if (mstConnect == null) //construct ApiConnecter if necessary 
-						mstConnect = new ApiConnecter(Options);
-					else
-						mstConnect.ResetCrd(Options.ClientId,
-							Options.ClientSecret); //reset in case changed since last time the class was constructed
+				if (_mstConnect == null) //construct ApiConnecter if necessary 
+					_mstConnect = new ApiConnecter(Options.ClientId);
+				else
+					_mstConnect.ResetCrd(Options.ClientId); //reset in case changed since last time the class was constructed
 
-					return mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
-						languageDirection.TargetCulture.Name);
-				}
-				case MtTranslationOptions.ProviderType.GoogleTranslate:
-				{
-					if (gtConnect == null) //instantiate GtApiConnecter if necessary
-						gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
-					else
-						gtConnect.ApiKey =
-							Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
-					return gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
-				}
-				default:
-					//not likely to get here but...
-					return true;
+				return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name,
+					languageDirection.TargetCulture.Name);
 			}
+			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
+			{
+				if (_gtConnect == null) //instantiate GtApiConnecter if necessary
+					_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
+				else
+					_gtConnect.ApiKey =
+						Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
+				return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+			_googleV3Connecter = new GoogleV3Connecter(Options);
+
+
+			return _googleV3Connecter.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 	}
 }

@@ -231,4 +231,163 @@
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BackBtnText" xml:space="preserve">
+    <value>Translation Provider</value>
+  </data>
+  <data name="backImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\backImg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Google" xml:space="preserve">
+    <value>Google Translator</value>
+  </data>
+  <data name="Microsoft" xml:space="preserve">
+    <value>Microsoft Translator</value>
+  </data>
+  <data name="PluginsView" xml:space="preserve">
+    <value>PluginsView</value>
+  </data>
+  <data name="Setting" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Setting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsText" xml:space="preserve">
+    <value>Translation Provider Settings</value>
+  </data>
+  <data name="SettingsView" xml:space="preserve">
+    <value>SettingsView</value>
+  </data>
+  <data name="SettingsViewTitle" xml:space="preserve">
+    <value>Provider options</value>
+  </data>
+  <data name="WindowDescription" xml:space="preserve">
+    <value>Please choose which MT Provider you want to use:</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ApiKeyError" xml:space="preserve">
+    <value>Please add API key.</value>
+  </data>
+  <data name="BrowseBtn" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="CatIdDescription" xml:space="preserve">
+    <value>Use Category Id</value>
+  </data>
+  <data name="CatIdError" xml:space="preserve">
+    <value>Please add Category Id otherwise uncheck CategoryId checbox.</value>
+  </data>
+  <data name="EmptyJsonFilePathMsg" xml:space="preserve">
+    <value>The local path to json file cannot be empty.</value>
+  </data>
+  <data name="EmptyProjectNameMsd" xml:space="preserve">
+    <value>Project name cannot be empty.</value>
+  </data>
+  <data name="GoogleApiDescription" xml:space="preserve">
+    <value>Please select the version of the Google Translate API that you wish to use:</value>
+  </data>
+  <data name="GoogleApiEnvironmentVariableName" xml:space="preserve">
+    <value>GOOGLE_APPLICATION_CREDENTIALS</value>
+  </data>
+  <data name="GoogleResponseDescription" xml:space="preserve">
+    <value>Google Response</value>
+  </data>
+  <data name="InvalidProjectName" xml:space="preserve">
+    <value>Invalid project name.</value>
+  </data>
+  <data name="MicrosoftApiDescription" xml:space="preserve">
+    <value>Please enter your Microsoft Translate API Key</value>
+  </data>
+  <data name="PersistGoogle" xml:space="preserve">
+    <value>Save Google key</value>
+  </data>
+  <data name="PersistMicrosoft" xml:space="preserve">
+    <value>Save Microsoft key</value>
+  </data>
+  <data name="PostLookupBrowse" xml:space="preserve">
+    <value>PostLookup</value>
+  </data>
+  <data name="PostLookupDescription" xml:space="preserve">
+    <value>Do post-lookup find/replace</value>
+  </data>
+  <data name="PostLookupEmptyMessage" xml:space="preserve">
+    <value>Post-lookup filepath cannot be empty. Please add a valid path otherwise uncheck "Do post-lookup checkbox".</value>
+  </data>
+  <data name="PostLookupFileName" xml:space="preserve">
+    <value>Do post-lookup find/replace filename:</value>
+  </data>
+  <data name="PostLookupWaterMark" xml:space="preserve">
+    <value>Browse or type the location of the post-lookup file</value>
+  </data>
+  <data name="PostLookupWrongPathMessage" xml:space="preserve">
+    <value>Post-lookup file could not be found at the specified path.</value>
+  </data>
+  <data name="PreLookBrowse" xml:space="preserve">
+    <value>PreLookup</value>
+  </data>
+  <data name="PreLookDescription" xml:space="preserve">
+    <value>Do pre-lookup find/replace</value>
+  </data>
+  <data name="PreLookFileName" xml:space="preserve">
+    <value>Do pre-lookup find/replace name:</value>
+  </data>
+  <data name="PreLookupEmptyMessage" xml:space="preserve">
+    <value>Pre-lookup filepath cannot be empty. Please add a valid path otherwise uncheck "Do pre-lookup checkbox".</value>
+  </data>
+  <data name="PreLookupWaterMark" xml:space="preserve">
+    <value>Browse or type the location of the pre-lookup file</value>
+  </data>
+  <data name="PreLookupWrongPathMessage" xml:space="preserve">
+    <value>Pre-lookup file could not be found at the specified path.</value>
+  </data>
+  <data name="ReSendDescription" xml:space="preserve">
+    <value>Re-send draft and translated segments</value>
+  </data>
+  <data name="SendPlainDescription" xml:space="preserve">
+    <value>Send plain text only (not tags)</value>
+  </data>
+  <data name="UriGt" xml:space="preserve">
+    <value>mtenhancedprovidergt:///</value>
+  </data>
+  <data name="UriMs" xml:space="preserve">
+    <value>mtenhancedprovidermst:///</value>
+  </data>
+  <data name="V3JsonPathDescription" xml:space="preserve">
+    <value>Enter the local path to the json file associated with your API key:</value>
+  </data>
+  <data name="V3ProjectNameDescription" xml:space="preserve">
+    <value>Enter the project name for this file from your Google account:</value>
+  </data>
+  <data name="WrongJsonFilePath" xml:space="preserve">
+    <value>Json file could not be found at the specified path.</value>
+  </data>
+  <data name="GoogleApiVersionV2Description" xml:space="preserve">
+    <value>V2 - Basic Translation</value>
+  </data>
+  <data name="GoogleApiVersionV3Description" xml:space="preserve">
+    <value>V3 - Advanced Translation</value>
+  </data>
+  <data name="GoogleAdvanced" xml:space="preserve">
+    <value>MT Enhanced using Google Translate Advanced</value>
+  </data>
+  <data name="GoogleBasic" xml:space="preserve">
+    <value>MT Enhanced using Google Translate Basic</value>
+  </data>
+  <data name="GoogleEngineModelDescription" xml:space="preserve">
+    <value>Enter AutoML Translation model:</value>
+  </data>
+  <data name="GoogleInvalidEngine" xml:space="preserve">
+    <value>Invalid model name</value>
+  </data>
+  <data name="GoogleProjectLocation" xml:space="preserve">
+    <value>Please add project location:</value>
+  </data>
+  <data name="ProjectLocationValidation" xml:space="preserve">
+    <value>Project location value is required</value>
+  </data>
+  <data name="V3Glossary" xml:space="preserve">
+    <value>Enter the URI whare the glossary is stored:</value>
+  </data>
+  <data name="UnidirectionalGlossary" xml:space="preserve">
+    <value>Unidirectional glossaries</value>
+  </data>
 </root>

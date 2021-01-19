@@ -24,6 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
 		private bool _dialogResult;
+		private bool _searchInSubdomains;
 
 		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService)
 		{			
@@ -109,6 +110,17 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
+		public bool SearchInSubdomains
+		{
+			get => _searchInSubdomains;
+			set
+			{
+				if (_searchInSubdomains == value) return;
+				_searchInSubdomains = value;
+				OnPropertyChanged(nameof(SearchInSubdomains));
+			}
+		}
+
 		public ObservableCollection<DomainModel> Domains
 		{
 			get => _domains;
@@ -130,6 +142,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			ResetDomains();
 			ResetTypes();
+			SearchInSubdomains = false;
 		}
 
 		private void ResetTypes()
@@ -138,6 +151,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			{
 				type.IsSelected = false;
 			}
+			OnPropertyChanged(nameof(AllTermTypesChecked));
 		}
 
 		private void ResetDomains()
@@ -146,6 +160,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			{
 				domain.IsSelected = false;
 			}
+			OnPropertyChanged(nameof(AllDomainsChecked));
 		}
 
 		private void SaveSettingsAction()
@@ -159,8 +174,10 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 					_settingsService.RemoveProviderSettings();
 					savedSettings.Domains = Domains.ToList();
 					savedSettings.TermTypes = TermTypes.ToList();
+					savedSettings.SearchInSubdomains = SearchInSubdomains;
 					ProviderSettings.Domains.AddRange(Domains);
 					ProviderSettings.TermTypes.AddRange(TermTypes);
+					ProviderSettings.SearchInSubdomains = SearchInSubdomains;
 				}
 				_settingsService.SaveProviderSettings(savedSettings);
 			}
@@ -217,7 +234,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 					var domainModel = new DomainModel
 					{
 						Code = domain.Code,
-						Name = selectedDomainName
+						Name = selectedDomainName,
+						SubdomainsIds = domain.SubdomainIds
 					};
 					domainModel.PropertyChanged += DomainModel_PropertyChanged;
 					Domains.Add(domainModel);
@@ -246,8 +264,15 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			if (providerSettings is null) return;
 
-			Domains = new ObservableCollection<DomainModel>(providerSettings.Domains);
-			TermTypes = new ObservableCollection<TermTypeModel>(providerSettings.TermTypes);
+			if (providerSettings.Domains?.Count> 0)
+			{
+				Domains = new ObservableCollection<DomainModel>(providerSettings.Domains);
+			}
+			if (providerSettings.TermTypes?.Count > 0)
+			{
+				TermTypes = new ObservableCollection<TermTypeModel>(providerSettings.TermTypes);
+			}
+			SearchInSubdomains = providerSettings.SearchInSubdomains;
 		}
 
 		private bool AreAllDomainsSelected()

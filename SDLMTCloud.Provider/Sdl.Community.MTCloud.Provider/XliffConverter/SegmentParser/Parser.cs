@@ -68,8 +68,16 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 				}
 				else if (parsedTag.Type == TagType.End)
 				{
-					var correspondingStartTag = startingTags.Pop();
-					parsedTag.TagID = correspondingStartTag.TagID;
+					if (parsedTag.Anchor == startingTags.Peek().Anchor)
+					{
+						var correspondingStartTag = startingTags.Pop();
+						parsedTag.TagID = correspondingStartTag.TagID;
+					}
+					else
+					{
+						segment.Add(tag);
+						continue;
+					}
 				}
 
 				segment.Add(parsedTag);
@@ -87,7 +95,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 		/// </summary>
 		/// <param name="tag"></param>
 		/// <returns cref="Tag"/>
-		public static Tag ParseTag(string tag)
+		public static Tag ParseTag(string tag) 
 		{
 			Match match;
 			if ((match = StartingTag.Match(tag)).Success)

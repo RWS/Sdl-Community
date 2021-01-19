@@ -6,5 +6,6 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 	{
 		public List<DomainModel> Domains { get; set; }
 		public List<TermTypeModel> TermTypes { get; set; }
+		public bool SearchInSubdomains { get; set; }
 	}
 }

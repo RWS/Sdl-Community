@@ -19,12 +19,14 @@ namespace Sdl.Community.DeepLMTProvider
 		private readonly LanguagePair _languageDirection;
 		private readonly DeepLTranslationOptions _options;
 		private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
+		private DeepLTranslationProviderConnecter _connecter;
 
-		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
+		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderConnecter connecter)
 		{
 			_deepLMtTranslationProvider = deepLMtTranslationProvider;
 			_languageDirection = languageDirection;
 			_options = deepLMtTranslationProvider.Options;
+			_connecter = connecter;
 		}
 
 		public bool CanReverseLanguageDirection => throw new NotImplementedException();
@@ -310,13 +312,11 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 
-				var translator = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Formality);
-
 				await Task.Run(() => Parallel.ForEach(preTranslateSegments, segment =>
 				{
 					if (segment != null)
 					{
-						segment.PlainTranslation = translator.Translate(_languageDirection, segment.SourceText);
+						segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText);
 					}
 				})).ConfigureAwait(true);
 

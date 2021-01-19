@@ -8,6 +8,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 	{
 		private readonly List<DomainModel> _domanins = new List<DomainModel>();
 		private readonly List<TermTypeModel> _termTypes = new List<TermTypeModel>();
+		private readonly bool _searchInSubdomains = false;
 
 		public List<DomainModel> Domains
 		{
@@ -35,6 +36,16 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			}
 		}
 
+		public bool SearchInSubdomains
+		{
+			get => GetSetting<bool>(nameof(SearchInSubdomains));
+			set
+			{
+				var searchInSubdomain = GetSetting<bool>(nameof(SearchInSubdomains));
+				searchInSubdomain.Value = value;
+			}
+		}
+
 		protected override object GetDefaultValue(string settingId)
 		{
 			switch (settingId)
@@ -43,6 +54,8 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 					return _domanins;
 				case nameof(TermTypes):
 					return _termTypes;
+				case nameof(SearchInSubdomains):
+					return _searchInSubdomains;
 			}
 
 			return base.GetDefaultValue(settingId);

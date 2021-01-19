@@ -17,23 +17,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.LanguagePlatform.Core;
 
-namespace Sdl.Community.MtEnhancedProvider
+namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 {
 	public class MtTranslationProviderGTApiConnecter
 	{
 		//holds supported languages so we don't have to keep pinging google once the lang has been checked
 		//the structure is <targetLang, List<sourceLangs>>
-		private static Dictionary<string, List<string>> _dictSupportedLangs;
-		private readonly Constants _constants = new Constants();
+		public static Dictionary<string, List<string>> DictSupportedLangs;
 
 		public string ApiKey { get; set; }//for when this is already instantiated but key is changed in dialog
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -48,45 +46,37 @@ namespace Sdl.Community.MtEnhancedProvider
 			var list = GetSourceLangsList(target);
 			if (list == null) //returns null if error
 			{
-				var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;// +Environment.NewLine + PluginResources.LangPairAuthErrorMsg3;
+				var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;
 				throw new Exception(message); //b/c list will come back null if key is bad
 			}
-			_dictSupportedLangs.Add(target, list);
+			DictSupportedLangs.Add(target, list);
 		}
 
 		public bool IsSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
 			var sourceLang = GetLanguageCode(sourceCulture);
 			var targetLang = GetLanguageCode(targetCulture);
-			if (_dictSupportedLangs == null)
-				_dictSupportedLangs = new Dictionary<string, List<string>>();
-			if (!_dictSupportedLangs.ContainsKey(targetLang))
+			if (DictSupportedLangs == null)
+				DictSupportedLangs = new Dictionary<string, List<string>>();
+			if (!DictSupportedLangs.ContainsKey(targetLang))
 				UpdateSupportedLangs(targetLang);
 
-			return _dictSupportedLangs[targetLang].Any(source => source == sourceLang);
+			return DictSupportedLangs[targetLang].Any(source => source == sourceLang);
 		}
 
 		/// <summary>
 		/// Used to translate plain text only.
 		/// </summary>
-		/// <param name="langPair"></param>
-		/// <param name="text"></param>
-		/// <returns></returns>
 		public string Translate(LanguagePair langPair, string text) //this is called for just plain text
 		{
-			var format = "html";
 			text = HttpUtility.HtmlEncode(text); //we want to HtmlEncode a plain text segment
-			var result = DoTranslate(langPair, text, format);
+			var result = DoTranslate(langPair, text, "html");
 			return result;
 		}
 
 		/// <summary>
 		/// Used to translate as html to allow for tag markup
 		/// </summary>
-		/// <param name="langPair"></param>
-		/// <param name="text"></param>
-		/// <param name="format"></param>
-		/// <returns></returns>
 		public string Translate(LanguagePair langPair, string text, string format) //this is called for segments with tags
 		{
 			//here we do not HtmlEncode b/c the tagplacer will do that later..selectively
@@ -94,6 +84,17 @@ namespace Sdl.Community.MtEnhancedProvider
 			return result;
 		}
 
+		//Credentials are validated only then we try to translate something
+		//Translate a dummy text in order to show the error on the UI when user try to close the window.
+		public void ValidateCredentials()
+		{
+			var langPair = new LanguagePair
+			{
+				SourceCulture = new CultureInfo("en-us"),
+				TargetCulture = new CultureInfo("de-de")
+			};
+			Translate(langPair, string.Empty);
+		}
 
 		private string DoTranslate(LanguagePair langPair, string text, string format)
 		{
@@ -125,7 +126,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					}
 					catch (WebException e) //will come back 400 bad request if there is a problem
 					{
-						_logger.Error($"{_constants.DoTranslate} {e.Message}\n { e.StackTrace}");
+						_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n { e.StackTrace}");
 
 						var eReason = GetExceptionReason(e);
 						//get our localized error message from the resources file
@@ -145,7 +146,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.DoTranslate} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 				throw new Exception(ex.Message);
 			}
 		}
@@ -204,7 +205,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					}
 					catch (WebException e) //will come back 400 invalid value if target lang not supported
 					{
-						_logger.Error($"{_constants.GetSourceLangsList} {e.Message}\n { e.StackTrace}");
+						_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n { e.StackTrace}");
 
 						var eReason = GetExceptionReason(e);
 						return eReason == "Bad Request" ? null : new List<string> {"unsupported"};
@@ -216,7 +217,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{_constants.GetSourceLangsList} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 			}
 			return list;
 		}

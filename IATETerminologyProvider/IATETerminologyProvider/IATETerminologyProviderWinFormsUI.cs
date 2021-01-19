@@ -17,7 +17,6 @@ namespace Sdl.Community.IATETerminologyProvider
 		private SettingsWindow _settingsWindow;
 		private readonly IateSettingsService _settingsService = new IateSettingsService();
 
-
 		public string TypeName => PluginResources.IATETerminologyProviderName;
 		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
 		public bool SupportsEditing => true;
@@ -39,6 +38,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				providerSettings.Domains.AddRange(savedSettings.Domains);
 				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
+				providerSettings.SearchInSubdomains = savedSettings.SearchInSubdomains;
 			}
 			SetTerminologyProvider(terminologyProvider as IATETerminologyProvider, providerSettings);
 

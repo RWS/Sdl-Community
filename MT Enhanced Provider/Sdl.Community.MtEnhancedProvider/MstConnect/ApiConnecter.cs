@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using NLog;
 using RestSharp;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
@@ -23,20 +25,17 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		public static List<string> SupportedLangs { get; set; }
 		private string _subscriptionKey;
 		private const string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
-
 		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-		private readonly Constants _constants = new Constants();
-
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
-		/// <param name="options"></param>
-		internal ApiConnecter(MtTranslationOptions options)
+		/// <param name="clientId">Microsoft API key</param>
+		internal ApiConnecter(string clientId)
 		{
-			_subscriptionKey = options.ClientId;
+			_subscriptionKey = clientId;
 			if (_authToken == null)
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
@@ -52,7 +51,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// </summary>
 		/// <param name="cid">the client Id obtained from Microsoft</param>
 		/// <param name="cst">the client secret obtained from Microsoft</param>
-		internal void ResetCrd(string cid, string cst)
+		internal void ResetCrd(string cid)
 		{
 			_subscriptionKey = cid;
 		}
@@ -60,12 +59,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <summary>
 		/// translates the text input
 		/// </summary>
-		/// <param name="sourceLang"></param>
-		/// <param name="targetLang"></param>
-		/// <param name="textToTranslate"></param>
-		/// <param name="categoryId"></param>
-		/// <param name="format"></param>
-		/// <returns></returns>
 		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
 		{
 			//convert our language codes
@@ -74,8 +67,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+
 			var translatedText = string.Empty;
 			try
 			{
@@ -128,7 +120,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				_logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return translatedText;
@@ -188,9 +180,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <summary>
 		/// Checks of lang pair is supported by MS
 		/// </summary>
-		/// <param name="sourceLang"></param>
-		/// <param name="targetLang"></param>
-		/// <returns></returns>
 		internal bool IsSupportedLangPair(string sourceLang, string targetLang)
 		{
 			//convert our language codes
@@ -217,8 +206,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		{
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
 			var languageCodeList = new List<string>();
 			try
@@ -242,7 +229,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				_logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return languageCodeList;
@@ -250,15 +237,15 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		private string ProcessWebException(WebException e, string message)
 		{
-			Console.WriteLine("{0}: {1}", message, e);
-
+			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
+			
 			// Obtain detailed error information
 			string strResponse;
 			using (var response = (HttpWebResponse)e.Response)
 			{
 				using (var responseStream = response.GetResponseStream())
 				{
-					using (var sr = new StreamReader(responseStream, System.Text.Encoding.ASCII))
+					using (var sr = new StreamReader(responseStream, Encoding.ASCII))
 					{
 						strResponse = sr.ReadToEnd();
 					}
@@ -281,13 +268,22 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			if (task.IsFaulted)
 			{
-				throw task.Exception;
+				if (task.Exception != null) throw new Exception(task.Exception.InnerException?.Message);
 			}
 			if (task.IsCanceled)
 			{
 				throw new Exception("Timeout obtaining access token.");
 			}
 			return accessToken;
+		}
+
+		public void RefreshAuthToken()
+		{
+			//Clear the existing token because the api key has changed
+			_authToken = string.Empty;
+
+			//try to get the token for the new api key
+			_authToken = GetAuthToken();
 		}
 
 		public async Task<string> GetAccessTokenAsync()
