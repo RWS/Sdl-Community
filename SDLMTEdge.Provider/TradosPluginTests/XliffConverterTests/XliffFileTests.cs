@@ -2,9 +2,10 @@
 using System.Globalization;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sdl.Community.Toolkit.LanguagePlatform.SegmentParser;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.SegmentParser;
 using Sdl.LanguagePlatform.Core;
+using File = Sdl.Community.MTEdge.Provider.XliffConverter.Models.File;
 
 namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 {
@@ -21,7 +22,19 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 		public void GetSegments_TaggedText_SameAsSource()
 		{
 			var segments = Parser.ParseFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TaggedFile.txt"));
-			var xliff = new Xliff(CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("fr"));
+
+			var file = new File
+			{
+				SourceCulture = CultureInfo.GetCultureInfo("en-us"),
+				TargetCulture = CultureInfo.GetCultureInfo("fr")
+			};
+
+			var xliff = new Xliff
+			{
+				File = file
+			};
+
+
 			foreach (var segment in segments)
 			{
 				xliff.AddTranslation(segment, segment, "MTEdge");
@@ -43,7 +56,18 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 		{
 			var segments = Parser.ParseFile(
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TaggedFile.txt"));
-			var xliff = new Xliff(CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("fr"));
+
+			var file = new File
+			{
+				SourceCulture = CultureInfo.GetCultureInfo("en-us"),
+				TargetCulture = CultureInfo.GetCultureInfo("fr")
+			};
+
+			var xliff = new Xliff
+			{
+				File = file
+			};
+
 			foreach (var segment in segments)
 			{
 				xliff.AddSourceSegment(segment);
@@ -63,7 +87,17 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 		[ExpectedException(typeof(NullReferenceException))]
 		public void AddTranslation_NullSourceSegment_ThrowsException()
 		{
-			var xliff = new Xliff(CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("fr"));
+			var file = new File
+			{
+				SourceCulture = CultureInfo.GetCultureInfo("en-us"),
+				TargetCulture = CultureInfo.GetCultureInfo("fr")
+			};
+
+			var xliff = new Xliff
+			{
+				File = file
+			};
+
 			xliff.AddTranslation(null, new Segment(xliff.File.SourceCulture), "MTEdge");
 		}
 
@@ -74,7 +108,17 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 		[ExpectedException(typeof(NullReferenceException))]
 		public void AddSourceSegment_NullSourceSegment_ThrowsException()
 		{
-			var xliff = new Xliff(CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("fr"));
+			var file = new File
+			{
+				SourceCulture = CultureInfo.GetCultureInfo("en-us"),
+				TargetCulture = CultureInfo.GetCultureInfo("fr")
+			};
+
+			var xliff = new Xliff
+			{
+				File = file
+			};
+
 			xliff.AddSourceSegment(null);
 		}
 
@@ -85,7 +129,17 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 		[ExpectedException(typeof(NullReferenceException))]
 		public void AddSourceText_NullSourceText_ThrowsException()
 		{
-			var xliff = new Xliff(CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("fr"));
+			var file = new File
+			{
+				SourceCulture = CultureInfo.GetCultureInfo("en-us"),
+				TargetCulture = CultureInfo.GetCultureInfo("fr")
+			};
+
+			var xliff = new Xliff
+			{
+				File = file
+			};
+
 			xliff.AddSourceText(null);
 		}
 
@@ -96,7 +150,17 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 		[ExpectedException(typeof(NullReferenceException))]
 		public void AddTranslation_NullTargetSegment_ThrowsException()
 		{
-			var xliff = new Xliff(CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("fr"));
+			var file = new File
+			{
+				SourceCulture = CultureInfo.GetCultureInfo("en-us"),
+				TargetCulture = CultureInfo.GetCultureInfo("fr")
+			};
+
+			var xliff = new Xliff
+			{
+				File = file
+			};
+
 			xliff.AddTranslation(new Segment(xliff.File.SourceCulture), null, "MTEdge");
 		}
 	}

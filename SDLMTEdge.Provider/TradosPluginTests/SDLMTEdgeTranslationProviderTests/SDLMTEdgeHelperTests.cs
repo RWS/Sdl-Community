@@ -4,10 +4,12 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sdl.Community.MTEdge.Provider;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.Community.MTEdge.LPConverter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Models;
+using Converter = Sdl.Community.MTEdge.Provider.XliffConverter.Converter.Converter;
 
 namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 {
@@ -101,11 +103,21 @@ namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 		[TestMethod]
 		public void MTEdgeApi_FetchTranslationNoTags_ValidTranslation()
 		{
-			var xliffDocument = new Xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
+			var file = new File
+			{
+				SourceCulture = engFraLP.SourceCulture,
+				TargetCulture = engFraLP.TargetCulture
+			};
+
+			var xliffDocument = new Xliff
+			{
+				File = file
+			};
+
 			xliffDocument.AddSourceText(UTStringResource.BasicText);
 
 			var translatedXliffText = SDLMTEdgeTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engFraLP, xliffDocument);
-			var translatedXliff = Toolkit.LanguagePlatform.XliffConverter.Converter.ParseXliffString(translatedXliffText);
+			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 
 			Assert.IsTrue(translatedXliff.GetTargetSegments().Any());
 			Assert.AreEqual(UTStringResource.BasicTranslation, translatedXliff.GetTargetSegments()[0].ToString());
@@ -114,7 +126,7 @@ namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 			basicAuthTranslationOptions.ApiToken = token;
 
 			translatedXliffText = SDLMTEdgeTranslatorHelper.GetTranslation(basicAuthTranslationOptions, engFraLP, xliffDocument);
-			translatedXliff = Toolkit.LanguagePlatform.XliffConverter.Converter.ParseXliffString(translatedXliffText);
+			translatedXliff = Converter.ParseXliffString(translatedXliffText);
 
 			Assert.IsTrue(translatedXliff.GetTargetSegments().Any());
 			Assert.AreEqual(UTStringResource.BasicTranslation, translatedXliff.GetTargetSegments()[0].ToString());
@@ -126,11 +138,20 @@ namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 		[TestMethod]
 		public void MTEdgeApi_FetchTranslationEmoji_ValidTranslation()
 		{
-			var xliffDocument = new Xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
+			var file = new File
+			{
+				SourceCulture = engFraLP.SourceCulture,
+				TargetCulture = engFraLP.TargetCulture
+			};
+
+			var xliffDocument = new Xliff
+			{
+				File = file
+			};
 			xliffDocument.AddSourceText(UTStringResource.BasicEmojiTest);
 			xliffDocument.Version = "v1.0";
 			var translatedXliffText = SDLMTEdgeTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engFraLP, xliffDocument);
-			var translatedXliff = Toolkit.LanguagePlatform.XliffConverter.Converter.ParseXliffString(translatedXliffText);
+			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			Assert.IsTrue(translatedXliff.GetTargetSegments().Any());
 			Assert.AreEqual(UTStringResource.BasicEmojiTranslation, translatedXliff.GetTargetSegments()[0].ToString());
 		}
@@ -142,9 +163,17 @@ namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 		[ExpectedException(typeof(Exception))]
 		public void MTEdgeApi_FetchTranslation_InvalidTranslation()
 		{
-			var xliffDocument = new Xliff(engFraLP.SourceCulture, engFraLP.TargetCulture);
-			xliffDocument.AddSourceText(UTStringResource.BasicText);
+			var file = new File
+			{
+				SourceCulture = engFraLP.SourceCulture,
+				TargetCulture = engFraLP.TargetCulture
+			};
 
+			var xliffDocument = new Xliff
+			{
+				File = file
+			};
+			xliffDocument.AddSourceText(UTStringResource.BasicText);
 			SDLMTEdgeTranslatorHelper.GetTranslation(apiKeyTranslationOptions, engInvLP, xliffDocument);
 		}
 

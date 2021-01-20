@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sdl.Community.Toolkit.LanguagePlatform.SegmentParser;
+using Sdl.Community.MTEdge.Provider.XliffConverter.SegmentParser;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTEdge.UnitTests.SegmentParserTests

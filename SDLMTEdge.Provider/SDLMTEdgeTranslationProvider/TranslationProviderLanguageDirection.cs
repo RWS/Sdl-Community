@@ -84,7 +84,7 @@ namespace Sdl.Community.MTEdge.Provider
 			var translatedXliff = Converter.ParseXliffString(translatedXliffText);
 			if (translatedXliff != null)
 			{
-				return translatedXliff.GetTargetSegments(out _);
+				return translatedXliff.GetTargetSegments();
 			}
 			return new Segment[sourceSegments.Length];
 		}

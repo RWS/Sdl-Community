@@ -7,6 +7,5 @@
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0"/>
   <Include>
     <File>Sdl.Community.MTEdge.LPConverter.dll</File>
-    <File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
  </Include>
 </PluginPackage>
