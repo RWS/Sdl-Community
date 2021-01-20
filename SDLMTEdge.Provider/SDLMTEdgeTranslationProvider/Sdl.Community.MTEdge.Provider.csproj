@@ -156,6 +156,17 @@
     <Compile Include="TranslationProviderFactory.cs" />
     <Compile Include="TranslationProviderLanguageDirection.cs" />
     <Compile Include="TranslationProviderWinFormsUI.cs" />
+    <Compile Include="XliffConverter\Converter\Converter.cs" />
+    <Compile Include="XliffConverter\Converter\Extensions.cs" />
+    <Compile Include="XliffConverter\Converter\Xliff.cs" />
+    <Compile Include="XliffConverter\Models\Body.cs" />
+    <Compile Include="XliffConverter\Models\File.cs" />
+    <Compile Include="XliffConverter\Models\Header.cs" />
+    <Compile Include="XliffConverter\Models\TargetTranslation.cs" />
+    <Compile Include="XliffConverter\Models\Tool.cs" />
+    <Compile Include="XliffConverter\Models\TranslationOption.cs" />
+    <Compile Include="XliffConverter\Models\TranslationUnit.cs" />
+    <Compile Include="XliffConverter\SegmentParser\Parser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml">
