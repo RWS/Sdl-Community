@@ -272,7 +272,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				var folderDialog = new FolderSelectDialog
 				{
-					Title = "Select the export folder location",
+					Title = PluginResources.FolderSelectDialog_Select_Export_Folder,
 					InitialDirectory = initialDirectory,
 				};
 
@@ -294,7 +294,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				var openFileDialog = new OpenFileDialog
 				{
-					Title = "Select the bilingual SDLXLIFF file"
+					Title = PluginResources.OpenFileDialog_Select_Import_File
 				};
 
 				var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -378,7 +378,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			if (string.IsNullOrEmpty(ExportPath) || !Directory.Exists(ExportPath) || File.Exists(ExportPath))
 			{
-				MessageBox.Show("Directory not found!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Error_Message_Directory_Not_Found, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
 			ProcessingDateTime = DateTime.Now;
@@ -391,7 +391,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var segmentPairs = _projectFileService.GetSegmentPairs(_activeDocument, ExportSelectedSegments);
 				if (segmentPairs?.Count <= 0)
 				{
-					MessageBox.Show("No segments selected!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+					MessageBox.Show(PluginResources.Error_Message_No_Segments_Selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 					return;
 				}
 
@@ -408,10 +408,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 					_sdlxliffMerger.MergeFiles(filesExported, filePathOutput, true);
 				}
 
-				var message = "Successfully completed the filter operation.\r\n\r\n";
-				message += string.Format("Exported {0} segments from {1} files\r\n\r\n",
+				var message = PluginResources.Message_Successfully_Completed_Filter_Operation;
+				message += "\r\n\r\n";
+				message += string.Format(PluginResources.Message_Exported_SEgments_From_Files,
 					segmentPairs?.Count, filesExported.Count);
-				message += string.Format("Export File: {0}", filePathOutput);
+				message += "\r\n\r\n";
+				message += string.Format(PluginResources.Message_Export_File, filePathOutput);
 
 				ShowMessage(true, message, LogFilePath, ExportPath);
 			}
@@ -430,12 +432,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			if (string.IsNullOrEmpty(ImportPath) || !File.Exists(ImportPath))
 			{
-				MessageBox.Show("File not found!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Error_Message_File_Not_Found, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
 			if (!ImportPath.EndsWith(".sdlxliff", StringComparison.InvariantCultureIgnoreCase))
 			{
-				MessageBox.Show("Expected bilingual SDLXLIFF format!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Error_Message_Expected_Bilingual_Format, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
 			ProcessingDateTime = DateTime.Now;
@@ -448,11 +450,15 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 				var importResult = ImportFile(ImportPath, excludeFilterIds, analysisBands);
 
-				var message = "Successfully updated the document.\r\n\r\n";
-				message += "Segments\r\n";
-				message += string.Format("  Updated: {0}\r\n", importResult.UpdatedSegments);
-				message += string.Format("  Ignored: {0}\r\n\r\n", importResult.IgnoredSegments);
-				message += string.Format("Import File: {0}", ImportPath);
+				var message = PluginResources.Message_Successfully_Updated_Document;
+				message += "\r\n\r\n";
+				message += PluginResources.Message_Segments;
+				message += "\r\n";
+				message += string.Format(PluginResources.Message_Tab_Updated, importResult.UpdatedSegments);
+				message += "\r\n";
+				message += string.Format(PluginResources.Message_Tab_Ignored, importResult.IgnoredSegments);
+				message += "\r\n\r\n";
+				message += string.Format(PluginResources.Message_Import_File, ImportPath);
 
 				ShowMessage(true, message, LogFilePath, Path.GetDirectoryName(importResult.FilePath));
 			}
@@ -478,7 +484,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
 			{
 				importResult.Success = false;
-				importResult.Message = "Unable to locate document file!";
+				importResult.Message = PluginResources.Error_Message_Unable_To_Locate_Document_File;
 				return importResult;
 			}
 			
@@ -537,7 +543,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			var messageInfo = new MessageInfo
 			{
-				Title = "Task Result",
+				Title = PluginResources.Message_Title_Task_Result,
 				Message = message,
 				LogFilePath = logFilePath,
 				Folder = folder,

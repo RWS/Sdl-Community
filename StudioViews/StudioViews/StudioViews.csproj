@@ -232,7 +232,7 @@
     <Resource Include="Resources\StudioViewsMain.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\DataGridStyle.xaml">

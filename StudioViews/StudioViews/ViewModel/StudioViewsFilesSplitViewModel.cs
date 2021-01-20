@@ -331,7 +331,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			if (_selectedFiles == null || _selectedFiles.Count <= 0)
 			{
-				MessageBox.Show("No files selected!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Message_No_files_selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 				return;
 			}
 
@@ -370,7 +370,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				{
 					using (var sr = new StreamWriter(LogFilePath, false, Encoding.UTF8))
 					{
-						sr.WriteLine("Studio Views");
+						sr.WriteLine(PluginResources.Plugin_Name);
 						sr.WriteLine("Task: Split Files");
 						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
 

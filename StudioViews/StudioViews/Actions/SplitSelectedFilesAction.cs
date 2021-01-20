@@ -38,7 +38,8 @@ namespace Sdl.Community.StudioViews.Actions
 			var selectedFiles = _filesController.SelectedFiles?.ToList();
 			if (selectedFiles?.Count == 0)
 			{
-				MessageBox.Show("No files selected", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Message_No_files_selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
 			}
 
 			var commonService = new ProjectFileService();
@@ -63,7 +64,7 @@ namespace Sdl.Community.StudioViews.Actions
 				{
 					var messageInfo = new MessageInfo
 					{
-						Title = "Task Result",
+						Title = PluginResources.Message_Title_Task_Result,
 						Message = model.Message,
 						LogFilePath = model.LogFilePath,
 						Folder = model.ExportPath,

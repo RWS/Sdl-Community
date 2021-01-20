@@ -5,7 +5,7 @@ namespace Sdl.Community.StudioViews.TellMe
 	[TellMeProvider]
 	public class TellMeProvider: ITellMeProvider
 	{
-		public string Name => "Studio Views TellMe provider";
+		public string Name => string.Format(PluginResources.TellMe_String_TellMe_Provider, PluginResources.Plugin_Name);
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

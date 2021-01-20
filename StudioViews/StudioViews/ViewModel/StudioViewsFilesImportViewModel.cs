@@ -84,7 +84,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			get
 			{
-				var message = string.Format("Files: {0}, Selected: {1}",
+				var message = string.Format(PluginResources.Status_Label_Files_Selected,
 					Files?.Count ?? 0,
 					SelectedFiles?.Count ?? 0);
 				return message;
@@ -207,7 +207,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			if (_selectedProjectFiles == null || _selectedProjectFiles.Count <= 0)
 			{
-				MessageBox.Show("No files selected!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Message_No_files_selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 				return;
 			}
 
@@ -251,16 +251,20 @@ namespace Sdl.Community.StudioViews.ViewModel
 							}
 						}
 
-						Message = "Successfully completed the import operation.\r\n\r\n";
-						Message += string.Format("Updated {0} of the selected files.\r\n\r\n", updatedFileCount);
-						Message += "Segments\r\n";
-						Message += string.Format(" Updated: {0}\r\n", importedCount);
-						Message += string.Format(" Ignored: {0}", ignoredCount);
+						Message = PluginResources.Message_Successfully_Completed_Import_Operation;
+						Message += "\r\n\r\n";
+						Message += string.Format(PluginResources.Message_Updated_Of_The_Selected_Files, updatedFileCount);
+						Message += "\r\n\r\n";
+						Message += PluginResources.Message_Segments;
+						Message += "\r\n";
+						Message += string.Format(PluginResources.Message_Tab_Updated, importedCount);
+						Message += "\r\n";
+						Message += string.Format(PluginResources.Message_Tab_Ignored, ignoredCount);
 					}
 					else
 					{
 						Success = false;
-						Message = "The Import operation failed!";
+						Message = PluginResources.Error_Message_The_Import_Operation_Failed;
 					}
 
 					DialogResult = DialogResult.OK;
@@ -283,19 +287,19 @@ namespace Sdl.Community.StudioViews.ViewModel
 				{
 					using (var sr = new StreamWriter(LogFilePath, false, Encoding.UTF8))
 					{
-						sr.WriteLine("Studio Views");
-						sr.WriteLine("Task: Import Files");
-						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine(PluginResources.Plugin_Name);
+						sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing + _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						if (SelectedExcludeFilterItems.Count > 0)
 						{
 							sr.WriteLine(string.Empty);
 							var filterItems = GetFilterItems(SelectedExcludeFilterItems.ToList());
-							sr.WriteLine("Exclude Filters: " + filterItems);
+							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("Import Files (" + Files.Count + "):");
+						sr.WriteLine(PluginResources.LogFile_Label_Import_Files, Files.Count);
 						var fileIndex = 0;
 						foreach (var fileInfo in Files)
 						{

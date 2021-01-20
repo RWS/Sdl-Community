@@ -7,9 +7,9 @@ namespace Sdl.Community.StudioViews.TellMe
 	public class CommunityWikiAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		
-		public override string Category => "Studio Views results";
-		
+
+		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
+
 		public override Icon Icon => PluginResources.Question;
 
 		public CommunityWikiAction()

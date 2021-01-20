@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("studioViews")]
 [assembly: AssemblyCopyright("Copyright © SDL 2021")]
+
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
