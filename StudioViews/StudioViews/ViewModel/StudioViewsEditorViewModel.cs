@@ -23,9 +23,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 	public class StudioViewsEditorViewModel : BaseModel, IDisposable
 	{
 		private readonly EditorController _editorController;
-		private readonly FilterItemHelper _filterItemHelper;
-		private readonly ProjectHelper _projectHelper;
-		private readonly CommonService _commonService;
+		private readonly FilterItemService _filterItemService;
+		private readonly ProjectService _projectService;
+		private readonly ProjectFileService _projectFileService;
 		private readonly SdlxliffMerger _sdlxliffMerger;
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
@@ -54,12 +54,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private int _selectedTabItem;
 
 		public StudioViewsEditorViewModel(EditorController editorController,
-			FilterItemHelper filterItemHelper, ProjectHelper projectHelper, CommonService commonService,
+			FilterItemService filterItemService, ProjectService projectService, ProjectFileService projectFileService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
-			_filterItemHelper = filterItemHelper;
-			_projectHelper = projectHelper;
-			_commonService = commonService;
+			_filterItemService = filterItemService;
+			_projectService = projectService;
+			_projectFileService = projectFileService;
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
@@ -71,9 +71,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			// Default values
 			ExportSelectedSegments = true;
-			FilterItems = new List<FilterItem>(_filterItemHelper.GetFilterItems());
+			FilterItems = new List<FilterItem>(_filterItemService.GetFilterItems());
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
-				_filterItemHelper.GetFilterItems(FilterItems, new List<string> { "Locked" }));
+				_filterItemService.GetFilterItems(FilterItems, new List<string> { "Locked" }));
 			SelectedTabItem = 0;
 		}
 
@@ -264,7 +264,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			try
 			{
-				var initialDirectory = _commonService.GetValidFolderPath(ExportPath);
+				var initialDirectory = _projectFileService.GetValidFolderPath(ExportPath);
 				if (string.IsNullOrEmpty(initialDirectory) || !Directory.Exists(initialDirectory))
 				{
 					initialDirectory = null;
@@ -382,27 +382,28 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			ProcessingDateTime = DateTime.Now;
-			LogFilePath = Path.Combine(ExportPath, GetLogFileName("Filter", ProcessingDateTime));
+			var logFileName = "StudioViews_" + "Filtered" + "_"  + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+			LogFilePath = Path.Combine(ExportPath, logFileName);
 
 
 			try
 			{
-				var segmentPairs = _commonService.GetSegmentPairs(_activeDocument, ExportSelectedSegments);
+				var segmentPairs = _projectFileService.GetSegmentPairs(_activeDocument, ExportSelectedSegments);
 				if (segmentPairs?.Count <= 0)
 				{
 					MessageBox.Show("No segments selected!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
 					return;
 				}
 
-				var projectFiles = _commonService.GetProjectFiles(segmentPairs);
-				var segmentPairInfos = _commonService.GetSegmentPairInfos(ProjectFileInfos, segmentPairs);
+				var projectFiles = _projectFileService.GetProjectFiles(segmentPairs);
+				var segmentPairInfos = _projectFileService.GetSegmentPairInfos(ProjectFileInfos, segmentPairs);
 				var filesExported = ExportFiles(projectFiles, segmentPairInfos);
 				var filePathOutput = filesExported[0];
 
 				if (filesExported.Count > 1)
 				{
 					var fileDirectory = Path.GetDirectoryName(projectFiles[0].LocalFilePath);
-					filePathOutput = _commonService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), "Filtered");
+					filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), "Filtered");
 
 					_sdlxliffMerger.MergeFiles(filesExported, filePathOutput, true);
 				}
@@ -438,11 +439,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			ProcessingDateTime = DateTime.Now;
-			LogFilePath = Path.Combine(ExportPath, GetLogFileName("Import", ProcessingDateTime));
+			var logFileName = "StudioViews_" + "Import" + "_"  + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+			LogFilePath = Path.Combine(ExportPath, logFileName);
 
 			try
 			{
-				var analysisBands = _projectHelper.GetAnalysisBands(_activeDocument.Project);
+				var analysisBands = _projectService.GetAnalysisBands(_activeDocument.Project);
 				var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 				var importResult = ImportFile(ImportPath, excludeFilterIds, analysisBands);
 
@@ -467,7 +469,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				FilePath = filePath,
 				UpdatedFilePath = importFilePath,
-				BackupFilePath = _commonService.GetUniqueFileName(filePath, "Backup"),
+				BackupFilePath = _projectFileService.GetUniqueFileName(filePath, "Backup"),
 				UpdatedSegments = 0,
 				IgnoredSegments = 0
 			};
@@ -492,7 +494,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					continue;
 				}
 
-				var segmentPair = _commonService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId,
+				var segmentPair = _projectFileService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId,
 					updatedSegmentPair.SegmentId);
 				if (segmentPair?.Target == null
 					|| IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target)
@@ -504,7 +506,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				if (excludeFilterIds.Count > 0)
 				{
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
-					var match = _filterItemHelper.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
+					var match = _filterItemService.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
 						analysisBands);
 
 					if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
@@ -552,38 +554,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 			messageView.ShowDialog();
 		}
 
-		private string GetLogFileName(string task, DateTime dateTime)
-		{
-			return "StudioViews_" + task + "Task_"
-				   + GetDateTimeToFilePartString(dateTime) + ".log";
-		}
-
-		private string GetDateTimeToFilePartString(DateTime dateTime)
-		{
-			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
-				? dateTime.Year
-				  + "" + dateTime.Month.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Day.ToString().PadLeft(2, '0')
-				  + "T" + dateTime.Hour.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Minute.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Second.ToString().PadLeft(2, '0')
-				: "none";
-			return value;
-		}
-
-		private string GetDateTimeToString(DateTime dateTime)
-		{
-			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
-				? dateTime.Year
-				  + "-" + dateTime.Month.ToString().PadLeft(2, '0')
-				  + "-" + dateTime.Day.ToString().PadLeft(2, '0')
-				  + " " + dateTime.Hour.ToString().PadLeft(2, '0')
-				  + ":" + dateTime.Minute.ToString().PadLeft(2, '0')
-				  + ":" + dateTime.Second.ToString().PadLeft(2, '0')
-				: "[none]";
-			return value;
-		}
-
 		private static bool IsSame(ISegment segment, ISegment updatedSegment)
 		{
 			var originalTarget = segment.ToString();
@@ -607,7 +577,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			foreach (var documentFile in projectFiles)
 			{
 				var filePathInput = documentFile.LocalFilePath;
-				var filePathOutput = _commonService.GetUniqueFileName(Path.Combine(ExportPath, filePathInput), "Filtered");
+				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInput), "Filtered");
 
 				var success = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
 				if (success)
@@ -639,7 +609,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_activeDocument = document;
 			if (_activeDocument != null)
 			{
-				ProjectFileInfos = _commonService.GetProjectFileInfos(_activeDocument.Files.ToList());
+				ProjectFileInfos = _projectFileService.GetProjectFileInfos(_activeDocument.Files.ToList());
 				ExportPath = Path.GetDirectoryName(GetDocumentPath(_activeDocument));
 			}
 		}

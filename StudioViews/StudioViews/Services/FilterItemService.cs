@@ -8,7 +8,7 @@ using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.StudioViews.Services
 {
-	public class FilterItemHelper
+	public class FilterItemService
 	{
 		public enum MatchType
 		{

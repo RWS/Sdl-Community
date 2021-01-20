@@ -27,7 +27,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffImporter _sdlxliffImporter;
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly List<ProjectFile> _selectedProjectFiles;
-		private readonly FilterItemHelper _filterItemHelper;
+		private readonly FilterItemService _filterItemService;
+		private readonly ProjectFileService _projectFileService;
 
 		private bool _progressIsVisible;
 		private ObservableCollection<SystemFileInfo> _files;
@@ -47,14 +48,15 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _removeTemplateCommand;
 		private ICommand _dragDropCommand;
 
-		public StudioViewsFilesImportViewModel(Window window, List<ProjectFile> selectedProjectFiles,
-			FilterItemHelper filterItemHelper, SdlxliffImporter sdlxliffImporter, SdlxliffReader sdlxliffReader)
+		public StudioViewsFilesImportViewModel(Window window, List<ProjectFile> selectedProjectFiles, ProjectFileService projectFileService,
+			FilterItemService filterItemService, SdlxliffImporter sdlxliffImporter, SdlxliffReader sdlxliffReader)
 		{
 			_window = window;
-			_filterItemHelper = filterItemHelper;
+			_filterItemService = filterItemService;
 			_selectedProjectFiles = selectedProjectFiles;
 			_sdlxliffImporter = sdlxliffImporter;
 			_sdlxliffReader = sdlxliffReader;
+			_projectFileService = projectFileService;
 
 			WindowTitle = "Import";
 			DialogResult = DialogResult.None;
@@ -215,7 +217,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				ExportPath = Path.GetDirectoryName(_selectedProjectFiles.FirstOrDefault()?.LocalFilePath);
 				ProcessingDateTime = DateTime.Now;
-				LogFilePath = Path.Combine(ExportPath, GetLogFileName("Import", ProcessingDateTime));
+				var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+				LogFilePath = Path.Combine(ExportPath, logFileName);
 
 				var task = Task.Run(ImportFiles);
 				task.ContinueWith(t =>
@@ -273,12 +276,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
-		private string GetLogFileName(string task, DateTime dateTime)
-		{
-			return "StudioViews_" + task + "Task_"
-				   + GetDateTimeToFilePartString(dateTime) + ".log";
-		}
-
 		private void WriteLogFile(List<ImportResult> importResults)
 		{
 			_window.Dispatcher.Invoke(
@@ -288,7 +285,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					{
 						sr.WriteLine("Studio Views");
 						sr.WriteLine("Task: Import Files");
-						sr.WriteLine("Start Processing: " + GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						if (SelectedExcludeFilterItems.Count > 0)
 						{
@@ -332,7 +329,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("End Processing: " + GetDateTimeToString(DateTime.Now));
+						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
 
 						sr.Flush();
 						sr.Close();
@@ -361,42 +358,15 @@ namespace Sdl.Community.StudioViews.ViewModel
 			return items;
 		}
 
-
-		private string GetDateTimeToFilePartString(DateTime dateTime)
-		{
-			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
-				? dateTime.Year
-				  + "" + dateTime.Month.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Day.ToString().PadLeft(2, '0')
-				  + "T" + dateTime.Hour.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Minute.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Second.ToString().PadLeft(2, '0')
-				: "none";
-			return value;
-		}
-
-		private string GetDateTimeToString(DateTime dateTime)
-		{
-			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
-				? dateTime.Year
-				  + "-" + dateTime.Month.ToString().PadLeft(2, '0')
-				  + "-" + dateTime.Day.ToString().PadLeft(2, '0')
-				  + " " + dateTime.Hour.ToString().PadLeft(2, '0')
-				  + ":" + dateTime.Minute.ToString().PadLeft(2, '0')
-				  + ":" + dateTime.Second.ToString().PadLeft(2, '0')
-				: "[none]";
-			return value;
-		}
-
 		private void Reset(object paramter)
 		{
 			ProgressIsVisible = false;
 
 			Files = new ObservableCollection<SystemFileInfo>();
 
-			FilterItems = new List<FilterItem>(_filterItemHelper.GetFilterItems());
+			FilterItems = new List<FilterItem>(_filterItemService.GetFilterItems());
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
-				_filterItemHelper.GetFilterItems(FilterItems, new List<string> { "Locked" }));
+				_filterItemService.GetFilterItems(FilterItems, new List<string> { "Locked" }));
 
 			OnPropertyChanged(nameof(IsFilesSelected));
 			OnPropertyChanged(nameof(Files));

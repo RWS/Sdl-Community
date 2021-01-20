@@ -41,8 +41,7 @@ namespace Sdl.Community.StudioViews.Actions
 				MessageBox.Show("No files selected", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
-			var fileInfoService = new FileInfoService();
-			var commonService = new CommonService(fileInfoService);
+			var commonService = new ProjectFileService();
 			var sdlxliffMerger = new SdlxliffMerger();
 			var sdlxliffExporter = new SdlxliffExporter();
 			var sdlXliffReader = new SdlxliffReader();

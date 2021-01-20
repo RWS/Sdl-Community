@@ -10,18 +10,18 @@ namespace Sdl.Community.StudioViews.Services
 	{
 		private readonly List<SegmentPairInfo> _updatedSegmentPairs;
 		private readonly List<string> _excludeFilterIds;
-		private readonly FilterItemHelper _filterItemHelper;
+		private readonly FilterItemService _filterItemService;
 		private readonly List<AnalysisBand> _analysisBands;
 
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 
 		public ContentImporter(List<SegmentPairInfo> updatedSegmentPairs, List<string> excludeFilterIds,
-			FilterItemHelper filterItemHelper, List<AnalysisBand> analysisBands)
+			FilterItemService filterItemService, List<AnalysisBand> analysisBands)
 		{
 			_updatedSegmentPairs = updatedSegmentPairs;
 			_excludeFilterIds = excludeFilterIds;
-			_filterItemHelper = filterItemHelper;
+			_filterItemService = filterItemService;
 			_analysisBands = analysisBands;
 
 			UpdatedSegments = 0;
@@ -86,7 +86,7 @@ namespace Sdl.Community.StudioViews.Services
 					if (_excludeFilterIds.Count > 0)
 					{
 						var status = segmentPair.Properties.ConfirmationLevel.ToString();
-						var match = _filterItemHelper.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
+						var match = _filterItemService.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
 							_analysisBands);
 
 						if ((segmentPair.Properties.IsLocked && _excludeFilterIds.Exists(a => a == "Locked"))

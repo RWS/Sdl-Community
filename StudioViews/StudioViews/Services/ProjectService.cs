@@ -8,11 +8,11 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StudioViews.Services
 {
-	public class ProjectHelper
+	public class ProjectService
 	{
 		private readonly ProjectsController _projectsController;
 
-		public ProjectHelper(ProjectsController projectsController)
+		public ProjectService(ProjectsController projectsController)
 		{
 			_projectsController = projectsController;
 		}

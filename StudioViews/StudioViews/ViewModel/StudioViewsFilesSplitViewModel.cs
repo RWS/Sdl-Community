@@ -26,7 +26,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly List<ProjectFile> _selectedFiles;
-		private readonly CommonService _commonService;
+		private readonly ProjectFileService _projectFileService;
 
 		private int _maxNumberOfWords;
 		private int _numberOfEqualParts;
@@ -45,12 +45,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _exportPathBrowseCommand;
 		private ICommand _openFolderInExplorerCommand;
 
-		public StudioViewsFilesSplitViewModel(Window window, List<ProjectFile> selectedFiles, CommonService commonService,
+		public StudioViewsFilesSplitViewModel(Window window, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
 			_window = window;
 			_selectedFiles = selectedFiles;
-			_commonService = commonService;
+			_projectFileService = projectFileService;
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
@@ -339,7 +339,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				ProgressIsVisible = true;
 				ProcessingDateTime = DateTime.Now;
-				LogFilePath = Path.Combine(ExportPath, GetLogFileName("Split", ProcessingDateTime));
+				var logFileName = "StudioViews_" + "Split" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+				LogFilePath = Path.Combine(ExportPath, logFileName);
 
 				var task = Task.Run(ExportFiles);
 				task.ContinueWith(t =>
@@ -362,13 +363,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
-
-		private string GetLogFileName(string task, DateTime dateTime)
-		{
-			return "StudioViews_" + task + "Task_"
-			       + GetDateTimeToFilePartString(dateTime) + ".log";
-		}
-
 		private void WriteLogFile(ExportResult exportResult)
 		{
 			_window.Dispatcher.Invoke(
@@ -378,7 +372,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					{
 						sr.WriteLine("Studio Views");
 						sr.WriteLine("Task: Split Files");
-						sr.WriteLine("Start Processing: " + GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						sr.WriteLine(string.Empty);
 						sr.WriteLine("Input Files (" + exportResult.InputFiles.Count + "):");
@@ -399,38 +393,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("End Processing: " + GetDateTimeToString(DateTime.Now));
+						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
 
 						sr.Flush();
 						sr.Close();
 					}
 				});
-		}
-
-		private string GetDateTimeToFilePartString(DateTime dateTime)
-		{
-			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
-				? dateTime.Year
-				  + "" + dateTime.Month.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Day.ToString().PadLeft(2, '0')
-				  + "T" + dateTime.Hour.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Minute.ToString().PadLeft(2, '0')
-				  + "" + dateTime.Second.ToString().PadLeft(2, '0')
-				: "none";
-			return value;
-		}
-		
-		private string GetDateTimeToString(DateTime dateTime)
-		{
-			var value = (dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue)
-				? dateTime.Year
-				  + "-" + dateTime.Month.ToString().PadLeft(2, '0')
-				  + "-" + dateTime.Day.ToString().PadLeft(2, '0')
-				  + " " + dateTime.Hour.ToString().PadLeft(2, '0')
-				  + ":" + dateTime.Minute.ToString().PadLeft(2, '0')
-				  + ":" + dateTime.Second.ToString().PadLeft(2, '0')
-				: "[none]";
-			return value;
 		}
 
 		private void Reset(object paramter)
@@ -459,7 +427,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var files = _selectedFiles.Select(a => a.LocalFilePath).ToList();
 				var fileDirectory = Path.GetDirectoryName(files[0]);
 				var filePathOutput =
-					_commonService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
+					_projectFileService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
 
 				var mergedFile = _sdlxliffMerger.MergeFiles(files, filePathOutput, false);
 				if (mergedFile)

@@ -42,16 +42,15 @@ namespace Sdl.Community.StudioViews.Actions
 				return;
 			}
 
-			var projectHelper = new ProjectHelper(_projectsController);
+			var projectHelper = new ProjectService(_projectsController);
 			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
-			var filterItemHelper = new FilterItemHelper();
-			var fileInfoService = new FileInfoService();
-			var commonService = new CommonService(fileInfoService);
+			var filterItemHelper = new FilterItemService();
+			var commonService = new ProjectFileService();
 			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemHelper, analysisBands);
 			var sdlXliffReader = new SdlxliffReader();
 
 			_window = new StudioViewsFilesImportView();
-			var model = new StudioViewsFilesImportViewModel(_window, selectedFiles, filterItemHelper, sdlxliffImporter, sdlXliffReader);
+			var model = new StudioViewsFilesImportViewModel(_window, selectedFiles, commonService, filterItemHelper, sdlxliffImporter, sdlXliffReader);
 
 			_window.DataContext = model;
 			_window.ShowDialog();

@@ -10,14 +10,14 @@ namespace Sdl.Community.StudioViews.Services
 	
 	public class SdlxliffImporter
 	{
-		private readonly CommonService _commonService;
-		private readonly FilterItemHelper _filterItemHelper;
+		private readonly ProjectFileService _projectFileService;
+		private readonly FilterItemService _filterItemService;
 		private readonly List<AnalysisBand> _analysisBands;
 
-		public SdlxliffImporter(CommonService commonService, FilterItemHelper filterItemHelper, List<AnalysisBand> analysisBands)
+		public SdlxliffImporter(ProjectFileService projectFileService, FilterItemService filterItemService, List<AnalysisBand> analysisBands)
 		{
-			_commonService = commonService;
-			_filterItemHelper = filterItemHelper;
+			_projectFileService = projectFileService;
+			_filterItemService = filterItemService;
 			_analysisBands = analysisBands;
 		}
 		
@@ -32,7 +32,7 @@ namespace Sdl.Community.StudioViews.Services
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds, _filterItemHelper, _analysisBands);
+			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds, _filterItemService, _analysisBands);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();
@@ -46,7 +46,7 @@ namespace Sdl.Community.StudioViews.Services
 				IgnoredSegments = contentWriter.IgnoredSegments,
 				FilePath = filePathInput,
 				UpdatedFilePath = filePathOutput,
-				BackupFilePath = _commonService.GetUniqueFileName(filePathInput, "Backup")
+				BackupFilePath = _projectFileService.GetUniqueFileName(filePathInput, "Backup")
 			};
 		}
 
