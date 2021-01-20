@@ -37,9 +37,8 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -83,8 +82,8 @@
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
+    <Reference Include="Sdl.MultiSelectComboBox">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
@@ -98,15 +97,18 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Versioning, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Versioning">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -159,6 +161,10 @@
     <Compile Include="Services\SdlxliffReader.cs" />
     <Compile Include="Services\SdlxliffImporter.cs" />
     <Compile Include="Services\SdlxliffExporter.cs" />
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\BaseModel.cs" />
     <Compile Include="Model\ParagraphUnitContext.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -210,7 +216,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\information.ico" />
+    <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\question.png" />
     <Resource Include="Resources\warning.png" />
     <Resource Include="Resources\Information.png" />
