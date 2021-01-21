@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sdl.Community.Toolkit.LanguagePlatform.SegmentParser;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.SegmentParser;
 
 namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 {
