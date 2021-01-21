@@ -10,7 +10,7 @@
     <AssemblyName>Sdl.Community.MTEdge.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
@@ -43,13 +43,8 @@
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform">
-      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2019.1.9.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
       <SpecificVersion>False</SpecificVersion>
@@ -102,7 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="SampleXliff.xliff" />
   </ItemGroup>
   <ItemGroup>

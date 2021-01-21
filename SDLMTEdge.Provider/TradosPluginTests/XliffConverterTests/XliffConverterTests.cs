@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
 
 namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 {
