@@ -6,10 +6,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sdl.Community.MTEdge.Provider;
-using Sdl.Community.Toolkit.LanguagePlatform.SegmentParser;
+using Sdl.Community.MTEdge.Provider.XliffConverter.SegmentParser;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
-using TradosPluginTests;
 
 namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 {
