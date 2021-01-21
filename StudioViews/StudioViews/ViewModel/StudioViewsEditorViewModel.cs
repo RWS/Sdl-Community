@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
@@ -382,9 +384,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			ProcessingDateTime = DateTime.Now;
-			var logFileName = "StudioViews_" + "Filtered" + "_"  + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+			var logFileName = "StudioViews_" + "Filtered" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 			LogFilePath = Path.Combine(ExportPath, logFileName);
-
 
 			try
 			{
@@ -397,22 +398,31 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				var projectFiles = _projectFileService.GetProjectFiles(segmentPairs);
 				var segmentPairInfos = _projectFileService.GetSegmentPairInfos(ProjectFileInfos, segmentPairs);
-				var filesExported = ExportFiles(projectFiles, segmentPairInfos);
-				var filePathOutput = filesExported[0];
+				var exportResult = ExportFiles(projectFiles, segmentPairInfos);
+				var filePathOutput = exportResult.OutputFiles[0].FilePath;
 
-				if (filesExported.Count > 1)
+				if (exportResult.OutputFiles.Count > 1)
 				{
-					var fileDirectory = Path.GetDirectoryName(projectFiles[0].LocalFilePath);
-					filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), "Filtered");
+					filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, "StudioViewsFile.sdlxliff"), "Filtered");
+					_sdlxliffMerger.MergeFiles(exportResult.OutputFiles.Select(a => a.FilePath).ToList(), filePathOutput, true);
 
-					_sdlxliffMerger.MergeFiles(filesExported, filePathOutput, true);
+					var outputFile = new OutputFile
+					{
+						FilePath = filePathOutput,
+						SegmentCount = exportResult.OutputFiles.Sum(a => a.SegmentCount),
+						WordCount = exportResult.OutputFiles.Sum(a => a.WordCount)
+					};
+
+					exportResult.OutputFiles = new List<OutputFile> { outputFile };
 				}
 
+				WriteFilteredLogFile(exportResult, LogFilePath);
+
 				var message = PluginResources.Message_Successfully_Completed_Filter_Operation;
-				message += "\r\n\r\n";
-				message += string.Format(PluginResources.Message_Exported_SEgments_From_Files,
-					segmentPairs?.Count, filesExported.Count);
-				message += "\r\n\r\n";
+				message += Environment.NewLine + Environment.NewLine;
+				message += string.Format(PluginResources.Message_Exported_Segments_From_Files,
+					segmentPairs?.Count, exportResult.InputFiles.Count);
+				message += Environment.NewLine + Environment.NewLine;
 				message += string.Format(PluginResources.Message_Export_File, filePathOutput);
 
 				ShowMessage(true, message, LogFilePath, ExportPath);
@@ -441,7 +451,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			ProcessingDateTime = DateTime.Now;
-			var logFileName = "StudioViews_" + "Import" + "_"  + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+			var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 			LogFilePath = Path.Combine(ExportPath, logFileName);
 
 			try
@@ -450,13 +460,15 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 				var importResult = ImportFile(ImportPath, excludeFilterIds, analysisBands);
 
+				WriteImportLogFile(importResult, ImportPath, LogFilePath);
+
 				var message = PluginResources.Message_Successfully_Updated_Document;
 				message += "\r\n\r\n";
 				message += PluginResources.Message_Segments;
 				message += "\r\n";
 				message += string.Format(PluginResources.Message_Tab_Updated, importResult.UpdatedSegments);
 				message += "\r\n";
-				message += string.Format(PluginResources.Message_Tab_Ignored, importResult.IgnoredSegments);
+				message += string.Format(PluginResources.Message_Tab_Excluded, importResult.ExcludedSegments);
 				message += "\r\n\r\n";
 				message += string.Format(PluginResources.Message_Import_File, ImportPath);
 
@@ -468,6 +480,103 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
+		private void WriteImportLogFile(ImportResult importResult, string importFilePath, string logFilePath)
+		{
+			Dispatcher.CurrentDispatcher.Invoke(
+				delegate
+				{
+					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+					{
+						sr.WriteLine(PluginResources.Plugin_Name);
+						sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+
+						if (SelectedExcludeFilterItems.Count > 0)
+						{
+							sr.WriteLine(string.Empty);
+							var filterItems = _filterItemService.GetFilterItemsString(SelectedExcludeFilterItems.ToList());
+							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("Import Files");
+						
+						sr.WriteLine("  File: " + importFilePath);
+
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(string.Format("Updated Files: {0}", importResult.UpdatedSegments > 0));
+						sr.WriteLine(string.Format("Updated Segments: {0}", importResult.UpdatedSegments));
+						sr.WriteLine(string.Empty);
+
+						sr.WriteLine("File: " + importResult.FilePath);
+						sr.WriteLine("  Success: " + importResult.Success);
+						sr.WriteLine("  Updated: " + (importResult.UpdatedSegments > 0 ? "True" : "False"));
+						if (importResult.UpdatedSegments > 0)
+						{
+							sr.WriteLine("  Backup: " + importResult.BackupFilePath);
+						}
+						sr.WriteLine("  Segments");
+						sr.WriteLine("     Updated: " + importResult.UpdatedSegments);
+						sr.WriteLine("     Excluded: " + importResult.ExcludedSegments);
+
+						sr.WriteLine(string.Empty);
+
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
+
+						sr.Flush();
+						sr.Close();
+					}
+				});
+		}
+
+		private void WriteFilteredLogFile(ExportResult exportResult, string logFilePath)
+		{
+			Dispatcher.CurrentDispatcher.Invoke(
+				delegate
+				{
+					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+					{
+						sr.WriteLine(PluginResources.Plugin_Name);
+						sr.WriteLine("Task: Export Filtered");
+						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("Input Files (" + exportResult.InputFiles.Count + "):");
+						var fileIndex = 0;
+						foreach (var filePath in exportResult.InputFiles)
+						{
+							fileIndex++;
+							sr.WriteLine("  File (" + fileIndex + "): " + filePath);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("Output Files (" + exportResult.OutputFiles.Count + "):");
+						fileIndex = 0;
+						foreach (var file in exportResult.OutputFiles)
+						{
+							fileIndex++;
+							sr.WriteLine("  File (" + fileIndex + "): " + file.FilePath);
+							sr.WriteLine("     Segments " + file.SegmentCount);
+							if (file.WordCount > 0)
+							{
+								sr.WriteLine("     Words " + file.WordCount);
+							}
+
+							sr.WriteLine(string.Empty);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
+
+						sr.Flush();
+						sr.Close();
+					}
+				});
+		}
+
 		private ImportResult ImportFile(string importFilePath, List<string> excludeFilterIds, List<AnalysisBand> analysisBands)
 		{
 			var filePath = GetDocumentPath(_activeDocument);
@@ -477,17 +586,17 @@ namespace Sdl.Community.StudioViews.ViewModel
 				UpdatedFilePath = importFilePath,
 				BackupFilePath = _projectFileService.GetUniqueFileName(filePath, "Backup"),
 				UpdatedSegments = 0,
-				IgnoredSegments = 0
+				ExcludedSegments = 0
 			};
-			
-			
+
+
 			if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
 			{
 				importResult.Success = false;
 				importResult.Message = PluginResources.Error_Message_Unable_To_Locate_Document_File;
 				return importResult;
 			}
-			
+
 			_activeDocument.Project.Save();
 			File.Copy(importResult.FilePath, importResult.BackupFilePath, true);
 
@@ -519,7 +628,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 						|| excludeFilterIds.Exists(a => a == status)
 						|| excludeFilterIds.Exists(a => a == match))
 					{
-						importResult.IgnoredSegments++;
+						importResult.ExcludedSegments++;
 						continue;
 					}
 				}
@@ -577,22 +686,28 @@ namespace Sdl.Community.StudioViews.ViewModel
 			return segment.ToString().Trim() == string.Empty;
 		}
 
-		private List<string> ExportFiles(IEnumerable<ProjectFile> projectFiles, List<SegmentPairInfo> segmentPairInfos)
+		private ExportResult ExportFiles(IReadOnlyCollection<ProjectFile> projectFiles, List<SegmentPairInfo> segmentPairInfos)
 		{
-			var exportFiles = new List<string>();
+			var exportResult = new ExportResult
+			{
+				InputFiles = new List<string>(projectFiles.Select(a => a.LocalFilePath))
+			};
+
 			foreach (var documentFile in projectFiles)
 			{
 				var filePathInput = documentFile.LocalFilePath;
-				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInput), "Filtered");
+				var filePathInputName = Path.GetFileName(filePathInput);
+				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInputName), "Filtered");
 
-				var success = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
-				if (success)
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
+				if (outputFile != null)
 				{
-					exportFiles.Add(filePathOutput);
+					exportResult.OutputFiles.Add(outputFile);
 				}
 			}
 
-			return exportFiles;
+			exportResult.Success = true;
+			return exportResult;
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)

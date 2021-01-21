@@ -25,13 +25,13 @@ namespace Sdl.Community.StudioViews.Services
 			_analysisBands = analysisBands;
 
 			UpdatedSegments = 0;
-			IgnoredSegments = 0;
+			ExcludedSegments = 0;
 			TotalSegments = 0;
 		}
 
 		public int UpdatedSegments { get; private set; }
 
-		public int IgnoredSegments { get; private set; }
+		public int ExcludedSegments { get; private set; }
 
 		public int TotalSegments { get; private set; }
 
@@ -93,7 +93,7 @@ namespace Sdl.Community.StudioViews.Services
 							|| _excludeFilterIds.Exists(a => a == status)
 							|| _excludeFilterIds.Exists(a => a == match))
 						{
-							IgnoredSegments++;
+							ExcludedSegments++;
 							continue;
 						}
 					}

@@ -130,7 +130,7 @@
   <data name="StudioViewsMain_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\studioviewsmain.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WarningMessage_UnableToParseFileLanguageCannotBeNull" xml:space="preserve">
+  <data name="Warning_Message_UnableToParseFileLanguageCannotBeNull" xml:space="preserve">
     <value>Unable to parse the file; {0} language cannot be null!</value>
   </data>
   <data name="Label_Source" xml:space="preserve">
@@ -170,90 +170,93 @@
     <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Message_No_files_selected" xml:space="preserve">
-	  <value>No files selected</value>
+    <value>No files selected</value>
   </data>
   <data name="Message_Title_Task_Result" xml:space="preserve">
-	  <value>Task Result</value>
+    <value>Task Result</value>
   </data>
-  <data name="ErrorMessage_Unable_To_Parse_File_Language_Null" xml:space="preserve">
-	  <value>Unable to parse the file; {0} language cannot be null!</value>
+  <data name="Error_Message_Unable_To_Parse_File_Language_Null" xml:space="preserve">
+    <value>Unable to parse the file; {0} language cannot be null!</value>
   </data>
   <data name="TellMe_Download_StudioViews_From_AppStore" xml:space="preserve">
-	  <value>Download Studio Views from the AppStore</value>
+    <value>Download Studio Views from the AppStore</value>
   </data>
   <data name="TellMe_String_Results" xml:space="preserve">
-	  <value>{0} results</value>
+    <value>{0} results</value>
   </data>
   <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
-	  <value>{0} TellMe provider</value>
+    <value>{0} TellMe provider</value>
   </data>
   <data name="FolderSelectDialog_Select_Export_Folder" xml:space="preserve">
-	  <value>Select the export folder location</value>
+    <value>Select the export folder location</value>
   </data>
   <data name="OpenFileDialog_Select_Import_File" xml:space="preserve">
-	  <value>Select the bilingual SDLXLIFF file</value>
+    <value>Select the bilingual SDLXLIFF file</value>
   </data>
   <data name="Error_Message_Directory_Not_Found" xml:space="preserve">
-	  <value>Directory not found</value>
+    <value>Directory not found</value>
   </data>
   <data name="Error_Message_No_Segments_Selected" xml:space="preserve">
-	  <value>No segments selected</value>
+    <value>No segments selected</value>
   </data>
   <data name="Message_Successfully_Completed_Filter_Operation" xml:space="preserve">
-	  <value>Successfully completed the filter operation.</value>
+    <value>Successfully completed the filter operation.</value>
   </data>
-  <data name="Message_Exported_SEgments_From_Files" xml:space="preserve">
-	  <value>Exported {0} segments from {1} files</value>
+  <data name="Message_Exported_Segments_From_Files" xml:space="preserve">
+    <value>Exported {0} segments from {1} files</value>
   </data>
   <data name="Message_Export_File" xml:space="preserve">
-	  <value>Export File: {0}</value>
+    <value>Export File: {0}</value>
   </data>
   <data name="Message_Successfully_Updated_Document" xml:space="preserve">
-	  <value>Successfully updated the document.</value>
+    <value>Successfully updated the document.</value>
   </data>
   <data name="Message_Segments" xml:space="preserve">
-	  <value>Segments</value>
+    <value>Segments</value>
   </data>
   <data name="Message_Tab_Updated" xml:space="preserve">
-	  <value>  Updated: {0}</value>
+    <value>  Updated: {0}</value>
   </data>
-  <data name="Message_Tab_Ignored" xml:space="preserve">
-	  <value>  Ignored: {0}</value>
+  <data name="Message_Tab_Excluded" xml:space="preserve">
+    <value>  Excluded: {0}</value>
   </data>
   <data name="Message_Import_File" xml:space="preserve">
-	  <value>Import File: {0}</value>
+    <value>Import File: {0}</value>
   </data>
   <data name="Error_Message_Expected_Bilingual_Format" xml:space="preserve">
-	  <value>Expected bilingual SDLXLIFF format</value>
+    <value>Expected bilingual SDLXLIFF format</value>
   </data>
   <data name="Error_Message_File_Not_Found" xml:space="preserve">
-	  <value>File not found</value>
+    <value>File not found</value>
   </data>
   <data name="Error_Message_Unable_To_Locate_Document_File" xml:space="preserve">
-	  <value>Unable to locate document file</value>
+    <value>Unable to locate document file</value>
   </data>
   <data name="Status_Label_Files_Selected" xml:space="preserve">
-	  <value>Files: {0}, Selected: {1}</value>
+    <value>Files: {0}, Selected: {1}</value>
   </data>
   <data name="Message_Updated_Of_The_Selected_Files" xml:space="preserve">
-	  <value>Updated {0} of the selected files.</value>
+    <value>Updated {0} of the selected files.</value>
   </data>
   <data name="Message_Successfully_Completed_Import_Operation" xml:space="preserve">
-	  <value>Successfully completed the import operation.</value>
+    <value>Successfully completed the import operation.</value>
   </data>
   <data name="Error_Message_The_Import_Operation_Failed" xml:space="preserve">
-	  <value>The Import operation failed!</value>
+    <value>The Import operation failed!</value>
   </data>
   <data name="LogFile_Title_Task_Import_Files" xml:space="preserve">
-	  <value>Task: Import Files</value>
+    <value>Task: Import Files</value>
   </data>
   <data name="LogFile_Label_Start_Processing" xml:space="preserve">
-	  <value>Start Processing: </value>
+    <value>Start Processing: </value>
   </data>
   <data name="LogFile_Label_Exclude_Filters" xml:space="preserve">
-	  <value>Exclude Filters: </value>
+    <value>Exclude Filters: </value>
   </data>
   <data name="LogFile_Label_Import_Files" xml:space="preserve">
-	  <value>Import Files ({0}):</value>
+    <value>Import Files ({0})</value>
+  </data>
+  <data name="Message_Missing_Project_Files_Download_From_Server" xml:space="preserve">
+    <value>Some of the selected files could not be found locally. Connect to the server to get the latest version of these files</value>
   </data>
 </root>

@@ -4,7 +4,7 @@
 	{
 		public int UpdatedSegments { get; set; }
 
-		public int IgnoredSegments { get; set; }
+		public int ExcludedSegments { get; set; }
 
 		public bool Success { get; set; }
 		

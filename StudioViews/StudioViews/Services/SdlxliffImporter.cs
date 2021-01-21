@@ -43,7 +43,7 @@ namespace Sdl.Community.StudioViews.Services
 			{
 				Success = true,
 				UpdatedSegments = contentWriter.UpdatedSegments,
-				IgnoredSegments = contentWriter.IgnoredSegments,
+				ExcludedSegments = contentWriter.ExcludedSegments,
 				FilePath = filePathInput,
 				UpdatedFilePath = filePathOutput,
 				BackupFilePath = _projectFileService.GetUniqueFileName(filePathInput, "Backup")

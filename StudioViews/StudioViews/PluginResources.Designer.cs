@@ -127,9 +127,9 @@ namespace Sdl.Community.StudioViews {
         /// <summary>
         ///   Looks up a localized string similar to Unable to parse the file; {0} language cannot be null!.
         /// </summary>
-        internal static string ErrorMessage_Unable_To_Parse_File_Language_Null {
+        internal static string Error_Message_Unable_To_Parse_File_Language_Null {
             get {
-                return ResourceManager.GetString("ErrorMessage_Unable_To_Parse_File_Language_Null", resourceCulture);
+                return ResourceManager.GetString("Error_Message_Unable_To_Parse_File_Language_Null", resourceCulture);
             }
         }
         
@@ -180,7 +180,7 @@ namespace Sdl.Community.StudioViews {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import Files ({0}):.
+        ///   Looks up a localized string similar to Import Files ({0}).
         /// </summary>
         internal static string LogFile_Label_Import_Files {
             get {
@@ -218,9 +218,9 @@ namespace Sdl.Community.StudioViews {
         /// <summary>
         ///   Looks up a localized string similar to Exported {0} segments from {1} files.
         /// </summary>
-        internal static string Message_Exported_SEgments_From_Files {
+        internal static string Message_Exported_Segments_From_Files {
             get {
-                return ResourceManager.GetString("Message_Exported_SEgments_From_Files", resourceCulture);
+                return ResourceManager.GetString("Message_Exported_Segments_From_Files", resourceCulture);
             }
         }
         
@@ -230,6 +230,15 @@ namespace Sdl.Community.StudioViews {
         internal static string Message_Import_File {
             get {
                 return ResourceManager.GetString("Message_Import_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some of the selected files could not be found locally. Connect to the server to get the latest version of these files.
+        /// </summary>
+        internal static string Message_Missing_Project_Files_Download_From_Server {
+            get {
+                return ResourceManager.GetString("Message_Missing_Project_Files_Download_From_Server", resourceCulture);
             }
         }
         
@@ -279,11 +288,11 @@ namespace Sdl.Community.StudioViews {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to   Ignored: {0}.
+        ///   Looks up a localized string similar to   Excluded: {0}.
         /// </summary>
-        internal static string Message_Tab_Ignored {
+        internal static string Message_Tab_Excluded {
             get {
-                return ResourceManager.GetString("Message_Tab_Ignored", resourceCulture);
+                return ResourceManager.GetString("Message_Tab_Excluded", resourceCulture);
             }
         }
         
@@ -475,9 +484,9 @@ namespace Sdl.Community.StudioViews {
         /// <summary>
         ///   Looks up a localized string similar to Unable to parse the file; {0} language cannot be null!.
         /// </summary>
-        internal static string WarningMessage_UnableToParseFileLanguageCannotBeNull {
+        internal static string Warning_Message_UnableToParseFileLanguageCannotBeNull {
             get {
-                return ResourceManager.GetString("WarningMessage_UnableToParseFileLanguageCannotBeNull", resourceCulture);
+                return ResourceManager.GetString("Warning_Message_UnableToParseFileLanguageCannotBeNull", resourceCulture);
             }
         }
     }

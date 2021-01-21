@@ -348,7 +348,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					Success = t.Result.Success;
 					Message = t.Result.Message;
 
-					WriteLogFile(t.Result);
+					WriteLogFile(t.Result, LogFilePath);
 
 					DialogResult = DialogResult.OK;
 					
@@ -363,12 +363,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
-		private void WriteLogFile(ExportResult exportResult)
+		private void WriteLogFile(ExportResult exportResult, string logFilePath)
 		{
 			_window.Dispatcher.Invoke(
 				delegate
 				{
-					using (var sr = new StreamWriter(LogFilePath, false, Encoding.UTF8))
+					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
 					{
 						sr.WriteLine(PluginResources.Plugin_Name);
 						sr.WriteLine("Task: Split Files");
@@ -386,10 +386,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 						sr.WriteLine(string.Empty);
 						sr.WriteLine("Output Files (" + exportResult.OutputFiles.Count + "):");
 						fileIndex = 0;
-						foreach (var filePath in exportResult.OutputFiles)
+						foreach (var file in exportResult.OutputFiles)
 						{
 							fileIndex++;
-							sr.WriteLine("  File (" + fileIndex + "): " + filePath);
+							sr.WriteLine("  File (" + fileIndex + "): " + file.FilePath);
+							sr.WriteLine("     Segments " + file.SegmentCount);
+							sr.WriteLine("     Words " + file.WordCount);
+							sr.WriteLine(string.Empty);
 						}
 
 						sr.WriteLine(string.Empty);
@@ -419,7 +422,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			var exportResult = new ExportResult
 			{
 				InputFiles = _selectedFiles.Select(a => a.LocalFilePath).ToList(),
-				OutputFiles = new List<string>()
+				OutputFiles = new List<OutputFile>()
 			};
 
 			if (_selectedFiles.Count > 1)
@@ -457,9 +460,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				fileIndex++;
 				var filePathOutput = GetFilePathOutput(FileName, ExportPath, fileIndex);
-				_sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput);
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput);
 
-				exportResult.OutputFiles.Add(filePathOutput);
+				exportResult.OutputFiles.Add(outputFile);
 			}
 
 			if (_selectedFiles.Count > 1)

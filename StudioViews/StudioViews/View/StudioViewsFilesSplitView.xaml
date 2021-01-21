@@ -58,7 +58,7 @@
 			</Grid.RowDefinitions>
 			<Grid Grid.Row="0"></Grid>
 
-			<GroupBox Grid.Row="1" Margin="5" Padding="5" Header="Split Options">
+			<GroupBox Grid.Row="1" Margin="5" Padding="5" Header="Split options">
 				<Grid >
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
@@ -145,7 +145,7 @@
 
 					<TextBlock Grid.Column="0" 
 				           Grid.Row="0" 
-				           Text="File Name:" 
+				           Text="File name:" 
 				           VerticalAlignment="Center"
 				           Margin="0,0,5,0" 
 				           IsEnabled="False"

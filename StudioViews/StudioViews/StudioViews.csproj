@@ -143,6 +143,7 @@
     <Compile Include="Model\ConfirmationStatus.cs" />
     <Compile Include="Model\ExportResult.cs" />
     <Compile Include="Model\MessageInfo.cs" />
+    <Compile Include="Model\OutputFile.cs" />
     <Compile Include="Model\SystemFileInfo.cs" />
     <Compile Include="Model\FilterItem.cs" />
     <Compile Include="Model\ImportResult.cs" />

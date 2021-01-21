@@ -60,7 +60,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			WindowTitle = "Import";
 			DialogResult = DialogResult.None;
-			
+
 			Reset(null);
 		}
 
@@ -225,21 +225,21 @@ namespace Sdl.Community.StudioViews.ViewModel
 				{
 					var failCount = task.Result.Count(a => !a.Success);
 
-					WriteLogFile(t.Result);
+					WriteLogFile(t.Result, Files.ToList(), LogFilePath);
 
 					if (failCount == 0)
 					{
 						Success = true;
 
 						var importedCount = 0;
-						var ignoredCount = 0;
+						var excludedCount = 0;
 						var updatedFileCount = 0;
 
 						foreach (var result in task.Result)
 						{
 							updatedFileCount += result.UpdatedSegments > 0 ? 1 : 0;
 							importedCount += result.UpdatedSegments;
-							ignoredCount += result.IgnoredSegments;
+							excludedCount += result.ExcludedSegments;
 
 							if (updatedFileCount > 0)
 							{
@@ -259,7 +259,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 						Message += "\r\n";
 						Message += string.Format(PluginResources.Message_Tab_Updated, importedCount);
 						Message += "\r\n";
-						Message += string.Format(PluginResources.Message_Tab_Ignored, ignoredCount);
+						Message += string.Format(PluginResources.Message_Tab_Excluded, excludedCount);
 					}
 					else
 					{
@@ -280,12 +280,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
-		private void WriteLogFile(List<ImportResult> importResults)
+		private void WriteLogFile(IReadOnlyCollection<ImportResult> importResults, List<SystemFileInfo> files, string logFilePath)
 		{
 			_window.Dispatcher.Invoke(
 				delegate
 				{
-					using (var sr = new StreamWriter(LogFilePath, false, Encoding.UTF8))
+					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
 					{
 						sr.WriteLine(PluginResources.Plugin_Name);
 						sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
@@ -294,14 +294,14 @@ namespace Sdl.Community.StudioViews.ViewModel
 						if (SelectedExcludeFilterItems.Count > 0)
 						{
 							sr.WriteLine(string.Empty);
-							var filterItems = GetFilterItems(SelectedExcludeFilterItems.ToList());
+							var filterItems = _filterItemService.GetFilterItemsString(SelectedExcludeFilterItems.ToList());
 							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Label_Import_Files, Files.Count);
+						sr.WriteLine(PluginResources.LogFile_Label_Import_Files, files.Count);
 						var fileIndex = 0;
-						foreach (var fileInfo in Files)
+						foreach (var fileInfo in files)
 						{
 							fileIndex++;
 							sr.WriteLine("  File (" + fileIndex + "): " + fileInfo.FullPath);
@@ -327,7 +327,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 							}
 							sr.WriteLine("  Segments");
 							sr.WriteLine("     Updated: " + result.UpdatedSegments);
-							sr.WriteLine("     Ignored: " + result.IgnoredSegments);
+							sr.WriteLine("     Excluded: " + result.ExcludedSegments);
 
 							sr.WriteLine(string.Empty);
 						}
@@ -339,27 +339,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 						sr.Close();
 					}
 				});
-		}
-
-		private string GetFilterItems(List<FilterItem> filterItems)
-		{
-			var items = string.Empty;
-
-			if (FilterItems?.Count > 0)
-			{
-				foreach (var filterItem in filterItems)
-				{
-					items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-							 filterItem.Name;
-				}
-			}
-
-			if (string.IsNullOrEmpty(items))
-			{
-				items = "[none]";
-			}
-
-			return items;
 		}
 
 		private void Reset(object paramter)
