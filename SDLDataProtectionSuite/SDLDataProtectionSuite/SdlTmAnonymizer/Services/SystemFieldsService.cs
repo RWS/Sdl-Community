@@ -391,7 +391,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			{
 				systemFields.AddRange(new List<string> {
 					tu.SystemFields.CreationUser,
-					tu.SystemFields.UseUser });
+					tu.SystemFields.UseUser,
+					tu.SystemFields.ChangeUser
+				});
 			}
 
 			foreach (var name in systemFields.Distinct().ToList())
