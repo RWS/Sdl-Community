@@ -199,6 +199,16 @@ namespace Sdl.Community.TQA
 			wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
 			wsReport.Cell("L8").Value = "TQA";
 			wsReport.Cell("L11").Value = reportResults.QualityLevel;
+			var first = wsReport.Cell("B10");
+		   // var hasvalidation = first.HasDataValidation;
+		    var pictures = wsReport.Pictures;
+		    var pic = wsReport.Pictures.TryGetPicture("ComboBox1", out var test);
+		    first.Clear();
+
+			var options = new List<string> { "Option1", "Option2", "Option3" };
+			var validOptions = $"\"{String.Join(",", options)}\"";
+			wsReport.Cell("B10").DataValidation.List(validOptions, true);
+
 			ChangeStyleForEvaluationReport(wsReport);
 
 			for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
