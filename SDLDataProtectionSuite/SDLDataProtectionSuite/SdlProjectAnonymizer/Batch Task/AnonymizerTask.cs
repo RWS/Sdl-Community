@@ -22,7 +22,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	[RequiresSettings(typeof(AnonymizerSettings), typeof(AnonymizerSettingsPage))]
 	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 		private List<string> _ignoredFiles;
 		private RestOfFilesParser _restOfFilesParser;
 		private AnonymizerSettings _settings;
@@ -67,10 +66,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		protected override void OnInitializeTask()
 		{
-			if (_projectController.CurrentProject != null)
-			{
-				ProjectBackup.CreateProjectBackup((Project as FileBasedProject)?.FilePath);
-			}
+			ProjectBackup.CreateProjectBackup((Project as FileBasedProject)?.FilePath);
 
 			_restOfFilesParser = new RestOfFilesParser();
 			_settings = GetSetting<AnonymizerSettings>();
