@@ -8,6 +8,7 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Constants = Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.Constants;
 
@@ -21,10 +22,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	[RequiresSettings(typeof(AnonymizerSettings), typeof(AnonymizerSettingsPage))]
 	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
+		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 		private List<string> _ignoredFiles;
 		private RestOfFilesParser _restOfFilesParser;
 		private AnonymizerSettings _settings;
-		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -57,7 +58,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			var key = _settings.EncryptionKey == "<dummy-encryption-key>" ? "" : AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key);
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted))));
 
-			_restOfFilesParser.ParseRestOfFiles(_projectController, TaskFiles,
+			_restOfFilesParser.ParseRestOfFiles(
+				Project,
+				TaskFiles,
 				new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted)),
 				out _ignoredFiles);
 		}
@@ -66,7 +69,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 		{
 			if (_projectController.CurrentProject != null)
 			{
-				ProjectBackup.CreateProjectBackup(_projectController.CurrentProject.FilePath);
+				ProjectBackup.CreateProjectBackup((Project as FileBasedProject)?.FilePath);
 			}
 
 			_restOfFilesParser = new RestOfFilesParser();

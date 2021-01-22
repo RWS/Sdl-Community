@@ -7,7 +7,6 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
@@ -50,10 +49,13 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 				return;
 			}
 
-			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
 
-			_restOfFilesParser.ParseRestOfFiles(projectController, TaskFiles, new DecryptDataProcessor(_settings), out _ignoredFiles);
+			_restOfFilesParser.ParseRestOfFiles(
+				Project,
+				TaskFiles,
+				new DecryptDataProcessor(_settings),
+				out _ignoredFiles);
 		}
 
 		protected override void OnInitializeTask()
