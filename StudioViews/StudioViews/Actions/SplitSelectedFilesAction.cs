@@ -67,27 +67,29 @@ namespace Sdl.Community.StudioViews.Actions
 				return;
 			}
 
-			_window.Dispatcher.Invoke(
-				delegate
-				{
-					var messageInfo = new MessageInfo
-					{
-						Title = PluginResources.Message_Title_Task_Result,
-						Message = model.Message,
-						LogFilePath = model.LogFilePath,
-						Folder = model.ExportPath,
-						ShowImage = true,
-						ImageUrl = model.Success
-							? "/Sdl.Community.StudioViews;component/Resources/information.png"
-							: "/Sdl.Community.StudioViews;component/Resources/warning.png"
-					};
 
-					var messageView = new MessageBoxView();
-					var messageViewModel = new MessageBoxViewModel(messageView, messageInfo);
-					messageView.DataContext = messageViewModel;
+			OpenMessageWindow(model);
+		}
 
-					messageView.ShowDialog();
-				});
+		private static void OpenMessageWindow(StudioViewsFilesSplitViewModel model)
+		{
+			var messageInfo = new MessageInfo
+			{
+				Title = PluginResources.Message_Title_Task_Result,
+				Message = model.Message,
+				LogFilePath = model.LogFilePath,
+				Folder = model.ExportPath,
+				ShowImage = true,
+				ImageUrl = model.Success
+					? "/Sdl.Community.StudioViews;component/Resources/information.png"
+					: "/Sdl.Community.StudioViews;component/Resources/warning.png"
+			};
+
+			var messageView = new MessageBoxView();
+			var messageViewModel = new MessageBoxViewModel(messageView, messageInfo);
+			messageView.DataContext = messageViewModel;
+
+			messageView.ShowDialog();
 		}
 	}
 }

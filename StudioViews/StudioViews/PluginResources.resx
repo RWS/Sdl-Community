@@ -337,4 +337,7 @@
   <data name="LogFile_Title_Task_Export_Filtered" xml:space="preserve">
     <value>Task: Export Filtered</value>
   </data>
+  <data name="Message_Exported_Segments_into_Files" xml:space="preserve">
+	  <value>Exported {0} segments into {1} files</value>
+  </data>
 </root>

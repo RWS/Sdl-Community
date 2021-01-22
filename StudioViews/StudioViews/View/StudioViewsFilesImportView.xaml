@@ -57,7 +57,7 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
-			
+
 			<Grid Grid.Row="0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
@@ -224,6 +224,6 @@
 			</StackPanel>
 		</Grid>
 
-		
+
 	</Grid>
 </Window>

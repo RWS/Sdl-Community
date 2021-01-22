@@ -120,11 +120,11 @@ namespace Sdl.Community.StudioViews.Services
 			return fileContent;
 		}
 
-		private static string BuildDocInfoContent(List<string> revDefs, List<string> repDefs, List<string> cmtDefs)
+		private static string BuildDocInfoContent(IReadOnlyCollection<string> revDefs, IReadOnlyCollection<string> repDefs, IReadOnlyCollection<string> cmtDefs)
 		{
 			var content = new StringBuilder(@"<doc-info xmlns=""http://sdl.com/FileTypes/SdlXliff/1.0"">");
 
-			if (repDefs.Count > 0)
+			if (revDefs.Count > 0)
 			{
 				content.Append(@"<rev-defs>");
 				foreach (var value in revDefs)

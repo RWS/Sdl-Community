@@ -396,6 +396,15 @@ namespace Sdl.Community.StudioViews {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exported {0} segments into {1} files.
+        /// </summary>
+        internal static string Message_Exported_Segments_into_Files {
+            get {
+                return ResourceManager.GetString("Message_Exported_Segments_into_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import File: {0}.
         /// </summary>
         internal static string Message_Import_File {

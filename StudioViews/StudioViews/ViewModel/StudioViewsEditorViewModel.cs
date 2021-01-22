@@ -463,13 +463,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 				WriteImportLogFile(importResult, ImportPath, LogFilePath);
 
 				var message = PluginResources.Message_Successfully_Updated_Document;
-				message += "\r\n\r\n";
+				message += Environment.NewLine + Environment.NewLine;
 				message += PluginResources.Message_Segments;
-				message += "\r\n";
+				message += Environment.NewLine;
 				message += string.Format(PluginResources.Message_Tab_Updated, importResult.UpdatedSegments);
-				message += "\r\n";
+				message += Environment.NewLine;
 				message += string.Format(PluginResources.Message_Tab_Excluded, importResult.ExcludedSegments);
-				message += "\r\n\r\n";
+				message += Environment.NewLine + Environment.NewLine;
 				message += string.Format(PluginResources.Message_Import_File, ImportPath);
 
 				ShowMessage(true, message, LogFilePath, Path.GetDirectoryName(importResult.FilePath));
@@ -494,7 +494,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 						if (SelectedExcludeFilterItems.Count > 0)
 						{
 							sr.WriteLine(string.Empty);
-							var filterItems = _filterItemService.GetFilterItemsString(SelectedExcludeFilterItems.ToList());
+							var filterItems = _filterItemService.GetFilterItemsText(SelectedExcludeFilterItems.ToList());
 							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
 						}
 
@@ -585,7 +585,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 				UpdatedSegments = 0,
 				ExcludedSegments = 0
 			};
-
 
 			if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
 			{

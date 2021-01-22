@@ -7,7 +7,6 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StudioViews.Services
 {
-	
 	public class SdlxliffImporter
 	{
 		private readonly ProjectFileService _projectFileService;

@@ -162,7 +162,7 @@ namespace Sdl.Community.StudioViews.Services
 			return filterItems;
 		}
 
-		public string GetFilterItemsString(List<FilterItem> filterItems)
+		public string GetFilterItemsText(List<FilterItem> filterItems)
 		{
 			var items = string.Empty;
 			if (!filterItems.Any())

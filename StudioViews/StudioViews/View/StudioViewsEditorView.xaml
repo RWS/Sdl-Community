@@ -166,26 +166,25 @@
 
 					</Grid>
 
-					<!--<GroupBox Grid.Row="1"  Margin="5" Header="Options">-->
 					<Grid  Grid.Row="1" Margin="0">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition Height="Auto"/>
-							</Grid.RowDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
 
-							<Grid Grid.Row="1">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*" />
-								</Grid.ColumnDefinitions>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-								</Grid.RowDefinitions>
+						<Grid Grid.Row="1">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="Auto" />
+							</Grid.RowDefinitions>
 
 							<TextBlock VerticalAlignment="Center" Text="Exclude existing segments:"  Margin="5,5,5,5"/>
 
-								<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+							<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
 							                         Margin="5,0,5,0" 
 							                         Height="55" 
 							                         MaxDropDownHeight="250"
@@ -202,13 +201,12 @@
 							                         ClearFilterOnDropdownClosing="True"
 							                         ClearSelectionOnFilterChanged="True"
 							/>
-								<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+							<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
 							        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
-									<Underline>Clear selected items</Underline>
-								</Button>
-							</Grid>
+								<Underline>Clear selected items</Underline>
+							</Button>
 						</Grid>
-					<!--</GroupBox>-->
+					</Grid>
 
 					<Grid Grid.Row="2" Margin="5,15,5,5">
 						<Button Content="Import" 

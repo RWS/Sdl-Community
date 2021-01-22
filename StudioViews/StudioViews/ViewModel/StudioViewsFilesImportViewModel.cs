@@ -252,13 +252,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 						}
 
 						Message = PluginResources.Message_Successfully_Completed_Import_Operation;
-						Message += "\r\n\r\n";
+						Message += Environment.NewLine + Environment.NewLine;
 						Message += string.Format(PluginResources.Message_Updated_Of_The_Selected_Files, updatedFileCount);
-						Message += "\r\n\r\n";
+						Message += Environment.NewLine + Environment.NewLine;
 						Message += PluginResources.Message_Segments;
-						Message += "\r\n";
+						Message += Environment.NewLine;
 						Message += string.Format(PluginResources.Message_Tab_Updated, importedCount);
-						Message += "\r\n";
+						Message += Environment.NewLine;
 						Message += string.Format(PluginResources.Message_Tab_Excluded, excludedCount);
 					}
 					else
@@ -294,7 +294,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 						if (SelectedExcludeFilterItems.Count > 0)
 						{
 							sr.WriteLine(string.Empty);
-							var filterItems = _filterItemService.GetFilterItemsString(SelectedExcludeFilterItems.ToList());
+							var filterItems = _filterItemService.GetFilterItemsText(SelectedExcludeFilterItems.ToList());
 							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
 						}
 

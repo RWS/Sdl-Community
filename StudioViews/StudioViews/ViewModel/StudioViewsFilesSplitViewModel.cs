@@ -476,8 +476,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 			exportResult.Success = true;
 			exportResult.Message = Message = PluginResources.Message_Successfully_Completed_Split_Operation;
 			exportResult.Message += Environment.NewLine + Environment.NewLine;
-			exportResult.Message += string.Format(PluginResources.Message_Exported_Segments_From_Files, segmentPairs.Count, fileIndex);
-			
+			exportResult.Message += string.Format(PluginResources.Message_Exported_Segments_into_Files, segmentPairs.Count, fileIndex);
+
+
 			return await Task.FromResult(exportResult);
 		}
 
