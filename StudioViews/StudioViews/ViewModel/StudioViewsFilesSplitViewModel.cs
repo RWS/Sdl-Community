@@ -303,7 +303,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				var folderDialog = new FolderSelectDialog
 				{
-					Title = "Select the export folder location",
+					Title = PluginResources.FolderSelectDialog_Select_Export_Folder,
 					InitialDirectory = initialDirectory,
 				};
 
@@ -371,32 +371,32 @@ namespace Sdl.Community.StudioViews.ViewModel
 					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
 					{
 						sr.WriteLine(PluginResources.Plugin_Name);
-						sr.WriteLine("Task: Split Files");
-						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine(PluginResources.LogFile_Title_Task_Split_Files);
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing,  _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("Input Files (" + exportResult.InputFiles.Count + "):");
+						sr.WriteLine(PluginResources.LogFile_Tab_Label_Input_Files_Number, exportResult.InputFiles.Count);
 						var fileIndex = 0;
 						foreach (var filePath in exportResult.InputFiles)
 						{
 							fileIndex++;
-							sr.WriteLine("  File (" + fileIndex + "): " + filePath);
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, filePath);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("Output Files (" + exportResult.OutputFiles.Count + "):");
+						sr.WriteLine(PluginResources.LogFile_Label_Output_Files_Number, exportResult.OutputFiles.Count);
 						fileIndex = 0;
 						foreach (var file in exportResult.OutputFiles)
 						{
 							fileIndex++;
-							sr.WriteLine("  File (" + fileIndex + "): " + file.FilePath);
-							sr.WriteLine("     Segments " + file.SegmentCount);
-							sr.WriteLine("     Words " + file.WordCount);
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, file.FilePath);
+							sr.WriteLine(PluginResources.Message_Tab_Tab_Segments_Number, file.SegmentCount);
+							sr.WriteLine(PluginResources.Message_Tab_Tab_Words_Number, file.WordCount);
 							sr.WriteLine(string.Empty);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
+						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
 
 						sr.Flush();
 						sr.Close();
@@ -440,7 +440,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				else
 				{
 					exportResult.Success = false;
-					exportResult.Message = "Unexpected error while merging files.";
+					exportResult.Message = PluginResources.Error_Message_Unexpected_Error_Merging_Files;
 					return await Task.FromResult(exportResult);
 				}
 			}
@@ -451,7 +451,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			if (segmentPairSplits == null)
 			{
 				exportResult.Success = false;
-				exportResult.Message = "No segments available.";
+				exportResult.Message = PluginResources.Error_Message_No_Segments_Selected;
 				return await Task.FromResult(exportResult);
 			}
 
@@ -474,8 +474,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			exportResult.Success = true;
-			exportResult.Message = Message = "Successfully completed the split operation.\r\n\r\n";
-			exportResult.Message += string.Format("Exported {0} segments into {1} separate files", segmentPairs.Count, fileIndex);
+			exportResult.Message = Message = PluginResources.Message_Successfully_Completed_Split_Operation;
+			exportResult.Message += Environment.NewLine + Environment.NewLine;
+			exportResult.Message += string.Format(PluginResources.Message_Exported_Segments_From_Files, segmentPairs.Count, fileIndex);
 			
 			return await Task.FromResult(exportResult);
 		}
@@ -596,7 +597,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			var match = regexNum.Match(fileNameOutput);
 			if (match.Success)
 			{
-				var digits = match.Groups["digits"].Name.Length - 2;
+				var digits = match.Groups["digits"].Value.Length - 2;
 				var fileNamePrefix = fileNameOutput.Substring(0, match.Index);
 				var digitsString = fileIndex.ToString().PadLeft(digits, '0');
 				var fileNameSuffix = fileNameOutput.Substring(match.Index + match.Length);

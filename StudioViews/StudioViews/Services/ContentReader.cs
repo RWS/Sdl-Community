@@ -86,7 +86,7 @@ namespace Sdl.Community.StudioViews.Services
 				if (SourceLanguage == null || TargetLanguage == null)
 				{
 					throw new Exception(
-						string.Format(PluginResources.Error_Message_Unable_To_Parse_File_Language_Null, SourceLanguage == null 
+						string.Format(PluginResources.Error_Message_Unable_To_Parse_File_Language_Null, SourceLanguage == null
 							? "Source" : "Target"));
 				}
 

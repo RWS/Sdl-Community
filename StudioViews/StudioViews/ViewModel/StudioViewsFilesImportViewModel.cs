@@ -58,7 +58,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_sdlxliffReader = sdlxliffReader;
 			_projectFileService = projectFileService;
 
-			WindowTitle = "Import";
+			WindowTitle = PluginResources.WindowTitle_Import;
 			DialogResult = DialogResult.None;
 
 			Reset(null);
@@ -289,7 +289,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					{
 						sr.WriteLine(PluginResources.Plugin_Name);
 						sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
-						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						if (SelectedExcludeFilterItems.Count > 0)
 						{
@@ -304,36 +304,36 @@ namespace Sdl.Community.StudioViews.ViewModel
 						foreach (var fileInfo in files)
 						{
 							fileIndex++;
-							sr.WriteLine("  File (" + fileIndex + "): " + fileInfo.FullPath);
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, fileInfo.FullPath);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine(string.Format("Updated Files: {0}", importResults.Count(a => a.UpdatedSegments > 0)));
-						sr.WriteLine(string.Format("Updated Segments: {0}", importResults.Sum(importResult => importResult.UpdatedSegments)));
+						sr.WriteLine(PluginResources.LogFile_Label_Updated_Files, importResults.Count(a => a.UpdatedSegments > 0));
+						sr.WriteLine(PluginResources.LogFile_Label_Updated_Segments, importResults.Sum(importResult => importResult.UpdatedSegments));
 						sr.WriteLine(string.Empty);
 
-						sr.WriteLine("Selected Files (" + importResults.Count + "):");
-						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_Selected_Files, importResults.Count);
 						fileIndex = 0;
 						foreach (var result in importResults)
 						{
 							fileIndex++;
-							sr.WriteLine("File (" + fileIndex + "): " + result.FilePath);
-							sr.WriteLine("  Success: " + result.Success);
-							sr.WriteLine("  Updated: " + (result.UpdatedSegments > 0 ? "True" : "False"));
+							sr.WriteLine(PluginResources.LogFile_Label_File_Number_Path, fileIndex, result.FilePath);
+							sr.WriteLine(PluginResources.LogFile_Label_Tab_Success + result.Success);
+							sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (result.UpdatedSegments > 0 
+								? PluginResources.Label_True : PluginResources.Label_False));
 							if (result.UpdatedSegments > 0)
 							{
-								sr.WriteLine("  Backup: " + result.BackupFilePath);
+								sr.WriteLine(PluginResources.LogFile_Label_Tab_Backup + result.BackupFilePath);
 							}
-							sr.WriteLine("  Segments");
-							sr.WriteLine("     Updated: " + result.UpdatedSegments);
-							sr.WriteLine("     Excluded: " + result.ExcludedSegments);
+							sr.WriteLine(PluginResources.Message_Tab_Segments);
+							sr.WriteLine(PluginResources.Message_Tab_Tab_Updated, result.UpdatedSegments);
+							sr.WriteLine(PluginResources.Message_Tab_Tab_Excluded, result.ExcludedSegments);
 
 							sr.WriteLine(string.Empty);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
+						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
 
 						sr.Flush();
 						sr.Close();
@@ -395,7 +395,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				var openFileDialog = new Microsoft.Win32.OpenFileDialog
 				{
-					Title = "Select the bilingual SDLXLIFF File"
+					Title = PluginResources.OpenFileDialog_Select_Import_File
 				};
 
 				var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

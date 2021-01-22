@@ -14,7 +14,7 @@ namespace Sdl.Community.StudioViews.TellMe
 
 		public CommunityWikiAction()
 		{
-			Name = "Studio Views plugin wiki";
+			Name = string.Format("{0} plugin wiki", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()

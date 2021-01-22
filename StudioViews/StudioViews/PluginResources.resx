@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Studio Views</value>
+    <value>studioViews</value>
   </data>
   <data name="StudioViewsEditorController_Description" xml:space="preserve">
-    <value>Studio Views</value>
+    <value>studioViews</value>
   </data>
   <data name="StudioViewsEditorController_Name" xml:space="preserve">
-    <value>Studio Views</value>
+    <value>studioViews</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="StudioViewsMain_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -179,7 +179,7 @@
     <value>Unable to parse the file; {0} language cannot be null!</value>
   </data>
   <data name="TellMe_Download_StudioViews_From_AppStore" xml:space="preserve">
-    <value>Download Studio Views from the AppStore</value>
+    <value>Download studioViews from the AppStore</value>
   </data>
   <data name="TellMe_String_Results" xml:space="preserve">
     <value>{0} results</value>
@@ -248,7 +248,7 @@
     <value>Task: Import Files</value>
   </data>
   <data name="LogFile_Label_Start_Processing" xml:space="preserve">
-    <value>Start Processing: </value>
+    <value>Start Processing: {0}</value>
   </data>
   <data name="LogFile_Label_Exclude_Filters" xml:space="preserve">
     <value>Exclude Filters: </value>
@@ -258,5 +258,83 @@
   </data>
   <data name="Message_Missing_Project_Files_Download_From_Server" xml:space="preserve">
     <value>Some of the selected files could not be found locally. Connect to the server to get the latest version of these files</value>
+  </data>
+  <data name="LogFile_Tab_Label_File_Number_Path" xml:space="preserve">
+    <value>  File ({0}): {1}</value>
+  </data>
+  <data name="LogFile_Label_Updated_Files" xml:space="preserve">
+    <value>Updated Files: {0}</value>
+  </data>
+  <data name="LogFile_Label_Updated_Segments" xml:space="preserve">
+    <value>Updated Segments: {0}</value>
+  </data>
+  <data name="LogFile_Label_Selected_Files" xml:space="preserve">
+    <value>Selected Files ({0})</value>
+  </data>
+  <data name="LogFile_Label_File_Number_Path" xml:space="preserve">
+    <value>File ({0}): {1}</value>
+  </data>
+  <data name="LogFile_Label_Tab_Success" xml:space="preserve">
+    <value>  Success: </value>
+  </data>
+  <data name="LogFile_Label_Tab_Updated" xml:space="preserve">
+    <value>  Updated: </value>
+  </data>
+  <data name="LogFile_Label_Tab_Backup" xml:space="preserve">
+    <value>  Backup: </value>
+  </data>
+  <data name="Label_True" xml:space="preserve">
+    <value>True</value>
+  </data>
+  <data name="Label_False" xml:space="preserve">
+    <value>False</value>
+  </data>
+  <data name="Message_Tab_Segments" xml:space="preserve">
+    <value>  Segments</value>
+  </data>
+  <data name="Message_Tab_Tab_Updated" xml:space="preserve">
+    <value>     Updated: {0}</value>
+  </data>
+  <data name="Message_Tab_Tab_Excluded" xml:space="preserve">
+    <value>     Excluded: {0}</value>
+  </data>
+  <data name="LogFile_Label_End_Processing" xml:space="preserve">
+    <value>End Processing: {0}</value>
+  </data>
+  <data name="WindowTitle_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="LogFile_Title_Task_Split_Files" xml:space="preserve">
+    <value>Task: Split Files</value>
+  </data>
+  <data name="LogFile_Tab_Label_Input_Files_Number" xml:space="preserve">
+    <value>Input Files ({0})</value>
+  </data>
+  <data name="LogFile_Label_Output_Files_Number" xml:space="preserve">
+    <value>Output Files ({0})</value>
+  </data>
+  <data name="Message_Tab_Tab_Segments_Number" xml:space="preserve">
+    <value>     Segments: {0}</value>
+  </data>
+  <data name="Message_Tab_Tab_Words_Number" xml:space="preserve">
+    <value>     Words: {0}</value>
+  </data>
+  <data name="Error_Message_Unexpected_Error_Merging_Files" xml:space="preserve">
+    <value>Unexpected error while merging files.</value>
+  </data>
+  <data name="Message_Successfully_Completed_Split_Operation" xml:space="preserve">
+    <value>Successfully completed the split operation.</value>
+  </data>
+  <data name="LogFile_Tab_Label_Input_Files" xml:space="preserve">
+    <value>Import Files</value>
+  </data>
+  <data name="LogFile_Tab_Label_File_Number" xml:space="preserve">
+    <value>  File: {0}</value>
+  </data>
+  <data name="LogFile_Label_File" xml:space="preserve">
+    <value>File: {0}</value>
+  </data>
+  <data name="LogFile_Title_Task_Export_Filtered" xml:space="preserve">
+    <value>Task: Export Filtered</value>
   </data>
 </root>

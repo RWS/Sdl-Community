@@ -499,32 +499,29 @@ namespace Sdl.Community.StudioViews.ViewModel
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("Import Files");
-						
-						sr.WriteLine("  File: " + importFilePath);
+						sr.WriteLine(PluginResources.LogFile_Label_Import_Files, 1);
+						sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number, importFilePath);
 
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine(string.Format("Updated Files: {0}", importResult.UpdatedSegments > 0));
-						sr.WriteLine(string.Format("Updated Segments: {0}", importResult.UpdatedSegments));
+						sr.WriteLine(PluginResources.LogFile_Label_Updated_Files, importResult.UpdatedSegments > 0);
+						sr.WriteLine(PluginResources.LogFile_Label_Updated_Segments, importResult.UpdatedSegments);
 						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_Selected_Files, 1);
 
-						sr.WriteLine("File: " + importResult.FilePath);
-						sr.WriteLine("  Success: " + importResult.Success);
-						sr.WriteLine("  Updated: " + (importResult.UpdatedSegments > 0 ? "True" : "False"));
+						sr.WriteLine(PluginResources.LogFile_Label_File_Number_Path, 1, importResult.FilePath);
+						sr.WriteLine(PluginResources.LogFile_Label_Tab_Success + importResult.Success);
+						sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (importResult.UpdatedSegments > 0 ? "True" : "False"));
 						if (importResult.UpdatedSegments > 0)
 						{
-							sr.WriteLine("  Backup: " + importResult.BackupFilePath);
+							sr.WriteLine(PluginResources.LogFile_Label_Tab_Backup + importResult.BackupFilePath);
 						}
-						sr.WriteLine("  Segments");
-						sr.WriteLine("     Updated: " + importResult.UpdatedSegments);
-						sr.WriteLine("     Excluded: " + importResult.ExcludedSegments);
+						sr.WriteLine(PluginResources.Message_Tab_Segments);
+						sr.WriteLine(PluginResources.Message_Tab_Tab_Updated, importResult.UpdatedSegments);
+						sr.WriteLine(PluginResources.Message_Tab_Tab_Excluded, importResult.ExcludedSegments);
 
 						sr.WriteLine(string.Empty);
-
-
-						sr.WriteLine(string.Empty);
-						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
+						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
 
 						sr.Flush();
 						sr.Close();
@@ -540,36 +537,36 @@ namespace Sdl.Community.StudioViews.ViewModel
 					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
 					{
 						sr.WriteLine(PluginResources.Plugin_Name);
-						sr.WriteLine("Task: Export Filtered");
-						sr.WriteLine("Start Processing: " + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine(PluginResources.LogFile_Title_Task_Export_Filtered);
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("Input Files (" + exportResult.InputFiles.Count + "):");
+						sr.WriteLine(PluginResources.LogFile_Tab_Label_Input_Files_Number, exportResult.InputFiles.Count);
 						var fileIndex = 0;
 						foreach (var filePath in exportResult.InputFiles)
 						{
 							fileIndex++;
-							sr.WriteLine("  File (" + fileIndex + "): " + filePath);
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, filePath);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("Output Files (" + exportResult.OutputFiles.Count + "):");
+						sr.WriteLine(PluginResources.LogFile_Label_Output_Files_Number, exportResult.OutputFiles.Count);
 						fileIndex = 0;
 						foreach (var file in exportResult.OutputFiles)
 						{
 							fileIndex++;
-							sr.WriteLine("  File (" + fileIndex + "): " + file.FilePath);
-							sr.WriteLine("     Segments " + file.SegmentCount);
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, file.FilePath);
+							sr.WriteLine(PluginResources.Message_Tab_Tab_Segments_Number, file.SegmentCount);
 							if (file.WordCount > 0)
 							{
-								sr.WriteLine("     Words " + file.WordCount);
+								sr.WriteLine(PluginResources.Message_Tab_Tab_Words_Number, file.WordCount);
 							}
 
 							sr.WriteLine(string.Empty);
 						}
 
 						sr.WriteLine(string.Empty);
-						sr.WriteLine("End Processing: " + _projectFileService.GetDateTimeToString(DateTime.Now));
+						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
 
 						sr.Flush();
 						sr.Close();
