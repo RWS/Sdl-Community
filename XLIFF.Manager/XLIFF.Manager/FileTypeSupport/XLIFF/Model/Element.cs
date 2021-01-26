@@ -5,7 +5,7 @@
 		public enum TagType
 		{
 			OpeningTag,
-			ClosingTag,
+			ClosingTag
 		}
 	}
 }

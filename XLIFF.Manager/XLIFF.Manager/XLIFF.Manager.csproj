@@ -100,8 +100,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
+    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.19.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.32\lib\net48\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <SpecificVersion>False</SpecificVersion>
@@ -165,6 +165,8 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\WebBrowserHelper.cs" />
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Context.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementGenericPlaceholder.cs" />
     <Compile Include="LanguageMapping\Constants.cs" />
     <Compile Include="LanguageMapping\Implementation\Common.cs" />
     <Compile Include="LanguageMapping\Implementation\Reader.cs" />

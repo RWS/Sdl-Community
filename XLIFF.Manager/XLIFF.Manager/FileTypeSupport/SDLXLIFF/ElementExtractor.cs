@@ -1,4 +1,6 @@
-﻿using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
+﻿using System;
+using System.Text.RegularExpressions;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
@@ -6,8 +8,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 	public class ElementExtractor : IMarkupDataVisitor
 	{
 		private string _elementIdToSearch;
-		
-		private Element _element;		
+
+		private Element _element;
 
 		private int _currentLockedContentId;
 
@@ -15,7 +17,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		{
 			FoundElement = null;
 
-			_elementIdToSearch = elementId;			
+			_elementIdToSearch = elementId;
 			_element = element;
 			_currentLockedContentId = 0;
 			VisitChildren(objectToSearch);
@@ -33,24 +35,34 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		{
 			foreach (var item in container)
 			{
+				if (FoundElement != null)
+				{
+					return;
+				}
+
 				item.AcceptVisitor(this);
 			}
 		}
 
-
-		
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
+			if (FoundElement != null)
+			{
+				return;
+			}
+
 			VisitChildren(commentMarker);
 		}
 
-		public void VisitLocationMarker(ILocationMarker location)
-		{
-
-		}
+		public void VisitLocationMarker(ILocationMarker location) { }
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
+			if (FoundElement != null)
+			{
+				return;
+			}
+
 			if (_element is ElementLocked && _currentLockedContentId.ToString() == _elementIdToSearch)
 			{
 				FoundElement = lockedContent;
@@ -61,12 +73,26 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 		public void VisitOtherMarker(IOtherMarker marker)
 		{
+			if (FoundElement != null)
+			{
+				return;
+			}
+
 			VisitChildren(marker);
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-			if (_element is ElementPlaceholder && tag.TagProperties.TagId.Id == _elementIdToSearch)
+			if (FoundElement != null)
+			{
+				return;
+			}
+
+			// Dev Notes: should handle the tagContentId differently; potentially have priority
+			var tagContentId = GetTagContentId(tag.TagProperties.TagContent);
+
+			if (_element is ElementPlaceholder &&
+				(tag.TagProperties.TagId.Id == _elementIdToSearch || tagContentId == _elementIdToSearch))
 			{
 				FoundElement = tag;
 			}
@@ -74,20 +100,38 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
+			if (FoundElement != null)
+			{
+				return;
+			}
+
 			VisitChildren(revisionMarker);
 		}
 
 		public void VisitSegment(ISegment segment)
 		{
+			if (FoundElement != null)
+			{
+				return;
+			}
+
 			VisitChildren(segment);
 		}
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
+			if (FoundElement != null)
+			{
+				return;
+			}
+
 			if (_element is ElementTagPair elementTagPair)
 			{
-				if (elementTagPair.Type == Element.TagType.OpeningTag || elementTagPair.Type== Element.TagType.ClosingTag
-				    && tagPair.TagProperties.TagId.Id == _elementIdToSearch)
+				// Dev Notes: should handle the tagContentId differently; potentially have priority
+				var tagContentId = GetTagContentId(tagPair.TagProperties.TagContent);
+
+				if ((elementTagPair.Type == Element.TagType.OpeningTag || elementTagPair.Type == Element.TagType.ClosingTag) &&
+					(tagPair.TagProperties.TagId.Id == _elementIdToSearch || tagContentId == _elementIdToSearch))
 				{
 					FoundElement = tagPair;
 				}
@@ -96,9 +140,27 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 		}
 
-		public void VisitText(IText text)
-		{
+		public void VisitText(IText text) { }
 
-		}		
+		public string GetTagContentId(string text)
+		{
+			var regexAttribute = new Regex(@"\s+(?<name>[^\s""]+)\=""(?<value>[^""]*)""", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+			var mc = regexAttribute.Matches(text);
+			if (mc.Count > 0)
+			{
+				foreach (Match match in mc)
+				{
+					var attValue = match.Groups["value"].Value;
+					var attName = match.Groups["name"].Value;
+
+					if (string.Compare(attName, "id", StringComparison.OrdinalIgnoreCase) == 0)
+					{
+						return attValue;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
 }

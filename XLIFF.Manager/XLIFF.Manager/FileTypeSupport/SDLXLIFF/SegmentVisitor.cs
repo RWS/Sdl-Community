@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -8,7 +9,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 {
 	internal class SegmentVisitor : IMarkupDataVisitor
 	{
-		private readonly bool _ignoreTags;		
+		private readonly bool _ignoreTags;
+		private readonly Regex _regexNewline = new Regex(@"[\r\n]+", RegexOptions.None);
 
 		private Stack<ITagPair> _tagPairStack;
 
@@ -17,7 +19,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			_ignoreTags = ignoreTags;
 			InitializeComponents();
 		}
-		
+
 		public List<Element> Elements { get; private set; }
 
 		public bool HasRevisions { get; private set; }
@@ -70,9 +72,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				{
 					Type = Element.TagType.ClosingTag,
 					TagId = currentTag.TagProperties.TagId.Id,
-					TagContent = currentTag.EndTagProperties.TagContent					
+					TagContent = currentTag.EndTagProperties.TagContent
 				};
-			
+
 				Elements.Add(element);
 
 				Text += currentTag.EndTagProperties.TagContent;
@@ -87,7 +89,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			}
 
 			var element = new ElementPlaceholder
-			{				
+			{
 				TagId = placeholderTag.TagProperties.TagId.Id,
 				TagContent = placeholderTag.TagProperties.TagContent,
 				DisplayText = placeholderTag.TagProperties.DisplayText,
@@ -97,16 +99,6 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			Elements.Add(element);
 
 			Text += placeholderTag.Properties.TagContent;
-		}
-
-		public void VisitText(IText text)
-		{
-			Elements.Add(new ElementText
-			{
-				Text = text.Properties.Text
-			});
-
-			Text += text.Properties.Text;
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -173,7 +165,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			{
 				return;
 			}
-			
+
 			var element = new ElementLocked
 			{
 				Type = Element.TagType.OpeningTag
@@ -200,6 +192,57 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			{
 				VisitChilderen(revisionMarker);
 			}
+		}
+		
+		public void VisitText(IText text)
+		{
+			var elements = GetInlineText(text);
+			if (elements.Count > 0)
+			{
+				Elements.AddRange(elements);
+			}
+
+			Text += text.Properties.Text;
+		}
+
+		private List<Element> GetInlineText(IText text)
+		{
+			var elements = new List<Element>();
+
+			var matches = _regexNewline.Matches(text.Properties.Text);
+			if (matches.Count > 0)
+			{
+				var startIndex = 0;
+				foreach (Match match in matches)
+				{
+					var prefix = text.Properties.Text.Substring(startIndex, match.Index - startIndex);
+					if (!string.IsNullOrEmpty(prefix))
+					{
+						elements.Add(new ElementText { Text = prefix });
+					}
+
+					var lbText = text.Properties.Text.Substring(match.Index, match.Length);
+					elements.Add(new ElementGenericPlaceholder
+					{
+						CType = "lb",
+						TextEquivalent = lbText.Replace("\n", "\\n").Replace("\r", "\\r")
+					});
+
+					startIndex = match.Index + match.Length;
+				}
+
+				if (startIndex < text.Properties.Text.Length)
+				{
+					var suffixText = text.Properties.Text.Substring(startIndex);
+					elements.Add(new ElementText { Text = suffixText });
+				}
+			}
+			else
+			{
+				elements.Add(new ElementText { Text = text.Properties.Text });
+			}
+
+			return elements;
 		}
 	}
 }
