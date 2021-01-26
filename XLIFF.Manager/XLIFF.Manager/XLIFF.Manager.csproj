@@ -164,6 +164,8 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\WebBrowserHelper.cs" />
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Context.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementGenericPlaceholder.cs" />
     <Compile Include="LanguageMapping\Constants.cs" />
     <Compile Include="LanguageMapping\Implementation\Common.cs" />
     <Compile Include="LanguageMapping\Implementation\Reader.cs" />

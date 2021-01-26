@@ -25,7 +25,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private SegmentVisitor _segmentVisitor;
 		private SegmentPairProcessor _segmentPairProcessor;
 
-		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder, 
+		public ContentWriter(Xliff xliff, SegmentBuilder segmentBuilder,
 			ImportOptions importOptions, List<AnalysisBand> analysisBands)
 		{
 			_xliff = xliff;
@@ -85,7 +85,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					foreach (var segmentPair in paragraphUnit.SegmentPairs)
 					{
 						var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 
 						var status = segmentPair.Properties.ConfirmationLevel.ToString();
@@ -103,7 +103,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
 				var segmentPairInfo = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
-				
+
 				var importedSegmentPair = importedTransUnit.SegmentPairs.FirstOrDefault(a => a.Id == segmentPair.Properties.Id.Id);
 				if (importedSegmentPair == null)
 				{
@@ -111,7 +111,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusSegmentNotImportedId, true, out var result);
 						var statusSegmentNotImported = success ? result : ConfirmationLevel.Unspecified;
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusSegmentNotImported;
 					}
 
@@ -132,8 +132,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
 					excludeFilter = (segmentPair.Properties.IsLocked && _importOptions.ExcludeFilterIds.Exists(a => a == "Locked"))
-					                || _importOptions.ExcludeFilterIds.Exists(a => a == status)
-					                || _importOptions.ExcludeFilterIds.Exists(a => a == match);
+									|| _importOptions.ExcludeFilterIds.Exists(a => a == status)
+									|| _importOptions.ExcludeFilterIds.Exists(a => a == match);
 				}
 
 				if (noOverwrite || excludeFilter)
@@ -142,7 +142,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					{
 						var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
 						var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
-						
+
 						segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
 					}
 
@@ -240,6 +240,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 					UpdatePlaceholder(elementPlaceholder, originalTarget, originalSource, containers);
 				}
 
+				if (element is ElementGenericPlaceholder genericPlaceholder)
+				{
+					UpdateGenericPlaceholder(genericPlaceholder, originalTarget, originalSource, containers);
+				}
+
 				if (element is ElementText elementText && !string.IsNullOrEmpty(elementText.Text))
 				{
 					UpdateText(elementText, containers);
@@ -263,14 +268,14 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			SegmentVisitor.VisitSegment(targetSegment);
 			var updatedText = SegmentVisitor.Text;
-			
+
 			if (string.Compare(originalText, updatedText, StringComparison.Ordinal) != 0)
 			{
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
 				{
 					if (targetSegment.Properties.TranslationOrigin != null)
 					{
-						var currentTranslationOrigin = (ITranslationOrigin) targetSegment.Properties.TranslationOrigin.Clone();
+						var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
 						targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
 						SetTranslationOrigin(targetSegment);
 					}
@@ -293,7 +298,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
 
 			}
-			else 
+			else
 			{
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 				{
@@ -335,6 +340,31 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 			var container = containers.Peek();
 			container.Add(placeholder);
+		}
+
+		private void UpdateGenericPlaceholder(ElementGenericPlaceholder elementGenericPlaceholder,
+			ISegment originalTarget, ISegment originalSource, Stack<IAbstractMarkupDataContainer> containers)
+		{
+			if (string.Compare(elementGenericPlaceholder.CType, "lb", StringComparison.CurrentCultureIgnoreCase) == 0)
+			{
+				UpdateLineBreak(elementGenericPlaceholder, containers);
+			}
+
+			//TODO provide support for other generic placeholders
+		}
+
+		private void UpdateLineBreak(ElementGenericPlaceholder elementGenericPlaceholder, Stack<IAbstractMarkupDataContainer> containers)
+		{
+			var textEquivalent = elementGenericPlaceholder.TextEquivalent.Replace("\\r", "\r").Replace("\\n", "\n");
+			if (string.IsNullOrEmpty(textEquivalent))
+			{
+				textEquivalent = "\n";
+			}
+
+			var text = _segmentBuilder.Text(textEquivalent);
+			var container = containers.Peek();
+
+			container.Add(text);
 		}
 
 		private int UpdateLockedContent(ElementLocked elementLocked, int lockedContentId, ISegment originalTarget,
