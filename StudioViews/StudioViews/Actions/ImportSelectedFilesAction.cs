@@ -67,9 +67,8 @@ namespace Sdl.Community.StudioViews.Actions
 			{
 				return;
 			}
-			
-			
-					OpenMessageWindow(model);
+
+			OpenMessageWindow(model);
 		}
 
 		private static void OpenMessageWindow(StudioViewsFilesImportViewModel model)

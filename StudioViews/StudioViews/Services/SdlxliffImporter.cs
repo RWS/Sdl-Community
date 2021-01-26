@@ -64,7 +64,6 @@ namespace Sdl.Community.StudioViews.Services
 			return contentReader.SegmentPairInfos;
 		}
 
-
 		private List<string> GetTagIds(string filePath)
 		{
 			string content;
