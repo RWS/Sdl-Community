@@ -414,7 +414,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 					if (_firstTimeAdded)
 					{
-						SwitchRateTranslationsControllerVisibility(TranslationService?.Options?.SendFeedback ?? true);
+						SwitchRateTranslationsControllerVisibility(true);
 						_firstTimeAdded = false;
 					}
 				});
