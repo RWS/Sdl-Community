@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +13,8 @@ namespace Sdl.Community.TQA
 {
 	public static class DataConverter
 	{
+		private static readonly string ProtectionPassword = "Thames";
+
 		public static ReportResults ExtractFromXml(string path, string qualityLevel)
 		{
 			var report = XDocument.Load(path);
@@ -192,22 +193,8 @@ namespace Sdl.Community.TQA
 				}
 			}
 
-			var wsReport = wb.Worksheet("Evaluation Report_Initial");
-
-			wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
-			wsReport.Cell("L8").Value = "TQA";
-			wsReport.Cell("L11").Value = reportResults.QualityLevel;
-			ChangeStyleForEvaluationReport(wsReport);
-
-			for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
-			{
-				wsReport.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
-			}
-
-			var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
-			ChangeStyleForEvaluationReport(wsFinalResult);
-			wsFinalResult.Protect("Thames");
-			wsFinalResult.Range(1, 1, 60, 60).Style.Protection.SetLocked(true);
+			GenerateInitialReportSheet(reportResults, wb);
+			GenerateFinalReportSheet(wb);
 
 			wb.CalculateMode = XLCalculateMode.Auto;
 			wb.Save();
@@ -217,6 +204,48 @@ namespace Sdl.Community.TQA
 			AddGradient(spreadsheet, "B6B6B7", "FFFFC000", "FF009B00");
 			spreadsheet.Save();
 			spreadsheet.Close();
+		}
+
+		private static void GenerateFinalReportSheet(XLWorkbook wb)
+		{
+			var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
+			ChangeStyleForEvaluationReport(wsFinalResult);
+			wsFinalResult.Protect(ProtectionPassword);
+			var rangeUsed = wsFinalResult.RangeUsed();
+			rangeUsed.Style.Protection.SetLocked(true);
+		}
+
+		private static void GenerateInitialReportSheet(ReportResults reportResults, XLWorkbook wb)
+		{
+			var wsReport = wb.Worksheet("Evaluation Report_Initial");
+
+			wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
+			wsReport.Cell("L8").Value = "TQA";
+			wsReport.Cell("L11").Value = reportResults.QualityLevel;
+
+			wsReport.Protect(ProtectionPassword);
+			wsReport.Range(14, 1, 21, 9).Style.Protection.SetLocked(true); // only second table should be protected
+
+			AjustCommentSize(wsReport);
+
+			ChangeStyleForEvaluationReport(wsReport);
+
+			for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
+			{
+				wsReport.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
+			}
+		}
+
+		private static void AjustCommentSize(IXLWorksheet wsReport)
+		{
+			wsReport.Cell("B3").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("B4").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("B5").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("B6").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("B9").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("L7").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("L8").Comment?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("L10").Comment?.Style.Size.SetAutomaticSize();
 		}
 
 		private static void AddGradient(SpreadsheetDocument spreadSheet, string dummyColorCode, string firstColorCode, string secondColorCode)
