@@ -283,7 +283,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			var comments = isFeedbackForPreviousSegment ? PreviousRating.Comments : GetCommentsAndFeedbackFromUi();
 			if (comments?.Count > 0) rating.Comments = comments;
 
-			PreviousRating = null;
+			PreviousRating.Empty();
 
 			if (!((ExpandoObject)rating).Any()) rating = null;
 			return rating;
