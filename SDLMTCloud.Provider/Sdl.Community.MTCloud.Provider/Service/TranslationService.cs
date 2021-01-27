@@ -13,6 +13,8 @@ using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Events;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.ProjectAutomation.Core;
@@ -24,14 +26,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class TranslationService : ITranslationService
 	{
+		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public TranslationService(IConnectionService connectionService)
+		public event TranslationReceivedEventHandler TranslationReceived;
+
+		public TranslationService(IConnectionService connectionService, IHttpClient httpClient)
 		{
+			_httpClient = httpClient;
 			ConnectionService = connectionService;
 		}
-
-		public event TranslationReceivedEventHandler TranslationReceived;
 
 		public IConnectionService ConnectionService { get; }
 		public Options Options { get; set; }
@@ -51,26 +55,21 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					}
 				}
 
-				using (var httpClient = new HttpClient())
+				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/dictionaries");
+				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+				request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
+				ConnectionService.AddTraceHeader(request);
+
+				var responseMessage = await _httpClient.SendAsync(request);
+				var response = await responseMessage.Content.ReadAsStringAsync();
+
+				if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
 				{
-					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-					httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
-
-					var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/dictionaries");
-					var request = new HttpRequestMessage(HttpMethod.Get, uri);
-					ConnectionService.AddTraceHeader(request);
-
-					var responseMessage = await httpClient.SendAsync(request);
-					var response = await responseMessage.Content.ReadAsStringAsync();
-
-					if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
-					{
-						var result = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response);
-						return result;
-					}
-
-					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
+					var result = JsonConvert.DeserializeObject<MTCloudDictionaryInfo>(response);
+					return result;
 				}
+
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
 			}
 			catch (Exception ex)
 			{
@@ -96,26 +95,21 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					}
 				}
 
-				using (var httpClient = new HttpClient())
+				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/subscriptions/language-pairs");
+				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+				request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
+				ConnectionService.AddTraceHeader(request);
+
+				var responseMessage = await _httpClient.SendAsync(request);
+				var response = await responseMessage.Content.ReadAsStringAsync();
+
+				if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
 				{
-					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-					httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
-
-					var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{accountId}/subscriptions/language-pairs");
-					var request = new HttpRequestMessage(HttpMethod.Get, uri);
-					ConnectionService.AddTraceHeader(request);
-
-					var responseMessage = await httpClient.SendAsync(request);
-					var response = await responseMessage.Content.ReadAsStringAsync();
-
-					if (responseMessage.StatusCode == HttpStatusCode.OK) // 200
-					{
-						var result = JsonConvert.DeserializeObject<SubscriptionInfo>(response);
-						return result;
-					}
-
-					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
+					var result = JsonConvert.DeserializeObject<SubscriptionInfo>(response);
+					return result;
 				}
+
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
 			}
 			catch (Exception ex)
 			{
@@ -130,6 +124,41 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var feedbackRequest = CreateFeedbackRequest(segmentId, rating, originalText, improvement);
 			return await SendFeedback(feedbackRequest);
+		}
+
+		private async Task<HttpResponseMessage> SendFeedback(dynamic translationFeedback)
+		{
+			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
+			{
+				// attempt one connection
+				var success = ConnectionService.Connect(ConnectionService.Credential);
+				if (!success.Item1)
+				{
+					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+					throw new Exception(PluginResources.Message_Connection_token_has_expired);
+				}
+			}
+
+			HttpResponseMessage responseMessage;
+			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
+			var request = new HttpRequestMessage(HttpMethod.Post, uri);
+			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
+
+			ConnectionService.AddTraceHeader(request);
+
+			var serializerSettings =
+				new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+			var content = JsonConvert.SerializeObject(translationFeedback, serializerSettings);
+
+			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+
+			responseMessage = await _httpClient.SendAsync(request);
+			var response = await responseMessage.Content.ReadAsStringAsync();
+			responseMessage.ReasonPhrase = response;
+
+			_logger.Info(PluginResources.SendFeedbackResponseFromServer, responseMessage.StatusCode, response);
+
+			return responseMessage;
 		}
 
 		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
@@ -150,62 +179,62 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				}
 			}
 
-			using (var httpClient = new HttpClient())
+			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + "/mt/translations/async");
+			var request = new HttpRequestMessage(HttpMethod.Post, uri);
+			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
+			ConnectionService.AddTraceHeader(request);
+
+			var translationRequestModel = new TranslationRequest
 			{
-				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
+				Input = new[] { text },
+				SourceLanguageId = model.SelectedSource.CodeName,
+				TargetLanguageId = model.SelectedTarget.CodeName,
+				Model = model.SelectedModel.Model,
+				InputFormat = "xliff"
+			};
 
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + "/mt/translations/async");
-				var request = new HttpRequestMessage(HttpMethod.Post, uri);
-				ConnectionService.AddTraceHeader(request);
-
-				var translationRequestModel = new TranslationRequest
-				{
-					Input = new[] { text },
-					SourceLanguageId = model.SelectedSource.CodeName,
-					TargetLanguageId = model.SelectedTarget.CodeName,
-					Model = model.SelectedModel.Model,
-					InputFormat = "xliff"
-				};
-
-				if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
-					&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
-				{
-					translationRequestModel.Dictionaries = new[] { model.SelectedDictionary?.DictionaryId };
-				}
-
-				var content = JsonConvert.SerializeObject(translationRequestModel);
-				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
-
-				var responseMessage = await httpClient.SendAsync(request);
-				var response = await responseMessage.Content.ReadAsStringAsync();
-
-				if (!responseMessage.IsSuccessStatusCode)
-				{
-					return null;
-				}
-
-				if (!(JsonConvert.DeserializeObject<TranslationResponse>(response) is TranslationResponse translationResponse))
-					return null;
-
-				var dataResponse = await GetTranslations(httpClient, translationResponse.RequestId);
-				if (!(JsonConvert.DeserializeObject<TranslationResponse>(dataResponse) is TranslationResponse translations))
-					return null;
-
-				var translation = translations.Translation.FirstOrDefault();
-				if (translation == null)
-				{
-					return null;
-				}
-
-				var translatedXliff = Converter.ParseXliffString(translation);
-				if (translatedXliff == null) return null;
-
-				var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
-
-				OnTranslationReceived(sourceSegments, targetSegments.Select(seg => seg.ToString()).ToList());
-				return targetSegments;
+			if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
+				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
+			{
+				translationRequestModel.Dictionaries = new[] { model.SelectedDictionary?.DictionaryId };
 			}
+
+			var content = JsonConvert.SerializeObject(translationRequestModel);
+			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+
+			var responseMessage = await _httpClient.SendAsync(request);
+			var response = await responseMessage.Content.ReadAsStringAsync();
+
+			if (!responseMessage.IsSuccessStatusCode)
+			{
+				return null;
+			}
+
+			if (!(JsonConvert.DeserializeObject<TranslationResponse>(response) is TranslationResponse translationResponse))
+				return null;
+
+			var dataResponse = await GetTranslations(_httpClient, translationResponse.RequestId);
+			if (!(JsonConvert.DeserializeObject<TranslationResponse>(dataResponse) is TranslationResponse translations))
+				return null;
+
+			var translation = translations.Translation.FirstOrDefault();
+			if (translation == null)
+			{
+				return null;
+			}
+
+			var translatedXliff = Converter.ParseXliffString(translation);
+			if (translatedXliff == null) return null;
+
+			var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
+
+			OnTranslationReceived(sourceSegments, targetSegments.Select(seg => seg.ToString()).ToList());
+			return targetSegments;
+		}
+
+		private void OnTranslationReceived(List<string> sourceSegments, List<string> targetSegments)
+		{
+			TranslationReceived?.Invoke(sourceSegments, targetSegments);
 		}
 
 		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
@@ -254,10 +283,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return model;
 		}
 
-		private async Task<string> GetTranslationResult(HttpClient httpClient, string id)
+		private async Task<string> GetTranslationResult(IHttpClient httpClient, string id)
 		{
 			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}/content");
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
+			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
 			ConnectionService.AddTraceHeader(request);
 
 			var responseMessage = await httpClient.SendAsync(request);
@@ -271,7 +301,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return string.Empty;
 		}
 
-		private async Task<string> GetTranslations(HttpClient httpClient, string id)
+		private async Task<string> GetTranslations(IHttpClient httpClient, string id)
 		{
 			var translationStatus = string.Empty;
 
@@ -279,6 +309,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}");
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+				request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
 				ConnectionService.AddTraceHeader(request);
 
 				var responseMessage = await httpClient.SendAsync(request);
@@ -321,50 +352,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					 || string.Compare(translationStatus, Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase) == 0);
 
 			return await GetTranslationResult(httpClient, id);
-		}
-
-		private void OnTranslationReceived(List<string> sourceSegments, List<string> targetSegments)
-		{
-			TranslationReceived?.Invoke(sourceSegments, targetSegments);
-		}
-
-		private async Task<HttpResponseMessage> SendFeedback(dynamic translationFeedback)
-		{
-			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
-			{
-				// attempt one connection
-				var success = ConnectionService.Connect(ConnectionService.Credential);
-				if (!success.Item1)
-				{
-					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
-					throw new Exception(PluginResources.Message_Connection_token_has_expired);
-				}
-			}
-
-			HttpResponseMessage responseMessage;
-			using (var httpClient = new HttpClient())
-			{
-				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-				httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + ConnectionService.Credential.Token);
-
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
-				var request = new HttpRequestMessage(HttpMethod.Post, uri);
-				ConnectionService.AddTraceHeader(request);
-
-				var serializerSettings =
-					new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-				var content = JsonConvert.SerializeObject(translationFeedback, serializerSettings);
-
-				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
-
-				responseMessage = await httpClient.SendAsync(request);
-				var response = await responseMessage.Content.ReadAsStringAsync();
-				responseMessage.ReasonPhrase = response;
-
-				_logger.Info(PluginResources.SendFeedbackResponseFromServer, responseMessage.StatusCode, response);
-			}
-
-			return responseMessage;
 		}
 	}
 }

@@ -197,6 +197,7 @@
     <Compile Include="Model\TranslationResponseStats.cs" />
     <Compile Include="Model\TranslationResponseStatus.cs" />
     <Compile Include="Model\UserCredential.cs" />
+    <Compile Include="MTCloudApplicationInitializer.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,6 +207,8 @@
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
     <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
     <Compile Include="Service\Events\TranslationReceivedEventHandler.cs" />
+    <Compile Include="Service\HttpClient.cs" />
+    <Compile Include="Service\Interface\IHttpClient.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Service\TranslationService.cs" />
