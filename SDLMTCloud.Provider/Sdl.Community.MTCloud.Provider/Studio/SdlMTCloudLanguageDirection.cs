@@ -119,7 +119,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		/// corresponding mask)</param>
 		/// <param name="mask">Whether to translate a segment or not</param>
 		/// <returns></returns>
-		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
+		public SearchResults[] SearchSegments(Segment[] segments, bool[] mask)
 		{
 			var results = new SearchResults[segments.Length];
 			var mtCloudSegments = new List<MTCloudSegment>();
@@ -311,7 +311,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			// Need this vs having mask parameter default to null as inheritence doesn't allow default values to
 			// count as the same thing as having no parameter at all. IE, you can't have
 			// public string foo(string s = null) override public string foo().
-			return SearchSegments(settings, segments, null);
+			return SearchSegments(segments, null);
 		}
 
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
@@ -381,7 +381,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_translationUnits.Clear();
 			_translationUnits.AddRange(translationUnits);
 
-			return SearchSegments(settings, translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
+			return SearchSegments(translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
 		}
 
 		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
