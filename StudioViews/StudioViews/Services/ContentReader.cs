@@ -85,7 +85,9 @@ namespace Sdl.Community.StudioViews.Services
 
 				if (SourceLanguage == null || TargetLanguage == null)
 				{
-					throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
+					throw new Exception(
+						string.Format(PluginResources.Error_Message_Unable_To_Parse_File_Language_Null, SourceLanguage == null
+							? "Source" : "Target"));
 				}
 
 				var productName = GetProductName();

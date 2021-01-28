@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,7 +12,7 @@ namespace Sdl.Community.StudioViews.Services
 		/// deletes the input <param name="files"/> if <param name="cleanup"/> is set to true
 		/// </summary>
 		/// <param name="files">List of files to merge</param>
-		/// <param name="mergeFilePath">The full path to the output merged file</param>
+		/// <param name="mergeFilePath">The full path to the output merged systemFile</param>
 		/// <param name="cleanup">Deletes the input files if set to true</param>
 		/// <returns></returns>
 		public bool MergeFiles(IReadOnlyList<string> files, string mergeFilePath, bool cleanup)
@@ -24,25 +23,44 @@ namespace Sdl.Community.StudioViews.Services
 			}
 
 			var filesContent = new List<string>();
-			var xliffElement = string.Empty;
+			var revDefsContent = new List<string>();
+			var repDefsContent = new List<string>();
+			var cmtDefsContent = new List<string>();
+
 			for (var i = 0; i < files.Count; i++)
 			{
-				string content;
+				string fileContent;
 				using (var reader = new StreamReader(files[i], Encoding.UTF8))
 				{
-					content = reader.ReadToEnd();
+					fileContent = reader.ReadToEnd();
 					reader.Close();
 				}
 
-				filesContent.Add(GetFileContent(content));
+				var fileDocInfoContent = GetElementContent(fileContent, "doc-info");
 
-				if (i == 0)
+				var revDefContent = GetElementContent(fileDocInfoContent, "rev-defs");
+				if (!string.IsNullOrEmpty(revDefContent.Trim()))
 				{
-					xliffElement = GetXliffFileContent(content);
+					revDefsContent.Add(revDefContent);
 				}
+
+				var repDefContent = GetElementContent(fileDocInfoContent, "rep-defs");
+				if (!string.IsNullOrEmpty(repDefContent.Trim()))
+				{
+					repDefsContent.Add(repDefContent);
+				}
+
+				var cmtDefContent = GetElementContent(fileDocInfoContent, "cmt-defs");
+				if (!string.IsNullOrEmpty(cmtDefContent.Trim()))
+				{
+					cmtDefsContent.Add(cmtDefContent);
+				}
+
+				filesContent.Add(GetFileContent(fileContent));
 			}
 
-			WriteMergedFile(mergeFilePath, xliffElement, filesContent);
+			var docInfoContent = BuildDocInfoContent(revDefsContent,  repDefsContent, cmtDefsContent);
+			WriteMergedFile(mergeFilePath, docInfoContent, filesContent);
 
 			// cleanup individual export files
 			if (cleanup)
@@ -53,90 +71,37 @@ namespace Sdl.Community.StudioViews.Services
 			return true;
 		}
 
-		public string GetUniqueFileName(string filePath, string suffix)
+		private static string GetElementContent(string content, string elementName)
 		{
-			var directoryName = Path.GetDirectoryName(filePath);
-			var fileName = Path.GetFileName(filePath);
-			var fileExtension = Path.GetExtension(fileName);
-			var fileNameWithoutExtension = GetFileNameWithoutExtension(fileName, fileExtension);
+			var expression = @"<" + elementName + @"(|[^\>]*?)>(?<valueContent>(|.*?))</" + elementName + @">";
+			var regexSearchSingleline = new Regex(expression, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			var regexSearchMultiline = new Regex(expression, RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-			var index = 1;
-			var uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
-			                                                 + "." + (string.IsNullOrEmpty(suffix) ? string.Empty : suffix + "_")
-			                                                 + index.ToString().PadLeft(4, '0') + fileExtension);
-
-			if (File.Exists(uniqueFilePath))
+			var matchSearch = regexSearchSingleline.Match(content, 0);
+			var valueContent = string.Empty;
+			if (matchSearch.Success)
 			{
-				while (File.Exists(uniqueFilePath))
+				valueContent = matchSearch.Groups["valueContent"].Value;
+			}
+			else
+			{
+				matchSearch = regexSearchMultiline.Match(content, 0);
+				if (matchSearch.Success)
 				{
-					index++;
-					uniqueFilePath = Path.Combine(directoryName, fileNameWithoutExtension
-					                                             + "." + (string.IsNullOrEmpty(suffix) ? string.Empty : suffix + "_")
-					                                             + index.ToString().PadLeft(4, '0') + fileExtension);
+					valueContent = matchSearch.Groups["valueContent"].Value;
 				}
 			}
 
-			return uniqueFilePath;
-		}
-
-		public string GetValidFolderPath(string initialPath)
-		{
-			if (string.IsNullOrWhiteSpace(initialPath))
-			{
-				return string.Empty;
-			}
-
-			var outputFolder = initialPath;
-			if (Directory.Exists(outputFolder))
-			{
-				return outputFolder;
-			}
-
-			while (outputFolder.Contains("\\"))
-			{
-				outputFolder = outputFolder.Substring(0, outputFolder.LastIndexOf("\\", StringComparison.Ordinal));
-				if (Directory.Exists(outputFolder))
-				{
-					return outputFolder;
-				}
-			}
-
-			return outputFolder;
-		}
-
-		private string GetFileNameWithoutExtension(string fileName, string extension)
-		{
-			if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(extension))
-			{
-				return fileName;
-			}
-
-			if (extension.Length > fileName.Length || !fileName.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
-			{
-				return fileName;
-			}
-
-			return fileName.Substring(0, fileName.Length - extension.Length);
-		}
-		
-		private static string GetXliffFileContent(string content)
-		{
-			var regexXliff = new Regex(@"(?<xliff><xliff\s+[^\>]*?>)", RegexOptions.IgnoreCase);
-			var matchXliff = regexXliff.Match(content);
-			if (matchXliff.Success)
-			{
-				return matchXliff.Groups["xliff"].Value;
-			}
-
-			return string.Empty;
+			return valueContent;
 		}
 
 		private static string GetFileContent(string content)
 		{
 			// greedy match
-			var regexFileSingleline = new Regex(@"(?<file><file\s+.*</file>)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-			var regexFileMultiline = new Regex(@"(?<file><file\s+.*</file>)", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-			
+			var expression = @"(?<file><file\s+.*</file>)";
+			var regexFileSingleline = new Regex(expression, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			var regexFileMultiline = new Regex(expression, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
 			var matchFile = regexFileSingleline.Match(content, 0);
 			var fileContent = string.Empty;
 			if (matchFile.Success)
@@ -155,16 +120,66 @@ namespace Sdl.Community.StudioViews.Services
 			return fileContent;
 		}
 
-		private static void WriteMergedFile(string name, string xliffFileContent, IEnumerable<string> filesContent)
+		private static string BuildDocInfoContent(IReadOnlyCollection<string> revDefs, IReadOnlyCollection<string> repDefs, IReadOnlyCollection<string> cmtDefs)
 		{
-			using (var writer = new StreamWriter(name, false, Encoding.UTF8))
+			var content = new StringBuilder(@"<doc-info xmlns=""http://sdl.com/FileTypes/SdlXliff/1.0"">");
+
+			if (revDefs.Count > 0)
+			{
+				content.Append(@"<rev-defs>");
+				foreach (var value in revDefs)
+				{
+					content.Append(value);
+				}
+				content.Append(@"</rev-defs>");
+			}
+			
+			if (repDefs.Count > 0)
+			{
+				content.Append(@"<rep-defs>");
+				foreach (var value in repDefs)
+				{
+					content.Append(value);
+				}
+				content.Append(@"</rep-defs>");
+			}
+
+			if (cmtDefs.Count > 0)
+			{
+				content.Append(@"<cmt-defs>");
+				foreach (var value in cmtDefs)
+				{
+					content.Append(value);
+				}
+				content.Append(@"</cmt-defs>");
+			}
+
+			content.Append(@"</doc-info>");
+
+			return content.ToString();
+		}
+
+		private static void WriteMergedFile(string filePath, string docInfoContent, IEnumerable<string> filesContent)
+		{
+			using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
 				writer.Write(@"<?xml version=""1.0"" encoding=""utf-8""?>");
-				writer.Write(xliffFileContent);
+
+				writer.Write(@"<xliff xmlns:sdl=""http://sdl.com/FileTypes/SdlXliff/1.0"" xmlns=""urn:oasis:names:tc:xliff:document:1.2"" version=""1.2"" sdl:version=""1.0"">");
+
+				if (!string.IsNullOrEmpty(docInfoContent.Trim()))
+				{
+					writer.Write(docInfoContent);
+				}
+
 				foreach (var fileContent in filesContent)
 				{
-					writer.Write(fileContent);
+					if (!string.IsNullOrEmpty(fileContent.Trim()))
+					{
+						writer.Write(fileContent);
+					}
 				}
+
 				writer.Write("</xliff>");
 			}
 		}

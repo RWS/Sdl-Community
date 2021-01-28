@@ -37,12 +37,12 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Community.Toolkit.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.3.0.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -82,8 +82,8 @@
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
+    <Reference Include="Sdl.MultiSelectComboBox">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
@@ -97,15 +97,18 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Versioning, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Versioning">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -121,7 +124,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Actions\ImportSelectedFilesAction.cs" />
+    <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
+    <Compile Include="Behaviours\SelectedItemBehaviour.cs" />
     <Compile Include="Actions\SplitSelectedFilesAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
@@ -131,24 +137,34 @@
     <Compile Include="Controls\Folder\FolderSelectDialog.cs" />
     <Compile Include="Controls\Folder\Reflector.cs" />
     <Compile Include="Controls\NumericUpDown.cs" />
+    <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
+    <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
     <Compile Include="Model\ConfirmationStatus.cs" />
+    <Compile Include="Model\ExportResult.cs" />
+    <Compile Include="Model\MessageInfo.cs" />
+    <Compile Include="Model\OutputFile.cs" />
+    <Compile Include="Model\SystemFileInfo.cs" />
     <Compile Include="Model\FilterItem.cs" />
+    <Compile Include="Model\ImportResult.cs" />
     <Compile Include="Model\MrkInfo.cs" />
     <Compile Include="Model\ParagraphInfo.cs" />
     <Compile Include="Model\ParagraphUnitInfo.cs" />
     <Compile Include="Model\ProjectFileInfo.cs" />
     <Compile Include="Model\SegmentInfo.cs" />
     <Compile Include="Model\SegmentPairInfo.cs" />
-    <Compile Include="Services\CommonService.cs" />
+    <Compile Include="Services\ProjectFileService.cs" />
     <Compile Include="Services\ContentExporter.cs" />
-    <Compile Include="Services\FileInfoService.cs" />
-    <Compile Include="Services\FilterItemHelper.cs" />
-    <Compile Include="Services\ProjectHelper.cs" />
+    <Compile Include="Services\FilterItemService.cs" />
+    <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\SdlxliffMerger.cs" />
     <Compile Include="Services\SdlxliffReader.cs" />
     <Compile Include="Services\SdlxliffImporter.cs" />
     <Compile Include="Services\SdlxliffExporter.cs" />
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\BaseModel.cs" />
     <Compile Include="Model\ParagraphUnitContext.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -159,13 +175,20 @@
     <Compile Include="Services\ContentReader.cs" />
     <Compile Include="Services\ContentImporter.cs" />
     <Compile Include="Services\SegmentBuilder.cs" />
-    <Compile Include="Services\SegmentPairService.cs" />
     <Compile Include="StudioViewsEditorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Model\FilterItemGroup.cs" />
+    <Compile Include="ViewModel\MessageBoxViewModel.cs" />
     <Compile Include="ViewModel\StudioViewsEditorViewModel.cs" />
+    <Compile Include="ViewModel\StudioViewsFilesImportViewModel.cs" />
     <Compile Include="ViewModel\StudioViewsFilesSplitViewModel.cs" />
+    <Compile Include="View\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StudioViewsFilesImportView.xaml.cs">
+      <DependentUpon>StudioViewsFilesImportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\StudioViewsFilesSplitView.xaml.cs">
       <DependentUpon>StudioViewsFilesSplitView.xaml</DependentUpon>
     </Compile>
@@ -192,6 +215,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Content Include="Resources\information.ico" />
+    <Resource Include="Resources\Question.ico" />
+    <Resource Include="Resources\question.png" />
+    <Resource Include="Resources\warning.png" />
+    <Resource Include="Resources\Information.png" />
+    <Resource Include="Resources\StudioViews_split.ico" />
+    <Resource Include="Resources\Add.ico" />
+    <Resource Include="Resources\Delete.ico" />
+    <Resource Include="Resources\Edit.ico" />
     <Resource Include="Resources\export.ico" />
     <Resource Include="Resources\export_small.ico" />
     <Resource Include="Resources\import.ico" />
@@ -199,9 +233,13 @@
     <Resource Include="Resources\StudioViewsMain.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -251,6 +289,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MessageBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\StudioViewsFilesImportView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -26,15 +26,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private LanguageMappingsService _languageMappingsService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private RateItController _rateItController;
+		private bool _firstTimeAdded;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
-		 ILanguageProvider languageProvider, EditorController editorController, ProjectsController projectsController)
+		 ILanguageProvider languageProvider, EditorController editorController, ProjectsController projectsController, bool firstTimeAdded = false)
 		{
 			Uri = uri;
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
 			_editorController = editorController;
 			_projectsController = projectsController;
+			_firstTimeAdded = firstTimeAdded;
 
 			LoadState(translationProviderState);
 
@@ -409,7 +411,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 					if (_rateItController == null) return;
 					_rateItController.RateIt.SetTranslationService(TranslationService);
-					SwitchRateTranslationsControllerVisibility(TranslationService?.Options?.SendFeedback ?? true);
+
+					if (_firstTimeAdded)
+					{
+						SwitchRateTranslationsControllerVisibility(true);
+						_firstTimeAdded = false;
+					}
 				});
 			}
 			catch

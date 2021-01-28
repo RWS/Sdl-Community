@@ -26,10 +26,9 @@ namespace Sdl.Community.StudioViews
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
-			var fileInfoService = new FileInfoService();
-			var commonService = new CommonService(fileInfoService);
-			var filterItemHelper = new FilterItemHelper();
-			var projectHelper = new ProjectHelper(_projectsController);
+			var commonService = new ProjectFileService();
+			var filterItemHelper = new FilterItemService();
+			var projectHelper = new ProjectService(_projectsController);
 			var sdlxliffMerger = new SdlxliffMerger();
 			var sdlxliffExporter = new SdlxliffExporter();
 			var sdlXliffReader = new SdlxliffReader();

@@ -573,6 +573,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							segment.Elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
@@ -667,6 +673,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							segment.Elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
@@ -865,6 +877,42 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			return placeholder;
 		}
 
+		private ElementGenericPlaceholder ReadElementGenericPlaceholder(XmlReader xmlReader)
+		{
+			var placeholder = new ElementGenericPlaceholder();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.TagId = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "equiv-text", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.TextEquivalent = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "ctype", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.CType = xmlReader.Value;
+								}
+							}
+						}
+						break;
+				}
+			}
+
+			return placeholder;
+		}
+
 		private List<Element> ReadElements(XmlReader xmlReader)
 		{
 			var mtype = string.Empty;
@@ -914,6 +962,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							elements.Add(ReadElementPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)

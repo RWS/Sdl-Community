@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguageCloud.IdentityApi;
@@ -23,10 +24,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class ConnectionService : IConnectionService
 	{
+		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public ConnectionService(IWin32Window owner, VersionService versionService, LanguageCloudIdentityApi languageCloudIdentityApi)
+		public ConnectionService(IWin32Window owner, VersionService versionService, LanguageCloudIdentityApi languageCloudIdentityApi, IHttpClient httpClient)
 		{
+			_httpClient = httpClient;
+
 			Owner = owner;
 			VersionService = versionService;
 
@@ -127,14 +131,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			if (string.IsNullOrEmpty(name) &&
-			    !string.IsNullOrEmpty(user) && !string.IsNullOrEmpty(password))
+				!string.IsNullOrEmpty(user) && !string.IsNullOrEmpty(password))
 			{
 				if (string.Compare(type, "CustomUser", StringComparison.CurrentCultureIgnoreCase) == 0)
 				{
 					var emailAddress = new EmailAddressAttribute();
 					var isvalid = emailAddress.IsValid(user);
-					type = isvalid 
-						? Authentication.AuthenticationType.User.ToString() 
+					type = isvalid
+						? Authentication.AuthenticationType.User.ToString()
 						: Authentication.AuthenticationType.Client.ToString();
 				}
 				else
@@ -300,7 +304,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return new Tuple<LanguageCloudIdentityApiModel, string>(null, string.Empty);
 			}
 
-			var success = LanguageCloudIdentityApi.TryLogin(out var message);			
+			var success = LanguageCloudIdentityApi.TryLogin(out var message);
 			if (success)
 			{
 				var model = new LanguageCloudIdentityApiModel
@@ -485,27 +489,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			try
 			{
-				using (var httpClient = new HttpClient())
+
+				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
+				var request = new HttpRequestMessage(HttpMethod.Post, uri)
 				{
-					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					Content = new StringContent(content, new UTF8Encoding(), "application/json")
+				};
 
-					var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
-					var request = new HttpRequestMessage(HttpMethod.Post, uri);
-					request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+				AddTraceHeader(request);
 
-					AddTraceHeader(request);
+				var responseMessage = await _httpClient.SendAsync(request);
+				var response = await responseMessage.Content.ReadAsStringAsync();
 
-					var responseMessage = await httpClient.SendAsync(request);
-					var response = await responseMessage.Content.ReadAsStringAsync();
-
-					if (responseMessage.IsSuccessStatusCode)
-					{
-						var authorizationResponse = JsonConvert.DeserializeObject<AuthorizationResponse>(response);
-						return new Tuple<AuthorizationResponse, string>(authorizationResponse, responseMessage.ReasonPhrase);
-					}
-
-					return new Tuple<AuthorizationResponse, string>(null, responseMessage.ReasonPhrase);
+				if (responseMessage.IsSuccessStatusCode)
+				{
+					var authorizationResponse = JsonConvert.DeserializeObject<AuthorizationResponse>(response);
+					return new Tuple<AuthorizationResponse, string>(authorizationResponse, responseMessage.ReasonPhrase);
 				}
+
+				return new Tuple<AuthorizationResponse, string>(null, responseMessage.ReasonPhrase);
 			}
 			catch (Exception ex)
 			{
@@ -518,27 +520,23 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			try
 			{
-				using (var httpClient = new HttpClient())
+				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
+				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+				request.Headers.Add("Authorization", $"Bearer {token}");
+
+				AddTraceHeader(request);
+
+				var responseMessage = await _httpClient.SendAsync(request);
+				var response = await responseMessage.Content.ReadAsStringAsync();
+
+				if (responseMessage.IsSuccessStatusCode)
 				{
-					httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-					httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-
-					var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
-					var request = new HttpRequestMessage(HttpMethod.Get, uri);
-
-					AddTraceHeader(request);
-
-					var responseMessage = await httpClient.SendAsync(request);
-					var response = await responseMessage.Content.ReadAsStringAsync();
-
-					if (responseMessage.IsSuccessStatusCode)
-					{
-						var userDetails = JsonConvert.DeserializeObject<UserDetails>(response);
-						return new Tuple<UserDetails, string>(userDetails, responseMessage.ReasonPhrase);
-					}
-
-					return new Tuple<UserDetails, string>(null, responseMessage.ReasonPhrase);
+					var userDetails = JsonConvert.DeserializeObject<UserDetails>(response);
+					return new Tuple<UserDetails, string>(userDetails, responseMessage.ReasonPhrase);
 				}
+
+				return new Tuple<UserDetails, string>(null, responseMessage.ReasonPhrase);
 			}
 			catch (Exception ex)
 			{

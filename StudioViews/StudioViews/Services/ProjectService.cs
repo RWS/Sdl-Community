@@ -1,20 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StudioViews.Services
 {
-	public class ProjectHelper
+	public class ProjectService
 	{
 		private readonly ProjectsController _projectsController;
 
-		public ProjectHelper(ProjectsController projectsController)
+		public ProjectService(ProjectsController projectsController)
 		{
 			_projectsController = projectsController;
+		}
+
+		public bool IsServerProject(FileBasedProject project)
+		{
+			var projectInfo = project.GetProjectInfo();
+			var isServerProject = !string.IsNullOrEmpty(projectInfo.ServerUri?.AbsoluteUri)
+			                      && projectInfo.PublicationStatus == PublicationStatus.Published;
+
+			return isServerProject;
 		}
 
 		public void ActivateProject(FileBasedProject project)

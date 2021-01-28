@@ -4,26 +4,30 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
+using Sdl.Community.StudioViews.View;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using AnalysisBand = Sdl.Community.StudioViews.Model.AnalysisBand;
 
 namespace Sdl.Community.StudioViews.ViewModel
 {
 	public class StudioViewsEditorViewModel : BaseModel, IDisposable
 	{
 		private readonly EditorController _editorController;
-		private readonly FilterItemHelper _filterItemHelper;
-		private readonly ProjectHelper _projectHelper;
-		private readonly CommonService _commonService;
+		private readonly FilterItemService _filterItemService;
+		private readonly ProjectService _projectService;
+		private readonly ProjectFileService _projectFileService;
 		private readonly SdlxliffMerger _sdlxliffMerger;
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
@@ -52,12 +56,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private int _selectedTabItem;
 
 		public StudioViewsEditorViewModel(EditorController editorController,
-			FilterItemHelper filterItemHelper, ProjectHelper projectHelper, CommonService commonService,
+			FilterItemService filterItemService, ProjectService projectService, ProjectFileService projectFileService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
-			_filterItemHelper = filterItemHelper;
-			_projectHelper = projectHelper;
-			_commonService = commonService;
+			_filterItemService = filterItemService;
+			_projectService = projectService;
+			_projectFileService = projectFileService;
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
@@ -69,9 +73,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			// Default values
 			ExportSelectedSegments = true;
-			FilterItems = new List<FilterItem>(_filterItemHelper.GetFilterItems());
+			FilterItems = new List<FilterItem>(_filterItemService.GetFilterItems());
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
-				_filterItemHelper.GetFilterItems(FilterItems, new List<string> { "Locked" }));
+				_filterItemService.GetFilterItems(FilterItems, new List<string> { "Locked" }));
 			SelectedTabItem = 0;
 		}
 
@@ -230,6 +234,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
+		public string LogFilePath { get; private set; }
+
+		public DateTime ProcessingDateTime { get; private set; }
+
 		private List<ProjectFileInfo> ProjectFileInfos { get; set; }
 
 		private void OpenFolderInExplorer(object parameter)
@@ -258,7 +266,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			try
 			{
-				var initialDirectory = _sdlxliffMerger.GetValidFolderPath(ExportPath);
+				var initialDirectory = _projectFileService.GetValidFolderPath(ExportPath);
 				if (string.IsNullOrEmpty(initialDirectory) || !Directory.Exists(initialDirectory))
 				{
 					initialDirectory = null;
@@ -266,7 +274,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				var folderDialog = new FolderSelectDialog
 				{
-					Title = "Select the export folder location",
+					Title = PluginResources.FolderSelectDialog_Select_Export_Folder,
 					InitialDirectory = initialDirectory,
 				};
 
@@ -288,7 +296,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				var openFileDialog = new OpenFileDialog
 				{
-					Title = "Select the bilingual SDLXLIFF file"
+					Title = PluginResources.OpenFileDialog_Select_Import_File
 				};
 
 				var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -372,35 +380,52 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			if (string.IsNullOrEmpty(ExportPath) || !Directory.Exists(ExportPath) || File.Exists(ExportPath))
 			{
-				MessageBox.Show("Directory not found!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Error_Message_Directory_Not_Found, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
+
+			ProcessingDateTime = DateTime.Now;
+			var logFileName = "StudioViews_" + "Filtered" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+			LogFilePath = Path.Combine(ExportPath, logFileName);
 
 			try
 			{
-				var segmentPairs = _commonService.GetSegmentPairs(_activeDocument, ExportSelectedSegments);
+				var segmentPairs = _projectFileService.GetSegmentPairs(_activeDocument, ExportSelectedSegments);
 				if (segmentPairs?.Count <= 0)
 				{
-					MessageBox.Show("No segments selected!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+					MessageBox.Show(PluginResources.Error_Message_No_Segments_Selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 					return;
 				}
 
-				var projectFiles = _commonService.GetProjectFiles(segmentPairs);
-				var segmentPairInfos = _commonService.GetSegmentPairInfos(ProjectFileInfos, segmentPairs);
-				var filesExported = ExportFiles(projectFiles, segmentPairInfos);
+				var projectFiles = _projectFileService.GetProjectFiles(segmentPairs);
+				var segmentPairInfos = _projectFileService.GetSegmentPairInfos(ProjectFileInfos, segmentPairs);
+				var exportResult = ExportFiles(projectFiles, segmentPairInfos);
+				var filePathOutput = exportResult.OutputFiles[0].FilePath;
 
-				var message = GetMessage(segmentPairs, filesExported, filesExported[0]);
-				if (filesExported.Count > 1)
+				if (exportResult.OutputFiles.Count > 1)
 				{
-					var fileDirectory = Path.GetDirectoryName(projectFiles[0].LocalFilePath);
-					var filePathOutput = _sdlxliffMerger.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), "Filtered");
+					filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, "StudioViewsFile.sdlxliff"), "Filtered");
+					_sdlxliffMerger.MergeFiles(exportResult.OutputFiles.Select(a => a.FilePath).ToList(), filePathOutput, true);
 
-					_sdlxliffMerger.MergeFiles(filesExported, filePathOutput, true);
+					var outputFile = new OutputFile
+					{
+						FilePath = filePathOutput,
+						SegmentCount = exportResult.OutputFiles.Sum(a => a.SegmentCount),
+						WordCount = exportResult.OutputFiles.Sum(a => a.WordCount)
+					};
 
-					message = GetMessage(segmentPairs, filesExported, filePathOutput);
+					exportResult.OutputFiles = new List<OutputFile> { outputFile };
 				}
 
-				MessageBox.Show(message, "Studio Views", MessageBoxButton.OK, MessageBoxImage.Information);
+				WriteFilteredLogFile(exportResult, LogFilePath);
 
+				var message = PluginResources.Message_Successfully_Completed_Filter_Operation;
+				message += Environment.NewLine + Environment.NewLine;
+				message += string.Format(PluginResources.Message_Exported_Segments_From_Files,
+					segmentPairs?.Count, exportResult.InputFiles.Count);
+				message += Environment.NewLine + Environment.NewLine;
+				message += string.Format(PluginResources.Message_Export_File, filePathOutput);
+
+				ShowMessage(true, message, LogFilePath, ExportPath);
 			}
 			catch (Exception ex)
 			{
@@ -417,65 +442,37 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			if (string.IsNullOrEmpty(ImportPath) || !File.Exists(ImportPath))
 			{
-				MessageBox.Show("File not found!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Error_Message_File_Not_Found, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
 			if (!ImportPath.EndsWith(".sdlxliff", StringComparison.InvariantCultureIgnoreCase))
 			{
-				MessageBox.Show("Expected bilingual SDLXLIFF format!", "Studio Views", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show(PluginResources.Error_Message_Expected_Bilingual_Format, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
+
+			ProcessingDateTime = DateTime.Now;
+			var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+			LogFilePath = Path.Combine(ExportPath, logFileName);
 
 			try
 			{
-				var analysisBands = _projectHelper.GetAnalysisBands(_activeDocument.Project);
+				var analysisBands = _projectService.GetAnalysisBands(_activeDocument.Project);
 				var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
+				var importResult = ImportFile(ImportPath, excludeFilterIds, analysisBands);
 
-				var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(ImportPath);
+				WriteImportLogFile(importResult, ImportPath, LogFilePath);
 
-				var importedCount = 0;
-				var ignoredCount = 0;
+				var message = PluginResources.Message_Successfully_Updated_Document;
+				message += Environment.NewLine + Environment.NewLine;
+				message += PluginResources.Message_Segments;
+				message += Environment.NewLine;
+				message += string.Format(PluginResources.Message_Tab_Updated, importResult.UpdatedSegments);
+				message += Environment.NewLine;
+				message += string.Format(PluginResources.Message_Tab_Excluded, importResult.ExcludedSegments);
+				message += Environment.NewLine + Environment.NewLine;
+				message += string.Format(PluginResources.Message_Import_File, ImportPath);
 
-				foreach (var updatedSegmentPair in updatedSegmentPairs)
-				{
-					if (updatedSegmentPair.ParagraphUnit.IsStructure || !updatedSegmentPair.ParagraphUnit.SegmentPairs.Any())
-					{
-						continue;
-					}
-
-					var segmentPair = _commonService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId, updatedSegmentPair.SegmentId);
-					if (segmentPair == null)
-					{
-						continue;
-					}
-
-					if (excludeFilterIds.Count > 0)
-					{
-						var status = segmentPair.Properties.ConfirmationLevel.ToString();
-						var match = _filterItemHelper.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, analysisBands);
-
-						if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
-							|| excludeFilterIds.Exists(a => a == status)
-							|| excludeFilterIds.Exists(a => a == match))
-						{
-							ignoredCount++;
-							continue;
-						}
-					}
-
-					segmentPair.Target.Clear();
-					foreach (var item in updatedSegmentPair.SegmentPair.Target)
-					{
-						segmentPair.Target.Add(item.Clone() as IAbstractMarkupData);
-					}
-
-					_activeDocument.UpdateSegmentPair(segmentPair);
-					_activeDocument.UpdateSegmentPairProperties(segmentPair, updatedSegmentPair.SegmentPair.Properties);
-
-					importedCount++;
-				}
-
-				MessageBox.Show(string.Format("Successfully updated the document\r\n\r\nImported: {0}\r\nIgnored: {1}\r\n\r\nInput: {2}",
-					importedCount, ignoredCount, ImportPath), "Studio Views", MessageBoxButton.OK, MessageBoxImage.Information);
+				ShowMessage(true, message, LogFilePath, Path.GetDirectoryName(importResult.FilePath));
 			}
 			catch (Exception ex)
 			{
@@ -483,31 +480,230 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
-		private List<string> ExportFiles(IEnumerable<ProjectFile> projectFiles, List<SegmentPairInfo> segmentPairInfos)
+		private void WriteImportLogFile(ImportResult importResult, string importFilePath, string logFilePath)
 		{
-			var exportFiles = new List<string>();
+			Dispatcher.CurrentDispatcher.Invoke(
+				delegate
+				{
+					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+					{
+						sr.WriteLine(PluginResources.Plugin_Name);
+						sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing + _projectFileService.GetDateTimeToString(ProcessingDateTime));
+
+						if (SelectedExcludeFilterItems.Count > 0)
+						{
+							sr.WriteLine(string.Empty);
+							var filterItems = _filterItemService.GetFilterItemsText(SelectedExcludeFilterItems.ToList());
+							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_Import_Files, 1);
+						sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number, importFilePath);
+
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_Updated_Files, importResult.UpdatedSegments > 0);
+						sr.WriteLine(PluginResources.LogFile_Label_Updated_Segments, importResult.UpdatedSegments);
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_Selected_Files, 1);
+
+						sr.WriteLine(PluginResources.LogFile_Label_File_Number_Path, 1, importResult.FilePath);
+						sr.WriteLine(PluginResources.LogFile_Label_Tab_Success + importResult.Success);
+						sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (importResult.UpdatedSegments > 0 ? "True" : "False"));
+						if (importResult.UpdatedSegments > 0)
+						{
+							sr.WriteLine(PluginResources.LogFile_Label_Tab_Backup + importResult.BackupFilePath);
+						}
+						sr.WriteLine(PluginResources.Message_Tab_Segments);
+						sr.WriteLine(PluginResources.Message_Tab_Tab_Updated, importResult.UpdatedSegments);
+						sr.WriteLine(PluginResources.Message_Tab_Tab_Excluded, importResult.ExcludedSegments);
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
+
+						sr.Flush();
+						sr.Close();
+					}
+				});
+		}
+
+		private void WriteFilteredLogFile(ExportResult exportResult, string logFilePath)
+		{
+			Dispatcher.CurrentDispatcher.Invoke(
+				delegate
+				{
+					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+					{
+						sr.WriteLine(PluginResources.Plugin_Name);
+						sr.WriteLine(PluginResources.LogFile_Title_Task_Export_Filtered);
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Tab_Label_Input_Files_Number, exportResult.InputFiles.Count);
+						var fileIndex = 0;
+						foreach (var filePath in exportResult.InputFiles)
+						{
+							fileIndex++;
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, filePath);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_Output_Files_Number, exportResult.OutputFiles.Count);
+						fileIndex = 0;
+						foreach (var file in exportResult.OutputFiles)
+						{
+							fileIndex++;
+							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, file.FilePath);
+							sr.WriteLine(PluginResources.Message_Tab_Tab_Segments_Number, file.SegmentCount);
+							if (file.WordCount > 0)
+							{
+								sr.WriteLine(PluginResources.Message_Tab_Tab_Words_Number, file.WordCount);
+							}
+
+							sr.WriteLine(string.Empty);
+						}
+
+						sr.WriteLine(string.Empty);
+						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
+
+						sr.Flush();
+						sr.Close();
+					}
+				});
+		}
+
+		private ImportResult ImportFile(string importFilePath, List<string> excludeFilterIds, List<AnalysisBand> analysisBands)
+		{
+			var filePath = GetDocumentPath(_activeDocument);
+			var importResult = new ImportResult
+			{
+				FilePath = filePath,
+				UpdatedFilePath = importFilePath,
+				BackupFilePath = _projectFileService.GetUniqueFileName(filePath, "Backup"),
+				UpdatedSegments = 0,
+				ExcludedSegments = 0
+			};
+
+			if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+			{
+				importResult.Success = false;
+				importResult.Message = PluginResources.Error_Message_Unable_To_Locate_Document_File;
+				return importResult;
+			}
+
+			_activeDocument.Project.Save();
+			File.Copy(importResult.FilePath, importResult.BackupFilePath, true);
+
+			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath);
+
+			foreach (var updatedSegmentPair in updatedSegmentPairs)
+			{
+				if (updatedSegmentPair.ParagraphUnit.IsStructure || !updatedSegmentPair.ParagraphUnit.SegmentPairs.Any())
+				{
+					continue;
+				}
+
+				var segmentPair = _projectFileService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId,
+					updatedSegmentPair.SegmentId);
+				if (segmentPair?.Target == null
+					|| IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target)
+					|| IsEmpty(updatedSegmentPair.SegmentPair.Target))
+				{
+					continue;
+				}
+
+				if (excludeFilterIds.Count > 0)
+				{
+					var status = segmentPair.Properties.ConfirmationLevel.ToString();
+					var match = _filterItemService.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
+						analysisBands);
+
+					if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
+						|| excludeFilterIds.Exists(a => a == status)
+						|| excludeFilterIds.Exists(a => a == match))
+					{
+						importResult.ExcludedSegments++;
+						continue;
+					}
+				}
+
+				segmentPair.Target.Clear();
+				foreach (var item in updatedSegmentPair.SegmentPair.Target)
+				{
+					segmentPair.Target.Add(item.Clone() as IAbstractMarkupData);
+				}
+
+				_activeDocument.UpdateSegmentPair(segmentPair);
+				_activeDocument.UpdateSegmentPairProperties(segmentPair, updatedSegmentPair.SegmentPair.Properties);
+
+				importResult.UpdatedSegments++;
+			}
+
+			return importResult;
+		}
+
+		private void ShowMessage(bool success, string message, string logFilePath, string folder)
+		{
+			var messageInfo = new MessageInfo
+			{
+				Title = PluginResources.Message_Title_Task_Result,
+				Message = message,
+				LogFilePath = logFilePath,
+				Folder = folder,
+				ShowImage = true,
+				ImageUrl = success
+					? "/Sdl.Community.StudioViews;component/Resources/information.png"
+					: "/Sdl.Community.StudioViews;component/Resources/warning.png"
+			};
+
+			var messageView = new MessageBoxView();
+			var messageViewModel = new MessageBoxViewModel(messageView, messageInfo);
+			messageView.DataContext = messageViewModel;
+
+			messageView.ShowDialog();
+		}
+
+		private static bool IsSame(ISegment segment, ISegment updatedSegment)
+		{
+			var originalTarget = segment.ToString();
+			var updatedTarget = updatedSegment.ToString();
+
+			var isSame = (originalTarget == updatedTarget) &&
+						 (segment.Properties.IsLocked == updatedSegment.Properties.IsLocked) &&
+						 (segment.Properties.ConfirmationLevel == updatedSegment.Properties.ConfirmationLevel);
+
+			return isSame;
+		}
+
+		private static bool IsEmpty(ISegment segment)
+		{
+			return segment.ToString().Trim() == string.Empty;
+		}
+
+		private ExportResult ExportFiles(IReadOnlyCollection<ProjectFile> projectFiles, List<SegmentPairInfo> segmentPairInfos)
+		{
+			var exportResult = new ExportResult
+			{
+				InputFiles = new List<string>(projectFiles.Select(a => a.LocalFilePath))
+			};
+
 			foreach (var documentFile in projectFiles)
 			{
 				var filePathInput = documentFile.LocalFilePath;
-				var filePathOutput = _sdlxliffMerger.GetUniqueFileName(Path.Combine(ExportPath, filePathInput), "Filtered");
+				var filePathInputName = Path.GetFileName(filePathInput);
+				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInputName), "Filtered");
 
-				var success = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
-				if (success)
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
+				if (outputFile != null)
 				{
-					exportFiles.Add(filePathOutput);
+					exportResult.OutputFiles.Add(outputFile);
 				}
 			}
 
-			return exportFiles;
-		}
-
-		private string GetMessage(IReadOnlyCollection<ISegmentPair> segmentPairs, IReadOnlyCollection<string> filesExported, string filePathOutput)
-		{
-			string message;
-			message = string.Format("Exported {0} segments from {1} files", segmentPairs.Count, filesExported.Count);
-			message += Environment.NewLine + Environment.NewLine;
-			message += string.Format("Output: {0}", filePathOutput);
-			return message;
+			exportResult.Success = true;
+			return exportResult;
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
@@ -530,7 +726,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_activeDocument = document;
 			if (_activeDocument != null)
 			{
-				ProjectFileInfos = _commonService.GetProjectFileInfos(_activeDocument.Files.ToList());
+				ProjectFileInfos = _projectFileService.GetProjectFileInfos(_activeDocument.Files.ToList());
 				ExportPath = Path.GetDirectoryName(GetDocumentPath(_activeDocument));
 			}
 		}

@@ -7,6 +7,7 @@
         ResizeMode="CanResizeWithGrip"
         WindowStyle="ThreeDBorderWindow"
         AllowsTransparency="False" 
+		Icon="../Resources/StudioViews_split.ico"
         WindowStartupLocation="CenterScreen"
         Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
         xmlns:behaviours="clr-namespace:Sdl.Community.StudioViews.Behaviours"
@@ -57,7 +58,7 @@
 			</Grid.RowDefinitions>
 			<Grid Grid.Row="0"></Grid>
 
-			<GroupBox Grid.Row="1" Margin="5" Padding="5" Header="Split Options">
+			<GroupBox Grid.Row="1" Margin="5" Padding="5" Header="Split options">
 				<Grid >
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
@@ -144,7 +145,7 @@
 
 					<TextBlock Grid.Column="0" 
 				           Grid.Row="0" 
-				           Text="File Name:" 
+				           Text="File name:" 
 				           VerticalAlignment="Center"
 				           Margin="0,0,5,0" 
 				           IsEnabled="False"
@@ -222,6 +223,6 @@
 			</StackPanel>
 		</Grid>
 
-		
+
 	</Grid>
 </Window>

@@ -8,7 +8,7 @@ using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.StudioViews.Services
 {
-	public class FilterItemHelper
+	public class FilterItemService
 	{
 		public enum MatchType
 		{
@@ -160,6 +160,28 @@ namespace Sdl.Community.StudioViews.Services
 			}
 
 			return filterItems;
+		}
+
+		public string GetFilterItemsText(List<FilterItem> filterItems)
+		{
+			var items = string.Empty;
+			if (!filterItems.Any())
+			{
+				return items;
+			}
+
+			foreach (var filterItem in filterItems)
+			{
+				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
+						 filterItem.Name;
+			}
+
+			if (string.IsNullOrEmpty(items))
+			{
+				items = "[none]";
+			}
+
+			return items;
 		}
 
 		private void AddMatchTypeFilters(ICollection<FilterItem> filterItems, IItemGroup filterItemGroup)

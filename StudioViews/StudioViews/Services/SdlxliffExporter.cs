@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
@@ -6,7 +7,7 @@ namespace Sdl.Community.StudioViews.Services
 {
 	public class SdlxliffExporter
 	{
-		public bool ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput)
+		public OutputFile ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
@@ -18,8 +19,17 @@ namespace Sdl.Community.StudioViews.Services
 			converter.SynchronizeDocumentProperties();
 
 			converter.Parse();
-				
-			return true;
+
+
+			var outputFile =new OutputFile
+			{
+				FilePath = filePathOutput,
+				SegmentCount = contentWriter.SegmentPairInfos.Count,
+				WordCount = contentWriter.SegmentPairInfos.Sum(a => a.SourceWordCounts.Words)
+			};
+			
+
+			return outputFile;
 		}
 	}
 }

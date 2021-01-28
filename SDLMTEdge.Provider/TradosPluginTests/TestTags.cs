@@ -1,8 +1,7 @@
-﻿using Sdl.Community.MTEdge.UnitTests;
-using Sdl.Community.Toolkit.LanguagePlatform.SegmentParser;
+﻿using Sdl.Community.MTEdge.Provider.XliffConverter.SegmentParser;
 using Sdl.LanguagePlatform.Core;
 
-namespace TradosPluginTests
+namespace Sdl.Community.MTEdge.UnitTests
 {
 	public static class TestTags
     {
