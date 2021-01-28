@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 
@@ -10,7 +11,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class AccessTokenService : INotifyPropertyChanged, IDisposable
 	{
-		public static readonly Log Log = Log.Instance;
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;
 		private DateTime _requestedAccessToken;
 		private DateTime _extendedRefreshToken;
@@ -278,7 +279,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+				Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
 
 			return null;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Desktop.IntegrationApi;
@@ -16,7 +17,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public async void Execute()
 		{
-
+			Log.Setup();
 			InitializeHttpClientSettings();
 
 			var domanService = new DomainService();
@@ -42,6 +43,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private static void RefreshAccessToken()
 		{
+			var logger = LogManager.GetCurrentClassLogger();
+
 			if (AccessTokenService.RefreshTokenExpired
 			    || AccessTokenService.RequestedAccessToken == DateTime.MinValue
 			    || string.IsNullOrEmpty(AccessTokenService.AccessToken))
@@ -49,7 +52,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				var success = AccessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (!success)
 				{
-					throw new Exception(PluginResources.TermSearchService_Error_in_requesting_access_token);
+					logger.Error(PluginResources.TermSearchService_Error_in_requesting_access_token);
 				}
 			}
 			else if (AccessTokenService.AccessTokenExpired && !AccessTokenService.AccessTokenExtended)
@@ -57,7 +60,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				var success = AccessTokenService.ExtendAccessToken();
 				if (!success)
 				{
-					throw new Exception(PluginResources.TermSearchService_Error_in_refreshing_access_token);
+					logger.Error(PluginResources.TermSearchService_Error_in_refreshing_access_token);
 				}
 			}
 		}
