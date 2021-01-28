@@ -10,7 +10,6 @@ namespace IATETerminologyProvider.Service
 {
 	public class TermTypeService
 	{
-		public static readonly Log Log = Log.Instance;
 		public static ObservableCollection<ItemsResponseModel> IateTermType { get; set; }
 
 		public async Task<ObservableCollection<ItemsResponseModel>> GetTermTypes()

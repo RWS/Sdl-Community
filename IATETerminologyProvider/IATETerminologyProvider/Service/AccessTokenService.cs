@@ -5,12 +5,13 @@ using System.Runtime.CompilerServices;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
+using NLog;
 
 namespace IATETerminologyProvider.Service
 {
 	public class AccessTokenService : INotifyPropertyChanged, IDisposable
 	{
-		public static readonly Log Log = Log.Instance;
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;
 		private DateTime _requestedAccessToken;
 		private DateTime _extendedRefreshToken;
@@ -278,7 +279,7 @@ namespace IATETerminologyProvider.Service
 			}
 			catch (Exception e)
 			{
-				Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+				Logger.Error($"{e.Message}\n{e.StackTrace}");
 			}
 
 			return null;

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Service;
+using NLog;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
@@ -16,6 +17,7 @@ namespace IATETerminologyProvider
 
 		public async void Execute()
 		{
+			Log.Setup();
 			InitializeHttpClientSettings();
 
 			var domanService = new DomainService();
@@ -41,6 +43,8 @@ namespace IATETerminologyProvider
 
 		private static void RefreshAccessToken()
 		{
+			var logger = LogManager.GetCurrentClassLogger();
+
 			if (AccessTokenService.RefreshTokenExpired
 			    || AccessTokenService.RequestedAccessToken == DateTime.MinValue
 			    || string.IsNullOrEmpty(AccessTokenService.AccessToken))
@@ -48,7 +52,7 @@ namespace IATETerminologyProvider
 				var success = AccessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (!success)
 				{
-					throw new Exception(PluginResources.TermSearchService_Error_in_requesting_access_token);
+					logger.Error(PluginResources.TermSearchService_Error_in_requesting_access_token);
 				}
 			}
 			else if (AccessTokenService.AccessTokenExpired && !AccessTokenService.AccessTokenExtended)
@@ -56,7 +60,7 @@ namespace IATETerminologyProvider
 				var success = AccessTokenService.ExtendAccessToken();
 				if (!success)
 				{
-					throw new Exception(PluginResources.TermSearchService_Error_in_refreshing_access_token);
+					logger.Error(PluginResources.TermSearchService_Error_in_refreshing_access_token);
 				}
 			}
 		}

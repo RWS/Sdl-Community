@@ -12,7 +12,6 @@ namespace IATETerminologyProvider.Service
 {
 	public class DomainService
 	{
-		public static readonly Log Log = Log.Instance;
 		public static ObservableCollection<ItemsResponseModel> Domains { get; set; }
 
 		/// <summary>

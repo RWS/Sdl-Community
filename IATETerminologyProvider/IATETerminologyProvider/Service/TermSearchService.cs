@@ -10,6 +10,7 @@ using IATETerminologyProvider.Model;
 using IATETerminologyProvider.Model.ResponseModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -17,7 +18,7 @@ namespace IATETerminologyProvider.Service
 {
 	public class TermSearchService
 	{
-		public static readonly Log Log = Log.Instance;
+		private  readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly SettingsModel _providerSettings;
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
 		private readonly TermTypeService _termTypeService;
@@ -68,15 +69,11 @@ namespace IATETerminologyProvider.Service
 			try
 			{
 				timer1.Stop();
-				var elapsed1 = timer1.Elapsed.Milliseconds;
-				var timer2 = new Stopwatch();
-				timer2.Start();
+
 				var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
 				results = MapResponseValues(httpResponseString, domainsJsonResponse);
-				timer2.Stop();
-				var elapsed2 = timer2.Elapsed.Milliseconds;
 
 				return results;
 			}
@@ -241,7 +238,7 @@ namespace IATETerminologyProvider.Service
 									}
 									catch (Exception e)
 									{
-										Log.Logger.Error($"{e.Message}\n{e.StackTrace}");
+										_logger.Error($"{e.Message}\n{e.StackTrace}");
 									}
 								}
 							}
