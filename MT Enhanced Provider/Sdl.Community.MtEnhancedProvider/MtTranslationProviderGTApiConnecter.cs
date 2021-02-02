@@ -182,7 +182,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		{
 			if (ci.Name == "zh-TW" || ci.Name == "zh-CN") { return ci.Name; } //just get the name for zh-TW which Google can process..google can also process simplified when specifying target as zh-CN but it breaks when you specify that as source??
 			if (ci.Name.Equals("nb-NO") || ci.Name.Equals("nn-NO")) return "no";
-
+			if (ci.Name.Contains("sr-Latn")) return "sr-Latn";
 			var strReturn = ci.TwoLetterISOLanguageName; //if not chinese trad or norweigian get 2 letter code
 
 			//convert tagalog and hebrew for Google
