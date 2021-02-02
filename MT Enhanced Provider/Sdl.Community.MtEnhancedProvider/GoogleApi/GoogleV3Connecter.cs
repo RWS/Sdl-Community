@@ -125,10 +125,6 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 			}
-			finally
-			{
-				//GetProjectGlossaries(_options);
-			}
 		}
 
 		private Glossary CreatetCsvGlossary(List<string> glossaryLanguages)

@@ -109,6 +109,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguges,
 				include_subdomains = "true",
+				cascade_domains = true,
 				query_operator = 0,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
