@@ -11,14 +11,15 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 	public class Xliff12PolyglotWriter : IXliffWriter
 	{
 		private const string NsPrefix = "sdlxliff";
-		private Dictionary<string, List<IComment>> Comments { get; set; }		
+		private Dictionary<string, List<IComment>> Comments { get; set; }
 
 		private bool IncludeTranslations { get; set; }
 
 		public bool WriteFile(Xliff xliff, string outputFilePath, bool includeTranslations)
-		{			
+		{
 			Comments = xliff.DocInfo.Comments;
 			IncludeTranslations = includeTranslations;
+			UpdateGenericPlaceholderIds(xliff);
 
 			var settings = new XmlWriterSettings
 			{
@@ -65,13 +66,58 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			return true;
 		}
 
+		private void UpdateGenericPlaceholderIds(Xliff xliff)
+		{
+			var lastId = 0;
+			foreach (var xliffFile in xliff.Files)
+			{
+				foreach (var transUnit in xliffFile.Body.TransUnits)
+				{
+					foreach (var segmentPair in transUnit.SegmentPairs)
+					{
+						var ids = new List<int>();
+						foreach (var element in segmentPair.Source.Elements)
+						{
+							if (element is ElementGenericPlaceholder genericPlaceholder)
+							{
+								ids.Add(++lastId);
+								genericPlaceholder.TagId = string.Format("lb{0}", lastId);
+							}
+						}
+
+						var targetLbIndex = 0;
+						foreach (var element in segmentPair.Target.Elements)
+						{
+							if (element is ElementGenericPlaceholder genericPlaceholder)
+							{
+								int id;
+								if (targetLbIndex < ids.Count)
+								{
+									id = ids[targetLbIndex];
+								}
+								else
+								{
+									ids.Add(++lastId);
+									id = lastId;
+								}
+
+								targetLbIndex++;
+
+								genericPlaceholder.TagId = string.Format("x{0}", id);
+							}
+						}
+					}
+				}
+			}
+		}
+
 		private void WriteDocInfo(Xliff xliff, XmlWriter writer)
 		{
 			writer.WriteStartElement(NsPrefix, "doc-info", null);
 			writer.WriteAttributeString("project-id", xliff.DocInfo.ProjectId);
 			writer.WriteAttributeString("document-id", xliff.DocInfo.DocumentId);
 			writer.WriteAttributeString("source", xliff.DocInfo.Source);
-			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);			
+			writer.WriteAttributeString("source-language", xliff.DocInfo.SourceLanguage);
 			writer.WriteAttributeString("target-language", xliff.DocInfo.TargetLanguage);
 			writer.WriteAttributeString("created", GetDateToString(xliff.DocInfo.Created));
 
@@ -116,12 +162,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		private void WriteSdlSegCtx(XmlWriter writer, Context context)
 		{
 			writer.WriteStartElement(NsPrefix, "cxt", null);
-			
+
 			writer.WriteAttributeString("id", context.Id);
 
 			writer.WriteEndElement(); //sdl:cxt
 		}
-
+		
 		private void WriteTransUnitPolytlot(XmlWriter writer, TransUnit transUnit)
 		{
 			foreach (var segmentPair in transUnit.SegmentPairs)
@@ -217,13 +263,14 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		private void WriteSegmentPolyglot(XmlWriter writer, SegmentPair segmentPair, bool isSource)
 		{
 			writer.WriteStartElement(isSource ? "source" : "target");
-	
+			//writer.WriteAttributeString("xml", "space", null, "preserve");
+
 			var elements = isSource ? segmentPair.Source.Elements : segmentPair.Target.Elements;
 
 			foreach (var element in elements)
 			{
 				WriteSegment(writer, element);
-			}	
+			}
 
 			writer.WriteEndElement(); // source or target
 		}
@@ -245,7 +292,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 						if (!string.IsNullOrEmpty(tag.DisplayText))
 						{
 							writer.WriteAttributeString("equiv-text", tag.DisplayText);
-						}						
+						}
 						writer.WriteString(tag.TagContent);
 						writer.WriteEndElement();
 						break;
@@ -271,6 +318,18 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 					writer.WriteAttributeString("equiv-text", placeholder.DisplayText);
 				}
 				writer.WriteString(placeholder.TagContent);
+				writer.WriteEndElement();
+			}
+
+			if (element is ElementGenericPlaceholder genericPlaceholder)
+			{
+				writer.WriteStartElement("x");
+				writer.WriteAttributeString("id", genericPlaceholder.TagId);
+				writer.WriteAttributeString("ctype", genericPlaceholder.CType);
+				if (!string.IsNullOrEmpty(genericPlaceholder.TextEquivalent))
+				{
+					writer.WriteAttributeString("equiv-text", genericPlaceholder.TextEquivalent);
+				}
 				writer.WriteEndElement();
 			}
 
@@ -302,7 +361,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 						break;
 				}
 			}
-		}		
+		}
 
 		private void WriterFileHeader(XmlWriter writer, File xliffFile)
 		{
@@ -318,7 +377,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 				writer.WriteEndElement(); // skl
 			}
-
+			
 			WriterContextDefinitions(writer, xliffFile);
 
 			writer.WriteEndElement(); // header
@@ -365,7 +424,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 			return value;
 		}
-		
+
 		private int GetPriority(Severity severity)
 		{
 			switch (severity)

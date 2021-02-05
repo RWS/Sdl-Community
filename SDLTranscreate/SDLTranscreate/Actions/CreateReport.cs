@@ -10,6 +10,7 @@ using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Transcreate.Actions
 {
@@ -88,7 +89,7 @@ namespace Sdl.Community.Transcreate.Actions
 			_imageService = new ImageService();
 			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
-			_controllers = new Controllers();
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
 
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;

@@ -219,8 +219,8 @@
   <data name="FolderDialog_Title" xml:space="preserve">
     <value>Please select a folder</value>
   </data>
-  <data name="JobProcess_Export" xml:space="preserve">
-    <value>Export</value>
+  <data name="JobProcess_CreateBackTranslations" xml:space="preserve">
+    <value>Create Back-Translations</value>
   </data>
   <data name="JobProcess_Finalize" xml:space="preserve">
     <value>Finalize</value>
@@ -647,6 +647,6 @@
     <value>Overwrite existing Back-Translations: {0}</value>
   </data>
   <data name="Label_BackTranslationsCreatedOn" xml:space="preserve">
-	  <value>Back-Translations created on: {0}</value>
+    <value>Back-Translations created on: {0}</value>
   </data>
 </root>

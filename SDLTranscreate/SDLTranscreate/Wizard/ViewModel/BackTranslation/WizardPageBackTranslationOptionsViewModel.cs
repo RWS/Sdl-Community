@@ -18,7 +18,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
 		{
 			_dialogService = dialogService;
 
-			CopySourceToTargetForEmptyTranslationsEnabled = true;
+			CopySourceToTargetForEmptyTranslationsEnabled = false;
 			CopySourceToTargetForEmptyTranslations = taskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations;
 
 			OverwriteExistingBackTranslationsEnabled = true;

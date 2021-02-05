@@ -13,24 +13,29 @@ using Sdl.Community.Transcreate.Model;
 namespace Sdl.Community.Transcreate.Wizard.ViewModel
 {
 	public class WizardViewModel : BaseModel, IDisposable
-	{		
+	{
 		private Window _window;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
-		private WizardPageViewModelBase _currentPage;		
+		private WizardPageViewModelBase _currentPage;
 		private RelayCommand _moveNextCommand;
 		private RelayCommand _moveBackCommand;
 		private RelayCommand _finishCommand;
 		private RelayCommand _cancelCommand;
 
-		public WizardViewModel(Window window, ObservableCollection<WizardPageViewModelBase> pages, 
+		public WizardViewModel(Window window, ObservableCollection<WizardPageViewModelBase> pages,
 			TaskContext taskContext, Enumerators.Action action)
 		{
-			SetWindow(window);		
+			SetWindow(window);
 			Pages = pages;
 			Action = action;
 			TaskContext = taskContext;
 			UpdateWizardHeader(_window.ActualWidth);
-			SetCurrentPage(Pages[0]);
+			
+			if (Pages.Count > 0)
+			{
+				SetCurrentPage(Pages[0]);
+			}
+
 		}
 
 		public event EventHandler RequestClose;
@@ -129,7 +134,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 				_currentPage = value;
 
 				var actionText = GetActionText();
-				WindowTitle = string.Format(PluginResources.Title_WizardPage, 
+				WindowTitle = string.Format(PluginResources.Title_WizardPage,
 					PluginResources.TranscreateManager_Name, actionText, CurrentPage.DisplayName);
 
 				// move focus to the page in the wizard early
@@ -144,7 +149,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 				OnPropertyChanged(nameof(CurrentPage));
 				OnPropertyChanged(nameof(IsOnLastPage));
 				OnPropertyChanged(nameof(WindowTitle));
-				OnPropertyChanged(nameof(CompletedSteps));			
+				OnPropertyChanged(nameof(CompletedSteps));
 			}
 		}
 
@@ -189,7 +194,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 
 			return actionText;
 		}
-		
+
 		private void AddEventhandlers(ObservableCollection<WizardPageViewModelBase> pages)
 		{
 			foreach (var viewModelBase in pages)
@@ -409,7 +414,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 				SetCurrentPage(Pages[CurrentPageIndex - 1]);
 			}
 		}
-		
+
 		private void OnRequestCancel()
 		{
 			RequestCancel?.Invoke(this, EventArgs.Empty);
@@ -418,7 +423,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel
 		private void OnRequestClose()
 		{
 			RequestClose?.Invoke(this, EventArgs.Empty);
-		}		
+		}
 
 		public void Dispose()
 		{

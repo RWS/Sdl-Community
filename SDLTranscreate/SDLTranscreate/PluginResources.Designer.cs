@@ -192,6 +192,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translations.
+        /// </summary>
+        internal static string JobProcess_CreateBackTranslations {
+            get {
+                return ResourceManager.GetString("JobProcess_CreateBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Transcreate Project.
         /// </summary>
         internal static string JobProcess_CreateTranscreateProject {
@@ -206,15 +215,6 @@ namespace Sdl.Community.Transcreate {
         internal static string JobProcess_Done {
             get {
                 return ResourceManager.GetString("JobProcess_Done", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string JobProcess_Export {
-            get {
-                return ResourceManager.GetString("JobProcess_Export", resourceCulture);
             }
         }
         

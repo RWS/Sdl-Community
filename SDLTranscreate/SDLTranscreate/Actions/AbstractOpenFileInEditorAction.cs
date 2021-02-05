@@ -16,7 +16,9 @@ namespace Sdl.Community.Transcreate.Actions
 		internal void Setup()
 		{
 			Enabled = false;
-			_controllers = new Controllers();
+			
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
+			
 			SetEnabled(_controllers.TranscreateController.GetSelectedProjectFiles());
 
 			if (_controllers.ProjectsController != null)

@@ -54,11 +54,6 @@
 				          Content="Overwrite existing Back-Translations" 
 				          IsEnabled="{Binding OverwriteExistingBackTranslationsEnabled}"
 				          IsChecked="{Binding OverwriteExistingBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-
-			
-				
 			</Grid>
 		</GroupBox>
 	</Grid>

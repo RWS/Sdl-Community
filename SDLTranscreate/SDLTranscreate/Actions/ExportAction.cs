@@ -10,6 +10,8 @@ using Sdl.Community.Transcreate.Model;
 using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.Transcreate.Actions
 {
@@ -61,7 +63,7 @@ namespace Sdl.Community.Transcreate.Actions
 				var projects = _controllers.TranscreateController.GetProjects();
 				var parentProject = projects.FirstOrDefault(project => project.BackTranslationProjects.Exists(a => a.Id == selectedProject.Id));
 
-				_controllers.TranscreateController.UpdateBackTranslationProjectData(parentProject, taskContext);
+				_controllers.TranscreateController.UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
 			}
 			else
 			{
@@ -76,14 +78,15 @@ namespace Sdl.Community.Transcreate.Actions
 
 		public override void Initialize()
 		{
-			_controllers = new Controllers();
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			SetupTranscreateController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
+			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController,
+				_controllers.ProjectsController, _customerProvider);
 
 			Enabled = false;
 		}

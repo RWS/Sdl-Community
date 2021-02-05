@@ -13,6 +13,6 @@ namespace Sdl.Community.Transcreate.Interfaces
 
 		void UpdateProjectData(TaskContext taskContext);
 
-		void UpdateBackTranslationProjectData(IProject parentProject, TaskContext taskContext);
+		void UpdateBackTranslationProjectData(string parentProjectId, TaskContext taskContext);
 	}
 }

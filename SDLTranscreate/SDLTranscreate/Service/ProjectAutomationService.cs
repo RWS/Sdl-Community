@@ -6,8 +6,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
+using Newtonsoft.Json;
 using Sdl.Community.Transcreate.Common;
 using Sdl.Community.Transcreate.Model;
+using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
@@ -183,8 +185,9 @@ namespace Sdl.Community.Transcreate.Service
 			return newProject;
 		}
 
-		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string targetLanguage, string iconPath,
-			List<string> projectFiles, string projectNameSuffix)
+		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string localProjectFolder,
+			string targetLanguage, string iconPath,
+			List<SourceFile> sourceFiles, string projectNameSuffix)
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
@@ -194,8 +197,6 @@ namespace Sdl.Community.Transcreate.Service
 			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
-
-			var localProjectFolder = Path.Combine(projectInfo.LocalProjectFolder, "BackProjects", targetLanguage);
 
 			var newSourceLanguage = projectInfo.TargetLanguages.FirstOrDefault(a =>
 				string.Compare(a.CultureInfo.Name, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
@@ -219,15 +220,17 @@ namespace Sdl.Community.Transcreate.Service
 			};
 
 			var newProject = new FileBasedProject(newProjectInfo, projectReference);
-			foreach (var contextProjectFile in projectFiles)
+			foreach (var sourceFile in sourceFiles)
 			{
-				if (!string.IsNullOrEmpty(contextProjectFile) &&
-					File.Exists(contextProjectFile))
+				if (!string.IsNullOrEmpty(sourceFile.FilePath) &&
+					File.Exists(sourceFile.FilePath))
 				{
-					newProject.AddFiles(new[] { contextProjectFile }, string.Empty);
+					newProject.AddFiles(new[] { sourceFile.FilePath }, sourceFile.FolderPathInProject);
 				}
 			}
 			newProject.Save();
+
+			UpdateProjectSettingsBundle(newProject);
 
 			// Remove any TMs that don't correspond to the language directions of the project
 			UpdateTmConfiguration(newProject);
@@ -248,6 +251,22 @@ namespace Sdl.Community.Transcreate.Service
 
 			newProject.Save();
 			return newProject;
+		}
+
+		private void UpdateProjectSettingsBundle(FileBasedProject project)
+		{
+			var settingsBundle = project.GetSettings();
+			var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
+			var projectFiles = new List<SDLTranscreateProjectFile>();
+			sdlTranscreateProject.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles);
+			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
+
+			var sdlBackTranslateProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+			var backProjects = new List<SDLTranscreateBackProject>();
+			sdlBackTranslateProjects.BackProjectsJson.Value = JsonConvert.SerializeObject(backProjects);
+			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
+
+			project.Save();
 		}
 
 		public Interfaces.IProject GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)
@@ -277,6 +296,7 @@ namespace Sdl.Community.Transcreate.Service
 			var existingProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 				? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out _)
 				: _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+
 			if (existingProject != null)
 			{
 				foreach (var projectFile in existingProject.ProjectFiles)
@@ -290,6 +310,11 @@ namespace Sdl.Community.Transcreate.Service
 						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.FileId.ToString());
 						project.ProjectFiles.Add(clonedProjectFile);
 					}
+				}
+
+				foreach (var existingProjectBackTranslationProject in existingProject.BackTranslationProjects)
+				{
+					project.BackTranslationProjects.Add(existingProjectBackTranslationProject.Clone() as BackTranslationProject);
 				}
 			}
 			else

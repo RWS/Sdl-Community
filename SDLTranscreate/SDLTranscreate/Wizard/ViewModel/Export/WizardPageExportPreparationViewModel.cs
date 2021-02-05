@@ -124,7 +124,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				//},
 				new JobProcess
 				{
-					Name = PluginResources.JobProcess_Export
+					Name = PluginResources.JobProcess_CreateBackTranslations
 				},
 				new JobProcess
 				{
@@ -153,7 +153,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 				if (success)
 				{
-					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_CreateBackTranslations);
 					if (job != null)
 					{
 						success = await Export(job);

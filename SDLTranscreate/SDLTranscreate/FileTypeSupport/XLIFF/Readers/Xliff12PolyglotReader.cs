@@ -83,7 +83,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 			xliff.DocInfo.Comments = Comments;
 
 			UpdateTransUnitContextInfo(xliff);
-
+			
 			return xliff;
 		}
 
@@ -429,9 +429,9 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						else if (string.Compare(xmlReader.Name, "trans-unit", StringComparison.OrdinalIgnoreCase) == 0)
-						{							
+						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
-							transUnit.SegmentPairs.Add(ReadTransUnit(xmlReaderSub));							
+							transUnit.SegmentPairs.Add(ReadTransUnit(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, NsPrefix + ":seg-cxts", StringComparison.OrdinalIgnoreCase) == 0)
@@ -439,11 +439,11 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							contexts = ReadTransUnitContexts(xmlReaderSub);
 							xmlReaderSub.Close();
-						}						
+						}
 						break;
 				}
 			}
-
+			
 			transUnit.Contexts = contexts;
 
 			return transUnit;
@@ -516,7 +516,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 		}
 
 		private SegmentPair ReadTransUnit(XmlReader xmlReader)
-		{			
+		{
 			var segmentPair = new SegmentPair(_segmentBuilder);
 
 			var index = 0;
@@ -594,7 +594,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 						break;
 				}
 			}
-			
+
 			return segmentPair;
 		}
 
@@ -733,6 +733,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							segment.Elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
@@ -814,6 +820,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							segment.Elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
@@ -985,7 +997,6 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 							{
 								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
 								{
-									// for polyglot support, the segment id is represented by the trans-unit id
 									placeholder.TagId = xmlReader.Value;
 								}
 								if (string.Compare(xmlReader.Name, "equiv-text", StringComparison.OrdinalIgnoreCase) == 0)
@@ -1006,6 +1017,42 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 						break;
 					case XmlNodeType.EntityReference:
 						placeholder.TagContent += xmlReader.Name;
+						break;
+				}
+			}
+
+			return placeholder;
+		}
+
+		private ElementGenericPlaceholder ReadElementGenericPlaceholder(XmlReader xmlReader)
+		{
+			var placeholder = new ElementGenericPlaceholder();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.TagId = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "equiv-text", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.TextEquivalent = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "ctype", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.CType = xmlReader.Value;
+								}
+							}
+						}
 						break;
 				}
 			}
@@ -1062,6 +1109,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
 							elements.Add(ReadElementPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
