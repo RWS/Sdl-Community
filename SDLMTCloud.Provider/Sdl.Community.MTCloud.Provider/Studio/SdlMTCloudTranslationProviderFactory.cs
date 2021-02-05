@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Net.Http;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using HttpClient = Sdl.Community.MTCloud.Provider.Service.HttpClient;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -14,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
-				StudioInstance.GetLanguageCloudIdentityApi());
+				StudioInstance.GetLanguageCloudIdentityApi(), MTCloudApplicationInitializer.Client);
 
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
@@ -26,7 +29,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			connectionService.SaveCredential(credentialStore);
 
 			var editorController = StudioInstance.GetEditorController();
-			var translationService = new TranslationService(connectionService);
+
+			var translationService = new TranslationService(connectionService, MTCloudApplicationInitializer.Client);
 			var languageProvider = new LanguageProvider();
 			var projectsController = StudioInstance.GetProjectsController();
 

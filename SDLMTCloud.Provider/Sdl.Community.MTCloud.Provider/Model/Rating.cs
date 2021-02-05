@@ -7,5 +7,11 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public int Score { get; set; }
 		// Corresponds to the options (checkboxes) set on the UI
 		public List<string> Comments { get; set; }
+
+		public void Empty()
+		{
+			Score = 0;
+			Comments = new List<string>();
+		}
 	}
 }
