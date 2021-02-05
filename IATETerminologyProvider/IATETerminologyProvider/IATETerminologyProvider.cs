@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
@@ -19,13 +24,16 @@ namespace Sdl.Community.IATETerminologyProvider
 		private SettingsModel _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private ProjectsController _projectsController;		
+		private ProjectsController _projectsController;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private ICacheService _cacheService;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public IATETerminologyProvider(SettingsModel providerSettings)
 		{
-			UpdateSettings(providerSettings);			
+			UpdateSettings(providerSettings);
+			InitializeDbConnection();
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -56,8 +64,26 @@ namespace Sdl.Community.IATETerminologyProvider
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
 			_entryModels.Clear();
+			var bodyModel = GetApiRequestBodyValues(source, target, text);
+			var modelString = JsonConvert.SerializeObject(bodyModel);
 
-			var results = _searchService.GetTerms(text, source, target, maxResultsCount);
+			var cachedResults =_cacheService.GetCachedResults(text, target.Name, modelString);
+			if (cachedResults != null && cachedResults.Count > 0)
+			{
+				var test = new List<ISearchResult>();
+				foreach (var cache in cachedResults)
+				{
+					var a = (ISearchResult) cache;
+					test.Add(a);
+				}
+				CreateEntryTerms(test, source, GetLanguages());
+
+				SuscribeToEntriesChangedEvent(text, source, target);
+				//return cachedResults;
+				return new List<ISearchResult>(test);
+			}
+
+			var results = _searchService.GetTerms(text, source, target, maxResultsCount, modelString);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -65,8 +91,31 @@ namespace Sdl.Community.IATETerminologyProvider
 				results = RemoveDuplicateTerms(termGroups, source, target);
 				results = MaxSearchResults(results, maxResultsCount);
 				CreateEntryTerms(results, source, GetLanguages());
+
+				var test = new List<SearchResultModel>();
+				foreach (var result in results)
+				{
+					var res = (SearchResultModel)result;
+					test.Add(res);
+				}
+				// add search to catche db
+				var searchResults = new SearchCache
+				{
+					QueryString = modelString,
+					SourceText = text,
+					TargetLanguageName = target.Name,
+					SearchResults = new List<SearchResultModel>(test) 
+				};
+				_cacheService.AddSearchResults(searchResults);
 			}
 
+			SuscribeToEntriesChangedEvent(text, source, target);
+
+			return results;
+		}
+
+		private void SuscribeToEntriesChangedEvent(string text, ILanguage source, ILanguage target)
+		{
 			if (IsActiveSegmentText(text, source))
 			{
 				OnTermEntriesChanged(new TermEntriesChangedEventArgs
@@ -76,8 +125,6 @@ namespace Sdl.Community.IATETerminologyProvider
 					TargetLanguage = new Language(target.Locale.Name)
 				});
 			}
-
-			return results;
 		}
 
 		public void UpdateSettings(SettingsModel providerSettings)
@@ -87,6 +134,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			_searchService = new TermSearchService(_providerSettings);
 
 			InitializeEditorController();
+			InitializeDbConnection();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -167,6 +215,93 @@ namespace Sdl.Community.IATETerminologyProvider
 				case 3: return "Preferred";
 				default: return ""; // TODO: confirm default value
 			}
+		}
+
+		private object GetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
+		{
+			var targetLanguges = new List<string>();
+			var filteredDomains = new List<string>();
+			var filteredTermTypes = new List<int>();
+
+			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
+			if (_providerSettings != null)
+			{
+				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
+				filteredDomains.AddRange(domains);
+
+				if (_providerSettings.SearchInSubdomains)
+				{
+					IncludeSubdomainsId(filteredDomains);
+				}
+
+				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
+				filteredTermTypes.AddRange(termTypes);
+			}
+
+			var bodyModel = new
+			{
+				query = text,
+				source = source.Locale.TwoLetterISOLanguageName,
+				targets = targetLanguges,
+				include_subdomains = "true",
+				cascade_domains = true,
+				query_operator = 0,
+				filter_by_domains = filteredDomains,
+				search_in_term_types = filteredTermTypes
+			};
+
+			return bodyModel;
+		}
+
+		private void InitializeDbConnection()
+		{
+			var projectName = GetCurrentProjectName();
+			if (string.IsNullOrEmpty(projectName)) return;
+			var dbContextService = new DatabaseContextService(projectName);
+			_cacheService = new CacheService(dbContextService);
+		}
+		/// <summary>
+		/// User can change the settings of the provider or add the provider from any controller
+		/// If non of the existing controllers we'll try the Files controller
+		/// </summary>
+		/// <returns>Active project name</returns>
+		private string GetCurrentProjectName()
+		{
+			var editorActiveProject = _editorController?.ActiveDocument?.Project?.GetProjectInfo();
+			if (editorActiveProject!=null)
+			{
+				return editorActiveProject.Name;
+			}
+
+			var projectsControllerActiveProj = _projectsController?.CurrentProject?.GetProjectInfo();
+			if (projectsControllerActiveProj !=null)
+			{
+				return projectsControllerActiveProj.Name;
+			}
+			
+
+			var fileController = SdlTradosStudio.Application.GetController<FilesController>();
+			var filesControllerProject = fileController.CurrentProject?.GetProjectInfo();
+			if (filesControllerProject != null)
+			{
+				return filesControllerProject.Name;
+			}
+
+			_logger.Error("Current project name could not be obtained");
+			return string.Empty;
+		}
+
+		//TODO: Remove this method after IATE releases the new version of the API (we'll not need it anymore)
+		private void IncludeSubdomainsId(List<string> filteredDomainsIds)
+		{
+			var subdomainsIds = new List<string>();
+			var correspondingSubdomains =
+				_providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
+			foreach (var subdomainIds in correspondingSubdomains)
+			{
+				subdomainsIds.AddRange(subdomainIds);
+			}
+			filteredDomainsIds.AddRange(subdomainsIds);
 		}
 
 		public override void Dispose()
@@ -371,7 +506,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			foreach (var termResult in termsResult)
 			{
-				var sourceTerms = termResult.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
+				var sourceTerms = termResult.Results
+					.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{

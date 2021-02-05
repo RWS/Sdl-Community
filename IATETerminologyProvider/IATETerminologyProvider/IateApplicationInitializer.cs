@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Caching;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
@@ -18,6 +20,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		public async void Execute()
 		{
 			Log.Setup();
+
 			InitializeHttpClientSettings();
 
 			var domanService = new DomainService();
@@ -37,8 +40,9 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void InitializeHttpClientSettings()
 		{
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 			Utils.AddDefaultParameters(Clinet);
-			SetAccessToken();
+			//SetAccessToken();
 		}
 
 		private static void RefreshAccessToken()

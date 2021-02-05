@@ -19,10 +19,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
 				"IATEProviderLogs");
 
-			if (!Directory.Exists(logDirectoryPath))
-			{
-				Directory.CreateDirectory(logDirectoryPath);
-			}
+			Directory.CreateDirectory(logDirectoryPath);
 
 			var target = new FileTarget
 			{
