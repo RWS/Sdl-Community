@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Interop;
-using Sdl.Community.Transcreate.ViewModel;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.View
+namespace Trados.Transcreate.View
 {	
 	public partial class ReportWindow : Window
 	{

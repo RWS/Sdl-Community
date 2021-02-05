@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Interop;
 
-namespace Sdl.Community.Transcreate.Wizard.View
+namespace Trados.Transcreate.Wizard.View
 {	
 	public partial class WizardWindow : Window
 	{		

@@ -8,23 +8,23 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service.ProgressDialog;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.Reports.Viewer.API.Model;
-using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
-using ConfirmationStatistics = Sdl.Community.Transcreate.Model.ConfirmationStatistics;
-using File = Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model.File;
-using PathInfo = Sdl.Community.Transcreate.Common.PathInfo;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service.ProgressDialog;
+using AnalysisBand = Trados.Transcreate.Model.AnalysisBand;
+using ConfirmationStatistics = Trados.Transcreate.Model.ConfirmationStatistics;
+using File = Trados.Transcreate.FileTypeSupport.XLIFF.Model.File;
+using PathInfo = Trados.Transcreate.Common.PathInfo;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class ReportService
 	{
@@ -303,7 +303,7 @@ namespace Sdl.Community.Transcreate.Service
 		public string GetReportTemplatePath(string name)
 		{
 			var filePath = Path.Combine(_pathInfo.SettingsFolderPath, name);
-			var resourceName = "Sdl.Community.Transcreate.Resources." + name;
+			var resourceName = "Trados.Transcreate.Resources." + name;
 
 			WriteResourceToFile(resourceName, filePath);
 

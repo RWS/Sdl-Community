@@ -5,15 +5,15 @@ using System.IO;
 using System.Linq;
 using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Versioning;
-using File = Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model.File;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Model;
+using File = Trados.Transcreate.FileTypeSupport.XLIFF.Model.File;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
+namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	internal class XliffContentReader : AbstractBilingualContentProcessor
 	{
@@ -426,10 +426,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				}
 
 				var productName = GetProductName();
-				var pathInfo = new Toolkit.LanguagePlatform.Models.PathInfo(productName);
+				var pathInfo = new Sdl.Community.Toolkit.LanguagePlatform.Models.PathInfo(productName);
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
+					new Sdl.Community.Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
 
 				return _segmentPairProcessor;
 			}

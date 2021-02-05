@@ -1,6 +1,6 @@
 ﻿using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class Controllers
 	{

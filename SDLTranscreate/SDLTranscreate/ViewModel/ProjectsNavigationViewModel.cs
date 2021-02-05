@@ -5,16 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Actions;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Actions;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.CustomEventArgs;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Model.ProjectSettings;
 
-namespace Sdl.Community.Transcreate.ViewModel
+namespace Trados.Transcreate.ViewModel
 {
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{

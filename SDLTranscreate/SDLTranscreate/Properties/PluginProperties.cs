@@ -1,3 +1,3 @@
 ﻿using Sdl.Core.PluginFramework;
 
-[assembly: Plugin("SDL Transcreate Plugin")]
+[assembly: Plugin("Trados Transcreate Plugin")]

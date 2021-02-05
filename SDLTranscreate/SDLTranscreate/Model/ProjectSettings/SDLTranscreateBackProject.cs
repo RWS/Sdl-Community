@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sdl.Community.Transcreate.Model.ProjectSettings
+namespace Trados.Transcreate.Model.ProjectSettings
 {
 	public class SDLTranscreateBackProject
 	{

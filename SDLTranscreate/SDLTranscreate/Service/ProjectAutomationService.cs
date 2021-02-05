@@ -7,18 +7,18 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Model.ProjectSettings;
+using AnalysisBand = Trados.Transcreate.Model.AnalysisBand;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class ProjectAutomationService
 	{
@@ -461,7 +461,7 @@ namespace Sdl.Community.Transcreate.Service
 				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 
-		private List<Guid> GetProjectFileGuids(ProjectAutomation.Core.ProjectFile[] projectFiles)
+		private List<Guid> GetProjectFileGuids(Sdl.ProjectAutomation.Core.ProjectFile[] projectFiles)
 		{
 			var fileGuids = new List<Guid>();
 			foreach (var projectFile in projectFiles)
@@ -552,7 +552,7 @@ namespace Sdl.Community.Transcreate.Service
 			}
 		}
 
-		private ProjectFile GetProjectFile(Interfaces.IProject project, ProjectAutomation.Core.ProjectFile projectFile,
+		private ProjectFile GetProjectFile(Interfaces.IProject project, Sdl.ProjectAutomation.Core.ProjectFile projectFile,
 			IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile

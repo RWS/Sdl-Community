@@ -1,23 +1,22 @@
-﻿<UserControl x:Class="Sdl.Community.Transcreate.Wizard.View.BackTranslation.WizardPageBackTranslationPreparationView"
+﻿<UserControl x:Class="Trados.Transcreate.Wizard.View.BackTranslation.WizardPageBackTranslationPreparationView"
              x:Name="PreparationViewUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:model="clr-namespace:Sdl.Community.Transcreate.Model"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation"
+             xmlns:backTranslation="clr-namespace:Trados.Transcreate.Wizard.ViewModel.BackTranslation"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModel:WizardPageBackTranslationPreparationViewModel}">
+             d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance backTranslation:WizardPageBackTranslationPreparationViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>

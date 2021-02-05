@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Transcreate.Common;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.Model.ProjectSettings
+namespace Trados.Transcreate.Model.ProjectSettings
 {
 	public class SDLTranscreateProjectFile
 	{

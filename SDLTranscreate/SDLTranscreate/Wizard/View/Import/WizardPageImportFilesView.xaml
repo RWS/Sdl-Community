@@ -1,28 +1,27 @@
-﻿<UserControl x:Class="Sdl.Community.Transcreate.Wizard.View.Import.WizardPageImportFilesView"
+﻿<UserControl x:Class="Trados.Transcreate.Wizard.View.Import.WizardPageImportFilesView"
 			 x:Name="WizardPageImportFilesViewUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             xmlns:controls="clr-namespace:Sdl.Community.Transcreate.Controls"
-             xmlns:model="clr-namespace:Sdl.Community.Transcreate.Model"
-             xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
-             xmlns:converters="clr-namespace:Sdl.Community.Transcreate.Converters"
-             xmlns:import="clr-namespace:Sdl.Community.Transcreate.Wizard.ViewModel.Import"
-             d:DataContext="{d:DesignInstance import:WizardPageImportFilesViewModel}"
+			 xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
+			 xmlns:converters="clr-namespace:Trados.Transcreate.Converters"
+			 xmlns:controls="clr-namespace:Trados.Transcreate.Controls"
+			 xmlns:import="clr-namespace:Trados.Transcreate.Wizard.ViewModel.Import"
+			 d:DataContext="{d:DesignInstance import:WizardPageImportFilesViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="180" d:DesignWidth="650">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageSourceConverter"/>

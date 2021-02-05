@@ -1,10 +1,10 @@
 ﻿using System.Windows.Forms;
-using Sdl.Community.Transcreate.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	[ViewPart(
 		Id = "TranscreateManager_ProjectFileActivity_ViewPart",

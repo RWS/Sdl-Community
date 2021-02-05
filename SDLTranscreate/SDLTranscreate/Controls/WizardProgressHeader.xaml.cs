@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	public partial class WizardProgressHeader : UserControl
 	{

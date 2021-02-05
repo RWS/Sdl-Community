@@ -5,15 +5,15 @@ using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.Versioning;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Model;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Visitors;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Writers;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Readers
 {
 	internal class ContentReader : AbstractBilingualContentProcessor
 	{
@@ -273,10 +273,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
 
 
 				var productName = GetProductName();
-				var pathInfo = new Toolkit.LanguagePlatform.Models.PathInfo(productName);
+				var pathInfo = new Sdl.Community.Toolkit.LanguagePlatform.Models.PathInfo(productName);
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
+					new Sdl.Community.Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
 
 				return _segmentPairProcessor;
 			}

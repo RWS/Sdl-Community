@@ -11,16 +11,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.MSOffice;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Visitors;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Wizard.View;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
+namespace Trados.Transcreate.Wizard.ViewModel.Import
 {
 	public class WizardPageImportPreparationViewModel : WizardPageViewModelBase, IDisposable
 	{

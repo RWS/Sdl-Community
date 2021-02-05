@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using Sdl.Community.Transcreate.Service;
+using Trados.Transcreate.Service;
 
-namespace Sdl.Community.Transcreate.Converters
+namespace Trados.Transcreate.Converters
 {
 	public class CultureInfoNameToImageConverter : IValueConverter
 	{

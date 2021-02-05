@@ -1,7 +1,7 @@
 ﻿using System;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.ViewModel
+namespace Trados.Transcreate.ViewModel
 {
 	public class ProjectPropertiesViewModel : BaseModel, IDisposable
 	{

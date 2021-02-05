@@ -5,12 +5,12 @@ using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Model;
+using Trados.Transcreate.Model;
 using Comment = DocumentFormat.OpenXml.Wordprocessing.Comment;
 
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Readers
 {
 	internal class WordReader
 	{

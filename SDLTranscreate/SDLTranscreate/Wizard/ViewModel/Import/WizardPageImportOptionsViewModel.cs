@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
+namespace Trados.Transcreate.Wizard.ViewModel.Import
 {
 	public class WizardPageImportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{

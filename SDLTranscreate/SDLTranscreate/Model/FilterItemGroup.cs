@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Sdl.MultiSelectComboBox.API;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class FilterItemGroup: IItemGroup, INotifyPropertyChanged
 	{

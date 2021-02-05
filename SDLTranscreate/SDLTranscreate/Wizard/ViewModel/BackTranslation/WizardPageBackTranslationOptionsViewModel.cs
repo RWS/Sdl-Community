@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
+namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 {
 	public class WizardPageBackTranslationOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{

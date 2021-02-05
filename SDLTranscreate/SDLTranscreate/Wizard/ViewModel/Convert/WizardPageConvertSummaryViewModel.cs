@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
+namespace Trados.Transcreate.Wizard.ViewModel.Convert
 {
 	public class WizardPageConvertSummaryViewModel : WizardPageViewModelBase
 	{

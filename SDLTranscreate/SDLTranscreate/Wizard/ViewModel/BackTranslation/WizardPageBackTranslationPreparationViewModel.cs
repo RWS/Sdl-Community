@@ -12,25 +12,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Model.ProjectSettings;
-using Sdl.Community.Transcreate.Service;
-using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Writers;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Model.ProjectSettings;
+using Trados.Transcreate.Service;
+using Trados.Transcreate.Wizard.View;
 using File = System.IO.File;
 using IProject = Sdl.ProjectAutomation.Core.IProject;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 using Task = System.Threading.Tasks.Task;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
+namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 {
 	public class WizardPageBackTranslationPreparationViewModel : WizardPageViewModelBase
 	{

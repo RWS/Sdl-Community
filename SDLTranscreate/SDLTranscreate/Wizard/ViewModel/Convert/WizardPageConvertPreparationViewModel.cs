@@ -10,22 +10,22 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service;
-using Sdl.Community.Transcreate.Wizard.View;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Writers;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service;
+using Trados.Transcreate.Wizard.View;
 using Button = System.Windows.Controls.Button;
 using File = System.IO.File;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 using Task = System.Threading.Tasks.Task;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
+namespace Trados.Transcreate.Wizard.ViewModel.Convert
 {
 	public class WizardPageConvertPreparationViewModel : WizardPageViewModelBase
 	{

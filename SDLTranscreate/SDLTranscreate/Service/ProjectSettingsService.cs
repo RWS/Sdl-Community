@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class ProjectSettingsService
 	{

@@ -8,13 +8,13 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DocumentFormat.OpenXml.Packaging;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
 using Sdl.Versioning;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
+namespace Trados.Transcreate.Wizard.ViewModel.Import
 {
 	public class WizardPageImportFilesViewModel : WizardPageViewModelBase, IDisposable
 	{

@@ -163,7 +163,7 @@
     <value>Depending on the settings you choose during import, changes made before importing translations may not be retained and could cause the import to fail.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL Transcreate</value>
+    <value>Trados Transcreate</value>
   </data>
   <data name="StatusLabel_Files_0_Selected_1" xml:space="preserve">
     <value>Files: {0}, Selected: {1}</value>
@@ -187,7 +187,7 @@
     <value>Actions</value>
   </data>
   <data name="TranscreateManager_Description" xml:space="preserve">
-    <value>SDL Transcreate Manager</value>
+    <value>Trados Transcreate Manager</value>
   </data>
   <data name="TranscreateManager_Export_Description" xml:space="preserve">
     <value>Export</value>
@@ -202,7 +202,7 @@
     <value>Import</value>
   </data>
   <data name="TranscreateManager_Name" xml:space="preserve">
-    <value>SDL Transcreate</value>
+    <value>Trados Transcreate</value>
   </data>
   <data name="TranscreateManager_ProjectFileActivity_Description" xml:space="preserve">
     <value>Project File Activity</value>

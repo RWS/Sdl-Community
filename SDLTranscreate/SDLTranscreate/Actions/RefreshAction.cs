@@ -1,9 +1,9 @@
-﻿using Sdl.Community.Transcreate.Common;
-using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	[Action("TranscreateManager_Refresh_Action",
 		Name = "TranscreateManager_Refresh_Name",

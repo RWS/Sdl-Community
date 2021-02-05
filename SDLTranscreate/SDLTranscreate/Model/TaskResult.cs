@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sdl.Community.Transcreate.Common;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class TaskResult
 	{

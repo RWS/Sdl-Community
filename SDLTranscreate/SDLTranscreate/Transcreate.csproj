@@ -7,8 +7,8 @@
     <ProjectGuid>{AD8EE7B5-21DF-4AB0-9799-B13361B26E61}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Transcreate</RootNamespace>
-    <AssemblyName>Sdl.Community.Transcreate</AssemblyName>
+    <RootNamespace>Trados.Transcreate</RootNamespace>
+    <AssemblyName>Trados.Transcreate</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Transcreate.Interfaces;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class Project : BaseModel, ICloneable, IProject
 	{

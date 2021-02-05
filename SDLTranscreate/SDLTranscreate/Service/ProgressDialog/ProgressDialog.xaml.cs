@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
 
-namespace Sdl.Community.Transcreate.Service.ProgressDialog
+namespace Trados.Transcreate.Service.ProgressDialog
 {
 	public partial class ProgressDialog : Window
 	{

@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.Transcreate.CustomEventArgs
+﻿namespace Trados.Transcreate.CustomEventArgs
 {
 	public class ProjectSelectionChangedEventArgs: System.EventArgs
 	{

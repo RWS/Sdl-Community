@@ -4,7 +4,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Application = System.Windows.Application;
 
-namespace Sdl.Community.Transcreate
+namespace Trados.Transcreate
 {
 	[ApplicationInitializer]
 	internal class ApplicationInstance : IApplicationInitializer

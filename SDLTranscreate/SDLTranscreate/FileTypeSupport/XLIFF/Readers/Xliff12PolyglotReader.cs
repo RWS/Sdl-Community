@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Interfaces;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Readers
 {
 	public class Xliff12PolyglotReader : IXliffReader
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	public class BindingDataProxy : Freezable
 	{

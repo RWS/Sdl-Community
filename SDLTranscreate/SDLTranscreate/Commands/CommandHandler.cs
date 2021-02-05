@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Sdl.Community.Transcreate.Commands
+namespace Trados.Transcreate.Commands
 {
 	public class CommandHandler : ICommand
 	{

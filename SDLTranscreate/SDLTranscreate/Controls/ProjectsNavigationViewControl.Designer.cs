@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.Transcreate.Controls
+﻿namespace Trados.Transcreate.Controls
 {
 	partial class ProjectsNavigationViewControl
 	{

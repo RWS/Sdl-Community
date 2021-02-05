@@ -6,10 +6,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel
+namespace Trados.Transcreate.Wizard.ViewModel
 {
 	public class ExceptionViewerViewModel : BaseModel
 	{

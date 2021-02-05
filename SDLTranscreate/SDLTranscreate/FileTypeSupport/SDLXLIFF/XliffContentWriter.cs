@@ -5,17 +5,17 @@ using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Versioning;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Model;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
+namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	public class XliffContentWriter : AbstractBilingualContentProcessor
 	{
@@ -597,10 +597,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 				}
 
 				var productName = GetProductName();
-				var pathInfo = new Toolkit.LanguagePlatform.Models.PathInfo(productName);
+				var pathInfo = new Sdl.Community.Toolkit.LanguagePlatform.Models.PathInfo(productName);
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
+					new Sdl.Community.Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
 
 				return _segmentPairProcessor;
 			}

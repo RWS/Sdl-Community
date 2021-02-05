@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.View;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.View;
 
-namespace Sdl.Community.Transcreate.ViewModel
+namespace Trados.Transcreate.ViewModel
 {
 	public class ProjectFileActivityViewModel : BaseModel, IDisposable
 	{

@@ -10,16 +10,6 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Controls;
-using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Model.ProjectSettings;
-using Sdl.Community.Transcreate.Service;
-using Sdl.Community.Transcreate.ViewModel;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -30,12 +20,22 @@ using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using IProject = Sdl.Community.Transcreate.Interfaces.IProject;
-using LanguageDirectionInfo = Sdl.Community.Transcreate.Model.LanguageDirectionInfo;
-using PathInfo = Sdl.Community.Transcreate.Common.PathInfo;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Controls;
+using Trados.Transcreate.CustomEventArgs;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Writers;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Model.ProjectSettings;
+using Trados.Transcreate.Service;
+using Trados.Transcreate.ViewModel;
+using IProject = Trados.Transcreate.Interfaces.IProject;
+using LanguageDirectionInfo = Trados.Transcreate.Model.LanguageDirectionInfo;
+using PathInfo = Trados.Transcreate.Common.PathInfo;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 
-namespace Sdl.Community.Transcreate
+namespace Trados.Transcreate
 {
 	[View(
 		Id = "TranscreateManager_View",
@@ -553,7 +553,7 @@ namespace Sdl.Community.Transcreate
 		private string GetReportTemplatePath(string name)
 		{
 			var filePath = Path.Combine(_pathInfo.SettingsFolderPath, name);
-			var resourceName = "Sdl.Community.Transcreate.Resources." + name;
+			var resourceName = "Trados.Transcreate.Resources." + name;
 
 			WriteResourceToFile(resourceName, filePath);
 

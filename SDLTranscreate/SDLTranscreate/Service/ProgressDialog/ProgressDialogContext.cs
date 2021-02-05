@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 
-namespace Sdl.Community.Transcreate.Service.ProgressDialog
+namespace Trados.Transcreate.Service.ProgressDialog
 {
 	public class ProgressDialogContext
 	{

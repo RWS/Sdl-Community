@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Visitors
 {
 	public class TokenVisitor : IMarkupDataVisitor
 	{

@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
+namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 {
 	public class WizardPageBackTranslationSummaryViewModel : WizardPageViewModelBase
 	{

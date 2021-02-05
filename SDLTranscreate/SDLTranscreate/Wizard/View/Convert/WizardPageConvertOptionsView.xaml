@@ -1,28 +1,28 @@
-﻿<UserControl x:Class="Sdl.Community.Transcreate.Wizard.View.Convert.WizardPageConvertOptionsView"
+﻿<UserControl x:Class="Trados.Transcreate.Wizard.View.Convert.WizardPageConvertOptionsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sdl="http://schemas.sdl.com/xaml"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.Wizard.ViewModel.Convert"
-             xmlns:controls="clr-namespace:Sdl.Community.Transcreate.Controls"
+             xmlns:controls="clr-namespace:Trados.Transcreate.Controls"
+             xmlns:convert="clr-namespace:Trados.Transcreate.Wizard.ViewModel.Convert"
              mc:Ignorable="d" 
-             d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:WizardPageConvertOptionsViewModel}">
+             d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance convert:WizardPageConvertOptionsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/NumberUpDown.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/NumberUpDown.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 

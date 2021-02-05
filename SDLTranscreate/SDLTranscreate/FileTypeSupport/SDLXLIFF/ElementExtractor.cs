@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
+namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	public class ElementExtractor : IMarkupDataVisitor
 	{

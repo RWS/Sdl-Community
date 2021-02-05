@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Transcreate {
+namespace Trados.Transcreate {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.Transcreate {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Transcreate.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Trados.Transcreate.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -979,7 +979,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate.
+        ///   Looks up a localized string similar to Trados Transcreate.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -1209,7 +1209,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate Manager.
+        ///   Looks up a localized string similar to Trados Transcreate Manager.
         /// </summary>
         internal static string TranscreateManager_Description {
             get {
@@ -1272,7 +1272,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate.
+        ///   Looks up a localized string similar to Trados Transcreate.
         /// </summary>
         internal static string TranscreateManager_Name {
             get {

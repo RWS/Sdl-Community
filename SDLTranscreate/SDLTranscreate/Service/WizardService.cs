@@ -4,25 +4,25 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Wizard.View;
-using Sdl.Community.Transcreate.Wizard.View.BackTranslation;
-using Sdl.Community.Transcreate.Wizard.View.Convert;
-using Sdl.Community.Transcreate.Wizard.View.Export;
-using Sdl.Community.Transcreate.Wizard.View.Import;
-using Sdl.Community.Transcreate.Wizard.ViewModel;
-using Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation;
-using Sdl.Community.Transcreate.Wizard.ViewModel.Convert;
-using Sdl.Community.Transcreate.Wizard.ViewModel.Export;
-using Sdl.Community.Transcreate.Wizard.ViewModel.Import;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Wizard.View;
+using Trados.Transcreate.Wizard.View.BackTranslation;
+using Trados.Transcreate.Wizard.View.Convert;
+using Trados.Transcreate.Wizard.View.Export;
+using Trados.Transcreate.Wizard.View.Import;
+using Trados.Transcreate.Wizard.ViewModel;
+using Trados.Transcreate.Wizard.ViewModel.BackTranslation;
+using Trados.Transcreate.Wizard.ViewModel.Convert;
+using Trados.Transcreate.Wizard.ViewModel.Export;
+using Trados.Transcreate.Wizard.ViewModel.Import;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class WizardService
 	{

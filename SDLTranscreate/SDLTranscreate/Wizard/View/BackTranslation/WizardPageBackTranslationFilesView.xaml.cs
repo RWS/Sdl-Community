@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Sdl.Community.Transcreate.Wizard.View.BackTranslation
+namespace Trados.Transcreate.Wizard.View.BackTranslation
 {	
 	public partial class WizardPageBackTranslationFilesView : UserControl
 	{		
