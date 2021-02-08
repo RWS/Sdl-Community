@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
@@ -67,7 +66,8 @@ namespace Sdl.Community.IATETerminologyProvider
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
 
-			var cachedResults = _cacheService.GetCachedResults(text, target.Name, modelString);
+			var cachedResults = Task.Run(async () => await _cacheService.GetCachedResults(text, target.Name, modelString)).Result;
+
 			if (cachedResults != null && cachedResults.Count > 0)
 			{
 				CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
@@ -92,7 +92,8 @@ namespace Sdl.Community.IATETerminologyProvider
 					SourceText = text,
 					TargetLanguageName = target.Name
 				};
-				_cacheService.AddSearchResults(searchResults,results);
+			
+				Task.Run(async () => await _cacheService.AddSearchResults(searchResults, results));
 			}
 
 			SuscribeToEntriesChangedEvent(text, source, target);

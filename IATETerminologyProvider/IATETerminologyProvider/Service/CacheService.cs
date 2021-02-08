@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Data.Entity;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
@@ -21,14 +22,16 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			return _dbContext.SearchCaches.AsNoTracking();
 		}
 
-		public void AddSearchResults(SearchCache searchCache,List<ISearchResult>iateSearchResults)
+		public async Task AddSearchResults(SearchCache searchCache,List<ISearchResult>iateSearchResults)
 		{
 			if (iateSearchResults == null) return;
+
 			var serializedSearchResult = SerializeSearchResult(iateSearchResults);
 			if (string.IsNullOrEmpty(serializedSearchResult)) return;
+
 			searchCache.SearchResultsString = serializedSearchResult;
 			_dbContext.SearchCaches.Add(searchCache);
-			_dbContext.SaveChanges();
+			await _dbContext.SaveChangesAsync();
 		}
 
 		public void ClearCachedResults()
@@ -38,12 +41,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			_dbContext.SaveChanges();
 		}
 
-		public List<ISearchResult> GetCachedResults(string sourceText, string targetLanguageName, string bodyModelString)
+		public async Task<List<ISearchResult>> GetCachedResults(string sourceText, string targetLanguageName, string bodyModelString)
 		{
-			var cacheData = _dbContext.SearchCaches.FirstOrDefault(s =>
+			var cacheData = await _dbContext.SearchCaches.FirstOrDefaultAsync(s =>
 				s.SourceText.Equals(sourceText) && s.TargetLanguageName.Equals(targetLanguageName) &&
 				s.QueryString.Equals(bodyModelString));
-
 			return cacheData != null ? DeserializeSearchResult(cacheData.SearchResultsString) : null;
 		}
 
