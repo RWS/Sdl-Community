@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.IO;
-using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
@@ -11,7 +9,6 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 	public class DatabaseContextService : DbContext
 	{
 		public DbSet<SearchCache> SearchCaches { get; set; }
-		public DbSet<SearchResultModel> CacheSearchResults { get; set; }
 
 		public DatabaseContextService(string projectName) : base(projectName)
 		{

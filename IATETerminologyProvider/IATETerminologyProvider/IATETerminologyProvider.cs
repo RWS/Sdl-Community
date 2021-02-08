@@ -67,20 +67,13 @@ namespace Sdl.Community.IATETerminologyProvider
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
 
-			var cachedResults =_cacheService.GetCachedResults(text, target.Name, modelString);
+			var cachedResults = _cacheService.GetCachedResults(text, target.Name, modelString);
 			if (cachedResults != null && cachedResults.Count > 0)
 			{
-				var test = new List<ISearchResult>();
-				foreach (var cache in cachedResults)
-				{
-					var a = (ISearchResult) cache;
-					test.Add(a);
-				}
-				CreateEntryTerms(test, source, GetLanguages());
+				CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
 
 				SuscribeToEntriesChangedEvent(text, source, target);
-				//return cachedResults;
-				return new List<ISearchResult>(test);
+				return cachedResults;
 			}
 
 			var results = _searchService.GetTerms(text, source, target, maxResultsCount, modelString);
@@ -92,21 +85,14 @@ namespace Sdl.Community.IATETerminologyProvider
 				results = MaxSearchResults(results, maxResultsCount);
 				CreateEntryTerms(results, source, GetLanguages());
 
-				var test = new List<SearchResultModel>();
-				foreach (var result in results)
-				{
-					var res = (SearchResultModel)result;
-					test.Add(res);
-				}
 				// add search to catche db
 				var searchResults = new SearchCache
 				{
 					QueryString = modelString,
 					SourceText = text,
-					TargetLanguageName = target.Name,
-					SearchResults = new List<SearchResultModel>(test) 
+					TargetLanguageName = target.Name
 				};
-				_cacheService.AddSearchResults(searchResults);
+				_cacheService.AddSearchResults(searchResults,results);
 			}
 
 			SuscribeToEntriesChangedEvent(text, source, target);
@@ -361,8 +347,10 @@ namespace Sdl.Community.IATETerminologyProvider
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
 			_entryModels.Clear();
+			var termsForSourceLanguage = termsResult.Where(s =>
+				s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName));
 
-			foreach (var searchResult in termsResult.Where(s => s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName)))
+			foreach (var searchResult in termsForSourceLanguage)
 			{
 				var termResult = (SearchResultModel)searchResult;
 

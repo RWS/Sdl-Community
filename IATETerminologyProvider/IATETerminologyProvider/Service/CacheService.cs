@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -20,9 +21,12 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			return _dbContext.SearchCaches.AsNoTracking();
 		}
 
-		public void AddSearchResults(SearchCache searchCache)
+		public void AddSearchResults(SearchCache searchCache,List<ISearchResult>iateSearchResults)
 		{
-			if (searchCache.SearchResults == null) return;
+			if (iateSearchResults == null) return;
+			var serializedSearchResult = SerializeSearchResult(iateSearchResults);
+			if (string.IsNullOrEmpty(serializedSearchResult)) return;
+			searchCache.SearchResultsString = serializedSearchResult;
 			_dbContext.SearchCaches.Add(searchCache);
 			_dbContext.SaveChanges();
 		}
@@ -34,13 +38,31 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			_dbContext.SaveChanges();
 		}
 
-		public IList<SearchResultModel> GetCachedResults(string sourceText, string targetLanguageName, string bodyModelString)
+		public List<ISearchResult> GetCachedResults(string sourceText, string targetLanguageName, string bodyModelString)
 		{
 			var cacheData = _dbContext.SearchCaches.FirstOrDefault(s =>
 				s.SourceText.Equals(sourceText) && s.TargetLanguageName.Equals(targetLanguageName) &&
 				s.QueryString.Equals(bodyModelString));
-			//var test = cacheData.SearchResults.ToList() as List<ISearchResult>;
-			return cacheData?.SearchResults.ToList();
+
+			return cacheData != null ? DeserializeSearchResult(cacheData.SearchResultsString) : null;
+		}
+
+		private string SerializeSearchResult(List<ISearchResult> iateSearchResults)
+		{
+			return JsonConvert.SerializeObject(iateSearchResults, Formatting.Indented, GetJsonSettings());
+		}
+
+		private List<ISearchResult> DeserializeSearchResult(string dbSavedResult)
+		{
+			return JsonConvert.DeserializeObject<List<ISearchResult>>(dbSavedResult, GetJsonSettings());
+		}
+
+		private JsonSerializerSettings GetJsonSettings()
+		{
+			return  new JsonSerializerSettings
+			{
+				TypeNameHandling = TypeNameHandling.All
+			};
 		}
 
 		public void Dispose()
