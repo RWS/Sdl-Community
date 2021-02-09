@@ -255,6 +255,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Projects.
+        /// </summary>
+        internal static string JobProcess_LoadProjects {
+            get {
+                return ResourceManager.GetString("JobProcess_LoadProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparation.
         /// </summary>
         internal static string JobProcess_Preparation {
@@ -278,6 +287,15 @@ namespace Trados.Transcreate {
         internal static string JobProcess_ProcessingPleaseWait {
             get {
                 return ResourceManager.GetString("JobProcess_ProcessingPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading project files....
+        /// </summary>
+        internal static string JobProcess_ReadingProjectFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ReadingProjectFiles", resourceCulture);
             }
         }
         
@@ -498,6 +516,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading Project: {0}.
+        /// </summary>
+        internal static string Label_LoadingProject {
+            get {
+                return ResourceManager.GetString("Label_LoadingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location: {0}.
         /// </summary>
         internal static string Label_Location {
@@ -647,6 +674,15 @@ namespace Trados.Transcreate {
         internal static string Label_SelectedFiles {
             get {
                 return ResourceManager.GetString("Label_SelectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Files.
+        /// </summary>
+        internal static string Label_SourceFiles {
+            get {
+                return ResourceManager.GetString("Label_SourceFiles", resourceCulture);
             }
         }
         
@@ -1146,6 +1182,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If the selected SDLXLIFF files already exist in the Back-Translation project, then they will be re-imported, overwriting the existing ones..
+        /// </summary>
+        internal static string ToolTip_Option_OverwreteExistingBackTranslationFiles {
+            get {
+                return ResourceManager.GetString("ToolTip_Option_OverwreteExistingBackTranslationFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         internal static string TranscreateManager_ActionsGroup_Name {
@@ -1191,7 +1236,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Transcreate Reports.
+        ///   Looks up a localized string similar to Create Transcreate reports for the selected files.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Description {
             get {
@@ -1317,7 +1362,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open For Translation.
+        ///   Looks up a localized string similar to Open for Translation.
         /// </summary>
         internal static string TranscreateManager_OpenFileForTranslation_Description {
             get {
@@ -1326,7 +1371,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open For Translation.
+        ///   Looks up a localized string similar to Open for Translation.
         /// </summary>
         internal static string TranscreateManager_OpenFileForTranslation_Name {
             get {
@@ -1547,6 +1592,15 @@ namespace Trados.Transcreate {
         internal static string WizardMessage_ConvertingToFormat {
             get {
                 return ResourceManager.GetString("WizardMessage_ConvertingToFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating Back-Translation Project.
+        /// </summary>
+        internal static string WizardMessage_CreatingBackTranslationProject {
+            get {
+                return ResourceManager.GetString("WizardMessage_CreatingBackTranslationProject", resourceCulture);
             }
         }
         

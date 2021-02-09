@@ -60,18 +60,13 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Options + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_CopySourceToTargetForEmptyTranslations, TaskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations) + Environment.NewLine;
+			//summaryText += indent + string.Format(PluginResources.Label_CopySourceToTargetForEmptyTranslations, TaskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_OverwriteExistingBackTranslations, TaskContext.BackTranslationOptions.OverwriteExistingBackTranslations) + Environment.NewLine;
 			
-			if (TaskContext.ExportOptions.ExcludeFilterIds.Count > 0)
-			{
-				summaryText += indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(TaskContext.ExportOptions.ExcludeFilterIds)) + Environment.NewLine;
-			}
-
 			summaryText += Environment.NewLine;
 			summaryText += PluginResources.Label_Files + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count) + Environment.NewLine;
-			summaryText += indent + string.Format(PluginResources.Label_ExportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
+			summaryText += indent + string.Format(PluginResources.Label_ImportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)) + Environment.NewLine;
 			summaryText += indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()) + Environment.NewLine;
 
 			var targetLanguages = TaskContext.ProjectFiles.Where(a => a.Selected)

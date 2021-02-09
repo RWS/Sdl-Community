@@ -30,7 +30,7 @@ namespace Trados.Transcreate.ViewModel
 		private ICommand _openFileForReviewCommand;
 		private ICommand _openFileForSignOffCommand;
 		private ICommand _mouseDoubleClickCommand;
-		
+		private ICommand _createReportsFromSelectionCommand;
 
 		public ProjectFilesViewModel(List<ProjectFile> projectFiles)
 		{
@@ -41,6 +41,8 @@ namespace Trados.Transcreate.ViewModel
 		}
 
 		public EventHandler<ProjectFileSelectionChangedEventArgs> ProjectFileSelectionChanged;
+
+		public ICommand CreateReportsFromSelectionCommand => _createReportsFromSelectionCommand ?? (_createReportsFromSelectionCommand = new CommandHandler(CreateReportsFromSelection));
 
 		public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
 
@@ -137,18 +139,34 @@ namespace Trados.Transcreate.ViewModel
 			}
 		}
 
+		public bool IsTranscreateProject
+		{
+			get
+			{
+				var activeProject = SelectedProjectFile?.Project;
+				if (activeProject == null || activeProject is BackTranslationProject)
+				{
+					return false;
+				}
+
+				return true;
+			}
+		}
+
 		public bool IsProjectFileSelected
 		{
 			get => _isProjectFileSelected;
 			set
 			{
+				OnPropertyChanged(nameof(IsTranscreateProject));
+				
 				if (_isProjectFileSelected == value)
 				{
 					return;
 				}
-
 				_isProjectFileSelected = value;
 				OnPropertyChanged(nameof(IsProjectFileSelected));
+				
 
 				IsSingleProjectFileSelected = !_isMultipleProjectFilesSelected && _isProjectFileSelected;
 			}
@@ -159,6 +177,8 @@ namespace Trados.Transcreate.ViewModel
 			get => _isMultipleProjectFilesSelected;
 			set
 			{
+				OnPropertyChanged(nameof(IsTranscreateProject));
+				
 				if (_isMultipleProjectFilesSelected == value)
 				{
 					return;
@@ -166,7 +186,7 @@ namespace Trados.Transcreate.ViewModel
 
 				_isMultipleProjectFilesSelected = value;
 				OnPropertyChanged(nameof(IsMultipleProjectFilesSelected));
-
+				
 				IsSingleProjectFileSelected = !_isMultipleProjectFilesSelected && _isProjectFileSelected;
 			}
 		}
@@ -196,6 +216,18 @@ namespace Trados.Transcreate.ViewModel
 		{
 			var action = SdlTradosStudio.Application.GetAction<ExportAction>();
 			action.LaunchWizard();
+		}
+
+		private void CreateReportsFromSelection(object parameter)
+		{
+			var selectedFiles = SelectedProjectFiles?.Cast<ProjectFile>().ToList();
+			if (selectedFiles == null || selectedFiles.Count == 0)
+			{
+				return;
+			}
+
+			var action = SdlTradosStudio.Application.GetAction<CreateReport>();
+			action.Run(selectedFiles);
 		}
 
 		private void OpenFolder(object parameter)

@@ -492,6 +492,7 @@
     <Resource Include="Resources\import_small.ico" />
     <Resource Include="Resources\back_translation.ico" />
     <Resource Include="Resources\back_translation_small.ico" />
+    <Resource Include="Resources\information.png" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />

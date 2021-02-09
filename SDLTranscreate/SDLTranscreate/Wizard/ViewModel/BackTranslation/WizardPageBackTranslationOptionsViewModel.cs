@@ -19,7 +19,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			_dialogService = dialogService;
 
 			CopySourceToTargetForEmptyTranslationsEnabled = false;
-			CopySourceToTargetForEmptyTranslations = taskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations;
+			CopySourceToTargetForEmptyTranslations = true; //always true... for now
 
 			OverwriteExistingBackTranslationsEnabled = true;
 			OverwriteExistingBackTranslations = taskContext.BackTranslationOptions.OverwriteExistingBackTranslations;
@@ -77,6 +77,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 		}
 
+		public string OverwriteExistingBackTranslationsToolTip => PluginResources.ToolTip_Option_OverwreteExistingBackTranslationFiles;
+
 		public bool OverwriteExistingBackTranslationsEnabled
 		{
 			get => _overwriteExistingBackTranslationsEnabled;
@@ -98,9 +100,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 		private void VerifyIsValid()
 		{
-			// TODO
-			//IsValid = Directory.Exists(OutputFolder);
-
 			IsValid = true;
 		}
 

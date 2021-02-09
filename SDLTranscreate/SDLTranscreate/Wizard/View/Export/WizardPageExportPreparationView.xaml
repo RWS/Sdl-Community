@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:export="clr-namespace:Trados.Transcreate.Wizard.ViewModel.Export"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance export:WizardPageExportPreparationViewModel}">
 	<UserControl.Resources>

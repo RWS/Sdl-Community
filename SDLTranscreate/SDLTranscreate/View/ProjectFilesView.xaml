@@ -196,28 +196,35 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Open For Translation" 
+					<MenuItem Header="Open for Translation" 
 					          Command="{Binding OpenFileForTranslationCommand}" 
 					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForTranslation.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Open For Review" 
+					<MenuItem Header="Open for Review" 
 					          Command="{Binding OpenFileForReviewCommand}"
 					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForReview.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Open For Sign-off" 
+					<MenuItem Header="Open for Sign-off" 
 					          Command="{Binding OpenFileForSignOffCommand}" 
 					          IsEnabled="{Binding IsSingleProjectFileSelected}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForSignOff.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					
+					<Separator/>
+					<MenuItem Header="Create Transcreate reports for the selected files" 
+					          Command="{Binding CreateReportsFromSelectionCommand}" 
+					          IsEnabled="{Binding IsTranscreateProject}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Report.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}" 
 					          IsEnabled="{Binding IsSingleProjectFileSelected}">

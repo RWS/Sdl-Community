@@ -270,7 +270,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 
 				var selectedProject = _controllers.ProjectsController.GetProjects()
 					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
-				_projectAutomationService.RunPretranslationWithoutTm(selectedProject);
+				await _projectAutomationService.RunPretranslationWithoutTm(selectedProject);
 				_projectAutomationService.RemoveLastReportOfType("Translate");
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
@@ -1018,6 +1018,11 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 
 		private async Task UpdateProgress(JobProcess jobProcess, JobProcess.ProcessStatus status, int progress, string description)
 		{
+			if (progress > 100)
+			{
+				progress = 100;
+			}
+			
 			jobProcess.Status = status;
 			jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
 			jobProcess.Description = description;

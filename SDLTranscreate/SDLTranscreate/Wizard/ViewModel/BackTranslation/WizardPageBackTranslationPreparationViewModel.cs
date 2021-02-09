@@ -133,13 +133,17 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 		{
 			JobProcesses = new List<JobProcess>
 			{
-				//new JobProcess
-				//{
-				//	Name = PluginResources.JobProcess_Preparation
-				//},
+				new JobProcess
+				{
+					Name = PluginResources.JobProcess_Preparation
+				},
 				new JobProcess
 				{
 					Name = PluginResources.JobProcess_CreateBackTranslations
+				},
+				new JobProcess
+				{
+					Name = PluginResources.JobProcess_LoadProjects
 				},
 				new JobProcess
 				{
@@ -166,6 +170,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					success = await Preparation(job);
 				}
 
+				var taskContexts = new List<TaskContext>();
 				if (success)
 				{
 					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_CreateBackTranslations);
@@ -173,10 +178,16 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					{
 						var result = await CreateBackTranslations(job);
 						success = result.Item1;
-						if (success)
-						{
-							UpdateStudio(result.Item2);
-						}
+						taskContexts = result.Item2;
+					}
+				}
+
+				if (success)
+				{
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_LoadProjects);
+					if (job != null)
+					{
+						success = LoadStudio(job, taskContexts);
 					}
 				}
 
@@ -188,6 +199,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 						success = await Finalize(job);
 					}
 				}
+
+				TaskContext.Completed = success;
 
 				FinalizeJobProcesses(success);
 			}
@@ -208,23 +221,23 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 			try
 			{
-				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.UtcNow));
+				//_logReport.AppendLine();
+				//_logReport.AppendLine("Phase: Preparation - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.WizardMessage_Initializing;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
 
-				Refresh();
+				//await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 30, PluginResources.JobProcess_ProcessingPleaseWait);
 
-				_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.UtcNow));
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+				//_logReport.AppendLine("Phase: Preparation - Complete " + FormatDateTime(DateTime.UtcNow));
 
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
 			}
 			catch (Exception ex)
 			{
 				jobProcess.Errors.Add(ex);
-				jobProcess.Status = JobProcess.ProcessStatus.Failed;
+				//jobProcess.Description = string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, ex.Message);
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
 
 				_logReport.AppendLine();
@@ -238,15 +251,17 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 		{
 			var taskContexts = new List<TaskContext>();
 			var success = true;
+			var phase = PluginResources.JobProcess_CreateBackTranslations;
 
 			try
 			{
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Export - Started " + FormatDateTime(DateTime.UtcNow));
+				_logReport.AppendLine("Phase: " + phase + " - Started " + FormatDateTime(DateTime.UtcNow));
 
-				TextMessage = PluginResources.WizardMessage_ConvertingToFormat;
+				TextMessage = PluginResources.JobProcess_CreateBackTranslations;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
+
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ReadingProjectFiles);
 
 				Refresh();
 
@@ -257,60 +272,63 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				var studioProjectInfo = TaskContext.FileBasedProject.GetProjectInfo();
 				var fileDataList = GetFileDataList(TaskContext.ProjectFiles.Where(a => a.Selected).ToList(), TaskContext.Project, studioProjectInfo, sdlxliffReader);
 
-				var selectedLanguages = GetSelectedLanguages();
-
+				var selectedLanguages = GetSelectedLanguages().ToList();
+				var totalLanguages = System.Convert.ToDouble(selectedLanguages.Count);
+				var languageIndex = 0;
 				foreach (var languageName in selectedLanguages)
 				{
-					_logReport.AppendLine();
-					_logReport.AppendLine(string.Format(PluginResources.Label_Language, languageName));
+					languageIndex++;
+					var unit = System.Convert.ToInt32((System.Convert.ToDouble(languageIndex) / totalLanguages) * 100);
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, languageName));
 
-					var sourceFiles = GetSelectedSourceFiles(languageName, fileDataList, xliffWriter);
+					var sourceFiles = await GetSelectedSourceFiles(languageName, fileDataList, xliffWriter);
 
-					var backTranslationProjectStudio = CloseBackTranslationProject(languageName);
+					var backTranslationProjectStudio = await CloseBackTranslationProject(languageName);
 
 					var localProjectFolderTemp = Path.Combine(Path.GetTempPath(), GetDateTimeToString(DateTime.Now));
 					var localProjectFolder = Path.Combine(studioProjectInfo.LocalProjectFolder, "BackProjects", languageName, string.Empty);
 					if (Directory.Exists(localProjectFolder))
 					{
-						MoveBackTranslationProject(localProjectFolder, localProjectFolderTemp);
-						PersistExistingBackTranslationFiles(backTranslationProjectStudio, languageName, localProjectFolderTemp, studioProjectInfo, sourceFiles, sdlxliffReader);
+						await MoveBackTranslationProject(localProjectFolder, localProjectFolderTemp);
+						await PersistExistingBackTranslationFiles(backTranslationProjectStudio, languageName, localProjectFolderTemp, studioProjectInfo, sourceFiles, sdlxliffReader);
 					}
 
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, "Creating project...");
+
 					var iconPath = GetBackTranslationIconPath();
-					var newStudioProject = _projectAutomationService.CreateBackTranslationProject(
+					var newStudioProject = await _projectAutomationService.CreateBackTranslationProject(
 						TaskContext.FileBasedProject, localProjectFolder, languageName, iconPath,
 						sourceFiles, "BT");
 
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, string.Format("Created project: {0}", newStudioProject.GetProjectInfo().Name));
+
+					var newStudioProjectInfo = newStudioProject.GetProjectInfo();
+
+					var indent = "   ";
+
+					_logReport.AppendLine();
+					_logReport.AppendLine(PluginResources.Label_Project);
+					_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, newStudioProjectInfo.Name));
+					_logReport.AppendLine(indent + string.Format(PluginResources.Label_Location, newStudioProjectInfo.LocalProjectFolder));
+					_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, newStudioProjectInfo.SourceLanguage.CultureInfo.Name));
+					_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, newStudioProjectInfo.TargetLanguages.FirstOrDefault()?.CultureInfo.Name));
+					_logReport.AppendLine(PluginResources.Label_SourceFiles);
+					foreach (var sourceFile in sourceFiles)
+					{
+						_logReport.AppendLine(string.Format(indent + "{0}: {1}", sourceFile.Action.ToString(), sourceFile.FolderPathInProject + sourceFile.FileName));
+					}
+
 					_controllers.ProjectsController.RefreshProjects();
 
-					// Copy folders here
-					// Copy/merge folders to new project
-					var previousReportsDirectory = Path.Combine(localProjectFolderTemp, "Reports");
-					var previousReportsViewerDirectory = Path.Combine(localProjectFolderTemp, "Reports.Viewer");
-					var previousWorkFlowDirectory = Path.Combine(localProjectFolderTemp, "WorkFlow");
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, "Merging project folders....");
+					CopyProjectFolders(localProjectFolderTemp, localProjectFolder);
 
-					var newReportsDirectory = Path.Combine(localProjectFolder, "Reports");
-					var newReportsViewerDirectory = Path.Combine(localProjectFolder, "Reports.Viewer");
-					var newWorkFlowDirectory = Path.Combine(localProjectFolder, "WorkFlow");
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, "Pretranslating....");
+					await _projectAutomationService.RunPretranslationWithoutTm(newStudioProject);
 
-					if (Directory.Exists(previousReportsDirectory))
-					{
-						Copy(previousReportsDirectory, newReportsDirectory);
-					}
 
-					if (Directory.Exists(previousReportsViewerDirectory))
-					{
-						Copy(previousReportsViewerDirectory, newReportsViewerDirectory);
-					}
-
-					if (Directory.Exists(previousWorkFlowDirectory))
-					{
-						Copy(previousWorkFlowDirectory, newWorkFlowDirectory);
-					}
-
-					_projectAutomationService.RunPretranslationWithoutTm(newStudioProject);
-
-					var taskContext = CreateBackTranslationTaskContext(newStudioProject,
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, "Updating task context....");
+					var taskContext = await CreateBackTranslationTaskContext(newStudioProject,
 						sourceFiles, studioProjectInfo.LocalProjectFolder, localProjectFolderTemp,
 						 sdlxliffReader, sdlxliffWriter, xliffWriter);
 
@@ -324,15 +342,14 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				}
 
 				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Export - Completed " + FormatDateTime(DateTime.UtcNow));
+				_logReport.AppendLine("Phase: " + phase + " -  Completed " + FormatDateTime(DateTime.UtcNow));
 
-				TaskContext.Completed = true;
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
 			}
 			catch (Exception ex)
 			{
 				jobProcess.Errors.Add(ex);
-				jobProcess.Status = JobProcess.ProcessStatus.Failed;
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
 
 				_logReport.AppendLine();
@@ -340,6 +357,183 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 
 			return await Task.FromResult(new Tuple<bool, List<TaskContext>>(success, taskContexts));
+		}
+
+		private bool LoadStudio(JobProcess jobProcess, IEnumerable<TaskContext> taskContexts)
+		{
+			var success = true;
+
+			TextMessage = PluginResources.JobProcess_LoadProjects;
+			TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
+			var phase = PluginResources.JobProcess_LoadProjects;
+
+			_logReport.AppendLine();
+			_logReport.AppendLine("Phase: " + phase + " - Started " + FormatDateTime(DateTime.UtcNow));
+
+			Task.Run(() => UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 50, "Loading projects..."));
+
+			try
+			{
+				foreach (var taskContext in taskContexts)
+				{
+					Owner.Dispatcher.Invoke(new Action(delegate
+					{
+						_projectAutomationService.ActivateProject(taskContext.FileBasedProject);
+						_controllers.ProjectsController.RefreshProjects();
+
+						_logReport.AppendLine();
+						_logReport.AppendLine(string.Format(PluginResources.Label_LoadingProject, taskContext.FileBasedProject.FilePath));
+
+						UpdateProjectSettingsBundle(taskContext.FileBasedProject);
+						_controllers.TranscreateController.UpdateBackTranslationProjectData(TaskContext.Project.Id, taskContext);
+
+						_logReport.AppendLine("Done!");
+					}), DispatcherPriority.ContextIdle);
+				}
+
+				_controllers.TranscreateController.InvalidateProjectsContainer();
+
+				_logReport.AppendLine();
+				_logReport.AppendLine("Phase: " + phase + " -  Completed " + FormatDateTime(DateTime.UtcNow));
+
+				Task.Run(() => UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done));
+			}
+			catch (Exception ex)
+			{
+				jobProcess.Errors.Add(ex);
+				Task.Run(() => UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message));
+				success = false;
+
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
+			}
+
+			return success;
+		}
+
+		private async Task<bool> Finalize(JobProcess jobProcess)
+		{
+			var success = true;
+
+			try
+			{
+				//_logReport.AppendLine();
+				//_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.UtcNow));
+
+				TextMessage = PluginResources.WizardMessage_Finalizing;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
+				//await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 30, PluginResources.JobProcess_ProcessingPleaseWait);
+
+				Refresh();
+
+				//_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
+			}
+			catch (Exception ex)
+			{
+				jobProcess.Errors.Add(ex);
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
+				success = false;
+
+				_logReport.AppendLine();
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
+			}
+
+			return await Task.FromResult(success);
+		}
+
+		private void WriteLogReportHeader()
+		{
+			_logReport = new StringBuilder();
+			_logReport.AppendLine("Start Process: Create Back-Translation Projects " + FormatDateTime(DateTime.UtcNow));
+			_logReport.AppendLine();
+
+			var indent = "   ";
+			var project = TaskContext.ProjectFiles[0].Project;
+			_logReport.AppendLine(PluginResources.Label_Project);
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Location, project.Path));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created, project.Created.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate, project.DueDate.ToString(CultureInfo.InvariantCulture)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, project.SourceLanguage.CultureInfo.DisplayName));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, GetProjectTargetLanguagesString(project)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ProjectType, project.ProjectType));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Customer, project.Customer?.Name));
+
+			_logReport.AppendLine();
+			_logReport.AppendLine(PluginResources.Label_Options);
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, TaskContext.WorkingFolder));
+			//_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTargetForEmptyTranslations, TaskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingBackTranslations, TaskContext.BackTranslationOptions.OverwriteExistingBackTranslations));
+
+			_logReport.AppendLine();
+			_logReport.AppendLine(PluginResources.Label_Files);
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ImportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)));
+			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
+			_logReport.AppendLine();
+		}
+
+		private void FinalizeJobProcesses(bool success)
+		{
+			_logReport.AppendLine();
+			_logReport.AppendLine("End Process: Create Back-Translation Projects " + FormatDateTime(DateTime.UtcNow));
+
+			if (success)
+			{
+				TextMessage = PluginResources.Result_Successful;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundSuccess);
+				IsComplete = true;
+			}
+			else
+			{
+				TextMessage = PluginResources.Result_Unsuccessful;
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundError);
+				IsComplete = false;
+			}
+		}
+
+		private void SaveLogReport()
+		{
+			var logFileName = "log." + TaskContext.DateTimeStampToString + ".txt";
+			var outputFile = Path.Combine(TaskContext.WorkingFolder, logFileName);
+			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
+			{
+				writer.Write(_logReport);
+				writer.Flush();
+			}
+
+			File.Copy(outputFile, Path.Combine(_pathInfo.ApplicationLogsFolderPath, logFileName));
+		}
+
+		private void CopyProjectFolders(string from, string to)
+		{
+			Owner.Dispatcher.Invoke(new Action(delegate
+			{
+				var fromReportsDirectory = Path.Combine(from, "Reports");
+				var fromReportsViewerDirectory = Path.Combine(from, "Reports.Viewer");
+				var fromWorkFlowDirectory = Path.Combine(from, "WorkFlow");
+
+				var toReportsDirectory = Path.Combine(to, "Reports");
+				var toReportsViewerDirectory = Path.Combine(to, "Reports.Viewer");
+				var toWorkFlowDirectory = Path.Combine(to, "WorkFlow");
+
+				if (Directory.Exists(fromReportsDirectory))
+				{
+					Copy(fromReportsDirectory, toReportsDirectory);
+				}
+
+				if (Directory.Exists(fromReportsViewerDirectory))
+				{
+					Copy(fromReportsViewerDirectory, toReportsViewerDirectory);
+				}
+
+				if (Directory.Exists(fromWorkFlowDirectory))
+				{
+					Copy(fromWorkFlowDirectory, toWorkFlowDirectory);
+				}
+			}), DispatcherPriority.ContextIdle);
 		}
 
 		public static void Copy(string sourceDirectory, string targetDirectory)
@@ -380,7 +574,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 		}
 
-		private static void MoveBackTranslationProject(string from, string to)
+		private async Task MoveBackTranslationProject(string from, string to)
 		{
 			try
 			{
@@ -395,9 +589,11 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			{
 				//ignore; catch all
 			}
+
+			await Task.FromResult(1);
 		}
 
-		private void PersistExistingBackTranslationFiles(IProject backTranslationProjectStudio, string targetLanguage,
+		private async Task PersistExistingBackTranslationFiles(IProject backTranslationProjectStudio, string targetLanguage,
 			string localProjectFolderTemp, ProjectInfo studioProjectInfo,
 			ICollection<SourceFile> sourceFiles, SdlxliffReader sdlxliffReader)
 		{
@@ -442,17 +638,28 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 				if (existingSourceFile == null)
 				{
+					sourceFile.Action = SourceFile.Actions.Persist;
 					sourceFiles.Add(sourceFile);
 				}
-				else if (!TaskContext.BackTranslationOptions.OverwriteExistingBackTranslations)
+				else
 				{
-					sourceFiles.Remove(existingSourceFile);
-					sourceFiles.Add(sourceFile);
+					if (TaskContext.BackTranslationOptions.OverwriteExistingBackTranslations)
+					{
+						existingSourceFile.Action = SourceFile.Actions.Overwrite;
+					}
+					else
+					{
+						sourceFile.Action = SourceFile.Actions.Persist;
+						sourceFiles.Remove(existingSourceFile);
+						sourceFiles.Add(sourceFile);
+					}
 				}
 			}
+
+			await Task.FromResult(1);
 		}
 
-		private List<SourceFile> GetSelectedSourceFiles(string languageName, IReadOnlyCollection<FileData> fileDataList, IXliffWriter xliffWriter)
+		private async Task<List<SourceFile>> GetSelectedSourceFiles(string languageName, IReadOnlyCollection<FileData> fileDataList, IXliffWriter xliffWriter)
 		{
 			var sourceFiles = new List<SourceFile>();
 			var languageFolder = GetLanguageFolder(languageName);
@@ -482,89 +689,49 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					FilePath = xliffFilePath,
 					FileData = fileData,
 					FolderPathInProject = projectFile.Path.Trim('\\') + '\\',
-					FileName = Path.GetFileName(xliffFilePath)
+					FileName = Path.GetFileName(xliffFilePath),
+					Action = SourceFile.Actions.Add
 				});
 			}
 
-			return sourceFiles;
+			return await Task.FromResult(sourceFiles);
 		}
 
-		private IProject CloseBackTranslationProject(string languageName)
+		private async Task<IProject> CloseBackTranslationProject(string languageName)
 		{
+			FileBasedProject backTranslationProjectStudio = null;
+			
 			var backTranslationProject = TaskContext.Project.BackTranslationProjects.FirstOrDefault(a =>
 				string.Compare(a.SourceLanguage.CultureInfo.Name, languageName, StringComparison.CurrentCultureIgnoreCase) == 0);
 			if (backTranslationProject != null)
 			{
-				var backTranslationProjectStudio = _controllers.ProjectsController.GetProjects()
-					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == backTranslationProject.Id);
+				//var projects = _controllers.ProjectsController.GetProjects();
+				backTranslationProjectStudio = _controllers.ProjectsController.GetProjects()
+					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == backTranslationProject.Id
+					|| string.Compare(Path.GetDirectoryName(a.FilePath), backTranslationProject.Path, StringComparison.CurrentCultureIgnoreCase) == 0);
 
 				if (backTranslationProjectStudio != null)
 				{
 					_controllers.ProjectsController.Close(backTranslationProjectStudio);
 				}
-				else
+				else if (Directory.Exists(backTranslationProject.Path))
 				{
 					var projectPaths = Directory.GetFiles(backTranslationProject.Path, "*.sdlproj", SearchOption.TopDirectoryOnly);
 					if (projectPaths.Any())
 					{
-						backTranslationProjectStudio = _controllers.ProjectsController.Add(projectPaths).FirstOrDefault();
-
-						_controllers.ProjectsController.Close(backTranslationProjectStudio);
+						Owner.Dispatcher.Invoke(new Action(delegate
+						{
+							backTranslationProjectStudio = _controllers.ProjectsController.Add(projectPaths).FirstOrDefault();
+							_controllers.ProjectsController.Close(backTranslationProjectStudio);
+						}), DispatcherPriority.ContextIdle);
 					}
 				}
-
-				return backTranslationProjectStudio;
 			}
 
-			return null;
+			return await Task.FromResult(backTranslationProjectStudio);
 		}
 
-		private void UpdateStudio(IEnumerable<TaskContext> taskContexts)
-		{
-			foreach (var taskContext in taskContexts)
-			{
-				_projectAutomationService.ActivateProject(taskContext.FileBasedProject);
-				_controllers.ProjectsController.RefreshProjects();
-
-				UpdateProjectSettingsBundle(taskContext.FileBasedProject);
-				_controllers.TranscreateController.UpdateBackTranslationProjectData(TaskContext.Project.Id, taskContext);
-			}
-
-			_controllers.TranscreateController.InvalidateProjectsContainer();
-		}
-
-		private async Task<bool> Finalize(JobProcess jobProcess)
-		{
-			var success = true;
-
-			try
-			{
-				_logReport.AppendLine();
-				_logReport.AppendLine("Phase: Finalize - Started " + FormatDateTime(DateTime.UtcNow));
-
-				TextMessage = PluginResources.WizardMessage_Finalizing;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
-				jobProcess.Status = JobProcess.ProcessStatus.Running;
-
-				Refresh();
-
-				_logReport.AppendLine("Phase: Finalize - Completed " + FormatDateTime(DateTime.UtcNow));
-				jobProcess.Status = JobProcess.ProcessStatus.Completed;
-			}
-			catch (Exception ex)
-			{
-				jobProcess.Errors.Add(ex);
-				jobProcess.Status = JobProcess.ProcessStatus.Failed;
-				success = false;
-
-				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
-			}
-
-			return await Task.FromResult(success);
-		}
-
-		private TaskContext CreateBackTranslationTaskContext(FileBasedProject newStudioProject,
+		private async Task<TaskContext> CreateBackTranslationTaskContext(FileBasedProject newStudioProject,
 			IReadOnlyCollection<SourceFile> sourceFiles, string localProjectFolder, string localProjectFolderTemp,
 			SdlxliffReader sdlxliffReader, SdlxliffWriter sdlxliffWriter, XliffWriter xliffWriter)
 		{
@@ -655,7 +822,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				File.Delete(tmpInputFile);
 			}
 
-			return taskContext;
+			return await Task.FromResult(taskContext);
 		}
 
 		private Dictionary<string, List<string>> GetParagraphMap(Xliff xliffData)
@@ -935,6 +1102,18 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					content += "</ph>";
 				}
 
+				if (element is ElementGenericPlaceholder genericPlaceholder)
+				{
+					content += "<x ";
+					content += "id=\"" + genericPlaceholder.TagId + "\"";
+					content += " ctype=\"" + genericPlaceholder.CType + "\"";
+					if (!string.IsNullOrEmpty(genericPlaceholder.TextEquivalent))
+					{
+						content += " equiv-text=\"" + genericPlaceholder.TextEquivalent + "\"";
+					}
+					content += "/>";
+				}
+
 				if (element is ElementLocked locked)
 				{
 					switch (locked.Type)
@@ -969,7 +1148,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			return content;
 		}
 
-
 		private string GetBackTranslationIconPath()
 		{
 			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "SDLBackTranslation.ico");
@@ -984,17 +1162,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			return iconPath;
 		}
 
-		private static string GetXliffFolder(string languageFolder, ProjectFile targetFile)
-		{
-			var xliffFolder = Path.Combine(languageFolder, targetFile.Path.TrimStart('\\'));
-			if (!Directory.Exists(xliffFolder))
-			{
-				Directory.CreateDirectory(xliffFolder);
-			}
-
-			return xliffFolder;
-		}
-
 		private string GetLanguageFolder(string name)
 		{
 			var languageFolder = TaskContext.GetLanguageFolder(name);
@@ -1004,76 +1171,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 
 			return languageFolder;
-		}
-
-		private void FinalizeJobProcesses(bool success)
-		{
-			_logReport.AppendLine();
-			_logReport.AppendLine("End Process: Export " + FormatDateTime(DateTime.UtcNow));
-
-			if (success)
-			{
-				TextMessage = PluginResources.Result_Successful;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundSuccess);
-				IsComplete = true;
-			}
-			else
-			{
-				TextMessage = PluginResources.Result_Unsuccessful;
-				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundError);
-				IsComplete = false;
-			}
-		}
-
-		private void SaveLogReport()
-		{
-			var logFileName = "log." + TaskContext.DateTimeStampToString + ".txt";
-			var outputFile = Path.Combine(TaskContext.WorkingFolder, logFileName);
-			using (var writer = new StreamWriter(outputFile, false, Encoding.UTF8))
-			{
-				writer.Write(_logReport);
-				writer.Flush();
-			}
-
-			File.Copy(outputFile, Path.Combine(_pathInfo.ApplicationLogsFolderPath, logFileName));
-		}
-
-		private void WriteLogReportHeader()
-		{
-			_logReport = new StringBuilder();
-			_logReport.AppendLine("Start Process: Export " + FormatDateTime(DateTime.UtcNow));
-			_logReport.AppendLine();
-
-			var indent = "   ";
-			var project = TaskContext.ProjectFiles[0].Project;
-			_logReport.AppendLine(PluginResources.Label_Project);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Id, project.Id));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, project.Name));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Location, project.Path));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Created, project.Created.ToString(CultureInfo.InvariantCulture)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_DueDate, project.DueDate.ToString(CultureInfo.InvariantCulture)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, project.SourceLanguage.CultureInfo.DisplayName));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, GetProjectTargetLanguagesString(project)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ProjectType, project.ProjectType));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Customer, project.Customer?.Name));
-
-			_logReport.AppendLine();
-			_logReport.AppendLine(PluginResources.Label_Options);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_XliffSupport, TaskContext.ExportOptions.XliffSupport));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, TaskContext.WorkingFolder));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_IncludeTranslations, TaskContext.ExportOptions.IncludeTranslations));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTarget, TaskContext.ExportOptions.CopySourceToTarget));
-			if (TaskContext.ExportOptions.ExcludeFilterIds.Count > 0)
-			{
-				_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExcludeFilters, GetFitlerItemsString(TaskContext.ExportOptions.ExcludeFilterIds)));
-			}
-
-			_logReport.AppendLine();
-			_logReport.AppendLine(PluginResources.Label_Files);
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_TotalFiles, TaskContext.ProjectFiles.Count));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_ExportFiles, TaskContext.ProjectFiles.Count(a => a.Selected)));
-			_logReport.AppendLine(indent + string.Format(PluginResources.Label_Languages, GetSelectedLanguagesString()));
-			_logReport.AppendLine();
 		}
 
 		private string GetProjectTargetLanguagesString(Interfaces.IProject project)
@@ -1147,6 +1244,20 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			return value;
 		}
 
+		private async Task UpdateProgress(JobProcess jobProcess, JobProcess.ProcessStatus status, int progress, string description)
+		{
+			if (progress > 100)
+			{
+				progress = 100;
+			}
+
+			jobProcess.Status = status;
+			jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
+			jobProcess.Description = description;
+
+			Refresh();
+		}
+
 		private void Refresh()
 		{
 			Owner.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
@@ -1161,25 +1272,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 		private void OnLeavePage(object sender, EventArgs e)
 		{
-		}
-
-		private string GetFitlerItemsString(IEnumerable<string> ids)
-		{
-			var allFilterItems = Enumerators.GetFilterItems();
-			var filterItems = Enumerators.GetFilterItems(allFilterItems, ids);
-			var items = string.Empty;
-			foreach (var filterItem in filterItems)
-			{
-				items += (string.IsNullOrEmpty(items) ? string.Empty : ", ") +
-						 filterItem.Name;
-			}
-
-			if (string.IsNullOrEmpty(items))
-			{
-				items = "[none]";
-			}
-
-			return items;
 		}
 
 		public void Dispose()

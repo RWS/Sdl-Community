@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:backTranslation="clr-namespace:Trados.Transcreate.Wizard.ViewModel.BackTranslation"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="500" d:DataContext="{d:DesignInstance backTranslation:WizardPageBackTranslationPreparationViewModel}">
 	<UserControl.Resources>
@@ -88,6 +89,16 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="Description" Width="2*" SortMemberPath="Message" IsReadOnly="True">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:JobProcess">
+							<TextBlock Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+							           Background="Transparent" VerticalAlignment="Top"
+							           TextWrapping="Wrap" HorizontalAlignment="Left" Margin="10,2,2,2" >
+							</TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="Message" Width="*" SortMemberPath="Message" IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:JobProcess">
@@ -99,7 +110,8 @@
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 		</DataGrid>
-		
+
+
 		<Grid Grid.Row="2" Margin="0,5,0,5">
 			<Button Content="Open Folder in Explorer" Style="{StaticResource LinkButton}" 
 			        HorizontalAlignment="Left"

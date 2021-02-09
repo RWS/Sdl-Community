@@ -288,9 +288,6 @@
   <data name="Label_Languages" xml:space="preserve">
     <value>Languages: {0}</value>
   </data>
-  <data name="Label_Location" xml:space="preserve">
-    <value>Location: {0}</value>
-  </data>
   <data name="Label_Name" xml:space="preserve">
     <value>Name: {0}</value>
   </data>
@@ -305,9 +302,6 @@
   </data>
   <data name="Label_Polyglot" xml:space="preserve">
     <value>Polyglot</value>
-  </data>
-  <data name="Label_Project" xml:space="preserve">
-    <value>Project</value>
   </data>
   <data name="Label_ProjectType" xml:space="preserve">
     <value>Project Type: {0}</value>
@@ -575,10 +569,10 @@
     <value>Project Creation</value>
   </data>
   <data name="TranscreateManager_OpenFileForTranslation_Description" xml:space="preserve">
-    <value>Open For Translation</value>
+    <value>Open for Translation</value>
   </data>
   <data name="TranscreateManager_OpenFileForTranslation_Name" xml:space="preserve">
-    <value>Open For Translation</value>
+    <value>Open for Translation</value>
   </data>
   <data name="TranscreateManager_OpenGroup_Name" xml:space="preserve">
     <value>Open</value>
@@ -611,7 +605,7 @@
     <value>resources\sdl_transcreate_wizard.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TranscreateManager_CreateReport_Description" xml:space="preserve">
-    <value>Create Transcreate Reports</value>
+    <value>Create Transcreate reports for the selected files</value>
   </data>
   <data name="TranscreateManager_CreateReport_Name" xml:space="preserve">
     <value>Create Reports</value>
@@ -648,5 +642,29 @@
   </data>
   <data name="Label_BackTranslationsCreatedOn" xml:space="preserve">
     <value>Back-Translations created on: {0}</value>
+  </data>
+  <data name="ToolTip_Option_OverwreteExistingBackTranslationFiles" xml:space="preserve">
+    <value>If the selected SDLXLIFF files already exist in the Back-Translation project, then they will be re-imported, overwriting the existing ones.</value>
+  </data>
+  <data name="JobProcess_ReadingProjectFiles" xml:space="preserve">
+    <value>Reading project files...</value>
+  </data>
+  <data name="JobProcess_LoadProjects" xml:space="preserve">
+    <value>Load Projects</value>
+  </data>
+  <data name="Label_Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="Label_Location" xml:space="preserve">
+    <value>Location: {0}</value>
+  </data>
+  <data name="Label_SourceFiles" xml:space="preserve">
+    <value>Source Files</value>
+  </data>
+  <data name="Label_LoadingProject" xml:space="preserve">
+    <value>Loading Project: {0}</value>
+  </data>
+  <data name="WizardMessage_CreatingBackTranslationProject" xml:space="preserve">
+    <value>Creating Back-Translation Project</value>
   </data>
 </root>

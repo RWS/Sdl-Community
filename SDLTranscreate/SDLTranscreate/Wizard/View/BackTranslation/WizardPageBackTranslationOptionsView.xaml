@@ -22,8 +22,6 @@
 				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Margin="0">
@@ -31,29 +29,22 @@
 			<Grid Margin="10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<CheckBox Grid.Row="0" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
-				          Content="Copy Source to Target for empty translations" 
-				          IsEnabled="{Binding CopySourceToTargetForEmptyTranslationsEnabled}"
-				          IsChecked="{Binding CopySourceToTargetForEmptyTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-
-				<CheckBox Grid.Row="1" Margin="5,5,5,5" Grid.Column="0" Grid.ColumnSpan="2" 
-				          Content="Overwrite existing Back-Translations" 
+				<CheckBox Grid.Row="0" Margin="5,5,5,5" Grid.Column="0"  
+				          Content="Overwrite existing Back-Translation files." 
 				          IsEnabled="{Binding OverwriteExistingBackTranslationsEnabled}"
 				          IsChecked="{Binding OverwriteExistingBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<Image Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center" Stretch="UniformToFill"
+				                   Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+				                   Source="../../../Resources/information.png"
+				                   ToolTip="{Binding OverwriteExistingBackTranslationsToolTip, Mode=OneWay}"/>
 			</Grid>
 		</GroupBox>
 	</Grid>

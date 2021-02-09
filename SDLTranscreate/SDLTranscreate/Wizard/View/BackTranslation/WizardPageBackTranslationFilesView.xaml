@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:Trados.Transcreate.Converters"
              xmlns:controls="clr-namespace:Trados.Transcreate.Controls"
              xmlns:backTranslation="clr-namespace:Trados.Transcreate.Wizard.ViewModel.BackTranslation"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance backTranslation:WizardPageBackTranslationFilesViewModel}">
 	<UserControl.Resources>

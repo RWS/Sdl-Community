@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -33,6 +34,12 @@ namespace Trados.Transcreate.Actions
 
 		protected override void Execute()
 		{
+			var selectedFiles = _controllers.TranscreateController.GetSelectedProjectFiles();
+			Run(selectedFiles);
+		}
+
+		private void CreateReports(List<ProjectFile> selectedFiles)
+		{
 			var projects = _controllers.TranscreateController.GetSelectedProjects();
 			if (projects?.Count != 1)
 			{
@@ -54,15 +61,16 @@ namespace Trados.Transcreate.Actions
 			}
 
 			var reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
-
-			var reports = reportService.CreateFinalReport(project, studioProject, out var workingPath);
+			
+			var reports = reportService.CreateFinalReport(project, studioProject, selectedFiles, out var workingPath);
 			if (reports.Count > 0)
 			{
-				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId, reports);
+				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId,
+					reports);
 
 				var dr = MessageBox.Show("The transcreate reports have been created successfully."
-				                         +Environment.NewLine+Environment.NewLine+
-					"Open folder in explorer?", 
+				                         + Environment.NewLine + Environment.NewLine +
+				                         "Open folder in explorer?",
 					PluginResources.Plugin_Name, MessageBoxButtons.YesNo);
 
 				if (dr == DialogResult.Yes)
@@ -75,9 +83,14 @@ namespace Trados.Transcreate.Actions
 			}
 		}
 
-		public void Run()
+		public void Run(List<ProjectFile> selectedFiles)
 		{
-			Execute();
+			CreateReports(selectedFiles);
+		}
+
+		public bool IsEnabled()
+		{
+			return Enabled;
 		}
 
 		public override void Initialize()
@@ -108,8 +121,6 @@ namespace Trados.Transcreate.Actions
 
 			return new Settings();
 		}
-
-
 
 		private void ProjectsController_SelectedProjectsChanged(object sender, ProjectSelectionChangedEventArgs e)
 		{

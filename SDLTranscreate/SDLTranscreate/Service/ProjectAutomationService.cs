@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using Sdl.Core.Globalization;
@@ -63,45 +64,60 @@ namespace Trados.Transcreate.Service
 		/// Work around to ensure the project files have a segment pair container (e.g. segmented)
 		/// </summary>
 		/// <param name="project"></param>
-		public void RunPretranslationWithoutTm(FileBasedProject project)
+		public async Task<bool> RunPretranslationWithoutTm(FileBasedProject project)
 		{
-			var projectInfo = project.GetProjectInfo();
-			var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
-			var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
-
-			var languageTranslationProviderConfigurations = new Dictionary<Language, TranslationProviderConfiguration>();
-			foreach (var language in projectInfo.TargetLanguages)
+			var success = true;
+			try
 			{
-				var languageTranslationProviderConfigurationClone = project.GetTranslationProviderConfiguration(language);
-				languageTranslationProviderConfigurations.Add(language, languageTranslationProviderConfigurationClone);
+				var projectInfo = project.GetProjectInfo();
+				var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
+				var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
 
-				var languageTranslationProviderConfiguration = project.GetTranslationProviderConfiguration(language);
-				languageTranslationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
-				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfiguration);
+				var languageTranslationProviderConfigurations =
+					new Dictionary<Language, TranslationProviderConfiguration>();
+				foreach (var language in projectInfo.TargetLanguages)
+				{
+					var languageTranslationProviderConfigurationClone =
+						project.GetTranslationProviderConfiguration(language);
+					languageTranslationProviderConfigurations.Add(language,
+						languageTranslationProviderConfigurationClone);
+
+					var languageTranslationProviderConfiguration =
+						project.GetTranslationProviderConfiguration(language);
+					languageTranslationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+					project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfiguration);
+				}
+
+				// temporarily remove tm resources, prior to performing a pretranslation task
+				translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+				project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
+
+				foreach (var language in project.GetProjectInfo().TargetLanguages)
+				{
+					var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
+					project.RunAutomaticTask(
+						targetGuids.ToArray(),
+						AutomaticTaskTemplateIds.PreTranslateFiles
+					);
+				}
+
+				// add back the tm resources
+				project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
+				foreach (var language in projectInfo.TargetLanguages)
+				{
+					project.UpdateTranslationProviderConfiguration(language,
+						languageTranslationProviderConfigurations[language]);
+				}
+
+				project.UpdateProject(projectInfo);
+				project.Save();
+			}
+			catch
+			{
+				success = false;
 			}
 
-			// temporarily remove tm resources, prior to performing a pretranslation task
-			translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
-			project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
-
-			foreach (var language in project.GetProjectInfo().TargetLanguages)
-			{
-				var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
-				project.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.PreTranslateFiles
-				);
-			}
-
-			// add back the tm resources
-			project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
-			foreach (var language in projectInfo.TargetLanguages)
-			{
-				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfigurations[language]);
-			}
-
-			project.UpdateProject(projectInfo);
-			project.Save();
+			return await System.Threading.Tasks.Task.FromResult(success);
 		}
 
 		public void RemoveLastReportOfType(string groupType)
@@ -185,7 +201,7 @@ namespace Trados.Transcreate.Service
 			return newProject;
 		}
 
-		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string localProjectFolder,
+		public async Task<FileBasedProject> CreateBackTranslationProject(FileBasedProject project, string localProjectFolder,
 			string targetLanguage, string iconPath,
 			List<SourceFile> sourceFiles, string projectNameSuffix)
 		{
@@ -250,7 +266,7 @@ namespace Trados.Transcreate.Service
 				AutomaticTaskTemplateIds.CopyToTargetLanguages);
 
 			newProject.Save();
-			return newProject;
+			return await System.Threading.Tasks.Task.FromResult(newProject);
 		}
 
 		private void UpdateProjectSettingsBundle(FileBasedProject project)

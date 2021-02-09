@@ -39,7 +39,7 @@ namespace Trados.Transcreate.Service
 			_segmentBuilder = segmentBuilder;
 		}
 
-		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, out string workingPathOut)
+		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, List<ProjectFile> selectedFiles, out string workingPathOut)
 		{
 			var reports = new List<Report>();
 			var settings = new XmlWriterSettings
@@ -71,8 +71,20 @@ namespace Trados.Transcreate.Service
 				decimal current = 0;
 				foreach (var targetLanguage in project.TargetLanguages)
 				{
-					var projectFiles = project.ProjectFiles.Where(a => string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
-																   StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+					var projectFiles = project.ProjectFiles.Where(a =>
+						string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+
+					var hasProjectFiles = HasProjectFiles(selectedFiles, projectFiles);
+					if (!hasProjectFiles)
+					{
+						current += projectFiles.Count;
+						var progress = current / maximum * 100;
+
+						ProgressDialog.ProgressDialog.Current.Report((int)progress, 
+							string.Format("Language: {0}\r\nFile: {1}", targetLanguage.CultureInfo.DisplayName, projectFiles.FirstOrDefault().Name));
+
+						continue;
+					}
 
 					var workingLanguageFolder = GetPath(workingPath, targetLanguage.CultureInfo.Name);
 					foreach (var projectFile in projectFiles)
@@ -84,9 +96,13 @@ namespace Trados.Transcreate.Service
 
 						current++;
 						var progress = current / maximum * 100;
-						ProgressDialog.ProgressDialog.Current.Report((int)progress, "File: " + projectFile.Name);
+						ProgressDialog.ProgressDialog.Current.Report((int)progress, string.Format("Language: {0}\r\nFile: {1}", targetLanguage.CultureInfo.DisplayName, projectFile.Name));
 
-
+						if (selectedFiles !=null && !selectedFiles.Exists(a => a.FileId == projectFile.FileId))
+						{
+							continue;
+						}
+						
 						var projectFilePath = Path.Combine(project.Path, projectFile.Location);
 						var xliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId, projectFilePath,
 								targetLanguage.CultureInfo.Name);
@@ -218,6 +234,28 @@ namespace Trados.Transcreate.Service
 
 			return reports;
 
+		}
+
+		private static bool HasProjectFiles(List<ProjectFile> selectedFiles, List<ProjectFile> projectFiles)
+		{
+			var hasProjectFiles = true;
+			
+			if (selectedFiles?.Count > 0 && projectFiles.Any())
+			{
+				var availableFiles = projectFiles
+					.Where(projectFile => selectedFiles.Exists(a => a.FileId == projectFile.FileId)).ToList();
+				
+				if (!availableFiles.Any())
+				{
+					hasProjectFiles = false;
+				}
+			}
+			else if (!projectFiles.Any())
+			{
+				hasProjectFiles = false;
+			}
+
+			return hasProjectFiles;
 		}
 
 		public void CreateTaskReport(TaskContext taskContext, string reportFile,
