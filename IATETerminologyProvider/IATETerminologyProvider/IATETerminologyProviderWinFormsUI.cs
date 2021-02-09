@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
@@ -59,22 +60,26 @@ namespace Sdl.Community.IATETerminologyProvider
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
 
-		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, SettingsModel providerSettings)
+		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider,
+			SettingsModel providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
-			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService);
+			var dbContextService = new DatabaseContextService(Utils.GetCurrentProjectName());
+			var cacheService = new CacheService(dbContextService);
+			var messageBoxService = new MessageBoxService();
+			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService, cacheService,messageBoxService);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel
 			};
-			
+
 			_settingsWindow.ShowDialog();
 			if (!_settingsViewModel.DialogResult) return null;
 			providerSettings = _settingsViewModel.ProviderSettings;
 
 			if (provider is null)
 			{
-				provider = new IATETerminologyProvider(providerSettings);
+				provider = new IATETerminologyProvider(providerSettings, cacheService);
 			}
 			else
 			{
@@ -85,5 +90,6 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			return result.ToArray();
 		}
+
 	}
 }

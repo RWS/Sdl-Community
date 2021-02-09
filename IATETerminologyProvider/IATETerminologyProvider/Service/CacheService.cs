@@ -19,7 +19,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		public IEnumerable<SearchCache> GetAllCachedResults()
 		{
-			return _dbContext.SearchCaches.AsNoTracking();
+			return _dbContext.SearchCaches;
 		}
 
 		public async Task AddSearchResults(SearchCache searchCache,List<ISearchResult>iateSearchResults)
@@ -34,11 +34,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public void ClearCachedResults()
+		public async Task ClearCachedResults()
 		{
 			var catchedData = GetAllCachedResults();
 			_dbContext.SearchCaches.RemoveRange(catchedData);
-			_dbContext.SaveChanges();
+			await _dbContext.SaveChangesAsync();
 		}
 
 		public async Task<List<ISearchResult>> GetCachedResults(string sourceText, string targetLanguageName, string bodyModelString)

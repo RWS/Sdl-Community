@@ -61,6 +61,24 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear local cache.
+        /// </summary>
+        public static string ClearCache {
+            get {
+                return ResourceManager.GetString("ClearCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear local cache?.
+        /// </summary>
+        public static string ClearConfirmation {
+            get {
+                return ResourceManager.GetString("ClearConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select domain(s):.
         /// </summary>
         public static string Domains_description {

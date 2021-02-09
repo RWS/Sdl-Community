@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Commands;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Interface;
@@ -16,23 +18,29 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 	{
 		private ICommand _saveSettingsCommand;
 		private ICommand _resetToDefault;
+		private ICommand _clearCache;
 		private DomainModel _selectedDomain;		
 		private TermTypeModel _selectedTermType;
 		private readonly DomainService _domainService;
 		private readonly TermTypeService _termTypeService;
 		private readonly IIateSettingsService _settingsService;
+		private readonly ICacheService _cacheService;
+		private readonly IMessageBoxService _messageBoxService;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
 		private bool _dialogResult;
 		private bool _searchInSubdomains;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService)
+		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService,ICacheService cacheService,IMessageBoxService messageBocBoxService)
 		{			
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
 			_termTypeService = new TermTypeService();
 			_domainService = new DomainService();
 			_settingsService = settingsService;
+			_cacheService = cacheService;
+			_messageBoxService = messageBocBoxService;
 			ProviderSettings = new SettingsModel
 			{
 				Domains = new List<DomainModel>(),
@@ -137,6 +145,16 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
 		public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset, true));
+		public ICommand ClearCache => _clearCache ?? (_clearCache = new CommandHandler(Clear, true));
+
+		private void Clear()
+		{
+			var result = _messageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
+			if (result == MessageDialogResult.Yes)
+			{
+				Task.Run(async () => await _cacheService.ClearCachedResults());
+			}
+		}
 
 		private void Reset()
 		{
@@ -187,16 +205,24 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void LoadDomains()
 		{
-			if (DomainService.Domains?.Count > 0)
+			try
 			{
-				SetDomains(DomainService.Domains);
+				if (DomainService.Domains?.Count > 0)
+				{
+					SetDomains(DomainService.Domains);
+				}
+				else
+				{
+					IateDomains = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_domainService.GetDomains());
+					IateDomains.PropertyChanged += IateDomains_PropertyChanged;
+				}
 			}
-			else
+			catch (InvalidAsynchronousStateException e)
 			{
-				IateDomains = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_domainService.GetDomains());
-				IateDomains.PropertyChanged += IateDomains_PropertyChanged;
+				_logger.Error(e);
 			}
 		}
+
 		private void LoadTermTypes()
 		{
 			if (TermTypeService.IateTermType?.Count > 0)

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.Caching;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
@@ -16,17 +15,25 @@ namespace Sdl.Community.IATETerminologyProvider
 	{
 		public static HttpClient Clinet = new HttpClient();
 		private static readonly AccessTokenService AccessTokenService = new AccessTokenService();
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 		public async void Execute()
 		{
 			Log.Setup();
-
 			InitializeHttpClientSettings();
 
-			var domanService = new DomainService();
-			var termTypeService = new TermTypeService();
-			await domanService.GetDomains();
-			await termTypeService.GetTermTypes();
+			//If iate service is unavailable an error will be thrown in Studio, and studio will shut down without try/catch
+			try
+			{
+				var domanService = new DomainService();
+				var termTypeService = new TermTypeService();
+				await domanService.GetDomains();
+				await termTypeService.GetTermTypes();
+			}
+			catch (Exception e)
+			{
+				Logger.Error(e);
+			}
 		}
 
 		public static void SetAccessToken()
@@ -47,7 +54,6 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private static void RefreshAccessToken()
 		{
-			var logger = LogManager.GetCurrentClassLogger();
 
 			if (AccessTokenService.RefreshTokenExpired
 			    || AccessTokenService.RequestedAccessToken == DateTime.MinValue
@@ -56,7 +62,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				var success = AccessTokenService.GetAccessToken("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
 				if (!success)
 				{
-					logger.Error(PluginResources.TermSearchService_Error_in_requesting_access_token);
+					Logger.Error(PluginResources.TermSearchService_Error_in_requesting_access_token);
 				}
 			}
 			else if (AccessTokenService.AccessTokenExpired && !AccessTokenService.AccessTokenExtended)
@@ -64,7 +70,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				var success = AccessTokenService.ExtendAccessToken();
 				if (!success)
 				{
-					logger.Error(PluginResources.TermSearchService_Error_in_refreshing_access_token);
+					Logger.Error(PluginResources.TermSearchService_Error_in_refreshing_access_token);
 				}
 			}
 		}

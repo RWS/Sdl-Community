@@ -29,7 +29,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				providerSettings.Domains.AddRange(savedSettings.Domains);
 				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
 			}
-			var terminologyProvider = new IATETerminologyProvider(providerSettings);
+			var dbContextService = new DatabaseContextService(Utils.GetCurrentProjectName());
+			var terminologyProvider = new IATETerminologyProvider(providerSettings,new CacheService(dbContextService));
 			return terminologyProvider;
 		}		
 	}

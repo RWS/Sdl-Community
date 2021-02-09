@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Interface;
@@ -24,15 +23,14 @@ namespace Sdl.Community.IATETerminologyProvider
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private ICacheService _cacheService;
+		private readonly ICacheService _cacheService;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
-		public IATETerminologyProvider(SettingsModel providerSettings)
+		public IATETerminologyProvider(SettingsModel providerSettings,ICacheService cacheService)
 		{
 			UpdateSettings(providerSettings);
-			InitializeDbConnection();
+			_cacheService = cacheService;
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -121,7 +119,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			_searchService = new TermSearchService(_providerSettings);
 
 			InitializeEditorController();
-			InitializeDbConnection();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -238,44 +235,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			};
 
 			return bodyModel;
-		}
-
-		private void InitializeDbConnection()
-		{
-			var projectName = GetCurrentProjectName();
-			if (string.IsNullOrEmpty(projectName)) return;
-			var dbContextService = new DatabaseContextService(projectName);
-			_cacheService = new CacheService(dbContextService);
-		}
-		/// <summary>
-		/// User can change the settings of the provider or add the provider from any controller
-		/// If non of the existing controllers we'll try the Files controller
-		/// </summary>
-		/// <returns>Active project name</returns>
-		private string GetCurrentProjectName()
-		{
-			var editorActiveProject = _editorController?.ActiveDocument?.Project?.GetProjectInfo();
-			if (editorActiveProject!=null)
-			{
-				return editorActiveProject.Name;
-			}
-
-			var projectsControllerActiveProj = _projectsController?.CurrentProject?.GetProjectInfo();
-			if (projectsControllerActiveProj !=null)
-			{
-				return projectsControllerActiveProj.Name;
-			}
-			
-
-			var fileController = SdlTradosStudio.Application.GetController<FilesController>();
-			var filesControllerProject = fileController.CurrentProject?.GetProjectInfo();
-			if (filesControllerProject != null)
-			{
-				return filesControllerProject.Name;
-			}
-
-			_logger.Error("Current project name could not be obtained");
-			return string.Empty;
 		}
 
 		//TODO: Remove this method after IATE releases the new version of the API (we'll not need it anymore)

@@ -144,6 +144,7 @@
     <Compile Include="IATETerminologyProviderFactory.cs" />
     <Compile Include="Interface\ICacheService.cs" />
     <Compile Include="Interface\IIateSettingsService.cs" />
+    <Compile Include="Interface\IMessageBoxService.cs" />
     <Compile Include="Interface\IProviderSettings.cs" />
     <Compile Include="Model\CacheSearchResults.cs" />
     <Compile Include="Model\SearchCache.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Service\DomainService.cs" />
     <Compile Include="Service\AccessTokenService.cs" />
     <Compile Include="Service\IateSettingsService.cs" />
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Service\TermTypeService.cs" />

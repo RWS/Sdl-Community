@@ -11,6 +11,6 @@ namespace Sdl.Community.IATETerminologyProvider.Interface
 		Task<List<ISearchResult>> GetCachedResults(string sourceText, string targetLanguage, string bodyModelString);
 		IEnumerable<SearchCache> GetAllCachedResults();
 		Task AddSearchResults(SearchCache searchCache,List<ISearchResult> iateSearchResult);	
-		void ClearCachedResults();
+		Task ClearCachedResults();
 	}
 }
