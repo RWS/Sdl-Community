@@ -24,7 +24,6 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private readonly DomainService _domainService;
 		private readonly TermTypeService _termTypeService;
 		private readonly IIateSettingsService _settingsService;
-		private readonly ICacheService _cacheService;
 		private readonly IMessageBoxService _messageBoxService;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
@@ -32,14 +31,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private bool _searchInSubdomains;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService,ICacheService cacheService,IMessageBoxService messageBocBoxService)
+		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService,IMessageBoxService messageBocBoxService)
 		{			
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
 			_termTypeService = new TermTypeService();
 			_domainService = new DomainService();
 			_settingsService = settingsService;
-			_cacheService = cacheService;
 			_messageBoxService = messageBocBoxService;
 			ProviderSettings = new SettingsModel
 			{
@@ -150,10 +148,12 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private void Clear()
 		{
 			var result = _messageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
-			if (result == MessageDialogResult.Yes)
-			{
-				Task.Run(async () => await _cacheService.ClearCachedResults());
-			}
+			if (result != MessageDialogResult.Yes) return;
+			var activeProjectName = Utils.GetCurrentProjectName();
+			if (string.IsNullOrEmpty(activeProjectName)) return;
+
+			var cacheService = new CacheService(activeProjectName);
+			Task.Run(async () => await cacheService.ClearCachedResults());
 		}
 
 		private void Reset()

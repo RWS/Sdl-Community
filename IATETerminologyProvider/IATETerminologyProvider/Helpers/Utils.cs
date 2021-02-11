@@ -32,29 +32,15 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 		/// <summary>
 		/// We need the project name to create the connection to db. User can access the project from multiple locations in Studio
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Active Studio project name</returns>
 		public static string GetCurrentProjectName()
 		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var editorActiveProject = editorController?.ActiveDocument?.Project?.GetProjectInfo();
-			if (editorActiveProject != null)
-			{
-				return editorActiveProject.Name;
-			}
-
 			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 			var projectsControllerActiveProj = projectsController?.CurrentProject?.GetProjectInfo();
 			if (projectsControllerActiveProj != null)
 			{
 				return projectsControllerActiveProj.Name;
-			}
-
-			var fileController = SdlTradosStudio.Application.GetController<FilesController>();
-			var filesControllerProject = fileController.CurrentProject?.GetProjectInfo();
-			if (filesControllerProject != null)
-			{
-				return filesControllerProject.Name;
 			}
 
 			Logger.Error("Current project name could not be obtained");

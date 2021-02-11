@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,14 +13,17 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 	{
 		private readonly DatabaseContextService _dbContext;
 
-		public CacheService(DatabaseContextService dbContext)
+		public CacheService(string activeProjectName)
 		{
-			_dbContext = dbContext;
+			if (!IsDbConnected())
+			{
+				_dbContext = new DatabaseContextService(activeProjectName);
+			}
 		}
 
 		public IEnumerable<SearchCache> GetAllCachedResults()
 		{
-			return _dbContext.SearchCaches;
+			return _dbContext?.SearchCaches;
 		}
 
 		public async Task AddSearchResults(SearchCache searchCache,List<ISearchResult>iateSearchResults)
@@ -30,20 +34,28 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			if (string.IsNullOrEmpty(serializedSearchResult)) return;
 
 			searchCache.SearchResultsString = serializedSearchResult;
-			_dbContext.SearchCaches.Add(searchCache);
-			await _dbContext.SaveChangesAsync();
+			_dbContext?.SearchCaches.Add(searchCache);
+			if (_dbContext != null) await _dbContext.SaveChangesAsync();
 		}
 
 		public async Task ClearCachedResults()
 		{
-			var catchedData = GetAllCachedResults();
-			_dbContext.SearchCaches.RemoveRange(catchedData);
-			await _dbContext.SaveChangesAsync();
+			var cachedData = GetAllCachedResults();
+			_dbContext?.SearchCaches.RemoveRange(cachedData);
+			if (_dbContext != null) await _dbContext.SaveChangesAsync();
+		}
+
+		public bool IsDbConnected()
+		{
+			if (_dbContext?.Database == null || !_dbContext.Database.Exists()) return false;
+			return _dbContext.Database.Connection.State == ConnectionState.Open;
 		}
 
 		public async Task<List<ISearchResult>> GetCachedResults(string sourceText, string targetLanguageName, string bodyModelString)
 		{
-			var cacheData = await _dbContext.SearchCaches.FirstOrDefaultAsync(s =>
+			if (_dbContext?.SearchCaches == null) return null;
+
+			var cacheData = await _dbContext?.SearchCaches?.FirstOrDefaultAsync(s =>
 				s.SourceText.Equals(sourceText) && s.TargetLanguageName.Equals(targetLanguageName) &&
 				s.QueryString.Equals(bodyModelString));
 			return cacheData != null ? DeserializeSearchResult(cacheData.SearchResultsString) : null;

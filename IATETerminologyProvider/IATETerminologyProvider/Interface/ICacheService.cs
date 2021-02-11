@@ -12,5 +12,6 @@ namespace Sdl.Community.IATETerminologyProvider.Interface
 		IEnumerable<SearchCache> GetAllCachedResults();
 		Task AddSearchResults(SearchCache searchCache,List<ISearchResult> iateSearchResult);	
 		Task ClearCachedResults();
+		bool IsDbConnected();
 	}
 }

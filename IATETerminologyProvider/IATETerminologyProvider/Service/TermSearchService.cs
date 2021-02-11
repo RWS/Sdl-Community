@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -50,16 +52,23 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			var results = new List<ISearchResult>();
 
+			var mediaType = new ContentType("application/vnd.iate.entry-search+json").MediaType;
+			var content = new StringContent(bodyModel, Encoding.UTF8, mediaType);
+			content.Headers.ContentType.CharSet = ""; // we need to remove the charset otherwise we'll receive Unsupported Media Type error from IATE
+
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Post,
 				RequestUri = new Uri(ApiUrls.SearchUri("true", "0", "500")),
-				Content = new StringContent(bodyModel, Encoding.UTF8, "application/json")
+				Content = content
 			};
 
 			//TODO: Uncomment this line when the token will work
 			//Refresh the Access token on Http client in case it expired
 			//IateApplicationInitializer.SetAccessToken();
+
+			var client = IateApplicationInitializer.Clinet;
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.iate.entry+json"));
 
 			var httpResponse = IateApplicationInitializer.Clinet.SendAsync(httpRequest)?.Result;
 
@@ -75,7 +84,8 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 			finally
 			{
-				httpResponse?.Dispose();
+				httpResponse?.Dispose(); 
+				content.Dispose();
 			}
 		}
 

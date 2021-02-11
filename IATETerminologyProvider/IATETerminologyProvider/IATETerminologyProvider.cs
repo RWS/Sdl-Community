@@ -23,14 +23,12 @@ namespace Sdl.Community.IATETerminologyProvider
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;
-		private readonly ICacheService _cacheService;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
-		public IATETerminologyProvider(SettingsModel providerSettings,ICacheService cacheService)
+		public IATETerminologyProvider(SettingsModel providerSettings)
 		{
 			UpdateSettings(providerSettings);
-			_cacheService = cacheService;
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -63,15 +61,24 @@ namespace Sdl.Community.IATETerminologyProvider
 			_entryModels.Clear();
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
+			var activeProjectName = Utils.GetCurrentProjectName();
+			CacheService cacheService =null;
 
-			var cachedResults = Task.Run(async () => await _cacheService.GetCachedResults(text, target.Name, modelString)).Result;
-
-			if (cachedResults != null && cachedResults.Count > 0)
+			if (!string.IsNullOrEmpty(activeProjectName))
 			{
-				CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
+				cacheService = new CacheService(activeProjectName);
+			}
 
-				SuscribeToEntriesChangedEvent(text, source, target);
-				return cachedResults;
+			if (cacheService != null)
+			{
+				var cachedResults = Task.Run(async () => await cacheService.GetCachedResults(text, target.Name, modelString)).Result;
+				if (cachedResults != null && cachedResults.Count > 0)
+				{
+					CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
+
+					SuscribeToEntriesChangedEvent(text, source, target);
+					return cachedResults;
+				}
 			}
 
 			var results = _searchService.GetTerms(text, source, target, maxResultsCount, modelString);
@@ -83,15 +90,18 @@ namespace Sdl.Community.IATETerminologyProvider
 				results = MaxSearchResults(results, maxResultsCount);
 				CreateEntryTerms(results, source, GetLanguages());
 
-				// add search to catche db
+				// add search to cache db
 				var searchResults = new SearchCache
 				{
 					QueryString = modelString,
 					SourceText = text,
 					TargetLanguageName = target.Name
 				};
-			
-				Task.Run(async () => await _cacheService.AddSearchResults(searchResults, results));
+
+				if (cacheService != null)
+				{
+					Task.Run(async () => await cacheService.AddSearchResults(searchResults, results));
+				}
 			}
 
 			SuscribeToEntriesChangedEvent(text, source, target);
@@ -162,6 +172,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		{			
 			var result = new List<IDefinitionLanguage>();
 			var currentProject = _projectsController.CurrentProject;
+			if (currentProject == null) return result;
 			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
@@ -170,7 +181,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				Locale = projectInfo.SourceLanguage.CultureInfo,
 				Name = projectInfo.SourceLanguage.DisplayName,
 				TargetOnly = false
-			};						
+			};
 			result.Add(sourceLanguage);
 
 			foreach (var language in projectInfo.TargetLanguages)
@@ -185,7 +196,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				result.Add(targetLanguage);
 			}
-		
+
 			return result;
 		}
 

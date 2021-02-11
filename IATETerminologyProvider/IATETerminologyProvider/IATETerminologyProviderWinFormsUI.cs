@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
@@ -64,10 +63,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			SettingsModel providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
-			var dbContextService = new DatabaseContextService(Utils.GetCurrentProjectName());
-			var cacheService = new CacheService(dbContextService);
 			var messageBoxService = new MessageBoxService();
-			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService, cacheService,messageBoxService);
+
+			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService,messageBoxService);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel
@@ -79,7 +77,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			if (provider is null)
 			{
-				provider = new IATETerminologyProvider(providerSettings, cacheService);
+				provider = new IATETerminologyProvider(providerSettings);
 			}
 			else
 			{
@@ -90,6 +88,5 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			return result.ToArray();
 		}
-
 	}
 }
