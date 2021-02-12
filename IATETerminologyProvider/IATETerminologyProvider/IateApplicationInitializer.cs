@@ -22,12 +22,12 @@ namespace Sdl.Community.IATETerminologyProvider
 			Log.Setup();
 			InitializeHttpClientSettings();
 
-			//If iate service is unavailable an error will be thrown in Studio, and studio will shut down without try/catch
+			//If IATE service is unavailable an error will be thrown in Studio, and studio will shut down without try/catch
 			try
 			{
-				var domanService = new DomainService();
+				var domainService = new DomainService();
 				var termTypeService = new TermTypeService();
-				await domanService.GetDomains();
+				await domainService.GetDomains();
 				await termTypeService.GetTermTypes();
 			}
 			catch (Exception e)

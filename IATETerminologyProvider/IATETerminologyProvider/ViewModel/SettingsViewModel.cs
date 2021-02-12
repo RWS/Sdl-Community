@@ -261,7 +261,6 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 					{
 						Code = domain.Code,
 						Name = selectedDomainName,
-						SubdomainsIds = domain.SubdomainIds
 					};
 					domainModel.PropertyChanged += DomainModel_PropertyChanged;
 					Domains.Add(domainModel);

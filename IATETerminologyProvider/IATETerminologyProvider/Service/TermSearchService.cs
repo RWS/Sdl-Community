@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -115,7 +114,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 						var searchResultItems = new List<SearchResultModel>();
 
-						// get language childrens (source + target languages)
+						// get language children (source + target languages)
 						var languageTokens = item.SelectToken("language").Children().ToList();
 						if (languageTokens.Any())
 						{
@@ -220,8 +219,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			return domain.TrimEnd(' ').TrimEnd(',');
 		}
 
-		//TODO: Remove this
-		// Set term subdomain
+		// Set term subdomains
 		private void SetTermSubdomains(ItemsResponseModel mainDomains)
 		{
 			// clear _subdomains list for each term
@@ -243,7 +241,6 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 		}
 
-		//TODO: Remove this
 		// Get subdomains recursively
 		private void GetSubdomainsRecursively(IEnumerable<SubdomainsResponseModel> subdomains, string code, string note)
 		{

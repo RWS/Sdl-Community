@@ -14,6 +14,5 @@ namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 		public List<SubdomainsResponseModel> Subdomains { get; set; }
 		public List<TermsDomainResponseModel> Domains { get; set; }
 		public string Id { get; set; }
-		public List<string> SubdomainIds { get; set; }
 	}
 }

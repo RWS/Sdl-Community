@@ -214,20 +214,15 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private object GetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
 		{
-			var targetLanguges = new List<string>();
+			var targetLanguages = new List<string>();
 			var filteredDomains = new List<string>();
 			var filteredTermTypes = new List<int>();
 
-			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
+			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
 			if (_providerSettings != null)
 			{
 				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
 				filteredDomains.AddRange(domains);
-
-				if (_providerSettings.SearchInSubdomains)
-				{
-					IncludeSubdomainsId(filteredDomains);
-				}
 
 				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
@@ -237,28 +232,15 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
-				targets = targetLanguges,
-				include_subdomains = "true",
-				cascade_domains = true,
+				targets = targetLanguages,
+				include_subdomains = _providerSettings?.SearchInSubdomains,
+				cascade_domains = _providerSettings?.SearchInSubdomains,
 				query_operator = 0,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
 			};
 
 			return bodyModel;
-		}
-
-		//TODO: Remove this method after IATE releases the new version of the API (we'll not need it anymore)
-		private void IncludeSubdomainsId(List<string> filteredDomainsIds)
-		{
-			var subdomainsIds = new List<string>();
-			var correspondingSubdomains =
-				_providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
-			foreach (var subdomainIds in correspondingSubdomains)
-			{
-				subdomainsIds.AddRange(subdomainIds);
-			}
-			filteredDomainsIds.AddRange(subdomainsIds);
 		}
 
 		public override void Dispose()
