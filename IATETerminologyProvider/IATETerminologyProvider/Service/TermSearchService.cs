@@ -62,9 +62,8 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				Content = content
 			};
 
-			//TODO: Uncomment this line when the token will work
 			//Refresh the Access token on Http client in case it expired
-			//IateApplicationInitializer.SetAccessToken();
+			IateApplicationInitializer.SetAccessToken();
 
 			var client = IateApplicationInitializer.Clinet;
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.iate.entry+json"));

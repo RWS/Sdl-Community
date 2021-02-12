@@ -49,7 +49,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		{
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 			Utils.AddDefaultParameters(Clinet);
-			//SetAccessToken();
+			SetAccessToken();
 		}
 
 		private static void RefreshAccessToken()
