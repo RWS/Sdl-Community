@@ -32,6 +32,7 @@ namespace Trados.Transcreate.Actions
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
+		private ProjectSettingsService _projectSettingsService;
 		private Controllers _controllers;
 
 		protected override void Execute()
@@ -70,7 +71,7 @@ namespace Trados.Transcreate.Actions
 
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService,
-				_projectAutomationService);
+				_projectAutomationService, _projectSettingsService);
 
 			try
 			{
@@ -111,7 +112,8 @@ namespace Trados.Transcreate.Actions
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
-
+			_projectSettingsService = new ProjectSettingsService();
+			
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
 
 			var projects = _controllers?.TranscreateController?.GetSelectedProjects();

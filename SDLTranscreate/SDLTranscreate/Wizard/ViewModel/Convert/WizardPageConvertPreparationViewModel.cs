@@ -271,6 +271,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				var selectedProject = _controllers.ProjectsController.GetProjects()
 					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
 				await _projectAutomationService.RunPretranslationWithoutTm(selectedProject);
+				
 				_projectAutomationService.RemoveLastReportOfType("Translate");
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,

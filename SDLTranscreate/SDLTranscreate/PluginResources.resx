@@ -667,4 +667,70 @@
   <data name="WizardMessage_CreatingBackTranslationProject" xml:space="preserve">
     <value>Creating Back-Translation Project</value>
   </data>
+  <data name="Report_Label_CreateTranscreateProject" xml:space="preserve">
+	  <value>Create Transcreate project</value>
+  </data>
+  <data name="Report_Label_ProjectCreation" xml:space="preserve">
+	  <value>Project Creation</value>
+  </data>
+  <data name="Report_Label_CreatedTranscreateProject" xml:space="preserve">
+	  <value>Created Transcreate project</value>
+  </data>
+  <data name="Report_Label_UpdateBackTranslationProject" xml:space="preserve">
+	  <value>Update Back-Translation project</value>
+  </data>
+  <data name="Report_Label_UpdatedBackTranslationProject" xml:space="preserve">
+	  <value>Updated Back-Translation project</value>
+  </data>
+  <data name="Report_Label_CreateBackTranslationProject" xml:space="preserve">
+	  <value>Create Back-Translation project</value>
+  </data>
+  <data name="Report_Label_CreatedBackTranslationProject" xml:space="preserve">
+	  <value>Created Back-Translation project</value>
+  </data>
+  <data name="Report_Label_ExportTranslations" xml:space="preserve">
+	  <value>Export Translations</value>
+  </data>
+  <data name="Report_Label_Export" xml:space="preserve">
+	  <value>Export</value>
+  </data>
+  <data name="Report_Label_ExportedForTranslation" xml:space="preserve">
+	  <value>Exported for Translation</value>
+  </data>
+  <data name="Report_Label_ImportTranslations" xml:space="preserve">
+	  <value>Import Translations</value>
+  </data>
+  <data name="Report_Label_Import" xml:space="preserve">
+	  <value>Import</value>
+  </data>
+  <data name="Report_Label_ImportedTranslations" xml:space="preserve">
+	  <value>Imported Translations</value>
+  </data>
+  <data name="Report_Label_ExportBackTranslations" xml:space="preserve">
+	  <value>Export Back-Translations</value>
+  </data>
+  <data name="Report_Label_ExportedForBackTranslation" xml:space="preserve">
+	  <value>Exported for Back-Translation</value>
+  </data>
+  <data name="Report_Label_ImportBackTranslations" xml:space="preserve">
+	  <value>Import Back-Translations</value>
+  </data>
+  <data name="Report_Label_ImportedBackTranslation" xml:space="preserve">
+	  <value>Imported Back-Translation</value>
+  </data>
+  <data name="Progres_Label_CreatingProject" xml:space="preserve">
+	  <value>Creating project...</value>
+  </data>
+  <data name="Progres_Label_CreatedProject" xml:space="preserve">
+	  <value>Created project: {0}</value>
+  </data>
+  <data name="Progres_Label_MergingProjectFolders" xml:space="preserve">
+	  <value>Merging project folders....</value>
+  </data>
+  <data name="Progres_Label_Translating" xml:space="preserve">
+	  <value>Translating....</value>
+  </data>
+  <data name="Progres_Label_UpdatingTask" xml:space="preserve">
+	  <value>Updating task....</value>
+  </data>
 </root>

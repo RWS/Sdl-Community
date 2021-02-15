@@ -36,6 +36,7 @@ namespace Trados.Transcreate.Service
 		private readonly Settings _settings;
 		private readonly IDialogService _dialogService;
 		private readonly ProjectAutomationService _projectAutomationService;
+		private readonly ProjectSettingsService _projectSettingsService;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private TaskContext _taskContext;
@@ -43,7 +44,7 @@ namespace Trados.Transcreate.Service
 
 		public WizardService(Enumerators.Action action, Enumerators.WorkFlow workFlow, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
-			IDialogService dialogService, ProjectAutomationService projectAutomationService)
+			IDialogService dialogService, ProjectAutomationService projectAutomationService, ProjectSettingsService projectSettingsService)
 		{
 			_action = action;
 			_workFlow = workFlow;
@@ -55,6 +56,7 @@ namespace Trados.Transcreate.Service
 			_segmentBuilder = segmentBuilder;
 			_settings = settings;
 			_projectAutomationService = projectAutomationService;
+			_projectSettingsService = projectSettingsService;
 		}
 
 		public TaskContext ShowWizard(AbstractController controller, out string message)
@@ -243,7 +245,7 @@ namespace Trados.Transcreate.Service
 				pages.Add(new WizardPageBackTranslationOptionsViewModel(_wizardWindow, new WizardPageBackTranslationOptionsView(), taskContext, _dialogService));
 				pages.Add(new WizardPageBackTranslationSummaryViewModel(_wizardWindow, new WizardPageBackTranslationSummaryView(), taskContext));
 				pages.Add(new WizardPageBackTranslationPreparationViewModel(_wizardWindow, new WizardPageBackTranslationPreparationView(), taskContext,
-					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService));
+					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService, _projectSettingsService));
 			}
 
 			UpdatePageIndexes(pages);

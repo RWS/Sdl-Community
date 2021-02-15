@@ -12,6 +12,7 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.Model;
@@ -232,7 +233,7 @@ namespace Trados.Transcreate.Service
 				TargetLanguages = new Language[] { newTargetLanguage },
 				DueDate = projectInfo.DueDate,
 				ProjectOrigin = "Back-Translation project",
-				IconPath = iconPath,
+				IconPath = iconPath
 			};
 
 			var newProject = new FileBasedProject(newProjectInfo, projectReference);
@@ -246,7 +247,7 @@ namespace Trados.Transcreate.Service
 			}
 			newProject.Save();
 
-			UpdateProjectSettingsBundle(newProject);
+			UpdateProjectSettingsBundle(newProject, null, null, null);
 
 			// Remove any TMs that don't correspond to the language directions of the project
 			UpdateTmConfiguration(newProject);
@@ -269,20 +270,51 @@ namespace Trados.Transcreate.Service
 			return await System.Threading.Tasks.Task.FromResult(newProject);
 		}
 
-		private void UpdateProjectSettingsBundle(FileBasedProject project)
+		public void UpdateProjectSettingsBundle(FileBasedProject project, IReadOnlyCollection<Report> reports,
+			IReadOnlyCollection<SDLTranscreateProjectFile> projectFiles, IReadOnlyCollection<SDLTranscreateBackProject> backProjects)
 		{
 			var settingsBundle = project.GetSettings();
-			var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
-			var projectFiles = new List<SDLTranscreateProjectFile>();
-			sdlTranscreateProject.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles);
-			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
 
-			var sdlBackTranslateProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
-			var backProjects = new List<SDLTranscreateBackProject>();
-			sdlBackTranslateProjects.BackProjectsJson.Value = JsonConvert.SerializeObject(backProjects);
-			project.UpdateSettings(sdlTranscreateProject.SettingsBundle);
+			var reportsViewerBundle = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
+			reportsViewerBundle.ReportsJson.Value = JsonConvert.SerializeObject(reports ?? new List<Report>());
+			project.UpdateSettings(reportsViewerBundle.SettingsBundle);
+
+			var transcreateBundle = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
+			transcreateBundle.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles ?? new List<SDLTranscreateProjectFile>());
+			project.UpdateSettings(transcreateBundle.SettingsBundle);
+
+			var backTranslationBundle = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+			backTranslationBundle.BackProjectsJson.Value = JsonConvert.SerializeObject(backProjects ?? new List<SDLTranscreateBackProject>());
+			project.UpdateSettings(backTranslationBundle.SettingsBundle);
 
 			project.Save();
+		}
+
+		public List<Report> GetProjectReports(FileBasedProject project)
+		{
+			if (project != null)
+			{
+				var settingsBundle = project.GetSettings();
+				var reportsViewerBundle = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
+				return DeserializeReports(reportsViewerBundle.ReportsJson.Value);
+			}
+
+			return new List<Report>();
+		}
+
+		private List<Report> DeserializeReports(string value)
+		{
+			try
+			{
+				var reports = JsonConvert.DeserializeObject<List<Report>>(value);
+				return reports?.ToList() ?? new List<Report>();
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return new List<Report>();
 		}
 
 		public Interfaces.IProject GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)

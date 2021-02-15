@@ -80,7 +80,7 @@ namespace Trados.Transcreate.Service
 						current += projectFiles.Count;
 						var progress = current / maximum * 100;
 
-						ProgressDialog.ProgressDialog.Current.Report((int)progress, 
+						ProgressDialog.ProgressDialog.Current.Report((int)progress,
 							string.Format("Language: {0}\r\nFile: {1}", targetLanguage.CultureInfo.DisplayName, projectFiles.FirstOrDefault().Name));
 
 						continue;
@@ -98,11 +98,11 @@ namespace Trados.Transcreate.Service
 						var progress = current / maximum * 100;
 						ProgressDialog.ProgressDialog.Current.Report((int)progress, string.Format("Language: {0}\r\nFile: {1}", targetLanguage.CultureInfo.DisplayName, projectFile.Name));
 
-						if (selectedFiles !=null && !selectedFiles.Exists(a => a.FileId == projectFile.FileId))
+						if (selectedFiles != null && !selectedFiles.Exists(a => a.FileId == projectFile.FileId))
 						{
 							continue;
 						}
-						
+
 						var projectFilePath = Path.Combine(project.Path, projectFile.Location);
 						var xliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId, projectFilePath,
 								targetLanguage.CultureInfo.Name);
@@ -239,12 +239,12 @@ namespace Trados.Transcreate.Service
 		private static bool HasProjectFiles(List<ProjectFile> selectedFiles, List<ProjectFile> projectFiles)
 		{
 			var hasProjectFiles = true;
-			
+
 			if (selectedFiles?.Count > 0 && projectFiles.Any())
 			{
 				var availableFiles = projectFiles
 					.Where(projectFile => selectedFiles.Exists(a => a.FileId == projectFile.FileId)).ToList();
-				
+
 				if (!availableFiles.Any())
 				{
 					hasProjectFiles = false;
@@ -278,7 +278,14 @@ namespace Trados.Transcreate.Service
 					reportName = "Create Transcreate Project Report";
 					break;
 				case Enumerators.Action.CreateBackTranslation:
-					reportName = "Create Back-Translation Project Report";
+					if (taskContext.Project is BackTranslationProject backTranslationProject && backTranslationProject.IsUpdate)
+					{
+						reportName = "Update Back-Translation Project Report";
+					}
+					else
+					{
+						reportName = "Create Back-Translation Project Report";
+					}
 					break;
 				case Enumerators.Action.Export:
 					reportName = "Export Translations Report";

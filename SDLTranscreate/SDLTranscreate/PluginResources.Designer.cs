@@ -1033,6 +1033,51 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created project: {0}.
+        /// </summary>
+        internal static string Progres_Label_CreatedProject {
+            get {
+                return ResourceManager.GetString("Progres_Label_CreatedProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating project....
+        /// </summary>
+        internal static string Progres_Label_CreatingProject {
+            get {
+                return ResourceManager.GetString("Progres_Label_CreatingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merging project folders.....
+        /// </summary>
+        internal static string Progres_Label_MergingProjectFolders {
+            get {
+                return ResourceManager.GetString("Progres_Label_MergingProjectFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translating.....
+        /// </summary>
+        internal static string Progres_Label_Translating {
+            get {
+                return ResourceManager.GetString("Progres_Label_Translating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating task.....
+        /// </summary>
+        internal static string Progres_Label_UpdatingTask {
+            get {
+                return ResourceManager.GetString("Progres_Label_UpdatingTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Refresh {
@@ -1049,6 +1094,159 @@ namespace Trados.Transcreate {
             get {
                 object obj = ResourceManager.GetObject("Report", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_CreateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_CreatedBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreatedBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created Transcreate project.
+        /// </summary>
+        internal static string Report_Label_CreatedTranscreateProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreatedTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Transcreate project.
+        /// </summary>
+        internal static string Report_Label_CreateTranscreateProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreateTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string Report_Label_Export {
+            get {
+                return ResourceManager.GetString("Report_Label_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Back-Translations.
+        /// </summary>
+        internal static string Report_Label_ExportBackTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported for Back-Translation.
+        /// </summary>
+        internal static string Report_Label_ExportedForBackTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportedForBackTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported for Translation.
+        /// </summary>
+        internal static string Report_Label_ExportedForTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportedForTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Translations.
+        /// </summary>
+        internal static string Report_Label_ExportTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string Report_Label_Import {
+            get {
+                return ResourceManager.GetString("Report_Label_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Back-Translations.
+        /// </summary>
+        internal static string Report_Label_ImportBackTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported Back-Translation.
+        /// </summary>
+        internal static string Report_Label_ImportedBackTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportedBackTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported Translations.
+        /// </summary>
+        internal static string Report_Label_ImportedTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportedTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Translations.
+        /// </summary>
+        internal static string Report_Label_ImportTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Creation.
+        /// </summary>
+        internal static string Report_Label_ProjectCreation {
+            get {
+                return ResourceManager.GetString("Report_Label_ProjectCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_UpdateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_UpdateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_UpdatedBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_UpdatedBackTranslationProject", resourceCulture);
             }
         }
         

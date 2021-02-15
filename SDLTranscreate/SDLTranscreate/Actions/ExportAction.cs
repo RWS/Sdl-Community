@@ -31,6 +31,7 @@ namespace Trados.Transcreate.Actions
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
+		private ProjectSettingsService _projectSettingsService;
 
 		protected override void Execute()
 		{
@@ -49,7 +50,7 @@ namespace Trados.Transcreate.Actions
 			var settings = GetSettings();
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService,
-				_projectAutomationService);
+				_projectAutomationService, _projectSettingsService);
 
 			var taskContext = wizardService.ShowWizard(Controller, out var message);
 			if (taskContext == null && !string.IsNullOrEmpty(message))
@@ -87,7 +88,8 @@ namespace Trados.Transcreate.Actions
 			_segmentBuilder = new SegmentBuilder();
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController,
 				_controllers.ProjectsController, _customerProvider);
-
+			_projectSettingsService = new ProjectSettingsService();
+			
 			Enabled = false;
 		}
 

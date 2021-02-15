@@ -327,7 +327,7 @@ namespace Trados.Transcreate
 			}
 
 			_projectsController.RefreshProjects();
-			
+
 			var parentProject = _transcreateProjects.FirstOrDefault(a => a.Id == parentProjectId);
 			if (parentProject == null)
 			{
@@ -341,76 +341,40 @@ namespace Trados.Transcreate
 				return;
 			}
 
+
 			lock (_lockObject)
 			{
-				_projectAutomationService.RemoveAllReports();
+				_projectAutomationService.RemoveLastReportOfType("Translate");
 			}
 
 			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
 			taskContext.Project.ProjectFiles.RemoveAll(a => string.Compare(a.TargetLanguage, sourceLanguage,
 				StringComparison.CurrentCultureIgnoreCase) == 0);
 
+			var backTranslationProject = parentProject.BackTranslationProjects.FirstOrDefault(a => a.Id == taskContext.Project.Id) ??
+										 parentProject.BackTranslationProjects.FirstOrDefault(a =>
+											string.Compare(a.SourceLanguage?.CultureInfo.Name,
+												taskContext.Project.SourceLanguage?.CultureInfo.Name,
+												StringComparison.CurrentCultureIgnoreCase) == 0 &&
+											string.Compare(a.TargetLanguages.FirstOrDefault()?.CultureInfo.Name,
+												taskContext.Project.TargetLanguages.FirstOrDefault()?.CultureInfo.Name,
+												StringComparison.CurrentCultureIgnoreCase) == 0);
 
-			var backTranslationProject = parentProject.BackTranslationProjects.FirstOrDefault(a => a.Id == taskContext.Project.Id);
-
-			if (backTranslationProject == null)
+			if (backTranslationProject != null)
 			{
-				var previousBackTranslationProject = parentProject.BackTranslationProjects.FirstOrDefault(a =>
-					string.Compare(a.SourceLanguage?.CultureInfo.Name,
-						taskContext.Project.SourceLanguage?.CultureInfo.Name,
-						StringComparison.CurrentCultureIgnoreCase) == 0 &&
-					string.Compare(a.TargetLanguages.FirstOrDefault()?.CultureInfo.Name,
-						taskContext.Project.TargetLanguages.FirstOrDefault()?.CultureInfo.Name,
-						StringComparison.CurrentCultureIgnoreCase) == 0);
-				
-				if (previousBackTranslationProject != null)
-				{
-					parentProject.BackTranslationProjects.Remove(previousBackTranslationProject);
-				}
-
-				foreach (var wcProjectFile in taskContext.ProjectFiles)
-				{
-					ConvertToRelativePaths(taskContext.Project, wcProjectFile);
-				}
-
-				backTranslationProject = taskContext.Project as BackTranslationProject;
-				if (backTranslationProject != null)
-				{
-					parentProject.BackTranslationProjects.Add(backTranslationProject);
-				}
+				((BackTranslationProject)taskContext.Project).IsUpdate = true;
+				parentProject.BackTranslationProjects.Remove(backTranslationProject);
 			}
-			else
+
+			foreach (var wcProjectFile in taskContext.ProjectFiles)
 			{
-				foreach (var wcProjectFile in taskContext.ProjectFiles)
-				{
-					var projectFile = backTranslationProject.ProjectFiles.FirstOrDefault(a => a.FileId == wcProjectFile.FileId);
-					if (projectFile == null)
-					{
-						wcProjectFile.Project = backTranslationProject;
-						ConvertToRelativePaths(backTranslationProject, wcProjectFile);
-						backTranslationProject.ProjectFiles.Add(wcProjectFile);
-					}
-					else if (wcProjectFile.Selected)
-					{
-						foreach (var fileActivity in wcProjectFile.ProjectFileActivities)
-						{
-							fileActivity.ProjectFile = projectFile;
-						}
+				ConvertToRelativePaths(taskContext.Project, wcProjectFile);
+			}
 
-						ConvertToRelativePaths(backTranslationProject, wcProjectFile);
-
-						projectFile.ExternalFilePath = wcProjectFile.ExternalFilePath;
-						projectFile.Location = wcProjectFile.Location;
-						projectFile.Report = wcProjectFile.Report;
-						projectFile.Status = wcProjectFile.Status;
-						projectFile.Action = wcProjectFile.Action;
-						projectFile.WorkFlow = wcProjectFile.WorkFlow;
-						projectFile.Date = wcProjectFile.Date;
-						projectFile.ConfirmationStatistics = wcProjectFile.ConfirmationStatistics;
-						projectFile.TranslationOriginStatistics = wcProjectFile.TranslationOriginStatistics;
-						projectFile.ProjectFileActivities = wcProjectFile.ProjectFileActivities;
-					}
-				}
+			backTranslationProject = taskContext.Project as BackTranslationProject;
+			if (backTranslationProject != null)
+			{
+				parentProject.BackTranslationProjects.Add(backTranslationProject);
 			}
 
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, backTranslationProject);
@@ -427,10 +391,13 @@ namespace Trados.Transcreate
 
 			var languageDirections = GetLanguageDirectionFiles(studioParentProject.FilePath, taskContext);
 
+			var isUpdate = taskContext.Project is BackTranslationProject backTranslationProject && backTranslationProject.IsUpdate;
+			var actionName = isUpdate ? "UpdateBackTranslation" : taskContext.Action.ToString();
+
 			foreach (var languageDirection in languageDirections)
 			{
 				var reportName = string.Format("{0}_{1}_{2}_{3}.xml",
-					taskContext.Action.ToString().Replace(" ", ""),
+					actionName,
 					taskContext.DateTimeStampToString,
 					languageDirection.Key.SourceLanguageCode,
 					languageDirection.Key.TargetLanguageCode);
@@ -459,7 +426,7 @@ namespace Trados.Transcreate
 					XsltPath = reportTemplate,
 					Date = DateTime.Now
 				};
-				AssingReportProperties(taskContext.Action, report);
+				AssingReportProperties(taskContext.Action, report, isUpdate);
 
 				reports.Add(report);
 
@@ -841,39 +808,48 @@ namespace Trados.Transcreate
 			wcProjectFile.Report = GetRelativePath(project.Path, wcProjectFile.Report);
 		}
 
-		private void AssingReportProperties(Enumerators.Action action, Report report)
+		private void AssingReportProperties(Enumerators.Action action, Report report, bool isUpdate)
 		{
 			switch (action)
 			{
 				case Enumerators.Action.Convert:
-					report.Name = "Create Transcreate Project";
-					report.Group = "Project Creation";
-					report.Description = "Created transcreate project";
+					report.Name = PluginResources.Report_Label_CreateTranscreateProject;
+					report.Group = PluginResources.Report_Label_ProjectCreation;
+					report.Description = PluginResources.Report_Label_CreatedTranscreateProject;
 					break;
 				case Enumerators.Action.CreateBackTranslation:
-					report.Name = "Create Back-Translation Project";
-					report.Group = "Project Creation";
-					report.Description = "Created back-translation project";
+					if (isUpdate)
+					{
+						report.Name = PluginResources.Report_Label_UpdateBackTranslationProject;
+						report.Group = PluginResources.Report_Label_ProjectCreation;
+						report.Description = PluginResources.Report_Label_UpdatedBackTranslationProject;
+					}
+					else
+					{
+						report.Name = PluginResources.Report_Label_CreateBackTranslationProject;
+						report.Group = PluginResources.Report_Label_ProjectCreation;
+						report.Description = PluginResources.Report_Label_CreatedBackTranslationProject;
+					}
 					break;
 				case Enumerators.Action.Export:
-					report.Name = "Export Translations";
-					report.Group = "Export";
-					report.Description = "Exported for translation";
+					report.Name = PluginResources.Report_Label_ExportTranslations;
+					report.Group = PluginResources.Report_Label_Export;
+					report.Description = PluginResources.Report_Label_ExportedForTranslation;
 					break;
 				case Enumerators.Action.Import:
-					report.Name = "Import Translations";
-					report.Group = "Import";
-					report.Description = "Imported translations";
+					report.Name = PluginResources.Report_Label_ImportTranslations;
+					report.Group = PluginResources.Report_Label_Import;
+					report.Description = PluginResources.Report_Label_ImportedTranslations;
 					break;
 				case Enumerators.Action.ExportBackTranslation:
-					report.Name = "Export Back-Translations";
-					report.Group = "Export";
-					report.Description = "Exported for back-translation";
+					report.Name = PluginResources.Report_Label_ExportBackTranslations;
+					report.Group = PluginResources.Report_Label_Export;
+					report.Description = PluginResources.Report_Label_ExportedForBackTranslation;
 					break;
 				case Enumerators.Action.ImportBackTranslation:
-					report.Name = "Import Back-Translations";
-					report.Group = "Import";
-					report.Description = "Imported back-translation";
+					report.Name = PluginResources.Report_Label_ImportBackTranslations;
+					report.Group = PluginResources.Report_Label_Import;
+					report.Description = PluginResources.Report_Label_ImportedBackTranslation;
 					break;
 			}
 		}
