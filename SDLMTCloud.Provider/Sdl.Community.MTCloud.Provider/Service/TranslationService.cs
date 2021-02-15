@@ -230,16 +230,20 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
 
-			OnTranslationReceived(sourceSegments, new TargetSegmentData 
+			OnTranslationReceived(sourceSegments, new TranslationData 
 			{
 				TargetSegments = targetSegments.Select(seg => seg.ToString()).ToList(),
-				Model = translations.Model,
-				QualityEstimation = dataResponse.Item2
+				TranslationOriginInformation = new TranslationOriginInformation
+				{
+					Model = translations.Model,
+					QualityEstimation = dataResponse.Item2
+				}
 			});
+
 			return targetSegments;
 		}
 
-		private void OnTranslationReceived(List<string> sourceSegments, TargetSegmentData targetSegmentData)
+		private void OnTranslationReceived(List<string> sourceSegments, TranslationData targetSegmentData)
 		{
 			TranslationReceived?.Invoke(sourceSegments, targetSegmentData);
 		}
@@ -308,10 +312,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return string.Empty;
 		}
 
-		private async Task<(string, string[])> CheckTranslationStatus(IHttpClient httpClient, string id)
+		private async Task<(string, string)> CheckTranslationStatus(IHttpClient httpClient, string id)
 		{
 			var translationStatus = string.Empty;
-			var qualityEstimation = new string[1];
+			string qualityEstimation = null;
 
 			do
 			{
@@ -334,7 +338,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (JsonConvert.DeserializeObject<TranslationResponseStatus>(response) is TranslationResponseStatus responseStatus)
 				{
 					translationStatus = responseStatus.TranslationStatus;
-					qualityEstimation = responseStatus.QualityEstimation;
+					qualityEstimation = responseStatus.QualityEstimation?[0];
 
 					if (string.Compare(responseStatus.TranslationStatus, Constants.DONE, StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
