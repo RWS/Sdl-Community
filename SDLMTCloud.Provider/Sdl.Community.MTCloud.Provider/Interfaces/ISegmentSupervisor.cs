@@ -10,9 +10,9 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	{
 		event ConfirmationLevelChangedEventHandler SegmentConfirmed;
 
-		Dictionary<SegmentId, Feedback> ActiveDocumentImprovements { get; }
+		Dictionary<SegmentId, TargetSegmentData> ActiveDocumentData { get; }
 
-		Dictionary<Guid, Dictionary<SegmentId, Feedback>> Improvements { get; set; }
+		Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; }
 
 		void AddImprovement(SegmentId segmentId, string improvement);
 

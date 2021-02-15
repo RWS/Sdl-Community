@@ -193,7 +193,9 @@
     <Compile Include="Model\Rating.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
     <Compile Include="Model\TargetSegmentData.cs" />
+    <Compile Include="Model\TranslationData.cs" />
     <Compile Include="Model\TranslationFeedbackRequest.cs" />
+    <Compile Include="Model\TranslationOriginInformation.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\TranslationResponseStats.cs" />

@@ -3,5 +3,5 @@ using Sdl.Community.MTCloud.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Provider.Service.Events
 {
-	public delegate void TranslationReceivedEventHandler(List<string> sourceSegment, TargetSegmentData targetSegmentData);
+	public delegate void TranslationReceivedEventHandler(List<string> sourceSegment, TranslationData targetSegmentData);
 }
