@@ -66,7 +66,6 @@
 			</DataGrid>
 		</GroupBox>
 
-
 		<GroupBox Header="Comments"  Visibility="{Binding Path=HasComments, Converter={StaticResource BooleanToVisibilityConverter}}" >
 			<controls:SortAwareDataGrid Margin="2,8,2,2" 
 			          ItemsSource="{Binding Path=Comments, Mode=OneWay}"
@@ -114,6 +113,33 @@
 					</DataGridTemplateColumn>
 					<DataGridTextColumn Width="Auto" Header="Author" Binding="{Binding Author, Mode=OneWay}"/>
 					<DataGridTextColumn Width="Auto" Header="Date" Binding="{Binding Date, Mode=OneWay}"/>
+				</DataGrid.Columns>
+			</controls:SortAwareDataGrid>
+		</GroupBox>
+
+		<GroupBox Header="Translation Origin Information"  Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}" >
+			<controls:SortAwareDataGrid Margin="2,8,2,2" 
+			          ItemsSource="{Binding Path=TranslationOriginData, Mode=OneWay}"
+			          GridLinesVisibility="None"
+			          BorderBrush="#CCCCCD"
+				      SelectionMode="Single" 
+			          HeadersVisibility="Column"
+			          SelectionUnit="FullRow"
+			          HorizontalScrollBarVisibility="Disabled"
+			          BorderThickness="0" 
+					  VerticalScrollBarVisibility="Auto"
+			          IsReadOnly="True"
+			          Style="{StaticResource CustomGridStyle}">
+				<DataGrid.Columns>
+					<!--<DataGridTemplateColumn Header="Quality Estimation" Width="*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Grid.Column="1" Margin="2,0,0,0" Text="{Binding QualityEstimation, Mode=OneWay}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>-->
+					<DataGridTextColumn Width="*" Header="Quality Estimation" Binding="{Binding QualityEstimation, Mode=OneWay}"/>
+					<DataGridTextColumn Width="Auto" Header="Model" Binding="{Binding Model, Mode=OneWay}"/>
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</GroupBox>

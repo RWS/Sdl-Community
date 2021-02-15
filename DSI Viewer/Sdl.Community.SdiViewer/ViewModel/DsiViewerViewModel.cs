@@ -15,12 +15,16 @@ namespace Sdl.Community.DsiViewer.ViewModel
 	{
 		private List<DsiModel> _documentStructureInformation;
 		private List<IComment> _comments;
+		private List<TranslationOriginData> _translationOriginData;
+
 		private IStudioDocument _activeDocument;
 		private readonly EditorController _editorController;
 		private readonly SegmentVisitor _segmentVisitor;
 
 		public DsiViewerViewModel()
 		{
+			_translationOriginData = new List<TranslationOriginData>();
+
 			_segmentVisitor = new SegmentVisitor(false);
 			_comments = new List<IComment>();
 			_documentStructureInformation = new List<DsiModel>();
@@ -70,6 +74,18 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		public bool HasDocumentStructureInformation => DocumentStructureInformation.Any();
 
 		public bool HasComments => Comments.Any();
+		public bool HasTranslationOriginMetadata => TranslationOriginData.Any();
+
+		public List<TranslationOriginData> TranslationOriginData
+		{
+			get => _translationOriginData;
+			set
+			{
+				_translationOriginData = value;
+				OnPropertyChanged(nameof(TranslationOriginData));
+				OnPropertyChanged(nameof(HasTranslationOriginMetadata));
+			}
+		}
 
 		private void UpdateDocumentStructureInformation()
 		{
@@ -181,6 +197,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 				UpdateDocumentStructureInformation();
 				UpdateComments();
+				UpdateTranslationOriginMetadata();
 			}
 		}
 
@@ -188,6 +205,28 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		{
 			UpdateDocumentStructureInformation();
 			UpdateComments();
+			UpdateTranslationOriginMetadata();
+
+		}
+
+		private void UpdateTranslationOriginMetadata()
+		{
+			var translationOrigin = _activeDocument.ActiveSegmentPair?.Target.Properties.TranslationOrigin;
+			if (translationOrigin is null || string.IsNullOrWhiteSpace(translationOrigin.GetMetaData("qualityEstimation")))
+			{
+				OnPropertyChanged(nameof(TranslationOriginData));
+				OnPropertyChanged(nameof(HasTranslationOriginMetadata));
+				return;
+			}
+
+			TranslationOriginData = new List<TranslationOriginData>
+			{
+				new TranslationOriginData
+				{
+					QualityEstimation = translationOrigin.GetMetaData("qualityEstimation"),
+					Model = translationOrigin.GetMetaData("model")
+				}
+			};
 		}
 
 		private static EditorController GetEditorController()
