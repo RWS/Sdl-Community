@@ -13,7 +13,6 @@ namespace Sdl.Community.DeepLMTProvider
 		private static readonly List<string> FormalityIncompatibleTargetLanguages = new List<string>
 		{
 			"ja",
-			"es",
 			"zh",
 			"en",
 			"en-gb",
