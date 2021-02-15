@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -139,25 +140,74 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void TranslationService_TranslationReceived(List<string> sources, List<string> targets)
+		private void TranslationService_TranslationReceived(List<string> sources, TargetSegmentData targetSegmentData)
 		{
 			if (ActiveDocument == null) return;
-
 			for (var i = 0; i < sources.Count; i++)
 			{
-				var currentSegmentId = ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sources[i])?.Properties.Id;
+				var currentSegmentPair = ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sources[i]);
 
-				if (currentSegmentId != null)
-				{
-					CreateFeedbackEntry(currentSegmentId.Value, targets[i], PluginResources.SDLMTCloudName,
-						sources[i]);
-				}
-				else
-				{
-					CreateFeedbackEntry(ActiveDocument.ActiveSegmentPair.Properties.Id, targets[i], PluginResources.SDLMTCloudName,
-						ActiveDocument.ActiveSegmentPair.Source.ToString());
-				}
+				AddTargetSegmentMetaData(targetSegmentData, currentSegmentPair);
+				CreateFeedback(sources, targetSegmentData, i, currentSegmentPair);
 			}
+		}
+
+		private void CreateFeedback(List<string> sources, TargetSegmentData targetSegmentData, int i, ISegmentPair currentSegmentPair)
+		{
+			var currentSegmentId = currentSegmentPair?.Properties.Id;
+
+			if (currentSegmentId != null)
+			{
+				CreateFeedbackEntry(currentSegmentId.Value, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
+					sources[i]);
+			}
+			else
+			{
+				CreateFeedbackEntry(ActiveDocument.ActiveSegmentPair.Properties.Id, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
+					ActiveDocument.ActiveSegmentPair.Source.ToString());
+			}
+		}
+
+		private void AddTargetSegmentMetaData(TargetSegmentData targetSegmentData, ISegmentPair currentSegmentPair)
+		{
+			if (currentSegmentPair == null) return;
+			var propFact = _editorController.ActiveDocument.PropertiesFactory;
+
+			var paragraphUnitProperties = currentSegmentPair.GetParagraphUnitProperties();
+			var contexts = paragraphUnitProperties.Contexts?.Contexts;
+
+			if (contexts == null)
+			{
+				paragraphUnitProperties.Contexts = propFact.CreateContextProperties();
+			}
+
+			var contextInfo = contexts.FirstOrDefault(ci=>ci.ContextType == "Translation Origin Information");
+			if (contextInfo == null)
+			{
+				contextInfo = propFact.CreateContextInfo("Translation Origin Information");
+				contexts.Add(contextInfo);
+			}	
+
+			contextInfo.DisplayName = "Quality Estimation";
+			contextInfo.Description = RandomString();
+
+			//var oldContextProperties = contextInfo.Contexts;
+
+			//oldContextProperties.Contexts.Add(contexts);
+
+			//currentSegmentPair.GetParagraphUnitProperties().Contexts.Contexts.Add()
+			//currentSegmentPair.Properties.TranslationOrigin.SetMetaData("model", targetSegmentData.Model);
+			//currentSegmentPair.Properties.TranslationOrigin.SetMetaData("qualityEstimation", /*targetSegmentData.QualityEstimation[i]*/RandomString(20));
+
+
+			ActiveDocument.UpdateParagraphUnitProperties(paragraphUnitProperties);
+		}
+
+		private static Random random = new Random();
+		public static string RandomString()
+		{
+			var strings = new List<string> { "Calitate exagerata", "Nu se poate mai bine, doar daca exageram", "Sub orice critica", "Cat de cat corect, daca esti de la tara", "Se pot aduce critici sub care sa nu fie" };
+			return strings[random.Next(5)];
 		}
 	}
 }

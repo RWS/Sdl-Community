@@ -14,6 +14,9 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public string OutputFormat { get; set; }
 
 		[JsonProperty("translationStats")]
-		public TranslationResponseStats TranslationStats { get; set; }		
+		public TranslationResponseStats TranslationStats { get; set; }
+
+		[JsonProperty("qualityEstimation")]
+		public string[] QualityEstimation { get; set; }
 	}
 }

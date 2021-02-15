@@ -90,12 +90,6 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.LanguageCloud.IdentityApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
     </Reference>
@@ -198,6 +192,7 @@
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Rating.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
+    <Compile Include="Model\TargetSegmentData.cs" />
     <Compile Include="Model\TranslationFeedbackRequest.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
