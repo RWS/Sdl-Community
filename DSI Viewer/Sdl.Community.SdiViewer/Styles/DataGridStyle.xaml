@@ -186,6 +186,23 @@
 		<Setter Property="CellStyle" Value="{StaticResource CustomGridCellStyle}"/>
 		<Setter Property="RowStyle" Value="{StaticResource RowStyle}"/>
 	</Style>
+	
+	<Style x:Key="CustomGridStyleNoRightBorder" TargetType="{x:Type DataGrid}">
+		<Setter Property="AlternationCount" Value="2"/>
+		<Setter Property="AutoGenerateColumns" Value="False"/>
+		<Setter Property="CanUserSortColumns" Value="True"/>
+		<Setter Property="CanUserAddRows" Value="False"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="RowHeaderWidth" Value="0"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="{StaticResource OutterBorderColor}"/>
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="VerticalGridLinesBrush" Value="{StaticResource InnerBorderColor}"/>
+		<Setter Property="HorizontalGridLinesBrush" Value="{StaticResource InnerBorderColor}"/>
+		<Setter Property="ColumnHeaderStyle" Value="{StaticResource NoRightBorderColumnHeaderStyle}"/>
+		<Setter Property="CellStyle" Value="{StaticResource CustomGridCellStyle}"/>
+		<Setter Property="RowStyle" Value="{StaticResource RowStyle}"/>
+	</Style>
 
 
 	<Style x:Key="GridRowDetailListViewContainerStyle" TargetType="{x:Type ListViewItem}">

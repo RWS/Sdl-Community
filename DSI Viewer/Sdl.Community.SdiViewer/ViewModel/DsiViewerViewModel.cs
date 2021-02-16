@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Sdl.Community.DsiViewer.Model;
 using Sdl.Community.DsiViewer.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -15,7 +17,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 	{
 		private List<DsiModel> _documentStructureInformation;
 		private List<IComment> _comments;
-		private List<TranslationOriginData> _translationOriginData;
+		private TranslationOriginData _translationOriginData;
 
 		private IStudioDocument _activeDocument;
 		private readonly EditorController _editorController;
@@ -23,8 +25,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 		public DsiViewerViewModel()
 		{
-			_translationOriginData = new List<TranslationOriginData>();
-
 			_segmentVisitor = new SegmentVisitor(false);
 			_comments = new List<IComment>();
 			_documentStructureInformation = new List<DsiModel>();
@@ -74,9 +74,9 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		public bool HasDocumentStructureInformation => DocumentStructureInformation.Any();
 
 		public bool HasComments => Comments.Any();
-		public bool HasTranslationOriginMetadata => TranslationOriginData.Any();
+		public bool HasTranslationOriginMetadata => TranslationOriginData != null;
 
-		public List<TranslationOriginData> TranslationOriginData
+		public TranslationOriginData TranslationOriginData
 		{
 			get => _translationOriginData;
 			set
@@ -132,6 +132,28 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 			OnPropertyChanged(nameof(DocumentStructureInformation));
 			OnPropertyChanged(nameof(HasDocumentStructureInformation));
+		}
+
+		private string GetEstimationColorLabel(string estimation)
+		{
+			Color color;
+			switch (estimation)
+			{
+				case "Good":
+					color = Color.FromArgb(0, 128, 64);
+					break;
+				case "Adequate":
+					color = Color.FromArgb(0, 128, 255);
+					break;
+				case "Poor":
+					color = Color.FromArgb(255, 72, 72);
+					break;
+				default:
+					color = Color.FromArgb(183, 183, 219);
+					break;
+			}
+
+			return "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
 		}
 
 		private void UpdateComments()
@@ -194,38 +216,43 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			if (_activeDocument != null)
 			{
 				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+				_activeDocument.SegmentsTranslationOriginChanged += ActiveDocument_SegmentsTranslationOriginChanged;
 
 				UpdateDocumentStructureInformation();
 				UpdateComments();
-				UpdateTranslationOriginMetadata();
+				UpdateTranslationOriginInformation();
 			}
+		}
+
+		private void ActiveDocument_SegmentsTranslationOriginChanged(object sender, EventArgs e)
+		{
+			UpdateTranslationOriginInformation();
 		}
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
 			UpdateDocumentStructureInformation();
 			UpdateComments();
-			UpdateTranslationOriginMetadata();
-
+			UpdateTranslationOriginInformation();
 		}
 
-		private void UpdateTranslationOriginMetadata()
+		private void UpdateTranslationOriginInformation()
 		{
-			var translationOrigin = _activeDocument.ActiveSegmentPair?.Target.Properties.TranslationOrigin;
-			if (translationOrigin is null || string.IsNullOrWhiteSpace(translationOrigin.GetMetaData("qualityEstimation")))
+			TranslationOriginData = null;
+			var translationOrigin = _activeDocument.ActiveSegmentPair?.Properties.TranslationOrigin;
+			if (translationOrigin is null || string.IsNullOrWhiteSpace(translationOrigin.GetMetaData("quality_estimation")))
 			{
 				OnPropertyChanged(nameof(TranslationOriginData));
 				OnPropertyChanged(nameof(HasTranslationOriginMetadata));
 				return;
 			}
 
-			TranslationOriginData = new List<TranslationOriginData>
+			var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
+			TranslationOriginData = new TranslationOriginData
 			{
-				new TranslationOriginData
-				{
-					QualityEstimation = translationOrigin.GetMetaData("qualityEstimation"),
-					Model = translationOrigin.GetMetaData("model")
-				}
+				QualityEstimation = qualityEstimation,
+				Model = translationOrigin.GetMetaData("model"),
+				ColorCode = GetEstimationColorLabel(qualityEstimation)
 			};
 		}
 
@@ -234,7 +261,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
-		public string GetAdditionalInformation(IContextInfo context)
+		private string GetAdditionalInformation(IContextInfo context)
 		{
 			var additionalInfo = new StringBuilder();
 			foreach (var metaPair in context.MetaData)
@@ -264,6 +291,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			if (_activeDocument != null)
 			{
 				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+				_activeDocument.SegmentsTranslationOriginChanged -= ActiveDocument_SegmentsTranslationOriginChanged;
 			}
 		}
 	}
