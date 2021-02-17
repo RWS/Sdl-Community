@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Data;
 using Sdl.Core.Globalization;
 
-namespace Sdl.Community.Transcreate.Converters
+namespace Trados.Transcreate.Converters
 {
 	public class CultureInfoNameToDisplayNameConverter : IValueConverter
 	{	

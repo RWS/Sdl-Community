@@ -1,8 +1,8 @@
 ﻿using System;
-using Sdl.Community.Transcreate.Model;
 using Sdl.MultiSelectComboBox.API;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class FilterService : IFilterService
 	{

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Visitors;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Writers;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice
+namespace Trados.Transcreate.FileTypeSupport.MSOffice
 {
 	public class ImportProcessor
 	{

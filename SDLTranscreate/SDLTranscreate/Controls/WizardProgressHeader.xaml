@@ -1,11 +1,9 @@
-﻿<UserControl x:Class="Sdl.Community.Transcreate.Controls.WizardProgressHeader"
+﻿<UserControl x:Class="Trados.Transcreate.Controls.WizardProgressHeader"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.Transcreate.Controls"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.Wizard.ViewModel"
-             xmlns:controls="clr-namespace:Sdl.Community.Transcreate.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Trados.Transcreate.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="200">
 	<Control.Resources>

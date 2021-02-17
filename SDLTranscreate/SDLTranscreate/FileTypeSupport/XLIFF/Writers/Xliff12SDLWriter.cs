@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Writers
 {
 	public class Xliff12SDLWriter : IXliffWriter
 	{
@@ -19,6 +19,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		{
 			Comments = xliff.DocInfo.Comments;
 			IncludeTranslations = includeTranslations;
+
+			UpdateGenericPlaceholdersIds(xliff);
 
 			var settings = new XmlWriterSettings
 			{
@@ -63,6 +65,51 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			}
 
 			return true;
+		}
+
+		private void UpdateGenericPlaceholdersIds(Xliff xliff)
+		{
+			var lastId = 0;
+			foreach (var xliffFile in xliff.Files)
+			{
+				foreach (var transUnit in xliffFile.Body.TransUnits)
+				{
+					foreach (var segmentPair in transUnit.SegmentPairs)
+					{
+						var ids = new List<int>();
+						foreach (var element in segmentPair.Source.Elements)
+						{
+							if (element is ElementGenericPlaceholder genericPlaceholder)
+							{
+								ids.Add(++lastId);
+								genericPlaceholder.TagId = string.Format("lb{0}", lastId);
+							}
+						}
+
+						var targetLbIndex = 0;
+						foreach (var element in segmentPair.Target.Elements)
+						{
+							if (element is ElementGenericPlaceholder genericPlaceholder)
+							{
+								int id;
+								if (targetLbIndex < ids.Count)
+								{
+									id = ids[targetLbIndex];
+								}
+								else
+								{
+									ids.Add(++lastId);
+									id = lastId;
+								}
+
+								targetLbIndex++;
+
+								genericPlaceholder.TagId = string.Format("x{0}", id);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private void WriteDocInfo(Xliff xliff, XmlWriter writer)
@@ -148,7 +195,12 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 			WriteSourceParagraph(writer, transUnit);
 			WriteSegSource(writer, transUnit);
-			WriteTargetParagraph(writer, transUnit);
+
+			if (IncludeTranslations)
+			{
+				WriteTargetParagraph(writer, transUnit);
+			}
+
 			WriteSdlSegDefs(writer, transUnit);
 			WriteSdlSegCtxs(writer, transUnit);
 
@@ -171,14 +223,17 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		{
 			writer.WriteStartElement(NsPrefix, "seg", null);
 			writer.WriteAttributeString("id", segmentPair.Id);
-			writer.WriteAttributeString("conf", segmentPair.ConfirmationLevel.ToString());
+			if (IncludeTranslations)
+			{
+				writer.WriteAttributeString("conf", segmentPair.ConfirmationLevel.ToString());
+			}
 
 			if (segmentPair.IsLocked)
 			{
 				writer.WriteAttributeString("locked", segmentPair.IsLocked.ToString());
 			}
 
-			if (segmentPair.TranslationOrigin != null)
+			if (IncludeTranslations && segmentPair.TranslationOrigin != null)
 			{
 				WriteTranslationOrigin(writer, segmentPair.TranslationOrigin);
 
@@ -266,6 +321,8 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		private void WriteSourceParagraph(XmlWriter writer, TransUnit transUnit)
 		{
 			writer.WriteStartElement("source");
+			//writer.WriteAttributeString("xml", "space", null, "preserve");
+
 			for (var index = 0; index < transUnit.SegmentPairs.Count; index++)
 			{
 				var segmentPair = transUnit.SegmentPairs[index];
@@ -322,6 +379,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 		private void WriteTargetParagraph(XmlWriter writer, TransUnit transUnit)
 		{
 			writer.WriteStartElement("target");
+			//writer.WriteAttributeString("xml", "space", null, "preserve");
 
 			foreach (var segmentPair in transUnit.SegmentPairs)
 			{
@@ -337,7 +395,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 				writer.WriteEndElement(); // mrk
 			}
 
-			writer.WriteEndElement(); // seg-source
+			writer.WriteEndElement(); // target
 		}
 
 		private void WriteSegment(XmlWriter writer, Element element)
@@ -371,6 +429,18 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 				writer.WriteStartElement("ph");
 				writer.WriteAttributeString("id", placeholder.TagId);
 				writer.WriteString(placeholder.TagContent);
+				writer.WriteEndElement();
+			}
+
+			if (element is ElementGenericPlaceholder genericPlaceholder)
+			{
+				writer.WriteStartElement("x");
+				writer.WriteAttributeString("id", genericPlaceholder.TagId);
+				writer.WriteAttributeString("ctype", genericPlaceholder.CType);
+				if (!string.IsNullOrEmpty(genericPlaceholder.TextEquivalent))
+				{
+					writer.WriteAttributeString("equiv-text", genericPlaceholder.TextEquivalent);
+				}
 				writer.WriteEndElement();
 			}
 
@@ -420,7 +490,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 			}
 
 			WriterContextDefinitions(writer, xliffFile);
-
+			
 			writer.WriteEndElement(); // header
 		}
 
@@ -451,7 +521,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Writers
 
 			writer.WriteEndElement(); // cxt-defs
 		}
-
+		
 		private bool AddSpaceBetweenSegmentationPosition(TransUnit transUnit, int index)
 		{
 			var addSpace = true;

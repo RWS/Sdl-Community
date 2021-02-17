@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Model
 {
 	public abstract class Segment
 	{

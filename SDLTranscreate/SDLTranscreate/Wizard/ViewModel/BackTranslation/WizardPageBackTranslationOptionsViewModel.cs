@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
+namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 {
 	public class WizardPageBackTranslationOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{
@@ -18,8 +18,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
 		{
 			_dialogService = dialogService;
 
-			CopySourceToTargetForEmptyTranslationsEnabled = true;
-			CopySourceToTargetForEmptyTranslations = taskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations;
+			CopySourceToTargetForEmptyTranslationsEnabled = false;
+			CopySourceToTargetForEmptyTranslations = true; //always true... for now
 
 			OverwriteExistingBackTranslationsEnabled = true;
 			OverwriteExistingBackTranslations = taskContext.BackTranslationOptions.OverwriteExistingBackTranslations;
@@ -77,6 +77,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 		}
 
+		public string OverwriteExistingBackTranslationsToolTip => PluginResources.ToolTip_Option_OverwreteExistingBackTranslationFiles;
+
 		public bool OverwriteExistingBackTranslationsEnabled
 		{
 			get => _overwriteExistingBackTranslationsEnabled;
@@ -98,9 +100,6 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
 
 		private void VerifyIsValid()
 		{
-			// TODO
-			//IsValid = Directory.Exists(OutputFolder);
-
 			IsValid = true;
 		}
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{AD8EE7B5-21DF-4AB0-9799-B13361B26E61}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Transcreate</RootNamespace>
-    <AssemblyName>Sdl.Community.Transcreate</AssemblyName>
+    <RootNamespace>Trados.Transcreate</RootNamespace>
+    <AssemblyName>Trados.Transcreate</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -212,6 +212,7 @@
     <Compile Include="FileTypeSupport\XLIFF\Model\DocInfo.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\Element.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementComment.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementGenericPlaceholder.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementLocked.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementPlaceholder.cs" />
     <Compile Include="FileTypeSupport\XLIFF\Model\ElementSegment.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Interfaces\IXLIFFReader.cs" />
     <Compile Include="Interfaces\IXLIFFWriter.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
+    <Compile Include="Model\AnalysisTaskSettingsInfo.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\ConfirmationStatistics.cs" />
     <Compile Include="Model\ConfirmationStatus.cs" />
@@ -251,7 +253,10 @@
     <Compile Include="Model\CustomerGroup.cs" />
     <Compile Include="Model\BackTranslationOptions.cs" />
     <Compile Include="Model\ExportOptions.cs" />
+    <Compile Include="Model\FileAssignmentInfo.cs" />
     <Compile Include="Model\FileData.cs" />
+    <Compile Include="Model\FileStateInfo.cs" />
+    <Compile Include="Model\FileVersionInfo.cs" />
     <Compile Include="Model\FilterItem.cs" />
     <Compile Include="Model\FilterItemGroup.cs" />
     <Compile Include="Model\ImportFile.cs" />
@@ -259,12 +264,14 @@
     <Compile Include="Model\ImportOptions.cs" />
     <Compile Include="Model\JobProcess.cs" />
     <Compile Include="Model\LanguageDirectionInfo.cs" />
+    <Compile Include="Model\LanguageFileInfo.cs" />
     <Compile Include="Model\LanguageInfo.cs" />
     <Compile Include="Model\BackTranslationProject.cs" />
     <Compile Include="Model\NavigationNodeState.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\ProjectFile.cs" />
     <Compile Include="Model\ProjectFileActivity.cs" />
+    <Compile Include="Model\ProjectFileInfo.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateBackProjects.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateConvertSettings.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateExportSettings.cs" />
@@ -273,8 +280,12 @@
     <Compile Include="Model\ProjectSettings\SDLTranscreateBackProject.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateProjectFile.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateProjectFileActivity.cs" />
+    <Compile Include="Model\ProjectUserInfo.cs" />
     <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\SourceContentSettingsInfo.cs" />
+    <Compile Include="Model\SourceFile.cs" />
     <Compile Include="Model\TaskReport.cs" />
+    <Compile Include="Model\TaskResult.cs" />
     <Compile Include="Model\TranslationOriginStatistics.cs" />
     <Compile Include="Model\TaskContext.cs" />
     <Compile Include="Model\WizardException.cs" />
@@ -335,6 +346,10 @@
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wizard\ViewModel\BackTranslation\WizardPageBackTranslationFilesViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\BackTranslation\WizardPageBackTranslationOptionsViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\BackTranslation\WizardPageBackTranslationPreparationViewModel.cs" />
+    <Compile Include="Wizard\ViewModel\BackTranslation\WizardPageBackTranslationSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertOptionsViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertPreparationViewModel.cs" />
     <Compile Include="Wizard\ViewModel\Convert\WizardPageConvertSummaryViewModel.cs" />
@@ -349,6 +364,18 @@
     <Compile Include="Wizard\ViewModel\Import\WizardPageImportSummaryViewModel.cs" />
     <Compile Include="Wizard\ViewModel\WizardPageViewModelBase.cs" />
     <Compile Include="Wizard\ViewModel\WizardViewModel.cs" />
+    <Compile Include="Wizard\View\BackTranslation\WizardPageBackTranslationFilesView.xaml.cs">
+      <DependentUpon>WizardPageBackTranslationFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\BackTranslation\WizardPageBackTranslationOptionsView.xaml.cs">
+      <DependentUpon>WizardPageBackTranslationOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\BackTranslation\WizardPageBackTranslationPreparationView.xaml.cs">
+      <DependentUpon>WizardPageBackTranslationPreparationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\View\BackTranslation\WizardPageBackTranslationSummaryView.xaml.cs">
+      <DependentUpon>WizardPageBackTranslationSummaryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wizard\View\Convert\WizardPageConvertOptionsView.xaml.cs">
       <DependentUpon>WizardPageConvertOptionsView.xaml</DependentUpon>
     </Compile>
@@ -473,6 +500,7 @@
     <Resource Include="Resources\import_small.ico" />
     <Resource Include="Resources\back_translation.ico" />
     <Resource Include="Resources\back_translation_small.ico" />
+    <Resource Include="Resources\information.png" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />
@@ -602,6 +630,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\BackTranslation\WizardPageBackTranslationFilesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\BackTranslation\WizardPageBackTranslationOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\BackTranslation\WizardPageBackTranslationPreparationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wizard\View\BackTranslation\WizardPageBackTranslationSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

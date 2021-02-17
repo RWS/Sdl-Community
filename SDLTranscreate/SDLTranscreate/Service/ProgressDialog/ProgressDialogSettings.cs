@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 
-namespace Sdl.Community.Transcreate.Service.ProgressDialog
+namespace Trados.Transcreate.Service.ProgressDialog
 {
 	public class ProgressDialogSettings
 	{		

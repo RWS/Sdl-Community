@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Sdl.Community.Transcreate.Model;
 using Sdl.ProjectAutomation.FileBased;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class CustomerProvider
 	{

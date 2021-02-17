@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Model
 {
 	public class Comment
     {	 

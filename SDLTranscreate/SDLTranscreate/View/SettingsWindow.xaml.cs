@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Sdl.Community.Transcreate.View
+namespace Trados.Transcreate.View
 {	
 	public partial class SettingsWindow : Window
 	{

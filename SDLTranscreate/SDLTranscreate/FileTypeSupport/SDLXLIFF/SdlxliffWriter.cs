@@ -2,11 +2,11 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
+namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	public class SdlxliffWriter
 	{

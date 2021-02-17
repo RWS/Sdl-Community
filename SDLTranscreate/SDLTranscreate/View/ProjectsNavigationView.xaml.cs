@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Sdl.Community.Transcreate.ViewModel;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.View
+namespace Trados.Transcreate.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectsNavigationView.xaml

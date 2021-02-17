@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	public class SortAwareDataGrid : SelectedItemsAwareDataGrid
 	{

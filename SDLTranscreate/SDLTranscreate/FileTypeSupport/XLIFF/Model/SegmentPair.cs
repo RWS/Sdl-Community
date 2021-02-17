@@ -1,9 +1,9 @@
 ﻿using System;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Model
 {
 	public class SegmentPair : ICloneable
 	{

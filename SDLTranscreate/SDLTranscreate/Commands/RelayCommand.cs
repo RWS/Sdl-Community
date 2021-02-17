@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Sdl.Community.Transcreate.Commands
+namespace Trados.Transcreate.Commands
 {
 	/// <summary>
 	/// A command whose sole purpose is to 

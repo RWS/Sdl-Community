@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Transcreate {
+namespace Trados.Transcreate {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.Transcreate {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Transcreate.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Trados.Transcreate.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -192,6 +192,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translations.
+        /// </summary>
+        internal static string JobProcess_CreateBackTranslations {
+            get {
+                return ResourceManager.GetString("JobProcess_CreateBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Transcreate Project.
         /// </summary>
         internal static string JobProcess_CreateTranscreateProject {
@@ -206,15 +215,6 @@ namespace Sdl.Community.Transcreate {
         internal static string JobProcess_Done {
             get {
                 return ResourceManager.GetString("JobProcess_Done", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string JobProcess_Export {
-            get {
-                return ResourceManager.GetString("JobProcess_Export", resourceCulture);
             }
         }
         
@@ -255,6 +255,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Projects.
+        /// </summary>
+        internal static string JobProcess_LoadProjects {
+            get {
+                return ResourceManager.GetString("JobProcess_LoadProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparation.
         /// </summary>
         internal static string JobProcess_Preparation {
@@ -278,6 +287,15 @@ namespace Sdl.Community.Transcreate {
         internal static string JobProcess_ProcessingPleaseWait {
             get {
                 return ResourceManager.GetString("JobProcess_ProcessingPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading project files....
+        /// </summary>
+        internal static string JobProcess_ReadingProjectFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ReadingProjectFiles", resourceCulture);
             }
         }
         
@@ -498,6 +516,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading Project: {0}.
+        /// </summary>
+        internal static string Label_LoadingProject {
+            get {
+                return ResourceManager.GetString("Label_LoadingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location: {0}.
         /// </summary>
         internal static string Label_Location {
@@ -647,6 +674,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_SelectedFiles {
             get {
                 return ResourceManager.GetString("Label_SelectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Files.
+        /// </summary>
+        internal static string Label_SourceFiles {
+            get {
+                return ResourceManager.GetString("Label_SourceFiles", resourceCulture);
             }
         }
         
@@ -979,7 +1015,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate.
+        ///   Looks up a localized string similar to Trados Transcreate.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -993,6 +1029,51 @@ namespace Sdl.Community.Transcreate {
         internal static string Proceed_and_copy_source_to_target_for_empty_translations {
             get {
                 return ResourceManager.GetString("Proceed_and_copy_source_to_target_for_empty_translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created project: {0}.
+        /// </summary>
+        internal static string Progres_Label_CreatedProject {
+            get {
+                return ResourceManager.GetString("Progres_Label_CreatedProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating project....
+        /// </summary>
+        internal static string Progres_Label_CreatingProject {
+            get {
+                return ResourceManager.GetString("Progres_Label_CreatingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merging project folders.....
+        /// </summary>
+        internal static string Progres_Label_MergingProjectFolders {
+            get {
+                return ResourceManager.GetString("Progres_Label_MergingProjectFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translating.....
+        /// </summary>
+        internal static string Progres_Label_Translating {
+            get {
+                return ResourceManager.GetString("Progres_Label_Translating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating task.....
+        /// </summary>
+        internal static string Progres_Label_UpdatingTask {
+            get {
+                return ResourceManager.GetString("Progres_Label_UpdatingTask", resourceCulture);
             }
         }
         
@@ -1013,6 +1094,159 @@ namespace Sdl.Community.Transcreate {
             get {
                 object obj = ResourceManager.GetObject("Report", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_CreateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_CreatedBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreatedBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created Transcreate project.
+        /// </summary>
+        internal static string Report_Label_CreatedTranscreateProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreatedTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Transcreate project.
+        /// </summary>
+        internal static string Report_Label_CreateTranscreateProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreateTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string Report_Label_Export {
+            get {
+                return ResourceManager.GetString("Report_Label_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Back-Translations.
+        /// </summary>
+        internal static string Report_Label_ExportBackTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported for Back-Translation.
+        /// </summary>
+        internal static string Report_Label_ExportedForBackTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportedForBackTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported for Translation.
+        /// </summary>
+        internal static string Report_Label_ExportedForTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportedForTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Translations.
+        /// </summary>
+        internal static string Report_Label_ExportTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string Report_Label_Import {
+            get {
+                return ResourceManager.GetString("Report_Label_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Back-Translations.
+        /// </summary>
+        internal static string Report_Label_ImportBackTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported Back-Translation.
+        /// </summary>
+        internal static string Report_Label_ImportedBackTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportedBackTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported Translations.
+        /// </summary>
+        internal static string Report_Label_ImportedTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportedTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Translations.
+        /// </summary>
+        internal static string Report_Label_ImportTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Creation.
+        /// </summary>
+        internal static string Report_Label_ProjectCreation {
+            get {
+                return ResourceManager.GetString("Report_Label_ProjectCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_UpdateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_UpdateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_UpdatedBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_UpdatedBackTranslationProject", resourceCulture);
             }
         }
         
@@ -1146,6 +1380,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If the selected SDLXLIFF files already exist in the Back-Translation project, then they will be re-imported, overwriting the existing ones..
+        /// </summary>
+        internal static string ToolTip_Option_OverwreteExistingBackTranslationFiles {
+            get {
+                return ResourceManager.GetString("ToolTip_Option_OverwreteExistingBackTranslationFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         internal static string TranscreateManager_ActionsGroup_Name {
@@ -1191,7 +1434,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Transcreate Reports.
+        ///   Looks up a localized string similar to Create Transcreate reports for the selected files.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Description {
             get {
@@ -1209,7 +1452,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate Manager.
+        ///   Looks up a localized string similar to Trados Transcreate Manager.
         /// </summary>
         internal static string TranscreateManager_Description {
             get {
@@ -1272,7 +1515,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate.
+        ///   Looks up a localized string similar to Trados Transcreate.
         /// </summary>
         internal static string TranscreateManager_Name {
             get {
@@ -1317,7 +1560,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open For Translation.
+        ///   Looks up a localized string similar to Open for Translation.
         /// </summary>
         internal static string TranscreateManager_OpenFileForTranslation_Description {
             get {
@@ -1326,7 +1569,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open For Translation.
+        ///   Looks up a localized string similar to Open for Translation.
         /// </summary>
         internal static string TranscreateManager_OpenFileForTranslation_Name {
             get {
@@ -1547,6 +1790,15 @@ namespace Sdl.Community.Transcreate {
         internal static string WizardMessage_ConvertingToFormat {
             get {
                 return ResourceManager.GetString("WizardMessage_ConvertingToFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating Back-Translation Project.
+        /// </summary>
+        internal static string WizardMessage_CreatingBackTranslationProject {
+            get {
+                return ResourceManager.GetString("WizardMessage_CreatingBackTranslationProject", resourceCulture);
             }
         }
         

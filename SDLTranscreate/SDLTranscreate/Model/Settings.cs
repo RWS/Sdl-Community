@@ -1,6 +1,6 @@
 ﻿using Sdl.Core.Globalization;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class Settings
 	{

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	public abstract class AbstractOpenFileInEditorAction : AbstractAction
 	{
@@ -16,7 +16,9 @@ namespace Sdl.Community.Transcreate.Actions
 		internal void Setup()
 		{
 			Enabled = false;
-			_controllers = new Controllers();
+			
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
+			
 			SetEnabled(_controllers.TranscreateController.GetSelectedProjectFiles());
 
 			if (_controllers.ProjectsController != null)

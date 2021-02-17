@@ -5,16 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Actions;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Model.ProjectSettings;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Actions;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.CustomEventArgs;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Model.ProjectSettings;
 
-namespace Sdl.Community.Transcreate.ViewModel
+namespace Trados.Transcreate.ViewModel
 {
 	public class ProjectsNavigationViewModel : BaseModel, IDisposable
 	{
@@ -30,10 +30,7 @@ namespace Sdl.Community.Transcreate.ViewModel
 		private List<NavigationNodeState> _navigationNodeStates;
 		private ICommand _clearSelectionCommand;
 		private ICommand _clearFilterCommand;
-		//private ICommand _removeProjectDataCommand;
 		private ICommand _openProjectFolderCommand;
-		//private ICommand _importFilesCommand;
-		//private ICommand _exportFilesCommand;
 		private ICommand _selectedItemChanged;
 		private ICommand _createBackProjectsCommand;
 		private ICommand _removeBackProjectsCommand;
@@ -50,10 +47,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
 
-		//public ICommand ExportFilesCommand => _exportFilesCommand ?? (_exportFilesCommand = new CommandHandler(ExportFiles));
-
-		//public ICommand ImportFilesCommand => _importFilesCommand ?? (_importFilesCommand = new CommandHandler(ImportFiles));
-
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand ClearFilterCommand => _clearFilterCommand ?? (_clearFilterCommand = new CommandHandler(ClearFilter));
@@ -67,7 +60,13 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 		public ICommand SelectedItemChangedCommand => _selectedItemChanged ?? (_selectedItemChanged = new CommandHandler(SelectedItemChanged));
 
-		public bool IsEnabledCreateBackProjects { get; set; }
+		public bool IsEnabledCreateBackProjects
+		{
+			get
+			{
+				return SelectedProject is Project && !(SelectedProject is BackTranslationProject);
+			}
+		}
 
 		public bool IsEnabledRemoveBackProjects { get; set; }
 
@@ -356,21 +355,11 @@ namespace Sdl.Community.Transcreate.ViewModel
 
 				if (SelectedProject == null || SelectedProject is BackTranslationProject)
 				{
-					IsEnabledCreateBackProjects = false;
 					IsEnabledRemoveBackProjects = false;
 				}
 				else
 				{
-					if (SelectedProject.BackTranslationProjects.Count > 0)
-					{
-						IsEnabledCreateBackProjects = false;
-						IsEnabledRemoveBackProjects = true;
-					}
-					else
-					{
-						IsEnabledCreateBackProjects = true;
-						IsEnabledRemoveBackProjects = false;
-					}
+					IsEnabledRemoveBackProjects = SelectedProject.BackTranslationProjects.Count > 0;
 				}
 
 				OnPropertyChanged(nameof(IsEnabledCreateBackProjects));
@@ -393,18 +382,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 			}
 		}
 
-		//private void ImportFiles(object parameter)
-		//{
-		//	var action = SdlTradosStudio.Application.GetAction<ImportAction>();
-		//	action.LaunchWizard();
-		//}
-
-		//private void ExportFiles(object parameter)
-		//{
-		//	var action = SdlTradosStudio.Application.GetAction<ExportAction>();
-		//	action.LaunchWizard();
-		//}
-
 		private void ClearSelection(object parameter)
 		{
 			SelectedProjects?.Clear();
@@ -421,7 +398,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 			var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationAction>();
 			action.Run();
 
-			IsEnabledCreateBackProjects = false;
 			IsEnabledRemoveBackProjects = true;
 
 			OnPropertyChanged(nameof(IsEnabledCreateBackProjects));
@@ -490,7 +466,6 @@ namespace Sdl.Community.Transcreate.ViewModel
 				var action = SdlTradosStudio.Application.GetAction<CreateBackTranslationAction>();
 				action.Enabled = true;
 
-				IsEnabledCreateBackProjects = true;
 				IsEnabledRemoveBackProjects = false;
 
 				OnPropertyChanged(nameof(IsEnabledCreateBackProjects));

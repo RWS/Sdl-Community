@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Interfaces;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class ProjectFile : BaseModel, IDisposable, ICloneable
 	{

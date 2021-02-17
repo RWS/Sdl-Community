@@ -5,11 +5,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
+namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 {
 	public class WizardPageBackTranslationFilesViewModel : WizardPageViewModelBase, IDisposable
 	{
@@ -165,9 +165,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
 		{
 			foreach (var projectFile in ProjectFiles)
 			{
-				if (projectFile.Action == Enumerators.Action.CreateBackTranslation)
+				var backTranslationFile = BackTranslationFileExists(projectFile);
+				if (backTranslationFile != null)
 				{
-					var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a =>
+					var activityfile = backTranslationFile.ProjectFileActivities.OrderByDescending(a =>
 						a.Date).FirstOrDefault(a => a.Action == Enumerators.Action.CreateBackTranslation);
 
 					projectFile.Status = Enumerators.Status.Warning;
@@ -181,6 +182,27 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.BackTranslation
 					projectFile.Report = string.Empty;
 				}
 			}
+		}
+
+		private ProjectFile BackTranslationFileExists(ProjectFile projectFile)
+		{
+			var projectFileLocation = projectFile.Location.Replace(TaskContext.Project.Path, "").Trim('\\');
+			projectFileLocation = projectFileLocation.Substring(projectFileLocation.IndexOf('\\') + 1);
+			foreach (var backTranslationProject in TaskContext.Project.BackTranslationProjects)
+			{
+				foreach (var file in backTranslationProject.ProjectFiles)
+				{
+					var backTranslationProjectFileLocation = file.Location.Replace(backTranslationProject.Path, "").Trim('\\');
+					backTranslationProjectFileLocation = backTranslationProjectFileLocation.Substring(backTranslationProjectFileLocation.IndexOf('\\') + 1);
+					if (string.Compare(projectFileLocation, backTranslationProjectFileLocation,
+						StringComparison.CurrentCultureIgnoreCase) == 0)
+					{
+						return file;
+					}
+				}
+			}
+
+			return null;
 		}
 
 		private void ProjectFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

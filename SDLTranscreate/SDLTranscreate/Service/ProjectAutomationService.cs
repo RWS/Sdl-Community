@@ -5,18 +5,22 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Threading;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
+using Newtonsoft.Json;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Model.ProjectSettings;
+using AnalysisBand = Trados.Transcreate.Model.AnalysisBand;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class ProjectAutomationService
 	{
@@ -61,45 +65,60 @@ namespace Sdl.Community.Transcreate.Service
 		/// Work around to ensure the project files have a segment pair container (e.g. segmented)
 		/// </summary>
 		/// <param name="project"></param>
-		public void RunPretranslationWithoutTm(FileBasedProject project)
+		public async Task<bool> RunPretranslationWithoutTm(FileBasedProject project)
 		{
-			var projectInfo = project.GetProjectInfo();
-			var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
-			var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
-
-			var languageTranslationProviderConfigurations = new Dictionary<Language, TranslationProviderConfiguration>();
-			foreach (var language in projectInfo.TargetLanguages)
+			var success = true;
+			try
 			{
-				var languageTranslationProviderConfigurationClone = project.GetTranslationProviderConfiguration(language);
-				languageTranslationProviderConfigurations.Add(language, languageTranslationProviderConfigurationClone);
+				var projectInfo = project.GetProjectInfo();
+				var translationProviderConfigurationClone = project.GetTranslationProviderConfiguration();
+				var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
 
-				var languageTranslationProviderConfiguration = project.GetTranslationProviderConfiguration(language);
-				languageTranslationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
-				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfiguration);
+				var languageTranslationProviderConfigurations =
+					new Dictionary<Language, TranslationProviderConfiguration>();
+				foreach (var language in projectInfo.TargetLanguages)
+				{
+					var languageTranslationProviderConfigurationClone =
+						project.GetTranslationProviderConfiguration(language);
+					languageTranslationProviderConfigurations.Add(language,
+						languageTranslationProviderConfigurationClone);
+
+					var languageTranslationProviderConfiguration =
+						project.GetTranslationProviderConfiguration(language);
+					languageTranslationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+					project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfiguration);
+				}
+
+				// temporarily remove tm resources, prior to performing a pretranslation task
+				translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
+				project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
+
+				foreach (var language in project.GetProjectInfo().TargetLanguages)
+				{
+					var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
+					project.RunAutomaticTask(
+						targetGuids.ToArray(),
+						AutomaticTaskTemplateIds.PreTranslateFiles
+					);
+				}
+
+				// add back the tm resources
+				project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
+				foreach (var language in projectInfo.TargetLanguages)
+				{
+					project.UpdateTranslationProviderConfiguration(language,
+						languageTranslationProviderConfigurations[language]);
+				}
+
+				project.UpdateProject(projectInfo);
+				project.Save();
+			}
+			catch
+			{
+				success = false;
 			}
 
-			// temporarily remove tm resources, prior to performing a pretranslation task
-			translationProviderConfiguration.Entries = new List<TranslationProviderCascadeEntry>();
-			project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
-
-			foreach (var language in project.GetProjectInfo().TargetLanguages)
-			{
-				var targetGuids = GetProjectFileGuids(project.GetTargetLanguageFiles(language));
-				project.RunAutomaticTask(
-					targetGuids.ToArray(),
-					AutomaticTaskTemplateIds.PreTranslateFiles
-				);
-			}
-
-			// add back the tm resources
-			project.UpdateTranslationProviderConfiguration(translationProviderConfigurationClone);
-			foreach (var language in projectInfo.TargetLanguages)
-			{
-				project.UpdateTranslationProviderConfiguration(language, languageTranslationProviderConfigurations[language]);
-			}
-
-			project.UpdateProject(projectInfo);
-			project.Save();
+			return await System.Threading.Tasks.Task.FromResult(success);
 		}
 
 		public void RemoveLastReportOfType(string groupType)
@@ -183,8 +202,9 @@ namespace Sdl.Community.Transcreate.Service
 			return newProject;
 		}
 
-		public FileBasedProject CreateBackTranslationProject(FileBasedProject project, string targetLanguage, string iconPath,
-			List<string> projectFiles, string projectNameSuffix)
+		public async Task<FileBasedProject> CreateBackTranslationProject(FileBasedProject project, string localProjectFolder,
+			string targetLanguage, string iconPath,
+			List<SourceFile> sourceFiles, string projectNameSuffix)
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
@@ -194,8 +214,6 @@ namespace Sdl.Community.Transcreate.Service
 			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
-
-			var localProjectFolder = Path.Combine(projectInfo.LocalProjectFolder, "BackProjects", targetLanguage);
 
 			var newSourceLanguage = projectInfo.TargetLanguages.FirstOrDefault(a =>
 				string.Compare(a.CultureInfo.Name, targetLanguage, StringComparison.CurrentCultureIgnoreCase) == 0);
@@ -215,19 +233,21 @@ namespace Sdl.Community.Transcreate.Service
 				TargetLanguages = new Language[] { newTargetLanguage },
 				DueDate = projectInfo.DueDate,
 				ProjectOrigin = "Back-Translation project",
-				IconPath = iconPath,
+				IconPath = iconPath
 			};
 
 			var newProject = new FileBasedProject(newProjectInfo, projectReference);
-			foreach (var contextProjectFile in projectFiles)
+			foreach (var sourceFile in sourceFiles)
 			{
-				if (!string.IsNullOrEmpty(contextProjectFile) &&
-					File.Exists(contextProjectFile))
+				if (!string.IsNullOrEmpty(sourceFile.FilePath) &&
+					File.Exists(sourceFile.FilePath))
 				{
-					newProject.AddFiles(new[] { contextProjectFile }, string.Empty);
+					newProject.AddFiles(new[] { sourceFile.FilePath }, sourceFile.FolderPathInProject);
 				}
 			}
 			newProject.Save();
+
+			UpdateProjectSettingsBundle(newProject, null, null, null);
 
 			// Remove any TMs that don't correspond to the language directions of the project
 			UpdateTmConfiguration(newProject);
@@ -247,7 +267,54 @@ namespace Sdl.Community.Transcreate.Service
 				AutomaticTaskTemplateIds.CopyToTargetLanguages);
 
 			newProject.Save();
-			return newProject;
+			return await System.Threading.Tasks.Task.FromResult(newProject);
+		}
+
+		public void UpdateProjectSettingsBundle(FileBasedProject project, IReadOnlyCollection<Report> reports,
+			IReadOnlyCollection<SDLTranscreateProjectFile> projectFiles, IReadOnlyCollection<SDLTranscreateBackProject> backProjects)
+		{
+			var settingsBundle = project.GetSettings();
+
+			var reportsViewerBundle = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
+			reportsViewerBundle.ReportsJson.Value = JsonConvert.SerializeObject(reports ?? new List<Report>());
+			project.UpdateSettings(reportsViewerBundle.SettingsBundle);
+
+			var transcreateBundle = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
+			transcreateBundle.ProjectFilesJson.Value = JsonConvert.SerializeObject(projectFiles ?? new List<SDLTranscreateProjectFile>());
+			project.UpdateSettings(transcreateBundle.SettingsBundle);
+
+			var backTranslationBundle = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+			backTranslationBundle.BackProjectsJson.Value = JsonConvert.SerializeObject(backProjects ?? new List<SDLTranscreateBackProject>());
+			project.UpdateSettings(backTranslationBundle.SettingsBundle);
+
+			project.Save();
+		}
+
+		public List<Report> GetProjectReports(FileBasedProject project)
+		{
+			if (project != null)
+			{
+				var settingsBundle = project.GetSettings();
+				var reportsViewerBundle = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
+				return DeserializeReports(reportsViewerBundle.ReportsJson.Value);
+			}
+
+			return new List<Report>();
+		}
+
+		private List<Report> DeserializeReports(string value)
+		{
+			try
+			{
+				var reports = JsonConvert.DeserializeObject<List<Report>>(value);
+				return reports?.ToList() ?? new List<Report>();
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return new List<Report>();
 		}
 
 		public Interfaces.IProject GetProject(FileBasedProject selectedProject, IReadOnlyCollection<string> selectedFileIds, List<ProjectFile> projectFiles = null)
@@ -277,6 +344,7 @@ namespace Sdl.Community.Transcreate.Service
 			var existingProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 				? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out _)
 				: _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
+
 			if (existingProject != null)
 			{
 				foreach (var projectFile in existingProject.ProjectFiles)
@@ -290,6 +358,11 @@ namespace Sdl.Community.Transcreate.Service
 						clonedProjectFile.Selected = selectedFileIds != null && selectedFileIds.Any(a => a == projectFile.FileId.ToString());
 						project.ProjectFiles.Add(clonedProjectFile);
 					}
+				}
+
+				foreach (var existingProjectBackTranslationProject in existingProject.BackTranslationProjects)
+				{
+					project.BackTranslationProjects.Add(existingProjectBackTranslationProject.Clone() as BackTranslationProject);
 				}
 			}
 			else
@@ -436,7 +509,7 @@ namespace Sdl.Community.Transcreate.Service
 				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 
-		private List<Guid> GetProjectFileGuids(ProjectAutomation.Core.ProjectFile[] projectFiles)
+		private List<Guid> GetProjectFileGuids(Sdl.ProjectAutomation.Core.ProjectFile[] projectFiles)
 		{
 			var fileGuids = new List<Guid>();
 			foreach (var projectFile in projectFiles)
@@ -527,7 +600,7 @@ namespace Sdl.Community.Transcreate.Service
 			}
 		}
 
-		private ProjectFile GetProjectFile(Interfaces.IProject project, ProjectAutomation.Core.ProjectFile projectFile,
+		private ProjectFile GetProjectFile(Interfaces.IProject project, Sdl.ProjectAutomation.Core.ProjectFile projectFile,
 			IReadOnlyCollection<string> selectedFileIds)
 		{
 			var projectFileModel = new ProjectFile

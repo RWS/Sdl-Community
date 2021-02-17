@@ -1,9 +1,9 @@
 ﻿using System.Windows.Forms;
-using Sdl.Community.Transcreate.View;
-using Sdl.Community.Transcreate.ViewModel;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.Transcreate.View;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	public partial class ProjectFileActivityViewControl : UserControl, IUIControl
 	{

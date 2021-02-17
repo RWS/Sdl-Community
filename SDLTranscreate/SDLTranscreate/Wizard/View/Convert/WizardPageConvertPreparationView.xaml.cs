@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Sdl.Community.Transcreate.Wizard.View.Convert
+namespace Trados.Transcreate.Wizard.View.Convert
 {	
 	public partial class WizardPageConvertPreparationView : UserControl
 	{		

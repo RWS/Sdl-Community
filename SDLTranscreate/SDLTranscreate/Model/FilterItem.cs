@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using Sdl.MultiSelectComboBox.API;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class FilterItem : IItemEnabledAware, IItemGroupAware, INotifyPropertyChanged
 	{

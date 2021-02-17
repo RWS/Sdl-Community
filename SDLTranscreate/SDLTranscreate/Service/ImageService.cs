@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Sdl.Core.Globalization;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class ImageService
 	{

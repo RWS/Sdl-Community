@@ -3,17 +3,18 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service;
+using MessageBox = System.Windows.MessageBox;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	[Action("TranscreateManager_ConvertProject_Action", 
 		Name = "TranscreateManager_ConvertProject_Name",
@@ -31,6 +32,7 @@ namespace Sdl.Community.Transcreate.Actions
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
+		private ProjectSettingsService _projectSettingsService;
 
 		protected override void Execute()
 		{
@@ -51,7 +53,7 @@ namespace Sdl.Community.Transcreate.Actions
 
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, 
-				_projectAutomationService);
+				_projectAutomationService, _projectSettingsService);
 
 			var taskContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
 			if (taskContext == null && !string.IsNullOrEmpty(message))
@@ -69,15 +71,17 @@ namespace Sdl.Community.Transcreate.Actions
 			Enabled = false;
 
 
-			_controllers = new Controllers();
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			SetProjectsController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
-
+			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, 
+				_controllers.ProjectsController, _customerProvider);
+			_projectSettingsService = new ProjectSettingsService();
+			
 			SetEnabled();
 		}
 

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.Transcreate.Common;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class ExportOptions : BaseModel
 	{

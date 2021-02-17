@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.CustomEventArgs;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	[Action("TranscreateManager_CreateReport_Action",
 		Name = "TranscreateManager_CreateReport_Name",
@@ -31,6 +33,12 @@ namespace Sdl.Community.Transcreate.Actions
 		private Controllers _controllers;
 
 		protected override void Execute()
+		{
+			var selectedFiles = _controllers.TranscreateController.GetSelectedProjectFiles();
+			Run(selectedFiles);
+		}
+
+		private void CreateReports(List<ProjectFile> selectedFiles)
 		{
 			var projects = _controllers.TranscreateController.GetSelectedProjects();
 			if (projects?.Count != 1)
@@ -53,15 +61,16 @@ namespace Sdl.Community.Transcreate.Actions
 			}
 
 			var reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
-
-			var reports = reportService.CreateFinalReport(project, studioProject, out var workingPath);
+			
+			var reports = reportService.CreateFinalReport(project, studioProject, selectedFiles, out var workingPath);
 			if (reports.Count > 0)
 			{
-				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId, reports);
+				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId,
+					reports);
 
 				var dr = MessageBox.Show("The transcreate reports have been created successfully."
-				                         +Environment.NewLine+Environment.NewLine+
-					"Open folder in explorer?", 
+				                         + Environment.NewLine + Environment.NewLine +
+				                         "Open folder in explorer?",
 					PluginResources.Plugin_Name, MessageBoxButtons.YesNo);
 
 				if (dr == DialogResult.Yes)
@@ -74,9 +83,14 @@ namespace Sdl.Community.Transcreate.Actions
 			}
 		}
 
-		public void Run()
+		public void Run(List<ProjectFile> selectedFiles)
 		{
-			Execute();
+			CreateReports(selectedFiles);
+		}
+
+		public bool IsEnabled()
+		{
+			return Enabled;
 		}
 
 		public override void Initialize()
@@ -88,7 +102,7 @@ namespace Sdl.Community.Transcreate.Actions
 			_imageService = new ImageService();
 			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
-			_controllers = new Controllers();
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
 
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
@@ -107,8 +121,6 @@ namespace Sdl.Community.Transcreate.Actions
 
 			return new Settings();
 		}
-
-
 
 		private void ProjectsController_SelectedProjectsChanged(object sender, ProjectSelectionChangedEventArgs e)
 		{

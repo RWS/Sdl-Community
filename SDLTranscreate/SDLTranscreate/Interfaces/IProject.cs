@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Interfaces
+namespace Trados.Transcreate.Interfaces
 {
 	public interface IProject
 	{

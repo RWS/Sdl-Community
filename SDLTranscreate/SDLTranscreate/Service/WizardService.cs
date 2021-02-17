@@ -4,23 +4,25 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Wizard.View;
-using Sdl.Community.Transcreate.Wizard.View.Convert;
-using Sdl.Community.Transcreate.Wizard.View.Export;
-using Sdl.Community.Transcreate.Wizard.View.Import;
-using Sdl.Community.Transcreate.Wizard.ViewModel;
-using Sdl.Community.Transcreate.Wizard.ViewModel.Convert;
-using Sdl.Community.Transcreate.Wizard.ViewModel.Export;
-using Sdl.Community.Transcreate.Wizard.ViewModel.Import;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Wizard.View;
+using Trados.Transcreate.Wizard.View.BackTranslation;
+using Trados.Transcreate.Wizard.View.Convert;
+using Trados.Transcreate.Wizard.View.Export;
+using Trados.Transcreate.Wizard.View.Import;
+using Trados.Transcreate.Wizard.ViewModel;
+using Trados.Transcreate.Wizard.ViewModel.BackTranslation;
+using Trados.Transcreate.Wizard.ViewModel.Convert;
+using Trados.Transcreate.Wizard.ViewModel.Export;
+using Trados.Transcreate.Wizard.ViewModel.Import;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class WizardService
 	{
@@ -34,6 +36,7 @@ namespace Sdl.Community.Transcreate.Service
 		private readonly Settings _settings;
 		private readonly IDialogService _dialogService;
 		private readonly ProjectAutomationService _projectAutomationService;
+		private readonly ProjectSettingsService _projectSettingsService;
 		private WizardWindow _wizardWindow;
 		private ObservableCollection<WizardPageViewModelBase> _pages;
 		private TaskContext _taskContext;
@@ -41,7 +44,7 @@ namespace Sdl.Community.Transcreate.Service
 
 		public WizardService(Enumerators.Action action, Enumerators.WorkFlow workFlow, PathInfo pathInfo, CustomerProvider customerProvider,
 			ImageService imageService, Controllers controllers, SegmentBuilder segmentBuilder, Settings settings,
-			IDialogService dialogService, ProjectAutomationService projectAutomationService)
+			IDialogService dialogService, ProjectAutomationService projectAutomationService, ProjectSettingsService projectSettingsService)
 		{
 			_action = action;
 			_workFlow = workFlow;
@@ -53,6 +56,7 @@ namespace Sdl.Community.Transcreate.Service
 			_segmentBuilder = segmentBuilder;
 			_settings = settings;
 			_projectAutomationService = projectAutomationService;
+			_projectSettingsService = projectSettingsService;
 		}
 
 		public TaskContext ShowWizard(AbstractController controller, out string message)
@@ -235,14 +239,14 @@ namespace Sdl.Community.Transcreate.Service
 				pages.Add(new WizardPageConvertPreparationViewModel(_wizardWindow, new WizardPageConvertPreparationView(), taskContext,
 					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService));
 			}
-			//else if (_action == Enumerators.Action.CreateBackTranslation)
-			//{
-			//	pages.Add(new WizardPageBackTranslationFilesViewModel(_wizardWindow, new WizardPageBackTranslationFilesView(), taskContext));
-			//	pages.Add(new WizardPageBackTranslationOptionsViewModel(_wizardWindow, new WizardPageBackTranslationOptionsView(), taskContext, _dialogService));
-			//	pages.Add(new WizardPageBackTranslationSummaryViewModel(_wizardWindow, new WizardPageBackTranslationSummaryView(), taskContext));
-			//	pages.Add(new WizardPageBackTranslationPreparationViewModel(_wizardWindow, new WizardPageBackTranslationPreparationView(), taskContext,
-			//		_segmentBuilder, _pathInfo));
-			//}
+			else if (_action == Enumerators.Action.CreateBackTranslation)
+			{
+				pages.Add(new WizardPageBackTranslationFilesViewModel(_wizardWindow, new WizardPageBackTranslationFilesView(), taskContext));
+				pages.Add(new WizardPageBackTranslationOptionsViewModel(_wizardWindow, new WizardPageBackTranslationOptionsView(), taskContext, _dialogService));
+				pages.Add(new WizardPageBackTranslationSummaryViewModel(_wizardWindow, new WizardPageBackTranslationSummaryView(), taskContext));
+				pages.Add(new WizardPageBackTranslationPreparationViewModel(_wizardWindow, new WizardPageBackTranslationPreparationView(), taskContext,
+					_segmentBuilder, _pathInfo, _controllers, _projectAutomationService, _projectSettingsService));
+			}
 
 			UpdatePageIndexes(pages);
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service;
 
-namespace Sdl.Community.Transcreate.TestData
+namespace Trados.Transcreate.TestData
 {
 	public class TestDataUtil
 	{
