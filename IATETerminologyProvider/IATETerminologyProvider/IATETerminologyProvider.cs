@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
@@ -23,6 +23,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -59,6 +60,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
 			_entryModels.Clear();
+			_logger.Info("--> Start Searching for segment");
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
 			var activeProjectName = Utils.GetCurrentProjectName();
@@ -71,12 +73,15 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			if (cacheService != null)
 			{
+				_logger.Info("--> Try to get cache results");
+
 				var cachedResults = Task.Run(async () => await cacheService.GetCachedResults(text, target.Name, modelString)).Result;
 				if (cachedResults != null && cachedResults.Count > 0)
 				{
 					CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
+					_logger.Info("--> Cache results found");
 
-					SuscribeToEntriesChangedEvent(text, source, target);
+					SubscribeToEntriesChangedEvent(text, source, target);
 					return cachedResults;
 				}
 			}
@@ -100,16 +105,18 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				if (cacheService != null)
 				{
+					_logger.Info("--> Try to add results in db");
+
 					Task.Run(async () => await cacheService.AddSearchResults(searchResults, results));
 				}
 			}
 
-			SuscribeToEntriesChangedEvent(text, source, target);
+			SubscribeToEntriesChangedEvent(text, source, target);
 
 			return results;
 		}
 
-		private void SuscribeToEntriesChangedEvent(string text, ILanguage source, ILanguage target)
+		private void SubscribeToEntriesChangedEvent(string text, ILanguage source, ILanguage target)
 		{
 			if (IsActiveSegmentText(text, source))
 			{

@@ -68,6 +68,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var client = IateApplicationInitializer.Clinet;
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.iate.entry+json"));
 
+			_logger.Info("--> Search call to iate");
 			var httpResponse = IateApplicationInitializer.Clinet.SendAsync(httpRequest)?.Result;
 
 			httpResponse?.EnsureSuccessStatusCode();
@@ -77,6 +78,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
 				results = MapResponseValues(httpResponseString, domainsJsonResponse);
+				_logger.Info("--> Response received from IATE");
 
 				return results;
 			}

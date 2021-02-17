@@ -20,11 +20,14 @@ namespace Sdl.Community.IATETerminologyProvider
 		public async void Execute()
 		{
 			Log.Setup();
+			Logger.Info("-->IATE Application Initializer");
 			InitializeHttpClientSettings();
 
 			//If IATE service is unavailable an error will be thrown in Studio, and studio will shut down without try/catch
 			try
 			{
+				Logger.Info("-->Try to get domains");
+
 				var domainService = new DomainService();
 				var termTypeService = new TermTypeService();
 				await domainService.GetDomains();
@@ -38,6 +41,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public static void SetAccessToken()
 		{
+			Logger.Info("-->IATE Set token");
+
 			RefreshAccessToken();
 			if (!string.IsNullOrEmpty(AccessTokenService.AccessToken))
 			{

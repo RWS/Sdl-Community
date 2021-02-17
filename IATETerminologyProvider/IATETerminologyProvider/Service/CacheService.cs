@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -11,14 +12,14 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class CacheService : ICacheService
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly DatabaseContextService _dbContext;
 
 		public CacheService(string activeProjectName)
 		{
-			if (!IsDbConnected())
-			{
-				_dbContext = new DatabaseContextService(activeProjectName);
-			}
+			if (IsDbConnected()) return;
+			_logger.Info($"--> Trying to create database context for following project name: {activeProjectName}");
+			_dbContext = new DatabaseContextService(activeProjectName);
 		}
 
 		public IEnumerable<SearchCache> GetAllCachedResults()
