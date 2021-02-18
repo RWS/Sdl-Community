@@ -45,11 +45,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		{
 			get
 			{
-				if (_comments == null)
-				{
-					_comments = new List<IComment>();
-				}
-
+				_comments ??= new List<IComment>();
 				return _comments.OrderByDescending(a => (int)a.Severity).ThenByDescending(a => a.Date);
 			}
 			set

@@ -47,10 +47,10 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform">
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>False</Private>
