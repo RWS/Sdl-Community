@@ -16,7 +16,7 @@
 			set
 			{
 				_model = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Model));
 			}
 		}
 
@@ -26,7 +26,7 @@
 			set 
 			{
 				_qeAdequate = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(QeAdequate));
 			}
 		}
 
@@ -36,7 +36,7 @@
 			set
 			{
 				_qeGood = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(QeGood));
 			}
 		}
 
@@ -46,7 +46,7 @@
 			set
 			{
 				_qeNoneAvailable = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(QeNoneAvailable));
 			}
 		}
 
@@ -56,7 +56,7 @@
 			set
 			{
 				_qePoor = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(QePoor));
 			}
 		}
 
@@ -66,7 +66,7 @@
 			set
 			{
 				_byModel = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(ByModel));
 			}
 		}
 
@@ -76,13 +76,18 @@
 			set
 			{
 				_byQualityEstimation = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(ByQualityEstimation));
 			}
 		}
 
 		public void ClearFilter()
 		{
 			ByQualityEstimation = false;
+			Model = null;
+			QeNoneAvailable = false;
+			QePoor = false;
+			QeGood = false;
+			QeAdequate = false;
 			ByModel = false;
 		}
 	}

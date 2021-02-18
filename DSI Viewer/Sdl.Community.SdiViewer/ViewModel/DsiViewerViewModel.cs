@@ -10,7 +10,6 @@ using Sdl.Community.DsiViewer.Commands;
 using Sdl.Community.DsiViewer.Model;
 using Sdl.Community.DsiViewer.Service;
 using Sdl.Community.DsiViewer.Services;
-using Sdl.Community.DsiViewer.Studio.DisplayFilters;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -29,7 +28,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private readonly SegmentVisitor _segmentVisitor;
 		private ICommand _applySdlMtCloudFilter;
 		private ICommand _clearSdlMtCloudFilter;
-		private ICommand _copyToClipBoardCommand;
 
 		public DsiViewerViewModel()
 		{
@@ -44,18 +42,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		}
 
 		public ICommand ClearSdlMtCloudFilter => _clearSdlMtCloudFilter ??= new CommandHandler(() => ApplyFilter(true), true);
-
-		public ICommand CopyToClipBoardCommand => _copyToClipBoardCommand ??= new CommandHandler(CopyToClipBoard, true);
-
-		private void CopyToClipBoard()
-		{
-			var text = (string)SelectedItem.GetType().GetProperty("Text")?.GetValue(SelectedItem);
-
-			if (text is not null)
-			{
-				Clipboard.SetText(text);
-			}
-		}
 
 		public ICommand ApplySdlMtCloudFilter => _applySdlMtCloudFilter ??= new CommandHandler(() => ApplyFilter(), true);
 

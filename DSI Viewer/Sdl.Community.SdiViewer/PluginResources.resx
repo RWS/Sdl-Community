@@ -124,9 +124,6 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>DSI Viewer</value>
   </data>
-  <data name="QE_funnel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\qe_funnel.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="StructureContextInfo_MetaKey_length_max_value" xml:space="preserve">
     <value>Maximum value</value>
   </data>
@@ -143,42 +140,42 @@
     <value>characters</value>
   </data>
   <data name="ClearFilter_Button_Content" xml:space="preserve">
-	  <value>Clear filter</value>
+    <value>Clear filter</value>
   </data>
   <data name="ApplyFilter_Button_Content" xml:space="preserve">
-	  <value>Apply filter</value>
+    <value>Apply filter</value>
   </data>
   <data name="CheckBox_ByModel_Content" xml:space="preserve">
-	  <value>by Model</value>
+    <value>by Model</value>
   </data>
   <data name="CheckBox_NoneAvailable" xml:space="preserve">
-	  <value>N/A</value>
+    <value>N/A</value>
   </data>
   <data name="CheckBox_Poor" xml:space="preserve">
-	  <value>Poor</value>
+    <value>Poor</value>
   </data>
   <data name="CheckBox_Good" xml:space="preserve">
-	  <value>Good</value>
+    <value>Good</value>
   </data>
   <data name="CheckBox_Adequate" xml:space="preserve">
-	  <value>Adequate</value>
+    <value>Adequate</value>
   </data>
   <data name="CheckBox_ByQualityEstimation" xml:space="preserve">
-	  <value>by Quality Estimation</value>
+    <value>by Quality Estimation</value>
   </data>
   <data name="Label_SDLMTCloudFilter" xml:space="preserve">
-	  <value> - SDL MT Cloud Filter:</value>
+    <value> - SDL MT Cloud Filter:</value>
   </data>
   <data name="Label_Model" xml:space="preserve">
-	  <value>Model</value>
+    <value>Model</value>
   </data>
   <data name="Label_QualityEstimation" xml:space="preserve">
-	  <value>Quality Estimation</value>
+    <value>Quality Estimation</value>
   </data>
   <data name="Label_SDLMTCloudRelated" xml:space="preserve">
-	  <value>SDL MT Cloud Related</value>
+    <value>SDL MT Cloud Related</value>
   </data>
   <data name="Label_SDLMTCloudInfo" xml:space="preserve">
-	  <value> - Translation Origin Info:</value>
+    <value> - Translation Origin Info:</value>
   </data>
 </root>

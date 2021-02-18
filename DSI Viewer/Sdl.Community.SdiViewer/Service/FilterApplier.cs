@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.DsiViewer.Model;
+﻿using Sdl.Community.DsiViewer.Model;
 using Sdl.Community.DsiViewer.Studio.DisplayFilters;
 
 namespace Sdl.Community.DsiViewer.Service
 {
 	public class FilterApplier
 	{
-		private SdlMtCloudDisplayFilter SdlMtCloudDisplayFilter { get; } = new();
 		public SdlMtCloudFilterSettings SdlMtCloudFilterSettings => SdlMtCloudDisplayFilter.Settings;
+		private SdlMtCloudDisplayFilter SdlMtCloudDisplayFilter { get; } = new();
 
 		public void ApplyFilter()
 		{

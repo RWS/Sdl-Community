@@ -197,16 +197,6 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon QE_funnel {
-            get {
-                object obj = ResourceManager.GetObject("QE_funnel", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Maximum value.
         /// </summary>
         public static string StructureContextInfo_MetaKey_length_max_value {

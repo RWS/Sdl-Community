@@ -12,7 +12,7 @@
 			set
 			{
 				_colorCode = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(ColorCode));
 			}
 		}
 
@@ -22,7 +22,7 @@
 			set
 			{
 				_model = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(Model));
 			}
 		}
 
@@ -32,7 +32,7 @@
 			set
 			{
 				_qualityEstimation = value;
-				OnPropertyChanged();
+				OnPropertyChanged(nameof(QualityEstimation));
 			}
 		}
 	}

@@ -86,11 +86,6 @@
 					  VerticalScrollBarVisibility="Auto"
 			          IsReadOnly="True"
 			          Style="{StaticResource CustomGridStyle}">
-				<DataGrid.ContextMenu>
-					<ContextMenu>
-						<MenuItem Header="Copy" Command="{Binding CopyToClipBoardCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:SortAwareDataGrid}}, Path=SelectedItem}"/>
-					</ContextMenu>
-				</DataGrid.ContextMenu>
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header="Comment" Width="*" SortMemberPath="Text">
 						<DataGridTemplateColumn.CellTemplate>
@@ -118,7 +113,14 @@
 											</Style>
 										</Image.Style>
 									</Image>
-									<TextBlock x:Name="CommentText" Grid.Column="1" Margin="2,0,0,0" Text="{Binding Text, Mode=OneWay}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+									<TextBox IsReadOnly="True" 
+									         Grid.Column="1" 
+									         Margin="2,0,0,0" 
+									         Text="{Binding Text, Mode=OneWay}" 
+									         VerticalAlignment="Center" 
+									         TextWrapping="Wrap"
+									         Background="Transparent"
+									         BorderThickness="0"/>
 								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
