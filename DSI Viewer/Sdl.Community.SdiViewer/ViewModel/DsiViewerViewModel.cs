@@ -4,9 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.DsiViewer.Commands;
 using Sdl.Community.DsiViewer.Model;
+using Sdl.Community.DsiViewer.Service;
 using Sdl.Community.DsiViewer.Services;
 using Sdl.Community.DsiViewer.Studio.DisplayFilters;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -26,6 +28,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private readonly EditorController _editorController;
 		private readonly SegmentVisitor _segmentVisitor;
 		private ICommand _applySdlMtCloudFilter;
+		private ICommand _clearSdlMtCloudFilter;
+		private ICommand _copyToClipBoardCommand;
 
 		public DsiViewerViewModel()
 		{
@@ -33,20 +37,44 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			_comments = new List<IComment>();
 			_documentStructureInformation = new List<DsiModel>();
 
-			_editorController = GetEditorController();
+			_editorController = DsiViewerInitializer.EditorController;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			SetActiveDocument(_editorController.ActiveDocument);
 		}
 
-		public ICommand ApplySdlMtCloudFilter => _applySdlMtCloudFilter ??= new CommandHandler(ApplyFilter, true);
+		public ICommand ClearSdlMtCloudFilter => _clearSdlMtCloudFilter ??= new CommandHandler(() => ApplyFilter(true), true);
 
-		private void ApplyFilter()
+		public ICommand CopyToClipBoardCommand => _copyToClipBoardCommand ??= new CommandHandler(CopyToClipBoard, true);
+
+		private void CopyToClipBoard()
 		{
-			//DsiViewerInitializer.EditorController.ActiveDocument.ApplyFilterOnSegments();
+			var text = (string)SelectedItem.GetType().GetProperty("Text")?.GetValue(SelectedItem);
+
+			if (text is not null)
+			{
+				Clipboard.SetText(text);
+			}
 		}
 
-		public SdlMtCloudFilterSettings SdlMtCloudFilterSettings { get; } = new SdlMtCloudFilterSettings();
+		public ICommand ApplySdlMtCloudFilter => _applySdlMtCloudFilter ??= new CommandHandler(() => ApplyFilter(), true);
+
+		public bool HasSdlMtCloudRelatedInfo
+			=>
+				_editorController?.ActiveDocument?.SegmentPairs.Any(
+					sp => sp.Properties.TranslationOrigin.MetaDataContainsKey("quality_estimation")) ?? false;
+
+		private void ApplyFilter(bool isClearing = false)
+		{
+			if (isClearing)
+			{
+				FilterApplier.ClearFilter();
+			}
+
+			FilterApplier.ApplyFilter();
+		}
+
+		public FilterApplier FilterApplier => DsiViewerInitializer.FilterApplier;
 
 		public IOrderedEnumerable<DsiModel> DocumentStructureInformation
 		{
@@ -99,6 +127,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				OnPropertyChanged(nameof(HasTranslationOriginMetadata));
 			}
 		}
+
+		public object SelectedItem { get; set; }
 
 		private void UpdateDocumentStructureInformation()
 		{
@@ -215,6 +245,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			SetActiveDocument(e.Document);
+			OnPropertyChanged(nameof(HasSdlMtCloudRelatedInfo));
 		}
 
 		private void SetActiveDocument(IStudioDocument document)
@@ -240,6 +271,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private void ActiveDocument_SegmentsTranslationOriginChanged(object sender, EventArgs e)
 		{
 			UpdateTranslationOriginInformation();
+			OnPropertyChanged(nameof(HasSdlMtCloudRelatedInfo));
 		}
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
@@ -267,11 +299,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				Model = translationOrigin.GetMetaData("model"),
 				ColorCode = GetEstimationColorLabel(qualityEstimation)
 			};
-		}
-
-		private static EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
 		private string GetAdditionalInformation(IContextInfo context)

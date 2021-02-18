@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:Sdl.Community.DsiViewer.ViewModel"
              xmlns:controls="clr-namespace:Sdl.Community.DsiViewer.Controls"
+             xmlns:dsiViewer="clr-namespace:Sdl.Community.DsiViewer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:DsiViewerViewModel}">
 	<UserControl.Resources>
@@ -16,6 +17,9 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 			<Style TargetType="CheckBox">
 				<Setter Property="VerticalContentAlignment" Value="Center"/>
+			</Style>
+			<Style x:Key="BindToQe" TargetType="CheckBox">
+				<Setter Property="IsEnabled" Value="{Binding ElementName=ByQe, Path=IsChecked}"/>
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -77,10 +81,16 @@
 			          HeadersVisibility="Column"
 			          SelectionUnit="FullRow"
 			          HorizontalScrollBarVisibility="Disabled"
+					  SelectedItem="{Binding SelectedItem}"
 			          BorderThickness="0" 
 					  VerticalScrollBarVisibility="Auto"
 			          IsReadOnly="True"
 			          Style="{StaticResource CustomGridStyle}">
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Copy" Command="{Binding CopyToClipBoardCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:SortAwareDataGrid}}, Path=SelectedItem}"/>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header="Comment" Width="*" SortMemberPath="Text">
 						<DataGridTemplateColumn.CellTemplate>
@@ -108,7 +118,7 @@
 											</Style>
 										</Image.Style>
 									</Image>
-									<TextBlock Grid.Column="1" Margin="2,0,0,0" Text="{Binding Text, Mode=OneWay}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+									<TextBlock x:Name="CommentText" Grid.Column="1" Margin="2,0,0,0" Text="{Binding Text, Mode=OneWay}" VerticalAlignment="Center" TextWrapping="Wrap"/>
 								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -118,82 +128,102 @@
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</GroupBox>
-		<GroupBox Margin="2 8 2 0" 
-		          Header="SDL MT Cloud Information"
-		          Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}">
-			<Grid HorizontalAlignment="Stretch">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition/>
-					<RowDefinition/>
-				</Grid.RowDefinitions>
-					<Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Background="{Binding TranslationOriginData.ColorCode}" BorderThickness="1" Margin="8" BorderBrush="LightSlateGray" VerticalAlignment="Stretch"/>
-					<Label Grid.Row="0" Grid.Column="1" Content="Quality Estimation" HorizontalAlignment="Center" FontWeight="Black"/>
-					<TextBlock Grid.Row="1" Grid.Column="1" DockPanel.Dock="Left" Text="{Binding TranslationOriginData.QualityEstimation, Mode=OneWay}" HorizontalAlignment="Center"/>
-					<Label Grid.Row="0" Grid.Column="2" Content="Model" HorizontalAlignment="Center" FontWeight="Black"/>
-					<TextBlock Grid.Row="1" Grid.Column="2" DockPanel.Dock="Right" Text="{Binding TranslationOriginData.Model, Mode=OneWay}" HorizontalAlignment="Center"/>
-			</Grid>
-		</GroupBox>
-		<GroupBox Margin="2 8 2 0" Header="SDL MT Cloud Filter" >
-			<Grid Margin="8 2 0 0">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="3*"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
 
-				<Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" 
-				           Stroke="LightGray" StrokeThickness="0.7" RadiusX="10" RadiusY="10"/>
-				<Label Grid.Row="0" Grid.Column="0" 
-				       Content="by Quality Estimation" 
-				       HorizontalAlignment="Left" 
-				       FontWeight="ExtraLight"/>
-				<StackPanel Grid.Row="1" Grid.Column="0" 
-				            HorizontalAlignment="Left"
-				            Margin="20 0 0 20">
-					<CheckBox Content="N/A" IsChecked="{Binding SdlMtCloudFilterSettings.QeNoneAvailable}"/>
-					<CheckBox Content="Poor" IsChecked="{Binding SdlMtCloudFilterSettings.QePoor}"/>
-					<CheckBox Content="Good" IsChecked="{Binding SdlMtCloudFilterSettings.QeGood}"/>
-					<CheckBox Content="Adequate" IsChecked="{Binding SdlMtCloudFilterSettings.QeAdequate}"/>
+		<GroupBox Header="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudRelated}" Margin="2 8 2 0" Visibility="{Binding HasSdlMtCloudRelatedInfo, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<StackPanel>
+				<Label Content="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudInfo}" VerticalAlignment="Center" Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}" FontWeight="ExtraLight"/>
+				<StackPanel Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<Grid HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Background="{Binding TranslationOriginData.ColorCode}"
+						        BorderThickness="1" Margin="8" BorderBrush="LightSlateGray" VerticalAlignment="Stretch" />
+						<Label Grid.Row="0" Grid.Column="1" Content="{x:Static dsiViewer:PluginResources.Label_QualityEstimation}" HorizontalAlignment="Center" FontWeight="Heavy" />
+						<TextBlock Grid.Row="1" Grid.Column="1" DockPanel.Dock="Left"
+						           Text="{Binding TranslationOriginData.QualityEstimation, Mode=OneWay}" HorizontalAlignment="Center" />
+						<Label Grid.Row="0" Grid.Column="2" Content="{x:Static dsiViewer:PluginResources.Label_Model}" HorizontalAlignment="Center" FontWeight="Heavy" />
+						<TextBlock Grid.Row="1" Grid.Column="2" DockPanel.Dock="Right"
+						           Text="{Binding TranslationOriginData.Model, Mode=OneWay}" HorizontalAlignment="Center" />
+					</Grid>
 				</StackPanel>
 
-				<Rectangle Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
-						   Margin="5 0 0 0"
-				           Stroke="LightGray" StrokeThickness="0.7" RadiusX="10" RadiusY="10"/>
-					<Label Grid.Row="0" Grid.Column="1"
-					       HorizontalAlignment="Center"
-					       FontWeight="Medium">
-						<CheckBox x:Name="ByModel"
-								  IsChecked="{Binding SdlMtCloudFilterSettings.ByModel}"
-						          Content="by Model" />
-					</Label>
-					<TextBox Grid.Row="1" Grid.Column="1"
-							 Margin="0 10 0 0"
-							 MinWidth="140"
-					         HorizontalAlignment="Center"
-							 VerticalContentAlignment="Center"
-							 Text="{Binding SdlMtCloudFilterSettings.Model}"
-					         VerticalAlignment="Top"
-					         TextAlignment="Justify"
-					         Height="20"
-					         IsEnabled="{Binding ElementName=ByModel, Path=IsChecked}" />
-				<Button Grid.Column="1" Grid.Row="2" 
-						Margin="0 5 0 0"
-						Cursor="Hand"
-						Width="Auto"
-						Command="{Binding ApplySdlMtCloudFilter}"
-						HorizontalAlignment="Right"
-				        Content="Apply filter"
-				        Style="{StaticResource Sdl.Button.SecondaryStyle}"/>
-			</Grid>
+				<Separator Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+				<Label Content="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudFilter}" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+				<StackPanel Margin="2 8 2 0">
+					<Grid Margin="8 2 0 0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="3*" />
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
+
+						<GroupBox Grid.Row="1" Grid.Column="0">
+							<GroupBox.Header>
+								<CheckBox x:Name="ByQe" Content="{x:Static dsiViewer:PluginResources.CheckBox_ByQualityEstimation}"
+								          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.ByQualityEstimation}" />
+							</GroupBox.Header>
+							<StackPanel HorizontalAlignment="Left"
+							            Margin="20 20 0 20">
+								<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_NoneAvailable}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeNoneAvailable}"
+								          Style="{StaticResource BindToQe}" />
+								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Poor}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
+								          Style="{StaticResource BindToQe}" />
+								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Good}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeGood}"
+								          Style="{StaticResource BindToQe}" />
+								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Adequate}"
+								          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeAdequate}"
+								          Style="{StaticResource BindToQe}" />
+							</StackPanel>
+						</GroupBox>
+
+						<GroupBox Grid.Row="1" Grid.Column="1">
+							<GroupBox.Header>
+								<CheckBox x:Name="ByModel" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.ByModel}"
+								          Content="{x:Static dsiViewer:PluginResources.CheckBox_ByModel_Content}" />
+							</GroupBox.Header>
+							<TextBox Margin="0 10 0 0"
+							         MinWidth="140"
+							         HorizontalAlignment="Center"
+							         VerticalContentAlignment="Center"
+							         Text="{Binding FilterApplier.SdlMtCloudFilterSettings.Model}"
+							         VerticalAlignment="Center"
+							         TextAlignment="Justify"
+							         Height="20"
+							         IsEnabled="{Binding ElementName=ByModel, Path=IsChecked}" />
+						</GroupBox>
+						<DockPanel Grid.Column="1" Grid.Row="2" LastChildFill="False">
+							<Button DockPanel.Dock="Right"
+							        Margin="0 5 0 0"
+							        Cursor="Hand"
+							        HorizontalAlignment="Stretch"
+							        Command="{Binding ApplySdlMtCloudFilter}"
+							        Content="{x:Static dsiViewer:PluginResources.ApplyFilter_Button_Content}"
+							        Style="{StaticResource Sdl.Button.PrimaryStyle}" />
+
+							<Button DockPanel.Dock="Left"
+							        Margin="0 5 0 0"
+							        Cursor="Hand"
+							        HorizontalAlignment="Stretch"
+							        Command="{Binding ClearSdlMtCloudFilter}"
+							        Content="{x:Static dsiViewer:PluginResources.ClearFilter_Button_Content}"
+							        Style="{StaticResource Sdl.Button.SecondaryStyle}" />
+						</DockPanel>
+					</Grid>
+				</StackPanel>
+			</StackPanel>
 		</GroupBox>
+
 	</StackPanel>
 </UserControl>
