@@ -4,8 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Input;
+using Sdl.Community.DsiViewer.Commands;
 using Sdl.Community.DsiViewer.Model;
 using Sdl.Community.DsiViewer.Services;
+using Sdl.Community.DsiViewer.Studio.DisplayFilters;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -22,6 +25,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private IStudioDocument _activeDocument;
 		private readonly EditorController _editorController;
 		private readonly SegmentVisitor _segmentVisitor;
+		private ICommand _applySdlMtCloudFilter;
 
 		public DsiViewerViewModel()
 		{
@@ -34,6 +38,15 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 			SetActiveDocument(_editorController.ActiveDocument);
 		}
+
+		public ICommand ApplySdlMtCloudFilter => _applySdlMtCloudFilter ??= new CommandHandler(ApplyFilter, true);
+
+		private void ApplyFilter()
+		{
+			//DsiViewerInitializer.EditorController.ActiveDocument.ApplyFilterOnSegments();
+		}
+
+		public SdlMtCloudFilterSettings SdlMtCloudFilterSettings { get; } = new SdlMtCloudFilterSettings();
 
 		public IOrderedEnumerable<DsiModel> DocumentStructureInformation
 		{
