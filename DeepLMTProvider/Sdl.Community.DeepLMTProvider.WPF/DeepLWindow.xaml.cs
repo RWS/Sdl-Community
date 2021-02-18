@@ -2,7 +2,10 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Windows;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
@@ -81,13 +84,30 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 				if (!string.IsNullOrEmpty(Options.ApiKey))
 				{
 					ValidationBlock.Visibility = Visibility.Hidden;
+					var isValidKey = IsValidApiKey(Options.ApiKey);
+					if (!isValidKey) return;
 					DialogResult = true;
 					Close();
 				}
 				else
 				{
+					ValidationBlock.Text = "Api Key is required.";
 					ValidationBlock.Visibility = Visibility.Visible;
 				}
+			}
+		}
+
+		private bool IsValidApiKey(string apiKey)
+		{
+			using (var httpClient = new HttpClient())
+			{
+				var response = httpClient.GetAsync($"https://api.deepl.com/v2/usage?auth_key={apiKey}").Result;
+				if (response.IsSuccessStatusCode) return true;
+				ValidationBlock.Visibility = Visibility.Visible;
+				ValidationBlock.Text = response.StatusCode == HttpStatusCode.Forbidden
+					? "Authorization failed. Please supply a valid API Key."
+					: $"{response.StatusCode}";
+				return false;
 			}
 		}
 	}
