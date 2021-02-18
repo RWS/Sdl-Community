@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -10,6 +11,7 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
+		private readonly Logger _logger = Log.GetLogger(nameof(DeepLMTProvider.DeepLTranslationProviderConnecter));
 
 		public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderConnecter deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
 		{
@@ -48,7 +50,6 @@ namespace Sdl.Community.DeepLMTProvider
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, "Deepl");
-
 		public bool SupportsConcordanceSearch => false;
 		public bool SupportsDocumentSearches => false;
 		public bool SupportsFilters => false;
@@ -87,15 +88,16 @@ namespace Sdl.Community.DeepLMTProvider
 			return JsonConvert.SerializeObject(Options);
 		}
 
-		// Check if LanguageDirection is supported (if true, the provider is added in Studio)
-		// 'IsInvalidServerMessage' is used to check if any server error was returned in the first call, if yes, then is no need to make the second call to 
-		// the server to verify if language pairs are supported. (2 calls of SupportsLanguageDirection() are made because of twice instantiation of DeepLTranslationProviderConnecter. 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-
-			if (!Helpers.IsInvalidServerMessage)
+			try
 			{
 				return DeepLTranslationProviderConnecter.IsLanguagePairSupported(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"Error for following LP: source {languageDirection.SourceCultureName} and target {languageDirection.TargetCultureName}");
+				_logger.Error(e);
 			}
 
 			return false;

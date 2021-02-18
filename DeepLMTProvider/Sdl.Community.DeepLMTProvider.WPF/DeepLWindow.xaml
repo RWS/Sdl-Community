@@ -10,7 +10,7 @@
         FontFamily="Calibri"
         WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="DeepL Translation Provider" Height="400" Width="600">
+        Title="DeepL Translation Provider" Height="430" Width="600">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -50,7 +50,9 @@
 					Margin="10,0,20,0"
 					IsEnabled="True">
 				</PasswordBox>
-				<TextBlock Name="ValidationBlock" Foreground="DarkRed" Margin="10,0,0,0" Visibility="Hidden" FontFamily="Calibri" Text="API Key is required" FontSize="14" />
+				<TextBlock Name="ValidationBlock" Foreground="DarkRed" VerticalAlignment="Center"
+				           Margin="10,0,0,5" Visibility="Hidden" FontFamily="Calibri" 
+				           Text="API Key is required" FontSize="14" />
 				<TextBlock Style="{DynamicResource TextBlockColor}" Margin="10,0,0,10" FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
 				<TextBlock  Margin="10,0,0,10">
 					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate" FontFamily="Calibri">
@@ -77,8 +79,7 @@
 						           FontFamily="Calibri"
 								   TextWrapping="Wrap"
 						           Text="{x:Static wpf:PluginResources.FormalityNotAvailableText}"
-
-						           FontSize="14" />
+								   FontSize="14" />
 					</StackPanel>
 				</StackPanel>
 				<DockPanel LastChildFill="False" Margin="0 5 0 0">
