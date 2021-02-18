@@ -6,11 +6,10 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 {
 	public class SdlMtCloudDisplayFilter : IDisplayFilter
 	{
+		private const string Adequate = "Adequate";
+		private const string Good = "Good";
 		private const string NoneAvailable = "N/A";
 		private const string Poor = "Poor";
-		private const string Good = "Good";
-		private const string Adequate = "Adequate";
-
 		public SdlMtCloudFilterSettings Settings { get; } = new();
 
 		public bool EvaluateRow(IDisplayFilterRowInfo rowInfo)
@@ -32,7 +31,7 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 				}
 				if (Settings.QePoor)
 				{
-					anyQualityEstimation |=  GetQualityEstimation(translationOrigin) == Poor;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Poor;
 				}
 				if (Settings.QeGood)
 				{

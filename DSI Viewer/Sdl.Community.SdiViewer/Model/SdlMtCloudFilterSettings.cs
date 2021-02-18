@@ -3,12 +3,32 @@
 	public class SdlMtCloudFilterSettings : ModelBase
 	{
 		private bool _byModel;
-		private bool _qePoor;
-		private bool _qeNoneAvailable;
-		private bool _qeGood;
-		private bool _qeAdequate;
-		private string _model;
 		private bool _byQualityEstimation;
+		private string _model;
+		private bool _qeAdequate;
+		private bool _qeGood;
+		private bool _qeNoneAvailable;
+		private bool _qePoor;
+
+		public bool ByModel
+		{
+			get => _byModel;
+			set
+			{
+				_byModel = value;
+				OnPropertyChanged(nameof(ByModel));
+			}
+		}
+
+		public bool ByQualityEstimation
+		{
+			get => _byQualityEstimation;
+			set
+			{
+				_byQualityEstimation = value;
+				OnPropertyChanged(nameof(ByQualityEstimation));
+			}
+		}
 
 		public string Model
 		{
@@ -23,7 +43,7 @@
 		public bool QeAdequate
 		{
 			get => _qeAdequate;
-			set 
+			set
 			{
 				_qeAdequate = value;
 				OnPropertyChanged(nameof(QeAdequate));
@@ -57,26 +77,6 @@
 			{
 				_qePoor = value;
 				OnPropertyChanged(nameof(QePoor));
-			}
-		}
-
-		public bool ByModel
-		{
-			get => _byModel;
-			set
-			{
-				_byModel = value;
-				OnPropertyChanged(nameof(ByModel));
-			}
-		}
-
-		public bool ByQualityEstimation
-		{
-			get => _byQualityEstimation;
-			set
-			{
-				_byQualityEstimation = value;
-				OnPropertyChanged(nameof(ByQualityEstimation));
 			}
 		}
 

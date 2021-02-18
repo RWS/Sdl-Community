@@ -10,11 +10,11 @@ namespace Sdl.Community.DsiViewer
 	{
 		public static EditorController EditorController { get; private set; }
 
+		public static FilterApplier FilterApplier { get; } = new();
+
 		public void Execute()
 		{
 			EditorController = SdlTradosStudio.Application.GetController<EditorController>();
 		}
-
-		public static FilterApplier FilterApplier { get;} = new FilterApplier();
 	}
 }

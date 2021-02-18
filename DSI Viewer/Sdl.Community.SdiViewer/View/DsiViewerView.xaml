@@ -1,25 +1,25 @@
 ﻿<UserControl x:Class="Sdl.Community.DsiViewer.View.DsiViewerView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModel="clr-namespace:Sdl.Community.DsiViewer.ViewModel"
-             xmlns:controls="clr-namespace:Sdl.Community.DsiViewer.Controls"
-             xmlns:dsiViewer="clr-namespace:Sdl.Community.DsiViewer"
-             mc:Ignorable="d" 
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:dsiViewer="clr-namespace:Sdl.Community.DsiViewer"
+			 xmlns:controls="clr-namespace:Sdl.Community.DsiViewer.Controls"
+			 xmlns:viewModel="clr-namespace:Sdl.Community.DsiViewer.ViewModel"
+			 mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:DsiViewerViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Styles/DataGridStyle.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="../Styles/DataGridStyle.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 			<Style TargetType="CheckBox">
-				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="VerticalContentAlignment" Value="Center" />
 			</Style>
 			<Style x:Key="BindToQe" TargetType="CheckBox">
-				<Setter Property="IsEnabled" Value="{Binding ElementName=ByQe, Path=IsChecked}"/>
+				<Setter Property="IsEnabled" Value="{Binding ElementName=ByQe, Path=IsChecked}" />
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -36,12 +36,12 @@
 			          Style="{StaticResource CustomGridStyle}">
 				<DataGrid.RowStyle>
 					<Style TargetType="DataGridRow">
-						<Setter Property="Padding" Value="2,0,2,0"/>
+						<Setter Property="Padding" Value="2,0,2,0" />
 					</Style>
 				</DataGrid.RowStyle>
 				<DataGrid.ContextMenu>
 					<ContextMenu>
-						<MenuItem Command="Copy"/>
+						<MenuItem Command="Copy" />
 					</ContextMenu>
 				</DataGrid.ContextMenu>
 				<DataGrid.Columns>
@@ -61,7 +61,7 @@
 							</Style>
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
-					<DataGridTextColumn Width="Auto" Header="Code" Binding="{Binding Code, Mode=OneWay}"/>
+					<DataGridTextColumn Width="Auto" Header="Code" Binding="{Binding Code, Mode=OneWay}" />
 					<DataGridTextColumn Width="*" Header="Description" Binding="{Binding Description, Mode=OneWay}">
 						<DataGridTextColumn.ElementStyle>
 							<Style>
@@ -72,17 +72,17 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</GroupBox>
-		<GroupBox Margin="2,8,2,0" Header="Comments"  Visibility="{Binding Path=HasComments, Converter={StaticResource BooleanToVisibilityConverter}}" >
-			<controls:SortAwareDataGrid  
+		<GroupBox Margin="2,8,2,0" Header="Comments"  Visibility="{Binding Path=HasComments, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<controls:SortAwareDataGrid
 			          ItemsSource="{Binding Path=Comments, Mode=OneWay}"
 			          GridLinesVisibility="None"
 			          BorderBrush="#CCCCCD"
-				      SelectionMode="Single" 
+				      SelectionMode="Single"
 			          HeadersVisibility="Column"
 			          SelectionUnit="FullRow"
 			          HorizontalScrollBarVisibility="Disabled"
 					  SelectedItem="{Binding SelectedItem}"
-			          BorderThickness="0" 
+			          BorderThickness="0"
 					  VerticalScrollBarVisibility="Auto"
 			          IsReadOnly="True"
 			          Style="{StaticResource CustomGridStyle}">
@@ -92,48 +92,48 @@
 							<DataTemplate>
 								<Grid>
 									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto"/>
-										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="*" />
 									</Grid.ColumnDefinitions>
 									<Image Grid.Column="0" Height="16" Width="16" VerticalAlignment="Center">
 										<Image.Style>
 											<Style TargetType="Image">
-												<Setter Property="Source" Value="../Resources/information.png"/>
+												<Setter Property="Source" Value="../Resources/information.png" />
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Severity}" Value="High">
-														<Setter Property="Source" Value="../Resources/error.png"/>
+														<Setter Property="Source" Value="../Resources/error.png" />
 													</DataTrigger>
 													<DataTrigger Binding="{Binding Severity}" Value="Medium">
-														<Setter Property="Source" Value="../Resources/warning.png"/>
+														<Setter Property="Source" Value="../Resources/warning.png" />
 													</DataTrigger>
 													<DataTrigger Binding="{Binding Severity}" Value="Low">
-														<Setter Property="Source" Value="../Resources/information.png"/>
+														<Setter Property="Source" Value="../Resources/information.png" />
 													</DataTrigger>
 												</Style.Triggers>
 											</Style>
 										</Image.Style>
 									</Image>
-									<TextBox IsReadOnly="True" 
-									         Grid.Column="1" 
-									         Margin="2,0,0,0" 
-									         Text="{Binding Text, Mode=OneWay}" 
-									         VerticalAlignment="Center" 
+									<TextBox IsReadOnly="True"
+									         Grid.Column="1"
+									         Margin="2,0,0,0"
+									         Text="{Binding Text, Mode=OneWay}"
+									         VerticalAlignment="Center"
 									         TextWrapping="Wrap"
 									         Background="Transparent"
-									         BorderThickness="0"/>
+									         BorderThickness="0" />
 								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTextColumn Width="Auto" Header="Author" Binding="{Binding Author, Mode=OneWay}"/>
-					<DataGridTextColumn Width="Auto" Header="Date" Binding="{Binding Date, Mode=OneWay}"/>
+					<DataGridTextColumn Width="Auto" Header="Author" Binding="{Binding Author, Mode=OneWay}" />
+					<DataGridTextColumn Width="Auto" Header="Date" Binding="{Binding Date, Mode=OneWay}" />
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</GroupBox>
 
 		<GroupBox Header="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudRelated}" Margin="2 8 2 0" Visibility="{Binding HasSdlMtCloudRelatedInfo, Converter={StaticResource BooleanToVisibilityConverter}}">
 			<StackPanel>
-				<Label Content="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudInfo}" VerticalAlignment="Center" Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}" FontWeight="ExtraLight"/>
+				<Label Content="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudInfo}" VerticalAlignment="Center" Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}" FontWeight="ExtraLight" />
 				<StackPanel Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<Grid HorizontalAlignment="Stretch">
 						<Grid.ColumnDefinitions>
@@ -156,9 +156,9 @@
 					</Grid>
 				</StackPanel>
 
-				<Separator Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+				<Separator Visibility="{Binding Path=HasTranslationOriginMetadata, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-				<Label Content="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudFilter}" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+				<Label Content="{x:Static dsiViewer:PluginResources.Label_SDLMTCloudFilter}" FontWeight="ExtraLight" VerticalAlignment="Center" />
 				<StackPanel Margin="2 8 2 0">
 					<Grid Margin="8 2 0 0">
 						<Grid.ColumnDefinitions>
@@ -226,6 +226,5 @@
 				</StackPanel>
 			</StackPanel>
 		</GroupBox>
-
 	</StackPanel>
 </UserControl>

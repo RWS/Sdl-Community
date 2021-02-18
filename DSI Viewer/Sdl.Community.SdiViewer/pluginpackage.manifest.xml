@@ -4,5 +4,5 @@
   <Version>3.0.3.0</Version>
   <Description>This plugin adds preview capability for Document Structure Information and Comments so they can be viewed in real-time as you work on a document.</Description>
   <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="16.0" />
 </PluginPackage>
