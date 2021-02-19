@@ -110,6 +110,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			{
 				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
 				_activeDocument.SegmentsTranslationOriginChanged -= ActiveDocument_SegmentsTranslationOriginChanged;
+				_activeDocument.ContentChanged -= ActiveDocument_ContentChanged;
 			}
 		}
 
@@ -224,11 +225,17 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			{
 				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 				_activeDocument.SegmentsTranslationOriginChanged += ActiveDocument_SegmentsTranslationOriginChanged;
+				_activeDocument.ContentChanged += ActiveDocument_ContentChanged;
 
 				UpdateDocumentStructureInformation();
 				UpdateComments();
 				UpdateTranslationOriginInformation();
 			}
+		}
+
+		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
+		{
+			UpdateComments();
 		}
 
 		private void UpdateComments()
