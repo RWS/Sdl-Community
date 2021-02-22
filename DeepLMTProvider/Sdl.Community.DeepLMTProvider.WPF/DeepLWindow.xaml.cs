@@ -101,7 +101,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			using (var httpClient = new HttpClient())
 			{
-				var response = httpClient.GetAsync($"https://api.deepl.com/v2/usage?auth_key={apiKey}").Result;
+				var response = httpClient.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
 				if (response.IsSuccessStatusCode) return true;
 				ValidationBlock.Visibility = Visibility.Visible;
 				ValidationBlock.Text = response.StatusCode == HttpStatusCode.Forbidden
