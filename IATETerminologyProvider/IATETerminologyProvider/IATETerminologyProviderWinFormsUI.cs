@@ -59,10 +59,13 @@ namespace IATETerminologyProvider
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
 		}
 
-		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, SettingsModel providerSettings)
+		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider,
+			SettingsModel providerSettings)
 		{
 			var result = new List<ITerminologyProvider>();
-			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService);
+			var messageBoxService = new MessageBoxService();
+
+			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService, messageBoxService);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel

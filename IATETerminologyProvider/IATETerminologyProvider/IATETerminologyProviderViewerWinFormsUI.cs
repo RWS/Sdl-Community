@@ -28,7 +28,7 @@ namespace IATETerminologyProvider
 				_control = new IATETermsControl(_iateTerminologyProvider)
 				{
 					Text = @"IATETerminologyProviderViewerWinFormsUI",
-					BackColor = Color.White					
+					BackColor = Color.White
 				};
 
 				JumpToTermAction += _control.JumpToTerm;
@@ -42,7 +42,7 @@ namespace IATETerminologyProvider
 
 				return _control;
 			}
-		}				
+		}
 
 		public bool Initialized => true;
 
@@ -53,7 +53,7 @@ namespace IATETerminologyProvider
 		}
 
 		public void AddTerm(string source, string target)
-		{			
+		{
 			AddTermAction?.Invoke(source, target);
 		}
 
@@ -81,11 +81,11 @@ namespace IATETerminologyProvider
 			_documentStateService.SaveDocumentEntriesState(_control);
 
 			_control?.ReleaseSubscribers();
-		}		
+		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-		}	
+		}
 	}
 }

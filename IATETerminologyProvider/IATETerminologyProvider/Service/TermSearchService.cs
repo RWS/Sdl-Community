@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using IATETerminologyProvider.Helpers;
 using IATETerminologyProvider.Model;
@@ -18,7 +20,7 @@ namespace IATETerminologyProvider.Service
 {
 	public class TermSearchService
 	{
-		private  readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly SettingsModel _providerSettings;
 		private readonly ObservableCollection<ItemsResponseModel> _domains;
 		private readonly TermTypeService _termTypeService;
@@ -44,95 +46,48 @@ namespace IATETerminologyProvider.Service
 		/// <param name="source">source language</param>
 		/// <param name="target">target language</param>
 		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
+		/// <param name="bodyModel">Values in the body of the requests</param>
 		/// <returns>terms</returns>
-		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount)
+		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount, string bodyModel)
 		{
 			var results = new List<ISearchResult>();
 
-			var timer1 = new Stopwatch();
-			timer1.Start();
-			var bodyModel = SetApiRequestBodyValues(source, target, text);
+			var mediaType = new ContentType("application/vnd.iate.entry-search+json").MediaType;
+			var content = new StringContent(bodyModel, Encoding.UTF8, mediaType);
+			content.Headers.ContentType.CharSet = ""; // we need to remove the charset otherwise we'll receive Unsupported Media Type error from IATE
 
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Post,
-				RequestUri = new Uri(ApiUrls.BaseUri("true", "0", "500")),
-				Content = new StringContent(JsonConvert.SerializeObject(bodyModel), Encoding.UTF8, "application/json")
+				RequestUri = new Uri(ApiUrls.SearchUri("true", "0", "500")),
+				Content = content
 			};
 
 			//Refresh the Access token on Http client in case it expired
 			IateApplicationInitializer.SetAccessToken();
 
+			var client = IateApplicationInitializer.Clinet;
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.iate.entry+json"));
+
+			_logger.Info("--> Search call to iate");
 			var httpResponse = IateApplicationInitializer.Clinet.SendAsync(httpRequest)?.Result;
 
 			httpResponse?.EnsureSuccessStatusCode();
 			try
 			{
-				timer1.Stop();
-
 				var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
 				results = MapResponseValues(httpResponseString, domainsJsonResponse);
+				_logger.Info("--> Response received from IATE");
 
 				return results;
 			}
 			finally
 			{
 				httpResponse?.Dispose();
+				content.Dispose();
 			}
-		}
-
-		// Set the needed fields for the API search request
-		private object SetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
-		{
-			var targetLanguges = new List<string>();
-			var filteredDomains = new List<string>();
-			var filteredTermTypes = new List<int>();
-
-			targetLanguges.Add(destination.Locale.TwoLetterISOLanguageName);
-			if (_providerSettings != null)
-			{
-				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
-				filteredDomains.AddRange(domains);
-
-				if (_providerSettings.SearchInSubdomains)
-				{
-					IncludeSubdomainsId(filteredDomains);
-				}
-
-				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
-				filteredTermTypes.AddRange(termTypes);
-			}
-
-			var bodyModel = new
-			{
-				query = text,
-				source = source.Locale.TwoLetterISOLanguageName,
-				targets = targetLanguges,
-				include_subdomains = "true",
-				query_operator = 0,
-				filter_by_domains = filteredDomains,
-				search_in_term_types = filteredTermTypes
-			};
-
-			return bodyModel;
-		}
-
-		/// <summary>
-		/// Add subdomains ids for selected domains
-		/// </summary>
-		/// <param name="filteredDomainsIds">Subdomains ids which needs to be sent to IATE</param>
-		private void IncludeSubdomainsId(List<string> filteredDomainsIds)
-		{
-			var subdomainsIds = new List<string>();
-			var correspondingSubdomains =
-				_providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.SubdomainsIds).ToList();
-			foreach (var subdomainIds in correspondingSubdomains)
-			{
-				subdomainsIds.AddRange(subdomainIds);
-			}
-			filteredDomainsIds.AddRange(subdomainsIds);
 		}
 
 		/// <summary>
@@ -161,7 +116,7 @@ namespace IATETerminologyProvider.Service
 
 						var searchResultItems = new List<SearchResultModel>();
 
-						// get language childrens (source + target languages)
+						// get language children (source + target languages)
 						var languageTokens = item.SelectToken("language").Children().ToList();
 						if (languageTokens.Any())
 						{
@@ -266,7 +221,7 @@ namespace IATETerminologyProvider.Service
 			return domain.TrimEnd(' ').TrimEnd(',');
 		}
 
-		// Set term subdomain
+		// Set term subdomains
 		private void SetTermSubdomains(ItemsResponseModel mainDomains)
 		{
 			// clear _subdomains list for each term

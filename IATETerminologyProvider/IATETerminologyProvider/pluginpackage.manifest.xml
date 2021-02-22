@@ -6,6 +6,13 @@
   <Author>SDL Community Developers</Author>
 	<Include>
 		<File>System.Reactive.dll</File>
+		<File>System.Data.SQLite.dll</File>
+		<File>System.Data.SQLite.EF6.dll</File>
+		<File>System.Data.SQLite.Linq.dll</File>
+		<File>EntityFramework.dll</File>
+		<File>EntityFramework.SqlServer.dll</File>
+		<File>System.ComponentModel.DataAnnotations.dll</File>
+		<File>System.Data.DataSetExtensions.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.2" maxversion="16.0"/>
 </PluginPackage>

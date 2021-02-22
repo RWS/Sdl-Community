@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IATETerminologyProvider.Helpers;
@@ -47,9 +45,7 @@ namespace IATETerminologyProvider.Service
 								Code = item.Code,
 								Name = item.Name,
 								Subdomains = item.Subdomains,
-								SubdomainIds = new List<string>()
 							};
-							SetSubdomainsIds(domain);
 							domains.Add(domain);
 						}
 					}
@@ -60,47 +56,6 @@ namespace IATETerminologyProvider.Service
 			finally
 			{
 				httpResponse?.Dispose();
-			}
-		}
-
-		private void SetSubdomainsIds(ItemsResponseModel domain)
-		{
-			var subdomainsIds = new List<string>();
-			if (domain.Subdomains != null)
-			{
-				foreach (var subdomain in domain.Subdomains)
-				{
-					AddUniqueSubdomainId(subdomain.Code, subdomainsIds);
-					GetSubdomainsId(subdomain.Subdomains, subdomainsIds);
-					if (subdomainsIds.Any())
-					{
-						domain.SubdomainIds.AddRange(subdomainsIds);
-					}
-				}
-			}
-		}
-
-		private void GetSubdomainsId(List<SubdomainsResponseModel> subdomains, List<string> subdomainsIds)
-		{
-			if (subdomains != null)
-			{
-				foreach (var subdomain in subdomains)
-				{
-					AddUniqueSubdomainId(subdomain.Code, subdomainsIds);
-
-					GetSubdomainsId(subdomain.Subdomains, subdomainsIds);
-				}
-			}
-		}
-
-		private void AddUniqueSubdomainId(string subdomainId, List<string> subdomainsIds)
-		{
-			if (!string.IsNullOrEmpty(subdomainId))
-			{
-				if (!subdomainsIds.Any(s => s.Equals(subdomainId)))
-				{
-					subdomainsIds.Add(subdomainId);
-				}
 			}
 		}
 	}
