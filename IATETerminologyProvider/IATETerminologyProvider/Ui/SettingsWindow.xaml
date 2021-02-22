@@ -118,9 +118,15 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
-			<Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
-					Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default"/>
+			<DockPanel Grid.Row="5" Grid.Column="0">
+				<Button  HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
+				        Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default"/>
+				<Button HorizontalAlignment="Left" Margin="10" Cursor="Hand" VerticalAlignment="Center" Command="{Binding ClearCache}"
+				        Style="{DynamicResource Sdl.Button.HyperLinkStyle}" MaxWidth="150" Content="{x:Static resx:PluginResources.ClearCache}"/>
+			</DockPanel>
+			
 			<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.1,0,0" BorderBrush="#ABB0B3">
+				
 				<DockPanel>
 					<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
 					         ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"

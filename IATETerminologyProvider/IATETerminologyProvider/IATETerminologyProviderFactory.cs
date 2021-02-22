@@ -31,6 +31,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			}
 			var terminologyProvider = new IATETerminologyProvider(providerSettings);
 			return terminologyProvider;
-		}		
+		}
 	}
 }

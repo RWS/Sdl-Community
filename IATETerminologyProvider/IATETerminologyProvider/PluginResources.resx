@@ -178,4 +178,10 @@
   <data name="Subdomains_Tooltip" xml:space="preserve">
     <value>Searching in subdomains will increase the response time from IATE service</value>
   </data>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Clear local cache</value>
+  </data>
+  <data name="ClearConfirmation" xml:space="preserve">
+    <value>Are you sure you want to clear local cache?</value>
+  </data>
 </root>

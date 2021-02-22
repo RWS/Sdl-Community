@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sdl.Community.IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class DomainModel : ViewModelBase
 	{		
@@ -17,6 +15,5 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
-		public List<string> SubdomainsIds { get; set; }
 	}
 }
