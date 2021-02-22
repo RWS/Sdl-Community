@@ -7,14 +7,14 @@ namespace Sdl.Community.DsiViewer.View
 	/// Interaction logic for SdiWpfControl.xaml
 	/// </summary>
 	public partial class DsiViewerView : UserControl, IUIControl
-	{
-		public DsiViewerView()
-		{
-			InitializeComponent();
-		}
+    {
+        public DsiViewerView()
+        {
+            InitializeComponent();
+        }
 
-		public void Dispose()
-		{			
-		}
-	}
+        public void Dispose()
+        {
+        }
+    }
 }

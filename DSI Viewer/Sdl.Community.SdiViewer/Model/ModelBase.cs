@@ -3,9 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.DsiViewer.Model
 {
-	public class ModelBase:INotifyPropertyChanged
+	public class ModelBase : INotifyPropertyChanged
 	{
-
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
