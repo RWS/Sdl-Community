@@ -15,11 +15,10 @@ namespace IATETerminologyProvider
 	{
 		private SettingsViewModel _settingsViewModel;
 		private SettingsWindow _settingsWindow;
-		private readonly IateSettingsService _settingsService = new IateSettingsService();
-
 		public string TypeName => PluginResources.IATETerminologyProviderName;
 		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
 		public bool SupportsEditing => true;
+
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
 			var result = SetTerminologyProvider(null, null);
@@ -28,19 +27,10 @@ namespace IATETerminologyProvider
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
-			var savedSettings = _settingsService.GetProviderSettings();
-			var providerSettings = new SettingsModel
-			{
-				Domains = new List<DomainModel>(),
-				TermTypes = new List<TermTypeModel>()
-			};
-			if (savedSettings != null)
-			{
-				providerSettings.Domains.AddRange(savedSettings.Domains);
-				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
-				providerSettings.SearchInSubdomains = savedSettings.SearchInSubdomains;
-			}
-			SetTerminologyProvider(terminologyProvider as IATETerminologyProvider, providerSettings);
+			var provider = terminologyProvider as IATETerminologyProvider;
+			var savedSettings = provider?.ProviderSettings;
+
+			SetTerminologyProvider(provider, savedSettings);
 
 			return true;
 		}
@@ -65,7 +55,7 @@ namespace IATETerminologyProvider
 			var result = new List<ITerminologyProvider>();
 			var messageBoxService = new MessageBoxService();
 
-			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService, messageBoxService);
+			_settingsViewModel = new SettingsViewModel(providerSettings, messageBoxService);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel

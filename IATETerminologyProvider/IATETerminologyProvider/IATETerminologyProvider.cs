@@ -19,17 +19,17 @@ namespace IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private IList<EntryModel> _entryModels;
-		private SettingsModel _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
-
+		public SettingsModel ProviderSettings { get; set; }
 		public IATETerminologyProvider(SettingsModel providerSettings)
 		{
-			UpdateSettings(providerSettings);
+			ProviderSettings = providerSettings;
+			UpdateSettings(ProviderSettings);
 		}
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
@@ -40,7 +40,7 @@ namespace IATETerminologyProvider
 
 		public override string Name => PluginResources.IATETerminologyProviderName;
 
-		public override Uri Uri => new Uri((IateUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
+		public override Uri Uri => ProviderSettings.Uri;
 
 		public override IEntry GetEntry(int id)
 		{
@@ -129,11 +129,13 @@ namespace IATETerminologyProvider
 			}
 		}
 
-		public void UpdateSettings(SettingsModel providerSettings)
+		public void UpdateSettings(SettingsModel settings)
 		{
-			_providerSettings = providerSettings;
+			ProviderSettings.SearchInSubdomains = settings.SearchInSubdomains;
+			ProviderSettings.Domains = settings.Domains;
+			ProviderSettings.TermTypes = settings.TermTypes;
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(_providerSettings);
+			_searchService = new TermSearchService(ProviderSettings);
 
 			InitializeEditorController();
 		}
@@ -226,12 +228,12 @@ namespace IATETerminologyProvider
 			var filteredTermTypes = new List<int>();
 
 			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
-			if (_providerSettings != null)
+			if (ProviderSettings != null)
 			{
-				var domains = _providerSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
+				var domains = ProviderSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
 				filteredDomains.AddRange(domains);
 
-				var termTypes = _providerSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
+				var termTypes = ProviderSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
 			}
 
@@ -240,8 +242,8 @@ namespace IATETerminologyProvider
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguages,
-				include_subdomains = _providerSettings?.SearchInSubdomains,
-				cascade_domains = _providerSettings?.SearchInSubdomains,
+				include_subdomains = ProviderSettings?.SearchInSubdomains,
+				cascade_domains = ProviderSettings?.SearchInSubdomains,
 				query_operator = 0,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
