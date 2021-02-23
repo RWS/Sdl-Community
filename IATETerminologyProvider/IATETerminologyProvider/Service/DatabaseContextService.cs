@@ -24,7 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 				var dbFilePath = Path.Combine(cacheDirectoryPath, $"{projectName}.mdf");
 				Database.Connection.ConnectionString =
-					$@"Data Source=.\SQLEXPRESS;Integrated Security=True;MultipleActiveResultSets=True;AttachDbFilename={dbFilePath}";
+					$@"Data Source=(localdb)\mssqllocaldb;Integrated Security=True;MultipleActiveResultSets=True;AttachDbFilename={dbFilePath}";
 
 				_logger.Info($"--> Trying to create db with name: {projectName} at following path: {dbFilePath}");
 				var dbCreated = Database.CreateIfNotExists();
