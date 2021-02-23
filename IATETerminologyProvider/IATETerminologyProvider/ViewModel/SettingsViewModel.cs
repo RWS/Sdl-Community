@@ -23,7 +23,6 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private TermTypeModel _selectedTermType;
 		private readonly DomainService _domainService;
 		private readonly TermTypeService _termTypeService;
-		private readonly IIateSettingsService _settingsService;
 		private readonly IMessageBoxService _messageBoxService;
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
@@ -31,13 +30,12 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private bool _searchInSubdomains;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public SettingsViewModel(SettingsModel providerSettings,IIateSettingsService settingsService,IMessageBoxService messageBocBoxService)
-		{			
+		public SettingsViewModel(SettingsModel providerSettings, IMessageBoxService messageBocBoxService)
+		{
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
 			_termTypeService = new TermTypeService();
 			_domainService = new DomainService();
-			_settingsService = settingsService;
 			_messageBoxService = messageBocBoxService;
 			ProviderSettings = new SettingsModel
 			{
@@ -185,20 +183,15 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			if (Domains.Count > 0)
 			{
-				// Add selected to provider settings
-				var savedSettings = _settingsService.GetProviderSettings();
-				if (savedSettings != null)
-				{
-					_settingsService.RemoveProviderSettings();
-					savedSettings.Domains = Domains.ToList();
-					savedSettings.TermTypes = TermTypes.ToList();
-					savedSettings.SearchInSubdomains = SearchInSubdomains;
-					ProviderSettings.Domains.AddRange(Domains);
-					ProviderSettings.TermTypes.AddRange(TermTypes);
-					ProviderSettings.SearchInSubdomains = SearchInSubdomains;
-				}
-				_settingsService.SaveProviderSettings(savedSettings);
+				ProviderSettings.Domains = Domains.ToList();
 			}
+
+			if (TermTypes.Count > 0)
+			{
+				ProviderSettings.TermTypes = TermTypes.ToList();
+			}
+			ProviderSettings.SearchInSubdomains = SearchInSubdomains;
+
 			DialogResult = true;
 			UnSubscribeToEvents();
 		}
