@@ -44,7 +44,7 @@ namespace Sdl.Community.StarTransit
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult == DialogResult.OK)
 				{
-					var path = fileDialog.FileName;	
+					var path = fileDialog.FileName;
 					var packageService = new PackageService();
 					var package = await packageService.OpenPackage(path, pathToTempFolder);
 
@@ -69,19 +69,19 @@ namespace Sdl.Community.StarTransit
 				_messageBoxService.ShowMessage(ptle.Message, string.Empty);
 				Log.Logger.Error($"OpenPackage method: {ptle.Message}\n {ptle.StackTrace}");
 			}
-		}  
-		
+		}
+
 		private string CreateTempPackageFolder()
 		{
 			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
-			var pathToTempFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
-			
-			if (Directory.Exists(pathToTempFolder))
+			var pathToTempPackageFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
+
+			if (Directory.Exists(tempFolder))
 			{
-				Directory.Delete(pathToTempFolder, true);
+				Directory.Delete(tempFolder, true);
 			}
-			Directory.CreateDirectory(pathToTempFolder);
-			return pathToTempFolder;
+			Directory.CreateDirectory(pathToTempPackageFolder);
+			return pathToTempPackageFolder;
 		}
 	}
 
