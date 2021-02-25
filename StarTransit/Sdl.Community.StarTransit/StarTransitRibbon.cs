@@ -74,14 +74,14 @@ namespace Sdl.Community.StarTransit
 		private string CreateTempPackageFolder()
 		{
 			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
-			var pathToTempFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
+			var pathToTempPackageFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
 			
-			if (Directory.Exists(pathToTempFolder))
+			if (Directory.Exists(tempFolder))
 			{
-				Directory.Delete(pathToTempFolder, true);
+				Directory.Delete(tempFolder, true);
 			}
-			Directory.CreateDirectory(pathToTempFolder);
-			return pathToTempFolder;
+			Directory.CreateDirectory(pathToTempPackageFolder);
+			return pathToTempPackageFolder;
 		}
 	}
 
