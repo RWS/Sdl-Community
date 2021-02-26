@@ -162,7 +162,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return responseMessage;
 		}
 
-		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
+		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegments)
 		{
 			if (string.IsNullOrEmpty(model?.SelectedModel?.Model))
 			{
@@ -231,22 +231,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
 
-			OnTranslationReceived(sourceSegments, new TranslationData 
+			OnTranslationReceived(new TranslationData 
 			{
+				SourceSegments = sourceSegments,
 				TargetSegments = targetSegments.Select(seg => seg.ToString()).ToList(),
 				TranslationOriginInformation = new TranslationOriginInformation
 				{
 					Model = translations.Model,
 					QualityEstimation = dataResponse.Item2
-				}
+				},
+				FilePath = fileAndSegments.FilePath,
+				SegmentIds = fileAndSegments.SegmentIds
 			});
 
 			return targetSegments;
 		}
 
-		private void OnTranslationReceived(List<string> sourceSegments, TranslationData targetSegmentData)
+		private void OnTranslationReceived(TranslationData translationData)
 		{
-			TranslationReceived?.Invoke(sourceSegments, targetSegmentData);
+			TranslationReceived?.Invoke(translationData);
 		}
 
 		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)

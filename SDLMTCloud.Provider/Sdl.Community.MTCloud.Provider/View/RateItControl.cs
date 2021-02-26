@@ -31,12 +31,11 @@ namespace Sdl.Community.MTCloud.Provider.View
 			var actionProvider = new ActionProvider();
 			var messageBoxService = new MessageBoxService();
 
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var editorController = MtCloudApplicationInitializer.EditorController;
 			var segmentSupervisor = new SegmentSupervisor(editorController);
-			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 
 			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService,
-				editorController, eventAggregator);
+				editorController);
 			_rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel

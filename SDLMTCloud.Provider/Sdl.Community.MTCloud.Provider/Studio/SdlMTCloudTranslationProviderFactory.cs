@@ -17,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
-				StudioInstance.GetLanguageCloudIdentityApi(), MTCloudApplicationInitializer.Client);
+				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
 
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
@@ -30,12 +30,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			var editorController = StudioInstance.GetEditorController();
 
-			var translationService = new TranslationService(connectionService, MTCloudApplicationInitializer.Client);
+			MtCloudApplicationInitializer.SetTranslationService(connectionService);
+
 			var languageProvider = new LanguageProvider();
 			var projectsController = StudioInstance.GetProjectsController();
 
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
-				translationService, languageProvider, editorController, projectsController);
+				MtCloudApplicationInitializer.TranslationService, languageProvider, editorController,
+				projectsController);
+
 			return provider;
 		}
 
