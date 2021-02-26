@@ -79,7 +79,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						if (line.StartsWith("[") && line.EndsWith("]"))
 						{
 							var valuesDictionaries = new List<KeyValuePair<string, string>>();
-							//aici ar trebui sa verific daca key property trecut a fost languages sa fac break nu are rost sa citim pana la sfarsit documentul
 							if (keyProperty != string.Empty && _dictionaryPropetries.Any())
 							{
 								valuesDictionaries.AddRange(
@@ -94,6 +93,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 									_pluginDictionary.Add(keyProperty, valuesDictionaries);
 								}
 								_dictionaryPropetries.Clear();
+								if (keyProperty.Equals("Languages")) break; // we don't want to read the irrelevant information after language info
 							}
 
 							var firstPosition = line.IndexOf("[", StringComparison.Ordinal) + 1;
@@ -146,11 +146,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					var propertiesDictionary = _pluginDictionary["Admin"];
 					foreach (var item in propertiesDictionary)
 					{
-						if (item.Key == "ProjectName")
-						{
-							model.Name = item.Value;
-							break;
-						}
+						if (item.Key != "ProjectName") continue;
+						model.Name = item.Value;
+						break;
 					}
 				}
 
@@ -164,22 +162,21 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							var sourceLanguageCode = int.Parse(item.Value);
 							sourceLanguage = Language(sourceLanguageCode);
 						}
-						if (item.Key == "TargetLanguages")
-						{
-							//we assume languages code are separated by " "
-							var languages = item.Value.Split(LanguageTargetSeparator);
 
-							foreach (var language in languages)
+						if (item.Key != "TargetLanguages") continue;
+						//we assume languages code are separated by " "
+						var languages = item.Value.Split(LanguageTargetSeparator);
+
+						foreach (var language in languages)
+						{
+							var targetLanguageCode = int.Parse(language);
+							var cultureInfo = Language(targetLanguageCode);
+							var pair = new LanguagePair
 							{
-								var targetLanguageCode = int.Parse(language);
-								var cultureInfo = Language(targetLanguageCode);
-								var pair = new LanguagePair
-								{
-									SourceLanguage = sourceLanguage,
-									TargetLanguage = cultureInfo
-								};
-								languagePairList.Add(pair);
-							}
+								SourceLanguage = sourceLanguage,
+								TargetLanguage = cultureInfo
+							};
+							languagePairList.Add(pair);
 						}
 					}
 				}
@@ -209,43 +206,39 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
 			List<string> targetFilesAndTmsPath)
 		{
-			try
+			var pathToTargetFiles = new List<string>();
+			var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
+			var sourcefileList = sourceFilesAndTmsPath.Item1;
+			var tmMetadataList = sourceFilesAndTmsPath.Item2;
+
+			languagePair.HasTm = tmMetadataList.Count > 0;
+			languagePair.SourceFile = sourcefileList;
+
+			foreach (var file in targetFilesAndTmsPath)
 			{
-				var pathToTargetFiles = new List<string>();
-				var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
-				var sourcefileList = sourceFilesAndTmsPath.Item1;
-				var tmMetadataList = sourceFilesAndTmsPath.Item2;
-
-				languagePair.HasTm = tmMetadataList.Count > 0;
-				languagePair.SourceFile = sourcefileList;
-
-				foreach (var file in targetFilesAndTmsPath)
+				var isTm = IsTmFile(file);
+				if (isTm)
 				{
-					var isTm = IsTmFile(file);
-					if (isTm)
-					{
-						var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-						//selects the source tm which has the same id with the target tm id
-						var metaData = tmMetadataList.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
+					var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+					//selects the source tm which has the same id with the target tm id
+					var metaData = tmMetadataList.FirstOrDefault(x =>
+						Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
 
-						if (metaData != null)
-						{
-							metaData.TargetFile = file;
-						}
-						tmMetaDatas.Add(metaData);
-					}
-					else
+					if (metaData != null)
 					{
-						pathToTargetFiles.Add(file);
+						metaData.TargetFile = file;
 					}
+
+					tmMetaDatas.Add(metaData);
 				}
-				languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
-				languagePair.TargetFile = pathToTargetFiles;
+				else
+				{
+					pathToTargetFiles.Add(file);
+				}
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"AddFilesAndTmsToModel method: {ex.Message}\n {ex.StackTrace}");
-			}
+
+			languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
+			languagePair.TargetFile = pathToTargetFiles;
 		}
 
 		/// <summary>
@@ -282,8 +275,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				var multiLanguageExtensions = extension.Split(',');
 				foreach (var multiLangExtension in multiLanguageExtensions)
 				{
-					var langExtension = multiLangExtension.Trim();
-					var files = Directory.GetFiles(pathToTempFolder, "*." + langExtension, SearchOption.TopDirectoryOnly).ToList();
+					var files = Directory.GetFiles(pathToTempFolder, $"*.{multiLangExtension.Trim()}", SearchOption.TopDirectoryOnly).ToList();
 					filesAndTms.AddRange(files);
 				}
 			}

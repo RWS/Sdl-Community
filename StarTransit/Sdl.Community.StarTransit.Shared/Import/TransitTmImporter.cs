@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -13,12 +12,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitTmImporter
 	{
-		#region Private Fields
 		private readonly IFileTypeManager _fileTypeManager;
 		private readonly FileBasedTranslationMemory _fileBasedTM;
-		#endregion
 
-		#region Constructors
 		public TransitTmImporter(LanguagePair pair,	IFileTypeManager fileTypeManager, string studioTranslationMemory)
 		{
 			_fileTypeManager = fileTypeManager;
@@ -60,13 +56,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			TMFilePath = _fileBasedTM.FilePath;
 		}
 
-		#endregion
-
-		#region Public Properties
 		public string TMFilePath { get; set; }
-		#endregion
 
-		#region Public Methods
 		public void ImportStarTransitTm(string starTransitTm)
 		{
 			try
@@ -84,9 +75,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			return new TranslationProviderReference(_fileBasedTM.FilePath, true);
 		}
-		#endregion
 
-		#region Private Methods
 		private void ImportSdlXliffIntoTm(string sdlXliffFullPath)
 		{
 			try
@@ -169,6 +158,5 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			return WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe;
 		}
-		#endregion
 	}
 }

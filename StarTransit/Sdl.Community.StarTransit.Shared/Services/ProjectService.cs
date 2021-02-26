@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using Sdl.Community.StarTransit.Shared.Import;
@@ -41,8 +40,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			_tmConfig = new TranslationProviderConfiguration();
 			_targetProjectFiles = new List<ProjectFile>();
 		}
-
-		#region Public Methods
 
 		public virtual IProject CreateNewProject(ProjectInfo projectInfo, ProjectTemplateReference projectTemplateReference)
 		{
@@ -140,9 +137,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			return _messageModel;
 		}
-		#endregion
-
-		#region Private Methods
 
 		private MessageModel SetLanguagePairInformation(
 			IProject newProject,
@@ -272,29 +266,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
 		{
-			try
+			var targetLanguageList = new List<Language>();
+			foreach (var pair in languagePairs)
 			{
-				var targetCultureInfoList = new List<CultureInfo>();
-				foreach (var pair in languagePairs)
-				{
-					var targetLanguage = pair.TargetLanguage;
-					targetCultureInfoList.Add(targetLanguage);
-				}
-				var targetLanguageList = new List<Language>();
-				foreach (var target in targetCultureInfoList)
-				{
-					var language = new Language(target);
-					targetLanguageList.Add(language);
-				}
-				var targetArray = targetLanguageList.ToArray();
+				var language = new Language(pair.TargetLanguage);
+				targetLanguageList.Add(language);
+			}
 
-				return targetArray;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"GetTargetLanguages method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return new Language[] { };
+			return targetLanguageList.ToArray();
 		}
 
 		// Update the translation memory settings
@@ -346,7 +325,5 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				Log.Logger.Error($"CreateMetadataFolder method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
-
-		#endregion
 	}
 }
