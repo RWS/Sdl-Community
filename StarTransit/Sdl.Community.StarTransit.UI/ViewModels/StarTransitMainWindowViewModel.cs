@@ -14,7 +14,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class StarTransitMainWindowViewModel : BaseViewModel, IWindowActions
 	{
-		#region Private Fields
 		private ICommand _nextCommand;
 		private ICommand _backCommand;
 		private ICommand _createCommand;
@@ -34,19 +33,17 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private bool _hasTm;
 		private readonly TranslationMemories _translationMemories;
 		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
-        private readonly IMessageBoxService _messageBoxService;
-		#endregion
+		private readonly IMessageBoxService _messageBoxService;
 
-		#region Constructors
 		public StarTransitMainWindowViewModel(
 			PackageDetailsViewModel packageDetailsViewModel,
 			PackageDetails packageDetails,
 			TranslationMemories translationMemories,
 			TranslationMemoriesViewModel translationMemoriesViewModel,
 			FinishViewModel finishViewModel,
-            IMessageBoxService messageBoxService)
-        {
-            _messageBoxService = messageBoxService;
+			IMessageBoxService messageBoxService)
+		{
+			_messageBoxService = messageBoxService;
 			_packageDetailsViewModel = packageDetailsViewModel;
 			_packageDetails = packageDetails;
 			_translationMemories = translationMemories;
@@ -62,10 +59,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			var helpers = new Shared.Utils.Helpers();
 			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true), helpers);
 		}
-		#endregion
-
-		#region Public Properties
-
 		public bool DetailsSelected
 		{
 			get => _isDetailsSelected;
@@ -192,13 +185,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				OnPropertyChanged(nameof(Active));
 			}
 		}
-		#endregion
-
-		#region Actions
 		public Action CloseAction { get; set; }
-		#endregion
 
-		#region Commands
 		public ICommand NextCommand => _nextCommand ?? (_nextCommand = new CommandHandler(Next, true));
 
 		public ICommand BackCommand
@@ -216,9 +204,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 
 		public ICommand CreateCommand => _createCommand ?? (_createCommand = new CommandHandler(Create, true));
-		#endregion
 
-		#region Public Methods
 		public void Next()
 		{
 			try
@@ -281,45 +267,38 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public void Back()
 		{
-			try
+			if (DetailsSelected)
 			{
-				if (DetailsSelected)
-				{
-					CanExecuteBack = false;
-				}
-				else if (FinishSelected && _hasTm == false)
-				{
-					CanExecuteBack = false;
-					DetailsSelected = true;
-					TmSelected = false;
-					CanExecuteNext = true;
-					FinishSelected = false;
-					CanExecuteCreate = false;
-				}
-				else if (FinishSelected && _hasTm)
-				{
-					DetailsSelected = false;
-					TmSelected = true;
-					FinishSelected = false;
-					CanExecuteBack = true;
-					CanExecuteCreate = false;
-					CanExecuteNext = true;
-					Color = "#FF66290B";
-				}
-				else if (TmSelected)
-				{
-					DetailsSelected = true;
-					TmSelected = false;
-					FinishSelected = false;
-					CanExecuteBack = false;
-					CanExecuteCreate = false;
-					CanExecuteNext = true;
-					Color = "#FFB69476";
-				}
+				CanExecuteBack = false;
 			}
-			catch (Exception ex)
+			else if (FinishSelected && _hasTm == false)
 			{
-				Log.Logger.Error($"Back method: {ex.Message}\n {ex.StackTrace}");
+				CanExecuteBack = false;
+				DetailsSelected = true;
+				TmSelected = false;
+				CanExecuteNext = true;
+				FinishSelected = false;
+				CanExecuteCreate = false;
+			}
+			else if (FinishSelected && _hasTm)
+			{
+				DetailsSelected = false;
+				TmSelected = true;
+				FinishSelected = false;
+				CanExecuteBack = true;
+				CanExecuteCreate = false;
+				CanExecuteNext = true;
+				Color = "#FF66290B";
+			}
+			else if (TmSelected)
+			{
+				DetailsSelected = true;
+				TmSelected = false;
+				FinishSelected = false;
+				CanExecuteBack = false;
+				CanExecuteCreate = false;
+				CanExecuteNext = true;
+				Color = "#FFB69476";
 			}
 		}
 
@@ -348,7 +327,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 				else
 				{
-                    _messageBoxService.ShowInformationMessage(messageModel.Message, messageModel.Title);
+					_messageBoxService.ShowInformationMessage(messageModel.Message, messageModel.Title);
 					Active = false;
 					CanExecuteBack = CanExecuteCreate = false;
 				}
@@ -359,28 +338,23 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				Log.Logger.Error($"Create method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
-		#endregion
 
-		#region Private Methods
 		/// <summary>
 		/// Check to see if the folder is empty, in case the user just paste the path in text box
 		/// </summary>
-		/// <param name="folderPath"></param>
-		/// <returns></returns>
 		private bool IsFolderEmpty(string folderPath)
 		{
-			if(string.IsNullOrEmpty(folderPath))
+			if (string.IsNullOrEmpty(folderPath))
 			{
-                _messageBoxService.ShowWarningMessage("All fields are required!", "Warning");
+				_messageBoxService.ShowWarningMessage("All fields are required!", "Warning");
 				return false;
 			}
 			if (!Helpers.Utils.IsFolderEmpty(folderPath))
 			{
-                _messageBoxService.ShowWarningMessage("Please select an empty folder", "Folder not empty!");
+				_messageBoxService.ShowWarningMessage("Please select an empty folder", "Folder not empty!");
 				return false;
 			}
 			return true;
 		}
-		#endregion
 	}
 }

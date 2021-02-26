@@ -37,12 +37,6 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HockeyApp">
-      <HintPath>..\3rd party assemblies\HockeyApp.dll</HintPath>
-    </Reference>
-    <Reference Include="HockeyAppPCL">
-      <HintPath>..\3rd party assemblies\HockeyAppPCL.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
