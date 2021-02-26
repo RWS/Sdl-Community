@@ -36,7 +36,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			try
 			{
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");				
-				var connectionService = new ConnectionService(owner, new VersionService(), StudioInstance.GetLanguageCloudIdentityApi(), MTCloudApplicationInitializer.Client);
+				var connectionService = new ConnectionService(owner, new VersionService(), StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
 				
 				var credential = connectionService.GetCredential(credentialStore);								
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);
@@ -49,12 +49,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				connectionService.SaveCredential(credentialStore);
 
 				var editorController = StudioInstance.GetEditorController();
-				var translationService = new TranslationService(connectionService, MTCloudApplicationInitializer.Client);
+				MtCloudApplicationInitializer.SetTranslationService(connectionService);
+
 				var languageProvider = new LanguageProvider();
 				var projectsController = StudioInstance.GetProjectsController();
 
-				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, translationService, languageProvider,
-					editorController, projectsController, true);			
+				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
+					languageProvider,
+					editorController, projectsController, true);
 								
 				return new ITranslationProvider[] { provider };
 
@@ -62,9 +64,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			catch (Exception e)
 			{
 				_logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
+				throw;
 			}
 
-			return null;
+			//return null;
 		}
 		
 		[STAThread]

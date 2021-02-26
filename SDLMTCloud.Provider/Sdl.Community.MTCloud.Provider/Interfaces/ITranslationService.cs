@@ -22,6 +22,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement);
 
-		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
+		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
 	}
 }
