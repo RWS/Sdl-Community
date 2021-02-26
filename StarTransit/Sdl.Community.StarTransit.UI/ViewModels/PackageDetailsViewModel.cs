@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using System.Xml.Linq;
+using System.Xml;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -13,35 +13,33 @@ using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.UI.Interfaces;
 using Sdl.ProjectAutomation.Core;
+using System.Threading.Tasks;
 using Sdl.Versioning;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class PackageDetailsViewModel : BaseViewModel, IDataErrorInfo, IWindowActions
 	{
-	
 		private readonly List<ProjectTemplateInfo> _studioTemplates;
-        private readonly ObservableCollection<ProjectTemplateInfo> _templates;
+        private ObservableCollection<ProjectTemplateInfo> _templates;
+        private ObservableCollection<Customer> _customers;
         private readonly string _sourceLanguage;
         private readonly string _targetLanguage;
         private readonly PackageModel _packageModel;
         private readonly bool _canExecute;
         private readonly IMessageBoxService _messageBoxService;
-
-		private string _textLocation;
+        private string _textLocation;
         private string _txtName;
         private string _txtDescription;
 		private bool _hasDueDate;
 		private DateTime? _dueDate;
 		private ProjectTemplateInfo _template;
 		private Customer _selectedCustomer;
-		
 		private int _selectedHour;
 		private int _selectedMinute;
 		private string _selectedMoment;
-
-        private ICommand _browseCommand;
-
+		private ICommand _browseCommand;
 		public List<int> HourList { get; set; }
 		public List<int> MinutesList { get; set; }
 		public List<string> MomentsList { get; set; }
@@ -58,18 +56,32 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_hasDueDate = false;
 			_targetLanguage = string.Empty;
             _messageBoxService = messageBoxService;
-
+            _customers = new ObservableCollection<Customer>();
 			foreach (var pair in package.LanguagePairs)
 			{
 				var targetLanguage = string.Concat(" ", pair.TargetLanguage.DisplayName);
 				_targetLanguage = string.Concat(_targetLanguage, targetLanguage);
 			}
+			HourList = new List<int>
+			{
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12
+			};
 			_canExecute = true;
 			_selectedHour = -1;
 			_selectedMinute = -1;
 			_selectedMoment = string.Empty;
-			GetCustomers();
-			SetHours();
+			Task.Run(async ()=> await ReadCustomers());
 			SetMinutes();
 			MomentsList = new List<string> { "AM", "PM" };
 		}
@@ -132,14 +144,22 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse, _canExecute));
 
-
-		public List<Customer> Customers { get; set; }
+		public ObservableCollection<Customer> Customers
+		{
+			get => _customers;
+			set
+			{
+				_customers = value;
+				OnPropertyChanged(nameof(Customers));
+			}
+		}
 
 		public ObservableCollection<ProjectTemplateInfo> Templates
 		{
 			get => _templates;
 			set
 			{
+				_templates = value;
 				OnPropertyChanged(nameof(Templates));
 			}
 		}
@@ -294,41 +314,32 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public PackageModel GetPackageModel()
 		{
-			try
+			_packageModel.Name = Name;
+			_packageModel.Description = Description;
+			_packageModel.Location = TextLocation;
+			if (_hasDueDate)
 			{
-				_packageModel.Name = _txtName;
-				_packageModel.Description = _txtDescription;
-				_packageModel.Location = _textLocation;
-				if (_hasDueDate)
-				{
-					_packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
-				}
+				_packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
+			}
 
-				_packageModel.ProjectTemplate = _template;
-				_packageModel.HasDueDate = _hasDueDate;
-				_packageModel.Customer = _selectedCustomer;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"GetPackageModel method: {ex.Message}\n {ex.StackTrace}");
-			}
+			_packageModel.ProjectTemplate = Template;
+			_packageModel.HasDueDate = HasDueDate;
+			_packageModel.Customer = SelectedCustomer;
+
 			return _packageModel;
 		}
 
 		public void Browse()
 		{
-
 			var folderDialog = new FolderSelectDialog();
-			if (folderDialog.ShowDialog())
+			if (!folderDialog.ShowDialog()) return;
+			if (!Utils.IsFolderEmpty(folderDialog.FileName))
 			{
-				if (!Utils.IsFolderEmpty(folderDialog.FileName))
-				{
-					_messageBoxService.ShowWarningMessage("Please select an empty folder!","Folder not empty!");
-				}
-				else
-				{
-					TextLocation = folderDialog.FileName;
-				}
+				_messageBoxService.ShowWarningMessage("Please select an empty folder!","Folder not empty!");
+			}
+			else
+			{
+				TextLocation = folderDialog.FileName;
 			}
 		}
 
@@ -343,67 +354,43 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			MinutesList = minutesList;
 		}
 
-		private void GetCustomers()
+		private async System.Threading.Tasks.Task ReadCustomers()
 		{
-			try
+			await System.Threading.Tasks.Task.Run(() =>
 			{
-				var shortStudioVersion = GetInstalledStudioShortVersion();
-				if (!string.IsNullOrEmpty(shortStudioVersion))
+				try
 				{
+					var shortStudioVersion = GetInstalledStudioShortVersion();
+					if (string.IsNullOrEmpty(shortStudioVersion)) return;
 					var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $@"Studio {shortStudioVersion}\Projects\projects.xml");
-					ReadCustomers(projectsPath);
+
+					var projectsFile = new XmlDocument();
+					projectsFile.Load(projectsPath);
+					var customers = projectsFile.GetElementsByTagName("Customers");
+					foreach (XmlNode custom in customers)
+					{
+						foreach (XmlNode child in custom.ChildNodes)
+						{
+							var name = child.Attributes?["Name"]?.Value;
+							var guid = child.Attributes?["Guid"]?.Value;
+							var email = child.Attributes?["Email"]?.Value;
+							if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(guid)) continue;
+							var customer = new Customer { Name = name, Guid = new Guid(guid), Email = email };
+							Customers.Add(customer);
+						}
+					}
 				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"GetCustomers method: {ex.Message}\n {ex.StackTrace}");
-			}
+				catch (Exception ex)
+				{
+					Log.Logger.Error($"{ex.Message}\n {ex.StackTrace}");
+				}
+			});
 		}
 
 		private string GetInstalledStudioShortVersion()
 		{
 			var studioService = new StudioVersionService();
 			return studioService.GetStudioVersion()?.ShortVersion;
-		}
-
-		private void ReadCustomers(string projectsPath)
-		{
-			try
-			{
-				var sourceProjectsXml = XElement.Load(projectsPath);
-				if (!sourceProjectsXml.Element("Customers").HasElements) return;
-
-				var customers = (sourceProjectsXml.Descendants("Customer")
-					.Select(customer => new Customer
-					{
-						Guid = new Guid(customer?.Attribute("Guid")?.Value ?? throw new InvalidOperationException()),
-						Name = customer?.Attribute("Name")?.Value,
-						Email = customer?.Attribute("Email")?.Value
-					})).OrderBy(c => c.Name).ToList();
-
-				Customers = customers;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"ReadCustomers method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
-		private void SetHours()
-		{
-			try
-			{
-				var hoursList = new List<int>();
-				for (var i = 1; i <= 12; i++)
-				{
-					hoursList.Add(i);
-				}
-				HourList = hoursList;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"SetHours method: {ex.Message}\n {ex.StackTrace}");
-			}
 		}
 	}
 }

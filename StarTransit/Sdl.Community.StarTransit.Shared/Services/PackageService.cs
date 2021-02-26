@@ -17,15 +17,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	{
 		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries = new List<KeyValuePair<string, string>>();
 		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
-
 		private static PackageModel _package = new PackageModel();
 		private const char LanguageTargetSeparator = ' ';
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
 		/// </summary>
-		/// <param name="packagePath"></param>
-		/// <param name="pathToTempFolder"></param>
 		public async Task<PackageModel> OpenPackage(string packagePath, string pathToTempFolder)
 		{
 			try
@@ -37,10 +34,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						foreach (var entry in archive.Entries)
 						{
-							var subdirectoryPath = Path.GetDirectoryName(entry.FullName);
-							if (!Directory.Exists(Path.Combine(pathToTempFolder, subdirectoryPath)))
+							var subdirectoriesPath = Path.GetDirectoryName(entry.FullName);
+
+							if (subdirectoriesPath != null)
 							{
-								Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoryPath));
+								Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoriesPath));
 							}
 
 							entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
@@ -59,15 +57,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				Log.Logger.Error($"OpenPackage method: {ex.Message}\n {ex.StackTrace}");
 			}
+
 			return new PackageModel();
 		}
 
 		/// <summary>
 		/// Reads the metadata from .PRJ file
 		/// </summary>
-		/// <param name="pathToTempFolder"></param>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
 		private async Task<PackageModel> ReadProjectMetadata(string pathToTempFolder, string fileName)
 		{
 			try
@@ -78,12 +74,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				using (var reader = new StreamReader(filePath, Encoding.Default))
 				{
 					string line;
-					while ((line = reader.ReadLine()) != null)
+					while ((line = await reader.ReadLineAsync()) != null)
 					{
 						if (line.StartsWith("[") && line.EndsWith("]"))
 						{
 							var valuesDictionaries = new List<KeyValuePair<string, string>>();
-							if (keyProperty != string.Empty && _dictionaryPropetries.Count != 0)
+							//aici ar trebui sa verific daca key property trecut a fost languages sa fac break nu are rost sa citim pana la sfarsit documentul
+							if (keyProperty != string.Empty && _dictionaryPropetries.Any())
 							{
 								valuesDictionaries.AddRange(
 									_dictionaryPropetries.Select(
@@ -106,7 +103,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						else
 						{
 							var properties = line.Split('=');
-							_dictionaryPropetries.Add(new KeyValuePair<string, string>(properties[0], properties[1]));
+							if (!string.IsNullOrEmpty(properties[1]))
+							{
+								_dictionaryPropetries.Add(
+									new KeyValuePair<string, string>(properties[0], properties[1]));
+							}
 						}
 					}
 				}
@@ -132,8 +133,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <summary>
 		/// Creates a package model
 		/// </summary>
-		/// <param name="pathToTempFolder"></param>
-		/// <returns></returns>
 		private async Task<PackageModel> CreateModel(string pathToTempFolder)
 		{
 			var model = new PackageModel();
@@ -150,6 +149,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						if (item.Key == "ProjectName")
 						{
 							model.Name = item.Value;
+							break;
 						}
 					}
 				}
@@ -163,7 +163,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						{
 							var sourceLanguageCode = int.Parse(item.Value);
 							sourceLanguage = Language(sourceLanguageCode);
-
 						}
 						if (item.Key == "TargetLanguages")
 						{
@@ -227,7 +226,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
 						//selects the source tm which has the same id with the target tm id
-						var metaData = tmMetadataList?.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
+						var metaData = tmMetadataList.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
 
 						if (metaData != null)
 						{
@@ -252,8 +251,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <summary>
 		/// Check if is a tm
 		/// </summary>
-		/// <param name="file"></param>
-		/// <returns>true if this is a tm file</returns>
 		private bool IsTmFile(string file)
 		{
 			var result = false;
@@ -285,7 +282,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				var multiLanguageExtensions = extension.Split(',');
 				foreach (var multiLangExtension in multiLanguageExtensions)
 				{
-					var langExtension = multiLangExtension.TrimEnd().TrimStart();
+					var langExtension = multiLangExtension.Trim();
 					var files = Directory.GetFiles(pathToTempFolder, "*." + langExtension, SearchOption.TopDirectoryOnly).ToList();
 					filesAndTms.AddRange(files);
 				}
@@ -325,7 +322,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <summary>
 		/// Helper method which to get language from language code
 		/// </summary>
-		/// <param name="languageCode"></param>
+		/// <param name="languageCode">Language code read from prj package</param>
 		/// <returns>CultureInfo of the language</returns>
 		private CultureInfo Language(int languageCode)
 		{

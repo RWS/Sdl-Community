@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.Community.SDLBatchAnonymize.Service;
 using Sdl.Core.Globalization;
@@ -43,7 +44,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 				{
 					if (!window.Title.Equals("Batch Processing") && !window.Title.Contains("Create a New Project")) continue;
 					_batchTaskWindow = window;
-					_batchTaskWindow.Closed += BatchTaskWindow_Closed; ;
+					_batchTaskWindow.Closed += BatchTaskWindow_Closed; 
 				}
 			});
 
@@ -57,7 +58,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 			var anonymizeProjService = new AnonymizeSdlProjService();
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
+			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			if (Project is FileBasedProject proj)
 			{
 				proj.Save();
@@ -67,6 +68,11 @@ namespace Sdl.Community.SDLBatchAnonymize
 				anonymizeProjService.RemoveTraces(projectFilePath);
 
 				projectController.Add(projectFilePath);
+
+				if (filesController?.SelectedFiles?.Count() > 0) // that means we are in files view. Once we close the project user will be redirected to Welcome view
+				{
+					projectController.Open(proj); // we open the project again so the focus will remain in files view.
+				}
 			}
 			_batchTaskWindow.Closed -= BatchTaskWindow_Closed;
 		}
