@@ -192,15 +192,15 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			Color color;
 			switch (estimation)
 			{
-				case "Good":
+				case "GOOD":
 					color = Color.FromArgb(0, 128, 64);
 					break;
 
-				case "Adequate":
+				case "ADEQUATE":
 					color = Color.FromArgb(0, 128, 255);
 					break;
 
-				case "Poor":
+				case "POOR":
 					color = Color.FromArgb(255, 72, 72);
 					break;
 
