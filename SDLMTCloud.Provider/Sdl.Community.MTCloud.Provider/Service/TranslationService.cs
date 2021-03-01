@@ -184,15 +184,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
 			ConnectionService.AddTraceHeader(request);
 
+			var engineModel = model.SelectedModel.Model;
 			var translationRequestModel = new TranslationRequest
 			{
 				Input = new[] { text },
 				SourceLanguageId = model.SelectedSource.CodeName,
 				TargetLanguageId = model.SelectedTarget.CodeName,
-				Model = model.SelectedModel.Model,
+				Model = engineModel,
 				InputFormat = "xliff",
-				QualityEstimation = 1
-			};
+				QualityEstimation = engineModel.ToLower().Contains("qe") ? 1 : 0
+		};
 
 			if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
