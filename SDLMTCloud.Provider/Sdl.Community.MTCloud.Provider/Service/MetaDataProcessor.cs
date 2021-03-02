@@ -8,6 +8,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	internal class MetaDataProcessor : AbstractBilingualContentProcessor
 	{
+		private readonly List<SegmentId> _usedIds = new();
+
 		public MetaDataProcessor(List<MetadataTransferObject> translationData)
 		{
 			TranslationData = translationData;
@@ -15,23 +17,30 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public List<MetadataTransferObject> TranslationData { get; set; }
 
+		public List<ISegmentPair> GetValidSegmentPairs(IParagraphUnit paragraphUnit, IEnumerable<SegmentId> segmentIds)
+		{
+			var segmentPairs = segmentIds.Select(paragraphUnit.GetSegmentPair).ToList();
+			segmentPairs.RemoveAll(sp => sp is null || _usedIds.Contains(sp.Properties.Id));
+
+			return segmentPairs.Where(sp => !sp.Properties.IsLocked).ToList();
+		}
+
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
 
 			if (paragraphUnit.IsStructure) return;
 
-			var segmentPairsTotal = paragraphUnit.SegmentPairs.Count();
-			var segmentPairsRemaining = segmentPairsTotal;
-
+			var segmentPairsRemaining = paragraphUnit.SegmentPairs.Count();
 			var markedForRemoval = new List<MetadataTransferObject>();
+
 			foreach (var datum in TranslationData)
 			{
 				if (segmentPairsRemaining == 0) break;
 				var metaData = datum.TranslationOriginInformation;
 				var segmentPairs = GetValidSegmentPairs(paragraphUnit, datum.SegmentIds);
 
-				foreach (var segmentPair in segmentPairs.Skip(segmentPairsTotal - segmentPairsRemaining))
+				foreach (var segmentPair in segmentPairs)
 				{
 					segmentPairsRemaining--;
 					var translationOrigin = segmentPair.Properties.TranslationOrigin;
@@ -39,19 +48,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					translationOrigin.SetMetaData("quality_estimation", metaData.QualityEstimation);
 					translationOrigin.SetMetaData("model", metaData.Model);
 				}
-				datum.SegmentIds = datum.SegmentIds.Except(segmentPairs.Select(sp => sp.Properties.Id)).ToList();
-				if (datum.SegmentIds.Count == 0) markedForRemoval.Add(datum);
+				_usedIds.AddRange(segmentPairs.Select(sp => sp.Properties.Id));
+				datum.SegmentIds = datum.SegmentIds.Except(_usedIds).ToList();
+
+				if (datum.SegmentIds.Count != 0) continue;
+				MarkDatumForRemoval(markedForRemoval, datum);
 			}
 
 			TranslationData = TranslationData.Except(markedForRemoval).ToList();
 		}
 
-		public List<ISegmentPair> GetValidSegmentPairs(IParagraphUnit paragraphUnit, IEnumerable<SegmentId> segmentIds)
+		private void MarkDatumForRemoval(List<MetadataTransferObject> markedForRemoval, MetadataTransferObject datum)
 		{
-			var segmentPairs = segmentIds.Select(paragraphUnit.GetSegmentPair).ToList();
-			segmentPairs.RemoveAll(sp => sp is null);
-
-			return segmentPairs.Where(sp => !sp.Properties.IsLocked).ToList();
+			markedForRemoval.Add(datum);
 		}
 	}
 }

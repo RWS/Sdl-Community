@@ -52,11 +52,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				MtCloudApplicationInitializer.SetTranslationService(connectionService);
 
 				var languageProvider = new LanguageProvider();
-				var projectsController = StudioInstance.GetProjectsController();
-
 				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
 					languageProvider,
-					editorController, projectsController, true);
+					editorController, true);
 								
 				return new ITranslationProvider[] { provider };
 
@@ -66,8 +64,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				_logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
 				throw;
 			}
-
-			//return null;
 		}
 		
 		[STAThread]

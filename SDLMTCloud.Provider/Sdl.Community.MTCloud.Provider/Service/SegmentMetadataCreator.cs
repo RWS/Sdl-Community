@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
@@ -10,12 +11,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class SegmentMetadataCreator : ISegmentMetadataCreator
 	{
-		private IEnumerable<IGrouping<string, MetadataTransferObject>> _dataDictionary;
-
+		private IEnumerable<IGrouping<string, MetadataTransferObject>> _groupedData;
 		private List<TranslationData> Data { get; } = new();
 
 		private IEnumerable<IGrouping<string, MetadataTransferObject>> GroupedData
-			=> _dataDictionary ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
+			=> _groupedData ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
 
 		public void AddTargetSegmentMetaData(TranslationData translationData)
 		{
@@ -40,22 +40,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			foreach (var kvp in GroupedData)
 			{
+				var currentFilePath = kvp.Key;
+				if (!File.Exists(currentFilePath)) return;
+
 				var manager = DefaultFileTypeManager.CreateInstance(true);
-				var converter = manager.GetConverterToDefaultBilingual(kvp.Key, kvp.Key, null);
-
+				var converter = manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
 				var contentProcessor = new MetaDataProcessor(kvp.ToList());
-				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter?.Parse();
 
-				converter.Parse();
 			}
-
 			ResetData();
-		}
-
-		private void ResetData()
-		{
-			Data.Clear();
-			_dataDictionary = null;
 		}
 
 		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new()
@@ -64,5 +59,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			SegmentIds = translationData.SegmentIds,
 			TranslationOriginInformation = translationData.TranslationOriginInformation
 		};
+
+		private void ResetData()
+		{
+			Data.Clear();
+		}
 	}
 }

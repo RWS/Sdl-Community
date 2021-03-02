@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.Core.Globalization;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Application = System.Windows.Application;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
@@ -23,6 +26,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private Guid _docId;
 		private readonly EditorController _editorController;
 		private bool _isFirstTime = true;
+		private Window _batchProcessingWindow;
 
 		public MetadataSupervisor(ISegmentMetadataCreator segmentMetadataCreator, EditorController editorController)
 		{
@@ -59,16 +63,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void TranslationService_TranslationReceived(TranslationData translationData)
 		{
-			if (ActiveDocument == null)
+			SetBatchProcessingWindow();
+			if (_batchProcessingWindow is not null)
 			{
 				if (_isFirstTime)
 				{
-					Application.Current.Dispatcher.Invoke(AttachToClosedEvent);
+					AttachToClosedEvent(_batchProcessingWindow);
 				}
 
 				_segmentMetadataCreator.AddTargetSegmentMetaData(translationData);
 			}
-			else
+			else if (ActiveDocument is not null)
 			{
 				foreach (var sourceSegment in translationData.SourceSegments)
 				{
@@ -80,22 +85,23 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void AttachToClosedEvent()
+		private void AttachToClosedEvent(Window window)
 		{
 			_isFirstTime = false;
-			foreach (Window window in Application.Current.Windows)
-			{
-				//&& !window.Title.Contains("Create a New Project"))
-				if (window.Title != "Batch Processing") continue;
+			_batchProcessingWindow = null;
+			window.Closed += Window_Closed;
+		}
 
-				window.Closed += Window_Closed;
-				break;
-			}
+		private void SetBatchProcessingWindow()
+		{
+			if (_batchProcessingWindow is not null) return;
+			_batchProcessingWindow = Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.GetCurrentWindow);
 		}
 
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			_isFirstTime = true;
+			Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.CloseOpenedDocuments);
 			_segmentMetadataCreator.AddToSegmentContextData();
 		}
 
