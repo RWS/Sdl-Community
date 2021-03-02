@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Helpers\CurrentViewDetector.cs" />
     <Compile Include="Helpers\TaskUtilities.cs" />
     <Compile Include="Interfaces\IActionProvider.cs" />
     <Compile Include="Interfaces\IAsyncCommand.cs" />

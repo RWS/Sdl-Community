@@ -33,11 +33,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			MtCloudApplicationInitializer.SetTranslationService(connectionService);
 
 			var languageProvider = new LanguageProvider();
-			var projectsController = StudioInstance.GetProjectsController();
-
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
-				MtCloudApplicationInitializer.TranslationService, languageProvider, editorController,
-				projectsController);
+				MtCloudApplicationInitializer.TranslationService, languageProvider, editorController);
 
 			return provider;
 		}
