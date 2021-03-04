@@ -37,9 +37,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public ITranslationProvider TranslationProvider => _translationProvider;
 
-		public CultureInfo SourceLanguage { get; }
-
-		public CultureInfo TargetLanguage { get; }
+		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 
 		public bool CanReverseLanguageDirection { get; }
 
