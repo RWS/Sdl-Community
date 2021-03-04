@@ -17,6 +17,8 @@ namespace Sdl.Community.MTCloud.Provider
 	internal class MtCloudApplicationInitializer : IApplicationInitializer
 	{
 		private static EditorController _editorController;
+		private const string CreateNewProject = "create a new project";
+		private const string BatchProcessing = "batch processing";
 
 		public static IHttpClient Client { get; private set; }
 
@@ -31,12 +33,8 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; } = new();
 
-		public static Window GetCurrentWindow()
-		{
-			return
-				Application.Current.Windows.Cast<Window>().FirstOrDefault(
-					window => window.Title == "Batch Processing" || window.Title.Contains("Create a New Project"));
-		}
+		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
+			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 
 		public static void SetTranslationService(IConnectionService connectionService)
 		{
@@ -58,21 +56,17 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
-			if (GetCurrentWindow()?.Title.Contains("Create a New Project") ?? false) return null;
+			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
-			FileBasedProject currentProjectInProcessingPath = null;
-			switch (CurrentViewDetector.View)
-			{
-				case CurrentViewDetector.CurrentView.ProjectsView:
-					currentProjectInProcessingPath = ProjectsController.SelectedProjects.FirstOrDefault() ??
-					                                 ProjectsController.CurrentProject;
-					break;
-				case CurrentViewDetector.CurrentView.FilesView:
-				case CurrentViewDetector.CurrentView.EditorView:
-					currentProjectInProcessingPath = ProjectsController.CurrentProject;
-					break;
-			}
-			return currentProjectInProcessingPath;
+			var projectInProcessing = CurrentViewDetector.View
+				switch
+				{
+					CurrentViewDetector.CurrentView.ProjectsView => ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject,
+					CurrentViewDetector.CurrentView.FilesView => ProjectsController.CurrentProject,
+					CurrentViewDetector.CurrentView.EditorView => ProjectsController.CurrentProject,
+					_ => null
+				};
+			return projectInProcessing;
 		}
 
 		public void Execute()

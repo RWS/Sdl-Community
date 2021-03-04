@@ -68,7 +68,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				if (_isFirstTime)
 				{
-					AttachToClosedEvent(_batchProcessingWindow);
+					AttachToClosedEvent();
 				}
 
 				_segmentMetadataCreator.AddTargetSegmentMetaData(translationData);
@@ -85,11 +85,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void AttachToClosedEvent(Window window)
+		private void AttachToClosedEvent()
 		{
+			_batchProcessingWindow.Closed -= Window_Closed;
+			_batchProcessingWindow.Closed += Window_Closed;
 			_isFirstTime = false;
-			_batchProcessingWindow = null;
-			window.Closed += Window_Closed;
 		}
 
 		private void SetBatchProcessingWindow()
@@ -101,6 +101,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			_isFirstTime = true;
+			_batchProcessingWindow = null;
 			Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.CloseOpenedDocuments);
 			_segmentMetadataCreator.AddToSegmentContextData();
 		}
