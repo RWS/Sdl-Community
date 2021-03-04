@@ -21,5 +21,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[JsonProperty("dictionaries")]
 		public string[] Dictionaries { get; set; }
+
+		[JsonProperty("qualityEstimation")]
+		public int QualityEstimation { get; set; }
 	}
 }
