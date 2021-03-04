@@ -123,6 +123,9 @@
     <Compile Include="..\Sdl.Community.StarTransit\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Import\TmFileParser.cs" />
+    <Compile Include="Import\TmSniffer.cs" />
+    <Compile Include="Import\TmWriter.cs" />
     <Compile Include="Import\TransitExtension.cs" />
     <Compile Include="Import\TransitTmImporter.cs" />
     <Compile Include="Import\TransitParser.cs" />
@@ -146,6 +149,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\Interfaces\IFileService.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="Services\PackageService.cs" />
     <Compile Include="Services\ProjectService.cs" />

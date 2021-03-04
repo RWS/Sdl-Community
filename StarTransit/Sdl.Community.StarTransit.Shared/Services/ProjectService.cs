@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -11,6 +12,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using TaskStatus = Sdl.ProjectAutomation.Core.TaskStatus;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -114,7 +116,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 				_messageModel = SetLanguagePairInformation(newProject, package);
 
-				if (_messageModel is null || _messageModel.Message is null)
+				if (_messageModel?.Message is null)
 				{
 					if (Directory.Exists(newProject?.GetProjectInfo()?.LocalProjectFolder))
 					{
@@ -168,7 +170,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					_targetProjectFiles?.Clear();
 
 					// Import language pair TM if any
-					ImportLanguagePairTm(pair, newProject);
+					ImportLanguagePairTm(pair, newProject,package);
 
 					if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
 					{
@@ -187,54 +189,68 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return _messageModel;
 		}
 		
-		private void ImportLanguagePairTm(LanguagePair pair, IProject project)
+		private void ImportLanguagePairTm(LanguagePair pair, IProject project, PackageModel package)
 		{
-			if (pair.HasTm && !string.IsNullOrEmpty(pair.TmPath))
+			if (!pair.HasTm || string.IsNullOrEmpty(pair.TmPath)) return;
+			if (pair.StarTranslationMemoryMetadatas.Count > 0)
 			{
-				if (pair.StarTranslationMemoryMetadatas.Count > 0)
+				var localProjectFolder = project?.GetProjectInfo()?.LocalProjectFolder;
+				if (localProjectFolder != null)
 				{
-					var newTmPath = Path.Combine(project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(pair.TmPath));
+					var newTmPath = Path.Combine(localProjectFolder, Path.GetFileName(pair.TmPath));
 					var importer = new TransitTmImporter(pair, _fileTypeManager, newTmPath);
 
+					//Parallel.ForEach(pair.StarTranslationMemoryMetadatas, (tm) =>
+					//{
+					//	importer.ImportStarTransitTm(tm.TargetFile);
+					//});
 					foreach (var tm in pair.StarTranslationMemoryMetadatas)
 					{
-						importer.ImportStarTransitTm(tm.TargetFile);
+						importer.ImportStarTransitTm(tm,package);
 					}
 					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(), true, true, true));
 				}
+			}
 
-				// Create separate TM for each TM file on which user set penalty. The penalty is applied on top of any penalty that might be applied by the translation provider itself.
-				// (the name of the new TM will be the same with the one from StarTransit package)
-				foreach (var item in _penaltiesTmsList)
-				{
-					var tpReference = CreateTpReference(item, pair, project);
-					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true, item.TMPenalty));
-				}
+			//TODO:Extract in one method
+			// Create separate TM for each TM file on which user set penalty. The penalty is applied on top of any penalty that might be applied by the translation provider itself.
+			// (the name of the new TM will be the same with the one from StarTransit package)
+			//Parallel.ForEach(_penaltiesTmsList, (item) =>
+			//{
+			//	var tpReference = CreateTpReference(item, pair, project);
+			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true,
+			//		item.TMPenalty));
+			//});
+			foreach (var item in _penaltiesTmsList)
+			{
+				//TODO: Send all the tms paths to be added extracted and added to project
+				var tpReference = CreateTpReference(item, pair, project,package);
+				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true, item.TMPenalty));
+			}
 
-				//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
-				foreach (var item in _machineTransList)
-				{
-					var tpReference = CreateTpReference(item, pair, project);
+			//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
+			foreach (var item in _machineTransList)
+			{
+				var tpReference = CreateTpReference(item, pair, project,package);
 
-					//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
-					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true,true,1));
-				}
+				//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
+				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true,true,1));
 			}
 		}
 
 		// Create translation provider reference
-		private TranslationProviderReference CreateTpReference(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project)
+		private TranslationProviderReference CreateTpReference(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
 		{
-			var importer = CreateTmImporter(item, pair, project);
+			var importer = CreateTmImporter(item, pair, project,package);
 			var tpReference = new TranslationProviderReference(importer.TMFilePath);
 			return tpReference;
 		}
 
 		// Create the translation memory importer
-		private TransitTmImporter CreateTmImporter(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project)
+		private TransitTmImporter CreateTmImporter(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
 		{
 			var importer = new TransitTmImporter(_fileTypeManager, pair, project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(item.TargetFile));
-			importer.ImportStarTransitTm(item.TargetFile);
+			importer.ImportStarTransitTm(item,package);
 			return importer;
 		}
 
@@ -264,6 +280,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 		}
 
+		//TODO: Use the method from file service.
 		private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
 		{
 			var targetLanguageList = new List<Language>();
@@ -301,19 +318,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <summary>
 		/// Creates a folder named "StarTransitMetadata"and save the PRJ file in it.
 		/// </summary>
-		/// <param name="studioProjectPath"></param>
-		/// <param name="prjFilePath"></param>
 		private void CreateMetadataFolder(string studioProjectPath, string prjFilePath)
 		{
 			try
 			{
 				var starTransitMetadataFolderPath = Path.Combine(studioProjectPath, "StarTransitMetadata");
 
-				if (!Directory.Exists(starTransitMetadataFolderPath))
-				{
-					Directory.CreateDirectory(starTransitMetadataFolderPath);
-				}
-
+				Directory.CreateDirectory(starTransitMetadataFolderPath);
+				
 				var prjFileName = Path.GetFileName(prjFilePath);
 				if (prjFileName != null)
 				{

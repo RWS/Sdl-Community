@@ -2,6 +2,7 @@
 {
 	public static class TransitExtension
 	{
+		//TODO: Move this method in file service
 		// If Three letters Windows language is not the same with the one from Star Transit extension, map it with the equivalent one.
 		// See: https://www.worldatlas.com/aatlas/ctycodes.htm, https://www.terena.org/activities/multiling/ml-docs/iso-639-2-dis.txt 
 		// https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes or https://www.loc.gov/standards/iso639-2/php/code_list.php list of ISO 639-1 amd ISO 639-2 codes

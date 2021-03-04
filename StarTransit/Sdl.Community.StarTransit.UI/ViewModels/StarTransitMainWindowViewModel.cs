@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Interfaces;
@@ -313,10 +314,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				var messageModel = new MessageModel();
 
 				CloseAction();
-
+				var watch = new Stopwatch();
+				watch.Start();
 				if (isEmpty)
 				{
 					await Task.Run(() => messageModel = _projectService.CreateProject(packageModel));
+					watch.Stop();
+					var seconds = watch.Elapsed.TotalSeconds;
 				}
 				if (messageModel == null)
 				{

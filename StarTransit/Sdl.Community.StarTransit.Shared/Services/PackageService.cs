@@ -249,6 +249,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var result = false;
 			try
 			{
+				// TODO: open the file using StreamReader  (and break the execution after the ExtFileType)
 				var tmFile = XElement.Load(file);
 				var fileName = Path.GetFileName(file);
 				if (tmFile.Attribute("ExtFileType") != null || fileName.StartsWith("_AEXTR", StringComparison.InvariantCultureIgnoreCase))
@@ -269,7 +270,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			try
 			{
 				var extension = language.ThreeLetterWindowsLanguageName;
-				extension = TransitExtension.MapStarTransitLanguage(extension);
+				extension = TransitExtension.MapStarTransitLanguage(extension);  //TODO:USe method from file service;
 
 				// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
 				var multiLanguageExtensions = extension.Split(',');

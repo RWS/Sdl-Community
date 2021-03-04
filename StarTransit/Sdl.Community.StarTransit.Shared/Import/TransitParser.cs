@@ -40,15 +40,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var trgFilePath = _fileProperties.FileConversionProperties.OriginalFilePath;
 				_document.Load(trgFilePath);
 
+				//TODO: Refactor
 				var pos = trgFilePath.LastIndexOf("\\");
 				var path = trgFilePath.Substring(0, pos);
 
 				foreach (var fileName in Directory.GetFiles(path))
 				{
+					//TODO: Refactor code
 					if (fileName.Substring(0, fileName.Length - 4) == trgFilePath.Substring(0, trgFilePath.Length - 4) &&
 						fileName.Substring(fileName.Length - 4, 4) != trgFilePath.Substring(trgFilePath.Length - 4, 4))
 					{
 						_srcDocument.Load(fileName);
+						//TODO: add break;
 					}
 				}
 			}
@@ -104,6 +107,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				// variables for the progress report
 				if (!(_document is null))
 				{
+					//TODO: get the nodes in a variable
 					var totalUnitCount = _document.SelectNodes("//Seg").Count;
 					var currentUnitCount = 0;
 					foreach (XmlNode item in _document.SelectNodes("//Seg"))

@@ -1,128 +1,41 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Text;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
-using Sdl.Core.Settings;
-using Sdl.FileTypeSupport.Framework;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.StarTransit.Shared.Import
+namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class TransitSniffer : INativeFileSniffer
+	public class FileService: IFileService
 	{
-		static string _BilingualDocument = "Transit";
-		private string _srcFileExtension;
-		private string _trgFileExtension;
-		private PackageModel _packageModel;
-		private PackageService _packageService = new PackageService();
+		private const string TmFileType = "ExtFileType=\"Extract\"";
 
-		public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage,
-			Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter,
-			ISettingsGroup settingsGroup)
+		public bool IsTransitTm(string filePath)
 		{
-			var info = new SniffInfo();
-			try
+			if (!File.Exists(filePath)) return false;
+			using (var reader = new StreamReader(filePath, Encoding.Default))
 			{
-				_packageModel = _packageService.GetPackageModel();
-				var sourceLanguageExtension = string.Empty;
-				if (_packageModel != null)
+				string line;
+				while ((line = reader.ReadLine()) != null)
 				{
-					sourceLanguageExtension = _packageModel.LanguagePairs[0].SourceLanguage.ThreeLetterWindowsLanguageName;
-				}
-
-				if (File.Exists(nativeFilePath))
-				{
-					// call method to check if file is supported
-					info.IsSupported = IsFileSupported(nativeFilePath, sourceLanguageExtension);
-					// call method to determine the file language pair
-					GetFileLanguages(ref info, nativeFilePath);
-				}
-				else
-				{
-					//TODO: Change: If the file is not found that means is not supported
-					info.IsSupported = true;
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"Sniff method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return info;
-		}
-
-		// determine whether a given file is supported based on the
-		// root element
-		private bool IsFileSupported(string nativeFilePath, string sourceLanguageExtension)
-		{
-			var result = false;
-			try
-			{
-				var rootElementMatches = false;
-				var sourceFileFound = false;
-
-				// check whether header tag name equals Transit, if not the file cannot be opened in Studio
-				//TODO: Add method in file service to read the file as string we need to check also in the file to not contain "Extract" which is for tms
-				var doc = new XmlDocument();
-				doc.Load(nativeFilePath);
-				if (doc.DocumentElement.Name == _BilingualDocument)
-				{
-					rootElementMatches = true;
-				}
-				var pos = nativeFilePath.LastIndexOf("\\");
-				var path = nativeFilePath.Substring(0, pos);
-
-				// check whether source file with the same name exists
-				// if it does not exist, the file cannot be opened in Studio
-				var files = Directory.GetFiles(path).ToList();
-				if (files.Count != 0)
-				{
-					var sourceFileName = Path.GetFileNameWithoutExtension(nativeFilePath) + "." + sourceLanguageExtension;
-					var sourceFilesFromFolder = files.Where(s => s.EndsWith(sourceLanguageExtension)).ToList();
-
-					var sourceFile = sourceFilesFromFolder.FirstOrDefault(f => f.Contains(sourceFileName));
-					if (sourceFile != null)
+					if (line.Trim().Contains(TmFileType))
 					{
-						sourceFileFound = true;
-						_srcFileExtension = sourceLanguageExtension;
-						_trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
+						return true;
 					}
 				}
+			}
 
-				// if both conditions are met, then the file can be supported by Studio
-				result = rootElementMatches && sourceFileFound ? true : false;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"IsFileSupported method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return result;
+			return false;
 		}
 
-		// retrieve the source and target language
-		// from the file header
-		private void GetFileLanguages(ref SniffInfo info, string nativeFilePath)
+		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{
-			try
-			{
-				//TODO: Remove the unnecessary loading of document
-				var doc = new XmlDocument();
-				doc.Load(nativeFilePath);
-
-				info.DetectedSourceLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(_srcFileExtension)), DetectionLevel.Certain);
-				info.DetectedTargetLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(_trgFileExtension)), DetectionLevel.Certain);
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"GetFileLanguages method: {ex.Message}\n {ex.StackTrace}");
-			}
+			return languagePairs.Select(pair => new Language(pair.TargetLanguage)).ToArray();
 		}
 
-		//TODO: Use method from file service
-		private string MapLanguage(string fileExtension)
+		public string MapFileLanguage(string fileExtension)
 		{
 			fileExtension = fileExtension.ToUpper();
 			switch (fileExtension)

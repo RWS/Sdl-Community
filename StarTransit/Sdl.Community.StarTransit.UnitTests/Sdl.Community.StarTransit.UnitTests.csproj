@@ -69,6 +69,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilesServiceUnitTests.cs" />
     <Compile Include="StarTransitConfiguration.cs" />
     <Compile Include="PackageServiceUnitTests.cs" />
     <Compile Include="ProjectServiceUnitTests.cs" />
@@ -80,6 +81,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TestingFiles\Default.sdltpl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestingFiles\FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestingFiles\_AEXTR_1.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
