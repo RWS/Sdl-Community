@@ -408,7 +408,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		}
 
 		private static string GetProjectInProcessing(IFileProperties fileProperties)
-			=> Application.Current.Dispatcher.Invoke(() => MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath ??
+			=> Application.Current.Dispatcher.Invoke(() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath) ??
 			                                               Path.GetDirectoryName(
 				                                               Path.GetDirectoryName(
 					                                               fileProperties.FileConversionProperties.OriginalFilePath)));
