@@ -161,7 +161,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return responseMessage;
 		}
 
-		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model)
+		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegments)
 		{
 			if (string.IsNullOrEmpty(model?.SelectedModel?.Model))
 			{
@@ -184,14 +184,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
 			ConnectionService.AddTraceHeader(request);
 
+			var engineModel = model.SelectedModel.Model;
 			var translationRequestModel = new TranslationRequest
 			{
 				Input = new[] { text },
 				SourceLanguageId = model.SelectedSource.CodeName,
 				TargetLanguageId = model.SelectedTarget.CodeName,
-				Model = model.SelectedModel.Model,
-				InputFormat = "xliff"
-			};
+				Model = engineModel,
+				InputFormat = "xliff",
+				QualityEstimation = engineModel.ToLower().Contains("qe") ? 1 : 0
+		};
 
 			if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
@@ -213,8 +215,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (!(JsonConvert.DeserializeObject<TranslationResponse>(response) is TranslationResponse translationResponse))
 				return null;
 
-			var dataResponse = await GetTranslations(_httpClient, translationResponse.RequestId);
-			if (!(JsonConvert.DeserializeObject<TranslationResponse>(dataResponse) is TranslationResponse translations))
+			var dataResponse = await CheckTranslationStatus(_httpClient, translationResponse.RequestId);
+
+			if (!(JsonConvert.DeserializeObject<TranslationResponse>(dataResponse.Item1) is TranslationResponse translations))
 				return null;
 
 			var translation = translations.Translation.FirstOrDefault();
@@ -228,13 +231,26 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
 
-			OnTranslationReceived(sourceSegments, targetSegments.Select(seg => seg.ToString()).ToList());
+			OnTranslationReceived(new TranslationData 
+			{
+				SourceSegments = sourceSegments,
+				TargetSegments = targetSegments.Select(seg => seg.ToString()).ToList(),
+				TranslationOriginInformation = new TranslationOriginInformation
+				{
+					Model = translations.Model,
+					QualityEstimation = dataResponse.Item2
+				},
+				FilePath = fileAndSegments.FilePath,
+				SegmentIds = fileAndSegments.SegmentIds,
+				TargetLanguage = model.TargetTradosCode
+			});
+
 			return targetSegments;
 		}
 
-		private void OnTranslationReceived(List<string> sourceSegments, List<string> targetSegments)
+		private void OnTranslationReceived(TranslationData translationData)
 		{
-			TranslationReceived?.Invoke(sourceSegments, targetSegments);
+			TranslationReceived?.Invoke(translationData);
 		}
 
 		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
@@ -301,9 +317,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return string.Empty;
 		}
 
-		private async Task<string> GetTranslations(IHttpClient httpClient, string id)
+		private async Task<(string, string)> CheckTranslationStatus(IHttpClient httpClient, string id)
 		{
 			var translationStatus = string.Empty;
+			string qualityEstimation = null;
 
 			do
 			{
@@ -326,6 +343,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (JsonConvert.DeserializeObject<TranslationResponseStatus>(response) is TranslationResponseStatus responseStatus)
 				{
 					translationStatus = responseStatus.TranslationStatus;
+					qualityEstimation = responseStatus.QualityEstimation?[0];
 
 					if (string.Compare(responseStatus.TranslationStatus, Constants.DONE, StringComparison.CurrentCultureIgnoreCase) != 0)
 					{
@@ -351,7 +369,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			} while (string.Compare(translationStatus, Constants.INIT, StringComparison.CurrentCultureIgnoreCase) == 0
 					 || string.Compare(translationStatus, Constants.TRANSLATING, StringComparison.CurrentCultureIgnoreCase) == 0);
 
-			return await GetTranslationResult(httpClient, id);
+			return (await GetTranslationResult(httpClient, id), qualityEstimation);
 		}
 	}
 }
