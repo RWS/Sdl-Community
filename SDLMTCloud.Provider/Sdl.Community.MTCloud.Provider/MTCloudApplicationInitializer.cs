@@ -23,10 +23,10 @@ namespace Sdl.Community.MTCloud.Provider
 		public static IHttpClient Client { get; private set; }
 
 		public static EditorController EditorController
-			=> _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
+			=> _editorController = _editorController ?? SdlTradosStudio.Application.GetController<EditorController>();
 
 		public static MetadataSupervisor MetadataSupervisor
-			=> new(new SegmentMetadataCreator(), EditorController);
+			=> new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
