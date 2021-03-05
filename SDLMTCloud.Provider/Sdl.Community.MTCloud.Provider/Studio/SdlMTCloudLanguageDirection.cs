@@ -373,8 +373,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			var sdlMtFileAndSegmentIds = new FileAndSegmentIds
 			{
-				FilePath = GetSdlXliffFilePath(translationUnits[0].FileProperties),
-				SegmentIds = translationUnits.Select(tu => tu.DocumentSegmentPair.Properties.Id).ToList()
+				FilePath = GetSdlXliffFilePath(translationUnits[0].FileProperties) ??
+				           Path.GetFileName(translationUnits[0]?.FileProperties.FileConversionProperties.OriginalFilePath),
+				SegmentIds = translationUnits.Select(tu => tu.DocumentSegmentPair.Properties.Id).ToList(),
 			};
 
 			if (translationUnits == null)
@@ -395,7 +396,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private string GetSdlXliffFilePath(IFileProperties fileProperties)
 		{
-			var projectPath = GetProjectInProcessing(fileProperties);
+			var projectPath = ProjectInProcessing;
 			if (projectPath is null) return null;
 
 			var fileConversionProperties = fileProperties.FileConversionProperties;
@@ -406,11 +407,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return sdlxliffFilePath;
 		}
 
-		private static string GetProjectInProcessing(IFileProperties fileProperties)
-			=> Application.Current.Dispatcher.Invoke(() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath) ??
-			                                               Path.GetDirectoryName(
-				                                               Path.GetDirectoryName(
-					                                               fileProperties.FileConversionProperties.OriginalFilePath)));
+		private static string ProjectInProcessing => Application.Current.Dispatcher.Invoke(
+			() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath));
 
 		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
 		{
