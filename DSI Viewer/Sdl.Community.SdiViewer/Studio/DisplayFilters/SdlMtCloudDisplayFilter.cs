@@ -14,7 +14,9 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 
 		public bool EvaluateRow(IDisplayFilterRowInfo rowInfo)
 		{
-			var shouldDisplayRow = rowInfo.IsSegment;
+			if (!rowInfo.IsSegment) return false;
+
+			var shouldDisplayRow = true;
 			var translationOrigin = rowInfo?.SegmentPair?.Properties?.TranslationOrigin;
 
 			if (Settings.ByModel)
@@ -27,19 +29,19 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 				var anyQualityEstimation = false;
 				if (Settings.QeNoneAvailable)
 				{
-					anyQualityEstimation = GetQualityEstimation(translationOrigin) == NoneAvailable;
+					anyQualityEstimation = GetQualityEstimation(translationOrigin) == DsiViewerInitializer.NoneAvailable;
 				}
 				if (Settings.QePoor)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Poor;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.PoorQuality;
 				}
 				if (Settings.QeGood)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Good;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.GoodQuality;
 				}
 				if (Settings.QeAdequate)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Adequate;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.AdequateQuality;
 				}
 
 				shouldDisplayRow &= anyQualityEstimation;

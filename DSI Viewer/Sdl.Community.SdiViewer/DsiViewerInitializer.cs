@@ -8,6 +8,11 @@ namespace Sdl.Community.DsiViewer
 	[ApplicationInitializer]
 	public class DsiViewerInitializer : IApplicationInitializer
 	{
+		public const string AdequateQuality = "ADEQUATE";
+		public const string GoodQuality = "GOOD";
+		public const string NoneAvailable = "N/A";
+		public const string PoorQuality = "POOR";
+
 		public static EditorController EditorController { get; private set; }
 
 		public static FilterApplier FilterApplier { get; } = new();
