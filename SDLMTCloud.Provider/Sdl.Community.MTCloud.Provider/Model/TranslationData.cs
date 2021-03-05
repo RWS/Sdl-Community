@@ -11,5 +11,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		public TranslationOriginInformation TranslationOriginInformation { get; set; }
 		public List<SegmentId> SegmentIds { get; set; }
+		public string TargetLanguage { get; set; }
 	}
 }

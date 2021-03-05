@@ -241,7 +241,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					QualityEstimation = dataResponse.Item2
 				},
 				FilePath = fileAndSegments.FilePath,
-				SegmentIds = fileAndSegments.SegmentIds
+				SegmentIds = fileAndSegments.SegmentIds,
+				TargetLanguage = model.TargetTradosCode
 			});
 
 			return targetSegments;
