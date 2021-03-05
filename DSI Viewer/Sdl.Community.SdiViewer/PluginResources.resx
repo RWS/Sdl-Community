@@ -139,4 +139,43 @@
   <data name="StructureContextInfo_MetaValue_chars" xml:space="preserve">
     <value>characters</value>
   </data>
+  <data name="ClearFilter_Button_Content" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
+  <data name="ApplyFilter_Button_Content" xml:space="preserve">
+    <value>Apply filter</value>
+  </data>
+  <data name="CheckBox_ByModel_Content" xml:space="preserve">
+    <value>by Model</value>
+  </data>
+  <data name="CheckBox_NoneAvailable" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="CheckBox_Poor" xml:space="preserve">
+    <value>Poor</value>
+  </data>
+  <data name="CheckBox_Good" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="CheckBox_Adequate" xml:space="preserve">
+    <value>Adequate</value>
+  </data>
+  <data name="CheckBox_ByQualityEstimation" xml:space="preserve">
+    <value>by Quality Estimation</value>
+  </data>
+  <data name="Label_SDLMTCloudFilter" xml:space="preserve">
+    <value> - SDL MT Cloud Filter:</value>
+  </data>
+  <data name="Label_Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="Label_QualityEstimation" xml:space="preserve">
+    <value>Quality Estimation</value>
+  </data>
+  <data name="Label_SDLMTCloudRelated" xml:space="preserve">
+    <value>SDL MT Cloud Related</value>
+  </data>
+  <data name="Label_SDLMTCloudInfo" xml:space="preserve">
+    <value> - Translation Origin Info:</value>
+  </data>
 </root>
