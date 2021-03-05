@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Sdl.Community.MTCloud.Provider.Model;
+﻿using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Events;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
-	public interface ISegmentSupervisor
+	public interface ISegmentSupervisor : ISupervisor
 	{
 		event ConfirmationLevelChangedEventHandler SegmentConfirmed;
-
-		Dictionary<SegmentId, Feedback> ActiveDocumentImprovements { get; }
-
-		Dictionary<Guid, Dictionary<SegmentId, Feedback>> Improvements { get; set; }
 
 		void AddImprovement(SegmentId segmentId, string improvement);
 
@@ -20,7 +15,5 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 			string source);
 
 		Feedback GetImprovement(SegmentId? segmentId = null);
-
-		void StartSupervising(ITranslationService translationService);
 	}
 }

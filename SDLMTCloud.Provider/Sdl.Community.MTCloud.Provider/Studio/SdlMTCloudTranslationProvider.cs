@@ -21,7 +21,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	public class SdlMTCloudTranslationProvider : ITranslationProvider
 	{
 		private readonly EditorController _editorController;
-		private readonly ProjectsController _projectsController;
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -29,13 +28,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private bool _firstTimeAdded;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
-		 ILanguageProvider languageProvider, EditorController editorController, ProjectsController projectsController, bool firstTimeAdded = false)
+		 ILanguageProvider languageProvider, EditorController editorController, bool firstTimeAdded = false)
 		{
 			Uri = uri;
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
 			_editorController = editorController;
-			_projectsController = projectsController;
 			_firstTimeAdded = firstTimeAdded;
 
 			LoadState(translationProviderState);
@@ -399,10 +397,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private void ActivateRatingController()
 		{
-			var tpStatus = _projectsController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(
-				e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider.Enabled;
-			if (!(tpStatus ?? true)) return;
+			var tpStatus =
+				Application.Current.Dispatcher.Invoke(
+					() =>
+						MtCloudApplicationInitializer.GetProjectInProcessing()?.GetTranslationProviderConfiguration().Entries
+							.FirstOrDefault(
+								e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider
+							.Enabled);
 
+			if (!(tpStatus ?? true)) return;
 			try
 			{
 				Application.Current?.Dispatcher?.Invoke(() =>

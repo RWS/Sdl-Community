@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.XliffConverter.Models;
 using Sdl.Core.Globalization;
@@ -11,6 +13,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 using Xliff = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Xliff;
@@ -34,9 +37,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public ITranslationProvider TranslationProvider => _translationProvider;
 
-		public CultureInfo SourceLanguage { get; }
-
-		public CultureInfo TargetLanguage { get; }
+		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 
 		public bool CanReverseLanguageDirection { get; }
 
@@ -45,7 +47,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return null;
 		}
 
-		public Segment[] TranslateSegments(Segment[] sourceSegments)
+		public Segment[] TranslateSegments(Segment[] sourceSegments, FileAndSegmentIds fileAndSegmentIds)
 		{
 			var xliffDocument = CreateXliffFile(sourceSegments);
 
@@ -54,24 +56,24 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			 		l.TargetTradosCode.Equals(_languageDirection?.TargetCulture?.Name, StringComparison.InvariantCultureIgnoreCase));
 
 			var targetSegments = Task.Run(async () => await _translationProvider.TranslationService.TranslateText(
-				xliffDocument.ToString(), model)).Result;
+				xliffDocument.ToString(), model, fileAndSegmentIds)).Result;
 
 			return targetSegments ?? new Segment[0];
 		}
 
 		public Xliff CreateXliffFile(Segment[] segments)
 		{
-			var file = new File
+			var file = new XliffConverter.Models.File
 			{
 				SourceCulture = _languageDirection.SourceCulture,
-				TargetCulture = _languageDirection.TargetCulture				
+				TargetCulture = _languageDirection.TargetCulture
 			};
 
 			var xliffDocument = new Xliff
 			{
 				File = file
 			};
-			
+
 			foreach (var seg in segments)
 			{
 				if (seg != null)
@@ -114,17 +116,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		/// <summary>
 		/// Translate an array of segments.
 		/// </summary>
-		/// <param name="settings"></param>
 		/// <param name="segments">Array of segments to be translated (depending on the value of the
-		/// corresponding mask)</param>
+		///     corresponding mask)</param>
 		/// <param name="mask">Whether to translate a segment or not</param>
+		/// <param name="fileAndSegmentIds"></param>
+		/// <param name="settings"></param>
 		/// <returns></returns>
-		public SearchResults[] SearchSegments(Segment[] segments, bool[] mask)
+		public SearchResults[] SearchSegments(Segment[] segments, bool[] mask, FileAndSegmentIds fileAndSegmentIds = null)
 		{
 			var results = new SearchResults[segments.Length];
 			var mtCloudSegments = new List<MTCloudSegment>();
 			var alreadyTranslatedSegments = new List<MTCloudSegment>();
-			
+
 			if (!_translationProvider.Options.ResendDraft)
 			{
 				// Re-send draft segment logic
@@ -179,7 +182,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				if (mtCloudSegments.Count > 0)
 				{
-					var hasTranslations = GetTranslations(mtCloudSegments);
+					var hasTranslations = GetTranslations(mtCloudSegments, fileAndSegmentIds);
 					if (hasTranslations)
 					{
 						SetSearchResults(results, mtCloudSegments);
@@ -193,7 +196,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 			else
 			{
-				var translations = TranslateSegments(segments.ToArray());
+				var translations = TranslateSegments(segments.ToArray(), fileAndSegmentIds);
 
 				if (translations.Any(translation => translation != null))
 				{
@@ -226,8 +229,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			if (activeSegmentPair != null)
 			{
-				var activeSegmentPairId = int.TryParse(activeSegmentPair.Target.Properties.Id.Id, out _) 
-					? int.Parse(activeSegmentPair.Target.Properties.Id.Id) 
+				var activeSegmentPairId = int.TryParse(activeSegmentPair.Target.Properties.Id.Id, out _)
+					? int.Parse(activeSegmentPair.Target.Properties.Id.Id)
 					: 0;
 
 				var nextSegmentPair = _editorController?.ActiveDocument?.SegmentPairs?.SkipWhile(
@@ -288,9 +291,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 		}
 
-		private bool GetTranslations(IReadOnlyList<MTCloudSegment> mtCloudSegments)
+		private bool GetTranslations(IReadOnlyList<MTCloudSegment> mtCloudSegments, FileAndSegmentIds fileAndSegmentIds)
 		{
-			var translations = TranslateSegments(mtCloudSegments.Select(segment => segment.Segment).ToArray());
+			var translations = TranslateSegments(mtCloudSegments.Select(segment => segment.Segment).ToArray(), fileAndSegmentIds);
 
 			if (translations.Any() && translations[0] != null)
 			{
@@ -317,7 +320,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
 			var results = new SearchResults[segments.Length];
-			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray());
+			var translations = TranslateSegments(segments.Where((seg, i) => mask == null || mask[i]).ToArray(), null);
 			if (translations.Any(translation => translation != null))
 			{
 				var translationIndex = 0;
@@ -368,6 +371,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits,
 			bool[] mask)
 		{
+			var sdlMtFileAndSegmentIds = new FileAndSegmentIds
+			{
+				FilePath = GetSdlXliffFilePath(translationUnits[0].FileProperties),
+				SegmentIds = translationUnits.Select(tu => tu.DocumentSegmentPair.Properties.Id).ToList()
+			};
+
 			if (translationUnits == null)
 			{
 				throw new ArgumentNullException(nameof(translationUnits), @"TranslationUnits in SearchSegmentsMasked");
@@ -381,8 +390,27 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_translationUnits.Clear();
 			_translationUnits.AddRange(translationUnits);
 
-			return SearchSegments(translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask);
+			return SearchSegments(translationUnits.Select(tu => tu?.SourceSegment).ToArray(), mask, sdlMtFileAndSegmentIds);
 		}
+
+		private string GetSdlXliffFilePath(IFileProperties fileProperties)
+		{
+			var projectPath = GetProjectInProcessing(fileProperties);
+			if (projectPath is null) return null;
+
+			var fileConversionProperties = fileProperties.FileConversionProperties;
+			var originalFilePath = fileConversionProperties.OriginalFilePath;
+			var fileName = Path.GetFileName(originalFilePath);
+
+			var sdlxliffFilePath = $@"{projectPath}\{fileConversionProperties.TargetLanguage.IsoAbbreviation}\{fileName}.sdlxliff";
+			return sdlxliffFilePath;
+		}
+
+		private static string GetProjectInProcessing(IFileProperties fileProperties)
+			=> Application.Current.Dispatcher.Invoke(() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath) ??
+			                                               Path.GetDirectoryName(
+				                                               Path.GetDirectoryName(
+					                                               fileProperties.FileConversionProperties.OriginalFilePath)));
 
 		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
 		{
