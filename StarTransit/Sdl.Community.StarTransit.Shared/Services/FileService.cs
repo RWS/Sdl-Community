@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
@@ -29,6 +30,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			return false;
 		}
+
+		public bool IsValidNode(XmlNode originalXmlNode)
+		{
+			var childNodesCount = originalXmlNode.ChildNodes.Count;
+			var tagNodesCount = originalXmlNode.ChildNodes.Cast<XmlNode>().Count(childNode => childNode.Name.ToLower().Equals("tag"));
+			return !childNodesCount.Equals(tagNodesCount);
+		}
+
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{

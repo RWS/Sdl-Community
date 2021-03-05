@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
@@ -20,6 +22,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private int _totalTagCount;
 		private int _tmpTotalTagCount;
 		private int _srcSegmentTagCount;
+		private IFileService _fileService = new FileService();
 
 		public void StartOfInput()
 		{
@@ -73,7 +76,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var currentUnitCount = 0;
 				foreach (XmlNode item in segNodes)
 				{
-					Output.ProcessParagraphUnit(CreateParagraphUnit(item));
+					if (_fileService.IsValidNode(item))
+					{
+						Output.ProcessParagraphUnit(CreateParagraphUnit(item));
+					}
 
 					// update the progress report   
 					currentUnitCount++;

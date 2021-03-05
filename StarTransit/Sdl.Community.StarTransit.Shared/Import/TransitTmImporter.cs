@@ -89,7 +89,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			try
 			{
 				var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
-				var importSettings = new ImportSettings()
+				var importSettings = new ImportSettings
 				{
 					IsDocumentImport = false,
 					CheckMatchingSublanguages = false,
@@ -114,61 +114,52 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// TODO: Write UT
 		private string CreateTemporarySdlXliff(StarTranslationMemoryMetadata starTransitTM, PackageModel package)
 		{
-			try
+			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM.TargetFile));
+			var generatedXliffName = $"{Path.GetFileNameWithoutExtension(starTransitTM.TargetFile)}{".sdlxliff"}";
+
+			var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
+
+			//TODO: Create studio project based on the selected tms and return the xliff path
+			var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
+
+			var projectInfo = new ProjectInfo
 			{
-				var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM.TargetFile));
-				var generatedXliffName = $"{Path.GetFileNameWithoutExtension(starTransitTM.TargetFile)}{".sdlxliff"}";
+				Name = "TMTestProject",
+				LocalProjectFolder = @"C:\Users\aghisa\Desktop\TestProject", //package.Location,
+				SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
+				TargetLanguages = target
+			};
+			var newProject =
+				new FileBasedProject(projectInfo,
+					new ProjectTemplateReference(package.ProjectTemplate
+						.Uri)); // TODO: Use interface for final implementation
+			newProject.AddFiles(new[] {starTransitTM.SourceFile});
+			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
+			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
 
-				var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
-
-				//TODO: Create studio project based on the selected tms and return the xliff path
-				var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
-
-				var projectInfo = new ProjectInfo
-				{
-					Name = "TMTestProject",
-					LocalProjectFolder = @"C:\Users\aghisa\Desktop\TestProject",//package.Location,
-					SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
-					TargetLanguages = target
-				};
-				var newProject = new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri)); // TODO: Use interface for final implementation
-				newProject.AddFiles(new[] {starTransitTM.SourceFile}); // using default converter from studio we used taget file? we need to check
-				var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
-				newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
-
-				var targetTms = newProject.AddFiles(new []{starTransitTM.TargetFile});
-				newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
-				var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(), new[]
+			var targetTms = newProject.AddFiles(new[] {starTransitTM.TargetFile});
+			newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
+			var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),
+				new[]
 				{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages
 				});
-				//var converter = _fileTypeManager.GetConverterToDefaultBilingual(starTransitTM, sdlXliffFullPath, null);
-				//converter.Parse();
-				return sdlXliffFullPath;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreateTemporarySdlXliff method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return string.Empty;
+
+			return sdlXliffFullPath; //Return target folde path
 		}
 
 		/// <summary>
 		/// Create temporary folder for TM import
 		/// </summary>
-		/// <param name="pathToTemp"></param>
-		/// <returns></returns>
 		private string CreateFolderToExtract(string pathToTemp)
 		{
 			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract");
-			if (!Directory.Exists(pathToExtractFolder))
-			{
-				Directory.CreateDirectory(pathToExtractFolder);
-			}
+			Directory.CreateDirectory(pathToExtractFolder);
+
 			return pathToExtractFolder;
 		}
-		
+
 		private static FuzzyIndexes GetFuzzyIndexes()
 		{
 			return FuzzyIndexes.SourceCharacterBased |
