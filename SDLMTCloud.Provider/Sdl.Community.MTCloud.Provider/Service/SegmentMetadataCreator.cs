@@ -20,10 +20,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_manager = DefaultFileTypeManager.CreateInstance(true);
 		}
 
-		private List<TranslationData> Data { get; } = new();
+		private List<TranslationData> Data { get; } = new List<TranslationData>();
 
 		private IEnumerable<IGrouping<string, MetadataTransferObject>> GroupedData
-			=> _groupedData ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
+			=> _groupedData = _groupedData ?? Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
 
 		public void AddTargetSegmentMetaData(TranslationData translationData)
 		{
@@ -59,7 +59,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			ResetData();
 		}
 
-		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new()
+		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new MetadataTransferObject()
 		{
 			FilePath = GetFilePath(translationData),
 			SegmentIds = translationData.SegmentIds,

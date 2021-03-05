@@ -23,15 +23,15 @@ namespace Sdl.Community.MTCloud.Provider
 		public static IHttpClient Client { get; private set; }
 
 		public static EditorController EditorController
-			=> _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
+			=> _editorController = _editorController ?? SdlTradosStudio.Application.GetController<EditorController>();
 
 		public static MetadataSupervisor MetadataSupervisor
-			=> new(new SegmentMetadataCreator(), EditorController);
+			=> new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
 
-		public static CurrentViewDetector CurrentViewDetector { get; set; } = new();
+		public static CurrentViewDetector CurrentViewDetector { get; set; } = new CurrentViewDetector();
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
@@ -58,14 +58,20 @@ namespace Sdl.Community.MTCloud.Provider
 		{
 			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
-			var projectInProcessing = CurrentViewDetector.View
-				switch
-				{
-					CurrentViewDetector.CurrentView.ProjectsView => ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject,
-					CurrentViewDetector.CurrentView.FilesView => ProjectsController.CurrentProject,
-					CurrentViewDetector.CurrentView.EditorView => ProjectsController.CurrentProject,
-					_ => null
-				};
+			FileBasedProject projectInProcessing;
+			switch (CurrentViewDetector.View)
+			{
+				case CurrentViewDetector.CurrentView.ProjectsView:
+					projectInProcessing = ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject;
+					break;
+				case CurrentViewDetector.CurrentView.FilesView:
+				case CurrentViewDetector.CurrentView.EditorView:
+					projectInProcessing = ProjectsController.CurrentProject;
+					break;
+				default:
+					projectInProcessing = null;
+					break;
+			}
 			return projectInProcessing;
 		}
 

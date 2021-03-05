@@ -38,7 +38,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new();
+		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>>();
 
 		public Feedback GetImprovement(SegmentId? segmentId = null)
 		{

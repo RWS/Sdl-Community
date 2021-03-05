@@ -64,7 +64,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private void TranslationService_TranslationReceived(TranslationData translationData)
 		{
 			SetBatchProcessingWindow();
-			if (_batchProcessingWindow is not null)
+			if (_batchProcessingWindow != null)
 			{
 				if (_isFirstTime)
 				{
@@ -73,7 +73,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				_segmentMetadataCreator.AddTargetSegmentMetaData(translationData);
 			}
-			else if (ActiveDocument is not null)
+			else if (ActiveDocument != null)
 			{
 				foreach (var sourceSegment in translationData.SourceSegments)
 				{
@@ -94,7 +94,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void SetBatchProcessingWindow()
 		{
-			if (_batchProcessingWindow is not null) return;
+			if (_batchProcessingWindow != null) return;
 			_batchProcessingWindow = Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.GetCurrentWindow);
 		}
 
@@ -145,7 +145,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void AddTargetSegmentMetaData(TranslationOriginInformation translationOriginInformation, ISegmentPair currentSegmentPair)
 		{
-			currentSegmentPair ??= ActiveDocument.ActiveSegmentPair;
+			currentSegmentPair = currentSegmentPair ?? ActiveDocument.ActiveSegmentPair;
 			var segmentId = currentSegmentPair.Properties.Id;
 
 			ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData);
@@ -184,6 +184,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new();
+		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>>();
 	}
 }

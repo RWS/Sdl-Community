@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	internal class MetaDataProcessor : AbstractBilingualContentProcessor
 	{
-		private readonly List<SegmentId> _usedIds = new();
+		private readonly List<SegmentId> _usedIds = new List<SegmentId>();
 
 		public MetaDataProcessor(List<MetadataTransferObject> translationData)
 		{
