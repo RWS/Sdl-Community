@@ -51,6 +51,12 @@
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Desktop.Platform">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -95,13 +101,19 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="DsiViewerInitializer.cs" />
+    <Compile Include="Model\SdlMtCloudFilterSettings.cs" />
+    <Compile Include="Model\TranslationOriginData.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\SegmentVisitor.cs" />
+    <Compile Include="Service\FilterApplier.cs" />
+    <Compile Include="Studio\DisplayFilters\SdlMtCloudDisplayFilter.cs" />
     <Compile Include="ViewModel\DsiViewerViewModel.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,6 +138,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="DsiViewerControl.resx">
