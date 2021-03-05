@@ -204,10 +204,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					//{
 					//	importer.ImportStarTransitTm(tm.TargetFile);
 					//});
-					foreach (var tm in pair.StarTranslationMemoryMetadatas)
-					{
-						importer.ImportStarTransitTm(tm,package);
-					}
+
+					importer.ImportStarTransitTm(pair.StarTranslationMemoryMetadatas, package);
 					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(), true, true, true));
 				}
 			}
@@ -215,44 +213,51 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			//TODO:Extract in one method
 			// Create separate TM for each TM file on which user set penalty. The penalty is applied on top of any penalty that might be applied by the translation provider itself.
 			// (the name of the new TM will be the same with the one from StarTransit package)
+			
+			
 			//Parallel.ForEach(_penaltiesTmsList, (item) =>
 			//{
 			//	var tpReference = CreateTpReference(item, pair, project);
 			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true,
 			//		item.TMPenalty));
 			//});
-			foreach (var item in _penaltiesTmsList)
-			{
-				//TODO: Send all the tms paths to be added extracted and added to project
-				var tpReference = CreateTpReference(item, pair, project,package);
-				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true, item.TMPenalty));
-			}
 
-			//If the user requests it, create a separate TM for the Machine Translation coming from Transit.
-			foreach (var item in _machineTransList)
-			{
-				var tpReference = CreateTpReference(item, pair, project,package);
 
-				//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
-				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true,true,1));
-			}
+			//Used when user sets penalty.
+			//TODO:Uncomment the code and adapt to the new tm impementation functionality.
+			//foreach (var item in _penaltiesTmsList)
+			//{
+			//	//TODO: Send all the tms paths to be added extracted and added to project
+			//	var tpReference = CreateTpReference(item, pair, project,package);
+			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true, item.TMPenalty));
+			//}
+
+			////If the user requests it, create a separate TM for the Machine Translation coming from Transit.
+			//foreach (var item in _machineTransList)
+			//{
+			//	var tpReference = CreateTpReference(item, pair, project,package);
+
+			//	//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
+			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true,true,1));
+			//}
 		}
 
+		//TODO:Uncomment
 		// Create translation provider reference
-		private TranslationProviderReference CreateTpReference(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
-		{
-			var importer = CreateTmImporter(item, pair, project,package);
-			var tpReference = new TranslationProviderReference(importer.TMFilePath);
-			return tpReference;
-		}
+		//private TranslationProviderReference CreateTpReference(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
+		//{
+		//	var importer = CreateTmImporter(item, pair, project,package);
+		//	var tpReference = new TranslationProviderReference(importer.TMFilePath);
+		//	return tpReference;
+		//}
 
-		// Create the translation memory importer
-		private TransitTmImporter CreateTmImporter(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
-		{
-			var importer = new TransitTmImporter(_fileTypeManager, pair, project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(item.TargetFile));
-			importer.ImportStarTransitTm(item,package);
-			return importer;
-		}
+		//// Create the translation memory importer
+		//private TransitTmImporter CreateTmImporter(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
+		//{
+		//	var importer = new TransitTmImporter(_fileTypeManager, pair, project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(item.TargetFile));
+		//	importer.ImportStarTransitTm(item,package);
+		//	return importer;
+		//}
 
 		// Separate all items from package.TMPenalties(files that are having penalties set), that are found in pair.StarTranslationMemoryMetadatas
 		private void AddTmPenalties(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)

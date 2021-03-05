@@ -45,6 +45,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private bool IsFileSupported(string nativeFilePath, string sourceLanguageExtension)
 		{
 			var isTmFile = _fileService.IsTransitTm(nativeFilePath);
+			if (!isTmFile) return false;
 			var sourceFileFound = false;
 	
 			var directoryPath = Path.GetDirectoryName(nativeFilePath);
@@ -62,7 +63,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				_srcFileExtension = sourceLanguageExtension;
 				_trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
 			}
-			return isTmFile && sourceFileFound;
+			return  sourceFileFound;
 		}
 
 		//TODO: Move this in Files service

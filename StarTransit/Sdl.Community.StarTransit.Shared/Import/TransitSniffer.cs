@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
@@ -14,11 +15,12 @@ namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitSniffer : INativeFileSniffer
 	{
-		static string _BilingualDocument = "Transit";
+		//static string _BilingualDocument = "Transit";
 		private string _srcFileExtension;
 		private string _trgFileExtension;
 		private PackageModel _packageModel;
-		private PackageService _packageService = new PackageService();
+		private IFileService _fileService = new FileService();
+		private readonly PackageService _packageService = new PackageService();
 
 		public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage,
 			Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter,
@@ -58,48 +60,32 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		// root element
 		private bool IsFileSupported(string nativeFilePath, string sourceLanguageExtension)
 		{
-			var result = false;
-			try
+			var isTransitFile = _fileService.IsTransitFile(nativeFilePath);
+			if (!isTransitFile) return false;
+			var sourceFileFound = false;
+
+			//TODO: Refactor
+			var pos = nativeFilePath.LastIndexOf("\\");
+			var path = nativeFilePath.Substring(0, pos);
+
+			// check whether source file with the same name exists
+			// if it does not exist, the file cannot be opened in Studio
+			var files = Directory.GetFiles(path).ToList();
+			if (files.Count != 0)
 			{
-				var rootElementMatches = false;
-				var sourceFileFound = false;
+				var sourceFileName = Path.GetFileNameWithoutExtension(nativeFilePath) + "." + sourceLanguageExtension;
+				var sourceFilesFromFolder = files.Where(s => s.EndsWith(sourceLanguageExtension)).ToList();
 
-				// check whether header tag name equals Transit, if not the file cannot be opened in Studio
-				//TODO: Add method in file service to read the file as string we need to check also in the file to not contain "Extract" which is for tms
-				var doc = new XmlDocument();
-				doc.Load(nativeFilePath);
-				if (doc.DocumentElement.Name == _BilingualDocument)
+				var sourceFile = sourceFilesFromFolder.FirstOrDefault(f => f.Contains(sourceFileName));
+				if (sourceFile != null)
 				{
-					rootElementMatches = true;
+					sourceFileFound = true;
+					_srcFileExtension = sourceLanguageExtension;
+					_trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
 				}
-				var pos = nativeFilePath.LastIndexOf("\\");
-				var path = nativeFilePath.Substring(0, pos);
-
-				// check whether source file with the same name exists
-				// if it does not exist, the file cannot be opened in Studio
-				var files = Directory.GetFiles(path).ToList();
-				if (files.Count != 0)
-				{
-					var sourceFileName = Path.GetFileNameWithoutExtension(nativeFilePath) + "." + sourceLanguageExtension;
-					var sourceFilesFromFolder = files.Where(s => s.EndsWith(sourceLanguageExtension)).ToList();
-
-					var sourceFile = sourceFilesFromFolder.FirstOrDefault(f => f.Contains(sourceFileName));
-					if (sourceFile != null)
-					{
-						sourceFileFound = true;
-						_srcFileExtension = sourceLanguageExtension;
-						_trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
-					}
-				}
-
-				// if both conditions are met, then the file can be supported by Studio
-				result = rootElementMatches && sourceFileFound ? true : false;
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"IsFileSupported method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return result;
+
+			return sourceFileFound;
 		}
 
 		// retrieve the source and target language
@@ -108,9 +94,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			try
 			{
-				//TODO: Remove the unnecessary loading of document
-				var doc = new XmlDocument();
-				doc.Load(nativeFilePath);
+				//TODO: Check for null src and trg extension
+				
 
 				info.DetectedSourceLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(_srcFileExtension)), DetectionLevel.Certain);
 				info.DetectedTargetLanguage = new Pair<Language, DetectionLevel>(new Language(MapLanguage(_trgFileExtension)), DetectionLevel.Certain);
