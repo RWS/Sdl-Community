@@ -125,7 +125,6 @@
     </Compile>
     <Compile Include="Import\TmFileParser.cs" />
     <Compile Include="Import\TmSniffer.cs" />
-    <Compile Include="Import\TmWriter.cs" />
     <Compile Include="Import\TransitExtension.cs" />
     <Compile Include="Import\TransitTmImporter.cs" />
     <Compile Include="Import\TransitParser.cs" />

@@ -41,7 +41,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				string line;
 				while ((line = reader.ReadLine()) != null)
 				{
-					if (line.Contains(FileType) && !line.Trim().Contains(TmFileType))
+					if (line.Contains(FileType))
 					{
 						return true;
 					}
@@ -54,13 +54,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public bool IsValidNode(XmlNode originalXmlNode)
 		{
-			var childNodesCount = originalXmlNode.ChildNodes.Count;
-			var tagNodesCount = originalXmlNode.ChildNodes.Cast<XmlNode>().Count(childNode => childNode.Name.ToLower().Equals("tag"));
-			//TODO:Uncomment this and test.
-			// originalXmlNode.ChildNodes.Cast<XmlNode>().Count(childNode => childNode.Name.ToLower().Equals("tag")|| childNode.Name.Equals("#whitespace"))
-			return !childNodesCount.Equals(tagNodesCount);
+			return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text);
 		}
-
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{

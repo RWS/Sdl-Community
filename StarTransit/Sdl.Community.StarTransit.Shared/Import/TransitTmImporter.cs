@@ -121,7 +121,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTms[0].TargetFile));
 
-			//TODO: Create studio project based on the selected tms and return the xliff path
 			var sourceTmFiles = starTransitTms.Select(s => s.SourceFile).ToArray();
 			var targetTmFiles = starTransitTms.Select(t => t.TargetFile).ToArray();
 			var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);

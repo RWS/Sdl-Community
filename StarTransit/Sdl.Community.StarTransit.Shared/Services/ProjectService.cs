@@ -192,18 +192,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private void ImportLanguagePairTm(LanguagePair pair, IProject project, PackageModel package)
 		{
 			if (!pair.HasTm || string.IsNullOrEmpty(pair.TmPath)) return;
-			if (pair.StarTranslationMemoryMetadatas.Count > 0)
+			if (pair.StarTranslationMemoryMetadatas.Any())
 			{
 				var localProjectFolder = project?.GetProjectInfo()?.LocalProjectFolder;
 				if (localProjectFolder != null)
 				{
 					var newTmPath = Path.Combine(localProjectFolder, Path.GetFileName(pair.TmPath));
 					var importer = new TransitTmImporter(pair, _fileTypeManager, newTmPath);
-
-					//Parallel.ForEach(pair.StarTranslationMemoryMetadatas, (tm) =>
-					//{
-					//	importer.ImportStarTransitTm(tm.TargetFile);
-					//});
 
 					importer.ImportStarTransitTm(pair.StarTranslationMemoryMetadatas, package);
 					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(), true, true, true));
