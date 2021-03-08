@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
@@ -18,5 +19,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[JsonProperty("translationStatus")]
 		public string TranslationStatus { get; set; }
+
+		public HttpResponseMessage ResponseMessage { get; set; }
 	}
 }
