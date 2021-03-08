@@ -6,11 +6,11 @@ namespace Sdl.Community.MTCloud.Provider.Model
 	public class TranslationData
 	{
 		public string FilePath { get; set; }
+		public List<SegmentId> SegmentIds { get; set; }
 		public List<string> SourceSegments { get; set; }
+		public string TargetLanguage { get; set; }
 		public List<string> TargetSegments { get; set; }
 
 		public TranslationOriginInformation TranslationOriginInformation { get; set; }
-		public List<SegmentId> SegmentIds { get; set; }
-		public string TargetLanguage { get; set; }
 	}
 }

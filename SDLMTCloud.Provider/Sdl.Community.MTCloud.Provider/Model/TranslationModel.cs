@@ -10,15 +10,15 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public string DisplayName { get; set; }
 
 		[DataMember]
-		public string Source { get; set; }
-
-		[DataMember]
-		public string Target { get; set; }
+		public string Model { get; set; }
 
 		[DataMember]
 		public MTCloudLanguagePair MTCloudLanguagePair { get; set; }
 
 		[DataMember]
-		public string Model { get; set; }
+		public string Source { get; set; }
+
+		[DataMember]
+		public string Target { get; set; }
 	}
 }

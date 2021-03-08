@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Net.Http;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
-using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using HttpClient = Sdl.Community.MTCloud.Provider.Service.HttpClient;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -39,6 +36,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return provider;
 		}
 
+		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
+		{
+			var info = new TranslationProviderInfo
+			{
+				TranslationMethod = TranslationMethod.MachineTranslation,
+				Name = PluginResources.Plugin_NiceName
+			};
+
+			return info;
+		}
+
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
 			if (translationProviderUri == null)
@@ -49,16 +57,5 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
 			return supportsProvider;
 		}
-
-		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
-		{
-			var info = new TranslationProviderInfo
-			{
-				TranslationMethod = TranslationMethod.MachineTranslation,
-				Name = PluginResources.Plugin_NiceName
-			};
-
-			return info;
-		}	
 	}
 }
