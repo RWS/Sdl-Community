@@ -17,9 +17,9 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		IConnectionService ConnectionService { get; }
 		Options Options { get; set; }
 
-		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
+		Task<MTCloudDictionaryInfo> GetDictionaries();
 
-		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
+		Task<SubscriptionInfo> GetLanguagePairs();
 
 		Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement);
 

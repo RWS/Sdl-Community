@@ -26,8 +26,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			get
 			{
-				return _subscriptionInfo ?? (_subscriptionInfo = Task.Run(async () =>
-					await _translationService.GetLanguagePairs(_translationService.ConnectionService.Credential.AccountId)).Result);
+				return _subscriptionInfo ??= Task.Run(async () =>
+					await _translationService.GetLanguagePairs()).Result;
 			}
 		}
 
@@ -37,9 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				if (_dictionaries == null)
 				{
-					var accountId = _translationService.ConnectionService.Credential.AccountId;
-					var result = Task.Run(async () => await _translationService.GetDictionaries(accountId)).Result;
-
+					var result = Task.Run(async () => await _translationService.GetDictionaries()).Result;
 					_dictionaries = result?.Dictionaries;
 				}
 
