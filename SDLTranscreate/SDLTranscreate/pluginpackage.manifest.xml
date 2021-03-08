@@ -4,7 +4,7 @@
 	<Version>2.0.4.9</Version>
 	<Description>Trados Transcreate is a plugin for Trados Studio designed to help manage the Transcreation process.</Description>
 	<Author>Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+	<RequiredProduct name="SDLTradosStudio" minversion="16.1" />
 	<Include>
 		<File>Sdl.MultiSelectComboBox.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>

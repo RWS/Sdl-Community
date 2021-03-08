@@ -14,6 +14,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.Model;
 using Trados.Transcreate.Model.ProjectSettings;
@@ -29,23 +30,36 @@ namespace Trados.Transcreate.Service
 		private readonly TranscreateViewController _controller;
 		private readonly ProjectsController _projectsController;
 		private readonly CustomerProvider _customerProvider;
+		private readonly StudioVersionService _studioVersionService;
 
 		public ProjectAutomationService(ImageService imageService, TranscreateViewController controller, ProjectsController projectsController,
-			CustomerProvider customerProvider)
+			CustomerProvider customerProvider, StudioVersionService studioVersionService)
 		{
 			_imageService = imageService;
 			_controller = controller;
 			_projectsController = projectsController;
 			_customerProvider = customerProvider;
+			_studioVersionService = studioVersionService;
 		}
 
 		public void ActivateProject(FileBasedProject project)
 		{
+			if (project == null)
+			{
+				return;
+			}
+
 			var projectId = project.GetProjectInfo().Id.ToString();
 			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
 			if (projectId != selectedProjectId)
 			{
-				Dispatcher.CurrentDispatcher.Invoke(delegate
+				if (CanActivateFileBasedProject())
+				{
+					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					activateProjectMethod?.Invoke(_projectsController, new object[] { project });
+				}
+				else
 				{
 					var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
 						BindingFlags.NonPublic | BindingFlags.Instance);
@@ -54,8 +68,7 @@ namespace Trados.Transcreate.Service
 					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
 						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 					activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
-
-				}, DispatcherPriority.ContextIdle);
+				}
 			}
 
 			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
@@ -300,6 +313,21 @@ namespace Trados.Transcreate.Service
 			}
 
 			return new List<Report>();
+		}
+
+		private bool CanActivateFileBasedProject()
+		{
+			var studioVersion = _studioVersionService.GetStudioVersion();
+			if (studioVersion != null)
+			{
+				var version = studioVersion.ExecutableVersion;
+				if (version.Major < 16 || version.Minor < 1 || version.Build < 4)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		private List<Report> DeserializeReports(string value)

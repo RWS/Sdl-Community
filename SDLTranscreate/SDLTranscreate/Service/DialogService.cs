@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
-using Trados.Transcreate.Common;
+using Trados.Transcreate.Controls;
 using Trados.Transcreate.Interfaces;
 
 namespace Trados.Transcreate.Service

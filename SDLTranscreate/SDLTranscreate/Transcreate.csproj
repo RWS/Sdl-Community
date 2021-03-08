@@ -135,8 +135,9 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\SelectedItemChangedCommand.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Enumerators.cs" />
-    <Compile Include="Common\FolderSelectDialog.cs" />
+    <Compile Include="Controls\FolderSelectDialog.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="Common\PathInfo.cs" />
     <Compile Include="Common\Reflector.cs" />

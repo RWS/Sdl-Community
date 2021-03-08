@@ -733,4 +733,10 @@
   <data name="Progres_Label_UpdatingTask" xml:space="preserve">
 	  <value>Updating task....</value>
   </data>
+  <data name="Question_OpenFolderInExplorer" xml:space="preserve">
+	  <value>Open folder in explorer?</value>
+  </data>
+  <data name="Message_TranscreateReportsCreatedSuccessfully" xml:space="preserve">
+	  <value>The transcreate reports have been created successfully.</value>
+  </data>
 </root>

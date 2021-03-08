@@ -20,6 +20,7 @@ using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.Controls;
 using Trados.Transcreate.CustomEventArgs;
@@ -63,6 +64,7 @@ namespace Trados.Transcreate
 		private ProjectAutomationService _projectAutomationService;
 		private SegmentBuilder _segmentBuilder;
 		private ReportService _reportService;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -85,7 +87,9 @@ namespace Trados.Transcreate
 			_customerProvider = new CustomerProvider();
 			_projectSettingsService = new ProjectSettingsService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, this, _projectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, this, _projectsController, _customerProvider, _studioVersionService);
 			_reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
 
 			ReportsController = ReportsController.Instance;
@@ -1202,7 +1206,7 @@ namespace Trados.Transcreate
 					taskContext.ImportOptions.StatusSegmentNotImportedId = string.Empty;
 					taskContext.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
 					taskContext.ImportOptions.OverwriteTranslations = true;
-					taskContext.ImportOptions.OriginSystem = "Transcreate Automation";
+					taskContext.ImportOptions.OriginSystem = Constants.OriginSystem_TranscreateAutomation;
 
 					taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 					taskContext.WorkflowFolder = taskContext.GetWorkflowPath();

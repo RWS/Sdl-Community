@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.CustomEventArgs;
 using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
@@ -32,6 +33,7 @@ namespace Trados.Transcreate.Actions
 		private IDialogService _dialogService;
 		private ProjectAutomationService _projectAutomationService;
 		private ProjectSettingsService _projectSettingsService;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
@@ -85,8 +87,9 @@ namespace Trados.Transcreate.Actions
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController,
-				_controllers.ProjectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
 			_projectSettingsService = new ProjectSettingsService();
 
 			Enabled = false;

@@ -922,6 +922,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The transcreate reports have been created successfully..
+        /// </summary>
+        internal static string Message_TranscreateReportsCreatedSuccessfully {
+            get {
+                return ResourceManager.GetString("Message_TranscreateReportsCreatedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to process file with revision markers..
         /// </summary>
         internal static string Message_UnableToProcessFileWithTrackChanges {
@@ -1074,6 +1083,15 @@ namespace Trados.Transcreate {
         internal static string Progres_Label_UpdatingTask {
             get {
                 return ResourceManager.GetString("Progres_Label_UpdatingTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder in explorer?.
+        /// </summary>
+        internal static string Question_OpenFolderInExplorer {
+            get {
+                return ResourceManager.GetString("Question_OpenFolderInExplorer", resourceCulture);
             }
         }
         

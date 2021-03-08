@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.CustomEventArgs;
 using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
@@ -34,6 +35,7 @@ namespace Trados.Transcreate.Actions
 		private ProjectAutomationService _projectAutomationService;
 		private ProjectSettingsService _projectSettingsService;
 		private Controllers _controllers;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
@@ -66,7 +68,7 @@ namespace Trados.Transcreate.Actions
 			settings.ExportOptions.CopySourceToTarget = false;
 
 			settings.ImportOptions.OverwriteTranslations = true;
-			settings.ImportOptions.OriginSystem = "Transcreate Automation";
+			settings.ImportOptions.OriginSystem = Constants.OriginSystem_TranscreateAutomation;
 			settings.ImportOptions.StatusTranslationUpdatedId = string.Empty;
 
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
@@ -111,7 +113,10 @@ namespace Trados.Transcreate.Actions
 			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
+			
 			_projectSettingsService = new ProjectSettingsService();
 			
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;

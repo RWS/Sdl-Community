@@ -7,6 +7,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
 using Trados.Transcreate.Interfaces;
@@ -33,6 +34,7 @@ namespace Trados.Transcreate.Actions
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
 		private ProjectSettingsService _projectSettingsService;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
@@ -78,8 +80,9 @@ namespace Trados.Transcreate.Actions
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, 
-				_controllers.ProjectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
 			_projectSettingsService = new ProjectSettingsService();
 			
 			SetEnabled();

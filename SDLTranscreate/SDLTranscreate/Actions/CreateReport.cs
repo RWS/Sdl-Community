@@ -12,6 +12,7 @@ using Trados.Transcreate.CustomEventArgs;
 using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
 using Trados.Transcreate.Model;
 using Trados.Transcreate.Service;
+using Sdl.Versioning;
 
 namespace Trados.Transcreate.Actions
 {
@@ -31,6 +32,7 @@ namespace Trados.Transcreate.Actions
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
 		private Controllers _controllers;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
@@ -68,9 +70,9 @@ namespace Trados.Transcreate.Actions
 				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId,
 					reports);
 
-				var dr = MessageBox.Show("The transcreate reports have been created successfully."
+				var dr = MessageBox.Show(PluginResources.Message_TranscreateReportsCreatedSuccessfully
 				                         + Environment.NewLine + Environment.NewLine +
-				                         "Open folder in explorer?",
+				                         PluginResources.Question_OpenFolderInExplorer,
 					PluginResources.Plugin_Name, MessageBoxButtons.YesNo);
 
 				if (dr == DialogResult.Yes)
@@ -103,8 +105,10 @@ namespace Trados.Transcreate.Actions
 			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
-
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
+			
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
 
 			var projects = _controllers?.TranscreateController?.GetSelectedProjects();

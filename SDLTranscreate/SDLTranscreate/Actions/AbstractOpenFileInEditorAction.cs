@@ -69,7 +69,7 @@ namespace Trados.Transcreate.Actions
 				var message2 =
 					string.Format(PluginResources.Message_WarningTranslationsCanBeOverwrittenDuringImport,
 						activityfile?.DateToString);
-				var message3 = "Do you want to proceed?";
+				var message3 = PluginResources.Message_DoYouWantToProceed;
 
 				var dr = MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2 +
 								Environment.NewLine + Environment.NewLine + message3,
