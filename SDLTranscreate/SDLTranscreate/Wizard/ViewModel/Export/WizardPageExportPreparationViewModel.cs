@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using NLog;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Trados.Transcreate.Commands;
 using Trados.Transcreate.Common;
@@ -171,6 +172,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.Export
 
 				FinalizeJobProcesses(success);
 			}
+			catch (Exception ex)
+			{
+				LogManager.GetCurrentClassLogger().Error(ex);
+			}
 			finally
 			{
 				Owner.Dispatcher.Invoke(DispatcherPriority.Input, new Action(delegate
@@ -203,6 +208,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Export
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
@@ -292,6 +298,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Export
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
@@ -323,6 +330,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Export
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;

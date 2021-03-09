@@ -12,6 +12,8 @@ namespace Trados.Transcreate
 		public void Execute()
 		{
 			SetApplicationShutdownMode();
+
+			Common.Log.Setup();
 		}
 
 		public static Form GetActiveForm()
@@ -34,7 +36,7 @@ namespace Trados.Transcreate
 		{
 			if (Application.Current == null)
 			{
-				// initialize the enviornments application instance
+				// initialize the environments application instance
 				new Application();
 			}
 

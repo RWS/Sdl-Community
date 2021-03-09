@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -26,7 +27,6 @@ namespace Trados.Transcreate.Actions
 	[ActionLayout(typeof(TranscreateManagerActionsGroup), 3, DisplayType.Large)]
 	public class CreateBackTranslationAction : AbstractViewControllerAction<TranscreateViewController>
 	{
-		private Settings _settings;
 		private CustomerProvider _customerProvider;
 		private PathInfo _pathInfo;
 		private ImageService _imageService;
@@ -82,12 +82,14 @@ namespace Trados.Transcreate.Actions
 				var taskContext = wizardService.ShowWizard(Controller, out var message);
 				if (taskContext == null && !string.IsNullOrEmpty(message))
 				{
+					LogManager.GetCurrentClassLogger().Warn(message);
 					MessageBox.Show(message,
 						PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				MessageBox.Show(ex.Message,
 					PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 			}
@@ -110,7 +112,6 @@ namespace Trados.Transcreate.Actions
 			_pathInfo = new PathInfo();
 			_dialogService = new DialogService();
 			_imageService = new ImageService();
-			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			_studioVersionService = new StudioVersionService();

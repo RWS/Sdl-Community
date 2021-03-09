@@ -25,7 +25,6 @@ namespace Trados.Transcreate.Service
 {
 	public class ProjectAutomationService
 	{
-		private string _projectNameSuffix;
 		private readonly ImageService _imageService;
 		private readonly TranscreateViewController _controller;
 		private readonly ProjectsController _projectsController;
@@ -162,23 +161,21 @@ namespace Trados.Transcreate.Service
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
-				throw new Exception("The project name suffix cannot be null!");
+				throw new Exception(PluginResources.Warning_Message_ProjectNameSuffixCannotBeNull);
 			}
-
-			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
 			var projectReference = new ProjectReference(project.FilePath);
 
 			var newProjectInfo = new ProjectInfo
 			{
-				Name = projectInfo.Name + "-" + _projectNameSuffix,
+				Name = projectInfo.Name + "-" + projectNameSuffix,
 				Description = projectInfo.Description,
-				LocalProjectFolder = projectInfo.LocalProjectFolder + "-" + _projectNameSuffix,
+				LocalProjectFolder = projectInfo.LocalProjectFolder + "-" + projectNameSuffix,
 				SourceLanguage = projectInfo.SourceLanguage,
 				TargetLanguages = projectInfo.TargetLanguages,
 				DueDate = projectInfo.DueDate,
-				ProjectOrigin = "Transcreate project",
+				ProjectOrigin = Constants.ProjectOrigin_TranscreateProject,
 				IconPath = iconPath,
 			};
 
@@ -221,10 +218,8 @@ namespace Trados.Transcreate.Service
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
-				throw new Exception("The project name suffix cannot be null!");
+				throw new Exception(PluginResources.Warning_Message_ProjectNameSuffixCannotBeNull);
 			}
-
-			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
 
@@ -239,7 +234,7 @@ namespace Trados.Transcreate.Service
 			var projectReference = new ProjectReference(project.FilePath);
 			var newProjectInfo = new ProjectInfo
 			{
-				Name = projectInfo.Name + "-" + _projectNameSuffix + "-" + targetLanguage,
+				Name = projectInfo.Name + "-" + projectNameSuffix + "-" + targetLanguage,
 				Description = projectInfo.Description,
 				LocalProjectFolder = localProjectFolder,
 				SourceLanguage = newSourceLanguage,

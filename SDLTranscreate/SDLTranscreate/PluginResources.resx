@@ -739,4 +739,13 @@
   <data name="Message_TranscreateReportsCreatedSuccessfully" xml:space="preserve">
 	  <value>The transcreate reports have been created successfully.</value>
   </data>
+  <data name="Warning_Message_ProjectFolderAlreadyExists" xml:space="preserve">
+	  <value>The project folder already exists!</value>
+  </data>
+  <data name="Warning_Message_NoSourceFilesFound" xml:space="preserve">
+	  <value>No source files found!</value>
+  </data>
+  <data name="Warning_Message_ProjectNameSuffixCannotBeNull" xml:space="preserve">
+	  <value>The project name suffix cannot be null!</value>
+  </data>
 </root>

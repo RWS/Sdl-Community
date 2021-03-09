@@ -1722,6 +1722,33 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No source files found!.
+        /// </summary>
+        internal static string Warning_Message_NoSourceFilesFound {
+            get {
+                return ResourceManager.GetString("Warning_Message_NoSourceFilesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project folder already exists!.
+        /// </summary>
+        internal static string Warning_Message_ProjectFolderAlreadyExists {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectFolderAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project name suffix cannot be null!.
+        /// </summary>
+        internal static string Warning_Message_ProjectNameSuffixCannotBeNull {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectNameSuffixCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to load project: {0}.
         /// </summary>
         internal static string Warning_UnableToLoadProject {
