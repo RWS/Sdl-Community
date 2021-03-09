@@ -61,7 +61,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static void SetTranslationService(IConnectionService connectionService)
 		{
-			TranslationService = new TranslationService(connectionService, Client);
+			TranslationService = new TranslationService(connectionService, Client, new MessageBoxService());
 
 			//TODO: start supervising when a QE enabled model has been chosen
 			MetadataSupervisor.StartSupervising(TranslationService);

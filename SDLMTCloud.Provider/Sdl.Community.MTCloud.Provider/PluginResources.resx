@@ -397,4 +397,16 @@ Response from SDL MT Cloud:
   <data name="SDLMTCloudUri" xml:space="preserve">
     <value>sdlmtcloud:///</value>
   </data>
+  <data name="No_dictionary_has_been_selected" xml:space="preserve">
+	  <value>No dictionary has been selected</value>
+  </data>
+  <data name="Operation_failed" xml:space="preserve">
+	  <value>Operation failed</value>
+  </data>
+  <data name="The_term_has_been_successfully_added_to_the_current_dictionary" xml:space="preserve">
+	  <value>The term has been successfully added to the current dictionary</value>
+  </data>
+  <data name="Operation_complete" xml:space="preserve">
+	  <value>Operation complete</value>
+  </data>
 </root>

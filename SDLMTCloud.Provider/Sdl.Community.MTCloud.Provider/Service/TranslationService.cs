@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Dynamic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -25,10 +24,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	{
 		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly IMessageBoxService _messageService;
 
-		public TranslationService(IConnectionService connectionService, IHttpClient httpClient)
+		public TranslationService(IConnectionService connectionService, IHttpClient httpClient, IMessageBoxService messageService)
 		{
 			_httpClient = httpClient;
+			_messageService = messageService;
 			ConnectionService = connectionService;
 		}
 
@@ -80,7 +81,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{ConnectionService.Credential.AccountId}/dictionaries");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
 
-			return await SendRequest<MTCloudDictionaryInfo>(request);
+			var response = await SendRequest(request);
+			return await GetResult<MTCloudDictionaryInfo>(response);
 		}
 
 		public async Task<SubscriptionInfo> GetLanguagePairs()
@@ -90,7 +92,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
 
-			return await SendRequest<SubscriptionInfo>(request);
+			var response = await SendRequest(request);
+			return await GetResult<SubscriptionInfo>(response);
 		}
 
 		public async Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
@@ -131,21 +134,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var content = JsonConvert.SerializeObject(translationRequestModel);
 			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 
-			var response = await SendRequest<TranslationResponse>(request);
+			var response = await SendRequest(request);
+			var translationResponse = await GetResult<TranslationResponse>(response);
 
-			if (response is null)
-				return null;
+			if (response is null) return null;
 
-			var dataResponse = await CheckTranslationStatus(_httpClient, response.RequestId);
+			var (responseMessage, qualityEstimation) = await CheckTranslationStatus(translationResponse?.RequestId);
+			var translations = await GetResult<TranslationResponse>(responseMessage);
 
-			if (!(JsonConvert.DeserializeObject<TranslationResponse>(dataResponse.Item1) is TranslationResponse translations))
-				return null;
-
-			var translation = translations.Translation.FirstOrDefault();
-			if (translation == null)
-			{
-				return null;
-			}
+			var translation = translations?.Translation?.FirstOrDefault();
+			if (translation == null) return null;
 
 			var translatedXliff = Converter.ParseXliffString(translation);
 			if (translatedXliff == null) return null;
@@ -159,7 +157,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				TranslationOriginInformation = new TranslationOriginInformation
 				{
 					Model = translations.Model,
-					QualityEstimation = dataResponse.Item2
+					QualityEstimation = qualityEstimation
 				},
 				FilePath = fileAndSegments.FilePath,
 				SegmentIds = fileAndSegments.SegmentIds,
@@ -184,20 +182,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void CheckConnection()
 		{
-			if (ConnectionService.Credential.ValidTo < DateTime.UtcNow)
-			{
-				// attempt one connection
-				var success = ConnectionService.Connect(ConnectionService.Credential);
-				if (!success.Item1)
-				{
-					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " +
-								  $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
-					throw new Exception(PluginResources.Message_Connection_token_has_expired);
-				}
-			}
+			if (ConnectionService.Credential.ValidTo >= DateTime.UtcNow) return;
+
+			// attempt one connection
+			var success = ConnectionService.Connect(ConnectionService.Credential);
+			if (success.Item1) return;
+
+			_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " +
+			              $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+
+			throw new Exception(PluginResources.Message_Connection_token_has_expired);
 		}
 
-		private async Task<(string, string)> CheckTranslationStatus(IHttpClient httpClient, string id)
+		private async Task<(HttpResponseMessage, string)> CheckTranslationStatus(string id)
 		{
 			var translationStatus = string.Empty;
 			string qualityEstimation = null;
@@ -207,10 +204,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}");
 				var request = GetRequestMessage(HttpMethod.Get, uri);
 
-				var responseStatus = await SendRequest<TranslationResponseStatus>(request);
+				var responseMessage = await SendRequest(request);
+				var responseStatus = await GetResult<TranslationResponseStatus>(responseMessage);
 
 				if (responseStatus is null) continue;
-				var responseMessage = responseStatus.ResponseMessage;
 
 				WaitForTranslation(responseStatus);
 
@@ -218,23 +215,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				qualityEstimation = GetQualityEstimation(responseStatus);
 
 				if (translationStatus.ToUpperInvariant() != Constants.FAILED) continue;
-				var response = await responseMessage.Content.ReadAsStringAsync();
-				var responseContent = JsonConvert.DeserializeObject<ResponseError>(response);
 
-				if (responseContent?.Errors != null)
+				var response = await GetResult<ResponseError>(responseMessage);
+
+				if (response?.Errors != null)
 				{
-					foreach (var error in responseContent.Errors)
+					foreach (var error in response.Errors)
 					{
-						throw new Exception($"{Constants.ErrorCode} {error.Code}, {error.Description}");
+						_logger.Error($"{nameof(CheckTranslationStatus)}: {error}");
 					}
 				}
 				else
 				{
-					throw new Exception($"{Constants.ErrorCode} {responseMessage.StatusCode}, {responseMessage.Content}");
+					_logger.Error($"{nameof(CheckTranslationStatus)}: {responseMessage.StatusCode}, {responseMessage.Content}");
 				}
+
 			} while (translationStatus.ToUpperInvariant() == Constants.INIT || translationStatus.ToUpperInvariant() == Constants.TRANSLATING);
 
-			return (await GetTranslationResult(httpClient, id), qualityEstimation);
+			return (await GetTranslationResult(id), qualityEstimation);
 		}
 
 		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
@@ -291,32 +289,51 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return request;
 		}
 
-		private bool GetResult<T>(HttpResponseMessage responseMessage, string response, out T result)
+		private async Task<string> GetResponseAsString(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
 		{
-			if (responseMessage.IsSuccessStatusCode) // 200
+			string response = null;
+
+			if (responseMessage?.Content == null) return null;
+			try
 			{
-				result = JsonConvert.DeserializeObject<T>(response);
-				return true;
+				response = await responseMessage.Content.ReadAsStringAsync();
+				responseMessage.ReasonPhrase = response;
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"{nameof(GetResponseAsString)} for {callerMemberName}: {e}");
 			}
 
-			result = default;
-			return false;
+			return response;
 		}
 
-		private async Task<string> GetTranslationResult(IHttpClient httpClient, string id)
+		private async Task<T> GetResult<T>(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
 		{
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}/content");
-
-			var request = GetRequestMessage(HttpMethod.Get, uri);
-			var responseMessage = await httpClient.SendAsync(request);
-			var response = await responseMessage.Content.ReadAsStringAsync();
-
-			if (responseMessage.IsSuccessStatusCode)
+			var response = await GetResponseAsString(responseMessage);
+			if (responseMessage?.IsSuccessStatusCode ?? false)
 			{
-				return response;
+				T result = default;
+				try
+				{
+					result = JsonConvert.DeserializeObject<T>(response);
+				}
+				catch (Exception e)
+				{
+					_logger.Error($"{nameof(GetResult)} for {callerMemberName}: {e}");
+				}
+				return result;
 			}
 
-			return string.Empty;
+			_logger.Error($"{nameof(GetResult)} for {callerMemberName} " + $"{responseMessage?.StatusCode}\n {responseMessage?.RequestMessage}");
+			return default;
+		}
+
+		private async Task<HttpResponseMessage> GetTranslationResult(string id)
+		{
+			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}/content");
+			var request = GetRequestMessage(HttpMethod.Get, uri);
+			var responseMessage = await SendRequest(request);
+			return responseMessage.IsSuccessStatusCode ? responseMessage : null;
 		}
 
 		private void OnTranslationReceived(TranslationData translationData)
@@ -337,42 +354,26 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 
-			var responseMessage = await _httpClient.SendAsync(request);
-			var response = await responseMessage.Content.ReadAsStringAsync();
-			responseMessage.ReasonPhrase = response;
+			var response = await SendRequest(request);
+			var responseAsString = await GetResponseAsString(response);
 
-			_logger.Info(PluginResources.SendFeedbackResponseFromServer, responseMessage.StatusCode, response);
-
-			return responseMessage;
+			_logger.Info(PluginResources.SendFeedbackResponseFromServer, response?.StatusCode, responseAsString);
+			return response;
 		}
 
-		private async Task<T> SendRequest<T>(HttpRequestMessage request, [CallerMemberName] string callerMemberName = null)
+		private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, [CallerMemberName] string callerMemberName = null)
 		{
-			HttpResponseMessage responseMessage;
-			string responseAsString;
-
+			HttpResponseMessage responseMessage = null;
 			try
 			{
 				responseMessage = await _httpClient.SendAsync(request);
-				responseAsString = await responseMessage.Content.ReadAsStringAsync();
 			}
 			catch (Exception e)
 			{
 				_logger.Error($"{nameof(SendRequest)} for {callerMemberName}" + e);
-				throw;
 			}
 
-			if (GetResult<T>(responseMessage, responseAsString, out var result))
-			{
-				if (result is TranslationResponseStatus trasnlationStatus)
-				{
-					trasnlationStatus.ResponseMessage = responseMessage;
-				}
-				return result;
-			}
-
-			_logger.Error($"{callerMemberName} " + $"{responseMessage.StatusCode}\n {responseMessage.RequestMessage}");
-			return default;
+			return responseMessage;
 		}
 	}
 }

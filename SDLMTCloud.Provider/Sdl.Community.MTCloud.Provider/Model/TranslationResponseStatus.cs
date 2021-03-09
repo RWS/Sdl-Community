@@ -19,7 +19,5 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[JsonProperty("translationStatus")]
 		public string TranslationStatus { get; set; }
-
-		public HttpResponseMessage ResponseMessage { get; set; }
 	}
 }
