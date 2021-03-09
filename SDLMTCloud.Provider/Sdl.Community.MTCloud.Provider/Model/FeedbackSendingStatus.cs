@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,9 +12,10 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		public Status Status { get; set; }
 
-		public void ChangeStatus(HttpResponseMessage responseMessage)
+		public async Task ChangeStatus(HttpResponseMessage responseMessage)
 		{
-			var jObj = JToken.Parse(responseMessage.ReasonPhrase);
+			var responseReason = await MtCloudApplicationInitializer.Client.GetResponseAsString(responseMessage);
+			var jObj = JToken.Parse(responseReason);
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				Status = Status.Sent;
