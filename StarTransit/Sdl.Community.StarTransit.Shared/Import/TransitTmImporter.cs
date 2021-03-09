@@ -7,8 +7,6 @@ using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -19,50 +17,93 @@ namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitTmImporter
 	{
-		private readonly IFileTypeManager _fileTypeManager;
 		private readonly FileBasedTranslationMemory _fileBasedTM;
-		private readonly IFileService _fileService;
+		private readonly IFileService _fileService = new FileService();
+		public Dictionary<FileBasedTranslationMemory, int> StudioTranslationMemories= new Dictionary<FileBasedTranslationMemory, int>();
 
-		public TransitTmImporter(LanguagePair pair,	IFileTypeManager fileTypeManager, string studioTranslationMemory)
+		public TransitTmImporter(LanguagePair pair, string studioTranslationMemory)
 		{
-			_fileTypeManager = fileTypeManager;
-			_fileService = new FileService();
 
 			if (pair.CreateNewTm)
 			{
+				//TODO: use existing method to create tm
 				_fileBasedTM = new FileBasedTranslationMemory(
 					studioTranslationMemory,
 					string.Empty,
 					pair.SourceLanguage,
 					pair.TargetLanguage,
-					GetFuzzyIndexes(),
-					GetRecognizers(),
+					FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
+					BuiltinRecognizers.RecognizeAll,
 					TokenizerFlags.DefaultFlags,
-					GetWordCountFlags());
+					WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
 			}
 			else
 			{
+				//TODO: vezi cand intra aici
 				_fileBasedTM = new FileBasedTranslationMemory(pair.TmPath);
 			}
 		}
 
-		public TransitTmImporter(IFileTypeManager fileTypeManager, LanguagePair pair, string projectPath, string fileName)
+		public TransitTmImporter(LanguagePair languagePair, string studioProjectPath, List<StarTranslationMemoryMetadata> tmsList)
 		{
-			_fileTypeManager = fileTypeManager;
+			if (tmsList != null && tmsList.Any())
+			{
+				foreach (var transitTm in tmsList)
+				{
+					var transitTmName = Path.GetFileName(transitTm.TargetFile);
+					var tmPath = Path.Combine(studioProjectPath, string.Concat(transitTmName, ".sdltm"));
+					CreateStudioTranslationMemory(tmPath, $"{transitTmName} description", transitTm.TMPenalty, languagePair);
+				}
+			}
+			else
+			{
+				// sa vad cum arata pt mt pennalty sipathu
+				//CreateStudioTranslationMemory(studioProjectPath, string.Empty, 1)
+			}
 
-			_fileBasedTM = new FileBasedTranslationMemory(
-						Path.Combine(projectPath, string.Concat(fileName, ".sdltm")),
-						string.Concat(fileName, " description"),
-						pair.SourceLanguage,
-						pair.TargetLanguage,
-						GetFuzzyIndexes(),
-				 		GetRecognizers(),
-						TokenizerFlags.DefaultFlags,
-						GetWordCountFlags());
+		}
 
-			_fileBasedTM.LanguageResourceBundles.Clear();
-			_fileBasedTM.Save();
-			TMFilePath = _fileBasedTM.FilePath;
+		private void CreateStudioTranslationMemory(string tmPath, string description,int penalty,LanguagePair pair)
+		{
+			var fileBasedTm = new FileBasedTranslationMemory(
+				tmPath,
+				description,
+				pair.SourceLanguage,
+				pair.TargetLanguage,
+				FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
+				BuiltinRecognizers.RecognizeAll,
+				TokenizerFlags.DefaultFlags,
+				WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
+			fileBasedTm.Save();
+
+			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
+			{
+				StudioTranslationMemories.Add(fileBasedTm, penalty);
+			}
+		}
+
+		//TODO: Adapteaza sa mearga si in cazul in care cream doar un tm, primul constructor
+		private void CreateStudioTranslationMemory(StarTranslationMemoryMetadata tmMetadata,LanguagePair pair,string studioProjectPath )
+		{
+			//TODO muta in cosntructor path si ce mai e
+			var transitTmName = Path.GetFileName(tmMetadata.TargetFile);
+			var tmPath = Path.Combine(studioProjectPath, string.Concat(transitTmName, ".sdltm"));
+
+			var fileBasedTm = new FileBasedTranslationMemory(
+				tmPath,
+				string.Concat(transitTmName, " description"),
+				pair.SourceLanguage,
+				pair.TargetLanguage,
+				FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
+				BuiltinRecognizers.RecognizeAll,
+				TokenizerFlags.DefaultFlags,
+				WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
+			fileBasedTm.Save();
+
+			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
+			{
+				StudioTranslationMemories.Add(fileBasedTm,tmMetadata.TMPenalty);
+			}
 		}
 
 		public string TMFilePath { get; set; }
@@ -73,42 +114,48 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,package);
 		}
 
+		//TODO: Returneaza o lista de TP Reference
 		public TranslationProviderReference GetTranslationProviderReference()
 		{
 			return new TranslationProviderReference(_fileBasedTM.FilePath, true);
 		}
 
-		private void ImportSdlXliffIntoTm(string sdlXliffFilderPath, PackageModel package)
+		private void ImportSdlXliffIntoTm(string sdlXliffFolderPath, PackageModel package)
 		{
 			try
 			{
-				var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
-				var importSettings = new ImportSettings
-				{
-					IsDocumentImport = false,
-					CheckMatchingSublanguages = false,
-					IncrementUsageCount = true,
-					NewFields = ImportSettings.NewFieldsOption.Ignore,
-					PlainText = false,
-					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
-				};
-				tmImporter.ImportSettings = importSettings;
 				var targetLanguages = package.LanguagePairs.Select(f => f.TargetLanguage.Name).ToList();
 
 				foreach (var languageCode in targetLanguages)
 				{
-					var folderPath = Path.Combine(sdlXliffFilderPath, languageCode);
+					var folderPath = Path.Combine(sdlXliffFolderPath, languageCode);
 					var xliffFiles = Directory.GetFiles(folderPath);
+
 					foreach (var xliffFile in xliffFiles)
 					{
+						var fileName = Path.GetFileNameWithoutExtension(xliffFile);
+						var correspondingTm =
+							StudioTranslationMemories.Keys.FirstOrDefault(t => t.Name.Equals(fileName));
+						if(correspondingTm is null) return;
+
+						var tmImporter = new TranslationMemoryImporter(correspondingTm.LanguageDirection);
+						var importSettings = new ImportSettings
+						{
+							IsDocumentImport = false,
+							CheckMatchingSublanguages = false,
+							IncrementUsageCount = true,
+							NewFields = ImportSettings.NewFieldsOption.Ignore,
+							PlainText = false,
+							ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
+						};
+						tmImporter.ImportSettings = importSettings;
 						tmImporter.Import(xliffFile);
 					}
-
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ImportSdlXliffIntoTm method: {ex.Message}\n {ex.StackTrace}");
+				Log.Logger.Error(ex);
 			}
 		}
 
@@ -160,24 +207,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			Directory.CreateDirectory(pathToExtractFolder);
 
 			return pathToExtractFolder;
-		}
-
-		private static FuzzyIndexes GetFuzzyIndexes()
-		{
-			return FuzzyIndexes.SourceCharacterBased |
-				FuzzyIndexes.SourceWordBased |
-				FuzzyIndexes.TargetCharacterBased |
-				FuzzyIndexes.TargetWordBased;
-		}
-
-		private static BuiltinRecognizers GetRecognizers()
-		{
-			return BuiltinRecognizers.RecognizeAll;
-		}
-
-		private static WordCountFlags GetWordCountFlags()
-		{
-			return WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe;
 		}
 	}
 }

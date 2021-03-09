@@ -150,12 +150,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				{
 					if (pair.CreateNewTm)
 					{
+						//TODO:Investigate and refactor
 						foreach (var starTmMetadata in pair.StarTranslationMemoryMetadatas)
 						{
 							AddTmPenalties(package, starTmMetadata);
 							AddMtMemories(package, starTmMetadata);
 						}
 
+						//TODO: Investigate if we really need this later we'll join the mt and tms becasue
 						// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
 						foreach (var item in _penaltiesTmsList)
 						{
@@ -192,92 +194,75 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private void ImportLanguagePairTm(LanguagePair pair, IProject project, PackageModel package)
 		{
 			if (!pair.HasTm || string.IsNullOrEmpty(pair.TmPath)) return;
-			if (pair.StarTranslationMemoryMetadatas.Any())
+			if (pair.StarTranslationMemoryMetadatas !=null && pair.StarTranslationMemoryMetadatas.Any())
 			{
+				//TODO: Fix this flow.
 				var localProjectFolder = project?.GetProjectInfo()?.LocalProjectFolder;
 				if (localProjectFolder != null)
 				{
 					var newTmPath = Path.Combine(localProjectFolder, Path.GetFileName(pair.TmPath));
-					var importer = new TransitTmImporter(pair, _fileTypeManager, newTmPath);
+					var importer = new TransitTmImporter(pair, newTmPath);
 
 					importer.ImportStarTransitTm(pair.StarTranslationMemoryMetadatas, package);
 					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(), true, true, true));
 				}
 			}
-
-			//TODO:Extract in one method
-			// Create separate TM for each TM file on which user set penalty. The penalty is applied on top of any penalty that might be applied by the translation provider itself.
-			// (the name of the new TM will be the same with the one from StarTransit package)
 			
-			
-			//Parallel.ForEach(_penaltiesTmsList, (item) =>
-			//{
-			//	var tpReference = CreateTpReference(item, pair, project);
-			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true,
-			//		item.TMPenalty));
-			//});
-
-
-			//Used when user sets penalty.
-			//TODO:Uncomment the code and adapt to the new tm impementation functionality.
-			//foreach (var item in _penaltiesTmsList)
-			//{
-			//	//TODO: Send all the tms paths to be added extracted and added to project
-			//	var tpReference = CreateTpReference(item, pair, project,package);
-			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true, true, item.TMPenalty));
-			//}
-
-			////If the user requests it, create a separate TM for the Machine Translation coming from Transit.
-			//foreach (var item in _machineTransList)
-			//{
-			//	var tpReference = CreateTpReference(item, pair, project,package);
-
-			//	//It should have a penalty set by default, otherwise it will be used for pretranslation and later added to the main TM when updating main TM, and we want to avoid that.
-			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpReference, true, true,true,1));
-			//}
+			CreateSeparateTms(pair, project, package);
 		}
 
-		//TODO:Uncomment
-		// Create translation provider reference
-		//private TranslationProviderReference CreateTpReference(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
-		//{
-		//	var importer = CreateTmImporter(item, pair, project,package);
-		//	var tpReference = new TranslationProviderReference(importer.TMFilePath);
-		//	return tpReference;
-		//}
+		// Create separate TM for each TM file on which user set penalty. The penalty is applied on top of any penalty that might be applied by the translation provider itself.
+		// The name of the new TM will be the same with the one from StarTransit package
+		// We'll create a single project which will contain all the tms and mt.
+		private void CreateSeparateTms(LanguagePair pair, IProject project, PackageModel package)
+		{
+			var allTransitTms = _penaltiesTmsList?.Concat(_machineTransList).ToList();
 
-		//// Create the translation memory importer
-		//private TransitTmImporter CreateTmImporter(StarTranslationMemoryMetadata item, LanguagePair pair, IProject project, PackageModel package)
-		//{
-		//	var importer = new TransitTmImporter(_fileTypeManager, pair, project?.GetProjectInfo()?.LocalProjectFolder, Path.GetFileName(item.TargetFile));
-		//	importer.ImportStarTransitTm(item,package);
-		//	return importer;
-		//}
+			if (allTransitTms != null && !allTransitTms.Any()) return;
+			var tpReference = CreateTpReference(allTransitTms, pair, project, package);
+			foreach (var tpRef in tpReference)
+			{
+				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpRef.Key, true, true, true,tpRef.Value));
+			}
+		}
 
+		private Dictionary<TranslationProviderReference, int> CreateTpReference(List<StarTranslationMemoryMetadata> tmsList, LanguagePair pair, IProject project, PackageModel package)
+		{
+			var localProjectPath = project?.GetProjectInfo()?.LocalProjectFolder;
+			var importer = new TransitTmImporter(pair, localProjectPath, tmsList);
+			importer.ImportStarTransitTm(tmsList, package);
+			var translationProvRef = new Dictionary<TranslationProviderReference, int>();
+
+			foreach (var tm in importer.StudioTranslationMemories)
+			{
+				var provider = new TranslationProviderReference(tm.Key.FilePath);
+				if (!translationProvRef.ContainsKey(provider))
+				{
+					translationProvRef.Add(provider,tm.Value);
+				}
+			}
+			return translationProvRef;
+		}
+		
 		// Separate all items from package.TMPenalties(files that are having penalties set), that are found in pair.StarTranslationMemoryMetadatas
 		private void AddTmPenalties(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)
 		{
-			if (package?.TMPenalties != null)
+			if (package?.TMPenalties == null) return;
+			if (package.TMPenalties.Any(t => t.Key.Equals(starTmMetadata.TargetFile)))
 			{
-				if (package.TMPenalties.Any(t => t.Key.Equals(starTmMetadata.TargetFile)))
-				{
-					starTmMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTmMetadata.TargetFile)).Value;
-					_penaltiesTmsList.Add(starTmMetadata);
-				}
+				starTmMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTmMetadata.TargetFile)).Value;
+				_penaltiesTmsList.Add(starTmMetadata);
 			}
 		}
 
 		//Separate all items from package.MachineTransMem (files that contain Machine Translation)
 		private void AddMtMemories(PackageModel package, StarTranslationMemoryMetadata starTmMetadata)
 		{
-			if (package?.MTMemories != null)
-			{
-				var hasMtMemories = package.MTMemories.Any(t => t.Equals(starTmMetadata.TargetFile));
-				if (hasMtMemories)
-				{
-					_machineTransList.Add(starTmMetadata);
-				}
-			}
+			if (package?.MTMemories == null) return;
+			var hasMtMemories = package.MTMemories.Any(t => t.Equals(starTmMetadata.TargetFile));
+			if (!hasMtMemories) return;
+			starTmMetadata.TMPenalty = 1;
+			_machineTransList.Add(starTmMetadata);
 		}
 
 		//TODO: Use the method from file service.
@@ -296,22 +281,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		// Update the translation memory settings
 		private void UpdateTmSettings(IProject project)
 		{
-			try
+			var settings = project.GetSettings();
+			var updateTmSettings = settings.GetSettingsGroup<TranslationMemoryUpdateTaskSettings>();
+			if (updateTmSettings != null)
 			{
-				var settings = project.GetSettings();
-				var updateTmSettings = settings.GetSettingsGroup<TranslationMemoryUpdateTaskSettings>();
-				if (updateTmSettings != null)
-				{
-					updateTmSettings.TmImportOptions.Value = TmImportOption.AlwaysAddNewTranslation;
-					updateTmSettings.UpdateWithApprovedSignOffSegments.Value = true;
-					updateTmSettings.UpdateWithApprovedTranslationSegments.Value = true;
-					updateTmSettings.UpdateWithTranslatedSegments.Value = true;
-					project.UpdateSettings(settings);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"UpdateTmSettings method: {ex.Message}\n {ex.StackTrace}");
+				updateTmSettings.TmImportOptions.Value = TmImportOption.AlwaysAddNewTranslation;
+				updateTmSettings.UpdateWithApprovedSignOffSegments.Value = true;
+				updateTmSettings.UpdateWithApprovedTranslationSegments.Value = true;
+				updateTmSettings.UpdateWithTranslatedSegments.Value = true;
+				project.UpdateSettings(settings);
 			}
 		}
 
