@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -53,6 +54,15 @@ namespace Trados.Transcreate.Actions
 			var action = Enumerators.Action.Convert;
 			var workFlow = Enumerators.WorkFlow.Internal;
 
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+			var newProjectLocalFolder = selectedProject?.GetProjectInfo().LocalProjectFolder + "-T";
+			if (Directory.Exists(newProjectLocalFolder))
+			{
+				MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder, 
+					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, 
 				_projectAutomationService, _projectSettingsService);
@@ -71,7 +81,6 @@ namespace Trados.Transcreate.Actions
 		public override void Initialize()
 		{
 			Enabled = false;
-
 
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			SetProjectsController();

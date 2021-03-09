@@ -384,7 +384,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
 				if (Directory.Exists(newProjectLocalFolder))
 				{
-					throw new Exception(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + newProjectLocalFolder);
+					throw new Exception(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder);
 				}
 
 				var sourceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name;
@@ -441,10 +441,9 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				if (_newProject != null)
 				{
 					await CloseBackTranslationProject(_newProject);
+					// cleanup folders
+					TryDeleteFolder(newProjectLocalFolder);
 				}
-
-				// cleanup folders
-				TryDeleteFolder(newProjectLocalFolder);
 			}
 
 			return await Task.FromResult(success);
