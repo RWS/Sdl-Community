@@ -47,7 +47,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					UserId = "abc123",
 					ClientId = null
 				};
-				connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>()).Returns(
+				connectionService.GetUserDetails(Arg.Any<string>()).Returns(
 					Task.FromResult((userDetails, string.Empty)));
 			}
 
@@ -87,7 +87,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					UserId = "abc123",
 					ClientId = null
 				};
-				connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>()).Returns(
+				connectionService.GetUserDetails(Arg.Any<string>()).Returns(
 					Task.FromResult((userDetails, string.Empty)));
 			}
 
@@ -139,7 +139,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				UserId = type != Authentication.AuthenticationType.Client ? "abc123" : null,
 				ClientId = type == Authentication.AuthenticationType.Client ? "abc123" : null,
 			};
-			connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>())
+			connectionService.GetUserDetails(Arg.Any<string>())
 				.Returns(Task.FromResult((userDetails, string.Empty)));
 
 			var result = connectionService.Connect(credential);
@@ -189,7 +189,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				UserId = type != Authentication.AuthenticationType.Client ? "abc123" : null,
 				ClientId = type == Authentication.AuthenticationType.Client ? "abc123" : null,
 			};
-			connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>())
+			connectionService.GetUserDetails(Arg.Any<string>())
 				.Returns(Task.FromResult((userDetails, string.Empty)));
 
 			var result = connectionService.Connect(credential);

@@ -71,7 +71,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 				Credential.Token = signInResult.Item1?.AccessToken;
-				Credential.ValidTo = GetTokenValidTo(Credential.Token);
+				Credential.ValidTo = GetTokenValidTo();
 				Credential.Name = signInResult.Item1?.Email;
 				Credential.Password = null;
 				message = signInResult.Item2;
@@ -79,7 +79,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (IsSignedIn)
 				{
 					var userDetailsResult =
-						Task.Run(async () => await GetUserDetails(Credential.Token, Constants.MTCloudUriResourceUserDetails)).Result;
+						Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceUserDetails)).Result;
 					IsSignedIn = userDetailsResult.Item1 != null;
 					Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 					message = userDetailsResult.Item2;
@@ -103,12 +103,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var signInResult = Task.Run(async () => await SignIn(Constants.MTCloudUriResourceUserToken, content)).Result;
 						IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 						Credential.Token = signInResult.Item1?.AccessToken;
-						Credential.ValidTo = GetTokenValidTo(Credential.Token);
+						Credential.ValidTo = GetTokenValidTo();
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
 						{
-							var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, Constants.MTCloudUriResourceUserDetails)).Result;
+							var userDetailsResult = Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceUserDetails)).Result;
 							IsSignedIn = userDetailsResult.Item1 != null;
 							Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 							message = userDetailsResult.Item2;
@@ -127,13 +127,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var signInResult = Task.Run(async () => await SignIn(Constants.MTCloudUriResourceClientToken, content)).Result;
 						IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 						Credential.Token = signInResult.Item1?.AccessToken;
-						Credential.ValidTo = GetTokenValidTo(Credential.Token);
+						Credential.ValidTo = GetTokenValidTo();
 
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
 						{
-							var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, Constants.MTCloudUriResourceClientDetails)).Result;
+							var userDetailsResult = Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceClientDetails)).Result;
 							IsSignedIn = userDetailsResult.Item1 != null;
 							Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 							message = userDetailsResult.Item2;
@@ -312,9 +312,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credential ?? new Credential();
 		}
 
-		public virtual async Task<(UserDetails, string)> GetUserDetails(string token, string resource)
+		public virtual async Task<(UserDetails, string)> GetUserDetails(string resource)
 		{
-			if (string.IsNullOrEmpty(token))
+			if (string.IsNullOrEmpty(Credential.Token))
 			{
 				return (null, PluginResources.Message_The_token_cannot_be_null);
 			}
@@ -326,11 +326,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			// there is a known issues with a timeout interfering with the credential authentication from the server side
 			// to mitigate this issue, we make two attempts to signin.
-			var userDetails = await GetUserDetailsAttempt(token, resource);
+			var userDetails = await GetUserDetailsAttempt(resource);
 			if (!(userDetails.Item1?.AccountId <= 0)) return userDetails;
 
 			_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
-			userDetails = await GetUserDetailsAttempt(token, resource);
+			userDetails = await GetUserDetailsAttempt(resource);
 
 			return userDetails;
 		}
@@ -455,10 +455,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credentialsWindow;
 		}
 
-		private DateTime GetTokenValidTo(string token)
+		private DateTime GetTokenValidTo(string token = null)
 		{
-			var tokenModel = ReadToken(token);
-
+			var tokenModel = ReadToken(token ?? Credential.Token);
 			return tokenModel?.ValidTo ?? DateTime.MinValue;
 		}
 
@@ -470,7 +469,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return request;
 		}
 
-		private async Task<(UserDetails, string)> GetUserDetailsAttempt(string token, string resource)
+		private async Task<(UserDetails, string)> GetUserDetailsAttempt(string resource)
 		{
 			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
 			var request = GetRequestMessage(HttpMethod.Get, uri);

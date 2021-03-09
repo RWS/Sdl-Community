@@ -38,7 +38,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
 
-		Task<(UserDetails, string)> GetUserDetails(string token, string resource);
+		Task<(UserDetails, string)> GetUserDetails(string resource);
 
 		void AddTraceHeader(HttpRequestMessage request);
 
