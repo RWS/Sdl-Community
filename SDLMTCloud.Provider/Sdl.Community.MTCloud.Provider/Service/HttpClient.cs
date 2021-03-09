@@ -19,42 +19,23 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_httpClient = new System.Net.Http.HttpClient();
 		}
 
-		public void SetLogger(ILogger logger)
-		{
-			_logger = logger;
-		}
-
 		public HttpRequestHeaders DefaultRequestHeaders { get => _httpClient.DefaultRequestHeaders; }
 
-		public TimeSpan Timeout
+		public async Task<string> GetResponseAsString(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
 		{
-			get => _httpClient.Timeout;
-			set => _httpClient.Timeout = value;
-		}
+			string response = null;
 
-		public Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequestMessage)
-		{
-			return _httpClient.SendAsync(httpRequestMessage);
-		}
-
-		public Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequestMessage, HttpCompletionOption httpCompletionOption)
-		{
-			return _httpClient.SendAsync(httpRequestMessage, httpCompletionOption);
-		}
-
-		public async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, [CallerMemberName] string callerMemberName = null)
-		{
-			HttpResponseMessage responseMessage = null;
+			if (responseMessage?.Content == null) return null;
 			try
 			{
-				responseMessage = await SendAsync(request);
+				response = await responseMessage.Content.ReadAsStringAsync();
 			}
 			catch (Exception e)
 			{
-				_logger.Error($"{nameof(SendRequest)} for {callerMemberName}" + e);
+				_logger.Error($"{nameof(GetResponseAsString)} for {callerMemberName}: {e}");
 			}
 
-			return responseMessage;
+			return response;
 		}
 
 		public async Task<T> GetResult<T>(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
@@ -78,21 +59,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return default;
 		}
 
-		public async Task<string> GetResponseAsString(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
+		public async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, [CallerMemberName] string callerMemberName = null)
 		{
-			string response = null;
-
-			if (responseMessage?.Content == null) return null;
+			HttpResponseMessage responseMessage = null;
 			try
 			{
-				response = await responseMessage.Content.ReadAsStringAsync();
+				responseMessage = await _httpClient.SendAsync(request);
 			}
 			catch (Exception e)
 			{
-				_logger.Error($"{nameof(GetResponseAsString)} for {callerMemberName}: {e}");
+				_logger.Error($"{nameof(SendRequest)} for {callerMemberName}" + e);
 			}
 
-			return response;
+			return responseMessage;
+		}
+
+		public void SetLogger(ILogger logger)
+		{
+			_logger = logger;
 		}
 	}
 }
