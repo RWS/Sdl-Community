@@ -8,6 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 {
 	[Action("Add Dictionary Term",
 		Name = "Add Dictionary Term",
+		Icon = "add_dictionary",
 		Description = "Add a term to the current dictionary")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 2, DisplayType.Default, "",
 		true)]

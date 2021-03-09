@@ -73,6 +73,16 @@ namespace Sdl.Community.MTCloud.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon add_dictionary {
+            get {
+                object obj = ResourceManager.GetObject("add_dictionary", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon add_langcode {
             get {
                 object obj = ResourceManager.GetObject("add_langcode", resourceCulture);
