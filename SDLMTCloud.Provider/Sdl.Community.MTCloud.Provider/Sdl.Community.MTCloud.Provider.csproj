@@ -222,7 +222,9 @@
     <Compile Include="Service\SegmentMetadataCreator.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
+    <Compile Include="Model\Term.cs" />
     <Compile Include="Service\TranslationService.cs" />
+    <Compile Include="Studio\ContextMenuAction\AddDictionaryTermAction.cs" />
     <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
@@ -321,6 +323,7 @@
     <Resource Include="Resources\rating.ico" />
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\checked.png" />
+    <Resource Include="Resources\add_dictionary.ico" />
     <Content Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />

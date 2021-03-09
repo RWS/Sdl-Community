@@ -7,7 +7,6 @@ using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -16,11 +15,12 @@ namespace Sdl.Community.MTCloud.Provider
 	[ApplicationInitializer]
 	internal class MtCloudApplicationInitializer : IApplicationInitializer
 	{
-		private static EditorController _editorController;
-		private const string CreateNewProject = "create a new project";
 		private const string BatchProcessing = "batch processing";
+		private const string CreateNewProject = "create a new project";
+		private static EditorController _editorController;
+		public static IHttpClient Client { get; } = new HttpClient();
 
-		public static IHttpClient Client { get; private set; }
+		public static CurrentViewDetector CurrentViewDetector { get; set; } = new CurrentViewDetector();
 
 		public static EditorController EditorController
 			=> _editorController = _editorController ?? SdlTradosStudio.Application.GetController<EditorController>();
@@ -31,19 +31,6 @@ namespace Sdl.Community.MTCloud.Provider
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
 
-		public static CurrentViewDetector CurrentViewDetector { get; set; } = new CurrentViewDetector();
-
-		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
-			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
-
-		public static void SetTranslationService(IConnectionService connectionService)
-		{
-			TranslationService = new TranslationService(connectionService, Client);
-
-			//TODO: start supervising when a QE enabled model has been chosen
-			MetadataSupervisor.StartSupervising(TranslationService);
-		}
-
 		public static void CloseOpenedDocuments()
 		{
 			var activeDocs = _editorController.GetDocuments().ToList();
@@ -53,6 +40,9 @@ namespace Sdl.Community.MTCloud.Provider
 				_editorController.Close(activeDoc);
 			}
 		}
+
+		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
+			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
@@ -75,10 +65,17 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
+		public static void SetTranslationService(IConnectionService connectionService)
+		{
+			TranslationService = new TranslationService(connectionService, Client, new MessageBoxService());
+
+			//TODO: start supervising when a QE enabled model has been chosen
+			MetadataSupervisor.StartSupervising(TranslationService);
+		}
+
 		public void Execute()
 		{
 			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			Client = new HttpClient();
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 	}

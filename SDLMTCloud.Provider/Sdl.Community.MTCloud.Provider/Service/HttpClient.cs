@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 
 namespace Sdl.Community.MTCloud.Provider.Service
@@ -9,10 +12,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	public class HttpClient : IHttpClient
 	{
 		private readonly System.Net.Http.HttpClient _httpClient;
+		private ILogger _logger;
 
 		public HttpClient()
 		{
 			_httpClient = new System.Net.Http.HttpClient();
+		}
+
+		public void SetLogger(ILogger logger)
+		{
+			_logger = logger;
 		}
 
 		public HttpRequestHeaders DefaultRequestHeaders { get => _httpClient.DefaultRequestHeaders; }
@@ -31,6 +40,59 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequestMessage, HttpCompletionOption httpCompletionOption)
 		{
 			return _httpClient.SendAsync(httpRequestMessage, httpCompletionOption);
+		}
+
+		public async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request, [CallerMemberName] string callerMemberName = null)
+		{
+			HttpResponseMessage responseMessage = null;
+			try
+			{
+				responseMessage = await SendAsync(request);
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"{nameof(SendRequest)} for {callerMemberName}" + e);
+			}
+
+			return responseMessage;
+		}
+
+		public async Task<T> GetResult<T>(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
+		{
+			var response = await GetResponseAsString(responseMessage, callerMemberName);
+			if (responseMessage?.IsSuccessStatusCode ?? false)
+			{
+				T result = default;
+				try
+				{
+					result = JsonConvert.DeserializeObject<T>(response);
+				}
+				catch (Exception e)
+				{
+					_logger.Error($"{nameof(GetResult)} for {callerMemberName}: {e}");
+				}
+				return result;
+			}
+
+			_logger.Error($"{nameof(GetResult)} for {callerMemberName} " + $"{responseMessage?.StatusCode}\n {responseMessage?.RequestMessage}");
+			return default;
+		}
+
+		public async Task<string> GetResponseAsString(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
+		{
+			string response = null;
+
+			if (responseMessage?.Content == null) return null;
+			try
+			{
+				response = await responseMessage.Content.ReadAsStringAsync();
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"{nameof(GetResponseAsString)} for {callerMemberName}: {e}");
+			}
+
+			return response;
 		}
 	}
 }

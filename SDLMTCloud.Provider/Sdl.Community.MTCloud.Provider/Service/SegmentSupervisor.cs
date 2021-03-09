@@ -40,6 +40,33 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>>();
 
+		public void AddImprovement(SegmentId segmentId, string improvement)
+		{
+			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
+
+			var item = ActiveDocumentData[segmentId].Feedback;
+			if (item.Suggestion != improvement) item.Suggestion = improvement;
+		}
+
+		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
+			string source)
+		{
+			if (targetOrigin != PluginResources.SDLMTCloudName) return;
+
+			ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData);
+			if (targetSegmentData == null)
+			{
+				ActiveDocumentData[segmentId] = new TargetSegmentData
+				{
+					Feedback = new Feedback(originalTarget, source),
+				};
+			}
+			else
+			{
+				ActiveDocumentData[segmentId].Feedback = new Feedback(originalTarget, source);
+			}
+		}
+
 		public Feedback GetImprovement(SegmentId? segmentId = null)
 		{
 			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
@@ -73,6 +100,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
+		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin, bool lookInPrevious = false)
+		{
+			//TODO: extract in helper
+			if (lookInPrevious)
+			{
+				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
+			}
+			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
+		}
+
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
 		{
 			var segment = (ISegment)((ISegmentContainerNode)sender).Item;
@@ -91,40 +128,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			SegmentConfirmed?.Invoke(segmentId);
 		}
 
-		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin, bool lookInPrevious = false)
+		private void CreateFeedback(List<string> sources, TranslationData targetSegmentData, int i, ISegmentPair currentSegmentPair)
 		{
-			//TODO: extract in helper
-			if (lookInPrevious)
+			var currentSegmentId = currentSegmentPair?.Properties.Id;
+
+			if (currentSegmentId != null)
 			{
-				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
-			}
-			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
-		}
-
-		public void AddImprovement(SegmentId segmentId, string improvement)
-		{
-			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
-
-			var item = ActiveDocumentData[segmentId].Feedback;
-			if (item.Suggestion != improvement) item.Suggestion = improvement;
-		}
-
-		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
-			string source)
-		{
-			if (targetOrigin != PluginResources.SDLMTCloudName) return;
-
-			ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData);
-			if (targetSegmentData == null)
-			{
-				ActiveDocumentData[segmentId] = new TargetSegmentData
-				{
-					Feedback = new Feedback(originalTarget, source),
-				};
+				CreateFeedbackEntry(currentSegmentId.Value, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
+					sources[i]);
 			}
 			else
 			{
-				ActiveDocumentData[segmentId].Feedback = new Feedback(originalTarget, source);
+				CreateFeedbackEntry(ActiveDocument.ActiveSegmentPair.Properties.Id, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
+					ActiveDocument.ActiveSegmentPair.Source.ToString());
 			}
 		}
 
@@ -163,23 +179,5 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				CreateFeedback(translationData.SourceSegments, translationData, i, currentSegmentPair);
 			}
 		}
-
-		private void CreateFeedback(List<string> sources, TranslationData targetSegmentData, int i, ISegmentPair currentSegmentPair)
-		{
-			var currentSegmentId = currentSegmentPair?.Properties.Id;
-
-			if (currentSegmentId != null)
-			{
-				CreateFeedbackEntry(currentSegmentId.Value, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
-					sources[i]);
-			}
-			else
-			{
-				CreateFeedbackEntry(ActiveDocument.ActiveSegmentPair.Properties.Id, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
-					ActiveDocument.ActiveSegmentPair.Source.ToString());
-			}
-		}
-
-		
 	}
 }

@@ -11,24 +11,15 @@ using Sdl.Core.Globalization;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
-	public class LanguageMappingsService: ILanguageMappingsService
+	public class LanguageMappingsService : ILanguageMappingsService
 	{
 		private readonly ITranslationService _translationService;
-		private SubscriptionInfo _subscriptionInfo;
 		private List<MTCloudDictionary> _dictionaries;
+		private SubscriptionInfo _subscriptionInfo;
 
 		public LanguageMappingsService(ITranslationService translationService)
 		{
 			_translationService = translationService;
-		}
-
-		public SubscriptionInfo SubscriptionInfo
-		{
-			get
-			{
-				return _subscriptionInfo ?? (_subscriptionInfo = Task.Run(async () =>
-					await _translationService.GetLanguagePairs(_translationService.ConnectionService.Credential.AccountId)).Result);
-			}
 		}
 
 		public List<MTCloudDictionary> Dictionaries
@@ -37,9 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				if (_dictionaries == null)
 				{
-					var accountId = _translationService.ConnectionService.Credential.AccountId;
-					var result = Task.Run(async () => await _translationService.GetDictionaries(accountId)).Result;
-
+					var result = Task.Run(async () => await _translationService.GetDictionaries()).Result;
 					_dictionaries = result?.Dictionaries;
 				}
 
@@ -47,51 +36,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		/// <summary>
-		/// Gets a list of the available translation models for the MT Cloud language pair
-		/// </summary>
-		/// <param name="mtCloudSource">The source MT Cloud language code</param>
-		/// <param name="mtCloudTarget">The target MT Cloud language code</param>
-		/// <param name="source">The source langauge name used by Studio (e.g. en-US, it-IT...)</param>
-		/// <param name="target">The target langauge name used by Studio (e.g. en-US, it-IT...)</param>
-		/// <returns>Returns a list of TranslationModel that correspond to the MT Cloud language pair</returns>
-		public List<TranslationModel> GetTranslationModels(MTCloudLanguage mtCloudSource, MTCloudLanguage mtCloudTarget, string source, string target)
+		public SubscriptionInfo SubscriptionInfo
 		{
-			var translationModels = new List<TranslationModel>();
-			
-			if (SubscriptionInfo?.LanguagePairs == null)
+			get
 			{
-				return null;
+				return _subscriptionInfo = _subscriptionInfo ?? Task.Run(async () =>
+					await _translationService.GetLanguagePairs()).Result;
 			}
-
-			var models = SubscriptionInfo?.LanguagePairs.Where(a => mtCloudSource.CodeName.Equals(a.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase)
-			                                             && mtCloudTarget.CodeName.Equals(a.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase));
-
-			foreach (var model in models)
-			{
-				translationModels.Add(new TranslationModel
-				{
-					Model = model.Model,
-					MTCloudLanguagePair = model,
-					DisplayName = $"{model.SourceLanguageId}-{model.TargetLanguageId} {model.DisplayName}",
-					Source = source,
-					Target = target
-				});
-			}
-
-			if (translationModels.Count == 0)
-			{
-				translationModels.Add(new TranslationModel
-				{
-					Model = null,
-					MTCloudLanguagePair = null,
-					DisplayName = PluginResources.Message_No_model_available,
-					Source = source,
-					Target = target
-				});
-			}
-
-			return translationModels;
 		}
 
 		/// <summary>
@@ -107,7 +58,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (Dictionaries != null)
 			{
 				var dictionaries = Dictionaries.Where(a =>
-					a.Source.Equals(mtCloudSource.CodeName, StringComparison.InvariantCultureIgnoreCase) && 
+					a.Source.Equals(mtCloudSource.CodeName, StringComparison.InvariantCultureIgnoreCase) &&
 						a.Target.Equals(mtCloudTarget.CodeName, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
 				if (dictionaries.Any())
@@ -153,6 +104,53 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return languageMappings;
+		}
+
+		/// <summary>
+		/// Gets a list of the available translation models for the MT Cloud language pair
+		/// </summary>
+		/// <param name="mtCloudSource">The source MT Cloud language code</param>
+		/// <param name="mtCloudTarget">The target MT Cloud language code</param>
+		/// <param name="source">The source langauge name used by Studio (e.g. en-US, it-IT...)</param>
+		/// <param name="target">The target langauge name used by Studio (e.g. en-US, it-IT...)</param>
+		/// <returns>Returns a list of TranslationModel that correspond to the MT Cloud language pair</returns>
+		public List<TranslationModel> GetTranslationModels(MTCloudLanguage mtCloudSource, MTCloudLanguage mtCloudTarget, string source, string target)
+		{
+			var translationModels = new List<TranslationModel>();
+
+			if (SubscriptionInfo?.LanguagePairs == null)
+			{
+				return null;
+			}
+
+			var models = SubscriptionInfo?.LanguagePairs.Where(a => mtCloudSource.CodeName.Equals(a.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase)
+														 && mtCloudTarget.CodeName.Equals(a.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase));
+
+			foreach (var model in models)
+			{
+				translationModels.Add(new TranslationModel
+				{
+					Model = model.Model,
+					MTCloudLanguagePair = model,
+					DisplayName = $"{model.SourceLanguageId}-{model.TargetLanguageId} {model.DisplayName}",
+					Source = source,
+					Target = target
+				});
+			}
+
+			if (translationModels.Count == 0)
+			{
+				translationModels.Add(new TranslationModel
+				{
+					Model = null,
+					MTCloudLanguagePair = null,
+					DisplayName = PluginResources.Message_No_model_available,
+					Source = source,
+					Target = target
+				});
+			}
+
+			return translationModels;
 		}
 
 		private static Image SetLanguageFlag(CultureInfo cultureInfo)
