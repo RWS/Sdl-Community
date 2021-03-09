@@ -3,13 +3,11 @@ using System.Linq;
 using System.Windows.Interop;
 using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
-using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using LogManager = NLog.LogManager;
 
@@ -23,29 +21,27 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
+		public bool SupportsEditing => true;
+		public string TypeDescription => PluginResources.Plugin_NiceName;
 		public string TypeName => PluginResources.Plugin_NiceName;
 
-		public string TypeDescription => PluginResources.Plugin_NiceName;
-
-		public bool SupportsEditing => true;		
-		
 		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			//TODO: Instantiate the new Rate it View part
 			try
 			{
-				var uri = new Uri($"{Constants.MTCloudUriScheme}://");				
+				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
 				var connectionService = new ConnectionService(owner, new VersionService(), StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
-				
-				var credential = connectionService.GetCredential(credentialStore);								
+
+				var credential = connectionService.GetCredential(credentialStore);
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);
 
 				if (!connectionResult.Item1)
 				{
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
-				
+
 				connectionService.SaveCredential(credentialStore);
 
 				var editorController = StudioInstance.GetEditorController();
@@ -55,9 +51,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
 					languageProvider,
 					editorController, true);
-								
-				return new ITranslationProvider[] { provider };
 
+				return new ITranslationProvider[] { provider };
 			}
 			catch (Exception e)
 			{
@@ -65,17 +60,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				throw;
 			}
 		}
-		
+
 		[STAThread]
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			try
-			{				
+			{
 				if (!(translationProvider is SdlMTCloudTranslationProvider provider))
 				{
 					return false;
 				}
-				
+
 				provider.TranslationService.ConnectionService.Owner = owner;
 				var connectionResult = provider.TranslationService.ConnectionService.EnsureSignedIn(provider.TranslationService.ConnectionService.Credential);
 
@@ -89,12 +84,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				var optionsWindow = GetOptionsWindow(owner);
 				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs.ToList());
 				optionsWindow.DataContext = optionsViewModel;
-				
+
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
-				{														
+				{
 					return true;
-				}							
+				}
 			}
 			catch (Exception e)
 			{
@@ -104,15 +99,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return false;
 		}
 
-		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
+		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
+			ITranslationProviderCredentialStore credentialStore)
 		{
-			if (translationProviderUri == null)
-			{
-				throw new ArgumentNullException(nameof(translationProviderUri));
-			}
-			
-			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
-			return supportsProvider;
+			return false;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
@@ -126,11 +116,16 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			};
 			return info;
 		}
-		
-		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
-			ITranslationProviderCredentialStore credentialStore)
+
+		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			return false;
+			if (translationProviderUri == null)
+			{
+				throw new ArgumentNullException(nameof(translationProviderUri));
+			}
+
+			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
+			return supportsProvider;
 		}
 
 		private static OptionsWindow GetOptionsWindow(IWin32Window owner)
@@ -141,6 +136,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				Owner = owner.Handle
 			};
 			return window;
-		}		
+		}
 	}
 }

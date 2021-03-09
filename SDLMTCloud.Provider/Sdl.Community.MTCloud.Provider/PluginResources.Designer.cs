@@ -73,6 +73,16 @@ namespace Sdl.Community.MTCloud.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon add_dictionary {
+            get {
+                object obj = ResourceManager.GetObject("add_dictionary", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon add_langcode {
             get {
                 object obj = ResourceManager.GetObject("add_langcode", resourceCulture);
@@ -452,6 +462,33 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No dictionary has been selected.
+        /// </summary>
+        public static string No_dictionary_has_been_selected {
+            get {
+                return ResourceManager.GetString("No_dictionary_has_been_selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation complete.
+        /// </summary>
+        public static string Operation_complete {
+            get {
+                return ResourceManager.GetString("Operation_complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation failed.
+        /// </summary>
+        public static string Operation_failed {
+            get {
+                return ResourceManager.GetString("Operation_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  (original MT Cloud translation is missing).
         /// </summary>
         public static string OriginalMtCloudTranslationMissing {
@@ -819,6 +856,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("TellMe1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term has been successfully added to the current dictionary.
+        /// </summary>
+        public static string The_term_has_been_successfully_added_to_the_current_dictionary {
+            get {
+                return ResourceManager.GetString("The_term_has_been_successfully_added_to_the_current_dictionary", resourceCulture);
             }
         }
         
