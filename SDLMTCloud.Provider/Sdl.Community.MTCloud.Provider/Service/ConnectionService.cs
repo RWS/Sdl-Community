@@ -29,6 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public ConnectionService(IWin32Window owner, VersionService versionService, LanguageCloudIdentityApi languageCloudIdentityApi, IHttpClient httpClient)
 		{
 			_httpClient = httpClient;
+			_httpClient.SetLogger(_logger);
 
 			Owner = owner;
 			VersionService = versionService;

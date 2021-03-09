@@ -18,7 +18,7 @@ namespace Sdl.Community.MTCloud.Provider
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
 		private static EditorController _editorController;
-		public static IHttpClient Client { get; private set; }
+		public static IHttpClient Client { get; } = new HttpClient();
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; } = new();
 
@@ -70,7 +70,6 @@ namespace Sdl.Community.MTCloud.Provider
 		public void Execute()
 		{
 			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			Client = new HttpClient();
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 	}
