@@ -737,7 +737,7 @@
 	  <value>Open folder in explorer?</value>
   </data>
   <data name="Message_TranscreateReportsCreatedSuccessfully" xml:space="preserve">
-	  <value>The transcreate reports have been created successfully.</value>
+	  <value>The Transcreate reports have been created successfully.</value>
   </data>
   <data name="Warning_Message_ProjectFolderAlreadyExists" xml:space="preserve">
 	  <value>The project folder already exists!</value>
@@ -747,5 +747,11 @@
   </data>
   <data name="Warning_Message_ProjectNameSuffixCannotBeNull" xml:space="preserve">
 	  <value>The project name suffix cannot be null!</value>
+  </data>
+  <data name="Warning_Message_ProjectAlreadyTranscreateProject" xml:space="preserve">
+	  <value>The project has already been converted to a Transcreate project.</value>
+  </data>
+  <data name="Wanring_Message_CloseAllProjectDocumentBeforeProceeding" xml:space="preserve">
+	  <value>Close all documents from the editor that are associated with the selected project before proceeding.</value>
   </data>
 </root>

@@ -43,6 +43,17 @@ namespace Trados.Transcreate.Actions
 				return;
 			}
 
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == selectedProject.Id))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
+			}
+
 			var action = selectedProject is BackTranslationProject
 				? Enumerators.Action.ExportBackTranslation
 				: Enumerators.Action.Export;
@@ -92,7 +103,7 @@ namespace Trados.Transcreate.Actions
 			_projectAutomationService = new ProjectAutomationService(
 				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
 			_projectSettingsService = new ProjectSettingsService();
-			
+
 			Enabled = false;
 		}
 

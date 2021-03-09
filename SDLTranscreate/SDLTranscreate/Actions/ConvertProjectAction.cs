@@ -39,6 +39,23 @@ namespace Trados.Transcreate.Actions
 
 		protected override void Execute()
 		{
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+			if (selectedProject == null)
+			{
+				return;
+			}
+			
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == selectedProject.GetProjectInfo().Id.ToString()))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
+			}
+
 			// set the default settings for creating the xliff from the sdlxliff
 			// these should not be taken from the users settings
 			var settings = GetSettings();
@@ -54,11 +71,18 @@ namespace Trados.Transcreate.Actions
 			var action = Enumerators.Action.Convert;
 			var workFlow = Enumerators.WorkFlow.Internal;
 
-			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
-			var newProjectLocalFolder = selectedProject?.GetProjectInfo().LocalProjectFolder + "-T";
+			
+			var newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
 			if (Directory.Exists(newProjectLocalFolder))
 			{
 				MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder, 
+					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+
+			if (selectedProject.GetProjectInfo().ProjectOrigin == Constants.ProjectOrigin_TranscreateProject)
+			{
+				MessageBox.Show(PluginResources.Warning_Message_ProjectAlreadyTranscreateProject,
 					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
@@ -73,7 +97,7 @@ namespace Trados.Transcreate.Actions
 				MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
-
+		
 			_controllers.TranscreateController.UpdateProjectData(taskContext);
 		}
 	
@@ -123,7 +147,15 @@ namespace Trados.Transcreate.Actions
 
 		private void SetEnabled()
 		{
-			Enabled = _controllers.ProjectsController.SelectedProjects.Count() == 1;
+			if (_controllers.ProjectsController.SelectedProjects.Count() != 1)
+			{
+				Enabled = false;
+				return;
+			}
+			
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+
+			Enabled = selectedProject?.GetProjectInfo().ProjectOrigin != Constants.ProjectOrigin_TranscreateProject;
 		}
 	}
 }

@@ -51,12 +51,23 @@ namespace Trados.Transcreate.Actions
 			{
 				return;
 			}
-
+			
 			var studioProject = _controllers.ProjectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
 			if (studioProject == null)
 			{
 				return;
+			}
+
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == project.Id))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
 			}
 
 			var action = Enumerators.Action.CreateBackTranslation;
@@ -142,7 +153,7 @@ namespace Trados.Transcreate.Actions
 			SetEnabled(e.SelectedProject);
 		}
 
-		private void SetEnabled(Interfaces.IProject selectedProject)
+		private void SetEnabled(IProject selectedProject)
 		{
 			Enabled = selectedProject is Project && !(selectedProject is BackTranslationProject);
 		}

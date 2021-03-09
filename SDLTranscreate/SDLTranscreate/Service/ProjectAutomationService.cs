@@ -240,7 +240,7 @@ namespace Trados.Transcreate.Service
 				SourceLanguage = newSourceLanguage,
 				TargetLanguages = new Language[] { newTargetLanguage },
 				DueDate = projectInfo.DueDate,
-				ProjectOrigin = "Back-Translation project",
+				ProjectOrigin = Constants.ProjectOrigin_BackTranslationProject,
 				IconPath = iconPath
 			};
 
@@ -528,7 +528,7 @@ namespace Trados.Transcreate.Service
 
 		private bool IsBackTranslationProject(string projectOrigin)
 		{
-			return string.Compare(projectOrigin, "Back-Translation project",
+			return string.Compare(projectOrigin, Constants.ProjectOrigin_BackTranslationProject,
 				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 

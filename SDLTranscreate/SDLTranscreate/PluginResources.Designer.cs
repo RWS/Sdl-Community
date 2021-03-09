@@ -922,7 +922,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The transcreate reports have been created successfully..
+        ///   Looks up a localized string similar to The Transcreate reports have been created successfully..
         /// </summary>
         internal static string Message_TranscreateReportsCreatedSuccessfully {
             get {
@@ -1704,6 +1704,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close all documents from the editor that are associated with the selected project before proceeding..
+        /// </summary>
+        internal static string Wanring_Message_CloseAllProjectDocumentBeforeProceeding {
+            get {
+                return ResourceManager.GetString("Wanring_Message_CloseAllProjectDocumentBeforeProceeding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File path cannot be null!.
         /// </summary>
         internal static string Warning_FilePathNull {
@@ -1727,6 +1736,15 @@ namespace Trados.Transcreate {
         internal static string Warning_Message_NoSourceFilesFound {
             get {
                 return ResourceManager.GetString("Warning_Message_NoSourceFilesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project has already been converted to a Transcreate project..
+        /// </summary>
+        internal static string Warning_Message_ProjectAlreadyTranscreateProject {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectAlreadyTranscreateProject", resourceCulture);
             }
         }
         

@@ -262,7 +262,10 @@ namespace Trados.Transcreate
 
 			if (taskContext.Project.Id != _projectsController.CurrentProject?.GetProjectInfo().Id.ToString())
 			{
-				_projectAutomationService.ActivateProject(fileBasedProject);
+				lock (_lockObject)
+				{
+					_projectAutomationService.ActivateProject(fileBasedProject);
+				}
 			}
 
 			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
@@ -1016,7 +1019,7 @@ namespace Trados.Transcreate
 
 		private bool IsBackTranslationProject(string projectOrigin)
 		{
-			return string.Compare(projectOrigin, "Back-Translation project",
+			return string.Compare(projectOrigin, Constants.ProjectOrigin_BackTranslationProject,
 				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 

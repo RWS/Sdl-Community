@@ -75,14 +75,6 @@ namespace Trados.Transcreate.Service
 				return null;
 			}
 
-			var documents = _controllers.EditorController.GetDocuments();
-			if (documents.Any())
-			{
-				message = PluginResources.WizardMessage_CloseOpenDocumentsInTheEditor;
-				return null;
-			}
-
-
 			_isCancelled = false;
 			_wizardWindow = new WizardWindow();
 			_wizardWindow.Loaded += WizardWindowLoaded;
