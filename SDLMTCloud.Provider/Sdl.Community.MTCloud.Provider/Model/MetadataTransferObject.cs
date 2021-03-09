@@ -9,4 +9,4 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public List<SegmentId> SegmentIds { get; set; }
 		public TranslationOriginInformation TranslationOriginInformation { get; set; }
 	}
-} 
+}
