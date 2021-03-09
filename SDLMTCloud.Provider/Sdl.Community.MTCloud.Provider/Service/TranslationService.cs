@@ -37,17 +37,40 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public IConnectionService ConnectionService { get; }
 		public Options Options { get; set; }
 
-		public async Task AddTermToDictionary(string term)
+		public async Task AddTermToDictionary(Term term)
 		{
 			CheckConnection();
 
 			var model = GetCorrespondingLanguageMappingModel();
 			var dictionaryId = model.SelectedDictionary.DictionaryId;
 
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/accounts/{ConnectionService.Credential.AccountId}/dictionaries/{dictionaryId}/terms");
+			if (string.IsNullOrWhiteSpace(dictionaryId))
+			{
+				_messageService.ShowWarningMessage(PluginResources.No_dictionary_has_been_selected, PluginResources.Operation_failed);
+				return;
+			}
+
+			var uri = new Uri($@"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/dictionaries/{dictionaryId}/terms");
 			var request = GetRequestMessage(HttpMethod.Post, uri);
 
-			var response = await SendRequest<string>(request);
+			var content = JsonConvert.SerializeObject(term);
+			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+
+			var httpResponseMessage = await SendRequest(request);
+
+			if (httpResponseMessage is not null)
+			{
+				if (httpResponseMessage.IsSuccessStatusCode)
+				{
+					_messageService.ShowInformationMessage(PluginResources.The_term_has_been_successfully_added_to_the_current_dictionary,
+						PluginResources.Operation_complete);
+				}
+				else
+				{
+					_messageService.ShowWarningMessage(httpResponseMessage.Content.ReadAsStringAsync().Result,
+						PluginResources.Operation_failed);
+				}
+			}
 		}
 
 		public async Task<MTCloudDictionaryInfo> GetDictionaries()
