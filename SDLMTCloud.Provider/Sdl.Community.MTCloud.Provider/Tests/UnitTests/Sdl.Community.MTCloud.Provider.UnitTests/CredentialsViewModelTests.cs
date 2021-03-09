@@ -83,7 +83,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					Email = credential.Name
 				};
 				connectionService.StudioSignIn()
-					.Returns(new Tuple<LanguageCloudIdentityApiModel, string>(languageCloudIdentityApiModel, string.Empty));
+					.Returns((languageCloudIdentityApiModel, string.Empty));
 			}
 			else
 			{
@@ -92,7 +92,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					AccessToken = credential.Token
 				};
 				connectionService.SignIn(Arg.Any<string>(), Arg.Any<string>())
-					.Returns(Task.FromResult(new Tuple<AuthorizationResponse, string>(authorizationResponse, string.Empty)));
+					.Returns(Task.FromResult((authorizationResponse, string.Empty)));
 			}
 
 			var userDetails = new UserDetails
@@ -102,7 +102,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				ClientId = type == Authentication.AuthenticationType.Client ? "abc123" : null,
 			};
 			connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>())
-				.Returns(Task.FromResult(new Tuple<UserDetails, string>(userDetails, string.Empty)));
+				.Returns(Task.FromResult((userDetails, string.Empty)));
 
 			var model = Substitute.For<CredentialsViewModel>(null, connectionService);
 			Assert.False(model.IsSignedIn, "Expected: 'False' Found: 'True'");
