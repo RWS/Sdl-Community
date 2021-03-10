@@ -124,7 +124,6 @@
   <ItemGroup>
     <Compile Include="FileType\FiletypeDetails.cs" />
     <Compile Include="FileType\TransitFilterComponentBuilder.cs" />
-    <Compile Include="FileType\TransitTmComponentBuilder.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

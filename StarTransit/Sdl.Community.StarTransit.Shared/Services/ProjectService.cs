@@ -196,15 +196,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (!pair.HasTm || string.IsNullOrEmpty(pair.TmPath)) return;
 			if (pair.StarTranslationMemoryMetadatas !=null && pair.StarTranslationMemoryMetadatas.Any())
 			{
-				//TODO: Fix this flow.
 				var localProjectFolder = project?.GetProjectInfo()?.LocalProjectFolder;
 				if (localProjectFolder != null)
 				{
 					var newTmPath = Path.Combine(localProjectFolder, Path.GetFileName(pair.TmPath));
-					var importer = new TransitTmImporter(pair, newTmPath);
+					var importer = new TransitTmImporter(pair, newTmPath,null);
 
 					importer.ImportStarTransitTm(pair.StarTranslationMemoryMetadatas, package);
-					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(), true, true, true));
+					var providerRef = importer.GetTranslationProviderReference(newTmPath,pair);
+					if(providerRef==null)return;
+					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true));
 				}
 			}
 			
