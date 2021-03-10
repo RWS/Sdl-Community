@@ -52,22 +52,23 @@ namespace Trados.Transcreate.Service
 			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
 			if (projectId != selectedProjectId)
 			{
-				if (CanActivateFileBasedProject())
-				{
-					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
-						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					activateProjectMethod?.Invoke(_projectsController, new object[] { project });
-				}
-				else
-				{
-					var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
-						BindingFlags.NonPublic | BindingFlags.Instance);
-					var projectInstance = internalProjectType?.GetValue(project);
+				_projectsController.ActivateProject(project);
+				//if (CanActivateFileBasedProject())
+				//{
+				//	var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+				//		BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				//	activateProjectMethod?.Invoke(_projectsController, new object[] { project });
+				//}
+				//else
+				//{
+				//	var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
+				//		BindingFlags.NonPublic | BindingFlags.Instance);
+				//	var projectInstance = internalProjectType?.GetValue(project);
 
-					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
-						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
-				}
+				//	var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+				//		BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				//	activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
+				//}
 			}
 
 			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
@@ -196,16 +197,16 @@ namespace Trados.Transcreate.Service
 		   );
 
 			var sourceGuids = GetProjectFileGuids(newProject.GetSourceLanguageFiles());
+			if (sourceGuids.Count > 0)
+			{
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
 
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.ConvertToTranslatableFormat
-			);
-
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.CopyToTargetLanguages
-			);
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.CopyToTargetLanguages);
+			}
 
 			newProject.Save();
 
@@ -260,19 +261,23 @@ namespace Trados.Transcreate.Service
 			// Remove any TMs that don't correspond to the language directions of the project
 			UpdateTmConfiguration(newProject);
 
+			var languageFileIds = newProject.GetSourceLanguageFiles().GetIds();
+
 			newProject.RunAutomaticTask(
-				newProject.GetSourceLanguageFiles().GetIds(),
+				languageFileIds,
 				AutomaticTaskTemplateIds.Scan);
 
 			var sourceGuids = GetProjectFileGuids(newProject.GetSourceLanguageFiles());
+			if (sourceGuids.Count > 0)
+			{
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
 
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
-
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.CopyToTargetLanguages);
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.CopyToTargetLanguages);
+			}
 
 			newProject.Save();
 			return await System.Threading.Tasks.Task.FromResult(newProject);

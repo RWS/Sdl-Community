@@ -400,8 +400,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				var iconPath = GetTranscreateIconPath();
 
 				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, iconPath, projectFiles, "T");
+				_controllers.ProjectsController.RefreshProjects();
+				
 				UpdateWizardContext(_newProject);
-
+				
 				var newProjectInfo = _newProject.GetProjectInfo();
 
 				_logReport.AppendLine();
@@ -908,7 +910,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				file.TargetLanguage = null;
 				file.Original = "Recommended";
 
-				//xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
+				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
 				for (var i = 1; i <= TaskContext.ConvertOptions.MaxAlternativeTranslations; i++)
 				{
 					var newFile = new FileTypeSupport.XLIFF.Model.File

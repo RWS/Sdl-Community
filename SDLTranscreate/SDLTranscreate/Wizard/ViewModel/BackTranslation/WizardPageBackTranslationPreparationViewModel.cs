@@ -268,7 +268,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				_logReport.AppendLine("Phase: " + phase + " - Started " + FormatDateTime(DateTime.UtcNow));
 
 				TextMessage = PluginResources.JobProcess_CreateBackTranslations;
-				TextMessageBrush = (SolidColorBrush) new BrushConverter().ConvertFrom(ForegroundProcessing);
+				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0,
 					PluginResources.JobProcess_ReadingProjectFiles);
@@ -329,8 +329,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 						TaskContext.FileBasedProject, projectFolderReference.LocalProjectFolder, languageName, iconPath,
 						sourceFiles, "BT");
 					projectFolderReference.Project = newStudioProject;
-					
-					
+
+					_controllers.ProjectsController.RefreshProjects();
+					_controllers.ProjectsController.ActivateProject(newStudioProject);
+
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit,
 						string.Format(PluginResources.Progres_Label_CreatedProject,
 							newStudioProject.GetProjectInfo().Name));
@@ -515,7 +517,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			catch (Exception ex)
 			{
 				LogManager.GetCurrentClassLogger().Error(ex);
-				
+
 				jobProcess.Errors.Add(ex);
 				Task.Run(() => UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message));
 				success = false;
@@ -548,7 +550,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			catch (Exception ex)
 			{
 				LogManager.GetCurrentClassLogger().Error(ex);
-				
+
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
