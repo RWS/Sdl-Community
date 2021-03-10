@@ -26,19 +26,19 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		ICredential GetCredential(string credentialString);
 
-		Tuple<bool, string> Connect(ICredential credential);
+		(bool, string) Connect(ICredential credential);
 
-		Tuple<bool, string> EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
+		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
 
 		bool IsValidStudioCredential(out string message);
 
 		bool IsValidCredential(out string message);
 
-		Tuple<LanguageCloudIdentityApiModel, string> StudioSignIn();
+		(LanguageCloudIdentityApiModel, string) StudioSignIn();
 
-		Task<Tuple<AuthorizationResponse, string>> SignIn(string resource, string content);
+		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
 
-		Task<Tuple<UserDetails, string>> GetUserDetails(string token, string resource);
+		Task<(UserDetails, string)> GetUserDetails(string resource);
 
 		void AddTraceHeader(HttpRequestMessage request);
 

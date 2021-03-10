@@ -2,7 +2,6 @@
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -191,7 +190,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (success.Item1) return;
 
 			_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " +
-			              $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
+						  $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
 
 			throw new Exception(PluginResources.Message_Connection_token_has_expired);
 		}
@@ -231,7 +230,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				{
 					_logger.Error($"{nameof(CheckTranslationStatus)}: {responseMessage.StatusCode}, {responseMessage.Content}");
 				}
-
 			} while (translationStatus.ToUpperInvariant() == Constants.INIT || translationStatus.ToUpperInvariant() == Constants.TRANSLATING);
 
 			return (await GetTranslationResult(id), qualityEstimation);
@@ -291,10 +289,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return request;
 		}
 
-		
-
-		
-
 		private async Task<HttpResponseMessage> GetTranslationResult(string id)
 		{
 			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}/content");
@@ -327,7 +321,5 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_logger.Info(PluginResources.SendFeedbackResponseFromServer, response?.StatusCode, responseAsString);
 			return response;
 		}
-
-		
 	}
 }
