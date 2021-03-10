@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				$"{Constants.SDLMachineTranslationCloudProvider} {PluginVersion} - {StudioVersion}.{Guid.NewGuid()}");
 		}
 
-		public Tuple<bool, string> Connect(ICredential credential)
+		public (bool, string) Connect(ICredential credential)
 		{
 			Credential = credential;
 
@@ -70,7 +71,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 				IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 				Credential.Token = signInResult.Item1?.AccessToken;
-				Credential.ValidTo = GetTokenValidTo(Credential.Token);
+				Credential.ValidTo = GetTokenValidTo();
 				Credential.Name = signInResult.Item1?.Email;
 				Credential.Password = null;
 				message = signInResult.Item2;
@@ -78,7 +79,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (IsSignedIn)
 				{
 					var userDetailsResult =
-						Task.Run(async () => await GetUserDetails(Credential.Token, Constants.MTCloudUriResourceUserDetails)).Result;
+						Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceUserDetails)).Result;
 					IsSignedIn = userDetailsResult.Item1 != null;
 					Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 					message = userDetailsResult.Item2;
@@ -102,12 +103,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var signInResult = Task.Run(async () => await SignIn(Constants.MTCloudUriResourceUserToken, content)).Result;
 						IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 						Credential.Token = signInResult.Item1?.AccessToken;
-						Credential.ValidTo = GetTokenValidTo(Credential.Token);
+						Credential.ValidTo = GetTokenValidTo();
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
 						{
-							var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, Constants.MTCloudUriResourceUserDetails)).Result;
+							var userDetailsResult = Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceUserDetails)).Result;
 							IsSignedIn = userDetailsResult.Item1 != null;
 							Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 							message = userDetailsResult.Item2;
@@ -126,13 +127,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						var signInResult = Task.Run(async () => await SignIn(Constants.MTCloudUriResourceClientToken, content)).Result;
 						IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 						Credential.Token = signInResult.Item1?.AccessToken;
-						Credential.ValidTo = GetTokenValidTo(Credential.Token);
+						Credential.ValidTo = GetTokenValidTo();
 
 						message = signInResult.Item2;
 
 						if (IsSignedIn)
 						{
-							var userDetailsResult = Task.Run(async () => await GetUserDetails(Credential.Token, Constants.MTCloudUriResourceClientDetails)).Result;
+							var userDetailsResult = Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceClientDetails)).Result;
 							IsSignedIn = userDetailsResult.Item1 != null;
 							Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
 							message = userDetailsResult.Item2;
@@ -141,7 +142,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				}
 			}
 
-			return new Tuple<bool, string>(IsSignedIn, message);
+			return (IsSignedIn, message);
 		}
 
 		public string CredentialToString()
@@ -149,14 +150,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary();
 		}
 
-		public Tuple<bool, string> EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
+		public (bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
 		{
 			Credential = credential;
 
 			if (Credential == null)
 			{
 				IsSignedIn = false;
-				return new Tuple<bool, string>(IsSignedIn, PluginResources.Message_Invalid_credentials);
+				return (IsSignedIn, PluginResources.Message_Invalid_credentials);
 			}
 
 			var result = Connect(Credential);
@@ -185,7 +186,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				Credential.AccountId = string.Empty;
 			}
 
-			return new Tuple<bool, string>(IsSignedIn, message);
+			return (IsSignedIn, message);
 		}
 
 		public ICredential GetCredential(string credentialString)
@@ -311,26 +312,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credential ?? new Credential();
 		}
 
-		public virtual async Task<Tuple<UserDetails, string>> GetUserDetails(string token, string resource)
+		public virtual async Task<(UserDetails, string)> GetUserDetails(string resource)
 		{
-			if (string.IsNullOrEmpty(token))
+			if (string.IsNullOrEmpty(Credential.Token))
 			{
-				return new Tuple<UserDetails, string>(null, PluginResources.Message_The_token_cannot_be_null);
+				return (null, PluginResources.Message_The_token_cannot_be_null);
 			}
 
 			if (string.IsNullOrEmpty(resource))
 			{
-				return new Tuple<UserDetails, string>(null, PluginResources.Message_The_resource_path_cannot_be_null);
+				return (null, PluginResources.Message_The_resource_path_cannot_be_null);
 			}
 
 			// there is a known issues with a timeout interfering with the credential authentication from the server side
 			// to mitigate this issue, we make two attempts to signin.
-			var userDetails = await GetUserDetailsAttempt(token, resource);
-			if (userDetails.Item1?.AccountId <= 0)
-			{
-				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
-				userDetails = await GetUserDetailsAttempt(token, resource);
-			}
+			var userDetails = await GetUserDetailsAttempt(resource);
+			if (!(userDetails.Item1?.AccountId <= 0)) return userDetails;
+
+			_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + PluginResources.Message_Second_Attempt + $" {resource}");
+			userDetails = await GetUserDetailsAttempt(resource);
 
 			return userDetails;
 		}
@@ -400,7 +400,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			credentialStore.AddCredential(uri, credentials);
 		}
 
-		public virtual async Task<Tuple<AuthorizationResponse, string>> SignIn(string resource, string content)
+		public virtual async Task<(AuthorizationResponse, string)> SignIn(string resource, string content)
 		{
 			// there is a known issues with a timeout interfering with the credential authentication from the server side
 			// to mitigate this issue, we make two attempts to signin.
@@ -414,11 +414,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return signIn;
 		}
 
-		public virtual Tuple<LanguageCloudIdentityApiModel, string> StudioSignIn()
+		public virtual (LanguageCloudIdentityApiModel, string) StudioSignIn()
 		{
 			if (LanguageCloudIdentityApi == null)
 			{
-				return new Tuple<LanguageCloudIdentityApiModel, string>(null, string.Empty);
+				return (null, string.Empty);
 			}
 
 			var success = LanguageCloudIdentityApi.TryLogin(out var message);
@@ -437,10 +437,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Email = LanguageCloudIdentityApi.LanguageCloudCredential?.Email,
 				};
 
-				return new Tuple<LanguageCloudIdentityApiModel, string>(model, message);
+				return (model, message);
 			}
 
-			return new Tuple<LanguageCloudIdentityApiModel, string>(null, message);
+			return (null, message);
 		}
 
 		private CredentialsWindow GetCredentialsWindow(IWin32Window owner)
@@ -455,40 +455,29 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credentialsWindow;
 		}
 
-		private DateTime GetTokenValidTo(string token)
+		private DateTime GetTokenValidTo(string token = null)
 		{
-			var tokenModel = ReadToken(token);
-
+			var tokenModel = ReadToken(token ?? Credential.Token);
 			return tokenModel?.ValidTo ?? DateTime.MinValue;
 		}
 
-		private async Task<Tuple<UserDetails, string>> GetUserDetailsAttempt(string token, string resource)
+		private HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri)
 		{
-			try
-			{
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
-				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+			var request = new HttpRequestMessage(httpMethod, uri);
+			request.Headers.Add("Authorization", $"Bearer {Credential.Token}");
+			AddTraceHeader(request);
+			return request;
+		}
 
-				request.Headers.Add("Authorization", $"Bearer {token}");
+		private async Task<(UserDetails, string)> GetUserDetailsAttempt(string resource)
+		{
+			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
+			var request = GetRequestMessage(HttpMethod.Get, uri);
 
-				AddTraceHeader(request);
+			var responseMessage = await _httpClient.SendRequest(request);
+			var userDetails = await _httpClient.GetResult<UserDetails>(responseMessage);
 
-				var responseMessage = await _httpClient.SendAsync(request);
-				var response = await responseMessage.Content.ReadAsStringAsync();
-
-				if (responseMessage.IsSuccessStatusCode)
-				{
-					var userDetails = JsonConvert.DeserializeObject<UserDetails>(response);
-					return new Tuple<UserDetails, string>(userDetails, responseMessage.ReasonPhrase);
-				}
-
-				return new Tuple<UserDetails, string>(null, responseMessage.ReasonPhrase);
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
-				return new Tuple<UserDetails, string>(null, ex.Message);
-			}
+			return (userDetails, responseMessage.ReasonPhrase);
 		}
 
 		private JwtSecurityToken ReadToken(string token)
@@ -519,34 +508,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		private async Task<Tuple<AuthorizationResponse, string>> SignInAttempt(string resource, string content)
+		private async Task<(AuthorizationResponse, string)> SignInAttempt(string resource, string content)
 		{
-			try
-			{
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
-				var request = new HttpRequestMessage(HttpMethod.Post, uri)
-				{
-					Content = new StringContent(content, new UTF8Encoding(), "application/json")
-				};
+			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
 
-				AddTraceHeader(request);
+			var request = GetRequestMessage(HttpMethod.Post, uri);
+			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 
-				var responseMessage = await _httpClient.SendAsync(request);
-				var response = await responseMessage.Content.ReadAsStringAsync();
+			var responseMessage = await _httpClient.SendRequest(request);
+			var authorizationResponse = await _httpClient.GetResult<AuthorizationResponse>(responseMessage);
 
-				if (responseMessage.IsSuccessStatusCode)
-				{
-					var authorizationResponse = JsonConvert.DeserializeObject<AuthorizationResponse>(response);
-					return new Tuple<AuthorizationResponse, string>(authorizationResponse, responseMessage.ReasonPhrase);
-				}
-
-				return new Tuple<AuthorizationResponse, string>(null, responseMessage.ReasonPhrase);
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + $"{ex.Message}\n {ex.StackTrace}");
-				return new Tuple<AuthorizationResponse, string>(null, ex.Message);
-			}
+			return (authorizationResponse, responseMessage.ReasonPhrase);
 		}
 	}
 }
