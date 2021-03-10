@@ -6,8 +6,10 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 {
+
+
 	[Action("Add Dictionary Term",
-		Name = "Add Dictionary Term",
+		Name = "Add Term to MT Cloud Dictionary",
 		Icon = "add_dictionary",
 		Description = "Add a term to the current dictionary")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 2, DisplayType.Default, "",
@@ -22,6 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 				Source = selection.Source.ToString(),
 				Target = selection.Target.ToString()
 			};
+
 			await MtCloudApplicationInitializer.TranslationService.AddTermToDictionary(term);
 		}
 	}
