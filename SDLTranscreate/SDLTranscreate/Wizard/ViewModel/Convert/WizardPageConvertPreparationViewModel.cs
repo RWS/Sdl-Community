@@ -908,8 +908,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				file.TargetLanguage = null;
 				file.Original = "Recommended";
 
-				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
-
+				//xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
 				for (var i = 1; i <= TaskContext.ConvertOptions.MaxAlternativeTranslations; i++)
 				{
 					var newFile = new FileTypeSupport.XLIFF.Model.File
@@ -932,6 +931,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 						{
 							if (segmentPair.Clone() is SegmentPair sp)
 							{
+								sp.Target = new Target();
+								sp.ConfirmationLevel = ConfirmationLevel.Unspecified;
+								sp.IsLocked = false;
+								sp.TranslationOrigin = null;
 								tu.SegmentPairs.Add(sp);
 							}
 						}

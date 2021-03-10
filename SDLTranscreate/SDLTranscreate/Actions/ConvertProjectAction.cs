@@ -63,7 +63,7 @@ namespace Trados.Transcreate.Actions
 			settings.ExportOptions.IncludeTranslations = true;
 			settings.ExportOptions.ExcludeFilterIds = new List<string>();
 
-			settings.ImportOptions.StatusTranslationUpdatedId = "Translated";
+			settings.ImportOptions.StatusTranslationUpdatedId = string.Empty;
 			settings.ImportOptions.StatusSegmentNotImportedId = string.Empty;
 			settings.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
 			settings.ImportOptions.OverwriteTranslations = true;
