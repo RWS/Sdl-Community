@@ -51,10 +51,10 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Fact]
-		public void IsTransitFile_ReturnsFalse()
+		public void IsTransitFile_ReturnsTrue()
 		{
 			var isTransitFile = _fileService.IsTransitFile(_tmFilePath);
-			Assert.False(isTransitFile);
+			Assert.True(isTransitFile);
 		}
 
 		[Theory]

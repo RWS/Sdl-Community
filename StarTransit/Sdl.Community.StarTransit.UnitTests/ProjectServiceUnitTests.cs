@@ -20,9 +20,8 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		public ProjectServiceUnitTests()
 		{
-			var fileTypeManager = Substitute.For<IFileTypeManager>();
-			_projectService = Substitute.For<ProjectService>(fileTypeManager, null);
 			var packageService = Substitute.For<PackageService>();
+			_projectService = Substitute.For<ProjectService>();
 			_starTransitConfiguration = new StarTransitConfiguration(packageService);
 		}
 

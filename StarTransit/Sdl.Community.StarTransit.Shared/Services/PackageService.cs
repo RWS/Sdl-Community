@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 
 namespace Sdl.Community.StarTransit.Shared.Services
@@ -19,6 +20,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
 		private static PackageModel _package = new PackageModel();
 		private const char LanguageTargetSeparator = ' ';
+		private readonly IFileService _fileService = new FileService();
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
@@ -216,7 +218,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			foreach (var file in targetFilesAndTmsPath)
 			{
-				var isTm = IsTmFile(file);
+				var isTm = _fileService.IsTransitTm(file);
 				if (isTm)
 				{
 					var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
@@ -239,29 +241,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
 			languagePair.TargetFile = pathToTargetFiles;
-		}
-
-		/// <summary>
-		/// Check if is a tm
-		/// </summary>
-		private bool IsTmFile(string file)
-		{
-			var result = false;
-			try
-			{
-				// TODO: open the file using StreamReader  (and break the execution after the ExtFileType)
-				var tmFile = XElement.Load(file);
-				var fileName = Path.GetFileName(file);
-				if (tmFile.Attribute("ExtFileType") != null || fileName.StartsWith("_AEXTR", StringComparison.InvariantCultureIgnoreCase))
-				{
-					result = true;
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"IsTmFile method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return result;
 		}
 
 		private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
@@ -294,7 +273,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			foreach (var file in filesAndTmsList)
 			{
-				var isTm = IsTmFile(file);
+				var isTm = _fileService.IsTransitTm(file);
 				if (isTm)
 				{
 					var metadata = new StarTranslationMemoryMetadata
@@ -302,7 +281,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						SourceFile = file
 					};
 					translationMemoryMetadataList.Add(metadata);
-
 				}
 				else
 				{

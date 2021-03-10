@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
@@ -22,20 +21,21 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly List<StarTranslationMemoryMetadata> _machineTransList;
 		private TranslationProviderConfiguration _tmConfig;
 		private MessageModel _messageModel;
-		private readonly IFileTypeManager _fileTypeManager;
 		private readonly ProjectsController _projectsController;
 		private readonly List<ProjectFile> _targetProjectFiles;
 		private readonly string _iconPath;
-		
-		public ProjectService(IFileTypeManager fileTypeManager, Helpers helpers)
-		{
-			_fileTypeManager = fileTypeManager;
-			if (helpers != null)
-			{
-				_projectsController = helpers.GetProjectsController();
-				_iconPath = string.IsNullOrEmpty(_iconPath) ? helpers.GetIconPath() : _iconPath;
-			}
+		private readonly IFileService _fileService;
 
+		public ProjectService(Helpers helpers):this()
+		{
+			if (helpers == null) return;
+			_projectsController = helpers.GetProjectsController();
+			_iconPath = string.IsNullOrEmpty(_iconPath) ? helpers.GetIconPath() : _iconPath;
+		}
+
+		public ProjectService()
+		{
+			_fileService = new FileService();
 			_messageModel = new MessageModel();
 			_penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
 			_machineTransList = new List<StarTranslationMemoryMetadata>();
@@ -55,7 +55,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public virtual MessageModel UpdateProjectSettings(IProject project)
 		{
-			var fileBasedProject = ((FileBasedProject)project);
+			var fileBasedProject = (FileBasedProject)project;
 			UpdateTmSettings(project);
 			fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
 
@@ -85,7 +85,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		{
 			try
 			{
-				var target = GetTargetLanguages(package.LanguagePairs);
+				var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
 
 				var projectInfo = new ProjectInfo
 				{
@@ -148,6 +148,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				foreach (var pair in package.LanguagePairs)
 				{
+					if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
+					{
+						_messageModel.IsProjectCreated = false;
+						_messageModel.Message =
+							"Project was not created correctly because no target files were found in the package!";
+						_messageModel.Title = "Informative message";
+						return _messageModel;
+					}
+
 					if (pair.CreateNewTm)
 					{
 						//TODO:Investigate and refactor
@@ -173,15 +182,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					// Import language pair TM if any
 					ImportLanguagePairTm(pair, newProject,package);
-
-					if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
-					{
-						_messageModel.IsProjectCreated = false;
-						_messageModel.Message =
-							"Project was not created correctly because no target files were found in the package!";
-						_messageModel.Title = "Informative message";
-						return _messageModel;
-					}
 
 					_targetProjectFiles?.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
 					_messageModel = UpdateProjectSettings(newProject);
@@ -264,19 +264,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (!hasMtMemories) return;
 			starTmMetadata.TMPenalty = 1;
 			_machineTransList.Add(starTmMetadata);
-		}
-
-		//TODO: Use the method from file service.
-		private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
-		{
-			var targetLanguageList = new List<Language>();
-			foreach (var pair in languagePairs)
-			{
-				var language = new Language(pair.TargetLanguage);
-				targetLanguageList.Add(language);
-			}
-
-			return targetLanguageList.ToArray();
 		}
 
 		// Update the translation memory settings

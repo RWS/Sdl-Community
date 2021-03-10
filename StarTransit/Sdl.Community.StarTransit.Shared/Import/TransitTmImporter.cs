@@ -140,7 +140,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// Create temporary bilingual files (sdlxliff) used to import the information
 		/// in Studio translation memories
 		/// </summary>
-		/// TODO: Write UT
 		private string CreateTemporarySdlXliffs(List<StarTranslationMemoryMetadata> starTransitTms, PackageModel package)
 		{
 			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTms[0].TargetFile));
@@ -158,7 +157,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			};
 
 			var newProject =
-				new FileBasedProject(projectInfo,new ProjectTemplateReference(package.ProjectTemplate.Uri)); // TODO: Use interface for final implementation
+				new FileBasedProject(projectInfo,new ProjectTemplateReference(package.ProjectTemplate.Uri));
 			newProject.AddFiles(sourceTmFiles);
 			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
 			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
@@ -172,6 +171,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages
 				});
+			if (taskSequence.Status == TaskStatus.Failed)
+			{
+				throw new Exception("Failed to create xliff for corresponding Transit TMs");
+			}
 			return pathToExtractFolder;
 		}
 
