@@ -138,10 +138,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 						|| _exportOptions.ExcludeFilterIds.Exists(a => a == status)
 						|| _exportOptions.ExcludeFilterIds.Exists(a => a == match))
 					{
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(status, segmentPairInfo, match);
 						continue;
 					}
 				}
@@ -149,9 +146,9 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				SegmentVisitor.VisitSegment(segmentPair.Source);
 				if (SegmentVisitor.HasRevisions)
 				{
-					throw new Exception(PluginResources.Message_UnableToProcessFileWithTrackChanges +
-										Environment.NewLine +
-										PluginResources.Message_AccecptRejectTrackChangesBeforeExporting);
+					//throw new Exception(PluginResources.Message_UnableToProcessFileWithTrackChanges +
+										//Environment.NewLine +
+										//PluginResources.Message_AccecptRejectTrackChangesBeforeExporting);
 				}
 
 				var sourceElements = SegmentVisitor.Elements;
@@ -180,9 +177,9 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				SegmentVisitor.VisitSegment(segmentPair.Target);
 				if (SegmentVisitor.HasRevisions)
 				{
-					throw new Exception(PluginResources.Message_UnableToProcessFileWithTrackChanges +
-										Environment.NewLine +
-										PluginResources.Message_AccecptRejectTrackChangesBeforeExporting);
+					//throw new Exception(PluginResources.Message_UnableToProcessFileWithTrackChanges +
+										//Environment.NewLine +
+										//PluginResources.Message_AccecptRejectTrackChangesBeforeExporting);
 				}
 				var targetElements = SegmentVisitor.Elements;
 				if (SegmentVisitor.Comments.Count > 0)
@@ -208,16 +205,21 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				};
 				transUnit.SegmentPairs.Add(newSegmentPair);
 
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+				AddWordCounts(status, segmentPairInfo, match);
 			}
 
 			if (transUnit.SegmentPairs.Count > 0)
 			{
 				file.Body.TransUnits.Add(transUnit);
 			}
+		}
+
+		private void AddWordCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 		}
 
 		public override void FileComplete()
