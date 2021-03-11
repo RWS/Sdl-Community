@@ -81,63 +81,55 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return _messageModel;
 		}
 
-		public MessageModel CreateProject(PackageModel package)
+		public (MessageModel, IProject) CreateProject(PackageModel package)
 		{
-			try
+			var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
+
+			var projectInfo = new ProjectInfo
 			{
-				var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
+				Name = package.Name,
+				LocalProjectFolder = package.Location,
+				SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
+				TargetLanguages = target,
+				DueDate = package.DueDate,
+				ProjectOrigin = "Star Transit project",
+				IconPath = _iconPath
+			};
 
-				var projectInfo = new ProjectInfo
-				{
-					Name = package.Name,
-					LocalProjectFolder = package.Location,
-					SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
-					TargetLanguages = target,
-					DueDate = package.DueDate,
-					ProjectOrigin = "Star Transit project",
-					IconPath = _iconPath
-				};
+			var newProject = CreateNewProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
 
-				var newProject = CreateNewProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
-				
-				if (package.Customer != null)
+			if (package.Customer != null)
+			{
+				((FileBasedProject) newProject).SetCustomer(package.Customer);
+			}
+
+			//Add StarTransit package source files. The same on all language pairs
+			newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
+
+			//set the file role(user to display project details in Studio view)
+			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
+			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
+			_tmConfig = newProject.GetTranslationProviderConfiguration();
+
+			_messageModel = SetLanguagePairInformation(newProject, package);
+
+			if (_messageModel?.Message is null)
+			{
+				if (Directory.Exists(newProject?.GetProjectInfo()?.LocalProjectFolder))
 				{
-					((FileBasedProject)newProject).SetCustomer(package.Customer);
+					CreateMetadataFolder(package.Location, package.PathToPrjFile);
+					_projectsController?.RefreshProjects();
 				}
 
-				//Add StarTransit package source files. The same on all language pairs
-				newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
-
-				//set the file role(user to display project details in Studio view)
-				var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
-				newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
-
-				_tmConfig = newProject.GetTranslationProviderConfiguration();
-
-				_messageModel = SetLanguagePairInformation(newProject, package);
-
-				if (_messageModel?.Message is null)
+				if (_messageModel != null)
 				{
-					if (Directory.Exists(newProject?.GetProjectInfo()?.LocalProjectFolder))
-					{
-						CreateMetadataFolder(package.Location, package.PathToPrjFile);
-						_projectsController?.RefreshProjects();
-					}
-
-					if (_messageModel != null)
-					{
-						_messageModel.IsProjectCreated = true;
-						_messageModel.Message = "Project was successfully created!";
-						_messageModel.Title = "Informative message";
-					}
+					_messageModel.IsProjectCreated = true;
+					_messageModel.Message = "Project was successfully created!";
+					_messageModel.Title = "Informative message";
 				}
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreateModel method: {ex.Message}\n {ex.StackTrace}");
-				return null;
-			}
-			return _messageModel;
+
+			return (_messageModel, newProject);
 		}
 
 		private MessageModel SetLanguagePairInformation(

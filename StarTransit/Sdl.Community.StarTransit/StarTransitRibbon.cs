@@ -95,6 +95,10 @@ namespace Sdl.Community.StarTransit
 				{
 					Directory.Delete(tempFolder, true);
 				}
+				catch (Exception e)
+				{
+					Log.Logger.Error(e);
+				}
 			}
 			Directory.CreateDirectory(pathToTempPackageFolder);
 			return pathToTempPackageFolder;

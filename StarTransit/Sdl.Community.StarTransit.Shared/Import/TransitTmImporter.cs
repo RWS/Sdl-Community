@@ -183,7 +183,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// </summary>
 		private string CreateFolderToExtract(string pathToTemp)
 		{
-			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract");
+			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract",Guid.NewGuid().ToString());
+
 			Directory.CreateDirectory(pathToExtractFolder);
 
 			return pathToExtractFolder;
