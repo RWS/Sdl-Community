@@ -72,6 +72,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.Import
 			}
 		}
 
+		public string ExcludeSegmentsToolTip => PluginResources.ToolTip_Label_ExcludeSegments_Import;
+
 		public List<FilterItem> FilterItems
 		{
 			get => _filterItems;

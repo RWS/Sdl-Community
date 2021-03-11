@@ -763,4 +763,10 @@
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ToolTip_Label_ExcludeSegments_Import" xml:space="preserve">
+	  <value>Exclude segments from being updated that match the properties selected.</value>
+  </data>
+  <data name="ToolTip_Label_ExcludeSegments_Export" xml:space="preserve">
+	  <value>Exclude segments from being exported that match the properties selected.</value>
+  </data>
 </root>

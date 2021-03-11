@@ -63,6 +63,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.Export
 
 		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
 
+		public string ExcludeSegmentsToolTip => PluginResources.ToolTip_Label_ExcludeSegments_Export;
+		
 		public List<FilterItem> FilterItems
 		{
 			get => _filterItems;

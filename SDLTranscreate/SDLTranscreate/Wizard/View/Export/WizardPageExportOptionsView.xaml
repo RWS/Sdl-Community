@@ -131,7 +131,17 @@
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 
-					<TextBlock VerticalAlignment="Center" Text="Exclude Segments" Style="{StaticResource TextBlockColor}" Margin="5,10,5,5"/>
+					<Grid Grid.Row="0" Margin="5,10,5,5">
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+							<TextBlock VerticalAlignment="Center" 
+							           Text="Exclude Segments" Style="{StaticResource TextBlockColor}" />
+							<Image  Margin="5,0,0,0" VerticalAlignment="Center" Stretch="UniformToFill"
+							        Width="16"  RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+							        Source="../../../Resources/information.png"
+							        ToolTip="{Binding ExcludeSegmentsToolTip, Mode=OneWay}"/>
+						</StackPanel>
+					</Grid>
+
 
 					<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
 				                Margin="5,0,5,0" 

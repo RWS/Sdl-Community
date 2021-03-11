@@ -1428,6 +1428,24 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude segments from being exported that match the properties selected..
+        /// </summary>
+        internal static string ToolTip_Label_ExcludeSegments_Export {
+            get {
+                return ResourceManager.GetString("ToolTip_Label_ExcludeSegments_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude segments from being updated that match the properties selected..
+        /// </summary>
+        internal static string ToolTip_Label_ExcludeSegments_Import {
+            get {
+                return ResourceManager.GetString("ToolTip_Label_ExcludeSegments_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If the selected SDLXLIFF files already exist in the Back-Translation project, then they will be re-imported, overwriting the existing ones..
         /// </summary>
         internal static string ToolTip_Option_OverwreteExistingBackTranslationFiles {
