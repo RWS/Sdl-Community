@@ -668,90 +668,99 @@
     <value>Creating Back-Translation Project</value>
   </data>
   <data name="Report_Label_CreateTranscreateProject" xml:space="preserve">
-	  <value>Create Transcreate project</value>
+    <value>Create Transcreate project</value>
   </data>
   <data name="Report_Label_ProjectCreation" xml:space="preserve">
-	  <value>Project Creation</value>
+    <value>Project Creation</value>
   </data>
   <data name="Report_Label_CreatedTranscreateProject" xml:space="preserve">
-	  <value>Created Transcreate project</value>
+    <value>Created Transcreate project</value>
   </data>
   <data name="Report_Label_UpdateBackTranslationProject" xml:space="preserve">
-	  <value>Update Back-Translation project</value>
+    <value>Update Back-Translation project</value>
   </data>
   <data name="Report_Label_UpdatedBackTranslationProject" xml:space="preserve">
-	  <value>Updated Back-Translation project</value>
+    <value>Updated Back-Translation project</value>
   </data>
   <data name="Report_Label_CreateBackTranslationProject" xml:space="preserve">
-	  <value>Create Back-Translation project</value>
+    <value>Create Back-Translation project</value>
   </data>
   <data name="Report_Label_CreatedBackTranslationProject" xml:space="preserve">
-	  <value>Created Back-Translation project</value>
+    <value>Created Back-Translation project</value>
   </data>
   <data name="Report_Label_ExportTranslations" xml:space="preserve">
-	  <value>Export Translations</value>
+    <value>Export Translations</value>
   </data>
   <data name="Report_Label_Export" xml:space="preserve">
-	  <value>Export</value>
+    <value>Export</value>
   </data>
   <data name="Report_Label_ExportedForTranslation" xml:space="preserve">
-	  <value>Exported for Translation</value>
+    <value>Exported for Translation</value>
   </data>
   <data name="Report_Label_ImportTranslations" xml:space="preserve">
-	  <value>Import Translations</value>
+    <value>Import Translations</value>
   </data>
   <data name="Report_Label_Import" xml:space="preserve">
-	  <value>Import</value>
+    <value>Import</value>
   </data>
   <data name="Report_Label_ImportedTranslations" xml:space="preserve">
-	  <value>Imported Translations</value>
+    <value>Imported Translations</value>
   </data>
   <data name="Report_Label_ExportBackTranslations" xml:space="preserve">
-	  <value>Export Back-Translations</value>
+    <value>Export Back-Translations</value>
   </data>
   <data name="Report_Label_ExportedForBackTranslation" xml:space="preserve">
-	  <value>Exported for Back-Translation</value>
+    <value>Exported for Back-Translation</value>
   </data>
   <data name="Report_Label_ImportBackTranslations" xml:space="preserve">
-	  <value>Import Back-Translations</value>
+    <value>Import Back-Translations</value>
   </data>
   <data name="Report_Label_ImportedBackTranslation" xml:space="preserve">
-	  <value>Imported Back-Translation</value>
+    <value>Imported Back-Translation</value>
   </data>
   <data name="Progres_Label_CreatingProject" xml:space="preserve">
-	  <value>Creating project...</value>
+    <value>Creating project...</value>
   </data>
   <data name="Progres_Label_CreatedProject" xml:space="preserve">
-	  <value>Created project: {0}</value>
+    <value>Created project: {0}</value>
   </data>
   <data name="Progres_Label_MergingProjectFolders" xml:space="preserve">
-	  <value>Merging project folders....</value>
+    <value>Merging project folders....</value>
   </data>
   <data name="Progres_Label_Translating" xml:space="preserve">
-	  <value>Translating....</value>
+    <value>Translating....</value>
   </data>
   <data name="Progres_Label_UpdatingTask" xml:space="preserve">
-	  <value>Updating task....</value>
+    <value>Updating task....</value>
   </data>
   <data name="Question_OpenFolderInExplorer" xml:space="preserve">
-	  <value>Open folder in explorer?</value>
+    <value>Open folder in explorer?</value>
   </data>
   <data name="Message_TranscreateReportsCreatedSuccessfully" xml:space="preserve">
-	  <value>The Transcreate reports have been created successfully.</value>
+    <value>The Transcreate reports have been created successfully.</value>
   </data>
   <data name="Warning_Message_ProjectFolderAlreadyExists" xml:space="preserve">
-	  <value>The project folder already exists!</value>
+    <value>The project folder already exists!</value>
   </data>
   <data name="Warning_Message_NoSourceFilesFound" xml:space="preserve">
-	  <value>No source files found!</value>
+    <value>No source files found!</value>
   </data>
   <data name="Warning_Message_ProjectNameSuffixCannotBeNull" xml:space="preserve">
-	  <value>The project name suffix cannot be null!</value>
+    <value>The project name suffix cannot be null!</value>
   </data>
   <data name="Warning_Message_ProjectAlreadyTranscreateProject" xml:space="preserve">
-	  <value>The project has already been converted to a Transcreate project.</value>
+    <value>The project has already been converted to a Transcreate project.</value>
   </data>
   <data name="Wanring_Message_CloseAllProjectDocumentBeforeProceeding" xml:space="preserve">
-	  <value>Close all documents from the editor that are associated with the selected project before proceeding.</value>
+    <value>Close all documents from the editor that are associated with the selected project before proceeding.</value>
+  </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

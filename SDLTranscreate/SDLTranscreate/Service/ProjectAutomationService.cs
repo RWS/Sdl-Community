@@ -52,23 +52,22 @@ namespace Trados.Transcreate.Service
 			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
 			if (projectId != selectedProjectId)
 			{
-				_projectsController.ActivateProject(project);
-				//if (CanActivateFileBasedProject())
-				//{
-				//	var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
-				//		BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				//	activateProjectMethod?.Invoke(_projectsController, new object[] { project });
-				//}
-				//else
-				//{
-				//	var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
-				//		BindingFlags.NonPublic | BindingFlags.Instance);
-				//	var projectInstance = internalProjectType?.GetValue(project);
+				if (CanActivateFileBasedProject())
+				{
+					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					activateProjectMethod?.Invoke(_projectsController, new object[] { project });
+				}
+				else
+				{
+					var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
+						BindingFlags.NonPublic | BindingFlags.Instance);
+					var projectInstance = internalProjectType?.GetValue(project);
 
-				//	var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
-				//		BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				//	activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
-				//}
+					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
+				}
 			}
 
 			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
