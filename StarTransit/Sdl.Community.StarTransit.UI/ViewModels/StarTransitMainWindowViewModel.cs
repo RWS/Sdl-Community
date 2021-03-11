@@ -313,20 +313,15 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				var messageModel = new MessageModel();
 
 				CloseAction();
-				var watch = new Stopwatch();
-				watch.Start();
 				if (isEmpty)
 				{
 					await Task.Run(() => messageModel = _projectService.CreateProject(packageModel));
-					watch.Stop();
-					var seconds = watch.Elapsed.TotalSeconds;
 				}
 				if (messageModel == null)
 				{
 					CanExecuteBack = CanExecuteCreate = false;
 					Active = false;
 					CloseAction();
-					Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 				}
 				else
 				{
@@ -334,7 +329,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 					Active = false;
 					CanExecuteBack = CanExecuteCreate = false;
 				}
-				Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 			}
 			catch (Exception ex)
 			{

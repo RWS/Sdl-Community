@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -39,7 +40,7 @@ namespace Sdl.Community.StarTransit
 			{
 				var fileDialog = new OpenFileDialog
 				{
-					Filter = @"Transit Project Package Files (*.ppf)|*.ppf"
+					Filter = "Transit Project Package Files (*.ppf)|*.ppf"
 				};
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult == DialogResult.OK)
@@ -71,17 +72,51 @@ namespace Sdl.Community.StarTransit
 			}
 		}  
 		
+		/// <summary>
+		/// We need to delete all the files from subfolders before deleteing the main directory. Otherwise sometimes it throws an error
+		/// </summary>
 		private string CreateTempPackageFolder()
 		{
 			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
 			var pathToTempPackageFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
 			
+			//Delete existing folder where we extract transit packages
 			if (Directory.Exists(tempFolder))
 			{
-				Directory.Delete(tempFolder, true);
+				try
+				{
+					DeleteDirectory(tempFolder);
+				}
+				catch (IOException)
+				{
+					Directory.Delete(tempFolder, true);
+				}
+				catch (UnauthorizedAccessException)
+				{
+					Directory.Delete(tempFolder, true);
+				}
 			}
 			Directory.CreateDirectory(pathToTempPackageFolder);
 			return pathToTempPackageFolder;
+		}
+
+		private void DeleteDirectory(string directoryPath)
+		{
+			//Delete all files from folder before deleting the folder
+			var files = Directory.GetFiles(directoryPath);
+			var dirs = Directory.GetDirectories(directoryPath);
+
+			foreach (var file in files)
+			{
+				File.SetAttributes(file, FileAttributes.Normal);
+				File.Delete(file);
+			}
+
+			foreach (var dir in dirs)
+			{
+				DeleteDirectory(dir);
+			}
+			Directory.Delete(directoryPath, false);
 		}
 	}
 
