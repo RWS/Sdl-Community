@@ -3,11 +3,14 @@ using System.Linq;
 using System.Windows.Interop;
 using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using LogManager = NLog.LogManager;
 
@@ -42,6 +45,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
 
+				var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
+				eventAggregator.Publish(new TranslationProviderAdded());
+
 				connectionService.SaveCredential(credentialStore);
 
 				var editorController = StudioInstance.GetEditorController();
@@ -57,8 +63,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			catch (Exception e)
 			{
 				_logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
-				throw;
 			}
+
+			return null;
 		}
 
 		[STAThread]
