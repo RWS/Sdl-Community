@@ -217,8 +217,8 @@
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
-    <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
-    <Compile Include="Service\Events\TranslationReceivedEventHandler.cs" />
+    <Compile Include="Events\ConfirmationLevelChangedEventHandler.cs" />
+    <Compile Include="Events\TranslationReceivedEventHandler.cs" />
     <Compile Include="Service\HttpClient.cs" />
     <Compile Include="Service\Interface\IMetadataSupervisor.cs" />
     <Compile Include="Service\Interface\IHttpClient.cs" />
@@ -245,6 +245,7 @@
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
+    <Compile Include="Events\TranslationProviderAdded.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
