@@ -63,8 +63,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			catch (Exception e)
 			{
 				_logger.Error($"{Constants.Browse} {e.Message}\n {e.StackTrace}");
-				throw;
 			}
+
+			return null;
 		}
 
 		[STAThread]

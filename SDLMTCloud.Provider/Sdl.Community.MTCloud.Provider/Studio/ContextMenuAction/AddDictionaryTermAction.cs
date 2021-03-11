@@ -27,6 +27,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 			Enabled = false;
 			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 
+			//TODO: move this functionality to its own class, sharing it with other features
+			//Because this object gets constructed before the EditorController has been initialized, we need to make sure that the subscription to the event happens only after the EditorController has had a chance to be initialized
+			//We cannot do this in the MTAppInitializer because this object gets constructed even before MtAppInit.Execute() is called
 			eventAggregator.GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(
 				_ => MtCloudApplicationInitializer.EditorController.ActiveDocumentChanged +=
 					(_, _) => EnableAction());
