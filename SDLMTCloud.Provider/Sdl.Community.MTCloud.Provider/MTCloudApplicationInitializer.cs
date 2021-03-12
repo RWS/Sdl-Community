@@ -18,6 +18,7 @@ namespace Sdl.Community.MTCloud.Provider
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
 		private static EditorController _editorController;
+		public static IMessageBoxService MessageService { get; } = new MessageBoxService();
 		public static IHttpClient Client { get; } = new HttpClient();
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; } = new CurrentViewDetector();
@@ -67,7 +68,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static void SetTranslationService(IConnectionService connectionService)
 		{
-			TranslationService = new TranslationService(connectionService, Client, new MessageBoxService());
+			TranslationService = new TranslationService(connectionService, Client, MessageService);
 
 			//TODO: start supervising when a QE enabled model has been chosen
 			MetadataSupervisor.StartSupervising(TranslationService);

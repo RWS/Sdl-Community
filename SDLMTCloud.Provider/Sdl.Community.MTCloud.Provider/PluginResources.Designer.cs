@@ -685,6 +685,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDL MT Cloud Provider is not added to the current project.
+        /// </summary>
+        public static string SDL_MT_Cloud_Provider_is_not_added_to_the_current_project {
+            get {
+                return ResourceManager.GetString("SDL_MT_Cloud_Provider_is_not_added_to_the_current_project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDL MT Cloud Language Mapping.
         /// </summary>
         public static string SDLMTCloud_Action_LanguageMapping_Description {
