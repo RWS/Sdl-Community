@@ -22,7 +22,7 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 
 			var target = new FileTarget
 			{
-				Name = "IATETerminologyProvider",
+				Name = "StarTransitLogs",
 				FileName = Path.Combine(logDirectoryPath, "StarTransitLogs.txt"),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};

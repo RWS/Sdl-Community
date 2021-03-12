@@ -5,7 +5,6 @@ using System.Xml;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
