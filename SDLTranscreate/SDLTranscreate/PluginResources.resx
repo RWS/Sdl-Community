@@ -123,7 +123,7 @@
   <data name="Message_AccecptRejectTrackChangesBeforeExporting" xml:space="preserve">
     <value>Accept/Reject all track changes before exporting to XLIFF format</value>
   </data>
-  <data name="Message_ActionWillRemoveAllProjectData" xml:space="preserve">
+  <data name="Message_ActionWillRemoveAllBackProjectData" xml:space="preserve">
     <value>This action will remove all back-projects from the selected project</value>
   </data>
   <data name="Message_DoYouWantToProceed" xml:space="preserve">
@@ -768,5 +768,8 @@
   </data>
   <data name="ToolTip_Label_ExcludeSegments_Export" xml:space="preserve">
 	  <value>Exclude segments from being exported that match the properties selected.</value>
+  </data>
+  <data name="Message_ActionWillRemoveAllProjectData" xml:space="preserve">
+	  <value>This action will remove all data related to the selected Transcreate project.</value>
   </data>
 </root>

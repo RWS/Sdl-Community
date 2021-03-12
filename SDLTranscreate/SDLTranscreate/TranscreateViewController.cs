@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -30,6 +31,7 @@ using Trados.Transcreate.Interfaces;
 using Trados.Transcreate.Model;
 using Trados.Transcreate.Model.ProjectSettings;
 using Trados.Transcreate.Service;
+using Trados.Transcreate.View;
 using Trados.Transcreate.ViewModel;
 using IProject = Trados.Transcreate.Interfaces.IProject;
 using LanguageDirectionInfo = Trados.Transcreate.Model.LanguageDirectionInfo;
@@ -51,8 +53,8 @@ namespace Trados.Transcreate
 		private List<IProject> _transcreateProjects;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
-		private ProjectFilesViewControl _projectFilesViewControl;
-		private ProjectsNavigationViewControl _projectsNavigationViewControl;
+		private ProjectFilesView _projectFilesView;
+		private ProjectsNavigationView _projectsNavigationView;
 		private ProjectFileActivityViewController _projectFileActivityViewController;
 		private ProjectsController _projectsController;
 		private EditorController _editorController;
@@ -101,37 +103,42 @@ namespace Trados.Transcreate
 
 		protected override IUIControl GetExplorerBarControl()
 		{
-			if (_projectsNavigationViewControl != null)
+			if (_projectsNavigationView != null)
 			{
-				return _projectsNavigationViewControl;
+				return _projectsNavigationView;
 			}
 
-			_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<IProject>(), _projectsController, _editorController);
+			_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<IProject>(), _projectsController,
+				_editorController, _projectAutomationService);
+
 			_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
 
-			_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
+			_projectsNavigationView = new ProjectsNavigationView();
+			_projectsNavigationView.DataContext = _projectsNavigationViewModel;
 
-			return _projectsNavigationViewControl;
+
+			return _projectsNavigationView;
 		}
 
 		protected override IUIControl GetContentControl()
 		{
-			if (_projectFilesViewControl != null)
+			if (_projectFilesView != null)
 			{
-				return _projectFilesViewControl;
+				return _projectFilesView;
 			}
 
-			_projectFilesViewModel = new ProjectFilesViewModel(null);
-			_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
-			_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
+			_projectFilesViewModel = new ProjectFilesViewModel(new List<ProjectFile>());
+			_projectFilesView = new ProjectFilesView();
+			_projectFilesView.DataContext = _projectFilesViewModel;
 
+
+			_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
 			_projectFilesViewModel.ProjectFileSelectionChanged += ProjectFilesViewModel_ProjectFileSelectionChanged;
 
 			UpdateProjectSelectionFromProjectsController();
+			InvalidateProjectsContainer();
 
-			_projectsNavigationViewModel.Projects = _transcreateProjects;
-
-			return _projectFilesViewControl;
+			return _projectFilesView;
 		}
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
@@ -188,26 +195,8 @@ namespace Trados.Transcreate
 
 			if (refresh || force)
 			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
-			}
-		}
-
-		public void InvalidateProjectsContainer()
-		{
-			if (_projectsNavigationViewModel != null)
-			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
-			}
-		}
-
-		public void InvalidateProjectFilesContainer(IProject project)
-		{
-			if (_projectFilesViewModel != null)
-			{
-				_projectFilesViewModel.ProjectFiles = new List<ProjectFile>();
-				_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
+				InvalidateProjectsContainer();
+				InvalidateProjectFilesContainer(_projectsNavigationViewModel.SelectedProject?.ProjectFiles ?? new List<ProjectFile>());
 			}
 		}
 
@@ -322,8 +311,9 @@ namespace Trados.Transcreate
 
 			UpdateProjectSettingsBundle(project);
 
-			InvalidateProjectFilesContainer(project);
+
 			InvalidateProjectsContainer();
+			InvalidateProjectFilesContainer(project.ProjectFiles);
 		}
 
 		public void UpdateBackTranslationProjectData(string parentProjectId, TaskContext taskContext)
@@ -1156,7 +1146,7 @@ namespace Trados.Transcreate
 					{
 						UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
 						InvalidateProjectsContainer();
-						InvalidateProjectFilesContainer(transcreateProject);
+						InvalidateProjectFilesContainer(transcreateProject.ProjectFiles);
 					}
 					else
 					{
@@ -1300,7 +1290,7 @@ namespace Trados.Transcreate
 					{
 						UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
 						InvalidateProjectsContainer();
-						InvalidateProjectFilesContainer(transcreateProject);
+						InvalidateProjectFilesContainer(transcreateProject.ProjectFiles);
 					}
 					else
 					{
@@ -1445,7 +1435,30 @@ namespace Trados.Transcreate
 			if (e.Active)
 			{
 				SetProjectFileActivityViewController();
-				_projectFilesViewModel.Refresh();
+				_projectFilesViewModel?.Refresh();
+			}
+		}
+
+		private void InvalidateProjectFilesContainer(List<ProjectFile> projectFiles)
+		{
+			Dispatcher.CurrentDispatcher.Invoke(
+				new Action(delegate { _projectFilesViewModel.ProjectFiles = new List<ProjectFile> { new ProjectFile() }; }),
+				DispatcherPriority.ContextIdle);
+			Dispatcher.CurrentDispatcher.Invoke(new Action(delegate { _projectFilesViewModel.ProjectFiles = projectFiles; }),
+				DispatcherPriority.ContextIdle);
+		}
+
+		public void InvalidateProjectsContainer()
+		{
+			Dispatcher.CurrentDispatcher.Invoke(
+				new Action(delegate { _projectsNavigationViewModel.Projects = new List<IProject>(); }),
+				DispatcherPriority.ContextIdle);
+			Dispatcher.CurrentDispatcher.Invoke(new Action(delegate { _projectsNavigationViewModel.Projects = _transcreateProjects; }),
+				DispatcherPriority.ContextIdle);
+
+			if (_projectsNavigationViewModel?.SelectedProject == null)
+			{
+				InvalidateProjectFilesContainer(new List<ProjectFile>());
 			}
 		}
 
@@ -1561,8 +1574,7 @@ namespace Trados.Transcreate
 
 			if (updated || updatedProjectSelection)
 			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
+				InvalidateProjectsContainer();
 
 				lock (_lockObject)
 				{

@@ -827,6 +827,15 @@ namespace Trados.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to This action will remove all back-projects from the selected project.
         /// </summary>
+        internal static string Message_ActionWillRemoveAllBackProjectData {
+            get {
+                return ResourceManager.GetString("Message_ActionWillRemoveAllBackProjectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will remove all data related to the selected Transcreate project..
+        /// </summary>
         internal static string Message_ActionWillRemoveAllProjectData {
             get {
                 return ResourceManager.GetString("Message_ActionWillRemoveAllProjectData", resourceCulture);

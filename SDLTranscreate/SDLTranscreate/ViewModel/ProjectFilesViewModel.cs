@@ -67,6 +67,7 @@ namespace Trados.Transcreate.ViewModel
 		public void Refresh()
 		{
 			OnPropertyChanged(nameof(ProjectFiles));
+			OnPropertyChanged(nameof(StatusLabel));
 		}
 
 		public List<ProjectFile> ProjectFiles

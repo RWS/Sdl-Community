@@ -37,7 +37,7 @@
 				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
 			</Style>
 
-			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFiles}">
+			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>

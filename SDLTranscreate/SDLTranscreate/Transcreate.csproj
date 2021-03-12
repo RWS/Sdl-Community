@@ -149,25 +149,7 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
-    <Compile Include="Controls\ProjectFileActivityViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProjectFileActivityViewControl.Designer.cs">
-      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ProjectFileActivityViewController.cs" />
-    <Compile Include="Controls\ProjectFilesViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProjectFilesViewControl.Designer.cs">
-      <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.Designer.cs">
-      <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\TextBoxWithEllipsis.cs" />
@@ -337,9 +319,6 @@
     <Compile Include="ViewModel\ProjectsNavigationViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\ProjectPropertiesView.xaml.cs">
-      <DependentUpon>ProjectPropertiesView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ProjectFileActivityView.xaml.cs">
       <DependentUpon>ProjectFileActivityView.xaml</DependentUpon>
     </Compile>
@@ -446,15 +425,6 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
-      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectFilesViewControl.resx">
-      <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectsNavigationViewControl.resx">
-      <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -616,10 +586,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ProjectPropertiesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
