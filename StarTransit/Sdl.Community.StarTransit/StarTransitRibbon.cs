@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
@@ -28,7 +27,7 @@ namespace Sdl.Community.StarTransit
 	public class StarTransitOpenPackageAction : AbstractAction
 	{
 		private IMessageBoxService _messageBoxService;
-		private static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		protected override async void Execute()
 		{
@@ -65,10 +64,10 @@ namespace Sdl.Community.StarTransit
 					Program.InitializeMain(packageModel);
 				}
 			}
-			catch (PathTooLongException ptle)
+			catch (Exception ex)
 			{
-				_messageBoxService.ShowMessage(ptle.Message, string.Empty);
-				Log.Logger.Error($"OpenPackage method: {ptle.Message}\n {ptle.StackTrace}");
+				_messageBoxService.ShowMessage(ex.Message, string.Empty);
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}  
 		
@@ -79,28 +78,29 @@ namespace Sdl.Community.StarTransit
 		{
 			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
 			var pathToTempPackageFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
-			
+
 			//Delete existing folder where we extract transit packages
-			if (Directory.Exists(tempFolder))
+			try
 			{
-				try
+				if (Directory.Exists(tempFolder))
 				{
 					DeleteDirectory(tempFolder);
 				}
-				catch (IOException)
-				{
-					Directory.Delete(tempFolder, true);
-				}
-				catch (UnauthorizedAccessException)
-				{
-					Directory.Delete(tempFolder, true);
-				}
-				catch (Exception e)
-				{
-					Log.Logger.Error(e);
-				}
+				Directory.CreateDirectory(pathToTempPackageFolder);
 			}
-			Directory.CreateDirectory(pathToTempPackageFolder);
+			catch (IOException)
+			{
+				Directory.Delete(tempFolder, true);
+			}
+			catch (UnauthorizedAccessException)
+			{
+				Directory.Delete(tempFolder, true);
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+			}
+
 			return pathToTempPackageFolder;
 		}
 

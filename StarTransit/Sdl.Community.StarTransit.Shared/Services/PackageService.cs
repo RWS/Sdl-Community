@@ -6,9 +6,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.Community.StarTransit.Shared.Utils;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -16,13 +16,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	{
 		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries =
 			new List<KeyValuePair<string, string>>();
-
 		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary =
 			new Dictionary<string, List<KeyValuePair<string, string>>>();
-
 		private static PackageModel _package = new PackageModel();
 		private const char LanguageTargetSeparator = ' ';
 		private readonly IFileService _fileService = new FileService();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
@@ -59,7 +58,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"OpenPackage method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 
 			return new PackageModel();

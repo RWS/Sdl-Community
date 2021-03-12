@@ -14,6 +14,7 @@ using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.UI.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using System.Threading.Tasks;
+using NLog;
 using Sdl.Versioning;
 using Task = System.Threading.Tasks.Task;
 
@@ -40,6 +41,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private int _selectedMinute;
 		private string _selectedMoment;
 		private ICommand _browseCommand;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public List<int> HourList { get; set; }
 		public List<int> MinutesList { get; set; }
 		public List<string> MomentsList { get; set; }
@@ -354,9 +357,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			MinutesList = minutesList;
 		}
 
-		private async System.Threading.Tasks.Task ReadCustomers()
+		private async Task ReadCustomers()
 		{
-			await System.Threading.Tasks.Task.Run(() =>
+			await Task.Run(() =>
 			{
 				try
 				{
@@ -382,7 +385,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 				catch (Exception ex)
 				{
-					Log.Logger.Error($"{ex.Message}\n {ex.StackTrace}");
+					_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 				}
 			});
 		}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
@@ -25,6 +26,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly List<ProjectFile> _targetProjectFiles;
 		private readonly string _iconPath;
 		private readonly IFileService _fileService;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ProjectService(Helpers helpers):this()
 		{
@@ -292,7 +294,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"CreateMetadataFolder method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 	}

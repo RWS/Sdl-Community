@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -23,6 +24,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private int _totalTagCount;
 		private int _tmpTotalTagCount;
 		private int _srcSegmentTagCount;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void SetFileProperties(IFileProperties properties)
 		{
@@ -114,7 +116,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ParseNext method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
 		}

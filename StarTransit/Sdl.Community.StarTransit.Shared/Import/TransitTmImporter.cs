@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -19,6 +19,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	{
 		private readonly IFileService _fileService = new FileService();
 		public Dictionary<FileBasedTranslationMemory, int> StudioTranslationMemories= new Dictionary<FileBasedTranslationMemory, int>();
+		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
 		public TransitTmImporter(LanguagePair languagePair, string studioProjectPath, List<StarTranslationMemoryMetadata> tmsList)
 		{
@@ -132,7 +133,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error(ex);
+				_logger.Error(ex);
 			}
 		}
 
@@ -171,11 +172,19 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages
 				});
-			if (taskSequence.Status == TaskStatus.Failed)
+
+			if (taskSequence.Status != TaskStatus.Failed) return pathToExtractFolder;
+			foreach (var subTask in taskSequence.SubTasks)
 			{
-				throw new Exception("Failed to create xliff for corresponding Transit TMs");
+				_logger.Error($"Name:{subTask.Name}");
+
+				foreach (var messages in subTask.Messages)
+				{
+					_logger.Error($"Exception: {messages?.Exception}");
+					_logger.Error($"Message: {messages?.Message}");
+				}
 			}
-			return pathToExtractFolder;
+			throw new Exception("Failed to create xliff for corresponding Transit TMs");
 		}
 
 		/// <summary>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.ProjectAutomation.Core;
@@ -19,16 +18,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public List<ProjectTemplateInfo> LoadProjectTemplates()
 		{
-			try
-			{
-				var templateList = _projectsController?.GetProjectTemplates().OrderBy(t => t.Name).ToList();
-				return templateList;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"MedatataBuilder method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return new List<ProjectTemplateInfo>();
+			var templateList = _projectsController?.GetProjectTemplates()?.OrderBy(t => t.Name).ToList();
+			return templateList ?? new List<ProjectTemplateInfo>();
 		}
 	}
 }

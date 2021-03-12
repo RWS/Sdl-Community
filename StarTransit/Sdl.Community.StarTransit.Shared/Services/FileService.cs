@@ -13,10 +13,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	{
 		private const string TmFileType = "ExtFileType=\"Extract\"";
 		private const string FileType = "Transit";
+		private const string MtFilesName = "_AEXTR_MT";
 
+		/// <summary>
+		/// MT Files are considered to be TMs. However the Transit MT file does not conain |"
+		/// </summary>
 		public bool IsTransitTm(string filePath)
 		{
 			if (!File.Exists(filePath)) return false;
+			var name = Path.GetFileName(filePath);
+			var containsMtName = name.Contains(MtFilesName);
 			using (var reader = new StreamReader(filePath, Encoding.Default))
 			{
 				string line;
@@ -25,6 +31,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					if (line.Trim().Contains(TmFileType))
 					{
 						return true;
+					}
+
+					if (containsMtName)
+					{
+						if (line.Contains(FileType))
+						{
+							return true;
+						}
 					}
 					if (line.Equals("<Header>")) break;
 				}
@@ -54,7 +68,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public bool IsValidNode(XmlNode originalXmlNode)
 		{
-			return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text);
+			return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text && !string.IsNullOrWhiteSpace(childNode.Value));
 		}
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
@@ -332,9 +346,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				default:
 					return "";
 			}
-
-			return string.Empty;
 		}
+
 		public string MapStarTransitLanguage(string fileExtension)
 		{
 			if (string.IsNullOrEmpty(fileExtension)) return string.Empty;
@@ -444,8 +457,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				default:
 					return fileExtension;
 			}
-
-			return string.Empty;
 		}
 	}
 }

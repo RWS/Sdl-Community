@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -34,8 +35,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private readonly TranslationMemories _translationMemories;
 		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
         private readonly IMessageBoxService _messageBoxService;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public IProject CreatedProject { get; set; }
+		public IProject CreatedProject { get; set; }
 
 		public StarTransitMainWindowViewModel(
 			PackageDetailsViewModel packageDetailsViewModel,
@@ -209,61 +211,56 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 		public void Next()
 		{
-			try
-			{
-				var model = _packageDetailsViewModel.GetPackageModel();
-				_hasTm = false;
-				var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
+			var model = _packageDetailsViewModel.GetPackageModel();
+			_hasTm = false;
+			var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
 
-				if (isEmpty)
-				{
-					foreach (var pair in model.LanguagePairs)
-					{
-						if (pair.StarTranslationMemoryMetadatas.Count != 0)
-						{
-							_hasTm = true;
-						}
-					}//tm page is disabled
-					if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
-					{
-						DetailsSelected = false;
-						TmSelected = false;
-						FinishSelected = true;
-						CanExecuteBack = true;
-						CanExecuteNext = false;
-						_finishViewModel.Refresh();
-						CanExecuteCreate = true;
-						IsEnabled = false;
-						Color = "Gray";
-					}//tm page
-					else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
-					{
-						DetailsSelected = false;
-						TmSelected = true;
-						FinishSelected = false;
-						CanExecuteBack = true;
-						CanExecuteNext = true;
-						CanExecuteCreate = false;
-						IsEnabled = true;
-						Color = "#FF66290B";
-					}//finish page
-					else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
-					{
-						DetailsSelected = false;
-						CanExecuteNext = false;
-						CanExecuteCreate = true;
-						CanExecuteBack = true;
-						TmSelected = false;
-						IsEnabled = true;
-						FinishSelected = true;
-						_finishViewModel.Refresh();
-						Color = "#FFB69476";
-					}
-				}
-			}
-			catch (Exception ex)
+			if (isEmpty)
 			{
-				Log.Logger.Error($"Next method: {ex.Message}\n {ex.StackTrace}");
+				foreach (var pair in model.LanguagePairs)
+				{
+					if (pair.StarTranslationMemoryMetadatas.Count != 0)
+					{
+						_hasTm = true;
+					}
+				} //tm page is disabled
+
+				if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
+				{
+					DetailsSelected = false;
+					TmSelected = false;
+					FinishSelected = true;
+					CanExecuteBack = true;
+					CanExecuteNext = false;
+					_finishViewModel.Refresh();
+					CanExecuteCreate = true;
+					IsEnabled = false;
+					Color = "Gray";
+				} //tm page
+				else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+				{
+					DetailsSelected = false;
+					TmSelected = true;
+					FinishSelected = false;
+					CanExecuteBack = true;
+					CanExecuteNext = true;
+					CanExecuteCreate = false;
+					IsEnabled = true;
+					Color = "#FF66290B";
+				} //finish page
+				else if (_packageDetails.FieldsAreCompleted() && TmSelected &&
+				         _translationMemories.TmFieldIsCompleted())
+				{
+					DetailsSelected = false;
+					CanExecuteNext = false;
+					CanExecuteCreate = true;
+					CanExecuteBack = true;
+					TmSelected = false;
+					IsEnabled = true;
+					FinishSelected = true;
+					_finishViewModel.Refresh();
+					Color = "#FFB69476";
+				}
 			}
 		}
 
@@ -333,7 +330,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"Create method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
