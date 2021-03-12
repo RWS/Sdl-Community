@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 
@@ -40,8 +41,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public async Task<T> GetResult<T>(HttpResponseMessage responseMessage, [CallerMemberName] string callerMemberName = null)
 		{
+			if (responseMessage is null) return default;
 			var response = await GetResponseAsString(responseMessage, callerMemberName);
-			if (responseMessage?.IsSuccessStatusCode ?? false)
+			responseMessage.ReasonPhrase = GetErrorDescription(response);
+			if (responseMessage.IsSuccessStatusCode)
 			{
 				T result = default;
 				try
@@ -77,6 +80,21 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public void SetLogger(ILogger logger)
 		{
 			_logger = logger;
+		}
+
+		private string GetErrorDescription(string value)
+		{
+			var message = "";
+			try
+			{
+				var jObj = JToken.Parse(value);
+				message = jObj["status"]["description"].ToString();
+			}
+			catch
+			{
+				// ignored
+			}
+			return message;
 		}
 	}
 }

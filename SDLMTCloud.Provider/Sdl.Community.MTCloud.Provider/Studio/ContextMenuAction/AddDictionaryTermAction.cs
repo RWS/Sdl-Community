@@ -2,6 +2,7 @@
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
@@ -18,13 +19,19 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 	{
 		protected override async void Execute()
 		{
-			var selection = MtCloudApplicationInitializer.EditorController.ActiveDocument.Selection;
+			var selection = MtCloudApplicationInitializer.EditorController?.ActiveDocument?.Selection;
+
 			var term = new Term
 			{
-				Source = selection.Source.ToString(),
-				Target = selection.Target.ToString()
+				Source = selection?.Source.ToString(),
+				Target = selection?.Target.ToString()
 			};
 
+			if (MtCloudApplicationInitializer.TranslationService == null)
+			{
+				MtCloudApplicationInitializer.MessageService.ShowWarningMessage(PluginResources.SDL_MT_Cloud_Provider_is_not_added_to_the_current_project, PluginResources.Operation_failed);
+				return;
+			}
 			await MtCloudApplicationInitializer.TranslationService.AddTermToDictionary(term);
 		}
 	}

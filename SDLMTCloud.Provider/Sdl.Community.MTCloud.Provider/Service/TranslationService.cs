@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NLog;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Service.Events;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
@@ -43,7 +43,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			CheckConnection();
 
 			var model = GetCorrespondingLanguageMappingModel();
-			var dictionaryId = model.SelectedDictionary.DictionaryId;
+			var dictionaryId = model?.SelectedDictionary?.DictionaryId;
 
 			if (string.IsNullOrWhiteSpace(dictionaryId))
 			{
