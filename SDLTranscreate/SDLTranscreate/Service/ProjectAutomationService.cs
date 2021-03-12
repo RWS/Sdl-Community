@@ -314,6 +314,35 @@ namespace Trados.Transcreate.Service
 			return new List<Report>();
 		}
 
+		public void UpdateProjectIcon(FileBasedProject project, string iconPath)
+		{
+			var projectInfo = project?.GetProjectInfo();
+			if (projectInfo != null && 
+			    string.Compare(projectInfo.IconPath, iconPath, StringComparison.CurrentCultureIgnoreCase) != 0)
+			{
+				projectInfo.IconPath = iconPath;
+				project.UpdateProject(projectInfo);
+			}
+		}
+
+		public string GetTranscreateIconPath(Common.PathInfo pathInfo)
+		{
+			if (pathInfo == null)
+			{
+				return null;
+			}
+			
+			if (!File.Exists(pathInfo.ProjectIconFilePath))
+			{
+				using (var fs = new FileStream(pathInfo.ProjectIconFilePath, FileMode.Create))
+				{
+					PluginResources.sdl_transcreate_view.Save(fs);
+				}
+			}
+
+			return pathInfo.ProjectIconFilePath;
+		}
+
 		private bool CanActivateFileBasedProject()
 		{
 			var studioVersion = _studioVersionService.GetStudioVersion();

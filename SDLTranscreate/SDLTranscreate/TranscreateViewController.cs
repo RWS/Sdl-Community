@@ -1563,6 +1563,14 @@ namespace Trados.Transcreate
 			{
 				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
+
+				lock (_lockObject)
+				{
+					// TODO: there is a bug with the API where the icon path is not updated
+					// we will need to create a new API enhancement proposal
+					var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+					_projectAutomationService?.UpdateProjectIcon(_projectsController?.CurrentProject, iconPath);
+				}
 			}
 		}
 

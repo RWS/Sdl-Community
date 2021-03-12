@@ -397,8 +397,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 30, PluginResources.JobProcess_ProcessingPleaseWait);
 
-				var iconPath = GetTranscreateIconPath();
-
+				var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+				
 				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, iconPath, projectFiles, "T");
 				_controllers.ProjectsController.RefreshProjects();
 				
@@ -688,19 +688,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			return paragraphMap;
 		}
 
-		private string GetTranscreateIconPath()
-		{
-			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "Transcreate.ico");
-			if (!File.Exists(iconPath))
-			{
-				using (var fs = new FileStream(iconPath, FileMode.Create))
-				{
-					PluginResources.sdl_transcreate_view.Save(fs);
-				}
-			}
-
-			return iconPath;
-		}
+	
 
 		private void WriteXliffFile(XliffWriter xliffWriter, ProjectFile projectFile)
 		{
