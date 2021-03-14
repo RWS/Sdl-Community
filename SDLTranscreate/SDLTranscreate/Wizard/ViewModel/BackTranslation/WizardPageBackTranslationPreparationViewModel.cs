@@ -507,7 +507,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					}
 				}
 
-				_controllers.TranscreateController.InvalidateProjectsContainer();
+				_controllers.TranscreateController.RefreshProjects(true);
 
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " -  Completed " + FormatDateTime(DateTime.UtcNow));

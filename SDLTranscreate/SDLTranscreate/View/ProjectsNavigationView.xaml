@@ -141,7 +141,7 @@
 			</Grid>
 
 			<TreeView Grid.Column="0" Padding="2,5,2,2" Grid.Row="1" 					  
-			          ItemsSource="{Binding CustomerGroups}"
+			          ItemsSource="{Binding CustomerGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 				<TreeView.ItemContainerStyle>
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">

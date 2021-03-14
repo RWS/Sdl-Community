@@ -313,7 +313,6 @@
     <Compile Include="TranscreateViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranscreateViewGroups.cs" />
-    <Compile Include="ViewModel\ProjectPropertiesViewModel.cs" />
     <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
     <Compile Include="ViewModel\ProjectFilesViewModel.cs" />
     <Compile Include="ViewModel\ProjectsNavigationViewModel.cs" />

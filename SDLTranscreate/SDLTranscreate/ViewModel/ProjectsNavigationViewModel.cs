@@ -102,8 +102,6 @@ namespace Trados.Transcreate.ViewModel
 
 		public ProjectFilesViewModel ProjectFilesViewModel { get; internal set; }
 
-		public ProjectPropertiesViewModel ProjectPropertiesViewModel { get; internal set; }
-
 		public string FilterString
 		{
 			get => _filterString;
@@ -337,11 +335,6 @@ namespace Trados.Transcreate.ViewModel
 							.SelectMany(a => a.ProjectFiles).ToList();
 				}
 
-				if (ProjectPropertiesViewModel != null)
-				{
-					ProjectPropertiesViewModel.SelectedProject = _selectedProject;
-				}
-
 				OnPropertyChanged(nameof(StatusLabel));
 			}
 		}
@@ -354,16 +347,10 @@ namespace Trados.Transcreate.ViewModel
 				_selectedProject = value;
 				OnPropertyChanged(nameof(SelectedProject));
 
-				if (ProjectFilesViewModel != null && _selectedProject != null)
+				if (ProjectFilesViewModel != null)
 				{
-					ProjectFilesViewModel.ProjectFiles = _selectedProject.ProjectFiles;
+					ProjectFilesViewModel.ProjectFiles = _selectedProject?.ProjectFiles ?? new List<ProjectFile>();
 				}
-
-				if (ProjectPropertiesViewModel != null)
-				{
-					ProjectPropertiesViewModel.SelectedProject = _selectedProject;
-				}
-
 
 				ProjectSelectionChanged?.Invoke(this, new ProjectSelectionChangedEventArgs { SelectedProject = _selectedProject });
 
@@ -555,9 +542,13 @@ namespace Trados.Transcreate.ViewModel
 		{
 			if (parameter is RoutedPropertyChangedEventArgs<object> property)
 			{
-				if (property.NewValue is Project project)
+				if (property.NewValue is IProject project)
 				{
 					SelectedProject = project;
+				}
+				else
+				{
+					SelectedProject = null;
 				}
 			}
 		}
@@ -565,7 +556,6 @@ namespace Trados.Transcreate.ViewModel
 		public void Dispose()
 		{
 			ProjectFilesViewModel?.Dispose();
-			ProjectPropertiesViewModel?.Dispose();
 		}
 	}
 }
