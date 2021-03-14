@@ -409,6 +409,11 @@ namespace Trados.Transcreate.ViewModel
 
 		private void RemoveProject(object parameter)
 		{
+			if (SelectedProject == null)
+			{
+				return;
+			}
+			
 			var message1 = PluginResources.Message_ActionWillRemoveAllProjectData;
 			var message2 = PluginResources.Message_DoYouWantToProceed;
 
