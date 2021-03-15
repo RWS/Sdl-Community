@@ -72,6 +72,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
 			{
+				_logger.Info($"--> Added tm to list from: {fileBasedTm.FilePath}");
 				StudioTranslationMemories.Add(fileBasedTm, penalty);
 			}
 		}
@@ -194,7 +195,15 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract",Guid.NewGuid().ToString());
 
-			Directory.CreateDirectory(pathToExtractFolder);
+			try
+			{
+				Directory.CreateDirectory(pathToExtractFolder);
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+			}
+			_logger.Info($"--> Temp Path folder for Studio project where we extract the tms: {pathToExtractFolder}");
 
 			return pathToExtractFolder;
 		}

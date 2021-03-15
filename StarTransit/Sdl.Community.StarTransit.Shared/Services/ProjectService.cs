@@ -75,6 +75,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (taskSequence.Status.Equals(TaskStatus.Failed))
 			{
 				_messageModel.IsProjectCreated = false;
+				foreach (var subTask in taskSequence.SubTasks)
+				{
+					_logger.Error($"Name:{subTask.Name}");
+
+					foreach (var messages in subTask.Messages)
+					{
+						_logger.Error($"Exception: {messages?.Exception}");
+						_logger.Error($"Message: {messages?.Message}");
+					}
+				}
 				_messageModel.Message = "Project could not be created.Error occured while running automatic tasks!";
 				_messageModel.Title = "Informative message";
 				return _messageModel;
@@ -198,7 +208,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					importer.ImportStarTransitTm(pair.StarTranslationMemoryMetadatas, package);
 					var providerRef = importer.GetTranslationProviderReference(newTmPath,pair);
+					_logger.Info($"-->Import lang pair Provider Reference:{providerRef?.Uri}");
 					if(providerRef==null)return;
+					//var test = new TranslationProviderCascadeEntry(providerRef, true, true, true);
 					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true));
 				}
 			}
