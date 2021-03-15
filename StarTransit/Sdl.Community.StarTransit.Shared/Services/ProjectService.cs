@@ -66,10 +66,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages,
-					AutomaticTaskTemplateIds.PerfectMatch,
 					AutomaticTaskTemplateIds.PreTranslateFiles,
-					AutomaticTaskTemplateIds.AnalyzeFiles,
-					AutomaticTaskTemplateIds.UpdateMainTranslationMemories
 			});
 
 			if (taskSequence.Status.Equals(TaskStatus.Failed))

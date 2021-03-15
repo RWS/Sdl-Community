@@ -72,11 +72,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
 			{
-				_logger.Info($"--> Added tm to list from: {fileBasedTm.FilePath}");
 				StudioTranslationMemories.Add(fileBasedTm, penalty);
 			}
 		}
-
+		
 		public void ImportStarTransitTm(List<StarTranslationMemoryMetadata> starTransitTms, PackageModel package)
 		{
 			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(starTransitTms, package);
@@ -104,7 +103,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					IsDocumentImport = false,
 					CheckMatchingSublanguages = false,
 					IncrementUsageCount = true,
-					NewFields = ImportSettings.NewFieldsOption.Ignore,
+					NewFields = ImportSettings.NewFieldsOption.AddToSetup,
 					PlainText = false,
 					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
 				};

@@ -10,8 +10,6 @@ namespace Sdl.Community.StarTransit
 		public void Execute()
 		{
 			Log.Setup();
-			var logger = NLog.LogManager.GetCurrentClassLogger();
-			logger.Info("--> Application initializer");
 		}
 	}
 }
