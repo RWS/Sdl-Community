@@ -75,6 +75,9 @@
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -109,6 +112,11 @@
     <Compile Include="Services\SegmentVisitor.cs" />
     <Compile Include="Service\FilterApplier.cs" />
     <Compile Include="Studio\DisplayFilters\SdlMtCloudDisplayFilter.cs" />
+    <Compile Include="TellMe\CommunitySupportAction.cs" />
+    <Compile Include="TellMe\DsiViewerTellMeAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
+    <Compile Include="TellMe\HelpAction.cs" />
+    <Compile Include="TellMe\StoreAction.cs" />
     <Compile Include="ViewModel\DsiViewerViewModel.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,6 +128,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\TellMe.ico" />
+    <Resource Include="Resources\Global.ico" />
+    <Resource Include="Resources\Question.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\error.png" />
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\warning.png" />
