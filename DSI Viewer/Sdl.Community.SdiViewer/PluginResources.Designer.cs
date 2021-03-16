@@ -143,6 +143,26 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Global {
+            get {
+                object obj = ResourceManager.GetObject("Global", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Model.
         /// </summary>
         public static string Label_Model {
@@ -197,6 +217,16 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum value.
         /// </summary>
         public static string StructureContextInfo_MetaKey_length_max_value {
@@ -238,6 +268,16 @@ namespace Sdl.Community.DsiViewer {
         public static string StructureContextInfo_MetaValue_chars {
             get {
                 return ResourceManager.GetString("StructureContextInfo_MetaValue_chars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe {
+            get {
+                object obj = ResourceManager.GetObject("TellMe", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
