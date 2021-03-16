@@ -52,7 +52,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTextColumn Width="Auto" MaxWidth="100" Header="Location" Binding="{Binding DisplayName, Mode=OneWay}">
+					<DataGridTextColumn Width="Auto" Header="Location" Binding="{Binding DisplayName, Mode=OneWay}">
 						<DataGridTextColumn.ElementStyle>
 							<Style>
 								<Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
@@ -62,7 +62,7 @@
 						</DataGridTextColumn.ElementStyle>
 					</DataGridTextColumn>
 					<DataGridTextColumn Width="Auto" Header="Code" Binding="{Binding Code, Mode=OneWay}" />
-					<DataGridTextColumn Width="*" Header="Description" Binding="{Binding Description, Mode=OneWay}">
+					<DataGridTextColumn Width="Auto" Header="Description" Binding="{Binding Description, Mode=OneWay}">
 						<DataGridTextColumn.ElementStyle>
 							<Style>
 								<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
