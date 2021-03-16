@@ -4,7 +4,6 @@ using NLog;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Interfaces;
@@ -323,9 +322,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 				else
 				{
-                    _messageBoxService.ShowInformationResultMessage(messageModel.Message, messageModel.Title);
-                    Active = false;
-                    CanExecuteBack = CanExecuteCreate = false;
+					Active = false;
+					CanExecuteBack = CanExecuteCreate = false;
+					_messageBoxService.ShowInformationResultMessage(messageModel.Message, messageModel.Title);
+					CloseAction.Invoke(); // close window
 				}
 			}
 			catch (Exception ex)
