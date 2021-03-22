@@ -107,14 +107,13 @@ namespace Trados.Transcreate
 				return _projectsNavigationView;
 			}
 
-			_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<IProject>(), _projectsController,
+			_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projectsController,
 				_editorController, _projectAutomationService);
 
 			_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
 
 			_projectsNavigationView = new ProjectsNavigationView();
 			_projectsNavigationView.DataContext = _projectsNavigationViewModel;
-
 
 			return _projectsNavigationView;
 		}
@@ -126,10 +125,8 @@ namespace Trados.Transcreate
 				return _projectFilesView;
 			}
 
-			_projectFilesViewModel = new ProjectFilesViewModel(new List<ProjectFile>());
-			_projectFilesView = new ProjectFilesView();
-			_projectFilesView.DataContext = _projectFilesViewModel;
-
+			_projectFilesViewModel = new ProjectFilesViewModel();
+			_projectFilesView = new ProjectFilesView { DataContext = _projectFilesViewModel };
 
 			_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
 			_projectFilesViewModel.ProjectFileSelectionChanged += ProjectFilesViewModel_ProjectFileSelectionChanged;
@@ -1334,7 +1331,7 @@ namespace Trados.Transcreate
 			var date = successDate ? resultDate.ToUniversalTime() : DateTime.MinValue;
 			return date;
 		}
-
+		
 		private string GetDateToString(DateTime date)
 		{
 			var value = string.Empty;
@@ -1427,10 +1424,8 @@ namespace Trados.Transcreate
 			if (e.Active)
 			{
 				SetProjectFileActivityViewController();
-				_projectFilesViewModel?.Refresh();
 			}
 		}
-
 
 		private void SetProjectFileActivityViewController()
 		{

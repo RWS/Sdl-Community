@@ -83,6 +83,26 @@ namespace Trados.Transcreate {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon Check {
+            get {
+                object obj = ResourceManager.GetObject("Check", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Checked {
+            get {
+                object obj = ResourceManager.GetObject("Checked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
@@ -1739,6 +1759,24 @@ namespace Trados.Transcreate {
         internal static string TranscreateManager_SettingsGroup_Name {
             get {
                 return ResourceManager.GetString("TranscreateManager_SettingsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch with Recommended Translation.
+        /// </summary>
+        internal static string TranscreateManager_SwitchWithRecommendedTranslation_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_SwitchWithRecommendedTranslation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch with Recommended Translation.
+        /// </summary>
+        internal static string TranscreateManager_SwitchWithRecommendedTranslation_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_SwitchWithRecommendedTranslation_Name", resourceCulture);
             }
         }
         

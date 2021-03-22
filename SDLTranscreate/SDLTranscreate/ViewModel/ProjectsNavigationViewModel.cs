@@ -40,16 +40,12 @@ namespace Trados.Transcreate.ViewModel
 		private ICommand _removeBackProjectsCommand;
 		private ICommand _removeProjectCommand;
 
-		public ProjectsNavigationViewModel(List<IProject> projects, ProjectsController projectsController, EditorController editorController,
+		public ProjectsNavigationViewModel( ProjectsController projectsController, EditorController editorController,
 			ProjectAutomationService projectAutomationService)
 		{
-			_projects = projects;
 			_projectsController = projectsController;
 			_editorController = editorController;
 			_projectAutomationService = projectAutomationService;
-
-			FilteredProjects = _projects;
-			FilterString = string.Empty;
 		}
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;

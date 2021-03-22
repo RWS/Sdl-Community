@@ -131,6 +131,7 @@
     <Compile Include="Actions\OpenFileForTranslationAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="Actions\RefreshAction.cs" />
+    <Compile Include="Actions\SwitchWithRecommendedTranslationAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
@@ -479,6 +480,7 @@
     <Resource Include="Resources\back_translation.ico" />
     <Resource Include="Resources\back_translation_small.ico" />
     <Resource Include="Resources\information.png" />
+    <Resource Include="Resources\check.ico" />
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\Search.png" />
