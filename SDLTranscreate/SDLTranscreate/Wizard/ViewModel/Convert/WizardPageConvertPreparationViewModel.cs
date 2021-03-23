@@ -362,7 +362,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			var success = true;
 			var phase = PluginResources.JobProcess_CreateTranscreateProject;
 			var newProjectLocalFolder = string.Empty;
-			
+
 			try
 			{
 				_logReport.AppendLine();
@@ -398,12 +398,12 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 30, PluginResources.JobProcess_ProcessingPleaseWait);
 
 				var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
-				
+
 				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, iconPath, projectFiles, "T");
 				_controllers.ProjectsController.RefreshProjects();
-				
+
 				UpdateWizardContext(_newProject);
-				
+
 				var newProjectInfo = _newProject.GetProjectInfo();
 
 				_logReport.AppendLine();
@@ -688,7 +688,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			return paragraphMap;
 		}
 
-	
+
 
 		private void WriteXliffFile(XliffWriter xliffWriter, ProjectFile projectFile)
 		{
@@ -893,12 +893,13 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				throw new Exception("Unexpected inner file count");
 			}
 
-			if (xliffData.Files[0].Clone() is FileTypeSupport.XLIFF.Model.File file)
+			if (xliffData.Files[0] is FileTypeSupport.XLIFF.Model.File file)
 			{
 				file.TargetLanguage = null;
 				file.Original = "Recommended";
-
 				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
+
+				var nextSegmentId = GetNextSegmentId(file);
 				for (var i = 1; i <= TaskContext.ConvertOptions.MaxAlternativeTranslations; i++)
 				{
 					var newFile = new FileTypeSupport.XLIFF.Model.File
@@ -921,11 +922,14 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 						{
 							if (segmentPair.Clone() is SegmentPair sp)
 							{
+								sp.Id = nextSegmentId.ToString();
 								sp.Target = new Target();
 								sp.ConfirmationLevel = ConfirmationLevel.Unspecified;
 								sp.IsLocked = false;
 								sp.TranslationOrigin = null;
 								tu.SegmentPairs.Add(sp);
+
+								nextSegmentId++;
 							}
 						}
 
@@ -940,6 +944,27 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 					xliffData.Files.Add(newFile);
 				}
 			}
+		}
+
+		private static long GetNextSegmentId(FileTypeSupport.XLIFF.Model.File file)
+		{
+			long nextSegmentId = 0;
+			var lastSegmentPair = file.Body.TransUnits.LastOrDefault()?.SegmentPairs.LastOrDefault();
+			if (lastSegmentPair != null)
+			{
+				long id;
+				if (long.TryParse(lastSegmentPair.Id, NumberStyles.Integer, CultureInfo.InvariantCulture, out id))
+				{
+					nextSegmentId = id + 1;
+				}
+				else
+				{
+					// not an integer - fallback: increment by the number of segments in the paragraph
+					nextSegmentId = file.Body.TransUnits.Sum(transUnit => transUnit.SegmentPairs.LongCount());
+				}
+			}
+
+			return nextSegmentId;
 		}
 
 		private static bool IsSourceLanguage(string language, string sourceLanguage)

@@ -363,6 +363,7 @@ namespace Trados.Transcreate.ViewModel
 
 				OnPropertyChanged(nameof(IsEnabledCreateBackProjects));
 				OnPropertyChanged(nameof(IsEnabledRemoveBackProjects));
+				OnPropertyChanged(nameof(IsEnabledDeleteProject));
 			}
 		}
 

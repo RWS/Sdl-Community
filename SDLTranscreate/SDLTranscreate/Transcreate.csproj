@@ -187,6 +187,7 @@
     <Compile Include="FileTypeSupport\MSOffice\Readers\WordReader.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Visitors\TokenVisitor.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Writers\WordWriter.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentRenumberingBilingualProcessor.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\XliffContentReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\XliffContentWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />

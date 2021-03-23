@@ -39,6 +39,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 
 			var contentReader = new XliffContentReader(projectId, documentId, filePath, targetLanguage, false, _segmentBuilder,
 				_exportOptions, _analysisBands);
+			//converter.AddBilingualProcessor(new SegmentRenumberingBilingualProcessor());
 			converter.AddBilingualProcessor(contentReader);
 
 			converter.Parse();

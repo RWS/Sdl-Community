@@ -878,9 +878,9 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					File.Move(tmpInputFile, tmpInputFile + ".sdlxliff");
 					tmpInputFile = tmpInputFile + ".sdlxliff";
 
-					var paragraphMap = GetParagraphMap(sdlxliffReader, projectFile.ProjectId, projectFile.FileId,
+					var paragraphUnitMap = GetParagraphUnitMap(sdlxliffReader, projectFile.ProjectId, projectFile.FileId,
 						projectFile.Location, projectFile.TargetLanguage);
-					AlignParagraphIds(fileData.Data, paragraphMap.Keys.ToList());
+					AlignParagraphUnitIds(fileData.Data, paragraphUnitMap);
 
 					if (!Directory.Exists(filePath))
 					{
@@ -958,20 +958,30 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			return paragraphMap;
 		}
 
-		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string projectId, string fileId, string path, string targetLanguage)
+		private Dictionary<string, List<string>> GetParagraphUnitMap(SdlxliffReader sdlxliffReader, string projectId, string fileId, string path, string targetLanguage)
 		{
 			var xliffData = sdlxliffReader.ReadFile(projectId, fileId, path, targetLanguage);
 			return GetParagraphMap(xliffData);
 		}
 
-		private void AlignParagraphIds(Xliff xliffData, IReadOnlyList<string> paragraphIds)
+		private void AlignParagraphUnitIds(Xliff xliffData, Dictionary<string, List<string>> paragraphUnitMap)
 		{
+			var paragraphUnitIds = paragraphUnitMap.Keys.ToList();
+			
 			var i = 0;
 			foreach (var file in xliffData.Files)
 			{
 				foreach (var transUnit in file.Body.TransUnits)
 				{
-					transUnit.Id = paragraphIds[i++];
+					var paragraphUnitId = paragraphUnitIds[i++];
+					transUnit.Id = paragraphUnitId;
+
+					//var segmentPairIds = paragraphUnitMap[paragraphUnitId];
+					//for (var index = 0; index < transUnit.SegmentPairs.Count; index++)
+					//{
+					//	var segmentPair = transUnit.SegmentPairs[index];
+					//	segmentPair.Id = segmentPairIds[index];
+					//}
 				}
 			}
 		}
