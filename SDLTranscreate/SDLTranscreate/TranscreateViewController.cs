@@ -1018,6 +1018,8 @@ namespace Trados.Transcreate
 				var project = e.Document.Project;
 				var projectInfo = project.GetProjectInfo();
 				var projectId = projectInfo.Id.ToString();
+				
+				
 				var document = e.Document.Files?.FirstOrDefault();
 				var documentId = document?.Id.ToString();
 				var language = document?.Language;

@@ -21,6 +21,7 @@ namespace Trados.Transcreate.ViewModel
 		private bool _isProjectFileSelected;
 		private bool _isMultipleProjectFilesSelected;
 		private bool _isSingleProjectFileSelected;
+		private bool _canOpenSelectedInEditor;
 		private ICommand _clearSelectionCommand;
 		private ICommand _importFilesCommand;
 		private ICommand _exportFilesCommand;
@@ -77,6 +78,7 @@ namespace Trados.Transcreate.ViewModel
 				OnPropertyChanged(nameof(StatusLabel));
 
 				IsMultipleProjectFilesSelected = _selectedProjectFiles?.Count > 1;
+				OnPropertyChanged(nameof(CanOpenSelectedInEditor));
 
 				ProjectFileSelectionChanged?.Invoke(this, new ProjectFileSelectionChangedEventArgs
 				{
@@ -100,6 +102,7 @@ namespace Trados.Transcreate.ViewModel
 
 				IsProjectFileSelected = _selectedProjectFile != null;
 				IsMultipleProjectFilesSelected = _selectedProjectFiles?.Count > 1;
+				OnPropertyChanged(nameof(CanOpenSelectedInEditor));
 
 				ProjectFileSelectionChanged?.Invoke(this, new ProjectFileSelectionChangedEventArgs
 				{
@@ -146,14 +149,14 @@ namespace Trados.Transcreate.ViewModel
 			set
 			{
 				OnPropertyChanged(nameof(IsTranscreateProject));
-				
+
 				if (_isProjectFileSelected == value)
 				{
 					return;
 				}
 				_isProjectFileSelected = value;
 				OnPropertyChanged(nameof(IsProjectFileSelected));
-				
+
 
 				IsSingleProjectFileSelected = !_isMultipleProjectFilesSelected && _isProjectFileSelected;
 			}
@@ -165,7 +168,7 @@ namespace Trados.Transcreate.ViewModel
 			set
 			{
 				OnPropertyChanged(nameof(IsTranscreateProject));
-				
+
 				if (_isMultipleProjectFilesSelected == value)
 				{
 					return;
@@ -173,7 +176,7 @@ namespace Trados.Transcreate.ViewModel
 
 				_isMultipleProjectFilesSelected = value;
 				OnPropertyChanged(nameof(IsMultipleProjectFilesSelected));
-				
+
 				IsSingleProjectFileSelected = !_isMultipleProjectFilesSelected && _isProjectFileSelected;
 			}
 		}
@@ -190,6 +193,20 @@ namespace Trados.Transcreate.ViewModel
 
 				_isSingleProjectFileSelected = value;
 				OnPropertyChanged(nameof(IsSingleProjectFileSelected));
+			}
+		}
+
+		public bool CanOpenSelectedInEditor
+		{
+			get
+			{
+				if (_selectedProjectFiles?.Count > 0)
+				{
+					var languages = _selectedProjectFiles.Cast<ProjectFile>().Select(a => a?.TargetLanguage).Distinct().ToList();
+					return languages.Count == 1 && languages.FirstOrDefault() != null;
+				}
+
+				return false;
 			}
 		}
 
