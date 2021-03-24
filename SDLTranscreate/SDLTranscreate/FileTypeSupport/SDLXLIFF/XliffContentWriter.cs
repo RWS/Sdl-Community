@@ -109,7 +109,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 						var status = segmentPair.Properties.ConfirmationLevel.ToString();
 						var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-						AddWordCounts(status, segmentPairInfo, match);
+						AddWordNotProcessedCounts(status, segmentPairInfo, match);
 					}
 				}
 
@@ -162,7 +162,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-					AddWordCounts(status, segmentPairInfo, match);
+					AddWordNotProcessedCounts(status, segmentPairInfo, match);
 
 					continue;
 				}
@@ -196,7 +196,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-					AddWordCounts(status, segmentPairInfo, match);
+					AddWordExcludedCounts(status, segmentPairInfo, match);
 
 					continue;
 				}
@@ -385,7 +385,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				var status = targetSegment.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-				AddWordCounts(status, segmentPairInfo, match);
+				AddWordProcessedCounts(status, segmentPairInfo, match);
 			}
 			else
 			{
@@ -407,7 +407,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				var status = targetSegment.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-				AddWordCounts(status, segmentPairInfo, match);
+				AddWordExcludedCounts(status, segmentPairInfo, match);
 			}
 		}
 
@@ -423,10 +423,26 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 			targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
 		}
 
-		private void AddWordCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		private void AddWordProcessedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
+
+		private void AddWordNotProcessedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
 		{
 			AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
 			AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
+
+		private void AddWordExcludedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
 			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
 			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 		}
