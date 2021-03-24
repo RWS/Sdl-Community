@@ -5,6 +5,7 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.ViewModels;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.StarTransit.UI
 {
@@ -84,11 +85,13 @@ namespace Sdl.Community.StarTransit.UI
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
-            if (starTransitViewModel != null)
-            {
-                e.Cancel = starTransitViewModel.Active;
-            }
+            var starTransitViewModel = (StarTransitMainWindowViewModel)DataContext;
+            if (starTransitViewModel == null) return;
+            e.Cancel = starTransitViewModel.Active;
+            if (starTransitViewModel.CreatedProject == null) return;
+            var helpers = new Shared.Utils.Helpers();
+            var projectsController = helpers.GetProjectsController();
+            projectsController?.Open((FileBasedProject)starTransitViewModel.CreatedProject);
         }
 	}
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.ProjectAutomation.Core;
@@ -17,6 +18,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly ProjectsController _projectsController;
 		private readonly List<bool> _isTransitProject;
 		private readonly ReturnPackage _returnPackage;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ReturnPackageService()
 		{
@@ -79,7 +81,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetReturnPackage method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 			return null;
 		}
@@ -87,8 +89,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <summary>
 		/// Check to see if the file type is the same with the Transit File Type
 		/// </summary>
-		/// <param name="filesPath"></param>
-		/// <returns></returns>
 		public bool IsTransitProject(List<ProjectFile> filesPath)
 		{
 			if (filesPath != null)
@@ -100,27 +100,17 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public void ExportFiles(ReturnPackage package)
 		{
-			try
-			{
-				var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(), new string[]
-				{
-				 AutomaticTaskTemplateIds.GenerateTargetTranslations
-				});
+			var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(),
+				new string[] {AutomaticTaskTemplateIds.GenerateTargetTranslations});
 
-				var outputFiles = taskSequence.OutputFiles.ToList();
-				CreateArchive(package);
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"ExportFiles method: {ex.Message}\n {ex.StackTrace}");
-			}
+			var outputFiles = taskSequence.OutputFiles.ToList();
+			CreateArchive(package);
 		}
 
 		/// <summary>
 		/// Creates an archive in the Return Package folder and add project files to it
 		/// For the moment we add the files without runing any task on them
 		/// </summary>
-		/// <param name="package"></param>
 		private void CreateArchive(ReturnPackage package)
 		{
 			try
@@ -157,7 +147,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"CreateArchive method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -200,45 +190,34 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"UpdateArchive method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
 		/// <summary>
 		/// Reads the prj file and check if an update has been made already
 		/// </summary>
-		/// <param name="pathToPrjFile"></param>
 		private void ChangeMetadataFile(string pathToPrjFile)
 		{
-			try
+			var metadata = new Metadata
 			{
-				var metadata = new Metadata
-				{
-					ExchangedDate = CustomDateTime.CustomExchangeDate(DateTime.Now),
-					ExchangedTime = CustomDateTime.CustomExchangeTime(DateTime.Now),
-					LastChangedDate = CustomDateTime.CreateCustomDate(DateTime.Now)
-				};
+				ExchangedDate = CustomDateTime.CustomExchangeDate(DateTime.Now),
+				ExchangedTime = CustomDateTime.CustomExchangeTime(DateTime.Now),
+				LastChangedDate = CustomDateTime.CreateCustomDate(DateTime.Now)
+			};
 
-				using (var reader = new StreamReader(pathToPrjFile))
-				{
-					var fileContent = reader.ReadToEnd();
-					reader.Close();
-
-					MetadataBuilder(pathToPrjFile, metadata, !fileContent.Contains("PromptForNewWorkingDir"));
-				}
-			}
-			catch (Exception ex)
+			using (var reader = new StreamReader(pathToPrjFile))
 			{
-				Log.Logger.Error($"ChangeMetadataFile method: {ex.Message}\n {ex.StackTrace}");
+				var fileContent = reader.ReadToEnd();
+				reader.Close();
+
+				MetadataBuilder(pathToPrjFile, metadata, !fileContent.Contains("PromptForNewWorkingDir"));
 			}
 		}
 
 		/// <summary>
 		/// Changes the metadata from prj file
 		/// </summary>
-		/// <param name="pathToPrjFile"></param>
-		/// <param name="metadata"></param>
-		/// <param name="createNewMetadata"></param>
 		private void MetadataBuilder(string pathToPrjFile, Metadata metadata, bool createNewMetadata)
 		{
 			try
@@ -290,7 +269,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"MetadataBuilder method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 	}

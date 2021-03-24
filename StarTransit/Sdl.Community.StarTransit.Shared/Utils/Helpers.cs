@@ -8,7 +8,7 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 	{
 		public ProjectsController GetProjectsController()
 		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
+			return SdlTradosStudio.Application?.GetController<ProjectsController>();
 		}
 
 		// Write the icon to the Plugins\Unpacked folder and use the icon's path from that folder in order to set the project's IconPath

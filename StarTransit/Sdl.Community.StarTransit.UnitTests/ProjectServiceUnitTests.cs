@@ -3,7 +3,6 @@ using System.IO;
 using NSubstitute;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Xunit;
 
@@ -20,9 +19,8 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		public ProjectServiceUnitTests()
 		{
-			var fileTypeManager = Substitute.For<IFileTypeManager>();
-			_projectService = Substitute.For<ProjectService>(fileTypeManager, null);
 			var packageService = Substitute.For<PackageService>();
+			_projectService = Substitute.For<ProjectService>();
 			_starTransitConfiguration = new StarTransitConfiguration(packageService);
 		}
 
@@ -36,7 +34,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var result = _projectService?.CreateProject(_packageModel);
 
 			// Assert: the method returns what we expected
-			Assert.Equal("Project was successfully created!", result?.Message);
+			Assert.Equal("Project was successfully created!", result?.Item1.Message);
 		}
 
 		[Fact]
@@ -49,7 +47,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var result = _projectService?.CreateProject(_packageModel);
 
 			// Assert: the method returns what we expected
-			Assert.NotEqual("Project was successfully created!", result?.Message);
+			Assert.NotEqual("Project was successfully created!", result?.Item1.Message);
 		}
 
 		private void ConfigureProject(bool isCreated, string message)

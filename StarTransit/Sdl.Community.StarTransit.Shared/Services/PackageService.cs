@@ -6,19 +6,22 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Sdl.Community.StarTransit.Shared.Import;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class PackageService
 	{
-		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries = new List<KeyValuePair<string, string>>();
-		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string, string>>>();
+		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries =
+			new List<KeyValuePair<string, string>>();
+		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary =
+			new Dictionary<string, List<KeyValuePair<string, string>>>();
 		private static PackageModel _package = new PackageModel();
 		private const char LanguageTargetSeparator = ' ';
+		private readonly IFileService _fileService = new FileService();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
@@ -55,7 +58,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"OpenPackage method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 
 			return new PackageModel();
@@ -66,63 +69,57 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// </summary>
 		private async Task<PackageModel> ReadProjectMetadata(string pathToTempFolder, string fileName)
 		{
-			try
+			var filePath = Path.Combine(pathToTempFolder, fileName);
+			var keyProperty = string.Empty;
+
+			using (var reader = new StreamReader(filePath, Encoding.Default))
 			{
-				var filePath = Path.Combine(pathToTempFolder, fileName);
-				var keyProperty = string.Empty;
-
-				using (var reader = new StreamReader(filePath, Encoding.Default))
+				string line;
+				while ((line = await reader.ReadLineAsync()) != null)
 				{
-					string line;
-					while ((line = await reader.ReadLineAsync()) != null)
+					if (line.StartsWith("[") && line.EndsWith("]"))
 					{
-						if (line.StartsWith("[") && line.EndsWith("]"))
+						var valuesDictionaries = new List<KeyValuePair<string, string>>();
+						if (keyProperty != string.Empty && _dictionaryPropetries.Any())
 						{
-							var valuesDictionaries = new List<KeyValuePair<string, string>>();
-							//aici ar trebui sa verific daca key property trecut a fost languages sa fac break nu are rost sa citim pana la sfarsit documentul
-							if (keyProperty != string.Empty && _dictionaryPropetries.Any())
+							valuesDictionaries.AddRange(
+								_dictionaryPropetries.Select(
+									property => new KeyValuePair<string, string>(property.Key, property.Value)));
+							if (_pluginDictionary.ContainsKey(keyProperty))
 							{
-								valuesDictionaries.AddRange(
-									_dictionaryPropetries.Select(
-										property => new KeyValuePair<string, string>(property.Key, property.Value)));
-								if (_pluginDictionary.ContainsKey(keyProperty))
-								{
-									_pluginDictionary[keyProperty].AddRange(valuesDictionaries);
-								}
-								else
-								{
-									_pluginDictionary.Add(keyProperty, valuesDictionaries);
-								}
-								_dictionaryPropetries.Clear();
+								_pluginDictionary[keyProperty].AddRange(valuesDictionaries);
+							}
+							else
+							{
+								_pluginDictionary.Add(keyProperty, valuesDictionaries);
 							}
 
-							var firstPosition = line.IndexOf("[", StringComparison.Ordinal) + 1;
-							var lastPosition = line.IndexOf("]", StringComparison.Ordinal) - 1;
-							keyProperty = line.Substring(firstPosition, lastPosition);
+							_dictionaryPropetries.Clear();
+							if (keyProperty.Equals("Languages"))
+								break; // we don't want to read the irrelevant information after language info
 						}
-						else
+
+						var firstPosition = line.IndexOf("[", StringComparison.Ordinal) + 1;
+						var lastPosition = line.IndexOf("]", StringComparison.Ordinal) - 1;
+						keyProperty = line.Substring(firstPosition, lastPosition);
+					}
+					else
+					{
+						var properties = line.Split('=');
+						if (!string.IsNullOrEmpty(properties[1]))
 						{
-							var properties = line.Split('=');
-							if (!string.IsNullOrEmpty(properties[1]))
-							{
-								_dictionaryPropetries.Add(
-									new KeyValuePair<string, string>(properties[0], properties[1]));
-							}
+							_dictionaryPropetries.Add(
+								new KeyValuePair<string, string>(properties[0], properties[1]));
 						}
 					}
 				}
-
-				var packageModel = await CreateModel(pathToTempFolder);
-				packageModel.PathToPrjFile = filePath;
-
-				_package = packageModel;
-				return packageModel;
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"ReadProjectMetadata method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return new PackageModel();
+
+			var packageModel = await CreateModel(pathToTempFolder);
+			packageModel.PathToPrjFile = filePath;
+
+			_package = packageModel;
+			return packageModel;
 		}
 
 		public PackageModel GetPackageModel()
@@ -131,77 +128,66 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		}
 
 		/// <summary>
-		/// Creates a package model
+		/// Creates a package model based on info read from .prj file
 		/// </summary>
 		private async Task<PackageModel> CreateModel(string pathToTempFolder)
 		{
 			var model = new PackageModel();
-			try
+			CultureInfo sourceLanguage = null;
+			var languagePairList = new List<LanguagePair>();
+
+			if (_pluginDictionary.ContainsKey("Admin"))
 			{
-				CultureInfo sourceLanguage = null;
-				var languagePairList = new List<LanguagePair>();
-
-				if (_pluginDictionary.ContainsKey("Admin"))
+				var propertiesDictionary = _pluginDictionary["Admin"];
+				foreach (var item in propertiesDictionary)
 				{
-					var propertiesDictionary = _pluginDictionary["Admin"];
-					foreach (var item in propertiesDictionary)
-					{
-						if (item.Key == "ProjectName")
-						{
-							model.Name = item.Value;
-							break;
-						}
-					}
+					if (item.Key != "ProjectName") continue;
+					model.Name = item.Value;
+					break;
 				}
+			}
 
-				if (_pluginDictionary.ContainsKey("Languages"))
+			if (_pluginDictionary.ContainsKey("Languages"))
+			{
+				var propertiesDictionary = _pluginDictionary["Languages"];
+				foreach (var item in propertiesDictionary)
 				{
-					var propertiesDictionary = _pluginDictionary["Languages"];
-					foreach (var item in propertiesDictionary)
+					if (item.Key == "SourceLanguage")
 					{
-						if (item.Key == "SourceLanguage")
-						{
-							var sourceLanguageCode = int.Parse(item.Value);
-							sourceLanguage = Language(sourceLanguageCode);
-						}
-						if (item.Key == "TargetLanguages")
-						{
-							//we assume languages code are separated by " "
-							var languages = item.Value.Split(LanguageTargetSeparator);
-
-							foreach (var language in languages)
-							{
-								var targetLanguageCode = int.Parse(language);
-								var cultureInfo = Language(targetLanguageCode);
-								var pair = new LanguagePair
-								{
-									SourceLanguage = sourceLanguage,
-									TargetLanguage = cultureInfo
-								};
-								languagePairList.Add(pair);
-							}
-						}
+						var sourceLanguageCode = int.Parse(item.Value);
+						sourceLanguage = new CultureInfo(sourceLanguageCode);
 					}
-				}
-				model.LanguagePairs = languagePairList;
-				if (model.LanguagePairs.Count > 0)
-				{
-					//for source
-					var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguage);
-					var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
 
-					//for target
-					foreach (var languagePair in model.LanguagePairs)
+					if (item.Key != "TargetLanguages") continue;
+					//we assume languages code are separated by " "
+					var languages = item.Value.Split(LanguageTargetSeparator);
+
+					foreach (var language in languages)
 					{
-						var targetFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, languagePair.TargetLanguage);
-						AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
+						var targetLanguageCode = int.Parse(language);
+						var cultureInfo = new CultureInfo(targetLanguageCode);
+						var pair = new LanguagePair {SourceLanguage = sourceLanguage, TargetLanguage = cultureInfo};
+						languagePairList.Add(pair);
 					}
 				}
 			}
-			catch (Exception ex)
+
+			model.LanguagePairs = languagePairList;
+			if (model.LanguagePairs.Count > 0)
 			{
-				Log.Logger.Error($"CreateModel method: {ex.Message}\n {ex.StackTrace}");
+				//for source
+				var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguage);
+				var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
+
+				//for target
+				foreach (var languagePair in model.LanguagePairs)
+				{
+					var targetFilesAndTmsPath =
+						GetFilesAndTmsFromTempFolder(pathToTempFolder, languagePair.TargetLanguage);
+					AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
+				}
 			}
+
 			return model;
 		}
 
@@ -209,124 +195,82 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
 			List<string> targetFilesAndTmsPath)
 		{
-			try
+			var pathToTargetFiles = new List<string>();
+			var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
+			var sourcefileList = sourceFilesAndTmsPath.Item1;
+			var tmMetadataList = sourceFilesAndTmsPath.Item2;
+
+			languagePair.HasTm = tmMetadataList.Count > 0;
+			languagePair.SourceFile = sourcefileList;
+
+			foreach (var file in targetFilesAndTmsPath)
 			{
-				var pathToTargetFiles = new List<string>();
-				var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
-				var sourcefileList = sourceFilesAndTmsPath.Item1;
-				var tmMetadataList = sourceFilesAndTmsPath.Item2;
-
-				languagePair.HasTm = tmMetadataList.Count > 0;
-				languagePair.SourceFile = sourcefileList;
-
-				foreach (var file in targetFilesAndTmsPath)
+				var isTm = _fileService.IsTransitTm(file);
+				if (isTm)
 				{
-					var isTm = IsTmFile(file);
-					if (isTm)
-					{
-						var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-						//selects the source tm which has the same id with the target tm id
-						var metaData = tmMetadataList.FirstOrDefault(x => Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
+					var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+					//selects the source tm which has the same id with the target tm id
+					var metaData = tmMetadataList.FirstOrDefault(x =>
+						Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
 
-						if (metaData != null)
-						{
-							metaData.TargetFile = file;
-						}
-						tmMetaDatas.Add(metaData);
-					}
-					else
+					if (metaData != null)
 					{
-						pathToTargetFiles.Add(file);
+						metaData.TargetFile = file;
 					}
+
+					tmMetaDatas.Add(metaData);
 				}
-				languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
-				languagePair.TargetFile = pathToTargetFiles;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"AddFilesAndTmsToModel method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
-		/// <summary>
-		/// Check if is a tm
-		/// </summary>
-		private bool IsTmFile(string file)
-		{
-			var result = false;
-			try
-			{
-				var tmFile = XElement.Load(file);
-				var fileName = Path.GetFileName(file);
-				if (tmFile.Attribute("ExtFileType") != null || fileName.StartsWith("_AEXTR", StringComparison.InvariantCultureIgnoreCase))
+				else
 				{
-					result = true;
+					pathToTargetFiles.Add(file);
 				}
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"IsTmFile method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return result;
+
+			languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
+			languagePair.TargetFile = pathToTargetFiles;
 		}
 
 		private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
 		{
 			var filesAndTms = new List<string>();
-			try
-			{
-				var extension = language.ThreeLetterWindowsLanguageName;
-				extension = TransitExtension.MapStarTransitLanguage(extension);
 
-				// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
-				var multiLanguageExtensions = extension.Split(',');
-				foreach (var multiLangExtension in multiLanguageExtensions)
-				{
-					var langExtension = multiLangExtension.Trim();
-					var files = Directory.GetFiles(pathToTempFolder, "*." + langExtension, SearchOption.TopDirectoryOnly).ToList();
-					filesAndTms.AddRange(files);
-				}
-			}
-			catch (Exception ex)
+			var extension = language.ThreeLetterWindowsLanguageName;
+			extension = _fileService.MapStarTransitLanguage(extension);
+
+			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
+			var multiLanguageExtensions = extension.Split(',');
+			foreach (var multiLangExtension in multiLanguageExtensions)
 			{
-				Log.Logger.Error($"GetFilesAndTmsFromTempFolder method: {ex.Message}\n {ex.StackTrace}");
+				var files = Directory.GetFiles(pathToTempFolder, $"*.{multiLangExtension.Trim()}",
+					SearchOption.TopDirectoryOnly).ToList();
+				filesAndTms.AddRange(files);
 			}
+
 			return filesAndTms;
 		}
 
-		private Tuple<List<string>, List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(List<string> filesAndTmsList)
+		private Tuple<List<string>, List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(
+			List<string> filesAndTmsList)
 		{
 			var translationMemoryMetadataList = new List<StarTranslationMemoryMetadata>();
 			var fileNames = new List<string>();
 
 			foreach (var file in filesAndTmsList)
 			{
-				var isTm = IsTmFile(file);
+				var isTm = _fileService.IsTransitTm(file);
 				if (isTm)
 				{
-					var metadata = new StarTranslationMemoryMetadata
-					{
-						SourceFile = file
-					};
+					var metadata = new StarTranslationMemoryMetadata {SourceFile = file};
 					translationMemoryMetadataList.Add(metadata);
-
 				}
 				else
 				{
 					fileNames.Add(file);
 				}
 			}
-			return new Tuple<List<string>, List<StarTranslationMemoryMetadata>>(fileNames, translationMemoryMetadataList);
-		}
 
-		/// <summary>
-		/// Helper method which to get language from language code
-		/// </summary>
-		/// <param name="languageCode">Language code read from prj package</param>
-		/// <returns>CultureInfo of the language</returns>
-		private CultureInfo Language(int languageCode)
-		{
-			return new CultureInfo(languageCode);
+			return new Tuple<List<string>, List<StarTranslationMemoryMetadata>>(fileNames,
+				translationMemoryMetadataList);
 		}
 	}
 }
