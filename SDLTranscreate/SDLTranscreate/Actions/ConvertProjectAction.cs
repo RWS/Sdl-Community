@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -7,6 +8,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
 using Trados.Transcreate.Interfaces;
@@ -33,9 +35,27 @@ namespace Trados.Transcreate.Actions
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
 		private ProjectSettingsService _projectSettingsService;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+			if (selectedProject == null)
+			{
+				return;
+			}
+			
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == selectedProject.GetProjectInfo().Id.ToString()))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
+			}
+
 			// set the default settings for creating the xliff from the sdlxliff
 			// these should not be taken from the users settings
 			var settings = GetSettings();
@@ -43,13 +63,29 @@ namespace Trados.Transcreate.Actions
 			settings.ExportOptions.IncludeTranslations = true;
 			settings.ExportOptions.ExcludeFilterIds = new List<string>();
 
-			settings.ImportOptions.StatusTranslationUpdatedId = "Translated";
+			settings.ImportOptions.StatusTranslationUpdatedId = string.Empty;
 			settings.ImportOptions.StatusSegmentNotImportedId = string.Empty;
 			settings.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
 			settings.ImportOptions.OverwriteTranslations = true;
 
 			var action = Enumerators.Action.Convert;
 			var workFlow = Enumerators.WorkFlow.Internal;
+
+			
+			var newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
+			if (Directory.Exists(newProjectLocalFolder))
+			{
+				MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder, 
+					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+
+			if (selectedProject.GetProjectInfo().ProjectOrigin == Constants.ProjectOrigin_TranscreateProject)
+			{
+				MessageBox.Show(PluginResources.Warning_Message_ProjectAlreadyTranscreateProject,
+					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
 
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService, 
@@ -61,7 +97,7 @@ namespace Trados.Transcreate.Actions
 				MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
-
+		
 			_controllers.TranscreateController.UpdateProjectData(taskContext);
 		}
 	
@@ -70,7 +106,6 @@ namespace Trados.Transcreate.Actions
 		{
 			Enabled = false;
 
-
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			SetProjectsController();
 			_customerProvider = new CustomerProvider();
@@ -78,8 +113,9 @@ namespace Trados.Transcreate.Actions
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, 
-				_controllers.ProjectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
 			_projectSettingsService = new ProjectSettingsService();
 			
 			SetEnabled();
@@ -111,7 +147,15 @@ namespace Trados.Transcreate.Actions
 
 		private void SetEnabled()
 		{
-			Enabled = _controllers.ProjectsController.SelectedProjects.Count() == 1;
+			if (_controllers.ProjectsController.SelectedProjects.Count() != 1)
+			{
+				Enabled = false;
+				return;
+			}
+			
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+
+			Enabled = selectedProject?.GetProjectInfo().ProjectOrigin != Constants.ProjectOrigin_TranscreateProject;
 		}
 	}
 }

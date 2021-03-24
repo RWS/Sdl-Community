@@ -9,7 +9,17 @@ namespace Trados.Transcreate.Model
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			try
+			{
+				if (propertyName != null)
+				{
+					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+				}
+			}
+			catch
+			{
+				// ignore; catch all;
+			}
 		}
 	}
 }

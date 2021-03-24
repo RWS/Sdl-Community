@@ -163,7 +163,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Readers
 			CheckParagraphCount(targetCell);
 			currentContentList.TranslationHasTrackedChanges = SegmentHasChanges(targetCell);
 
-			var translationContent = targetCell.GetFirstChild<Paragraph>();
+			var translationContent = GetParagraphsTrimed(targetCell).FirstOrDefault();
 			if (translationContent != null)
 			{
 				var tagBuffer = "";//sometimes word is so stupid that tags are not in single runs, buffering is required.
@@ -177,7 +177,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Readers
 				currentContentList.TranslationTokens = translationTokens;
 			}
 
-			var backTranslationContent = backTranslationCell?.GetFirstChild<Paragraph>();
+			var backTranslationContent = GetParagraphsTrimed(backTranslationCell).FirstOrDefault();
 			if (backTranslationContent != null)
 			{
 				CheckParagraphCount(backTranslationCell);
@@ -322,10 +322,62 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Readers
 		/// <param name="targetCell"></param>
 		private void CheckParagraphCount(TableCell targetCell)
 		{
-			if (targetCell.Elements<Paragraph>().Count() > 1)
+			var paragraphs = GetParagraphsTrimed(targetCell);
+			if (paragraphs.Count > 1)
 			{
 				throw new TooManyParagraphsException();
 			}
+		}
+
+		private static List<Paragraph> GetParagraphsTrimed(TableCell targetCell)
+		{
+			if (targetCell == null)
+			{
+				return new List<Paragraph>();
+			}
+			
+			var allParagraphs = targetCell.Elements<Paragraph>().ToList();
+			var excludeIndexes = new List<int>();
+			for (var i = 0; i < allParagraphs.Count; i++)
+			{
+				if (string.IsNullOrEmpty(allParagraphs[i].InnerText.Trim()))
+				{
+					if (!excludeIndexes.Contains(i))
+					{
+						excludeIndexes.Add(i);
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			for (var i = allParagraphs.Count - 1; i >= 0; i--)
+			{
+				if (string.IsNullOrEmpty(allParagraphs[i].InnerText.Trim()))
+				{
+					if (!excludeIndexes.Contains(i))
+					{
+						excludeIndexes.Add(i);
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			var paragraphs = new List<Paragraph>();
+			for (var i = 0; i < allParagraphs.Count; i++)
+			{
+				if (!excludeIndexes.Contains(i))
+				{
+					paragraphs.Add(allParagraphs[i]);
+				}
+			}
+
+			return paragraphs;
 		}
 
 		private void ProcessTextRun(ref List<Token> tokens, Run textRun, ref string tagbuffer)

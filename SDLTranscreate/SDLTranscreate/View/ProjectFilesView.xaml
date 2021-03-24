@@ -8,6 +8,7 @@
              xmlns:controls="clr-namespace:Trados.Transcreate.Controls"
              xmlns:behaviours="clr-namespace:Trados.Transcreate.Behaviours"
              xmlns:viewModel="clr-namespace:Trados.Transcreate.ViewModel"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFilesViewModel}">
 	<UserControl.Resources>
@@ -37,7 +38,9 @@
 				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
 			</Style>
 
-			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFiles}">
+			<CollectionViewSource x:Key="ProjectFiles" 
+			                      Source="{Binding ProjectFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			                      IsLiveFilteringRequested="True">
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>

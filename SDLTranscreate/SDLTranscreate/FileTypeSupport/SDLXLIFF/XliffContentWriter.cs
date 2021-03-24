@@ -109,10 +109,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 						var status = segmentPair.Properties.ConfirmationLevel.ToString();
 						var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(status, segmentPairInfo, match);
 					}
 				}
 
@@ -165,10 +162,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordCounts(status, segmentPairInfo, match);
 
 					continue;
 				}
@@ -202,10 +196,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 					var status = segmentPair.Properties.ConfirmationLevel.ToString();
 					var match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordCounts(status, segmentPairInfo, match);
 
 					continue;
 				}
@@ -339,7 +330,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				}
 			}
 
-			UpdateTranslationOrigin(originalTarget, targetSegment, segmentPairInfo, importedSegmentPair.ConfirmationLevel);
+			UpdateTranslationOrigin(originalTarget, targetSegment, segmentPairInfo, importedSegmentPair);
 		}
 
 		private void UpdateText(ElementText elementText, Stack<IAbstractMarkupDataContainer> containers)
@@ -349,7 +340,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 			container.Add(text);
 		}
 
-		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment, SegmentPairInfo segmentPairInfo, ConfirmationLevel importedConfirmationLevel)
+		private void UpdateTranslationOrigin(ISegment originalTarget, ISegment targetSegment, SegmentPairInfo segmentPairInfo, SegmentPair importedSegmentPair)
 		{
 			SegmentVisitor.VisitSegment(originalTarget);
 			var originalText = SegmentVisitor.Text;
@@ -361,58 +352,62 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 			{
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationUpdatedId))
 				{
+					if (targetSegment.Properties.TranslationOrigin == null)
+					{
+						targetSegment.Properties.TranslationOrigin = importedSegmentPair.TranslationOrigin;
+					}
+					
 					if (targetSegment.Properties.TranslationOrigin != null)
 					{
 						var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
 						targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
-						SetTranslationOrigin(targetSegment);
 					}
 					else
 					{
 						targetSegment.Properties.TranslationOrigin = _segmentBuilder.CreateTranslationOrigin();
-						SetTranslationOrigin(targetSegment);
 					}
 
+					SetTranslationOrigin(targetSegment);
+
 					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationUpdatedId, true, out var result);
-					var statusTranslationUpdated = success ? result : importedConfirmationLevel;
+					var statusTranslationUpdated = success ? result : importedSegmentPair.ConfirmationLevel;
 
 					targetSegment.Properties.ConfirmationLevel = statusTranslationUpdated;
+					targetSegment.Properties.IsLocked = importedSegmentPair.IsLocked;
 				}
 				else
 				{
-					targetSegment.Properties.ConfirmationLevel = importedConfirmationLevel;
+					targetSegment.Properties.TranslationOrigin = importedSegmentPair.TranslationOrigin;
+					targetSegment.Properties.IsLocked = importedSegmentPair.IsLocked;
+					targetSegment.Properties.ConfirmationLevel = importedSegmentPair.ConfirmationLevel;
 				}
 
 				var status = targetSegment.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
-
+				AddWordCounts(status, segmentPairInfo, match);
 			}
 			else
 			{
 				if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 				{
 					var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
-					var statusTranslationNotUpdated = success ? result : importedConfirmationLevel;
+					var statusTranslationNotUpdated = success ? result : importedSegmentPair.ConfirmationLevel;
 
 					targetSegment.Properties.ConfirmationLevel = statusTranslationNotUpdated;
 				}
 				else
 				{
-					targetSegment.Properties.ConfirmationLevel = importedConfirmationLevel;
+					targetSegment.Properties.ConfirmationLevel = importedSegmentPair.ConfirmationLevel;
 				}
+				
+				targetSegment.Properties.TranslationOrigin = importedSegmentPair.TranslationOrigin;
+				targetSegment.Properties.IsLocked = importedSegmentPair.IsLocked;
 
 				var status = targetSegment.Properties.ConfirmationLevel.ToString();
 				var match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-				AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-				AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+				AddWordCounts(status, segmentPairInfo, match);
 			}
 		}
 
@@ -426,6 +421,14 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 
 			targetSegment.Properties.TranslationOrigin.SetMetaData("last_modified_by", _importOptions.OriginSystem);
 			targetSegment.Properties.TranslationOrigin.SetMetaData("modified_on", FormatAsInvariantDateTime(DateTime.UtcNow));
+		}
+
+		private void AddWordCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 		}
 
 		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder, ISegment originalTarget, ISegment originalSource,

@@ -36,15 +36,28 @@
 				<Setter Property="ContextMenu" Value="{DynamicResource TreeViewContextMenu}"/>
 			</Style>
 			<ContextMenu x:Key="TreeViewContextMenu">
-				<MenuItem Header="Create Back-Translation projects" 
-							IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
+
+				<MenuItem Header="Remove Transcreate project" 
+				          IsEnabled="{Binding DataContext.IsEnabledDeleteProject, 
 							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
 							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-							Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+				          Command="{Binding DataContext.RemoveProjectCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/Delete.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+
+				<MenuItem Header="Create Back-Translation projects" 
+				          IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+				          Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 					<MenuItem.Icon>
 						<Image Source="../Resources/back_translation_small.ico"/>
 					</MenuItem.Icon>
 				</MenuItem>
+
 				<MenuItem Header="Remove Back-Translation projects" 
 							IsEnabled="{Binding DataContext.IsEnabledRemoveBackProjects, 
 							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
@@ -55,17 +68,14 @@
 					</MenuItem.Icon>
 				</MenuItem>
 
+				<Separator/>
 				<MenuItem Header="Open folder in explorer" 
-				          Command="{Binding DataContext.OpenProjectFolderCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-				       >
+				          Command="{Binding DataContext.OpenProjectFolderCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 					<MenuItem.Icon>
 						<Image Source="../Resources/Folder.png"/>
 					</MenuItem.Icon>
 				</MenuItem>
 			</ContextMenu>
-
-			
-
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Border BorderBrush="Gainsboro" BorderThickness="1" Background="White">
@@ -131,7 +141,7 @@
 			</Grid>
 
 			<TreeView Grid.Column="0" Padding="2,5,2,2" Grid.Row="1" 					  
-			          ItemsSource="{Binding CustomerGroups}"
+			          ItemsSource="{Binding CustomerGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 				<TreeView.ItemContainerStyle>
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
@@ -151,7 +161,7 @@
 						<HierarchicalDataTemplate.ItemTemplate>
 							<HierarchicalDataTemplate ItemsSource="{Binding BackTranslationProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" 
 							                          DataType="{x:Type model:Project}">
-								
+
 								<StackPanel Orientation="Horizontal" Margin="0,1,0,1"
 								            Style="{StaticResource ContextMenuStyle}">
 									<Image Focusable="False"

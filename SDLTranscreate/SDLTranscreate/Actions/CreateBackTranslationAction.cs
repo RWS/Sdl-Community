@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.CustomEventArgs;
 using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
@@ -25,7 +27,6 @@ namespace Trados.Transcreate.Actions
 	[ActionLayout(typeof(TranscreateManagerActionsGroup), 3, DisplayType.Large)]
 	public class CreateBackTranslationAction : AbstractViewControllerAction<TranscreateViewController>
 	{
-		private Settings _settings;
 		private CustomerProvider _customerProvider;
 		private PathInfo _pathInfo;
 		private ImageService _imageService;
@@ -34,6 +35,7 @@ namespace Trados.Transcreate.Actions
 		private ProjectAutomationService _projectAutomationService;
 		private ProjectSettingsService _projectSettingsService;
 		private Controllers _controllers;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
@@ -49,12 +51,23 @@ namespace Trados.Transcreate.Actions
 			{
 				return;
 			}
-
+			
 			var studioProject = _controllers.ProjectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
 			if (studioProject == null)
 			{
 				return;
+			}
+
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == project.Id))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
 			}
 
 			var action = Enumerators.Action.CreateBackTranslation;
@@ -66,7 +79,7 @@ namespace Trados.Transcreate.Actions
 			settings.ExportOptions.CopySourceToTarget = false;
 
 			settings.ImportOptions.OverwriteTranslations = true;
-			settings.ImportOptions.OriginSystem = "Transcreate Automation";
+			settings.ImportOptions.OriginSystem = Constants.OriginSystem_TranscreateAutomation;
 			settings.ImportOptions.StatusTranslationUpdatedId = string.Empty;
 
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
@@ -80,12 +93,14 @@ namespace Trados.Transcreate.Actions
 				var taskContext = wizardService.ShowWizard(Controller, out var message);
 				if (taskContext == null && !string.IsNullOrEmpty(message))
 				{
+					LogManager.GetCurrentClassLogger().Warn(message);
 					MessageBox.Show(message,
 						PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				MessageBox.Show(ex.Message,
 					PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 			}
@@ -108,10 +123,12 @@ namespace Trados.Transcreate.Actions
 			_pathInfo = new PathInfo();
 			_dialogService = new DialogService();
 			_imageService = new ImageService();
-			_settings = GetSettings();
 			_segmentBuilder = new SegmentBuilder();
 			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
+			
 			_projectSettingsService = new ProjectSettingsService();
 			
 			_controllers.TranscreateController.ProjectSelectionChanged += ProjectsController_SelectedProjectsChanged;
@@ -136,7 +153,7 @@ namespace Trados.Transcreate.Actions
 			SetEnabled(e.SelectedProject);
 		}
 
-		private void SetEnabled(Interfaces.IProject selectedProject)
+		private void SetEnabled(IProject selectedProject)
 		{
 			Enabled = selectedProject is Project && !(selectedProject is BackTranslationProject);
 		}

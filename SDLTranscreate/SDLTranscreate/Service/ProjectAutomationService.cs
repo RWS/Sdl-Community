@@ -14,6 +14,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.Model;
 using Trados.Transcreate.Model.ProjectSettings;
@@ -24,28 +25,40 @@ namespace Trados.Transcreate.Service
 {
 	public class ProjectAutomationService
 	{
-		private string _projectNameSuffix;
 		private readonly ImageService _imageService;
 		private readonly TranscreateViewController _controller;
 		private readonly ProjectsController _projectsController;
 		private readonly CustomerProvider _customerProvider;
+		private readonly StudioVersionService _studioVersionService;
 
 		public ProjectAutomationService(ImageService imageService, TranscreateViewController controller, ProjectsController projectsController,
-			CustomerProvider customerProvider)
+			CustomerProvider customerProvider, StudioVersionService studioVersionService)
 		{
 			_imageService = imageService;
 			_controller = controller;
 			_projectsController = projectsController;
 			_customerProvider = customerProvider;
+			_studioVersionService = studioVersionService;
 		}
 
 		public void ActivateProject(FileBasedProject project)
 		{
+			if (project == null)
+			{
+				return;
+			}
+
 			var projectId = project.GetProjectInfo().Id.ToString();
 			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
 			if (projectId != selectedProjectId)
 			{
-				Dispatcher.CurrentDispatcher.Invoke(delegate
+				if (CanActivateFileBasedProject())
+				{
+					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					activateProjectMethod?.Invoke(_projectsController, new object[] { project });
+				}
+				else
 				{
 					var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
 						BindingFlags.NonPublic | BindingFlags.Instance);
@@ -54,8 +67,7 @@ namespace Trados.Transcreate.Service
 					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
 						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 					activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
-
-				}, DispatcherPriority.ContextIdle);
+				}
 			}
 
 			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
@@ -149,23 +161,21 @@ namespace Trados.Transcreate.Service
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
-				throw new Exception("The project name suffix cannot be null!");
+				throw new Exception(PluginResources.Warning_Message_ProjectNameSuffixCannotBeNull);
 			}
-
-			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
 			var projectReference = new ProjectReference(project.FilePath);
 
 			var newProjectInfo = new ProjectInfo
 			{
-				Name = projectInfo.Name + "-" + _projectNameSuffix,
+				Name = projectInfo.Name + "-" + projectNameSuffix,
 				Description = projectInfo.Description,
-				LocalProjectFolder = projectInfo.LocalProjectFolder + "-" + _projectNameSuffix,
+				LocalProjectFolder = projectInfo.LocalProjectFolder + "-" + projectNameSuffix,
 				SourceLanguage = projectInfo.SourceLanguage,
 				TargetLanguages = projectInfo.TargetLanguages,
 				DueDate = projectInfo.DueDate,
-				ProjectOrigin = "Transcreate project",
+				ProjectOrigin = Constants.ProjectOrigin_TranscreateProject,
 				IconPath = iconPath,
 			};
 
@@ -186,16 +196,16 @@ namespace Trados.Transcreate.Service
 		   );
 
 			var sourceGuids = GetProjectFileGuids(newProject.GetSourceLanguageFiles());
+			if (sourceGuids.Count > 0)
+			{
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
 
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.ConvertToTranslatableFormat
-			);
-
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.CopyToTargetLanguages
-			);
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.CopyToTargetLanguages);
+			}
 
 			newProject.Save();
 
@@ -208,10 +218,8 @@ namespace Trados.Transcreate.Service
 		{
 			if (string.IsNullOrEmpty(projectNameSuffix))
 			{
-				throw new Exception("The project name suffix cannot be null!");
+				throw new Exception(PluginResources.Warning_Message_ProjectNameSuffixCannotBeNull);
 			}
-
-			_projectNameSuffix = projectNameSuffix;
 
 			var projectInfo = project.GetProjectInfo();
 
@@ -226,13 +234,13 @@ namespace Trados.Transcreate.Service
 			var projectReference = new ProjectReference(project.FilePath);
 			var newProjectInfo = new ProjectInfo
 			{
-				Name = projectInfo.Name + "-" + _projectNameSuffix + "-" + targetLanguage,
+				Name = projectInfo.Name + "-" + projectNameSuffix + "-" + targetLanguage,
 				Description = projectInfo.Description,
 				LocalProjectFolder = localProjectFolder,
 				SourceLanguage = newSourceLanguage,
 				TargetLanguages = new Language[] { newTargetLanguage },
 				DueDate = projectInfo.DueDate,
-				ProjectOrigin = "Back-Translation project",
+				ProjectOrigin = Constants.ProjectOrigin_BackTranslationProject,
 				IconPath = iconPath
 			};
 
@@ -252,19 +260,23 @@ namespace Trados.Transcreate.Service
 			// Remove any TMs that don't correspond to the language directions of the project
 			UpdateTmConfiguration(newProject);
 
+			var languageFileIds = newProject.GetSourceLanguageFiles().GetIds();
+
 			newProject.RunAutomaticTask(
-				newProject.GetSourceLanguageFiles().GetIds(),
+				languageFileIds,
 				AutomaticTaskTemplateIds.Scan);
 
 			var sourceGuids = GetProjectFileGuids(newProject.GetSourceLanguageFiles());
+			if (sourceGuids.Count > 0)
+			{
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
 
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
-
-			newProject.RunAutomaticTask(
-				sourceGuids.ToArray(),
-				AutomaticTaskTemplateIds.CopyToTargetLanguages);
+				newProject.RunAutomaticTask(
+					sourceGuids.ToArray(),
+					AutomaticTaskTemplateIds.CopyToTargetLanguages);
+			}
 
 			newProject.Save();
 			return await System.Threading.Tasks.Task.FromResult(newProject);
@@ -300,6 +312,50 @@ namespace Trados.Transcreate.Service
 			}
 
 			return new List<Report>();
+		}
+
+		public void UpdateProjectIcon(FileBasedProject project, string iconPath)
+		{
+			var projectInfo = project?.GetProjectInfo();
+			if (projectInfo != null && 
+			    string.Compare(projectInfo.IconPath, iconPath, StringComparison.CurrentCultureIgnoreCase) != 0)
+			{
+				projectInfo.IconPath = iconPath;
+				project.UpdateProject(projectInfo);
+			}
+		}
+
+		public string GetTranscreateIconPath(Common.PathInfo pathInfo)
+		{
+			if (pathInfo == null)
+			{
+				return null;
+			}
+			
+			if (!File.Exists(pathInfo.ProjectIconFilePath))
+			{
+				using (var fs = new FileStream(pathInfo.ProjectIconFilePath, FileMode.Create))
+				{
+					PluginResources.sdl_transcreate_view.Save(fs);
+				}
+			}
+
+			return pathInfo.ProjectIconFilePath;
+		}
+
+		private bool CanActivateFileBasedProject()
+		{
+			var studioVersion = _studioVersionService.GetStudioVersion();
+			if (studioVersion != null)
+			{
+				var version = studioVersion.ExecutableVersion;
+				if (version.Major < 16 || version.Minor < 1 || version.Build < 4)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		private List<Report> DeserializeReports(string value)
@@ -505,7 +561,7 @@ namespace Trados.Transcreate.Service
 
 		private bool IsBackTranslationProject(string projectOrigin)
 		{
-			return string.Compare(projectOrigin, "Back-Translation project",
+			return string.Compare(projectOrigin, Constants.ProjectOrigin_BackTranslationProject,
 				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 

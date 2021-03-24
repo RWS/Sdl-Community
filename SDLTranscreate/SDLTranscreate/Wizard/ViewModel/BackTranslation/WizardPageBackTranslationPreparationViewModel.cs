@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -191,7 +192,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_LoadProjects);
 					if (job != null)
 					{
-						success = LoadStudio(job, taskContexts);
+						success = LoadStudioProjects(job, taskContexts);
 					}
 				}
 
@@ -207,6 +208,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				TaskContext.Completed = success;
 
 				FinalizeJobProcesses(success);
+			}
+			catch (Exception ex)
+			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 			}
 			finally
 			{
@@ -240,7 +245,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			catch (Exception ex)
 			{
 				jobProcess.Errors.Add(ex);
-				//jobProcess.Description = string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, ex.Message);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
 
@@ -257,6 +261,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			var success = true;
 			var phase = PluginResources.JobProcess_CreateBackTranslations;
 
+			var projectFolderReferences = new List<ProjectFolderReference>();
 			try
 			{
 				_logReport.AppendLine();
@@ -265,7 +270,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				TextMessage = PluginResources.JobProcess_CreateBackTranslations;
 				TextMessageBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(ForegroundProcessing);
 
-				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0, PluginResources.JobProcess_ReadingProjectFiles);
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 0,
+					PluginResources.JobProcess_ReadingProjectFiles);
 
 				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, TaskContext.ExportOptions, TaskContext.AnalysisBands);
 				var sdlxliffWriter = new SdlxliffWriter(_segmentBuilder, TaskContext.ImportOptions, TaskContext.AnalysisBands);
@@ -273,7 +279,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 				var studioProjectInfo = TaskContext.FileBasedProject.GetProjectInfo();
 
-				var fileDataList = GetFileDataList(TaskContext.ProjectFiles.Where(a => a.Selected).ToList(), TaskContext.Project, studioProjectInfo, sdlxliffReader);
+				var fileDataList = GetFileDataList(TaskContext.ProjectFiles.Where(a => a.Selected).ToList(),
+					TaskContext.Project, studioProjectInfo, sdlxliffReader);
 
 				var selectedLanguages = GetSelectedLanguages().ToList();
 				var totalLanguages = System.Convert.ToDouble(selectedLanguages.Count);
@@ -283,12 +290,14 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				{
 					languageIndex++;
 					var unit = System.Convert.ToInt32((System.Convert.ToDouble(languageIndex) / totalLanguages) * 100);
-					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, languageName));
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit,
+						string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, languageName));
 
 					var sourceFiles = await GetSelectedSourceFiles(languageName, fileDataList, xliffWriter);
 
 					var backTranslationProject = TaskContext.Project.BackTranslationProjects.FirstOrDefault(a =>
-						string.Compare(a.SourceLanguage.CultureInfo.Name, languageName, StringComparison.CurrentCultureIgnoreCase) == 0);
+						string.Compare(a.SourceLanguage.CultureInfo.Name, languageName,
+							StringComparison.CurrentCultureIgnoreCase) == 0);
 
 					var backTranslationProjectStudio = GetBackTranslationStudioProject(backTranslationProject);
 
@@ -296,15 +305,20 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 					await CloseBackTranslationProject(backTranslationProjectStudio);
 
-					var localProjectFolderTemp = Path.Combine(Path.GetTempPath(), GetDateTimeToString(DateTime.Now));
-					var localProjectFolder = Path.Combine(studioProjectInfo.LocalProjectFolder, "BackProjects", languageName);
-					if (Directory.Exists(localProjectFolder))
+					var projectFolderReference = new ProjectFolderReference
 					{
-						await MoveBackTranslationProject(localProjectFolder, localProjectFolderTemp);
+						LocalProjectFolderTemp = Path.Combine(Path.GetTempPath(), GetDateTimeToString(DateTime.Now)),
+						LocalProjectFolder = Path.Combine(studioProjectInfo.LocalProjectFolder, "BackProjects", languageName)
+					};
+					projectFolderReferences.Add(projectFolderReference);
+
+					if (Directory.Exists(projectFolderReference.LocalProjectFolder))
+					{
+						await MoveBackTranslationProject(projectFolderReference.LocalProjectFolder, projectFolderReference.LocalProjectFolderTemp);
 						if (backTranslationProject != null)
 						{
 							await PersistExistingBackTranslationFiles(backTranslationProject, languageName,
-								localProjectFolderTemp, studioProjectInfo, sourceFiles, sdlxliffReader);
+								projectFolderReference.LocalProjectFolderTemp, studioProjectInfo, sourceFiles, sdlxliffReader);
 						}
 					}
 
@@ -312,24 +326,31 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 					var iconPath = GetBackTranslationIconPath();
 					var newStudioProject = await _projectAutomationService.CreateBackTranslationProject(
-						TaskContext.FileBasedProject, localProjectFolder, languageName, iconPath,
+						TaskContext.FileBasedProject, projectFolderReference.LocalProjectFolder, languageName, iconPath,
 						sourceFiles, "BT");
+					projectFolderReference.Project = newStudioProject;
 
-					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, string.Format(PluginResources.Progres_Label_CreatedProject, newStudioProject.GetProjectInfo().Name));
+					_controllers.ProjectsController.RefreshProjects();
+					_controllers.ProjectsController.ActivateProject(newStudioProject);
+
+					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit,
+						string.Format(PluginResources.Progres_Label_CreatedProject,
+							newStudioProject.GetProjectInfo().Name));
 
 					if (projectReports?.Count > 0)
 					{
 						var newProjectReports = _projectAutomationService.GetProjectReports(newStudioProject);
 						newProjectReports.AddRange(projectReports);
 
-						_projectAutomationService.UpdateProjectSettingsBundle(newStudioProject, newProjectReports, null, null);
+						_projectAutomationService.UpdateProjectSettingsBundle(newStudioProject, newProjectReports, null,
+							null);
 					}
 
 					AlignProjectFileIds(backTranslationProject, newStudioProject);
 
 					var newStudioProjectInfo = newStudioProject.GetProjectInfo();
 					var indent = "   ";
-					
+
 					_logReport.AppendLine();
 					_logReport.AppendLine(PluginResources.Label_Project);
 					_logReport.AppendLine(indent + string.Format(PluginResources.Label_Name, newStudioProjectInfo.Name));
@@ -337,48 +358,76 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					_logReport.AppendLine(indent + string.Format(PluginResources.Label_SourceLanguage, newStudioProjectInfo.SourceLanguage.CultureInfo.Name));
 					_logReport.AppendLine(indent + string.Format(PluginResources.Label_TargetLanguages, newStudioProjectInfo.TargetLanguages.FirstOrDefault()?.CultureInfo.Name));
 					_logReport.AppendLine(PluginResources.Label_SourceFiles);
-					
+
 					foreach (var sourceFile in sourceFiles)
 					{
-						_logReport.AppendLine(string.Format(indent + "{0}: {1}", sourceFile.Action.ToString(), sourceFile.FolderPathInProject + sourceFile.FileName));
+						_logReport.AppendLine(string.Format(indent + "{0}: {1}", sourceFile.Action.ToString(),
+							sourceFile.FolderPathInProject + sourceFile.FileName));
 					}
 
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, PluginResources.Progres_Label_MergingProjectFolders);
-					CopyProjectFolders(localProjectFolderTemp, localProjectFolder);
+					CopyProjectFolders(projectFolderReference.LocalProjectFolderTemp, projectFolderReference.LocalProjectFolder);
 
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, PluginResources.Progres_Label_Translating);
 					await _projectAutomationService.RunPretranslationWithoutTm(newStudioProject);
 
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, PluginResources.Progres_Label_UpdatingTask);
 					var taskContext = await CreateBackTranslationTaskContext(newStudioProject, backTranslationProject,
-						sourceFiles, studioProjectInfo.LocalProjectFolder, localProjectFolderTemp,
-						 sdlxliffReader, sdlxliffWriter, xliffWriter);
+						sourceFiles, studioProjectInfo.LocalProjectFolder, projectFolderReference.LocalProjectFolderTemp,
+						sdlxliffReader, sdlxliffWriter, xliffWriter);
 
 					taskContext.Completed = true;
 					taskContexts.Add(taskContext);
-
-					if (Directory.Exists(localProjectFolderTemp))
-					{
-						Directory.Delete(localProjectFolderTemp, true);
-					}
 				}
 
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " -  Completed " + FormatDateTime(DateTime.UtcNow));
 
-				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100, PluginResources.JobProcess_Done);
+				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Completed, 100,
+					PluginResources.JobProcess_Done);
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
+
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
 
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
+
+				// Undo any existing operations to the project
+				foreach (var projectFolderReference in projectFolderReferences)
+				{
+					await CloseBackTranslationProject(projectFolderReference.Project);
+					await MoveBackTranslationProject(projectFolderReference.LocalProjectFolderTemp, projectFolderReference.LocalProjectFolder);
+				}
+			}
+			finally
+			{
+				foreach (var projectFolder in projectFolderReferences)
+				{
+					TryDeleteFolder(projectFolder.LocalProjectFolderTemp);
+				}
 			}
 
 			return await Task.FromResult(new Tuple<bool, List<TaskContext>>(success, taskContexts));
+		}
+
+		private static void TryDeleteFolder(string folder)
+		{
+			try
+			{
+				if (Directory.Exists(folder))
+				{
+					Directory.Delete(folder, true);
+				}
+			}
+			catch
+			{
+				// catch all; ignore
+			}
 		}
 
 		private static void AlignProjectFileIds(Interfaces.IProject backTranslationProject, IProject newStudioProject)
@@ -424,10 +473,11 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == backTranslationProject?.Id
 									 || string.Compare(Path.GetDirectoryName(a.FilePath), backTranslationProject?.Path,
 										 StringComparison.CurrentCultureIgnoreCase) == 0);
+
 			return backTranslationProjectStudio;
 		}
 
-		private bool LoadStudio(JobProcess jobProcess, IEnumerable<TaskContext> taskContexts)
+		private bool LoadStudioProjects(JobProcess jobProcess, IEnumerable<TaskContext> taskContexts)
 		{
 			var success = true;
 
@@ -444,7 +494,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			{
 				foreach (var taskContext in taskContexts)
 				{
-					Dispatcher.CurrentDispatcher.Invoke(new Action(delegate
+					lock (_lockObject)
 					{
 						_projectAutomationService.ActivateProject(taskContext.FileBasedProject);
 
@@ -454,10 +504,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 						_controllers.TranscreateController.UpdateBackTranslationProjectData(TaskContext.Project.Id, taskContext);
 
 						_logReport.AppendLine("Done!");
-					}), DispatcherPriority.ContextIdle);
+					}
 				}
 
-				_controllers.TranscreateController.InvalidateProjectsContainer();
+				_controllers.TranscreateController.RefreshProjects(true);
 
 				_logReport.AppendLine();
 				_logReport.AppendLine("Phase: " + phase + " -  Completed " + FormatDateTime(DateTime.UtcNow));
@@ -466,6 +516,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
+
 				jobProcess.Errors.Add(ex);
 				Task.Run(() => UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message));
 				success = false;
@@ -497,6 +549,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
+
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
@@ -530,7 +584,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			_logReport.AppendLine();
 			_logReport.AppendLine(PluginResources.Label_Options);
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_WorkingFolder, TaskContext.WorkingFolder));
-			//_logReport.AppendLine(indent + string.Format(PluginResources.Label_CopySourceToTargetForEmptyTranslations, TaskContext.BackTranslationOptions.CopySourceToTargetForEmptyTranslations));
 			_logReport.AppendLine(indent + string.Format(PluginResources.Label_OverwriteExistingBackTranslations, TaskContext.BackTranslationOptions.OverwriteExistingBackTranslations));
 
 			_logReport.AppendLine();
@@ -642,15 +695,16 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 		private async Task MoveBackTranslationProject(string from, string to)
 		{
-			if (Directory.Exists(to))
+			if (Directory.Exists(from))
 			{
-				Directory.Delete(to, true);
-			}
+				if (Directory.Exists(to))
+				{
+					Directory.Delete(to, true);
+				}
 
-			Dispatcher.CurrentDispatcher.Invoke(new Action(delegate
-			{
-				Directory.Move(from, to);
-			}), DispatcherPriority.ContextIdle);
+				Dispatcher.CurrentDispatcher.Invoke(new Action(delegate { Directory.Move(from, to); }),
+					DispatcherPriority.ContextIdle);
+			}
 
 			await Task.FromResult(1);
 		}
@@ -768,7 +822,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 				_controllers.ProjectsController.Close(project);
 			}
 
-
 			await Task.FromResult(1);
 		}
 
@@ -825,9 +878,9 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 					File.Move(tmpInputFile, tmpInputFile + ".sdlxliff");
 					tmpInputFile = tmpInputFile + ".sdlxliff";
 
-					var paragraphMap = GetParagraphMap(sdlxliffReader, projectFile.ProjectId, projectFile.FileId,
+					var paragraphUnitMap = GetParagraphUnitMap(sdlxliffReader, projectFile.ProjectId, projectFile.FileId,
 						projectFile.Location, projectFile.TargetLanguage);
-					AlignParagraphIds(fileData.Data, paragraphMap.Keys.ToList());
+					AlignParagraphUnitIds(fileData.Data, paragraphUnitMap);
 
 					if (!Directory.Exists(filePath))
 					{
@@ -905,20 +958,30 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			return paragraphMap;
 		}
 
-		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string projectId, string fileId, string path, string targetLanguage)
+		private Dictionary<string, List<string>> GetParagraphUnitMap(SdlxliffReader sdlxliffReader, string projectId, string fileId, string path, string targetLanguage)
 		{
 			var xliffData = sdlxliffReader.ReadFile(projectId, fileId, path, targetLanguage);
 			return GetParagraphMap(xliffData);
 		}
 
-		private void AlignParagraphIds(Xliff xliffData, IReadOnlyList<string> paragraphIds)
+		private void AlignParagraphUnitIds(Xliff xliffData, Dictionary<string, List<string>> paragraphUnitMap)
 		{
+			var paragraphUnitIds = paragraphUnitMap.Keys.ToList();
+			
 			var i = 0;
 			foreach (var file in xliffData.Files)
 			{
 				foreach (var transUnit in file.Body.TransUnits)
 				{
-					transUnit.Id = paragraphIds[i++];
+					var paragraphUnitId = paragraphUnitIds[i++];
+					transUnit.Id = paragraphUnitId;
+
+					//var segmentPairIds = paragraphUnitMap[paragraphUnitId];
+					//for (var index = 0; index < transUnit.SegmentPairs.Count; index++)
+					//{
+					//	var segmentPair = transUnit.SegmentPairs[index];
+					//	segmentPair.Id = segmentPairIds[index];
+					//}
 				}
 			}
 		}

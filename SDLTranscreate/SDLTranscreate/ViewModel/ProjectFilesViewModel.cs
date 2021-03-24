@@ -32,14 +32,6 @@ namespace Trados.Transcreate.ViewModel
 		private ICommand _mouseDoubleClickCommand;
 		private ICommand _createReportsFromSelectionCommand;
 
-		public ProjectFilesViewModel(List<ProjectFile> projectFiles)
-		{
-			ProjectFiles = projectFiles;
-
-			SelectedProjectFile = ProjectFiles?.Count > 0 ? projectFiles[0] : null;
-			SelectedProjectFiles = new List<ProjectFile> { SelectedProjectFile };
-		}
-
 		public EventHandler<ProjectFileSelectionChangedEventArgs> ProjectFileSelectionChanged;
 
 		public ICommand CreateReportsFromSelectionCommand => _createReportsFromSelectionCommand ?? (_createReportsFromSelectionCommand = new CommandHandler(CreateReportsFromSelection));
@@ -63,11 +55,6 @@ namespace Trados.Transcreate.ViewModel
 		public ICommand MouseDoubleClickCommand => _mouseDoubleClickCommand ?? (_mouseDoubleClickCommand = new CommandHandler(MouseDoubleClick));
 
 		public ProjectFileActivityViewModel ProjectFileActivityViewModel { get; internal set; }
-
-		public void Refresh()
-		{
-			OnPropertyChanged(nameof(ProjectFiles));
-		}
 
 		public List<ProjectFile> ProjectFiles
 		{

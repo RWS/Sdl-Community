@@ -27,6 +27,7 @@ namespace PretranslateSamplePlugin
 			};
 
 			var fileBasedProject = new FileBasedProject(projectInfo);
+			var allProviders = TranslationProviderManager.GetTranslationProviderFactories(); //get a list of all providers
 			AddServerTm(fileBasedProject, "", "", "", false, "",
 				"");
 

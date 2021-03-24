@@ -30,7 +30,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private readonly ISegmentSupervisor _segmentSupervisor;
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly EditorController _editorController;
-		private readonly IStudioEventAggregator _eventAggregator;
 		private List<ISDLMTCloudAction> _actions;
 		private ICommand _sendFeedbackCommand;
 
@@ -39,13 +38,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _clearCommand;
 		private bool? _autoSendFeedback;
 
-		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService, EditorController editorController, IStudioEventAggregator eventAggregator)
+		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService, EditorController editorController)
 		{
 			_actionProvider = actionProvider;
 			_segmentSupervisor = segmentSupervisor;
 			_messageBoxService = messageBoxService;
 			_editorController = editorController;
-			_eventAggregator = eventAggregator;
 			_shortcutService = shortcutService;
 
 			Initialize();

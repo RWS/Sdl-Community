@@ -125,11 +125,8 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 							status = segmentPair.Properties.ConfirmationLevel.ToString();
 							match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 						}
-
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						
+						AddWordCounts(status, segmentPairInfo, match);
 
 						continue;
 					}
@@ -187,10 +184,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 							match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 						}
 
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(status, segmentPairInfo, match);
 					}
 					else
 					{
@@ -205,10 +199,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 						status = targetSegment.Properties.ConfirmationLevel.ToString();
 						match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordCounts(status, segmentPairInfo, match);
 					}
 				}
 				else
@@ -225,10 +216,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 						match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 					}
 
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordCounts(status, segmentPairInfo, match);
 				}
 			}
 
@@ -252,6 +240,13 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 			return date.ToString(DateTimeFormatInfo.InvariantInfo);
 		}
 
+		private void AddWordCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
 
 		/// <summary>
 		/// Need to find out the segment identifier, there is a possibility that the old files 

@@ -20,6 +20,7 @@ using Sdl.Reports.Viewer.API;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.Controls;
 using Trados.Transcreate.CustomEventArgs;
@@ -29,6 +30,7 @@ using Trados.Transcreate.Interfaces;
 using Trados.Transcreate.Model;
 using Trados.Transcreate.Model.ProjectSettings;
 using Trados.Transcreate.Service;
+using Trados.Transcreate.View;
 using Trados.Transcreate.ViewModel;
 using IProject = Trados.Transcreate.Interfaces.IProject;
 using LanguageDirectionInfo = Trados.Transcreate.Model.LanguageDirectionInfo;
@@ -50,8 +52,8 @@ namespace Trados.Transcreate
 		private List<IProject> _transcreateProjects;
 		private ProjectFilesViewModel _projectFilesViewModel;
 		private ProjectsNavigationViewModel _projectsNavigationViewModel;
-		private ProjectFilesViewControl _projectFilesViewControl;
-		private ProjectsNavigationViewControl _projectsNavigationViewControl;
+		private ProjectFilesView _projectFilesView;
+		private ProjectsNavigationView _projectsNavigationView;
 		private ProjectFileActivityViewController _projectFileActivityViewController;
 		private ProjectsController _projectsController;
 		private EditorController _editorController;
@@ -63,6 +65,7 @@ namespace Trados.Transcreate
 		private ProjectAutomationService _projectAutomationService;
 		private SegmentBuilder _segmentBuilder;
 		private ReportService _reportService;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Initialize(IViewContext context)
 		{
@@ -85,7 +88,9 @@ namespace Trados.Transcreate
 			_customerProvider = new CustomerProvider();
 			_projectSettingsService = new ProjectSettingsService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, this, _projectsController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, this, _projectsController, _customerProvider, _studioVersionService);
 			_reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
 
 			ReportsController = ReportsController.Instance;
@@ -97,37 +102,39 @@ namespace Trados.Transcreate
 
 		protected override IUIControl GetExplorerBarControl()
 		{
-			if (_projectsNavigationViewControl != null)
+			if (_projectsNavigationView != null)
 			{
-				return _projectsNavigationViewControl;
+				return _projectsNavigationView;
 			}
 
-			_projectsNavigationViewModel = new ProjectsNavigationViewModel(new List<IProject>(), _projectsController, _editorController);
+			_projectsNavigationViewModel = new ProjectsNavigationViewModel(_projectsController,
+				_editorController, _projectAutomationService);
+
 			_projectsNavigationViewModel.ProjectSelectionChanged += OnProjectSelectionChanged;
 
-			_projectsNavigationViewControl = new ProjectsNavigationViewControl(_projectsNavigationViewModel);
+			_projectsNavigationView = new ProjectsNavigationView();
+			_projectsNavigationView.DataContext = _projectsNavigationViewModel;
 
-			return _projectsNavigationViewControl;
+			return _projectsNavigationView;
 		}
 
 		protected override IUIControl GetContentControl()
 		{
-			if (_projectFilesViewControl != null)
+			if (_projectFilesView != null)
 			{
-				return _projectFilesViewControl;
+				return _projectFilesView;
 			}
 
-			_projectFilesViewModel = new ProjectFilesViewModel(null);
-			_projectFilesViewControl = new ProjectFilesViewControl(_projectFilesViewModel);
-			_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
+			_projectFilesViewModel = new ProjectFilesViewModel();
+			_projectFilesView = new ProjectFilesView { DataContext = _projectFilesViewModel };
 
+			_projectsNavigationViewModel.ProjectFilesViewModel = _projectFilesViewModel;
 			_projectFilesViewModel.ProjectFileSelectionChanged += ProjectFilesViewModel_ProjectFileSelectionChanged;
 
 			UpdateProjectSelectionFromProjectsController();
-
 			_projectsNavigationViewModel.Projects = _transcreateProjects;
 
-			return _projectFilesViewControl;
+			return _projectFilesView;
 		}
 
 		public EventHandler<ProjectSelectionChangedEventArgs> ProjectSelectionChanged;
@@ -184,26 +191,7 @@ namespace Trados.Transcreate
 
 			if (refresh || force)
 			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
-			}
-		}
-
-		public void InvalidateProjectsContainer()
-		{
-			if (_projectsNavigationViewModel != null)
-			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
-			}
-		}
-
-		public void InvalidateProjectFilesContainer(IProject project)
-		{
-			if (_projectFilesViewModel != null)
-			{
-				_projectFilesViewModel.ProjectFiles = new List<ProjectFile>();
-				_projectFilesViewModel.ProjectFiles = project.ProjectFiles;
 			}
 		}
 
@@ -258,7 +246,10 @@ namespace Trados.Transcreate
 
 			if (taskContext.Project.Id != _projectsController.CurrentProject?.GetProjectInfo().Id.ToString())
 			{
-				_projectAutomationService.ActivateProject(fileBasedProject);
+				lock (_lockObject)
+				{
+					_projectAutomationService.ActivateProject(fileBasedProject);
+				}
 			}
 
 			var sourceLanguage = taskContext.Project.SourceLanguage.CultureInfo.Name;
@@ -315,8 +306,7 @@ namespace Trados.Transcreate
 
 			UpdateProjectSettingsBundle(project);
 
-			InvalidateProjectFilesContainer(project);
-			InvalidateProjectsContainer();
+			_projectsNavigationViewModel.Projects = _transcreateProjects;
 		}
 
 		public void UpdateBackTranslationProjectData(string parentProjectId, TaskContext taskContext)
@@ -1012,7 +1002,7 @@ namespace Trados.Transcreate
 
 		private bool IsBackTranslationProject(string projectOrigin)
 		{
-			return string.Compare(projectOrigin, "Back-Translation project",
+			return string.Compare(projectOrigin, Constants.ProjectOrigin_BackTranslationProject,
 				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 
@@ -1148,8 +1138,6 @@ namespace Trados.Transcreate
 					if (transcreateProject is BackTranslationProject)
 					{
 						UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
-						InvalidateProjectsContainer();
-						InvalidateProjectFilesContainer(transcreateProject);
 					}
 					else
 					{
@@ -1202,7 +1190,7 @@ namespace Trados.Transcreate
 					taskContext.ImportOptions.StatusSegmentNotImportedId = string.Empty;
 					taskContext.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
 					taskContext.ImportOptions.OverwriteTranslations = true;
-					taskContext.ImportOptions.OriginSystem = "Transcreate Automation";
+					taskContext.ImportOptions.OriginSystem = Constants.OriginSystem_TranscreateAutomation;
 
 					taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
 					taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
@@ -1292,8 +1280,6 @@ namespace Trados.Transcreate
 					if (transcreateProject is BackTranslationProject)
 					{
 						UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
-						InvalidateProjectsContainer();
-						InvalidateProjectFilesContainer(transcreateProject);
 					}
 					else
 					{
@@ -1345,7 +1331,7 @@ namespace Trados.Transcreate
 			var date = successDate ? resultDate.ToUniversalTime() : DateTime.MinValue;
 			return date;
 		}
-
+		
 		private string GetDateToString(DateTime date)
 		{
 			var value = string.Empty;
@@ -1438,7 +1424,6 @@ namespace Trados.Transcreate
 			if (e.Active)
 			{
 				SetProjectFileActivityViewController();
-				_projectFilesViewModel.Refresh();
 			}
 		}
 
@@ -1554,8 +1539,15 @@ namespace Trados.Transcreate
 
 			if (updated || updatedProjectSelection)
 			{
-				_projectsNavigationViewModel.Projects = new List<IProject>();
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
+
+				lock (_lockObject)
+				{
+					// TODO: there is a bug with the API where the icon path is not updated
+					// we will need to create a new API enhancement proposal
+					var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+					_projectAutomationService?.UpdateProjectIcon(_projectsController?.CurrentProject, iconPath);
+				}
 			}
 		}
 

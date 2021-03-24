@@ -11,6 +11,7 @@
     <RootNamespace>Sdl.Community.MTCloud.Provider</RootNamespace>
     <AssemblyName>Sdl.Community.MTCloud.Provider</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -90,11 +91,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguageCloud.IdentityApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
@@ -172,6 +171,7 @@
     </Compile>
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Helpers\CurrentViewDetector.cs" />
     <Compile Include="Helpers\TaskUtilities.cs" />
     <Compile Include="Interfaces\IActionProvider.cs" />
     <Compile Include="Interfaces\IAsyncCommand.cs" />
@@ -185,6 +185,8 @@
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\FileAndSegmentIds.cs" />
+    <Compile Include="Model\MetadataTransferObject.cs" />
     <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
@@ -198,7 +200,10 @@
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Rating.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
+    <Compile Include="Model\TargetSegmentData.cs" />
+    <Compile Include="Model\TranslationData.cs" />
     <Compile Include="Model\TranslationFeedbackRequest.cs" />
+    <Compile Include="Model\TranslationOriginInformation.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\TranslationResponseStats.cs" />
@@ -212,13 +217,21 @@
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
-    <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
-    <Compile Include="Service\Events\TranslationReceivedEventHandler.cs" />
+    <Compile Include="Events\ConfirmationLevelChangedEventHandler.cs" />
+    <Compile Include="Events\TranslationReceivedEventHandler.cs" />
     <Compile Include="Service\HttpClient.cs" />
+    <Compile Include="Service\Interface\IMetadataSupervisor.cs" />
     <Compile Include="Service\Interface\IHttpClient.cs" />
+    <Compile Include="Service\Interface\ISegmentMetadataCreator.cs" />
+    <Compile Include="Service\Interface\ISupervisor.cs" />
+    <Compile Include="Service\MetaDataProcessor.cs" />
+    <Compile Include="Service\MetadataSupervisor.cs" />
+    <Compile Include="Service\SegmentMetadataCreator.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
+    <Compile Include="Model\Term.cs" />
     <Compile Include="Service\TranslationService.cs" />
+    <Compile Include="Studio\ContextMenuAction\AddDictionaryTermAction.cs" />
     <Compile Include="Studio\RateItController.cs" />
     <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
@@ -232,6 +245,7 @@
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
+    <Compile Include="Events\TranslationProviderAdded.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
@@ -317,6 +331,7 @@
     <Resource Include="Resources\rating.ico" />
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\checked.png" />
+    <Resource Include="Resources\add_dictionary.ico" />
     <Content Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />

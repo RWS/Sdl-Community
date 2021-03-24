@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using Trados.Transcreate.Commands;
@@ -212,6 +213,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 
 				FinalizeJobProcesses(success);
 			}
+			catch (Exception ex)
+			{
+				LogManager.GetCurrentClassLogger().Error(ex);
+			}
 			finally
 			{
 				Owner.Dispatcher.Invoke(DispatcherPriority.Input, new Action(delegate
@@ -241,6 +246,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
@@ -271,11 +277,10 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				var selectedProject = _controllers.ProjectsController.GetProjects()
 					.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == TaskContext.Project.Id);
 				await _projectAutomationService.RunPretranslationWithoutTm(selectedProject);
-				
+
 				_projectAutomationService.RemoveLastReportOfType("Translate");
 
-				var sdlxliffReader = new SdlxliffReader(_segmentBuilder,
-					TaskContext.ExportOptions, TaskContext.AnalysisBands);
+				var sdlxliffReader = new SdlxliffReader(_segmentBuilder, TaskContext.ExportOptions, TaskContext.AnalysisBands);
 				var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
 
 				var sourceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name;
@@ -284,10 +289,9 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 
 				var total = GetTargetLangauges(TaskContext.Project).Count;
 				var unit = System.Convert.ToInt32(Math.Truncate(System.Convert.ToDouble(100 / ((total * 2) + 1))));
-
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, string.Format(PluginResources.JobProcess_ProcessingLanguageFiles, project.SourceLanguage.CultureInfo.DisplayName));
 
-				var sourceProjectFiles = ProcessProjectFiles(sourceLanguage, project, sdlxliffReader);
+				var sourceProjectFiles = await ProcessProjectFiles(sourceLanguage, project, sdlxliffReader);
 
 				var targetProjectFiles = new List<ProjectFile>();
 				var targetLangauges = GetTargetLangauges(project);
@@ -299,13 +303,12 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 					_logReport.AppendLine();
 					_logReport.AppendLine(string.Format(PluginResources.Label_Language, targetLanguage));
 
-					var targetFiles = ProcessProjectFiles(targetLanguage, project, sdlxliffReader);
+					var targetFiles = await ProcessProjectFiles(targetLanguage, project, sdlxliffReader);
 					targetProjectFiles.AddRange(targetFiles);
 				}
 
 				ClearTargetTransUnits(sourceProjectFiles);
 				WriteXliffFiles(xliffWriter, sourceProjectFiles);
-
 
 				foreach (var projectFile in targetProjectFiles)
 				{
@@ -342,6 +345,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
@@ -357,6 +361,8 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 		{
 			var success = true;
 			var phase = PluginResources.JobProcess_CreateTranscreateProject;
+			var newProjectLocalFolder = string.Empty;
+
 			try
 			{
 				_logReport.AppendLine();
@@ -375,19 +381,27 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 					throw new Exception(string.Format(PluginResources.WarningMessage_UnableToLocateProject, TaskContext.Project.Name));
 				}
 
+				newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
+				if (Directory.Exists(newProjectLocalFolder))
+				{
+					throw new Exception(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder);
+				}
+
 				var sourceLanguage = TaskContext.Project.SourceLanguage.CultureInfo.Name;
 				var projectFiles = TaskContext.ProjectFiles.Where(a => IsSourceLanguage(a.TargetLanguage, sourceLanguage)).ToList();
 
 				if (projectFiles.Count == 0)
 				{
-					throw new Exception("No source files found!");
+					throw new Exception(PluginResources.Warning_Message_NoSourceFilesFound);
 				}
 
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, 30, PluginResources.JobProcess_ProcessingPleaseWait);
 
-				var iconPath = GetTranscreateIconPath();
+				var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
 
 				_newProject = _projectAutomationService.CreateTranscreateProject(selectedProject, iconPath, projectFiles, "T");
+				_controllers.ProjectsController.RefreshProjects();
+
 				UpdateWizardContext(_newProject);
 
 				var newProjectInfo = _newProject.GetProjectInfo();
@@ -399,6 +413,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 
 				_logReport.AppendLine();
 				_logReport.AppendLine(PluginResources.Label_Files);
+
 				foreach (var projectFile in projectFiles)
 				{
 					_logReport.AppendLine(string.Format(PluginResources.Label_XliffFile, projectFile.ExternalFilePath));
@@ -416,12 +431,21 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			}
 			catch (Exception ex)
 			{
+				success = false;
+
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
-				success = false;
 
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
+
+				if (_newProject != null)
+				{
+					await CloseBackTranslationProject(_newProject);
+					// cleanup folders
+					TryDeleteFolder(newProjectLocalFolder);
+				}
 			}
 
 			return await Task.FromResult(success);
@@ -552,9 +576,11 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			}
 			catch (Exception ex)
 			{
+				success = false;
+
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
-				success = false;
 
 				_logReport.AppendLine();
 				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
@@ -593,6 +619,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Failed, jobProcess.Progress, ex.Message);
 				success = false;
@@ -602,6 +629,31 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			}
 
 			return await Task.FromResult(success);
+		}
+
+		private async Task CloseBackTranslationProject(FileBasedProject project)
+		{
+			if (project != null)
+			{
+				_controllers.ProjectsController.Close(project);
+			}
+
+			await Task.FromResult(1);
+		}
+
+		private static void TryDeleteFolder(string folder)
+		{
+			try
+			{
+				if (Directory.Exists(folder))
+				{
+					Directory.Delete(folder, true);
+				}
+			}
+			catch
+			{
+				// catch all; ignore
+			}
 		}
 
 		private Dictionary<string, List<string>> GetParagraphMap(SdlxliffReader sdlxliffReader, string fileId, string path, string targetLanguage)
@@ -636,19 +688,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			return paragraphMap;
 		}
 
-		private string GetTranscreateIconPath()
-		{
-			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "Transcreate.ico");
-			if (!File.Exists(iconPath))
-			{
-				using (var fs = new FileStream(iconPath, FileMode.Create))
-				{
-					PluginResources.sdl_transcreate_view.Save(fs);
-				}
-			}
 
-			return iconPath;
-		}
 
 		private void WriteXliffFile(XliffWriter xliffWriter, ProjectFile projectFile)
 		{
@@ -790,7 +830,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			return languages;
 		}
 
-		private List<ProjectFile> ProcessProjectFiles(string language, Interfaces.IProject project, SdlxliffReader sdlxliffReader)
+		private async Task<List<ProjectFile>> ProcessProjectFiles(string language, Interfaces.IProject project, SdlxliffReader sdlxliffReader)
 		{
 			var languageFolder = GetLanguageFolder(language);
 			var projectFiles = TaskContext.ProjectFiles.Where(a => Equals(a.TargetLanguage, language)).ToList();
@@ -839,7 +879,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				}
 			}
 
-			return projectFiles;
+			return await Task.FromResult(projectFiles);
 		}
 
 		private void AddAlternativeStructure(Xliff xliffData, ProjectFile projectFile)
@@ -853,13 +893,13 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 				throw new Exception("Unexpected inner file count");
 			}
 
-			if (xliffData.Files[0].Clone() is FileTypeSupport.XLIFF.Model.File file)
+			if (xliffData.Files[0] is FileTypeSupport.XLIFF.Model.File file)
 			{
 				file.TargetLanguage = null;
 				file.Original = "Recommended";
-
 				xliffData.Files[0] = file.Clone() as FileTypeSupport.XLIFF.Model.File;
 
+				var nextSegmentId = GetNextSegmentId(file);
 				for (var i = 1; i <= TaskContext.ConvertOptions.MaxAlternativeTranslations; i++)
 				{
 					var newFile = new FileTypeSupport.XLIFF.Model.File
@@ -882,7 +922,14 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 						{
 							if (segmentPair.Clone() is SegmentPair sp)
 							{
+								sp.Id = nextSegmentId.ToString();
+								sp.Target = new Target();
+								sp.ConfirmationLevel = ConfirmationLevel.Unspecified;
+								sp.IsLocked = false;
+								sp.TranslationOrigin = null;
 								tu.SegmentPairs.Add(sp);
+
+								nextSegmentId++;
 							}
 						}
 
@@ -897,6 +944,27 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 					xliffData.Files.Add(newFile);
 				}
 			}
+		}
+
+		private static long GetNextSegmentId(FileTypeSupport.XLIFF.Model.File file)
+		{
+			long nextSegmentId = 0;
+			var lastSegmentPair = file.Body.TransUnits.LastOrDefault()?.SegmentPairs.LastOrDefault();
+			if (lastSegmentPair != null)
+			{
+				long id;
+				if (long.TryParse(lastSegmentPair.Id, NumberStyles.Integer, CultureInfo.InvariantCulture, out id))
+				{
+					nextSegmentId = id + 1;
+				}
+				else
+				{
+					// not an integer - fallback: increment by the number of segments in the paragraph
+					nextSegmentId = file.Body.TransUnits.Sum(transUnit => transUnit.SegmentPairs.LongCount());
+				}
+			}
+
+			return nextSegmentId;
 		}
 
 		private static bool IsSourceLanguage(string language, string sourceLanguage)
@@ -1023,7 +1091,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.Convert
 			{
 				progress = 100;
 			}
-			
+
 			jobProcess.Status = status;
 			jobProcess.Progress = jobProcess.Progress <= progress ? progress : 100;
 			jobProcess.Description = description;

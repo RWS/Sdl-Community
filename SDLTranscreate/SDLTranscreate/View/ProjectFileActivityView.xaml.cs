@@ -1,34 +1,21 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Trados.Transcreate.ViewModel;
+﻿using System.Windows.Controls;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Trados.Transcreate.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectFileActivitiesView.xaml
 	/// </summary>
-	public partial class ProjectFileActivityView : UserControl
-	{	
-		private readonly ProjectFileActivityViewModel _viewModel;
-
-		public ProjectFileActivityView(ProjectFileActivityViewModel viewModel)
+	public partial class ProjectFileActivityView : UserControl, IUIControl
+	{
+		public ProjectFileActivityView()
 		{
 			InitializeComponent();
-
-			_viewModel = viewModel;
-			Loaded += ProjectFileActivityView_Loaded;
 		}
 
-		/// <summary>
-		/// We need to wait for the view to be fully loaded before binding the view model
-		/// Ensure Loaded is called only once; unsubscribe to the Loaded event
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ProjectFileActivityView_Loaded(object sender, RoutedEventArgs e)
+		
+		public void Dispose()
 		{
-			Loaded -= ProjectFileActivityView_Loaded;
-			DataContext = _viewModel;
 		}
 	}
 }

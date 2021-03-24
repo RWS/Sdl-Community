@@ -42,7 +42,7 @@
 				          IsEnabled="{Binding OverwriteExistingBackTranslationsEnabled}"
 				          IsChecked="{Binding OverwriteExistingBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 				<Image Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center" Stretch="UniformToFill"
-				                   Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+				                   Width="16"  RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
 				                   Source="../../../Resources/information.png"
 				                   ToolTip="{Binding OverwriteExistingBackTranslationsToolTip, Mode=OneWay}"/>
 			</Grid>

@@ -5,31 +5,8 @@ using Sdl.Community.MTCloud.Languages.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Languages.Provider
 {
-	public class LanguageProvider: ILanguageProvider
-	{					
-		/// <summary>
-		/// Saves the MT Clound Languages to the default location in the users
-		/// roaming directory.
-		/// </summary>
-		/// <param name="mappedLanguages">list of MT Cloud Languages</param>
-		/// <returns>Returns true if file was saved correctly</returns>
-		public bool SaveMappedLanguages(List<MappedLanguage> mappedLanguages)
-		{
-			return SaveMappedLanguages(mappedLanguages, Constants.MTLanguageCodesFilePath);
-		}
-
-		/// <summary>
-		/// Saves the MT Clound Languages to the <param name="path">file path</param>
-		/// </summary>
-		/// <param name="mappedLanguages">list of MT Cloud Languages</param>
-		/// <param name="path">The full path to the excel file where the languages are saved</param>
-		/// <returns>Returns true if file was saved correctly</returns>
-		public bool SaveMappedLanguages(List<MappedLanguage> mappedLanguages, string path)
-		{			
-			var writer = new Writer();			
-			return writer.WriteLanguages(mappedLanguages, path);
-		}
-
+	public class LanguageProvider : ILanguageProvider
+	{
 		/// <summary>
 		/// Reads the MT Cloud Languages from the excel file in the users roaming directory.
 		/// If the Excel file is empty, the default languages are recovered automatically.
@@ -40,7 +17,6 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 		{
 			return GetMappedLanguages(Constants.MTLanguageCodesFilePath, reset);
 		}
-
 
 		/// <summary>
 		/// Reads the MT Cloud Languages from the <param name="path">file path</param>
@@ -61,6 +37,29 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 			return languages;
 		}
 
+		/// <summary>
+		/// Saves the MT Clound Languages to the default location in the users
+		/// roaming directory.
+		/// </summary>
+		/// <param name="mappedLanguages">list of MT Cloud Languages</param>
+		/// <returns>Returns true if file was saved correctly</returns>
+		public bool SaveMappedLanguages(List<MappedLanguage> mappedLanguages)
+		{
+			return SaveMappedLanguages(mappedLanguages, Constants.MTLanguageCodesFilePath);
+		}
+
+		/// <summary>
+		/// Saves the MT Clound Languages to the <param name="path">file path</param>
+		/// </summary>
+		/// <param name="mappedLanguages">list of MT Cloud Languages</param>
+		/// <param name="path">The full path to the excel file where the languages are saved</param>
+		/// <returns>Returns true if file was saved correctly</returns>
+		public bool SaveMappedLanguages(List<MappedLanguage> mappedLanguages, string path)
+		{
+			var writer = new Writer();
+			return writer.WriteLanguages(mappedLanguages, path);
+		}
+
 		private static List<MappedLanguage> GetLanguages(IEnumerable<ExcelRow> excelRows)
 		{
 			var languages = new List<MappedLanguage>();
@@ -78,15 +77,19 @@ namespace Sdl.Community.MTCloud.Languages.Provider
 						case 0:
 							language.Name = cell.Value;
 							break;
+
 						case 1:
 							language.Region = cell.Value;
 							break;
+
 						case 2:
 							language.TradosCode = cell.Value;
 							break;
+
 						case 3:
 							language.MTCode = cell.Value;
 							break;
+
 						case 4:
 							language.MTCodeLocale = cell.Value;
 							break;

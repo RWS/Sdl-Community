@@ -81,6 +81,36 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Check {
+            get {
+                object obj = ResourceManager.GetObject("Check", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Checked {
+            get {
+                object obj = ResourceManager.GetObject("Checked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected error converting file: {0}.
         /// </summary>
         internal static string ErrorMessage_ConvertingFile {
@@ -114,6 +144,16 @@ namespace Trados.Transcreate {
         internal static string FolderDialog_Title {
             get {
                 return ResourceManager.GetString("FolderDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -807,6 +847,15 @@ namespace Trados.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to This action will remove all back-projects from the selected project.
         /// </summary>
+        internal static string Message_ActionWillRemoveAllBackProjectData {
+            get {
+                return ResourceManager.GetString("Message_ActionWillRemoveAllBackProjectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will remove all data related to the selected Transcreate project..
+        /// </summary>
         internal static string Message_ActionWillRemoveAllProjectData {
             get {
                 return ResourceManager.GetString("Message_ActionWillRemoveAllProjectData", resourceCulture);
@@ -918,6 +967,15 @@ namespace Trados.Transcreate {
         internal static string Message_SelectOutputFolder {
             get {
                 return ResourceManager.GetString("Message_SelectOutputFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Transcreate reports have been created successfully..
+        /// </summary>
+        internal static string Message_TranscreateReportsCreatedSuccessfully {
+            get {
+                return ResourceManager.GetString("Message_TranscreateReportsCreatedSuccessfully", resourceCulture);
             }
         }
         
@@ -1074,6 +1132,25 @@ namespace Trados.Transcreate {
         internal static string Progres_Label_UpdatingTask {
             get {
                 return ResourceManager.GetString("Progres_Label_UpdatingTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder in explorer?.
+        /// </summary>
+        internal static string Question_OpenFolderInExplorer {
+            get {
+                return ResourceManager.GetString("Question_OpenFolderInExplorer", resourceCulture);
             }
         }
         
@@ -1380,6 +1457,24 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude segments from being exported that match the properties selected..
+        /// </summary>
+        internal static string ToolTip_Label_ExcludeSegments_Export {
+            get {
+                return ResourceManager.GetString("ToolTip_Label_ExcludeSegments_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude segments from being updated that match the properties selected..
+        /// </summary>
+        internal static string ToolTip_Label_ExcludeSegments_Import {
+            get {
+                return ResourceManager.GetString("ToolTip_Label_ExcludeSegments_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If the selected SDLXLIFF files already exist in the Back-Translation project, then they will be re-imported, overwriting the existing ones..
         /// </summary>
         internal static string ToolTip_Option_OverwreteExistingBackTranslationFiles {
@@ -1668,6 +1763,24 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch with Recommended Translation.
+        /// </summary>
+        internal static string TranscreateManager_SwitchWithRecommendedTranslation_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_SwitchWithRecommendedTranslation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch with Recommended Translation.
+        /// </summary>
+        internal static string TranscreateManager_SwitchWithRecommendedTranslation_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_SwitchWithRecommendedTranslation_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View.
         /// </summary>
         internal static string TranscreateManager_ViewGroup_Name {
@@ -1686,6 +1799,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close all documents from the editor that are associated with the selected project before proceeding..
+        /// </summary>
+        internal static string Wanring_Message_CloseAllProjectDocumentBeforeProceeding {
+            get {
+                return ResourceManager.GetString("Wanring_Message_CloseAllProjectDocumentBeforeProceeding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File path cannot be null!.
         /// </summary>
         internal static string Warning_FilePathNull {
@@ -1700,6 +1822,42 @@ namespace Trados.Transcreate {
         internal static string Warning_LanguagesEmpty {
             get {
                 return ResourceManager.GetString("Warning_LanguagesEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No source files found!.
+        /// </summary>
+        internal static string Warning_Message_NoSourceFilesFound {
+            get {
+                return ResourceManager.GetString("Warning_Message_NoSourceFilesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project has already been converted to a Transcreate project..
+        /// </summary>
+        internal static string Warning_Message_ProjectAlreadyTranscreateProject {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectAlreadyTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project folder already exists!.
+        /// </summary>
+        internal static string Warning_Message_ProjectFolderAlreadyExists {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectFolderAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project name suffix cannot be null!.
+        /// </summary>
+        internal static string Warning_Message_ProjectNameSuffixCannotBeNull {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectNameSuffixCannotBeNull", resourceCulture);
             }
         }
         

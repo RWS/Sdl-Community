@@ -12,6 +12,7 @@ namespace Trados.Transcreate.Common
 		private const string IconsPathName = "Icons";
 		private const string SettingsFileName = "Settings.xml";
 		private const string LanguageMappingsFileName = "LanguageMappings.xlsx";
+		private const string ProjectIconFileName = "Transcreate.ico";
 
 		private string _sdlCommunityFolderPath;
 		private string _applicationFolderPath;
@@ -97,6 +98,8 @@ namespace Trados.Transcreate.Common
 			}
 		}
 
+		public string ProjectIconFilePath => Path.Combine(ApplicationIconsFolderPath, ProjectIconFileName);
+
 		public string SettingsFolderPath
 		{
 			get
@@ -115,7 +118,6 @@ namespace Trados.Transcreate.Common
 				return _settingsFolderPath;
 			}
 		}
-
 
 		public string SettingsFilePath => Path.Combine(SettingsFolderPath, SettingsFileName);
 

@@ -45,6 +45,9 @@
     <Reference Include="Sdl.Reports.Viewer.API">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Reports.Viewer.API.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Versioning">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
     </Reference>
@@ -128,6 +131,7 @@
     <Compile Include="Actions\OpenFileForTranslationAction.cs" />
     <Compile Include="Actions\OpenSettingsAction.cs" />
     <Compile Include="Actions\RefreshAction.cs" />
+    <Compile Include="Actions\SwitchWithRecommendedTranslationAction.cs" />
     <Compile Include="ApplicationInstance.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Behaviours\MouseDoubleClickBehaviour.cs" />
@@ -135,9 +139,10 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\SelectedItemChangedCommand.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Enumerators.cs" />
-    <Compile Include="Common\FolderSelectDialog.cs" />
-    <Compile Include="Common\Logger.cs" />
+    <Compile Include="Controls\FolderSelectDialog.cs" />
+    <Compile Include="Common\Log.cs" />
     <Compile Include="Common\PathInfo.cs" />
     <Compile Include="Common\Reflector.cs" />
     <Compile Include="Controls\BindableParagraphBlock.cs" />
@@ -145,25 +150,7 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
-    <Compile Include="Controls\ProjectFileActivityViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProjectFileActivityViewControl.Designer.cs">
-      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ProjectFileActivityViewController.cs" />
-    <Compile Include="Controls\ProjectFilesViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProjectFilesViewControl.Designer.cs">
-      <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProjectsNavigationViewControl.Designer.cs">
-      <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\TextBoxWithEllipsis.cs" />
@@ -200,6 +187,7 @@
     <Compile Include="FileTypeSupport\MSOffice\Readers\WordReader.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Visitors\TokenVisitor.cs" />
     <Compile Include="FileTypeSupport\MSOffice\Writers\WordWriter.cs" />
+    <Compile Include="FileTypeSupport\SDLXLIFF\SegmentRenumberingBilingualProcessor.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\XliffContentReader.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\XliffContentWriter.cs" />
     <Compile Include="FileTypeSupport\SDLXLIFF\ElementExtractor.cs" />
@@ -272,6 +260,7 @@
     <Compile Include="Model\ProjectFile.cs" />
     <Compile Include="Model\ProjectFileActivity.cs" />
     <Compile Include="Model\ProjectFileInfo.cs" />
+    <Compile Include="Model\ProjectFolderReference.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateBackProjects.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateConvertSettings.cs" />
     <Compile Include="Model\ProjectSettings\SDLTranscreateExportSettings.cs" />
@@ -318,19 +307,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="TranscreateViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranscreateViewGroups.cs" />
-    <Compile Include="ViewModel\ProjectPropertiesViewModel.cs" />
     <Compile Include="ViewModel\ProjectFileActivityViewModel.cs" />
     <Compile Include="ViewModel\ProjectFilesViewModel.cs" />
     <Compile Include="ViewModel\ProjectsNavigationViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\ProjectPropertiesView.xaml.cs">
-      <DependentUpon>ProjectPropertiesView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ProjectFileActivityView.xaml.cs">
       <DependentUpon>ProjectFileActivityView.xaml</DependentUpon>
     </Compile>
@@ -437,15 +426,6 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\ProjectFileActivityViewControl.resx">
-      <DependentUpon>ProjectFileActivityViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectFilesViewControl.resx">
-      <DependentUpon>ProjectFilesViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProjectsNavigationViewControl.resx">
-      <DependentUpon>ProjectsNavigationViewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -501,6 +481,8 @@
     <Resource Include="Resources\back_translation.ico" />
     <Resource Include="Resources\back_translation_small.ico" />
     <Resource Include="Resources\information.png" />
+    <Resource Include="Resources\check.ico" />
+    <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />
@@ -606,10 +588,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ProjectPropertiesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
