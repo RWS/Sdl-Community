@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
@@ -27,7 +27,7 @@ namespace Sdl.Community.StarTransit
 	public class StarTransitOpenPackageAction : AbstractAction
 	{
 		private IMessageBoxService _messageBoxService;
-		private static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		protected override async void Execute()
 		{
@@ -39,7 +39,7 @@ namespace Sdl.Community.StarTransit
 			{
 				var fileDialog = new OpenFileDialog
 				{
-					Filter = @"Transit Project Package Files (*.ppf)|*.ppf"
+					Filter = "Transit Project Package Files (*.ppf)|*.ppf"
 				};
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult == DialogResult.OK)
@@ -64,24 +64,63 @@ namespace Sdl.Community.StarTransit
 					Program.InitializeMain(packageModel);
 				}
 			}
-			catch (PathTooLongException ptle)
+			catch (Exception ex)
 			{
-				_messageBoxService.ShowMessage(ptle.Message, string.Empty);
-				Log.Logger.Error($"OpenPackage method: {ptle.Message}\n {ptle.StackTrace}");
+				_messageBoxService.ShowMessage(ex.Message, string.Empty);
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}  
 		
+		/// <summary>
+		/// We need to delete all the files from subfolders before deleteing the main directory. Otherwise sometimes it throws an error
+		/// </summary>
 		private string CreateTempPackageFolder()
 		{
 			var tempFolder = $@"C:\Users\{Environment.UserName}\StarTransit";
 			var pathToTempPackageFolder = Path.Combine(tempFolder, Guid.NewGuid().ToString());
-			
-			if (Directory.Exists(tempFolder))
+
+			//Delete existing folder where we extract transit packages
+			try
+			{
+				if (Directory.Exists(tempFolder))
+				{
+					DeleteDirectory(tempFolder);
+				}
+				Directory.CreateDirectory(pathToTempPackageFolder);
+			}
+			catch (IOException)
 			{
 				Directory.Delete(tempFolder, true);
 			}
-			Directory.CreateDirectory(pathToTempPackageFolder);
+			catch (UnauthorizedAccessException)
+			{
+				Directory.Delete(tempFolder, true);
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+			}
+
 			return pathToTempPackageFolder;
+		}
+
+		private void DeleteDirectory(string directoryPath)
+		{
+			//Delete all files from folder before deleting the folder
+			var files = Directory.GetFiles(directoryPath);
+			var dirs = Directory.GetDirectories(directoryPath);
+
+			foreach (var file in files)
+			{
+				File.SetAttributes(file, FileAttributes.Normal);
+				File.Delete(file);
+			}
+
+			foreach (var dir in dirs)
+			{
+				DeleteDirectory(dir);
+			}
+			Directory.Delete(directoryPath, false);
 		}
 	}
 

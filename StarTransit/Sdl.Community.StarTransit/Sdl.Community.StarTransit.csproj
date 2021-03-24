@@ -122,6 +122,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileType\FiletypeDetails.cs" />
     <Compile Include="FileType\TransitFilterComponentBuilder.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -135,6 +136,7 @@
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="TellMe\StoreAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
+    <Compile Include="TransitApplicationInitializer.cs" />
     <Compile Include="VersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>

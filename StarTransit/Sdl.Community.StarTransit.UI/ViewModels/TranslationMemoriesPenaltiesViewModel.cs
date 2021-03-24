@@ -10,17 +10,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class TranslationMemoriesPenaltiesViewModel : BaseViewModel
 	{
-		#region Private Fields
-		private PackageModel _packageModel;
+		private readonly PackageModel _packageModel;
 		private ObservableCollection<TranslationMemoriesPenaltiesModel> _translationMemoriesPenaltiesModelList;
 		private string _translationMemoryName;
 		private string _translationMemoryPath;
 		private int _tmPenalty;
 		private ICommand _okCommand;
-
-		#endregion
-
-		#region Constructors
 
 		public TranslationMemoriesPenaltiesViewModel(PackageModel packageModel)
 		{
@@ -36,9 +31,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			LoadTranslationMemories();
 		}
 
-		#endregion
-
-		#region Public Properties
 		public ObservableCollection<TranslationMemoriesPenaltiesModel> TranslationMemoriesPenaltiesModelList
 		{
 			get => _translationMemoriesPenaltiesModelList;
@@ -92,9 +84,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 		}
 
-		#endregion
-
-		#region Private Methods
 		/// <summary>
 		/// Load translation memories
 		/// </summary>
@@ -134,13 +123,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 			}
 		}
-		#endregion
 
-		#region Commands
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(OkAction, true));
-		#endregion
 
-		#region Actions
 		private void OkAction()
 		{
 			_packageModel.TMPenalties.Clear();
@@ -155,6 +140,5 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				}
 			}
 		}
-		#endregion
 	}
 }

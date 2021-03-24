@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.ProjectAutomation.FileBased;
@@ -7,41 +8,41 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 {
 	public static class Extensions
 	{
+		public static List<Customer> GetStudioCustomers(FileBasedProject project)
+		{
+			var customers = new List<Customer>();
+
+			var type = project.GetType();
+			var internalProjectField = type.GetField("_project", BindingFlags.Instance | BindingFlags.NonPublic);
+			if (internalProjectField == null) return customers;
+			dynamic internalDynamicaProject = internalProjectField.GetValue(project);
+			dynamic customersList = internalDynamicaProject.ProjectsProvider?.CustomerProvider?.Customers;
+			if (customersList == null) return customers;
+			foreach (var customer in customersList)
+			{
+				customers.Add(new Customer {Guid = customer.Guid, Name = customer.Name, Email = customer.Email});
+			}
+
+			return customers;
+		}
+
 		public static void SetCustomer(this FileBasedProject project, Customer customerModel)
 		{
-			try
+			var allCustomers = GetStudioCustomers(project);
+			var customer = allCustomers.FirstOrDefault(c =>
+				c.Name.Equals(customerModel.Name) && c.Guid.Equals(customerModel.Guid));
+			if (customer == null) return;
+			var type = project.GetType();
+			var internalProjectField = type.GetField("_project", BindingFlags.Instance | BindingFlags.NonPublic);
+			if (internalProjectField == null) return;
+			dynamic internalDynamicaProject = internalProjectField.GetValue(project);
+			dynamic customersList = internalDynamicaProject.ProjectsProvider?.CustomerProvider?.Customers;
+			if (customersList == null) return;
+			foreach (var dynCustomer in customersList)
 			{
-				//Get internal project
-				var projectType = project.GetType();
-				var projectMemberInfos = projectType.GetMember("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-				var projectFieldInfo = (FieldInfo)projectMemberInfos[0];
-				dynamic internalProject = projectFieldInfo.GetValue(project);
-				var internalProjectType = projectFieldInfo.FieldType;
-
-				//Create customer instance
-				var xmlCustomerType = Type.GetType(String.Format("{0},{1}", "Sdl.ProjectApi.Implementation.Xml.Customer", "Sdl.ProjectApi.Implementation"), true);
-				var xmlCustomer = Activator.CreateInstance(xmlCustomerType);
-				xmlCustomerType.GetProperty("Guid").SetValue(xmlCustomer, customerModel.Guid);
-				xmlCustomerType.GetProperty("Name").SetValue(xmlCustomer, customerModel.Name);
-				xmlCustomerType.GetProperty("Email").SetValue(xmlCustomer, customerModel.Email);
-
-				var customerType = Type.GetType(String.Format("{0}, {1}", "Sdl.ProjectApi.Implementation.Customer", "Sdl.ProjectApi.Implementation"), true);
-
-				var customer = Activator.CreateInstance(customerType,
-					BindingFlags.Instance | BindingFlags.NonPublic,
-					null,
-					new object[]
-					{
-						internalProject.ProjectServer
-						, xmlCustomer
-					},
-					null,
-					null);
-				internalProjectType.GetProperty("Customer").SetValue(internalProject, customer);
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"SetCustomer method: {ex.Message}\n {ex.StackTrace}");
+				if (!dynCustomer.Guid.Equals(customer.Guid)) continue;
+				internalDynamicaProject.ChangeCustomer(dynCustomer);
+				break;
 			}
 		}
 	}
