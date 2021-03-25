@@ -2060,6 +2060,15 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translation Project.
+        /// </summary>
+        internal static string WizardTitle_CreateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("WizardTitle_CreateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string WizardTitle_Export {

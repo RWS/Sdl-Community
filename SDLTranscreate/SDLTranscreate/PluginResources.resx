@@ -784,4 +784,7 @@
   <data name="TranscreateManager_SwitchWithRecommendedTranslation_Name" xml:space="preserve">
     <value>Switch with Recommended Translation</value>
   </data>
+  <data name="WizardTitle_CreateBackTranslationProject" xml:space="preserve">
+	  <value>Create Back-Translation Project</value>
+  </data>
 </root>

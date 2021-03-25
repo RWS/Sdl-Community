@@ -21,7 +21,6 @@ namespace Trados.Transcreate.ViewModel
 		private bool _isProjectFileSelected;
 		private bool _isMultipleProjectFilesSelected;
 		private bool _isSingleProjectFileSelected;
-		private bool _canOpenSelectedInEditor;
 		private ICommand _clearSelectionCommand;
 		private ICommand _importFilesCommand;
 		private ICommand _exportFilesCommand;

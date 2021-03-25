@@ -306,7 +306,10 @@ namespace Trados.Transcreate
 
 			UpdateProjectSettingsBundle(project);
 
-			_projectsNavigationViewModel.Projects = _transcreateProjects;
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
 		}
 
 		public void UpdateBackTranslationProjectData(string parentProjectId, TaskContext taskContext)

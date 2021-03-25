@@ -190,6 +190,15 @@ namespace Trados.Transcreate.Wizard.ViewModel
 				case Enumerators.Action.Import:
 					actionText = PluginResources.WizardTitle_Import;
 					break;
+				case Enumerators.Action.CreateBackTranslation:
+					actionText = PluginResources.WizardTitle_CreateBackTranslationProject;
+					break;
+				case Enumerators.Action.ExportBackTranslation:
+					actionText = PluginResources.WizardTitle_Export;
+					break;
+				case Enumerators.Action.ImportBackTranslation:
+					actionText = PluginResources.WizardTitle_Import;
+					break;
 			}
 
 			return actionText;
