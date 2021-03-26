@@ -302,10 +302,12 @@ namespace Trados.Transcreate
 			}
 
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, project);
-			ReportsController.AddReports(ClientId, reports);
+			if (reports.Count > 0)
+			{
+				ReportsController.AddReports(ClientId, reports);
+			}
 
 			UpdateProjectSettingsBundle(project);
-
 			if (_projectsNavigationViewModel != null)
 			{
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
@@ -371,7 +373,10 @@ namespace Trados.Transcreate
 			}
 
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, backTranslationProject);
-			ReportsController.AddReports(ClientId, reports);
+			if (reports.Count > 0)
+			{
+				ReportsController.AddReports(ClientId, reports);
+			}
 
 			UpdateBackTranslationProjectSettingsBundle(parentProject);
 		}
@@ -1175,13 +1180,13 @@ namespace Trados.Transcreate
 				{
 					var documentId = document?.Id.ToString();
 					var language = document?.Language;
-					
+
 					var projectFile = transcreateProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
 						a.TargetLanguage == language.CultureInfo.Name);
 					if (projectFile != null)
 					{
 						var segmentBuilder = new SegmentBuilder();
-						
+
 						var action = transcreateProject is BackTranslationProject
 							? Enumerators.Action.ImportBackTranslation
 							: Enumerators.Action.Import;
@@ -1264,38 +1269,127 @@ namespace Trados.Transcreate
 							}
 						}
 
-						var activityFile = new ProjectFileActivity
+
+						// monitor internal changes only when the document is updated in the editor.
+						var projectTargetFile = transcreateProject.ProjectFiles.FirstOrDefault(a => a.FileId == targetFile.FileId);
+						if (projectTargetFile == null)
 						{
-							ProjectFileId = targetFile.FileId,
-							ActivityId = Guid.NewGuid().ToString(),
-							Action = taskContext.Action,
-							WorkFlow = taskContext.WorkFlow,
-							Status = imported ? Enumerators.Status.Success : Enumerators.Status.Error,
-							Date = taskContext.DateTimeStamp,
-							Name = Path.GetFileName(xliffFilePath),
-							Path = Path.GetDirectoryName(xliffFilePath),
-							Report = string.Empty,
-							ProjectFile = targetFile,
-							ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics,
-							TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics
-						};
-
-						targetFile.ProjectFileActivities.Add(activityFile);
-						taskContext.Completed = true;
-
-						_projectAutomationService.ActivateProject(project);
-
-						if (transcreateProject is BackTranslationProject)
-						{
-							UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
+							continue;
 						}
-						else
+						
+						var projectTargetFileActivity = projectTargetFile.ProjectFileActivities.LastOrDefault();
+						if (projectTargetFileActivity != null && (projectTargetFileActivity.Action == Enumerators.Action.Export ||
+							projectTargetFileActivity.Action == Enumerators.Action.ExportBackTranslation))
 						{
-							UpdateProjectData(taskContext);
+							_projectAutomationService.ActivateProject(project);
+
+							var documentIsUpdated = DocumentIsUpdated(
+								projectTargetFileActivity.ConfirmationStatistics?.WordCounts?.Total,
+								sdlxliffWriter.ConfirmationStatistics?.WordCounts?.Total);
+
+							if (!documentIsUpdated)
+							{
+								RemovePreviousProjectFileActivity(projectTargetFile, projectTargetFileActivity, transcreateProject);
+								continue;
+							}
+
+							var activityFile = new ProjectFileActivity
+							{
+								ProjectFileId = targetFile.FileId,
+								ActivityId = Guid.NewGuid().ToString(),
+								Action = taskContext.Action,
+								WorkFlow = taskContext.WorkFlow,
+								Status = imported ? Enumerators.Status.Success : Enumerators.Status.Error,
+								Date = taskContext.DateTimeStamp,
+								Name = Path.GetFileName(xliffFilePath),
+								Path = Path.GetDirectoryName(xliffFilePath),
+								Report = string.Empty,
+								ProjectFile = targetFile,
+								ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics,
+								TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics
+							};
+
+							targetFile.ProjectFileActivities.Add(activityFile);
+							taskContext.Completed = true;
+
+							if (transcreateProject is BackTranslationProject)
+							{
+								UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
+							}
+							else
+							{
+								UpdateProjectData(taskContext);
+							}
 						}
 					}
 				}
 			}
+		}
+
+		private void RemovePreviousProjectFileActivity(ProjectFile projectTargetFile, 
+			ProjectFileActivity projectFileActivity, IProject transcreateProject)
+		{
+			if (projectFileActivity == null)
+			{
+				return;
+			}
+			
+			projectTargetFile.ProjectFileActivities.Remove(projectFileActivity);
+			
+			var previousActivity = projectTargetFile.ProjectFileActivities.LastOrDefault();
+			if (previousActivity != null)
+			{
+				projectTargetFile.Action = previousActivity.Action;
+				projectTargetFile.ConfirmationStatistics = previousActivity.ConfirmationStatistics;
+				projectTargetFile.TranslationOriginStatistics = previousActivity.TranslationOriginStatistics;
+				projectTargetFile.Date = previousActivity.Date;
+				projectTargetFile.ExternalFilePath = Path.Combine(previousActivity.Path, previousActivity.Name);
+				projectTargetFile.Report = previousActivity.Report;
+			}
+
+			UpdateProjectSettingsBundle(transcreateProject);
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
+		}
+
+		private static bool DocumentIsUpdated(IReadOnlyCollection<WordCount> currentWordCounts, IReadOnlyCollection<WordCount> updatedWordCounts)
+		{
+			if (currentWordCounts == null && updatedWordCounts == null)
+			{
+				return false;
+			}
+
+			if (currentWordCounts == null || updatedWordCounts == null)
+			{
+				return true;
+			}
+
+			if (currentWordCounts.Count != updatedWordCounts.Count)
+			{
+				return true;
+			}
+
+			foreach (var currentWordCount in currentWordCounts)
+			{
+				var updatedWordCount = updatedWordCounts.FirstOrDefault(x => x.Category == currentWordCount.Category);
+				if (updatedWordCount == null)
+				{
+					return true;
+				}
+
+				if (updatedWordCount.Segments != currentWordCount.Segments ||
+					updatedWordCount.Characters != currentWordCount.Characters ||
+					updatedWordCount.Placeables != currentWordCount.Placeables ||
+					updatedWordCount.Tags != currentWordCount.Tags ||
+					updatedWordCount.Words != currentWordCount.Words)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private Settings GetSettings()
@@ -1552,8 +1646,6 @@ namespace Trados.Transcreate
 
 				lock (_lockObject)
 				{
-					// TODO: there is a bug with the API where the icon path is not updated
-					// we will need to create a new API enhancement proposal
 					var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
 					_projectAutomationService?.UpdateProjectIcon(_projectsController?.CurrentProject, iconPath);
 				}
