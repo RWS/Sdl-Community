@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DSOFile;
 using Sdl.Community.AhkPlugin.Model;
 
 namespace Sdl.Community.AhkPlugin.Helpers
@@ -117,12 +116,6 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			}
 
 			File.WriteAllLines(filePath, scriptLines,Encoding.UTF8);
-			//set custom property
-			var fileProperties = new OleDocumentProperties();
-			fileProperties.Open(filePath);
-			object customProperty = "GeneratedByAhkPlugin";
-			fileProperties.CustomProperties.Add("SdlCommunity", ref customProperty);
-			fileProperties.Close(true);
 		}
 
 		private static List<string> CreateScriptLinesContent(Script script)
@@ -160,16 +153,69 @@ namespace Sdl.Community.AhkPlugin.Helpers
 		
 		public static bool IsGeneratedByAhkPlugin(string filePath)
 		{
-			var fileProperties = new OleDocumentProperties();
-			fileProperties.Open(filePath);
-			foreach (CustomProperty property in fileProperties.CustomProperties)
+			using (var streamReader = new StreamReader(filePath))
 			{
-				if (property.Name == "SdlCommunity")
+				string line;
+				var hasName = false;
+				var hasDescription = false;
+				var hasContent = false;
+				var isScript = false;
+
+				while ((line = streamReader.ReadLine()) != null && !isScript)
 				{
-					return true;
+					if (string.Equals(line, ";Name"))
+					{
+						hasName = true;
+					}
+
+					if (string.Equals(line, ";Description"))
+					{
+						if (hasName)
+						{
+							hasDescription = true;
+						}
+						else
+						{
+							// ReSharper disable once RedundantAssignment
+							isScript = false;
+							break;
+						}
+					}
+
+					if (string.Equals(line, ";Content"))
+					{
+						if (hasDescription)
+						{
+							hasContent = true;
+						}
+						else
+						{
+							// ReSharper disable once RedundantAssignment
+							isScript = false;
+							break;
+						}
+					}
+
+					if (string.Equals(line, ";endScript"))
+					{
+						if (hasContent)
+						{
+							isScript = true;
+							hasName = false;
+							hasDescription = false;
+							hasContent = false;
+						}
+						else
+						{
+							// ReSharper disable once RedundantAssignment
+							isScript = false;
+							break;
+						}
+					}
 				}
+
+				return isScript;
 			}
-			return false;
 		}
 
 		public static void ChangeScriptState(Script script)
