@@ -379,6 +379,10 @@ namespace Trados.Transcreate
 			}
 
 			UpdateBackTranslationProjectSettingsBundle(parentProject);
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
 		}
 
 		private List<Report> CreateHtmlReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject project)
@@ -543,6 +547,11 @@ namespace Trados.Transcreate
 
 		private void UpdateProjectSettingsBundle(IProject project)
 		{
+			if (project == null)
+			{
+				return;
+			}
+
 			var selectedProject = _projectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
 
@@ -1269,6 +1278,10 @@ namespace Trados.Transcreate
 							}
 						}
 
+						foreach (var projectFileActivity in targetFile.ProjectFileActivities)
+						{
+							projectFileActivity.ProjectFile = targetFile;
+						}
 
 						// monitor internal changes only when the document is updated in the editor.
 						var projectTargetFile = transcreateProject.ProjectFiles.FirstOrDefault(a => a.FileId == targetFile.FileId);
@@ -1276,20 +1289,20 @@ namespace Trados.Transcreate
 						{
 							continue;
 						}
-						
-						var projectTargetFileActivity = projectTargetFile.ProjectFileActivities.LastOrDefault();
+
+						var projectTargetFileActivity = projectTargetFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
 						if (projectTargetFileActivity != null && (projectTargetFileActivity.Action == Enumerators.Action.Export ||
 							projectTargetFileActivity.Action == Enumerators.Action.ExportBackTranslation))
 						{
-							_projectAutomationService.ActivateProject(project);
-
-							var documentIsUpdated = DocumentIsUpdated(
-								projectTargetFileActivity.ConfirmationStatistics?.WordCounts?.Total,
-								sdlxliffWriter.ConfirmationStatistics?.WordCounts?.Total);
-
-							if (!documentIsUpdated)
+							
+							if (sdlxliffWriter.ConfirmationStatistics?.WordCounts?.Processed?.Count <= 0)
 							{
-								RemovePreviousProjectFileActivity(projectTargetFile, projectTargetFileActivity, transcreateProject);
+								RemovePreviousProjectFileActivity(projectTargetFile, projectTargetFileActivity);
+								UpdateProjectSettingsBundle(transcreateProject is BackTranslationProject ? parentProject : transcreateProject);
+								if (_projectsNavigationViewModel != null)
+								{
+									_projectsNavigationViewModel.Projects = _transcreateProjects;
+								}
 								continue;
 							}
 
@@ -1312,6 +1325,7 @@ namespace Trados.Transcreate
 							targetFile.ProjectFileActivities.Add(activityFile);
 							taskContext.Completed = true;
 
+							_projectAutomationService.ActivateProject(project);
 							if (transcreateProject is BackTranslationProject)
 							{
 								UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
@@ -1326,17 +1340,17 @@ namespace Trados.Transcreate
 			}
 		}
 
-		private void RemovePreviousProjectFileActivity(ProjectFile projectTargetFile, 
-			ProjectFileActivity projectFileActivity, IProject transcreateProject)
+		private void RemovePreviousProjectFileActivity(ProjectFile projectTargetFile,
+			ProjectFileActivity projectFileActivity)
 		{
 			if (projectFileActivity == null)
 			{
 				return;
 			}
-			
+
 			projectTargetFile.ProjectFileActivities.Remove(projectFileActivity);
-			
-			var previousActivity = projectTargetFile.ProjectFileActivities.LastOrDefault();
+
+			var previousActivity = projectTargetFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
 			if (previousActivity != null)
 			{
 				projectTargetFile.Action = previousActivity.Action;
@@ -1345,12 +1359,6 @@ namespace Trados.Transcreate
 				projectTargetFile.Date = previousActivity.Date;
 				projectTargetFile.ExternalFilePath = Path.Combine(previousActivity.Path, previousActivity.Name);
 				projectTargetFile.Report = previousActivity.Report;
-			}
-
-			UpdateProjectSettingsBundle(transcreateProject);
-			if (_projectsNavigationViewModel != null)
-			{
-				_projectsNavigationViewModel.Projects = _transcreateProjects;
 			}
 		}
 
