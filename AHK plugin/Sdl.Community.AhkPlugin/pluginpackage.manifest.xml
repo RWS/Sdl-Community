@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>AutoHotKey Manager</PlugInName>
-	<Version>3.0.4.0</Version>
+	<Version>3.0.4.1</Version>
 	<Description>This plugin can be used to manage AutoHotKey scripts so they can be easily imported/exported and shared with others.</Description>
 	<Author>SDL Community Developers</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0" />

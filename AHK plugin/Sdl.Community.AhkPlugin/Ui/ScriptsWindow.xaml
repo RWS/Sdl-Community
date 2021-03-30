@@ -76,7 +76,7 @@
 					</Style>
 				</DataGrid.RowStyle>
 				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="Auto">
+					<DataGridTemplateColumn Width="Auto" CanUserResize="False">
 						<DataGridTemplateColumn.Header>
 							<CheckBox IsChecked="{Binding Path=DataContext.AllFilesChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						          VerticalContentAlignment="Center"
@@ -86,7 +86,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							          Margin="4,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+							          Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
