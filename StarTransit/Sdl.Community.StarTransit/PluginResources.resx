@@ -151,4 +151,16 @@
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="Wizard_Name" xml:space="preserve">
+    <value>TransitPackage Handler</value>
+  </data>
+  <data name="Wizard_StepsCompleted" xml:space="preserve">
+    <value>{0} of {1} completed</value>
+  </data>
 </root>

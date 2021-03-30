@@ -168,5 +168,41 @@ namespace Sdl.Community.StarTransit {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TransitPackage Handler.
+        /// </summary>
+        public static string Wizard_Name {
+            get {
+                return ResourceManager.GetString("Wizard_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} completed.
+        /// </summary>
+        public static string Wizard_StepsCompleted {
+            get {
+                return ResourceManager.GetString("Wizard_StepsCompleted", resourceCulture);
+            }
+        }
     }
 }

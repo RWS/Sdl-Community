@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using NLog;
+using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
+using Sdl.Community.StarTransit.View;
+using Sdl.Community.StarTransit.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -29,46 +35,58 @@ namespace Sdl.Community.StarTransit
 		private IMessageBoxService _messageBoxService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
+		private ObservableCollection<IProgressHeaderItem> CreatePages(WizardModel wizardModel)
+		{
+			return new ObservableCollection<IProgressHeaderItem> {new PackageDetailsViewModel(wizardModel)};
+		}
+
+
 		protected override async void Execute()
 		{
-			_messageBoxService = new MessageBoxService();
-			Utils.EnsureApplicationResources();
+			var wizardModel = new WizardModel();
+			var pages = CreatePages(wizardModel);
+			var wizard = new ImportWizard(pages);
 
-			var pathToTempFolder = CreateTempPackageFolder();
-			try
-			{
-				var fileDialog = new OpenFileDialog
-				{
-					Filter = "Transit Project Package Files (*.ppf)|*.ppf"
-				};
-				var dialogResult = fileDialog.ShowDialog();
-				if (dialogResult == DialogResult.OK)
-				{
-					var path = fileDialog.FileName;	
-					var packageService = new PackageService();
-					var package = await packageService.OpenPackage(path, pathToTempFolder);
+			ElementHost.EnableModelessKeyboardInterop(wizard);
+			wizard.ShowDialog();
+			//_messageBoxService = new MessageBoxService();
+			//Utils.EnsureApplicationResources();
 
-					var templateService = new TemplateService();
-					var templateList = templateService.LoadProjectTemplates();
+			//var pathToTempFolder = CreateTempPackageFolder();
+			//try
+			//{
+			//	var fileDialog = new OpenFileDialog
+			//	{
+			//		Filter = "Transit Project Package Files (*.ppf)|*.ppf"
+			//	};
+			//	var dialogResult = fileDialog.ShowDialog();
+			//	if (dialogResult == DialogResult.OK)
+			//	{
+			//		var path = fileDialog.FileName;	
+			//		var packageService = new PackageService();
+			//		var package = await packageService.OpenPackage(path, pathToTempFolder);
 
-					var packageModel = new PackageModel
-					{
-						Name = package.Name,
-						Description = package.Description,
-						StudioTemplates = templateList,
-						LanguagePairs = package.LanguagePairs,
-						PathToPrjFile = package.PathToPrjFile
-					};
+			//		var templateService = new TemplateService();
+			//		var templateList = templateService.LoadProjectTemplates();
 
-					// Start BackgroundWorker in InitializeMain method to have app working separately than Trados Studio process
-					Program.InitializeMain(packageModel);
-				}
-			}
-			catch (Exception ex)
-			{
-				_messageBoxService.ShowMessage(ex.Message, string.Empty);
-				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-			}
+			//		var packageModel = new PackageModel
+			//		{
+			//			Name = package.Name,
+			//			Description = package.Description,
+			//			StudioTemplates = templateList,
+			//			LanguagePairs = package.LanguagePairs,
+			//			PathToPrjFile = package.PathToPrjFile
+			//		};
+
+			//		// Start BackgroundWorker in InitializeMain method to have app working separately than Trados Studio process
+			//		Program.InitializeMain(packageModel);
+			//	}
+			//}
+			//catch (Exception ex)
+			//{
+			//	_messageBoxService.ShowMessage(ex.Message, string.Empty);
+			//	_logger.Error($"{ex.Message}\n {ex.StackTrace}");
+			//}
 		}  
 		
 		/// <summary>
