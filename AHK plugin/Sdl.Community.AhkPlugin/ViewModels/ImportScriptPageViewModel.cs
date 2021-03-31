@@ -33,15 +33,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
+			_dbContext = new DbContext();
+			GridVisibility = "Collapsed";
+			MessageVisibility = "Collapsed";
 		}
 
-	    public ImportScriptPageViewModel()
-	    {
-		    _gridVisibility = "Hidden";
-		    _messageVisibility = "Hidden";
-		    _dbContext = new DbContext();
-		}
-	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
+		public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ??
 											(_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
