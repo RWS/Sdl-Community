@@ -221,6 +221,7 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Resource Include="Resources\trash-alt.png" />
     <None Include="Resources\reload.txt" />
     <Resource Include="Resources\icon.png" />
     <EmbeddedResource Include="PluginResources.resx">

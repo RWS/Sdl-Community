@@ -13,14 +13,11 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\UiHelpers\Buttons.xaml"/>
+                <ResourceDictionary Source="..\UiHelpers\General.xaml"/>
                 <ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
                 <ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
                 <ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
-                <Setter Property="Padding" Value="5"/>
-                <Setter Property="FontFamily" Value="Segoe UI"/>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >

@@ -51,10 +51,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    public ICommand AddToMasterCommand => _addToMasterCommand ??
 	                                          (_addToMasterCommand = new CommandHandler(ImportScriptsToMaster, true));
 	    public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
-	    public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
+		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
 
-
-	    private void SelectAllScripts()
+		private void SelectAllScripts()
 	    {
 		    Helpers.Ui.Select(GetObservableCollectionOfScripts(), SelectAll);
 	    }
@@ -314,8 +313,17 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    {
 				    return;
 			    }
-			    _selectAll = value;
+			    ToggleCheckAllFiles(value);
+				_selectAll = value;
 			    OnPropertyChanged(nameof(SelectAll));
+		    }
+	    }
+
+	    private void ToggleCheckAllFiles(bool value)
+	    {
+		    foreach (var script in ScriptsCollection)
+		    {
+			    script.Value.IsSelected = value;
 		    }
 	    }
 	}
