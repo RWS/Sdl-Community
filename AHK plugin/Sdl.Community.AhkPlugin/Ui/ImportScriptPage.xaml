@@ -19,9 +19,6 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<UserControl.DataContext>
-		<viewModels:ImportScriptPageViewModel /> 
-	</UserControl.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -100,9 +97,8 @@
 					<DataGridTemplateColumn.Header>
 						<CheckBox Grid.Row="5" Grid.Column="0" 
 						          Style="{StaticResource CheckBoxStyle}" 
-						          Visibility="{Binding GridVisibility}" 
 						          Margin="10,5,0,0" 
-						          IsChecked="{Binding Path=DataContext.SelectAll, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >Select all</CheckBox>
+						          IsChecked="{Binding Path=DataContext.SelectAll, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 					</DataGridTemplateColumn.Header>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
