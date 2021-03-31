@@ -44,7 +44,6 @@
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-
     <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
@@ -205,6 +204,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\trash-alt.png" />
     <None Include="Resources\reload.txt" />
     <Resource Include="Resources\icon.png" />
     <EmbeddedResource Include="PluginResources.resx">
