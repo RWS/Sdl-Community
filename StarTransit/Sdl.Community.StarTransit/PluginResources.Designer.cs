@@ -141,6 +141,78 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer:.
+        /// </summary>
+        public static string PackageDetails_Customer {
+            get {
+                return ResourceManager.GetString("PackageDetails_Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description:.
+        /// </summary>
+        public static string PackageDetails_DescriptionLbl {
+            get {
+                return ResourceManager.GetString("PackageDetails_DescriptionLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Due date:.
+        /// </summary>
+        public static string PackageDetails_DueDate {
+            get {
+                return ResourceManager.GetString("PackageDetails_DueDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location:.
+        /// </summary>
+        public static string PackageDetails_Location {
+            get {
+                return ResourceManager.GetString("PackageDetails_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package name:.
+        /// </summary>
+        public static string PackageDetails_NameLbl {
+            get {
+                return ResourceManager.GetString("PackageDetails_NameLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source language:.
+        /// </summary>
+        public static string PackageDetails_SourceLanguage {
+            get {
+                return ResourceManager.GetString("PackageDetails_SourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target language(s):.
+        /// </summary>
+        public static string PackageDetails_TargetLanguage {
+            get {
+                return ResourceManager.GetString("PackageDetails_TargetLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project template:.
+        /// </summary>
+        public static string PackageDetails_Template {
+            get {
+                return ResourceManager.GetString("PackageDetails_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.StarTransit.
         /// </summary>
         public static string Plugin_Name {
@@ -197,11 +269,29 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package Details.
+        /// </summary>
+        public static string Wizard_PackageDetails_DisplayName {
+            get {
+                return ResourceManager.GetString("Wizard_PackageDetails_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} completed.
         /// </summary>
         public static string Wizard_StepsCompleted {
             get {
                 return ResourceManager.GetString("Wizard_StepsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please fill all the required fields.
+        /// </summary>
+        public static string Wizard_ValidationMessage {
+            get {
+                return ResourceManager.GetString("Wizard_ValidationMessage", resourceCulture);
             }
         }
     }

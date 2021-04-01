@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	
+
 	<Style TargetType="{x:Type ToolTip}" x:Key="ToolTipStyle">
 		<Setter Property="Background" Value="White"/>
 		<Setter Property="BorderThickness" Value="0.5"/>

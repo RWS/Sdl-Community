@@ -163,4 +163,34 @@
   <data name="Wizard_StepsCompleted" xml:space="preserve">
     <value>{0} of {1} completed</value>
   </data>
+  <data name="PackageDetails_Customer" xml:space="preserve">
+    <value>Customer:</value>
+  </data>
+  <data name="PackageDetails_DescriptionLbl" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="PackageDetails_DueDate" xml:space="preserve">
+    <value>Due date:</value>
+  </data>
+  <data name="PackageDetails_Location" xml:space="preserve">
+    <value>Location:</value>
+  </data>
+  <data name="PackageDetails_NameLbl" xml:space="preserve">
+    <value>Package name:</value>
+  </data>
+  <data name="PackageDetails_SourceLanguage" xml:space="preserve">
+    <value>Source language:</value>
+  </data>
+  <data name="PackageDetails_TargetLanguage" xml:space="preserve">
+    <value>Target language(s):</value>
+  </data>
+  <data name="PackageDetails_Template" xml:space="preserve">
+    <value>Project template:</value>
+  </data>
+  <data name="Wizard_PackageDetails_DisplayName" xml:space="preserve">
+    <value>Package Details</value>
+  </data>
+  <data name="Wizard_ValidationMessage" xml:space="preserve">
+    <value>Please fill all the required fields</value>
+  </data>
 </root>

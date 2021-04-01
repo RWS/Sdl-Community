@@ -19,6 +19,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using PackageDetails = Sdl.Community.StarTransit.View.PackageDetails;
 
 namespace Sdl.Community.StarTransit
 {
@@ -37,7 +38,7 @@ namespace Sdl.Community.StarTransit
 
 		private ObservableCollection<IProgressHeaderItem> CreatePages(WizardModel wizardModel)
 		{
-			return new ObservableCollection<IProgressHeaderItem> {new PackageDetailsViewModel(wizardModel)};
+			return new ObservableCollection<IProgressHeaderItem> {new PackageDetailsViewModel(wizardModel,new PackageDetails())};
 		}
 
 
