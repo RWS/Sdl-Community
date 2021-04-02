@@ -132,12 +132,15 @@
   <ItemGroup>
     <Compile Include="Command\MouseDownCommand.cs" />
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="Converter\ImageToBitmapImageConverter.cs" />
     <Compile Include="Extension\EventsExtensions.cs" />
     <Compile Include="FileType\FiletypeDetails.cs" />
     <Compile Include="FileType\TransitFilterComponentBuilder.cs" />
     <Compile Include="Helpers\SelectedPageEventArgs.cs" />
     <Compile Include="Interface\IProgressHeader.cs" />
     <Compile Include="Interface\IProgressHeaderItem.cs" />
+    <Compile Include="Interface\IWizardModel.cs" />
+    <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\WizardModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -146,6 +149,7 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AsyncTaskWatcherService.cs" />
     <Compile Include="StarTransitRibbon.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />

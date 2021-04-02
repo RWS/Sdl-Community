@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
+using Sdl.Community.StarTransit.Service;
+using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -15,9 +19,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
-		private readonly WizardModel _wizardModel;
+		private readonly IWizardModel _wizardModel;
 
-		public PackageDetailsViewModel(WizardModel wizardModel,object view) : base(view)
+		public PackageDetailsViewModel(IWizardModel wizardModel,IPackageService packageService,object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			_currentPageNumber = 1;
@@ -25,24 +29,18 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_isPreviousEnabled = false;
 			_isNextEnabled = true;
 			_isValid = true; //TODO remove this
+			PackageModel = new AsyncTaskWatcherService<PackageModel>(
+				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
 		}
 
-		public override bool OnChangePage(int position, out string message)
+		public AsyncTaskWatcherService<PackageModel> PackageModel
 		{
-			message = string.Empty;
-
-			var pagePosition = PageIndex - 1;
-			if (position == pagePosition)
+			get => _wizardModel.PackageModel;
+			set
 			{
-				return false;
+				_wizardModel.PackageModel = value;
+				OnPropertyChanged(nameof(PackageModel));
 			}
-
-			if (!IsValid && position > pagePosition)
-			{
-				message = PluginResources.Wizard_ValidationMessage;
-				return false;
-			}
-			return true;
 		}
 
 		public override string DisplayName
@@ -117,6 +115,25 @@ namespace Sdl.Community.StarTransit.ViewModel
 				_isPreviousEnabled = value;
 				OnPropertyChanged(nameof(IsPreviousEnabled));
 			}
+		}
+
+
+		public override bool OnChangePage(int position, out string message)
+		{
+			message = string.Empty;
+
+			var pagePosition = PageIndex - 1;
+			if (position == pagePosition)
+			{
+				return false;
+			}
+
+			if (!IsValid && position > pagePosition)
+			{
+				message = PluginResources.Wizard_ValidationMessage;
+				return false;
+			}
+			return true;
 		}
 	}
 }

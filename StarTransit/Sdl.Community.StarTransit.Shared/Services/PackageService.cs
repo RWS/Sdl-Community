@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class PackageService
+	public class PackageService:IPackageService
 	{
 		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries =
 			new List<KeyValuePair<string, string>>();
@@ -165,8 +166,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					foreach (var language in languages)
 					{
 						var targetLanguageCode = int.Parse(language);
-						var cultureInfo = new CultureInfo(targetLanguageCode);
-						var pair = new LanguagePair {SourceLanguage = sourceLanguage, TargetLanguage = cultureInfo};
+						var targetCultureInfo = new CultureInfo(targetLanguageCode);
+						var pair = new LanguagePair
+						{
+							SourceLanguage = sourceLanguage,
+							TargetLanguage = targetCultureInfo,
+							TargetFlag = new Language(targetCultureInfo).GetFlagImage()
+						};
 						languagePairList.Add(pair);
 					}
 				}
@@ -188,6 +194,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 			}
 
+			model.SourceLanguage = model.LanguagePairs[0].SourceLanguage;
+			model.SourceFlag = new Language(model.SourceLanguage).GetFlagImage();
 			return model;
 		}
 

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.ViewModel"
+             xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
              xmlns:resx="clr-namespace:Sdl.Community.StarTransit"
              d:DataContext="{d:DesignInstance viewModels:PackageDetailsViewModel}"
              mc:Ignorable="d" 
@@ -13,8 +14,12 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 
 			<Style x:Key="DescriptionLableStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.InformationTitleStyle}">
+				<Setter Property="Margin" Value="0 5 0 5"/>
+			</Style>
+			<Style x:Key="PackageDetailsMargin" TargetType="{x:Type TextBlock}">
 				<Setter Property="Margin" Value="0 5 0 5"/>
 			</Style>
 		</ResourceDictionary>
@@ -37,22 +42,42 @@
 		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
 		           Grid.Column="0" Grid.Row="0"
 		           Text="{x:Static resx:PluginResources.PackageDetails_NameLbl}"/>
-		<TextBlock Grid.Row="0" Grid.Column="1"/>
+		<TextBlock Style="{StaticResource PackageDetailsMargin}"
+		           Grid.Column="1" Grid.Row="0"
+		           Text="{Binding PackageModel.Result.Name}"/>
+		
 		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
 		           Grid.Column="0" Grid.Row="1"
-		           Text="{x:Static resx:PluginResources.PackageDetails_DescriptionLbl}"/>
-		<TextBlock Grid.Row="1" Grid.Column="1"/>
-		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
-		           Grid.Column="0" Grid.Row="2"
-		           Text="{x:Static resx:PluginResources.PackageDetails_Location}"/>
+		           Text="{x:Static resx:PluginResources.PackageDetails_Location}"><Span Foreground="Red">*</Span></TextBlock>
 
 		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
-		           Grid.Column="0" Grid.Row="3"
+		           Grid.Column="0" Grid.Row="2"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Customer}"/>
 
 		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
-		           Grid.Column="0" Grid.Row="4"
+		           Grid.Column="0" Grid.Row="3"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Template}"><Span Foreground="Red">*</Span></TextBlock>
+
+		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
+		           Grid.Column="0" Grid.Row="4"
+		           Text="{x:Static resx:PluginResources.PackageDetails_DueDate}"/>
+
+		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
+		           Grid.Column="0" Grid.Row="5"
+		           Text="{x:Static resx:PluginResources.PackageDetails_SourceLanguage}"/>
+
+		<DockPanel Grid.Column="1" Grid.Row="5" LastChildFill="false">
+			<Image DockPanel.Dock="Left"
+			       Source="{Binding Path=PackageModel.Result.SourceFlag,
+				   Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+			<TextBlock Style="{StaticResource PackageDetailsMargin}"
+			           Text="{Binding PackageModel.Result.SourceLanguage.DisplayName}"/>
+		</DockPanel>
+
+
+		<TextBlock Style="{StaticResource DescriptionLableStyle}" 
+		           Grid.Column="0" Grid.Row="6"
+		           Text="{x:Static resx:PluginResources.PackageDetails_TargetLanguage}"/>
 
 
 	</Grid>

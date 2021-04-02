@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.StarTransit.Shared.Models
 {
@@ -11,6 +8,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
     {
         public CultureInfo SourceLanguage { get; set; }
         public CultureInfo TargetLanguage { get; set; }
+        public Image TargetFlag { get; set; }
         public List<StarTranslationMemoryMetadata> StarTranslationMemoryMetadatas { get; set; }
         public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }

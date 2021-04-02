@@ -147,6 +147,7 @@
     </Compile>
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\Interfaces\IFileService.cs" />
+    <Compile Include="Services\Interfaces\IPackageService.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="Services\PackageService.cs" />
     <Compile Include="Services\ProjectService.cs" />

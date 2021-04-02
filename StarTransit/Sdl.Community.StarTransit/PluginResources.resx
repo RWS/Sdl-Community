@@ -173,7 +173,7 @@
     <value>Due date:</value>
   </data>
   <data name="PackageDetails_Location" xml:space="preserve">
-    <value>Location:</value>
+    <value>Project location:</value>
   </data>
   <data name="PackageDetails_NameLbl" xml:space="preserve">
     <value>Package name:</value>

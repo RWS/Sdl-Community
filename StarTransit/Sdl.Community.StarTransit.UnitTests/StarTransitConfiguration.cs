@@ -10,6 +10,7 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UnitTests
 {
+	//TODO: Use IPackageService
 	public class StarTransitConfiguration
 	{
 		private PackageService _packageService;

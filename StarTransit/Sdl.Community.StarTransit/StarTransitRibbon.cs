@@ -10,6 +10,7 @@ using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
@@ -36,20 +37,39 @@ namespace Sdl.Community.StarTransit
 		private IMessageBoxService _messageBoxService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		private ObservableCollection<IProgressHeaderItem> CreatePages(WizardModel wizardModel)
+		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel,IPackageService packageService)
 		{
-			return new ObservableCollection<IProgressHeaderItem> {new PackageDetailsViewModel(wizardModel,new PackageDetails())};
+			return new ObservableCollection<IProgressHeaderItem> {new PackageDetailsViewModel(wizardModel,packageService,new PackageDetails())};
 		}
 
 
 		protected override async void Execute()
 		{
-			var wizardModel = new WizardModel();
-			var pages = CreatePages(wizardModel);
-			var wizard = new ImportWizard(pages);
+			try
+			{
+				var fileDialog = new OpenFileDialog { Filter = "Transit Project Package Files (*.ppf)|*.ppf" };
+				var dialogResult = fileDialog.ShowDialog();
+				if (dialogResult != DialogResult.OK) return;
+				var packageService = new PackageService();
+				var pathToTempFolder = CreateTempPackageFolder();
+				var wizardModel = new WizardModel
+				{
+					TransitFilePathLocation = fileDialog.FileName,
+					PathToTempFolder = pathToTempFolder
+				};
+				var pages = CreatePages(wizardModel, packageService);
+				var wizard = new ImportWizard(pages);
 
-			ElementHost.EnableModelessKeyboardInterop(wizard);
-			wizard.ShowDialog();
+				ElementHost.EnableModelessKeyboardInterop(wizard);
+				wizard.ShowDialog();
+			}
+			catch (Exception ex)
+			{
+				_messageBoxService.ShowMessage(ex.Message, string.Empty);
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
+			}
+
+
 			//_messageBoxService = new MessageBoxService();
 			//Utils.EnsureApplicationResources();
 
@@ -63,7 +83,7 @@ namespace Sdl.Community.StarTransit
 			//	var dialogResult = fileDialog.ShowDialog();
 			//	if (dialogResult == DialogResult.OK)
 			//	{
-			//		var path = fileDialog.FileName;	
+			//		var path = fileDialog.FileName;
 			//		var packageService = new PackageService();
 			//		var package = await packageService.OpenPackage(path, pathToTempFolder);
 

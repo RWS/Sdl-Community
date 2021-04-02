@@ -168,7 +168,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location:.
+        ///   Looks up a localized string similar to Project location:.
         /// </summary>
         public static string PackageDetails_Location {
             get {
