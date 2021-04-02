@@ -141,6 +141,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string PackageDetails_Browse {
+            get {
+                return ResourceManager.GetString("PackageDetails_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer:.
         /// </summary>
         public static string PackageDetails_Customer {
@@ -164,6 +173,15 @@ namespace Sdl.Community.StarTransit {
         public static string PackageDetails_DueDate {
             get {
                 return ResourceManager.GetString("PackageDetails_DueDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select folder path.
+        /// </summary>
+        public static string PackageDetails_FolderLocation {
+            get {
+                return ResourceManager.GetString("PackageDetails_FolderLocation", resourceCulture);
             }
         }
         
@@ -213,6 +231,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paste folder path or click &quot;Browse&quot; .
+        /// </summary>
+        public static string PackageDetails_Watermark {
+            get {
+                return ResourceManager.GetString("PackageDetails_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.StarTransit.
         /// </summary>
         public static string Plugin_Name {
@@ -237,6 +264,16 @@ namespace Sdl.Community.StarTransit {
         public static System.Drawing.Icon return_package {
             get {
                 object obj = ResourceManager.GetObject("return_package", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon user {
+            get {
+                object obj = ResourceManager.GetObject("user", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

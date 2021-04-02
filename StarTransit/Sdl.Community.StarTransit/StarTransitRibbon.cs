@@ -7,6 +7,7 @@ using System.Windows.Forms.Integration;
 using NLog;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
+using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -37,9 +38,14 @@ namespace Sdl.Community.StarTransit
 		private IMessageBoxService _messageBoxService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel,IPackageService packageService)
+		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel,
+			IPackageService packageService, IFolderDialogService dialogService, IStudioService studioService)
 		{
-			return new ObservableCollection<IProgressHeaderItem> {new PackageDetailsViewModel(wizardModel,packageService,new PackageDetails())};
+			return new ObservableCollection<IProgressHeaderItem>
+			{
+				new PackageDetailsViewModel(wizardModel, packageService, dialogService, studioService,
+					new PackageDetails())
+			};
 		}
 
 
@@ -50,14 +56,17 @@ namespace Sdl.Community.StarTransit
 				var fileDialog = new OpenFileDialog { Filter = "Transit Project Package Files (*.ppf)|*.ppf" };
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult != DialogResult.OK) return;
+				//services
 				var packageService = new PackageService();
+				var folderService = new FolderDialogService();
+				var studioService = new StudioService();
 				var pathToTempFolder = CreateTempPackageFolder();
 				var wizardModel = new WizardModel
 				{
 					TransitFilePathLocation = fileDialog.FileName,
 					PathToTempFolder = pathToTempFolder
 				};
-				var pages = CreatePages(wizardModel, packageService);
+				var pages = CreatePages(wizardModel, packageService, folderService,studioService);
 				var wizard = new ImportWizard(pages);
 
 				ElementHost.EnableModelessKeyboardInterop(wizard);

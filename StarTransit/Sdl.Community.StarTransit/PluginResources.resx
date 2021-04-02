@@ -193,4 +193,16 @@
   <data name="Wizard_ValidationMessage" xml:space="preserve">
     <value>Please fill all the required fields</value>
   </data>
+  <data name="PackageDetails_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="PackageDetails_FolderLocation" xml:space="preserve">
+    <value>Please select folder path</value>
+  </data>
+  <data name="PackageDetails_Watermark" xml:space="preserve">
+    <value>Paste folder path or click "Browse" </value>
+  </data>
+  <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\user.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

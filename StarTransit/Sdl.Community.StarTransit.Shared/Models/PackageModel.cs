@@ -17,7 +17,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		public string Description { get; set; } // TODO: Remove this for final implementation. This is no used anywhere we don't have description in the packages
         public ProjectTemplateInfo ProjectTemplate { get; set; }
         public List<ProjectTemplateInfo> StudioTemplates { get; set; }
-        public string Location { get; set; }
+        public string Location { get; set; } // TODO: Remove this we'll use it from wizard
         public DateTime? DueDate { get; set; }
         public bool HasDueDate { get; set; }
         public Customer Customer { get; set; }

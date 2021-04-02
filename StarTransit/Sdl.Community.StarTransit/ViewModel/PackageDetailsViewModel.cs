@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Service;
@@ -20,17 +22,25 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private readonly IWizardModel _wizardModel;
+		private readonly IFolderDialogService _dialogService;
+		private readonly IStudioService _studioService;
+		private ICommand _clearCommand;
+		private ICommand _browseCommand;
 
-		public PackageDetailsViewModel(IWizardModel wizardModel,IPackageService packageService,object view) : base(view)
+		public PackageDetailsViewModel(IWizardModel wizardModel, IPackageService packageService,
+			IFolderDialogService folderService, IStudioService studioService, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			_currentPageNumber = 1;
 			_displayName = PluginResources.Wizard_PackageDetails_DisplayName;
-			_isPreviousEnabled = false;
+			IsPreviousEnabled = false;
 			_isNextEnabled = true;
 			_isValid = true; //TODO remove this
+			_dialogService = folderService;
+			_studioService = studioService;
 			PackageModel = new AsyncTaskWatcherService<PackageModel>(
 				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
+			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers());
 		}
 
 		public AsyncTaskWatcherService<PackageModel> PackageModel
@@ -40,6 +50,36 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				_wizardModel.PackageModel = value;
 				OnPropertyChanged(nameof(PackageModel));
+			}
+		}
+
+		public string StudioProjectLocation
+		{
+			get => _wizardModel.StudioProjectLocation;
+			set
+			{
+				_wizardModel.StudioProjectLocation = value;
+				OnPropertyChanged(nameof(StudioProjectLocation));
+			}
+		}
+
+		public AsyncTaskWatcherService<List<Customer>> Customers
+		{
+			get => _wizardModel.Customers;
+			set
+			{
+				_wizardModel.Customers = value;
+				OnPropertyChanged(nameof(Customers));
+			}
+		}
+
+		public Customer SelectedCustomer
+		{
+			get => _wizardModel.SelectedCustomer;
+			set
+			{
+				_wizardModel.SelectedCustomer = value;
+				OnPropertyChanged(nameof(SelectedCustomer));
 			}
 		}
 
@@ -117,6 +157,20 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(ClearLocation));
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new RelayCommand(BrowseLocation));
+
+		private void BrowseLocation()
+		{
+			var location = _dialogService.ShowDialog(PluginResources.PackageDetails_FolderLocation);
+			if(string.IsNullOrEmpty(location))return;
+			StudioProjectLocation = location;
+		}
+
+		private void ClearLocation()
+		{
+			StudioProjectLocation = string.Empty;
+		}
 
 		public override bool OnChangePage(int position, out string message)
 		{

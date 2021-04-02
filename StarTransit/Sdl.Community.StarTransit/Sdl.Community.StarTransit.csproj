@@ -114,6 +114,9 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Versioning">
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -136,9 +139,13 @@
     <Compile Include="Extension\EventsExtensions.cs" />
     <Compile Include="FileType\FiletypeDetails.cs" />
     <Compile Include="FileType\TransitFilterComponentBuilder.cs" />
+    <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SelectedPageEventArgs.cs" />
+    <Compile Include="Interface\IFolderDialogService.cs" />
     <Compile Include="Interface\IProgressHeader.cs" />
     <Compile Include="Interface\IProgressHeaderItem.cs" />
+    <Compile Include="Interface\IStudioService.cs" />
     <Compile Include="Interface\IWizardModel.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\WizardModel.cs" />
@@ -150,6 +157,8 @@
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AsyncTaskWatcherService.cs" />
+    <Compile Include="Service\FolderDialogService.cs" />
+    <Compile Include="Service\StudioService.cs" />
     <Compile Include="StarTransitRibbon.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
@@ -174,6 +183,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\user.ico" />
     <None Include="Resources\help_icon.ico" />
     <None Include="Resources\Download.ico" />
     <None Include="Resources\ForumIcon.ico" />
