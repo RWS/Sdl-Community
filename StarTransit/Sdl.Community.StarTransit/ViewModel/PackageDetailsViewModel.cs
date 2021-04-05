@@ -45,6 +45,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
 			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers());
 			ProjectTemplates = new List<ProjectTemplateInfo>(_studioService.GetProjectTemplates());
+			SelectedProjectTemplate = ProjectTemplates[0];
 			DueDate = null;
 			_displayStartDate = DateTime.Now;
 		}

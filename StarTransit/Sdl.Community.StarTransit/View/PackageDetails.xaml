@@ -23,12 +23,13 @@
 				<ResourceDictionary Source="../UiHelpers/General.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
+			<converters:NullVisibilityConverter x:Key="NullVisibilityConverter"/>
 
 			<Style x:Key="DescriptionLabelStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.InformationTitleStyle}">
 				<Setter Property="Margin" Value="10 5 0 5"/>
 			</Style>
 			<Style x:Key="PackageDetailsMargin" TargetType="{x:Type TextBlock}">
-				<Setter Property="Margin" Value="0 5 0 5"/>
+				<Setter Property="Margin" Value="15 5 0 5"/>
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -57,7 +58,7 @@
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="1"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Location}"><Span Foreground="Red">*</Span></TextBlock>
-		<DockPanel Grid.Column="1" Grid.Row="1" LastChildFill="False">
+		<DockPanel Grid.Column="1" Grid.Row="1" Margin="15 0 0 0" LastChildFill="False">
 			<TextBox Style="{DynamicResource WatermarkTextBox}"
 					 Name="LocationBox"
 			         Width="500"
@@ -79,14 +80,15 @@
 		          Width="{Binding Path=ActualWidth,ElementName=LocationBox}"
 		          HorizontalAlignment="Left"
 				  VerticalContentAlignment="Center"
-		          Grid.Column="1" Grid.Row="2" Margin="0 10"
+		          Grid.Column="1" Grid.Row="2" Margin="15 10"
 		          Cursor="Hand"
 				  SelectedItem="{Binding SelectedCustomer}"
 		          ItemsSource="{Binding Customers.Result}">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-						<Image Source="../Resources/user.ico" Width="15" Height="15" VerticalAlignment="Center"/>
+						<Image Source="../Resources/user.ico" Width="15" Height="15" VerticalAlignment="Center" 			       
+						       Visibility="{Binding Name, Converter={StaticResource NullVisibilityConverter} }"/>
 						<TextBlock Text="{Binding Name}" 
 						           Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					</StackPanel>
@@ -102,7 +104,7 @@
 		          Width="{Binding Path=ActualWidth,ElementName=LocationBox}"
 		          HorizontalAlignment="Left"
 		          VerticalContentAlignment="Center"
-		          Grid.Column="1" Grid.Row="3" Margin="0 10"
+		          Grid.Column="1" Grid.Row="3" Margin="15 10"
 		          Cursor="Hand"
 		          SelectedItem="{Binding SelectedProjectTemplate}"
 		          ItemsSource="{Binding ProjectTemplates}">
@@ -121,7 +123,7 @@
 		           Grid.Column="0" Grid.Row="4"
 		           Text="{x:Static resx:PluginResources.PackageDetails_DueDate}"/>
 
-		<DockPanel Grid.Column="1" Grid.Row="4" LastChildFill="False">
+		<DockPanel Grid.Column="1" Grid.Row="4" Margin="15 0 0 0" LastChildFill="False">
 			<DatePicker
 				HorizontalAlignment="Left"
 				VerticalContentAlignment="Center"
@@ -149,25 +151,23 @@
 				<Image Width="16" Height="16" Source="../Resources/delete.ico" />
 			</Button>
 		</DockPanel>
-		
 
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="5"
 		           Text="{x:Static resx:PluginResources.PackageDetails_SourceLanguage}"/>
 
-		<DockPanel Grid.Column="1" Grid.Row="5" LastChildFill="false">
+		<DockPanel Grid.Column="1" Margin="15 0 0 0" Grid.Row="5" LastChildFill="false">
 			<Image DockPanel.Dock="Left"
-			       Source="{Binding Path=PackageModel.Result.SourceFlag,
-				   Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+			       Width="24" Height="24"
+			       Source="{Binding Path=PackageModel.Result.SourceFlag, Converter={StaticResource ImageConverter}}"/>
 			<TextBlock Style="{StaticResource PackageDetailsMargin}"
 			           Text="{Binding PackageModel.Result.SourceLanguage.DisplayName}"/>
 		</DockPanel>
 
-
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="6"
 		           Text="{x:Static resx:PluginResources.PackageDetails_TargetLanguage}"/>
-		<ListView Grid.Column="1" Grid.Row="6" Background="Transparent" BorderThickness="0"
+		<ListView Grid.Column="1" Grid.Row="6" Background="Transparent" BorderThickness="0" Margin="15 0 0 0"
 		          ItemsSource="{Binding PackageModel.Result.LanguagePairs}">
 			<ListView.ItemContainerStyle>
 				<Style TargetType="{x:Type ListViewItem}">

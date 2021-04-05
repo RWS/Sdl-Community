@@ -62,7 +62,7 @@ namespace Sdl.Community.StarTransit.Service
 					//_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 				}
 
-				customersList.Insert(0, null);
+				customersList.Insert(0, new Customer()); // used to clear the selection
 				
 				return customersList;
 			});
