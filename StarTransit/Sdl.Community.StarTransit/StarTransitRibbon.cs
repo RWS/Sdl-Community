@@ -31,7 +31,7 @@ namespace Sdl.Community.StarTransit
 	{
 	}
 
-	[Action("Sdl.Community.StarTransit", Name = "Open StarTransit Package", Icon = "open_package", Description = "Open a StarTransit package")]
+	[Action("Sdl.Community.StarTransit", Name = "Open StarTransit Package", Icon = "CreateProjectPackage_Icon", Description = "Open a StarTransit package")]
 	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 	public class StarTransitOpenPackageAction : AbstractAction
 	{
@@ -172,7 +172,7 @@ namespace Sdl.Community.StarTransit
 		}
 	}
 
-	[Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "return_package", Description = "StarTransit return package")]
+	[Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "return", Description = "StarTransit return package")]
 	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 
 	public class ReturnPackageAction : AbstractAction
@@ -214,16 +214,6 @@ namespace Sdl.Community.StarTransit
 		protected override void Execute()
 		{
 			System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/StarTransit");
-		}
-	}
-
-	[Action("Sdl.Community.StarTransit.Help", Name = "Help", Icon = "help_icon", Description = "Help")]
-	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
-	public class HelpLinkAction : AbstractAction
-	{
-		protected override void Execute()
-		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3270.star-transit");
 		}
 	}
 }

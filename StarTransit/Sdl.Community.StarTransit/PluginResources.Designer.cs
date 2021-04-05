@@ -65,7 +65,7 @@ namespace Sdl.Community.StarTransit {
         /// </summary>
         public static System.Drawing.Icon _return {
             get {
-                object obj = ResourceManager.GetObject("_return", resourceCulture);
+                object obj = ResourceManager.GetObject("return", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -76,6 +76,16 @@ namespace Sdl.Community.StarTransit {
         public static System.Drawing.Icon bil {
             get {
                 object obj = ResourceManager.GetObject("bil", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon CreateProjectPackage_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CreateProjectPackage_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -96,16 +106,6 @@ namespace Sdl.Community.StarTransit {
         public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon help_icon {
-            get {
-                object obj = ResourceManager.GetObject("help_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -245,6 +245,16 @@ namespace Sdl.Community.StarTransit {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ProjectTemplates {
+            get {
+                object obj = ResourceManager.GetObject("ProjectTemplates", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

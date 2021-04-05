@@ -130,7 +130,7 @@
   <data name="opensourceimage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\opensourceimage.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_return" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="return" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\return.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="open_package" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -138,9 +138,6 @@
   </data>
   <data name="return_package" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\return_package.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="help_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\help_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -204,5 +201,11 @@
   </data>
   <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\user.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CreateProjectPackage_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\CreateProjectPackage_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProjectTemplates" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ProjectTemplates.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

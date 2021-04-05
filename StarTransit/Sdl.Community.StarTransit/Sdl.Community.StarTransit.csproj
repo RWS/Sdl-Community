@@ -187,8 +187,10 @@
     <None Include="Resources\help_icon.ico" />
     <None Include="Resources\Download.ico" />
     <None Include="Resources\ForumIcon.ico" />
+    <Content Include="Resources\CreateProjectPackage_Icon.ico" />
     <Content Include="Resources\open_package.ico" />
     <None Include="Resources\Question.ico" />
+    <Resource Include="Resources\ProjectTemplates.ico" />
     <Content Include="Resources\return.ico" />
     <Content Include="Resources\return_package.ico" />
     <None Include="Resources\opensourceimage.ico" />

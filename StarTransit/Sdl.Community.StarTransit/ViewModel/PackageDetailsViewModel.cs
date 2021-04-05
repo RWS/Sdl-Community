@@ -10,6 +10,7 @@ using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -41,6 +42,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			PackageModel = new AsyncTaskWatcherService<PackageModel>(
 				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
 			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers());
+			ProjectTemplates = new List<ProjectTemplateInfo>(_studioService.GetProjectTemplates());
 		}
 
 		public AsyncTaskWatcherService<PackageModel> PackageModel
@@ -80,6 +82,26 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				_wizardModel.SelectedCustomer = value;
 				OnPropertyChanged(nameof(SelectedCustomer));
+			}
+		}
+
+		public List<ProjectTemplateInfo> ProjectTemplates
+		{
+			get => _wizardModel.ProjectTemplates;
+			set
+			{
+				_wizardModel.ProjectTemplates = value;
+				OnPropertyChanged(nameof(ProjectTemplates));
+			}
+		}
+
+		public ProjectTemplateInfo SelectedProjectTemplate
+		{
+			get => _wizardModel.SelectedTemplate;
+			set
+			{
+				_wizardModel.SelectedTemplate = value;
+				OnPropertyChanged(nameof(SelectedProjectTemplate));
 			}
 		}
 

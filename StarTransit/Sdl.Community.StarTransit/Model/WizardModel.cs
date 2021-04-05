@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.Model
 {
@@ -13,8 +14,10 @@ namespace Sdl.Community.StarTransit.Model
 	{
 		private string _studioProjectLocation;
 		private Customer _selectedCustomer;
+		private ProjectTemplateInfo _selectedTemplate;
 		private AsyncTaskWatcherService<List<Customer>> _customers;
 		private AsyncTaskWatcherService<PackageModel> _packageModel;
+		private List<ProjectTemplateInfo> _projectTemplates;
 
 		public string TransitFilePathLocation { get; set; }
 		public string PathToTempFolder { get; set; }
@@ -37,6 +40,26 @@ namespace Sdl.Community.StarTransit.Model
 			{
 				_packageModel = value;
 				OnPropertyChanged(nameof(PackageModel));
+			}
+		}
+
+		public List<ProjectTemplateInfo> ProjectTemplates
+		{
+			get => _projectTemplates;
+			set
+			{
+				_projectTemplates = value;
+				OnPropertyChanged(nameof(ProjectTemplates));
+			}
+		}
+
+		public ProjectTemplateInfo SelectedTemplate
+		{
+			get => _selectedTemplate;
+			set
+			{
+				_selectedTemplate = value;
+				OnPropertyChanged(nameof(SelectedTemplate));
 			}
 		}
 
