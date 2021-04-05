@@ -62,6 +62,8 @@ namespace Sdl.Community.StarTransit.Service
 					//_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 				}
 
+				customersList.Insert(0, null);
+				
 				return customersList;
 			});
 		}

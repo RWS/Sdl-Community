@@ -188,6 +188,7 @@
     <None Include="Resources\Download.ico" />
     <None Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\CreateProjectPackage_Icon.ico" />
+    <Resource Include="Resources\delete.ico" />
     <Content Include="Resources\open_package.ico" />
     <None Include="Resources\Question.ico" />
     <Resource Include="Resources\ProjectTemplates.ico" />

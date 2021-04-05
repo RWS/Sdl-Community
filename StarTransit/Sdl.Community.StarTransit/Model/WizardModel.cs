@@ -63,6 +63,8 @@ namespace Sdl.Community.StarTransit.Model
 			}
 		}
 
+		public DateTime? DueDate { get; set; }
+
 		public AsyncTaskWatcherService<List<Customer>> Customers
 		{
 			get => _customers;

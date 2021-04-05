@@ -19,6 +19,8 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
+				<ResourceDictionary Source="../UiHelpers/General.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 
@@ -118,6 +120,36 @@
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="4"
 		           Text="{x:Static resx:PluginResources.PackageDetails_DueDate}"/>
+
+		<DockPanel Grid.Column="1" Grid.Row="4" LastChildFill="False">
+			<DatePicker
+				HorizontalAlignment="Left"
+				VerticalContentAlignment="Center"
+				IsEnabled="True"
+				TextBlock.Foreground="#999999"
+				Height="{Binding Path=ActualHeight,ElementName=LocationBox}"
+				Width="{Binding Path=ActualWidth,ElementName=LocationBox}"
+				SelectedDate="{Binding DueDate}"
+				DisplayDateStart="{Binding DisplayStartDate}">
+				<DatePicker.Resources>
+					<Style TargetType="DatePickerTextBox">
+						<Setter Property="IsReadOnly" Value="True" />
+						<Setter Property="FontStyle" Value="Italic" />
+						<Setter Property="Margin" Value="8 0 0 0"/>
+					</Style>
+				</DatePicker.Resources>
+			</DatePicker>
+			<Button Style="{StaticResource EmptyButton}"
+					Margin="10"
+			        Command="{Binding ClearDueDateCommand}">
+				<Button.ToolTip>
+					<ToolTip Content="{x:Static resx:PluginResources.PackageDetails_ClearDateTooltip}"
+					         Style="{StaticResource ToolTipStyle}" />
+				</Button.ToolTip>
+				<Image Width="16" Height="16" Source="../Resources/delete.ico" />
+			</Button>
+		</DockPanel>
+		
 
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="5"

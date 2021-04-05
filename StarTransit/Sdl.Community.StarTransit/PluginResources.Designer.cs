@@ -93,6 +93,16 @@ namespace Sdl.Community.StarTransit {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon delete {
+            get {
+                object obj = ResourceManager.GetObject("delete", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
@@ -146,6 +156,15 @@ namespace Sdl.Community.StarTransit {
         public static string PackageDetails_Browse {
             get {
                 return ResourceManager.GetString("PackageDetails_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selected due date.
+        /// </summary>
+        public static string PackageDetails_ClearDateTooltip {
+            get {
+                return ResourceManager.GetString("PackageDetails_ClearDateTooltip", resourceCulture);
             }
         }
         

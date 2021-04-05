@@ -27,6 +27,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private readonly IStudioService _studioService;
 		private ICommand _clearCommand;
 		private ICommand _browseCommand;
+		private ICommand _clearDueDateCommand;
+		private DateTime _displayStartDate;
 
 		public PackageDetailsViewModel(IWizardModel wizardModel, IPackageService packageService,
 			IFolderDialogService folderService, IStudioService studioService, object view) : base(view)
@@ -43,6 +45,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
 			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers());
 			ProjectTemplates = new List<ProjectTemplateInfo>(_studioService.GetProjectTemplates());
+			DueDate = null;
+			_displayStartDate = DateTime.Now;
 		}
 
 		public AsyncTaskWatcherService<PackageModel> PackageModel
@@ -102,6 +106,26 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				_wizardModel.SelectedTemplate = value;
 				OnPropertyChanged(nameof(SelectedProjectTemplate));
+			}
+		}
+
+		public DateTime? DueDate
+		{
+			get => _wizardModel.DueDate;
+			set
+			{
+				_wizardModel.DueDate = value;
+				OnPropertyChanged(nameof(DueDate));
+			}
+		}
+
+		public DateTime DisplayStartDate
+		{
+			get => _displayStartDate;
+			set
+			{
+				_displayStartDate = value;
+				OnPropertyChanged(nameof(DisplayStartDate));
 			}
 		}
 
@@ -181,6 +205,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(ClearLocation));
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new RelayCommand(BrowseLocation));
+
+		public ICommand ClearDueDateCommand =>
+			_clearDueDateCommand ?? (_clearDueDateCommand = new RelayCommand(ClearDate));
+
+		private void ClearDate()
+		{
+			DueDate = null;
+		}
 
 		private void BrowseLocation()
 		{
