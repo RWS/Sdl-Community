@@ -44,7 +44,8 @@ namespace Sdl.Community.StarTransit
 			return new ObservableCollection<IProgressHeaderItem>
 			{
 				new PackageDetailsViewModel(wizardModel, packageService, dialogService, studioService,
-					new PackageDetails())
+					new PackageDetails()),
+				new TmsViewModel(wizardModel,new Tms())
 			};
 		}
 

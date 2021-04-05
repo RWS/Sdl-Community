@@ -34,10 +34,11 @@ namespace Sdl.Community.StarTransit.ViewModel
 			IFolderDialogService folderService, IStudioService studioService, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
-			_currentPageNumber = 1;
+			CurrentPageNumber = 1;
 			_displayName = PluginResources.Wizard_PackageDetails_DisplayName;
+			_tooltip = PluginResources.Wizard_PackageDetails_Tooltip;
 			IsPreviousEnabled = false;
-			_isNextEnabled = true;
+			IsNextEnabled = true;
 			_isValid = true; //TODO remove this
 			_dialogService = folderService;
 			_studioService = studioService;

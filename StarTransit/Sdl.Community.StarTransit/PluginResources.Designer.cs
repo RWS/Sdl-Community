@@ -344,11 +344,38 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trados Studio project details.
+        /// </summary>
+        public static string Wizard_PackageDetails_Tooltip {
+            get {
+                return ResourceManager.GetString("Wizard_PackageDetails_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} completed.
         /// </summary>
         public static string Wizard_StepsCompleted {
             get {
                 return ResourceManager.GetString("Wizard_StepsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation Memories.
+        /// </summary>
+        public static string Wizard_TM_DisplayName {
+            get {
+                return ResourceManager.GetString("Wizard_TM_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation memories details.
+        /// </summary>
+        public static string Wizard_Tms_Tooltip {
+            get {
+                return ResourceManager.GetString("Wizard_Tms_Tooltip", resourceCulture);
             }
         }
         

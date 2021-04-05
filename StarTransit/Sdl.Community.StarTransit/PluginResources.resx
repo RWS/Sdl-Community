@@ -214,4 +214,13 @@
   <data name="PackageDetails_ClearDateTooltip" xml:space="preserve">
     <value>Remove selected due date</value>
   </data>
+  <data name="Wizard_PackageDetails_Tooltip" xml:space="preserve">
+    <value>Trados Studio project details</value>
+  </data>
+  <data name="Wizard_Tms_Tooltip" xml:space="preserve">
+    <value>Translation memories details</value>
+  </data>
+  <data name="Wizard_TM_DisplayName" xml:space="preserve">
+    <value>Translation Memories</value>
+  </data>
 </root>

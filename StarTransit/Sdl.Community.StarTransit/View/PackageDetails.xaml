@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.ViewModel"
              xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
-             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:resx="clr-namespace:Sdl.Community.StarTransit"
              xmlns:watermarkTextBox="clr-namespace:Sdl.Desktop.Platform.Controls.Controls.WatermarkTextBox;assembly=Sdl.Desktop.Platform.Controls"
              d:DataContext="{d:DesignInstance viewModels:PackageDetailsViewModel}"
