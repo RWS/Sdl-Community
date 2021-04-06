@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
+using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.Community.MtEnhancedProvider.View;
 using Sdl.Community.MtEnhancedProvider.ViewModel;
@@ -43,12 +44,12 @@ namespace Sdl.Community.MtEnhancedProvider
 		    ITranslationProviderCredentialStore credentialStore)
 	    {
 		    var options = new MtTranslationOptions();
-
-			var mainWindowVm = ShowProviderWindow(languagePairs, credentialStore, options);
+		    var regionsProvider = new RegionsProvider();
+			var mainWindowVm = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider);
 				
 		    if (!mainWindowVm.DialogResult) return null;
 			
-		    var provider = new MtTranslationProvider(options);
+		    var provider = new MtTranslationProvider(options, regionsProvider);
 
 			return new ITranslationProvider[] {provider};
 	    }
@@ -68,17 +69,19 @@ namespace Sdl.Community.MtEnhancedProvider
 			    return false;
 		    }
 			
-		    var mainWindowVm = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options);
+		    var mainWindowVm = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options, editProvider.RegionsProvider);
 		    return mainWindowVm.DialogResult;
 	    }
 
-	    /// <summary>
-	    /// This gets called when a TranslationProviderAuthenticationException is thrown
-	    /// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
-	    /// any new options set in the form that comes up are never saved to the project XML...
-	    /// so there is no way to change any options, only to provide the credentials
-	    /// </summary>
-	    public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
+
+		//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
+		/// <summary>
+		/// This gets called when a TranslationProviderAuthenticationException is thrown
+		/// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
+		/// any new options set in the form that comes up are never saved to the project XML...
+		/// so there is no way to change any options, only to provide the credentials
+		/// </summary>
+		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
 		    ITranslationProviderCredentialStore credentialStore)
 	    {
 		    var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -94,8 +97,8 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 			}
 		    var options = new MtTranslationOptions();
-
-		    var mainWindowVm = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options);
+		    var regionsProvider = new RegionsProvider();
+			var mainWindowVm = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options, regionsProvider);
 
 		    if (!mainWindowVm.DialogResult) return false;
 		    return mainWindowVm.DialogResult;
@@ -149,12 +152,12 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
 	    private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs,
-		    ITranslationProviderCredentialStore credentialStore, IMtTranslationOptions loadOptions)
+		    ITranslationProviderCredentialStore credentialStore, IMtTranslationOptions loadOptions, RegionsProvider regionsProvider)
 	    {
 		    SetSavedCredentialsOnUi(credentialStore, loadOptions);
 
 			var dialogService = new OpenFileDialogService();
-		    var providerControlVm = new ProviderControlViewModel(loadOptions);
+		    var providerControlVm = new ProviderControlViewModel(loadOptions, regionsProvider);
 
 		    var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService,false);
 		    var mainWindowVm = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm, credentialStore,languagePairs);
@@ -236,12 +239,13 @@ namespace Sdl.Community.MtEnhancedProvider
 		    return cred;
 	    }
 
-	    private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string providerUri, string apiKey,
-		    bool persistKey)
+	    private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string providerUri, string apiKey, bool persistKey)
 	    {
 			var myUri = new Uri(providerUri);
 
 		    var cred = new TranslationProviderCredential(apiKey, persistKey);
+		    
+		    
 		    credentialStore.RemoveCredential(myUri);
 		    credentialStore.AddCredential(myUri, cred);
 		}

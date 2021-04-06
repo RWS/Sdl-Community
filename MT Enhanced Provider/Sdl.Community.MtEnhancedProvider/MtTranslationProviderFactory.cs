@@ -13,6 +13,7 @@
    limitations under the License.*/
 
 using System;
+using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
@@ -34,6 +35,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
             //create options class based on URI passed to the method
             var loadOptions = new MtTranslationOptions(translationProviderUri);
+            var regionsProvider = new RegionsProvider();
 
             //start with MT...check if we are using MT
             if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
@@ -68,7 +70,7 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             
             //construct new provider with options..these options are going to include the cred.credential and the cred.persists
-            var tp = new MtTranslationProvider(loadOptions);
+            var tp = new MtTranslationProvider(loadOptions, regionsProvider);
 
             return tp;
         }

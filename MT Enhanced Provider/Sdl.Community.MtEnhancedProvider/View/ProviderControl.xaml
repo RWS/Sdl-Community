@@ -10,7 +10,7 @@
 			 xmlns:converters ="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="850" d:DesignWidth="800">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -50,7 +50,9 @@
 			</DockPanel>
 		</StackPanel>
 		<!--Microsoft API Options-->
-		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+		<StackPanel Grid.Row="1"
+		            Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+		            >
 			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
 			<PasswordBox
 				HorizontalAlignment="Left"
@@ -71,10 +73,24 @@
 				Margin="10 0"
 			/>
 			<CheckBox
+				Content="{x:Static mtEnhanced:PluginResources.MSSubscriptionRegionLabel}"
+				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				Margin="10 10"
+				IsChecked="{Binding RegionChecked, Mode=TwoWay}"/>
+			<ComboBox
+				IsEnabled="{Binding RegionChecked, Mode=OneWay}"
+				ItemsSource="{Binding Regions, Mode=OneWay}"
+				SelectedItem="{Binding Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				DisplayMemberPath="Name"
+				Width="200"
+				HorizontalAlignment="Left"
+				Margin="30, 0, 10, 5"/>
+
+			<CheckBox
 				Content="{x:Static mtEnhanced:PluginResources.CatIdDescription}"
 				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 				Margin="10 10"
-				IsChecked="{Binding UseCatId}"/>
+				IsChecked="{Binding UseCatId, Mode=TwoWay}"/>
 			<TextBox
 				controls:TextBoxHelper.Watermark="Category Id"
 				Text="{Binding CatId}"
@@ -82,10 +98,13 @@
 				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				Width="200"
 				HorizontalAlignment="Left"
-				Margin="10"/>
+				Margin="30, 0, 10, 10"/>
 		</StackPanel>
 		<!--Google API Options-->
-		<StackPanel Grid.Row="1" Visibility="{Binding IsMicrosoftSelected,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
+		<StackPanel 
+			Grid.Row="1" 
+			Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+			>
 			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.GoogleApiDescription}"/>
 			<ComboBox
 				ItemsSource="{Binding GoogleApiVersions}"

@@ -218,11 +218,11 @@ namespace Sdl.Community.MtEnhancedProvider
 			//instantiate ApiConnecter if necessary
 			if (_mstConnect == null)
 			{
-				_mstConnect = new ApiConnecter(_options.ClientId);
+				_mstConnect = new ApiConnecter(_options.ClientId, options.Region);
 			}
 			else
 			{
-				_mstConnect.ResetCrd(options.ClientId); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				_mstConnect.ResetCrd(options.ClientId, options.Region); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
 			}
 
 			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);

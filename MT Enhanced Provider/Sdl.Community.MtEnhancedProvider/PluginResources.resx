@@ -390,4 +390,7 @@
   <data name="UnidirectionalGlossary" xml:space="preserve">
     <value>Unidirectional glossaries</value>
   </data>
+  <data name="MSSubscriptionRegionLabel" xml:space="preserve">
+    <value>Subscription Region</value>
+  </data>
 </root>

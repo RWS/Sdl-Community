@@ -9,27 +9,53 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 	public interface IProviderControlViewModel
 	{
 		ModelBase ViewModel { get; set; }
+		
 		ICommand ShowSettingsCommand { get; set; }
+		
 		List<TranslationOption> TranslationOptions { get; set; }
+		
 		List<GoogleApiVersion> GoogleApiVersions { get; set; }
+		
 		GoogleApiVersion SelectedGoogleApiVersion { get; set; }
+		
 		TranslationOption SelectedTranslationOption { get; set; }
+		
 		bool IsMicrosoftSelected { get; set; }
+		
 		bool IsV2Checked { get; set; }
+		
 		bool UseCatId { get; set; }
+		
 		bool PersistGoogleKey { get; set; }
+		
 		bool PersistMicrosoftKey { get; set; }
+		
 		bool IsTellMeAction { get; set; }
+		
 		bool BasicCsvGlossary { get; set; }
+		
 		string CatId { get; set; }
+		
 		string ApiKey { get; set; } //Google
+		
 		string ClientId { get; set; } //Microsoft
+
+		SubscriptionRegion Region { get; set; }
+		
+		bool RegionChecked { get; set; }
+		
 		string JsonFilePath { get; set; }
+		
 		string ProjectName { get; set; }
+		
 		string GoogleEngineModel { get; set; }
+		
 		string ProjectLocation { get; set; }
+		
 		string GlossaryId { get; set; }
+		
 		string GlossaryPath { get; set; }
+		
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }

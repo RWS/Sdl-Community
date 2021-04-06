@@ -23,6 +23,8 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 		string GlossaryPath { get; set; }
 		string ApiKey { get; set; } //Google Key
 		string ClientId { get; set; } // Microsoft key
+		string Region { get; set; } // Microsoft Region
+		bool RegionChecked { get; set; }
 		string GoogleEngineModel { get; set; }
 		string ProjectLocation { get; set; }
 		Enums.GoogleApiVersion SelectedGoogleVersion { get; set; }

@@ -26,6 +26,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
+	//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
 	public partial class MtProviderConfDialog : Form
 	{
 		private const string GTranslateString = "Google Translate";

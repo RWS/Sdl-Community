@@ -299,7 +299,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId);
+				var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key);
 
 				if (!string.IsNullOrEmpty(Options?.ClientId))
 				{
@@ -422,6 +422,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private void SetMicrosoftProviderOptions()
 		{
 			Options.ClientId = _providerControlViewModel.ClientId;
+			Options.Region = _providerControlViewModel.Region.Key;
+			Options.RegionChecked = _providerControlViewModel.RegionChecked;
 			Options.UseCatID = _providerControlViewModel.UseCatId;
 			Options.CatId = _providerControlViewModel.CatId;
 			Options.PersistMicrosoftCreds = _providerControlViewModel.PersistMicrosoftKey;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sdl.Community.MtEnhancedProvider.Service.Interface
+﻿namespace Sdl.Community.MtEnhancedProvider.Service.Interface
 {
 	public interface IOpenFileDialogService
 	{

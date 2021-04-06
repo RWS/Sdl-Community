@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>MT Enhanced Plugin for Trados Studio</PlugInName>
-  <Version>5.3.12.0</Version>
+  <Version>5.3.13.1</Version>
   <Description>This plugin provides machine translation results from Microsoft Translator or Google Translate.</Description>
   <Author>SDL Community Developers</Author>
 	<Include>
@@ -24,5 +24,5 @@
 		<File>grpc_csharp_ext.x86.dll</File>
 		<File>System.Runtime.CompilerServices.Unsafe.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="16.1" />
 </PluginPackage>

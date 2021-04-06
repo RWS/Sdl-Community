@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Sdl.Community.MtEnhancedProvider.GoogleApi;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
+using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
@@ -12,6 +13,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 	public class ProviderControlViewModel : ModelBase, IProviderControlViewModel
 	{
 		private readonly IMtTranslationOptions _options;
+		private readonly RegionsProvider _regionsProvider;
 		private TranslationOption _selectedTranslationOption;
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private bool _isMicrosoftSelected;
@@ -24,6 +26,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _catId;
 		private string _apiKey;
 		private string _clientId;
+		private SubscriptionRegion _region;
+		private ObservableCollection<SubscriptionRegion> _regions;
+		private bool _regionChecked;
 		private string _jsonFilePath;
 		private string _projectName;
 		private string _googleEngineModel;
@@ -31,10 +36,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _glossaryId;
 		private string _glossaryPath;
 
-		public ProviderControlViewModel(IMtTranslationOptions options)
+		public ProviderControlViewModel(IMtTranslationOptions options, RegionsProvider regionsProvider)
 		{
 			ViewModel = this;
 			_options = options;
+			_regionsProvider = regionsProvider;
 			InitializeComponent();
 		}
 
@@ -44,7 +50,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		//	_options = options;
 		//	_isTellMeAction = isTellMeAction;
 		//	InitializeComponent();
-			
+
 		//}
 
 		private void InitializeComponent()
@@ -77,6 +83,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				}
 			};
 
+			// set the default region
+			Region = Regions.FirstOrDefault(a => a.Key == "");
+
 			if (_options != null)
 			{
 				ClientId = _options.ClientId;
@@ -92,6 +101,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				ProjectLocation = _options.ProjectLocation;
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
+
+				RegionChecked = string.IsNullOrEmpty(Region?.Key) && _options.RegionChecked;
+				Region = Regions.FirstOrDefault(a => a.Key == (RegionChecked ? _options.Region ?? string.Empty : ""));
 			}
 
 			SetTranslationOption();
@@ -100,8 +112,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		}
 
 		public ModelBase ViewModel { get; set; }
+
 		public ICommand ShowSettingsCommand { get; set; }
+
 		public List<TranslationOption> TranslationOptions { get; set; }
+
 		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
 		public string GoogleEngineModel
@@ -233,6 +248,58 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 		}
 
+		public SubscriptionRegion Region
+		{
+			get => _region;
+			set
+			{
+				if (_region == value)
+				{
+					return;
+				}
+
+				_region = value;
+				OnPropertyChanged(nameof(Region));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public ObservableCollection<SubscriptionRegion> Regions
+		{
+			get { return _regions ?? (_regions = new ObservableCollection<SubscriptionRegion>(
+				_regionsProvider.GetSubscriptionRegions())); }
+			set
+			{
+				_regions = value;
+				OnPropertyChanged(nameof(Region));
+			}
+		}
+
+		public bool RegionChecked
+		{
+			get
+			{
+				return _regionChecked;
+			}
+			set
+			{
+				if (_regionChecked == value)
+				{
+					return;
+				}
+
+				_regionChecked = value;
+				OnPropertyChanged(nameof(RegionChecked));
+
+				if (!RegionChecked)
+				{
+					Region = Regions.FirstOrDefault(a => a.Key == "");
+				}
+			}
+		}
+
+
+
 		public string JsonFilePath
 		{
 			get => _jsonFilePath;
@@ -356,7 +423,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 			else
 			{
-				//Bydefault we'll select Microsoft translator option
+				//By default we'll select Microsoft translator option
 				SelectMicrosoftTranslation();
 			}
 		}
