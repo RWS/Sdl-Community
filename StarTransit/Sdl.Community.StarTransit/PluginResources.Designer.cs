@@ -111,6 +111,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select an empty folder.
+        /// </summary>
+        public static string EmptyFolder_Error {
+            get {
+                return ResourceManager.GetString("EmptyFolder_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ForumIcon {
@@ -201,6 +210,15 @@ namespace Sdl.Community.StarTransit {
         public static string PackageDetails_FolderLocation {
             get {
                 return ResourceManager.GetString("PackageDetails_FolderLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add a valid folder path.
+        /// </summary>
+        public static string PackageDetails_InvalidPath_Error {
+            get {
+                return ResourceManager.GetString("PackageDetails_InvalidPath_Error", resourceCulture);
             }
         }
         

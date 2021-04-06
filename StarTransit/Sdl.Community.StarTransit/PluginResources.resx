@@ -211,6 +211,9 @@
   <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="EmptyFolder_Error" xml:space="preserve">
+    <value>Please select an empty folder</value>
+  </data>
   <data name="PackageDetails_ClearDateTooltip" xml:space="preserve">
     <value>Remove selected due date</value>
   </data>
@@ -222,5 +225,8 @@
   </data>
   <data name="Wizard_TM_DisplayName" xml:space="preserve">
     <value>Translation Memories</value>
+  </data>
+  <data name="PackageDetails_InvalidPath_Error" xml:space="preserve">
+    <value>Please add a valid folder path</value>
   </data>
 </root>

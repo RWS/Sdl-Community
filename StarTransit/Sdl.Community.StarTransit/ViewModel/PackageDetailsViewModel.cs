@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private int _currentPageNumber;
 		private string _displayName;
 		private string _tooltip;
+		private string _errorMessage;
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
@@ -39,7 +41,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_tooltip = PluginResources.Wizard_PackageDetails_Tooltip;
 			IsPreviousEnabled = false;
 			IsNextEnabled = true;
-			_isValid = true; //TODO remove this
+			_isValid = false;
 			_dialogService = folderService;
 			_studioService = studioService;
 			PackageModel = new AsyncTaskWatcherService<PackageModel>(
@@ -49,6 +51,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			SelectedProjectTemplate = ProjectTemplates[0];
 			DueDate = null;
 			_displayStartDate = DateTime.Now;
+			_errorMessage = string.Empty;
 		}
 
 		public AsyncTaskWatcherService<PackageModel> PackageModel
@@ -67,6 +70,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			set
 			{
 				_wizardModel.StudioProjectLocation = value;
+				ValidateLocation(value);
 				OnPropertyChanged(nameof(StudioProjectLocation));
 			}
 		}
@@ -128,6 +132,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				_displayStartDate = value;
 				OnPropertyChanged(nameof(DisplayStartDate));
+			}
+		}
+
+		public string ErrorMessage
+		{
+			get => _errorMessage;
+			set
+			{
+				if (_errorMessage == value) return;
+				_errorMessage = value;
+				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
 
@@ -218,9 +233,42 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private void BrowseLocation()
 		{
+			ErrorMessage = string.Empty;
 			var location = _dialogService.ShowDialog(PluginResources.PackageDetails_FolderLocation);
 			if(string.IsNullOrEmpty(location))return;
+
 			StudioProjectLocation = location;
+		}
+
+		private void ValidateLocation(string location)
+		{
+			ErrorMessage = string.Empty;
+
+			if (string.IsNullOrEmpty(location))
+			{
+				ErrorMessage = PluginResources.Wizard_ValidationMessage;
+				IsValid = false;
+				return;
+			}
+			if (!Directory.Exists(location))
+			{
+				ErrorMessage = PluginResources.PackageDetails_InvalidPath_Error;
+				IsValid = false;
+				return;
+			}
+
+			var isEmptyFolder = !Directory
+				.GetFiles(location, "*.*", SearchOption.AllDirectories)
+				.Any();
+			if (!isEmptyFolder)
+			{
+				ErrorMessage = PluginResources.EmptyFolder_Error;
+				IsValid = false;
+			}
+			else
+			{
+				IsValid = true;
+			}
 		}
 
 		private void ClearLocation()
