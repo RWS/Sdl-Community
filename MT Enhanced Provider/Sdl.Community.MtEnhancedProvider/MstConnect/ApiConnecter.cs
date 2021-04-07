@@ -27,7 +27,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private string _authToken;
 
 		//TODO PACH (06/04/2021): identify if we can enhance the service using this value.
-		private DateTime _tokenExpiresAt; 
+		private DateTime _tokenExpiresAt;
 
 		private string _subscriptionKey;
 		private string _region;
@@ -307,27 +307,34 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 
 			var uri = new Uri("https://"
-							  + (string.IsNullOrEmpty(_region) ? "" : _region + ".") 
+							  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
 							  + ServiceBaseUri + "/sts/v1.0/issueToken");
 
-			using (var client = new HttpClient())
-			using (var request = new HttpRequestMessage())
+			try
 			{
+				using (var client = new HttpClient())
+				using (var request = new HttpRequestMessage())
+				{
+					request.Method = HttpMethod.Post;
+					request.RequestUri = uri;
+					request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
+					var response = await client.SendAsync(request);
+					response.EnsureSuccessStatusCode();
+					var tokenString = await response.Content.ReadAsStringAsync();
 
-				request.Method = HttpMethod.Post;
-				request.RequestUri = uri;
-				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-				var response = await client.SendAsync(request);
-				response.EnsureSuccessStatusCode();
-				var tokenString = await response.Content.ReadAsStringAsync();
+					_authToken = "Bearer " + tokenString;
 
-				_authToken = "Bearer " + tokenString;
+					var token = ReadToken(tokenString);
+					_tokenExpiresAt = token?.ValidTo ?? DateTime.Now;
 
-				var token = ReadToken(tokenString);
-				_tokenExpiresAt = token?.ValidTo ?? DateTime.Now;
-
-				return _authToken;
+				}
 			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{ex.Message}\n { ex.StackTrace}");
+			}
+
+			return _authToken;
 		}
 
 		private JwtSecurityToken ReadToken(string token)

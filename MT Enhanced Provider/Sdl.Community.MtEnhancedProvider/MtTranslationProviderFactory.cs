@@ -18,82 +18,94 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
-    [TranslationProviderFactory(
-        Id = "MtTranslationProviderFactory",
-        Name = "MtTranslationProviderFactory",
-        Description = "MT Enhanced Trados Plugin")]
+	[TranslationProviderFactory(
+		Id = "MtTranslationProviderFactory",
+		Name = "MtTranslationProviderFactory",
+		Description = "MT Enhanced Trados Plugin")]
 
-    public class MtTranslationProviderFactory : ITranslationProviderFactory
-    {
+	public class MtTranslationProviderFactory : ITranslationProviderFactory
+	{
 
-        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
-        {
-            if (!SupportsTranslationProviderUri(translationProviderUri))
-            {
-                throw new Exception(PluginResources.UriNotSupportedMessage);
-            }
+		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+		{
+			if (!SupportsTranslationProviderUri(translationProviderUri))
+			{
+				throw new Exception(PluginResources.UriNotSupportedMessage);
+			}
 
-            //create options class based on URI passed to the method
-            var loadOptions = new MtTranslationOptions(translationProviderUri);
-            var regionsProvider = new RegionsProvider();
+			//create options class based on URI passed to the method
+			var loadOptions = new MtTranslationOptions(translationProviderUri);
+			var regionsProvider = new RegionsProvider();
 
-            //start with MT...check if we are using MT
-            if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
-            {
-                var myUri = new Uri(PluginResources.UriMs);
-                if (credentialStore.GetCredential(myUri) != null)
-                {
-					var cred = new TranslationProviderCredential(credentialStore.GetCredential(myUri).Credential, credentialStore.GetCredential(myUri).Persist);
-                    loadOptions.ClientId = cred.Credential;
-	                loadOptions.PersistMicrosoftCreds = cred.Persist;
-                }
-                else
-                {
-                    throw new TranslationProviderAuthenticationException();
-                }
-            }
-            else //if we are using Google as the provider need to get API key
-            {
-                var myUri = new Uri(PluginResources.UriGt);
-                if (credentialStore.GetCredential(myUri) != null)
-                {
-	              var cred = new TranslationProviderCredential(credentialStore.GetCredential(myUri).Credential, credentialStore.GetCredential(myUri).Persist);
-                    loadOptions.ApiKey = cred.Credential;
-	                loadOptions.PersistGoogleKey = cred.Persist;
-                }
-                else
-                {
-                    throw new TranslationProviderAuthenticationException(); 
-                    //throwing this exception ends up causing Studio to call MtTranslationProviderWinFormsUI.GetCredentialsFromUser();
-                    //which we use to prompt the user to enter credentials
-                }
-            }
-            
-            //construct new provider with options..these options are going to include the cred.credential and the cred.persists
-            var tp = new MtTranslationProvider(loadOptions, regionsProvider);
+			//start with MT...check if we are using MT
+			if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+			{
+				// The credential is saved with a different URI scheme than that of the plugin!
+				// We will need to make this known and/or provide a workaround in identifying the credentials
+				// added from the project automation API.
+				// The following is a work-around which attempts to recover the credential, given various scenarios
+				var credential = credentialStore.GetCredential(new Uri(PluginResources.UriMs))
+								 ?? credentialStore.GetCredential(translationProviderUri)
+								 ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
+				if (credential != null)
+				{
+					var cred = new TranslationProviderCredential(credential.Credential, credential.Persist);
+					loadOptions.ClientId = cred.Credential;
+					loadOptions.PersistMicrosoftCreds = cred.Persist;
+				}
+				else
+				{
+					throw new TranslationProviderAuthenticationException();
+				}
+			}
+			else //if we are using Google as the provider need to get API key
+			{
+				// The credential is saved with a different URI scheme than that of the plugin!
+				// We will need to make this known and/or provide a workaround in identifying the credentials
+				// added from the project automation API.
+				// The following is a work-around which attempts to recover the credential, given various scenarios
+				var credential = credentialStore.GetCredential(new Uri(PluginResources.UriGt))
+								 ?? credentialStore.GetCredential(translationProviderUri)
+								 ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
+				if (credential != null)
+				{
+					var cred = new TranslationProviderCredential(credential.Credential, credential.Persist);
+					loadOptions.ApiKey = cred.Credential;
+					loadOptions.PersistGoogleKey = cred.Persist;
+				}
+				else
+				{
+					throw new TranslationProviderAuthenticationException();
+					//throwing this exception ends up causing Studio to call MtTranslationProviderWinFormsUI.GetCredentialsFromUser();
+					//which we use to prompt the user to enter credentials
+				}
+			}
 
-            return tp;
-        }
+			//construct new provider with options..these options are going to include the cred.credential and the cred.persists
+			var tp = new MtTranslationProvider(loadOptions, regionsProvider);
 
-        public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-        {
+			return tp;
+		}
 
-            if (translationProviderUri == null)
-            {
-                throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
-            }
-            return string.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
-        }
+		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
+		{
 
-        public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
-        {
-	        var info = new TranslationProviderInfo
-	        {
-		        TranslationMethod = MtTranslationOptions.ProviderTranslationMethod,
-		        Name = PluginResources.Plugin_NiceName
-	        };
-	        return info;
-        }
+			if (translationProviderUri == null)
+			{
+				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
+			}
+			return string.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
+		}
 
-    }
+		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
+		{
+			var info = new TranslationProviderInfo
+			{
+				TranslationMethod = MtTranslationOptions.ProviderTranslationMethod,
+				Name = PluginResources.Plugin_NiceName
+			};
+			return info;
+		}
+
+	}
 }
