@@ -43,6 +43,8 @@ namespace Sdl.Community.StarTransit.Model
 			}
 		}
 
+		//public List<LanguagePair> TmsOptions { get; set; }
+
 		public List<ProjectTemplateInfo> ProjectTemplates
 		{
 			get => _projectTemplates;
@@ -84,5 +86,6 @@ namespace Sdl.Community.StarTransit.Model
 				OnPropertyChanged(nameof(SelectedCustomer));
 			}
 		}
+
 	}
 }

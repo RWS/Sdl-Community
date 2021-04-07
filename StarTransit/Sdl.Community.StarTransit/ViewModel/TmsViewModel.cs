@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Shared.Models;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -15,14 +16,36 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
+		private readonly IWizardModel _wizardModel;
+		private LanguagePair _selectedLanguagePair;
 
 		public TmsViewModel(IWizardModel wizardModel,object view):base(view)
 		{
 			_currentPageNumber = 2;
 			_displayName = PluginResources.Wizard_TM_DisplayName;
 			_tooltip = PluginResources.Wizard_Tms_Tooltip;
-
+			_wizardModel = wizardModel;
 			IsPreviousEnabled = true;
+		}
+
+		public List<LanguagePair> LanguagePairsTmOptions
+		{
+			get => _wizardModel.PackageModel.Result.LanguagePairs;
+			set
+			{
+				_wizardModel.PackageModel.Result.LanguagePairs = value;
+				OnPropertyChanged(nameof(LanguagePairsTmOptions));
+			}
+		}
+
+		public LanguagePair SelectedLanguagePair
+		{
+			get => _selectedLanguagePair;
+			set
+			{
+				_selectedLanguagePair = value;
+				OnPropertyChanged(nameof(SelectedLanguagePair));
+			}
 		}
 
 		public override string DisplayName

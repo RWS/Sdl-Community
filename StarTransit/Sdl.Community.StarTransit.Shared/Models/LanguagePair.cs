@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 
@@ -6,9 +7,11 @@ namespace Sdl.Community.StarTransit.Shared.Models
 {
     public class LanguagePair
     {
+	    public Guid LanguagePairId { get; set; }
         public CultureInfo SourceLanguage { get; set; }
         public CultureInfo TargetLanguage { get; set; }
         public Image TargetFlag { get; set; }
+        public Image SourceFlag { get; set; }
         public List<StarTranslationMemoryMetadata> StarTranslationMemoryMetadatas { get; set; }
         public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }

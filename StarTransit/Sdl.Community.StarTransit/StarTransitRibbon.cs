@@ -67,7 +67,7 @@ namespace Sdl.Community.StarTransit
 					TransitFilePathLocation = fileDialog.FileName,
 					PathToTempFolder = pathToTempFolder
 				};
-				var pages = CreatePages(wizardModel, packageService, folderService,studioService);
+				var pages = CreatePages(wizardModel, packageService, folderService, studioService);
 				var wizard = new ImportWizard(pages);
 
 				ElementHost.EnableModelessKeyboardInterop(wizard);

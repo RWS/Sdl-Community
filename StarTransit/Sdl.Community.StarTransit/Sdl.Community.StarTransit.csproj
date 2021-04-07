@@ -192,6 +192,7 @@
     <None Include="Resources\help_icon.ico" />
     <None Include="Resources\Download.ico" />
     <None Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\arrow_right_blue.png" />
     <Content Include="Resources\CreateProjectPackage_Icon.ico" />
     <Resource Include="Resources\delete.ico" />
     <Content Include="Resources\open_package.ico" />

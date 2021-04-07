@@ -134,7 +134,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private async Task<PackageModel> CreateModel(string pathToTempFolder)
 		{
 			var model = new PackageModel();
-			CultureInfo sourceLanguage = null;
+			CultureInfo sourceLanguageCultureInfo = null;
 			var languagePairList = new List<LanguagePair>();
 
 			if (_pluginDictionary.ContainsKey("Admin"))
@@ -156,7 +156,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					if (item.Key == "SourceLanguage")
 					{
 						var sourceLanguageCode = int.Parse(item.Value);
-						sourceLanguage = new CultureInfo(sourceLanguageCode);
+						sourceLanguageCultureInfo = new CultureInfo(sourceLanguageCode);
 					}
 
 					if (item.Key != "TargetLanguages") continue;
@@ -169,9 +169,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						var targetCultureInfo = new CultureInfo(targetLanguageCode);
 						var pair = new LanguagePair
 						{
-							SourceLanguage = sourceLanguage,
+							LanguagePairId = Guid.NewGuid(),
+							SourceLanguage = sourceLanguageCultureInfo,
 							TargetLanguage = targetCultureInfo,
-							TargetFlag = new Language(targetCultureInfo).GetFlagImage()
+							TargetFlag = new Language(targetCultureInfo).GetFlagImage(),
+							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage()
 						};
 						languagePairList.Add(pair);
 					}
@@ -182,7 +184,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (model.LanguagePairs.Count > 0)
 			{
 				//for source
-				var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguage);
+				var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguageCultureInfo);
 				var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
 
 				//for target

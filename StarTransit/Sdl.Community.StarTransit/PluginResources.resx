@@ -226,6 +226,9 @@
   <data name="Wizard_TM_DisplayName" xml:space="preserve">
     <value>Translation Memories</value>
   </data>
+  <data name="arrow_right_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\arrow_right_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PackageDetails_InvalidPath_Error" xml:space="preserve">
     <value>Please add a valid folder path</value>
   </data>
