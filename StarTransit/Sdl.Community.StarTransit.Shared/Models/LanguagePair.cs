@@ -16,6 +16,10 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }
         public List<string> TargetFile { get; set; }
+		/// <summary>
+		/// Used if the user wants to create project without a tm in it.
+		/// </summary>
+        public bool NoTm { get; set; }
         public bool CreateNewTm { get; set; }
         public bool ChoseExistingTm { get; set; }
         public string TmPath { get; set; }

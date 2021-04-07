@@ -173,7 +173,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							SourceLanguage = sourceLanguageCultureInfo,
 							TargetLanguage = targetCultureInfo,
 							TargetFlag = new Language(targetCultureInfo).GetFlagImage(),
-							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage()
+							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage(),
+							NoTm = true
 						};
 						languagePairList.Add(pair);
 					}

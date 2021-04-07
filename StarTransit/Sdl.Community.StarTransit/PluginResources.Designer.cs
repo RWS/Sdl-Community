@@ -326,6 +326,51 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select existing TM.
+        /// </summary>
+        public static string Tm_BrowseTm {
+            get {
+                return ResourceManager.GetString("Tm_BrowseTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new TM.
+        /// </summary>
+        public static string Tm_CreateTm {
+            get {
+                return ResourceManager.GetString("Tm_CreateTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create project without TM.
+        /// </summary>
+        public static string Tm_CreateWitoutTm {
+            get {
+                return ResourceManager.GetString("Tm_CreateWitoutTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select Translation Memory option for each language pair identified in Transit package.
+        /// </summary>
+        public static string Tm_PageDescription {
+            get {
+                return ResourceManager.GetString("Tm_PageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected TM name:.
+        /// </summary>
+        public static string Tm_SelectedTmName {
+            get {
+                return ResourceManager.GetString("Tm_SelectedTmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon user {

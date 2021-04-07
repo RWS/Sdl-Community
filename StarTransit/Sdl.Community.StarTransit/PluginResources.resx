@@ -232,4 +232,19 @@
   <data name="PackageDetails_InvalidPath_Error" xml:space="preserve">
     <value>Please add a valid folder path</value>
   </data>
+  <data name="Tm_BrowseTm" xml:space="preserve">
+    <value>Select existing TM</value>
+  </data>
+  <data name="Tm_CreateTm" xml:space="preserve">
+    <value>Create new TM</value>
+  </data>
+  <data name="Tm_CreateWitoutTm" xml:space="preserve">
+    <value>Create project without TM</value>
+  </data>
+  <data name="Tm_PageDescription" xml:space="preserve">
+    <value>Please select Translation Memory option for each language pair identified in Transit package</value>
+  </data>
+  <data name="Tm_SelectedTmName" xml:space="preserve">
+    <value>Selected TM name:</value>
+  </data>
 </root>

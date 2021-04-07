@@ -15,39 +15,94 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/radiobuttonresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/GroupboxResources.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/General.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 			<converters:NullVisibilityConverter x:Key="NullVisibilityConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<ListView
-		BorderThickness="0"
-		ItemsSource="{Binding LanguagePairsTmOptions}"
-		SelectedItem="{Binding SelectedLanguagePair}">
-		<ListView.ItemContainerStyle>
-			<Style TargetType="{x:Type ListViewItem}">
-				<Setter Property="Background" Value="Transparent" />
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type ListViewItem}">
-							<ContentPresenter />
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
-		</ListView.ItemContainerStyle>
-		<ListView.ItemTemplate>
-					<DataTemplate>
-						<StackPanel>
-							<DockPanel LastChildFill="false">
-								<Image DockPanel.Dock="Left" Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}" Width="20" Height="20" />
-								<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15"/>
-								<Image Source="{Binding Path=TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock
+			Margin="10 0 0 10"
+			FontSize="15"
+			Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+			Text="{x:Static resx:PluginResources.Tm_PageDescription}"
+			Grid.Row="0" />
+		<ListView
+			Grid.Row="1"
+			BorderThickness="0"
+			Margin="10 0"
+			ItemsSource="{Binding LanguagePairsTmOptions}"
+			SelectedItem="{Binding SelectedLanguagePair}">
+			<ListView.ItemContainerStyle>
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="Background" Value="Transparent" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type ListViewItem}">
+								<ContentPresenter />
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<StackPanel>
+						<DockPanel LastChildFill="false">
+							<Image DockPanel.Dock="Left" Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}" Width="20" Height="20" />
+							<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15"/>
+							<Image Source="{Binding Path=TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+							<Button 
+							        Margin="0 0 10 0"
+							        DockPanel.Dock="Right"
+							        Style="{StaticResource Sdl.Button.SecondaryStyle}" Content="{x:Static resx:PluginResources.PackageDetails_Browse}"/>
+						</DockPanel>
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition />
+								<RowDefinition />
+								<RowDefinition />
+								<RowDefinition />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition />
+							</Grid.ColumnDefinitions>
+							<RadioButton
+								Grid.Row="0" Grid.Column="0"
+								Style="{StaticResource Sdl.RadioButton.GenericStyle}" Margin="0 10 0 0"
+								IsChecked="{Binding NoTm}"
+								Content="{x:Static resx:PluginResources.Tm_CreateWitoutTm}" />
+							<RadioButton
+								Grid.Row="1" Grid.Column="0"
+								Style="{StaticResource Sdl.RadioButton.GenericStyle}" Margin="0 10 0 0"
+								IsChecked="{Binding ChoseExistingTm}"
+								Content="{x:Static resx:PluginResources.Tm_BrowseTm}" />
+							<RadioButton
+								Grid.Row="2" Grid.Column="0"
+								Style="{StaticResource Sdl.RadioButton.GenericStyle}" Margin="0 10 0 0"
+								IsChecked="{Binding CreateNewTm}"
+								Content="{x:Static resx:PluginResources.Tm_CreateTm}" />
+
+							<DockPanel Grid.Row="1" Grid.Column="1">
+								<TextBlock Margin="20 10 0 0" Text="{x:Static resx:PluginResources.Tm_SelectedTmName}"/>
+								<TextBlock Margin="20 10 0 0" Text="{Binding TmName}"/>
 							</DockPanel>
-							<TextBlock>Other options buttons</TextBlock>
-						</StackPanel>
-					</DataTemplate>
+
+						</Grid>
+					</StackPanel>
+				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+	</Grid>
+	
 </UserControl>
