@@ -4,11 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
+		d:DataContext="{d:DesignInstance viewModels:ScriptsWindowViewModel}"
         d:DesignHeight="500" d:DesignWidth="600"
         mc:Ignorable="d">
-    <UserControl.DataContext>
-        <viewModels:ScriptsWindowViewModel />
-    </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -87,6 +85,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
+					<DataGridTextColumn Width="Auto" Header="File name" Binding="{Binding FileName}" IsReadOnly="True"/>
 					<DataGridTextColumn Width="auto" Header="Script name" Binding="{Binding Name}" />
 					<DataGridTextColumn Width="*" Header="Description" Binding="{Binding Description}" />
 					<DataGridTemplateColumn Width="150">

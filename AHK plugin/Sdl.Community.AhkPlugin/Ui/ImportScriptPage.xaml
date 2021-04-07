@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:helpers="clr-namespace:Sdl.Community.AhkPlugin.Helpers"
-      xmlns:resx="clr-namespace:Sdl.Community.AhkPlugin"
 	  xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
       mc:Ignorable="d"
 	  d:DataContext="{d:DesignInstance viewModels:ImportScriptPageViewModel}"
@@ -132,6 +131,8 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="File name" Width="Auto" Binding="{Binding Value.FileName}"
+				                    IsReadOnly="True"/>
 				<DataGridTextColumn Header="Script name" Width="Auto" Binding="{Binding Value.Name}" />
 				<DataGridTextColumn Header="Description" Width="*" Binding="{Binding Value.Description}" />
 				<DataGridTemplateColumn Width="100">

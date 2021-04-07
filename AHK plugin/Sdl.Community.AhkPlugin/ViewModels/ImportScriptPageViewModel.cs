@@ -36,10 +36,10 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		public static readonly Log Log = Log.Instance;
 
-		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
+		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel, IDialogService dialogService)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
-			_dialogService = new FilesDialogService();
+			_dialogService = dialogService;
 			_dbContext = new DbContext();
 			GridVisibility = "Collapsed";
 			MessageVisibility = "Collapsed";
@@ -191,6 +191,15 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						RemoveScriptFromGrid(script);
 					}
 
+					var filesToRemove = FilesNameCollection.Where(template =>
+						ScriptsCollection.All(s =>
+							s.Value.FileName != Path.GetFileNameWithoutExtension(template.FilePath))).ToList();
+
+					foreach (var file in filesToRemove)
+					{
+						FilesNameCollection.Remove(file);
+					}
+
 					var masterScript = await _dbContext.GetMasterScript();
 					masterScript.Scripts.AddRange(scriptsToBeImported);
 					await _dbContext.UpdateScript(masterScript);
@@ -200,6 +209,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					Message = "Scripts imported successfully";
 					MessageVisibility = "Visible";
 					Helpers.Ui.Select(GetObservableCollectionOfScripts(), false);
+					SelectAll= false;
+					SetGridVisibility();
 				}
 				else
 				{
