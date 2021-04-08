@@ -423,7 +423,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			Options.ClientId = _providerControlViewModel.ClientId;
 			Options.Region = _providerControlViewModel.Region.Key;
-			Options.RegionChecked = _providerControlViewModel.RegionChecked;
 			Options.UseCatID = _providerControlViewModel.UseCatId;
 			Options.CatId = _providerControlViewModel.CatId;
 			Options.PersistMicrosoftCreds = _providerControlViewModel.PersistMicrosoftKey;

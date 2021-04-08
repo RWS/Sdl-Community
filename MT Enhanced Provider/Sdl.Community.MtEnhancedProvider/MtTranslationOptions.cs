@@ -263,26 +263,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		}
 
 		[JsonIgnore]
-		public bool RegionChecked
-		{
-			get
-			{
-				var regionChecked = GetStringParameter("regionChecked");
-				if (string.IsNullOrEmpty(regionChecked))
-				{
-					return false;
-				}
-
-				var success = bool.TryParse(regionChecked, out var result);
-				return success && result;
-			}
-			set
-			{
-				SetStringParameter("regionChecked", value.ToString());
-			}
-		}
-
-		[JsonIgnore]
         public bool PersistGoogleKey
         {
             get;

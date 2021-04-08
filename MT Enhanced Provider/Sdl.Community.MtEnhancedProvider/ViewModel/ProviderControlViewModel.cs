@@ -28,7 +28,6 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private string _clientId;
 		private SubscriptionRegion _region;
 		private ObservableCollection<SubscriptionRegion> _regions;
-		private bool _regionChecked;
 		private string _jsonFilePath;
 		private string _projectName;
 		private string _googleEngineModel;
@@ -102,9 +101,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
 
-				RegionChecked = string.IsNullOrEmpty(Region?.Key) && _options.RegionChecked;
-				Region = Regions.FirstOrDefault(a => a.Key == (RegionChecked ? _options.Region ?? string.Empty : ""));
+				Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
 			}
+			
 
 			SetTranslationOption();
 
@@ -266,39 +265,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		public ObservableCollection<SubscriptionRegion> Regions
 		{
-			get { return _regions ?? (_regions = new ObservableCollection<SubscriptionRegion>(
-				_regionsProvider.GetSubscriptionRegions())); }
+			get
+			{
+				return _regions ?? (_regions = new ObservableCollection<SubscriptionRegion>(
+			  _regionsProvider.GetSubscriptionRegions()));
+			}
 			set
 			{
 				_regions = value;
 				OnPropertyChanged(nameof(Region));
 			}
 		}
-
-		public bool RegionChecked
-		{
-			get
-			{
-				return _regionChecked;
-			}
-			set
-			{
-				if (_regionChecked == value)
-				{
-					return;
-				}
-
-				_regionChecked = value;
-				OnPropertyChanged(nameof(RegionChecked));
-
-				if (!RegionChecked)
-				{
-					Region = Regions.FirstOrDefault(a => a.Key == "");
-				}
-			}
-		}
-
-
 
 		public string JsonFilePath
 		{

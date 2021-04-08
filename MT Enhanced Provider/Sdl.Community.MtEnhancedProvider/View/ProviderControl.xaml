@@ -26,14 +26,14 @@
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
-    <Grid>
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<StackPanel Grid.Row="0">
-			<TextBlock Text="{x:Static mtEnhanced:PluginResources.WindowDescription}" Margin="10,10,0,0"/>
-			<DockPanel Margin="10">
+			<TextBlock Text="{x:Static mtEnhanced:PluginResources.WindowDescription}" Margin="10,10,0,5"/>
+			<DockPanel Margin="10,0,0,5">
 				<ComboBox
 					ItemsSource="{Binding TranslationOptions}"
 					SelectedItem="{Binding SelectedTranslationOption}"
@@ -53,10 +53,10 @@
 		<StackPanel Grid.Row="1"
 		            Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 		            >
-			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
+			<TextBlock Margin="10,10,0,5" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
 			<PasswordBox
 				HorizontalAlignment="Left"
-				Margin="10"
+				Margin="10,0,0,5"
 				Width="400"
 				Style="{DynamicResource MetroButtonRevealedPasswordBox}"
 				helpers:PasswordHelper.Attach="True"
@@ -70,26 +70,25 @@
 				IsChecked="{Binding PersistMicrosoftKey}"
 				Content="{x:Static mtEnhanced:PluginResources.PersistMicrosoft}"
 				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				Margin="10 0"
+				Margin="10 0, 0,5"
 			/>
-			<CheckBox
-				Content="{x:Static mtEnhanced:PluginResources.MSSubscriptionRegionLabel}"
-				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				Margin="10 10"
-				IsChecked="{Binding RegionChecked, Mode=TwoWay}"/>
+
+			<TextBlock
+					Text="{x:Static mtEnhanced:PluginResources.MSSubscriptionRegionLabel}"
+					Margin="10 10, 0, 5"/>
 			<ComboBox
-				IsEnabled="{Binding RegionChecked, Mode=OneWay}"
-				ItemsSource="{Binding Regions, Mode=OneWay}"
-				SelectedItem="{Binding Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				DisplayMemberPath="Name"
-				Width="200"
-				HorizontalAlignment="Left"
-				Margin="30, 0, 10, 5"/>
+					IsEnabled="{Binding RegionChecked, Mode=OneWay}"
+					ItemsSource="{Binding Regions, Mode=OneWay}"
+					SelectedItem="{Binding Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					DisplayMemberPath="Name"
+					Width="200"
+					HorizontalAlignment="Left"
+					Margin="10, 0, 10, 5"/>
 
 			<CheckBox
 				Content="{x:Static mtEnhanced:PluginResources.CatIdDescription}"
 				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				Margin="10 10"
+				Margin="10 10, 0,5"
 				IsChecked="{Binding UseCatId, Mode=TwoWay}"/>
 			<TextBox
 				controls:TextBoxHelper.Watermark="Category Id"
@@ -98,22 +97,22 @@
 				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				Width="200"
 				HorizontalAlignment="Left"
-				Margin="30, 0, 10, 10"/>
+				Margin="10, 0, 10, 10"/>
 		</StackPanel>
 		<!--Google API Options-->
 		<StackPanel 
 			Grid.Row="1" 
 			Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 			>
-			<TextBlock Margin="10,0" Text="{x:Static mtEnhanced:PluginResources.GoogleApiDescription}"/>
+			<TextBlock Margin="10,10, 0,5" Text="{x:Static mtEnhanced:PluginResources.GoogleApiDescription}"/>
 			<ComboBox
 				ItemsSource="{Binding GoogleApiVersions}"
 				SelectedItem="{Binding SelectedGoogleApiVersion}"
 				DisplayMemberPath="Name"
 				HorizontalAlignment="Left"
-				Margin="10"
+				Margin="10, 0,0,5"
 				Width="200"/>
-			<!--Google API V2--> 
+			<!--Google API V2-->
 			<PasswordBox
 				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 				HorizontalAlignment="Left"
@@ -136,35 +135,35 @@
 			<!--Google API V3-->
 			<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
 				<TextBlock 
-					Margin="10 10 0 0" 
+					Margin="10, 5, 0, 5" 
 					Text="{x:Static mtEnhanced:PluginResources.V3JsonPathDescription}"/>
 				<TextBox controls:TextBoxHelper.Watermark="Json file path"
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-				         Margin="10 10"
+				         Margin="10 0"
 				         Text="{Binding JsonFilePath}"/>
 				<TextBlock 
-					Margin="10 10" 
+					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.V3ProjectNameDescription}"/>
 				<TextBox controls:TextBoxHelper.Watermark="Project Name"
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				         Margin="10 0"
 				         Text="{Binding ProjectName}"/>
 				<TextBlock 
-					Margin="10 10" 
+					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.GoogleProjectLocation}"/>
 				<TextBox controls:TextBoxHelper.Watermark="Project location"
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				         Margin="10 0"
 				         Text="{Binding ProjectLocation}"/>
 				<TextBlock 
-					Margin="10 10" 
+					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.GoogleEngineModelDescription}"/>
 				<TextBox controls:TextBoxHelper.Watermark="Engine name"
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				         Margin="10 0"
 				         Text="{Binding GoogleEngineModel}"/>
 				<TextBlock 
-					Margin="10 10" 
+					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.V3Glossary}"/>
 				<TextBox controls:TextBoxHelper.Watermark="Glossary URI"
 				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
@@ -177,5 +176,5 @@
 					Margin="10 5"/>
 			</StackPanel>
 		</StackPanel>
-    </Grid>
+	</Grid>
 </UserControl>

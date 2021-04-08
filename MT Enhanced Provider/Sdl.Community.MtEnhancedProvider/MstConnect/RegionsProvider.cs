@@ -26,17 +26,17 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 				new SubscriptionRegion {Key = "koreacentral", Name = "Korea Central", Location = "Korea"},
 				new SubscriptionRegion {Key = "northcentralus	", Name = "North Central US", Location = "US"},
 				new SubscriptionRegion {Key = "northeurope", Name = "North Europe", Location = "Europe"},
+				new SubscriptionRegion {Key = "southafricanorth", Name = "South Africa North", Location = "South Africa"},
 				new SubscriptionRegion {Key = "southcentralus", Name = "South Central US", Location = "US"},
 				new SubscriptionRegion {Key = "southeastasia", Name = "South East Asia", Location = "Asia"},
 				new SubscriptionRegion {Key = "uksouth", Name = "UK South", Location = "UK"},
 				new SubscriptionRegion {Key = "westcentralus", Name = "West Central US", Location = "US"},
 				new SubscriptionRegion {Key = "westeurope", Name = "West Europe", Location = "Europe"},
 				new SubscriptionRegion {Key = "westus", Name = "West US", Location = "US"},
-				new SubscriptionRegion {Key = "westus2", Name = "West US 2", Location = "US"},
-				new SubscriptionRegion {Key = "southafricanorth", Name = "South Africa North", Location = "South Africa"}
+				new SubscriptionRegion {Key = "westus2", Name = "West US 2", Location = "US"}
 			};
 
-			return regions.OrderBy(a => a.Location).ThenBy(b => b.Name).ToList();
+			return regions.OrderBy(a => a.Key).ToList();
 		}
 	}
 }

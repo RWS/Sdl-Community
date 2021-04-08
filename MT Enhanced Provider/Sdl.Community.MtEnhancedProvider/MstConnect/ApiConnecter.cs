@@ -79,8 +79,15 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			var targetLc = ConvertLangCode(targetLang);
 
 			//check to see if token is null
-			if (_authToken == null) _authToken = GetAuthToken();
-
+			if (_authToken == null)
+			{
+				_authToken = GetAuthToken();
+				if (_authToken == null)
+				{
+					throw new Exception("Authorization token not valid!");
+				}
+			}
+			
 			var translatedText = string.Empty;
 			try
 			{
@@ -332,6 +339,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (Exception ex)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{ex.Message}\n { ex.StackTrace}");
+				throw ex;
 			}
 
 			return _authToken;

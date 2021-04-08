@@ -479,7 +479,7 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subscription Region.
+        ///   Looks up a localized string similar to Subscription Region:.
         /// </summary>
         public static string MSSubscriptionRegionLabel {
             get {

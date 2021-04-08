@@ -41,9 +41,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		string ClientId { get; set; } //Microsoft
 
 		SubscriptionRegion Region { get; set; }
-		
-		bool RegionChecked { get; set; }
-		
+
 		string JsonFilePath { get; set; }
 		
 		string ProjectName { get; set; }
