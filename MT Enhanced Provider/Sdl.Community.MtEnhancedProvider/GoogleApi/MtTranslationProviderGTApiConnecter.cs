@@ -49,7 +49,11 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;
 				throw new Exception(message); //b/c list will come back null if key is bad
 			}
-			DictSupportedLangs.Add(target, list);
+
+			if (!DictSupportedLangs.ContainsKey(target))
+			{
+				DictSupportedLangs.Add(target, list);
+			}
 		}
 
 		public bool IsSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
@@ -57,9 +61,14 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			var sourceLang = GetLanguageCode(sourceCulture);
 			var targetLang = GetLanguageCode(targetCulture);
 			if (DictSupportedLangs == null)
+			{
 				DictSupportedLangs = new Dictionary<string, List<string>>();
+			}
+			
 			if (!DictSupportedLangs.ContainsKey(targetLang))
+			{
 				UpdateSupportedLangs(targetLang);
+			}
 
 			return DictSupportedLangs[targetLang].Any(source => source == sourceLang);
 		}
