@@ -38,14 +38,17 @@ namespace Sdl.Community.StarTransit
 		private IMessageBoxService _messageBoxService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel,
-			IPackageService packageService, IFolderDialogService dialogService, IStudioService studioService)
+		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
+			var packageService = new PackageService();
+			var folderService = new FolderDialogService();
+			var studioService = new StudioService();
+			var fileDialogService = new OpenFileDialogService();
 			return new ObservableCollection<IProgressHeaderItem>
 			{
-				new PackageDetailsViewModel(wizardModel, packageService, dialogService, studioService,
+				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,
 					new PackageDetails()),
-				new TmsViewModel(wizardModel,new Tms())
+				new TmsViewModel(wizardModel,fileDialogService,new Tms())
 			};
 		}
 
@@ -57,17 +60,14 @@ namespace Sdl.Community.StarTransit
 				var fileDialog = new OpenFileDialog { Filter = "Transit Project Package Files (*.ppf)|*.ppf" };
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult != DialogResult.OK) return;
-				//services
-				var packageService = new PackageService();
-				var folderService = new FolderDialogService();
-				var studioService = new StudioService();
+
 				var pathToTempFolder = CreateTempPackageFolder();
 				var wizardModel = new WizardModel
 				{
 					TransitFilePathLocation = fileDialog.FileName,
 					PathToTempFolder = pathToTempFolder
 				};
-				var pages = CreatePages(wizardModel, packageService, folderService, studioService);
+				var pages = CreatePages(wizardModel);
 				var wizard = new ImportWizard(pages);
 
 				ElementHost.EnableModelessKeyboardInterop(wizard);

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Shared.Models;
 
@@ -18,19 +21,23 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isValid;
 		private readonly IWizardModel _wizardModel;
 		private LanguagePair _selectedLanguagePair;
+		private ICommand _selectTmCommand;
+		private readonly IOpenFileDialogService _fileDialogService;
 
-		public TmsViewModel(IWizardModel wizardModel,object view):base(view)
+		public TmsViewModel(IWizardModel wizardModel,IOpenFileDialogService fileDialogService, object view) : base(view)
 		{
 			_currentPageNumber = 2;
 			_displayName = PluginResources.Wizard_TM_DisplayName;
 			_tooltip = PluginResources.Wizard_Tms_Tooltip;
 			_wizardModel = wizardModel;
 			IsPreviousEnabled = true;
+			_fileDialogService = fileDialogService;
+			PropertyChanged += TmsViewModelChanged;
 		}
 
 		public List<LanguagePair> LanguagePairsTmOptions
 		{
-			get => _wizardModel.PackageModel.Result.LanguagePairs;
+			get => _wizardModel.PackageModel.Result?.LanguagePairs;
 			set
 			{
 				_wizardModel.PackageModel.Result.LanguagePairs = value;
@@ -46,6 +53,18 @@ namespace Sdl.Community.StarTransit.ViewModel
 				_selectedLanguagePair = value;
 				OnPropertyChanged(nameof(SelectedLanguagePair));
 			}
+		}
+
+		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(SelectTm));
+
+
+		private void SelectTm(object selectedLanguageOptions)
+		{
+			var selectedTm = _fileDialogService.ShowDialog("TM Files (.sdltm)|*.sdltm");
+			var language = (LanguagePair) selectedLanguageOptions;
+			language.TmPath = selectedTm;
+			language.TmName = Path.GetFileNameWithoutExtension(selectedTm);
+			OnPropertyChanged(nameof(LanguagePairsTmOptions));
 		}
 
 		public override string DisplayName
@@ -137,6 +156,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 				return false;
 			}
 			return true;
+		}
+		private void TmsViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != nameof(CurrentPageChanged)) return;
+			if (!IsCurrentPage) return;
+			foreach (var languagePairsTmOption in LanguagePairsTmOptions)
+			{
+				languagePairsTmOption.SelectTmCommand = SelectTmCommand;
+			}
+
+			//SelectedLanguagePair = LanguagePairsTmOptions?[0];
 		}
 	}
 }

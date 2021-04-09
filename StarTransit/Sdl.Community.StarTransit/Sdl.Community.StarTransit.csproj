@@ -133,6 +133,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Command\MouseDownCommand.cs" />
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Converter\ImageToBitmapImageConverter.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SelectedPageEventArgs.cs" />
     <Compile Include="Interface\IFolderDialogService.cs" />
+    <Compile Include="Interface\IOpenFileDialogService.cs" />
     <Compile Include="Interface\IProgressHeader.cs" />
     <Compile Include="Interface\IProgressHeaderItem.cs" />
     <Compile Include="Interface\IStudioService.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AsyncTaskWatcherService.cs" />
     <Compile Include="Service\FolderDialogService.cs" />
+    <Compile Include="Service\OpenFileDialogService.cs" />
     <Compile Include="Service\StudioService.cs" />
     <Compile Include="StarTransitRibbon.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />

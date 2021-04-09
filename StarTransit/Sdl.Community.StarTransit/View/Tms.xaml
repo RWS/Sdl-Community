@@ -7,6 +7,7 @@
              xmlns:resx="clr-namespace:Sdl.Community.StarTransit"
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.ViewModel"
              xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
+             xmlns:sdlConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
              d:DataContext="{d:DesignInstance viewModels:TmsViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -22,6 +23,7 @@
 			</ResourceDictionary.MergedDictionaries>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 			<converters:NullVisibilityConverter x:Key="NullVisibilityConverter"/>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -37,11 +39,13 @@
 			Text="{x:Static resx:PluginResources.Tm_PageDescription}"
 			Grid.Row="0" />
 		<ListView
+			Name="TmsOptions"
 			Grid.Row="1"
 			BorderThickness="0"
 			Margin="10 0"
+			SelectionMode="Single"
 			ItemsSource="{Binding LanguagePairsTmOptions}"
-			SelectedItem="{Binding SelectedLanguagePair}">
+			SelectedItem="{Binding SelectedLanguagePair,UpdateSourceTrigger=PropertyChanged}">
 			<ListView.ItemContainerStyle>
 				<Style TargetType="{x:Type ListViewItem}">
 					<Setter Property="Background" Value="Transparent" />
@@ -64,7 +68,9 @@
 							<Button 
 							        Margin="0 0 10 0"
 							        DockPanel.Dock="Right"
-							        Style="{StaticResource Sdl.Button.SecondaryStyle}" Content="{x:Static resx:PluginResources.PackageDetails_Browse}"/>
+									Cursor="Hand"
+							        Style="{StaticResource Sdl.Button.SecondaryStyle}" Content="{x:Static resx:PluginResources.PackageDetails_Browse}"
+							        Command="{ Binding SelectTmCommand}" CommandParameter="{Binding .}"							        Visibility="{Binding ChoseExistingTm,Converter={StaticResource BooleanToVisibilityConverter}}"/>
 						</DockPanel>
 						<Grid>
 							<Grid.RowDefinitions>
@@ -93,9 +99,10 @@
 								IsChecked="{Binding CreateNewTm}"
 								Content="{x:Static resx:PluginResources.Tm_CreateTm}" />
 
-							<DockPanel Grid.Row="1" Grid.Column="1">
-								<TextBlock Margin="20 10 0 0" Text="{x:Static resx:PluginResources.Tm_SelectedTmName}"/>
-								<TextBlock Margin="20 10 0 0" Text="{Binding TmName}"/>
+							<DockPanel Grid.Row="1" Grid.Column="1"
+							           Visibility="{Binding ChoseExistingTm,Converter={StaticResource BooleanToVisibilityConverter}}">
+								<TextBlock Margin="20 10 0 0" Text="{x:Static resx:PluginResources.Tm_SelectedTmName}" />
+								<TextBlock Margin="20 10 0 0" Text="{Binding TmName}" />
 							</DockPanel>
 
 						</Grid>
