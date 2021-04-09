@@ -191,6 +191,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\translationmemory.ico" />
     <Resource Include="Resources\user.ico" />
     <None Include="Resources\help_icon.ico" />
     <None Include="Resources\Download.ico" />

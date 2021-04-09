@@ -100,9 +100,11 @@
 								Content="{x:Static resx:PluginResources.Tm_CreateTm}" />
 
 							<DockPanel Grid.Row="1" Grid.Column="1"
-							           Visibility="{Binding ChoseExistingTm,Converter={StaticResource BooleanToVisibilityConverter}}">
-								<TextBlock Margin="20 10 0 0" Text="{x:Static resx:PluginResources.Tm_SelectedTmName}" />
-								<TextBlock Margin="20 10 0 0" Text="{Binding TmName}" />
+							           Visibility="{Binding TmName,Converter={StaticResource NullVisibilityConverter}}">
+								<Image Margin="20 10 0 0" Width="15" Height="15" Source="../Resources/translationmemory.ico"/>
+								<TextBlock Margin="5 10 0 0"
+										   VerticalAlignment="Center"
+								           Text="{Binding TmName}" />
 							</DockPanel>
 
 						</Grid>
