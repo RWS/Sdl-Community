@@ -30,20 +30,16 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindow = mainWindowViewModel;
-		}
-
-		public ScriptsWindowViewModel()
-		{
 			_dbContext = new DbContext();
 			try
 			{
-				var masterScript = _dbContext.GetMasterScript().Result; 
+				var masterScript = _dbContext.GetMasterScript().Result;
 				ScriptsCollection = new ObservableCollection<Script>(masterScript.Scripts);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Logger.Error($"{Constants.GetMasterScript}: {Constants.Message}: {ex.Message}\n " +
-					$"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
+				                 $"{Constants.StackTrace}: {ex.StackTrace}\n {Constants.InnerException}: {ex.InnerException}");
 			}
 		}
 
@@ -133,6 +129,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 							MessageBoxButton.OK, MessageBoxImage.Information);
 						Helpers.Ui.Select(ScriptsCollection, false);
 						SelectAll = false;
+						AllFilesChecked = false;
 					}
 				}
 				else
@@ -171,6 +168,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					//write masterscript on the disk
 					var masterScript = _dbContext.GetMasterScript().Result;
 					ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+					SelectAll = false;
+					AllFilesChecked = false;
 				}
 				else
 				{

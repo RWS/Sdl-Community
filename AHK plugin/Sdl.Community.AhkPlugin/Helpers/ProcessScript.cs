@@ -24,7 +24,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				var startScriptPosition = lines.IndexOf(";Name");
 				if (firstEndScriptPosition > -1 && startScriptPosition > -1)
 				{
-					var script = GetScript(lines);
+					var script = GetScript(lines, path);
 					var pair = new KeyValuePair<string, Script>(fileName, script);
 					scripts.Add(pair);
 					if (firstEndScriptPosition < lines.Count - 1)
@@ -46,13 +46,14 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			return scripts;
 		}
 
-		private static Script GetScript(List<string>scriptLines)
+		private static Script GetScript(List<string>scriptLines, string path)
 		{
 			var counter = 0;
 			var endScriptPosition = scriptLines.IndexOf(";endScript");
 			var script = new Script
 			{
-				ScriptId =  Guid.NewGuid().ToString()
+				ScriptId =  Guid.NewGuid().ToString(),
+				FileName = Path.GetFileNameWithoutExtension(path)
 			};
 			while (counter < endScriptPosition)
 			{

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin", "Sdl.Community.AhkPlugin.csproj", "{7F4A6B51-B24C-4A16-9F3E-5A8A7CAD56AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin.Tests", "..\Sdl.Community.AhkPlugin.Tests\Sdl.Community.AhkPlugin.Tests.csproj", "{341DB981-090C-408B-A024-BD6B69DB395B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin.Tests", "..\Sdl.Community.AhkPlugin.Tests\Sdl.Community.AhkPlugin.Tests.csproj", "{B56B5B8D-A43F-40A9-B52E-9818513A1B83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{7F4A6B51-B24C-4A16-9F3E-5A8A7CAD56AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F4A6B51-B24C-4A16-9F3E-5A8A7CAD56AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F4A6B51-B24C-4A16-9F3E-5A8A7CAD56AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{341DB981-090C-408B-A024-BD6B69DB395B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{341DB981-090C-408B-A024-BD6B69DB395B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{341DB981-090C-408B-A024-BD6B69DB395B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{341DB981-090C-408B-A024-BD6B69DB395B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B56B5B8D-A43F-40A9-B52E-9818513A1B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B56B5B8D-A43F-40A9-B52E-9818513A1B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B56B5B8D-A43F-40A9-B52E-9818513A1B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B56B5B8D-A43F-40A9-B52E-9818513A1B83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
