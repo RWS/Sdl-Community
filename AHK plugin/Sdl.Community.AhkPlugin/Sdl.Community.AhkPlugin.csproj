@@ -44,15 +44,6 @@
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.DSOFile, Version=2.1.0.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>3rd party\Interop.DSOFile.dll</HintPath>
-    </Reference>
-    <Reference Include="Interop.DSOFile">
-      <HintPath>3rd party\Interop.DSOFile.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="LiteDB, Version=4.1.4.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
       <HintPath>packages\LiteDB.4.1.4\lib\net40\LiteDB.dll</HintPath>
     </Reference>
@@ -76,6 +67,9 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -121,11 +115,13 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Ui.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
+    <Compile Include="Interface\IDialogService.cs" />
     <Compile Include="ItemTemplates\ImportScriptItemTemplate.cs" />
     <Compile Include="Model\MasterScript.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Script.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Service\FilesDialogService.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
@@ -227,9 +223,11 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\upload1.png" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Resource Include="Resources\trash-alt.png" />
     <None Include="Resources\reload.txt" />
     <Resource Include="Resources\icon.png" />
     <EmbeddedResource Include="PluginResources.resx">
@@ -245,8 +243,6 @@
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="packages.config" />
-    <Content Include="3rd party\dsofile.dll" />
-    <Content Include="3rd party\Interop.DSOFile.dll" />
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

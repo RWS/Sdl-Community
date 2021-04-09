@@ -72,4 +72,9 @@
 		<Setter Property="FontSize" Value="12"/>
 	</Style>
 
+	<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+		<Setter Property="Padding" Value="5"/>
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+	</Style>
+
 </ResourceDictionary>
