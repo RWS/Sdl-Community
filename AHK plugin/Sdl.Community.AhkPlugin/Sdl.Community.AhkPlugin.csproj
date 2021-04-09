@@ -44,7 +44,6 @@
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-
     <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
@@ -57,6 +56,9 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -102,11 +104,13 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Ui.cs" />
     <Compile Include="Helpers\WindowsControlUtils.cs" />
+    <Compile Include="Interface\IDialogService.cs" />
     <Compile Include="ItemTemplates\ImportScriptItemTemplate.cs" />
     <Compile Include="Model\MasterScript.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Script.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Service\FilesDialogService.cs" />
     <Compile Include="UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
@@ -205,6 +209,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\upload1.png" />
+    <Resource Include="Resources\trash-alt.png" />
     <None Include="Resources\reload.txt" />
     <Resource Include="Resources\icon.png" />
     <EmbeddedResource Include="PluginResources.resx">
@@ -240,10 +246,10 @@
       <Version>4.1.4</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>1.8.0</Version>
+      <Version>2.0.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>15.1.0</Version>
+      <Version>16.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

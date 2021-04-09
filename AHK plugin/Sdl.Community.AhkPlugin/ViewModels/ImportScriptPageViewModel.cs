@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Helpers;
+using Sdl.Community.AhkPlugin.Interface;
 using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
+using Sdl.Community.AhkPlugin.Service;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -17,31 +20,32 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private ICommand _backCommand;
 	    private ICommand _dragEnterCommand;
 	    private ICommand _removeFileCommand;
+	    private ICommand _addFilesCommand;
 	    private ICommand _addToMasterCommand;
 	    private ICommand _changeScriptStateCommand;
 	    private ICommand _selectAllCommand;
-	    private readonly DbContext _dbContext;
+	    private readonly IDialogService _dialogService;
+		private readonly DbContext _dbContext;
 		private string _gridVisibility;
 	    private string _message;
 	    private string _messageVisibility;
 	    private bool _selectAll;
 		private ObservableCollection<KeyValuePair<string,Script>> _scriptsCollection = new ObservableCollection<KeyValuePair<string, Script>>();
 		private ObservableCollection<ImportScriptItemTemplate> _filesNameCollection = new ObservableCollection<ImportScriptItemTemplate>();
+		private const string FilesFilter = "AHK Scripts(*.ahk) | *.ahk";
 
 		public static readonly Log Log = Log.Instance;
 
-		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
+		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel, IDialogService dialogService)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
+			_dialogService = dialogService;
+			_dbContext = new DbContext();
+			GridVisibility = "Collapsed";
+			MessageVisibility = "Collapsed";
 		}
 
-	    public ImportScriptPageViewModel()
-	    {
-		    _gridVisibility = "Collapsed";
-		    _messageVisibility = "Collapsed";
-		    _dbContext = new DbContext();
-		}
-	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
+		public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ??
 											(_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
@@ -50,19 +54,126 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    public ICommand AddToMasterCommand => _addToMasterCommand ??
 	                                          (_addToMasterCommand = new CommandHandler(ImportScriptsToMaster, true));
+
 	    public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
-	    public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
 
+		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
 
-	    private void SelectAllScripts()
+		public ICommand AddFilesCommand => _addFilesCommand ?? (_addFilesCommand = new CommandHandler(AddFiles, true));
+
+		public ObservableCollection<ImportScriptItemTemplate> FilesNameCollection
+		{
+			get => _filesNameCollection;
+
+			set
+			{
+				if (Equals(value, _filesNameCollection))
+				{
+					return;
+				}
+				_filesNameCollection = value;
+				OnPropertyChanged(nameof(FilesNameCollection));
+			}
+		}
+
+		public ObservableCollection<KeyValuePair<string, Script>> ScriptsCollection
+		{
+			get => _scriptsCollection;
+
+			set
+			{
+				if (Equals(value, _scriptsCollection))
+				{
+					return;
+				}
+				_scriptsCollection = value;
+				OnPropertyChanged(nameof(ScriptsCollection));
+			}
+		}
+
+		public string GridVisibility
+		{
+			get => _gridVisibility;
+
+			set
+			{
+				if (Equals(value, _gridVisibility))
+				{
+					return;
+				}
+				_gridVisibility = value;
+				OnPropertyChanged(nameof(GridVisibility));
+			}
+		}
+
+		public string MessageVisibility
+		{
+			get => _messageVisibility;
+
+			set
+			{
+				if (Equals(value, _messageVisibility))
+				{
+					return;
+				}
+				_messageVisibility = value;
+				OnPropertyChanged(nameof(MessageVisibility));
+			}
+		}
+
+		public string Message
+		{
+			get => _message;
+
+			set
+			{
+				if (Equals(value, _message))
+				{
+					return;
+				}
+				_message = value;
+				OnPropertyChanged(nameof(Message));
+			}
+		}
+
+		public bool SelectAll
+		{
+			get => _selectAll;
+
+			set
+			{
+				if (Equals(value, _selectAll))
+				{
+					return;
+				}
+				ToggleCheckAllFiles(value);
+				_selectAll = value;
+				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
+
+		private void SelectAllScripts()
 	    {
 		    Helpers.Ui.Select(GetObservableCollectionOfScripts(), SelectAll);
 	    }
+
 		private ObservableCollection<Script> GetObservableCollectionOfScripts()
 	    {
 			var scripts = ScriptsCollection.Select(s => s.Value).ToList();
 		    return new ObservableCollection<Script>(scripts);
 	    }
+
+		private async void AddFiles()
+		{
+			var selectedFilesPaths = _dialogService.ShowDialog(FilesFilter);
+			if (!(selectedFilesPaths is null))
+			{
+				await AddScriptsToCollection(selectedFilesPaths);
+			}
+			
+			SetGridVisibility();
+		}
+
 		private async void ImportScriptsToMaster()
 	    {
 			try
@@ -80,6 +191,15 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						RemoveScriptFromGrid(script);
 					}
 
+					var filesToRemove = FilesNameCollection.Where(template =>
+						ScriptsCollection.All(s =>
+							s.Value.FileName != Path.GetFileNameWithoutExtension(template.FilePath))).ToList();
+
+					foreach (var file in filesToRemove)
+					{
+						FilesNameCollection.Remove(file);
+					}
+
 					var masterScript = await _dbContext.GetMasterScript();
 					masterScript.Scripts.AddRange(scriptsToBeImported);
 					await _dbContext.UpdateScript(masterScript);
@@ -89,6 +209,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					Message = "Scripts imported successfully";
 					MessageVisibility = "Visible";
 					Helpers.Ui.Select(GetObservableCollectionOfScripts(), false);
+					SelectAll= false;
+					SetGridVisibility();
 				}
 				else
 				{
@@ -174,58 +296,64 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			}
 		}
 
-		private async void HandlePreviewDrop(object dropedFile)
+		private async void HandlePreviewDrop(object droppedFile)
 	    {
-			var file = dropedFile as IDataObject;
+			var file = droppedFile as IDataObject;
 		    if (null == file) return;
 		    var documentsPath = (string[])file.GetData(DataFormats.FileDrop);
 
 		    if (documentsPath != null)
 		    {
-				foreach (var path in documentsPath)
-				{
-					if (ProcessScript.IsGeneratedByAhkPlugin(path))
-					{
-						MessageVisibility = "Collapsed";
-						var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
-						if (!pathAlreadyAdded)
-						{
-							var scripts = ProcessScript.ReadImportedScript(path);
-							foreach (var script in scripts)
-							{
-								var exist =await ProcessScript.ScriptContentAlreadyExist(script.Value);
-								if (!exist)
-								{
-									script.Value.ScriptStateAction = script.Value.Active ? "Disable" : "Enable";
-									script.Value.RowColor = script.Value.Active ? "Black" : "DarkGray";
-									ScriptsCollection.Add(script);
-								}
-							}
-							var newFile = new ImportScriptItemTemplate
-							{
-								Content = Path.GetFileNameWithoutExtension(path),
-								RemoveFileCommand = new RelayCommand(RemoveFile),
-								FilePath = path
-							};
-							FilesNameCollection.Add(newFile);
-							if (ScriptsCollection.Count.Equals(0))
-							{
-								MessageVisibility = "Visible";
-								Message = "Imported scripts are already in the master script.";
-							}
-						}
-					}
-					else
-					{
-						MessageVisibility = "Visible";
-						Message = "Only scripts generated by AHK Plugin are supported.";
-					}
-				}
-			}
+			    await AddScriptsToCollection(documentsPath.ToList());
+		    }
 		    SetGridVisibility();
 	    }
 
-	    private void SetGridVisibility()
+		private async Task AddScriptsToCollection(IEnumerable<string> documentsPath)
+		{
+			foreach (var path in documentsPath)
+			{
+				if (ProcessScript.IsGeneratedByAhkPlugin(path))
+				{
+					MessageVisibility = "Collapsed";
+					var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
+					if (!pathAlreadyAdded)
+					{
+						var scripts = ProcessScript.ReadImportedScript(path);
+						foreach (var script in scripts)
+						{
+							var exist = await ProcessScript.ScriptContentAlreadyExist(script.Value);
+							if (!exist)
+							{
+								script.Value.ScriptStateAction = script.Value.Active ? "Disable" : "Enable";
+								script.Value.RowColor = script.Value.Active ? "Black" : "DarkGray";
+								ScriptsCollection.Add(script);
+							}
+						}
+
+						var newFile = new ImportScriptItemTemplate
+						{
+							Content = Path.GetFileNameWithoutExtension(path),
+							RemoveFileCommand = new RelayCommand(RemoveFile),
+							FilePath = path
+						};
+						FilesNameCollection.Add(newFile);
+						if (ScriptsCollection.Count.Equals(0))
+						{
+							MessageVisibility = "Visible";
+							Message = "Imported scripts are already in the master script.";
+						}
+					}
+				}
+				else
+				{
+					MessageVisibility = "Visible";
+					Message = "Only scripts generated by AHK Plugin are supported.";
+				}
+			}
+		}
+
+		private void SetGridVisibility()
 	    {
 			GridVisibility = ScriptsCollection.Count > 0 ? "Visible" : "Collapsed";
 		}
@@ -233,88 +361,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    {
 		    _mainWindowViewModel.LoadScriptsPage();
 	    }
-	    public ObservableCollection<ImportScriptItemTemplate> FilesNameCollection
-		{
-		    get => _filesNameCollection;
 
-		    set
-		    {
-			    if (Equals(value, _filesNameCollection))
-			    {
-				    return;
-			    }
-			    _filesNameCollection = value;
-			    OnPropertyChanged(nameof(FilesNameCollection));
-		    }
-	    }
-	    public ObservableCollection<KeyValuePair<string, Script>> ScriptsCollection
+	    private void ToggleCheckAllFiles(bool value)
 	    {
-		    get => _scriptsCollection;
-
-		    set
+		    foreach (var script in ScriptsCollection)
 		    {
-			    if (Equals(value, _scriptsCollection))
-			    {
-				    return;
-			    }
-			    _scriptsCollection = value;
-			    OnPropertyChanged(nameof(ScriptsCollection));			
-		    }
-	    }
-	    public string GridVisibility
-	    {
-		    get => _gridVisibility;
-
-		    set
-		    {
-			    if (Equals(value, _gridVisibility))
-			    {
-				    return;
-			    }
-			    _gridVisibility = value;
-			    OnPropertyChanged(nameof(GridVisibility));
-		    }
-	    }
-	    public string MessageVisibility
-	    {
-		    get => _messageVisibility;
-
-		    set
-		    {
-			    if (Equals(value, _messageVisibility))
-			    {
-				    return;
-			    }
-			    _messageVisibility = value;
-			    OnPropertyChanged(nameof(MessageVisibility));
-		    }
-	    }
-	    public string Message
-	    {
-		    get => _message;
-
-		    set
-		    {
-			    if (Equals(value, _message))
-			    {
-				    return;
-			    }
-			    _message = value;
-			    OnPropertyChanged(nameof(Message));
-		    }
-	    }
-	    public bool SelectAll
-	    {
-		    get => _selectAll;
-
-		    set
-		    {
-			    if (Equals(value, _selectAll))
-			    {
-				    return;
-			    }
-			    _selectAll = value;
-			    OnPropertyChanged(nameof(SelectAll));
+			    script.Value.IsSelected = value;
 		    }
 	    }
 	}
