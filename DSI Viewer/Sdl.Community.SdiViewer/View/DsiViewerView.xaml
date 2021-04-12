@@ -145,8 +145,25 @@
 							<RowDefinition />
 							<RowDefinition />
 						</Grid.RowDefinitions>
-						<Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Background="{Binding TranslationOriginData.ColorCode}"
-						        BorderThickness="1" Margin="8" BorderBrush="LightSlateGray" VerticalAlignment="Stretch" />
+						<Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+						        BorderThickness="1" Margin="8" BorderBrush="LightSlateGray" VerticalAlignment="Stretch" >
+							<Border.Style>
+								<Style TargetType="{x:Type Border}">
+									<Setter Property="Background" Value="#B7B7DB"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.GoodQuality}">
+											<Setter Property="Background" Value="#11A200"/>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.AdequateQuality}">
+											<Setter Property="Background" Value="#F09C00"/>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
+											<Setter Property="Background" Value="#FF4848"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</Border.Style>
+						</Border>
 						<Label Grid.Row="0" Grid.Column="1" Content="{x:Static dsiViewer:PluginResources.Label_QualityEstimation}" HorizontalAlignment="Center" FontWeight="Heavy" />
 						<TextBlock Grid.Row="1" Grid.Column="1" DockPanel.Dock="Left"
 						           Text="{Binding TranslationOriginData.QualityEstimation, Mode=OneWay}" HorizontalAlignment="Center" />
