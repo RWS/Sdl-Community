@@ -8,13 +8,14 @@ using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.Community.MtEnhancedProvider.ViewModel.Interface;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MtEnhancedProvider.ViewModel
 {
-	public class MainWindowViewModel: ModelBase, IMainWindow
+	public class MainWindowViewModel : ModelBase, IMainWindow
 	{
 		private ViewDetails _selectedView;
 		private bool _dialogResult;
@@ -25,20 +26,24 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
+		private readonly HtmlUtil _htmlUtil;
 		public delegate void CloseWindowEventRaiser();
 		public event CloseWindowEventRaiser CloseEventRaised;
 
-		public MainWindowViewModel(IMtTranslationOptions options,IProviderControlViewModel providerControlViewModel,ISettingsControlViewModel settingsControlViewModel,
-			ITranslationProviderCredentialStore credentialStore, LanguagePair[] languagePairs)
+		public MainWindowViewModel(IMtTranslationOptions options, IProviderControlViewModel providerControlViewModel,
+			ISettingsControlViewModel settingsControlViewModel,
+			ITranslationProviderCredentialStore credentialStore, LanguagePair[] languagePairs, HtmlUtil htmlUtil)
 		{
 			Options = options;
 			_providerControlViewModel = providerControlViewModel;
 			_settingsControlViewModel = settingsControlViewModel;
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
+			_htmlUtil = htmlUtil;
+
 			SaveCommand = new RelayCommand(Save);
-			ShowSettingsViewCommand =  new CommandHandler(ShowSettingsPage, true);
-			ShowMainViewCommand = new CommandHandler(ShowProvidersPage,true);
+			ShowSettingsViewCommand = new CommandHandler(ShowSettingsPage, true);
+			ShowMainViewCommand = new CommandHandler(ShowProvidersPage, true);
 
 			providerControlViewModel.ShowSettingsCommand = ShowSettingsViewCommand;
 			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
@@ -61,7 +66,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			ShowProvidersPage();
 		}
 
-		public MainWindowViewModel(IMtTranslationOptions options, ISettingsControlViewModel settingsControlViewModel,bool isTellMeAction)
+		public MainWindowViewModel(IMtTranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
 		{
 			Options = options;
 			_isTellMeAction = isTellMeAction;
@@ -98,7 +103,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		public ICommand ShowSettingsViewCommand { get; set; }
 		public ICommand ShowMainViewCommand { get; set; }
 		public ICommand SaveCommand { get; set; }
-		public IMtTranslationOptions Options { get;set; }
+		public IMtTranslationOptions Options { get; set; }
 
 		public bool DialogResult
 		{
@@ -110,7 +115,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				OnPropertyChanged(nameof(DialogResult));
 			}
 		}
-		
+
 		public string ErrorMessage
 		{
 			get => _errorMessage;
@@ -158,7 +163,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			{
 				return true;
 			}
-			return  false;
+			return false;
 		}
 
 		private bool ValidGoogleOptions()
@@ -194,7 +199,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 			return AreGoogleV3CredentialsValid();
 		}
-		
+
 		private bool ValidSettingsPageOptions()
 		{
 			if (_settingsControlViewModel.DoPreLookup)
@@ -275,12 +280,12 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private void DeleteCredentialsIfNecessary()
 		{
 			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-			    MtTranslationOptions.ProviderType.MicrosoftTranslator && !Options.PersistMicrosoftCreds)
+				MtTranslationOptions.ProviderType.MicrosoftTranslator && !Options.PersistMicrosoftCreds)
 			{
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
 			}
 			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-			    MtTranslationOptions.ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
+				MtTranslationOptions.ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
 			{
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriGt));
 			}
@@ -299,7 +304,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key);
+				var apiConnecter = new ApiConnecter(
+					_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
 
 				if (!string.IsNullOrEmpty(Options?.ClientId))
 				{
@@ -331,7 +337,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					ProjectLocation = _providerControlViewModel.ProjectLocation,
 					GlossaryPath = _providerControlViewModel.GlossaryPath,
 					BasicCsv = _providerControlViewModel.BasicCsvGlossary,
-					SelectedProvider =  _providerControlViewModel.SelectedTranslationOption.ProviderType,
+					SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType,
 					SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version
 				};
 				var googleV3 = new GoogleV3Connecter(providerOptions);
@@ -367,7 +373,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				var googleApiConecter = new MtTranslationProviderGTApiConnecter(_providerControlViewModel.ApiKey);
+				var googleApiConecter = new MtTranslationProviderGTApiConnecter(_providerControlViewModel.ApiKey, _htmlUtil);
 				googleApiConecter.ValidateCredentials();
 
 				return true;

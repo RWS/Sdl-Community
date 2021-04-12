@@ -295,6 +295,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service\HtmlUtil.cs" />
     <Compile Include="Service\Interface\IOpenFileDialogService.cs" />
     <Compile Include="Service\OpenFileDialogService.cs" />
     <Compile Include="StringExtensions.cs" />

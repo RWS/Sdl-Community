@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using NLog;
 using RestSharp;
 using Sdl.Community.MtEnhancedProvider.Model;
+using Sdl.Community.MtEnhancedProvider.Service;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
@@ -32,16 +33,18 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private string _subscriptionKey;
 		private string _region;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly HtmlUtil _htmlUtil;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
 		/// <param name="subscriptionKey">Microsoft API key</param>
 		/// <param name="region">Region</param>
-		internal ApiConnecter(string subscriptionKey, string region)
+		internal ApiConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
+			_htmlUtil = htmlUtil;
 
 			if (_authToken == null)
 			{
@@ -87,7 +90,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 					throw new Exception("Authorization token not valid!");
 				}
 			}
-			
+
 			var translatedText = string.Empty;
 			try
 			{
@@ -127,7 +130,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 						if (response.IsSuccessStatusCode)
 						{
 							var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
-							translatedText = responseTranslation[0]?.Translations[0]?.Text;
+							translatedText = _htmlUtil.HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
 						}
 						else
 						{

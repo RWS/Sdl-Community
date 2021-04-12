@@ -18,6 +18,7 @@ using Sdl.Community.MtEnhancedProvider.GoogleApi;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -33,15 +34,17 @@ namespace Sdl.Community.MtEnhancedProvider
 		private MtTranslationProviderGTApiConnecter _gtConnect;
 		private GoogleV3Connecter _googleV3Connecter;
 		private ApiConnecter _mstConnect;
+		private readonly HtmlUtil _htmlUtil;
 
-		public MtTranslationProvider(IMtTranslationOptions options, RegionsProvider regionProvider)
+		public MtTranslationProvider(IMtTranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
 		{
 			Options = options;
 			RegionsProvider = regionProvider;
+			_htmlUtil = htmlUtil;
 		}
 
-		public RegionsProvider RegionsProvider { get;}
-		
+		public RegionsProvider RegionsProvider { get; }
+
 		public IMtTranslationOptions Options { get; set; }
 
 		public bool IsReadOnly => true;
@@ -100,7 +103,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new MtTranslationProviderLanguageDirection(this, languageDirection);
+			return new MtTranslationProviderLanguageDirection(this, languageDirection, _htmlUtil);
 		}
 
 		public void LoadState(string translationProviderState)
@@ -128,23 +131,33 @@ namespace Sdl.Community.MtEnhancedProvider
 			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 			{
 				if (_mstConnect == null) //construct ApiConnecter if necessary 
-					_mstConnect = new ApiConnecter(Options.ClientId, Options.Region);
+				{
+					_mstConnect = new ApiConnecter(Options.ClientId, Options.Region, _htmlUtil);
+				}
 				else
-					_mstConnect.ResetCrd(Options.ClientId, Options.Region); //reset in case changed since last time the class was constructed
+				{
+					//reset in case changed since last time the class was constructed
+					_mstConnect.ResetCrd(Options.ClientId, Options.Region); 
+				}
 
 				return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 			}
-			
-			
+
 			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
 			{
 				if (_gtConnect == null) //instantiate GtApiConnecter if necessary
-					_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
+				{
+					_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey, _htmlUtil);
+				}
 				else
-					_gtConnect.ApiKey =
-						Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
+				{
+					//reset in case it has been changed since last time GtApiConnecter was instantiated
+					_gtConnect.ApiKey = Options.ApiKey; 
+				}
+
 				return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 			}
+			
 			_googleV3Connecter = new GoogleV3Connecter(Options);
 
 
