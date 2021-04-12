@@ -146,19 +146,19 @@
 							<RowDefinition />
 						</Grid.RowDefinitions>
 						<Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-						        BorderThickness="1" Margin="8" BorderBrush="LightSlateGray" VerticalAlignment="Stretch" >
+						        BorderThickness="1" Margin="8" BorderBrush="LightSlateGray" VerticalAlignment="Stretch">
 							<Border.Style>
 								<Style TargetType="{x:Type Border}">
-									<Setter Property="Background" Value="#B7B7DB"/>
+									<Setter Property="Background" Value="#B7B7DB" />
 									<Style.Triggers>
 										<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.GoodQuality}">
-											<Setter Property="Background" Value="#11A200"/>
+											<Setter Property="Background" Value="#11A200" />
 										</DataTrigger>
 										<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.AdequateQuality}">
-											<Setter Property="Background" Value="#F09C00"/>
+											<Setter Property="Background" Value="#F09C00" />
 										</DataTrigger>
 										<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
-											<Setter Property="Background" Value="#FF4848"/>
+											<Setter Property="Background" Value="#FF4848" />
 										</DataTrigger>
 									</Style.Triggers>
 								</Style>

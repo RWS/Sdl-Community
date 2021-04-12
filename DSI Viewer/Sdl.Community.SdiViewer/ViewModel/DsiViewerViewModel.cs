@@ -127,6 +127,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			UpdateTranslationOriginInformation();
 		}
 
+		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
+		{
+			UpdateComments();
+		}
+
 		private void ActiveDocument_SegmentsTranslationOriginChanged(object sender, EventArgs e)
 		{
 			UpdateTranslationOriginInformation();
@@ -205,11 +210,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				UpdateComments();
 				UpdateTranslationOriginInformation();
 			}
-		}
-
-		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
-		{
-			UpdateComments();
 		}
 
 		private void UpdateComments()
