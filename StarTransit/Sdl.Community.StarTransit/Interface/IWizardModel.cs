@@ -22,6 +22,16 @@ namespace Sdl.Community.StarTransit.Interface
 		Customer SelectedCustomer { get; set; }
 		AsyncTaskWatcherService<List<Customer>> Customers { get; set; }
 		AsyncTaskWatcherService<PackageModel> PackageModel { get; set; }
+		/// <summary>
+		/// List of Transit TMs/MT which doesn't have penalties set. All this files will be imported in a "Main TM" file
+		/// </summary>
+		List<StarTranslationMemoryMetadata> TmsForMainTm { get; set; }
+		/// <summary>
+		/// List of Transit TMs/MT which have penalty set. We'll create a different Studio TM for each file with the penalty set
+		/// </summary>
+		List<StarTranslationMemoryMetadata> IndividualTms { get; set; }
+
+
 		///// <summary>
 		///// For each language pair from Transit package user can select different options for tm. Import existing TM, create a new TM or not using at TM at all
 		///// </summary>

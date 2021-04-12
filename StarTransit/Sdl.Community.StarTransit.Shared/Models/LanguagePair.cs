@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace Sdl.Community.StarTransit.Shared.Models
 {
+	//TODO: For final implementation remove unused properties
     public class LanguagePair:BaseViewModel
     {
 	    private string _tmName;
@@ -18,6 +19,9 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public CultureInfo TargetLanguage { get; set; }
         public Image TargetFlag { get; set; }
         public Image SourceFlag { get; set; }
+		/// <summary>
+		/// List of all TMs/MT Files from Transit package
+		/// </summary>
         public List<StarTranslationMemoryMetadata> StarTranslationMemoryMetadatas { get; set; }
         public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }

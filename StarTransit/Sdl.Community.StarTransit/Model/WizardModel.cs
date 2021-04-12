@@ -43,7 +43,8 @@ namespace Sdl.Community.StarTransit.Model
 			}
 		}
 
-		//public List<LanguagePair> TmsOptions { get; set; }
+		public List<StarTranslationMemoryMetadata> TmsForMainTm { get; set; }
+		public List<StarTranslationMemoryMetadata> IndividualTms { get; set; }
 
 		public List<ProjectTemplateInfo> ProjectTemplates
 		{

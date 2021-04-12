@@ -250,4 +250,13 @@
   <data name="TranslationMemory" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\translationmemory.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AutomatedTranslation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AutomatedTranslation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Wizard_Penalty_Header" xml:space="preserve">
+    <value> Penalty</value>
+  </data>
+  <data name="Wizard_TmsName_Header" xml:space="preserve">
+    <value>Transit file name</value>
+  </data>
 </root>

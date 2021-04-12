@@ -227,6 +227,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					if (metaData != null)
 					{
 						metaData.TargetFile = file;
+						metaData.Name = targetFileNameWithoutExtension;
+						metaData.IsMtFile = targetFileNameWithoutExtension.Contains("_AEXTR_MT_");
 					}
 
 					tmMetaDatas.Add(metaData);

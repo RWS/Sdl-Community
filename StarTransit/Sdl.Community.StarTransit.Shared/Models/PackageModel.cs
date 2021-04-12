@@ -8,7 +8,8 @@ namespace Sdl.Community.StarTransit.Shared.Models
 {
 	public class PackageModel
 	{
-		//Info from transit prj file
+		//Info from transit prj file 
+		//Added in the new ui
         public string Name { get; set; }
         public CultureInfo SourceLanguage { get; set; }
         public Image SourceFlag { get; set; }

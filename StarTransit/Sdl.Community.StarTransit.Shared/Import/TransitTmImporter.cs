@@ -30,7 +30,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				{
 					var transitTmName = Path.GetFileName(transitTm.TargetFile);
 					var tmPath = Path.Combine(studioProjectPath, string.Concat(transitTmName, ".sdltm"));
-					CreateStudioTranslationMemory(tmPath, $"{transitTmName} description", transitTm.TMPenalty, languagePair);
+					CreateStudioTranslationMemory(tmPath, $"{transitTmName} description", transitTm.TmPenalty, languagePair);
 				}
 			}
 			else

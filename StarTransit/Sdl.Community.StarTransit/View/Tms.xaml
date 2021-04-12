@@ -7,6 +7,7 @@
              xmlns:resx="clr-namespace:Sdl.Community.StarTransit"
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.ViewModel"
              xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
+             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:sdlConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
              d:DataContext="{d:DesignInstance viewModels:TmsViewModel}"
              mc:Ignorable="d" 
@@ -19,6 +20,8 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/GroupboxResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/General.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
@@ -106,6 +109,53 @@
 										   VerticalAlignment="Center"
 								           Text="{Binding TmName}" />
 							</DockPanel>
+							<!--<StackPanel Grid.Row="3" Grid.Column="0" Background="MediumVioletRed" Height="50" >
+								<controls:NumericUpDown  Minimum="0" Maximum="100" Background="Red"
+								                        Value="20"/>
+							</StackPanel>-->
+							
+							<DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+									  Margin="0 10"
+									  GridLinesVisibility="None"
+									  SelectionMode="Extended"
+							          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+							          ItemsSource="{Binding StarTranslationMemoryMetadatas}">
+								<DataGrid.Columns>
+									<DataGridTemplateColumn  Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" SortMemberPath="Name" Width="auto">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal" >
+													<Image Width="15" Height="15">
+														<Image.Style>
+															<Style TargetType="Image">
+																<Style.Triggers>
+																	<DataTrigger Binding="{Binding IsMtFile}" Value="False">
+																		<Setter Property="Source" Value="../Resources/TranslationMemory.ico"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding IsMtFile}" Value="True">
+																		<Setter Property="Source" Value="../Resources/AutomatedTranslation.ico"/>
+																	</DataTrigger>
+																</Style.Triggers>
+															</Style>
+														</Image.Style>
+													</Image>
+													<TextBlock Text="{Binding Name}" Margin="5"  VerticalAlignment="Center"/>
+												</StackPanel>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_Penalty_Header}" SortMemberPath="Name"
+									                        Width="auto">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<controls:NumericUpDown Minimum="0" Maximum="100"
+													Value="{Binding TmPenalty}"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+
+								</DataGrid.Columns>
+							</DataGrid>
 
 						</Grid>
 					</StackPanel>

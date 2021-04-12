@@ -254,7 +254,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (package?.TMPenalties == null) return;
 			if (package.TMPenalties.Any(t => t.Key.Equals(starTmMetadata.TargetFile)))
 			{
-				starTmMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTmMetadata.TargetFile)).Value;
+				starTmMetadata.TmPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTmMetadata.TargetFile)).Value;
 				_penaltiesTmsList.Add(starTmMetadata);
 			}
 		}
@@ -265,7 +265,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (package?.MTMemories == null) return;
 			var hasMtMemories = package.MTMemories.Any(t => t.Equals(starTmMetadata.TargetFile));
 			if (!hasMtMemories) return;
-			starTmMetadata.TMPenalty = 1;
+			starTmMetadata.TmPenalty = 1;
 			_machineTransList.Add(starTmMetadata);
 		}
 

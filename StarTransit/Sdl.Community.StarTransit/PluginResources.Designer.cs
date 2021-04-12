@@ -83,6 +83,16 @@ namespace Sdl.Community.StarTransit {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon AutomatedTranslation {
+            get {
+                object obj = ResourceManager.GetObject("AutomatedTranslation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon bil {
             get {
                 object obj = ResourceManager.GetObject("bil", resourceCulture);
@@ -436,6 +446,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Penalty.
+        /// </summary>
+        public static string Wizard_Penalty_Header {
+            get {
+                return ResourceManager.GetString("Wizard_Penalty_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} completed.
         /// </summary>
         public static string Wizard_StepsCompleted {
@@ -459,6 +478,15 @@ namespace Sdl.Community.StarTransit {
         public static string Wizard_Tms_Tooltip {
             get {
                 return ResourceManager.GetString("Wizard_Tms_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transit file name.
+        /// </summary>
+        public static string Wizard_TmsName_Header {
+            get {
+                return ResourceManager.GetString("Wizard_TmsName_Header", resourceCulture);
             }
         }
         

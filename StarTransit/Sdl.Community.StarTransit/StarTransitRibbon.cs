@@ -31,7 +31,7 @@ namespace Sdl.Community.StarTransit
 	{
 	}
 
-	[Action("Sdl.Community.StarTransit", Name = "Open StarTransit Package", Icon = "CreateProjectPackage_Icon", Description = "Open a StarTransit package")]
+	[Action("Sdl.Community.StarTransit", Name = "Open StarTransit Package", Icon = "open_package", Description = "Open a StarTransit package")]
 	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 	public class StarTransitOpenPackageAction : AbstractAction
 	{
@@ -112,12 +112,12 @@ namespace Sdl.Community.StarTransit
 			//		// Start BackgroundWorker in InitializeMain method to have app working separately than Trados Studio process
 			//		Program.InitializeMain(packageModel);
 			//	}
-			//}
-			//catch (Exception ex)
-			//{
-			//	_messageBoxService.ShowMessage(ex.Message, string.Empty);
-			//	_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-			//}
+		//}
+		//	catch (Exception ex)
+		//	{
+		//		_messageBoxService.ShowMessage(ex.Message, string.Empty);
+		//		_logger.Error($"{ex.Message}\n {ex.StackTrace}");
+		//	}
 		}  
 		
 		/// <summary>
@@ -173,7 +173,7 @@ namespace Sdl.Community.StarTransit
 		}
 	}
 
-	[Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "return", Description = "StarTransit return package")]
+	[Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "return_package", Description = "StarTransit return package")]
 	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 
 	public class ReturnPackageAction : AbstractAction
