@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
@@ -128,6 +127,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			UpdateTranslationOriginInformation();
 		}
 
+		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
+		{
+			UpdateComments();
+		}
+
 		private void ActiveDocument_SegmentsTranslationOriginChanged(object sender, EventArgs e)
 		{
 			UpdateTranslationOriginInformation();
@@ -187,31 +191,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			return additionalInfo.ToString();
 		}
 
-		private string GetEstimationColorLabel(string estimation)
-		{
-			Color color;
-			switch (estimation)
-			{
-				case DsiViewerInitializer.GoodQuality:
-					color = Color.FromArgb(17, 162, 0);
-					break;
-
-				case DsiViewerInitializer.AdequateQuality:
-					color = Color.FromArgb(240, 156, 0);
-					break;
-
-				case DsiViewerInitializer.PoorQuality:
-					color = Color.FromArgb(255, 72, 72);
-					break;
-
-				default:
-					color = Color.FromArgb(183, 183, 219);
-					break;
-			}
-
-			return "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
-		}
-
 		private void SetActiveDocument(Document document)
 		{
 			if (_activeDocument != null)
@@ -231,11 +210,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				UpdateComments();
 				UpdateTranslationOriginInformation();
 			}
-		}
-
-		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
-		{
-			UpdateComments();
 		}
 
 		private void UpdateComments()
@@ -321,7 +295,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			{
 				QualityEstimation = qualityEstimation,
 				Model = translationOrigin.GetMetaData("model"),
-				ColorCode = GetEstimationColorLabel(qualityEstimation)
 			};
 		}
 	}
