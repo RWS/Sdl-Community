@@ -29,7 +29,7 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
+	<Grid Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ActualWidth}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
@@ -44,7 +44,7 @@
 		<ListView
 			Name="TmsOptions"
 			Grid.Row="1"
-			BorderThickness="0"
+			BorderThickness="0"			
 			Margin="10 0"
 			SelectionMode="Single"
 			ItemsSource="{Binding LanguagePairsTmOptions}"
@@ -109,19 +109,18 @@
 										   VerticalAlignment="Center"
 								           Text="{Binding TmName}" />
 							</DockPanel>
-							<!--<StackPanel Grid.Row="3" Grid.Column="0" Background="MediumVioletRed" Height="50" >
-								<controls:NumericUpDown  Minimum="0" Maximum="100" Background="Red"
-								                        Value="20"/>
-							</StackPanel>-->
 							
 							<DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-									  Margin="0 10"
+									  Margin="0 10 0 0"
 									  GridLinesVisibility="None"
-									  SelectionMode="Extended"
-							          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+									  SelectionUnit="FullRow"
+									  SelectionMode="Single"
+									  Width="500"
+									  HorizontalAlignment="Left"
+									  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 							          ItemsSource="{Binding StarTranslationMemoryMetadatas}">
 								<DataGrid.Columns>
-									<DataGridTemplateColumn  Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" SortMemberPath="Name" Width="auto">
+									<DataGridTemplateColumn  Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" Width="*">
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
 												<StackPanel Orientation="Horizontal" >
@@ -144,12 +143,11 @@
 											</DataTemplate>
 										</DataGridTemplateColumn.CellTemplate>
 									</DataGridTemplateColumn>
-									<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_Penalty_Header}" SortMemberPath="Name"
-									                        Width="auto">
+									<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_Penalty_Header}" Width="100">
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
-												<controls:NumericUpDown Minimum="0" Maximum="100"
-													Value="{Binding TmPenalty}"/>
+												<controls:NumericUpDown Style="{StaticResource Sdl.NumericUpDown.Generic}" Minimum="0" Maximum="100"
+												                        Value="{Binding TmPenalty,UpdateSourceTrigger=PropertyChanged}"/>
 											</DataTemplate>
 										</DataGridTemplateColumn.CellTemplate>
 									</DataGridTemplateColumn>

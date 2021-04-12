@@ -112,12 +112,12 @@ namespace Sdl.Community.StarTransit
 			//		// Start BackgroundWorker in InitializeMain method to have app working separately than Trados Studio process
 			//		Program.InitializeMain(packageModel);
 			//	}
-		//}
-		//	catch (Exception ex)
-		//	{
-		//		_messageBoxService.ShowMessage(ex.Message, string.Empty);
-		//		_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-		//	}
+			//}
+			//catch (Exception ex)
+			//{
+			//	_messageBoxService.ShowMessage(ex.Message, string.Empty);
+			//	_logger.Error($"{ex.Message}\n {ex.StackTrace}");
+			//}
 		}  
 		
 		/// <summary>
