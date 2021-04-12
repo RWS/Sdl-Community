@@ -2,19 +2,8 @@
 {
 	public class TranslationOriginData : ModelBase
 	{
-		private string _colorCode;
 		private string _model;
 		private string _qualityEstimation;
-
-		public string ColorCode
-		{
-			get => _colorCode;
-			set
-			{
-				_colorCode = value;
-				OnPropertyChanged(nameof(ColorCode));
-			}
-		}
 
 		public string Model
 		{
