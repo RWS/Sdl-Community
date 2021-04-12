@@ -178,14 +178,14 @@
 							</GroupBox.Header>
 							<StackPanel HorizontalAlignment="Left"
 							            Margin="20 20 0 20">
-								<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_NoneAvailable}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeNoneAvailable}"
-								          Style="{StaticResource BindToQe}" />
-								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Poor}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
-								          Style="{StaticResource BindToQe}" />
 								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Good}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeGood}"
 								          Style="{StaticResource BindToQe}" />
 								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Adequate}"
 								          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeAdequate}"
+								          Style="{StaticResource BindToQe}" />
+								<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Poor}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
+								          Style="{StaticResource BindToQe}" />
+								<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_NoneAvailable}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeNoneAvailable}"
 								          Style="{StaticResource BindToQe}" />
 							</StackPanel>
 						</GroupBox>

@@ -193,11 +193,11 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			switch (estimation)
 			{
 				case DsiViewerInitializer.GoodQuality:
-					color = Color.FromArgb(0, 128, 64);
+					color = Color.FromArgb(17, 162, 0);
 					break;
 
 				case DsiViewerInitializer.AdequateQuality:
-					color = Color.FromArgb(0, 128, 255);
+					color = Color.FromArgb(240, 156, 0);
 					break;
 
 				case DsiViewerInitializer.PoorQuality:
