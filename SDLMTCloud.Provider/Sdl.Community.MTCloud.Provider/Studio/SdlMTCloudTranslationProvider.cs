@@ -169,6 +169,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			catch
 			{
 				// ignore any casting errors and simply create a new options instance
+				Options = new Options();
 			}
 			finally
 			{
@@ -233,6 +234,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private void ActivateRatingController()
 		{
+			if (!MtCloudApplicationInitializer.IsStudioRunning) return;
 			var tpStatus =
 				Application.Current.Dispatcher.Invoke(
 					() =>

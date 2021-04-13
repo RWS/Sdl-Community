@@ -2,6 +2,7 @@
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
@@ -13,6 +14,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
+			SetIsStudioRunning();
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
 				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
 
@@ -34,6 +36,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				MtCloudApplicationInitializer.TranslationService, languageProvider, editorController);
 
 			return provider;
+		}
+
+		private static void SetIsStudioRunning()
+		{
+			try
+			{
+				MtCloudApplicationInitializer.IsStudioRunning = SdlTradosStudio.Application != null;
+			}
+			catch { }
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)

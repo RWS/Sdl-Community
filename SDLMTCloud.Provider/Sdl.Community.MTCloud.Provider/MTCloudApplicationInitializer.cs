@@ -17,36 +17,26 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
-		private static EditorController _editorController;
 		public static IMessageBoxService MessageService { get; } = new MessageBoxService();
 		public static IHttpClient Client { get; } = new HttpClient();
 
-		public static CurrentViewDetector CurrentViewDetector { get; set; } = new CurrentViewDetector();
+		public static CurrentViewDetector CurrentViewDetector { get; set; }
 
-		public static EditorController EditorController
-			=> _editorController = _editorController ?? SdlTradosStudio.Application.GetController<EditorController>();
+		public static EditorController EditorController { get; set; }
 
-		public static MetadataSupervisor MetadataSupervisor
-			=> new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
+		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
+		public static bool IsStudioRunning { get; set; }
 
-		public static void CloseOpenedDocuments()
-		{
-			var activeDocs = _editorController.GetDocuments().ToList();
-
-			foreach (var activeDoc in activeDocs)
-			{
-				_editorController.Close(activeDoc);
-			}
-		}
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
+			if (SdlTradosStudio.Application is null) return null;
 			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
 			FileBasedProject projectInProcessing;
@@ -71,13 +61,20 @@ namespace Sdl.Community.MTCloud.Provider
 			TranslationService = new TranslationService(connectionService, Client, MessageService);
 
 			//TODO: start supervising when a QE enabled model has been chosen
+
+			if (!IsStudioRunning) return;
 			MetadataSupervisor.StartSupervising(TranslationService);
 		}
 
 		public void Execute()
 		{
-			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+			if (!IsStudioRunning) return;
+			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			CurrentViewDetector = new CurrentViewDetector();
+			EditorController = SdlTradosStudio.Application.GetController<EditorController>();
+			MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 		}
 	}
 }
