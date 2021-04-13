@@ -36,6 +36,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			LoadState(translationProviderState);
 		}
 
+		public bool IsReadOnly => true;
 		public ITranslationProviderLanguageDirection LanguageDirectionProvider { get; private set; }
 
 		public ILanguageMappingsService LanguageMappingsService => _languageMappingsService = _languageMappingsService ?? new LanguageMappingsService(TranslationService);
@@ -43,6 +44,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public ILanguageProvider LanguageProvider { get; }
 
 		public string Name => PluginResources.Plugin_NiceName;
+
+		public Options Options
+		{
+			get => TranslationService.Options;
+			set => TranslationService.Options = value;
+		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
 
@@ -79,15 +86,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public bool SupportsWordCounts => false;
 
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
-
-		public bool IsReadOnly => true;
-
-		public Options Options
-		{
-			get => TranslationService.Options;
-			set => TranslationService.Options = value;
-		}
-
 		public ITranslationService TranslationService { get; }
 
 		public Uri Uri { get; internal set; }

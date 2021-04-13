@@ -38,15 +38,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return provider;
 		}
 
-		private static void SetIsStudioRunning()
-		{
-			try
-			{
-				MtCloudApplicationInitializer.IsStudioRunning = SdlTradosStudio.Application != null;
-			}
-			catch { }
-		}
-
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
 			var info = new TranslationProviderInfo
@@ -67,6 +58,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			var supportsProvider = translationProviderUri.Scheme.StartsWith(Constants.MTCloudUriScheme);
 			return supportsProvider;
+		}
+
+		private static void SetIsStudioRunning()
+		{
+			try
+			{
+				MtCloudApplicationInitializer.IsStudioRunning = SdlTradosStudio.Application != null;
+			}
+			catch { }
 		}
 	}
 }

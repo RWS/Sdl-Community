@@ -17,19 +17,15 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
-		public static IMessageBoxService MessageService { get; } = new MessageBoxService();
 		public static IHttpClient Client { get; } = new HttpClient();
-
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
-
 		public static EditorController EditorController { get; set; }
-
+		public static bool IsStudioRunning { get; set; }
+		public static IMessageBoxService MessageService { get; } = new MessageBoxService();
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
-		public static bool IsStudioRunning { get; set; }
-
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
@@ -45,10 +41,12 @@ namespace Sdl.Community.MTCloud.Provider
 				case CurrentViewDetector.CurrentView.ProjectsView:
 					projectInProcessing = ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject;
 					break;
+
 				case CurrentViewDetector.CurrentView.FilesView:
 				case CurrentViewDetector.CurrentView.EditorView:
 					projectInProcessing = ProjectsController.CurrentProject;
 					break;
+
 				default:
 					projectInProcessing = null;
 					break;
