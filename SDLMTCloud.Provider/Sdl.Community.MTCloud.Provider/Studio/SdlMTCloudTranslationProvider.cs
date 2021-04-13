@@ -14,7 +14,6 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Studio

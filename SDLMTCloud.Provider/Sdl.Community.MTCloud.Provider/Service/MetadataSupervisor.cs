@@ -43,6 +43,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new();
 
+		public void CloseOpenedDocuments()
+		{
+			var activeDocs = _editorController.GetDocuments().ToList();
+
+			foreach (var activeDoc in activeDocs)
+			{
+				_editorController.Close(activeDoc);
+			}
+		}
+
 		public void StartSupervising(ITranslationService translationService)
 		{
 			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
@@ -177,16 +187,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_batchProcessingWindow = null;
 			Application.Current.Dispatcher.Invoke(CloseOpenedDocuments);
 			_segmentMetadataCreator.AddToSegmentContextData();
-		}
-
-		public void CloseOpenedDocuments()
-		{
-			var activeDocs = _editorController.GetDocuments().ToList();
-
-			foreach (var activeDoc in activeDocs)
-			{
-				_editorController.Close(activeDoc);
-			}
 		}
 	}
 }

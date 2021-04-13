@@ -23,12 +23,11 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static EditorController EditorController { get; set; }
 
+		public static bool IsStudioRunning { get; set; }
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
-		public static bool IsStudioRunning { get; set; }
-
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
