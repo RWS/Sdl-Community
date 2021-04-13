@@ -13,6 +13,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
+			MtCloudApplicationInitializer.SetIsStudioRunning();
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
 				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
 
