@@ -17,10 +17,13 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
+		private static bool? _isStudioRunning;
+
 		public static IHttpClient Client { get; } = new HttpClient();
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
 		public static EditorController EditorController { get; set; }
-		public static bool IsStudioRunning { get; set; }
+
+		public static bool IsStudioRunning { get => _isStudioRunning ?? false; set => _isStudioRunning = value; }
 		public static IMessageBoxService MessageService { get; } = new MessageBoxService();
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
@@ -54,6 +57,20 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
+		/// <summary>
+		/// Since SdlTradosStudio is a static class, the moment we access .Application on it without Studio running we get an exception
+		/// and the class itself cannot be referred to, therefore we cannot check if it has been initialized
+		/// </summary>
+		public static void SetIsStudioRunning()
+		{
+			if (_isStudioRunning.HasValue) return;
+			try
+			{
+				IsStudioRunning = SdlTradosStudio.Application != null;
+			}
+			catch { }
+		}
+
 		public static void SetTranslationService(IConnectionService connectionService)
 		{
 			TranslationService = new TranslationService(connectionService, Client, MessageService);
@@ -66,8 +83,8 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public void Execute()
 		{
+			SetIsStudioRunning();
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
 			if (!IsStudioRunning) return;
 			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			CurrentViewDetector = new CurrentViewDetector();
