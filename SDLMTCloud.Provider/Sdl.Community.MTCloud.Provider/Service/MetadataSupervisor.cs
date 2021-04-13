@@ -175,8 +175,18 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			_isFirstTime = true;
 			_batchProcessingWindow = null;
-			Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.CloseOpenedDocuments);
+			Application.Current.Dispatcher.Invoke(CloseOpenedDocuments);
 			_segmentMetadataCreator.AddToSegmentContextData();
+		}
+
+		public void CloseOpenedDocuments()
+		{
+			var activeDocs = _editorController.GetDocuments().ToList();
+
+			foreach (var activeDoc in activeDocs)
+			{
+				_editorController.Close(activeDoc);
+			}
 		}
 	}
 }

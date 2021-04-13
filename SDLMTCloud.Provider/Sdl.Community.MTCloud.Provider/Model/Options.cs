@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		private bool sendFeedback;
 
 		public bool AutoSendFeedback { get; set; }
-		public List<LanguageMappingModel> LanguageMappings { get; set; }
+		public List<LanguageMappingModel> LanguageMappings { get; set; } = new();
 		public bool ResendDraft { get; set; }
 		public bool SendFeedback
 		{

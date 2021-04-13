@@ -14,6 +14,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Studio
@@ -38,8 +39,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			LoadState(translationProviderState);
 
-			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
-			eventAggregator.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
+			if (!MtCloudApplicationInitializer.IsStudioRunning) return;
+			var eventAggregator = SdlTradosStudio.Application?.GetService<IStudioEventAggregator>();
+			eventAggregator?.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
 		}
 
 		public bool IsReadOnly => true;
@@ -182,6 +184,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			catch
 			{
 				// ignore any casting errors and simply create a new options instance
+				Options = new Options();
 			}
 			finally
 			{
@@ -246,6 +249,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private void ActivateRatingController()
 		{
+			if (!MtCloudApplicationInitializer.IsStudioRunning) return;
 			var tpStatus =
 				Application.Current.Dispatcher.Invoke(
 					() =>
