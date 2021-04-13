@@ -37,7 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 		public ITranslationProvider TranslationProvider => _translationProvider;
 
-		private static string ProjectInProcessing => Application.Current.Dispatcher.Invoke(
+		private static string ProjectInProcessing => Application.Current?.Dispatcher.Invoke(
 			() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath));
 
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)

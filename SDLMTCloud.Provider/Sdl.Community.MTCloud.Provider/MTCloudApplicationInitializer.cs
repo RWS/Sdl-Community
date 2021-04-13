@@ -17,35 +17,26 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
-		private static EditorController _editorController;
+		private static bool? _isStudioRunning;
+
 		public static IHttpClient Client { get; } = new HttpClient();
 
-		public static CurrentViewDetector CurrentViewDetector { get; set; } = new();
+		public static CurrentViewDetector CurrentViewDetector { get; set; }
 
-		public static EditorController EditorController
-					=> _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
+		public static EditorController EditorController { get; set; }
 
-		public static MetadataSupervisor MetadataSupervisor
-			=> new(new SegmentMetadataCreator(), EditorController);
+		public static bool IsStudioRunning { get => _isStudioRunning ?? false; set => _isStudioRunning = value; }
+		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
 		public static ProjectsController ProjectsController { get; private set; }
 		public static TranslationService TranslationService { get; private set; }
-
-		public static void CloseOpenedDocuments()
-		{
-			var activeDocs = _editorController.GetDocuments().ToList();
-
-			foreach (var activeDoc in activeDocs)
-			{
-				_editorController.Close(activeDoc);
-			}
-		}
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
+			if (SdlTradosStudio.Application is null) return null;
 			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
 			var projectInProcessing = CurrentViewDetector.View
@@ -59,18 +50,39 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
+		/// <summary>
+		/// Since SdlTradosStudio is a static class, the moment we access .Application on it without Studio running we get an exception
+		/// and the class itself cannot be referred to, therefore we cannot check if it has been initialized
+		/// </summary>
+		public static void SetIsStudioRunning()
+		{
+			if (_isStudioRunning.HasValue) return;
+			try
+			{
+				IsStudioRunning = SdlTradosStudio.Application is not null;
+			}
+			catch { }
+		}
+
 		public static void SetTranslationService(IConnectionService connectionService)
 		{
 			TranslationService = new TranslationService(connectionService, Client, new MessageBoxService());
 
 			//TODO: start supervising when a QE enabled model has been chosen
+
+			if (!IsStudioRunning) return;
 			MetadataSupervisor.StartSupervising(TranslationService);
 		}
 
 		public void Execute()
 		{
-			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			SetIsStudioRunning();
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			if (!IsStudioRunning) return;
+			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			CurrentViewDetector = new CurrentViewDetector();
+			EditorController = SdlTradosStudio.Application.GetController<EditorController>();
+			MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 		}
 	}
 }
