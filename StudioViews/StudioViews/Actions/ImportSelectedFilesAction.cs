@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Sdl.Community.StudioViews.Model;
@@ -11,6 +10,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.StudioViews.Actions
@@ -27,11 +27,13 @@ namespace Sdl.Community.StudioViews.Actions
 		private StudioViewsFilesImportView _window;
 		private FilesController _filesController;
 		private ProjectsController _projectsController;
+		private StudioVersionService _studioVersionService;
 
 		public override void Initialize()
 		{
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_studioVersionService = new StudioVersionService();
 		}
 
 		protected override void Execute()
@@ -50,11 +52,13 @@ namespace Sdl.Community.StudioViews.Actions
 				return;
 			}
 
-			var projectHelper = new ProjectService(_projectsController);
+			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
 			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
 			var filterItemHelper = new FilterItemService();
 			var commonService = new ProjectFileService();
-			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemHelper, analysisBands);
+			var segmentVisitor = new SegmentVisitor();
+			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor);
+			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemHelper, analysisBands, paragraphUnitProvider);
 			var sdlXliffReader = new SdlxliffReader();
 
 			_window = new StudioViewsFilesImportView();

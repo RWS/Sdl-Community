@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StudioViews.Model
 {
@@ -12,6 +7,8 @@ namespace Sdl.Community.StudioViews.Model
 	{
 		public IParagraphUnit ParagraphUnit { get; set; }
 
-		public IFileProperties FileProperties { get; set; }
+		public string FileId { get; set; }
+		
+		public List<SegmentPairInfo> SegmentPairs { get; set; }
 	}
 }

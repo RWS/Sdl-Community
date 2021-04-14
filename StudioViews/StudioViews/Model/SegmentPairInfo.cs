@@ -1,5 +1,4 @@
 ﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StudioViews.Model
 {

@@ -7,13 +7,19 @@ namespace Sdl.Community.StudioViews.Services
 {
 	public class SdlxliffExporter
 	{
+		private readonly SegmentBuilder _segmentBuilder;
+		
+		public SdlxliffExporter(SegmentBuilder segmentBuilder)
+		{
+			_segmentBuilder = segmentBuilder;
+		}
+		
 		public OutputFile ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var segmentBuilder = new SegmentBuilder();
-			var contentWriter = new ContentExporter(selectedSegments, segmentBuilder);
+			var contentWriter = new ContentExporter(selectedSegments, _segmentBuilder);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

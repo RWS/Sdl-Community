@@ -12,17 +12,19 @@ namespace Sdl.Community.StudioViews.Services
 		private readonly List<string> _excludeFilterIds;
 		private readonly FilterItemService _filterItemService;
 		private readonly List<AnalysisBand> _analysisBands;
+		private readonly ParagraphUnitProvider _paragraphUnitProvider;
 
 		private IFileProperties _fileProperties;
 		private IDocumentProperties _documentProperties;
 
 		public ContentImporter(List<SegmentPairInfo> updatedSegmentPairs, List<string> excludeFilterIds,
-			FilterItemService filterItemService, List<AnalysisBand> analysisBands)
+			FilterItemService filterItemService, List<AnalysisBand> analysisBands, ParagraphUnitProvider paragraphUnitProvider)
 		{
 			_updatedSegmentPairs = updatedSegmentPairs;
 			_excludeFilterIds = excludeFilterIds;
 			_filterItemService = filterItemService;
 			_analysisBands = analysisBands;
+			_paragraphUnitProvider = paragraphUnitProvider;
 
 			UpdatedSegments = 0;
 			ExcludedSegments = 0;

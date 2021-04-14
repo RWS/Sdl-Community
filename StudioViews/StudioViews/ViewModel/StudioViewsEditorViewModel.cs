@@ -31,6 +31,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffMerger _sdlxliffMerger;
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
+		private readonly ParagraphUnitProvider _paragraphUnitProvider;
 
 		private IStudioDocument _activeDocument;
 
@@ -57,7 +58,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		public StudioViewsEditorViewModel(EditorController editorController,
 			FilterItemService filterItemService, ProjectService projectService, ProjectFileService projectFileService,
-			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
+			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader,
+			ParagraphUnitProvider paragraphUnitProvider)
 		{
 			_filterItemService = filterItemService;
 			_projectService = projectService;
@@ -65,6 +67,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
+			_paragraphUnitProvider = paragraphUnitProvider;
 
 			_editorController = editorController;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
@@ -598,6 +601,14 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath);
 
+			var alignmentDifferences = HasAlignmentDifferences(updatedSegmentPairs);
+			if (alignmentDifferences)
+			{
+				importResult.Success = false;
+				importResult.Message = "Unable to import segment pair alignment differences while the document is open in the editor.";
+				return importResult;
+			}
+			
 			foreach (var updatedSegmentPair in updatedSegmentPairs)
 			{
 				if (updatedSegmentPair.ParagraphUnit.IsStructure || !updatedSegmentPair.ParagraphUnit.SegmentPairs.Any())
@@ -608,8 +619,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var segmentPair = _projectFileService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId,
 					updatedSegmentPair.SegmentId);
 				if (segmentPair?.Target == null
-					|| IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target)
-					|| IsEmpty(updatedSegmentPair.SegmentPair.Target))
+				    || IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target)
+				    || IsEmpty(updatedSegmentPair.SegmentPair.Target))
 				{
 					continue;
 				}
@@ -642,6 +653,59 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			return importResult;
+		}
+
+		private bool HasAlignmentDifferences(List<SegmentPairInfo> updatedSegmentPairs)
+		{
+			var alignmentDifferences = false;
+			var updatedParagraphUnits = GetUpdatedParagraphUnits(updatedSegmentPairs);
+			foreach (var updatedParagraphUnit in updatedParagraphUnits)
+			{
+				var originalParagraphUnit = _projectFileService.GetParagraphUnit(_activeDocument,
+					updatedParagraphUnit.ParagraphUnit.Properties.ParagraphUnitId.Id);
+				if (originalParagraphUnit == null)
+				{
+					continue;
+				}
+
+				var alignment =
+					_paragraphUnitProvider.GetSegmentPairAlignment(originalParagraphUnit,
+						updatedParagraphUnit.ParagraphUnit);
+				if (alignment.Exists(a => a.Alignment == AlignmentInfo.AlignmentType.Added ||
+				                          a.Alignment == AlignmentInfo.AlignmentType.Removed))
+				{
+					alignmentDifferences = true;
+				}
+			}
+
+			return alignmentDifferences;
+		}
+
+		private static List<ParagraphUnitInfo> GetUpdatedParagraphUnits(IEnumerable<SegmentPairInfo> updatedSegmentPairs)
+		{
+			var updatedParagraphUnits = new List<ParagraphUnitInfo>();
+			foreach (var segmentPair in updatedSegmentPairs)
+			{
+				var paragraphUnit = updatedParagraphUnits.FirstOrDefault(
+					a => a.ParagraphUnit.Properties.ParagraphUnitId.Id == segmentPair.ParagraphUnitId);
+
+				if (paragraphUnit != null)
+				{
+					paragraphUnit.SegmentPairs.Add(segmentPair);
+				}
+				else
+				{
+					var paragraphUnitInfo = new ParagraphUnitInfo
+					{
+						ParagraphUnit = segmentPair.ParagraphUnit,
+						SegmentPairs = new List<SegmentPairInfo> { segmentPair },
+						FileId = segmentPair.FileId
+					};
+					updatedParagraphUnits.Add(paragraphUnitInfo);
+				}
+			}
+
+			return updatedParagraphUnits;
 		}
 
 		private void ShowMessage(bool success, string message, string logFilePath, string folder)

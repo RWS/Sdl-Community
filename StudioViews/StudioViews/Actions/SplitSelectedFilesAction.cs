@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Sdl.Community.StudioViews.Model;
@@ -52,7 +51,8 @@ namespace Sdl.Community.StudioViews.Actions
 
 			var commonService = new ProjectFileService();
 			var sdlxliffMerger = new SdlxliffMerger();
-			var sdlxliffExporter = new SdlxliffExporter();
+			var segmentBuilder = new SegmentBuilder();
+			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
 
 			_window = new StudioViewsFilesSplitView();

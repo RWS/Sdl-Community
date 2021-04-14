@@ -25,8 +25,6 @@ namespace Sdl.Community.StudioViews.Services
 
 		public IFormattingItemFactory FormattingFactory { get; }
 
-		public List<string> ExistingTagIds { get; set; }
-
 		public ITranslationOrigin CreateTranslationOrigin()
 		{
 			return ItemFactory.CreateTranslationOrigin();
@@ -40,6 +38,11 @@ namespace Sdl.Community.StudioViews.Services
 		public ISegmentPair CreateSegmentPair(ISegment source, ISegment target)
 		{
 			return ItemFactory.CreateSegmentPair(source, target);
+		}
+
+		public ISegment CreateSegment(ISegmentPairProperties segmentPairProperties)
+		{
+			return ItemFactory.CreateSegment(segmentPairProperties);
 		}
 
 		public IContextInfo CreateContextInfo(ParagraphUnitContext context)
@@ -57,7 +60,7 @@ namespace Sdl.Community.StudioViews.Services
 		}
 
 
-		public IAbstractMarkupData CreatePlaceholder(string tagId, string tagContent)
+		public IAbstractMarkupData CreatePlaceholder(string tagId, string tagContent, ref List<string> existingTagIds)
 		{
 			// Dev Notes: the tagContent is switched with the Display text to align with how the tags are 
 			// recreated by the XLIFF 1.2 parser from the framework
@@ -68,16 +71,16 @@ namespace Sdl.Community.StudioViews.Services
 			textProperties.SetMetaData("displayText", tagContent);
 			textProperties.SetMetaData("attribute:id", tagId);
 
-			if (ExistingTagIds.Contains(textProperties.TagId.Id))
+			if (existingTagIds.Contains(textProperties.TagId.Id))
 			{
-				textProperties.TagId = !ExistingTagIds.Contains(tagId)
+				textProperties.TagId = !existingTagIds.Contains(tagId)
 					? new TagId(tagId)
-					: new TagId(GetUniqueTagPairId());
+					: new TagId(GetUniqueTagPairId(existingTagIds));
 			}
 
-			if (!ExistingTagIds.Contains(textProperties.TagId.Id))
+			if (!existingTagIds.Contains(textProperties.TagId.Id))
 			{
-				ExistingTagIds.Add(textProperties.TagId.Id);
+				existingTagIds.Add(textProperties.TagId.Id);
 			}
 
 			return ItemFactory.CreatePlaceholderTag(textProperties);
@@ -117,34 +120,30 @@ namespace Sdl.Community.StudioViews.Services
 			return commentMarker;
 		}
 
-		public IAbstractMarkupData CreateTagPair(string tagId, string tagContent)
+		public ITagPair CreateTagPair(string tagId, string tagContent, ref List<string> existingTagIds)
 		{
 			var tagName = GetStartTagName(tagContent, out var refId);
-
-			// Dev Notes: the tagContent is switched with the Display text to align with how the tags are 
-			// recreated by the XLIFF 1.2 parser from the framework
-
-			var startTagProperties = PropertiesFactory.CreateStartTagProperties("<bpt id=\"" + tagId + "\">");
+			var startTagProperties = PropertiesFactory.CreateStartTagProperties("<" + tagName + " id=\"" + tagId + "\">");
 			startTagProperties.DisplayText = tagContent;
-			startTagProperties.SetMetaData("localName", "bpt");
+			startTagProperties.SetMetaData("localName", tagName);
 			startTagProperties.SetMetaData("displayText", tagContent);
 			startTagProperties.SetMetaData("attribute:id", tagId);
 
-			if (ExistingTagIds.Contains(startTagProperties.TagId.Id))
+			if (existingTagIds.Contains(startTagProperties.TagId.Id))
 			{
-				startTagProperties.TagId = !ExistingTagIds.Contains(tagId)
+				startTagProperties.TagId = !existingTagIds.Contains(tagId)
 					? new TagId(tagId)
-					: new TagId(GetUniqueTagPairId());
+					: new TagId(GetUniqueTagPairId(existingTagIds));
 			}
 
-			if (!ExistingTagIds.Contains(startTagProperties.TagId.Id))
+			if (!existingTagIds.Contains(startTagProperties.TagId.Id))
 			{
-				ExistingTagIds.Add(startTagProperties.TagId.Id);
+				existingTagIds.Add(startTagProperties.TagId.Id);
 			}
 
-			var endTagProperties = PropertiesFactory.CreateEndTagProperties("<ept id=\"" + tagId + "\">");
+			var endTagProperties = PropertiesFactory.CreateEndTagProperties("</" + tagName + ">");
 			endTagProperties.DisplayText = "</" + tagName + ">";
-			endTagProperties.SetMetaData("localName", "ept");
+			endTagProperties.SetMetaData("localName", tagName);
 			endTagProperties.SetMetaData("displayText", "</" + tagName + ">");
 			endTagProperties.SetMetaData("attribute:id", tagId);
 
@@ -155,14 +154,15 @@ namespace Sdl.Community.StudioViews.Services
 			//x.Formatting.Add(xItem);
 
 			var tagPair = ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
+			
 
 			return tagPair;
 		}
 
-		private string GetUniqueTagPairId()
+		private string GetUniqueTagPairId(List<string> existingTagIds)
 		{
 			var id = 1;
-			while (ExistingTagIds.Contains(id.ToString()))
+			while (existingTagIds.Contains(id.ToString()))
 			{
 				id++;
 			}
