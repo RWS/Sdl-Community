@@ -150,7 +150,7 @@
 					<ToolTip Content="{x:Static resx:PluginResources.PackageDetails_ClearDateTooltip}"
 					         Style="{StaticResource ToolTipStyle}" />
 				</Button.ToolTip>
-				<Image Width="16" Height="16" Source="../Resources/delete.ico" />
+				<Image Width="16" Height="16" Source="../Resources/trash-alt.png" />
 			</Button>
 		</DockPanel>
 

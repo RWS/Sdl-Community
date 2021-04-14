@@ -13,6 +13,8 @@ namespace Sdl.Community.StarTransit.Shared.Models
 	    private bool _chooseExistingTm;
 	    private bool _noTm;
 	    private bool _createNewTm;
+	    public delegate void ClearMessageRaiser();
+	    public event ClearMessageRaiser ClearEventRaised;
 
 	    public Guid LanguagePairId { get; set; }
         public CultureInfo SourceLanguage { get; set; }
@@ -39,6 +41,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		        _noTm = value;
 		        TmName = string.Empty;
 		        TmPath = string.Empty;
+		        ClearEventRaised?.Invoke();
 				OnPropertyChanged(nameof(NoTm));
 	        }
         }
@@ -52,6 +55,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		        _createNewTm = value;
 		        TmName = string.Empty;
 		        TmPath = string.Empty;
+		        ClearEventRaised?.Invoke();
 		        OnPropertyChanged(nameof(CreateNewTm));
 	        }
         }
@@ -76,10 +80,11 @@ namespace Sdl.Community.StarTransit.Shared.Models
 	        }
         }
 
-		public string TmPath { get; set; }
+        public string TmPath { get; set; }
 
 		public string PairNameIso { get; set; }
         public string PairName { get; set; }
         public ICommand SelectTmCommand { get; set; }
+        public ICommand RemoveSelectedTmCommand { get; set; }
     }
 }

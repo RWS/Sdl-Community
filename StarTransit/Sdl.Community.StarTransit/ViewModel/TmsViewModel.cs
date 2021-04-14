@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -16,12 +18,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private int _currentPageNumber;
 		private string _displayName;
 		private string _tooltip;
+		private string _errorMessage;
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private readonly IWizardModel _wizardModel;
 		private LanguagePair _selectedLanguagePair;
 		private ICommand _selectTmCommand;
+		private ICommand _removeTmCommand;
 		private readonly IOpenFileDialogService _fileDialogService;
 
 		public TmsViewModel(IWizardModel wizardModel,IOpenFileDialogService fileDialogService, object view) : base(view)
@@ -55,17 +59,19 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
-		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(SelectTm));
-
-
-		private void SelectTm(object selectedLanguageOptions)
+		public string ErrorMessage
 		{
-			var selectedTm = _fileDialogService.ShowDialog("TM Files (.sdltm)|*.sdltm");
-			var language = (LanguagePair) selectedLanguageOptions;
-			language.TmPath = selectedTm;
-			language.TmName = Path.GetFileNameWithoutExtension(selectedTm);
-			OnPropertyChanged(nameof(LanguagePairsTmOptions));
+			get => _errorMessage;
+			set
+			{
+				if (_errorMessage == value) return;
+				_errorMessage = value;
+				OnPropertyChanged(nameof(ErrorMessage));
+			}
 		}
+
+		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new RelayCommand(SelectTm));
+		public ICommand RemoveSelectedTmCommand => _removeTmCommand ?? (_removeTmCommand = new RelayCommand(RemoveTm));
 
 		public override string DisplayName
 		{
@@ -157,16 +163,55 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 			return true;
 		}
-		private void TmsViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+
+		private void TmsViewModelChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
 			foreach (var languagePairsTmOption in LanguagePairsTmOptions)
 			{
 				languagePairsTmOption.SelectTmCommand = SelectTmCommand;
+				languagePairsTmOption.RemoveSelectedTmCommand = RemoveSelectedTmCommand;
+				languagePairsTmOption.ClearEventRaised -= LanguagePairsTmOption_ClearEventRaised;
+				languagePairsTmOption.ClearEventRaised += LanguagePairsTmOption_ClearEventRaised;
 			}
+		}
 
-			//SelectedLanguagePair = LanguagePairsTmOptions?[0];
+		private void LanguagePairsTmOption_ClearEventRaised()
+		{
+			ErrorMessage = string.Empty;
+		}
+
+		private void RemoveTm()
+		{
+			ErrorMessage = string.Empty;
+			SelectedLanguagePair.TmName = string.Empty;
+			SelectedLanguagePair.TmPath = string.Empty;
+		}
+
+		private void SelectTm()
+		{
+			ErrorMessage = string.Empty;
+			var selectedTm = _fileDialogService.ShowDialog("TM Files (.sdltm)|*.sdltm");
+			if (SelectedLanguagePair is null || string.IsNullOrEmpty(selectedTm)) return;
+			if (TmLanguageMatches(selectedTm))
+			{
+				SelectedLanguagePair.TmPath = selectedTm;
+				SelectedLanguagePair.TmName = Path.GetFileNameWithoutExtension(selectedTm);
+			}
+			else
+			{
+				SelectedLanguagePair.TmPath = string.Empty;
+				SelectedLanguagePair.TmName = string.Empty;
+				ErrorMessage = PluginResources.Tm_LanguageValidation;
+			}
+		}
+
+		private bool TmLanguageMatches(string selectedTmPath)
+		{
+			var tmInfo = new FileBasedTranslationMemory(selectedTmPath);
+			var tmLanguageDirection = tmInfo.LanguageDirection;
+			return SelectedLanguagePair.SourceLanguage.Name.Equals(tmLanguageDirection.SourceLanguage.Name) && SelectedLanguagePair.TargetLanguage.Name.Equals(tmLanguageDirection.TargetLanguage.Name);
 		}
 	}
 }

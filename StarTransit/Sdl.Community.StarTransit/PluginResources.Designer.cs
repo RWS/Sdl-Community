@@ -363,11 +363,29 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected TM language pair does not match with the Transit TM language pair.
+        /// </summary>
+        public static string Tm_LanguageValidation {
+            get {
+                return ResourceManager.GetString("Tm_LanguageValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select Translation Memory option for each language pair identified in Transit package.
         /// </summary>
         public static string Tm_PageDescription {
             get {
                 return ResourceManager.GetString("Tm_PageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selected TM.
+        /// </summary>
+        public static string Tm_RemoveTmTooltip {
+            get {
+                return ResourceManager.GetString("Tm_RemoveTmTooltip", resourceCulture);
             }
         }
         
@@ -387,6 +405,16 @@ namespace Sdl.Community.StarTransit {
             get {
                 object obj = ResourceManager.GetObject("TranslationMemory", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap trash_alt {
+            get {
+                object obj = ResourceManager.GetObject("trash_alt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

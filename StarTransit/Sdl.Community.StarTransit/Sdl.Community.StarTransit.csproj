@@ -80,6 +80,9 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
@@ -195,6 +198,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\trash-alt.png" />
     <Resource Include="Resources\translationmemory.ico" />
     <Resource Include="Resources\user.ico" />
     <None Include="Resources\help_icon.ico" />
