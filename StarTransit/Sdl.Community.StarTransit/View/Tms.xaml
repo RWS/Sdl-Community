@@ -10,6 +10,7 @@
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:sdlConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
              d:DataContext="{d:DesignInstance viewModels:TmsViewModel}"
+             Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -29,7 +30,7 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid Name="MainGrid" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}">
+	<Grid Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
@@ -41,20 +42,18 @@
 			Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
 			Text="{x:Static resx:PluginResources.Tm_PageDescription}"
 			Grid.Row="0" />
-		<StackPanel Grid.Row="1" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
+		<ScrollViewer Grid.Row="1" 	   
+		              VerticalScrollBarVisibility="Auto" PreviewMouseWheel="OnPreviewMouseWheel">
 			<DataGrid
 				Name="TmsOptions"
 				AutoGenerateColumns="False"
 				HeadersVisibility="None"
 				GridLinesVisibility="None"
 				IsReadOnly="True"
-				VerticalScrollBarVisibility="auto"
 				IsSynchronizedWithCurrentItem="True"
-				MinHeight="200"
 				Background="Transparent"
-				MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
 				BorderThickness="0"
-				Margin="10 0"
+				Margin="10 "
 				SelectionMode="Single"
 				ItemsSource="{Binding LanguagePairsTmOptions}"
 				SelectedItem="{Binding SelectedLanguagePair,UpdateSourceTrigger=PropertyChanged}">
@@ -154,6 +153,7 @@
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
 			</DataGrid>
-		</StackPanel>
+		</ScrollViewer>
+	
 	</Grid>
 </UserControl>
