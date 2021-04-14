@@ -214,4 +214,13 @@
   <data name="UsernameHeader" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="RemoveQE_CheckBoxContent" xml:space="preserve">
+    <value>Remove MT Cloud quality estimation</value>
+  </data>
+  <data name="RemoveQE_ToolTipContent" xml:space="preserve">
+    <value>Remove MT Cloud quality estimation from the metadata of the segments</value>
+  </data>
+  <data name="MTCloudMetadata_GroupBoxHeader" xml:space="preserve">
+	  <value>Machine Translation Cloud Metadata</value>
+  </data>
 </root>
