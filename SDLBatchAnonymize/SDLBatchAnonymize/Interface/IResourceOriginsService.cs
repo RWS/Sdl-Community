@@ -10,6 +10,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Interface
 		/// <param name="segmentPair">Segment Pair</param>
 		/// <param name="anonymizerSettings">Anonymization settings</param>
 		void RemoveMt(ISegmentPair segmentPair, IBatchAnonymizerSettings anonymizerSettings);
+
 		void RemoveQe(ISegmentPair segmentPair);
 
 		/// <summary>
