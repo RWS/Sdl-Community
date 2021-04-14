@@ -19,7 +19,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -189,6 +189,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Machine Translation Cloud Metadata.
+        /// </summary>
+        public static string MTCloudMetadata_GroupBoxHeader {
+            get {
+                return ResourceManager.GetString("MTCloudMetadata_GroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove all Machine Translation providers from the file and replace with nothing; or replace with the name of a Translation Memory.
         /// </summary>
         public static string MtTooltip {
@@ -240,6 +249,24 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string RemoveMT {
             get {
                 return ResourceManager.GetString("RemoveMT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove MT Cloud quality estimation.
+        /// </summary>
+        public static string RemoveQE_CheckBoxContent {
+            get {
+                return ResourceManager.GetString("RemoveQE_CheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove MT Cloud quality estimation from the metadata of the segments.
+        /// </summary>
+        public static string RemoveQE_ToolTipContent {
+            get {
+                return ResourceManager.GetString("RemoveQE_ToolTipContent", resourceCulture);
             }
         }
         
