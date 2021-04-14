@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using NLog;
 using Sdl.Community.SDLBatchAnonymize.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -51,6 +50,10 @@ namespace Sdl.Community.SDLBatchAnonymize
 					if (_settings.ChangeTmChecked)
 					{
 						_resourceOriginsService.RemoveTm(segmentPair, _settings);
+					}
+					if (_settings.RemoveMtCloudMetadata)
+					{
+						_resourceOriginsService.RemoveQe(segmentPair);
 					}
 				}
 			}

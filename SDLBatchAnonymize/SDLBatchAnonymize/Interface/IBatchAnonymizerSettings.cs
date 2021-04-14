@@ -18,5 +18,6 @@
 		string TrackedName { get; set; }
 		decimal FuzzyScore { get; set; }
 		string TmName { get; set; }
+		bool RemoveMtCloudMetadata { get; set; }
 	}
 }
