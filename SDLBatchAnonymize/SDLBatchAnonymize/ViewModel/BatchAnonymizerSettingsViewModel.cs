@@ -26,6 +26,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 		private string _tmName;
 		private decimal _fuzzyScore;
 		private ICommand _loadWindowAction;
+		private bool _removeMtCloudMetadata;
 		public BatchAnonymizerSettings Settings { get; set; }
 
 		public bool AnonymizeAllSettings
@@ -48,6 +49,16 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 				if (_clearSettings == value) return;
 				_clearSettings = value;
 				OnPropertyChanged(nameof(ClearSettings));
+			}
+		}
+
+		public bool RemoveMtCloudMetadata
+		{
+			get => _removeMtCloudMetadata;
+			set
+			{
+				_removeMtCloudMetadata = value;
+				OnPropertyChanged(nameof(RemoveMtCloudMetadata));
 			}
 		}
 
@@ -279,6 +290,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			SetSpecificResChecked = Settings.SetSpecificResChecked;
 			TmName = Settings.TmName;
 			FuzzyScore = Settings.FuzzyScore;
+			RemoveMtCloudMetadata = Settings.RemoveMtCloudMetadata;
 		}
 
 		/// <summary>
@@ -291,6 +303,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			CommentChecked = anonymizeAll;
 			TrackedChecked = anonymizeAll;
 			ChangeMtChecked = anonymizeAll;
+			RemoveMtCloudMetadata = anonymizeAll;
 			if (!anonymizeAll) return;
 			CreatedByName = string.Empty;
 			ModifyByName = string.Empty;

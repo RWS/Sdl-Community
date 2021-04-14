@@ -70,7 +70,8 @@
 	</Style>
 	<Style TargetType="{x:Type TextBox}" x:Key="AnonymizeValueBox">
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="0,5,0,5"/>
+		<Setter Property="Margin" Value="0 5 0 0"/>
+		<Setter Property="Height" Value="22" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
 				<Setter Property="Background" Value="{StaticResource Disabled.Background}" />

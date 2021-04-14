@@ -32,6 +32,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" Style="{StaticResource Sdl.TextBlock.TitleStyle}" LineHeight="20" LineStackingStrategy="BlockLineHeight" 
 				   Text="{x:Static resx:PluginResources.PageTitle}"  HorizontalAlignment="Left"  FontSize="15" Padding="0"/>
@@ -81,9 +82,9 @@
 						<ToolTip Content="{x:Static resx:PluginResources.CreatedToolTip}" Style="{StaticResource ToolTipStyle}"/>
 					</CheckBox.ToolTip>
 				</CheckBox>
-				<TextBox  Grid.Row="0" Grid.Column="2" Height="25" Style="{StaticResource AnonymizeValueBox}" ToolTipService.ShowOnDisabled="True"
+				<TextBox  Grid.Row="0" Grid.Column="2" Style="{StaticResource AnonymizeValueBox}" ToolTipService.ShowOnDisabled="True"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
-						  Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}" Margin="0,6">
+						  Text="{Binding CreatedByName,UpdateSourceTrigger=PropertyChanged}">
 					<TextBox.ToolTip>
 						<ToolTip Content="{x:Static resx:PluginResources.CreatedToolTip}" Style="{StaticResource ToolTipStyle}"/>
 					</TextBox.ToolTip>
@@ -97,7 +98,7 @@
 						<ToolTip Content="{x:Static resx:PluginResources.ModifiedToolTip}" Style="{StaticResource ToolTipStyle}"/>
 					</CheckBox.ToolTip>
 				</CheckBox>
-				<TextBox  Grid.Row="1" Grid.Column="2" Style="{StaticResource AnonymizeValueBox}" Height="25"
+				<TextBox  Grid.Row="1" Grid.Column="2" Style="{StaticResource AnonymizeValueBox}" 
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
 						  Text="{Binding ModifyByName,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True">
 					<TextBox.ToolTip>
@@ -114,7 +115,6 @@
 					</CheckBox.ToolTip>
 				</CheckBox>
 				<TextBox  Grid.Row="2" Grid.Column="2" Style="{StaticResource AnonymizeValueBox}" ToolTipService.ShowOnDisabled="True"
-				          Height="25"
 						  Text="{Binding CommentAuthorName,UpdateSourceTrigger=PropertyChanged}"
 				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}">
 					<TextBox.ToolTip>
@@ -130,7 +130,7 @@
 						<ToolTip Content="{x:Static resx:PluginResources.TrackedToolTip}" Style="{StaticResource ToolTipStyle}"/>
 					</CheckBox.ToolTip>
 				</CheckBox>
-				<TextBox Grid.Row="3" Grid.Column="2" Style="{StaticResource AnonymizeValueBox}" Height="25"
+				<TextBox Grid.Row="3" Grid.Column="2" Style="{StaticResource AnonymizeValueBox}" 
 						 Text="{Binding TrackedName,UpdateSourceTrigger=PropertyChanged}" ToolTipService.ShowOnDisabled="True"
 				         IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}">
 					<TextBox.ToolTip>
@@ -203,6 +203,26 @@
 						<ToolTip Content="{x:Static resx:PluginResources.ProviderNameToolTip}" Style="{StaticResource ToolTipStyle}"/>
 					</TextBox.ToolTip>
 				</TextBox>
+			</Grid>
+		</GroupBox>
+		<GroupBox Grid.Row="5" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="{x:Static resx:PluginResources.MTCloudMetadata_GroupBoxHeader}" Margin="5,0,0,0">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<CheckBox Grid.Row="1"
+				          Style="{StaticResource Sdl.Checkbox.GenericStyle}" Margin="0 6 0 0"
+				          IsChecked="{Binding RemoveMtCloudMetadata,UpdateSourceTrigger=PropertyChanged}"
+				          ToolTipService.ShowOnDisabled="True"
+				          IsEnabled="{Binding AnonymizeAllSettings,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
+				          Content="{x:Static resx:PluginResources.RemoveQE_CheckBoxContent}"
+				          VerticalContentAlignment="Center" Grid.ColumnSpan="2">
+					<CheckBox.ToolTip>
+						<ToolTip Content="{x:Static resx:PluginResources.RemoveQE_ToolTipContent}"
+						         Style="{StaticResource ToolTipStyle}" />
+					</CheckBox.ToolTip>
+				</CheckBox>
 			</Grid>
 		</GroupBox>
 	</Grid>

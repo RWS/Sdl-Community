@@ -39,6 +39,7 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			_settings.SetSpecificResChecked = _control.BatchAnonymizerSettingsViewModel.SetSpecificResChecked;
 			_settings.FuzzyScore = _control.BatchAnonymizerSettingsViewModel.FuzzyScore;
 			_settings.TmName = _control.BatchAnonymizerSettingsViewModel.TmName;
+			_settings.RemoveMtCloudMetadata = _control.BatchAnonymizerSettingsViewModel.RemoveMtCloudMetadata;
 		}
 	}
 }

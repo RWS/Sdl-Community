@@ -18,6 +18,12 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			get => GetSetting<bool>(nameof(UseGeneral));
 			set => GetSetting<bool>(nameof(UseGeneral)).Value = value;
 		}
+		
+		public bool RemoveMtCloudMetadata
+		{
+			get => GetSetting<bool>(nameof(RemoveMtCloudMetadata));
+			set => GetSetting<bool>(nameof(RemoveMtCloudMetadata)).Value = value;
+		}
 
 		public bool CreatedByChecked
 		{

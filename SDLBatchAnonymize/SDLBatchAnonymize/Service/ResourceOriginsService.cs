@@ -97,6 +97,20 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			        originType.Equals(DefaultTranslationOrigin.AdaptiveMachineTranslation));
 		}
 
+		public void RemoveQe(ISegmentPair segmentPair)
+		{
+			var translationOrigin = segmentPair.Properties.TranslationOrigin;
+			if (translationOrigin is null) return;
+			if (translationOrigin.MetaDataContainsKey("quality_estimation"))
+			{
+				translationOrigin.RemoveMetaData("quality_estimation");
+			}
+			if (translationOrigin.MetaDataContainsKey("model"))
+			{
+				segmentPair.Properties.TranslationOrigin.RemoveMetaData("model");
+			}
+		}
+
 		private bool IsTmTransaltion(ITranslationOrigin translationOrigin)
 		{
 			var originType = translationOrigin?.OriginType;
