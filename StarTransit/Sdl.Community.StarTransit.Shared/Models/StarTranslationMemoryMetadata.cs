@@ -3,7 +3,7 @@
 	public class StarTranslationMemoryMetadata : BaseViewModel
 	{
 		private int _tmPanalty;
-
+		private bool _isChecked;
 		public string SourceFile { get; set; }
 
 		//Local path for TM/MT File
@@ -24,6 +24,17 @@
 				if (_tmPanalty == value) return;
 				_tmPanalty = value;
 				OnPropertyChanged(nameof(TmPenalty));
+			}
+		}
+
+		public bool IsChecked
+		{
+			get => _isChecked;
+			set
+			{
+				if (_isChecked == value) return;
+				_isChecked = value;
+				OnPropertyChanged(nameof(IsChecked));
 			}
 		}
 	}

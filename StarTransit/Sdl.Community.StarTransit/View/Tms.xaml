@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:sdlConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
+             xmlns:models1="clr-namespace:Sdl.Community.StarTransit.Shared.Models;assembly=Sdl.Community.StarTransit.Shared"
              d:DataContext="{d:DesignInstance viewModels:TmsViewModel}"
              Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
              mc:Ignorable="d" 
@@ -122,6 +123,8 @@
 										</DockPanel>
 									</DockPanel>
 									<DataGrid DockPanel.Dock="Bottom"
+											  Name="PenaltyGrid"
+											  d:DataContext="{d:DesignInstance models1:StarTranslationMemoryMetadata}"
 									          Margin="0 10 0 0"
 									          GridLinesVisibility="None"
 									          SelectionUnit="FullRow"
@@ -132,6 +135,25 @@
 									          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 									          ItemsSource="{Binding StarTranslationMemoryMetadatas}">
 										<DataGrid.Columns>
+											<DataGridTemplateColumn CanUserResize="False">
+												<DataGridTemplateColumn.HeaderTemplate>
+													<DataTemplate>
+														<CheckBox
+															VerticalAlignment="Center"
+															IsChecked="{Binding Path=DataContext.CheckAll,ElementName=TmsOptions,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+													</DataTemplate>
+
+												</DataGridTemplateColumn.HeaderTemplate>
+												<DataGridTemplateColumn.CellTemplate>
+													<DataTemplate>
+														<CheckBox 
+															VerticalAlignment="Center"
+															HorizontalAlignment="Center"
+															IsChecked="{Binding IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
+													</DataTemplate>
+												</DataGridTemplateColumn.CellTemplate>
+											</DataGridTemplateColumn>
+
 											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" Width="*">
 												<DataGridTemplateColumn.CellTemplate>
 													<DataTemplate>

@@ -70,6 +70,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		        OnPropertyChanged(nameof(ChoseExistingTm));
 	        }
         }
+
         public string TmName
         {
 	        get => _tmName;
