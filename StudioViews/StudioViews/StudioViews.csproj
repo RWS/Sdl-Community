@@ -165,7 +165,7 @@
     <Compile Include="Model\SegmentInfo.cs" />
     <Compile Include="Model\SegmentPairInfo.cs" />
     <Compile Include="Model\TokenInfo.cs" />
-    <Compile Include="Services\ParagraphUnitProvider.cs" />
+    <Compile Include="Providers\ParagraphUnitProvider.cs" />
     <Compile Include="Services\ProjectFileService.cs" />
     <Compile Include="Services\ContentExporter.cs" />
     <Compile Include="Services\FilterItemService.cs" />

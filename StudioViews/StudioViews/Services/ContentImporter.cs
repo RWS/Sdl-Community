@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.StudioViews.Services

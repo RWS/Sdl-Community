@@ -1,4 +1,5 @@
-﻿using Sdl.Community.StudioViews.Services;
+﻿using Sdl.Community.StudioViews.Providers;
+using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
 using Sdl.Community.StudioViews.ViewModel;
 using Sdl.Desktop.IntegrationApi;

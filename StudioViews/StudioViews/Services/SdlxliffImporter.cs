@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StudioViews.Services

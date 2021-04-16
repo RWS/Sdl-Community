@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.StudioViews.Services
+namespace Sdl.Community.StudioViews.Providers
 {
 	public class ParagraphUnitProvider
 	{
@@ -22,21 +24,12 @@ namespace Sdl.Community.StudioViews.Services
 				return null;
 			}
 
-			var sourceLeft = GetSourceContent(paragraphUnitLeft);
-			var sourceRight = GetSourceContent(paragraphUnitRight);
-
-			// TODO identify when the source content/text has been updated (other than structural changes)
-			//if (sourceLeft != sourceRight)
-			//{
-			//	throw new Exception("Source content does not match!");
-			//}
-
 			paragraphUnit.Properties = paragraphUnitRight.Properties;
 
 			paragraphUnit.Source.Clear();
 			paragraphUnit.Target.Clear();
 
-			var alignments = GetSegmentPairAlignment(paragraphUnitLeft, paragraphUnitRight);
+			var alignments = GetSegmentPairAlignments(paragraphUnitLeft, paragraphUnitRight);
 			foreach (var alignmentInfo in alignments)
 			{
 				switch (alignmentInfo.Alignment)
@@ -68,19 +61,7 @@ namespace Sdl.Community.StudioViews.Services
 			return paragraphUnit;
 		}
 
-		private string GetSourceContent(IParagraphUnit paragraphUnitLeft)
-		{
-			var sourceLeft = string.Empty;
-			foreach (var segmentPair in paragraphUnitLeft.SegmentPairs)
-			{
-				_segmentVisitor.VisitSegment(segmentPair.Source);
-				sourceLeft += _segmentVisitor.Text;
-			}
-
-			return sourceLeft;
-		}
-
-		public List<AlignmentInfo> GetSegmentPairAlignment(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight)
+		public List<AlignmentInfo> GetSegmentPairAlignments(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight)
 		{
 			var alignments = new List<AlignmentInfo>();
 
@@ -136,7 +117,6 @@ namespace Sdl.Community.StudioViews.Services
 			foreach (var segmentPairRight in paragraphUnitRight.SegmentPairs)
 			{
 				var segmentId = segmentPairRight.Properties.Id.Id;
-
 				var segmentPairLeft = paragraphUnitLeft.SegmentPairs.FirstOrDefault(
 					a => a.Properties.Id.Id == segmentPairRight.Properties.Id.Id);
 
@@ -153,18 +133,14 @@ namespace Sdl.Community.StudioViews.Services
 				}
 			}
 
-			alignments = alignments.OrderBy(a => a.SortId).ToList();
-
-			NormalizeAlignment(alignments);
-
-			return alignments;
+			return NormalizeAlignment(alignments.OrderBy(a => a.SortId).ToList());
 		}
 
-		private void NormalizeAlignment(List<AlignmentInfo> alignments)
+		private List<AlignmentInfo> NormalizeAlignment(List<AlignmentInfo> alignments)
 		{
 			if (!alignments.Exists(a => a.Alignment == AlignmentInfo.AlignmentType.None))
 			{
-				return;
+				return alignments;
 			}
 			
 			var sourceRight = string.Empty;
@@ -178,7 +154,7 @@ namespace Sdl.Community.StudioViews.Services
 				    alignmentInfo.Alignment == AlignmentInfo.AlignmentType.None)
 				{
 					_segmentVisitor.VisitSegment(alignmentInfo.SegmentPairLeft.Source);
-					sourceLeft += _segmentVisitor.Text;
+					sourceLeft += RemoveWhiteSpaces(_segmentVisitor.Text);
 
 					if (alignmentInfo.Alignment == AlignmentInfo.AlignmentType.None)
 					{
@@ -192,14 +168,22 @@ namespace Sdl.Community.StudioViews.Services
 				    alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Matched)
 				{
 					_segmentVisitor.VisitSegment(alignmentInfo.SegmentPairRight.Source);
-					sourceRight += _segmentVisitor.Text;
+					sourceRight += RemoveWhiteSpaces(_segmentVisitor.Text);
 				}
 
 				if (alignmentInfo.Alignment == AlignmentInfo.AlignmentType.LeftOnly)
 				{
-					sourceRight += _segmentVisitor.Text;
+					sourceRight += RemoveWhiteSpaces(_segmentVisitor.Text);
 				}
 			}
+
+			return alignments;
+		}
+
+		private static string RemoveWhiteSpaces(string input)
+		{
+			var output = Regex.Replace(input, @"\s+", string.Empty);
+			return output;
 		}
 
 		private static string GetSortId(string segmentId)
@@ -213,33 +197,5 @@ namespace Sdl.Community.StudioViews.Services
 
 			return segmentId.PadLeft(6, '0');
 		}
-
-		public List<ParagraphUnitInfo> GroupSegmentPairs(IEnumerable<SegmentPairInfo> updatedSegmentPairs)
-		{
-			var paragraphUnits = new List<ParagraphUnitInfo>();
-			foreach (var segmentPair in updatedSegmentPairs)
-			{
-				var paragraphUnit = paragraphUnits.FirstOrDefault(
-					a => a.ParagraphUnit.Properties.ParagraphUnitId.Id == segmentPair.ParagraphUnitId);
-
-				if (paragraphUnit != null)
-				{
-					paragraphUnit.SegmentPairs.Add(segmentPair);
-				}
-				else
-				{
-					var paragraphUnitInfo = new ParagraphUnitInfo
-					{
-						ParagraphUnit = segmentPair.ParagraphUnit,
-						SegmentPairs = new List<SegmentPairInfo> { segmentPair },
-						FileId = segmentPair.FileId
-					};
-					paragraphUnits.Add(paragraphUnitInfo);
-				}
-			}
-
-			return paragraphUnits;
-		}
-
 	}
 }

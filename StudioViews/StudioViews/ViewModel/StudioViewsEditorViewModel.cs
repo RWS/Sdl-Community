@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -668,10 +669,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 					continue;
 				}
 
-				var alignment =
-					_paragraphUnitProvider.GetSegmentPairAlignment(originalParagraphUnit,
+				var alignments =
+					_paragraphUnitProvider.GetSegmentPairAlignments(originalParagraphUnit,
 						updatedParagraphUnit.ParagraphUnit);
-				if (alignment.Exists(a => a.Alignment == AlignmentInfo.AlignmentType.Added ||
+				if (alignments.Exists(a => a.Alignment == AlignmentInfo.AlignmentType.Added ||
 				                          a.Alignment == AlignmentInfo.AlignmentType.Removed))
 				{
 					alignmentDifferences = true;

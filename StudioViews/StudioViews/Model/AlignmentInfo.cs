@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.StudioViews.Model
 {
