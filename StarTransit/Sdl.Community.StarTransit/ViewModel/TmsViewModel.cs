@@ -208,17 +208,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private void TmMetadata_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName.Equals(nameof(StarTranslationMemoryMetadata.IsChecked)))
+			if (!e.PropertyName.Equals(nameof(StarTranslationMemoryMetadata.IsChecked))) return;
+			var allSelected = SelectedLanguagePair.StarTranslationMemoryMetadatas.All(t => t.IsChecked);
+			if (allSelected)
 			{
-				var unselectedProperty = SelectedLanguagePair.StarTranslationMemoryMetadatas.FirstOrDefault(l => l.IsChecked == false);
-				if (unselectedProperty != null)
-				{
-					CheckAll = null;
-				}
-				else
-				{
-					CheckAll = true;
-				}
+				CheckAll = true;
+			}
+			else
+			{
+				var allUnchecked = SelectedLanguagePair.StarTranslationMemoryMetadatas.All(t => !t.IsChecked);
+				CheckAll = allUnchecked ? (bool?) false : null;
 			}
 		}
 
