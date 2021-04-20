@@ -16,7 +16,7 @@ using TaskStatus = Sdl.ProjectAutomation.Core.TaskStatus;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class ProjectService
+	public class ProjectService:IProjectService
 	{
 		private readonly List<StarTranslationMemoryMetadata> _penaltiesTmsList;
 		private readonly List<StarTranslationMemoryMetadata> _machineTransList;
@@ -26,6 +26,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly List<ProjectFile> _targetProjectFiles;
 		private readonly string _iconPath;
 		private readonly IFileService _fileService;
+		private readonly IProjectsControllerService _projectControllerService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ProjectService(Helpers helpers):this()
@@ -43,6 +44,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			_machineTransList = new List<StarTranslationMemoryMetadata>();
 			_tmConfig = new TranslationProviderConfiguration();
 			_targetProjectFiles = new List<ProjectFile>();
+		}
+
+		public ProjectService(IProjectsControllerService projectsControllerService):this()
+		{
+			_projectControllerService = projectsControllerService;
 		}
 
 		public virtual IProject CreateNewProject(ProjectInfo projectInfo, ProjectTemplateReference projectTemplateReference)
@@ -88,6 +94,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			fileBasedProject.Save();
 			return _messageModel;
+		}
+		public IProject CreateStudioProject(PackageModel transitPackage)
+		{
+			return null;
 		}
 
 		public (MessageModel, IProject) CreateProject(PackageModel package)
@@ -306,5 +316,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
+
+
 	}
 }

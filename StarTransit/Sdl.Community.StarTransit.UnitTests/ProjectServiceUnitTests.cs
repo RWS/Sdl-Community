@@ -3,6 +3,7 @@ using System.IO;
 using NSubstitute;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Xunit;
 
@@ -16,13 +17,28 @@ namespace Sdl.Community.StarTransit.UnitTests
 		private PackageModel _packageModel;
 		private readonly ProjectService _projectService;
 		private readonly StarTransitConfiguration _starTransitConfiguration;
+		private readonly IProjectService _projService;
 
 		public ProjectServiceUnitTests()
 		{
 			var packageService = Substitute.For<PackageService>();
 			_projectService = Substitute.For<ProjectService>();
+			var projectsControllerService = Substitute.For<IProjectsControllerService>();
+			_projService = new ProjectService(projectsControllerService);
 			_starTransitConfiguration = new StarTransitConfiguration(packageService);
 		}
+
+		[Fact]
+		public void CreateProject_ReceivedArgs()
+		{
+			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, "693203001_Trumpf_ID_IND.PPF").Result;
+			_projService.CreateStudioProject(packageModel);
+			//_projService.Received().Format(Arg.Any<object>());
+
+			//_projService.Received().
+			_projService.Received().CreateStudioProject(Arg.Is(packageModel));
+		}
+
 
 		[Fact]
 		public void CreateProject_IsSuccessfullyCreated_Test()

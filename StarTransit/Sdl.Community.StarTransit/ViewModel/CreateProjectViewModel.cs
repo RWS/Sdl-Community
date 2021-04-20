@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -15,9 +17,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private readonly IWizardModel _wizardModel;
+		private readonly IProjectService _projectService;
 		private ICommand _createProjectCommand;
 
-		public CreateProjectViewModel(IWizardModel wizardModel,object view) : base(view)
+		public CreateProjectViewModel(IWizardModel wizardModel, IProjectService projectService, object view) : base(view)
 		{
 			_currentPageNumber = 3;
 			_wizardModel = wizardModel;
@@ -25,6 +28,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_tooltip = PluginResources.Wizard_PackageDetails_Tooltip;
 			_isPreviousEnabled = true;
 			_isNextEnabled = false;
+			_projectService = projectService;
 			PropertyChanged += CreateProjectViewModelChanged;
 		}
 
@@ -139,7 +143,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 		private void CreateTradosProject()
 		{
-
+			var proj = _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
 		}
 	}
 }

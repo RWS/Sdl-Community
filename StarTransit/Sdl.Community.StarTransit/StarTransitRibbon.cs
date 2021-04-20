@@ -40,16 +40,20 @@ namespace Sdl.Community.StarTransit
 
 		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
+			var projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
+
 			var packageService = new PackageService();
 			var folderService = new FolderDialogService();
-			var studioService = new StudioService();
+			var studioService = new StudioService(projectsController);
 			var fileDialogService = new OpenFileDialogService();
+			var projectsControllerService = new ProjectsControllerService(projectsController);
+			var projectService = new ProjectService(projectsControllerService);
 			return new ObservableCollection<IProgressHeaderItem>
 			{
 				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,
 					new PackageDetails()),
 				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
-				new CreateProjectViewModel(wizardModel,new CreateProject())
+				new CreateProjectViewModel(wizardModel,projectService,new CreateProject())
 			};
 		}
 

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Xml;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -17,14 +15,16 @@ namespace Sdl.Community.StarTransit.Service
 {
 	public class StudioService: IStudioService
 	{
-		public ProjectsController GetProjectController()
+		private readonly ProjectsController _projectsController;
+
+		public StudioService(ProjectsController projectsController)
 		{
-			return SdlTradosStudio.Application?.GetController<ProjectsController>();
+			_projectsController = projectsController;
 		}
 
 		public List<ProjectTemplateInfo> GetProjectTemplates()
 		{
-			var templateList = GetProjectController()?.GetProjectTemplates()?.OrderBy(t => t.Name).ToList();
+			var templateList = _projectsController?.GetProjectTemplates()?.OrderBy(t => t.Name).ToList();
 			return templateList ?? new List<ProjectTemplateInfo>();
 		}
 
@@ -66,6 +66,11 @@ namespace Sdl.Community.StarTransit.Service
 				
 				return customersList;
 			});
+		}
+
+		public void RefreshProjects()
+		{
+			_projectsController.RefreshProjects();
 		}
 	}
 }
