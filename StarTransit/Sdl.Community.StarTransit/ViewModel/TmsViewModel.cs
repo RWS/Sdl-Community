@@ -24,6 +24,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private bool? _checkAll;
+		private bool _packageContainsTms;
 		private readonly IWizardModel _wizardModel;
 		private LanguagePair _selectedLanguagePair;
 		private ICommand _selectTmCommand;
@@ -159,6 +160,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 				CheckAllFiles(value);
 				OnPropertyChanged(nameof(CheckAll));
 			}
+		}
+
+		public bool PackageContainsTms
+		{
+			get => _wizardModel.PackageModel.Result.PackageContainsTms;
+			set { _packageContainsTms = value; }
 		}
 
 		private void CheckAllFiles(bool? value)

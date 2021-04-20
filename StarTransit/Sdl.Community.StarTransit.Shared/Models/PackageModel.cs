@@ -13,7 +13,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public string Name { get; set; }
         public CultureInfo SourceLanguage { get; set; }
         public Image SourceFlag { get; set; }
-
+        public bool PackageContainsTms { get; set; }
 
 		public string Description { get; set; } // TODO: Remove this for final implementation. This is no used anywhere we don't have description in the packages
         public ProjectTemplateInfo ProjectTemplate { get; set; }

@@ -43,15 +43,27 @@
 		<TextBlock
 			Margin="10 0 0 10"
 			FontSize="15"
-			Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
-			Text="{x:Static resx:PluginResources.Tm_PageDescription}"
-			Grid.Row="0" />
+			Grid.Row="0">
+			<TextBlock.Style>
+				<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.SubtitleStyle}">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding PackageContainsTms}" Value="True">
+							<Setter Property="Text" Value="{x:Static resx:PluginResources.Tm_PageDescription}"/>
+						</DataTrigger>
+						<DataTrigger Binding="{Binding PackageContainsTms}" Value="False">
+							<Setter Property="Text" Value="{x:Static resx:PluginResources.Tm_NoTmAvailableMessage}"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</TextBlock.Style>
+		</TextBlock>
 		<TextBlock Grid.Row="1" 
 		           HorizontalAlignment="Center" FontSize="15"
 		           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
 		           Text="{Binding ErrorMessage}"
 		           Visibility="{Binding ErrorMessage, Converter={StaticResource NullVisibilityConverter}, ConverterParameter=Inverted}" />
 		<ScrollViewer Grid.Row="2"
+					  Visibility="{Binding PackageContainsTms,Converter={StaticResource BooleanToVisibilityConverter}}"
 		              VerticalScrollBarVisibility="Auto" 
 		              PreviewMouseWheel="OnPreviewMouseWheel">
 			<DataGrid

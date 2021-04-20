@@ -336,7 +336,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select existing TM.
+        ///   Looks up a localized string similar to Import into existing TM.
         /// </summary>
         public static string Tm_BrowseTm {
             get {
@@ -345,7 +345,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new TM.
+        ///   Looks up a localized string similar to Create and import into new TM.
         /// </summary>
         public static string Tm_CreateTm {
             get {
@@ -368,6 +368,15 @@ namespace Sdl.Community.StarTransit {
         public static string Tm_LanguageValidation {
             get {
                 return ResourceManager.GetString("Tm_LanguageValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Transit package does not contain any TM.
+        /// </summary>
+        public static string Tm_NoTmAvailableMessage {
+            get {
+                return ResourceManager.GetString("Tm_NoTmAvailableMessage", resourceCulture);
             }
         }
         

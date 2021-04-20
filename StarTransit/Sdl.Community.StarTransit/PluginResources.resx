@@ -233,10 +233,10 @@
     <value>Please add a valid folder path</value>
   </data>
   <data name="Tm_BrowseTm" xml:space="preserve">
-    <value>Select existing TM</value>
+    <value>Import into existing TM</value>
   </data>
   <data name="Tm_CreateTm" xml:space="preserve">
-    <value>Create new TM</value>
+    <value>Create and import into new TM</value>
   </data>
   <data name="Tm_CreateWitoutTm" xml:space="preserve">
     <value>Create project without TM</value>
@@ -267,5 +267,8 @@
   </data>
   <data name="Tm_LanguageValidation" xml:space="preserve">
     <value>Selected TM language pair does not match with the Transit TM language pair</value>
+  </data>
+  <data name="Tm_NoTmAvailableMessage" xml:space="preserve">
+    <value>Selected Transit package does not contain any TM</value>
   </data>
 </root>

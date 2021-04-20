@@ -7,5 +7,6 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 	{
 		Task<PackageModel> OpenPackage(string packagePath, string pathToTempFolder);
 		PackageModel GetPackageModel();
+		bool PackageContainsTms(PackageModel packageModel);
 	}
 }

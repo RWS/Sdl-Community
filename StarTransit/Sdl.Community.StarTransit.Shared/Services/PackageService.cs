@@ -128,6 +128,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return _package;
 		}
 
+		public bool PackageContainsTms(PackageModel packageModel)
+		{
+			return packageModel.LanguagePairs.Any(pair => pair.StarTranslationMemoryMetadatas.Count != 0);
+		}
+
 		/// <summary>
 		/// Creates a package model based on info read from .prj file
 		/// </summary>
@@ -199,6 +204,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			model.SourceLanguage = model.LanguagePairs[0].SourceLanguage;
 			model.SourceFlag = new Language(model.SourceLanguage).GetFlagImage();
+			var containsTms = PackageContainsTms(model);
+			model.PackageContainsTms = containsTms;
 			return model;
 		}
 
