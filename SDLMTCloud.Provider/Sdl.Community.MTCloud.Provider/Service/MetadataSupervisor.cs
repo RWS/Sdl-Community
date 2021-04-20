@@ -29,6 +29,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_editorController = editorController;
 		}
 
+		public event QeEventHandler ActiveSegmentQeChanged;
+
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
 		public Dictionary<SegmentId, TargetSegmentData> ActiveDocumentData
@@ -54,11 +56,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public event QeEventHandler ActiveSegmentQeChanged;
-
 		public void StartSupervising(ITranslationService translationService)
 		{
-
 			if (ActiveDocument != null)
 			{
 				ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
@@ -78,15 +77,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
-		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
-		{
-			var segmentId = ActiveDocument.ActiveSegmentPair.Properties.Id;
-			if (ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData))
-			{
-				ActiveSegmentQeChanged?.Invoke(targetSegmentData.TranslationOriginInformation.QualityEstimation);
-			}
-		}
-
 		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin, bool lookInPrevious = false)
 		{
 			//TODO: extract in helper
@@ -95,6 +85,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
 			}
 			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
+		}
+
+		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
+		{
+			var segmentId = ActiveDocument.ActiveSegmentPair.Properties.Id;
+			if (ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData))
+			{
+				ActiveSegmentQeChanged?.Invoke(targetSegmentData.TranslationOriginInformation.QualityEstimation);
+			}
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
