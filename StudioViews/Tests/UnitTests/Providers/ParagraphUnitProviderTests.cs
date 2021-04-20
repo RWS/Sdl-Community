@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
@@ -18,8 +19,16 @@ namespace UnitTests.Providers
 			var segmentBuilder = new SegmentBuilder();
 			_paragraphUnitHelper = new ParagraphUnitHelper(segmentBuilder);
 
+			var analysisBands = new List<AnalysisBand>
+			{
+				new AnalysisBand {MaximumMatchValue = 74, MinimumMatchValue = 50},
+				new AnalysisBand {MaximumMatchValue = 84, MinimumMatchValue = 75},
+				new AnalysisBand {MaximumMatchValue = 94, MinimumMatchValue = 85},
+				new AnalysisBand {MaximumMatchValue = 99, MinimumMatchValue = 95}
+			};
+			var filterItemService = new FilterItemService(analysisBands);
 			var segmentVisitor = new SegmentVisitor();
-			_paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor);
+			_paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
 		}
 
 		[Fact]
@@ -48,17 +57,16 @@ namespace UnitTests.Providers
 
 
 			// act
-			var paragraphUnit = _paragraphUnitProvider.GetUpdatedParagraphUnit(paragraphUnit1, paragraphUnit2);
+			var result = _paragraphUnitProvider.GetUpdatedParagraphUnit(paragraphUnit1, paragraphUnit2, new List<string>());
 
 			// assert
 			// confirm that the same amount of ISegments exist in source and target
-			Assert.Equal(5, paragraphUnit.Source.Count);
-			Assert.Equal(5, paragraphUnit.Target.Count);
+			Assert.Equal(5, result.Paragraph.SegmentPairs.Count());
 
 			// confirm that last source (LeftOnly) content is built into the paragraph by comparing
 			// sourceLeft (paragraph submitted) against sourceRight (paragraphUnit received).
-			var sourceLeft = "Last section";
-			var sourceRight = ((IText)paragraphUnit.Source[paragraphUnit.Source.Count - 1]).Properties.Text;
+			var sourceLeft = segmentPairs1.LastOrDefault()?.Source.FirstOrDefault()?.ToString();
+			var sourceRight = result.Paragraph.SegmentPairs.LastOrDefault()?.Source.FirstOrDefault()?.ToString();
 
 			Assert.Equal(sourceLeft, sourceRight);
 		}

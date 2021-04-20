@@ -34,7 +34,7 @@ namespace UnitTests.Utils
 
 		public IParagraphUnit CreateParagraph(IEnumerable<ISegmentPair> segmentPairs)
 		{
-			var paragraphUnit = _segmentBuilder.CreateParagraphUnit(LockTypeFlags.Unlocked);
+			var paragraphUnit = _segmentBuilder.CreateParagraphUnit(null);
 			paragraphUnit.Properties.ParagraphUnitId = new ParagraphUnitId(Guid.NewGuid().ToString());
 			foreach (var segmentPair in segmentPairs)
 			{

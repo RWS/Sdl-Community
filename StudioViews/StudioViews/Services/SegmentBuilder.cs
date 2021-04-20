@@ -30,9 +30,15 @@ namespace Sdl.Community.StudioViews.Services
 			return ItemFactory.CreateTranslationOrigin();
 		}
 
-		public IParagraphUnit CreateParagraphUnit(LockTypeFlags lockTypeFlags)
+		public IParagraphUnit CreateParagraphUnit(IParagraphUnitProperties properties)
 		{
-			return ItemFactory.CreateParagraphUnit(lockTypeFlags);
+			var paragraphUnit = ItemFactory.CreateParagraphUnit(properties?.LockType ?? LockTypeFlags.Unlocked);
+			if (properties != null)
+			{
+				paragraphUnit.Properties = properties.Clone() as IParagraphUnitProperties;
+			}
+
+			return paragraphUnit;
 		}
 
 		public ISegmentPair CreateSegmentPair(ISegment source, ISegment target)
@@ -58,7 +64,6 @@ namespace Sdl.Community.StudioViews.Services
 
 			return contextInfo;
 		}
-
 
 		public IAbstractMarkupData CreatePlaceholder(string tagId, string tagContent, ref List<string> existingTagIds)
 		{
@@ -154,7 +159,7 @@ namespace Sdl.Community.StudioViews.Services
 			//x.Formatting.Add(xItem);
 
 			var tagPair = ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
-			
+
 
 			return tagPair;
 		}

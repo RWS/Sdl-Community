@@ -134,11 +134,13 @@
     <Compile Include="Behaviours\PreviewDragDropBehaviour.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Controls\Folder\FolderSelectDialog.cs" />
     <Compile Include="Controls\Folder\Reflector.cs" />
     <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Extensions\ParagraphUnitExtensions.cs" />
     <Compile Include="Model\AlignmentInfo.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
     <Compile Include="Model\ConfirmationStatus.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="Model\ExportResult.cs" />
     <Compile Include="Model\MessageInfo.cs" />
     <Compile Include="Model\OutputFile.cs" />
+    <Compile Include="Model\ParagraphUnitResult.cs" />
     <Compile Include="Model\SegmentPairMap.cs" />
     <Compile Include="Model\SystemFileInfo.cs" />
     <Compile Include="Model\FilterItem.cs" />
@@ -246,9 +249,7 @@
     <Resource Include="Resources\import_small.ico" />
     <Resource Include="Resources\StudioViewsMain.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UnitTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Styles\DataGridStyle.xaml">
       <Generator>MSBuild:Compile</Generator>

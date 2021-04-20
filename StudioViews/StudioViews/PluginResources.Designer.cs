@@ -441,6 +441,15 @@ namespace Sdl.Community.StudioViews {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select &apos;Yes&apos; to close the document and proceed with the import..
+        /// </summary>
+        internal static string Message_SelectYesToProceedWithImport {
+            get {
+                return ResourceManager.GetString("Message_SelectYesToProceedWithImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully completed the filter operation..
         /// </summary>
         internal static string Message_Successfully_Completed_Filter_Operation {
@@ -545,6 +554,15 @@ namespace Sdl.Community.StudioViews {
         internal static string Message_Title_Task_Result {
             get {
                 return ResourceManager.GetString("Message_Title_Task_Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import translations with alignment differences to the segment structure while the document is open the editor..
+        /// </summary>
+        internal static string Message_UnableToImportTranslationsFromEditor {
+            get {
+                return ResourceManager.GetString("Message_UnableToImportTranslationsFromEditor", resourceCulture);
             }
         }
         

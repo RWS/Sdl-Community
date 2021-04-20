@@ -1,4 +1,5 @@
-﻿using Sdl.Community.StudioViews.Providers;
+﻿using System.Linq;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
 using Sdl.Community.StudioViews.ViewModel;
@@ -31,16 +32,17 @@ namespace Sdl.Community.StudioViews
 			_studioVersionService = new StudioVersionService();
 
 			var commonService = new ProjectFileService();
-			var filterItemHelper = new FilterItemService();
 			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
+			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
+			var filterItemService = new FilterItemService(analysisBands);
 			var sdlxliffMerger = new SdlxliffMerger();
 			var segmentBuilder = new SegmentBuilder();
 			var segmentVisitor = new SegmentVisitor();
-			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor);
+			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
 			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
 
-			var model = new StudioViewsEditorViewModel(_editorController, filterItemHelper, projectHelper,
+			var model = new StudioViewsEditorViewModel(_editorController, filterItemService, projectHelper,
 				commonService, sdlxliffMerger, sdlxliffExporter, sdlXliffReader, paragraphUnitProvider);
 
 			_control = new StudioViewsEditorView { DataContext = model };

@@ -103,9 +103,8 @@ namespace Sdl.Community.StudioViews.Services
 				return;
 			}
 
-			var newParagraphUnit = _segmentBuilder.CreateParagraphUnit(paragraphUnit.Properties.LockType);
-			newParagraphUnit.Properties = paragraphUnit.Properties;
-
+			var newParagraphUnit = _segmentBuilder.CreateParagraphUnit(paragraphUnit.Properties);
+			
 			foreach (var segmentPair in segmentPairs)
 			{
 				newParagraphUnit.Source.Add(segmentPair.Source.Clone() as ISegment);

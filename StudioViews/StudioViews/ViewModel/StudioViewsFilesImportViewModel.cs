@@ -12,8 +12,10 @@ using System.Windows.Input;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
+using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MessageBox = System.Windows.MessageBox;
@@ -26,11 +28,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly Window _window;
 		private readonly SdlxliffImporter _sdlxliffImporter;
 		private readonly SdlxliffReader _sdlxliffReader;
-		private readonly List<ProjectFile> _selectedProjectFiles;
 		private readonly FilterItemService _filterItemService;
 		private readonly ProjectFileService _projectFileService;
 
 		private bool _progressIsVisible;
+		private FilesController _filesController;
+		private Language _language;
 		private ObservableCollection<SystemFileInfo> _files;
 		private IList _selectedFiles;
 		private SystemFileInfo _selectedFile;
@@ -48,12 +51,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _removeTemplateCommand;
 		private ICommand _dragDropCommand;
 
-		public StudioViewsFilesImportViewModel(Window window, List<ProjectFile> selectedProjectFiles, ProjectFileService projectFileService,
+		public StudioViewsFilesImportViewModel(Window window, FilesController filesController, Language language, ProjectFileService projectFileService,
 			FilterItemService filterItemService, SdlxliffImporter sdlxliffImporter, SdlxliffReader sdlxliffReader)
 		{
 			_window = window;
 			_filterItemService = filterItemService;
-			_selectedProjectFiles = selectedProjectFiles;
+			_filesController = filesController;
+			_language = language;
 			_sdlxliffImporter = sdlxliffImporter;
 			_sdlxliffReader = sdlxliffReader;
 			_projectFileService = projectFileService;
@@ -203,26 +207,58 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		public DialogResult DialogResult { get; set; }
 
-		private void Ok(object parameter)
+		public void AddFiles(IReadOnlyCollection<SystemFileInfo> files)
 		{
-			if (_selectedProjectFiles == null || _selectedProjectFiles.Count <= 0)
+			foreach (var systemFile in files)
 			{
-				MessageBox.Show(PluginResources.Message_No_files_selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+				var fileInfo = _files.FirstOrDefault(a => a.Name == systemFile.Name && a.Path == systemFile.Path);
+				if (fileInfo == null)
+				{
+					_files.Add(systemFile);
+				}
+			}
+
+			OnPropertyChanged(nameof(Files));
+			OnPropertyChanged(nameof(IsValid));
+			OnPropertyChanged(nameof(FilesStatusLabel));
+		}
+
+		public void RemoveFiles(IReadOnlyCollection<SystemFileInfo> files)
+		{
+			if (files == null || files.Count == 0)
+			{
 				return;
 			}
 
+			foreach (var fileInfo in files)
+			{
+				var template = _files.FirstOrDefault(a => a.Name == fileInfo.Name &&
+														  a.Path == fileInfo.Path);
+				if (template != null)
+				{
+					_files.Remove(template);
+				}
+			}
+
+			OnPropertyChanged(nameof(Files));
+			OnPropertyChanged(nameof(IsValid));
+			OnPropertyChanged(nameof(FilesStatusLabel));
+		}
+
+		private void Ok(object parameter)
+		{
 			try
 			{
 				ProgressIsVisible = true;
 
-				ExportPath = Path.GetDirectoryName(_selectedProjectFiles.FirstOrDefault()?.LocalFilePath);
-				ProcessingDateTime = DateTime.Now;
-				var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
-				LogFilePath = Path.Combine(ExportPath, logFileName);
-
 				var task = Task.Run(ImportFiles);
 				task.ContinueWith(t =>
 				{
+					ExportPath = Path.GetDirectoryName(task.Result.FirstOrDefault()?.FilePath);
+					ProcessingDateTime = DateTime.Now;
+					var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
+					LogFilePath = Path.Combine(ExportPath, logFileName);
+
 					var failCount = task.Result.Count(a => !a.Success);
 
 					WriteLogFile(t.Result, Files.ToList(), LogFilePath);
@@ -269,7 +305,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 					DialogResult = DialogResult.OK;
 					AttemptToCloseWindow();
-
 				});
 			}
 			catch (Exception e)
@@ -319,7 +354,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 							fileIndex++;
 							sr.WriteLine(PluginResources.LogFile_Label_File_Number_Path, fileIndex, result.FilePath);
 							sr.WriteLine(PluginResources.LogFile_Label_Tab_Success + result.Success);
-							sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (result.UpdatedSegments > 0 
+							sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (result.UpdatedSegments > 0
 								? PluginResources.Label_True : PluginResources.Label_False));
 							if (result.UpdatedSegments > 0)
 							{
@@ -481,13 +516,19 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private async Task<List<ImportResult>> ImportFiles()
 		{
 			var importResults = new List<ImportResult>();
-
 			var importFiles = Files.Select(a => a.FullPath);
 			var updatedSegmentPairs = GetUpdatedSegmentPairs(importFiles, _sdlxliffReader);
-
 			var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 
-			foreach (var selectedFile in _selectedProjectFiles)
+			var projectFiles = GetProjectFiles(updatedSegmentPairs, _sdlxliffReader);
+
+			var missingFiles = projectFiles.Any(file => file.LocalFileState == LocalFileState.Missing);
+			if (missingFiles)
+			{
+				throw new Exception(PluginResources.Message_Missing_Project_Files_Download_From_Server);
+			}
+
+			foreach (var selectedFile in projectFiles)
 			{
 				var updatedFilePath = Path.GetTempFileName();
 				var importResult = _sdlxliffImporter.UpdateFile(updatedSegmentPairs, excludeFilterIds, selectedFile.LocalFilePath, updatedFilePath);
@@ -495,6 +536,29 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			return await Task.FromResult(new List<ImportResult>(importResults));
+		}
+
+		private IEnumerable<ProjectFile> GetProjectFiles(IReadOnlyCollection<SegmentPairInfo> updatedSegmentPairs, 
+			SdlxliffReader sdlXliffReader)
+		{
+			var projectFiles = new List<ProjectFile>();
+			var project = _filesController.CurrentProject;
+			
+			foreach (var targetLanguageFile in project.GetTargetLanguageFiles(_language))
+			{
+				if (targetLanguageFile.Role != FileRole.Translatable)
+				{
+					continue;
+				}
+
+				var segmentPairs = sdlXliffReader.GetSegmentPairs(targetLanguageFile.LocalFilePath);
+				if (updatedSegmentPairs.Any(updatedSegmentPair => segmentPairs.Exists(a => a.ParagraphUnitId == updatedSegmentPair.ParagraphUnitId)))
+				{
+					projectFiles.Add(targetLanguageFile);
+				}
+			}
+			
+			return projectFiles;
 		}
 
 		private List<SegmentPairInfo> GetUpdatedSegmentPairs(IEnumerable<string> importFiles, SdlxliffReader sdlXliffReader)

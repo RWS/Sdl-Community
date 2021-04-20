@@ -2,32 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Sdl.Community.StudioViews.Extensions;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.StudioViews.Providers
 {
 	public class ParagraphUnitProvider
 	{
 		private readonly SegmentVisitor _segmentVisitor;
+		private readonly FilterItemService _filterItemService;
+		private readonly SegmentBuilder _segmentBuilder;
 
-		public ParagraphUnitProvider(SegmentVisitor segmentVisitor)
+		public ParagraphUnitProvider(SegmentVisitor segmentVisitor, FilterItemService filterItemService)
 		{
 			_segmentVisitor = segmentVisitor;
+			_filterItemService = filterItemService;
+			_segmentBuilder = new SegmentBuilder();
 		}
 
-		public IParagraphUnit GetUpdatedParagraphUnit(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight)
+		public ParagraphUnitResult GetUpdatedParagraphUnit(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight,
+			List<string> excludeFilterIds)
 		{
-			if (!(paragraphUnitLeft.Clone() is IParagraphUnit paragraphUnit))
+			if (paragraphUnitLeft == null)
 			{
 				return null;
 			}
 
-			paragraphUnit.Properties = paragraphUnitRight.Properties;
-
-			paragraphUnit.Source.Clear();
-			paragraphUnit.Target.Clear();
+			var result = new ParagraphUnitResult
+			{
+				Paragraph = paragraphUnitLeft.Clone() as IParagraphUnit
+			};
+			if (result.Paragraph == null)
+			{
+				return null;
+			}
+			
+			result.Paragraph.Properties = paragraphUnitRight.Properties.Clone() as IParagraphUnitProperties;
+			result.Paragraph.Source.Clear();
+			result.Paragraph.Target.Clear();
 
 			var alignments = GetSegmentPairAlignments(paragraphUnitLeft, paragraphUnitRight);
 			foreach (var alignmentInfo in alignments)
@@ -36,29 +51,52 @@ namespace Sdl.Community.StudioViews.Providers
 				{
 					case AlignmentInfo.AlignmentType.Added:
 					case AlignmentInfo.AlignmentType.Matched:
-						foreach (var segment in alignmentInfo.SegmentPairRight.Source)
+						var isExcluded = SegmentIsExcluded(excludeFilterIds, alignmentInfo.SegmentPairLeft);
+						if (isExcluded)
 						{
-							paragraphUnit.Source.Add(segment.Clone() as IAbstractMarkupData);
+							result.ExcludedSegments++;
+							result.Paragraph.Source.AddSegment(alignmentInfo.SegmentPairLeft.Source, _segmentBuilder);
+							result.Paragraph.Target.AddSegment(alignmentInfo.SegmentPairLeft.Target, _segmentBuilder);
 						}
-						foreach (var segment in alignmentInfo.SegmentPairRight.Target)
+						else
 						{
-							paragraphUnit.Target.Add(segment.Clone() as IAbstractMarkupData);
+							if (!IsSame(alignmentInfo.SegmentPairLeft?.Target, alignmentInfo.SegmentPairRight.Target))
+							{
+								result.UpdatedSegments++;
+							}
+
+							result.Paragraph.Source.AddSegment(alignmentInfo.SegmentPairRight.Source, _segmentBuilder);
+							result.Paragraph.Target.AddSegment(alignmentInfo.SegmentPairRight.Target, _segmentBuilder);
 						}
 						break;
 					case AlignmentInfo.AlignmentType.LeftOnly:
-						foreach (var segment in alignmentInfo.SegmentPairLeft.Source)
-						{
-							paragraphUnit.Source.Add(segment.Clone() as IAbstractMarkupData);
-						}
-						foreach (var segment in alignmentInfo.SegmentPairLeft.Target)
-						{
-							paragraphUnit.Target.Add(segment.Clone() as IAbstractMarkupData);
-						}
+						result.Paragraph.Source.AddSegment(alignmentInfo.SegmentPairLeft.Source, _segmentBuilder);
+						result.Paragraph.Target.AddSegment(alignmentInfo.SegmentPairLeft.Target, _segmentBuilder);
 						break;
 				}
 			}
 
-			return paragraphUnit;
+			return result;
+		}
+
+		private bool SegmentIsExcluded(List<string> excludeFilterIds, ISegmentPair segmentPair)
+		{
+			var segmentIsExcluded = false;
+			if (segmentPair != null && excludeFilterIds?.Count > 0)
+			{
+				var status = segmentPair.Properties.ConfirmationLevel.ToString();
+				var match = _filterItemService.GetTranslationOriginType(
+					segmentPair.Target.Properties.TranslationOrigin);
+
+				if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
+					|| excludeFilterIds.Exists(a => a == status)
+					|| excludeFilterIds.Exists(a => a == match))
+				{
+					segmentIsExcluded = true;
+				}
+			}
+
+			return segmentIsExcluded;
 		}
 
 		public List<AlignmentInfo> GetSegmentPairAlignments(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight)
@@ -127,7 +165,7 @@ namespace Sdl.Community.StudioViews.Providers
 						SortId = GetSortId(segmentId),
 						SegmentId = segmentId,
 						Alignment = AlignmentInfo.AlignmentType.Added,
-						SegmentPairLeft = null, 
+						SegmentPairLeft = null,
 						SegmentPairRight = segmentPairRight
 					});
 				}
@@ -142,16 +180,16 @@ namespace Sdl.Community.StudioViews.Providers
 			{
 				return alignments;
 			}
-			
+
 			var sourceRight = string.Empty;
 			var sourceLeft = string.Empty;
 
 			foreach (var alignmentInfo in alignments)
 			{
 				if (alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Matched ||
-				    alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Removed ||
-				    alignmentInfo.Alignment == AlignmentInfo.AlignmentType.LeftOnly ||
-				    alignmentInfo.Alignment == AlignmentInfo.AlignmentType.None)
+					alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Removed ||
+					alignmentInfo.Alignment == AlignmentInfo.AlignmentType.LeftOnly ||
+					alignmentInfo.Alignment == AlignmentInfo.AlignmentType.None)
 				{
 					_segmentVisitor.VisitSegment(alignmentInfo.SegmentPairLeft.Source);
 					sourceLeft += RemoveWhiteSpaces(_segmentVisitor.Text);
@@ -165,7 +203,7 @@ namespace Sdl.Community.StudioViews.Providers
 				}
 
 				if (alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Added ||
-				    alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Matched)
+					alignmentInfo.Alignment == AlignmentInfo.AlignmentType.Matched)
 				{
 					_segmentVisitor.VisitSegment(alignmentInfo.SegmentPairRight.Source);
 					sourceRight += RemoveWhiteSpaces(_segmentVisitor.Text);
@@ -196,6 +234,23 @@ namespace Sdl.Community.StudioViews.Providers
 			}
 
 			return segmentId.PadLeft(6, '0');
+		}
+
+		private static bool IsSame(ISegment segment, ISegment updatedSegment)
+		{
+			var originalTarget = segment?.ToString();
+			var updatedTarget = updatedSegment?.ToString();
+
+			var isSame = (originalTarget == updatedTarget) &&
+						 (segment?.Properties.IsLocked == updatedSegment?.Properties.IsLocked) &&
+						 (segment?.Properties.ConfirmationLevel == updatedSegment?.Properties.ConfirmationLevel);
+
+			return isSame;
+		}
+
+		private static bool IsEmpty(ISegment segment)
+		{
+			return segment == null || segment.ToString().Trim() == string.Empty;
 		}
 	}
 }

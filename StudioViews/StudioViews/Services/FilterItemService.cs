@@ -10,6 +10,13 @@ namespace Sdl.Community.StudioViews.Services
 {
 	public class FilterItemService
 	{
+		private readonly List<AnalysisBand> _analysisBands;
+		
+		public FilterItemService(List<AnalysisBand> analysisBands)
+		{
+			_analysisBands = analysisBands;
+		}
+		
 		public enum MatchType
 		{
 			None,
@@ -24,7 +31,7 @@ namespace Sdl.Community.StudioViews.Services
 			PM
 		}
 
-		public string GetTranslationOriginType(ITranslationOrigin translationOrigin, List<Model.AnalysisBand> analysisBands)
+		public string GetTranslationOriginType(ITranslationOrigin translationOrigin)
 		{
 			if (translationOrigin != null)
 			{
@@ -65,7 +72,7 @@ namespace Sdl.Community.StudioViews.Services
 
 				if (translationOrigin.MatchPercent > 0)
 				{
-					foreach (var analysisBand in analysisBands)
+					foreach (var analysisBand in _analysisBands)
 					{
 						if (translationOrigin.MatchPercent >= analysisBand.MinimumMatchValue &&
 							translationOrigin.MatchPercent <= analysisBand.MaximumMatchValue)

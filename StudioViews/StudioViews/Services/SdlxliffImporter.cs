@@ -12,15 +12,13 @@ namespace Sdl.Community.StudioViews.Services
 	{
 		private readonly ProjectFileService _projectFileService;
 		private readonly FilterItemService _filterItemService;
-		private readonly List<AnalysisBand> _analysisBands;
 		private readonly ParagraphUnitProvider _paragraphUnitProvider;
 
-		public SdlxliffImporter(ProjectFileService projectFileService, FilterItemService filterItemService,
-			List<AnalysisBand> analysisBands, ParagraphUnitProvider paragraphUnitProvider)
+		public SdlxliffImporter(ProjectFileService projectFileService, FilterItemService filterItemService, 
+			ParagraphUnitProvider paragraphUnitProvider)
 		{
 			_projectFileService = projectFileService;
 			_filterItemService = filterItemService;
-			_analysisBands = analysisBands;
 			_paragraphUnitProvider = paragraphUnitProvider;
 		}
 
@@ -30,7 +28,7 @@ namespace Sdl.Community.StudioViews.Services
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
 			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds,
-				_filterItemService, _analysisBands, _paragraphUnitProvider);
+				_filterItemService, _paragraphUnitProvider);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();
