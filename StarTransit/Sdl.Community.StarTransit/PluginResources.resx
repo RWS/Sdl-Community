@@ -271,4 +271,13 @@
   <data name="Tm_NoTmAvailableMessage" xml:space="preserve">
     <value>Selected Transit package does not contain any TM</value>
   </data>
+  <data name="Wizard_CreateProj_DisplayName" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="Wizard_CreateProj_Tooltip" xml:space="preserve">
+    <value>Create Trados Studio Project</value>
+  </data>
+  <data name="CreateProject_Btn" xml:space="preserve">
+    <value>Create project</value>
+  </data>
 </root>

@@ -101,6 +101,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create project.
+        /// </summary>
+        public static string CreateProject_Btn {
+            get {
+                return ResourceManager.GetString("CreateProject_Btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon CreateProjectPackage_Icon {
@@ -452,6 +461,24 @@ namespace Sdl.Community.StarTransit {
         public static string WindowsControl_Minimize {
             get {
                 return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create project.
+        /// </summary>
+        public static string Wizard_CreateProj_DisplayName {
+            get {
+                return ResourceManager.GetString("Wizard_CreateProj_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Trados Studio Project.
+        /// </summary>
+        public static string Wizard_CreateProj_Tooltip {
+            get {
+                return ResourceManager.GetString("Wizard_CreateProj_Tooltip", resourceCulture);
             }
         }
         

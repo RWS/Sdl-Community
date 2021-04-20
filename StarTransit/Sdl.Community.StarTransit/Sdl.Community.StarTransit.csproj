@@ -183,10 +183,14 @@
       <DependentUpon>WizardProgressHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="VersionInfo.cs" />
+    <Compile Include="ViewModel\CreateProjectViewModel.cs" />
     <Compile Include="ViewModel\PackageDetailsViewModel.cs" />
     <Compile Include="ViewModel\TmsViewModel.cs" />
     <Compile Include="ViewModel\WizardViewModel.cs" />
     <Compile Include="ViewModel\WizardViewModelBase.cs" />
+    <Compile Include="View\CreateProject.xaml.cs">
+      <DependentUpon>CreateProject.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ImportWizard.xaml.cs">
       <DependentUpon>ImportWizard.xaml</DependentUpon>
     </Compile>
@@ -270,6 +274,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UiHelpers\WizardProgressHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CreateProject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

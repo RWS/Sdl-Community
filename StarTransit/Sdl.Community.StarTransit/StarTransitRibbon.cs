@@ -48,7 +48,8 @@ namespace Sdl.Community.StarTransit
 			{
 				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,
 					new PackageDetails()),
-				new TmsViewModel(wizardModel,fileDialogService,new Tms())
+				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
+				new CreateProjectViewModel(wizardModel,new CreateProject())
 			};
 		}
 

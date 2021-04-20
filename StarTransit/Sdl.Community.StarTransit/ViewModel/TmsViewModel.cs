@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -38,8 +34,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_tooltip = PluginResources.Wizard_Tms_Tooltip;
 			_wizardModel = wizardModel;
 			IsPreviousEnabled = true;
+			IsNextEnabled = true;
 			_fileDialogService = fileDialogService;
 			_checkAll = false;
+			_isValid = true;
 			PropertyChanged += TmsViewModelChanged;
 		}
 

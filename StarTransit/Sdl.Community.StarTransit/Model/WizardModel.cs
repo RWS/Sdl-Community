@@ -42,10 +42,7 @@ namespace Sdl.Community.StarTransit.Model
 				OnPropertyChanged(nameof(PackageModel));
 			}
 		}
-
-		public List<StarTranslationMemoryMetadata> TmsForMainTm { get; set; }
-		public List<StarTranslationMemoryMetadata> IndividualTms { get; set; }
-
+		
 		public List<ProjectTemplateInfo> ProjectTemplates
 		{
 			get => _projectTemplates;

@@ -179,6 +179,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							TargetLanguage = targetCultureInfo,
 							TargetFlag = new Language(targetCultureInfo).GetFlagImage(),
 							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage(),
+							TmsForMainTm = new List<StarTranslationMemoryMetadata>(),
+							IndividualTms = new List<StarTranslationMemoryMetadata>(),
 							NoTm = true
 						};
 						languagePairList.Add(pair);
