@@ -170,6 +170,7 @@
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
+    <Compile Include="Events\VoidEventHandler.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
     <Compile Include="Helpers\TaskUtilities.cs" />
@@ -187,10 +188,10 @@
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\FileAndSegmentIds.cs" />
     <Compile Include="Model\MetadataTransferObject.cs" />
+    <Compile Include="Model\QualityEstimation.cs" />
     <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
-    <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
     <Compile Include="Model\FeedbackSendingStatus.cs" />
     <Compile Include="Model\Feedback.cs" />

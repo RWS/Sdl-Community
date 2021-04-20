@@ -37,6 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _feedback;
 		private ICommand _clearCommand;
 		private bool? _autoSendFeedback;
+		private QualityEstimation _evaluation = new();
 
 		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService, EditorController editorController)
 		{
@@ -187,11 +188,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var rating = GetRatingObject(segmentId);
 			var responseMessage = await _translationService.SendFeedback(segmentId, rating, improvement?.OriginalMtCloudTranslation,
-				suggestionReplacement ?? improvement?.Suggestion);
+				suggestionReplacement ?? improvement?.Suggestion, Evaluation);
 
 			FeedbackSendingStatus.ChangeStatus(responseMessage);
 			OnFeedbackSendingStatusChanged();
 		}
+
+		public QualityEstimation Evaluation
+		{
+			get => _evaluation;
+			set
+			{
+				_evaluation = value;
+				OnPropertyChanged(nameof(Evaluation));
+			}
+		} 
 
 		private void OnFeedbackSendingStatusChanged()
 		{
@@ -243,29 +254,29 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			switch (sender)
 			{
 				case FeedbackOption feedbackOption:
+				{
+					if (RateItControlProperties.Contains(feedbackOption.OptionName))
 					{
-						if (RateItControlProperties.Contains(feedbackOption.OptionName))
-						{
-							isResetNeeded = true;
-						}
-						break;
+						isResetNeeded = true;
 					}
+					break;
+				}
 				case RateItViewModel _:
+				{
+					if (RateItControlProperties.Contains(e.PropertyName))
 					{
-						if (RateItControlProperties.Contains(e.PropertyName))
-						{
-							isResetNeeded = true;
-						}
-						break;
+						isResetNeeded = true;
 					}
+					break;
+				}
 				case Document _:
+				{
+					if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
 					{
-						if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
-						{
-							isResetNeeded = true;
-						}
-						break;
+						isResetNeeded = true;
 					}
+					break;
+				}
 			}
 			return isResetNeeded;
 		}
@@ -335,6 +346,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetShortcutService();
 
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+			MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged += MetadataSupervisor_ActiveSegmentQeChanged;
 
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
@@ -355,6 +367,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			RateItControlProperties.Add(nameof(Rating));
 
 			PropertyChanged += RateItViewModel_PropertyChanged;
+		}
+
+		private void MetadataSupervisor_ActiveSegmentQeChanged(string qualityEstimation)
+		{
+			Evaluation.OriginalEstimation = qualityEstimation;
 		}
 
 		private void RateItViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

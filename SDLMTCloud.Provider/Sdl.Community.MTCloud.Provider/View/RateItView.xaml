@@ -28,6 +28,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboboxResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Textboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>
@@ -128,29 +129,58 @@
 					  Grid.Row="1" Grid.Column="0" MaxLines="3" Text="{Binding FeedbackMessage,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"/>
-			<Button Grid.Row="1"
-					IsDefault="True"
-					Name="SendFeedbackButton"
-					Grid.Column="1"
-					Margin="10 0 10 0"
-					Cursor="Hand"
-					HorizontalAlignment="Stretch"
-					HorizontalContentAlignment="Stretch"
-					IsEnabled="{Binding IsSendFeedbackEnabled}"
-					Style="{StaticResource FeedbackButtonStyle}"
-					Command="{Binding SendFeedbackCommand}"
-					ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
-				<DockPanel LastChildFill="False">
-					<TextBlock Margin="0 0 10 0"
-						       DockPanel.Dock="Left"
-						       Text="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" />
-					<Image DockPanel.Dock="Right"
-						   HorizontalAlignment="Right"
-						   Style="{StaticResource FeedbackStatusImageStyle}"
-						   ToolTip="{Binding FeedbackSendingStatus.Message}">
-					</Image>
-				</DockPanel>
-			</Button>
+			<DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="False">
+				<!--Visibility="{Binding QEEnabled}"-->
+				<Border CornerRadius="4" Margin="5 0 0 0" BorderThickness="0.6" BorderBrush="#AF000000">
+					<ComboBox Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+					          Text="Reevaluation"
+					          SelectedIndex="{Binding Evaluation.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<ComboBoxItem Name="GoodQe"
+						              Content="Good" Foreground="#11A200" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						<ComboBoxItem Name="AdequateQe"
+						              Content="Adequate" Foreground="#F09C00" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						<ComboBoxItem Name="PoorQe"
+						              Content="Poor" Foreground="#FF4848" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+					</ComboBox>
+					<Border.Style>
+						<Style TargetType="{x:Type Border}">
+							<Setter Property="Background" Value="#B7B7DB" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding Evaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.GoodQuality}">
+									<Setter Property="Background" Value="#11A200" />
+								</DataTrigger>
+								<DataTrigger Binding="{Binding Evaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.AdequateQuality}">
+									<Setter Property="Background" Value="#F09C00" />
+								</DataTrigger>
+								<DataTrigger Binding="{Binding Evaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.PoorQuality}">
+									<Setter Property="Background" Value="#FF4848" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Border.Style>
+				</Border>
+				<Button IsDefault="True"
+				        Name="SendFeedbackButton"
+				        Margin="5 0 10 0"
+				        Cursor="Hand"
+				        HorizontalAlignment="Stretch"
+				        HorizontalContentAlignment="Stretch"
+				        IsEnabled="{Binding IsSendFeedbackEnabled}"
+				        Style="{StaticResource FeedbackButtonStyle}"
+				        Command="{Binding SendFeedbackCommand}"
+				        ToolTip="{x:Static rsx:PluginResources.SendFeedback_ButtonTooltip}">
+					<DockPanel LastChildFill="False">
+						<TextBlock Margin="0 0 10 0"
+						           DockPanel.Dock="Left"
+						           Text="{x:Static rsx:PluginResources.RateIt_FeedbackBtn}" />
+						<Image DockPanel.Dock="Right"
+						       HorizontalAlignment="Right"
+						       Style="{StaticResource FeedbackStatusImageStyle}"
+						       ToolTip="{Binding FeedbackSendingStatus.Message}">
+						</Image>
+					</DockPanel>
+				</Button>
+			</DockPanel>
 			<!--TODO:Continue with adding the symbol when the button is collapsed-->
 		</Grid>
 	</ScrollViewer>

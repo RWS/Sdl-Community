@@ -88,7 +88,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			try
 			{
 				var jObj = JToken.Parse(value);
-				message = jObj["status"]["description"].ToString();
+				message = jObj?["status"]?["description"]?.ToString();
 			}
 			catch
 			{

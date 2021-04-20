@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
@@ -53,14 +54,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
+		public event QeEventHandler ActiveSegmentQeChanged;
+
 		public void StartSupervising(ITranslationService translationService)
 		{
-			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 
 			if (ActiveDocument != null)
 			{
 				ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 				ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+				ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+				ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 			}
 
 			_translationService = translationService;
@@ -70,7 +74,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				_translationService.TranslationReceived += TranslationService_TranslationReceived;
 			}
 
+			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+		}
+
+		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
+		{
+			var segmentId = ActiveDocument.ActiveSegmentPair.Properties.Id;
+			if (ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData))
+			{
+				ActiveSegmentQeChanged?.Invoke(targetSegmentData.TranslationOriginInformation.QualityEstimation);
+			}
 		}
 
 		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin, bool lookInPrevious = false)
@@ -125,6 +139,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (ActiveDocumentData.TryGetValue(ActiveDocument.ActiveSegmentPair.Properties.Id, out var targetData))
 			{
 				_segmentMetadataCreator.AddToCurrentSegmentContextData(ActiveDocument, targetData.TranslationOriginInformation);
+				ActiveSegmentQeChanged?.Invoke(targetData.TranslationOriginInformation.QualityEstimation);
 			}
 		}
 
@@ -139,7 +154,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			if (ActiveDocument == null) return;
 			SetIdAndActiveFile();
+			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+			ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 		}
 
 		private void SetBatchProcessingWindow()

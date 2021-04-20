@@ -18,7 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		Task<SubscriptionInfo> GetLanguagePairs();
 
-		Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement);
+		Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement, QualityEstimation qualityEstimation);
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
 		Task AddTermToDictionary(Term term);
