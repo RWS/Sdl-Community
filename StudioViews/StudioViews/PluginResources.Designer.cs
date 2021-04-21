@@ -558,7 +558,7 @@ namespace Sdl.Community.StudioViews {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to import translations with alignment differences to the segment structure while the document is open the editor..
+        ///   Looks up a localized string similar to Unable to import translations with alignment differences to the segment structure while the document is open in the editor..
         /// </summary>
         internal static string Message_UnableToImportTranslationsFromEditor {
             get {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sdl.Community.StudioViews.Common;
 using Sdl.Community.StudioViews.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -9,12 +10,12 @@ namespace UnitTests.Utils
 	public class ParagraphUnitHelper
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		
+
 		public ParagraphUnitHelper(SegmentBuilder segmentBuilder)
 		{
 			_segmentBuilder = segmentBuilder;
 		}
-		
+
 		public ISegmentPair GetSegmentPair(string segmentId, string sourceText, string targetText)
 		{
 			var segmentPairProperties = _segmentBuilder.CreateSegmentPairProperties();
@@ -30,6 +31,32 @@ namespace UnitTests.Utils
 
 			var segmentPair = _segmentBuilder.CreateSegmentPair(sourceSegment, targetSegment);
 			return segmentPair;
+		}
+
+		public void SetMergedParagraphMarker(ISegmentPair segmentPair)
+		{
+			var translationOrigin = segmentPair.Properties.TranslationOrigin ?? _segmentBuilder.CreateTranslationOrigin();
+			if (translationOrigin != null)
+			{
+				translationOrigin.OriginSystem = Constants.MergedParagraph;
+			}
+
+			segmentPair.Properties.TranslationOrigin = translationOrigin;
+			segmentPair.Properties.IsLocked = true;
+		}
+
+		public void SetMergedParagraphMetaData(ISegmentPair segmentPair)
+		{
+			var translationOrigin = segmentPair.Properties.TranslationOrigin ?? _segmentBuilder.CreateTranslationOrigin();
+			if (translationOrigin != null)
+			{
+				if (!translationOrigin.MetaDataContainsKey("MergeStatus"))
+				{
+					translationOrigin.SetMetaData("MergeStatus", "MergedParagraph");
+				}
+			}
+
+			segmentPair.Properties.TranslationOrigin = translationOrigin;
 		}
 
 		public IParagraphUnit CreateParagraph(IEnumerable<ISegmentPair> segmentPairs)

@@ -41,9 +41,10 @@ namespace Sdl.Community.StudioViews
 			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
 			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
+			var displayFilter = new DisplayFilter();
 
-			var model = new StudioViewsEditorViewModel(_editorController, filterItemService, projectHelper,
-				commonService, sdlxliffMerger, sdlxliffExporter, sdlXliffReader, paragraphUnitProvider);
+			var model = new StudioViewsEditorViewModel(_editorController, filterItemService,
+				commonService, sdlxliffMerger, sdlxliffExporter, sdlXliffReader, paragraphUnitProvider, displayFilter);
 
 			_control = new StudioViewsEditorView { DataContext = model };
 		}

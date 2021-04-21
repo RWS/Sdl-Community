@@ -79,26 +79,6 @@ namespace Sdl.Community.StudioViews.Providers
 			return result;
 		}
 
-		private bool SegmentIsExcluded(List<string> excludeFilterIds, ISegmentPair segmentPair)
-		{
-			var segmentIsExcluded = false;
-			if (segmentPair != null && excludeFilterIds?.Count > 0)
-			{
-				var status = segmentPair.Properties.ConfirmationLevel.ToString();
-				var match = _filterItemService.GetTranslationOriginType(
-					segmentPair.Target.Properties.TranslationOrigin);
-
-				if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
-					|| excludeFilterIds.Exists(a => a == status)
-					|| excludeFilterIds.Exists(a => a == match))
-				{
-					segmentIsExcluded = true;
-				}
-			}
-
-			return segmentIsExcluded;
-		}
-
 		public List<AlignmentInfo> GetSegmentPairAlignments(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight)
 		{
 			var alignments = new List<AlignmentInfo>();
@@ -216,6 +196,26 @@ namespace Sdl.Community.StudioViews.Providers
 			}
 
 			return alignments;
+		}
+
+		private bool SegmentIsExcluded(List<string> excludeFilterIds, ISegmentPair segmentPair)
+		{
+			var segmentIsExcluded = false;
+			if (segmentPair != null && excludeFilterIds?.Count > 0)
+			{
+				var status = segmentPair.Properties.ConfirmationLevel.ToString();
+				var match = _filterItemService.GetTranslationOriginType(
+					segmentPair.Target.Properties.TranslationOrigin);
+
+				if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
+				    || excludeFilterIds.Exists(a => a == status)
+				    || excludeFilterIds.Exists(a => a == match))
+				{
+					segmentIsExcluded = true;
+				}
+			}
+
+			return segmentIsExcluded;
 		}
 
 		private static string RemoveWhiteSpaces(string input)

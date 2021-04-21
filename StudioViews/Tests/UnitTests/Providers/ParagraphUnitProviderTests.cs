@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.StudioViews.Common;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
@@ -31,6 +32,51 @@ namespace UnitTests.Providers
 			_paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
 		}
 
+		[Fact]
+		public void GetUpdatedParagraphUnit_ReturnsEqual_WhenMergeAcrossParagraphs()
+		{
+			// arrange
+			var segmentPairs1 = new List<ISegmentPair>
+			{
+				_paragraphUnitHelper.GetSegmentPair("1", "Cats!", string.Empty),
+				_paragraphUnitHelper.GetSegmentPair("2", " and", string.Empty),
+				_paragraphUnitHelper.GetSegmentPair("3", " Dogs!", string.Empty),
+				_paragraphUnitHelper.GetSegmentPair("4", "Jack and Jill", string.Empty)
+			};
+			var paragraphUnit1 = _paragraphUnitHelper.CreateParagraph(segmentPairs1);
+
+			var segmentPairs2 = new List<ISegmentPair>
+			{
+				_paragraphUnitHelper.GetSegmentPair("1", "Cats! and Dogs!", "Gatti! e Cani!"),
+				_paragraphUnitHelper.GetSegmentPair("2", "", ""),
+				_paragraphUnitHelper.GetSegmentPair("3", "", ""),
+				_paragraphUnitHelper.GetSegmentPair("4", "Jack and Jill", "Jack e Jill") 
+			};
+			_paragraphUnitHelper.SetMergedParagraphMetaData(segmentPairs2[0]);
+			_paragraphUnitHelper.SetMergedParagraphMarker(segmentPairs2[1]);
+			_paragraphUnitHelper.SetMergedParagraphMarker(segmentPairs2[2]);
+			var paragraphUnit2 = _paragraphUnitHelper.CreateParagraph(segmentPairs2);
+
+			// act
+			var result = _paragraphUnitProvider.GetUpdatedParagraphUnit(paragraphUnit1, paragraphUnit2, new List<string>());
+
+			// assert
+			// confirm that the same amount of ISegments exist in source and target
+			Assert.Equal(4, result.Paragraph.SegmentPairs.Count());
+
+			// confirm tha the MergedParagraph markers exists and in the correct locations
+			Assert.Equal(result.Paragraph.SegmentPairs.ToList()[0].Properties.TranslationOrigin.GetMetaData("MergeStatus"), Constants.MergedParagraph);
+			Assert.Equal(result.Paragraph.SegmentPairs.ToList()[1].Properties.TranslationOrigin.OriginSystem, Constants.MergedParagraph);
+			Assert.Equal(result.Paragraph.SegmentPairs.ToList()[2].Properties.TranslationOrigin.OriginSystem, Constants.MergedParagraph);
+
+			// confirm that the first 3 segments from the input are exactly the same as the content returned in  the merged segment
+			var sourceLeft = segmentPairs1[0].Source.FirstOrDefault()?.ToString() + 
+			                 segmentPairs1[1].Source.FirstOrDefault() +
+			                 segmentPairs1[2].Source.FirstOrDefault();
+			var sourceRight = result.Paragraph.SegmentPairs.FirstOrDefault()?.Source.FirstOrDefault()?.ToString();
+			Assert.Equal(sourceLeft, sourceRight);
+		}
+		
 		[Fact]
 		public void GetUpdatedParagraphUnit_ReturnsEqual_WhenMultipleSegmentsAreSplitAndMerged()
 		{
