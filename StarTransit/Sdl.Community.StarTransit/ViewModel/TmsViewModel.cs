@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -26,6 +28,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private ICommand _selectTmCommand;
 		private ICommand _removeTmCommand;
 		private readonly IOpenFileDialogService _fileDialogService;
+		private string _initialFolderPath;
 
 		public TmsViewModel(IWizardModel wizardModel,IOpenFileDialogService fileDialogService, object view) : base(view)
 		{
@@ -38,6 +41,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_fileDialogService = fileDialogService;
 			_checkAll = false;
 			_isValid = true;
+			var studioVersion = new StudioVersionService().GetStudioVersion();
+
+			_initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), studioVersion.StudioDocumentsFolderName, "Translation Memories");
 			PropertyChanged += TmsViewModelChanged;
 		}
 
@@ -197,12 +203,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
+
 			foreach (var languagePairsTmOption in LanguagePairsTmOptions)
 			{
 				languagePairsTmOption.SelectTmCommand = SelectTmCommand;
 				languagePairsTmOption.RemoveSelectedTmCommand = RemoveSelectedTmCommand;
-				languagePairsTmOption.ClearEventRaised -= LanguagePairsTmOption_ClearEventRaised;
-				languagePairsTmOption.ClearEventRaised += LanguagePairsTmOption_ClearEventRaised;
+				languagePairsTmOption.TmOptionChangedEventRaised -= LanguagePairsTmOption_EventRaised;
+				languagePairsTmOption.TmOptionChangedEventRaised += LanguagePairsTmOption_EventRaised;
 				foreach (var tmMetadata in languagePairsTmOption.StarTranslationMemoryMetadatas)
 				{
 					tmMetadata.PropertyChanged -= TmMetadata_PropertyChanged;
@@ -226,9 +233,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
-		private void LanguagePairsTmOption_ClearEventRaised()
+		private void LanguagePairsTmOption_EventRaised()
 		{
 			ErrorMessage = string.Empty;
+			if (SelectedLanguagePair.CreateNewTm)
+			{
+				var selectedLanguagePair =
+					$"{SelectedLanguagePair.SourceLanguage.TwoLetterISOLanguageName}-{SelectedLanguagePair.TargetLanguage.TwoLetterISOLanguageName}";
+				var tmName = $"{_wizardModel.PackageModel.Result.Name}.{selectedLanguagePair}.sdltm";
+				SelectedLanguagePair.TmName = tmName;
+				SelectedLanguagePair.TmPath = Path.Combine(_initialFolderPath, tmName);
+			}
 		}
 
 		private void RemoveTm()

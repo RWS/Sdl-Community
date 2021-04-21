@@ -13,6 +13,7 @@ namespace Sdl.Community.StarTransit.Model
 	public class WizardModel:BaseModel,IWizardModel
 	{
 		private string _studioProjectLocation;
+		private DateTime? _dueDate;
 		private Customer _selectedCustomer;
 		private ProjectTemplateInfo _selectedTemplate;
 		private AsyncTaskWatcherService<List<Customer>> _customers;
@@ -63,7 +64,16 @@ namespace Sdl.Community.StarTransit.Model
 			}
 		}
 
-		public DateTime? DueDate { get; set; }
+		public DateTime? DueDate
+		{
+			get => _dueDate;
+			set
+			{
+				if (_dueDate == value) return;
+				_dueDate = value;
+				OnPropertyChanged(nameof(DueDate));
+			}
+		}
 
 		public AsyncTaskWatcherService<List<Customer>> Customers
 		{
@@ -84,6 +94,5 @@ namespace Sdl.Community.StarTransit.Model
 				OnPropertyChanged(nameof(SelectedCustomer));
 			}
 		}
-
 	}
 }

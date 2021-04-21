@@ -14,8 +14,8 @@ namespace Sdl.Community.StarTransit.Shared.Models
 	    private bool _chooseExistingTm;
 	    private bool _noTm;
 	    private bool _createNewTm;
-	    public delegate void ClearMessageRaiser();
-	    public event ClearMessageRaiser ClearEventRaised;
+	    public delegate void TmOptionsEventRaised();
+	    public event TmOptionsEventRaised TmOptionChangedEventRaised;
 
 	    public Guid LanguagePairId { get; set; }
         public CultureInfo SourceLanguage { get; set; }
@@ -51,7 +51,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		        _noTm = value;
 		        TmName = string.Empty;
 		        TmPath = string.Empty;
-		        ClearEventRaised?.Invoke();
+		        TmOptionChangedEventRaised?.Invoke();
 				OnPropertyChanged(nameof(NoTm));
 	        }
         }
@@ -65,7 +65,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		        _createNewTm = value;
 		        TmName = string.Empty;
 		        TmPath = string.Empty;
-		        ClearEventRaised?.Invoke();
+		        TmOptionChangedEventRaised?.Invoke();
 		        OnPropertyChanged(nameof(CreateNewTm));
 	        }
         }

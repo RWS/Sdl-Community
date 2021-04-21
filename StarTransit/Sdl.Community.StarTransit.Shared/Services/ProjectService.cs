@@ -95,10 +95,22 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			fileBasedProject.Save();
 			return _messageModel;
 		}
+
 		public IProject CreateStudioProject(PackageModel transitPackage)
 		{
 			var studioProject = PrepareStudioProject(transitPackage);
+			foreach (var languagePair in transitPackage.LanguagePairs)
+			{
+				if (!languagePair.NoTm)
+				{
+					_messageModel = ImportTms(transitPackage, languagePair);
+				}
 
+				var targetFilesForLanguagePair = studioProject.AddFiles(languagePair.TargetFile.ToArray());
+				var filesIds = targetFilesForLanguagePair.GetIds();
+				_messageModel = UpdateProjectSettings(studioProject, filesIds); // runs Studio batchtask to save all the changes to the project
+			}
+			CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
 			return null;
 		}
 
@@ -237,7 +249,37 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			return _messageModel;
 		}
-		
+
+		private MessageModel ImportTms(PackageModel package, LanguagePair languagePair)
+		{
+			if (!languagePair.HasTm || string.IsNullOrEmpty(languagePair.TmPath) ||
+			    string.IsNullOrEmpty(package.Location)) return null; //TODO: investigate whan we need to return
+
+			var localProjectPath = package.Location;
+			if (languagePair.TmsForMainTm!=null && languagePair.TmsForMainTm.Any())
+			{
+				var newTmPath = Path.Combine(localProjectPath, Path.GetFileName(languagePair.TmPath));
+				var importer = new TransitTmImporter(languagePair, newTmPath, null);
+
+				importer.ImportStarTransitTm(languagePair.TmsForMainTm, package);
+				var providerRef = importer.GetTranslationProviderReference(newTmPath, languagePair);
+				_logger.Info($"-->Import lang pair Provider Reference:{providerRef?.Uri}");
+				if (providerRef == null) return null;
+				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true));
+			}
+
+			if (languagePair.IndividualTms != null && languagePair.IndividualTms.Any())
+			{
+				var tpReference = CreateTpReference(languagePair.IndividualTms, languagePair, localProjectPath, package);
+				foreach (var tpRef in tpReference)
+				{
+					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpRef.Key, true, true, true, tpRef.Value));
+				}
+			}
+
+			return null;
+		}
+
 		private void ImportLanguagePairTm(LanguagePair pair, PackageModel package)
 		{
 			if (!pair.HasTm || string.IsNullOrEmpty(pair.TmPath) || string.IsNullOrEmpty(package.Location)) return;
@@ -253,7 +295,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				if (providerRef == null) return;
 				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true));
 			}
-
+			
 			CreateSeparateTms(pair, package.Location, package);
 		}
 

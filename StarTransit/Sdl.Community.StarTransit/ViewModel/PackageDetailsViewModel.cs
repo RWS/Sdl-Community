@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
-using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
@@ -52,6 +49,18 @@ namespace Sdl.Community.StarTransit.ViewModel
 			DueDate = null;
 			_displayStartDate = DateTime.Now;
 			_errorMessage = string.Empty;
+			PropertyChanged += PackageDetailsViewModelChanged;
+		}
+
+		private void PackageDetailsViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (PackageModel.Result != null)
+			{
+				PackageModel.Result.ProjectTemplate = SelectedProjectTemplate;
+				PackageModel.Result.Customer = SelectedCustomer;
+				PackageModel.Result.DueDate = DueDate;
+				PackageModel.Result.Location = StudioProjectLocation;
+			}
 		}
 
 		public AsyncTaskWatcherService<PackageModel> PackageModel
@@ -238,6 +247,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			if(string.IsNullOrEmpty(location))return;
 
 			StudioProjectLocation = location;
+			PackageModel.Result.Location = location;
 		}
 
 		private void ValidateLocation(string location)

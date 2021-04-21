@@ -28,16 +28,16 @@ namespace Sdl.Community.StarTransit.UnitTests
 			_starTransitConfiguration = new StarTransitConfiguration(packageService);
 		}
 
-		[Fact]
-		public void CreateProject_ReceivedArgs()
-		{
-			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, "693203001_Trumpf_ID_IND.PPF").Result;
-			_projService.CreateStudioProject(packageModel);
-			//_projService.Received().Format(Arg.Any<object>());
+		//[Fact]
+		//public void CreateProject_ReceivedArgs()
+		//{
+		//	var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, "693203001_Trumpf_ID_IND.PPF").Result;
+		//	_projService.CreateStudioProject(packageModel);
+		//	//_projService.Received().Format(Arg.Any<object>());
 
-			//_projService.Received().
-			_projService.Received().CreateStudioProject(Arg.Is(packageModel));
-		}
+		//	//_projService.Received().
+		//	_projService.Received().CreateStudioProject(Arg.Is(packageModel));
+		//}
 
 
 		[Fact]
