@@ -81,7 +81,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var studioProj = Substitute.For<IProject>();
 			studioProj?.GetProjectInfo().Returns(projectInfo);
 			_projectService?.CreateNewProject(Arg.Any<ProjectInfo>(), Arg.Any<ProjectTemplateReference>()).Returns(studioProj);
-			_projectService?.UpdateProjectSettings(Arg.Any<IProject>()).Returns(messageModel);
+			_projectService?.UpdateProjectSettings(Arg.Any<IProject>(),Arg.Any<Guid[]>()).Returns(messageModel);
 		}
 	}
 }

@@ -10,6 +10,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
     public class LanguagePair:BaseViewModel
     {
 	    private string _tmName;
+	    private string _tmPath;
 	    private bool _chooseExistingTm;
 	    private bool _noTm;
 	    private bool _createNewTm;
@@ -85,14 +86,24 @@ namespace Sdl.Community.StarTransit.Shared.Models
 	        get => _tmName;
 	        set
 	        {
-		        _tmName = value;
+				if(_tmName == value)return;
+				_tmName = value;
 		        OnPropertyChanged(nameof(TmName));
 	        }
         }
 
-        public string TmPath { get; set; }
+        public string TmPath
+        {
+	        get => _tmPath;
+	        set
+	        {
+		        if (_tmPath == value) return;
+		        _tmPath = value;
+		        OnPropertyChanged(nameof(TmPath));
+	        }
+        }
 
-		public string PairNameIso { get; set; }
+        public string PairNameIso { get; set; }
         public string PairName { get; set; }
         public ICommand SelectTmCommand { get; set; }
         public ICommand RemoveSelectedTmCommand { get; set; }
