@@ -14,6 +14,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
 			string source);
 
-		Feedback GetImprovement(SegmentId? segmentId = null);
+		ImprovementFeedback GetImprovement(SegmentId? segmentId = null);
 	}
 }

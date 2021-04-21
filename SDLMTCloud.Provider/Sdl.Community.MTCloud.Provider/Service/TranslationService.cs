@@ -98,9 +98,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return await _httpClient.GetResult<SubscriptionInfo>(response);
 		}
 
-		public async Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string originalText, string improvement, QualityEstimation qualityEstimation)
+		public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)
 		{
-			var feedbackRequest = CreateFeedbackRequest(segmentId, rating, originalText, improvement, qualityEstimation);
+			var feedbackRequest = CreateFeedbackRequest(feedbackInfo);
 			return await SendFeedback(feedbackRequest);
 		}
 
@@ -236,12 +236,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return (await GetTranslationResult(id), qualityEstimation);
 		}
 
-		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement, QualityEstimation qualityEstimation)
+		private dynamic CreateFeedbackRequest(FeedbackInfo feedbackInfo)
 		{
 			var activeDocument = MtCloudApplicationInitializer.EditorController.ActiveDocument;
 
-			var segmentSource = segmentId != null
-				? activeDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
+			var segmentSource = feedbackInfo.SegmentId != null
+				? activeDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(feedbackInfo.SegmentId))?.Source.ToString()
 				: activeDocument.ActiveSegmentPair.Source.ToString();
 
 			var model = GetCorrespondingLanguageMappingModel();
@@ -250,24 +250,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			translationFeedbackRequest.SourceLanguageId = model?.SelectedSource.CodeName;
 			translationFeedbackRequest.SourceText = segmentSource;
 			translationFeedbackRequest.TargetLanguageId = model?.SelectedTarget.CodeName;
-			translationFeedbackRequest.TargetMTText = originalText;
+			translationFeedbackRequest.TargetMTText = feedbackInfo.OriginalMtCloudTranslation;
 
 			dynamic feedbackRequest = new ExpandoObject();
 
-			if (qualityEstimation?.UserChoseDifferently ?? false)
+			if (feedbackInfo.Evaluation?.UserChoseDifferently ?? false)
 			{
-				translationFeedbackRequest.QualityEstimationMt = new List<string> { qualityEstimation.OriginalEstimation };
-				feedbackRequest.QualityEstimationMT = new List<string> { qualityEstimation.UserEstimation };
+				translationFeedbackRequest.QualityEstimationMt = new List<string> { feedbackInfo.Evaluation.OriginalEstimation };
+				feedbackRequest.QualityEstimationMT = new List<string> { feedbackInfo.Evaluation.UserEstimation };
 			}
 
-			if (!string.IsNullOrWhiteSpace(improvement))
+			if (!string.IsNullOrWhiteSpace(feedbackInfo.Suggestion))
 			{
-				var improvementObject = new Improvement { Text = improvement };
+				var improvementObject = new Improvement { Text = feedbackInfo.Suggestion};
 				feedbackRequest.Improvement = improvementObject;
 			}
-			if (rating is not null)
+			if (feedbackInfo.Rating is not null)
 			{
-				feedbackRequest.Rating = rating;
+				feedbackRequest.Rating = feedbackInfo.Rating;
 			}
 			feedbackRequest.Translation = translationFeedbackRequest;
 

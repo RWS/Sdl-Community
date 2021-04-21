@@ -45,7 +45,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
 
 			var item = ActiveDocumentData[segmentId].Feedback;
-			if (item.Suggestion != improvement) item.Suggestion = improvement;
+			if (item.Improvement != improvement) item.Improvement = improvement;
 		}
 
 		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
@@ -58,19 +58,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				ActiveDocumentData[segmentId] = new TargetSegmentData
 				{
-					Feedback = new Feedback(originalTarget, source),
+					Feedback = new ImprovementFeedback(originalTarget, source),
 				};
 			}
 			else
 			{
-				ActiveDocumentData[segmentId].Feedback = new Feedback(originalTarget, source);
+				ActiveDocumentData[segmentId].Feedback = new ImprovementFeedback(originalTarget, source);
 			}
 		}
 
-		public Feedback GetImprovement(SegmentId? segmentId = null)
+		public ImprovementFeedback GetImprovement(SegmentId? segmentId = null)
 		{
 			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
-			Feedback improvement = null;
+			ImprovementFeedback improvement = null;
 
 			var segmentHasImprovement = currentSegment != null && ActiveDocumentData.ContainsKey(currentSegment.Value);
 			if (segmentHasImprovement)

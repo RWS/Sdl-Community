@@ -226,7 +226,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			return comments;
 		}
 
-		private Feedback GetImprovement(SegmentId? segmentId = null)
+		private ImprovementFeedback GetImprovement(SegmentId? segmentId = null)
 		{
 			return _segmentSupervisor.GetImprovement(segmentId);
 		}
@@ -400,10 +400,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			DefaultFeedbackSendingStatus();
 			if (!IsSendFeedbackEnabled) return;
-			var improvement = GetImprovement(segmentId);
+			var suggestion = GetImprovement(segmentId);
 
 			//Checking for consistency: whether translation corresponds to source
-			if (improvement != null && improvement.OriginalSource != GetSourceSegment(segmentId))
+			if (suggestion != null && suggestion.OriginalSource != GetSourceSegment(segmentId))
 			{
 				_messageBoxService.ShowWarningMessage(
 					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName), PluginResources.SourceModified);
@@ -412,16 +412,25 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			string suggestionReplacement = null;
-			if (segmentId == null && improvement != null && improvement.Suggestion == null)
+			if (segmentId == null && suggestion != null && suggestion.Improvement == null)
 			{
 				suggestionReplacement = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
 			}
 
 			var rating = GetRatingObject(segmentId);
-			var responseMessage = await _translationService.SendFeedback(segmentId, rating, improvement?.OriginalMtCloudTranslation,
-				suggestionReplacement ?? improvement?.Suggestion, Evaluation);
 
-			FeedbackSendingStatus.ChangeStatus(responseMessage);
+			var feedbackInfo = new FeedbackInfo
+			{
+				Evaluation = Evaluation,
+				Rating = rating,
+				SegmentId = segmentId,
+				Suggestion = suggestionReplacement ?? suggestion?.Improvement,
+				OriginalMtCloudTranslation = suggestion?.OriginalMtCloudTranslation
+			};
+
+			var responseMessage = await _translationService.SendFeedback(feedbackInfo);
+
+			await FeedbackSendingStatus.ChangeStatus(responseMessage);
 			OnFeedbackSendingStatusChanged();
 		}
 
