@@ -25,7 +25,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			set
 			{
 				_originalEstimation = value;
-				Index = Qualifiers[_originalEstimation];
+				Index = _originalEstimation is not null ? Qualifiers[_originalEstimation] : null;
 				OnPropertyChanged(nameof(OriginalEstimation));
 			}
 		}

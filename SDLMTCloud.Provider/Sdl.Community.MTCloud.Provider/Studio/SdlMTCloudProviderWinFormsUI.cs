@@ -45,8 +45,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
 
-				var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
-				eventAggregator.Publish(new TranslationProviderAdded());
+				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
 
 				connectionService.SaveCredential(credentialStore);
 
