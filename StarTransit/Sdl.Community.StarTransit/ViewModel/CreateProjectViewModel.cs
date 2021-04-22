@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -109,7 +110,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 		public ICommand CreateProjectCommand =>
 			_createProjectCommand ?? (_createProjectCommand = new RelayCommand(CreateTradosProject));
 
-
 		public override bool OnChangePage(int position, out string message)
 		{
 			message = string.Empty;
@@ -127,18 +127,35 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 			return true;
 		}
+
 		private void CreateProjectViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
-				var tmsForMainTm = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked && t.TmPenalty == 0);
-				languagePair.TmsForMainTm.AddRange(tmsForMainTm);
+				if (languagePair.CreateNewTm)
+				{
+					//TMs/MT files selected without any penalties will be imported into only one tm
+					//var tmsForMainTm = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked && t.TmPenalty == 0);
+					//languagePair.TmsForMainTm.AddRange(tmsForMainTm);
 
-				var individualTms =
-					languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked && t.TmPenalty > 0);
-				languagePair.IndividualTms.AddRange(individualTms);
+					var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).GroupBy(t=>t.TmPenalty).ToList();
+					languagePair.GroupedTmsByPenalty.AddRange(selectedTms);
+
+
+					//We'll create individually tm for transit TMs/MT files which have penalty set
+					//var individualTms =
+					//	languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked && t.TmPenalty > 0);
+					//languagePair.IndividualTms.AddRange(individualTms);
+				}
+
+				if (languagePair.ChoseExistingTm)
+				{
+					//We'll import all the transit TM files into selected TM
+					var tmsForMainTm = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsMtFile);
+					languagePair.TmsForMainTm.AddRange(tmsForMainTm);
+				}
 			}
 		}
 		private void CreateTradosProject()

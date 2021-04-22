@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.SqlServer.Server;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -37,7 +38,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			{
 				if (languagePair.CreateNewTm)
 				{ 
-					//One general tm which includes all tms (tms which doesn't have penalty set in the UI
+					//One general tm which includes all tms (tms which doesn't have penalty set in the UI)
 					CreateStudioTranslationMemory(studioProjectPath, string.Empty, 0, languagePair);
 				}
 				else
@@ -46,6 +47,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					CreateStudioTranslationMemory(languagePair.TmPath, string.Empty, 0, null);
 				}
 			}
+		}
+
+		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath, int penalty)
+		{
+			CreateStudioTranslationMemory(tmPath, description, penalty, languagePair);
 		}
 
 		private void CreateStudioTranslationMemory(string tmPath, string description,int penalty,LanguagePair languagePair)
@@ -79,7 +85,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		public void ImportStarTransitTm(List<StarTranslationMemoryMetadata> starTransitTms, PackageModel package)
 		{
 			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(starTransitTms, package);
-			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,package);
+			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,starTransitTms[0].TmPenalty,package);
 		}
 
 		public TranslationProviderReference GetTranslationProviderReference(string tmPath,LanguagePair languagePair)
@@ -93,7 +99,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			return tm.Key != null ? new TranslationProviderReference(tm.Key.FilePath, true) : null;
 		}
 
-		private void ImportSdlXliffIntoTm(string sdlXliffFolderPath, PackageModel package)
+		private void ImportSdlXliffIntoTm(string sdlXliffFolderPath,int penalty, PackageModel package)
 		{
 			try
 			{
@@ -119,7 +125,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 						// for general tm the name of the tm is the name of the package. In constructor we set 0 as penalty for general tms
 						var correspondingTm =
 							StudioTranslationMemories.Keys.FirstOrDefault(t => t.Name.Equals(fileName)) ??
-							StudioTranslationMemories.FirstOrDefault(s => s.Value.Equals(0)).Key;
+							StudioTranslationMemories.FirstOrDefault(s => s.Value.Equals(penalty)).Key;
 
 						if (correspondingTm is null) return;
 						var tmImporter = new TranslationMemoryImporter(correspondingTm.LanguageDirection)

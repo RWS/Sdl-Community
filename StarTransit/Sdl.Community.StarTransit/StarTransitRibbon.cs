@@ -123,8 +123,8 @@ namespace Sdl.Community.StarTransit
 			//	_messageBoxService.ShowMessage(ex.Message, string.Empty);
 			//	_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			//}
-		}  
-		
+		}
+
 		/// <summary>
 		/// We need to delete all the files from subfolders before deleteing the main directory. Otherwise sometimes it throws an error
 		/// </summary>

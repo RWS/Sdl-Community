@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Sdl.Community.StarTransit.Shared.Models
@@ -35,6 +36,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		/// List of Transit TMs/MT which have penalty set. We'll create a different Studio TM for each file with the penalty set
 		/// </summary>
 		public List<StarTranslationMemoryMetadata> IndividualTms { get; set; }
+		public List<IGrouping<int,StarTranslationMemoryMetadata>> GroupedTmsByPenalty { get; set; }
 		public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }
         public List<string> TargetFile { get; set; }

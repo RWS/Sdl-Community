@@ -2,7 +2,7 @@
 {
 	public class StarTranslationMemoryMetadata : BaseViewModel
 	{
-		private int _tmPanalty;
+		private int _tmPenalty;
 		private bool _isChecked;
 		public string SourceFile { get; set; }
 
@@ -15,14 +15,14 @@
 		public bool IsMtFile { get; set; }
 		public string Name { get; set; }
 
-
 		public int TmPenalty
 		{
-			get => _tmPanalty;
+			get => _tmPenalty;
 			set
 			{
-				if (_tmPanalty == value) return;
-				_tmPanalty = value;
+				if (_tmPenalty == value) return;
+				_tmPenalty = value;
+				IsChecked = _tmPenalty > 0;
 				OnPropertyChanged(nameof(TmPenalty));
 			}
 		}

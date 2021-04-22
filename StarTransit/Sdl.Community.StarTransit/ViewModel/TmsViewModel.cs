@@ -28,7 +28,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private ICommand _selectTmCommand;
 		private ICommand _removeTmCommand;
 		private readonly IOpenFileDialogService _fileDialogService;
-		private string _initialFolderPath;
 
 		public TmsViewModel(IWizardModel wizardModel,IOpenFileDialogService fileDialogService, object view) : base(view)
 		{
@@ -41,9 +40,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_fileDialogService = fileDialogService;
 			_checkAll = false;
 			_isValid = true;
-			var studioVersion = new StudioVersionService().GetStudioVersion();
-
-			_initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), studioVersion.StudioDocumentsFolderName, "Translation Memories");
 			PropertyChanged += TmsViewModelChanged;
 		}
 
@@ -236,14 +232,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void LanguagePairsTmOption_EventRaised()
 		{
 			ErrorMessage = string.Empty;
-			if (SelectedLanguagePair.CreateNewTm)
-			{
-				var selectedLanguagePair =
-					$"{SelectedLanguagePair.SourceLanguage.TwoLetterISOLanguageName}-{SelectedLanguagePair.TargetLanguage.TwoLetterISOLanguageName}";
-				var tmName = $"{_wizardModel.PackageModel.Result.Name}.{selectedLanguagePair}.sdltm";
-				SelectedLanguagePair.TmName = tmName;
-				SelectedLanguagePair.TmPath = Path.Combine(_initialFolderPath, tmName);
-			}
+			//if (SelectedLanguagePair.CreateNewTm)
+			//{
+			//	var selectedLanguagePair =
+			//		$"{SelectedLanguagePair.SourceLanguage.TwoLetterISOLanguageName}-{SelectedLanguagePair.TargetLanguage.TwoLetterISOLanguageName}";
+			//	var tmName = $"{_wizardModel.PackageModel.Result.Name}.{selectedLanguagePair}.sdltm";
+			//	SelectedLanguagePair.TmName = tmName;
+			//	SelectedLanguagePair.TmPath = Path.Combine(_initialFolderPath, tmName);
+			//}
 		}
 
 		private void RemoveTm()

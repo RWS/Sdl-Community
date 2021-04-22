@@ -26,7 +26,6 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml" />
 				<ResourceDictionary Source="../UiHelpers/General.xaml" />
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
-
 			</ResourceDictionary.MergedDictionaries>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
 			<converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
