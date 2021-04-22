@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -26,6 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _clearCommand;
 		private QualityEstimation _evaluation = new();
 		private string _feedback;
+		private bool _qeEnabled;
 		private int _rating;
 		private ICommand _sendFeedbackCommand;
 		private ITranslationService _translationService;
@@ -52,7 +56,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ClearFeedbackBox));
+		public ICommand ClearCommand => _clearCommand ??= new CommandHandler(ClearFeedbackBox);
 
 		public QualityEstimation Evaluation
 		{
@@ -93,6 +97,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public bool QeEnabled
+		{
+			get => _qeEnabled;
+			set
+			{
+				_qeEnabled = value;
+				OnPropertyChanged(nameof(QeEnabled));
+			}
+		}
+
 		public int Rating
 		{
 			get => _rating;
@@ -106,7 +120,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand SendFeedbackCommand
-			=> _sendFeedbackCommand ?? (_sendFeedbackCommand = new AsyncCommand(() => SendFeedback(null)));
+			=> _sendFeedbackCommand ??= new AsyncCommand(() => SendFeedback(null));
 
 		private SegmentId? ActiveSegmentId => _editorController.ActiveDocument.ActiveSegmentPair?.Properties.Id;
 
@@ -155,12 +169,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_translationService = translationService;
 			_segmentSupervisor.StartSupervising(_translationService);
 
-			OnPropertyChanged(nameof(IsSendFeedbackEnabled));
+			_editorController.ActiveDocumentChanged -= ToggleSupervisingQe;
+			_editorController.ActiveDocumentChanged += ToggleSupervisingQe;
+			ToggleSupervisingQe();
 
-			if (AutoSendFeedback == null)
-			{
-				AutoSendFeedback = _translationService.Options.AutoSendFeedback;
-			}
+			OnPropertyChanged(nameof(IsSendFeedbackEnabled));
+			AutoSendFeedback ??= _translationService.Options.AutoSendFeedback;
 		}
 
 		private void _shortcutService_ShortcutChanged()
@@ -261,7 +275,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SetShortcutService();
 
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-			MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged += MetadataSupervisor_ActiveSegmentQeChanged;
 
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
@@ -322,9 +335,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			return isResetNeeded;
 		}
 
-		private void MetadataSupervisor_ActiveSegmentQeChanged(string qualityEstimation)
+		private void MetadataSupervisor_ActiveSegmentQeChanged()
 		{
-			Evaluation.OriginalEstimation = qualityEstimation;
+			Evaluation.OriginalEstimation = MtCloudApplicationInitializer.MetadataSupervisor.Estimation;
 		}
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
@@ -477,6 +490,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				FeedbackOptions.ForEach(fo => fo.PropertyChanged -= ResetFeedbackSendingStatus);
 				PropertyChanged -= ResetFeedbackSendingStatus;
+			}
+		}
+
+		private void ToggleSupervisingQe(object sender = null, EventArgs e = null)
+		{
+			if (_translationService?.IsActiveModelQeEnabled ?? false)
+			{
+				QeEnabled = true;
+				MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged -= MetadataSupervisor_ActiveSegmentQeChanged;
+				MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged += MetadataSupervisor_ActiveSegmentQeChanged;
+			}
+			else
+			{
+				QeEnabled = false;
+				MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged -= MetadataSupervisor_ActiveSegmentQeChanged;
 			}
 		}
 
