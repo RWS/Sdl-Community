@@ -195,7 +195,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void SetCurrentSegmentEstimation(string qualityEstimation)
 		{
-			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair.Target.ToString());
+			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair?.Target.ToString());
 			Estimation = isActiveSegmentTranslated ? qualityEstimation : null;
 		}
 
