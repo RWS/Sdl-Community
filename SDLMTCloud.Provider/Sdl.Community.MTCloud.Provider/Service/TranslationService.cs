@@ -278,7 +278,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private LanguageMappingModel GetCorrespondingLanguageMappingModel()
 		{
-			var activeDocument = MtCloudApplicationInitializer.EditorController.ActiveDocument;
+			var activeDocument = MtCloudApplicationInitializer.EditorController?.ActiveDocument;
 
 			if (activeDocument is null) return null;
 
