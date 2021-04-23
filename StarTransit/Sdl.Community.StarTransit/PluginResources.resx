@@ -269,7 +269,8 @@
     <value>Selected TM language pair does not match with the Transit TM language pair</value>
   </data>
   <data name="Tm_NoTmAvailableMessage" xml:space="preserve">
-    <value>Selected Transit package does not contain any TM</value>
+    <value>Information Only
+The selected Transit package doesn't contain any Translation Memories.</value>
   </data>
   <data name="Wizard_CreateProj_DisplayName" xml:space="preserve">
     <value>Create project</value>

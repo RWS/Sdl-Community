@@ -381,7 +381,8 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected Transit package does not contain any TM.
+        ///   Looks up a localized string similar to Information Only
+        ///The selected Transit package doesn&apos;t contain any Translation Memories..
         /// </summary>
         public static string Tm_NoTmAvailableMessage {
             get {

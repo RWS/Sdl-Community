@@ -29,11 +29,17 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
-		<Button Style="{StaticResource Sdl.Button.DialogStyle}"
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<Button Grid.Row="0"
+				HorizontalAlignment="Left"
+		        Style="{StaticResource Sdl.Button.DialogStyle}"
 		        Cursor="Hand"
-				Width="150" Height="50"
 		        Margin="10"
 		        Command="{Binding CreateProjectCommand}"
-		        Content="{x:Static resx:PluginResources.CreateProject_Btn}"/>
+		        Content="{x:Static resx:PluginResources.CreateProject_Btn}" />
+		<TextBlock Grid.Row="1" Text="Project was created" Visibility="{Binding ProjectFinished, Converter={StaticResource BooleanToVisibilityConverter}}" />
 	</Grid>
 </UserControl>

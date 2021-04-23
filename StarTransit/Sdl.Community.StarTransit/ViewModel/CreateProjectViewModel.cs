@@ -17,6 +17,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
+		private bool _projectFinished;
 		private readonly IWizardModel _wizardModel;
 		private readonly IProjectService _projectService;
 		private ICommand _createProjectCommand;
@@ -107,6 +108,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public bool ProjectFinished
+		{
+			get => _projectFinished;
+			set
+			{
+				_projectFinished = value;
+				OnPropertyChanged(nameof(ProjectFinished));
+			}
+		}
+
 		public ICommand CreateProjectCommand =>
 			_createProjectCommand ?? (_createProjectCommand = new RelayCommand(CreateTradosProject));
 
@@ -153,6 +164,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void CreateTradosProject()
 		{
 			var proj = _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
+			ProjectFinished = true;
 		}
 	}
 }
