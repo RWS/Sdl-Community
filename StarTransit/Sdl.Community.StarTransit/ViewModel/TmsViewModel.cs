@@ -8,7 +8,6 @@ using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.Versioning;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -232,14 +231,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void LanguagePairsTmOption_EventRaised()
 		{
 			ErrorMessage = string.Empty;
-			//if (SelectedLanguagePair.CreateNewTm)
-			//{
-			//	var selectedLanguagePair =
-			//		$"{SelectedLanguagePair.SourceLanguage.TwoLetterISOLanguageName}-{SelectedLanguagePair.TargetLanguage.TwoLetterISOLanguageName}";
-			//	var tmName = $"{_wizardModel.PackageModel.Result.Name}.{selectedLanguagePair}.sdltm";
-			//	SelectedLanguagePair.TmName = tmName;
-			//	SelectedLanguagePair.TmPath = Path.Combine(_initialFolderPath, tmName);
-			//}
 		}
 
 		private void RemoveTm()

@@ -27,15 +27,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		/// List of all TMs/MT Files from Transit package
 		/// </summary>
         public List<StarTranslationMemoryMetadata> StarTranslationMemoryMetadatas { get; set; }
-		/// <summary>
-		/// List of Transit TMs/MT which doesn't have penalties set. All this files will be imported in a "Main TM" file
-		/// </summary>
-		public List<StarTranslationMemoryMetadata> TmsForMainTm { get; set; }
-
-		/// <summary>
-		/// List of Transit TMs/MT which have penalty set. We'll create a different Studio TM for each file with the penalty set
-		/// </summary>
-		public List<StarTranslationMemoryMetadata> IndividualTms { get; set; }
 		public List<IGrouping<int,StarTranslationMemoryMetadata>> GroupedTmsByPenalty { get; set; }
 		public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }

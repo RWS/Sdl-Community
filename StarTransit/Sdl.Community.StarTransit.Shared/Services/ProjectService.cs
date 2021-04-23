@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -53,6 +54,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		public ProjectService(IProjectsControllerService projectsControllerService):this()
 		{
 			_projectControllerService = projectsControllerService;
+			_iconPath = string.IsNullOrEmpty(_iconPath) ? GetProjectIconPath() : _iconPath;
 		}
 
 		public virtual IProject CreateNewProject(ProjectInfo projectInfo, ProjectTemplateReference projectTemplateReference)
@@ -65,12 +67,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return newProject;
 		}
 
-		public virtual MessageModel UpdateProjectSettings(IProject project,Guid[] targetFilesIds)
+		public virtual MessageModel UpdateProjectSettings(IProject project,Guid[] targetFilesIds,bool projectContainsTm)
 		{
-			var fileBasedProject = (FileBasedProject)project; 
-			//TODO:Update this settings only if the project contains tm
-			UpdateTmSettings(project);
-			fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
+			var fileBasedProject = (FileBasedProject)project;
+
+			if (projectContainsTm)
+			{
+				UpdateTmSettings(project);
+				fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
+			}
 
 			project.RunAutomaticTask(targetFilesIds, AutomaticTaskTemplateIds.Scan);
 			var taskSequence = fileBasedProject.RunAutomaticTasks(targetFilesIds, new[]
@@ -106,14 +111,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var studioProject = PrepareStudioProject(transitPackage);
 			foreach (var languagePair in transitPackage.LanguagePairs)
 			{
+				var projectContainsTm = false;
 				if (!languagePair.NoTm)
 				{
 					_messageModel = ImportTms(transitPackage, languagePair);
+					projectContainsTm = true;
 				}
 
 				var targetFilesForLanguagePair = studioProject.AddFiles(languagePair.TargetFile.ToArray());
 				var filesIds = targetFilesForLanguagePair.GetIds();
-				_messageModel = UpdateProjectSettings(studioProject, filesIds); // runs Studio batchtask to save all the changes to the project
+				_messageModel = UpdateProjectSettings(studioProject, filesIds,projectContainsTm); // runs Studio batchtask to save all the changes to the project
 			}
 			CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
 			return null;
@@ -248,7 +255,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					var targetFilesForLanguagePair = newProject.AddFiles(pair.TargetFile.ToArray());
 					var filesIds=targetFilesForLanguagePair.GetIds();
-					_messageModel = UpdateProjectSettings(newProject, filesIds);
+					_messageModel = UpdateProjectSettings(newProject, filesIds,true);
 				}
 				//_projectsController?.RefreshProjects();
 			}
@@ -264,57 +271,43 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				var penalty = groupedTm.Key;
 				var tmsList = groupedTm.ToList();
-				// we need to import all the tms into onbly one tm
-				if (penalty.Equals(0) && tmsList.Count>1)  
+
+				if (languagePair.CreateNewTm)
 				{
-					//here we'll use the language pair name
-					var selectedLanguagePairName =
-						$"{languagePair.SourceLanguage.TwoLetterISOLanguageName}-{languagePair.TargetLanguage.TwoLetterISOLanguageName}";
-					languagePair.TmName = $"{package.Name}.{selectedLanguagePairName}.sdltm";
-				}
-				//here we'll use the penalty in the name of the tm
-				if (penalty > 0 && tmsList.Count > 1)
-				{
-					languagePair.TmName = $"{package.Name}.Penalty{penalty}.sdltm";
+					// we need to import all the tms into onbly one tm
+					if (penalty.Equals(0) && tmsList.Count > 1)
+					{
+						//here we'll use the language pair name
+						var selectedLanguagePairName =
+							$"{languagePair.SourceLanguage.TwoLetterISOLanguageName}-{languagePair.TargetLanguage.TwoLetterISOLanguageName}";
+						languagePair.TmName = $"{package.Name}.{selectedLanguagePairName}.sdltm";
+					}
+
+					//here we'll use the penalty in the name of the tm
+					if (penalty > 0 && tmsList.Count > 1)
+					{
+						languagePair.TmName = $"{package.Name}.Penalty{penalty}.sdltm";
+					}
+
+					//individual tms/mts which have the original star transit file name
+					if (tmsList.Count.Equals(1))
+					{
+						languagePair.TmName = $"{Path.GetFileName(tmsList[0].TargetFile)}.sdltm";
+					}
+
+					languagePair.TmPath = Path.Combine(localProjectPath, languagePair.TmName);
 				}
 
-				//individual tms/mts which have the original star transit file name
-				if (tmsList.Count.Equals(1))
-				{
-					languagePair.TmName = $"{Path.GetFileName(tmsList[0].TargetFile)}.sdltm";
-				}
-
-				languagePair.TmPath = Path.Combine(localProjectPath, languagePair.TmName);
 				var tmDescription = $"{languagePair.TmName} description";
+
 
 				var importer = new TransitTmImporter(languagePair, tmDescription, languagePair.TmPath, penalty);
 				importer.ImportStarTransitTm(tmsList, package);
 				var providerRef = importer.GetTranslationProviderReference(languagePair.TmPath, languagePair);
 				_logger.Info($"-->Import lang pair Provider Reference:{providerRef?.Uri}");
 				if (providerRef == null) return null;
-				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true,penalty));
+				_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true, penalty));
 			}
-
-			//if (languagePair.TmsForMainTm!=null && languagePair.TmsForMainTm.Any())
-			//{
-			//	var newTmPath = Path.Combine(localProjectPath, Path.GetFileName(languagePair.TmPath));
-			//	var importer = new TransitTmImporter(languagePair, newTmPath, null);
-
-			//	importer.ImportStarTransitTm(languagePair.TmsForMainTm, package);
-			//	var providerRef = importer.GetTranslationProviderReference(newTmPath, languagePair);
-			//	_logger.Info($"-->Import lang pair Provider Reference:{providerRef?.Uri}");
-			//	if (providerRef == null) return null;
-			//	_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true));
-			//}
-
-			//if (languagePair.IndividualTms != null && languagePair.IndividualTms.Any())
-			//{
-			//	var tpReference = CreateTpReference(languagePair.IndividualTms, languagePair, localProjectPath, package);
-			//	foreach (var tpRef in tpReference)
-			//	{
-			//		_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tpRef.Key, true, true, true, tpRef.Value));
-			//	}
-			//}
 
 			return null;
 		}
@@ -404,6 +397,19 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				updateTmSettings.UpdateWithTranslatedSegments.Value = true;
 				project.UpdateSettings(settings);
 			}
+		}
+
+		private string GetProjectIconPath()
+		{
+			var assemblyPath = Assembly.GetExecutingAssembly().Location;
+			var directoryInfo = Directory.GetParent(assemblyPath);
+			var targetPath = Path.Combine(directoryInfo.FullName, "transit.ico");
+
+			using (var fs = new FileStream(targetPath, FileMode.Create))
+			{
+				Resources.transit.Save(fs);
+			}
+			return targetPath;
 		}
 
 		/// <summary>

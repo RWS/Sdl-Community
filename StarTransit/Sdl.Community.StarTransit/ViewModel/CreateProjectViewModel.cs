@@ -137,24 +137,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 				if (languagePair.CreateNewTm)
 				{
 					//TMs/MT files selected without any penalties will be imported into only one tm
-					//var tmsForMainTm = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked && t.TmPenalty == 0);
-					//languagePair.TmsForMainTm.AddRange(tmsForMainTm);
-
-					var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).GroupBy(t=>t.TmPenalty).ToList();
+					var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked)
+						.GroupBy(t => t.TmPenalty).ToList();
 					languagePair.GroupedTmsByPenalty.AddRange(selectedTms);
-
-
-					//We'll create individually tm for transit TMs/MT files which have penalty set
-					//var individualTms =
-					//	languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked && t.TmPenalty > 0);
-					//languagePair.IndividualTms.AddRange(individualTms);
 				}
 
-				if (languagePair.ChoseExistingTm)
+				if (!languagePair.ChoseExistingTm) continue;
 				{
 					//We'll import all the transit TM files into selected TM
-					var tmsForMainTm = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsMtFile);
-					languagePair.TmsForMainTm.AddRange(tmsForMainTm);
+					var tmsForSelectedTm = languagePair.StarTranslationMemoryMetadatas.Where(t =>!t.IsMtFile).GroupBy(t => t.TmPenalty).ToList();
+					languagePair.GroupedTmsByPenalty.AddRange(tmsForSelectedTm);
 				}
 			}
 		}

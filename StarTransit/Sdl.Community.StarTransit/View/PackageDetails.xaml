@@ -183,12 +183,17 @@
 					</Setter>
 				</Style>
 			</ListView.ItemContainerStyle>
+			<ListView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel Orientation="Horizontal"/>
+				</ItemsPanelTemplate>
+			</ListView.ItemsPanel>
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<WrapPanel>
+					<WrapPanel >
 						<Image Width="24" Height="24"
 						       Source="{Binding TargetFlag,Converter={StaticResource ImageConverter}}"/>
-						<TextBlock Style="{StaticResource PackageDetailsMargin}"
+						<TextBlock Margin="5 5 10 5"
 						           Text="{Binding TargetLanguage.DisplayName}" />
 					</WrapPanel>
 				</DataTemplate>

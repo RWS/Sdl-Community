@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.SqlServer.Server;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -22,6 +21,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		public Dictionary<FileBasedTranslationMemory, int> StudioTranslationMemories= new Dictionary<FileBasedTranslationMemory, int>();
 		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
+		//TODO: Remove this for final impl
 		public TransitTmImporter(LanguagePair languagePair, string studioProjectPath, List<StarTranslationMemoryMetadata> tmsList)
 		{
 			if (tmsList != null && tmsList.Any())
@@ -51,11 +51,36 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath, int penalty)
 		{
-			CreateStudioTranslationMemory(tmPath, description, penalty, languagePair);
+			FileBasedTranslationMemory fileBasedTm;
+			if (languagePair != null)
+			{
+				fileBasedTm = new FileBasedTranslationMemory(
+					tmPath,
+					description,
+					languagePair.SourceLanguage,
+					languagePair.TargetLanguage,
+					FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
+					BuiltinRecognizers.RecognizeAll,
+					TokenizerFlags.DefaultFlags,
+					WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
+			}
+			else
+			{
+				fileBasedTm = new FileBasedTranslationMemory(tmPath);
+			}
+
+			fileBasedTm.Save();
+
+			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
+			{
+				StudioTranslationMemories.Add(fileBasedTm, penalty);
+			}
 		}
 
+		//TODO: REmove this for the final implementation
 		private void CreateStudioTranslationMemory(string tmPath, string description,int penalty,LanguagePair languagePair)
 		{
+			//TODO: move this to constructor
 			FileBasedTranslationMemory fileBasedTm;
 			if (languagePair != null)
 			{

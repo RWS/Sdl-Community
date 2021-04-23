@@ -165,7 +165,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					}
 
 					if (item.Key != "TargetLanguages") continue;
-					//we assume languages code are separated by " "
 					var languages = item.Value.Split(LanguageTargetSeparator);
 
 					foreach (var language in languages)
@@ -179,8 +178,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							TargetLanguage = targetCultureInfo,
 							TargetFlag = new Language(targetCultureInfo).GetFlagImage(),
 							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage(),
-							TmsForMainTm = new List<StarTranslationMemoryMetadata>(),
-							IndividualTms = new List<StarTranslationMemoryMetadata>(),
 							GroupedTmsByPenalty = new List<IGrouping<int, StarTranslationMemoryMetadata>>(),
 							NoTm = true
 						};
