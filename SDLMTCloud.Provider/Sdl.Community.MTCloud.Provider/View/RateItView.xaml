@@ -129,8 +129,8 @@
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}" />
 			<DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="False">
-				<!--Visibility="{Binding QEEnabled}"-->
-				<Border CornerRadius="4" Margin="5 0 0 0" BorderThickness="0.6" BorderBrush="#AF000000">
+				<Border CornerRadius="4" Margin="5 0 0 0" BorderThickness="0.6" BorderBrush="#AF000000" 
+				        Visibility="{Binding QeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<ComboBox Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 					          Text="Reevaluation"
 					          SelectedIndex="{Binding Evaluation.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">

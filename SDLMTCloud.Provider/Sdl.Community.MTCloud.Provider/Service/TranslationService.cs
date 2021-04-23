@@ -12,7 +12,6 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 using LogManager = NLog.LogManager;
@@ -37,6 +36,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public event TranslationReceivedEventHandler TranslationReceived;
 
 		public IConnectionService ConnectionService { get; }
+
+		public bool IsActiveModelQeEnabled
+			=> GetCorrespondingLanguageMappingModel()?.SelectedModel.Model.ToLower().Contains("qe") ?? false;
+
 		public Options Options { get; set; }
 
 		public async Task AddTermToDictionary(Term term)
@@ -261,7 +264,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			if (!string.IsNullOrWhiteSpace(feedbackInfo.Suggestion))
 			{
-				var improvementObject = new Improvement { Text = feedbackInfo.Suggestion};
+				var improvementObject = new Improvement { Text = feedbackInfo.Suggestion };
 				feedbackRequest.Improvement = improvementObject;
 			}
 			if (feedbackInfo.Rating != null)
@@ -276,7 +279,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private LanguageMappingModel GetCorrespondingLanguageMappingModel()
 		{
 			var activeDocument = MtCloudApplicationInitializer.EditorController.ActiveDocument;
-			var currentProject = MtCloudApplicationInitializer.EditorController.ActiveDocument.Project.GetProjectInfo();
+
+			if (activeDocument is null) return null;
+
+			var currentProject = activeDocument.Project.GetProjectInfo();
 
 			var model = Options.LanguageMappings?.FirstOrDefault(l =>
 				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,

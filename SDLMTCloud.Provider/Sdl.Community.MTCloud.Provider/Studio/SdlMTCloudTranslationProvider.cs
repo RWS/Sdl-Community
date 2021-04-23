@@ -35,7 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_firstTimeAdded = firstTimeAdded;
 			LoadState(translationProviderState);
 
-			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
+			//MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
 		}
 
 		public bool IsReadOnly => true;
