@@ -180,6 +180,7 @@
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\FeedbackInfo.cs" />
     <Compile Include="Model\FileAndSegmentIds.cs" />
     <Compile Include="Model\MetadataTransferObject.cs" />
     <Compile Include="Model\QualityEstimation.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="Model\Credential.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
     <Compile Include="Model\FeedbackSendingStatus.cs" />
-    <Compile Include="Model\Feedback.cs" />
+    <Compile Include="Model\ImprovementFeedback.cs" />
     <Compile Include="Model\Improvement.cs" />
     <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
