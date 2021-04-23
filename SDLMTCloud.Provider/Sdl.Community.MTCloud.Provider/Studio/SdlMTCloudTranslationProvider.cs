@@ -38,9 +38,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			LoadState(translationProviderState);
 
-			if (!MtCloudApplicationInitializer.IsStudioRunning) return;
-			var eventAggregator = SdlTradosStudio.Application?.GetService<IStudioEventAggregator>();
-			eventAggregator?.GetEvent<TranslationProviderStatusChanged>().Subscribe(Settings_TranslationProviderStatusChanged);
+			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
 		}
 
 		public bool IsReadOnly => true;
@@ -248,7 +246,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private void ActivateRatingController()
 		{
-			if (!MtCloudApplicationInitializer.IsStudioRunning) return;
+			if (!MtCloudApplicationInitializer.IsStudioRunning()) return;
+
 			var tpStatus =
 				Application.Current.Dispatcher.Invoke(
 					() =>
