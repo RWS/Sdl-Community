@@ -1,6 +1,8 @@
-﻿namespace Sdl.Community.MTCloud.Provider.Service.Interface
+﻿using Sdl.Community.MTCloud.Provider.Model;
+
+namespace Sdl.Community.MTCloud.Provider.Service.Interface
 {
-	public interface IMetadataSupervisor : ISupervisor
+	public interface IMetadataSupervisor : ISupervisor<TranslationOriginInformation>
 	{
 	}
 }

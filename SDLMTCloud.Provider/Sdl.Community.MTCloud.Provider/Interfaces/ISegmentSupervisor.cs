@@ -5,7 +5,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
-	public interface ISegmentSupervisor : ISupervisor
+	public interface ISegmentSupervisor : ISupervisor<ImprovementFeedback>
 	{
 		event ConfirmationLevelChangedEventHandler SegmentConfirmed;
 

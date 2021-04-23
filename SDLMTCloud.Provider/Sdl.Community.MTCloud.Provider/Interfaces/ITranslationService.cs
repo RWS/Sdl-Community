@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
@@ -12,6 +11,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		event TranslationReceivedEventHandler TranslationReceived;
 
 		IConnectionService ConnectionService { get; }
+		bool IsActiveModelQeEnabled { get; }
 		Options Options { get; set; }
 
 		Task AddTermToDictionary(Term term);
