@@ -36,6 +36,10 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -49,6 +53,12 @@
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
@@ -94,8 +104,13 @@
     <Compile Include="Control\TargetRenamerSettingsControl.Designer.cs">
       <DependentUpon>TargetRenamerSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToVisibilityConditionalConverter.cs" />
+    <Compile Include="Helpers\Enums.cs" />
+    <Compile Include="Interfaces\IFolderDialogService.cs" />
+    <Compile Include="Interfaces\ITargetRenamerSettings.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Services\CommandHandler.cs" />
+    <Compile Include="Services\FolderDialogService.cs" />
     <Compile Include="TargetRenamer.cs" />
     <Compile Include="TargetRenamerSettings.cs" />
     <Compile Include="ViewModel\TargetRenamerSettingsViewModel.cs" />

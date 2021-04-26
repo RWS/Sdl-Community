@@ -9,16 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.TargetRenamer.Interfaces;
+using Trados.TargetRenamer.Services;
 using Trados.TargetRenamer.ViewModel;
 
 namespace Trados.TargetRenamer.Control
 {
 	public partial class TargetRenamerSettingsControl : UserControl, ISettingsAware<TargetRenamerSettings>, IUISettingsControl
 	{
+		private readonly IFolderDialogService _folderDialogService;
 		public TargetRenamerSettingsControl()
 		{
 			InitializeComponent();
-			TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel();
+			_folderDialogService = new FolderDialogService();
+			TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel(_folderDialogService);
 			var targetRenamerSettingsControl = new View.TargetRenamerSettingsView
 			{
 				DataContext = TargetRenamerSettingsViewModel

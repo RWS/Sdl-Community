@@ -3,9 +3,151 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:Trados.TargetRenamer.ViewModel"
+             xmlns:converters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
+			 xmlns:converters2="clr-namespace:Trados.TargetRenamer.Converters"
+			 xmlns:enums="clr-namespace:Trados.TargetRenamer.Helpers"
              xmlns:local="clr-namespace:Trados.TargetRenamer.View"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModel:TargetRenamerSettingsViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-	</Grid>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/GroupboxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<converters2:BooleanToVisibilityConditionalConverter x:Key="ConditionalConverter"/>
+			<ObjectDataProvider x:Key="ReplaceEnum"
+			                    MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+				<ObjectDataProvider.MethodParameters>
+					<x:Type TypeName="enums:ReplacementEnum"/>
+				</ObjectDataProvider.MethodParameters>
+			</ObjectDataProvider>
+			<ObjectDataProvider x:Key="TargetEnum"
+			                    MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+				<ObjectDataProvider.MethodParameters>
+					<x:Type TypeName="enums:TargetLanguageEnum"/>
+				</ObjectDataProvider.MethodParameters>
+			</ObjectDataProvider>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}"  Margin="5,0,0,0" Header="Settings">
+		<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<CheckBox Grid.Row="0" Grid.Column="0"
+				  Width="Auto"
+				  Margin="5 10 5 25"
+		          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+		          Content="Overwrite Target Files"
+		          IsChecked="{Binding OverwriteTargetFiles, UpdateSourceTrigger=PropertyChanged}"/>
+		<ComboBox Grid.Row="1" Grid.Column="0"
+				  Margin="5 10 15 25"
+				  HorizontalContentAlignment="Center"
+				  Width="140"
+		          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+				  ItemsSource="{Binding Source={StaticResource ReplaceEnum}}"
+				  SelectedIndex="1"
+				  SelectionChanged="Selector_OnSelectionChanged"/>
+		<Label Grid.Row="2" Grid.Column="0" Content="Search for:"
+			   Margin="5"
+			   HorizontalAlignment="Center"
+			   VerticalAlignment="Center"
+		       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+		<TextBox Grid.Row="2" Grid.Column="1"
+				 Margin="5"
+		         Text="{Binding RegularExpressionSearchFor}"
+		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+		<Label Grid.Row="3" Grid.Column="0" Content="Replace with:"
+			   Margin="5"
+			   HorizontalAlignment="Center"
+			   VerticalAlignment="Center"
+			   Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+		<TextBox Grid.Row="3" Grid.Column="1"
+				 Margin="5"
+		         Text="{Binding RegularExpressionReplaceWith}"
+		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+		<Label Grid.Row="2" Grid.Column="0" Content="Delimitator:"
+		       Margin="5"
+		       HorizontalAlignment="Center"
+		       VerticalAlignment="Center">
+			<Label.Visibility>
+				<MultiBinding Converter="{StaticResource ConditionalConverter}">
+					<Binding Path="AppendAsPrefix"/>
+					<Binding Path="AppendAsSuffix"/>
+				</MultiBinding>
+			</Label.Visibility>
+		</Label>
+		<TextBox Grid.Row="2" Grid.Column="1"
+				 Margin="5"
+		         Text="{Binding Delimitator, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+			<TextBox.Visibility>
+				<MultiBinding Converter="{StaticResource ConditionalConverter}">
+					<Binding Path="AppendAsPrefix"/>
+					<Binding Path="AppendAsSuffix"/>
+				</MultiBinding>
+			</TextBox.Visibility>
+		</TextBox>
+		<ComboBox Grid.Row="3" Grid.Column="0"
+				  Margin="5"
+				  Width="140"
+				  HorizontalContentAlignment="Center"
+				  x:Name="TargetComboBox"
+		          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+		          ItemsSource="{Binding Source={StaticResource TargetEnum}}"
+				  SelectedIndex="0"
+		          SelectionChanged="Combobox_OnSelectionChanged">
+			<ComboBox.Visibility>
+				<MultiBinding Converter="{StaticResource ConditionalConverter}">
+					<Binding Path="AppendAsPrefix"/>
+					<Binding Path="AppendAsSuffix"/>
+				</MultiBinding>
+			</ComboBox.Visibility>
+		</ComboBox>
+		<CheckBox Grid.Row="3" Grid.Column="1"
+		          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				  Margin="5"
+				  VerticalAlignment="Center"
+		          Content="Use short locales"
+				  IsChecked="{Binding UseShortLocales}"
+		          Visibility="{Binding AppendTargetLanguage, Converter={StaticResource BooleanToVisibilityConverter}}">
+		</CheckBox>
+		<TextBox Grid.Row="3" Grid.Column="1"
+				 Margin="5"
+				 Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}"
+		         Text="{Binding CustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+		<CheckBox Grid.Row="4" Grid.Column="0"
+				  Margin="5 150 0 5"
+		          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+		          Content="Custom Target Location"
+		          ToolTip="If no custom location is selected, the project folder will be used."
+		          IsChecked="{Binding UseCustomLocation}"/>
+		<TextBox Grid.Row="5" Grid.Column="1"
+				 Margin="5"
+		         Text="{Binding CustomLocation, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+		         Visibility="{Binding UseCustomLocation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+		<Button Grid.Row="5" Grid.Column="0"
+				Margin="5"
+				Command="{Binding SelectTargetFolder}"
+		        Style="{StaticResource Sdl.Button.DialogStyle}"
+		        Content="Select Location"
+		        Visibility="{Binding UseCustomLocation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
+		</GroupBox>
 </UserControl>
