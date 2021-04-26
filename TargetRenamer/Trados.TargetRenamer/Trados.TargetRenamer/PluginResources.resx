@@ -123,4 +123,10 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>Trados.TargetRenamer</value>
   </data>
+  <data name="TargetRenamer_Description" xml:space="preserve">
+    <value>Changes the Finalized Target files based on the selected options.</value>
+  </data>
+  <data name="TargetRenamer_Name" xml:space="preserve">
+    <value>Target Renamer</value>
+  </data>
 </root>
