@@ -23,6 +23,7 @@ namespace Trados.TargetRenamer.Services
 			_execute = execute ?? throw new ArgumentNullException("execute");
 			_canExecute = canExecute;
 		}
+
 		[DebuggerStepThrough]
 		public bool CanExecute(object parameter)
 		{

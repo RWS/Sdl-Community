@@ -38,7 +38,7 @@ namespace Trados.TargetRenamer.Control
             // 
             this.targetRenamerHost.Location = new System.Drawing.Point(0, 0);
             this.targetRenamerHost.Name = "targetRenamerHost";
-            this.targetRenamerHost.Size = new System.Drawing.Size(150, 150);
+            this.targetRenamerHost.Size = new System.Drawing.Size(800, 450);
             this.targetRenamerHost.TabIndex = 0;
             this.targetRenamerHost.Text = "targetRenamerHost";
             this.targetRenamerHost.Child = null;
@@ -49,6 +49,7 @@ namespace Trados.TargetRenamer.Control
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.targetRenamerHost);
             this.Name = "TargetRenamerSettingsControl";
+            this.Size = new System.Drawing.Size(800, 450);
             this.ResumeLayout(false);
 
 		}
