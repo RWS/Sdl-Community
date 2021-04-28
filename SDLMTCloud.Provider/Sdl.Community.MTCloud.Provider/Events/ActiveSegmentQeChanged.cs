@@ -2,6 +2,6 @@
 {
 	public class ActiveSegmentQeChanged
 	{
-		public string Estimation{ get; set; }
+		public string Estimation { get; set; }
 	}
 }

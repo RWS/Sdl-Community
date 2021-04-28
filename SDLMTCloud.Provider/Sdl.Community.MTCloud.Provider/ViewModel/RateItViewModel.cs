@@ -10,9 +10,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -434,7 +432,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var feedbackInfo = new FeedbackInfo
 			{
-				Evaluation = Evaluation.OriginalEstimation != null? Evaluation : null,
+				Evaluation = Evaluation.OriginalEstimation != null ? Evaluation : null,
 				Rating = rating,
 				SegmentId = segmentId,
 				Suggestion = suggestionReplacement ?? suggestion?.Improvement,

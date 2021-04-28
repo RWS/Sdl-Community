@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
-using Sdl.Desktop.IntegrationApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using LogManager = NLog.LogManager;
@@ -26,10 +22,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 	{
 		private readonly EditorController _editorController;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private LanguagePair _languageDirection;
-		private LanguageMappingsService _languageMappingsService;
 		private readonly RateItController _rateItController;
 		private ProjectInfo _currentProject;
+		private LanguagePair _languageDirection;
+		private LanguageMappingsService _languageMappingsService;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController)
@@ -51,30 +47,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
 		}
 
-		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
-		{
-			if (sender is not ProjectsController projController) return;
-			var newProject = projController.CurrentProject.GetProjectInfo();
-			if (newProject == _currentProject) return;
-			_currentProject = newProject;
-
-			var tpState =
-				projController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(
-					entry => entry.MainTranslationProvider.Uri.ToString().Contains("sdlmtcloud"))?.MainTranslationProvider.State;
-
-			var currentLanguagePair = new LanguagePair(_currentProject.SourceLanguage.CultureInfo,
-				_editorController?.ActiveDocument?.ActiveFile.Language.CultureInfo);
-
-			if (_editorController is null) return;
-
-			LoadState(tpState);
-			if (tpState != null && currentLanguagePair.TargetCulture != null)
-			{
-				GetMTCloudLanguagePair(currentLanguagePair);
-			}
-			ActivateRatingController();
-		}
-
 		public bool IsReadOnly => true;
 
 		public ITranslationProviderLanguageDirection LanguageDirectionProvider { get; private set; }
@@ -94,7 +66,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				if (TranslationService.Options != null)
 				{
 					TranslationService.Options.PropertyChanged +=
-						(s, e) => { SwitchRateTranslationsControllerVisibility(((Options) s).SendFeedback); };
+						(s, e) => { SwitchRateTranslationsControllerVisibility(((Options)s).SendFeedback); };
 				}
 			}
 		}
@@ -388,6 +360,30 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			return engineModels.Count == 1 &&
 				   engineModels[0].DisplayName == PluginResources.Message_No_model_available;
+		}
+
+		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
+		{
+			if (sender is not ProjectsController projController) return;
+			var newProject = projController.CurrentProject.GetProjectInfo();
+			if (newProject == _currentProject) return;
+			_currentProject = newProject;
+
+			var tpState =
+				projController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(
+					entry => entry.MainTranslationProvider.Uri.ToString().Contains("sdlmtcloud"))?.MainTranslationProvider.State;
+
+			var currentLanguagePair = new LanguagePair(_currentProject.SourceLanguage.CultureInfo,
+				_editorController?.ActiveDocument?.ActiveFile.Language.CultureInfo);
+
+			if (_editorController is null) return;
+
+			LoadState(tpState);
+			if (tpState != null && currentLanguagePair.TargetCulture != null)
+			{
+				GetMTCloudLanguagePair(currentLanguagePair);
+			}
+			ActivateRatingController();
 		}
 
 		private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
