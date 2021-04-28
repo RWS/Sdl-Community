@@ -380,8 +380,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private bool HasOptionsLanguageMapping(LanguagePair languagePair)
 		{
-			return Options.LanguageMappings.Any(l => l.SourceTradosCode.Equals(languagePair.SourceCulture.Name)
-													&& l.TargetTradosCode.Equals(languagePair.TargetCulture.Name));
+			return Options?.LanguageMappings?.Any(l => l.SourceTradosCode.Equals(languagePair.SourceCulture.Name)
+													&& l.TargetTradosCode.Equals(languagePair.TargetCulture.Name)) ?? false;
 		}
 
 		private bool NoEngineFound(IReadOnlyList<TranslationModel> engineModels)
