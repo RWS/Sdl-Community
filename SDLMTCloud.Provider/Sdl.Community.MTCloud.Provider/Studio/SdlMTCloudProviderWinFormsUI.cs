@@ -45,6 +45,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
 
+				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
+
 				connectionService.SaveCredential(credentialStore);
 
 				var editorController = StudioInstance.GetEditorController();

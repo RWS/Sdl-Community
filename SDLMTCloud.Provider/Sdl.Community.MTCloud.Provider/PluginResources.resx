@@ -415,4 +415,13 @@ Response from SDL MT Cloud:
   <data name="SDL_MT_Cloud_Provider_is_not_added_to_the_current_project" xml:space="preserve">
 	  <value>SDL MT Cloud Provider is not added to the current project</value>
   </data>
+  <data name="PoorQuality" xml:space="preserve">
+	  <value>POOR</value>
+  </data>
+  <data name="AdequateQuality" xml:space="preserve">
+	  <value>ADEQUATE</value>
+  </data>
+  <data name="GoodQuality" xml:space="preserve">
+	  <value>GOOD</value>
+  </data>
 </root>

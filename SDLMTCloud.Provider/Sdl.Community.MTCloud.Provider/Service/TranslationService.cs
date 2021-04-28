@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
@@ -11,7 +12,6 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 using LogManager = NLog.LogManager;
@@ -36,6 +36,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public event TranslationReceivedEventHandler TranslationReceived;
 
 		public IConnectionService ConnectionService { get; }
+
+		public bool IsActiveModelQeEnabled
+			=> GetCorrespondingLanguageMappingModel()?.SelectedModel.Model.ToLower().Contains("qe") ?? false;
+
 		public Options Options { get; set; }
 
 		public async Task AddTermToDictionary(Term term)
@@ -96,9 +100,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return await _httpClient.GetResult<SubscriptionInfo>(response);
 		}
 
-		public async Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
+		public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)
 		{
-			var feedbackRequest = CreateFeedbackRequest(segmentId, rating, originalText, improvement);
+			var feedbackRequest = CreateFeedbackRequest(feedbackInfo);
 			return await SendFeedback(feedbackRequest);
 		}
 
@@ -234,33 +238,38 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return (await GetTranslationResult(id), qualityEstimation);
 		}
 
-		private dynamic CreateFeedbackRequest(SegmentId? segmentId, dynamic rating, string originalText, string improvement)
+		private dynamic CreateFeedbackRequest(FeedbackInfo feedbackInfo)
 		{
 			var activeDocument = MtCloudApplicationInitializer.EditorController.ActiveDocument;
 
-			var segmentSource = segmentId != null
-				? activeDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
+			var segmentSource = feedbackInfo.SegmentId != null
+				? activeDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(feedbackInfo.SegmentId))?.Source.ToString()
 				: activeDocument.ActiveSegmentPair.Source.ToString();
 
 			var model = GetCorrespondingLanguageMappingModel();
-			var translationFeedbackRequest = new TranslationFeedbackRequest
-			{
-				Model = model?.SelectedModel.Model,
-				SourceLanguageId = model?.SelectedSource.CodeName,
-				SourceText = segmentSource,
-				TargetLanguageId = model?.SelectedTarget.CodeName,
-				TargetMtText = originalText
-			};
+			dynamic translationFeedbackRequest = new ExpandoObject();
+			translationFeedbackRequest.Model = model?.SelectedModel.Model;
+			translationFeedbackRequest.SourceLanguageId = model?.SelectedSource.CodeName;
+			translationFeedbackRequest.SourceText = segmentSource;
+			translationFeedbackRequest.TargetLanguageId = model?.SelectedTarget.CodeName;
+			translationFeedbackRequest.TargetMTText = feedbackInfo.OriginalMtCloudTranslation;
 
 			dynamic feedbackRequest = new ExpandoObject();
-			if (!string.IsNullOrWhiteSpace(improvement))
+
+			if (feedbackInfo.Evaluation?.UserChoseDifferently ?? false)
 			{
-				var improvementObject = new Improvement { Text = improvement };
+				translationFeedbackRequest.QualityEstimationMt = new List<string> { feedbackInfo.Evaluation.OriginalEstimation };
+				feedbackRequest.QualityEstimationMT = new List<string> { feedbackInfo.Evaluation.UserEstimation };
+			}
+
+			if (!string.IsNullOrWhiteSpace(feedbackInfo.Suggestion))
+			{
+				var improvementObject = new Improvement { Text = feedbackInfo.Suggestion };
 				feedbackRequest.Improvement = improvementObject;
 			}
-			if (rating != null)
+			if (feedbackInfo.Rating != null)
 			{
-				feedbackRequest.Rating = rating;
+				feedbackRequest.Rating = feedbackInfo.Rating;
 			}
 			feedbackRequest.Translation = translationFeedbackRequest;
 
@@ -269,8 +278,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private LanguageMappingModel GetCorrespondingLanguageMappingModel()
 		{
-			var activeDocument = MtCloudApplicationInitializer.EditorController.ActiveDocument;
-			var currentProject = MtCloudApplicationInitializer.EditorController.ActiveDocument.Project.GetProjectInfo();
+			var activeDocument = MtCloudApplicationInitializer.EditorController?.ActiveDocument;
+
+			if (activeDocument is null) return null;
+
+			var currentProject = activeDocument.Project.GetProjectInfo();
 
 			var model = Options.LanguageMappings?.FirstOrDefault(l =>
 				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,

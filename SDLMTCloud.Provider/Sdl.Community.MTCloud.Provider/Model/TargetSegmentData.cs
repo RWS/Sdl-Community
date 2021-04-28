@@ -2,7 +2,7 @@
 {
 	public class TargetSegmentData
 	{
-		public Feedback Feedback { get; set; }
+		public ImprovementFeedback Feedback { get; set; }
 		public TranslationOriginInformation TranslationOriginInformation { get; set; }
 	}
 }

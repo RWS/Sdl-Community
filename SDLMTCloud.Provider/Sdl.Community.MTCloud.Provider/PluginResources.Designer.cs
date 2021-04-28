@@ -91,6 +91,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ADEQUATE.
+        /// </summary>
+        public static string AdequateQuality {
+            get {
+                return ResourceManager.GetString("AdequateQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Send Feedback.
         /// </summary>
         public static string AutoSendFeedback {
@@ -191,6 +200,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("global1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOOD.
+        /// </summary>
+        public static string GoodQuality {
+            get {
+                return ResourceManager.GetString("GoodQuality", resourceCulture);
             }
         }
         
@@ -530,6 +548,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string Plugin_NiceName {
             get {
                 return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to POOR.
+        /// </summary>
+        public static string PoorQuality {
+            get {
+                return ResourceManager.GetString("PoorQuality", resourceCulture);
             }
         }
         

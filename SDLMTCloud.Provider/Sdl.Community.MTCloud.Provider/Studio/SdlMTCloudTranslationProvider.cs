@@ -34,6 +34,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			_editorController = editorController;
 			_firstTimeAdded = firstTimeAdded;
 			LoadState(translationProviderState);
+
+			//MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
 		}
 
 		public bool IsReadOnly => true;
@@ -232,7 +234,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private void ActivateRatingController()
 		{
-			if (!MtCloudApplicationInitializer.IsStudioRunning) return;
+			if (!MtCloudApplicationInitializer.IsStudioRunning()) return;
+
 			var tpStatus =
 				Application.Current.Dispatcher.Invoke(
 					() =>
