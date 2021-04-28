@@ -266,7 +266,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			if (!MtCloudApplicationInitializer.IsStudioRunning()) return;
 
 			var tpStatus = GetTpStatus();
-			if (!(tpStatus ?? false)) return;
+			if (tpStatus is null) return;
 
 			try
 			{
