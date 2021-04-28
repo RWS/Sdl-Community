@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -20,7 +21,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private readonly ISegmentMetadataCreator _segmentMetadataCreator;
 		private Window _batchProcessingWindow;
 		private Guid _docId;
-		private string _estimation;
 		private bool _isFirstTime = true;
 		private ITranslationService _translationService;
 
@@ -32,8 +32,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			MtCloudApplicationInitializer
 				.Subscribe<RefreshQeStatus>(OnQeStatus);
 		}
-
-		public event VoidEventHandler ActiveSegmentQeChanged;
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
@@ -48,16 +46,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-
-		public string Estimation
-		{
-			get => _estimation;
-			set
-			{
-				_estimation = value;
-				ActiveSegmentQeChanged?.Invoke();
-			}
-		}
 		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new();
 
 		public void CloseOpenedDocuments()
@@ -192,7 +180,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private void SetCurrentSegmentEstimation(string qualityEstimation)
 		{
 			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair?.Target.ToString());
-			Estimation = isActiveSegmentTranslated ? qualityEstimation : null;
+			var estimation = isActiveSegmentTranslated ? qualityEstimation : null;
+			MtCloudApplicationInitializer.PublishEvent(new ActiveSegmentQeChanged {Estimation = estimation});
 		}
 
 		private void SetIdAndActiveFile()
