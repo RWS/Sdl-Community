@@ -96,8 +96,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							}
 
 							_dictionaryPropetries.Clear();
-							if (keyProperty.Equals("Languages"))
-								break; // we don't want to read the irrelevant information after language info
+
+							//We don't want to read any more information after we get the language and the files info
+							if (_pluginDictionary.ContainsKey("Files") &&
+							    _pluginDictionary.ContainsKey("Languages")) break;
 						}
 
 						var firstPosition = line.IndexOf("[", StringComparison.Ordinal) + 1;
@@ -128,6 +130,56 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return _package;
 		}
 
+		public List<string> GetFilesNamesFromPrjFile(List<KeyValuePair<string,string>> files)
+		{
+			var fileNames = new List<string>();
+			if (files != null)
+			{
+				foreach (var file in files)
+				{
+					var textWithoutLastPipe = file.Value.Substring(0, file.Value.LastIndexOf("|", StringComparison.Ordinal));
+					var fileName =
+						textWithoutLastPipe.Substring(textWithoutLastPipe.LastIndexOf("|", StringComparison.Ordinal) + 1);
+
+					var fileExists = fileNames.Any(f => f.Equals(fileName));
+					if (!fileExists)
+					{
+						fileNames.Add(fileName);
+					}
+				}
+			}
+			else
+			{
+				_logger.Error("Could read any files information from [File]");
+			}
+			
+			return fileNames;
+		}
+
+		public List<string> GetFilesPath(string pathToExtractedProject, CultureInfo language, List<string> fileNames)
+		{
+			var filePaths = new List<string>();
+			var extension = language.ThreeLetterWindowsLanguageName;
+			extension = _fileService.MapStarTransitLanguage(extension);
+
+			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
+			var multiLanguageExtensions = extension.Split(',');
+			foreach (var multiLangExtension in multiLanguageExtensions)
+			{
+				foreach (var file in fileNames)
+				{
+					var path = Path.Combine(pathToExtractedProject, $"{file}.{multiLangExtension}");
+					var pathExists = filePaths.Any(f => f.Equals(path));
+					if (!pathExists)
+					{
+						filePaths.Add(path);
+					}
+				}
+			}
+
+			return filePaths;
+		}
+
 		public bool PackageContainsTms(PackageModel packageModel)
 		{
 			return packageModel.LanguagePairs.Any(pair => pair.StarTranslationMemoryMetadatas.Count != 0);
@@ -141,7 +193,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var model = new PackageModel();
 			CultureInfo sourceLanguageCultureInfo = null;
 			var languagePairList = new List<LanguagePair>();
-
+			var filesNames = new List<string>();
 			if (_pluginDictionary.ContainsKey("Admin"))
 			{
 				var propertiesDictionary = _pluginDictionary["Admin"];
@@ -166,7 +218,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					if (item.Key != "TargetLanguages") continue;
 					var languages = item.Value.Split(LanguageTargetSeparator);
-
 					foreach (var language in languages)
 					{
 						var targetLanguageCode = int.Parse(language);
@@ -185,17 +236,30 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					}
 				}
 			}
+			if (_pluginDictionary.ContainsKey("Files"))
+			{
+				var filesList = _pluginDictionary["Files"];
+				filesNames.AddRange(GetFilesNamesFromPrjFile(filesList));
+			}
 
+			//TODO: Get files based on the [Files] values
 			model.LanguagePairs = languagePairList;
 			if (model.LanguagePairs.Count > 0)
 			{
 				//for source
 				var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguageCultureInfo);
 				var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
-
+				var sourceFiles = GetFilesPath(pathToTempFolder, sourceLanguageCultureInfo, filesNames);
+				
 				//for target
 				foreach (var languagePair in model.LanguagePairs)
 				{
+					var targetFiles = GetFilesPath(pathToTempFolder, languagePair.TargetLanguage, filesNames);
+					languagePair.SourceFile =sourceFiles;
+					languagePair.TargetFile = targetFiles;
+					//TODO: Crate methods for reading and adding tms info;
+
+					//TODO: Remove this for final implementation
 					var targetFilesAndTmsPath =
 						GetFilesAndTmsFromTempFolder(pathToTempFolder, languagePair.TargetLanguage);
 					AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
@@ -208,6 +272,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			model.PackageContainsTms = containsTms;
 			return model;
 		}
+
+
+		//TODO: Remove this for final implementation
 
 		private void AddFilesAndTmsToModel(LanguagePair languagePair,
 			Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
@@ -250,6 +317,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			languagePair.TargetFile = pathToTargetFiles;
 		}
 
+		//TODO: Remove this for final implementation
+
 		private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
 		{
 			var filesAndTms = new List<string>();
@@ -268,6 +337,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			return filesAndTms;
 		}
+
+		//TODO: Remove this for final implementation
 
 		private Tuple<List<string>, List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(
 			List<string> filesAndTmsList)
