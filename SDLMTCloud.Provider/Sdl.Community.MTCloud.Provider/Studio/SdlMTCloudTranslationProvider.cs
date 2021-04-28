@@ -26,6 +26,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
 		private RateItController _rateItController;
+		private ProjectInfo _currentProject;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
 		 ILanguageProvider languageProvider, EditorController editorController, bool firstTimeAdded = false)
@@ -35,10 +36,36 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			TranslationService = translationService;
 			_editorController = editorController;
 			_firstTimeAdded = firstTimeAdded;
+			_rateItController = SdlTradosStudio.Application.GetController<RateItController>();
+
+			var projectsController = MtCloudApplicationInitializer.ProjectsController;
+			projectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
+			projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+			_currentProject = projectsController.CurrentProject.GetProjectInfo();
 
 			LoadState(translationProviderState);
+			ActivateRatingController();
 
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
+		}
+
+		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
+		{
+			if (sender is not ProjectsController projController) return;
+			var newProject = projController.CurrentProject.GetProjectInfo();
+			if (newProject == _currentProject) return;
+			_currentProject = newProject;
+
+			var tpState =
+				projController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(
+					entry => entry.MainTranslationProvider.Uri.ToString().Contains("sdlmtcloud"))?.MainTranslationProvider.State;
+
+			var currentLanguagePair = new LanguagePair(_currentProject.SourceLanguage.CultureInfo,
+				_editorController?.ActiveDocument?.ActiveFile.Language.CultureInfo);
+
+				GetMTCloudLanguagePair(currentLanguagePair);
+			LoadState(tpState);
+            ActivateRatingController();
 		}
 
 		public bool IsReadOnly => true;
