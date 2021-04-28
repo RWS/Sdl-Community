@@ -63,7 +63,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			var currentLanguagePair = new LanguagePair(_currentProject.SourceLanguage.CultureInfo,
 				_editorController?.ActiveDocument?.ActiveFile.Language.CultureInfo);
 
+			if (_editorController is null) return;
+
+			if (tpState != null)
+			{
 				GetMTCloudLanguagePair(currentLanguagePair);
+			}
 			LoadState(tpState);
             ActivateRatingController();
 		}
@@ -197,23 +202,22 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		{
 			try
 			{
-				Options = JsonConvert.DeserializeObject<Options>(translationProviderState) ?? new Options
-				{
-					AutoSendFeedback = true,
-					LanguageMappings = new List<LanguageMappingModel>(),
-					ResendDraft = true,
-					SendFeedback = true
-				};
+				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
 			}
 			catch
 			{
 				// ignore any casting errors and simply create a new options instance
-				Options = new Options();
 			}
-			finally
-			{
-				ActivateRatingController();
-			}
+
+			Options = translationProviderState is not null
+				? Options ?? new Options
+				{
+					AutoSendFeedback = true,
+					LanguageMappings = new List<LanguageMappingModel>(),
+					ResendDraft = true,
+					SendFeedback = true,
+				}
+				: new Options();
 		}
 
 		public void RefreshStatusInfo()
