@@ -434,7 +434,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var feedbackInfo = new FeedbackInfo
 			{
-				Evaluation = Evaluation,
+				Evaluation = Evaluation.OriginalEstimation != null? Evaluation : null,
 				Rating = rating,
 				SegmentId = segmentId,
 				Suggestion = suggestionReplacement ?? suggestion?.Improvement,
