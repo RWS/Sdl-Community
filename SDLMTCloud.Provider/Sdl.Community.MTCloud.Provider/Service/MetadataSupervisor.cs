@@ -37,7 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public Dictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
+		public ConcurrentDictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
 		{
 			get
 			{
@@ -48,7 +48,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new();
 
 		public string Estimation
 		{
@@ -59,6 +58,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				ActiveSegmentQeChanged?.Invoke();
 			}
 		}
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new();
 
 		public void CloseOpenedDocuments()
 		{
@@ -204,7 +204,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
-				Data[_docId] = new Dictionary<SegmentId, TranslationOriginInformation>();
+				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginInformation>();
 			}
 		}
 
