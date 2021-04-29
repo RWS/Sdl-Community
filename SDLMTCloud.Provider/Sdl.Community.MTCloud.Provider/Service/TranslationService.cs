@@ -153,7 +153,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var translatedXliff = Converter.ParseXliffString(translation);
 			if (translatedXliff == null) return null;
 
-			var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
+			var targetSegments = translatedXliff.GetTargetSegments();
 
 			OnTranslationReceived(new TranslationData
 			{

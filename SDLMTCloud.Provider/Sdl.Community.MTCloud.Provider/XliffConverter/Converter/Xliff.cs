@@ -46,9 +46,8 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 			File?.Body?.Add(sourceSegment, targetSegment, toolId);
 		}
 
-		public Segment[] GetTargetSegments(out List<string> sources)
+		public Segment[] GetTargetSegments()
 		{
-			sources = new List<string>();
 			var segments = new List<Segment>();
 			foreach (var tu in File.Body.TranslationUnits)
 			{
@@ -60,7 +59,6 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 					return null;
 				}
 
-				sources.Add(tu.SourceText);
 				segment.Culture = File.TargetCulture ?? File.SourceCulture;
 				segments.Add(segment);
 			}
