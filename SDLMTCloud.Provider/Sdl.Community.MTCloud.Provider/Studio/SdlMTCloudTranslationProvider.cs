@@ -66,7 +66,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			if (_editorController is null) return;
 
-			if (tpState != null)
+			if (tpState != null && currentLanguagePair.TargetCulture != null)
 			{
 				GetMTCloudLanguagePair(currentLanguagePair);
 			}
