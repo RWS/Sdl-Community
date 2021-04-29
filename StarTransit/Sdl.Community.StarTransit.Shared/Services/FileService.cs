@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private const string TmFileType = "ExtFileType=\"Extract\"";
 		private const string FileType = "Transit";
 		private const string MtFilesName = "_AEXTR_MT";
+
+		public string[] GetTransitCorrespondingExtension(CultureInfo languageCulture)
+		{
+			var extension = languageCulture.ThreeLetterWindowsLanguageName;
+			extension = MapStarTransitLanguage(extension);
+
+			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
+			return extension.Split(',');
+		}
 
 		/// <summary>
 		/// MT Files are considered to be TMs. However the Transit MT file does not conain |"

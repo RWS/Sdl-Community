@@ -1,10 +1,17 @@
-﻿namespace Sdl.Community.StarTransit.Shared.Models
+﻿using System.Collections.Generic;
+
+namespace Sdl.Community.StarTransit.Shared.Models
 {
 	public class StarTranslationMemoryMetadata : BaseViewModel
 	{
 		private int _tmPenalty;
 		private bool _isChecked;
 		public string SourceFile { get; set; }
+
+		//We'll import all the transit tms file into one TM. We are not creating one Studio TM per Transit Tm file
+		public List<string> TransitTmsSourceFilesPath { get; set; }
+		public List<string> TransitTmsTargeteFilesPath { get; set; }
+
 
 		//Local path for TM/MT File
 		public string TargetFile { get; set; }
