@@ -10,9 +10,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -335,9 +333,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			return isResetNeeded;
 		}
 
-		private void MetadataSupervisor_ActiveSegmentQeChanged()
+		private void MetadataSupervisor_ActiveSegmentQeChanged(ActiveSegmentQeChanged data)
 		{
-			Evaluation.OriginalEstimation = MtCloudApplicationInitializer.MetadataSupervisor.Estimation;
+			Evaluation.OriginalEstimation = data.Estimation;
 		}
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
@@ -434,7 +432,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var feedbackInfo = new FeedbackInfo
 			{
-				Evaluation = Evaluation,
+				Evaluation = Evaluation.OriginalEstimation != null ? Evaluation : null,
 				Rating = rating,
 				SegmentId = segmentId,
 				Suggestion = suggestionReplacement ?? suggestion?.Improvement,
@@ -498,13 +496,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (_translationService?.IsActiveModelQeEnabled ?? false)
 			{
 				QeEnabled = true;
-				MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged -= MetadataSupervisor_ActiveSegmentQeChanged;
-				MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged += MetadataSupervisor_ActiveSegmentQeChanged;
+				MtCloudApplicationInitializer.Subscribe<ActiveSegmentQeChanged>(MetadataSupervisor_ActiveSegmentQeChanged);
 			}
 			else
 			{
 				QeEnabled = false;
-				MtCloudApplicationInitializer.MetadataSupervisor.ActiveSegmentQeChanged -= MetadataSupervisor_ActiveSegmentQeChanged;
 			}
 		}
 

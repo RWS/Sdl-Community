@@ -152,11 +152,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var translatedXliff = Converter.ParseXliffString(translation);
 			if (translatedXliff == null) return null;
 
-			var targetSegments = translatedXliff.GetTargetSegments(out var sourceSegments);
+			var targetSegments = translatedXliff.GetTargetSegments();
 
 			OnTranslationReceived(new TranslationData
 			{
-				SourceSegments = sourceSegments,
+				SourceSegments = fileAndSegments.Segments.Values.ToList(),
 				TargetSegments = targetSegments.Select(seg => seg.ToString()).ToList(),
 				TranslationOriginInformation = new TranslationOriginInformation
 				{
@@ -164,7 +164,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					QualityEstimation = qualityEstimation
 				},
 				FilePath = fileAndSegments.FilePath,
-				SegmentIds = fileAndSegments.SegmentIds,
+				Segments = fileAndSegments.Segments,
 				TargetLanguage = model.TargetTradosCode
 			});
 

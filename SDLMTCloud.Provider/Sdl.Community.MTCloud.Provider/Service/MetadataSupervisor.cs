@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -20,7 +21,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private readonly ISegmentMetadataCreator _segmentMetadataCreator;
 		private Window _batchProcessingWindow;
 		private Guid _docId;
-		private string _estimation;
 		private bool _isFirstTime = true;
 		private ITranslationService _translationService;
 
@@ -33,11 +33,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				.Subscribe<RefreshQeStatus>(OnQeStatus);
 		}
 
-		public event VoidEventHandler ActiveSegmentQeChanged;
+		
 
 		private Document ActiveDocument => _editorController?.ActiveDocument;
 
-		public Dictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
+		public ConcurrentDictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
 		{
 			get
 			{
@@ -48,17 +48,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, TranslationOriginInformation>>();
-
-		public string Estimation
-		{
-			get => _estimation;
-			set
-			{
-				_estimation = value;
-				ActiveSegmentQeChanged?.Invoke();
-			}
-		}
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } =
+			new Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>>();
 
 		public void CloseOpenedDocuments()
 		{
@@ -164,7 +155,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			if (ActiveDocument == null) return;
+			if (ActiveDocument?.ActiveFile == null) return;
 			SetIdAndActiveFile();
 			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
@@ -180,11 +171,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private string GetCurrentSegmentStoredQe()
 		{
-			var activeSegmentPair = ActiveDocument?.ActiveSegmentPair;
-			if (activeSegmentPair is null) return null;
-
-			ActiveDocumentData.TryGetValue(activeSegmentPair.Properties.Id, out var targetSegmentData);
-			return targetSegmentData?.QualityEstimation;
+			return ActiveDocument?.ActiveSegmentPair?.Properties.TranslationOrigin.GetMetaData("quality_estimation");
 		}
 
 		private void SetBatchProcessingWindow()
@@ -196,7 +183,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private void SetCurrentSegmentEstimation(string qualityEstimation)
 		{
 			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair?.Target.ToString());
-			Estimation = isActiveSegmentTranslated ? qualityEstimation : null;
+			var estimation = isActiveSegmentTranslated ? qualityEstimation : null;
+			MtCloudApplicationInitializer.PublishEvent(new ActiveSegmentQeChanged { Estimation = estimation });
 		}
 
 		private void SetIdAndActiveFile()
@@ -204,7 +192,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
-				Data[_docId] = new Dictionary<SegmentId, TranslationOriginInformation>();
+				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginInformation>();
 			}
 		}
 
@@ -222,10 +210,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			else if (ActiveDocument != null)
 			{
-				foreach (var sourceSegment in translationData.SourceSegments)
+				foreach (var sourceSegment in translationData.Segments)
 				{
 					var currentSegmentPair =
-						ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sourceSegment);
+						ActiveDocument.SegmentPairs.FirstOrDefault(
+							segPair => segPair.Source.ToString() == sourceSegment.Value || segPair.Properties.Id == sourceSegment.Key);
 
 					AddTargetSegmentMetaData(translationData.TranslationOriginInformation, currentSegmentPair);
 				}
