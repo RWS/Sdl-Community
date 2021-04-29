@@ -183,11 +183,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private string GetCurrentSegmentStoredQe()
 		{
-			var activeSegmentPair = ActiveDocument?.ActiveSegmentPair;
-			if (activeSegmentPair is null) return null;
-
-			ActiveDocumentData.TryGetValue(activeSegmentPair.Properties.Id, out var targetSegmentData);
-			return targetSegmentData?.QualityEstimation;
+			return ActiveDocument?.ActiveSegmentPair?.Properties.TranslationOrigin.GetMetaData("quality_estimation");
 		}
 
 		private void SetBatchProcessingWindow()
