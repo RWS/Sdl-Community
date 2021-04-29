@@ -7,6 +7,7 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -39,6 +40,9 @@ namespace Sdl.Community.MTCloud.Provider
 																			 ? SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
+
+		public static RateItController RateItController
+			=> IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
