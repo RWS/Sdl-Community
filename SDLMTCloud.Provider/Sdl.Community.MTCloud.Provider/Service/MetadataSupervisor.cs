@@ -155,7 +155,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			if (ActiveDocument == null) return;
+			if (ActiveDocument?.ActiveFile == null) return;
 			SetIdAndActiveFile();
 			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
