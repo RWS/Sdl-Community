@@ -188,7 +188,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			Options ??= new Options
 			{
 				AutoSendFeedback = true,
-				LanguageMappings = new List<LanguageMappingModel>(),
 				ResendDraft = true,
 				SendFeedback = true,
 			};
@@ -374,7 +373,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					entry => entry.MainTranslationProvider.Uri.ToString().Contains("sdlmtcloud"))?.MainTranslationProvider.State;
 
 			var currentLanguagePair = new LanguagePair(_currentProject.SourceLanguage.CultureInfo,
-				_editorController?.ActiveDocument?.ActiveFile.Language.CultureInfo);
+				_editorController?.ActiveDocument?.ActiveFile?.Language.CultureInfo);
 
 			if (_editorController is null) return;
 
