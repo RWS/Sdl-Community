@@ -184,7 +184,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair?.Target.ToString());
 			var estimation = isActiveSegmentTranslated ? qualityEstimation : null;
-			MtCloudApplicationInitializer.PublishEvent(new ActiveSegmentQeChanged {Estimation = estimation});
+			MtCloudApplicationInitializer.PublishEvent(new ActiveSegmentQeChanged { Estimation = estimation });
 		}
 
 		private void SetIdAndActiveFile()
