@@ -222,10 +222,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			else if (ActiveDocument != null)
 			{
-				foreach (var sourceSegment in translationData.SourceSegments)
+				foreach (var sourceSegment in translationData.Segments)
 				{
 					var currentSegmentPair =
-						ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sourceSegment);
+						ActiveDocument.SegmentPairs.FirstOrDefault(
+							segPair => segPair.Source.ToString() == sourceSegment.Value || segPair.Properties.Id == sourceSegment.Key);
 
 					AddTargetSegmentMetaData(translationData.TranslationOriginInformation, currentSegmentPair);
 				}

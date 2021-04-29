@@ -270,7 +270,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				FilePath = GetSdlXliffFilePath(translationUnits[0].FileProperties) ??
 						   Path.GetFileName(translationUnits[0]?.FileProperties.FileConversionProperties.OriginalFilePath),
-				SegmentIds = translationUnits.Select(tu => tu.DocumentSegmentPair.Properties.Id).ToList(),
+				Segments = translationUnits.ToDictionary(tu => tu.DocumentSegmentPair.Properties.Id, tu=>tu.SourceSegment.ToString())
 			};
 
 			if (translationUnits == null)

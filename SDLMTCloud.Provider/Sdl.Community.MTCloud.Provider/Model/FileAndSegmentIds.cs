@@ -6,6 +6,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 	public class FileAndSegmentIds
 	{
 		public string FilePath;
-		public List<SegmentId> SegmentIds;
+		public Dictionary<SegmentId, string> Segments;
 	}
 }

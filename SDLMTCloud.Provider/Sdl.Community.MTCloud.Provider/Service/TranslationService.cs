@@ -156,7 +156,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			OnTranslationReceived(new TranslationData
 			{
-				SourceSegments = sourceSegments,
+				SourceSegments = fileAndSegments.Segments.Values.ToList(),
 				TargetSegments = targetSegments.Select(seg => seg.ToString()).ToList(),
 				TranslationOriginInformation = new TranslationOriginInformation
 				{
@@ -164,7 +164,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					QualityEstimation = qualityEstimation
 				},
 				FilePath = fileAndSegments.FilePath,
-				SegmentIds = fileAndSegments.SegmentIds,
+				Segments = fileAndSegments.Segments,
 				TargetLanguage = model.TargetTradosCode
 			});
 
