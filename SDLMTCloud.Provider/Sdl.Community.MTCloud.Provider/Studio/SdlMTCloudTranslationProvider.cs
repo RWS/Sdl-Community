@@ -28,18 +28,22 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private LanguageMappingsService _languageMappingsService;
 
 		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
-		 ILanguageProvider languageProvider, EditorController editorController)
+		 ILanguageProvider languageProvider)
 		{
 			Uri = uri;
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
-			_editorController = editorController;
-			_rateItController = SdlTradosStudio.Application.GetController<RateItController>();
+			_editorController = MtCloudApplicationInitializer.EditorController;
+			_rateItController = MtCloudApplicationInitializer.RateItController;
 
 			var projectsController = MtCloudApplicationInitializer.ProjectsController;
-			projectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
-			projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
-			_currentProject = projectsController.CurrentProject.GetProjectInfo();
+
+			if (projectsController is not null)
+			{
+				projectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
+				projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+				_currentProject = projectsController.CurrentProject.GetProjectInfo();
+			}
 
 			LoadState(translationProviderState);
 			ActivateRatingController();
