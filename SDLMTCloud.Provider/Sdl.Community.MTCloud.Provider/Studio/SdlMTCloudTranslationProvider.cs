@@ -66,12 +66,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			if (_editorController is null) return;
 
+			LoadState(tpState);
 			if (tpState != null && currentLanguagePair.TargetCulture != null)
 			{
 				GetMTCloudLanguagePair(currentLanguagePair);
 			}
-			LoadState(tpState);
-            ActivateRatingController();
+			ActivateRatingController();
 		}
 
 		public bool IsReadOnly => true;
@@ -86,7 +86,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public Options Options
 		{
 			get => TranslationService.Options;
-			set => TranslationService.Options = value;
+			set
+			{
+				TranslationService.Options = value;
+			}
 		}
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
@@ -192,6 +195,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public void LoadState(string translationProviderState)
 		{
+			if (translationProviderState is null) Options = new Options();
 			try
 			{
 				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
@@ -201,15 +205,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				// ignore any casting errors and simply create a new options instance
 			}
 
-			Options = translationProviderState != null
-				? Options ?? new Options
-				{
-					AutoSendFeedback = true,
-					LanguageMappings = new List<LanguageMappingModel>(),
-					ResendDraft = true,
-					SendFeedback = true,
-				}
-				: new Options();
+			Options = Options ?? new Options
+			{
+				AutoSendFeedback = true,
+				LanguageMappings = new List<LanguageMappingModel>(),
+				ResendDraft = true,
+				SendFeedback = true,
+			};
 		}
 
 		public void RefreshStatusInfo()
