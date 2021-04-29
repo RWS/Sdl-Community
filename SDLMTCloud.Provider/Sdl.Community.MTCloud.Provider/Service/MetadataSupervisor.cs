@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -37,7 +38,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private Document ActiveDocument => _editorController?.ActiveDocument;
 
-		public Dictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
+		public ConcurrentDictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
 		{
 			get
 			{
@@ -48,7 +49,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new Dictionary<Guid, Dictionary<SegmentId, TranslationOriginInformation>>();
 
 		public string Estimation
 		{
@@ -59,6 +59,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				ActiveSegmentQeChanged?.Invoke();
 			}
 		}
+
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } =
+			new Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>>();
 
 		public void CloseOpenedDocuments()
 		{
@@ -204,7 +207,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
-				Data[_docId] = new Dictionary<SegmentId, TranslationOriginInformation>();
+				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginInformation>();
 			}
 		}
 
