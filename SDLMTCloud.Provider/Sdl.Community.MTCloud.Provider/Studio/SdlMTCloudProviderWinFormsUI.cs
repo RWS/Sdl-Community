@@ -55,7 +55,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				var languageProvider = new LanguageProvider();
 				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
 					languageProvider,
-					editorController, true);
+					editorController);
 
 				return new ITranslationProvider[] { provider };
 			}

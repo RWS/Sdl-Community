@@ -164,6 +164,7 @@
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
+    <Compile Include="Events\ActiveSegmentQeChanged.cs" />
     <Compile Include="Events\RefreshQeStatus.cs" />
     <Compile Include="Events\TranslationProviderAdded.cs" />
     <Compile Include="Events\VoidEventHandler.cs" />
