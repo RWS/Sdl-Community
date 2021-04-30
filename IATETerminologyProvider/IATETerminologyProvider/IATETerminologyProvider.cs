@@ -3,34 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using IATETerminologyProvider.EventArgs;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Service;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.IATETerminologyProvider.EventArgs;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace IATETerminologyProvider
+namespace Sdl.Community.IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
+
 		public SettingsModel ProviderSettings { get; set; }
-		public IATETerminologyProvider(SettingsModel providerSettings)
+
+		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
+			InventoriesProvider inventoriesProvider)
 		{
 			ProviderSettings = providerSettings;
-			UpdateSettings(ProviderSettings);
+			ConnectionProvider = connectionProvider;
+			InventoriesProvider = inventoriesProvider;
+
+			Task.Run(async () => await Setup(ProviderSettings));
 		}
+
+		private async Task Setup(SettingsModel settings)
+		{
+			if (!InventoriesProvider.IsInitialized)
+			{
+				await InventoriesProvider.Initialize();
+			}
+
+			UpdateSettings(settings);
+		}
+
+		public ConnectionProvider ConnectionProvider { get; private set; }
+
+		public InventoriesProvider InventoriesProvider { get; private set; }
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
 
@@ -60,7 +80,8 @@ namespace IATETerminologyProvider
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
 			_entryModels.Clear();
-			_logger.Info("--> Start Searching for segment");
+			_logger.Info("--> Try searching for segment");
+			
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
 			var activeProjectName = Utils.GetCurrentProjectName();
@@ -86,7 +107,7 @@ namespace IATETerminologyProvider
 				}
 			}
 
-			var results = _searchService.GetTerms(text, source, target, maxResultsCount, modelString);
+			var results = _searchService.GetTerms(modelString);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -134,8 +155,9 @@ namespace IATETerminologyProvider
 			ProviderSettings.SearchInSubdomains = settings.SearchInSubdomains;
 			ProviderSettings.Domains = settings.Domains;
 			ProviderSettings.TermTypes = settings.TermTypes;
+
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ProviderSettings);
+			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
 
 			InitializeEditorController();
 		}
@@ -180,8 +202,13 @@ namespace IATETerminologyProvider
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
 		{
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = _projectsController.CurrentProject;
-			if (currentProject == null) return result;
+
+			var currentProject = _projectsController?.CurrentProject;
+			if (currentProject == null)
+			{
+				return result;
+			}
+
 			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
@@ -242,9 +269,8 @@ namespace IATETerminologyProvider
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguages,
-				include_subdomains = ProviderSettings?.SearchInSubdomains,
 				cascade_domains = ProviderSettings?.SearchInSubdomains,
-				query_operator = 0,
+				query_operator = 18,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
 			};
@@ -288,7 +314,11 @@ namespace IATETerminologyProvider
 
 		private void InitializeEditorController()
 		{
-			if (!(_editorController is null)) return;
+			if (_editorController != null)
+			{
+				return;
+			}
+
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
 

@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Interface
+﻿namespace Sdl.Community.IATETerminologyProvider.Interface
 {
 	public interface IMessageBoxService
 	{

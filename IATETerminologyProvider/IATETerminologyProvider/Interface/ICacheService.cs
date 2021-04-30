@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider.Interface
+namespace Sdl.Community.IATETerminologyProvider.Interface
 {
 	public interface ICacheService : IDisposable
 	{

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Sdl.Core.Globalization;
 
-namespace IATETerminologyProvider.Helpers
+namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public class LanguageFlags
 	{

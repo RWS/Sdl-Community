@@ -4,7 +4,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace IATETerminologyProvider.Helpers
+namespace Sdl.Community.IATETerminologyProvider.Helpers
 {
 	public static class Log
 	{
@@ -14,6 +14,7 @@ namespace IATETerminologyProvider.Helpers
 			{
 				LogManager.Configuration = new LoggingConfiguration();
 			}
+			
 			var config = LogManager.Configuration;
 
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",

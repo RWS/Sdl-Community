@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IATETerminologyProvider.Model.ResponseModels
+namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 {
 	public class ItemsResponseModel
 	{
@@ -9,10 +9,15 @@ namespace IATETerminologyProvider.Model.ResponseModels
 
 		[JsonProperty("eurovoc_code	")]
 		public string EurovocCode { get; set; }
+		
 		public string Name { get; set; }
+		
 		public string Level { get; set; }
+		
 		public List<SubdomainsResponseModel> Subdomains { get; set; }
+		
 		public List<TermsDomainResponseModel> Domains { get; set; }
+		
 		public string Id { get; set; }
 		public List<string> SubdomainIds { get; set; }
 	}

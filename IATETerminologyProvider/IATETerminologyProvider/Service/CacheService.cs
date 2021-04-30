@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using IATETerminologyProvider.Interface;
-using IATETerminologyProvider.Model;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class CacheService : ICacheService
 	{

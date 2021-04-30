@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Ui
+﻿namespace Sdl.Community.IATETerminologyProvider.View
 {
 	/// <summary>
 	/// Interaction logic for SettingsWindow.xaml

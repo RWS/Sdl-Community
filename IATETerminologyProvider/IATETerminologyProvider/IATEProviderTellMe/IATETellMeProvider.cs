@@ -1,6 +1,6 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-namespace IATETerminologyProvider.IATEProviderTellMe
+namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 {
 	[TellMeProvider]
 	public class IATETellMeProvider : ITellMeProvider

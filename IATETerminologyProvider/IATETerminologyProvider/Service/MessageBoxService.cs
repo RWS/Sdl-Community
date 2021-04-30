@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Interface;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class MessageBoxService : IMessageBoxService
 	{

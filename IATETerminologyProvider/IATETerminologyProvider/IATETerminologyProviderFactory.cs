@@ -1,13 +1,19 @@
 ﻿using System;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
+using NLog;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider
+namespace Sdl.Community.IATETerminologyProvider
 {
-	[TerminologyProviderFactory(Id = "IATETerminologyProvider", Name = "IATE Terminology Provider", Icon = "Iate_logo", Description = "IATE terminology provider factory")]
+	[TerminologyProviderFactory(Id = "IATETerminologyProvider", 
+		Name = "IATE Terminology Provider", 
+		Icon = "Iate_logo", 
+		Description = "IATE terminology provider factory")]
 	public class IATETerminologyProviderFactory : ITerminologyProviderFactory
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
@@ -17,7 +23,17 @@ namespace IATETerminologyProvider
 		{
 			var savedSettings = new SettingsModel(terminologyProviderUri);
 
-			var terminologyProvider = new IATETerminologyProvider(savedSettings);
+			if (!IATEApplication.ConnectionProvider.EnsureConnection())
+			{
+				var exception = new Exception("Failed login!");
+				_logger.Error(exception);
+
+				throw exception;
+			}
+			
+			var terminologyProvider = new IATETerminologyProvider(savedSettings, 
+				IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider);
+			
 			return terminologyProvider;
 		}
 	}

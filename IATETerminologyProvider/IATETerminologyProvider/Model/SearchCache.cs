@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SearchCache
 	{

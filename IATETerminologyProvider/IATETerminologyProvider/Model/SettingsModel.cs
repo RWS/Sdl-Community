@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using IATETerminologyProvider.Helpers;
 using Newtonsoft.Json;
+using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SettingsModel
 	{

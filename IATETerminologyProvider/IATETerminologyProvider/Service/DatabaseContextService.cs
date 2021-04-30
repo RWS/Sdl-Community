@@ -2,10 +2,10 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.IO;
-using IATETerminologyProvider.Model;
 using NLog;
+using Sdl.Community.IATETerminologyProvider.Model;
 
-namespace IATETerminologyProvider.Service
+namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class DatabaseContextService : DbContext
 	{
