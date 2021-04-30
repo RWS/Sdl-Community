@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Desktop.Platform.Controls.Controls;
 
-namespace Sdl.Community.IATETerminologyProvider.UiHelpers
+namespace Sdl.Community.IATETerminologyProvider.Styles
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml

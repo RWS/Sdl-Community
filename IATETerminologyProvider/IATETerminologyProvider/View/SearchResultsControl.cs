@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace Sdl.Community.IATETerminologyProvider.Ui
+namespace Sdl.Community.IATETerminologyProvider.View
 {
 	public partial class SearchResultsControl : UserControl,IUIControl
 	{

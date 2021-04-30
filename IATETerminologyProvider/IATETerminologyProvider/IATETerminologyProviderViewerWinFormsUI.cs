@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
-using Sdl.Community.IATETerminologyProvider.Ui;
+using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.IATETerminologyProvider

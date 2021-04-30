@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using NLog;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -47,17 +44,6 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			return string.Empty;
 		}
 
-		public static void AddDefaultParameters(HttpClient httpClient)
-		{
-			//we accept only application/json because it is the only encoding we can handle at the moment
-			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");
-			httpClient.DefaultRequestHeaders.Add("Pragma", "no-cache");
-			httpClient.DefaultRequestHeaders.Add("Origin", "https://iate.europa.eu");
-			httpClient.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
-			httpClient.DefaultRequestHeaders.Add("Host", "iate.europa.eu");
-			httpClient.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
-			httpClient.Timeout = TimeSpan.FromMinutes(2);
-		}
+		
 	}
 }

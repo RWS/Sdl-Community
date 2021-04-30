@@ -25,12 +25,32 @@ namespace Sdl.Community.IATETerminologyProvider
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
+
 		public SettingsModel ProviderSettings { get; set; }
-		public IATETerminologyProvider(SettingsModel providerSettings)
+
+		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
+			InventoriesProvider inventoriesService)
 		{
 			ProviderSettings = providerSettings;
-			UpdateSettings(ProviderSettings);
+			ConnectionProvider = connectionProvider;
+			InventoriesService = inventoriesService;
+
+			Task.Run(async () => await Setup(ProviderSettings));
 		}
+
+		private async Task Setup(SettingsModel settings)
+		{
+			if (!InventoriesService.IsInitialized)
+			{
+				await InventoriesService.Initialize();
+			}
+
+			UpdateSettings(settings);
+		}
+
+		public ConnectionProvider ConnectionProvider { get; private set; }
+
+		public InventoriesProvider InventoriesService { get; private set; }
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
 
@@ -64,7 +84,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
 			var activeProjectName = Utils.GetCurrentProjectName();
-			CacheService cacheService =null;
+			CacheService cacheService = null;
 
 			if (!string.IsNullOrEmpty(activeProjectName))
 			{
@@ -86,7 +106,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 			}
 
-			var results = _searchService.GetTerms(text, source, target, maxResultsCount, modelString);
+			var results = _searchService.GetTerms(modelString);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -134,8 +154,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			ProviderSettings.SearchInSubdomains = settings.SearchInSubdomains;
 			ProviderSettings.Domains = settings.Domains;
 			ProviderSettings.TermTypes = settings.TermTypes;
+
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ProviderSettings);
+			_searchService = new TermSearchService(ConnectionProvider, InventoriesService);
 
 			InitializeEditorController();
 		}
@@ -178,10 +199,15 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{			
+		{
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = _projectsController.CurrentProject;
-			if (currentProject == null) return result;
+			
+			var currentProject = _projectsController?.CurrentProject;
+			if (currentProject == null)
+			{
+				return result;
+			}
+			
 			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
@@ -244,7 +270,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				targets = targetLanguages,
 				include_subdomains = ProviderSettings?.SearchInSubdomains,
 				cascade_domains = ProviderSettings?.SearchInSubdomains,
-				query_operator = 0,
+				query_operator = 18,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
 			};
@@ -288,13 +314,17 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void InitializeEditorController()
 		{
-			if (!(_editorController is null)) return;
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
-				
 			if (_editorController != null)
 			{
-				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
+				return;
+			}
+
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
+
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 			}
 		}
 

@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.IATETerminologyProvider.Ui
+﻿namespace Sdl.Community.IATETerminologyProvider.View
 {
 	partial class IATETermsControl
 	{

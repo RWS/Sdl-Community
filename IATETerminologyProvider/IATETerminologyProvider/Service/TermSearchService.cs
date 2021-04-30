@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using Newtonsoft.Json;
@@ -20,40 +18,36 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 	public class TermSearchService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly SettingsModel _providerSettings;
-		private readonly ObservableCollection<ItemsResponseModel> _domains;
-		private readonly TermTypeService _termTypeService;
-		private readonly List<string> _subdomains = new List<string>();
+		private readonly ConnectionProvider _connectionProvider;
+		private readonly InventoriesProvider _inventoriesService;
+		private readonly List<string> _subdomains;
+		private List<TermTypeModel> _termTypes;
 		private int _termIndexId;
-		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateTermTypes { get; set; }
-		public ObservableCollection<TermTypeModel> TermTypes { get; set; }
 
-		public TermSearchService(SettingsModel providerSettings)
+		public TermSearchService(ConnectionProvider connectionProvider, 
+			InventoriesProvider inventoriesService)
 		{
-			TermTypes = new ObservableCollection<TermTypeModel>();
-			_domains = DomainService.Domains;
-			_termTypeService = new TermTypeService();
+			_connectionProvider = connectionProvider;
+			_inventoriesService = inventoriesService;
 
-			LoadTermTypes();
-			_providerSettings = providerSettings;
+			_subdomains = new List<string>();
+			_termTypes = new List<TermTypeModel>();
+
+			SetTermTypes(_inventoriesService.TermTypes);
 		}
 
 		/// <summary>
 		/// Get terms from IATE database.
 		/// </summary>
-		/// <param name="text">text used for searching</param>
-		/// <param name="source">source language</param>
-		/// <param name="target">target language</param>
-		/// <param name="maxResultsCount">number of maximum results returned(set up in Studio Termbase search settings)</param>
 		/// <param name="bodyModel">Values in the body of the requests</param>
 		/// <returns>terms</returns>
-		public List<ISearchResult> GetTerms(string text, ILanguage source, ILanguage target, int maxResultsCount,string bodyModel)
+		public List<ISearchResult> GetTerms(string bodyModel)
 		{
-			var results = new List<ISearchResult>();
-
-			var mediaType = new ContentType("application/vnd.iate.entry-search+json").MediaType;
+			var mediaType = new ContentType("application/json").MediaType;
 			var content = new StringContent(bodyModel, Encoding.UTF8, mediaType);
-			content.Headers.ContentType.CharSet = ""; // we need to remove the charset otherwise we'll receive Unsupported Media Type error from IATE
+
+			// we need to remove the charset otherwise we'll receive Unsupported Media Type error from IATE
+			content.Headers.ContentType.CharSet = string.Empty; 
 
 			var httpRequest = new HttpRequestMessage
 			{
@@ -62,14 +56,8 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				Content = content
 			};
 
-			//Refresh the Access token on Http client in case it expired
-			IateApplicationInitializer.SetAccessToken();
-
-			var client = IateApplicationInitializer.Clinet;
-			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.iate.entry+json"));
-
 			_logger.Info("--> Search call to iate");
-			var httpResponse = IateApplicationInitializer.Clinet.SendAsync(httpRequest)?.Result;
+			var httpResponse = _connectionProvider.HttpClient.SendAsync(httpRequest)?.Result;
 
 			httpResponse?.EnsureSuccessStatusCode();
 			try
@@ -77,7 +65,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				var httpResponseString = httpResponse?.Content?.ReadAsStringAsync().Result;
 				var domainsJsonResponse = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseString);
 
-				results = MapResponseValues(httpResponseString, domainsJsonResponse);
+				var results = MapResponseValues(httpResponseString, domainsJsonResponse);
 				_logger.Info("--> Response received from IATE");
 
 				return results;
@@ -211,12 +199,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var domain = string.Empty;
 			foreach (var itemDomain in itemDomains.Domains)
 			{
-				var result = _domains?.FirstOrDefault(d => d.Code.Equals(itemDomain.Code));
+				var result = _inventoriesService.Domains?.FirstOrDefault(d => d.Code.Equals(itemDomain.Code));
 				if (result != null)
 				{
 					domain = $"{result.Name}, ";
 				}
 			}
+			
 			return domain.TrimEnd(' ').TrimEnd(',');
 		}
 
@@ -225,11 +214,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			// clear _subdomains list for each term
 			_subdomains.Clear();
-			if (_domains?.Count > 0)
+			if (_inventoriesService.Domains?.Count > 0)
 			{
 				foreach (var mainDomain in mainDomains.Domains)
 				{
-					foreach (var domain in _domains)
+					foreach (var domain in _inventoriesService.Domains)
 					{
 						// if result returns null, means that code belongs to a subdomain
 						var result = domain.Code.Equals(mainDomain.Code) ? domain : null;
@@ -274,35 +263,28 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			var result = string.Empty;
 			var subdomainNo = 0;
+			
 			foreach (var subdomain in _subdomains.ToList())
 			{
 				subdomainNo++;
 				result += $"{subdomainNo}.{subdomain}  ";
 			}
+			
 			return result.TrimEnd(' ');
 		}
 
 		// Return the term type name based on the term type code.
 		private string GetTermTypeByCode(string termTypeCode)
 		{
-			var typeCode = int.TryParse(termTypeCode, out _) ? int.Parse(termTypeCode) : 0;
-			return TermTypes?.Count > 0 ? TermTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name : string.Empty;
+			var typeCode = int.TryParse(termTypeCode, out _) 
+				? int.Parse(termTypeCode) : 0;
+			
+			return _termTypes?.Count > 0 
+				? _termTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name 
+				: string.Empty;
 		}
 
-		private void LoadTermTypes()
-		{
-			if (TermTypeService.IateTermType?.Count > 0)
-			{
-				SetTermTypes(TermTypeService.IateTermType);
-			}
-			else
-			{
-				IateTermTypes = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_termTypeService.GetTermTypes());
-				IateTermTypes.PropertyChanged += IateTermTypes_PropertyChanged;
-			}
-		}
-
-		private void SetTermTypes(ObservableCollection<ItemsResponseModel> termTypesResponse)
+		private void SetTermTypes(IEnumerable<ItemsResponseModel> termTypesResponse)
 		{
 			foreach (var item in termTypesResponse)
 			{
@@ -313,15 +295,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 					Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
 					Name = selectedTermTypeName
 				};
-				TermTypes.Add(termType);
-			}
-		}
 
-		private void IateTermTypes_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (!e.PropertyName.Equals("Result")) return;
-			if (!(IateTermTypes.Result?.Count > 0)) return;
-			SetTermTypes(IateTermTypes.Result);
+				_termTypes.Add(termType);
+			}
 		}
 	}
 }

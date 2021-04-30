@@ -11,7 +11,7 @@ using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace Sdl.Community.IATETerminologyProvider.Ui
+namespace Sdl.Community.IATETerminologyProvider.View
 {
 	public partial class IATETermsControl : UserControl
 	{

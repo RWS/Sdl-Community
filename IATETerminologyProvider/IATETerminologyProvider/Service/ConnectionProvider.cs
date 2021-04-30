@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using NLog;
@@ -9,33 +11,31 @@ using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
 
 namespace Sdl.Community.IATETerminologyProvider.Service
 {
-	public class AccessTokenService : INotifyPropertyChanged, IDisposable
+	public class ConnectionProvider : INotifyPropertyChanged, IDisposable
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;
-		private DateTime _requestedAccessToken;
-		private DateTime _extendedRefreshToken;
+		
+		private DateTime _expireDate;
 
 		private bool _accessTokenExpired;
 		private bool _refreshTokenExpired;
-		private bool _accessTokenExtended;
-
-		private TimeSpan _accessTokenLifespan;
-		private TimeSpan _refreshTokenLifespan;
 
 		private string _accessToken;
 		private string _refreshToken;
 
-		public AccessTokenService(TimeSpan accessTokenLifespan, TimeSpan refreshTokenLifespan)
-		{
-			Reset();
+		private string _userName;
+		private string _password;
 
-			_accessTokenLifespan = accessTokenLifespan.TotalSeconds > 0 ? accessTokenLifespan : new TimeSpan(0, 2, 45, 0);
-			_refreshTokenLifespan = refreshTokenLifespan.TotalSeconds > 0 ? refreshTokenLifespan : new TimeSpan(0, 8, 45, 0);
+		private HttpClient _httpClient;
+
+		public ConnectionProvider()
+		{
+			ResetProperties();
 
 			_timer = new System.Timers.Timer
 			{
-				Interval = 60000
+				Interval = 30000
 			};
 
 			_timer.Elapsed += Timer_Elapsed;
@@ -44,12 +44,23 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			_timer.Start();
 		}
 
-		public AccessTokenService() : this(new TimeSpan(0), new TimeSpan(0))
-		{
-		}
-
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		public HttpClient HttpClient
+		{
+			get => _httpClient;
+			private set
+			{
+				if (_httpClient == value)
+				{
+					return;
+				}
+
+				_httpClient = value;
+				OnPropertyChanged(nameof(HttpClient));
+			}
+		}
+		
 		public bool AccessTokenExpired
 		{
 			get => _accessTokenExpired;
@@ -77,21 +88,6 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 				_refreshTokenExpired = value;
 				OnPropertyChanged(nameof(RefreshTokenExpired));
-			}
-		}
-
-		public bool AccessTokenExtended
-		{
-			get => _accessTokenExtended;
-			private set
-			{
-				if (_accessTokenExtended == value)
-				{
-					return;
-				}
-
-				_accessTokenExtended = value;
-				OnPropertyChanged(nameof(AccessTokenExtended));
 			}
 		}
 
@@ -125,75 +121,33 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 		}
 
-		public DateTime RequestedAccessToken
+		public DateTime ExpireDate
 		{
-			get => _requestedAccessToken;
+			get => _expireDate;
 			private set
 			{
-				if (_requestedAccessToken == value)
+				if (_expireDate == value)
 				{
 					return;
 				}
 
-				_requestedAccessToken = value;
-				OnPropertyChanged(nameof(RequestedAccessToken));
+				_expireDate = value;
+				OnPropertyChanged(nameof(ExpireDate));
 			}
 		}
 
-		public DateTime ExtendedRefreshToken
-		{
-			get => _extendedRefreshToken;
-			private set
-			{
-				if (_extendedRefreshToken == value)
-				{
-					return;
-				}
-
-				_extendedRefreshToken = value;
-				OnPropertyChanged(nameof(ExtendedRefreshToken));
-			}
-		}
-
-		public TimeSpan AccessTokenLifespan
-		{
-			get => _accessTokenLifespan;
-			private set
-			{
-				if (_accessTokenLifespan == value)
-				{
-					return;
-				}
-
-				_accessTokenLifespan = value;
-				OnPropertyChanged(nameof(AccessTokenLifespan));
-			}
-		}
-
-		public TimeSpan RefreshTokenLifespan
-		{
-			get => _refreshTokenLifespan;
-			private set
-			{
-				if (_refreshTokenLifespan == value)
-				{
-					return;
-				}
-
-				_refreshTokenLifespan = value;
-				OnPropertyChanged(nameof(RefreshTokenLifespan));
-			}
-		}
-
-		public bool GetAccessToken(string userName, string password)
+		public bool Login(string userName, string password)
 		{
 			if (string.IsNullOrEmpty(userName)
-				|| string.IsNullOrEmpty(password))
+			    || string.IsNullOrEmpty(password))
 			{
 				return false;
 			}
 
-			Reset();
+			_userName = userName;
+			_password = password;
+			
+			ResetProperties();
 
 			var response = GetAccessTokenResponse(userName, password);
 			if (response != null && response.Tokens.Count > 0)
@@ -202,27 +156,36 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				_refreshToken = response.RefreshToken;
 
 				_accessTokenExpired = false;
-				_accessTokenExtended = false;
 				_refreshTokenExpired = false;
 
-				_requestedAccessToken = DateTime.Now;
-				_extendedRefreshToken = DateTime.MinValue;
+				_expireDate = ReadToken(_accessToken).ValidTo;
+
+				_httpClient = GetDefaultHttpClient();
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
 				OnPropertyChanged(nameof(AccessToken));
-				OnPropertyChanged(nameof(RequestedAccessToken));
+				OnPropertyChanged(nameof(ExpireDate));
+				OnPropertyChanged(nameof(HttpClient));
 
 				return true;
 			}
 
+			Logger.Error("Failed login!");
+			
 			return false;
 		}
 
-		public bool ExtendAccessToken()
+		public bool ReLogin()
 		{
-			if (_accessTokenExtended ||
-				string.IsNullOrEmpty(_accessToken) ||
-				string.IsNullOrEmpty(RefreshToken) ||
-				_requestedAccessToken == DateTime.MinValue)
+			return Login(_userName, _password);
+		}
+
+		public bool ExtendLogin()
+		{
+			if (_refreshTokenExpired ||
+			    string.IsNullOrEmpty(_refreshToken) ||
+			    _expireDate == DateTime.MinValue || 
+			    _expireDate == DateTime.MaxValue)
 			{
 				return false;
 			}
@@ -234,12 +197,14 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				_refreshToken = response.RefreshToken;
 
 				_accessTokenExpired = true;
-				_accessTokenExtended = true;
 				_refreshTokenExpired = false;
 
-				_extendedRefreshToken = DateTime.Now;
+				_expireDate = ReadToken(_accessToken).ValidTo;
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
-				OnPropertyChanged(nameof(ExtendedRefreshToken));
+				OnPropertyChanged(nameof(AccessToken));
+				OnPropertyChanged(nameof(ExpireDate));
+				OnPropertyChanged(nameof(HttpClient));
 
 				return true;
 			}
@@ -249,7 +214,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		public void Dispose()
 		{
-			if (_timer is null) return;
+			_httpClient?.Dispose();
+			
+			if (_timer is null)
+			{
+				return;
+			}
+			
 			_timer.Stop();
 			_timer.Elapsed -= Timer_Elapsed;
 			_timer.Close();
@@ -260,10 +231,8 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		private static JsonAccessTokenModel GetResponse(HttpClient httpClient)
+		private JsonAccessTokenModel GetResponse(HttpClient httpClient)
 		{
-			Utils.AddDefaultParameters(httpClient);
-
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Get
@@ -287,53 +256,96 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		private JsonAccessTokenModel GetAccessTokenResponse(string userName, string password)
 		{
-			var httpClient = new HttpClient
-			{
-				BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password)),
-				Timeout = TimeSpan.FromMinutes(2)
-			};
+			var httpClient = GetDefaultHttpClient();
+			httpClient.BaseAddress = new Uri(ApiUrls.GetAccessTokenUri(userName, password));
+
 			return GetResponse(httpClient);
 		}
 
 		private JsonAccessTokenModel GetExtendAccessTokenResponse()
 		{
-			var httpClient = new HttpClient
-			{
-				BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken)),
-				Timeout = TimeSpan.FromMinutes(2)
-			};
+			var httpClient = GetDefaultHttpClient();
+			httpClient.BaseAddress = new Uri(ApiUrls.GetExtendAccessTokenUri(RefreshToken));
+				
 			return GetResponse(httpClient);
 		}
 
-		private void Reset()
+		private JwtSecurityToken ReadToken(string token)
 		{
+			if (string.IsNullOrEmpty(token))
+			{
+				return null;
+			}
+
+			try
+			{
+				var jwtHandler = new JwtSecurityTokenHandler();
+
+				//Check if readable token (string is in a JWT format)
+				var readableToken = jwtHandler.CanReadToken(token);
+				if (!readableToken)
+				{
+					return null;
+				}
+
+				return jwtHandler.ReadJwtToken(token);
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return null;
+		}
+
+		private HttpClient GetDefaultHttpClient()
+		{
+			var httpClient = new HttpClient();
+
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			httpClient.DefaultRequestHeaders.Connection.Add("Keep-Alive");
+			httpClient.DefaultRequestHeaders.Add("Pragma", "no-cache");
+			httpClient.DefaultRequestHeaders.Add("Origin", "https://iate.europa.eu");
+			httpClient.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+			httpClient.DefaultRequestHeaders.Add("Host", "iate.europa.eu");
+			httpClient.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+			httpClient.Timeout = TimeSpan.FromMinutes(2);
+
+			return httpClient;
+		}
+
+		private void ResetProperties()
+		{
+			_httpClient = null;
+			
 			_accessTokenExpired = false;
-			_accessTokenExtended = false;
 			_refreshTokenExpired = false;
 
 			_accessToken = string.Empty;
 			_refreshToken = string.Empty;
 
-			_requestedAccessToken = DateTime.MinValue;
-			_extendedRefreshToken = DateTime.MinValue;
+			_expireDate = DateTime.MinValue;
 		}
 
 		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!_accessTokenExpired && _requestedAccessToken > DateTime.MinValue)
+			if (_expireDate == DateTime.MinValue || _expireDate == DateTime.MaxValue)
 			{
-				var expireTime = _requestedAccessToken.AddSeconds(_accessTokenLifespan.TotalSeconds);
-				if (expireTime < DateTime.Now.AddMinutes(1))
-				{
-					_accessTokenExpired = true;
-				}
+				return;
 			}
-			else if (!_refreshTokenExpired && _extendedRefreshToken > DateTime.MinValue)
+
+			// if the expire date will expire within the next minute
+			if (_expireDate < DateTime.UtcNow.AddMinutes(1))
 			{
-				var expireTime = _extendedRefreshToken.AddSeconds(_refreshTokenLifespan.TotalSeconds);
-				if (expireTime < DateTime.Now.AddMinutes(1))
+				if (!_accessTokenExpired)
 				{
-					_refreshTokenExpired = true;
+					//ExtendLogin();
+					AccessTokenExpired = true;
+				}
+				else if (!_refreshTokenExpired)
+				{
+					//ReLogin();
+					RefreshTokenExpired = true;
 				}
 			}
 		}
