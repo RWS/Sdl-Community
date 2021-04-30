@@ -5,7 +5,12 @@ namespace Sdl.Community.MTCloud.Provider.Model
 {
 	public class Options : BaseModel
 	{
-		private bool sendFeedback;
+		private bool _sendFeedback;
+
+		public Options()
+		{
+			LanguageMappings = new List<LanguageMappingModel>();
+		}
 
 		public bool AutoSendFeedback { get; set; }
 		public List<LanguageMappingModel> LanguageMappings { get; set; } = new();
@@ -13,10 +18,10 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		public bool SendFeedback
 		{
-			get => sendFeedback;
+			get => _sendFeedback;
 			set
 			{
-				sendFeedback = value;
+				_sendFeedback = value;
 				OnPropertyChanged(nameof(SendFeedback));
 			}
 		}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Events;
@@ -27,7 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public Dictionary<SegmentId, TargetSegmentData> ActiveDocumentData
+		public ConcurrentDictionary<SegmentId, ImprovementFeedback> ActiveDocumentData
 		{
 			get
 			{
@@ -38,14 +39,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new();
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, ImprovementFeedback>> Data { get; set; } = new();
 
 		public void AddImprovement(SegmentId segmentId, string improvement)
 		{
 			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
 
-			var item = ActiveDocumentData[segmentId].Feedback;
-			if (item.Suggestion != improvement) item.Suggestion = improvement;
+			var item = ActiveDocumentData[segmentId];
+			if (item.Improvement != improvement) item.Improvement = improvement;
 		}
 
 		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
@@ -53,29 +54,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			if (targetOrigin != PluginResources.SDLMTCloudName) return;
 
-			ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData);
-			if (targetSegmentData == null)
+			if (!ActiveDocumentData.TryGetValue(segmentId, out _))
 			{
-				ActiveDocumentData[segmentId] = new TargetSegmentData
-				{
-					Feedback = new Feedback(originalTarget, source),
-				};
+				ActiveDocumentData[segmentId] = new ImprovementFeedback(originalTarget, source);
 			}
 			else
 			{
-				ActiveDocumentData[segmentId].Feedback = new Feedback(originalTarget, source);
+				ActiveDocumentData[segmentId] = new ImprovementFeedback(originalTarget, source);
 			}
 		}
 
-		public Feedback GetImprovement(SegmentId? segmentId = null)
+		public ImprovementFeedback GetImprovement(SegmentId? segmentId = null)
 		{
 			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
-			Feedback improvement = null;
+			ImprovementFeedback improvement = null;
 
 			var segmentHasImprovement = currentSegment != null && ActiveDocumentData.ContainsKey(currentSegment.Value);
 			if (segmentHasImprovement)
 			{
-				improvement = ActiveDocumentData[currentSegment.Value].Feedback;
+				improvement = ActiveDocumentData[currentSegment.Value];
 			}
 			return improvement;
 		}
@@ -155,7 +152,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			return IsFromSdlMtCloud(translationOrigin, true) &&
 				   ActiveDocumentData.ContainsKey(segmentId) &&
-				   ActiveDocumentData[segmentId].Feedback.OriginalMtCloudTranslation != segment.ToString() &&
+				   ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
 				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
 		}
 
@@ -164,7 +161,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
-				Data[_docId] = new Dictionary<SegmentId, TargetSegmentData>();
+				Data[_docId] = new ConcurrentDictionary<SegmentId, ImprovementFeedback>();
 			}
 		}
 

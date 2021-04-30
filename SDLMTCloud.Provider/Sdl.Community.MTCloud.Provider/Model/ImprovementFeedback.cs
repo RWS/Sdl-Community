@@ -1,14 +1,14 @@
 ﻿namespace Sdl.Community.MTCloud.Provider.Model
 {
-	public class Feedback
+	public class ImprovementFeedback
 	{
-		public Feedback(string originalTarget, string originalSource)
+		public ImprovementFeedback(string originalTarget, string originalSource)
 		{
 			OriginalMtCloudTranslation = originalTarget;
 			OriginalSource = originalSource;
 		}
 
-		public string Suggestion { get; set; }
+		public string Improvement { get; set; }
 
 		public string OriginalMtCloudTranslation { get; set; }
 

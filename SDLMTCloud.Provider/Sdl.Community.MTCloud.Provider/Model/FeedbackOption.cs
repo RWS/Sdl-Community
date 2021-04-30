@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
-	public class FeedbackOption:BaseViewModel
+	public class FeedbackOption : BaseViewModel
 	{
 		private bool _isChecked;
 		private string _studioActionId;
@@ -18,7 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				OnPropertyChanged(nameof(IsChecked));
 			}
 		}
-		
+
 		public string OptionName { get; set; }
 
 		public string StudioActionId
