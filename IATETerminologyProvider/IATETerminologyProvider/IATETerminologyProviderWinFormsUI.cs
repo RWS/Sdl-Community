@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
@@ -11,6 +12,7 @@ namespace Sdl.Community.IATETerminologyProvider
 	[TerminologyProviderWinFormsUI]
 	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private SettingsViewModel _settingsViewModel;
 		private SettingsWindow _settingsWindow;
 		public string TypeName => PluginResources.IATETerminologyProviderName;
@@ -21,7 +23,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		{
 			var messageBoxService = new MessageBoxService();
 
-			if (IATEApplication.ConnectionProvider.HttpClient != null)
+			if (IATEApplication.ConnectionProvider.EnsureConnection())
 			{
 				_settingsViewModel = new SettingsViewModel(null, IATEApplication.InventoriesProvider, messageBoxService);
 				_settingsWindow = new SettingsWindow { DataContext = _settingsViewModel };
@@ -38,11 +40,22 @@ namespace Sdl.Community.IATETerminologyProvider
 				return new ITerminologyProvider[] { provider };
 			}
 
-			throw new Exception("Failed login!");
+			var exception = new Exception("Failed login!");
+			_logger.Error(exception);
+			
+			throw exception;
 		}
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
+			if (!IATEApplication.ConnectionProvider.EnsureConnection())
+			{
+				var exception = new Exception("Failed login!");
+				_logger.Error(exception);
+				
+				throw exception;
+			}
+			
 			var provider = terminologyProvider as IATETerminologyProvider;
 			if (provider == null)
 			{

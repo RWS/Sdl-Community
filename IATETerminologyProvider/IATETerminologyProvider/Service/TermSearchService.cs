@@ -24,7 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		private List<TermTypeModel> _termTypes;
 		private int _termIndexId;
 
-		public TermSearchService(ConnectionProvider connectionProvider, 
+		public TermSearchService(ConnectionProvider connectionProvider,
 			InventoriesProvider inventoriesProvider)
 		{
 			_connectionProvider = connectionProvider;
@@ -43,16 +43,21 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// <returns>terms</returns>
 		public List<ISearchResult> GetTerms(string bodyModel)
 		{
+			if (!_connectionProvider.EnsureConnection())
+			{
+				throw new Exception("Failed login!");
+			}
+
 			var mediaType = new ContentType("application/json").MediaType;
 			var content = new StringContent(bodyModel, Encoding.UTF8, mediaType);
 
 			// we need to remove the charset otherwise we'll receive Unsupported Media Type error from IATE
-			content.Headers.ContentType.CharSet = string.Empty; 
+			content.Headers.ContentType.CharSet = string.Empty;
 
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Post,
-				RequestUri = new Uri(ApiUrls.SearchUri("true", "0", "500")),
+				RequestUri = new Uri(ApiUrls.SearchUri("true", "500")),
 				Content = content
 			};
 
@@ -72,7 +77,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 			finally
 			{
-				httpResponse?.Dispose(); 
+				httpResponse?.Dispose();
 				content.Dispose();
 			}
 		}
@@ -89,7 +94,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			if (!string.IsNullOrEmpty(response))
 			{
 				var jObject = JObject.Parse(response);
-				var itemTokens = (JArray) jObject.SelectToken("items");
+				var itemTokens = (JArray)jObject.SelectToken("items");
 				if (itemTokens != null)
 				{
 					foreach (var item in itemTokens)
@@ -110,7 +115,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 							// foreach language token get the terms
 							foreach (var jToken in languageTokens)
 							{
-								var languageToken = (JProperty) jToken;
+								var languageToken = (JProperty)jToken;
 
 								// Multilingual and Latin translations are automatically returned by IATE API response->"la" code
 								// Ignore the "mul" and "la" translations
@@ -205,7 +210,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 					domain = $"{result.Name}, ";
 				}
 			}
-			
+
 			return domain.TrimEnd(' ').TrimEnd(',');
 		}
 
@@ -263,24 +268,24 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			var result = string.Empty;
 			var subdomainNo = 0;
-			
+
 			foreach (var subdomain in _subdomains.ToList())
 			{
 				subdomainNo++;
 				result += $"{subdomainNo}.{subdomain}  ";
 			}
-			
+
 			return result.TrimEnd(' ');
 		}
 
 		// Return the term type name based on the term type code.
 		private string GetTermTypeByCode(string termTypeCode)
 		{
-			var typeCode = int.TryParse(termTypeCode, out _) 
+			var typeCode = int.TryParse(termTypeCode, out _)
 				? int.Parse(termTypeCode) : 0;
-			
-			return _termTypes?.Count > 0 
-				? _termTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name 
+
+			return _termTypes?.Count > 0
+				? _termTypes?.FirstOrDefault(t => t.Code == typeCode)?.Name
 				: string.Empty;
 		}
 

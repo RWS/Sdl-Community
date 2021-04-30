@@ -212,6 +212,25 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			return true;
 		}
 
+		public bool EnsureConnection()
+		{
+			if (HttpClient == null)
+			{
+				return ReLogin();
+			}
+			
+			if (AccessTokenExpired)
+			{
+				var success = RefreshTokenExpired
+					? ReLogin()
+					: ExtendLogin();
+
+				return success;
+			}
+
+			return true;
+		}
+
 		public void Dispose()
 		{
 			_httpClient?.Dispose();
@@ -339,13 +358,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			{
 				if (!_accessTokenExpired)
 				{
-					//ExtendLogin();
 					AccessTokenExpired = true;
+					EnsureConnection();
 				}
 				else if (!_refreshTokenExpired)
 				{
-					//ReLogin();
 					RefreshTokenExpired = true;
+					EnsureConnection();
 				}
 			}
 		}

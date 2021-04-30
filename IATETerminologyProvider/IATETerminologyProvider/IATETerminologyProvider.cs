@@ -18,11 +18,11 @@ namespace Sdl.Community.IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
 		private ProjectsController _projectsController;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -201,13 +201,13 @@ namespace Sdl.Community.IATETerminologyProvider
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
 		{
 			var result = new List<IDefinitionLanguage>();
-			
+
 			var currentProject = _projectsController?.CurrentProject;
 			if (currentProject == null)
 			{
 				return result;
 			}
-			
+
 			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
@@ -268,7 +268,6 @@ namespace Sdl.Community.IATETerminologyProvider
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguages,
-				include_subdomains = ProviderSettings?.SearchInSubdomains,
 				cascade_domains = ProviderSettings?.SearchInSubdomains,
 				query_operator = 18,
 				filter_by_domains = filteredDomains,
