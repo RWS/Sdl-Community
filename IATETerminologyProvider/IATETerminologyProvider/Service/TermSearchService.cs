@@ -19,21 +19,21 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly ConnectionProvider _connectionProvider;
-		private readonly InventoriesProvider _inventoriesService;
+		private readonly InventoriesProvider _inventoriesProvider;
 		private readonly List<string> _subdomains;
 		private List<TermTypeModel> _termTypes;
 		private int _termIndexId;
 
 		public TermSearchService(ConnectionProvider connectionProvider, 
-			InventoriesProvider inventoriesService)
+			InventoriesProvider inventoriesProvider)
 		{
 			_connectionProvider = connectionProvider;
-			_inventoriesService = inventoriesService;
+			_inventoriesProvider = inventoriesProvider;
 
 			_subdomains = new List<string>();
 			_termTypes = new List<TermTypeModel>();
 
-			SetTermTypes(_inventoriesService.TermTypes);
+			SetTermTypes(_inventoriesProvider.TermTypes);
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var domain = string.Empty;
 			foreach (var itemDomain in itemDomains.Domains)
 			{
-				var result = _inventoriesService.Domains?.FirstOrDefault(d => d.Code.Equals(itemDomain.Code));
+				var result = _inventoriesProvider.Domains?.FirstOrDefault(d => d.Code.Equals(itemDomain.Code));
 				if (result != null)
 				{
 					domain = $"{result.Name}, ";
@@ -214,11 +214,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		{
 			// clear _subdomains list for each term
 			_subdomains.Clear();
-			if (_inventoriesService.Domains?.Count > 0)
+			if (_inventoriesProvider.Domains?.Count > 0)
 			{
 				foreach (var mainDomain in mainDomains.Domains)
 				{
-					foreach (var domain in _inventoriesService.Domains)
+					foreach (var domain in _inventoriesProvider.Domains)
 					{
 						// if result returns null, means that code belongs to a subdomain
 						var result = domain.Code.Equals(mainDomain.Code) ? domain : null;

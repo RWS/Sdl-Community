@@ -29,20 +29,20 @@ namespace Sdl.Community.IATETerminologyProvider
 		public SettingsModel ProviderSettings { get; set; }
 
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesService)
+			InventoriesProvider inventoriesProvider)
 		{
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
-			InventoriesService = inventoriesService;
+			InventoriesProvider = inventoriesProvider;
 
 			Task.Run(async () => await Setup(ProviderSettings));
 		}
 
 		private async Task Setup(SettingsModel settings)
 		{
-			if (!InventoriesService.IsInitialized)
+			if (!InventoriesProvider.IsInitialized)
 			{
-				await InventoriesService.Initialize();
+				await InventoriesProvider.Initialize();
 			}
 
 			UpdateSettings(settings);
@@ -50,7 +50,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public ConnectionProvider ConnectionProvider { get; private set; }
 
-		public InventoriesProvider InventoriesService { get; private set; }
+		public InventoriesProvider InventoriesProvider { get; private set; }
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
 
@@ -156,7 +156,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			ProviderSettings.TermTypes = settings.TermTypes;
 
 			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ConnectionProvider, InventoriesService);
+			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
 
 			InitializeEditorController();
 		}

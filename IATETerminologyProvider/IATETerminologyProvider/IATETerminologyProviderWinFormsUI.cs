@@ -51,7 +51,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var messageBoxService = new MessageBoxService();
 
-			_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesService, messageBoxService);
+			_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, messageBoxService);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel
