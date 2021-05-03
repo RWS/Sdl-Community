@@ -33,9 +33,9 @@ namespace Sdl.Community.IATETerminologyProvider
 					await InventoriesProvider.Initialize();
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				Logger.Error(e);
+				Logger.Error($"{ex.Message}\n{ex.StackTrace}");
 			}
 		}
 	}

@@ -35,7 +35,8 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 			_timer = new System.Timers.Timer
 			{
-				Interval = 30000
+				// every 10 seconds
+				Interval = 10000
 			};
 
 			_timer.Elapsed += Timer_Elapsed;
@@ -170,9 +171,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				return true;
 			}
 
-			_logger.Error("Failed login!");
-			
-			return false;
+			throw new Exception("Failed login!");
 		}
 
 		public bool ReLogin()
@@ -358,11 +357,13 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			{
 				if (!_accessTokenExpired)
 				{
+					// refresh the token before it expires using the RefreshToken
 					AccessTokenExpired = true;
 					EnsureConnection();
 				}
 				else if (!_refreshTokenExpired)
 				{
+					// relogin is required if the refresh token expires
 					RefreshTokenExpired = true;
 					EnsureConnection();
 				}
