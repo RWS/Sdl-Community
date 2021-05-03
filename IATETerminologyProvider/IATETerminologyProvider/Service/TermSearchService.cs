@@ -21,7 +21,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		private readonly ConnectionProvider _connectionProvider;
 		private readonly InventoriesProvider _inventoriesProvider;
 		private readonly List<string> _subdomains;
-		private List<TermTypeModel> _termTypes;
+		private readonly List<TermTypeModel> _termTypes;
 		private int _termIndexId;
 
 		public TermSearchService(ConnectionProvider connectionProvider,
@@ -39,9 +39,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// <summary>
 		/// Get terms from IATE database.
 		/// </summary>
-		/// <param name="bodyModel">Values in the body of the requests</param>
+		/// <param name="jsonBody">Values in the jsonBody of the requests</param>
 		/// <returns>terms</returns>
-		public List<ISearchResult> GetTerms(string bodyModel)
+		public List<ISearchResult> GetTerms(string jsonBody)
 		{
 			if (!_connectionProvider.EnsureConnection())
 			{
@@ -49,7 +49,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 
 			var mediaType = new ContentType("application/json").MediaType;
-			var content = new StringContent(bodyModel, Encoding.UTF8, mediaType);
+			var content = new StringContent(jsonBody, Encoding.UTF8, mediaType);
 
 			// we need to remove the charset otherwise we'll receive Unsupported Media Type error from IATE
 			content.Headers.ContentType.CharSet = string.Empty;
@@ -74,6 +74,11 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				_logger.Info("--> Response received from IATE");
 
 				return results;
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{ex.Message}\n{ex.StackTrace}");
+				throw;
 			}
 			finally
 			{

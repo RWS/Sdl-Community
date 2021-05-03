@@ -13,7 +13,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class ConnectionProvider : INotifyPropertyChanged, IDisposable
 	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;
 		
 		private DateTime _expireDate;
@@ -170,7 +170,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				return true;
 			}
 
-			Logger.Error("Failed login!");
+			_logger.Error("Failed login!");
 			
 			return false;
 		}
@@ -265,9 +265,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 				return accessTokenRespose;
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				Logger.Error($"{e.Message}\n{e.StackTrace}");
+				_logger.Error($"{ex.Message}\n{ex.StackTrace}");
 			}
 
 			return null;

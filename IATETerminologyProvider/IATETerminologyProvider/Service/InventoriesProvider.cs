@@ -11,7 +11,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class InventoriesProvider
 	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly ConnectionProvider _connectionProvider;
 
 		public InventoriesProvider(ConnectionProvider connectionProvider)
@@ -20,6 +20,10 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		}
 
 		public bool IsInitialized { get; private set; }
+
+		public List<ItemsResponseModel> Domains { get; private set; }
+
+		public List<ItemsResponseModel> TermTypes { get; private set; }
 
 		public async Task<bool> Initialize()
 		{
@@ -30,23 +34,24 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 			try
 			{
+				_logger.Info($"--> Try to recover inventories");
+
 				Domains = await Task.FromResult(await GetDomains());
+				_logger.Info($"--> Recoved {Domains?.Count} Domains");
+
 				TermTypes = await Task.FromResult(await GetTermTypes());
+				_logger.Info($"--> Recoved {TermTypes?.Count} Term Types");
 
 				IsInitialized = true;
 			}
 			catch (Exception ex)
 			{
 				IsInitialized = false;
-				Logger.Error(ex);
+				_logger.Error($"{ex.Message}\n{ex.StackTrace}");
 			}
 
 			return IsInitialized;
 		}
-
-		public List<ItemsResponseModel> Domains { get; private set; }
-
-		public List<ItemsResponseModel> TermTypes { get; private set; }
 
 		private async Task<List<ItemsResponseModel>> GetDomains()
 		{

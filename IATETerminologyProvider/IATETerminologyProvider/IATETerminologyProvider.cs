@@ -80,7 +80,8 @@ namespace Sdl.Community.IATETerminologyProvider
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
 			_entryModels.Clear();
-			_logger.Info("--> Start Searching for segment");
+			_logger.Info("--> Try searching for segment");
+			
 			var bodyModel = GetApiRequestBodyValues(source, target, text);
 			var modelString = JsonConvert.SerializeObject(bodyModel);
 			var activeProjectName = Utils.GetCurrentProjectName();

@@ -19,11 +19,11 @@ namespace Sdl.Community.IATETerminologyProvider
 		public async void Execute()
 		{
 			Log.Setup();
-			Logger.Info("-->IATE Application Initializer");
+			Logger.Info("--> IATE Initialize Application");
 			
 			try
 			{
-				Logger.Info("-->Try to get domains");
+				Logger.Info("--> Try to login");
 
 				ConnectionProvider = new ConnectionProvider();
 				var success = ConnectionProvider.Login("SDL_PLUGIN", "E9KWtWahXs4hvE9z");
