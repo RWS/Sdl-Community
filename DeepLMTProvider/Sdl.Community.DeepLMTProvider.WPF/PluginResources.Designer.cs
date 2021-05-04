@@ -61,6 +61,15 @@ namespace Sdl.Community.DeepLMTProvider.WPF {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Api Key is required..
+        /// </summary>
+        public static string ApiKeyIsRequired_ValidationBlockMessage {
+            get {
+                return ResourceManager.GetString("ApiKeyIsRequired_ValidationBlockMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key..
         /// </summary>
         public static string Forbidden_Message {

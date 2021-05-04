@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;

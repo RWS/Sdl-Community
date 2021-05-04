@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeepLMTProvider

@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
