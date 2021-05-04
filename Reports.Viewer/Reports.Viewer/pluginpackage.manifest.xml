@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Reports Viewer Plus</PlugInName>
-	<Version>2.0.3.1</Version>
+	<Version>2.1.0.0</Version>
 	<Description>Reports Viewer Plus</Description>
 	<Author>SDL Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
+	<RequiredProduct name="SDLTradosStudio" minversion="16.1.5"/>
 	<Include>
 		<File>Sdl.MultiSelectComboBox.dll</File>
 	</Include>
