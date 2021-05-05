@@ -22,7 +22,9 @@ write-output "CertFile: $CertFile"
 
 attrib -r "$fileToSign"
 
-$pluginpath = "$env:outputpath\Sdl.PluginFramework.PackageSupport.dll"
+#set the outputpath variable in the pipeline
+
+$pluginpath = "$env:outputpath\Sdl.Core.PluginFramework.PackageSupport.dll"
 write-output "trying $pluginpath"
 
 [Reflection.Assembly]::LoadFile($pluginpath)
