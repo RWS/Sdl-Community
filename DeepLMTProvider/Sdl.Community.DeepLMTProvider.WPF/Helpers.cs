@@ -9,13 +9,13 @@ using NLog;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
-	public static class Helpers
+	public class Helpers
 	{
 		private static readonly Logger _logger = Log.GetLogger(nameof(Helpers));
-		private static string _apiKey;
-		public static HttpResponseMessage IsApiKeyValidResponse { get; set; }
+		private string _apiKey;
+		public HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 
-		private static string ApiKey
+		private string ApiKey
 		{
 			get => _apiKey;
 			set
@@ -25,7 +25,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			}
 		}
 
-		private static void OnApiKeyChanged()
+		private void OnApiKeyChanged()
 		{
 			IsApiKeyValidResponse = IsValidApiKey(ApiKey);
 
@@ -37,10 +37,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private static List<string> FormalityIncompatibleTargetLanguages { get; set; }
 
-		public static bool? AreLanguagesCompatibleWithFormalityParameter(List<CultureInfo> targetLanguages)
+		public List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
 		{
 			if (FormalityIncompatibleTargetLanguages is null) return null;
-			return targetLanguages.All(IsLanguageCompatible);
+			return targetLanguages.Where(tl=>!IsLanguageCompatible(tl)).Select(tl => tl.Name).ToList();
 		}
 
 		public static List<string> GetSupportedSourceLanguages(string apiKey)
@@ -77,12 +77,12 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			return supportedLanguages;
 		}
 
-		public static void SetApiKey(string apiKey)
+		public void SetApiKey(string apiKey)
 		{
 			ApiKey = apiKey;
 		}
 
-		private static void SetFormalityIncompatibleLanguages()
+		private void SetFormalityIncompatibleLanguages()
 		{
 			FormalityIncompatibleTargetLanguages =
 				GetSupportedTargetLanguages(ApiKey).Where(sl => !sl.Value).Select(sl => sl.Key.ToLower()).ToList();
@@ -90,8 +90,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private static HttpResponseMessage IsValidApiKey(string apiKey)
 		{
-			var response = AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
-			return response;
+			return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
 		}
 
 		private static string GetSupportedLanguages(string type, string apiKey)

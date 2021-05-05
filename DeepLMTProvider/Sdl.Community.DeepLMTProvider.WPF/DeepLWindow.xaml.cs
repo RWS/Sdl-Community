@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
@@ -18,6 +19,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 	{
 		private readonly LanguagePair[] _languagePairs;
 		private readonly bool _isTellMeAction;
+		private readonly Helpers _helpers;
 
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
 			LanguagePair[] languagePairs = null, bool isTellMeAction = false)
@@ -29,6 +31,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			Formality.SelectedIndex = (int)options.Formality;
 			PlainText.IsChecked = options.SendPlainText;
 			Options = options;
+			_helpers = new Helpers();
 
 			PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -54,7 +57,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			Options.ApiKey = ApiKeyBox.Password.Trim();
 
-			Helpers.SetApiKey(Options.ApiKey);
+			_helpers.SetApiKey(Options.ApiKey);
 
 			SetApiKeyValidityLabel();
 			SetFormalityCompatibilityLabel();
@@ -68,7 +71,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				var formalityIncompatibleLanguages = Helpers.GetFormalityIncompatibleLanguages(currentLanguagePairs);
+				var formalityIncompatibleLanguages = _helpers.GetFormalityIncompatibleLanguages(currentLanguagePairs);
 				
 				if (formalityIncompatibleLanguages.Count > 0)
 				{
@@ -132,9 +135,9 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			if (!string.IsNullOrEmpty(Options.ApiKey))
 			{
-				SetValidationBlockMessage(Visibility.Hidden);
+				SetValidationBlockMessage(Visibility.Collapsed);
 
-				var isApiKeyValidResponse = Helpers.IsApiKeyValidResponse;
+				var isApiKeyValidResponse = _helpers.IsApiKeyValidResponse;
 				if (isApiKeyValidResponse.IsSuccessStatusCode) return;
 
 				SetValidationBlockMessage(Visibility.Visible, isApiKeyValidResponse.StatusCode == HttpStatusCode.Forbidden
