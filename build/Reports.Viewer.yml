@@ -29,7 +29,7 @@ variables:
 - name: pathToPublish
   value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
 - name: outputpath
-  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)'
+  value: '$(Build.Repository.LocalPath)\Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)'
 steps:
 - task: PowerShell@2
   displayName: 'set x86path'
