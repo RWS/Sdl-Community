@@ -98,6 +98,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppInitializer.cs" />
     <Compile Include="DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>

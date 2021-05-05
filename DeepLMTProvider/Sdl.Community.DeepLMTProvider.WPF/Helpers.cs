@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Xml;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -14,16 +11,28 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	public static class Helpers
 	{
-		public static readonly HttpClient Client = new HttpClient();
-
 		private static readonly Logger _logger = Log.GetLogger(nameof(Helpers));
+		private static string _apiKey;
+		public static HttpResponseMessage IsApiKeyValidResponse { get; set; }
 
-		static Helpers()
+		private static string ApiKey
 		{
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-			Client.Timeout = TimeSpan.FromMinutes(5);
-			var pluginVersion = GetPluginVersion();
-			Client.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {pluginVersion}");
+			get => _apiKey;
+			set
+			{
+				_apiKey = value;
+				OnApiKeyChanged();
+			}
+		}
+
+		private static void OnApiKeyChanged()
+		{
+			IsApiKeyValidResponse = IsValidApiKey(ApiKey);
+
+			if (IsApiKeyValidResponse.IsSuccessStatusCode)
+			{
+				SetFormalityIncompatibleLanguages();
+			}
 		}
 
 		private static List<string> FormalityIncompatibleTargetLanguages { get; set; }
@@ -68,43 +77,21 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			return supportedLanguages;
 		}
 
-		public static void ResetFormalityIncompatibleLanguages()
+		public static void SetApiKey(string apiKey)
 		{
-			FormalityIncompatibleTargetLanguages.Clear();
+			ApiKey = apiKey;
 		}
 
-		public static void SetFormalityIncompatibleLanguages(string apiKey)
+		private static void SetFormalityIncompatibleLanguages()
 		{
 			FormalityIncompatibleTargetLanguages =
-				GetSupportedTargetLanguages(apiKey).Where(sl => !sl.Value).Select(sl => sl.Key.ToLower()).ToList();
+				GetSupportedTargetLanguages(ApiKey).Where(sl => !sl.Value).Select(sl => sl.Key.ToLower()).ToList();
 		}
 
-		private static string GetPluginVersion()
+		private static HttpResponseMessage IsValidApiKey(string apiKey)
 		{
-			try
-			{
-				// fetch the version of the plugin from the manifest deployed
-				var pexecutingAsseblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-				pexecutingAsseblyPath = Path.Combine(pexecutingAsseblyPath, "pluginpackage.manifest.xml");
-				var doc = new XmlDocument();
-				doc.Load(pexecutingAsseblyPath);
-
-				if (doc.DocumentElement?.ChildNodes != null)
-				{
-					foreach (XmlNode n in doc.DocumentElement.ChildNodes)
-					{
-						if (n.Name == "Version")
-						{
-							return n.InnerText;
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
-			}
-			return string.Empty;
+			var response = AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
+			return response;
 		}
 
 		private static string GetSupportedLanguages(string type, string apiKey)
@@ -112,7 +99,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			var content = new StringContent($"type={type}" + $"&auth_key={apiKey}", Encoding.UTF8,
 				"application/x-www-form-urlencoded");
 
-			var response = Client.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+			var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/languages", content).Result;
 			response.EnsureSuccessStatusCode();
 
 			return response.Content?.ReadAsStringAsync().Result;
