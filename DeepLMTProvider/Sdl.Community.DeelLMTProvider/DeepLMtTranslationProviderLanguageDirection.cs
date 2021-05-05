@@ -285,7 +285,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private string LookupDeepL(string sourceText)
 		{
-			return _deepLMtTranslationProvider.DeepLTranslationProviderConnecter.Translate(_languageDirection, sourceText);
+			return _connecter.Translate(_languageDirection, sourceText);
 		}
 
 		private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)

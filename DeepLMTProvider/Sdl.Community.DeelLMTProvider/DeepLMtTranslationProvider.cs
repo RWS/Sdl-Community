@@ -10,7 +10,7 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLMtTranslationProvider : ITranslationProvider
 	{
-		public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
+		private DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
 		private readonly Logger _logger = Log.GetLogger(nameof(DeepLMTProvider.DeepLTranslationProviderConnecter));
 
