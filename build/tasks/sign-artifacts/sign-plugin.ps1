@@ -22,7 +22,7 @@ write-output "CertFile: $CertFile"
 
 attrib -r "$fileToSign"
 
-$pluginpath = [System.IO.Path]::GetFullPath("$PSScriptRoot\Sdl.PluginFramework.PackageSupport.dll"
+$pluginpath = [System.IO.Path]::GetFullPath("$PSScriptRoot\Sdl.PluginFramework.PackageSupport.dll");
 write-output "trying $pluginpath"
 
 [Reflection.Assembly]::LoadFile($pluginpath)
