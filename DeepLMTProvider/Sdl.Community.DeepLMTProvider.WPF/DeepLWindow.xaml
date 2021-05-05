@@ -44,6 +44,7 @@
 					Name="ApiKeyBox"
 					FontFamily="Calibri"
 					mah:TextBoxHelper.UseFloatingWatermark="True"
+					PasswordChanged="ApiKeyBox_PasswordChanged"
 					mah:TextBoxHelper.Watermark="API Key"
 					mah:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.HasText), Mode=OneWay}"
 					mah:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"

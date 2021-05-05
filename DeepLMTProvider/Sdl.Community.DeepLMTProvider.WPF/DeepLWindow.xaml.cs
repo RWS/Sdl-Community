@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Timers;
 using System.Windows;
-using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
@@ -16,40 +16,65 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	public partial class DeepLWindow
 	{
+		private readonly LanguagePair[] _languagePairs;
 		private readonly bool _isTellMeAction;
 
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
 			LanguagePair[] languagePairs = null, bool isTellMeAction = false)
 		{
 			InitializeComponent();
+			_languagePairs = languagePairs;
 			_isTellMeAction = isTellMeAction;
-
-			var currentLanguagePairs = isTellMeAction
-				? options?.LanguagesSupported?.Keys.Select(key => new CultureInfo(key)).ToList()
-				: languagePairs?.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
-
-			NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs)
-				? Visibility.Collapsed
-				: Visibility.Visible;
 
 			Formality.SelectedIndex = (int)options.Formality;
 			PlainText.IsChecked = options.SendPlainText;
 			Options = options;
 
+			PasswordChangedTimer.Elapsed += OnPasswordChanged;
+
+			SetSettingsOnWindow(credentialStore, isTellMeAction);
+		}
+
+		private void SetSettingsOnWindow(TranslationProviderCredential credentialStore, bool isTellMeAction)
+		{
 			if (isTellMeAction)
 			{
 				ApiKeyBox.IsEnabled = false;
 			}
 			else
 			{
-				if (credentialStore != null)
-				{
-					ApiKeyBox.Password = credentialStore.Credential;
-				}
+				if (credentialStore == null) return;
+
+				ApiKeyBox.Password = credentialStore.Credential;
+				Options.ApiKey = ApiKeyBox.Password;
 			}
 		}
 
-		public DeepLTranslationOptions Options { get; set; }
+		private void OnPasswordChanged(object sender, EventArgs e)
+		{
+			Options.ApiKey = ApiKeyBox.Password.Trim();
+
+			Helpers.SetApiKey(Options.ApiKey);
+
+			SetApiKeyValidityLabel();
+			SetFormalityCompatibilityLabel();
+		}
+
+		private void SetFormalityCompatibilityLabel()
+		{
+			var currentLanguagePairs = _isTellMeAction
+							? Options?.LanguagesSupported?.Keys.Select(key => new CultureInfo(key)).ToList()
+							: _languagePairs?.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
+
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs) ?? false
+					? Visibility.Collapsed
+					: Visibility.Visible;
+			});
+		}
+
+		public DeepLTranslationOptions Options { get; }
 
 		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{
@@ -60,6 +85,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			Enum.TryParse<Formality>(Formality.SelectedIndex.ToString(), out var formality);
 			Options.Formality = formality;
+
 			if (PlainText.IsChecked != null)
 			{
 				Options.SendPlainText = (bool)PlainText.IsChecked;
@@ -67,48 +93,67 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 			if (_isTellMeAction)
 			{
-				var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-				var documentsOpened = editorController.GetDocuments().Any();
+				AskUserToRestart();
 
-				if (documentsOpened)
-				{
-					MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
-						PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
-				}
-				DialogResult = true;
-				Close();
 			}
-			else
+			else if (ValidationBlock.Visibility == Visibility.Visible)
 			{
-				Options.ApiKey = ApiKeyBox.Password.Trim();
-				if (!string.IsNullOrEmpty(Options.ApiKey))
-				{
-					ValidationBlock.Visibility = Visibility.Hidden;
-					var isValidKey = IsValidApiKey(Options.ApiKey);
-					if (!isValidKey) return;
-					DialogResult = true;
-					Close();
-				}
-				else
-				{
-					ValidationBlock.Text = "Api Key is required.";
-					ValidationBlock.Visibility = Visibility.Visible;
-				}
+				return;
+			}
+
+			DialogResult = true;
+			Close();
+		}
+
+		private static void AskUserToRestart()
+		{
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var documentsOpened = editorController.GetDocuments().Any();
+
+			if (documentsOpened)
+			{
+				MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
+					PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
 			}
 		}
 
-		private bool  IsValidApiKey(string apiKey)
+		private void SetApiKeyValidityLabel()
 		{
-			using (var httpClient = new HttpClient())
+			if (!string.IsNullOrEmpty(Options.ApiKey))
 			{
-				var response = httpClient.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
-				if (response.IsSuccessStatusCode) return true;
-				ValidationBlock.Visibility = Visibility.Visible;
-				ValidationBlock.Text = response.StatusCode == HttpStatusCode.Forbidden
+				SetValidationBlockMessage(Visibility.Hidden);
+
+				var isApiKeyValidResponse = Helpers.IsApiKeyValidResponse;
+				if (isApiKeyValidResponse.IsSuccessStatusCode) return;
+
+				SetValidationBlockMessage(Visibility.Visible, isApiKeyValidResponse.StatusCode == HttpStatusCode.Forbidden
 					? "Authorization failed. Please supply a valid API Key."
-					: $"{response.StatusCode}";
-				return false;
+					: $"{isApiKeyValidResponse.StatusCode}");
+
+				return;
 			}
+
+			SetValidationBlockMessage(Visibility.Visible, PluginResources.ApiKeyIsRequired_ValidationBlockMessage);
+		}
+
+		private void SetValidationBlockMessage(Visibility visibility, string message = null)
+		{
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				ValidationBlock.Visibility = visibility;
+				ValidationBlock.Text = message;
+			});
+		}
+
+		private Timer PasswordChangedTimer { get; } = new()
+		{
+			Interval = 500,
+			AutoReset = false
+		};
+
+		private void ApiKeyBox_PasswordChanged(object sender, RoutedEventArgs e)
+		{
+			PasswordChangedTimer.Enabled = true;
 		}
 	}
 }
