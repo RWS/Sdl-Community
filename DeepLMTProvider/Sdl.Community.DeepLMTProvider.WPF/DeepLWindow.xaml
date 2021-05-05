@@ -60,7 +60,7 @@
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
 				</TextBlock>
-				<Label Content="Translation options" FontWeight="Bold" Margin="0" />
+				<Label Content="Translation options" FontWeight="Bold" Margin="5 0 0 0" />
 				<StackPanel>
 					<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0"
 						          Foreground="#0C2D47" />
