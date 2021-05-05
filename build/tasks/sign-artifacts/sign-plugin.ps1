@@ -22,9 +22,7 @@ write-output "CertFile: $CertFile"
 
 attrib -r "$fileToSign"
 
-write-output "load plugin framework from nuget studio path"
-
-$pluginpath = "$env:X86PATH\SDL\SDL Trados Studio\$env:StudioProductIdentifier\Sdl.Core.PluginFramework.PackageSupport.dll"
+$pluginpath = "$env:ouputpath\Sdl.PluginFramework.PackageSupport.dll"
 write-output "trying $pluginpath"
 
 [Reflection.Assembly]::LoadFile($pluginpath)
