@@ -46,9 +46,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			_formality = SupportedTargetLanguagesAndFormalities[languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper()]
-				? _formality
-				: Formality.Default;
+			var formality = GetFormality(languageDirection);
 
 			var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
 			var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
@@ -62,13 +60,13 @@ namespace Sdl.Community.DeepLMTProvider
 				var content = new StringContent($"text={sourceText}" +
 												$"&source_lang={sourceLanguage}" +
 												$"&target_lang={targetLanguage}" +
-												$"&formality={_formality.ToString().ToLower()}" +
+												$"&formality={formality.ToString().ToLower()}" +
 												"&preserve_formatting=1" +
 												"&tag_handling=xml" +
 												$"&auth_key={ApiKey}",
 					Encoding.UTF8, "application/x-www-form-urlencoded");
 
-				var response = Helpers.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+				var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 				response.EnsureSuccessStatusCode();
 
 				var translationResponse = response.Content?.ReadAsStringAsync().Result;
@@ -94,6 +92,20 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			return translatedText;
+		}
+
+		private Formality GetFormality(LanguagePair languageDirection)
+		{
+			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
+							languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper(), out var supportsFormality))
+			{
+				SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
+					out supportsFormality);
+			}
+
+			return supportsFormality
+				? _formality
+				: Formality.Default;
 		}
 
 		private string DecodeWhenNeeded(string translatedText)
