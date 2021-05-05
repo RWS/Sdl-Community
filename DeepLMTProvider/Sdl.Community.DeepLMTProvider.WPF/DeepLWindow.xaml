@@ -64,7 +64,7 @@
 				<StackPanel>
 					<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0"
 						          Foreground="#0C2D47" />
-					<StackPanel Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
+					<StackPanel Name="NotCompatibleStackPanel" Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
 						<Label Name="FormalityLabel" Content="Formality: " Margin="6 10 0 0" />
 						<ComboBox Name="Formality" FontFamily="Calibri" Margin="0,10,0,0" Foreground="#0C2D47" Width="100"
 							          HorizontalAlignment="Left">

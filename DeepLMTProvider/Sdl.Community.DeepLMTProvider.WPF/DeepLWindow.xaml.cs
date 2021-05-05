@@ -68,9 +68,20 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				NotCompatibleBlock.Visibility = Helpers.AreLanguagesCompatibleWithFormalityParameter(currentLanguagePairs) ?? false
-					? Visibility.Collapsed
-					: Visibility.Visible;
+				var formalityIncompatibleLanguages = Helpers.GetFormalityIncompatibleLanguages(currentLanguagePairs);
+				
+				if (formalityIncompatibleLanguages.Count > 0)
+				{
+					NotCompatibleBlock.Visibility = Visibility.Visible;
+					NotCompatibleStackPanel.ToolTip = new ToolTip
+					{
+						Content = $"{string.Join(Environment.NewLine, formalityIncompatibleLanguages)}"
+					};
+				}
+				else
+				{
+					NotCompatibleBlock.Visibility = Visibility.Collapsed;
+				}
 			});
 		}
 
