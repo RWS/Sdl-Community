@@ -1,11 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>Reports Viewer Plus</PlugInName>
-	<Version>2.1.0.0</Version>
-	<Description>Reports Viewer Plus</Description>
-	<Author>SDL Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.1.5"/>
-	<Include>
-		<File>Sdl.MultiSelectComboBox.dll</File>
-	</Include>
+		<PlugInName>Reports Viewer Plus</PlugInName>
+		<Version>2.1.0.0</Version>
+		<Description>Reports Viewer Plus</Description>
+		<Author>SDL Community Developers</Author>
+		<RequiredProduct name="SDLTradosStudio" minversion="16.1.5"/>
+		<Include>
+				<File>Sdl.MultiSelectComboBox.dll</File>
+
+				<File>CefSharp.dll</File>
+				<File>CefSharp.Wpf.dll</File>
+				<File>CefSharp.Core.dll</File>
+				<File>CefSharp.Core.Runtime.dll</File>
+				<File>CefSharp.BrowserSubprocess.Core.dll</File>
+				<File>CefSharp.BrowserSubprocess.exe</File>
+
+				<File>chrome_elf.dll</File>
+				<File>libcef.dll</File>
+				<File>icudtl.dat</File>
+				<File>libEGL.dll</File>
+				<File>libGLESv2.dll</File>
+
+				<File>cef.pak</File>
+				<File>cef_100_percent.pak</File>
+				<File>cef_200_percent.pak</File>
+				<File>cef_extensions.pak</File>
+
+				<File>snapshot_blob.bin</File>
+				<File>v8_context_snapshot.bin</File>
+		</Include>
 </PluginPackage>

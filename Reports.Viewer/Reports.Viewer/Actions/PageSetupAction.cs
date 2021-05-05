@@ -48,7 +48,8 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		private void SetEnabled()
 		{
-			Enabled = !_isLoading && _canEnable;
+			Enabled = false;
+			//Enabled = !_isLoading && _canEnable;
 		}
 	}
 }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using CefSharp;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.Reports.Viewer.API.Model;
 
@@ -18,10 +19,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private readonly DataViewModel _dataViewModel;
 		private string _projectLocalFolder;
 		private ContentControl _currentView;
+		private string _address;
 
 		public ReportViewModel(BrowserView browserView,
 			DataViewModel dataViewModel, DataView dataView)
-		{			
+		{
 			_browserView = browserView;
 			_dataViewModel = dataViewModel;
 			_dataView = dataView;
@@ -30,6 +32,21 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			CurrentView = _dataView;
 		}
 
+		public string Address
+		{
+			get => _address;
+			set
+			{
+				if (_address == value)
+				{
+					return;
+				}
+				
+				_address = value;
+				OnPropertyChanged(nameof(Address));
+			}
+		}
+		
 		public ContentControl CurrentView
 		{
 			get => _currentView;
@@ -67,17 +84,17 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public void ShowPageSetupDialog()
 		{
-			_browserView.WebBrowser.ShowPageSetupDialog();
+			//_browserView.WebBrowser.ShowPageSetupDialog();
 		}
 
 		public void ShowPrintPreviewDialog()
 		{
-			_browserView.WebBrowser.ShowPrintPreviewDialog();
+			//_browserView.WebBrowser.ShowPrintPreviewDialog();
 		}
 
 		public void SaveReport()
 		{
-			_browserView.WebBrowser.ShowSaveAsDialog();
+			//_browserView.WebBrowser.ShowSaveAsDialog();
 		}
 
 		public void UpdateReport(Report report)
@@ -99,13 +116,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			_browserView.WebBrowser.Navigate(file != null ? "file://" + file : null);
+			Address = file != null ? "file://" + file : null;
 		}
 
 		public void UpdateData(List<Report> reports)
 		{
 			CurrentView = _dataView;
-			_dataViewModel.Reports = new ObservableCollection<Report>(reports);			
+			_dataViewModel.Reports = new ObservableCollection<Report>(reports);
 		}
 
 		public string WindowTitle
