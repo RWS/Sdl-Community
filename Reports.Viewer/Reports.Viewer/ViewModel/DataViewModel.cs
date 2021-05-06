@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
-using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 

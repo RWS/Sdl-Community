@@ -8,25 +8,26 @@
 		<Include>
 				<File>Sdl.MultiSelectComboBox.dll</File>
 
-				<File>CefSharp.dll</File>
 				<File>CefSharp.Wpf.dll</File>
 				<File>CefSharp.Core.dll</File>
-				<File>CefSharp.Core.Runtime.dll</File>
-				<File>CefSharp.BrowserSubprocess.Core.dll</File>
-				<File>CefSharp.BrowserSubprocess.exe</File>
 
-				<File>chrome_elf.dll</File>
-				<File>libcef.dll</File>
-				<File>icudtl.dat</File>
-				<File>libEGL.dll</File>
-				<File>libGLESv2.dll</File>
+				<File>x86\CefSharp.dll</File>
+				<File>x86\CefSharp.Core.Runtime.dll</File>
+				<File>x86\CefSharp.BrowserSubprocess.Core.dll</File>
+				<File>x86\CefSharp.BrowserSubprocess.exe</File>
 
-				<File>cef.pak</File>
-				<File>cef_100_percent.pak</File>
-				<File>cef_200_percent.pak</File>
-				<File>cef_extensions.pak</File>
+				<File>x86\chrome_elf.dll</File>
+				<File>x86\libcef.dll</File>
+				<File>x86\icudtl.dat</File>
+				<File>x86\libEGL.dll</File>
+				<File>x86\libGLESv2.dll</File>
 
-				<File>snapshot_blob.bin</File>
-				<File>v8_context_snapshot.bin</File>
+				<File>x86\cef.pak</File>
+				<File>x86\cef_100_percent.pak</File>
+				<File>x86\cef_200_percent.pak</File>
+				<File>x86\cef_extensions.pak</File>
+
+				<File>x86\snapshot_blob.bin</File>
+				<File>x86\v8_context_snapshot.bin</File>
 		</Include>
 </PluginPackage>

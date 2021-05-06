@@ -352,21 +352,24 @@
 																<Image Source="../Resources/Print.ico"/>
 															</MenuItem.Icon>
 														</MenuItem>
-														<MenuItem Header="Print Preview" 														          
+														<MenuItem Header="Print Preview" 
+														          IsEnabled="False"
 														          Command="{Binding PrintPreviewCommand}"
 														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 															<MenuItem.Icon>
 																<Image Source="../Resources/PrintPreview.ico"/>
 															</MenuItem.Icon>
 														</MenuItem>
-														<MenuItem Header="Page Setup" 														          
+														<MenuItem Header="Page Setup" 	
+														          IsEnabled="False"
 														          Command="{Binding PageSetupCommand}"
 														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 															<MenuItem.Icon>
 																<Image Source="../Resources/PageSetup.ico"/>
 															</MenuItem.Icon>
 														</MenuItem>
-														<MenuItem Header="Save As" 														          
+														<MenuItem Header="Save As" 		
+																  IsEnabled="False"
 														          Command="{Binding SaveAsCommand}"
 														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 															<MenuItem.Icon>

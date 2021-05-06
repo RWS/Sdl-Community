@@ -115,7 +115,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 					file = null;
 				}
 			}
-
+			
 			Address = file != null ? "file://" + file : null;
 		}
 
