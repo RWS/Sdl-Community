@@ -243,6 +243,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			if (model.LanguagePairs.Count > 0)
 			{
 				//for source -> old implementation
+				//TODO: Remove this for final implementation
 				var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguageCultureInfo);
 				var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
 
@@ -261,9 +262,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					languagePair.StarTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>(tms);
 
 					//TODO: Remove this for final implementation
-					var targetFilesAndTmsPath =
-						GetFilesAndTmsFromTempFolder(pathToTempFolder, languagePair.TargetLanguage);
-					AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
+					//var targetFilesAndTmsPath =
+					//	GetFilesAndTmsFromTempFolder(pathToTempFolder, languagePair.TargetLanguage);
+					//AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
 				}
 			}
 
@@ -396,35 +397,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return availableTms;
 		}
 
-
-
-		/// <summary>
-		/// Get available TMs/MTs (_AEXTR_ and the ones from Ref folder grouped by extension). Extension indicates the language of the file
-		/// </summary>
-		/// <param name="pathToTempFolder">Path to temp folder where whe extracted the Transit Package</param>
-		/// <returns>Available TMs/MTs grouped by language extension</returns>
-		private IEnumerable<IGrouping<string,FileInfo>> GetAllSourceAndTargetTmsRefereces(string pathToTempFolder)
-		{
-			var tempDirInfo = new DirectoryInfo(pathToTempFolder);
-
-			var allTms = tempDirInfo.GetFiles("_AEXTR_*", SearchOption.TopDirectoryOnly).ToList();
-			var refFolderPath = Path.Combine(pathToTempFolder, "REF");
-			if (Directory.Exists(refFolderPath))
-			{
-				var refDir = new DirectoryInfo(refFolderPath);
-				var refTms = refDir.GetFiles("*", SearchOption.AllDirectories).ToList();
-				if (refTms.Any())
-				{
-					allTms.AddRange(refTms);
-				}
-			}
-
-			return allTms.GroupBy(t => t.Extension);
-		}
-
-
 		//TODO: Remove this for final implementation
-
 		private void AddFilesAndTmsToModel(LanguagePair languagePair,
 			Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
 			List<string> targetFilesAndTmsPath)
@@ -466,8 +439,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			languagePair.TargetFile = pathToTargetFiles;
 		}
 
-	//	private 
-
 		//TODO: Remove this for final implementation
 		private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
 		{
@@ -489,7 +460,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		}
 
 		//TODO: Remove this for final implementation
-
 		private Tuple<List<string>, List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(
 			List<string> filesAndTmsList)
 		{

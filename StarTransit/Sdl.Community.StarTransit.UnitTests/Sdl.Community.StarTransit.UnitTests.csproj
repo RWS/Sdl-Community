@@ -81,6 +81,9 @@
     <None Include="TestingFiles\693203001_Trumpf_ID_IND.PPF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestingFiles\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestingFiles\Default.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
