@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using NSubstitute;
@@ -51,14 +52,24 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		//TMs Unit tests for AXTR Tms with only one Language Pair
+		//We grouping all the tms for a specific language into only one object. All MTs are in a different object.
 		[Theory]
-		[InlineData("766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf",2)] //TMs and MTs
+		[InlineData("766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf",2)] //TMs and MTs,
 		[InlineData("693203001_Trumpf_ID_IND.PPF", 1)] // AXTR tms
-		public void OpenPackage_MtsAndMts_OneLanguagePair(string packageName,int metadataNumber)
+		public void OpenPackage_MtsAndMts_CorrectMetadataNumber_OneLanguagePair(string packageName,int metadataNumber)
 		{
 			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, packageName).Result;
 
 			Assert.Equal(metadataNumber,packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas.Count);
+		}
+
+		[Theory]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF",4)]
+		[InlineData("693203001_Trumpf_ID_IND.PPF", 1)]
+		public void OpenPackage_CorrectPairsLanguageNumber(string packageName, int languagePairsNumber)
+		{
+			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, packageName).Result;
+			Assert.Equal(languagePairsNumber,packageModel.LanguagePairs.Count);
 		}
 
 		[Theory]
@@ -88,8 +99,8 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void OpenPackage_FilePath_ForAxtrMtsAndTms_OneLanguagePair()
 		{
 			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, "766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf").Result;
-			var tmMetadata = GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas,true);
-			var mtMetadata = GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, false);
+			var tmMetadata = _starTransitConfiguration.GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas,true);
+			var mtMetadata = _starTransitConfiguration.GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, false);
 
 			//TM files
 			Assert.All(tmMetadata.TransitTmsSourceFilesPath, file => Assert.DoesNotContain("MT", file));
@@ -105,9 +116,9 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath,
 				"766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf").Result;
 			var tmMetadata =
-				GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, true);
+				_starTransitConfiguration.GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, true);
 			var mtMetadata =
-				GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, false);
+				_starTransitConfiguration.GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, false);
 			
 			//TM Files
 			Assert.Equal(2,tmMetadata.TransitTmsSourceFilesPath.Count);
@@ -117,15 +128,28 @@ namespace Sdl.Community.StarTransit.UnitTests
 			Assert.Single(mtMetadata.TransitTmsTargeteFilesPath);
 		}
 
+		[Theory]
+		[InlineData("766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf",true)]
+		[InlineData("693203001_Trumpf_ID_IND.PPF", false)]
+		public void OpenPackage_ContainsMtFile_ForAxtrMtsAndTms_OneLanguagePair(string packageName,bool packageContainsMtFiles)
+		{
+			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath,
+				packageName).Result;
+
+			//MT Files
+			Assert.Contains(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas,
+				meta =>meta.IsMtFile.Equals(packageContainsMtFiles));
+		}
+
 		[Fact]
-		public void OpenPackage_FileCorrectExtension_ForAxtrMtsAndTms_OneLanguagePair()
+		public void OpenPackage_CorrectFileExtension_ForAxtrMtsAndTms_OneLanguagePair()
 		{
 			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath,
 				"766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf").Result;
 			var tmMetadata =
-				GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, true);
+				_starTransitConfiguration.GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, true);
 			var mtMetadata =
-				GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, false);
+				_starTransitConfiguration.GetTmsOrMtMetadataFromList(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas, false);
 
 			//TM files
 			Assert.All(tmMetadata.TransitTmsSourceFilesPath, file => Assert.EndsWith(".DES", file));
@@ -162,6 +186,72 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 			Assert.All(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas[0].TransitTmsSourceFilesPath, file => Assert.DoesNotContain("MT", file));
 			Assert.All(packageModel.LanguagePairs[0].StarTranslationMemoryMetadatas[0].TransitTmsTargeteFilesPath, file => Assert.DoesNotContain("MT", file));
+		}
+
+		//Multilingual package test, all the TMS are in Ref folder
+		[Theory]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF", 51)]
+		public void OpenPackage_Multilingual_CorrectMetadataNumber(string packageName, int tmFilesNumber)
+		{
+			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, packageName).Result;
+
+			Assert.All(packageModel.LanguagePairs,
+				languagePair => Assert.Equal(tmFilesNumber,
+					languagePair.StarTranslationMemoryMetadatas[0].TransitTmsSourceFilesPath.Count));
+			Assert.All(packageModel.LanguagePairs,
+				languagePair => Assert.Equal(tmFilesNumber,
+					languagePair.StarTranslationMemoryMetadatas[0].TransitTmsTargeteFilesPath.Count));
+		}
+
+		[Theory]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF","de-de","en-en",".DEU",".ENG")]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF", "de-de", "fr-fr", ".DEU", ".FRA")]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF", "de-de", "it-it", ".DEU", ".ITA")]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF", "de-de", "es-es", ".DEU", ".ESP")]
+		public void OpenPackage_Multilingual_CorrectFileExtenssion(string packageName,string sourceLanguage,string targetLanguage,string sourceExtension,string targetExtension)
+		{
+			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, packageName).Result;
+			var languagePair = new LanguagePair
+			{
+				SourceLanguage = new CultureInfo(sourceLanguage), TargetLanguage = new CultureInfo(targetLanguage)
+			};
+			var tmFilesForLanguagePair = _starTransitConfiguration.GetTmsForLanguagePair(packageModel.LanguagePairs,languagePair);
+
+			Assert.All(tmFilesForLanguagePair.Item1, file => Assert.EndsWith(sourceExtension, file));
+			Assert.All(tmFilesForLanguagePair.Item2, file => Assert.EndsWith(targetExtension, file));
+		}
+
+		//Packages can contain: Only TMs, only MTs or TMs and MT files.
+		[Theory]
+		[InlineData("Test Multilingual Package Trados Plugin.PPF", true, false)]
+		public void OpenPackage_Multilingual_CorrectTmName(string packageName, bool packageContainsTm,
+			bool packageContainsMt)
+		{
+			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, packageName).Result;
+			foreach (var languagePair in packageModel.LanguagePairs)
+			{
+				var sourceLangCode = languagePair.SourceLanguage.TwoLetterISOLanguageName;
+				var targetLangCode = languagePair.TargetLanguage.TwoLetterISOLanguageName;
+				var tmName = $"{packageModel.Name}.{sourceLangCode}-{targetLangCode}";
+				var mtName = $"MT_{packageModel.Name}.{sourceLangCode}-{targetLangCode}";
+
+				if (packageContainsTm)
+				{
+					Assert.Contains(languagePair.StarTranslationMemoryMetadatas,
+						meta => meta.Name.Contains(tmName));
+				}
+
+				if (packageContainsMt)
+				{
+					Assert.Contains(languagePair.StarTranslationMemoryMetadatas,
+						meta => meta.Name.Contains(mtName));
+				}
+				else
+				{
+					Assert.DoesNotContain(languagePair.StarTranslationMemoryMetadatas,
+						meta => meta.Name.Contains(mtName));
+				}
+			}
 		}
 
 		[Fact]
@@ -217,14 +307,5 @@ namespace Sdl.Community.StarTransit.UnitTests
 			);
 		}
 
-		private StarTranslationMemoryMetadata GetTmsOrMtMetadataFromList(List<StarTranslationMemoryMetadata> currentList,bool tmFiles)
-		{
-			if (tmFiles)
-			{
-				return currentList.FirstOrDefault(n => !n.Name.Contains("MT"));
-			}
-
-			return currentList.FirstOrDefault(n => n.Name.Contains("MT"));
-		}
 	}
 }

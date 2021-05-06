@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -90,6 +91,36 @@ namespace Sdl.Community.StarTransit.UnitTests
 			}
 			var targetArray = targetLanguageList.ToArray();
 			return targetArray;
+		}
+
+		public StarTranslationMemoryMetadata GetTmsOrMtMetadataFromList(List<StarTranslationMemoryMetadata> currentList, bool tmFiles)
+		{
+			if (tmFiles)
+			{
+				return currentList.FirstOrDefault(n => !n.Name.Contains("MT"));
+			}
+
+			return currentList.FirstOrDefault(n => n.Name.Contains("MT"));
+		}
+
+		//Source files, Target files
+		public (List<string>, List<string>) GetTmsForLanguagePair(List<LanguagePair> languagePairs,
+			LanguagePair languagePair)
+		{
+			var sourceFilesPaths = new List<string>();
+			var targetFilesPaths = new List<string>();
+
+			var langPair = languagePairs.FirstOrDefault(lp => lp.TargetLanguage.Equals(languagePair.TargetLanguage));
+			if (langPair != null)
+			{
+				foreach (var tm in langPair.StarTranslationMemoryMetadatas)
+				{
+					sourceFilesPaths.AddRange(tm.TransitTmsSourceFilesPath);
+					targetFilesPaths.AddRange(tm.TransitTmsTargeteFilesPath);
+				}
+			}
+
+			return (sourceFilesPaths, targetFilesPaths);
 		}
 	}
 }
