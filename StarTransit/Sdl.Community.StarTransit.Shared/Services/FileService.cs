@@ -12,10 +12,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class FileService: IFileService
 	{
-		private const string TmFileType = "ExtFileType=\"Extract\"";
+		//private const string TmFileType = "ExtFileType=\"Extract\"";
 		private const string FileType = "Transit";
-		private const string MtFilesName = "_AEXTR_MT";
 
+		private Dictionary<string, string> _starTransitLanguageDictionary;
+		private Dictionary<string, string> _starTransitFileLanguageDictionary;
+
+		//private const string MtFilesName = "_AEXTR_MT";
+
+		public FileService()
+		{
+			BuildTransitLanguageDictionary();
+		}
 		public string[] GetTransitCorrespondingExtension(CultureInfo languageCulture)
 		{
 			var extension = languageCulture.ThreeLetterWindowsLanguageName;
@@ -28,34 +36,34 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// <summary>
 		/// MT Files are considered to be TMs. However the Transit MT file does not conain |"
 		/// </summary>
-		public bool IsTransitTm(string filePath)
-		{
-			if (!File.Exists(filePath)) return false;
-			var name = Path.GetFileName(filePath);
-			var containsMtName = name.Contains(MtFilesName);
-			using (var reader = new StreamReader(filePath, Encoding.Default))
-			{
-				string line;
-				while ((line = reader.ReadLine()) != null)
-				{
-					if (line.Trim().Contains(TmFileType))
-					{
-						return true;
-					}
+		//public bool IsTransitTm(string filePath)
+		//{
+		//	if (!File.Exists(filePath)) return false;
+		//	var name = Path.GetFileName(filePath);
+		//	var containsMtName = name.Contains(MtFilesName);
+		//	using (var reader = new StreamReader(filePath, Encoding.Default))
+		//	{
+		//		string line;
+		//		while ((line = reader.ReadLine()) != null)
+		//		{
+		//			if (line.Trim().Contains(TmFileType))
+		//			{
+		//				return true;
+		//			}
 
-					if (containsMtName)
-					{
-						if (line.Contains(FileType))
-						{
-							return true;
-						}
-					}
-					if (line.Equals("<Header>")) break;
-				}
-			}
+		//			if (containsMtName)
+		//			{
+		//				if (line.Contains(FileType))
+		//				{
+		//					return true;
+		//				}
+		//			}
+		//			if (line.Equals("<Header>")) break;
+		//		}
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		public bool IsTransitFile(string filePath)
 		{
@@ -361,112 +369,115 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		public string MapStarTransitLanguage(string fileExtension)
 		{
 			if (string.IsNullOrEmpty(fileExtension)) return string.Empty;
-			switch (fileExtension)
+
+			var languageExists = _starTransitLanguageDictionary.TryGetValue(fileExtension, out var transitLanguageExtension);
+			return languageExists ? transitLanguageExtension : string.Empty;
+		}
+
+		private void BuildTransitLanguageDictionary()
+		{
+			_starTransitLanguageDictionary = new Dictionary<string, string>
 			{
-				case "CYM":
-					return "WEL";
-				case "MNN":
-					return "MNG";
-				case "NGA":
-				case "BIN":
-					return "EDO,EFI,NGA";
-				case "FYN":
-					return "FRY,FYN";
-				case "GLA":
-				case "GLE":
-					return "GAE,GLA,GDH";
-				case "ELL":
-					return "GRC,ELL";
-				case "ITA":
-				case "ITS":
-					return "ITS,ITA";
-				case "KKZ":
-					return "KAZ,KKZ";
-				case "KIR":
-				case "KYR":
-					return "KYR,KIR";
-				case "LAT":
-					return "LAT";
-				case "SOT":
-					return "SXT";
-				case "TSN":
-					return "NBL,TSN,SRL,TNA,VEN";
-				case "TSO":
-					return "TSG";
-				case "AFK":
-					return "NBL,TSO,SRL,VEN";
-				case "XHO":
-					return "NBL,XHO,SRL,VEN";
-				case "ZUL":
-					return "NBL,ZUL,SRL,VEN";
-				case "ENW":
-					return "NDE,ENW";
-				case "SNA":
-					return "NDE,SNA";
-				case "ZZZ":
-					return "SSW,ZZZ";
-				case "TUK":
-					return "TKM,TUK";
-				case "ENN":
-					return "END";
-				case "ENE":
-					return "ENO";
-				case "FRR":
-					return "FRU";
-				case "FRI":
-					return "FRV";
-				case "FRD":
-				case "MAF":
-				case "GLP":
-					return "FRW";
-				case "FUL":
-				case "FUB":
-					return "FUB";
-				case "GRN":
-					return "GUA";
-				case "YOR":
-					return "YBA";
-				case "MLT":
-					return "MTL";
-				case "ORM":
-					return "ORO";
-				case "RMC":
-					return "RMS";
-				case "ROD":
-					return "ROV";
-				case "SOM":
-					return "SML";
-				case "SMB":
-				case "SMA":
-				case "SMK":
-				case "SMJ":
-				case "SMN":
-				case "SMS":
-					return "SZI";
-				case "TIR":
-					return "TGE";
-				case "TIE":
-					return "TGY";
-				case "GLC":
-					return "GAL";
-				case "SRM":
-				case "SRS":
-				case "SRP":
-					return "SRL";
-				case "SSW":
-					return "SSW";
-				case "NDE":
-					return "NDE";
-				case "NBL":
-					return "NBL";
-				case "VEN":
-					return "VEN";
-				case "NLD":
-				case "NLB":
-					return "NLD,NLB,NLS";
-				default:
-					return fileExtension;
-			}
+				{"CYM", "WEL"},
+				{"MNN", "MNG"},
+				{"NGA", "EDO,EFI,NGA"},
+				{"BIN", "EDO,EFI,NGA"},
+				{"FYN", "FRY,FYN"},
+				{"GLA", "GAE,GLA,GDH"},
+				{"GLE", "GAE,GLA,GDH"},
+				{"ELL", "GRC,ELL"},
+				{"ITA", "ITS,ITA"},
+				{"ITS", "ITS,ITA"},
+				{"KKZ", "KAZ,KKZ"},
+				{"KIR", "KYR,KIR"},
+				{"KYR", "KYR,KIR"},
+				{"LAT", "LAT"},
+				{"SOT", "SXT"},
+				{"TSN", "NBL,TSN,SRL,TNA,VEN"},
+				{"TSO", "TSG"},
+				{"AFK", "NBL,TSO,SRL,VEN"},
+				{"XHO", "NBL,XHO,SRL,VEN"},
+				{"ZUL", "NBL,ZUL,SRL,VEN"},
+				{"ENW", "NDE,ENW"},
+				{"SNA", "NDE,SNA"},
+				{"ZZZ", "SSW,ZZZ"},
+				{"TUK", "TKM,TUK"},
+				{"ENN", "END"},
+				{"ENE", "ENO"},
+				{"FRR", "FRU"},
+				{"FRI", "FRV"},
+				{"FRD", "FRW"},
+				{"MAF", "FRW"},
+				{"GLP", "FRW"},
+				{"FUL", "FUB"},
+				{"FUB", "FUB"},
+				{"GRN", "GUA"},
+				{"YOR", "YBA"},
+				{"MLT", "MLT"},
+				{"ORM", "ORO"},
+				{"RMC", "RMS"},
+				{"ROD", "ROV"},
+				{"SOM", "SML"},
+				{"SMB", "SZI"},
+				{"SMA", "SZI"},
+				{"SMK", "SZI"},
+				{"SMJ", "SZI"},
+				{"SMN", "SZI"},
+				{"SMS", "SZI"},
+				{"TIR", "TGE"},
+				{"TIE", "TGY"},
+				{"GLC", "GAL"},
+				{"SRM", "SRL"},
+				{"SRS", "SRL"},
+				{"SRP", "SRL"},
+				{"SSW", "SSW"},
+				{"NDE", "NDE"},
+				{"NBL", "NBL"},
+				{"VEN", "VEN"},
+				{"NLD", "NLD,NLB,NLS"},
+				{"NLB", "NLD,NLB,NLS"}
+			};
+		}
+
+		private void BuildTransitFileLanguage()
+		{
+			_starTransitFileLanguageDictionary = new Dictionary<string, string>
+			{
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""},
+				{"", ""}
+			};
 		}
 	}
 }

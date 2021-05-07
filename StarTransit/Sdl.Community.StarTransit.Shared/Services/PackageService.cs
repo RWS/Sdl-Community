@@ -244,10 +244,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				//for source -> old implementation
 				//TODO: Remove this for final implementation
-				var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguageCultureInfo);
-				var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
+				//var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguageCultureInfo);
+				//var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
 
 				var sourceFiles = GetFilesPathForLanguage(pathToTempFolder, sourceLanguageCultureInfo, filesNames);
+				var transitSourceExtensions =
+					_fileService.GetTransitCorrespondingExtension(model.LanguagePairs[0].SourceLanguage);
 
 				//for target
 				foreach (var languagePair in model.LanguagePairs)
@@ -256,8 +258,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						GetFilesPathForLanguage(pathToTempFolder, languagePair.TargetLanguage, filesNames);
 					languagePair.SourceFile = sourceFiles;
 					languagePair.TargetFile = targetFiles;
+					var transitTargetExtensions =
+						_fileService.GetTransitCorrespondingExtension(languagePair.TargetLanguage);
 
-					var tms = GetTransitTmsForLanguagePair(pathToTempFolder, model.Name, languagePair);
+					var tms = GetTransitTmsForLanguagePair(pathToTempFolder, model.Name, transitSourceExtensions,
+						transitTargetExtensions, languagePair);
 
 					languagePair.StarTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>(tms);
 
@@ -275,7 +280,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return model;
 		}
 
-		private List<StarTranslationMemoryMetadata> GetTransitTmsForLanguagePair(string pathToTempFolder, string packageName, LanguagePair languagePair)
+		private List<StarTranslationMemoryMetadata> GetTransitTmsForLanguagePair(string pathToTempFolder,
+			string packageName, string[] transitSourceExtensions, string[] transitTargetExtensions,LanguagePair languagePair)
 		{
 			var availableTms = new List<StarTranslationMemoryMetadata>();
 			var sourceTmFilesPath = new List<string>();
@@ -283,45 +289,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var sourceMtFilesPath = new List<string>();
 			var targetMtFilesPath = new List<string>();
 
-			var transitSourceExtensions =
-				_fileService.GetTransitCorrespondingExtension(languagePair.SourceLanguage);
-
-			var transitTargetExtensions =
-				_fileService.GetTransitCorrespondingExtension(languagePair.TargetLanguage);
-
-
-			//TODO: Refactor
-			//Tms normale
+			//_AXTR TMs/MTs
 			var tempDirInfo = new DirectoryInfo(pathToTempFolder);
-			var allTms = tempDirInfo.GetFiles("_AEXTR_*", SearchOption.TopDirectoryOnly).GroupBy(f=>f.Extension);
-			foreach (var subGroupInfo in allTms)
-			{
-				var files = subGroupInfo.ToList();
-				var tmFiles = files.Where(f => !f.Name.Contains("MT")).Select(f => f.FullName);
-				var mtFiles = files
-					.Where(f => f.Name.Contains("MT"))
-					.Select(f => f.FullName);
+			var allTms = tempDirInfo.GetFiles("_AEXTR_*", SearchOption.TopDirectoryOnly).GroupBy(f => f.Extension);
 
-				foreach (var transitTargetExtension in transitTargetExtensions)
-				{
-					var targetExtension = $".{transitTargetExtension}";
-					if (subGroupInfo.Key.Equals(targetExtension))
-					{
-						targetTmFilesPath.AddRange(tmFiles);
-						targetMtFilesPath.AddRange(mtFiles);
-					}
-					else
-					{
-						//There are folders which contains all source and target files. We want only the one corresponding for current lang pair
-						foreach (var transitSourceExtension in transitSourceExtensions)
-						{
-							var sourceExtension = $".{transitSourceExtension}";
-							if (!subGroupInfo.Key.Equals(sourceExtension)) continue;
-							sourceTmFilesPath.AddRange(tmFiles);
-							sourceMtFilesPath.AddRange(mtFiles);
-						}
-					}
-				}
+			foreach (var transitTargetExtension in transitTargetExtensions)
+			{
+				var targetExtension = $".{transitTargetExtension}";
+				GroupTmsIntoLists(allTms, targetExtension, transitSourceExtensions, targetTmFilesPath, targetMtFilesPath,
+					sourceTmFilesPath, sourceMtFilesPath);
 			}
 
 			//Ref folder tms
@@ -340,30 +316,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						var targetLanguageExists = subDirFileInfo.Any(t => t.Key.Equals(targetExtension));
 						if (targetLanguageExists)
 						{
-							foreach (var subGroupInfo in subDirFileInfo)
-							{
-								var files = subGroupInfo.ToList();
-								var tmFiles = files.Where(f => !f.Name.Contains("MT")).Select(f => f.FullName);
-								var mtFiles = files
-									.Where(f => f.Name.Contains("MT"))
-									.Select(f => f.FullName);
-								if (subGroupInfo.Key.Equals(targetExtension))
-								{
-									targetTmFilesPath.AddRange(tmFiles);
-									targetMtFilesPath.AddRange(mtFiles);
-								}
-								else
-								{
-									//There are folders which contains all source and target files. We want only the one corresponding for current lang pair
-									foreach (var transitSourceExtension in transitSourceExtensions)
-									{
-										var sourceExtension = $".{transitSourceExtension}";
-										if (!subGroupInfo.Key.Equals(sourceExtension)) continue;
-										sourceTmFilesPath.AddRange(tmFiles);
-										sourceMtFilesPath.AddRange(mtFiles);
-									}
-								}
-							}
+							GroupTmsIntoLists(subDirFileInfo, targetExtension, transitSourceExtensions, targetTmFilesPath,
+								targetMtFilesPath, sourceTmFilesPath, sourceMtFilesPath);
 						}
 					}
 				}
@@ -397,91 +351,120 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return availableTms;
 		}
 
-		//TODO: Remove this for final implementation
-		private void AddFilesAndTmsToModel(LanguagePair languagePair,
-			Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
-			List<string> targetFilesAndTmsPath)
+		private void GroupTmsIntoLists(IEnumerable<IGrouping<string, FileInfo>> subDirFileInfo, string targetExtension, string[] transitSourceExtensions, List<string> targetTmFilesPath,
+			List<string> targetMtFilesPath, List<string> sourceTmFilesPath, List<string> sourceMtFilesPath)
 		{
-			var pathToTargetFiles = new List<string>();
-			var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
-			var sourcefileList = sourceFilesAndTmsPath.Item1;
-			var tmMetadataList = sourceFilesAndTmsPath.Item2;
-
-			languagePair.HasTm = tmMetadataList.Count > 0;
-			languagePair.SourceFile = sourcefileList;
-
-			foreach (var file in targetFilesAndTmsPath)
+			foreach (var subGroupInfo in subDirFileInfo)
 			{
-				var isTm = _fileService.IsTransitTm(file);
-				if (isTm)
+				var files = subGroupInfo.ToList();
+				var tmFiles = files.Where(f => !f.Name.Contains("MT")).Select(f => f.FullName);
+				var mtFiles = files
+					.Where(f => f.Name.Contains("MT"))
+					.Select(f => f.FullName);
+				if (subGroupInfo.Key.Equals(targetExtension))
 				{
-					var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-					//selects the source tm which has the same id with the target tm id
-					var metaData = tmMetadataList.FirstOrDefault(x =>
-						Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
-
-					if (metaData != null)
+					targetTmFilesPath.AddRange(tmFiles);
+					targetMtFilesPath.AddRange(mtFiles);
+				}
+				else
+				{
+					//There are folders which contains all source and target files. We want only the one corresponding for current lang pair
+					foreach (var transitSourceExtension in transitSourceExtensions)
 					{
-						metaData.TargetFile = file;
-						metaData.Name = targetFileNameWithoutExtension;
-						metaData.IsMtFile = targetFileNameWithoutExtension.Contains("_AEXTR_MT_");
+						var sourceExtension = $".{transitSourceExtension}";
+						if (!subGroupInfo.Key.Equals(sourceExtension)) continue;
+						sourceTmFilesPath.AddRange(tmFiles);
+						sourceMtFilesPath.AddRange(mtFiles);
 					}
-
-					tmMetaDatas.Add(metaData);
-				}
-				else
-				{
-					pathToTargetFiles.Add(file);
 				}
 			}
-
-			languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
-			languagePair.TargetFile = pathToTargetFiles;
 		}
 
 		//TODO: Remove this for final implementation
-		private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
-		{
-			var filesAndTms = new List<string>();
+		//private void AddFilesAndTmsToModel(LanguagePair languagePair,
+		//	Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
+		//	List<string> targetFilesAndTmsPath)
+		//{
+		//	var pathToTargetFiles = new List<string>();
+		//	var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
+		//	var sourcefileList = sourceFilesAndTmsPath.Item1;
+		//	var tmMetadataList = sourceFilesAndTmsPath.Item2;
 
-			var extension = language.ThreeLetterWindowsLanguageName;
-			extension = _fileService.MapStarTransitLanguage(extension);
+		//	languagePair.HasTm = tmMetadataList.Count > 0;
+		//	languagePair.SourceFile = sourcefileList;
 
-			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
-			var multiLanguageExtensions = extension.Split(',');
-			foreach (var multiLangExtension in multiLanguageExtensions)
-			{
-				var files = Directory.GetFiles(pathToTempFolder, $"*.{multiLangExtension.Trim()}",
-					SearchOption.TopDirectoryOnly).ToList();
-				filesAndTms.AddRange(files);
-			}
+		//	foreach (var file in targetFilesAndTmsPath)
+		//	{
+		//		var isTm = _fileService.IsTransitTm(file);
+		//		if (isTm)
+		//		{
+		//			var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+		//			//selects the source tm which has the same id with the target tm id
+		//			var metaData = tmMetadataList.FirstOrDefault(x =>
+		//				Path.GetFileNameWithoutExtension(x.SourceFile).Equals(targetFileNameWithoutExtension));
 
-			return filesAndTms;
-		}
+		//			if (metaData != null)
+		//			{
+		//				metaData.TargetFile = file;
+		//				metaData.Name = targetFileNameWithoutExtension;
+		//				metaData.IsMtFile = targetFileNameWithoutExtension.Contains("_AEXTR_MT_");
+		//			}
 
-		//TODO: Remove this for final implementation
-		private Tuple<List<string>, List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(
-			List<string> filesAndTmsList)
-		{
-			var translationMemoryMetadataList = new List<StarTranslationMemoryMetadata>();
-			var fileNames = new List<string>();
+		//			tmMetaDatas.Add(metaData);
+		//		}
+		//		else
+		//		{
+		//			pathToTargetFiles.Add(file);
+		//		}
+		//	}
 
-			foreach (var file in filesAndTmsList)
-			{
-				var isTm = _fileService.IsTransitTm(file);
-				if (isTm)
-				{
-					var metadata = new StarTranslationMemoryMetadata {SourceFile = file};
-					translationMemoryMetadataList.Add(metadata);
-				}
-				else
-				{
-					fileNames.Add(file);
-				}
-			}
+		//	languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
+		//	languagePair.TargetFile = pathToTargetFiles;
+		//}
 
-			return new Tuple<List<string>, List<StarTranslationMemoryMetadata>>(fileNames,
-				translationMemoryMetadataList);
-		}
+		////TODO: Remove this for final implementation
+		//private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
+		//{
+		//	var filesAndTms = new List<string>();
+
+		//	var extension = language.ThreeLetterWindowsLanguageName;
+		//	extension = _fileService.MapStarTransitLanguage(extension);
+
+		//	// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
+		//	var multiLanguageExtensions = extension.Split(',');
+		//	foreach (var multiLangExtension in multiLanguageExtensions)
+		//	{
+		//		var files = Directory.GetFiles(pathToTempFolder, $"*.{multiLangExtension.Trim()}",
+		//			SearchOption.TopDirectoryOnly).ToList();
+		//		filesAndTms.AddRange(files);
+		//	}
+
+		//	return filesAndTms;
+		//}
+
+		////TODO: Remove this for final implementation
+		//private Tuple<List<string>, List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(
+		//	List<string> filesAndTmsList)
+		//{
+		//	var translationMemoryMetadataList = new List<StarTranslationMemoryMetadata>();
+		//	var fileNames = new List<string>();
+
+		//	foreach (var file in filesAndTmsList)
+		//	{
+		//		var isTm = _fileService.IsTransitTm(file);
+		//		if (isTm)
+		//		{
+		//			var metadata = new StarTranslationMemoryMetadata {SourceFile = file};
+		//			translationMemoryMetadataList.Add(metadata);
+		//		}
+		//		else
+		//		{
+		//			fileNames.Add(file);
+		//		}
+		//	}
+
+		//	return new Tuple<List<string>, List<StarTranslationMemoryMetadata>>(fileNames,
+		//		translationMemoryMetadataList);
+		//}
 	}
 }

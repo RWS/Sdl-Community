@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using NSubstitute;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -16,6 +15,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		private readonly StarTransitConfiguration _starTransitConfiguration;
 		private readonly string _testingFilesPath = Path.Combine($"{AppDomain.CurrentDomain.BaseDirectory}", "TestingFiles");
 		private readonly IPackageService _service;
+
 		public PackageServiceUnitTests()
 		{
 			var packageService = Substitute.For<PackageService>();
@@ -23,6 +23,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			_service = new PackageService();
 		}
 
+		
 		[Fact]
 		public void OpenPackage_IsNotNullPackage_UnitTest()
 		{
@@ -49,6 +50,15 @@ namespace Sdl.Community.StarTransit.UnitTests
 		{
 			var packageModel = _starTransitConfiguration.GetPackageModel(_testingFilesPath, "693203001_Trumpf_ID_IND.PPF")?.Result;
 			Assert.NotEqual("Trumpf_ID", packageModel?.Name);
+		}
+
+		[Fact]
+		public void ReturnPackage()
+		{
+			var model = _starTransitConfiguration.GetPackageModel(_testingFilesPath, "693203001_Trumpf_ID_IND.PPF").Result;
+
+			var package = _service.GetPackageModel();
+			Assert.NotNull(package);
 		}
 
 		//TMs Unit tests for AXTR Tms with only one Language Pair

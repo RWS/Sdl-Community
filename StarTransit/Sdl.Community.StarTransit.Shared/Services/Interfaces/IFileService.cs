@@ -11,7 +11,7 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 		string MapFileLanguage(string fileExtension);
 		string MapStarTransitLanguage(string fileExtension);
 		string[] GetTransitCorrespondingExtension(CultureInfo languageCulture);
-		bool IsTransitTm(string filePath);
+		//bool IsTransitTm(string filePath);
 		bool IsTransitFile(string filePath);
 		//Check for segments with empty tags or with empty tags in tags
 		bool IsValidNode(XmlNode originalXmlNode);

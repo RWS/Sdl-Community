@@ -22,26 +22,26 @@ namespace Sdl.Community.StarTransit.UnitTests
 			_transitFilePath = Path.Combine(_testingFilesPath, "FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU");
 		}
 
-		[Fact]
-		public void IsTmFile_ReturnsTrue()
-		{
-			var isTm = _fileService.IsTransitTm(_tmFilePath);
-			Assert.True(isTm);
-		}
+		//[Fact]
+		//public void IsTmFile_ReturnsTrue()
+		//{
+		//	var isTm = _fileService.IsTransitTm(_tmFilePath);
+		//	Assert.True(isTm);
+		//}
 
-		[Fact]
-		public void IsTmFile_ReturnsFalse()
-		{
-			var isTm = _fileService.IsTransitTm(_transitFilePath);
-			Assert.False(isTm);
-		}
+		//[Fact]
+		//public void IsTmFile_ReturnsFalse()
+		//{
+		//	var isTm = _fileService.IsTransitTm(_transitFilePath);
+		//	Assert.False(isTm);
+		//}
 
-		[Fact]
-		public void IsTmFile_FileDoesNotExist_ReturnsFalse()
-		{
-			var isTm = _fileService.IsTransitTm(Path.Combine(_testingFilesPath, "_AEXTR_2.DEU"));
-			Assert.False(isTm);
-		}
+		//[Fact]
+		//public void IsTmFile_FileDoesNotExist_ReturnsFalse()
+		//{
+		//	var isTm = _fileService.IsTransitTm(Path.Combine(_testingFilesPath, "_AEXTR_2.DEU"));
+		//	Assert.False(isTm);
+		//}
 
 		[Fact]
 		public void IsTransitFile_RetunsTrue()
