@@ -1,11 +1,11 @@
-﻿<Window x:Class="Sdl.Community.DeepLMTProvider.WPF.DeepLWindow"
+﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.DeepLWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.WPF.UiHelpers"
-        xmlns:wpf="clr-namespace:Sdl.Community.DeepLMTProvider.WPF"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+        xmlns:wpf="clr-namespace:Sdl.Community.DeepLMTProvider"
         mc:Ignorable="d"
         FontFamily="Calibri"
         WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
@@ -32,7 +32,7 @@
 			<uiHelpers:WindowsControl  DockPanel.Dock="Top" />
 			<DockPanel DockPanel.Dock="Top" Margin="5,10,10,0" LastChildFill="False">
 				<Label VerticalAlignment="Center" Content="Welcome to the DeepL Translation Provider. Please add your account and provider settings." FontFamily="Calibri" FontSize="14" />
-				<Image Source="Logo/deepLResized.png" Width="50" Height="50" DockPanel.Dock="Right" />
+				<Image Source="../Resources/deepLResized.png" Width="50" Height="50" DockPanel.Dock="Right" />
 			</DockPanel>
 			<StackPanel>
 				<TextBlock Margin="10,20,10,15"

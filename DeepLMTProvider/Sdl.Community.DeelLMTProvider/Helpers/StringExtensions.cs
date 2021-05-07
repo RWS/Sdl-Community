@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.Helpers
 {
 	public static class StringExtensions
     {

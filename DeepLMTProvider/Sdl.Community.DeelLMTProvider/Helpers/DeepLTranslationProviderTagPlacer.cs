@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 using System.Web;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.WPF;
+using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.LanguagePlatform.Core;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.Helpers
 {
 	public class DeepLTranslationProviderTagPlacer
     {

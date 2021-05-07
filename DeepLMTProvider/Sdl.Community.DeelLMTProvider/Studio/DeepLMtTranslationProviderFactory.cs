@@ -1,9 +1,8 @@
 ﻿using System;
-using Sdl.Community.DeepLMTProvider.WPF;
-using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.Studio
 {
 	[TranslationProviderFactory(Id = "DeepLMtTranslationProviderFactory",
 		Name = "DeepLMtTranslationProviderFactory",
@@ -12,7 +11,7 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			var originalUri = new Uri(Helpers.DeeplTranslationProviderScheme);
+			var originalUri = new Uri(Helpers.Helpers.DeeplTranslationProviderScheme);
 			var options = new DeepLTranslationOptions(translationProviderUri, translationProviderState);
 
 			if (credentialStore.GetCredential(originalUri) != null)

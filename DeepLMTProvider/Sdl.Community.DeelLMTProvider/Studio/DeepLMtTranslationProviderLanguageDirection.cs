@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
+using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.WPF;
-using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using LogManager = NLog.LogManager;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.Studio
 {
 	public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{

@@ -3,23 +3,22 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.DeepLMTProvider.WPF
+namespace Sdl.Community.DeepLMTProvider.UI
 {
 	public partial class DeepLWindow
 	{
 		private readonly LanguagePair[] _languagePairs;
 		private readonly bool _isTellMeAction;
-		private readonly Helpers _helpers;
+		private readonly Helpers.Helpers _helpers;
 
 		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore = null,
 			LanguagePair[] languagePairs = null, bool isTellMeAction = false)
@@ -31,7 +30,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			Formality.SelectedIndex = (int)options.Formality;
 			PlainText.IsChecked = options.SendPlainText;
 			Options = options;
-			_helpers = new Helpers();
+			_helpers = new Helpers.Helpers();
 
 			PasswordChangedTimer.Elapsed += OnPasswordChanged;
 

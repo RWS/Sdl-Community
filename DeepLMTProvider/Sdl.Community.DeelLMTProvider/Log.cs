@@ -4,7 +4,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace Sdl.Community.DeepLMTProvider.WPF
+namespace Sdl.Community.DeepLMTProvider
 {
 	public static class Log
 	{

@@ -1,18 +1,18 @@
 ﻿using System;
 using Newtonsoft.Json;
 using NLog;
-using Sdl.Community.DeepLMTProvider.WPF;
-using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.Studio
 {
 	public class DeepLMtTranslationProvider : ITranslationProvider
 	{
 		private DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-		private readonly Logger _logger = Log.GetLogger(nameof(DeepLMTProvider.DeepLTranslationProviderConnecter));
+		private readonly Logger _logger = Log.GetLogger(nameof(Studio.DeepLTranslationProviderConnecter));
 
 		public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderConnecter deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
 		{

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.DeepLMTProvider.WPF.Model
+namespace Sdl.Community.DeepLMTProvider.Model
 {
 	public class DeepLTranslationOptions
 	{

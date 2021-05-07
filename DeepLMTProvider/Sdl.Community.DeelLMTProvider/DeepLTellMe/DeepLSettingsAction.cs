@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.DeepLMTProvider.WPF;
-using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 

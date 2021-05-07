@@ -7,12 +7,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using NLog;
-using Sdl.Community.DeepLMTProvider.WPF;
-using Sdl.Community.DeelLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.Helpers;
+using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.LanguagePlatform.Core;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.Studio
 {
 	public class DeepLTranslationProviderConnecter
 	{
@@ -26,14 +26,14 @@ namespace Sdl.Community.DeepLMTProvider
 			ApiKey = key;
 			_formality = formality;
 
-			SupportedTargetLanguagesAndFormalities = Helpers.GetSupportedTargetLanguages(ApiKey);
+			SupportedTargetLanguagesAndFormalities = Helpers.Helpers.GetSupportedTargetLanguages(ApiKey);
 			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
 		}
 
 		private string ApiKey { get; }
 		private List<string> SupportedTargetLanguages { get; }
 
-		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= Helpers.GetSupportedSourceLanguages(ApiKey);
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= Helpers.Helpers.GetSupportedSourceLanguages(ApiKey);
 
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{

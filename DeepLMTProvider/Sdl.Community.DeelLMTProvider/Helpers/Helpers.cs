@@ -6,8 +6,9 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Sdl.Community.DeepLMTProvider.UI;
 
-namespace Sdl.Community.DeepLMTProvider.WPF
+namespace Sdl.Community.DeepLMTProvider.Helpers
 {
 	public class Helpers
 	{
