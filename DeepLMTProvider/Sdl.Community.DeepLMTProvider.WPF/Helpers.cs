@@ -11,6 +11,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	public class Helpers
 	{
+		public const string DeeplTranslationProviderScheme = "deepltranslationprovider:///";
 		private static readonly Logger _logger = Log.GetLogger(nameof(Helpers));
 		private string _apiKey;
 		public HttpResponseMessage IsApiKeyValidResponse { get; private set; }
