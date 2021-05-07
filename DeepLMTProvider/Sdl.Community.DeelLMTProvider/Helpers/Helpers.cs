@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using NLog;
-using Sdl.Community.DeepLMTProvider.UI;
 
 namespace Sdl.Community.DeepLMTProvider.Helpers
 {
@@ -17,6 +16,8 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 		private string _apiKey;
 		public HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 
+		private static List<string> FormalityIncompatibleTargetLanguages { get; set; }
+
 		private string ApiKey
 		{
 			get => _apiKey;
@@ -25,24 +26,6 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 				_apiKey = value;
 				OnApiKeyChanged();
 			}
-		}
-
-		private void OnApiKeyChanged()
-		{
-			IsApiKeyValidResponse = IsValidApiKey(ApiKey);
-
-			if (IsApiKeyValidResponse.IsSuccessStatusCode)
-			{
-				SetFormalityIncompatibleLanguages();
-			}
-		}
-
-		private static List<string> FormalityIncompatibleTargetLanguages { get; set; }
-
-		public List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
-		{
-			if (FormalityIncompatibleTargetLanguages is null) return null;
-			return targetLanguages.Where(tl=>!IsLanguageCompatible(tl)).Select(tl => tl.Name).ToList();
 		}
 
 		public static List<string> GetSupportedSourceLanguages(string apiKey)
@@ -79,20 +62,15 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 			return supportedLanguages;
 		}
 
+		public List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
+		{
+			if (FormalityIncompatibleTargetLanguages is null) return null;
+			return targetLanguages.Where(tl => !IsLanguageCompatible(tl)).Select(tl => tl.Name).ToList();
+		}
+
 		public void SetApiKey(string apiKey)
 		{
 			ApiKey = apiKey;
-		}
-
-		private void SetFormalityIncompatibleLanguages()
-		{
-			FormalityIncompatibleTargetLanguages =
-				GetSupportedTargetLanguages(ApiKey).Where(sl => !sl.Value).Select(sl => sl.Key.ToLower()).ToList();
-		}
-
-		private static HttpResponseMessage IsValidApiKey(string apiKey)
-		{
-			return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
 		}
 
 		private static string GetSupportedLanguages(string type, string apiKey)
@@ -110,6 +88,27 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 		{
 			return !FormalityIncompatibleTargetLanguages.Contains(targetLanguage.ToString().ToLower()) &&
 				   !FormalityIncompatibleTargetLanguages.Contains(targetLanguage.TwoLetterISOLanguageName.ToLower());
+		}
+
+		private static HttpResponseMessage IsValidApiKey(string apiKey)
+		{
+			return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
+		}
+
+		private void OnApiKeyChanged()
+		{
+			IsApiKeyValidResponse = IsValidApiKey(ApiKey);
+
+			if (IsApiKeyValidResponse.IsSuccessStatusCode)
+			{
+				SetFormalityIncompatibleLanguages();
+			}
+		}
+
+		private void SetFormalityIncompatibleLanguages()
+		{
+			FormalityIncompatibleTargetLanguages =
+				GetSupportedTargetLanguages(ApiKey).Where(sl => !sl.Value).Select(sl => sl.Key.ToLower()).ToList();
 		}
 	}
 }

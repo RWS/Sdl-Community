@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
@@ -18,7 +17,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 	{
 		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
 		private Formality _formality;
-		private Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; }
 		private List<string> _supportedSourceLanguages;
 
 		public DeepLTranslationProviderConnecter(string key, Formality formality)
@@ -31,9 +29,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 		}
 
 		private string ApiKey { get; }
-		private List<string> SupportedTargetLanguages { get; }
-
 		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= Helpers.Helpers.GetSupportedSourceLanguages(ApiKey);
+		private List<string> SupportedTargetLanguages { get; }
+		private Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; }
 
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
@@ -94,20 +92,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			return translatedText;
 		}
 
-		private Formality GetFormality(LanguagePair languageDirection)
-		{
-			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
-							languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper(), out var supportsFormality))
-			{
-				SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
-					out supportsFormality);
-			}
-
-			return supportsFormality
-				? _formality
-				: Formality.Default;
-		}
-
 		private string DecodeWhenNeeded(string translatedText)
 		{
 			if (translatedText.Contains("%"))
@@ -127,6 +111,20 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			translatedText = amp.Replace(translatedText, "&");
 
 			return translatedText;
+		}
+
+		private Formality GetFormality(LanguagePair languageDirection)
+		{
+			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
+							languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper(), out var supportsFormality))
+			{
+				SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
+					out supportsFormality);
+			}
+
+			return supportsFormality
+				? _formality
+				: Formality.Default;
 		}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
