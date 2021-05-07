@@ -44,6 +44,7 @@
 					Name="ApiKeyBox"
 					FontFamily="Calibri"
 					mah:TextBoxHelper.UseFloatingWatermark="True"
+					PasswordChanged="ApiKeyBox_PasswordChanged"
 					mah:TextBoxHelper.Watermark="API Key"
 					mah:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.HasText), Mode=OneWay}"
 					mah:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
@@ -59,11 +60,11 @@
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
 				</TextBlock>
-				<Label Content="Translation options" FontWeight="Bold" Margin="0" />
+				<Label Content="Translation options" FontWeight="Bold" Margin="5 0 0 0" />
 				<StackPanel>
 					<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0"
 						          Foreground="#0C2D47" />
-					<StackPanel Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
+					<StackPanel Name="NotCompatibleStackPanel" Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
 						<Label Name="FormalityLabel" Content="Formality: " Margin="6 10 0 0" />
 						<ComboBox Name="Formality" FontFamily="Calibri" Margin="0,10,0,0" Foreground="#0C2D47" Width="100"
 							          HorizontalAlignment="Left">

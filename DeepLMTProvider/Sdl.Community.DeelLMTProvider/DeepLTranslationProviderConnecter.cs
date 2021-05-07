@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NLog;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
@@ -18,18 +18,22 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
 		private Formality _formality;
-		private List<string> _supportedTargetLanguages;
+		private Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; }
 		private List<string> _supportedSourceLanguages;
 
 		public DeepLTranslationProviderConnecter(string key, Formality formality)
 		{
 			ApiKey = key;
 			_formality = formality;
+
+			SupportedTargetLanguagesAndFormalities = Helpers.GetSupportedTargetLanguages(ApiKey);
+			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
 		}
 
-		public string ApiKey { get; set; }
-		private List<string> SupportedTargetLanguages => _supportedTargetLanguages ?? (_supportedTargetLanguages = GetSupportedLanguages("target"));
-		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ?? (_supportedSourceLanguages = GetSupportedLanguages("source"));
+		private string ApiKey { get; }
+		private List<string> SupportedTargetLanguages { get; }
+
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= Helpers.GetSupportedSourceLanguages(ApiKey);
 
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
@@ -42,7 +46,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
-			_formality = Helpers.IsLanguageCompatible(languageDirection.TargetCulture) ? _formality : Formality.Default;
+			var formality = GetFormality(languageDirection);
 
 			var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
 			var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
@@ -56,13 +60,13 @@ namespace Sdl.Community.DeepLMTProvider
 				var content = new StringContent($"text={sourceText}" +
 												$"&source_lang={sourceLanguage}" +
 												$"&target_lang={targetLanguage}" +
-												$"&formality={_formality.ToString().ToLower()}" +
+												$"&formality={formality.ToString().ToLower()}" +
 												"&preserve_formatting=1" +
 												"&tag_handling=xml" +
 												$"&auth_key={ApiKey}",
 					Encoding.UTF8, "application/x-www-form-urlencoded");
 
-				var response = DeeplApplicationInitializer.Clinet.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+				var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 				response.EnsureSuccessStatusCode();
 
 				var translationResponse = response.Content?.ReadAsStringAsync().Result;
@@ -90,6 +94,20 @@ namespace Sdl.Community.DeepLMTProvider
 			return translatedText;
 		}
 
+		private Formality GetFormality(LanguagePair languageDirection)
+		{
+			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
+							languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper(), out var supportsFormality))
+			{
+				SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
+					out supportsFormality);
+			}
+
+			return supportsFormality
+				? _formality
+				: Formality.Default;
+		}
+
 		private string DecodeWhenNeeded(string translatedText)
 		{
 			if (translatedText.Contains("%"))
@@ -109,27 +127,6 @@ namespace Sdl.Community.DeepLMTProvider
 			translatedText = amp.Replace(translatedText, "&");
 
 			return translatedText;
-		}
-
-		private List<string> GetSupportedLanguages(string type)
-		{
-			try
-			{
-				var content = new StringContent($"type={type}" + $"&auth_key={ApiKey}", Encoding.UTF8,
-					"application/x-www-form-urlencoded");
-
-				var response = DeeplApplicationInitializer.Clinet.PostAsync("https://api.deepl.com/v1/languages", content).Result;
-				response.EnsureSuccessStatusCode();
-
-				var languagesResponse = response.Content?.ReadAsStringAsync().Result;
-
-				return JArray.Parse(languagesResponse).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{ex}");
-			}
-			return  new List<string>();
 		}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null

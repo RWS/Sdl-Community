@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -11,7 +12,7 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			var originalUri = new Uri("deeplprovider:///");
+			var originalUri = new Uri(Helpers.DeeplTranslationProviderScheme);
 			var options = new DeepLTranslationOptions(translationProviderUri, translationProviderState);
 
 			if (credentialStore.GetCredential(originalUri) != null)
@@ -19,13 +20,11 @@ namespace Sdl.Community.DeepLMTProvider
 				var credentials = credentialStore.GetCredential(originalUri);
 				options.ApiKey = credentials.Credential;
 			}
-
-			// create identifier on first use and save as a credential
-			originalUri = new Uri("deeplproviderIdentifier:///");
-			if (credentialStore.GetCredential(originalUri) == null)
+			else 
 			{
 				credentialStore.AddCredential(originalUri, new TranslationProviderCredential(Guid.NewGuid().ToString(), true));
 			}
+
 			if (credentialStore.GetCredential(originalUri) != null)
 			{
 				var credentials = credentialStore.GetCredential(originalUri);

@@ -23,7 +23,7 @@ namespace Sdl.Community.DeepLMTProvider
             var options = new DeepLTranslationOptions();
 
             //get credentials
-            var credentials = GetCredentials(credentialStore, "deeplprovider:///");
+            var credentials = GetCredentials(credentialStore, Helpers.DeeplTranslationProviderScheme);
 
             var dialog = new DeepLWindow(options, credentials, languagePairs);
             ElementHost.EnableModelessKeyboardInterop(dialog);
@@ -51,7 +51,7 @@ namespace Sdl.Community.DeepLMTProvider
             }
 
             //get saved key if there is one and put it into options
-            var savedCredentials = GetCredentials(credentialStore, "deeplprovider:///");
+            var savedCredentials = GetCredentials(credentialStore, Helpers.DeeplTranslationProviderScheme);
             if (savedCredentials != null)
             {
                 editProvider.Options.ApiKey = savedCredentials.Credential;
@@ -116,7 +116,7 @@ namespace Sdl.Community.DeepLMTProvider
         {
             //used to set credentials
             // we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
-            var uri = new Uri("deeplprovider:///");
+            var uri = new Uri(Helpers.DeeplTranslationProviderScheme);
             var credentials = new TranslationProviderCredential(apiKey, persistKey);
             credentialStore.RemoveCredential(uri);
             credentialStore.AddCredential(uri, credentials);

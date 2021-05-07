@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -284,7 +285,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private string LookupDeepL(string sourceText)
 		{
-			return _deepLMtTranslationProvider.DeepLTranslationProviderConnecter.Translate(_languageDirection, sourceText);
+			return _connecter.Translate(_languageDirection, sourceText);
 		}
 
 		private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
