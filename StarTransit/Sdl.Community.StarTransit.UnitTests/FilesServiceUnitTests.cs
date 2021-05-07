@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
+using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Xunit;
@@ -22,26 +25,51 @@ namespace Sdl.Community.StarTransit.UnitTests
 			_transitFilePath = Path.Combine(_testingFilesPath, "FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU");
 		}
 
-		//[Fact]
-		//public void IsTmFile_ReturnsTrue()
-		//{
-		//	var isTm = _fileService.IsTransitTm(_tmFilePath);
-		//	Assert.True(isTm);
-		//}
+		[Theory]
+		[InlineData("randomEx")]
+		[InlineData(null)]
+		[InlineData("")]
+		public void MapFileLanguage_ReturnsEmpty(string fileExtension)
+		{
+			var languageCode = _fileService.MapFileLanguage(fileExtension);
+			Assert.Empty(languageCode);
+		}
 
-		//[Fact]
-		//public void IsTmFile_ReturnsFalse()
-		//{
-		//	var isTm = _fileService.IsTransitTm(_transitFilePath);
-		//	Assert.False(isTm);
-		//}
+		[Theory]
+		[InlineData("DEU","de-DE")]
+		[InlineData("AZC", "az-Cyrl-AZ")]
+		public void MapFileLanguage_ReturnsCorrectCode(string fileExtension,string languageCode)
+		{
+			var transitLanguageCode = _fileService.MapFileLanguage(fileExtension);
+			Assert.Equal(languageCode,transitLanguageCode);
+		}
 
-		//[Fact]
-		//public void IsTmFile_FileDoesNotExist_ReturnsFalse()
-		//{
-		//	var isTm = _fileService.IsTransitTm(Path.Combine(_testingFilesPath, "_AEXTR_2.DEU"));
-		//	Assert.False(isTm);
-		//}
+		[Theory]
+		[InlineData(null)]
+		[InlineData("")]
+		public void MapTransitLanguage_ReturnsEmpty(string fileExtension)
+		{
+			var transitFileExtension = _fileService.MapStarTransitLanguage(fileExtension);
+			Assert.Empty(transitFileExtension);
+		}
+
+		[Theory]
+		[InlineData("DEU")]
+		public void MapTransitLanguage_NotFound_ReturnsSameExtension(string fileExtension)
+		{
+			var transitFileExtension = _fileService.MapStarTransitLanguage(fileExtension);
+			Assert.Equal(fileExtension,transitFileExtension);
+		}
+
+		[Theory]
+		[InlineData("NGA", "EDO,EFI,NGA")]
+		[InlineData("ITA", "ITS,ITA")]
+		[InlineData("FRI", "FRV")]
+		public void MapTransitLanguage_ReturnsCorrectCode(string fileExtension, string languageCode)
+		{
+			var transitLanguageCode = _fileService.MapStarTransitLanguage(fileExtension);
+			Assert.Equal(languageCode, transitLanguageCode);
+		}
 
 		[Fact]
 		public void IsTransitFile_RetunsTrue()
@@ -55,6 +83,37 @@ namespace Sdl.Community.StarTransit.UnitTests
 		{
 			var isTransitFile = _fileService.IsTransitFile(_tmFilePath);
 			Assert.True(isTransitFile);
+		}
+
+		[Fact]
+		public void IsTransitFile_ReturnsFalse()
+		{
+			var isTransitFile = _fileService.IsTransitFile("random path");
+			Assert.False(isTransitFile);
+		}
+
+		[Fact]
+		public void GetStudioTargetLanguages_ReturnsEmpty()
+		{
+			var empty = _fileService.GetStudioTargetLanguages(null);
+			Assert.Empty(empty);
+		}
+
+		[Fact]
+		public void GetStudioTargetLanguages_ReturnsList()
+		{
+			var languagePairs = new List<LanguagePair>
+			{
+				new LanguagePair
+				{
+					SourceLanguage = new CultureInfo("en-en"), TargetLanguage = new CultureInfo("fr-fr")
+				},new LanguagePair
+				{
+					SourceLanguage = new CultureInfo("en-en"), TargetLanguage = new CultureInfo("de-de")
+				}
+			};
+			var targetLanguages = _fileService.GetStudioTargetLanguages(languagePairs);
+			Assert.NotEmpty(targetLanguages);
 		}
 
 		[Theory]

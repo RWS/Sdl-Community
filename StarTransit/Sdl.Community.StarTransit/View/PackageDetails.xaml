@@ -26,7 +26,7 @@
 				<Setter Property="Margin" Value="10 5 0 5"/>
 			</Style>
 			<Style x:Key="PackageDetailsMargin" TargetType="{x:Type TextBlock}">
-				<Setter Property="Margin" Value="15 5 0 5"/>
+				<Setter Property="Margin" Value="5 5 0 5"/>
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -54,7 +54,7 @@
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="1"
 		           Text="{x:Static resx:PluginResources.PackageDetails_NameLbl}"/>
-		<TextBlock Style="{StaticResource PackageDetailsMargin}"
+		<TextBlock Margin="15 5 0 5"
 		           Grid.Column="1" Grid.Row="1"
 		           Text="{Binding PackageModel.Result.Name}"/>
 
