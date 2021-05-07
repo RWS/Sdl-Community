@@ -142,4 +142,7 @@ This feature currently works for all target languages except "ES" (Spanish), "JA
   <data name="ServerGeneralResponse_Message" xml:space="preserve">
     <value>The DeepL provider is returning a '{0}' status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity.</value>
   </data>
+  <data name="ApiKeyIsRequired_ValidationBlockMessage" xml:space="preserve">
+	  <value>Api Key is required.</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -9,7 +10,7 @@ namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLMtTranslationProvider : ITranslationProvider
 	{
-		public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
+		private DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
 		private readonly Logger _logger = Log.GetLogger(nameof(DeepLMTProvider.DeepLTranslationProviderConnecter));
 

@@ -6,22 +6,22 @@ using System.Xml;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.WPF
 {
 	[ApplicationInitializer]
-	public class DeeplApplicationInitializer: IApplicationInitializer
+	public class AppInitializer : IApplicationInitializer
 	{
-		public static HttpClient Clinet = new HttpClient();
+		public static readonly HttpClient Client = new HttpClient();
 
 		public void Execute()
 		{
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-			Clinet.Timeout= TimeSpan.FromMinutes(5);
+			Client.Timeout = TimeSpan.FromMinutes(5);
 			var pluginVersion = GetPluginVersion();
-			Clinet.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2019 /plugin {pluginVersion}");
+			Client.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {pluginVersion}");
 		}
 
-		private string GetPluginVersion()
+		private static string GetPluginVersion()
 		{
 			try
 			{
