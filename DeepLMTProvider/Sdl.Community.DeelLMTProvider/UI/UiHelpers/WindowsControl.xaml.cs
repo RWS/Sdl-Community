@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Desktop.Platform.Controls.Controls;
 
-namespace Sdl.Community.DeepLMTProvider.WPF.UiHelpers
+namespace Sdl.Community.DeepLMTProvider.UI.UiHelpers
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml

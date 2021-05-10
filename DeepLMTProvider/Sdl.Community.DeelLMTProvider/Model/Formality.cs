@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.DeepLMTProvider.WPF.Model
+﻿namespace Sdl.Community.DeepLMTProvider.Model
 {
 	public enum Formality
     {
