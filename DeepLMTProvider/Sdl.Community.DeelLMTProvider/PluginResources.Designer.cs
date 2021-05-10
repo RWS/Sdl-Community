@@ -120,6 +120,15 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to deepltranslationprovider:///.
+        /// </summary>
+        public static string DeeplTranslationProviderScheme {
+            get {
+                return ResourceManager.GetString("DeeplTranslationProviderScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {

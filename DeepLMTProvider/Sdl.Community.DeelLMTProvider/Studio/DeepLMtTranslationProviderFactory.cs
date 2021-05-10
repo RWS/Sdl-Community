@@ -11,7 +11,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
     {
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            var originalUri = new Uri(Helpers.Helpers.DeeplTranslationProviderScheme);
+            var originalUri = new Uri(PluginResources.DeeplTranslationProviderScheme);
             var options = new DeepLTranslationOptions(translationProviderUri, translationProviderState);
 
             if (credentialStore.GetCredential(originalUri) != null)
