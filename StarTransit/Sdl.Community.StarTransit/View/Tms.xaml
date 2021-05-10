@@ -88,6 +88,7 @@
 					<Style TargetType="{x:Type DataGridColumnHeader}">
 						<Setter Property="SeparatorBrush" Value="Transparent" />
 						<Setter Property="Background" Value="Transparent"/>
+						<Setter Property="Margin" Value="0 0 10 0"/>
 					</Style>
 				</DataGrid.ColumnHeaderStyle>
 				<DataGrid.Columns>
@@ -126,7 +127,7 @@
 									          GridLinesVisibility="None"
 									          SelectionUnit="FullRow"
 									          SelectionMode="Single"
-									          Width="500"
+									          Width="Auto"
 									          HorizontalAlignment="Left"
 									          Visibility="{Binding CreateNewTm,Converter={StaticResource BooleanToVisibilityConverter} }"
 									          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -143,7 +144,7 @@
 												</DataGridTemplateColumn.CellTemplate>
 											</DataGridTemplateColumn>
 
-											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" Width="*">
+											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" Width="Auto">
 												<DataGridTemplateColumn.CellTemplate>
 													<DataTemplate>
 														<StackPanel Orientation="Horizontal">
@@ -166,7 +167,7 @@
 													</DataTemplate>
 												</DataGridTemplateColumn.CellTemplate>
 											</DataGridTemplateColumn>
-											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_Penalty_Header}" Width="100">
+											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_Penalty_Header}">
 												<DataGridTemplateColumn.CellTemplate>
 													<DataTemplate>
 														<controls:NumericUpDown Style="{StaticResource Sdl.NumericUpDown.Generic}" Minimum="0" Maximum="25"
@@ -184,8 +185,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<RadioButton GroupName="{Binding TargetLanguage.Name}"
-								             Margin="0 10 10 0"
-											 HorizontalAlignment="Center"
+								             HorizontalAlignment="Center"
 								             IsChecked="{Binding NoTm,UpdateSourceTrigger=PropertyChanged}"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -194,7 +194,6 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<RadioButton GroupName="{Binding TargetLanguage.Name}" 
-								             Margin="0 10 10 0"
 								             HorizontalAlignment="Center"
 								             IsChecked="{Binding CreateNewTm,UpdateSourceTrigger=PropertyChanged}"/>
 							</DataTemplate>
@@ -205,7 +204,6 @@
 							<DataTemplate>
 								<RadioButton GroupName="{Binding TargetLanguage.Name}"
 								             HorizontalAlignment="Center"
-								             Margin="0 10 10 0"
 								             IsChecked="{Binding ChoseExistingTm,UpdateSourceTrigger=PropertyChanged}"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
