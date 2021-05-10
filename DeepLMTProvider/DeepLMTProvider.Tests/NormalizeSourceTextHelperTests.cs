@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.DeepLMTProvider;
+using Sdl.Community.DeepLMTProvider.Helpers;
 using Xunit;
 
 namespace DeepLMTProvider.Tests

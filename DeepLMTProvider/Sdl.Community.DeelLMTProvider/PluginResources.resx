@@ -151,4 +151,35 @@
   <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ApiKeyIsRequired_ValidationBlockMessage" xml:space="preserve">
+    <value>Api Key is required.</value>
+  </data>
+  <data name="Forbidden_Message" xml:space="preserve">
+    <value>The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key.</value>
+  </data>
+  <data name="FormalityNotAvailableReason" xml:space="preserve">
+    <value>Sets whether the translated text should lean towards formal or informal language.
+This feature currently works for all target languages except "ES" (Spanish), "JA" (Japanese) and "ZH" (Chinese).</value>
+  </data>
+  <data name="FormalityNotAvailableText" xml:space="preserve">
+    <value>*Not all languages are compatible with this option...</value>
+  </data>
+  <data name="ServerGeneralResponse_Message" xml:space="preserve">
+    <value>The DeepL provider is returning a '{0}' status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity.</value>
+  </data>
+  <data name="SettingsUpdated" xml:space="preserve">
+    <value>Settings Updated</value>
+  </data>
+  <data name="SettingsUpdated_ReopenFilesForEditing" xml:space="preserve">
+    <value>In order for the new settings to take effect, you have to reopen the file for editing</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="DeeplTranslationProviderScheme" xml:space="preserve">
+	  <value>deepltranslationprovider:///</value>
+  </data>
 </root>
