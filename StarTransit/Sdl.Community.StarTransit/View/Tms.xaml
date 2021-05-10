@@ -147,14 +147,6 @@
 									          ItemsSource="{Binding StarTranslationMemoryMetadatas}">
 										<DataGrid.Columns>
 											<DataGridTemplateColumn CanUserResize="False">
-												<DataGridTemplateColumn.HeaderTemplate>
-													<DataTemplate>
-														<CheckBox
-															VerticalAlignment="Center"
-															IsChecked="{Binding Path=DataContext.CheckAll,ElementName=TmsOptions,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-													</DataTemplate>
-
-												</DataGridTemplateColumn.HeaderTemplate>
 												<DataGridTemplateColumn.CellTemplate>
 													<DataTemplate>
 														<CheckBox 

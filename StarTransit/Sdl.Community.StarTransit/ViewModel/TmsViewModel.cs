@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -20,7 +18,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
-		private bool? _checkAll;
 		private bool _packageContainsTms;
 		private readonly IWizardModel _wizardModel;
 		private LanguagePair _selectedLanguagePair;
@@ -37,7 +34,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 			IsPreviousEnabled = true;
 			IsNextEnabled = true;
 			_fileDialogService = fileDialogService;
-			_checkAll = false;
 			_isValid = true;
 			PropertyChanged += TmsViewModelChanged;
 		}
@@ -149,31 +145,11 @@ namespace Sdl.Community.StarTransit.ViewModel
 				OnPropertyChanged(nameof(IsPreviousEnabled));
 			}
 		}
-		public bool? CheckAll
-		{
-			get => _checkAll;
-			set
-			{
-				if (_checkAll == value) return;
-				_checkAll = value;
-				CheckAllFiles(value);
-				OnPropertyChanged(nameof(CheckAll));
-			}
-		}
 
 		public bool PackageContainsTms
 		{
 			get => _wizardModel.PackageModel.Result.PackageContainsTms;
 			set { _packageContainsTms = value; }
-		}
-
-		private void CheckAllFiles(bool? value)
-		{
-			if (value == null) return;
-			foreach (var tmFile in LanguagePairsTmOptions.SelectMany(languagePairsTmOption => languagePairsTmOption.StarTranslationMemoryMetadatas))
-			{
-				tmFile.IsChecked = (bool)value;
-			}
 		}
 
 		public override bool OnChangePage(int position, out string message)
@@ -205,26 +181,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 				languagePairsTmOption.RemoveSelectedTmCommand = RemoveSelectedTmCommand;
 				languagePairsTmOption.TmOptionChangedEventRaised -= LanguagePairsTmOption_EventRaised;
 				languagePairsTmOption.TmOptionChangedEventRaised += LanguagePairsTmOption_EventRaised;
-				foreach (var tmMetadata in languagePairsTmOption.StarTranslationMemoryMetadatas)
-				{
-					tmMetadata.PropertyChanged -= TmMetadata_PropertyChanged;
-					tmMetadata.PropertyChanged += TmMetadata_PropertyChanged;
-				}
-			}
-		}
-
-		private void TmMetadata_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (!e.PropertyName.Equals(nameof(StarTranslationMemoryMetadata.IsChecked))) return;
-			var allSelected = SelectedLanguagePair.StarTranslationMemoryMetadatas.All(t => t.IsChecked);
-			if (allSelected)
-			{
-				CheckAll = true;
-			}
-			else
-			{
-				var allUnchecked = SelectedLanguagePair.StarTranslationMemoryMetadatas.All(t => !t.IsChecked);
-				CheckAll = allUnchecked ? (bool?) false : null;
 			}
 		}
 
