@@ -181,6 +181,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 				languagePairsTmOption.RemoveSelectedTmCommand = RemoveSelectedTmCommand;
 				languagePairsTmOption.TmOptionChangedEventRaised -= LanguagePairsTmOption_EventRaised;
 				languagePairsTmOption.TmOptionChangedEventRaised += LanguagePairsTmOption_EventRaised;
+				languagePairsTmOption.BrowseTmChangedEventRaised -= LanguagePairsBrowseTm_EventRaised;
+				languagePairsTmOption.BrowseTmChangedEventRaised += LanguagePairsBrowseTm_EventRaised;
+			}
+		}
+
+		private void LanguagePairsBrowseTm_EventRaised()
+		{
+			if (SelectedLanguagePair.ChoseExistingTm)
+			{
+				SelectTm();
 			}
 		}
 
@@ -194,23 +204,33 @@ namespace Sdl.Community.StarTransit.ViewModel
 			ErrorMessage = string.Empty;
 			SelectedLanguagePair.TmName = string.Empty;
 			SelectedLanguagePair.TmPath = string.Empty;
+			SelectedLanguagePair.NoTm = true;
 		}
 
 		private void SelectTm()
 		{
 			ErrorMessage = string.Empty;
 			var selectedTm = _fileDialogService.ShowDialog("TM Files (.sdltm)|*.sdltm");
-			if (SelectedLanguagePair is null || string.IsNullOrEmpty(selectedTm)) return;
-			if (TmLanguageMatches(selectedTm))
+
+			if(SelectedLanguagePair is null)return;
+			if (string.IsNullOrEmpty(selectedTm))
 			{
-				SelectedLanguagePair.TmPath = selectedTm;
-				SelectedLanguagePair.TmName = Path.GetFileNameWithoutExtension(selectedTm);
+				SelectedLanguagePair.NoTm = true;
+				SelectedLanguagePair.ChoseExistingTm = false;
 			}
 			else
 			{
-				SelectedLanguagePair.TmPath = string.Empty;
-				SelectedLanguagePair.TmName = string.Empty;
-				ErrorMessage = PluginResources.Tm_LanguageValidation;
+				if (TmLanguageMatches(selectedTm))
+				{
+					SelectedLanguagePair.TmPath = selectedTm;
+					SelectedLanguagePair.TmName = Path.GetFileNameWithoutExtension(selectedTm);
+				}
+				else
+				{
+					SelectedLanguagePair.TmPath = string.Empty;
+					SelectedLanguagePair.TmName = string.Empty;
+					ErrorMessage = PluginResources.Tm_LanguageValidation;
+				}
 			}
 		}
 
