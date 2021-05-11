@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
@@ -15,23 +16,70 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		private readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
-		private Formality _formality;
+		private static readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
+		private static string _apiKey;
 		private List<string> _supportedSourceLanguages;
 
-		public DeepLTranslationProviderConnecter(string key, Formality formality)
+		public DeepLTranslationProviderConnecter(string key, Formality formality = Formality.Default)
 		{
 			ApiKey = key;
-			_formality = formality;
-
-			SupportedTargetLanguagesAndFormalities = Helpers.Helpers.GetSupportedTargetLanguages(ApiKey);
-			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
+			Formality = formality != Formality.Default ? formality : Formality;
 		}
 
-		private string ApiKey { get; }
-		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= Helpers.Helpers.GetSupportedSourceLanguages(ApiKey);
-		private List<string> SupportedTargetLanguages { get; }
-		private Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; }
+		public static string ApiKey
+		{
+			get => _apiKey;
+			set
+			{
+				_apiKey = value;
+				OnApiKeyChanged();
+			}
+		}
+
+		public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
+		private static List<string> SupportedTargetLanguages { get; set; }
+		private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
+		private Formality Formality { get; set; }
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
+
+		public static List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
+		{
+			return targetLanguages.Where(tl => !IsLanguageCompatible(tl)).Select(tl => tl.Name).ToList();
+		}
+
+		public static List<string> GetSupportedSourceLanguages(string apiKey)
+		{
+			var supportedLanguages = new List<string>();
+			try
+			{
+				var response = GetSupportedLanguages("source", apiKey);
+				supportedLanguages = JArray.Parse(response).Select(item => item["language"].ToString().ToUpperInvariant()).ToList();
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{ex}");
+			}
+
+			return supportedLanguages;
+		}
+
+		public static Dictionary<string, bool> GetSupportedTargetLanguages(string apiKey)
+		{
+			var supportedLanguages = new Dictionary<string, bool>();
+			try
+			{
+				var response = GetSupportedLanguages("target", apiKey);
+				supportedLanguages =
+					JArray.Parse(response).ToDictionary(
+						item => item["language"].ToString().ToUpperInvariant(), item => bool.Parse(item["supports_formality"].ToString()));
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{ex}");
+			}
+
+			return supportedLanguages;
+		}
 
 		public bool IsLanguagePairSupported(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
@@ -92,6 +140,44 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			return translatedText;
 		}
 
+		private static string GetSupportedLanguages(string type, string apiKey)
+		{
+			var content = new StringContent($"type={type}" + $"&auth_key={apiKey}", Encoding.UTF8,
+				"application/x-www-form-urlencoded");
+
+			var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+			response.EnsureSuccessStatusCode();
+
+			return response.Content?.ReadAsStringAsync().Result;
+		}
+
+		private static bool IsLanguageCompatible(CultureInfo targetLanguage)
+		{
+			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage.ToString().ToUpper(), out var supportsFormality))
+			{
+				SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage.TwoLetterISOLanguageName.ToUpper(), out supportsFormality);
+			}
+
+			return supportsFormality;
+		}
+
+		private static HttpResponseMessage IsValidApiKey(string apiKey)
+		{
+			return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
+		}
+
+		private static void OnApiKeyChanged()
+		{
+			IsApiKeyValidResponse = IsValidApiKey(ApiKey);
+
+			if (!IsApiKeyValidResponse.IsSuccessStatusCode) return;
+
+			if (SupportedTargetLanguagesAndFormalities is { Count: not 0 }) return;
+
+			SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
+			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
+		}
+
 		private string DecodeWhenNeeded(string translatedText)
 		{
 			if (translatedText.Contains("%"))
@@ -123,7 +209,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			}
 
 			return supportsFormality
-				? _formality
+				? Formality
 				: Formality.Default;
 		}
 
