@@ -29,6 +29,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 var credentials = credentialStore.GetCredential(originalUri);
                 options.Identifier = credentials.Credential;
             }
+
             return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality));
         }
 
