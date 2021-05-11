@@ -30,6 +30,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		/// List of all TMs/MT Files from Transit package
 		/// </summary>
         public List<StarTranslationMemoryMetadata> StarTranslationMemoryMetadatas { get; set; }
+		public List<StarTranslationMemoryMetadata> SelectedTranslationMemoryMetadatas { get; set; }
 		public List<IGrouping<int,StarTranslationMemoryMetadata>> GroupedTmsByPenalty { get; set; }
 		public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }

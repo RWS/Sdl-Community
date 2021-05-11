@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
@@ -217,6 +218,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				SelectedLanguagePair.NoTm = true;
 				SelectedLanguagePair.ChoseExistingTm = false;
+				SelectAllTms(false,string.Empty);
 			}
 			else
 			{
@@ -224,13 +226,24 @@ namespace Sdl.Community.StarTransit.ViewModel
 				{
 					SelectedLanguagePair.TmPath = selectedTm;
 					SelectedLanguagePair.TmName = Path.GetFileNameWithoutExtension(selectedTm);
+					SelectAllTms(true, selectedTm);
 				}
 				else
 				{
 					SelectedLanguagePair.TmPath = string.Empty;
 					SelectedLanguagePair.TmName = string.Empty;
 					ErrorMessage = PluginResources.Tm_LanguageValidation;
+					SelectAllTms(false,string.Empty);
 				}
+			}
+		}
+
+		private void SelectAllTms(bool selectionValue,string selectedTmPath)
+		{
+			foreach (var tm in SelectedLanguagePair.StarTranslationMemoryMetadatas)
+			{
+				tm.IsChecked = selectionValue;
+				tm.LocalTmCreationPath = selectedTmPath;
 			}
 		}
 

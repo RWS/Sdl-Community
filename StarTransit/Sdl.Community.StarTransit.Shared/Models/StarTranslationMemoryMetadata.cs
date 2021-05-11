@@ -11,6 +11,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		//We'll import all the transit tms file into one TM. We are not creating one Studio TM per Transit Tm file
 		public List<string> TransitTmsSourceFilesPath { get; set; }
 		public List<string> TransitTmsTargeteFilesPath { get; set; }
+		public string LocalTmCreationPath { get; set; }
 
 
 		//Local path for TM/MT File

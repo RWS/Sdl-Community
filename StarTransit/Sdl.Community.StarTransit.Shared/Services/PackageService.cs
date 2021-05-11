@@ -258,6 +258,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						GetFilesPathForLanguage(pathToTempFolder, languagePair.TargetLanguage, filesNames);
 					languagePair.SourceFile = sourceFiles;
 					languagePair.TargetFile = targetFiles;
+					languagePair.SelectedTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>();
 					var transitTargetExtensions =
 						_fileService.GetTransitCorrespondingExtension(languagePair.TargetLanguage);
 
@@ -346,6 +347,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					IsMtFile = true
 				};
 				availableTms.Add(mt);
+			}
+
+			if (availableTms.Any())
+			{
+				languagePair.HasTm = true;
 			}
 
 			return availableTms;

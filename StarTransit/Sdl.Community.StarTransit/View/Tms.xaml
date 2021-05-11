@@ -186,6 +186,7 @@
 							<DataTemplate>
 								<RadioButton GroupName="{Binding TargetLanguage.Name}"
 								             HorizontalAlignment="Center"
+											 Margin="10"
 								             IsChecked="{Binding NoTm,UpdateSourceTrigger=PropertyChanged}"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -195,6 +196,7 @@
 							<DataTemplate>
 								<RadioButton GroupName="{Binding TargetLanguage.Name}" 
 								             HorizontalAlignment="Center"
+								             Margin="10"
 								             IsChecked="{Binding CreateNewTm,UpdateSourceTrigger=PropertyChanged}"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -204,6 +206,7 @@
 							<DataTemplate>
 								<RadioButton GroupName="{Binding TargetLanguage.Name}"
 								             HorizontalAlignment="Center"
+								             Margin="10"
 								             IsChecked="{Binding ChoseExistingTm,UpdateSourceTrigger=PropertyChanged}"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>

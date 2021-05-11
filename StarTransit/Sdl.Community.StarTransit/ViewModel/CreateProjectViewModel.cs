@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
@@ -145,22 +146,31 @@ namespace Sdl.Community.StarTransit.ViewModel
 			if (!IsCurrentPage) return;
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
+				var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).ToList();
 				if (languagePair.CreateNewTm)
 				{
+					foreach (var selectedTm in selectedTms)
+					{
+						selectedTm.Name = $"{selectedTm.Name}.sdltm";
+						selectedTm.LocalTmCreationPath = Path.Combine(_wizardModel.PackageModel.Result.Location, selectedTm.Name);
+					}
 					//TMs/MT files selected without any penalties will be imported into only one tm
-					var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked)
-						.GroupBy(t => t.TmPenalty).ToList();
-					languagePair.GroupedTmsByPenalty.AddRange(selectedTms);
+					//var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked)
+					//	.GroupBy(t => t.TmPenalty).ToList();
+					//languagePair.GroupedTmsByPenalty.AddRange(selectedTms);
 				}
+				languagePair.SelectedTranslationMemoryMetadatas.AddRange(selectedTms);
 
-				if (!languagePair.ChoseExistingTm) continue;
-				{
-					//We'll import all the transit TM files into selected TM
-					var tmsForSelectedTm = languagePair.StarTranslationMemoryMetadatas.Where(t =>!t.IsMtFile).GroupBy(t => t.TmPenalty).ToList();
-					languagePair.GroupedTmsByPenalty.AddRange(tmsForSelectedTm);
-				}
+
+				//if (!languagePair.ChoseExistingTm) continue;
+				//{
+				//	//We'll import all the transit TM files into selected TM
+				//	var tmsForSelectedTm = languagePair.StarTranslationMemoryMetadatas.Where(t => !t.IsMtFile).GroupBy(t => t.TmPenalty).ToList();
+				//	languagePair.GroupedTmsByPenalty.AddRange(tmsForSelectedTm);
+				//}
 			}
 		}
+
 		private void CreateTradosProject()
 		{
 			var proj = _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);

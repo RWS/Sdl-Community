@@ -22,32 +22,32 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
 		//TODO: Remove this for final impl
-		public TransitTmImporter(LanguagePair languagePair, string studioProjectPath, List<StarTranslationMemoryMetadata> tmsList)
-		{
-			if (tmsList != null && tmsList.Any())
-			{
-				//TM or star transit MTs which have penalties applied in the UI
-				foreach (var transitTm in tmsList)
-				{
-					var transitTmName = Path.GetFileName(transitTm.TargetFile);
-					var tmPath = Path.Combine(studioProjectPath, string.Concat(transitTmName, ".sdltm"));
-					CreateStudioTranslationMemory(tmPath, $"{transitTmName} description", transitTm.TmPenalty, languagePair);
-				}
-			}
-			else
-			{
-				if (languagePair.CreateNewTm)
-				{ 
-					//One general tm which includes all tms (tms which doesn't have penalty set in the UI)
-					CreateStudioTranslationMemory(studioProjectPath, string.Empty, 0, languagePair);
-				}
-				else
-				{
-					//Tm selected from local machine
-					CreateStudioTranslationMemory(languagePair.TmPath, string.Empty, 0, null);
-				}
-			}
-		}
+		//public TransitTmImporter(LanguagePair languagePair, string studioProjectPath, List<StarTranslationMemoryMetadata> tmsList)
+		//{
+		//	if (tmsList != null && tmsList.Any())
+		//	{
+		//		//TM or star transit MTs which have penalties applied in the UI
+		//		foreach (var transitTm in tmsList)
+		//		{
+		//			var transitTmName = Path.GetFileName(transitTm.TargetFile);
+		//			var tmPath = Path.Combine(studioProjectPath, string.Concat(transitTmName, ".sdltm"));
+		//			CreateStudioTranslationMemory(tmPath, $"{transitTmName} description", transitTm.TmPenalty, languagePair);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		if (languagePair.CreateNewTm)
+		//		{ 
+		//			//One general tm which includes all tms (tms which doesn't have penalty set in the UI)
+		//			CreateStudioTranslationMemory(studioProjectPath, string.Empty, 0, languagePair);
+		//		}
+		//		else
+		//		{
+		//			//Tm selected from local machine
+		//			CreateStudioTranslationMemory(languagePair.TmPath, string.Empty, 0, null);
+		//		}
+		//	}
+		//}
 
 		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath, int penalty)
 		{
@@ -107,10 +107,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 		}
 		
-		public void ImportStarTransitTm(List<StarTranslationMemoryMetadata> starTransitTms, PackageModel package)
+		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, int penalty, PackageModel package)
 		{
-			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(starTransitTms, package);
-			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,starTransitTms[0].TmPenalty,package);
+			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles,package);
+			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,penalty,package);
 		}
 
 		public TranslationProviderReference GetTranslationProviderReference(string tmPath,LanguagePair languagePair)
@@ -172,12 +172,12 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// Create temporary bilingual files (sdlxliff) used to import the information
 		/// in Studio translation memories
 		/// </summary>
-		private string CreateTemporarySdlXliffs(List<StarTranslationMemoryMetadata> starTransitTms, PackageModel package)
+		private string CreateTemporarySdlXliffs(List<string>sourceTmFiles,List<string>targetTmFiles, PackageModel package)
 		{
-			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTms[0].TargetFile));
+			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
 
-			var sourceTmFiles = starTransitTms.Select(s => s.SourceFile).ToArray();
-			var targetTmFiles = starTransitTms.Select(t => t.TargetFile).ToArray();
+			//var sourceTmFiles = starTransitTms.Select(s => s.SourceFile).ToArray();
+			//var targetTmFiles = starTransitTms.Select(t => t.TargetFile).ToArray();
 			var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
 
 			var projectInfo = new ProjectInfo
@@ -190,11 +190,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 			var newProject =
 				new FileBasedProject(projectInfo,new ProjectTemplateReference(package.ProjectTemplate.Uri));
-			newProject.AddFiles(sourceTmFiles);
+			newProject.AddFiles(sourceTmFiles.ToArray());
 			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
 			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
 
-			var targetTms = newProject.AddFiles(targetTmFiles);
+			var targetTms = newProject.AddFiles(targetTmFiles.ToArray());
 			newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
 
 			var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),
