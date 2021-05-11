@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Studio;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -16,7 +17,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 {
 	public partial class DeepLWindow
     {
-        private readonly Helpers.Helpers _helpers;
+        private readonly DeepLTranslationProviderConnecter _connecter;
         private readonly bool _isTellMeAction;
         private readonly LanguagePair[] _languagePairs;
 
@@ -30,16 +31,15 @@ namespace Sdl.Community.DeepLMTProvider.UI
             Formality.SelectedIndex = (int)options.Formality;
             PlainText.IsChecked = options.SendPlainText;
             Options = options;
-            _helpers = new Helpers.Helpers();
 
-            PasswordChangedTimer.Elapsed += OnPasswordChanged;
+	        PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             SetSettingsOnWindow(credentialStore, isTellMeAction);
         }
 
         public DeepLTranslationOptions Options { get; }
 
-        private Timer PasswordChangedTimer { get; } = new()
+        private Timer PasswordChangedTimer { get; } = new Timer
         {
             Interval = 500,
             AutoReset = false
@@ -94,9 +94,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             Options.ApiKey = ApiKeyBox.Password.Trim();
 
-            _helpers.SetApiKey(Options.ApiKey);
+	        DeepLTranslationProviderConnecter.ApiKey = Options.ApiKey;
 
-            SetApiKeyValidityLabel();
+			SetApiKeyValidityLabel();
             SetFormalityCompatibilityLabel();
         }
 
@@ -106,7 +106,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
             {
                 SetValidationBlockMessage(Visibility.Collapsed);
 
-                var isApiKeyValidResponse = _helpers.IsApiKeyValidResponse;
+                var isApiKeyValidResponse = DeepLTranslationProviderConnecter.IsApiKeyValidResponse;
                 if (isApiKeyValidResponse.IsSuccessStatusCode) return;
 
                 SetValidationBlockMessage(Visibility.Visible, isApiKeyValidResponse.StatusCode == HttpStatusCode.Forbidden
@@ -127,7 +127,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var formalityIncompatibleLanguages = _helpers.GetFormalityIncompatibleLanguages(currentLanguagePairs);
+	            var formalityIncompatibleLanguages =
+		            DeepLTranslationProviderConnecter.GetFormalityIncompatibleLanguages(currentLanguagePairs);
 
                 if (formalityIncompatibleLanguages.Count > 0)
                 {
