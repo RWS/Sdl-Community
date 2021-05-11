@@ -39,7 +39,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         public DeepLTranslationOptions Options { get; }
 
-        private Timer PasswordChangedTimer { get; } = new()
+        private Timer PasswordChangedTimer { get; } = new Timer
         {
             Interval = 500,
             AutoReset = false

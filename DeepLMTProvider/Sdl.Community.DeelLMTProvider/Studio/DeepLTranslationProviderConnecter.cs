@@ -40,7 +40,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 		private static List<string> SupportedTargetLanguages { get; set; }
 		private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
 		private Formality Formality { get; set; }
-		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
+		private List<string> SupportedSourceLanguages => _supportedSourceLanguages = _supportedSourceLanguages ?? GetSupportedSourceLanguages(ApiKey);
 
 		public static List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
 		{
@@ -172,7 +172,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
 			if (!IsApiKeyValidResponse.IsSuccessStatusCode) return;
 
-			if (SupportedTargetLanguagesAndFormalities is { Count: not 0 }) return;
+			if (SupportedTargetLanguagesAndFormalities != null && SupportedTargetLanguagesAndFormalities.Count != 0) return;
 
 			SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
 			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
