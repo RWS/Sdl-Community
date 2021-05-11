@@ -27,7 +27,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 			};
 
 			config.AddTarget(target);
-			config.AddRuleForAllLevels(target, $"*{PluginResources.Plugin_Name}*");
+			config.AddRuleForAllLevels(target, "*BatchAnonymize*");
 
 			LogManager.ReconfigExistingLoggers();
 		}
