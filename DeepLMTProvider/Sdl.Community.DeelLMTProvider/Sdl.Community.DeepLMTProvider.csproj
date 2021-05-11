@@ -159,7 +159,6 @@
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Model\DeepLTranslationOptions.cs" />
     <Compile Include="Model\Formality.cs" />

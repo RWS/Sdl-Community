@@ -28,6 +28,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             var dialog = new DeepLWindow(options, credentials, languagePairs);
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
+
             if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
             {
                 var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality), languagePairs)
