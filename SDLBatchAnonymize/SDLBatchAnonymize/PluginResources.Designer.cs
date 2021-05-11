@@ -216,7 +216,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLBatchAnonymize.
+        ///   Looks up a localized string similar to TradosBatchAnonymize.
         /// </summary>
         public static string Plugin_Name {
             get {
