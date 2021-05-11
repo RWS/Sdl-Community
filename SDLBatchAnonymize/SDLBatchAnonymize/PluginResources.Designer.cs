@@ -79,6 +79,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RWS Community.
+        /// </summary>
+        public static string AppStoreFolder {
+            get {
+                return ResourceManager.GetString("AppStoreFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete settings.
         /// </summary>
         public static string ClearSettings {
@@ -216,7 +225,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TradosBatchAnonymize.
+        ///   Looks up a localized string similar to Trados Batch Anonymizer.
         /// </summary>
         public static string Plugin_Name {
             get {

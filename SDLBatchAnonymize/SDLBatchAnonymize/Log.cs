@@ -16,18 +16,18 @@ namespace Sdl.Community.SDLBatchAnonymize
 			}
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TradosBatchAnonymizer");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.AppStoreFolder, PluginResources.Plugin_Name);
 			Directory.CreateDirectory(logDirectoryPath);
 
 			var target = new FileTarget
 			{
-				Name = "BatchAnonymize",
-				FileName = Path.Combine(logDirectoryPath, "TradosBatchAnonymizer.txt"),
+				Name = PluginResources.Plugin_Name,
+				FileName = Path.Combine(logDirectoryPath, $"{PluginResources.Plugin_Name}.txt"),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
 			config.AddTarget(target);
-			config.AddRuleForAllLevels(target, "*BatchAnonymize*");
+			config.AddRuleForAllLevels(target, $"*{PluginResources.Plugin_Name}*");
 
 			LogManager.ReconfigExistingLoggers();
 		}

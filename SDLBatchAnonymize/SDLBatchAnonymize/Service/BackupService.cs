@@ -7,7 +7,9 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 {
     public class BackupService
     {
-	    private readonly string _backupDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TradosBatchAnonymizer","Projects Backup");
+	    private readonly string _backupDirectoryPath =
+		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.AppStoreFolder,
+			    PluginResources.Plugin_Name, "Projects Backup");
 	    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void BackupProject(string projectPath, string projectName)

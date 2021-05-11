@@ -3,6 +3,6 @@
   <PlugInName>Trados Batch Anonymizer</PlugInName>
   <Version>2.0.8.0</Version>
   <Description>Provides various options for anonymizing the files in a Studio project.</Description>
-  <Author>RWS Community Developers</Author>
+  <Author>RWS AppStore Team</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
 </PluginPackage>
