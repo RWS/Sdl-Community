@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -168,7 +170,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 								{
 									SaveReportAsXml(report, dialog);
 								}
-								
+
 								break;
 							}
 					}
@@ -189,7 +191,9 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public void UpdateData(List<Report> reports)
 		{
+
 			CurrentView = _dataView;
+
 			_dataViewModel.Reports = new ObservableCollection<Report>(reports);
 		}
 
@@ -230,6 +234,12 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void WebBrowserNavigateToReport(Report report)
 		{
+			//var processes = Process.GetProcessesByName("CefSharp.BrowserSubprocess");
+			//foreach (var process in processes)
+			//{
+			//	process.Dispose();
+			//}
+		
 			_currentReport = report;
 
 			string file = null;
@@ -308,7 +318,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Marshal.ReleaseComObject(xlApp);
 			}
 		}
-		
+
 		private void DataViewModel_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
 		{
 			if (CurrentView is DataView)

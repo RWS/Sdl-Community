@@ -47,8 +47,8 @@ namespace Sdl.Community.Reports.Viewer
 		private BaseReportAction _addReportAction;
 		private BaseReportAction _editReportAction;
 		private BaseReportAction _openSettingsAction;
-		private BaseReportAction _pageSetupAction;
-		private BaseReportAction _printPreviewReportAction;
+		//private BaseReportAction _pageSetupAction;
+		//private BaseReportAction _printPreviewReportAction;
 		private BaseReportAction _printReportAction;
 		private BaseReportAction _refreshAction;
 		private BaseReportAction _saveAsReportAction;
@@ -424,8 +424,8 @@ namespace Sdl.Community.Reports.Viewer
 				_removeReportAction.UpdateEnabled(isLoading);
 
 				_printReportAction.UpdateEnabled(isLoading);
-				_pageSetupAction.UpdateEnabled(isLoading);
-				_printPreviewReportAction.UpdateEnabled(isLoading);
+				//_pageSetupAction.UpdateEnabled(isLoading);
+				//_printPreviewReportAction.UpdateEnabled(isLoading);
 				_saveAsReportAction.UpdateEnabled(isLoading);
 
 				_refreshAction.UpdateEnabled(isLoading);
