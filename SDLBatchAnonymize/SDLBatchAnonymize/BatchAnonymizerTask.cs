@@ -15,8 +15,8 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.SDLBatchAnonymize
 {
 
-	[AutomaticTask("SDL Batch Anonymizer",
-		"SDL Batch Anonymizer",
+	[AutomaticTask("Trados Batch Anonymizer",
+		"Trados Batch Anonymizer",
 		"Provides various options for anonymizing the files in a Studio project.",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]

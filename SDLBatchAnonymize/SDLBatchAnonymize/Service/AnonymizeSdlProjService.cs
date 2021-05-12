@@ -10,7 +10,8 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 	{
 		public void RemoveFileVersionComment(string projectPath)
 		{
-			const string comment = "Created by \'SDL Batch Anonymizer\'";
+			const string sdlComment = "Created by \'SDL Batch Anonymizer\'";
+			const string tradosComment = "Created by \'Trados Batch Anonymizer\'";
 			var nodesToBeRemoved = new List<XmlNode>();
 			var sdlProj = new XmlDocument();
 			sdlProj.Load(projectPath);
@@ -33,7 +34,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 							{
 								var fileVersionCommentValue = fileVersion.Attributes?["Comment"]?.Value.ToLower();
 								if (string.IsNullOrEmpty(fileVersionCommentValue)) continue;
-								if (fileVersionCommentValue.Equals(comment.ToLower()))
+								if (fileVersionCommentValue.Equals(sdlComment.ToLower()) || fileVersionCommentValue.Equals(tradosComment.ToLower()))
 								{
 									nodesToBeRemoved.Add(fileVersion);
 								}
@@ -51,16 +52,21 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 
 		public void RemoveTraces(string projectPath)
 		{
-			var taskTemplateId = "SDL Batch Anonymizer";
+			var sdlTaskTemplateId = "SDL Batch Anonymizer";
+			var tradosTaskTemplateId = "Trados Batch Anonymizer";
 			var rootElement = XElement.Load(projectPath);
-			
+
 			rootElement.Element("Tasks")?.Elements()
-				.FirstOrDefault(el=>el.Value == taskTemplateId)
-				?.Remove();
+				.Where(el => el.Value == sdlTaskTemplateId ||
+									el.Value == tradosTaskTemplateId)
+				.Remove();
 
 			rootElement.Element("InitialTaskTemplate")?.Elements().Elements()
-				.FirstOrDefault(el => el.Attribute("TaskTemplateId")?.Value == taskTemplateId)
-				?.Remove();
+				.Where(
+					el =>
+						el.Attribute("TaskTemplateId")?.Value == sdlTaskTemplateId ||
+						el.Attribute("TaskTemplateId")?.Value == tradosTaskTemplateId)
+				.Remove();
 
 			rootElement.Save(projectPath);
 		}
