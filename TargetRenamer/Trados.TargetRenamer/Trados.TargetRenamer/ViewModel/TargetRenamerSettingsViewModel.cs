@@ -187,5 +187,9 @@ namespace Trados.TargetRenamer.ViewModel
 			    OnPropertyChanged(nameof(CustomString));
 		    }
 	    }
+		private void SelectFolder(object obj)
+		{
+			CustomLocation = _folderDialogService.ShowDialog();
+		}
 	}
 }
