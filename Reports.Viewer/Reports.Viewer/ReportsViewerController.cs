@@ -69,8 +69,8 @@ namespace Sdl.Community.Reports.Viewer
 
 			_pathInfo = new PathInfo();
 			ReportsController = ReportsController.Instance;
-			ReportsController.ProjectChanging += Controller_ProjectChanging;
-			ReportsController.ProjectChanged += Controller_ProjectChanged;
+			ReportsController.ReportsChanging += Controller_ReportsChanging;
+			ReportsController.ReportsChanged += Controller_ReportsChanged;
 			ReportsController.ReportsAdded += Controller_ReportsAdded;
 			ReportsController.ReportsRemoved += Controller_ReportsRemoved;
 			ReportsController.ReportsUpdated += Controller_ReportsUpdated;
@@ -361,7 +361,7 @@ namespace Sdl.Community.Reports.Viewer
 			}
 		}
 
-		private void Controller_ProjectChanged(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangedEventArgs e)
+		private void Controller_ReportsChanged(object sender, Sdl.Reports.Viewer.API.Events.ReportsChangedEventArgs e)
 		{
 			if (_reportsNavigationViewModel != null)
 			{
@@ -373,7 +373,7 @@ namespace Sdl.Community.Reports.Viewer
 			EnableControls(false);
 		}
 
-		private void Controller_ProjectChanging(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangingEventArgs e)
+		private void Controller_ReportsChanging(object sender, Sdl.Reports.Viewer.API.Events.ReportsChangingEventArgs e)
 		{
 			EnableControls(true);
 		}
