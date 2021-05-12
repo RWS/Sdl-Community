@@ -93,6 +93,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
@@ -109,6 +110,11 @@
     <Compile Include="Interfaces\IFolderDialogService.cs" />
     <Compile Include="Interfaces\ITargetRenamerSettings.cs" />
     <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\CommandHandler.cs" />
     <Compile Include="Services\FolderDialogService.cs" />
     <Compile Include="TargetRenamer.cs" />
@@ -124,8 +130,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Control\TargetRenamerSettingsControl.resx">
       <DependentUpon>TargetRenamerSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
