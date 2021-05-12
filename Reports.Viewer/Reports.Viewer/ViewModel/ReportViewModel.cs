@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -191,9 +189,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		public void UpdateData(List<Report> reports)
 		{
-
 			CurrentView = _dataView;
-
 			_dataViewModel.Reports = new ObservableCollection<Report>(reports);
 		}
 
