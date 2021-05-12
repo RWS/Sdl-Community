@@ -98,12 +98,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\TargetRenamerSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Control\TargetRenamerSettingsControl.Designer.cs">
-      <DependentUpon>TargetRenamerSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Converters\BooleanToVisibilityConditionalConverter.cs" />
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Interfaces\IFolderDialogService.cs" />
@@ -112,9 +106,9 @@
     <Compile Include="Services\CommandHandler.cs" />
     <Compile Include="Services\FolderDialogService.cs" />
     <Compile Include="TargetRenamer.cs" />
-    <Compile Include="TargetRenamerSettings.cs" />
+    <Compile Include="BatchTask\TargetRenamerSettings.cs" />
     <Compile Include="ViewModel\TargetRenamerSettingsViewModel.cs" />
-    <Compile Include="TargetRenamerSettingsPage.cs" />
+    <Compile Include="BatchTask\TargetRenamerSettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="View\TargetRenamerSettingsView.xaml.cs">
@@ -122,8 +116,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Control\TargetRenamerSettingsControl.resx">
-      <DependentUpon>TargetRenamerSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />

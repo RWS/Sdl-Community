@@ -1,24 +1,18 @@
-﻿using Sdl.Desktop.IntegrationApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Core.Settings;
-using Trados.TargetRenamer.Control;
-using Trados.TargetRenamer.ViewModel;
+﻿using Sdl.Core.Settings;
+using Sdl.Desktop.IntegrationApi;
+using Trados.TargetRenamer.View;
 
-namespace Trados.TargetRenamer
+namespace Trados.TargetRenamer.BatchTask
 {
-    public class TargetRenamerSettingsPage : DefaultSettingsPage<TargetRenamerSettingsControl, TargetRenamerSettings>
+    public class TargetRenamerSettingsPage : DefaultSettingsPage<TargetRenamerSettingsView, TargetRenamerSettings>
     {
-	    private TargetRenamerSettingsControl _control;
+	    private TargetRenamerSettingsView _control;
 	    private TargetRenamerSettings _settings;
 
 	    public override object GetControl()
 	    {
 		    _settings = ((ISettingsBundle) DataSource).GetSettingsGroup<TargetRenamerSettings>();
-			_control = base.GetControl() as TargetRenamerSettingsControl;
+			_control = base.GetControl() as TargetRenamerSettingsView;
 			if (!(_control is null))
 			{
 				_control.TargetRenamerSettingsViewModel.Settings = _settings;
@@ -40,7 +34,7 @@ namespace Trados.TargetRenamer
 			_settings.RegularExpressionSearchFor = _control.TargetRenamerSettingsViewModel.RegularExpressionSearchFor;
 			_settings.RegularExpressionReplaceWith =
 				_control.TargetRenamerSettingsViewModel.RegularExpressionReplaceWith;
-			_settings.Delimitator = _control.TargetRenamerSettingsViewModel.Delimitator;
+			_settings.Delimiter = _control.TargetRenamerSettingsViewModel.Delimiter;
 			_settings.UseShortLocales = _control.TargetRenamerSettingsViewModel.UseShortLocales;
 			_settings.AppendTargetLanguage = _control.TargetRenamerSettingsViewModel.AppendTargetLanguage;
 			_settings.AppendCustomString = _control.TargetRenamerSettingsViewModel.AppendCustomString;

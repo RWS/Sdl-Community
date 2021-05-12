@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Trados.TargetRenamer.Helpers;
+﻿using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.TargetRenamer.BatchTask;
+using Trados.TargetRenamer.Interfaces;
+using Trados.TargetRenamer.Services;
 using Trados.TargetRenamer.ViewModel;
 
 namespace Trados.TargetRenamer.View
@@ -20,14 +10,18 @@ namespace Trados.TargetRenamer.View
 	/// <summary>
 	/// Interaction logic for TargetRenamerSettingsView.xaml
 	/// </summary>
-	public partial class TargetRenamerSettingsView : UserControl
+	public partial class TargetRenamerSettingsView : IUISettingsControl, ISettingsAware<TargetRenamerSettings>
 	{
 		public TargetRenamerSettingsView()
 		{
 			InitializeComponent();
+			IFolderDialogService folderDialogService = new FolderDialogService();
+			TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel(folderDialogService);
+			DataContext = TargetRenamerSettingsViewModel;
 		}
 
 		private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		public void Dispose()
 		{
 			var comboBox = (ComboBox) sender;
 			var vm = (TargetRenamerSettingsViewModel) comboBox.DataContext;
@@ -62,6 +56,7 @@ namespace Trados.TargetRenamer.View
 		}
 
 		private void Combobox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		public bool ValidateChildren()
 		{
 			var comboBox = (ComboBox) sender;
 			var vm = (TargetRenamerSettingsViewModel) comboBox.DataContext;
@@ -82,6 +77,10 @@ namespace Trados.TargetRenamer.View
 					throw new ArgumentOutOfRangeException($"{nameof(e)}. Selection does not exist as an option.");
 			}
 
+			return true;
 		}
+
+		public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
 	}
 }
