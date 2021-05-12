@@ -150,4 +150,13 @@
 		        Visibility="{Binding UseCustomLocation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 		</GroupBox>
+		<Button Grid.Row="8" Grid.Column="0"
+		        Margin="5"
+		        VerticalAlignment="Bottom"
+		        HorizontalAlignment="Left"
+		        Content="{x:Static resx:PluginResources.Reset}"
+		        Style="{StaticResource Sdl.Button.GeneralStyle}"
+		        CommandParameter="{Binding}"
+		        Command="{Binding ResetToDefault}">
+		</Button>
 </UserControl>

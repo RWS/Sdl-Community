@@ -37,6 +37,7 @@ namespace Trados.TargetRenamer.ViewModel
 		{
 			_folderDialogService = folderDialogService;
 			ComboBoxItems = new ObservableCollection<string> {AppendSuffixText, AppendPrefixText, RegExprText};
+			Reset(null);
 		}
 
 		public ObservableCollection<string> ComboBoxItems { get; }
@@ -75,6 +76,8 @@ namespace Trados.TargetRenamer.ViewModel
 
 		public ICommand SelectTargetFolder =>
 			_selectTargetFolder ?? (_selectTargetFolder = new CommandHandler(SelectFolder));
+
+		public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset));
 
 		public bool OverwriteTargetFiles
 		{
@@ -221,6 +224,23 @@ namespace Trados.TargetRenamer.ViewModel
 		}
 
 		public TargetRenamerSettings Settings { get; set; }
+
+		private void Reset(object obj)
+		{
+			OverwriteTargetFiles = true;
+			AppendAsPrefix = false;
+			AppendAsSuffix = true;
+			UseCustomLocation = false;
+			CustomLocation = Path.GetTempPath();
+			RegularExpressionSearchFor = string.Empty;
+			RegularExpressionReplaceWith = string.Empty;
+			Delimiter = "_";
+			UseShortLocales = false;
+			AppendTargetLanguage = true;
+			AppendCustomString = false;
+			CustomString = string.Empty;
+			SelectedComboBoxItem = AppendSuffixText;
+		}
 
 		private void SelectFolder(object obj)
 		{
