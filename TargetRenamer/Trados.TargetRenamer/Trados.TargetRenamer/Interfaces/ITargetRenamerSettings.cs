@@ -10,7 +10,7 @@
 		bool UseRegularExpression { get; set; }
 		string RegularExpressionSearchFor { get; set; }
 		string RegularExpressionReplaceWith { get; set; }
-		string Delimitator { get; set; }
+		string Delimiter { get; set; }
 		bool UseShortLocales { get; set; }
 		bool AppendTargetLanguage { get; set; }
 		bool AppendCustomString { get; set; }
