@@ -79,7 +79,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RWS Community.
+        ///   Looks up a localized string similar to RWS AppStore Team.
         /// </summary>
         public static string AppStoreFolder {
             get {
