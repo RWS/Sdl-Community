@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConditionalConverter.cs" />
     <Compile Include="Helpers\Enums.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Interfaces\IFolderDialogService.cs" />
     <Compile Include="Interfaces\ITargetRenamerSettings.cs" />
     <Compile Include="Model\BaseModel.cs" />
