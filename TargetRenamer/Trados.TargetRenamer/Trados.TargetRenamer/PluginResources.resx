@@ -117,11 +117,47 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Plugin_Description" xml:space="preserve">
-    <value>Provides various options for Renaming Targets</value>
+  <data name="AppendCustomString" xml:space="preserve">
+    <value>Append Custom String</value>
   </data>
-  <data name="Plugin_Name" xml:space="preserve">
-    <value>Trados.TargetRenamer</value>
+  <data name="CustomLocation" xml:space="preserve">
+    <value>Custom Target Location</value>
+  </data>
+  <data name="CustomLocationTooltip" xml:space="preserve">
+    <value>If no custom location is selected, the project folder will be used.</value>
+  </data>
+  <data name="Delimiter" xml:space="preserve">
+    <value>Delimiter:</value>
+  </data>
+  <data name="OverwriteTargetFiles" xml:space="preserve">
+    <value>Overwrite Target Files</value>
+  </data>
+  <data name="OverwriteTargetFilesTooltip" xml:space="preserve">
+    <value>Overwrites the generated target files if selected.</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Replace with:</value>
+  </data>
+  <data name="ReportDescription" xml:space="preserve">
+    <value>Details about renamed files and their location.</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset to default</value>
+  </data>
+  <data name="SearchFor" xml:space="preserve">
+    <value>Search for:</value>
+  </data>
+  <data name="SelectAction" xml:space="preserve">
+    <value>Select action:</value>
+  </data>
+  <data name="ShortLocales" xml:space="preserve">
+    <value>Use short locales</value>
+  </data>
+  <data name="ShortLocalesTooltip" xml:space="preserve">
+    <value>For example, use en instead of en-US</value>
+  </data>
+  <data name="TargetLanguage" xml:space="preserve">
+    <value>Use Target Language</value>
   </data>
   <data name="TargetRenamer_Description" xml:space="preserve">
     <value>Changes the Finalized Target files based on the selected options.</value>
