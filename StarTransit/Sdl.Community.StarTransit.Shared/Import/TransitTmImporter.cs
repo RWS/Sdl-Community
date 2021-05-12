@@ -141,24 +141,26 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				foreach (var languageCode in targetLanguages)
 				{
 					var folderPath = Path.Combine(sdlXliffFolderPath, languageCode);
-					var xliffFiles = Directory.GetFiles(folderPath);
-
-					foreach (var xliffFile in xliffFiles)
+					if (Directory.Exists(folderPath))
 					{
-						var fileName = Path.GetFileNameWithoutExtension(xliffFile);
-						// for tms list or MT list the name of star transit tm corresponds to Studio tm
-						// for general tm the name of the tm is the name of the package. In constructor we set 0 as penalty for general tms
-						var correspondingTm =
-							StudioTranslationMemories.Keys.FirstOrDefault(t => t.Name.Equals(fileName)) ??
-							StudioTranslationMemories.FirstOrDefault(s => s.Value.Equals(penalty)).Key;
-
-						if (correspondingTm is null) return;
-						var tmImporter = new TranslationMemoryImporter(correspondingTm.LanguageDirection)
+						var xliffFiles = Directory.GetFiles(folderPath);
+						foreach (var xliffFile in xliffFiles)
 						{
-							ImportSettings = importSettings
-						};
+							var fileName = Path.GetFileNameWithoutExtension(xliffFile);
+							// for tms list or MT list the name of star transit tm corresponds to Studio tm
+							// for general tm the name of the tm is the name of the package. In constructor we set 0 as penalty for general tms
+							var correspondingTm =
+								StudioTranslationMemories.Keys.FirstOrDefault(t => t.Name.Equals(fileName)) ??
+								StudioTranslationMemories.FirstOrDefault(s => s.Value.Equals(penalty)).Key;
 
-						tmImporter.Import(xliffFile);
+							if (correspondingTm is null) return;
+							var tmImporter = new TranslationMemoryImporter(correspondingTm.LanguageDirection)
+							{
+								ImportSettings = importSettings
+							};
+
+							tmImporter.Import(xliffFile);
+						}
 					}
 				}
 			}

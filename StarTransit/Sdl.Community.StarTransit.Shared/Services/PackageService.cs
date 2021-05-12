@@ -165,11 +165,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				foreach (var file in fileNames)
 				{
-					var path = Path.Combine(pathToExtractedProject, $"{file}.{multiLangExtension}");
-					var pathExists = filePaths.Any(f => f.Equals(path));
+					var filePath = Path.Combine(pathToExtractedProject, $"{file}.{multiLangExtension}");
+					if (!File.Exists(filePath)) continue;
+					var pathExists = filePaths.Any(f => f.Equals(filePath));
 					if (!pathExists)
 					{
-						filePaths.Add(path);
+						filePaths.Add(filePath);
 					}
 				}
 			}
