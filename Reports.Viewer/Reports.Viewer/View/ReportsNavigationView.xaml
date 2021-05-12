@@ -352,7 +352,7 @@
 																<Image Source="../Resources/Print.ico"/>
 															</MenuItem.Icon>
 														</MenuItem>
-														<MenuItem Header="Print Preview" 
+														<!--<MenuItem Header="Print Preview" 
 														          IsEnabled="False"
 														          Command="{Binding PrintPreviewCommand}"
 														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
@@ -367,9 +367,9 @@
 															<MenuItem.Icon>
 																<Image Source="../Resources/PageSetup.ico"/>
 															</MenuItem.Icon>
-														</MenuItem>
+														</MenuItem>-->
 														<MenuItem Header="Save As" 		
-																  IsEnabled="False"
+																  IsEnabled="True"
 														          Command="{Binding SaveAsCommand}"
 														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 															<MenuItem.Icon>

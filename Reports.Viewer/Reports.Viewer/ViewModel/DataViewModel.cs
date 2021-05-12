@@ -182,14 +182,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void PrintPreview(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
-			action.Run();
+			//var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			//action.Run();
 		}
 
 		private void PageSetup(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
-			action.Run();
+			//var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			//action.Run();
 		}
 
 		private void SaveAs(object parameter)

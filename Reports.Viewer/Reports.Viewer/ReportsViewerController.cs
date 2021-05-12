@@ -61,8 +61,8 @@ namespace Sdl.Community.Reports.Viewer
 			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
 			_editReportAction = SdlTradosStudio.Application.GetAction<EditReportAction>();
 			_openSettingsAction = SdlTradosStudio.Application.GetAction<OpenSettingsAction>();
-			_pageSetupAction = SdlTradosStudio.Application.GetAction<PageSetupAction>();
-			_printPreviewReportAction = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			//_pageSetupAction = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			//_printPreviewReportAction = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
 			_printReportAction = SdlTradosStudio.Application.GetAction<PrintReportAction>();
 			_refreshAction = SdlTradosStudio.Application.GetAction<RefreshAction>();
 			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
@@ -257,7 +257,7 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _dataViewModel
 			};
 
-			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView);
+			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView, ReportsController.SelectedProject);
 			_reportView = new ReportView
 			{
 				DataContext = _reportViewModel
