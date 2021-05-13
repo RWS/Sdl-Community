@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<ProjectTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Guid="c2e4745c-e8ec-46dc-9c8e-0621ba2c54df" SettingsBundleGuid="dfe78a35-4182-4bb7-b407-53663caf7f34" Version="4.0.0.0">
+  <LanguageDirections>
+    <LanguageDirection Guid="90b796f2-407e-40ab-9eea-27e588cf1fbe" SettingsBundleGuid="c5d39972-46c7-4713-9f2d-6652055962a5" TargetLanguageCode="en-GB" SourceLanguageCode="de-DE">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+    <LanguageDirection Guid="cae8df95-50a1-44c1-8d28-2fbd71c77104" SettingsBundleGuid="c98631cd-e776-498a-aa78-a9e0babc1abf" TargetLanguageCode="fr-FR" SourceLanguageCode="de-DE">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+    <LanguageDirection Guid="bec92829-5ca5-4feb-9c82-5cca6c7be25d" SettingsBundleGuid="9f6e5c6e-022b-4419-af04-6b353ba95ffd" TargetLanguageCode="it-IT" SourceLanguageCode="de-DE">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+    <LanguageDirection Guid="e77368cf-7db8-4a2b-9483-379f58d670a5" SettingsBundleGuid="90baa0fc-ad51-4061-8c6b-9aa9a5ceaba4" TargetLanguageCode="es-ES" SourceLanguageCode="de-DE">
+      <AutoSuggestDictionaries />
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+  </LanguageDirections>
+  <TermbaseConfiguration>
+    <Termbases>
+      <Name>TransitTB</Name>
+      <SettingsXml>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;TermbaseSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;Path&gt;C:\Users\aghisa\Documents\Studio 2021\Termbases\TransitTB.sdltb&lt;/Path&gt;
+  &lt;IsOpen&gt;false&lt;/IsOpen&gt;
+  &lt;Filter&gt;0&lt;/Filter&gt;
+  &lt;FilterHighlight&gt;false&lt;/FilterHighlight&gt;
+  &lt;Layout&gt;0&lt;/Layout&gt;
+  &lt;Local&gt;true&lt;/Local&gt;
+  &lt;IsCustom&gt;false&lt;/IsCustom&gt;
+&lt;/TermbaseSettings&gt;</SettingsXml>
+      <Enabled>true</Enabled>
+    </Termbases>
+    <LanguageIndexMappings>
+      <Language>en-US</Language>
+      <Index>English</Index>
+    </LanguageIndexMappings>
+    <LanguageIndexMappings>
+      <Language>ca-ES</Language>
+    </LanguageIndexMappings>
+    <LanguageIndexMappings>
+      <Language>ru-RU</Language>
+    </LanguageIndexMappings>
+    <LanguageIndexMappings>
+      <Language>id-ID</Language>
+      <Index>Indonesian</Index>
+    </LanguageIndexMappings>
+    <RecognitionOptions>
+      <ShowWithNoAvailableTranslation>false</ShowWithNoAvailableTranslation>
+      <MinimumMatchValue>70</MinimumMatchValue>
+      <SearchDepth>200</SearchDepth>
+      <SearchOrder>Parallel</SearchOrder>
+    </RecognitionOptions>
+  </TermbaseConfiguration>
+  <SettingsBundles>
+    <SettingsBundle Guid="dfe78a35-4182-4bb7-b407-53663caf7f34">
+      <SettingsBundle>
+        <SettingsGroup Id="QAVerificationSettings">
+          <Setting Id="RegExRules">True</Setting>
+          <Setting Id="RegExRulesCount">0</Setting>
+          <Setting Id="AbsoluteLengthElements">True</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="TerminologyProviderSettings">
+          <Setting Id="TermbasesOrder">
+            <ArrayOfstring xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <string>TransitTB</string>
+            </ArrayOfstring>
+          </Setting>
+          <Setting Id="Termbases">
+            <ArrayOfTermbase xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Sdl.ProjectApi.Implementation.Xml">
+            </ArrayOfTermbase>
+          </Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="ProjectSettings">
+          <Setting Id="ProjectOrigin">Star Transit project</Setting>
+          <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="TranslationMemoryUpdateTaskSettings">
+          <Setting Id="TmImportOptions">AlwaysAddNewTranslation</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="ProjectTemplateSettings">
+          <Setting Id="ProjectLocation">C:\Users\aghisa\Desktop\files</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="GeneralProjectInfoSettings">
+          <Setting Id="CreatedAt">
+            <dateTime xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2021-05-13T08:23:32.5137096Z</dateTime>
+          </Setting>
+          <Setting Id="CreatedBy">GLOBAL\aghisa</Setting>
+          <Setting Id="CustomerId">Automotive</Setting>
+          <Setting Id="Description" />
+          <Setting Id="DueDate">
+            <dateTime xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2021-05-15T00:00:00+03:00</dateTime>
+          </Setting>
+        </SettingsGroup>
+      </SettingsBundle>
+    </SettingsBundle>
+  </SettingsBundles>
+  <InitialTaskTemplate Description="ComplexTask_Prepare_NoProjectTM_Description" Name="ComplexTask_Prepare_NoProjectTM_Name" Id="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM">
+    <SubTaskTemplates>
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.PerfectMatch" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Translate" />
+      <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" />
+    </SubTaskTemplates>
+  </InitialTaskTemplate>
+  <AnalysisBands>
+    <AnalysisBand MinimumMatchValue="50" />
+    <AnalysisBand MinimumMatchValue="75" />
+    <AnalysisBand MinimumMatchValue="85" />
+    <AnalysisBand MinimumMatchValue="95" />
+  </AnalysisBands>
+  <ManualTaskTemplates />
+  <Users>
+    <User UserId="GLOBAL\aghisa" FullName="Andrea-Melinda Ghisa" Description="" Email="aghisa@sdl.com" PhoneNumber="" EmailType="Smtp" />
+  </Users>
+  <CascadeItem OverrideParent="true" StopSearchingWhenResultsFound="false">
+    <CascadeEntryItem PerformConcordanceSearch="true" Penalty="0" PerformUpdate="true" PerformNormalSearch="true">
+      <MainTranslationProviderItem Uri="sdltm.file:///C:/Users/aghisa/Documents/Studio 2021/Translation Memories/TestTransitTM.sdltm" Enabled="true" />
+    </CascadeEntryItem>
+    <CascadeEntryItem PerformConcordanceSearch="true" Penalty="5" PerformUpdate="true" PerformNormalSearch="true">
+      <MainTranslationProviderItem Uri="sdltm.file:///C:/Users/aghisa/Desktop/files/MultiAll/Test Multilingual Package Trados Plugin.de-en.sdltm" Enabled="true" />
+    </CascadeEntryItem>
+  </CascadeItem>
+  <GeneralProjectTemplateInfo Description="" CreatedAt="2021-05-13T08:23:32.4923933Z" CreatedBy="GLOBAL\aghisa" />
+</ProjectTemplate>

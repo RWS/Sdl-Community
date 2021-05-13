@@ -136,7 +136,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				SourceLanguage = new Language(transitPackage.LanguagePairs[0].SourceLanguage),
 				TargetLanguages = target,
 				DueDate = transitPackage.DueDate,
-				ProjectOrigin = "Star Transit project",
+				ProjectOrigin = Resources.ProjectOrigin,
 				IconPath = _iconPath
 			};
 			var newProject = CreateNewProject(projectInfo, new ProjectTemplateReference(transitPackage.ProjectTemplate.Uri));

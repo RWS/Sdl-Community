@@ -75,6 +75,7 @@
     <Compile Include="PackageServiceUnitTests.cs" />
     <Compile Include="ProjectServiceUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudioServiceUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -93,6 +94,9 @@
     <None Include="TestingFiles\Test Multilingual Package Trados Plugin.PPF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestingFiles\TransitMultilingualTemplate.sdltpl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestingFiles\_AEXTR_1.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -101,6 +105,10 @@
     <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj">
       <Project>{80113c78-7889-4d14-a233-48de24de11a2}</Project>
       <Name>Sdl.Community.StarTransit.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.StarTransit\Sdl.Community.StarTransit.csproj">
+      <Project>{1cbf7231-a95e-43a5-942e-49d3a9c99d4a}</Project>
+      <Name>Sdl.Community.StarTransit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

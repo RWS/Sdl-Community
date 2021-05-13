@@ -9,5 +9,6 @@ namespace Sdl.Community.StarTransit.Interface
 	{
 		List<ProjectTemplateInfo> GetProjectTemplates();
 		Task<List<Customer>> GetCustomers();
+		PackageModel GetModelBasedOnStudioTemplate(string templatePath);
 	}
 }

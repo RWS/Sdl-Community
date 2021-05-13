@@ -60,6 +60,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				PackageModel.Result.Customer = SelectedCustomer;
 				PackageModel.Result.DueDate = DueDate;
 				PackageModel.Result.Location = StudioProjectLocation;
+				//ReadProjectTemplateInfo(SelectedProjectTemplate);
 			}
 		}
 
@@ -120,6 +121,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			set
 			{
 				_wizardModel.SelectedTemplate = value;
+				//ReadProjectTemplateInfo(value);
 				OnPropertyChanged(nameof(SelectedProjectTemplate));
 			}
 		}
@@ -284,6 +286,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void ClearLocation()
 		{
 			StudioProjectLocation = string.Empty;
+		}
+
+		private void ReadProjectTemplateInfo(ProjectTemplateInfo selectedProjectTemplate)
+		{
+			if (PackageModel.Result != null)
+			{
+				//var packageModel = _studioService.GetModelBasedOnStudioTemplate(selectedProjectTemplate, PackageModel.Result);
+			}
 		}
 
 		public override bool OnChangePage(int position, out string message)

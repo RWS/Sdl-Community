@@ -191,6 +191,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			CultureInfo sourceLanguageCultureInfo = null;
 			var languagePairList = new List<LanguagePair>();
 			var filesNames = new List<string>();
+			var targetLanguages = new List<Language>();
 			if (_pluginDictionary.ContainsKey("Admin"))
 			{
 				var propertiesDictionary = _pluginDictionary["Admin"];
@@ -219,6 +220,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						var targetLanguageCode = int.Parse(language);
 						var targetCultureInfo = new CultureInfo(targetLanguageCode);
+						targetLanguages.Add(new Language(targetCultureInfo));
 						var pair = new LanguagePair
 						{
 							LanguagePairId = Guid.NewGuid(),
@@ -277,6 +279,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			model.SourceLanguage = model.LanguagePairs[0].SourceLanguage;
 			model.SourceFlag = new Language(model.SourceLanguage).GetFlagImage();
+			model.TargetLanguages = targetLanguages.ToArray();
 			model.PackageContainsTms = PackageContainsTms(model);
 
 			return model;

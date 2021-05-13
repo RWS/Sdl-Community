@@ -16,6 +16,13 @@ namespace Sdl.Community.StarTransit.Service
 	public class StudioService: IStudioService
 	{
 		private readonly ProjectsController _projectsController;
+		private const string ProjectSettingsGroupId = "ProjectSettings";
+		private const string GeneralProjectInfoSettingsGroupId = "GeneralProjectInfoSettings";
+		private const string ProjectTemplateSettingsGroupId = "ProjectTemplateSettings";
+		private const string DueDateGroupId = "DueDate";
+		private const string CustomerId = "CustomerId";
+		private const string ProjectOriginId = "ProjectOrigin";
+		private const string ProjectLocationId = "ProjectLocation";
 
 		public StudioService(ProjectsController projectsController)
 		{
@@ -66,6 +73,61 @@ namespace Sdl.Community.StarTransit.Service
 				
 				return customersList;
 			});
+		}
+
+		public PackageModel GetModelBasedOnStudioTemplate(string templatePath)
+		{
+			if (string.IsNullOrEmpty(templatePath) || !File.Exists(templatePath)) return null;
+
+			var projectTemplateDocument = new XmlDocument();
+			projectTemplateDocument.Load(templatePath);
+			var projectTemplate = projectTemplateDocument.SelectSingleNode("/ProjectTemplate");
+			var settingsBundleGuid = string.Empty;
+
+			if (projectTemplate?.Attributes != null)
+			{
+				foreach (XmlAttribute attribute in projectTemplate.Attributes)
+				{
+					if (!attribute.Name.Equals("SettingsBundleGuid")) continue;
+					settingsBundleGuid = attribute.Value;
+					break;
+				}
+
+				var projectOrigin = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+					ProjectSettingsGroupId, ProjectOriginId);
+				if (string.IsNullOrEmpty(projectOrigin)) return null;
+
+				var projectLocation = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+					ProjectTemplateSettingsGroupId, ProjectLocationId);
+
+				var customerId = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+					GeneralProjectInfoSettingsGroupId, CustomerId);
+
+				var dueDate = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+					GeneralProjectInfoSettingsGroupId, DueDateGroupId);
+
+				var packageModel = new PackageModel
+				{
+					Location = projectLocation, Customer = new Customer {Name = customerId}
+				};
+
+				if (DateTime.TryParse(dueDate, out var selectedDueDate))
+				{
+					packageModel.DueDate = selectedDueDate;
+				}
+
+				return packageModel;
+			}
+
+			return null;
+		}
+
+		private string GetSettingsByGroupId(XmlDocument projectTemplateDocument, string settingsBundleGuid,string groupId,string settingId)
+		{
+			var  settingsNode= projectTemplateDocument.SelectSingleNode(
+					$"/ProjectTemplate/SettingsBundles/SettingsBundle[@Guid='{settingsBundleGuid}']/SettingsBundle/SettingsGroup[@Id='{groupId}']/Setting[@Id='{settingId}']");
+			
+			return settingsNode?.InnerText;
 		}
 
 		public void RefreshProjects()
