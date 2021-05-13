@@ -48,29 +48,34 @@ namespace Trados.TargetRenamer.ViewModel
 			set
 			{
 				if (_selectedComboBoxItem == value) return;
-				switch (value)
-				{
-					case AppendSuffixText:
-						AppendAsSuffix = true;
-						AppendAsPrefix = false;
-						UseRegularExpression = false;
-						break;
-					case AppendPrefixText:
-						AppendAsPrefix = true;
-						AppendAsSuffix = false;
-						UseRegularExpression = false;
-						break;
-					case RegExprText:
-						UseRegularExpression = true;
-						AppendAsPrefix = false;
-						AppendAsSuffix = false;
-						AppendCustomString = false;
-						AppendTargetLanguage = false;
-						break;
-				}
+				OnSelectedComboBoxValueChanged(value);
 
 				_selectedComboBoxItem = value;
 				OnPropertyChanged(nameof(SelectedComboBoxItem));
+			}
+		}
+
+		private void OnSelectedComboBoxValueChanged(string value)
+		{
+			switch (value)
+			{
+				case AppendSuffixText:
+					AppendAsSuffix = true;
+					AppendAsPrefix = false;
+					UseRegularExpression = false;
+					break;
+				case AppendPrefixText:
+					AppendAsPrefix = true;
+					AppendAsSuffix = false;
+					UseRegularExpression = false;
+					break;
+				case RegExprText:
+					UseRegularExpression = true;
+					AppendAsPrefix = false;
+					AppendAsSuffix = false;
+					AppendCustomString = false;
+					AppendTargetLanguage = false;
+					break;
 			}
 		}
 

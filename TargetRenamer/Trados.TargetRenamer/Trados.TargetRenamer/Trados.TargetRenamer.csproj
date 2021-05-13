@@ -127,7 +127,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Services\Report.xsl" />
+    <EmbeddedResource Include="Resources\Report.xsl" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>

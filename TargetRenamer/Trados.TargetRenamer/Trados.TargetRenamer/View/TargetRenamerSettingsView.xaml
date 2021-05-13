@@ -68,9 +68,10 @@
 			         VerticalAlignment="Center"
 			         HorizontalAlignment="Left"
 			         Width="300"
-			         Style="{DynamicResource WatermarkTextBox}"
 			         Text="{Binding CustomLocation, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 			         IsEnabled="{Binding UseCustomLocation}"/>
+			         VerticalContentAlignment="Center"
+			         Height="{Binding ActualHeight, ElementName=ComboBox}"
 			<Button Grid.Column="1" Grid.Row="1"
 			        Margin="5"
 			        Command="{Binding SelectTargetFolder}"
@@ -97,7 +98,8 @@
 				 HorizontalAlignment="Left"
 				 Width="Auto"
 				 MinWidth="200"
-				 Style="{DynamicResource WatermarkTextBox}"
+				 VerticalContentAlignment="Center"
+				 Height="{Binding ActualHeight, ElementName=ComboBox}"
 		         Text="{Binding RegularExpressionSearchFor}"
 		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 		<Label Grid.Row="6" Grid.Column="0" Content="{x:Static resx:PluginResources.ReplaceWith}"
@@ -109,7 +111,8 @@
 				 HorizontalAlignment="Left"
 				 Width="Auto"
 				 MinWidth="200"
-				 Style="{DynamicResource WatermarkTextBox}"
+				 VerticalContentAlignment="Center"
+				 Height="{Binding ActualHeight, ElementName=ComboBox}"
 		         Text="{Binding RegularExpressionReplaceWith}"
 		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 		
@@ -154,7 +157,8 @@
 				 HorizontalAlignment="Left"
 				 Width="Auto"
 				 MinWidth="200"
-				 Style="{DynamicResource WatermarkTextBox}"
+				 VerticalContentAlignment="Center"
+				 Height="{Binding ActualHeight, ElementName=ComboBox}"
 		         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}"
 		         Text="{Binding CustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 		<Label Grid.Row="7" Grid.Column="0" Content="{x:Static resx:PluginResources.Delimiter}"
@@ -174,7 +178,8 @@
 				 HorizontalAlignment="Left"
 				 Width="Auto"
 				 MinWidth="200"
-				 Style="{DynamicResource WatermarkTextBox}"
+				 VerticalContentAlignment="Center"
+				 Height="{Binding ActualHeight, ElementName=ComboBox}"
 				 Text="{Binding Delimiter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 			<TextBox.Visibility>
 				<MultiBinding Converter="{StaticResource ConditionalConverter}">
