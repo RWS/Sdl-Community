@@ -480,10 +480,10 @@
 					<xsl:for-each select="//files/file">
 						<tr>
 							<td>
-								<xsl:value-of select="//@originalName" />
+								<xsl:value-of select="@originalName" />
 							</td>
 							<td>
-								<xsl:value-of select="//@newName" />
+								<xsl:value-of select="@newName" />
 							</td>
 						</tr>
 					</xsl:for-each>

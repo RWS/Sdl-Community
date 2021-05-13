@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using Sdl.ProjectAutomation.AutomaticTasks;
@@ -17,7 +18,7 @@ namespace Trados.TargetRenamer.Services
 		public void CreateReport(
 			IProject project,
 			List<ProjectFile> projectFiles,
-			Dictionary<ProjectFile, Tuple<string, string>> renamedFiles,
+			Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
 			TargetRenamerSettings renamerSettings,
 			LanguageDirection languageDirection)
 		{
@@ -53,16 +54,20 @@ namespace Trados.TargetRenamer.Services
 		}
 
 		private static void WriteReportFilesInfo(List<ProjectFile> projectFiles,
-			Dictionary<ProjectFile, Tuple<string, string>> renamedFiles, XmlWriter writer)
+			Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
+			XmlWriter writer)
 		{
 			writer.WriteStartElement("files");
 			foreach (var projectFile in projectFiles)
 			{
 				writer.WriteStartElement("file");
-				renamedFiles.TryGetValue(projectFile, out var fileNames);
+
+				var File = renamedFiles.Keys.SingleOrDefault(x => x.Item1.Id == projectFile.Id);
+				renamedFiles.TryGetValue(File, out var renamedFileNames);
 				writer.WriteAttributeString("name", projectFile.Name);
-				writer.WriteAttributeString("originalName", fileNames.Item1);
-				writer.WriteAttributeString("newName", fileNames.Item2);
+				writer.WriteAttributeString("originalName", renamedFileNames.Item1);
+				writer.WriteAttributeString("newName", renamedFileNames.Item2);
+				writer.WriteEndElement(); // file end tag
 			}
 
 			writer.WriteEndElement(); // files end tag
