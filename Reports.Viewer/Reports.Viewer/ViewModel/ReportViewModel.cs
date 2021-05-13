@@ -183,7 +183,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public void UpdateReport(Report report)
 		{
 			CurrentView = _browserView;
-
 			WebBrowserNavigateToReport(report);
 		}
 
@@ -191,6 +190,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		{
 			CurrentView = _dataView;
 			_dataViewModel.Reports = new ObservableCollection<Report>(reports);
+			_dataViewModel.SelectedReports = null;
 		}
 
 		public string WindowTitle
