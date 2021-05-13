@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:Trados.TargetRenamer.ViewModel"
+			 xmlns:helpers="clr-namespace:Trados.TargetRenamer.Helpers"
              xmlns:converters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
 			 xmlns:converters2="clr-namespace:Trados.TargetRenamer.Converters"
 			 xmlns:resx="clr-namespace:Trados.TargetRenamer"
-             mc:Ignorable="d" 
+			 mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance viewModel:TargetRenamerSettingsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -68,10 +69,17 @@
 			         VerticalAlignment="Center"
 			         HorizontalAlignment="Left"
 			         Width="300"
-			         Text="{Binding CustomLocation, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-			         IsEnabled="{Binding UseCustomLocation}"/>
 			         VerticalContentAlignment="Center"
 			         Height="{Binding ActualHeight, ElementName=ComboBox}"
+			         IsEnabled="{Binding UseCustomLocation}">
+				<TextBox.Text>
+						<Binding Path="CustomLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+							<Binding.ValidationRules>
+								<helpers:PathValidationRule/>
+							</Binding.ValidationRules>
+						</Binding>
+				</TextBox.Text>
+			</TextBox>
 			<Button Grid.Column="1" Grid.Row="1"
 			        Margin="5"
 			        Command="{Binding SelectTargetFolder}"
@@ -100,7 +108,7 @@
 				 MinWidth="200"
 				 VerticalContentAlignment="Center"
 				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-		         Text="{Binding RegularExpressionSearchFor}"
+		         Text="{Binding RegularExpressionSearchFor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 		<Label Grid.Row="6" Grid.Column="0" Content="{x:Static resx:PluginResources.ReplaceWith}"
 			   HorizontalAlignment="Left"
@@ -113,12 +121,18 @@
 				 MinWidth="200"
 				 VerticalContentAlignment="Center"
 				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-		         Text="{Binding RegularExpressionReplaceWith}"
-		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-		
+		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<TextBox.Text>
+				<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+					<Binding.ValidationRules>
+						<helpers:FileNameValidationRule/>
+					</Binding.ValidationRules>
+				</Binding>
+			</TextBox.Text>
+			</TextBox>
 		<RadioButton Grid.Row="5" Grid.Column="0" GroupName="Radios" Content="{x:Static resx:PluginResources.TargetLanguage}" 
 		             HorizontalAlignment="Left"
-					 Margin="5"
+		             Margin="5"
 		             VerticalAlignment="Center"
 		             Style="{StaticResource Sdl.RadioButton.GenericStyle}"
 		             IsChecked="{Binding AppendTargetLanguage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
@@ -159,8 +173,15 @@
 				 MinWidth="200"
 				 VerticalContentAlignment="Center"
 				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-		         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}"
-		         Text="{Binding CustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+		         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<TextBox.Text>
+				<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+					<Binding.ValidationRules>
+						<helpers:FileNameValidationRule/>
+					</Binding.ValidationRules>
+				</Binding>
+			</TextBox.Text>
+		</TextBox>
 		<Label Grid.Row="7" Grid.Column="0" Content="{x:Static resx:PluginResources.Delimiter}"
 		       Margin="0"
 		       FontWeight="Bold"
@@ -179,15 +200,21 @@
 				 Width="Auto"
 				 MinWidth="200"
 				 VerticalContentAlignment="Center"
-				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-				 Text="{Binding Delimiter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+				 Height="{Binding ActualHeight, ElementName=ComboBox}">
 			<TextBox.Visibility>
 				<MultiBinding Converter="{StaticResource ConditionalConverter}">
 					<Binding Path="AppendAsPrefix"/>
 					<Binding Path="AppendAsSuffix"/>
 				</MultiBinding>
 			</TextBox.Visibility>
-		</TextBox>
+			<TextBox.Text>
+				<Binding Path="Delimiter" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+					<Binding.ValidationRules>
+						<helpers:FileNameValidationRule/>
+					</Binding.ValidationRules>
+				</Binding>
+			</TextBox.Text>
+			</TextBox>
 		<Button Grid.Row="8" Grid.Column="0"
 		        Margin="5"
 		        VerticalAlignment="Bottom"
