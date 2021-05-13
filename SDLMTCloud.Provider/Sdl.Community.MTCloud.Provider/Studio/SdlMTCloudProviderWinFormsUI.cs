@@ -42,9 +42,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				{
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
-
-				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
-
 				connectionService.SaveCredential(credentialStore);
 
 				MtCloudApplicationInitializer.SetTranslationService(connectionService);
@@ -53,7 +50,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
 					languageProvider);
 
-				return new ITranslationProvider[] { provider };
+				var optionsWindow = GetOptionsWindow(owner, languagePairs, provider);
+
+				optionsWindow.ShowDialog();
+				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
+				{
+					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
+					return new ITranslationProvider[] { provider };
+				}
 			}
 			catch (Exception e)
 			{
@@ -83,9 +87,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				provider.TranslationService.ConnectionService.SaveCredential(credentialStore);
 
-				var optionsWindow = GetOptionsWindow(owner);
-				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs.ToList());
-				optionsWindow.DataContext = optionsViewModel;
+				var optionsWindow = GetOptionsWindow(owner, languagePairs, provider);
 
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
@@ -130,14 +132,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return supportsProvider;
 		}
 
-		private static OptionsWindow GetOptionsWindow(IWin32Window owner)
+		private static OptionsWindow GetOptionsWindow(IWin32Window owner, LanguagePair[] languagePairs, SdlMTCloudTranslationProvider provider)
 		{
-			var window = new OptionsWindow();
-			var helper = new WindowInteropHelper(window)
+			var optionsWindow = new OptionsWindow();
+
+			var _ = new WindowInteropHelper(optionsWindow)
 			{
 				Owner = owner.Handle
 			};
-			return window;
+
+			var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs.ToList());
+			optionsWindow.DataContext = optionsViewModel;
+			return optionsWindow;
 		}
 	}
 }
