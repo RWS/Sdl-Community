@@ -100,6 +100,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BooleanToVisibilityConditionalConverter.cs" />
+    <Compile Include="Helpers\FileNameValidationRule.cs" />
+    <Compile Include="Helpers\PathValidationRule.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Interfaces\IFolderDialogService.cs" />
     <Compile Include="Interfaces\ITargetRenamerSettings.cs" />
