@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sdl.Core.Globalization;
 
 namespace Sdl.Community.StarTransit.Model
 {
@@ -11,8 +6,9 @@ namespace Sdl.Community.StarTransit.Model
 	{
 		public int Penalty { get; set; }
 		public bool IsCreatedFromPlugin { get; set; }
-		public CultureInfo SourceLanguage { get; set; }
-		public CultureInfo TargetLanguage { get; set; }
+		//For tms which are already on the template and we need to check if the languages pair is compatible with any of the project languages
+		public Language SourceLanguage { get; set; }
+		public Language TargetLanguage { get; set; }
 		public string LocalPath { get; set; }
 		public string Name { get; set; }
 	}

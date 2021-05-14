@@ -117,6 +117,18 @@ namespace Sdl.Community.StarTransit.Service
 			return packageModel;
 		}
 
+		public (bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo,
+			Language[] targetLanguages)
+		{
+			foreach (var targetLanguage in targetLanguages)
+			{
+				return tmName.Contains(
+					$"{sourceCultureInfo.TwoLetterISOLanguageName}-{targetLanguage.CultureInfo.TwoLetterISOLanguageName}") ? (true, targetLanguage) : (false, null);
+			}
+
+			return (false, null);
+		}
+
 		private TemplateOptions GetTemplateOptions(XmlDocument projectTemplateDocument, string settingsBundleGuid, CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
 			var projectOrigin = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
@@ -137,7 +149,7 @@ namespace Sdl.Community.StarTransit.Service
 				templateOptions.DueDate = selectedDueDate;
 			}
 
-			var entryItems = GetCascadeEntryItems(projectTemplateDocument);
+			var entryItems = GetCascadeEntryItems(projectTemplateDocument,sourceCultureInfo,targetLanguages);
 			var languagePairsOptions = GetLanguagePairTmOptions(entryItems, sourceCultureInfo, targetLanguages);
 			templateOptions.ProjectLocation = projectLocation;
 			templateOptions.CustomerId = customerId;
@@ -152,7 +164,7 @@ namespace Sdl.Community.StarTransit.Service
 			return settingsNode?.InnerText;
 		}
 
-		private List<TemplateTmDetails> GetCascadeEntryItems(XmlDocument projectTemplateDocument)
+		private List<TemplateTmDetails> GetCascadeEntryItems(XmlDocument projectTemplateDocument, CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
 			var cascadeEntries = projectTemplateDocument.SelectNodes("/ProjectTemplate/CascadeItem/CascadeEntryItem");
 			if (cascadeEntries is null) return null;
@@ -177,6 +189,11 @@ namespace Sdl.Community.StarTransit.Service
 							var uri = new Uri(providerAttribute.Value);
 							details.LocalPath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(uri);
 							details.Name = FileBasedTranslationMemory.GetFileBasedTranslationMemoryName(uri);
+
+							var isCreatedFromPlugin =
+								IsTmCreatedFromPlugin(details.Name, sourceCultureInfo, targetLanguages);
+							details.IsCreatedFromPlugin = isCreatedFromPlugin.Item1;
+							details.TargetLanguage = isCreatedFromPlugin.Item2;
 						}
 					}
 				}
@@ -189,7 +206,7 @@ namespace Sdl.Community.StarTransit.Service
 		private List<LanguagePair> GetLanguagePairTmOptions(List<TemplateTmDetails> entryItems, CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
 			var langPairOptions = new List<LanguagePair>();
-
+			//var groupedEntries
 			return langPairOptions;
 		}
 

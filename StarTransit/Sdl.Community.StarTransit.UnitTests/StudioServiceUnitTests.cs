@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using NSubstitute;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
+using Sdl.Core.Globalization;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Xunit;
 
@@ -100,6 +104,34 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
+		[InlineData("Test Multilingual Package Trados Plugin.de-en.sdltm", "de-DE", "en-GB,fr-FR")]
+		public void IsTmCreatedFromPlugin_ReturnsTrue(string tmName, string sourceLanguageCode,
+			string targetLanguageCodes)
+		{
+			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
+
+			var isTmCreatedFromPlugin = _studioService.IsTmCreatedFromPlugin(tmName,
+				new CultureInfo(sourceLanguageCode), targetLanguages.ToArray());
+
+			Assert.True(isTmCreatedFromPlugin.Item1);
+			Assert.Equal(new Language("en-GB"),isTmCreatedFromPlugin.Item2);
+		}
+
+		[Theory]
+		[InlineData("TestTransitTM.sdltm", "de-DE", "en-GB,fr-FR")]
+		public void IsTmCreatedFromPlugin_ReturnsFalse(string tmName, string sourceLanguageCode,
+			string targetLanguageCodes)
+		{
+			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
+
+			var isTmCreatedFromPlugin = _studioService.IsTmCreatedFromPlugin(tmName,
+				new CultureInfo(sourceLanguageCode), targetLanguages.ToArray());
+
+			Assert.False(isTmCreatedFromPlugin.Item1);
+			Assert.Null(isTmCreatedFromPlugin.Item2);
+		}
+
+		[Theory]
 		[InlineData("sdltm.file:///C:/Users/aghisa/Documents/Studio 2021/Translation Memories/TestTransitTM.sdltm")]
 		public void GetTmLanguageFromPath(string tmUri)
 		{
@@ -110,6 +142,12 @@ namespace Sdl.Community.StarTransit.UnitTests
 			// templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
 			 _studioService.GetTranslationMemoryLanguage(tmUri);
 			//Assert.NotNull(templateInfo.DueDate);
+		}
+
+		private Language[] GetStudioLanguages(string targetLanguageCodes)
+		{
+			var targetCodes = targetLanguageCodes.Split(',');
+			return  targetCodes.Select(code => new Language(code)).ToArray();
 		}
 
 	}

@@ -15,6 +15,7 @@ namespace Sdl.Community.StarTransit.Interface
 		PackageModel GetModelBasedOnStudioTemplate(string templatePath, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages);
 
+		(bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo, Language[] targetLanguages);
 		bool GetTranslationMemoryLanguage(string tmUri);
 	}
 }
