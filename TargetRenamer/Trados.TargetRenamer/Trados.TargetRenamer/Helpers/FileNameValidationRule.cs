@@ -19,11 +19,11 @@ namespace Trados.TargetRenamer.Helpers
 			}
 			catch (Exception e)
 			{
-				return new ValidationResult(false, "Selection is empty.");
+				return new ValidationResult(false, PluginResources.SelectionEmpty);
 			}
 
 			return text.IndexOfAny(Path.GetInvalidPathChars()) >= 0
-				? new ValidationResult(false, "Please do not use invalid characters.")
+				? new ValidationResult(false, PluginResources.InvalidChars)
 				: ValidationResult.ValidResult;
 		}
 	}

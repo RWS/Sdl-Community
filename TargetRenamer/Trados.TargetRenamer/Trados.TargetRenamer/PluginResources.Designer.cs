@@ -97,6 +97,42 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path is empty..
+        /// </summary>
+        public static string EmptyPath {
+            get {
+                return ResourceManager.GetString("EmptyPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please do not use invalid characters..
+        /// </summary>
+        public static string InvalidChars {
+            get {
+                return ResourceManager.GetString("InvalidChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path is not valid..
+        /// </summary>
+        public static string InvalidPath {
+            get {
+                return ResourceManager.GetString("InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path contains invalid characters..
+        /// </summary>
+        public static string InvalidPathChars {
+            get {
+                return ResourceManager.GetString("InvalidPathChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite Target Files.
         /// </summary>
         public static string OverwriteTargetFiles {
@@ -156,6 +192,15 @@ namespace Trados.TargetRenamer {
         public static string SelectAction {
             get {
                 return ResourceManager.GetString("SelectAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selection is empty..
+        /// </summary>
+        public static string SelectionEmpty {
+            get {
+                return ResourceManager.GetString("SelectionEmpty", resourceCulture);
             }
         }
         
