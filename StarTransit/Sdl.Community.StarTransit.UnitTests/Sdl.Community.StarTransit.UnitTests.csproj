@@ -91,6 +91,9 @@
     <None Include="TestingFiles\FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestingFiles\MultilingualNoOptions.sdltpl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestingFiles\Test Multilingual Package Trados Plugin.PPF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

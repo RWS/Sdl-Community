@@ -61,6 +61,16 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
+		[InlineData("MultilingualNoOptions.sdltpl")]
+		public void ReadTemplateData_TransitTemplate_ReturnsNullCustomer(string templateName)
+		{
+			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+
+			Assert.Null(templateInfo.Customer);
+		}
+
+		[Theory]
 		[InlineData("TransitMultilingualTemplate.sdltpl")]
 		public void ReadTemplateData_TransitTemplate_ReturnsDueDate(string templateName)
 		{
@@ -68,6 +78,15 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
 
 			Assert.NotNull(templateInfo.DueDate);
+		}
+		[Theory]
+		[InlineData("MultilingualNoOptions.sdltpl")]
+		public void ReadTemplateData_TransitTemplate_ReturnsNullDueDate(string templateName)
+		{
+			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+
+			Assert.Null(templateInfo.Customer);
 		}
 
 		[Theory]

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -35,6 +36,7 @@ namespace Sdl.Community.StarTransit.Service
 			return templateList ?? new List<ProjectTemplateInfo>();
 		}
 
+		//TODO: Refactor
 		public Task<List<Customer>> GetCustomers()
 		{
 			var customersList = new List<Customer>();
@@ -84,42 +86,56 @@ namespace Sdl.Community.StarTransit.Service
 			var projectTemplate = projectTemplateDocument.SelectSingleNode("/ProjectTemplate");
 			var settingsBundleGuid = string.Empty;
 
-			if (projectTemplate?.Attributes != null)
+			if (projectTemplate?.Attributes == null) return null;
+			foreach (XmlAttribute attribute in projectTemplate.Attributes)
 			{
-				foreach (XmlAttribute attribute in projectTemplate.Attributes)
-				{
-					if (!attribute.Name.Equals("SettingsBundleGuid")) continue;
-					settingsBundleGuid = attribute.Value;
-					break;
-				}
+				if (!attribute.Name.Equals("SettingsBundleGuid")) continue;
+				settingsBundleGuid = attribute.Value;
+				break;
+			}
+			if (string.IsNullOrEmpty(settingsBundleGuid)) return null;
 
-				var projectOrigin = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
-					ProjectSettingsGroupId, ProjectOriginId);
-				if (string.IsNullOrEmpty(projectOrigin)) return null;
+			var templateOptions = GetTemplateOptions(projectTemplateDocument, settingsBundleGuid);
 
-				var projectLocation = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
-					ProjectTemplateSettingsGroupId, ProjectLocationId);
+			if (templateOptions is null) return null;
 
-				var customerId = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
-					GeneralProjectInfoSettingsGroupId, CustomerId);
+			var packageModel = new PackageModel
+			{
+				Location = templateOptions.ProjectLocation,
+				DueDate = templateOptions.DueDate
+			};
 
-				var dueDate = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
-					GeneralProjectInfoSettingsGroupId, DueDateGroupId);
-
-				var packageModel = new PackageModel
-				{
-					Location = projectLocation, Customer = new Customer {Name = customerId}
-				};
-
-				if (DateTime.TryParse(dueDate, out var selectedDueDate))
-				{
-					packageModel.DueDate = selectedDueDate;
-				}
-
-				return packageModel;
+			if (!string.IsNullOrEmpty(templateOptions.CustomerId))
+			{
+				packageModel.Customer = new Customer {Name = templateOptions.CustomerId};
 			}
 
-			return null;
+			return packageModel;
+		}
+
+		private TemplateOptions GetTemplateOptions(XmlDocument projectTemplateDocument, string settingsBundleGuid)
+		{
+			var projectOrigin = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+				ProjectSettingsGroupId, ProjectOriginId);
+			if (string.IsNullOrEmpty(projectOrigin)) return null;
+
+			var templateOptions = new TemplateOptions();
+			var projectLocation = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+				ProjectTemplateSettingsGroupId, ProjectLocationId);
+
+			var customerId = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+				GeneralProjectInfoSettingsGroupId, CustomerId);
+
+			var dueDate = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
+				GeneralProjectInfoSettingsGroupId, DueDateGroupId);
+			if (DateTime.TryParse(dueDate, out var selectedDueDate) && selectedDueDate != DateTime.MaxValue)
+			{
+				templateOptions.DueDate = selectedDueDate;
+			}
+
+			templateOptions.ProjectLocation = projectLocation;
+			templateOptions.CustomerId = customerId;
+			return templateOptions;
 		}
 
 		private string GetSettingsByGroupId(XmlDocument projectTemplateDocument, string settingsBundleGuid,string groupId,string settingId)
