@@ -19,7 +19,7 @@ namespace Trados.TargetRenamer.Helpers
 			}
 			catch (Exception e)
 			{
-				return new ValidationResult(false, "Path is empty.");
+				return new ValidationResult(false, PluginResources.EmptyPath);
 			}
 
 			try
@@ -28,11 +28,11 @@ namespace Trados.TargetRenamer.Helpers
 			}
 			catch (Exception e)
 			{
-				return new ValidationResult(false, "Path is not valid.");
+				return new ValidationResult(false, PluginResources.InvalidPath);
 			}
 
 			if (path.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-				return new ValidationResult(false, "Path contains invalid characters.");
+				return new ValidationResult(false, PluginResources.InvalidPathChars);
 
 			return ValidationResult.ValidResult;
 		}

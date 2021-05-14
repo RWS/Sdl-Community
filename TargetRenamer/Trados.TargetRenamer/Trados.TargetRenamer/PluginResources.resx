@@ -129,6 +129,18 @@
   <data name="Delimiter" xml:space="preserve">
     <value>Delimiter:</value>
   </data>
+  <data name="EmptyPath" xml:space="preserve">
+    <value>Path is empty.</value>
+  </data>
+  <data name="InvalidChars" xml:space="preserve">
+    <value>Please do not use invalid characters.</value>
+  </data>
+  <data name="InvalidPath" xml:space="preserve">
+    <value>Path is not valid.</value>
+  </data>
+  <data name="InvalidPathChars" xml:space="preserve">
+    <value>Path contains invalid characters.</value>
+  </data>
   <data name="OverwriteTargetFiles" xml:space="preserve">
     <value>Overwrite Target Files</value>
   </data>
@@ -149,6 +161,9 @@
   </data>
   <data name="SelectAction" xml:space="preserve">
     <value>Select action:</value>
+  </data>
+  <data name="SelectionEmpty" xml:space="preserve">
+    <value>Selection is empty.</value>
   </data>
   <data name="ShortLocales" xml:space="preserve">
     <value>Use short locales</value>
