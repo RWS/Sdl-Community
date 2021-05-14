@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +9,8 @@ using System.Xml;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Versioning;
@@ -77,7 +81,7 @@ namespace Sdl.Community.StarTransit.Service
 			});
 		}
 
-		public PackageModel GetModelBasedOnStudioTemplate(string templatePath)
+		public PackageModel GetModelBasedOnStudioTemplate(string templatePath,CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
 			if (string.IsNullOrEmpty(templatePath) || !File.Exists(templatePath)) return null;
 
@@ -95,7 +99,7 @@ namespace Sdl.Community.StarTransit.Service
 			}
 			if (string.IsNullOrEmpty(settingsBundleGuid)) return null;
 
-			var templateOptions = GetTemplateOptions(projectTemplateDocument, settingsBundleGuid);
+			var templateOptions = GetTemplateOptions(projectTemplateDocument, settingsBundleGuid,sourceCultureInfo,targetLanguages);
 
 			if (templateOptions is null) return null;
 
@@ -113,7 +117,7 @@ namespace Sdl.Community.StarTransit.Service
 			return packageModel;
 		}
 
-		private TemplateOptions GetTemplateOptions(XmlDocument projectTemplateDocument, string settingsBundleGuid)
+		private TemplateOptions GetTemplateOptions(XmlDocument projectTemplateDocument, string settingsBundleGuid, CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
 			var projectOrigin = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
 				ProjectSettingsGroupId, ProjectOriginId);
@@ -133,6 +137,8 @@ namespace Sdl.Community.StarTransit.Service
 				templateOptions.DueDate = selectedDueDate;
 			}
 
+			var entryItems = GetCascadeEntryItems(projectTemplateDocument);
+			var languagePairsOptions = GetLanguagePairTmOptions(entryItems, sourceCultureInfo, targetLanguages);
 			templateOptions.ProjectLocation = projectLocation;
 			templateOptions.CustomerId = customerId;
 			return templateOptions;
@@ -140,10 +146,60 @@ namespace Sdl.Community.StarTransit.Service
 
 		private string GetSettingsByGroupId(XmlDocument projectTemplateDocument, string settingsBundleGuid,string groupId,string settingId)
 		{
-			var  settingsNode= projectTemplateDocument.SelectSingleNode(
+			var settingsNode= projectTemplateDocument.SelectSingleNode(
 					$"/ProjectTemplate/SettingsBundles/SettingsBundle[@Guid='{settingsBundleGuid}']/SettingsBundle/SettingsGroup[@Id='{groupId}']/Setting[@Id='{settingId}']");
 			
 			return settingsNode?.InnerText;
+		}
+
+		private List<TemplateTmDetails> GetCascadeEntryItems(XmlDocument projectTemplateDocument)
+		{
+			var cascadeEntries = projectTemplateDocument.SelectNodes("/ProjectTemplate/CascadeItem/CascadeEntryItem");
+			if (cascadeEntries is null) return null;
+
+			var tmDetails = new List<TemplateTmDetails>();
+			foreach (XmlNode cascadeEntryItem in cascadeEntries)
+			{
+				var details = new TemplateTmDetails();
+				if (cascadeEntryItem.Attributes is null) continue;
+				foreach (XmlAttribute entryAttribute in cascadeEntryItem.Attributes)
+				{
+					if (!entryAttribute.Name.Equals("Penalty")) continue;
+					int.TryParse(entryAttribute.Value, out var penaltySet);
+					details.Penalty = penaltySet;
+
+					foreach (XmlNode mainTranslationProviderItem in cascadeEntryItem.ChildNodes)
+					{
+						if (mainTranslationProviderItem.Attributes is null) continue;
+						foreach (XmlAttribute providerAttribute in mainTranslationProviderItem.Attributes)
+						{
+							if (!providerAttribute.Name.Equals("Uri")) continue;
+							var uri = new Uri(providerAttribute.Value);
+							details.LocalPath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(uri);
+							details.Name = FileBasedTranslationMemory.GetFileBasedTranslationMemoryName(uri);
+						}
+					}
+				}
+
+				tmDetails.Add(details);
+			}
+			return tmDetails;
+		}
+
+		private List<LanguagePair> GetLanguagePairTmOptions(List<TemplateTmDetails> entryItems, CultureInfo sourceCultureInfo, Language[] targetLanguages)
+		{
+			var langPairOptions = new List<LanguagePair>();
+
+			return langPairOptions;
+		}
+
+		public bool GetTranslationMemoryLanguage(string uri)
+		{
+			//var tmLocalPath = new Uri(uri);
+			//var filePath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(tmLocalPath);
+			//var scheme = FileBasedTranslationMemory.GetFileBasedTranslationMemoryScheme();
+			//var tm =  new FileBasedTranslationMemory(tmLocalPath);.
+			return true;
 		}
 
 		public void RefreshProjects()

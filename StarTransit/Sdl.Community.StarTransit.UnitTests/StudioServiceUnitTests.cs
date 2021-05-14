@@ -24,7 +24,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		[InlineData("randomPath")]
 		public void ReadTemplateData_EmptyPath_ReturnsNull(string templatePath)
 		{
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(templatePath);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(templatePath,null,null);
 			Assert.Null(templateInfo);
 		}
 
@@ -33,7 +33,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsProjectLocation(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.NotNull(templateInfo);
 			Assert.NotEmpty(templateInfo.Location);
@@ -44,7 +44,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsCorrectProjectLocation(string templateName,string projectLocation)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Equal(projectLocation,templateInfo.Location);
 		}
@@ -54,7 +54,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsCorrectCustomer(string templateName, string selectedCustomerName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.NotNull(templateInfo.Customer);
 			Assert.Equal(selectedCustomerName, templateInfo.Customer.Name);
@@ -65,7 +65,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsNullCustomer(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo.Customer);
 		}
@@ -75,7 +75,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsDueDate(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.NotNull(templateInfo.DueDate);
 		}
@@ -84,7 +84,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsNullDueDate(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo.Customer);
 		}
@@ -94,9 +94,22 @@ namespace Sdl.Community.StarTransit.UnitTests
 		public void ReadTemplateData_TransitTemplate_ReturnsNull(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo);
+		}
+
+		[Theory]
+		[InlineData("sdltm.file:///C:/Users/aghisa/Documents/Studio 2021/Translation Memories/TestTransitTM.sdltm")]
+		public void GetTmLanguageFromPath(string tmUri)
+		{
+			var substitute = Substitute.For<IStudioService>();
+			substitute.GetTranslationMemoryLanguage(tmUri).Returns(false);
+			Assert.False(substitute.GetTranslationMemoryLanguage(tmUri));
+			//var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			// templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
+			 _studioService.GetTranslationMemoryLanguage(tmUri);
+			//Assert.NotNull(templateInfo.DueDate);
 		}
 
 	}

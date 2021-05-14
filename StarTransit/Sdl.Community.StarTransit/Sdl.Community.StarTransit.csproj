@@ -159,6 +159,7 @@
     <Compile Include="Interface\IWizardModel.cs" />
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\TemplateOptions.cs" />
+    <Compile Include="Model\TemplateTmDetails.cs" />
     <Compile Include="Model\WizardModel.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
