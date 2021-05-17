@@ -123,8 +123,12 @@ namespace Sdl.Community.StarTransit.Service
 			if (sourceCultureInfo is null || targetLanguages is null) return (false, null);
 			foreach (var targetLanguage in targetLanguages)
 			{
-				return tmName.Contains(
-					$"{sourceCultureInfo.TwoLetterISOLanguageName}-{targetLanguage.CultureInfo.TwoLetterISOLanguageName}") ? (true, targetLanguage) : (false, null);
+				if (tmName.Contains(
+					$"{sourceCultureInfo.TwoLetterISOLanguageName}-{targetLanguage.CultureInfo.TwoLetterISOLanguageName}")
+				)
+				{
+					return (true, targetLanguage);
+				}
 			}
 			return (false, null);
 		}
@@ -245,7 +249,7 @@ namespace Sdl.Community.StarTransit.Service
 				return new LanguagePair
 				{
 					SourceLanguage = sourceCultureInfo,
-					TargetLanguage = new CultureInfo(targetLanguage.DisplayName),
+					TargetLanguage = new CultureInfo(targetLanguage.CultureInfo.Name),
 					ChoseExistingTm = true,
 					TmPath = tmDetails.LocalPath,
 					TmName = tmDetails.Name

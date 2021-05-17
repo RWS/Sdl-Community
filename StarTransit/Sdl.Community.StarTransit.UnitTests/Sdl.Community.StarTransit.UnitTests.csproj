@@ -112,6 +112,9 @@
     <None Include="TestingFiles\TestTransitTM.sdltm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestingFiles\TransitMultilingualPenaltiesOptions.sdltpl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestingFiles\TransitMultilingualTemplate.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

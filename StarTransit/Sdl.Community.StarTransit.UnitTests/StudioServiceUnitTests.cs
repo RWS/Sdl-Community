@@ -129,6 +129,84 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
+		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT", 2)]
+		public void ReadTemplateData_MultilingualTransitTemplate_GetCorrectTmOptionsNumber(string templateName,
+			string sourceLanguageCode,
+			string targetLanguageCodes, int tmsOptions)
+		{
+			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
+
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
+				new CultureInfo(sourceLanguageCode), targetLanguages);
+
+			Assert.NotNull(templateInfo.LanguagePairs);
+			Assert.Equal(tmsOptions, templateInfo.LanguagePairs.Count);
+		}
+
+		[Theory]
+		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT")]
+		public void ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeFr(string templateName,
+			string sourceLanguageCode,
+			string targetLanguageCodes)
+		{
+			var deFrLanguagePair = new LanguagePair
+			{
+				SourceLanguage = new CultureInfo("de-DE"),
+				TargetLanguage = new CultureInfo("fr-FR"),
+				CreateNewTm = true,
+				TemplatePenalty = 10
+			};
+			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
+
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
+				new CultureInfo(sourceLanguageCode), targetLanguages);
+
+			var fRCorrespondingLpOption = GetCorresponndingLanguagePair(templateInfo.LanguagePairs, deFrLanguagePair);
+			Assert.Equal(deFrLanguagePair.SourceLanguage, fRCorrespondingLpOption.SourceLanguage);
+			Assert.Equal(deFrLanguagePair.TargetLanguage, fRCorrespondingLpOption.TargetLanguage);
+			Assert.Equal(deFrLanguagePair.CreateNewTm,fRCorrespondingLpOption.CreateNewTm);
+			Assert.Equal(deFrLanguagePair.TemplatePenalty, fRCorrespondingLpOption.TemplatePenalty);
+		}
+
+		[Theory]
+		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT")]
+		public void ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeIt(string templateName,
+			string sourceLanguageCode,
+			string targetLanguageCodes)
+		{
+			var deItLanguagePair = new LanguagePair
+			{
+				SourceLanguage = new CultureInfo("de-DE"),
+				TargetLanguage = new CultureInfo("it-IT"),
+				ChoseExistingTm = true,
+				TemplatePenalty = 0,
+				TmName = "Transit De-It.sdltm",
+				TmPath = @"C:/Users/aghisa/Documents/Studio 2021/Translation Memories/Transit De-It.sdltm"
+			};
+
+			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
+
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
+				new CultureInfo(sourceLanguageCode), targetLanguages);
+
+			var correspondingLpOption = GetCorresponndingLanguagePair(templateInfo.LanguagePairs, deItLanguagePair);
+			Assert.Equal(deItLanguagePair.SourceLanguage, correspondingLpOption.SourceLanguage);
+			Assert.Equal(deItLanguagePair.TargetLanguage, correspondingLpOption.TargetLanguage);
+			Assert.Equal(deItLanguagePair.CreateNewTm, correspondingLpOption.CreateNewTm);
+			Assert.Equal(deItLanguagePair.TemplatePenalty, correspondingLpOption.TemplatePenalty);
+		}
+
+		private LanguagePair GetCorresponndingLanguagePair(List<LanguagePair> templateInfoLanguagePairs, LanguagePair languagePair)
+		{
+			return templateInfoLanguagePairs.FirstOrDefault(l =>
+				l.SourceLanguage.Equals(languagePair.SourceLanguage) &&
+				l.TargetLanguage.Equals(languagePair.TargetLanguage));
+		}
+
+		[Theory]
 		[InlineData("Test Multilingual Package Trados Plugin.de-en.sdltm", "de-DE", "en-GB,fr-FR")]
 		public void IsTmCreatedFromPlugin_ReturnsTrue(string tmName, string sourceLanguageCode,
 			string targetLanguageCodes)
