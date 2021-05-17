@@ -1,14 +1,8 @@
-﻿using Sdl.Desktop.IntegrationApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Core.Settings;
+﻿using Sdl.Core.Settings;
+using Sdl.Desktop.IntegrationApi;
 using Trados.TargetRenamer.Control;
-using Trados.TargetRenamer.ViewModel;
 
-namespace Trados.TargetRenamer
+namespace Trados.TargetRenamer.BatchTask
 {
     public class TargetRenamerSettingsPage : DefaultSettingsPage<TargetRenamerSettingsControl, TargetRenamerSettings>
     {
@@ -40,7 +34,7 @@ namespace Trados.TargetRenamer
 			_settings.RegularExpressionSearchFor = _control.TargetRenamerSettingsViewModel.RegularExpressionSearchFor;
 			_settings.RegularExpressionReplaceWith =
 				_control.TargetRenamerSettingsViewModel.RegularExpressionReplaceWith;
-			_settings.Delimitator = _control.TargetRenamerSettingsViewModel.Delimitator;
+			_settings.Delimiter = _control.TargetRenamerSettingsViewModel.Delimiter;
 			_settings.UseShortLocales = _control.TargetRenamerSettingsViewModel.UseShortLocales;
 			_settings.AppendTargetLanguage = _control.TargetRenamerSettingsViewModel.AppendTargetLanguage;
 			_settings.AppendCustomString = _control.TargetRenamerSettingsViewModel.AppendCustomString;

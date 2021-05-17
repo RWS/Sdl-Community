@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Core.Settings;
+﻿using Sdl.Core.Settings;
 using Trados.TargetRenamer.Interfaces;
 
-namespace Trados.TargetRenamer
+namespace Trados.TargetRenamer.BatchTask
 {
 	public class TargetRenamerSettings : SettingsGroup, ITargetRenamerSettings
 	{
@@ -58,10 +53,10 @@ namespace Trados.TargetRenamer
 			set => GetSetting<string>(nameof(RegularExpressionReplaceWith)).Value = value;
 		}
 
-		public string Delimitator
+		public string Delimiter
 		{
-			get => GetSetting<string>(nameof(Delimitator));
-			set => GetSetting<string>(nameof(Delimitator)).Value = value;
+			get => GetSetting<string>(nameof(Delimiter));
+			set => GetSetting<string>(nameof(Delimiter)).Value = value;
 		}
 
 		public bool UseShortLocales
