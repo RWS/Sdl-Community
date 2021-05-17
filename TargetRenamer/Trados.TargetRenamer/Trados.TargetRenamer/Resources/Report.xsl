@@ -477,16 +477,32 @@
 							Target Filename
 						</th>
 					</tr>
-					<xsl:for-each select="//files/file">
+
+					<xsl:for-each select="//files/file/@location[not(.=preceding::file/@location)]">
+						<xsl:sort/>
+						<xsl:variable name ="Location" select="."/>
 						<tr>
 							<td>
-								<xsl:value-of select="@originalName" />
+								Old location:
+								<xsl:value-of select="."/>
 							</td>
 							<td>
-								<xsl:value-of select="@newName" />
+								New location:
+								<xsl:value-of select="../@newLocation"/>
 							</td>
 						</tr>
+						<xsl:for-each select="//files/file[@location = current()]">
+							<tr>
+								<td>
+									<xsl:value-of select="@originalName" />
+								</td>
+								<td>
+									<xsl:value-of select="@newName" />
+								</td>
+							</tr>
+						</xsl:for-each>
 					</xsl:for-each>
+
 				</table>
 			</body>
 		</html>

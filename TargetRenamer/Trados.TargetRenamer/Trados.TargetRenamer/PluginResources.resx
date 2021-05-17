@@ -156,6 +156,9 @@
   <data name="Reset" xml:space="preserve">
     <value>Reset to default</value>
   </data>
+  <data name="RWSAppStoreTeam" xml:space="preserve">
+    <value />
+  </data>
   <data name="SearchFor" xml:space="preserve">
     <value>Search for:</value>
   </data>

@@ -178,6 +178,15 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string RWSAppStoreTeam {
+            get {
+                return ResourceManager.GetString("RWSAppStoreTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search for:.
         /// </summary>
         public static string SearchFor {
