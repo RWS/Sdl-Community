@@ -1,4 +1,5 @@
-﻿using Sdl.Core.Globalization;
+﻿using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.StarTransit.Model
 {
@@ -11,5 +12,6 @@ namespace Sdl.Community.StarTransit.Model
 		public Language TargetLanguage { get; set; }
 		public string LocalPath { get; set; }
 		public string Name { get; set; }
+		public LanguagePair TransitLanguagePairOptions { get; set; }
 	}
 }

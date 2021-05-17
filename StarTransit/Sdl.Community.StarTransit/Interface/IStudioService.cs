@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -16,6 +17,9 @@ namespace Sdl.Community.StarTransit.Interface
 			Language[] targetLanguages);
 
 		(bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo, Language[] targetLanguages);
-		bool GetTranslationMemoryLanguage(string tmUri);
+		//(bool, Language) TmCorrespondsToOption(string tmUri, CultureInfo sourceCultureInfo, Language[] targetLanguages);
+
+		(bool, Language) TmSupportsAnyLanguageDirection(Uri tmLocalPath, CultureInfo sourceCultureInfo,
+			Language[] targetLanguages);
 	}
 }

@@ -110,11 +110,11 @@ namespace Sdl.Community.StarTransit.UnitTests
 		{
 			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
 
-			var isTmCreatedFromPlugin = _studioService.IsTmCreatedFromPlugin(tmName,
+			var (isCreatedFromPlugin, language) = _studioService.IsTmCreatedFromPlugin(tmName,
 				new CultureInfo(sourceLanguageCode), targetLanguages.ToArray());
 
-			Assert.True(isTmCreatedFromPlugin.Item1);
-			Assert.Equal(new Language("en-GB"),isTmCreatedFromPlugin.Item2);
+			Assert.True(isCreatedFromPlugin);
+			Assert.Equal(new Language("en-GB"),language);
 		}
 
 		[Theory]
@@ -124,24 +124,52 @@ namespace Sdl.Community.StarTransit.UnitTests
 		{
 			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
 
-			var isTmCreatedFromPlugin = _studioService.IsTmCreatedFromPlugin(tmName,
+			var (isCreatedFromPlugin, language) = _studioService.IsTmCreatedFromPlugin(tmName,
 				new CultureInfo(sourceLanguageCode), targetLanguages.ToArray());
 
-			Assert.False(isTmCreatedFromPlugin.Item1);
-			Assert.Null(isTmCreatedFromPlugin.Item2);
+			Assert.False(isCreatedFromPlugin);
+			Assert.Null(language);
 		}
 
 		[Theory]
-		[InlineData("sdltm.file:///C:/Users/aghisa/Documents/Studio 2021/Translation Memories/TestTransitTM.sdltm")]
-		public void GetTmLanguageFromPath(string tmUri)
+		[InlineData("TestTransitTM.sdltm", "de-DE", "en-GB,fr-FR")]
+		public void TmSupportsAnyLanguageDirection_ReturnsFalse(string tmName, string packageSourceLanguageCode,
+			string packageTargetLanguageCodes)
 		{
-			var substitute = Substitute.For<IStudioService>();
-			substitute.GetTranslationMemoryLanguage(tmUri).Returns(false);
-			Assert.False(substitute.GetTranslationMemoryLanguage(tmUri));
-			//var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			// templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate);
-			 _studioService.GetTranslationMemoryLanguage(tmUri);
-			//Assert.NotNull(templateInfo.DueDate);
+			var uri = new Uri($"{Path.Combine(_testingFilesPath, tmName)}");
+
+			var targetLanguages = GetStudioLanguages(packageTargetLanguageCodes);
+
+			var (isSupported, language) = _studioService.TmSupportsAnyLanguageDirection(uri, new CultureInfo(packageSourceLanguageCode), targetLanguages);
+			Assert.False(isSupported);
+			Assert.Null(language);
+		}
+
+		[Theory]
+		[InlineData("TestTransitTM.sdltm", "de-DE", "en-GB,id-ID")]
+		public void TmSupportsAnyLanguageDirection_ReturnsNull_IncorrectSourceLanguage_CorrectTarget(string tmName, string packageSourceLanguageCode,
+			string packageTargetLanguageCodes)
+		{
+			var uri = new Uri($"{Path.Combine(_testingFilesPath, tmName)}");
+			var targetLanguages = GetStudioLanguages(packageTargetLanguageCodes);
+
+			var (isSupported, language) = _studioService.TmSupportsAnyLanguageDirection(uri, new CultureInfo(packageSourceLanguageCode), targetLanguages);
+			Assert.False(isSupported);
+			Assert.Null(language);
+		}
+		[Theory]
+		[InlineData("TestTransitTM.sdltm", "en-US", "en-GB,id-ID")]
+		public void TmSupportsAnyLanguageDirection_ReturnsTrue_CorrectTargetLanguage(string tmName, string packageSourceLanguageCode,
+			string packageTargetLanguageCodes)
+		{
+			var uri = new Uri($"{Path.Combine(_testingFilesPath, tmName)}");
+			var targetLanguage = new Language("id-ID");
+			var targetLanguages = GetStudioLanguages(packageTargetLanguageCodes);
+
+			var (isSupported, language) = _studioService.TmSupportsAnyLanguageDirection(uri, new CultureInfo(packageSourceLanguageCode), targetLanguages);
+			Assert.True(isSupported);
+			Assert.NotNull(language);
+			Assert.Equal(targetLanguage, language);
 		}
 
 		private Language[] GetStudioLanguages(string targetLanguageCodes)

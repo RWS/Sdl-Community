@@ -35,6 +35,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }
         public List<string> TargetFile { get; set; }
+        public int TemplatePenalty { get; set; }
 
         /// <summary>
         /// Used if the user wants to create project without a tm in it.

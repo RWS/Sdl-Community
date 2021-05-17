@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -120,12 +119,12 @@ namespace Sdl.Community.StarTransit.Service
 		public (bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages)
 		{
+			if (targetLanguages is null) return (false, null);
 			foreach (var targetLanguage in targetLanguages)
 			{
 				return tmName.Contains(
 					$"{sourceCultureInfo.TwoLetterISOLanguageName}-{targetLanguage.CultureInfo.TwoLetterISOLanguageName}") ? (true, targetLanguage) : (false, null);
 			}
-
 			return (false, null);
 		}
 
@@ -135,7 +134,10 @@ namespace Sdl.Community.StarTransit.Service
 				ProjectSettingsGroupId, ProjectOriginId);
 			if (string.IsNullOrEmpty(projectOrigin)) return null;
 
-			var templateOptions = new TemplateOptions();
+			var templateOptions = new TemplateOptions
+			{
+				TemplateLanguagePairDetails = new List<LanguagePair>()
+			};
 			var projectLocation = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
 				ProjectTemplateSettingsGroupId, ProjectLocationId);
 
@@ -149,8 +151,18 @@ namespace Sdl.Community.StarTransit.Service
 				templateOptions.DueDate = selectedDueDate;
 			}
 
-			var entryItems = GetCascadeEntryItems(projectTemplateDocument,sourceCultureInfo,targetLanguages);
-			var languagePairsOptions = GetLanguagePairTmOptions(entryItems, sourceCultureInfo, targetLanguages);
+			var tmTemplateDetails = GetCascadeEntryItems(projectTemplateDocument,sourceCultureInfo,targetLanguages);
+			if (tmTemplateDetails.Any())
+			{
+				foreach (var tmDetails in tmTemplateDetails)
+				{
+					if (tmDetails.TransitLanguagePairOptions != null)
+					{
+						templateOptions.TemplateLanguagePairDetails.Add(tmDetails.TransitLanguagePairOptions);
+					}
+				}
+				//var languagePairsOptions = GetLanguagePairTmOptions(entryItems, sourceCultureInfo, targetLanguages);
+			}
 			templateOptions.ProjectLocation = projectLocation;
 			templateOptions.CustomerId = customerId;
 			return templateOptions;
@@ -189,34 +201,81 @@ namespace Sdl.Community.StarTransit.Service
 							var uri = new Uri(providerAttribute.Value);
 							details.LocalPath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(uri);
 							details.Name = FileBasedTranslationMemory.GetFileBasedTranslationMemoryName(uri);
-
-							var isCreatedFromPlugin =
-								IsTmCreatedFromPlugin(details.Name, sourceCultureInfo, targetLanguages);
-							details.IsCreatedFromPlugin = isCreatedFromPlugin.Item1;
-							details.TargetLanguage = isCreatedFromPlugin.Item2;
+							details.SourceLanguage = new Language(sourceCultureInfo.Name);
+							details.TransitLanguagePairOptions = GetLanguagePairTmOptions(details, sourceCultureInfo, targetLanguages);
 						}
 					}
 				}
-
 				tmDetails.Add(details);
 			}
 			return tmDetails;
 		}
 
-		private List<LanguagePair> GetLanguagePairTmOptions(List<TemplateTmDetails> entryItems, CultureInfo sourceCultureInfo, Language[] targetLanguages)
+		private LanguagePair GetLanguagePairTmOptions(TemplateTmDetails tmDetails, CultureInfo sourceCultureInfo,
+			Language[] targetLanguages)
 		{
-			var langPairOptions = new List<LanguagePair>();
-			//var groupedEntries
-			return langPairOptions;
+			var (isCreatedFromPlugin, language) =
+				IsTmCreatedFromPlugin(tmDetails.Name, sourceCultureInfo, targetLanguages);
+			tmDetails.IsCreatedFromPlugin = isCreatedFromPlugin;
+			tmDetails.TargetLanguage = language;
+
+			if (isCreatedFromPlugin)
+			{
+				return new LanguagePair
+				{
+					SourceLanguage = sourceCultureInfo,
+					TargetLanguage = new CultureInfo(language.DisplayName),
+					CreateNewTm = true,
+					TemplatePenalty = tmDetails.Penalty
+				};
+			}
+
+			var (tmCorrespondsToLanguagePair, targetLanguage) =
+				TmSupportsAnyLanguageDirection(new Uri(tmDetails.LocalPath), sourceCultureInfo, targetLanguages);
+			if (tmCorrespondsToLanguagePair)
+			{
+				return new LanguagePair
+				{
+					SourceLanguage = sourceCultureInfo,
+					TargetLanguage = new CultureInfo(targetLanguage.DisplayName),
+					ChoseExistingTm = true,
+					TmPath = tmDetails.LocalPath,
+					TmName = tmDetails.Name
+				};
+			}
+			return null;
 		}
 
-		public bool GetTranslationMemoryLanguage(string uri)
+		/// <summary>
+		/// Checks if TM found in the template supports any language from Transit Packages
+		/// </summary>
+		/// <param name="tmLocalPath">Tm local path read from project template</param>
+		/// <param name="sourceCultureInfo">Package source language</param>
+		/// <param name="targetLanguages">Package target languages</param>
+		/// <returns>true and target language supported</returns>
+		/// <returns>false if the TM target language is not supported by Transit Package</returns>
+		public (bool, Language) TmSupportsAnyLanguageDirection(Uri tmLocalPath, CultureInfo sourceCultureInfo,
+			Language[] targetLanguages)
 		{
-			//var tmLocalPath = new Uri(uri);
-			//var filePath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(tmLocalPath);
-			//var scheme = FileBasedTranslationMemory.GetFileBasedTranslationMemoryScheme();
-			//var tm =  new FileBasedTranslationMemory(tmLocalPath);.
-			return true;
+			if (targetLanguages is null) return (false, null);
+
+			var tm = new FileBasedTranslationMemory(tmLocalPath);
+			var tmSupportedLanguages = tm.SupportedLanguageDirections;
+
+			foreach (var supportedLanguageDirection in tmSupportedLanguages)
+			{
+				var isTmSourceLanguageSupported =
+					sourceCultureInfo.Name.Equals(supportedLanguageDirection.SourceCultureName);
+				if (!isTmSourceLanguageSupported) return (false, null);
+
+				var correspondingTarget = targetLanguages.FirstOrDefault(t =>
+					t.CultureInfo.Name.Equals(supportedLanguageDirection.TargetCultureName));
+				if (correspondingTarget != null)
+				{
+					return (true, correspondingTarget);
+				}
+			}
+			return (false, null);
 		}
 
 		public void RefreshProjects()

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Sdl.Community.StarTransit.Shared.Models;
 
 namespace Sdl.Community.StarTransit.Model
 {
@@ -11,5 +9,6 @@ namespace Sdl.Community.StarTransit.Model
 		public string CustomerId { get; set; }
 		public string ProjectLocation { get; set; }
 		public DateTime? DueDate { get; set; }
+		public List<LanguagePair> TemplateLanguagePairDetails { get; set; }
 	}
 }
