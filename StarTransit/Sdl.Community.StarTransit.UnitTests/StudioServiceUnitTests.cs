@@ -6,6 +6,7 @@ using System.Linq;
 using NSubstitute;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
+using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Core.Globalization;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Xunit;
@@ -104,6 +105,30 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
+		[InlineData("TransitMultilingualTemplate.sdltpl", "de-DE", "en-GB,fr-FR")]
+		public void ReadTemplateData_TransitTemplate_GetCorrectTmOption(string templateName, string sourceLanguageCode,
+			string targetLanguageCodes)
+		{
+			var languagePair = new LanguagePair
+			{
+				SourceLanguage = new CultureInfo("de-DE"),
+				TargetLanguage = new CultureInfo("en-GB"),
+				CreateNewTm = true,
+				TemplatePenalty = 5
+			};
+			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
+			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
+
+			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, new CultureInfo(sourceLanguageCode), targetLanguages);
+
+			Assert.Single(templateInfo.LanguagePairs);
+			Assert.Equal(languagePair.SourceLanguage,templateInfo.LanguagePairs[0].SourceLanguage);
+			Assert.Equal(languagePair.TargetLanguage, templateInfo.LanguagePairs[0].TargetLanguage);
+			Assert.True(templateInfo.LanguagePairs[0].CreateNewTm);
+			Assert.Equal(5, templateInfo.LanguagePairs[0].TemplatePenalty);
+		}
+
+		[Theory]
 		[InlineData("Test Multilingual Package Trados Plugin.de-en.sdltm", "de-DE", "en-GB,fr-FR")]
 		public void IsTmCreatedFromPlugin_ReturnsTrue(string tmName, string sourceLanguageCode,
 			string targetLanguageCodes)
@@ -126,6 +151,17 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 			var (isCreatedFromPlugin, language) = _studioService.IsTmCreatedFromPlugin(tmName,
 				new CultureInfo(sourceLanguageCode), targetLanguages.ToArray());
+
+			Assert.False(isCreatedFromPlugin);
+			Assert.Null(language);
+		}
+
+		[Theory]
+		[InlineData("TestTransitTM.sdltm")]
+		public void IsTmCreatedFromPlugin_NoLanguages_ReturnsFalse(string tmName)
+		{
+
+			var (isCreatedFromPlugin, language) = _studioService.IsTmCreatedFromPlugin(tmName,null, null);
 
 			Assert.False(isCreatedFromPlugin);
 			Assert.Null(language);
@@ -157,6 +193,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			Assert.False(isSupported);
 			Assert.Null(language);
 		}
+
 		[Theory]
 		[InlineData("TestTransitTM.sdltm", "en-US", "en-GB,id-ID")]
 		public void TmSupportsAnyLanguageDirection_ReturnsTrue_CorrectTargetLanguage(string tmName, string packageSourceLanguageCode,
@@ -170,6 +207,17 @@ namespace Sdl.Community.StarTransit.UnitTests
 			Assert.True(isSupported);
 			Assert.NotNull(language);
 			Assert.Equal(targetLanguage, language);
+		}
+
+		[Theory]
+		[InlineData("TestTransitTM.sdltm")]
+		public void TmSupportsAnyLanguageDirection_NoLanguages_ReturnsNull(string tmName)
+		{
+			var uri = new Uri($"{Path.Combine(_testingFilesPath, tmName)}");
+
+			var (isSupported, language) = _studioService.TmSupportsAnyLanguageDirection(uri, null, null);
+			Assert.False(isSupported);
+			Assert.Null(language);
 		}
 
 		private Language[] GetStudioLanguages(string targetLanguageCodes)

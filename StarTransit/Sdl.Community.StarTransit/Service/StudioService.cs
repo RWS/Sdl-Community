@@ -105,7 +105,8 @@ namespace Sdl.Community.StarTransit.Service
 			var packageModel = new PackageModel
 			{
 				Location = templateOptions.ProjectLocation,
-				DueDate = templateOptions.DueDate
+				DueDate = templateOptions.DueDate,
+				LanguagePairs = templateOptions.TemplateLanguagePairDetails
 			};
 
 			if (!string.IsNullOrEmpty(templateOptions.CustomerId))
@@ -119,7 +120,7 @@ namespace Sdl.Community.StarTransit.Service
 		public (bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages)
 		{
-			if (targetLanguages is null) return (false, null);
+			if (sourceCultureInfo is null || targetLanguages is null) return (false, null);
 			foreach (var targetLanguage in targetLanguages)
 			{
 				return tmName.Contains(
@@ -128,16 +129,14 @@ namespace Sdl.Community.StarTransit.Service
 			return (false, null);
 		}
 
-		private TemplateOptions GetTemplateOptions(XmlDocument projectTemplateDocument, string settingsBundleGuid, CultureInfo sourceCultureInfo, Language[] targetLanguages)
+		private TemplateOptions GetTemplateOptions(XmlDocument projectTemplateDocument, string settingsBundleGuid,
+			CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
 			var projectOrigin = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
 				ProjectSettingsGroupId, ProjectOriginId);
 			if (string.IsNullOrEmpty(projectOrigin)) return null;
 
-			var templateOptions = new TemplateOptions
-			{
-				TemplateLanguagePairDetails = new List<LanguagePair>()
-			};
+			var templateOptions = new TemplateOptions {TemplateLanguagePairDetails = new List<LanguagePair>()};
 			var projectLocation = GetSettingsByGroupId(projectTemplateDocument, settingsBundleGuid,
 				ProjectTemplateSettingsGroupId, ProjectLocationId);
 
@@ -151,18 +150,15 @@ namespace Sdl.Community.StarTransit.Service
 				templateOptions.DueDate = selectedDueDate;
 			}
 
-			var tmTemplateDetails = GetCascadeEntryItems(projectTemplateDocument,sourceCultureInfo,targetLanguages);
-			if (tmTemplateDetails.Any())
+			var tmTemplateDetails = TmDetailsFromCascadeEntry(projectTemplateDocument, sourceCultureInfo, targetLanguages);
+			if (tmTemplateDetails != null)
 			{
 				foreach (var tmDetails in tmTemplateDetails)
 				{
-					if (tmDetails.TransitLanguagePairOptions != null)
-					{
-						templateOptions.TemplateLanguagePairDetails.Add(tmDetails.TransitLanguagePairOptions);
-					}
+					templateOptions.TemplateLanguagePairDetails.Add(tmDetails.TransitLanguagePairOptions);
 				}
-				//var languagePairsOptions = GetLanguagePairTmOptions(entryItems, sourceCultureInfo, targetLanguages);
 			}
+
 			templateOptions.ProjectLocation = projectLocation;
 			templateOptions.CustomerId = customerId;
 			return templateOptions;
@@ -176,8 +172,9 @@ namespace Sdl.Community.StarTransit.Service
 			return settingsNode?.InnerText;
 		}
 
-		private List<TemplateTmDetails> GetCascadeEntryItems(XmlDocument projectTemplateDocument, CultureInfo sourceCultureInfo, Language[] targetLanguages)
+		private List<TemplateTmDetails> TmDetailsFromCascadeEntry(XmlDocument projectTemplateDocument, CultureInfo sourceCultureInfo, Language[] targetLanguages)
 		{
+			if (sourceCultureInfo is null || targetLanguages is null) return null;
 			var cascadeEntries = projectTemplateDocument.SelectNodes("/ProjectTemplate/CascadeItem/CascadeEntryItem");
 			if (cascadeEntries is null) return null;
 
@@ -201,16 +198,27 @@ namespace Sdl.Community.StarTransit.Service
 							var uri = new Uri(providerAttribute.Value);
 							details.LocalPath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(uri);
 							details.Name = FileBasedTranslationMemory.GetFileBasedTranslationMemoryName(uri);
-							details.SourceLanguage = new Language(sourceCultureInfo.Name);
 							details.TransitLanguagePairOptions = GetLanguagePairTmOptions(details, sourceCultureInfo, targetLanguages);
 						}
 					}
 				}
-				tmDetails.Add(details);
+
+				if (details.TransitLanguagePairOptions != null)
+				{
+					tmDetails.Add(details);
+				}
 			}
 			return tmDetails;
 		}
 
+		/// <summary>
+		/// Create language pairs options based on the TM types found in template. This options will be later used in the UI to enable
+		/// following options from Penalty Page: "No tm", "Create new tm", "Choose existing tm"
+		/// </summary>
+		/// <param name="tmDetails">Path and name for tm found in Studio template</param>
+		/// <param name="sourceCultureInfo">Package source language</param>
+		/// <param name="targetLanguages">Package target languages</param>
+		/// <returns>true and target language supported</returns>
 		private LanguagePair GetLanguagePairTmOptions(TemplateTmDetails tmDetails, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages)
 		{
@@ -224,7 +232,7 @@ namespace Sdl.Community.StarTransit.Service
 				return new LanguagePair
 				{
 					SourceLanguage = sourceCultureInfo,
-					TargetLanguage = new CultureInfo(language.DisplayName),
+					TargetLanguage = new CultureInfo(language.CultureInfo.Name),
 					CreateNewTm = true,
 					TemplatePenalty = tmDetails.Penalty
 				};
@@ -257,7 +265,7 @@ namespace Sdl.Community.StarTransit.Service
 		public (bool, Language) TmSupportsAnyLanguageDirection(Uri tmLocalPath, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages)
 		{
-			if (targetLanguages is null) return (false, null);
+			if (sourceCultureInfo is null || targetLanguages is null) return (false, null);
 
 			var tm = new FileBasedTranslationMemory(tmLocalPath);
 			var tmSupportedLanguages = tm.SupportedLanguageDirections;
