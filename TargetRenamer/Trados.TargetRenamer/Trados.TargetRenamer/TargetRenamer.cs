@@ -57,7 +57,7 @@ namespace Trados.TargetRenamer
 					$"{PluginResources.TargetRenamer_Name}_{languageDirection.SourceLanguage.IsoAbbreviation}_{languageDirection.TargetLanguage.IsoAbbreviation}";
 
 				var projectFiles = _projectFiles
-					.Where(x => x.GetLanguageDirection().TargetLanguage == languageDirection.TargetLanguage).ToList();
+					.Where(x => Equals(x.GetLanguageDirection().TargetLanguage, languageDirection.TargetLanguage)).ToList();
 				_reportCreator.CreateReport(Project, projectFiles, _renamedFiles, _settings, languageDirection);
 
 				CreateReport(reportName, PluginResources.ReportDescription, _reportCreator.ReportFile, languageDirection);
@@ -71,7 +71,7 @@ namespace Trados.TargetRenamer
 			var fileIds = new List<Guid>() { projectFile.Id };
 			var task = Project.RunAutomaticTask(fileIds.ToArray(), AutomaticTaskTemplateIds.GenerateTargetTranslations);
 			if (task == null || task.Status != TaskStatus.Completed)
-				throw new Exception(task?.Messages?.FirstOrDefault()?.Message ?? "Task has not been run correctly.");
+				_logger.Error($"{task?.Messages?.FirstOrDefault()?.Message}\n The task has not been run correctly.");
 
 			var targetLanguage = new CultureInfo(projectFile.GetLanguageDirection().TargetLanguage.IsoAbbreviation);
 			var files = Project.GetTargetLanguageFiles(projectFile.GetLanguageDirection().TargetLanguage);
@@ -95,7 +95,7 @@ namespace Trados.TargetRenamer
 					if (!Directory.Exists(_settings.CustomLocation))
 						Directory.CreateDirectory(_settings.CustomLocation ??
 												  throw new InvalidOperationException("Invalid file path!"));
-					newFileName = Path.Combine(_settings.CustomLocation, fileName);
+					newFileName = Path.Combine(_settings.CustomLocation, targetLanguage.Name, projectFile.Folder, fileName);
 				}
 				else
 				{
@@ -109,7 +109,14 @@ namespace Trados.TargetRenamer
 				if (_settings.OverwriteTargetFiles)
 				{
 					// Ensure that the file does not exist
-					if (File.Exists(newFileName)) File.Delete(newFileName);
+					if (File.Exists(newFileName))
+					{
+						File.Delete(newFileName);
+					}
+
+					Directory.CreateDirectory(Path.Combine(_settings.CustomLocation, targetLanguage.Name,
+							projectFile.Folder));
+					
 					File.Move(file.LocalFilePath, newFileName);
 				}
 				else

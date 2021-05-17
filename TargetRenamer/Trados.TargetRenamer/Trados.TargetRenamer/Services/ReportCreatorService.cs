@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using NLog;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Trados.TargetRenamer.BatchTask;
@@ -14,6 +15,7 @@ namespace Trados.TargetRenamer.Services
 	public class ReportCreatorService
 	{
 		public string ReportFile;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void CreateReport(
 			IProject project,
@@ -36,7 +38,7 @@ namespace Trados.TargetRenamer.Services
 
 				WriteReportTaskInfo(project, location, languageCode, writer, renamerSettings);
 
-				WriteReportFilesInfo(projectFiles, renamedFiles, writer);
+				WriteReportFilesInfo(projectFiles, renamedFiles, renamerSettings, writer);
 
 				writer.WriteEndElement(); // task end tag
 			}
@@ -50,11 +52,19 @@ namespace Trados.TargetRenamer.Services
 
 			ReportFile = reportData;
 
-			if (File.Exists(tempFile)) File.Delete(tempFile);
+			try
+			{
+				if (File.Exists(tempFile)) File.Delete(tempFile);
+			}
+			catch (Exception exception)
+			{
+				_logger.Error($"{exception.Message}\n {exception.StackTrace}");
+			}
 		}
 
 		private static void WriteReportFilesInfo(List<ProjectFile> projectFiles,
 			Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
+			TargetRenamerSettings renamerSettings,
 			XmlWriter writer)
 		{
 			writer.WriteStartElement("files");
@@ -62,13 +72,16 @@ namespace Trados.TargetRenamer.Services
 			{
 				writer.WriteStartElement("file");
 
-				var File = renamedFiles.Keys.SingleOrDefault(x => x.Item1.Id == projectFile.Id);
-				renamedFiles.TryGetValue(File, out var renamedFileNames);
+				var file = renamedFiles.Keys.SingleOrDefault(x => x.Item1.Id == projectFile.Id);
+				renamedFiles.TryGetValue(file, out var renamedFileNames);
 				writer.WriteAttributeString("name", projectFile.Name);
 				writer.WriteAttributeString("originalName", renamedFileNames.Item1);
 				writer.WriteAttributeString("newName", renamedFileNames.Item2);
-				writer.WriteAttributeString("location", File.Item1.Folder);
-				writer.WriteAttributeString("newLocation", projectFile.Folder);
+				writer.WriteAttributeString("location", file.Item1.Folder);
+				writer.WriteAttributeString("newLocation",
+					renamerSettings.UseCustomLocation
+						? Path.Combine(renamerSettings.CustomLocation, projectFile.Folder)
+						: Path.Combine(file.Item2.TargetLanguage.ToString(),projectFile.Folder));
 				writer.WriteEndElement(); // file end tag
 			}
 
@@ -97,7 +110,7 @@ namespace Trados.TargetRenamer.Services
 		{
 			writer.WriteStartElement("settings");
 			writer.WriteAttributeString("overwriteTargetFiles", settings.OverwriteTargetFiles.ToString());
-			writer.WriteAttributeString("path", settings.UseCustomLocation ? settings.CustomLocation : location);
+			writer.WriteAttributeString("path", location);
 			writer.WriteAttributeString("delimiter", settings.Delimiter);
 			writer.WriteAttributeString("targetLanguage", settings.AppendTargetLanguage.ToString());
 			writer.WriteAttributeString("shortLocales", settings.UseShortLocales.ToString());

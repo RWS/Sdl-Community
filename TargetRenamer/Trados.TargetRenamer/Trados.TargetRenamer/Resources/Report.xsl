@@ -89,6 +89,15 @@
 					padding: 5px;
 					}
 
+					.ReportTable td.HeaderText {
+					text-align: left;
+					background-color: #F8FAFA;
+					font-size: 11px;
+					line-height: 20px;
+					padding: 5px;
+					color: #0A1E2C;
+					}
+
 					.ReportTable td.File {
 					color: #0A1E2C;
 					text-align: left;
@@ -482,21 +491,20 @@
 						<xsl:sort/>
 						<xsl:variable name ="Location" select="."/>
 						<tr>
-							<td>
-								Old location:
+							<td class="HeaderText">
+								Location:
 								<xsl:value-of select="."/>
 							</td>
-							<td>
-								New location:
+							<td class="HeaderText">
 								<xsl:value-of select="../@newLocation"/>
 							</td>
 						</tr>
 						<xsl:for-each select="//files/file[@location = current()]">
 							<tr>
-								<td>
+								<td class="TextIndented">
 									<xsl:value-of select="@originalName" />
 								</td>
-								<td>
+								<td class="TextIndented">
 									<xsl:value-of select="@newName" />
 								</td>
 							</tr>
