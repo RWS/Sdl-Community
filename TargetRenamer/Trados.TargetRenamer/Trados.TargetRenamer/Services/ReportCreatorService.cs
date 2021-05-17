@@ -13,7 +13,7 @@ namespace Trados.TargetRenamer.Services
 {
 	public class ReportCreatorService
 	{
-		public string reportFile;
+		public string ReportFile;
 
 		public void CreateReport(
 			IProject project,
@@ -32,7 +32,7 @@ namespace Trados.TargetRenamer.Services
 				writer.WriteAttributeString("name", PluginResources.TargetRenamer_Name);
 				writer.WriteAttributeString("created",
 					project.GetProjectInfo().CreatedAt.ToString("MM/dd/yyyy hh:mm tt"));
-				var location = Path.GetDirectoryName(projectFiles[0].LocalFilePath);
+				var location = project.GetProjectInfo().LocalProjectFolder;
 
 				WriteReportTaskInfo(project, location, languageCode, writer, renamerSettings);
 
@@ -48,7 +48,7 @@ namespace Trados.TargetRenamer.Services
 				r.Close();
 			}
 
-			reportFile = reportData;
+			ReportFile = reportData;
 
 			if (File.Exists(tempFile)) File.Delete(tempFile);
 		}
@@ -67,6 +67,8 @@ namespace Trados.TargetRenamer.Services
 				writer.WriteAttributeString("name", projectFile.Name);
 				writer.WriteAttributeString("originalName", renamedFileNames.Item1);
 				writer.WriteAttributeString("newName", renamedFileNames.Item2);
+				writer.WriteAttributeString("location", File.Item1.Folder);
+				writer.WriteAttributeString("newLocation", projectFile.Folder);
 				writer.WriteEndElement(); // file end tag
 			}
 
