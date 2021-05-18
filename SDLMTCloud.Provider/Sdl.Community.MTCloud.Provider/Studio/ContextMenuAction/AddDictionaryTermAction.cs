@@ -10,8 +10,6 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 {
-
-
 	[Action("Add Dictionary Term",
 		Name = "Add Term to MT Cloud Dictionary",
 		Icon = "add_dictionary",
@@ -32,6 +30,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderAdded>(_ => EnableAction(new TranslationProviderStatusChanged(null, true)));
 
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(EnableAction);
+		}
+
+		protected override async void Execute()
+		{
+			var selection = MtCloudApplicationInitializer.EditorController.ActiveDocument.Selection;
+			var term = new Term
+			{
+				Source = selection.Source.ToString(),
+				Target = selection.Target.ToString()
+			};
+
+			await MtCloudApplicationInitializer.TranslationService.AddTermToDictionary(term);
 		}
 
 		private void EnableAction(TranslationProviderStatusChanged tpStatus = null)
@@ -57,18 +67,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 			}
 
 			Enabled = hasSdlMtAdded ?? false;
-		}
-
-		protected override async void Execute()
-		{
-			var selection = MtCloudApplicationInitializer.EditorController.ActiveDocument.Selection;
-			var term = new Term
-			{
-				Source = selection.Source.ToString(),
-				Target = selection.Target.ToString()
-			};
-
-			await MtCloudApplicationInitializer.TranslationService.AddTermToDictionary(term);
 		}
 	}
 }
