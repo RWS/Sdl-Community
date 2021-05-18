@@ -40,8 +40,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// Get terms from IATE database.
 		/// </summary>
 		/// <param name="jsonBody">Values in the jsonBody of the requests</param>
+		/// <param name="searchDepth"></param>
 		/// <returns>terms</returns>
-		public List<ISearchResult> GetTerms(string jsonBody, int maxEntries)
+		public List<ISearchResult> GetTerms(string jsonBody, int searchDepth)
 		{
 			if (!_connectionProvider.EnsureConnection())
 			{
@@ -57,7 +58,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Post,
-				RequestUri = new Uri(ApiUrls.SearchUri("true", maxEntries)),
+				RequestUri = new Uri(ApiUrls.SearchUri("true", searchDepth)),
 				Content = content
 			};
 

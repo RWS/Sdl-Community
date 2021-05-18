@@ -121,13 +121,13 @@
 					</DataGrid.Columns>
 				</DataGrid>
 
-				<CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10,10,0,0"
+				<CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10,10,0,15"
 				          Style="{DynamicResource Sdl.Checkbox.GenericStyle}" 
 				          Content="{x:Static resx:PluginResources.Search_Subdomains}" 
 				          ToolTip="{x:Static resx:PluginResources.Subdomains_Tooltip}"
 				          IsChecked="{Binding SearchInSubdomains}"/>
 
-				<StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5,0,10" >
+				<!--<StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5,0,10" >
 					<TextBlock VerticalAlignment="Center" Text="{x:Static resx:PluginResources.Label_MaximumEntries}" HorizontalAlignment="Left"/>
 					<controls:NumericUpDown Style="{StaticResource NumericSpinnerStyle}"
 					                        Margin="5,0,5,0"
@@ -139,7 +139,7 @@
 					            Foreground="DimGray"
 					            Text="[100...1000]" 
 					            HorizontalAlignment="Left"/>
-				</StackPanel>
+				</StackPanel>-->
 
 				<DockPanel Grid.Row="6" Grid.Column="0">
 					<Button  HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"

@@ -114,7 +114,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			}
 
 			_canUseCache = true;
-			var results = _searchService.GetTerms(queryString, ProviderSettings.MaxEntries);
+			
+			var config = _projectsController?.CurrentProject.GetTermbaseConfiguration();
+			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions.SearchDepth ?? 500);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);

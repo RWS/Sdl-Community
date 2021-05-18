@@ -284,7 +284,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			ResetTypes();
 			
 			SearchInSubdomains = false;
-			MaxEntries = ProviderSettings.DefaultMaxEntries;
+			//MaxEntries = ProviderSettings.DefaultMaxEntries;
 		}
 
 		private void ResetTypes()
@@ -320,7 +320,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 
 			ProviderSettings.SearchInSubdomains = SearchInSubdomains;
-			ProviderSettings.MaxEntries = MaxEntries;
+			//ProviderSettings.MaxEntries = MaxEntries;
 
 			DialogResult = true;
 
@@ -408,7 +408,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 
 			SearchInSubdomains = providerSettings.SearchInSubdomains;
-			MaxEntries = providerSettings.MaxEntries;
+			//MaxEntries = providerSettings.MaxEntries;
 		}
 
 		private bool AreAllDomainsSelected()
