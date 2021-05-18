@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -22,8 +23,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private readonly IWizardModel _wizardModel;
-		private readonly IFolderDialogService _dialogService;
 		private readonly IStudioService _studioService;
+		private readonly IFolderDialogService _dialogService;
 		private ICommand _clearCommand;
 		private ICommand _browseCommand;
 		private ICommand _clearDueDateCommand;
@@ -52,16 +53,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 			PropertyChanged += PackageDetailsViewModelChanged;
 		}
 
-		private void PackageDetailsViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void PackageDetailsViewModelChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (PackageModel.Result != null)
-			{
-				PackageModel.Result.ProjectTemplate = SelectedProjectTemplate;
-				PackageModel.Result.Customer = SelectedCustomer;
-				PackageModel.Result.DueDate = DueDate;
-				PackageModel.Result.Location = StudioProjectLocation;
-				//ReadProjectTemplateInfo(SelectedProjectTemplate);
-			}
+			if (PackageModel.Result == null) return;
+			PackageModel.Result.ProjectTemplate = SelectedProjectTemplate;
+			PackageModel.Result.Customer = SelectedCustomer;
+			PackageModel.Result.DueDate = DueDate;
+			PackageModel.Result.Location = StudioProjectLocation;
 		}
 
 		public AsyncTaskWatcherService<PackageModel> PackageModel
@@ -121,7 +119,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			set
 			{
 				_wizardModel.SelectedTemplate = value;
-				//ReadProjectTemplateInfo(value);
+				ReadProjectTemplateInfo(value);
 				OnPropertyChanged(nameof(SelectedProjectTemplate));
 			}
 		}
@@ -262,20 +260,21 @@ namespace Sdl.Community.StarTransit.ViewModel
 				IsValid = false;
 				return;
 			}
-			if (!Directory.Exists(location))
-			{
-				ErrorMessage = PluginResources.PackageDetails_InvalidPath_Error;
-				IsValid = false;
-				return;
-			}
 
-			var isEmptyFolder = !Directory
-				.GetFiles(location, "*.*", SearchOption.AllDirectories)
-				.Any();
-			if (!isEmptyFolder)
+			if (Directory.Exists(location))
 			{
-				ErrorMessage = PluginResources.EmptyFolder_Error;
-				IsValid = false;
+				var isEmptyFolder = !Directory
+					.GetFiles(location, "*.*", SearchOption.AllDirectories)
+					.Any();
+				if (!isEmptyFolder)
+				{
+					ErrorMessage = PluginResources.EmptyFolder_Error;
+					IsValid = false;
+				}
+				else
+				{
+					IsValid = true;
+				}
 			}
 			else
 			{
@@ -290,9 +289,82 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private void ReadProjectTemplateInfo(ProjectTemplateInfo selectedProjectTemplate)
 		{
-			if (PackageModel.Result != null)
+			if (PackageModel.Result == null) return;
+
+			//TODO:Make it async
+			var templatePackageModel = _studioService.GetModelBasedOnStudioTemplate(selectedProjectTemplate.Uri.LocalPath,
+				PackageModel.Result.SourceLanguage, PackageModel.Result.TargetLanguages);
+
+			UpdateUiBasedOnTemplate(templatePackageModel);
+		}
+
+		private void UpdateUiBasedOnTemplate(PackageModel templatePackageModel)
+		{
+			if (templatePackageModel is null)
 			{
-				//var packageModel = _studioService.GetModelBasedOnStudioTemplate(selectedProjectTemplate, PackageModel.Result);
+				ClearUi();
+			}
+			else
+			{
+				StudioProjectLocation = Path.Combine(templatePackageModel.Location, PackageModel.Result.Name);
+				if (templatePackageModel.Customer != null)
+				{
+					var selectedCustomer =
+						Customers.Result.FirstOrDefault(c => c.Name != null && c.Name.Equals(templatePackageModel.Customer.Name));
+					if (selectedCustomer != null)
+					{
+						SelectedCustomer = selectedCustomer;
+					}
+				}
+
+				if (templatePackageModel.DueDate != null)
+				{
+					DueDate = templatePackageModel.DueDate;
+				}
+
+				if (templatePackageModel.LanguagePairs == null) return;
+
+				foreach (var languagePairOption in templatePackageModel.LanguagePairs)
+				{
+					var selectedLp = PackageModel.Result.LanguagePairs.FirstOrDefault(t =>
+						t.TargetLanguage.Name.Equals(languagePairOption.TargetLanguage.Name));
+					if (selectedLp == null) continue;
+					if (languagePairOption.CreateNewTm)
+					{
+						selectedLp.CreateNewTm = true;
+						selectedLp.NoTm = false;
+						foreach (var tmMetadata in selectedLp.StarTranslationMemoryMetadatas)
+						{
+							tmMetadata.TmPenalty = languagePairOption.TemplatePenalty;
+							tmMetadata.IsChecked = true;
+						}
+					}
+
+					if (!languagePairOption.ChoseExistingTm) continue;
+					selectedLp.TmName = languagePairOption.TmName;
+					selectedLp.TmPath = languagePairOption.TmPath;
+					selectedLp.NoTm = false;
+				}
+			}
+		}
+
+		private void ClearUi()
+		{
+			StudioProjectLocation = string.Empty;
+			SelectedCustomer = Customers.Result[0];
+			DueDate = null;
+			foreach (var languagePair in PackageModel.Result.LanguagePairs)
+			{
+				languagePair.NoTm = true;
+				languagePair.ChoseExistingTm = false;
+				languagePair.CreateNewTm = false;
+				foreach (var tmMetadata in languagePair.StarTranslationMemoryMetadatas)
+				{
+					tmMetadata.TmPenalty = 0;
+					tmMetadata.IsChecked = false;
+				}
+				languagePair.TmPath = string.Empty;
+				languagePair.TmName = string.Empty;
 			}
 		}
 

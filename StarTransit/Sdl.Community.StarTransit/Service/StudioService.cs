@@ -201,7 +201,7 @@ namespace Sdl.Community.StarTransit.Service
 							if (!providerAttribute.Name.Equals("Uri")) continue;
 							var uri = new Uri(providerAttribute.Value);
 							details.LocalPath = FileBasedTranslationMemory.GetFileBasedTranslationMemoryFilePath(uri);
-							details.Name = FileBasedTranslationMemory.GetFileBasedTranslationMemoryName(uri);
+							details.Name = Path.GetFileNameWithoutExtension(details.LocalPath);
 							details.TransitLanguagePairOptions = GetLanguagePairTmOptions(details, sourceCultureInfo, targetLanguages);
 						}
 					}

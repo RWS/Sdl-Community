@@ -189,6 +189,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private void LanguagePairsBrowseTm_EventRaised()
 		{
+			if (SelectedLanguagePair is null) return;
 			if (SelectedLanguagePair.ChoseExistingTm)
 			{
 				SelectTm();
@@ -203,6 +204,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void RemoveTm()
 		{
 			ErrorMessage = string.Empty;
+			if (SelectedLanguagePair is null) return;
 			SelectedLanguagePair.TmName = string.Empty;
 			SelectedLanguagePair.TmPath = string.Empty;
 			SelectedLanguagePair.NoTm = true;
@@ -249,6 +251,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private bool TmLanguageMatches(string selectedTmPath)
 		{
+			if (SelectedLanguagePair is null) return false;
+
 			var tmInfo = new FileBasedTranslationMemory(selectedTmPath);
 			var tmLanguageDirection = tmInfo.LanguageDirection;
 			return SelectedLanguagePair.SourceLanguage.Name.Equals(tmLanguageDirection.SourceLanguage.Name) && SelectedLanguagePair.TargetLanguage.Name.Equals(tmLanguageDirection.TargetLanguage.Name);

@@ -128,7 +128,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private IProject PrepareStudioProject(PackageModel transitPackage)
 		{
 			var target = _fileService.GetStudioTargetLanguages(transitPackage.LanguagePairs);
-
+			Directory.CreateDirectory(transitPackage.Location); //if the location is set using project template feature this folder does not exist 
 			var projectInfo = new ProjectInfo
 			{
 				Name = transitPackage.Name,
