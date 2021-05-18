@@ -8,8 +8,9 @@
         xmlns:helpers="clr-namespace:Sdl.Community.IATETerminologyProvider.Helpers"
 		xmlns:viewModel="clr-namespace:Sdl.Community.IATETerminologyProvider.ViewModel"
 		xmlns:styles="clr-namespace:Sdl.Community.IATETerminologyProvider.Styles"
-        xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"  
-		Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
+        xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:controls="clr-namespace:Sdl.Community.IATETerminologyProvider.Controls"
+        Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
 		Title="IATE Real-time Terminology"
 		ResizeMode="CanResizeWithGrip"
 		WindowStartupLocation="CenterScreen"
@@ -23,6 +24,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="../Styles/ProgressRingAsteriskStyle.xaml" />
+				<ResourceDictionary Source="../Styles/NumberUpDown.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -34,35 +36,35 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition/>
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
-				<styles:WindowsControl  Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top"/>
-				<CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10"
-			          Style="{DynamicResource Sdl.Checkbox.GenericStyle}" 
-					  Content="{x:Static resx:PluginResources.Search_Subdomains}" 
-					  ToolTip="{x:Static resx:PluginResources.Subdomains_Tooltip}"
-					  IsChecked="{Binding SearchInSubdomains}"/>
+				<styles:WindowsControl  Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Margin="0,0,0,5"/>
 
-				<TextBlock Grid.Row="1" Grid.Column="0" Margin="10" 
-					   Style="{DynamicResource Sdl.TextBlock.TitleStyle}" Text="{x:Static resx:PluginResources.Settings_Descr}" FontSize="15" />
+				<!--<TextBlock Grid.Row="1" Grid.Column="0" Margin="5" 
+				           Style="{DynamicResource Sdl.TextBlock.TitleStyle}" Text="{x:Static resx:PluginResources.Settings_Descr}" FontSize="15" />-->
 
-				<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="3" Grid.Column="0" Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>
-				<DataGrid Grid.Row="4" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False" 
-                  ItemsSource="{Binding Domains,UpdateSourceTrigger=PropertyChanged}"   
-		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
-                  SelectionMode ="Extended"
-                  SelectedValue="{Binding SelectedDomain,UpdateSourceTrigger=PropertyChanged}"
-                  SelectionUnit="FullRow"
-		          GridLinesVisibility="None"
-				  AlternationCount="2"
-				  IsReadOnly="True"
-                  CanUserAddRows="False">
+				<TextBlock Foreground="DimGray" Grid.Row="2" Grid.Column="0" 
+				           Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>
+				<TextBlock Foreground="DimGray" Grid.Row="2" Grid.Column="1" 
+				           Margin="10,5,0,0" Text="{x:Static resx:PluginResources.TermType_Description}"/>
+				
+				<DataGrid Grid.Row="3" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False" 
+				          ItemsSource="{Binding Domains,UpdateSourceTrigger=PropertyChanged}"   
+				          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
+				          SelectionMode ="Extended"
+				          SelectedValue="{Binding SelectedDomain,UpdateSourceTrigger=PropertyChanged}"
+				          SelectionUnit="FullRow"
+				          GridLinesVisibility="None"
+				          AlternationCount="2"
+				          IsReadOnly="True"
+				          CanUserAddRows="False">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Width="50">
 							<DataGridTemplateColumn.Header>
@@ -87,8 +89,7 @@
 					</DataGrid.Columns>
 				</DataGrid>
 
-				<TextBlock Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Grid.Row="3" Margin="10,5,0,0" Grid.Column="1" Text="{x:Static resx:PluginResources.TermType_Description}"/>
-				<DataGrid Grid.Row="4" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False" 
+				<DataGrid Grid.Row="3" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False" 
                   ItemsSource="{Binding TermTypes,UpdateSourceTrigger=PropertyChanged}"
 		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
                   SelectionMode ="Extended"
@@ -120,27 +121,46 @@
 					</DataGrid.Columns>
 				</DataGrid>
 
-				<DockPanel Grid.Row="5" Grid.Column="0">
+				<CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10,10,0,0"
+				          Style="{DynamicResource Sdl.Checkbox.GenericStyle}" 
+				          Content="{x:Static resx:PluginResources.Search_Subdomains}" 
+				          ToolTip="{x:Static resx:PluginResources.Subdomains_Tooltip}"
+				          IsChecked="{Binding SearchInSubdomains}"/>
+
+				<StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5,0,10" >
+					<TextBlock VerticalAlignment="Center" Text="{x:Static resx:PluginResources.Label_MaximumEntries}" HorizontalAlignment="Left"/>
+					<controls:NumericUpDown Style="{StaticResource NumericSpinnerStyle}"
+					                        Margin="5,0,5,0"
+					                        Maximum="1000"
+					                        Minimum="100"
+					                        Value="{Binding MaxEntries, 
+											Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					<TextBlock  VerticalAlignment="Center" Margin="0" 
+					            Foreground="DimGray"
+					            Text="[100...1000]" 
+					            HorizontalAlignment="Left"/>
+				</StackPanel>
+
+				<DockPanel Grid.Row="6" Grid.Column="0">
 					<Button  HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
 				        Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default"/>
 					<Button HorizontalAlignment="Left" Margin="10" Cursor="Hand" VerticalAlignment="Center" Command="{Binding ClearCache}"
 				        Style="{DynamicResource Sdl.Button.HyperLinkStyle}" MaxWidth="150" Content="{x:Static resx:PluginResources.ClearCache}"/>
 				</DockPanel>
 
-				<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.1,0,0" BorderBrush="#ABB0B3">
-
+				<Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.2,0,0" BorderBrush="#ABB0B3">
 					<DockPanel>
-						<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
+						<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
 					         ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
 					         IsCancel="True"
 					         Cursor="Hand"
-					         Margin="10"
+					         Margin="5,10,10,10"
 					         HorizontalAlignment="Right"
 					         Content="Cancel">
 						</Button>
 						<Button  Style="{DynamicResource Sdl.Button.PrimaryStyle}" 
 					         Cursor="Hand" IsDefault="True"
-					         Margin="10" DockPanel.Dock="Right"
+					         Margin="10,10,5,10" DockPanel.Dock="Right"
 					         Command="{Binding SaveSettingsCommand}"
 							 helpers:CloseOnClickBehaviour.IsEnabled="True"
 					         HorizontalAlignment="Right"

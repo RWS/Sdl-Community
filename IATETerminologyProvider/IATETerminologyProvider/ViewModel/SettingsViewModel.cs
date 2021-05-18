@@ -19,6 +19,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly InventoriesProvider _inventoriesProvider;
+		private readonly ICacheProvider _cacheService;
 		private readonly IMessageBoxService _messageBoxService;
 		
 		private ICommand _saveSettingsCommand;
@@ -29,18 +30,20 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
+		private int _maxEntries;
 		private bool _dialogResult;
 		private bool _searchInSubdomains;
 		private bool _isLoading;
 		private bool _isEnabled;
 
 		public SettingsViewModel(SettingsModel settings, InventoriesProvider inventoriesProvider,
-			IMessageBoxService messageBocBoxService)
+			ICacheProvider cacheService, IMessageBoxService messageBocBoxService)
 		{
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
 
 			_inventoriesProvider = inventoriesProvider;
+			_cacheService = cacheService;
 			_messageBoxService = messageBocBoxService;
 
 			ProviderSettings = new SettingsModel
@@ -84,6 +87,21 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
+		public int MaxEntries
+		{
+			get => _maxEntries;
+			set
+			{
+				if (_maxEntries == value)
+				{
+					return;
+				}
+
+				_maxEntries = value;
+				OnPropertyChanged(nameof(MaxEntries));
+			}
+		}
+		
 		public DomainModel SelectedDomain
 		{
 			get => _selectedDomain;
@@ -258,14 +276,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				return;
 			}
 
-			var activeProjectName = Utils.GetCurrentProjectName();
-			if (string.IsNullOrEmpty(activeProjectName))
-			{
-				return;
-			}
-
-			var cacheService = new CacheService(activeProjectName);
-			Task.Run(async () => await cacheService.ClearCachedResults());
+			_cacheService?.ClearCachedResults();
 		}
 
 		private void Reset()
@@ -274,6 +285,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			ResetTypes();
 			
 			SearchInSubdomains = false;
+			MaxEntries = ProviderSettings.DefaultMaxEntries;
 		}
 
 		private void ResetTypes()
@@ -309,6 +321,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 
 			ProviderSettings.SearchInSubdomains = SearchInSubdomains;
+			ProviderSettings.MaxEntries = MaxEntries;
 
 			DialogResult = true;
 
@@ -396,6 +409,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 
 			SearchInSubdomains = providerSettings.SearchInSubdomains;
+			MaxEntries = providerSettings.MaxEntries;
 		}
 
 		private bool AreAllDomainsSelected()

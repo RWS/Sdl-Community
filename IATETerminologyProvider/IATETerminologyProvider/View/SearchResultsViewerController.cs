@@ -15,6 +15,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 	public class SearchResultsViewerController : AbstractViewPartController
 	{
 		private readonly SearchResultsControl _control = new SearchResultsControl();
+		
 		protected override void Initialize()
 		{
 		}

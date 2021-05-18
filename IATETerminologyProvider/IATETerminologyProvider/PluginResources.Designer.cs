@@ -145,6 +145,15 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum number of term entries:.
+        /// </summary>
+        public static string Label_MaximumEntries {
+            get {
+                return ResourceManager.GetString("Label_MaximumEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.IATETerminologyProvider.
         /// </summary>
         public static string Plugin_Name {
