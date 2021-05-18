@@ -41,7 +41,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// </summary>
 		/// <param name="jsonBody">Values in the jsonBody of the requests</param>
 		/// <returns>terms</returns>
-		public List<ISearchResult> GetTerms(string jsonBody)
+		public List<ISearchResult> GetTerms(string jsonBody, int maxEntries)
 		{
 			if (!_connectionProvider.EnsureConnection())
 			{
@@ -57,7 +57,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Post,
-				RequestUri = new Uri(ApiUrls.SearchUri("true", "500")),
+				RequestUri = new Uri(ApiUrls.SearchUri("true", maxEntries)),
 				Content = content
 			};
 

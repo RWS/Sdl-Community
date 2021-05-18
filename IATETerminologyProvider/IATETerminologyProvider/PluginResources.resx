@@ -184,4 +184,7 @@
   <data name="ClearConfirmation" xml:space="preserve">
     <value>Are you sure you want to clear local cache?</value>
   </data>
+  <data name="Label_MaximumEntries" xml:space="preserve">
+    <value>Maximum number of term entries:</value>
+  </data>
 </root>

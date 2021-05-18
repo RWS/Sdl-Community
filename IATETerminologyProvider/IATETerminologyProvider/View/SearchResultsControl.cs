@@ -3,7 +3,7 @@ using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.IATETerminologyProvider.View
 {
-	public partial class SearchResultsControl : UserControl,IUIControl
+	public partial class SearchResultsControl : UserControl, IUIControl
 	{
 		public SearchResultsControl()
 		{

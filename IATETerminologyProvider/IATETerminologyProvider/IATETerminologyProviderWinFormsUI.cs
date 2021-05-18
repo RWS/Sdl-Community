@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Community.IATETerminologyProvider.ViewModel;
@@ -25,7 +26,10 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			if (IATEApplication.ConnectionProvider.EnsureConnection())
 			{
-				_settingsViewModel = new SettingsViewModel(null, IATEApplication.InventoriesProvider, messageBoxService);
+				var sqlDatabaseProvider = new SqliteDatabaseProvider(new PathInfo());
+				var cacheProvider = new CacheProvider(sqlDatabaseProvider);
+
+				_settingsViewModel = new SettingsViewModel(null, IATEApplication.InventoriesProvider, cacheProvider, messageBoxService);
 				_settingsWindow = new SettingsWindow { DataContext = _settingsViewModel };
 
 				_settingsWindow.ShowDialog();
@@ -35,7 +39,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 
 				var settings = _settingsViewModel.ProviderSettings;
-				var provider = new IATETerminologyProvider(settings, IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider);
+				var provider = new IATETerminologyProvider(settings, IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider);
 
 				return new ITerminologyProvider[] { provider };
 			}
@@ -64,7 +68,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var messageBoxService = new MessageBoxService();
 
-			_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, messageBoxService);
+			_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, provider.CacheProvider, messageBoxService);
 			_settingsWindow = new SettingsWindow
 			{
 				DataContext = _settingsViewModel

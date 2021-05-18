@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
@@ -19,21 +21,25 @@ namespace Sdl.Community.IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly ProjectsController _projectsController;
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private ProjectsController _projectsController;
+		private bool _canUseCache;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public SettingsModel ProviderSettings { get; set; }
 
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider)
+			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
+			_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
+
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
 			InventoriesProvider = inventoriesProvider;
+			CacheProvider = cacheProvider;
 
 			Task.Run(async () => await Setup(ProviderSettings));
 		}
@@ -51,6 +57,8 @@ namespace Sdl.Community.IATETerminologyProvider
 		public ConnectionProvider ConnectionProvider { get; private set; }
 
 		public InventoriesProvider InventoriesProvider { get; private set; }
+
+		public ICacheProvider CacheProvider { get; private set; }
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
 
@@ -79,35 +87,31 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			_entryModels.Clear();
+			ClearEntries();
 			_logger.Info("--> Try searching for segment");
-			
-			var bodyModel = GetApiRequestBodyValues(source, target, text);
-			var modelString = JsonConvert.SerializeObject(bodyModel);
-			var activeProjectName = Utils.GetCurrentProjectName();
-			CacheService cacheService = null;
 
-			if (!string.IsNullOrEmpty(activeProjectName))
-			{
-				cacheService = new CacheService(activeProjectName);
-			}
+			var jsonBody = GetApiRequestBodyValues(source, target, text);
+			var queryString = JsonConvert.SerializeObject(jsonBody);
+			var canConnect = CacheProvider?.Connect(_projectsController?.CurrentProject);
 
-			if (cacheService != null)
+			if (canConnect != null && (bool)canConnect && _canUseCache)
 			{
 				_logger.Info("--> Try to get cache results");
 
-				var cachedResults = Task.Run(async () => await cacheService.GetCachedResults(text, target.Name, modelString)).Result;
+				var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
 				if (cachedResults != null && cachedResults.Count > 0)
 				{
 					CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
-					_logger.Info("--> Cache results found");
 
-					SubscribeToEntriesChangedEvent(text, source, target);
+					_logger.Info("--> Cache results found");
+					OnTermEntriesChanged(text, source, target);
+
 					return cachedResults;
 				}
 			}
 
-			var results = _searchService.GetTerms(modelString);
+			_canUseCache = true;
+			var results = _searchService.GetTerms(queryString, ProviderSettings.MaxEntries);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -117,37 +121,23 @@ namespace Sdl.Community.IATETerminologyProvider
 				CreateEntryTerms(results, source, GetLanguages());
 
 				// add search to cache db
-				var searchResults = new SearchCache
+				var searchCache = new SearchCache
 				{
-					QueryString = modelString,
 					SourceText = text,
-					TargetLanguageName = target.Name
+					TargetLanguage = target.Locale.Name,
+					QueryString = queryString
 				};
 
-				if (cacheService != null)
+				if (CacheProvider != null)
 				{
 					_logger.Info("--> Try to add results in db");
-
-					Task.Run(async () => await cacheService.AddSearchResults(searchResults, results));
+					CacheProvider.AddSearchResults(searchCache, results);
 				}
 			}
 
-			SubscribeToEntriesChangedEvent(text, source, target);
+			OnTermEntriesChanged(text, source, target);
 
 			return results;
-		}
-
-		private void SubscribeToEntriesChangedEvent(string text, ILanguage source, ILanguage target)
-		{
-			if (IsActiveSegmentText(text, source))
-			{
-				OnTermEntriesChanged(new TermEntriesChangedEventArgs
-				{
-					EntryModels = _entryModels,
-					SourceLanguage = new Language(source.Locale.Name),
-					TargetLanguage = new Language(target.Locale.Name)
-				});
-			}
 		}
 
 		public void UpdateSettings(SettingsModel settings)
@@ -155,6 +145,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			ProviderSettings.SearchInSubdomains = settings.SearchInSubdomains;
 			ProviderSettings.Domains = settings.Domains;
 			ProviderSettings.TermTypes = settings.TermTypes;
+			ProviderSettings.MaxEntries = settings.MaxEntries;
 
 			_entryModels = new List<EntryModel>();
 			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
@@ -248,6 +239,16 @@ namespace Sdl.Community.IATETerminologyProvider
 			}
 		}
 
+		public override void Dispose()
+		{
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+			}
+
+			base.Dispose();
+		}
+
 		private object GetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
 		{
 			var targetLanguages = new List<string>();
@@ -278,14 +279,27 @@ namespace Sdl.Community.IATETerminologyProvider
 			return bodyModel;
 		}
 
-		public override void Dispose()
+		private void ClearEntries()
 		{
-			if (_editorController != null)
+			if (_entryModels == null)
 			{
-				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_entryModels = new List<EntryModel>();
 			}
 
-			base.Dispose();
+			_entryModels.Clear();
+		}
+
+		private void OnTermEntriesChanged(string text, ILanguage source, ILanguage target)
+		{
+			if (IsActiveSegmentText(text, source))
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = new Language(source.Locale.Name),
+					TargetLanguage = new Language(target.Locale.Name)
+				});
+			}
 		}
 
 		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
@@ -319,13 +333,19 @@ namespace Sdl.Community.IATETerminologyProvider
 				return;
 			}
 
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			_editorController = SdlTradosStudio.Application?.GetController<EditorController>();
 
 			if (_editorController != null)
 			{
 				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+				_editorController.Opening += EditorControllerOnOpening;
 			}
+		}
+
+		private void EditorControllerOnOpening(object sender, CancelDocumentEventArgs e)
+		{
+			_canUseCache = false;
+			Application.DoEvents();
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
@@ -338,7 +358,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
-			_entryModels.Clear();
+			ClearEntries();
+
 			var termsForSourceLanguage = termsResult.Where(s =>
 				s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName));
 
