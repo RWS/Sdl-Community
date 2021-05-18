@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using NSubstitute;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
@@ -27,18 +28,18 @@ namespace Sdl.Community.StarTransit.UnitTests
 		[InlineData(null)]
 		[InlineData("")]
 		[InlineData("randomPath")]
-		public void ReadTemplateData_EmptyPath_ReturnsNull(string templatePath)
+		public async Task ReadTemplateData_EmptyPath_ReturnsNull(string templatePath)
 		{
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(templatePath,null,null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(templatePath,null,null);
 			Assert.Null(templateInfo);
 		}
 
 		[Theory]
 		[InlineData("TransitMultilingualTemplate.sdltpl")]
-		public void ReadTemplateData_TransitTemplate_ReturnsProjectLocation(string templateName)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsProjectLocation(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.NotNull(templateInfo);
 			Assert.NotEmpty(templateInfo.Location);
@@ -46,20 +47,20 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		[Theory]
 		[InlineData("TransitMultilingualTemplate.sdltpl", @"C:\Users\aghisa\Desktop\files")]
-		public void ReadTemplateData_TransitTemplate_ReturnsCorrectProjectLocation(string templateName,string projectLocation)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsCorrectProjectLocation(string templateName,string projectLocation)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Equal(projectLocation,templateInfo.Location);
 		}
 
 		[Theory]
 		[InlineData("TransitMultilingualTemplate.sdltpl", "Automotive")]
-		public void ReadTemplateData_TransitTemplate_ReturnsCorrectCustomer(string templateName, string selectedCustomerName)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsCorrectCustomer(string templateName, string selectedCustomerName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.NotNull(templateInfo.Customer);
 			Assert.Equal(selectedCustomerName, templateInfo.Customer.Name);
@@ -67,46 +68,46 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		[Theory]
 		[InlineData("MultilingualNoOptions.sdltpl")]
-		public void ReadTemplateData_TransitTemplate_ReturnsNullCustomer(string templateName)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsNullCustomer(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo.Customer);
 		}
 
 		[Theory]
 		[InlineData("TransitMultilingualTemplate.sdltpl")]
-		public void ReadTemplateData_TransitTemplate_ReturnsDueDate(string templateName)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsDueDate(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.NotNull(templateInfo.DueDate);
 		}
 		[Theory]
 		[InlineData("MultilingualNoOptions.sdltpl")]
-		public void ReadTemplateData_TransitTemplate_ReturnsNullDueDate(string templateName)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsNullDueDate(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo.Customer);
 		}
 
 		[Theory]
 		[InlineData("Default.sdltpl")]
-		public void ReadTemplateData_TransitTemplate_ReturnsNull(string templateName)
+		public async Task ReadTemplateData_TransitTemplate_ReturnsNull(string templateName)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, null, null);
 
 			Assert.Null(templateInfo);
 		}
 
 		[Theory]
 		[InlineData("TransitMultilingualTemplate.sdltpl", "de-DE", "en-GB,fr-FR")]
-		public void ReadTemplateData_TransitTemplate_GetCorrectTmOption(string templateName, string sourceLanguageCode,
+		public async Task ReadTemplateData_TransitTemplate_GetCorrectTmOption(string templateName, string sourceLanguageCode,
 			string targetLanguageCodes)
 		{
 			var languagePair = new LanguagePair
@@ -119,7 +120,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
 			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
 
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, new CultureInfo(sourceLanguageCode), targetLanguages);
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate, new CultureInfo(sourceLanguageCode), targetLanguages);
 
 			Assert.Single(templateInfo.LanguagePairs);
 			Assert.Equal(languagePair.SourceLanguage,templateInfo.LanguagePairs[0].SourceLanguage);
@@ -130,14 +131,14 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		[Theory]
 		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT", 2)]
-		public void ReadTemplateData_MultilingualTransitTemplate_GetCorrectTmOptionsNumber(string templateName,
+		public async Task ReadTemplateData_MultilingualTransitTemplate_GetCorrectTmOptionsNumber(string templateName,
 			string sourceLanguageCode,
 			string targetLanguageCodes, int tmsOptions)
 		{
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
 			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
 
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
 				new CultureInfo(sourceLanguageCode), targetLanguages);
 
 			Assert.NotNull(templateInfo.LanguagePairs);
@@ -146,7 +147,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		[Theory]
 		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT")]
-		public void ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeFr(string templateName,
+		public async Task ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeFr(string templateName,
 			string sourceLanguageCode,
 			string targetLanguageCodes)
 		{
@@ -160,7 +161,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
 			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
 
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
+			var templateInfo = await  _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
 				new CultureInfo(sourceLanguageCode), targetLanguages);
 
 			var fRCorrespondingLpOption = GetCorresponndingLanguagePair(templateInfo.LanguagePairs, deFrLanguagePair);
@@ -172,7 +173,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 
 		[Theory]
 		[InlineData("TransitMultilingualPenaltiesOptions.sdltpl", "de-DE", "en-GB,fr-FR,it-IT")]
-		public void ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeIt(string templateName,
+		public async Task ReadTemplateData_MultilingualTransitTemplate_GetCorrectLanguagePairOptions_DeIt(string templateName,
 			string sourceLanguageCode,
 			string targetLanguageCodes)
 		{
@@ -189,7 +190,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var multilingualTemplate = Path.Combine(_testingFilesPath, templateName);
 			var targetLanguages = GetStudioLanguages(targetLanguageCodes);
 
-			var templateInfo = _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
+			var templateInfo = await _studioService.GetModelBasedOnStudioTemplate(multilingualTemplate,
 				new CultureInfo(sourceLanguageCode), targetLanguages);
 
 			var correspondingLpOption = GetCorresponndingLanguagePair(templateInfo.LanguagePairs, deItLanguagePair);

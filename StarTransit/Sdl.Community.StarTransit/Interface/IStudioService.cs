@@ -12,7 +12,7 @@ namespace Sdl.Community.StarTransit.Interface
 	{
 		List<ProjectTemplateInfo> GetProjectTemplates();
 		Task<List<Customer>> GetCustomers();
-		PackageModel GetModelBasedOnStudioTemplate(string templatePath, CultureInfo sourceCultureInfo,
+		Task<PackageModel> GetModelBasedOnStudioTemplate(string templatePath, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages);
 		(bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo, Language[] targetLanguages);
 		(bool, Language) TmSupportsAnyLanguageDirection(Uri tmLocalPath, CultureInfo sourceCultureInfo,

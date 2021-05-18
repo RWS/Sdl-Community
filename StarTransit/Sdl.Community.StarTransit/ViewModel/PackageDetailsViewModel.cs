@@ -287,12 +287,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 			StudioProjectLocation = string.Empty;
 		}
 
-		private void ReadProjectTemplateInfo(ProjectTemplateInfo selectedProjectTemplate)
+		private async System.Threading.Tasks.Task ReadProjectTemplateInfo(ProjectTemplateInfo selectedProjectTemplate)
 		{
 			if (PackageModel.Result == null) return;
 
 			//TODO:Make it async
-			var templatePackageModel = _studioService.GetModelBasedOnStudioTemplate(selectedProjectTemplate.Uri.LocalPath,
+			var templatePackageModel = await  _studioService.GetModelBasedOnStudioTemplate(selectedProjectTemplate.Uri.LocalPath,
 				PackageModel.Result.SourceLanguage, PackageModel.Result.TargetLanguages);
 
 			UpdateUiBasedOnTemplate(templatePackageModel);

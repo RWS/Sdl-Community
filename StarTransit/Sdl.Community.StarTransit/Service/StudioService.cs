@@ -80,41 +80,48 @@ namespace Sdl.Community.StarTransit.Service
 			});
 		}
 
-		public PackageModel GetModelBasedOnStudioTemplate(string templatePath,CultureInfo sourceCultureInfo, Language[] targetLanguages)
+		public Task<PackageModel> GetModelBasedOnStudioTemplate(string templatePath, CultureInfo sourceCultureInfo,
+			Language[] targetLanguages)
 		{
-			if (string.IsNullOrEmpty(templatePath) || !File.Exists(templatePath)) return null;
-
-			var projectTemplateDocument = new XmlDocument();
-			projectTemplateDocument.Load(templatePath);
-			var projectTemplate = projectTemplateDocument.SelectSingleNode("/ProjectTemplate");
-			var settingsBundleGuid = string.Empty;
-
-			if (projectTemplate?.Attributes == null) return null;
-			foreach (XmlAttribute attribute in projectTemplate.Attributes)
+			return Task.Run(() =>
 			{
-				if (!attribute.Name.Equals("SettingsBundleGuid")) continue;
-				settingsBundleGuid = attribute.Value;
-				break;
-			}
-			if (string.IsNullOrEmpty(settingsBundleGuid)) return null;
+				if (string.IsNullOrEmpty(templatePath) || !File.Exists(templatePath)) return null;
 
-			var templateOptions = GetTemplateOptions(projectTemplateDocument, settingsBundleGuid,sourceCultureInfo,targetLanguages);
+				var projectTemplateDocument = new XmlDocument();
+				projectTemplateDocument.Load(templatePath);
+				var projectTemplate = projectTemplateDocument.SelectSingleNode("/ProjectTemplate");
+				var settingsBundleGuid = string.Empty;
 
-			if (templateOptions is null) return null;
+				if (projectTemplate?.Attributes == null) return null;
+				foreach (XmlAttribute attribute in projectTemplate.Attributes)
+				{
+					if (!attribute.Name.Equals("SettingsBundleGuid")) continue;
+					settingsBundleGuid = attribute.Value;
+					break;
+				}
 
-			var packageModel = new PackageModel
-			{
-				Location = templateOptions.ProjectLocation,
-				DueDate = templateOptions.DueDate,
-				LanguagePairs = templateOptions.TemplateLanguagePairDetails
-			};
+				if (string.IsNullOrEmpty(settingsBundleGuid)) return null;
 
-			if (!string.IsNullOrEmpty(templateOptions.CustomerId))
-			{
-				packageModel.Customer = new Customer {Name = templateOptions.CustomerId};
-			}
+				var templateOptions = GetTemplateOptions(projectTemplateDocument, settingsBundleGuid, sourceCultureInfo,
+					targetLanguages);
 
-			return packageModel;
+				if (templateOptions is null) return null;
+
+				var packageModel = new PackageModel
+				{
+					Location = templateOptions.ProjectLocation,
+					DueDate = templateOptions.DueDate,
+					LanguagePairs = templateOptions.TemplateLanguagePairDetails
+				};
+
+				if (!string.IsNullOrEmpty(templateOptions.CustomerId))
+				{
+					packageModel.Customer = new Customer {Name = templateOptions.CustomerId};
+				}
+
+				return packageModel;
+
+			});
 		}
 
 		public (bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo,
