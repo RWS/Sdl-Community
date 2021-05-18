@@ -80,7 +80,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				return false;
 			}
 
-			provider.UpdateSettings(_settingsViewModel.ProviderSettings);
+			provider.ProviderSettings = _settingsViewModel.ProviderSettings;
 
 			return true;
 		}

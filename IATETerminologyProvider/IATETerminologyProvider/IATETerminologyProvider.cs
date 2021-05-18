@@ -51,7 +51,10 @@ namespace Sdl.Community.IATETerminologyProvider
 				await InventoriesProvider.Initialize();
 			}
 
-			UpdateSettings(settings);
+			_entryModels = new List<EntryModel>();
+			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
+
+			InitializeEditorController();
 		}
 
 		public ConnectionProvider ConnectionProvider { get; private set; }
@@ -138,19 +141,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			OnTermEntriesChanged(text, source, target);
 
 			return results;
-		}
-
-		public void UpdateSettings(SettingsModel settings)
-		{
-			ProviderSettings.SearchInSubdomains = settings.SearchInSubdomains;
-			ProviderSettings.Domains = settings.Domains;
-			ProviderSettings.TermTypes = settings.TermTypes;
-			ProviderSettings.MaxEntries = settings.MaxEntries;
-
-			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
-
-			InitializeEditorController();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
