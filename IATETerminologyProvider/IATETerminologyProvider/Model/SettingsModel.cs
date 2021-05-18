@@ -8,7 +8,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SettingsModel
 	{
-		public int DefaultMaxEntries = 500;
+		//public int DefaultMaxEntries = 500;
 		
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
@@ -50,21 +50,21 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			}
 		}
 
-		public int MaxEntries
-		{
-			get
-			{
-				var success = int.TryParse(GetStringParameter("maxEntries"), out var value);
+		//public int MaxEntries
+		//{
+		//	get
+		//	{
+		//		var success = int.TryParse(GetStringParameter("maxEntries"), out var value);
 
-				return success
-					? value < 100 ? DefaultMaxEntries : value
-					: DefaultMaxEntries;
-			}
-			set
-			{
-				SetStringParameter("maxEntries", value.ToString());
-			}
-		}
+		//		return success
+		//			? value < 100 ? DefaultMaxEntries : value
+		//			: DefaultMaxEntries;
+		//	}
+		//	set
+		//	{
+		//		SetStringParameter("maxEntries", value.ToString());
+		//	}
+		//}
 
 		public bool SearchInSubdomains
 		{
