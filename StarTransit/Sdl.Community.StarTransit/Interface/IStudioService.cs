@@ -11,7 +11,7 @@ namespace Sdl.Community.StarTransit.Interface
 	public interface IStudioService
 	{
 		List<ProjectTemplateInfo> GetProjectTemplates();
-		Task<List<Customer>> GetCustomers();
+		Task<List<Customer>> GetCustomers(string projectsXmlFilePath);
 		Task<PackageModel> GetModelBasedOnStudioTemplate(string templatePath, CultureInfo sourceCultureInfo,
 			Language[] targetLanguages);
 		(bool, Language) IsTmCreatedFromPlugin(string tmName, CultureInfo sourceCultureInfo, Language[] targetLanguages);

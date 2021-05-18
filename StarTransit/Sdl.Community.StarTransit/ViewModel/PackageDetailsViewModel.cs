@@ -31,7 +31,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private DateTime _displayStartDate;
 
 		public PackageDetailsViewModel(IWizardModel wizardModel, IPackageService packageService,
-			IFolderDialogService folderService, IStudioService studioService, object view) : base(view)
+			IFolderDialogService folderService, IStudioService studioService,string projectsXmlFilePath, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			CurrentPageNumber = 1;
@@ -44,7 +44,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_studioService = studioService;
 			PackageModel = new AsyncTaskWatcherService<PackageModel>(
 				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
-			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers());
+			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers(projectsXmlFilePath));
 			ProjectTemplates = new List<ProjectTemplateInfo>(_studioService.GetProjectTemplates());
 			SelectedProjectTemplate = ProjectTemplates[0];
 			DueDate = null;

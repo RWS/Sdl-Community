@@ -21,6 +21,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using PackageDetails = Sdl.Community.StarTransit.View.PackageDetails;
 
 namespace Sdl.Community.StarTransit
@@ -37,6 +38,7 @@ namespace Sdl.Community.StarTransit
 	{
 		private IMessageBoxService _messageBoxService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly StudioVersionService _studioVersionService = new StudioVersionService();
 
 		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
@@ -48,10 +50,13 @@ namespace Sdl.Community.StarTransit
 			var fileDialogService = new OpenFileDialogService();
 			var projectsControllerService = new ProjectsControllerService(projectsController);
 			var projectService = new ProjectService(projectsControllerService);
+			var shortStudioVersion = _studioVersionService.GetStudioVersion()?.ShortVersion;
+			var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+				$@"Studio {shortStudioVersion}\Projects\projects.xml");
+
 			return new ObservableCollection<IProgressHeaderItem>
 			{
-				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,
-					new PackageDetails()),
+				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath, new PackageDetails()),
 				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
 				new CreateProjectViewModel(wizardModel,projectService,new CreateProject())
 			};

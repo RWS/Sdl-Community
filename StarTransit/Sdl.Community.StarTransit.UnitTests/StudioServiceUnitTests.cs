@@ -289,6 +289,32 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Theory]
+		[InlineData("projects.xml")]
+		public async Task ReadCustomers_ReturnsNotNull(string projectsFileName)
+		{
+			var projectsXmlFilePath = Path.Combine(_testingFilesPath, projectsFileName);
+			var customers = await _studioService.GetCustomers(projectsXmlFilePath);
+			Assert.NotNull(customers);
+		}
+
+		[Theory]
+		[InlineData("projects.xml", "Automotive")]
+		public async Task ReadCustomers_ContainsCustomer(string projectsFileName, string customerName)
+		{
+			var projectsXmlFilePath = Path.Combine(_testingFilesPath, projectsFileName);
+			var customers = await _studioService.GetCustomers(projectsXmlFilePath);
+			Assert.Contains(customers,
+				customer => customer.Name != null && customer.Name.Contains(customerName));
+		}
+
+		[Fact]
+		public async Task ReadCustomers_EmptyPath_ReturnsNotNull()
+		{
+			var customers = await _studioService.GetCustomers(null);
+			Assert.NotNull(customers);
+		}
+
+		[Theory]
 		[InlineData("TestTransitTM.sdltm")]
 		public void TmSupportsAnyLanguageDirection_NoLanguages_ReturnsNull(string tmName)
 		{

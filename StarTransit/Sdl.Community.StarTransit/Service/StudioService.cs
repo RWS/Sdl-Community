@@ -12,7 +12,6 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.Versioning;
 using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StarTransit.Service
@@ -39,22 +38,15 @@ namespace Sdl.Community.StarTransit.Service
 			return templateList ?? new List<ProjectTemplateInfo>();
 		}
 
-		//TODO: Refactor
-		public Task<List<Customer>> GetCustomers()
+		public Task<List<Customer>> GetCustomers(string projectsXmlFilePath)
 		{
 			var customersList = new List<Customer>();
 			return Task.Run(() =>
 			{
 				try
 				{
-					var studioVersionService = new StudioVersionService();
-					var shortStudioVersion = studioVersionService.GetStudioVersion()?.ShortVersion;
-					if (string.IsNullOrEmpty(shortStudioVersion)) return customersList;
-					var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-						$@"Studio {shortStudioVersion}\Projects\projects.xml");
-
 					var projectsFile = new XmlDocument();
-					projectsFile.Load(projectsPath);
+					projectsFile.Load(projectsXmlFilePath);
 					var customers = projectsFile.GetElementsByTagName("Customers");
 					foreach (XmlNode custom in customers)
 					{
