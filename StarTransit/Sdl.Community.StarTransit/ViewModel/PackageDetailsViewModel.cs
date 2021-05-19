@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -280,6 +281,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				IsValid = true;
 			}
+
+			var traversalRequest = new TraversalRequest(FocusNavigationDirection.Next);
+			var focused = (UIElement)Keyboard.FocusedElement;
+			focused?.MoveFocus(traversalRequest);
 		}
 
 		private void ClearLocation()
@@ -291,7 +296,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 			if (PackageModel.Result == null) return;
 
-			//TODO:Make it async
 			var templatePackageModel = await  _studioService.GetModelBasedOnStudioTemplate(selectedProjectTemplate.Uri.LocalPath,
 				PackageModel.Result.SourceLanguage, PackageModel.Result.TargetLanguages);
 

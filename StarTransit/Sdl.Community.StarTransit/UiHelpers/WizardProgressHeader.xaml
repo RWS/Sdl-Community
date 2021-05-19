@@ -191,7 +191,7 @@
 	</Control.Resources>
 
 	<Grid HorizontalAlignment="Center" Margin="0">
-		<ItemsControl ItemsSource="{Binding Path=Pages}" ItemTemplate="{StaticResource ProgressHeaderIndicator}" >
+		<ItemsControl ItemsSource="{Binding Path=Pages}" ItemTemplate="{StaticResource ProgressHeaderIndicator}" FocusVisualStyle="{x:Null}">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
 					<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal"/>
