@@ -9,7 +9,6 @@
 		xmlns:viewModel="clr-namespace:Sdl.Community.IATETerminologyProvider.ViewModel"
 		xmlns:styles="clr-namespace:Sdl.Community.IATETerminologyProvider.Styles"
         xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:controls="clr-namespace:Sdl.Community.IATETerminologyProvider.Controls"
         Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
 		Title="IATE Real-time Terminology"
 		ResizeMode="CanResizeWithGrip"
@@ -24,7 +23,6 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="../Styles/ProgressRingAsteriskStyle.xaml" />
-				<ResourceDictionary Source="../Styles/NumberUpDown.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -46,9 +44,6 @@
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
 				<styles:WindowsControl  Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Margin="0,0,0,5"/>
-
-				<!--<TextBlock Grid.Row="1" Grid.Column="0" Margin="5" 
-				           Style="{DynamicResource Sdl.TextBlock.TitleStyle}" Text="{x:Static resx:PluginResources.Settings_Descr}" FontSize="15" />-->
 
 				<TextBlock Foreground="DimGray" Grid.Row="2" Grid.Column="0" 
 				           Margin="10 5 0 0" Text="{x:Static resx:PluginResources.Domains_description}"/>

@@ -142,7 +142,6 @@
   <ItemGroup>
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\CloseOnClickBehaviour.cs" />
@@ -220,10 +219,6 @@
     </Compile>
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\NumberUpDown.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
