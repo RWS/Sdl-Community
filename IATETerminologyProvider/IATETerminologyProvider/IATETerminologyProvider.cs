@@ -233,6 +233,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			if (_editorController != null)
 			{
 				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_editorController.Opened -= EditorControllerOnOpened;
 			}
 
 			base.Dispose();
@@ -344,8 +345,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				OnTermEntriesChanged(new TermEntriesChangedEventArgs
 				{
 					EntryModels = _entryModels,
-					SourceLanguage = _editorController.ActiveDocument.ActiveFile.Language,
-					TargetLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage
+					SourceLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage,
+					TargetLanguage = _editorController.ActiveDocument.ActiveFile.Language
 				});
 			}
 		}
