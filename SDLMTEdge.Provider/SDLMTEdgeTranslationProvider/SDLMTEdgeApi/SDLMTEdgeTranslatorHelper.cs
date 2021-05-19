@@ -218,7 +218,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 			using (var httpClient = new HttpClient())
 			{
@@ -354,7 +353,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+			
 
 			using (var httpClient = new HttpClient())
 			{
