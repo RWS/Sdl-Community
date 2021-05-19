@@ -25,7 +25,9 @@ namespace Sdl.Community.IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private bool _canUseCache;
+		private string _currentText;
+		private ILanguage _currentSource;
+		private ILanguage _currentTarget;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -90,6 +92,10 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
+			_currentText = text;
+			_currentSource = source;
+			_currentTarget = target;
+			
 			ClearEntries();
 			_logger.Info("--> Try searching for segment");
 
@@ -97,7 +103,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var queryString = JsonConvert.SerializeObject(jsonBody);
 			var canConnect = CacheProvider?.Connect(_projectsController?.CurrentProject);
 
-			if (canConnect != null && (bool)canConnect && _canUseCache)
+			if (canConnect != null && (bool)canConnect)
 			{
 				_logger.Info("--> Try to get cache results");
 
@@ -113,8 +119,6 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 			}
 
-			_canUseCache = true;
-			
 			var config = _projectsController?.CurrentProject?.GetTermbaseConfiguration();
 			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
 			if (results != null)
@@ -330,14 +334,14 @@ namespace Sdl.Community.IATETerminologyProvider
 			if (_editorController != null)
 			{
 				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-				_editorController.Opening += EditorControllerOnOpening;
+				_editorController.Opened += EditorControllerOnOpened;
 			}
 		}
 
-		private void EditorControllerOnOpening(object sender, CancelDocumentEventArgs e)
+		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
 		{
-			_canUseCache = false;
 			Application.DoEvents();
+			OnTermEntriesChanged(_currentText, _currentSource, _currentTarget);
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
