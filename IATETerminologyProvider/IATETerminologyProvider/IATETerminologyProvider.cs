@@ -24,10 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		private readonly ProjectsController _projectsController;
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
-		private EditorController _editorController;
-		private string _currentText;
-		private ILanguage _currentSource;
-		private ILanguage _currentTarget;
+		private EditorController _editorController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -91,11 +88,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{
-			_currentText = text;
-			_currentSource = source;
-			_currentTarget = target;
-			
+		{	
 			ClearEntries();
 			_logger.Info("--> Try searching for segment");
 
@@ -240,6 +233,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			if (_editorController != null)
 			{
 				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_editorController.Opened -= EditorControllerOnOpened;
 			}
 
 			base.Dispose();
@@ -305,6 +299,11 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private bool IsActiveSegmentText(string text, ILanguage source)
 		{
+			if (text == null || source == null)
+			{
+				return false;
+			}
+			
 			var selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			if (selectedSegmentPair?.Source == null)
 			{
@@ -341,7 +340,15 @@ namespace Sdl.Community.IATETerminologyProvider
 		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
 		{
 			Application.DoEvents();
-			OnTermEntriesChanged(_currentText, _currentSource, _currentTarget);
+			if (_editorController?.ActiveDocument != null)
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage,
+					TargetLanguage = _editorController.ActiveDocument.ActiveFile.Language
+				});
+			}
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
