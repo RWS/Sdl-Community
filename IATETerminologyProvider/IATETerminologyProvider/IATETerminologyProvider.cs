@@ -25,7 +25,6 @@ namespace Sdl.Community.IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private bool _canUseCache;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -97,7 +96,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var queryString = JsonConvert.SerializeObject(jsonBody);
 			var canConnect = CacheProvider?.Connect(_projectsController?.CurrentProject);
 
-			if (canConnect != null && (bool)canConnect && _canUseCache)
+			if (canConnect != null && (bool)canConnect)
 			{
 				_logger.Info("--> Try to get cache results");
 
@@ -112,8 +111,7 @@ namespace Sdl.Community.IATETerminologyProvider
 					return cachedResults;
 				}
 			}
-
-			_canUseCache = true;
+			
 			var config = _projectsController?.CurrentProject?.GetTermbaseConfiguration();
 			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
 			if (results != null)
@@ -300,6 +298,11 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private bool IsActiveSegmentText(string text, ILanguage source)
 		{
+			if (text == null || source == null)
+			{
+				return false;
+			}
+			
 			var selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			if (selectedSegmentPair?.Source == null)
 			{
@@ -329,14 +332,22 @@ namespace Sdl.Community.IATETerminologyProvider
 			if (_editorController != null)
 			{
 				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
-				_editorController.Opening += EditorControllerOnOpening;
+				_editorController.Opened += EditorControllerOnOpened;
 			}
 		}
 
-		private void EditorControllerOnOpening(object sender, CancelDocumentEventArgs e)
+		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
 		{
-			_canUseCache = false;
 			Application.DoEvents();
+			if (_editorController?.ActiveDocument != null)
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = _editorController.ActiveDocument.ActiveFile.Language,
+					TargetLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage
+				});
+			}
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
