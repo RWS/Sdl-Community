@@ -224,6 +224,12 @@
     <value>Machine Translation Cloud Metadata</value>
   </data>
   <data name="AppStoreFolder" xml:space="preserve">
-    <value>RWS AppStore Team</value>
+    <value>RWS AppStore</value>
+  </data>
+  <data name="LogMessage_BatchTaskStarted" xml:space="preserve">
+	  <value>Batch task started...</value>
+  </data>
+  <data name="LogMessage_BackingUpProject" xml:space="preserve">
+	  <value>Backing up project...</value>
   </data>
 </root>

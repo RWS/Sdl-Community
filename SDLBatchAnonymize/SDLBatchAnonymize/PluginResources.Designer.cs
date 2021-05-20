@@ -79,7 +79,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RWS AppStore Team.
+        ///   Looks up a localized string similar to RWS AppStore.
         /// </summary>
         public static string AppStoreFolder {
             get {
@@ -185,6 +185,24 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string LastModified {
             get {
                 return ResourceManager.GetString("LastModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backing up project....
+        /// </summary>
+        public static string LogMessage_BackingUpProject {
+            get {
+                return ResourceManager.GetString("LogMessage_BackingUpProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Batch task started....
+        /// </summary>
+        public static string LogMessage_BatchTaskStarted {
+            get {
+                return ResourceManager.GetString("LogMessage_BatchTaskStarted", resourceCulture);
             }
         }
         
