@@ -322,6 +322,7 @@ namespace Trados.Transcreate.Service
 			{
 				projectInfo.IconPath = iconPath;
 				project.UpdateProject(projectInfo);
+				project.Save();
 			}
 		}
 

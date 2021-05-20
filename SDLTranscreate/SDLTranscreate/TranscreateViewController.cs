@@ -623,7 +623,7 @@ namespace Trados.Transcreate
 				return false;
 			}
 
-			var projectInfo = project.GetProjectInfo();
+			var projectInfo = GetNormalizedProjectOrigin(project);
 			try
 			{
 				if (_transcreateProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString()) != null)
@@ -639,7 +639,12 @@ namespace Trados.Transcreate
 
 				var settingsBundle = project.GetSettings();
 				var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
-				var sdlBackTranslationProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+
+				var sdlProjectFiles = DeserializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
+				if (sdlProjectFiles?.Count <= 0)
+				{
+					return false;
+				}
 
 				var xliffProject = new Project
 				{
@@ -654,11 +659,10 @@ namespace Trados.Transcreate
 					ProjectType = GetProjectType(project)
 				};
 
-				var sdlProjectFiles = SerializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
 				var projectFiles = GetProjectFiles(sdlProjectFiles, xliffProject);
-
 				if (projectFiles?.Count > 0)
 				{
+					var sdlBackTranslationProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
 					var sdlBackTranslationProject = SerializeBackProjects(sdlBackTranslationProjects.BackProjectsJson.Value);
 					var backProjects = GetBackProjects(projectInfo.LocalProjectFolder, sdlBackTranslationProject);
 
@@ -683,6 +687,23 @@ namespace Trados.Transcreate
 			}
 
 			return false;
+		}
+
+		private ProjectInfo GetNormalizedProjectOrigin(FileBasedProject project)
+		{
+			var projectInfo = project.GetProjectInfo();
+			if (projectInfo.ProjectOrigin == "Transcreate Project")
+			{
+				// required to force studio to recognize difference in case; added a space, remove a space
+				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject + " ";
+				project.UpdateProject(projectInfo);
+				
+				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject;
+				project.UpdateProject(projectInfo);
+				project.Save();
+			}
+
+			return projectInfo;
 		}
 
 		private List<ProjectFile> GetProjectFiles(IReadOnlyCollection<SDLTranscreateProjectFile> sdlProjectFiles, IProject project)
@@ -948,7 +969,7 @@ namespace Trados.Transcreate
 			return null;
 		}
 
-		private List<SDLTranscreateProjectFile> SerializeProjectFiles(string value)
+		private List<SDLTranscreateProjectFile> DeserializeProjectFiles(string value)
 		{
 			try
 			{
