@@ -21,37 +21,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		public Dictionary<FileBasedTranslationMemory, int> StudioTranslationMemories= new Dictionary<FileBasedTranslationMemory, int>();
 		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
-		//TODO: Remove this for final impl
-		//public TransitTmImporter(LanguagePair languagePair, string studioProjectPath, List<StarTranslationMemoryMetadata> tmsList)
-		//{
-		//	if (tmsList != null && tmsList.Any())
-		//	{
-		//		//TM or star transit MTs which have penalties applied in the UI
-		//		foreach (var transitTm in tmsList)
-		//		{
-		//			var transitTmName = Path.GetFileName(transitTm.TargetFile);
-		//			var tmPath = Path.Combine(studioProjectPath, string.Concat(transitTmName, ".sdltm"));
-		//			CreateStudioTranslationMemory(tmPath, $"{transitTmName} description", transitTm.TmPenalty, languagePair);
-		//		}
-		//	}
-		//	else
-		//	{
-		//		if (languagePair.CreateNewTm)
-		//		{ 
-		//			//One general tm which includes all tms (tms which doesn't have penalty set in the UI)
-		//			CreateStudioTranslationMemory(studioProjectPath, string.Empty, 0, languagePair);
-		//		}
-		//		else
-		//		{
-		//			//Tm selected from local machine
-		//			CreateStudioTranslationMemory(languagePair.TmPath, string.Empty, 0, null);
-		//		}
-		//	}
-		//}
-
 		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath, int penalty)
 		{
 			FileBasedTranslationMemory fileBasedTm;
+
 			if (languagePair != null)
 			{
 				fileBasedTm = new FileBasedTranslationMemory(
@@ -77,35 +50,35 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 		}
 
-		//TODO: REmove this for the final implementation
-		private void CreateStudioTranslationMemory(string tmPath, string description,int penalty,LanguagePair languagePair)
-		{
-			//TODO: move this to constructor
-			FileBasedTranslationMemory fileBasedTm;
-			if (languagePair != null)
-			{
-				fileBasedTm = new FileBasedTranslationMemory(
-					tmPath,
-					description,
-					languagePair.SourceLanguage,
-					languagePair.TargetLanguage,
-					FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
-					BuiltinRecognizers.RecognizeAll,
-					TokenizerFlags.DefaultFlags,
-					WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
-			}
-			else
-			{
-				fileBasedTm = new FileBasedTranslationMemory(tmPath);
-			}
+		////TODO: REmove this for the final implementation
+		//private void CreateStudioTranslationMemory(string tmPath, string description,int penalty,LanguagePair languagePair)
+		//{
+		//	//TODO: move this to constructor
+		//	FileBasedTranslationMemory fileBasedTm;
+		//	if (languagePair != null)
+		//	{
+		//		fileBasedTm = new FileBasedTranslationMemory(
+		//			tmPath,
+		//			description,
+		//			languagePair.SourceLanguage,
+		//			languagePair.TargetLanguage,
+		//			FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
+		//			BuiltinRecognizers.RecognizeAll,
+		//			TokenizerFlags.DefaultFlags,
+		//			WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
+		//	}
+		//	else
+		//	{
+		//		fileBasedTm = new FileBasedTranslationMemory(tmPath);
+		//	}
 			
-			fileBasedTm.Save();
+		//	fileBasedTm.Save();
 
-			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
-			{
-				StudioTranslationMemories.Add(fileBasedTm, penalty);
-			}
-		}
+		//	if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
+		//	{
+		//		StudioTranslationMemories.Add(fileBasedTm, penalty);
+		//	}
+		//}
 		
 		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, int penalty, PackageModel package)
 		{

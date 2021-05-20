@@ -164,6 +164,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			foreach (var metadataTransitFile in languagePair.SelectedTranslationMemoryMetadatas)
 			{
 				var tmDescription = $"{metadataTransitFile.Name} Translation Memory";
+				metadataTransitFile.LocalTmCreationPath = GetTmPathForDuplicatedName(metadataTransitFile.LocalTmCreationPath, _tmConfig.Entries);
 
 				var importer = new TransitTmImporter(languagePair, tmDescription, metadataTransitFile.LocalTmCreationPath,
 					metadataTransitFile.TmPenalty);
@@ -224,6 +225,21 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			//		return null;
 			//}
+		}
+
+		/// <summary>
+		/// If project was created based on Transit Template on the project with the same name, TM created using "Create Option" should have the name followed by {number}
+		/// In this way we can distinguish which tm was created for the current project and which one comes from the Project Template.
+		/// <returns>New Tm Path with TM name followed by {number} if the name already exists. Otherwise the same tmPath</returns>
+		/// </summary>
+		private string GetTmPathForDuplicatedName(string tmPath, List<TranslationProviderCascadeEntry> cascadeEntries)
+		{
+			var tmName = Path.GetFileNameWithoutExtension(tmPath);
+			var path = Path.GetDirectoryName(tmPath);
+			var tmsForLangPairCount =
+				cascadeEntries.Count(e => e.MainTranslationProvider.Uri.LocalPath.Contains(tmName));
+			if (tmsForLangPairCount == 0) return tmPath;
+			return !string.IsNullOrEmpty(path) ? Path.Combine(path, $"{tmName}_{tmsForLangPairCount}.sdltm") : tmPath;
 		}
 
 		// Update the translation memory settings

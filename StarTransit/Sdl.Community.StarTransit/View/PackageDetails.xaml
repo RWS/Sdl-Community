@@ -68,6 +68,7 @@
 					 Margin="0 10"
 			         Text="{Binding StudioProjectLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Delay=1000}"/>
 			<Button Style="{StaticResource Sdl.Button.DialogStyle}"
+			        FocusVisualStyle="{x:Null}"
 					Cursor="Hand"
 					Margin="10"
 					Command="{Binding BrowseCommand}"
