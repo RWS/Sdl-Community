@@ -343,6 +343,24 @@ namespace Trados.Transcreate.Service
 			return pathInfo.ProjectIconFilePath;
 		}
 
+		public string GetBackTranslationIconPath(Common.PathInfo pathInfo)
+		{
+			if (pathInfo == null)
+			{
+				return null;
+			}
+
+			if (!File.Exists(pathInfo.BackTranslationIconFilePath))
+			{
+				using (var fs = new FileStream(pathInfo.BackTranslationIconFilePath, FileMode.Create))
+				{
+					PluginResources.back_translation_small.Save(fs);
+				}
+			}
+
+			return pathInfo.BackTranslationIconFilePath;
+		}
+
 		private bool CanActivateFileBasedProject()
 		{
 			var studioVersion = _studioVersionService.GetStudioVersion();
@@ -398,7 +416,7 @@ namespace Trados.Transcreate.Service
 			project.ProjectType = GetProjectType(selectedProject);
 
 			var existingProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
-				? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out _)
+				? GetBackTranslationProject(projectInfo.Id.ToString(), out _)
 				: _controller.GetProjects().FirstOrDefault(a => a.Id == projectInfo.Id.ToString());
 
 			if (existingProject != null)
@@ -431,7 +449,7 @@ namespace Trados.Transcreate.Service
 			return project;
 		}
 
-		public Interfaces.IProject GetBackTranslationProjectProject(string projectId, out Interfaces.IProject parentProject)
+		public Interfaces.IProject GetBackTranslationProject(string projectId, out Interfaces.IProject parentProject)
 		{
 			parentProject = null;
 			var projects = _controller.GetProjects();
@@ -476,6 +494,12 @@ namespace Trados.Transcreate.Service
 			}
 
 			return analysisBands;
+		}
+
+		public bool IsBackTranslationProject(string projectOrigin)
+		{
+			return string.Compare(projectOrigin, Constants.ProjectOrigin_BackTranslationProject,
+				StringComparison.CurrentCultureIgnoreCase) == 0;
 		}
 
 		private void UpdateTmConfiguration(FileBasedProject project)
@@ -559,11 +583,6 @@ namespace Trados.Transcreate.Service
 				: values.Exists(a => string.CompareOrdinal(a.CultureInfo.Name, value) == 0);
 		}
 
-		private bool IsBackTranslationProject(string projectOrigin)
-		{
-			return string.Compare(projectOrigin, Constants.ProjectOrigin_BackTranslationProject,
-				StringComparison.CurrentCultureIgnoreCase) == 0;
-		}
 
 		private List<Guid> GetProjectFileGuids(Sdl.ProjectAutomation.Core.ProjectFile[] projectFiles)
 		{

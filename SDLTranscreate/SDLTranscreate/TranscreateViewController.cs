@@ -1294,7 +1294,7 @@ namespace Trados.Transcreate
 						if (projectTargetFileActivity != null && (projectTargetFileActivity.Action == Enumerators.Action.Export ||
 							projectTargetFileActivity.Action == Enumerators.Action.ExportBackTranslation))
 						{
-							
+
 							if (sdlxliffWriter.ConfirmationStatistics?.WordCounts?.Processed?.Count <= 0)
 							{
 								RemovePreviousProjectFileActivity(projectTargetFile, projectTargetFileActivity);
@@ -1654,7 +1654,11 @@ namespace Trados.Transcreate
 
 				lock (_lockObject)
 				{
-					var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+					var projectInfo = _projectsController?.CurrentProject.GetProjectInfo();
+					var iconPath = _projectAutomationService.IsBackTranslationProject(projectInfo?.ProjectOrigin)
+						? _projectAutomationService.GetBackTranslationIconPath(_pathInfo)
+						: _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+
 					_projectAutomationService?.UpdateProjectIcon(_projectsController?.CurrentProject, iconPath);
 				}
 			}
