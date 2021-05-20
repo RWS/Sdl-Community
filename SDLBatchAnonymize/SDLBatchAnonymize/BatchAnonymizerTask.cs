@@ -25,7 +25,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 	public class BatchAnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetLogger(nameof(BatchAnonymizerTask));
 		private BatchAnonymizerSettings _settings;
 		private UserNameService _userNameService;
 		private ResourceOriginsService _resourceOriginsService;
