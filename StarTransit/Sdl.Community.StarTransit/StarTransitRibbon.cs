@@ -9,10 +9,8 @@ using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Interfaces;
-using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.Community.StarTransit.UI;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.View;
@@ -62,12 +60,11 @@ namespace Sdl.Community.StarTransit
 			};
 		}
 
-
 		protected override async void Execute()
 		{
 			try
 			{
-				var fileDialog = new OpenFileDialog { Filter = "Transit Project Package Files (*.ppf)|*.ppf" };
+				var fileDialog = new OpenFileDialog { Filter = @"Transit Project Package Files (*.ppf)|*.ppf" };
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult != DialogResult.OK) return;
 
@@ -88,46 +85,6 @@ namespace Sdl.Community.StarTransit
 				_messageBoxService.ShowMessage(ex.Message, string.Empty);
 				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
-
-
-			//_messageBoxService = new MessageBoxService();
-			//Utils.EnsureApplicationResources();
-
-			//var pathToTempFolder = CreateTempPackageFolder();
-			//try
-			//{
-			//	var fileDialog = new OpenFileDialog
-			//	{
-			//		Filter = "Transit Project Package Files (*.ppf)|*.ppf"
-			//	};
-			//	var dialogResult = fileDialog.ShowDialog();
-			//	if (dialogResult == DialogResult.OK)
-			//	{
-			//		var path = fileDialog.FileName;
-			//		var packageService = new PackageService();
-			//		var package = await packageService.OpenPackage(path, pathToTempFolder);
-
-			//		var templateService = new TemplateService();
-			//		var templateList = templateService.LoadProjectTemplates();
-
-			//		var packageModel = new PackageModel
-			//		{
-			//			Name = package.Name,
-			//			Description = package.Description,
-			//			StudioTemplates = templateList,
-			//			LanguagePairs = package.LanguagePairs,
-			//			PathToPrjFile = package.PathToPrjFile
-			//		};
-
-			//		// Start BackgroundWorker in InitializeMain method to have app working separately than Trados Studio process
-			//		Program.InitializeMain(packageModel);
-			//	}
-			//}
-			//catch (Exception ex)
-			//{
-			//	_messageBoxService.ShowMessage(ex.Message, string.Empty);
-			//	_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-			//}
 		}
 
 		/// <summary>

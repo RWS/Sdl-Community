@@ -12,13 +12,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class FileService : IFileService
 	{
-		//private const string TmFileType = "ExtFileType=\"Extract\"";
 		private const string FileType = "Transit";
-
 		private Dictionary<string, string> _starTransitLanguageDictionary;
 		private Dictionary<string, string> _starTransitFileLanguageDictionary;
-
-		//private const string MtFilesName = "_AEXTR_MT";
 
 		public FileService()
 		{
@@ -33,38 +29,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
 			return extension.Split(',');
 		}
-
-		/// <summary>
-		/// MT Files are considered to be TMs. However the Transit MT file does not conain |"
-		/// </summary>
-		//public bool IsTransitTm(string filePath)
-		//{
-		//	if (!File.Exists(filePath)) return false;
-		//	var name = Path.GetFileName(filePath);
-		//	var containsMtName = name.Contains(MtFilesName);
-		//	using (var reader = new StreamReader(filePath, Encoding.Default))
-		//	{
-		//		string line;
-		//		while ((line = reader.ReadLine()) != null)
-		//		{
-		//			if (line.Trim().Contains(TmFileType))
-		//			{
-		//				return true;
-		//			}
-
-		//			if (containsMtName)
-		//			{
-		//				if (line.Contains(FileType))
-		//				{
-		//					return true;
-		//				}
-		//			}
-		//			if (line.Equals("<Header>")) break;
-		//		}
-		//	}
-
-		//	return false;
-		//}
 
 		public bool IsTransitFile(string filePath)
 		{
