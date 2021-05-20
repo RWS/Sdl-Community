@@ -358,6 +358,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
 			if (!(sender is ProjectsController projController)) return;
+			if (projController.CurrentProject is null) return;
+
 			var newProject = projController.CurrentProject.GetProjectInfo();
 			if (newProject == _currentProject) return;
 			_currentProject = newProject;
