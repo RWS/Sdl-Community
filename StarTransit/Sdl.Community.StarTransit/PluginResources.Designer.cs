@@ -110,6 +110,24 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package details.
+        /// </summary>
+        public static string CreateProject_PackageDetails {
+            get {
+                return ResourceManager.GetString("CreateProject_PackageDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project name.
+        /// </summary>
+        public static string CreateProject_ProjectName {
+            get {
+                return ResourceManager.GetString("CreateProject_ProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon CreateProjectPackage_Icon {

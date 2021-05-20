@@ -281,4 +281,10 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="CreateProject_Btn" xml:space="preserve">
     <value>Create project</value>
   </data>
+  <data name="CreateProject_PackageDetails" xml:space="preserve">
+    <value>Package details</value>
+  </data>
+  <data name="CreateProject_ProjectName" xml:space="preserve">
+    <value>Project name</value>
+  </data>
 </root>

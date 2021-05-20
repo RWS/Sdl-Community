@@ -35,6 +35,29 @@ namespace Sdl.Community.StarTransit.ViewModel
 			PropertyChanged += CreateProjectViewModelChanged;
 		}
 
+		public string PackageName
+		{
+			get => _wizardModel?.PackageModel?.Result.Name;
+		}
+
+		public string ProjectLocation
+		{
+			get => _wizardModel?.StudioProjectLocation;
+		}
+
+		public string Template
+		{
+			get => _wizardModel?.SelectedTemplate?.Name;
+		}
+		public string Customer
+		{
+			get => _wizardModel?.SelectedCustomer?.Name;
+		}
+		public string DueDate
+		{
+			get => _wizardModel?.DueDate?.ToString();
+		}
+
 		public override string DisplayName
 		{
 			get => _displayName;
