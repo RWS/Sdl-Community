@@ -10,7 +10,11 @@ namespace Sdl.Community.SDLBatchAnonymize
 		public void Execute()
 		{
 			Log.Setup();
-			new Application();
+
+			if (Application.Current == null)
+			{
+				new Application();
+			}
 		}
 	}
 }
