@@ -1672,10 +1672,14 @@ namespace Trados.Transcreate
 			if (updated || updatedProjectSelection)
 			{
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
-
+				if (_projectsController?.CurrentProject == null)
+				{
+					return;
+				}
+				
 				lock (_lockObject)
 				{
-					var projectInfo = _projectsController?.CurrentProject.GetProjectInfo();
+					var projectInfo = GetNormalizedProjectOrigin(_projectsController?.CurrentProject);
 					var iconPath = _projectAutomationService.IsBackTranslationProject(projectInfo?.ProjectOrigin)
 						? _projectAutomationService.GetBackTranslationIconPath(_pathInfo)
 						: _projectAutomationService.GetTranscreateIconPath(_pathInfo);
