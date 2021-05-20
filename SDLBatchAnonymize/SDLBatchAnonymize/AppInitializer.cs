@@ -9,8 +9,8 @@ namespace Sdl.Community.SDLBatchAnonymize
 	{
 		public void Execute()
 		{
-			var app = new Application();
 			Log.Setup();
+			new Application();
 		}
 	}
 }
