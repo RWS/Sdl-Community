@@ -110,11 +110,47 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new TM with name:.
+        /// </summary>
+        public static string CreateProject_CreateNewTm {
+            get {
+                return ResourceManager.GetString("CreateProject_CreateNewTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import into:.
+        /// </summary>
+        public static string CreateProject_Import {
+            get {
+                return ResourceManager.GetString("CreateProject_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No TM option selected.
+        /// </summary>
+        public static string CreateProject_NoTm {
+            get {
+                return ResourceManager.GetString("CreateProject_NoTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Package details.
         /// </summary>
         public static string CreateProject_PackageDetails {
             get {
                 return ResourceManager.GetString("CreateProject_PackageDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to with penalty: .
+        /// </summary>
+        public static string CreateProject_Penalty {
+            get {
+                return ResourceManager.GetString("CreateProject_Penalty", resourceCulture);
             }
         }
         

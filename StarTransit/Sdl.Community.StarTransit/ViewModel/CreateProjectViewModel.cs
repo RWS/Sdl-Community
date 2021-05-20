@@ -1,9 +1,13 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -22,6 +26,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private readonly IWizardModel _wizardModel;
 		private readonly IProjectService _projectService;
 		private ICommand _createProjectCommand;
+		private ObservableCollection<TmSummaryOptions> _tmSummaryOptions;
 
 		public CreateProjectViewModel(IWizardModel wizardModel, IProjectService projectService, object view) : base(view)
 		{
@@ -32,6 +37,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_isPreviousEnabled = true;
 			_isNextEnabled = false;
 			_projectService = projectService;
+			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
 		}
 
@@ -56,6 +62,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 		public string DueDate
 		{
 			get => _wizardModel?.DueDate?.ToString();
+		}
+
+		public ObservableCollection<TmSummaryOptions> TmSummaryOptions
+		{
+			get => _tmSummaryOptions;
+			set
+			{
+				_tmSummaryOptions = value;
+				OnPropertyChanged(nameof(TmSummaryOptions));
+			}
 		}
 
 		public override string DisplayName
@@ -167,8 +183,19 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
+			TmSummaryOptions.Clear();
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
+				//Create summary data
+				var tmSummary = new TmSummaryOptions
+				{
+					SourceFlag = languagePair.SourceFlag, TargetFlag = languagePair.TargetFlag
+				};
+				if (languagePair.NoTm)
+				{
+					tmSummary.SelectedOption = PluginResources.Tm_CreateWitoutTm;
+				}
+
 				var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).ToList();
 				if (languagePair.CreateNewTm)
 				{
@@ -177,20 +204,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 						selectedTm.Name = $"{selectedTm.Name}.sdltm";
 						selectedTm.LocalTmCreationPath = Path.Combine(_wizardModel.PackageModel.Result.Location, selectedTm.Name);
 					}
-					//TMs/MT files selected without any penalties will be imported into only one tm
-					//var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked)
-					//	.GroupBy(t => t.TmPenalty).ToList();
-					//languagePair.GroupedTmsByPenalty.AddRange(selectedTms);
+
+					tmSummary.SelectedOption =
+						$"{PluginResources.Tm_CreateTm}: {selectedTms[0].Name} {PluginResources.CreateProject_Penalty} {selectedTms[0].TmPenalty}";
 				}
 				languagePair.SelectedTranslationMemoryMetadatas.AddRange(selectedTms);
-
-
-				//if (!languagePair.ChoseExistingTm) continue;
-				//{
-				//	//We'll import all the transit TM files into selected TM
-				//	var tmsForSelectedTm = languagePair.StarTranslationMemoryMetadatas.Where(t => !t.IsMtFile).GroupBy(t => t.TmPenalty).ToList();
-				//	languagePair.GroupedTmsByPenalty.AddRange(tmsForSelectedTm);
-				//}
+				if (languagePair.ChoseExistingTm)
+				{
+					tmSummary.SelectedOption = $"{PluginResources.Tm_BrowseTm}: {languagePair.TmName}.sdltm";
+				}
+				TmSummaryOptions.Add(tmSummary);
 			}
 		}
 

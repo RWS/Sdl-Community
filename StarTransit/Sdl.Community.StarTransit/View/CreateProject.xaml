@@ -27,7 +27,7 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
+	<Grid Name="DetailsGrid">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition />
@@ -86,9 +86,39 @@
 		           Visibility="{Binding DueDate,Converter={StaticResource NullVisibilityConverter}}"
 		           Text="{Binding DueDate}"/>
 
-		<TextBlock Grid.Row="6" Grid.Column="0"
+		<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
 		           Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}" FontSize="15" Margin="10"
 		           Text="{x:Static resx:PluginResources.Wizard_TM_DisplayName}"/>
+		<ListView Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+		         Background="Transparent" BorderThickness="0"
+		         ItemsSource="{Binding TmSummaryOptions}">
+			<ListView.ItemContainerStyle>
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="Background" Value="Transparent" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type ListViewItem}">
+								<ContentPresenter />
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<WrapPanel >
+							<Image Margin="10 0 0 0"
+								Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}"/>
+							<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
+							<Image Source="{Binding TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+							<TextBlock 
+								Margin="10 0 0 0"
+								VerticalAlignment="Center"
+								Text="{Binding SelectedOption}"/>
+					</WrapPanel>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 		<!--<TextBlock Grid.Row="1" Text="Project was created" Visibility="{Binding ProjectFinished, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
 	</Grid>
 </UserControl>

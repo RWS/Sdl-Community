@@ -347,7 +347,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 					if (!languagePairOption.ChoseExistingTm) continue;
 					selectedLp.TmName = languagePairOption.TmName;
 					selectedLp.TmPath = languagePairOption.TmPath;
+					selectedLp.ChoseExistingTm = true;
 					selectedLp.NoTm = false;
+					selectedLp.CreateNewTm = false;
 				}
 			}
 		}

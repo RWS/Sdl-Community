@@ -287,4 +287,16 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="CreateProject_ProjectName" xml:space="preserve">
     <value>Project name</value>
   </data>
+  <data name="CreateProject_CreateNewTm" xml:space="preserve">
+    <value>Create new TM with name:</value>
+  </data>
+  <data name="CreateProject_Import" xml:space="preserve">
+    <value>Import into:</value>
+  </data>
+  <data name="CreateProject_NoTm" xml:space="preserve">
+    <value>No TM option selected</value>
+  </data>
+  <data name="CreateProject_Penalty" xml:space="preserve">
+    <value>with penalty: </value>
+  </data>
 </root>
