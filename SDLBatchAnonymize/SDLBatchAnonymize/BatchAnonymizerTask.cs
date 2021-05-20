@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
+using NLog;
 using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.Community.SDLBatchAnonymize.Service;
 using Sdl.Core.Globalization;
@@ -24,6 +25,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 	public class BatchAnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private BatchAnonymizerSettings _settings;
 		private UserNameService _userNameService;
 		private ResourceOriginsService _resourceOriginsService;
@@ -31,6 +33,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 
 		protected override void OnInitializeTask()
 		{
+			_logger.Info(PluginResources.LogMessage_BatchTaskStarted);
 			_resourceOriginsService = new ResourceOriginsService();
 			_userNameService = new UserNameService();
 
@@ -47,6 +50,7 @@ namespace Sdl.Community.SDLBatchAnonymize
 					_batchTaskWindow.Closed += BatchTaskWindow_Closed; 
 				}
 			});
+
 
 			backupService.BackupProject(projectInfo.LocalProjectFolder, projectInfo.Name);
 		}
