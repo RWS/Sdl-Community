@@ -191,11 +191,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 				//Create summary data
 				var tmSummary = new TmSummaryOptions
 				{
-					SourceFlag = languagePair.SourceFlag, TargetFlag = languagePair.TargetFlag
+					SourceFlag = languagePair.SourceFlag, TargetFlag = languagePair.TargetFlag, 
+					SelectedOption = new List<string>()
 				};
 				if (languagePair.NoTm)
 				{
-					tmSummary.SelectedOption = PluginResources.Tm_CreateWitoutTm;
+					tmSummary.SelectedOption.Add(PluginResources.Tm_CreateWitoutTm);
 				}
 
 				var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).ToList();
@@ -209,16 +210,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 						}
 						selectedTm.LocalTmCreationPath =
 							Path.Combine(_wizardModel.PackageModel.Result.Location, selectedTm.Name);
-					}
 
-					tmSummary.SelectedOption =
-						$"{PluginResources.Tm_CreateTm}: {selectedTms[0].Name} {PluginResources.CreateProject_Penalty} {selectedTms[0].TmPenalty}";
+						var selectedTmOption = $"{PluginResources.Tm_CreateTm}: {selectedTm.Name} {PluginResources.CreateProject_Penalty} {selectedTm.TmPenalty}";
+						tmSummary.SelectedOption.Add(selectedTmOption);
+					}
 				}
 
 				languagePair.SelectedTranslationMemoryMetadatas.AddRange(selectedTms);
 				if (languagePair.ChoseExistingTm)
 				{
-					tmSummary.SelectedOption = $"{PluginResources.Tm_BrowseTm}: {languagePair.TmName}.sdltm";
+					var option = $"{PluginResources.Tm_BrowseTm}: {languagePair.TmName}.sdltm";
+					tmSummary.SelectedOption.Add(option) ;
 				}
 
 				TmSummaryOptions.Add(tmSummary);
