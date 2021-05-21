@@ -163,7 +163,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			foreach (var metadataTransitFile in languagePair.SelectedTranslationMemoryMetadatas)
 			{
 				var tmDescription = $"{metadataTransitFile.Name} Translation Memory";
-				metadataTransitFile.LocalTmCreationPath = GetTmPathForDuplicatedName(metadataTransitFile.LocalTmCreationPath, _tmConfig.Entries);
+				if (languagePair.CreateNewTm)
+				{
+					//Only for create new tm option we need to check for duplicated name, for Browse existing tm we'll import into selected tm
+					metadataTransitFile.LocalTmCreationPath = GetTmPathForDuplicatedName(metadataTransitFile.LocalTmCreationPath, _tmConfig.Entries);
+				}
 
 				var importer = new TransitTmImporter(languagePair, tmDescription, metadataTransitFile.LocalTmCreationPath,
 					metadataTransitFile.TmPenalty);

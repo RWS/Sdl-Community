@@ -186,6 +186,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			TmSummaryOptions.Clear();
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
+				languagePair.SelectedTranslationMemoryMetadatas.Clear();
+
 				//Create summary data
 				var tmSummary = new TmSummaryOptions
 				{
@@ -201,18 +203,24 @@ namespace Sdl.Community.StarTransit.ViewModel
 				{
 					foreach (var selectedTm in selectedTms)
 					{
-						selectedTm.Name = $"{selectedTm.Name}.sdltm";
-						selectedTm.LocalTmCreationPath = Path.Combine(_wizardModel.PackageModel.Result.Location, selectedTm.Name);
+						if (!selectedTm.Name.Contains(".sdltm"))
+						{
+							selectedTm.Name = $"{selectedTm.Name}.sdltm";
+						}
+						selectedTm.LocalTmCreationPath =
+							Path.Combine(_wizardModel.PackageModel.Result.Location, selectedTm.Name);
 					}
 
 					tmSummary.SelectedOption =
 						$"{PluginResources.Tm_CreateTm}: {selectedTms[0].Name} {PluginResources.CreateProject_Penalty} {selectedTms[0].TmPenalty}";
 				}
+
 				languagePair.SelectedTranslationMemoryMetadatas.AddRange(selectedTms);
 				if (languagePair.ChoseExistingTm)
 				{
 					tmSummary.SelectedOption = $"{PluginResources.Tm_BrowseTm}: {languagePair.TmName}.sdltm";
 				}
+
 				TmSummaryOptions.Add(tmSummary);
 			}
 		}

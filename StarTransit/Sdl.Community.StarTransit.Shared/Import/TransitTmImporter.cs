@@ -25,6 +25,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			FileBasedTranslationMemory fileBasedTm;
 
+			//TODO: Refactor we don't need else
 			if (languagePair != null)
 			{
 				fileBasedTm = new FileBasedTranslationMemory(
@@ -50,42 +51,12 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 		}
 
-		////TODO: REmove this for the final implementation
-		//private void CreateStudioTranslationMemory(string tmPath, string description,int penalty,LanguagePair languagePair)
-		//{
-		//	//TODO: move this to constructor
-		//	FileBasedTranslationMemory fileBasedTm;
-		//	if (languagePair != null)
-		//	{
-		//		fileBasedTm = new FileBasedTranslationMemory(
-		//			tmPath,
-		//			description,
-		//			languagePair.SourceLanguage,
-		//			languagePair.TargetLanguage,
-		//			FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
-		//			BuiltinRecognizers.RecognizeAll,
-		//			TokenizerFlags.DefaultFlags,
-		//			WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
-		//	}
-		//	else
-		//	{
-		//		fileBasedTm = new FileBasedTranslationMemory(tmPath);
-		//	}
-			
-		//	fileBasedTm.Save();
-
-		//	if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
-		//	{
-		//		StudioTranslationMemories.Add(fileBasedTm, penalty);
-		//	}
-		//}
-		
 		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, int penalty, PackageModel package)
 		{
 			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles,package);
 			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,penalty,package);
 		}
-
+		//TODO: investigate this I don't think we need a list
 		public TranslationProviderReference GetTranslationProviderReference(string tmPath,LanguagePair languagePair)
 		{
 			var tm = StudioTranslationMemories.FirstOrDefault(t => t.Key.FilePath.Equals(tmPath));
@@ -97,6 +68,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			return tm.Key != null ? new TranslationProviderReference(tm.Key.FilePath, true) : null;
 		}
 
+		//TODO: We should receive the target language code and not iterating
 		private void ImportSdlXliffIntoTm(string sdlXliffFolderPath,int penalty, PackageModel package)
 		{
 			try
@@ -120,6 +92,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 						foreach (var xliffFile in xliffFiles)
 						{
 							var fileName = Path.GetFileNameWithoutExtension(xliffFile);
+							//TODO: investigate this it might not be required
 							// for tms list or MT list the name of star transit tm corresponds to Studio tm
 							// for general tm the name of the tm is the name of the package. In constructor we set 0 as penalty for general tms
 							var correspondingTm =
@@ -151,8 +124,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
 
-			//var sourceTmFiles = starTransitTms.Select(s => s.SourceFile).ToArray();
-			//var targetTmFiles = starTransitTms.Select(t => t.TargetFile).ToArray();
 			var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
 
 			var projectInfo = new ProjectInfo

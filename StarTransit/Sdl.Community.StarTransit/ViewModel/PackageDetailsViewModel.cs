@@ -337,19 +337,29 @@ namespace Sdl.Community.StarTransit.ViewModel
 					{
 						selectedLp.CreateNewTm = true;
 						selectedLp.NoTm = false;
-						foreach (var tmMetadata in selectedLp.StarTranslationMemoryMetadatas)
-						{
-							tmMetadata.TmPenalty = languagePairOption.TemplatePenalty;
-							tmMetadata.IsChecked = true;
-						}
+						SetTmMetadatas(selectedLp, languagePairOption.TemplatePenalty);
 					}
 
 					if (!languagePairOption.ChoseExistingTm) continue;
 					selectedLp.TmName = languagePairOption.TmName;
 					selectedLp.TmPath = languagePairOption.TmPath;
+					SetTmMetadatas(selectedLp, 0);
 					selectedLp.ChoseExistingTm = true;
 					selectedLp.NoTm = false;
 					selectedLp.CreateNewTm = false;
+				}
+			}
+		}
+
+		private static void SetTmMetadatas(LanguagePair selectedLp, int penalty)
+		{
+			foreach (var tmMetadata in selectedLp.StarTranslationMemoryMetadatas)
+			{
+				tmMetadata.TmPenalty = penalty;
+				tmMetadata.IsChecked = true;
+				if (!string.IsNullOrEmpty(selectedLp.TmPath))
+				{
+					tmMetadata.LocalTmCreationPath = selectedLp.TmPath;
 				}
 			}
 		}
@@ -368,6 +378,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				{
 					tmMetadata.TmPenalty = 0;
 					tmMetadata.IsChecked = false;
+					tmMetadata.LocalTmCreationPath = string.Empty;
 				}
 				languagePair.TmPath = string.Empty;
 				languagePair.TmName = string.Empty;
