@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -18,102 +18,80 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	public class TransitTmImporter
 	{
 		private readonly IFileService _fileService = new FileService();
-		public Dictionary<FileBasedTranslationMemory, int> StudioTranslationMemories= new Dictionary<FileBasedTranslationMemory, int>();
 		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+		private readonly FileBasedTranslationMemory _translationMemory;
 
-		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath, int penalty)
+		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath)
 		{
-			FileBasedTranslationMemory fileBasedTm;
+			_translationMemory = new FileBasedTranslationMemory(
+				tmPath,
+				description,
+				languagePair.SourceLanguage,
+				languagePair.TargetLanguage,
+				FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased |
+				FuzzyIndexes.TargetWordBased,
+				BuiltinRecognizers.RecognizeAll,
+				TokenizerFlags.DefaultFlags,
+				WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
 
-			//TODO: Refactor we don't need else
-			if (languagePair != null)
-			{
-				fileBasedTm = new FileBasedTranslationMemory(
-					tmPath,
-					description,
-					languagePair.SourceLanguage,
-					languagePair.TargetLanguage,
-					FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased | FuzzyIndexes.TargetWordBased,
-					BuiltinRecognizers.RecognizeAll,
-					TokenizerFlags.DefaultFlags,
-					WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
-			}
-			else
-			{
-				fileBasedTm = new FileBasedTranslationMemory(tmPath);
-			}
-
-			fileBasedTm.Save();
-
-			if (!StudioTranslationMemories.ContainsKey(fileBasedTm))
-			{
-				StudioTranslationMemories.Add(fileBasedTm, penalty);
-			}
+			_translationMemory.Save();
 		}
 
-		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, int penalty, PackageModel package)
+		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, CultureInfo targetLanguage, PackageModel package)
 		{
 			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles,package);
-			ImportSdlXliffIntoTm(sdlXliffFolderFullPath,penalty,package);
-		}
-		//TODO: investigate this I don't think we need a list
-		public TranslationProviderReference GetTranslationProviderReference(string tmPath,LanguagePair languagePair)
-		{
-			var tm = StudioTranslationMemories.FirstOrDefault(t => t.Key.FilePath.Equals(tmPath));
-			if (tm.Key is null)
-			{
-				// tm was selected from local disk
-				tm = StudioTranslationMemories.FirstOrDefault(t => t.Key.FilePath.Equals(languagePair.TmPath));
-			}
-			return tm.Key != null ? new TranslationProviderReference(tm.Key.FilePath, true) : null;
+			//TODO: Rise event finished converting tms into xliffs
+			ImportSdlXliffsIntoTm(sdlXliffFolderFullPath, targetLanguage);
 		}
 
-		//TODO: We should receive the target language code and not iterating
-		private void ImportSdlXliffIntoTm(string sdlXliffFolderPath,int penalty, PackageModel package)
+		public TranslationProviderReference GetTranslationProviderReference()
+		{
+			return new TranslationProviderReference(_translationMemory.FilePath, true);
+		}
+
+		private void ImportSdlXliffsIntoTm(string sdlXliffFolderPath,CultureInfo targetLanguage)
 		{
 			try
 			{
-				var targetLanguages = package.LanguagePairs.Select(f => f.TargetLanguage.Name).ToList();
 				var importSettings = new ImportSettings
 				{
-					IsDocumentImport = false,
+					IsDocumentImport = true,
 					CheckMatchingSublanguages = false,
 					IncrementUsageCount = true,
 					NewFields = ImportSettings.NewFieldsOption.AddToSetup,
 					PlainText = false,
 					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
 				};
-				foreach (var languageCode in targetLanguages)
+				var tmImporter = new TranslationMemoryImporter(_translationMemory.LanguageDirection)
 				{
-					var folderPath = Path.Combine(sdlXliffFolderPath, languageCode);
-					if (Directory.Exists(folderPath))
+					ImportSettings = importSettings
+				};
+				tmImporter.BatchImported += TmImporter_BatchImported;
+
+				var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
+				if (Directory.Exists(folderPath))
+				{
+					var xliffFiles = Directory.GetFiles(folderPath);
+					foreach (var xliffFile in xliffFiles)
 					{
-						var xliffFiles = Directory.GetFiles(folderPath);
-						foreach (var xliffFile in xliffFiles)
-						{
-							var fileName = Path.GetFileNameWithoutExtension(xliffFile);
-							//TODO: investigate this it might not be required
-							// for tms list or MT list the name of star transit tm corresponds to Studio tm
-							// for general tm the name of the tm is the name of the package. In constructor we set 0 as penalty for general tms
-							var correspondingTm =
-								StudioTranslationMemories.Keys.FirstOrDefault(t => t.Name.Equals(fileName)) ??
-								StudioTranslationMemories.FirstOrDefault(s => s.Value.Equals(penalty)).Key;
+						tmImporter.Import(xliffFile);
 
-							if (correspondingTm is null) return;
-							var tmImporter = new TranslationMemoryImporter(correspondingTm.LanguageDirection)
-							{
-								ImportSettings = importSettings
-							};
-
-							tmImporter.Import(xliffFile);
-						}
+						//TODO: Rise event file finished with the number of file
+						//TODO: Increase statistics details numbers
+						var statistics = tmImporter.Statistics;
 					}
 				}
+
 			}
 			catch (Exception ex)
 			{
 				_logger.Error(ex);
 			}
+		}
+
+		private void TmImporter_BatchImported(object sender, BatchImportedEventArgs e)
+		{
+			
 		}
 
 		/// <summary>

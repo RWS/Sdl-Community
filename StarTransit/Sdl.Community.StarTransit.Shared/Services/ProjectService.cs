@@ -169,11 +169,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					metadataTransitFile.LocalTmCreationPath = GetTmPathForDuplicatedName(metadataTransitFile.LocalTmCreationPath, _tmConfig.Entries);
 				}
 
-				var importer = new TransitTmImporter(languagePair, tmDescription, metadataTransitFile.LocalTmCreationPath,
-					metadataTransitFile.TmPenalty);
+				var importer = new TransitTmImporter(languagePair, tmDescription, metadataTransitFile.LocalTmCreationPath);
 				importer.ImportStarTransitTm(metadataTransitFile.TransitTmsSourceFilesPath,
-					metadataTransitFile.TransitTmsTargeteFilesPath, metadataTransitFile.TmPenalty, package);
-				var providerRef = importer.GetTranslationProviderReference(metadataTransitFile.LocalTmCreationPath, languagePair);
+					metadataTransitFile.TransitTmsTargeteFilesPath, languagePair.TargetLanguage, package);
+
+				var providerRef = importer.GetTranslationProviderReference();
 				_logger.Info($"-->Import lang pair Provider Reference:{providerRef?.Uri}");
 
 				if (providerRef == null) return null;
@@ -184,7 +184,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					_tmConfig.Entries.Add(new TranslationProviderCascadeEntry(providerRef, true, true, true, metadataTransitFile.TmPenalty));
 				}
 			}
-
 			return null;
 		}
 
