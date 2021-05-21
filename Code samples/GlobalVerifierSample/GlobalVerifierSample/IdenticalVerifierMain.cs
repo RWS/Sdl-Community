@@ -161,8 +161,7 @@ namespace GlobalVerifierSample
 						MessageReporterProxy.ReportMessage(this, PluginResources.Plugin_Name,
 							ErrorLevel.Warning, PluginResources.Error_NotIdentical,
 							new TextLocation(new Location(segmentPair.Target, true), 0),
-							new TextLocation(new Location(segmentPair.Target, true), segmentPair.Target.ToString().Length - 1),
-							new CustomMessageData("type", "severity", "source", "target"));
+							new TextLocation(new Location(segmentPair.Target, true), segmentPair.Target.ToString().Length - 1));
 					}
 				}
 			}
