@@ -9,5 +9,6 @@
 		<File>Sdl.Community.StarTransit.UI.dll</File>
 		<File>Sdl.Community.StarTransit.Shared.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
+		<File>System.Reactive.dll</File>
 	</Include>
 </PluginPackage>

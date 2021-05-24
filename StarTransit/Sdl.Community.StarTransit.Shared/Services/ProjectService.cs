@@ -28,6 +28,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly string _iconPath;
 		private readonly IFileService _fileService;
 		private readonly IProjectsControllerService _projectControllerService;
+		private readonly IEventAggregatorService _eventAggregatorService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _initialFolderPath;
 
@@ -49,9 +50,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			_initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), studioVersion.StudioDocumentsFolderName, "Translation Memories");
 		}
 
-		public ProjectService(IProjectsControllerService projectsControllerService):this()
+		public ProjectService(IProjectsControllerService projectsControllerService,IEventAggregatorService eventAggregatorService):this()
 		{
 			_projectControllerService = projectsControllerService;
+			_eventAggregatorService = eventAggregatorService;
 			_iconPath = string.IsNullOrEmpty(_iconPath) ? GetProjectIconPath() : _iconPath;
 		}
 
@@ -169,7 +171,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					metadataTransitFile.LocalTmCreationPath = GetTmPathForDuplicatedName(metadataTransitFile.LocalTmCreationPath, _tmConfig.Entries);
 				}
 
-				var importer = new TransitTmImporter(languagePair, tmDescription, metadataTransitFile.LocalTmCreationPath);
+				var importer = new TransitTmImporter(languagePair, tmDescription, metadataTransitFile.LocalTmCreationPath,_eventAggregatorService);
 				importer.ImportStarTransitTm(metadataTransitFile.TransitTmsSourceFilesPath,
 					metadataTransitFile.TransitTmsTargeteFilesPath, languagePair.TargetLanguage, package);
 

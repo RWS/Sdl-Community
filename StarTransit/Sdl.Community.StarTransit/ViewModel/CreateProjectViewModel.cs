@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -28,7 +29,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private ICommand _createProjectCommand;
 		private ObservableCollection<TmSummaryOptions> _tmSummaryOptions;
 
-		public CreateProjectViewModel(IWizardModel wizardModel, IProjectService projectService, object view) : base(view)
+		public CreateProjectViewModel(IWizardModel wizardModel, IProjectService projectService,IEventAggregatorService eventAggregatorService, object view) : base(view)
 		{
 			_currentPageNumber = 3;
 			_wizardModel = wizardModel;
@@ -37,6 +38,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_isPreviousEnabled = true;
 			_isNextEnabled = false;
 			_projectService = projectService;
+			eventAggregatorService?.Subscribe<TuImportStatistics>(OnTuStatisticsChanged);
+			eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
 		}
@@ -225,6 +228,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 				TmSummaryOptions.Add(tmSummary);
 			}
+		}
+		private void OnTuStatisticsChanged(TuImportStatistics statistics)
+		{
+			//We finish importing all the mt files into xliffs and we have the statistics for Language pair
+		}
+		private void OnTmFileProgressChanged(TmFilesProgress fileProgress)
+		{
+
 		}
 
 		private void CreateTradosProject()

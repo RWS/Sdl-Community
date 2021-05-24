@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using NLog;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
@@ -20,9 +21,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private readonly IFileService _fileService = new FileService();
 		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 		private readonly FileBasedTranslationMemory _translationMemory;
+		private readonly IEventAggregatorService _eventAggregator;
 
-		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath)
+		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath,IEventAggregatorService eventAggregator)
 		{
+			_eventAggregator = eventAggregator;
 			_translationMemory = new FileBasedTranslationMemory(
 				tmPath,
 				description,
@@ -66,22 +69,29 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				{
 					ImportSettings = importSettings
 				};
-				tmImporter.BatchImported += TmImporter_BatchImported;
-
+				var tuImportStatistics = new TuImportStatistics
+				{
+					TargetLanguage = targetLanguage
+				};
 				var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
 				if (Directory.Exists(folderPath))
 				{
 					var xliffFiles = Directory.GetFiles(folderPath);
+					var tmFileProgress = new TmFilesProgress
+					{
+						TotalFilesNumber = xliffFiles.Length,
+						TargetLanguage = targetLanguage
+					};
+
 					foreach (var xliffFile in xliffFiles)
 					{
+						tmFileProgress.ProcessingFileNumber++;
 						tmImporter.Import(xliffFile);
-
-						//TODO: Rise event file finished with the number of file
-						//TODO: Increase statistics details numbers
-						var statistics = tmImporter.Statistics;
+						GetFileImportStatistics(tmImporter.Statistics, tuImportStatistics);
+						_eventAggregator?.PublishEvent(tmFileProgress);
 					}
 				}
-
+				_eventAggregator?.PublishEvent(tuImportStatistics);
 			}
 			catch (Exception ex)
 			{
@@ -89,14 +99,16 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 		}
 
-		private void TmImporter_BatchImported(object sender, BatchImportedEventArgs e)
+		private static void GetFileImportStatistics(ImportStatistics tmImporterStatistics, TuImportStatistics tuImportStatistics)
 		{
-			
+			tuImportStatistics.AddedTusCount += tmImporterStatistics.AddedTranslationUnits;
+			tuImportStatistics.ReadTusCount += tmImporterStatistics.TotalRead;
+			tuImportStatistics.TotalImported = tmImporterStatistics.TotalImported;
+			tuImportStatistics.ErrorCount = tmImporterStatistics.Errors;
 		}
 
 		/// <summary>
-		/// Create temporary bilingual files (sdlxliff) used to import the information
-		/// in Studio translation memories
+		/// Create temporary bilingual files (sdlxliff) used to import the information in Studio translation memories
 		/// </summary>
 		private string CreateTemporarySdlXliffs(List<string>sourceTmFiles,List<string>targetTmFiles, PackageModel package)
 		{

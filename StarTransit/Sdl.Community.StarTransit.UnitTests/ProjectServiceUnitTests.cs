@@ -24,7 +24,8 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var packageService = Substitute.For<PackageService>();
 			_projectService = Substitute.For<ProjectService>();
 			var projectsControllerService = Substitute.For<IProjectsControllerService>();
-			_projService = new ProjectService(projectsControllerService);
+			var eventAggregatorService = Substitute.For<IEventAggregatorService>();
+			_projService = new ProjectService(projectsControllerService, eventAggregatorService);
 			_starTransitConfiguration = new StarTransitConfiguration(packageService);
 		}
 

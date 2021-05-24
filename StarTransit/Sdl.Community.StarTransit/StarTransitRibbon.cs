@@ -47,7 +47,9 @@ namespace Sdl.Community.StarTransit
 			var studioService = new StudioService(projectsController);
 			var fileDialogService = new OpenFileDialogService();
 			var projectsControllerService = new ProjectsControllerService(projectsController);
-			var projectService = new ProjectService(projectsControllerService);
+			var eventAggregatorService = new EventAggregatorService(TransitApplicationInitializer.EventAggregator);
+			var projectService = new ProjectService(projectsControllerService, eventAggregatorService);
+
 			var shortStudioVersion = _studioVersionService.GetStudioVersion()?.ShortVersion;
 			var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
 				$@"Studio {shortStudioVersion}\Projects\projects.xml");
@@ -56,7 +58,7 @@ namespace Sdl.Community.StarTransit
 			{
 				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath, new PackageDetails()),
 				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
-				new CreateProjectViewModel(wizardModel,projectService,new CreateProject())
+				new CreateProjectViewModel(wizardModel,projectService,eventAggregatorService,new CreateProject())
 			};
 		}
 
