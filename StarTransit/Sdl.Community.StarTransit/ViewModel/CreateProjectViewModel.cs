@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
@@ -40,6 +41,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_projectService = projectService;
 			eventAggregatorService?.Subscribe<TuImportStatistics>(OnTuStatisticsChanged);
 			eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
+			eventAggregatorService?.Subscribe<XliffCreationProgress>(OnXliffCreationProgressChanged);
+			eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
+
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
 		}
@@ -162,7 +166,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 
 		public ICommand CreateProjectCommand =>
-			_createProjectCommand ?? (_createProjectCommand = new RelayCommand(CreateTradosProject));
+			_createProjectCommand ?? (_createProjectCommand = new AwaitableCommand(CreateTradosProject));
 
 		public override bool OnChangePage(int position, out string message)
 		{
@@ -237,10 +241,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 
 		}
-
-		private void CreateTradosProject()
+		private void OnXliffCreationProgressChanged(XliffCreationProgress xliffProcess)
 		{
-			var proj = _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
+
+		}
+		private void OnStudioProjectProgressChanged(ProjectCreationProgress projectCreationProgress)
+		{
+		}
+
+		private async Task CreateTradosProject()
+		{
+			var proj = await _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
 			ProjectFinished = true;
 		}
 	}

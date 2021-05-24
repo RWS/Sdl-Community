@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using NLog;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
@@ -67,9 +69,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return newProject;
 		}
 
-		public virtual MessageModel UpdateProjectSettings(IProject project,Guid[] targetFilesIds,bool projectContainsTm)
+		public virtual MessageModel UpdateProjectSettings(IProject project, Guid[] targetFilesIds,
+			bool projectContainsTm)
 		{
-			var fileBasedProject = (FileBasedProject)project;
+			var fileBasedProject = (FileBasedProject) project;
 
 			if (projectContainsTm)
 			{
@@ -77,13 +80,20 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				fileBasedProject.UpdateTranslationProviderConfiguration(_tmConfig);
 			}
 
+			var projectCreationProgress = new ProjectCreationProgress { BatchTaskIds = new List<string>()};
+
 			project.RunAutomaticTask(targetFilesIds, AutomaticTaskTemplateIds.Scan);
-			var taskSequence = fileBasedProject.RunAutomaticTasks(targetFilesIds, new[]
-			{
+			var taskSequence = fileBasedProject.RunAutomaticTasks(targetFilesIds,
+				new[]
+				{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
-					AutomaticTaskTemplateIds.CopyToTargetLanguages,
-					AutomaticTaskTemplateIds.PreTranslateFiles,
-			});
+					AutomaticTaskTemplateIds.CopyToTargetLanguages, AutomaticTaskTemplateIds.PreTranslateFiles,
+				}, (sender, args) => {
+					projectCreationProgress.BatchTaskIds.Clear();
+					projectCreationProgress.BatchTaskIds.AddRange(args.TaskTemplateIds);
+					projectCreationProgress.Progress = args.PercentComplete;
+					_eventAggregatorService.PublishEvent(projectCreationProgress);
+				}, (sender, args) => { });
 
 			if (taskSequence.Status.Equals(TaskStatus.Failed))
 			{
@@ -98,32 +108,37 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						_logger.Error($"Message: {messages?.Message}");
 					}
 				}
+
 				_messageModel.Message = "Project could not be created.Error occured while running automatic tasks!";
 				_messageModel.Title = "Informative message";
 				return _messageModel;
 			}
+
 			fileBasedProject.Save();
 			return _messageModel;
 		}
 
-		public IProject CreateStudioProject(PackageModel transitPackage)
+		public Task<IProject> CreateStudioProject(PackageModel transitPackage)
 		{
-			var studioProject = PrepareStudioProject(transitPackage);
-			foreach (var languagePair in transitPackage.LanguagePairs)
+			return System.Threading.Tasks.Task.Run(() =>
 			{
-				var projectContainsTm = false;
-				if (!languagePair.NoTm)
+				var studioProject = PrepareStudioProject(transitPackage);
+				foreach (var languagePair in transitPackage.LanguagePairs)
 				{
-					_messageModel = ImportTms(transitPackage, languagePair);
-					projectContainsTm = true;
-				}
+					var projectContainsTm = false;
+					if (!languagePair.NoTm)
+					{
+						_messageModel = ImportTms(transitPackage, languagePair);
+						projectContainsTm = true;
+					}
 
-				var targetFilesForLanguagePair = studioProject.AddFiles(languagePair.TargetFile.ToArray());
-				var filesIds = targetFilesForLanguagePair.GetIds();
-				_messageModel = UpdateProjectSettings(studioProject, filesIds,projectContainsTm); // runs Studio batchtask to save all the changes to the project
-			}
-			CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
-			return null;
+					var targetFilesForLanguagePair = studioProject.AddFiles(languagePair.TargetFile.ToArray());
+					var filesIds = targetFilesForLanguagePair.GetIds();
+					_messageModel = UpdateProjectSettings(studioProject, filesIds, projectContainsTm); // runs Studio batchtask to save all the changes to the project
+				}
+				CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
+				return studioProject;
+			});
 		}
 
 		private IProject PrepareStudioProject(PackageModel transitPackage)

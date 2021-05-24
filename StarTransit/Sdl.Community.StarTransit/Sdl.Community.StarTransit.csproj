@@ -143,7 +143,9 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\AwaitableCommand.cs" />
     <Compile Include="Command\CommandHandler.cs" />
+    <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Command\MouseDownCommand.cs" />
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Converter\ImageToBitmapImageConverter.cs" />
@@ -154,10 +156,12 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SelectedPageEventArgs.cs" />
+    <Compile Include="Interface\IAsyncCommand.cs" />
     <Compile Include="Interface\IFolderDialogService.cs" />
     <Compile Include="Interface\IOpenFileDialogService.cs" />
     <Compile Include="Interface\IProgressHeader.cs" />
     <Compile Include="Interface\IProgressHeaderItem.cs" />
+    <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />
     <Compile Include="Interface\IStudioService.cs" />
     <Compile Include="Interface\IWizardModel.cs" />
     <Compile Include="Model\BaseModel.cs" />

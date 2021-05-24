@@ -42,7 +42,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, CultureInfo targetLanguage, PackageModel package)
 		{
-			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles,package);
+			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles, targetLanguage,package);
 			//TODO: Rise event finished converting tms into xliffs
 			ImportSdlXliffsIntoTm(sdlXliffFolderFullPath, targetLanguage);
 		}
@@ -110,22 +110,20 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		/// <summary>
 		/// Create temporary bilingual files (sdlxliff) used to import the information in Studio translation memories
 		/// </summary>
-		private string CreateTemporarySdlXliffs(List<string>sourceTmFiles,List<string>targetTmFiles, PackageModel package)
+		private string CreateTemporarySdlXliffs(List<string> sourceTmFiles, List<string> targetTmFiles, CultureInfo targetCultureInfo, PackageModel package)
 		{
 			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
-
-			var target = _fileService.GetStudioTargetLanguages(package.LanguagePairs);
-
+			var targetLang = new Language(targetCultureInfo);
 			var projectInfo = new ProjectInfo
 			{
 				Name = $"TMExtractProject_{Guid.NewGuid()}",
 				LocalProjectFolder = pathToExtractFolder,
 				SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
-				TargetLanguages = target
+				TargetLanguages = new[] {targetLang} 
 			};
 
 			var newProject =
-				new FileBasedProject(projectInfo,new ProjectTemplateReference(package.ProjectTemplate.Uri));
+				new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
 			newProject.AddFiles(sourceTmFiles.ToArray());
 			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
 			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
@@ -133,12 +131,23 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			var targetTms = newProject.AddFiles(targetTmFiles.ToArray());
 			newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
 
+			var xliffCreationProgress = new XliffCreationProgress
+			{
+				BatchTaskIds = new List<string>(), TargetLanguage = targetLang.CultureInfo
+			};
+
 			var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),
 				new[]
 				{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages
-				});
+				}, (sender, args) =>
+				{
+					xliffCreationProgress.BatchTaskIds.Clear();
+					xliffCreationProgress.BatchTaskIds.AddRange(args.TaskTemplateIds);
+					xliffCreationProgress.Progress = args.PercentComplete;
+					_eventAggregator.PublishEvent(xliffCreationProgress);
+				}, (sender, args) => { });
 
 			if (taskSequence.Status != TaskStatus.Failed) return pathToExtractFolder;
 			foreach (var subTask in taskSequence.SubTasks)
@@ -151,6 +160,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					_logger.Error($"Message: {messages?.Message}");
 				}
 			}
+
 			throw new Exception("Failed to create xliff for corresponding Transit TMs");
 		}
 
