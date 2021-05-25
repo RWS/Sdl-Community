@@ -110,6 +110,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Converting Transit Tms into XLIFF Files.
+        /// </summary>
+        public static string CreateProject_Convert {
+            get {
+                return ResourceManager.GetString("CreateProject_Convert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create new TM with name:.
         /// </summary>
         public static string CreateProject_CreateNewTm {
@@ -119,11 +128,38 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating project {0}.
+        /// </summary>
+        public static string CreateProject_Creating {
+            get {
+                return ResourceManager.GetString("CreateProject_Creating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import into:.
         /// </summary>
         public static string CreateProject_Import {
             get {
                 return ResourceManager.GetString("CreateProject_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing XLIFF Files into selected TM(s) {0} of {1}.
+        /// </summary>
+        public static string CreateProject_ImportXliff {
+            get {
+                return ResourceManager.GetString("CreateProject_ImportXliff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Pairs progress.
+        /// </summary>
+        public static string CreateProject_LangPair {
+            get {
+                return ResourceManager.GetString("CreateProject_LangPair", resourceCulture);
             }
         }
         
@@ -160,6 +196,15 @@ namespace Sdl.Community.StarTransit {
         public static string CreateProject_ProjectName {
             get {
                 return ResourceManager.GetString("CreateProject_ProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait....
+        /// </summary>
+        public static string CreateProject_Wait {
+            get {
+                return ResourceManager.GetString("CreateProject_Wait", resourceCulture);
             }
         }
         

@@ -133,7 +133,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 			var xliffCreationProgress = new XliffCreationProgress
 			{
-				BatchTaskIds = new List<string>(), TargetLanguage = targetLang.CultureInfo
+				BatchTaskIds = new List<string>(), TargetLanguage = targetLang.CultureInfo,TotalFileNumber = sourceTmFiles.Count
 			};
 
 			var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),

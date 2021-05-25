@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
+using Sdl.Community.StarTransit.Shared.Models;
 
 namespace Sdl.Community.StarTransit.Shared.Events
 {
-	public class TuImportStatistics
+	public class TuImportStatistics:BaseViewModel
 	{
 		public int ReadTusCount { get; set; }
 		public int AddedTusCount { get; set; }

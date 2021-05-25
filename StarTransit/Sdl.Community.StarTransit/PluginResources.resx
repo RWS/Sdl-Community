@@ -299,4 +299,19 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="CreateProject_Penalty" xml:space="preserve">
     <value>with penalty: </value>
   </data>
+  <data name="CreateProject_Convert" xml:space="preserve">
+    <value>Converting Transit Tms into XLIFF Files</value>
+  </data>
+  <data name="CreateProject_Creating" xml:space="preserve">
+    <value>Creating project {0}</value>
+  </data>
+  <data name="CreateProject_ImportXliff" xml:space="preserve">
+    <value>Importing XLIFF Files into selected TM(s) {0} of {1}</value>
+  </data>
+  <data name="CreateProject_LangPair" xml:space="preserve">
+    <value>Language Pairs progress</value>
+  </data>
+  <data name="CreateProject_Wait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
 </root>

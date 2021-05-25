@@ -31,7 +31,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
 		/// </summary>
         public List<StarTranslationMemoryMetadata> StarTranslationMemoryMetadatas { get; set; }
 		public List<StarTranslationMemoryMetadata> SelectedTranslationMemoryMetadatas { get; set; }
-		public List<IGrouping<int,StarTranslationMemoryMetadata>> GroupedTmsByPenalty { get; set; }
 		public bool HasTm { get; set; }
         public List<string> SourceFile { get; set; }
         public List<string> TargetFile { get; set; }

@@ -18,17 +18,22 @@ namespace Sdl.Community.StarTransit.ViewModel
 	public class CreateProjectViewModel : WizardViewModelBase
 	{
 		private int _currentPageNumber;
+		private int _projectCreationProgress;
 		private string _displayName;
 		private string _tooltip;
 		private string _errorMessage;
+		private string _createProjectMessage;
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private bool _projectFinished;
+		private bool _projectIsCreating;
 		private readonly IWizardModel _wizardModel;
 		private readonly IProjectService _projectService;
 		private ICommand _createProjectCommand;
 		private ObservableCollection<TmSummaryOptions> _tmSummaryOptions;
+		private ObservableCollection<TmSummaryOptions> _tmImportProgress;
+
 
 		public CreateProjectViewModel(IWizardModel wizardModel, IProjectService projectService,IEventAggregatorService eventAggregatorService, object view) : base(view)
 		{
@@ -45,6 +50,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
 
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
+			TmImportProgress = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
 		}
 
@@ -71,6 +77,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			get => _wizardModel?.DueDate?.ToString();
 		}
 
+		public string CreateMessage =>  string.Format(PluginResources.CreateProject_Creating, _wizardModel.PackageModel.Result.Name);
+
 		public ObservableCollection<TmSummaryOptions> TmSummaryOptions
 		{
 			get => _tmSummaryOptions;
@@ -78,6 +86,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				_tmSummaryOptions = value;
 				OnPropertyChanged(nameof(TmSummaryOptions));
+			}
+		}
+
+		public ObservableCollection<TmSummaryOptions> TmImportProgress
+		{
+			get => _tmImportProgress;
+			set
+			{
+				_tmImportProgress = value;
+				OnPropertyChanged(nameof(TmImportProgress));
 			}
 		}
 
@@ -129,6 +147,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public int ProjectCreationProgress
+		{
+			get => _projectCreationProgress;
+			set
+			{
+				if (_projectCreationProgress == value) return;
+				_projectCreationProgress = value;
+				OnPropertyChanged(nameof(ProjectCreationProgress));
+			}
+		}
+
 		public bool IsNextEnabled
 		{
 			get => _isNextEnabled;
@@ -165,6 +194,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public bool ProjectIsCreating
+		{
+			get => _projectIsCreating;
+			set
+			{
+				if (_projectIsCreating == value) return;
+				_projectIsCreating = value;
+				OnPropertyChanged(nameof(ProjectIsCreating));
+			}
+		}
+
 		public ICommand CreateProjectCommand =>
 			_createProjectCommand ?? (_createProjectCommand = new AwaitableCommand(CreateTradosProject));
 
@@ -198,7 +238,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 				//Create summary data
 				var tmSummary = new TmSummaryOptions
 				{
-					SourceFlag = languagePair.SourceFlag, TargetFlag = languagePair.TargetFlag, 
+					SourceFlag = languagePair.SourceFlag, 
+					TargetFlag = languagePair.TargetFlag,
+					TargetLanguage = languagePair.TargetLanguage,
 					SelectedOption = new List<string>()
 				};
 				if (languagePair.NoTm)
@@ -231,6 +273,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				}
 
 				TmSummaryOptions.Add(tmSummary);
+				TmImportProgress.Add(tmSummary);
 			}
 		}
 		private void OnTuStatisticsChanged(TuImportStatistics statistics)
@@ -247,10 +290,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 		private void OnStudioProjectProgressChanged(ProjectCreationProgress projectCreationProgress)
 		{
+			ProjectCreationProgress = projectCreationProgress.Progress;
 		}
 
 		private async Task CreateTradosProject()
 		{
+			ProjectIsCreating = true;
 			var proj = await _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
 			ProjectFinished = true;
 		}
