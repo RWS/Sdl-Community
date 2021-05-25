@@ -101,9 +101,17 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 				//var hasTrackedChanges = false;
 
 				var segmentIdentifier = string.Empty;
-				if (SegmentExists(paragraphUnit.Properties.ParagraphUnitId.Id, segmentPair.Properties.Id.Id, ref segmentIdentifier))
+				var updatedSegment = GetUpdatedSegmentContent(paragraphUnit.Properties.ParagraphUnitId.Id,
+					segmentPair.Properties.Id.Id, ref segmentIdentifier);
+
+				if (updatedSegment != null)
 				{
-					var noOverwrite = !_importOptions.OverwriteTranslations && segmentPair.Target.Any();
+					var canOverwriteTranslation = _importOptions.OverwriteTranslations || !segmentPair.Target.Any();
+					var canOverwriteBackTranslations = _importOptions.OverwriteTranslations
+								|| segmentPair.Target.Properties.TranslationOrigin == null
+								|| !segmentPair.Target.Properties.TranslationOrigin.MetaDataContainsKey("back-translation")
+								|| string.IsNullOrEmpty(segmentPair.Target.Properties.TranslationOrigin.GetMetaData("back-translation"));
+
 					var excludeFilter = false;
 					if (_importOptions.ExcludeFilterIds != null)
 					{
@@ -112,7 +120,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 										|| _importOptions.ExcludeFilterIds.Exists(a => a == match);
 					}
 
-					if (noOverwrite || excludeFilter)
+					if (excludeFilter || (!canOverwriteTranslation && !canOverwriteBackTranslations))
 					{
 						if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 						{
@@ -141,24 +149,43 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 						{
 							targetSegment.Properties.TranslationOrigin = _segmentBuilder.ItemFactory.CreateTranslationOrigin();
 						}
-						else
+
+						if (canOverwriteTranslation)
 						{
 							var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
 							targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
+
+							SetTranslationOrigin(targetSegment);
+
+							if (updatedSegment.TranslationTokens.Count > 0)
+							{
+								targetSegment = _segmentBuilder.GetUpdatedSegment(targetSegment,
+									updatedSegment.TranslationTokens, segmentPair.Source);
+							}
 						}
 
-						SetTranslationOrigin(targetSegment);
-
-						var updatedSegment = _updatedSegments[segmentIdentifier];
-						if (updatedSegment.TranslationTokens.Count > 0)
-						{
-							targetSegment = _segmentBuilder.GetUpdatedSegment(targetSegment, updatedSegment.TranslationTokens, segmentPair.Source);
-						}
-
-						if (updatedSegment.BackTranslationTokens.Count > 0)
+						if (canOverwriteBackTranslations && updatedSegment.BackTranslationTokens.Count > 0)
 						{
 							var backTranslations = JsonConvert.SerializeObject(updatedSegment.BackTranslationTokens);
 							segmentPair.Target.Properties.TranslationOrigin.SetMetaData("back-translation", backTranslations);
+						}
+
+						if (!canOverwriteTranslation)
+						{
+							if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+							{
+								var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
+								var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
+
+								segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+								segmentPair.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+
+								status = segmentPair.Properties.ConfirmationLevel.ToString();
+								match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+							}
+
+							AddWordExcludedCounts(status, segmentPairInfo, match);
+							continue;
 						}
 					}
 					catch (Exception ex)
@@ -272,19 +299,20 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 		/// <param name="segmentId"></param>
 		/// <param name="segmentIdentifier"></param>
 		/// <returns></returns>
-		private bool SegmentExists(string paragrahpUnitId, string segmentId, ref string segmentIdentifier)
+		private UpdatedSegmentContent GetUpdatedSegmentContent(string paragrahpUnitId, string segmentId, ref string segmentIdentifier)
 		{
 			if (_updatedSegments.ContainsKey(paragrahpUnitId + "_" + segmentId))
 			{
 				segmentIdentifier = paragrahpUnitId + "_" + segmentId;
-				return true;
+				return _updatedSegments[segmentIdentifier];
 			}
 			if (_updatedSegments.ContainsKey("_" + segmentId))
 			{
 				segmentIdentifier = "_" + segmentId;
-				return true;
+				return _updatedSegments[segmentIdentifier];
 			}
-			return false;
+
+			return null;
 		}
 
 		/// <summary>

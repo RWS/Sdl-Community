@@ -694,8 +694,8 @@ namespace Trados.Transcreate
 			var projectInfo = project.GetProjectInfo();
 			if (projectInfo.ProjectOrigin == "Transcreate Project")
 			{
-				// required to force studio to recognize difference in case; added a space, remove a space
-				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject + " ";
+				// required to force studio to recognize a 'case' difference.
+				projectInfo.ProjectOrigin = string.Empty;
 				project.UpdateProject(projectInfo);
 				
 				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject;
@@ -1620,25 +1620,28 @@ namespace Trados.Transcreate
 
 			if (e.SelectedProject != null && _projectAutomationService != null)
 			{
-				if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
+				lock (_lockObject)
 				{
-					var fileBasedProject = _projectsController.GetProjects()
-						.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
-
-					if (fileBasedProject != null)
+					if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
 					{
-						try
-						{
-							lock (_lockObject)
-							{
-								_projectAutomationService.ActivateProject(fileBasedProject);
-							}
+						var fileBasedProject = _projectsController.GetProjects()
+							.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
 
-							_projectsController.SelectedProjects = new[] { fileBasedProject };
-						}
-						catch
+						if (fileBasedProject != null)
 						{
-							//ignore
+							try
+							{
+								lock (_lockObject)
+								{
+									_projectAutomationService.ActivateProject(fileBasedProject);
+								}
+
+								_projectsController.SelectedProjects = new[] {fileBasedProject};
+							}
+							catch
+							{
+								//ignore
+							}
 						}
 					}
 				}
