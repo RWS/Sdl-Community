@@ -272,25 +272,24 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 		private void OnTmFileProgressChanged(TmFilesProgress fileProgress)
 		{
-
+			var processingLanguagePair = GetProcessingLanguagePair(fileProgress.TargetLanguage);
+			if (processingLanguagePair == null) return;
+			processingLanguagePair.FilesImportProgress = string.Format(PluginResources.CreateProject_ImportXliff,
+				fileProgress.ProcessingFileNumber, fileProgress.TotalFilesNumber);
 		}
 
 		private void OnXliffCreationProgressChanged(XliffCreationProgress xliffProcess)
 		{
 			var processingLanguagePair = GetProcessingLanguagePair(xliffProcess.TargetLanguage);
-			if (processingLanguagePair != null)
-			{
-				processingLanguagePair.XliffImportProgress = xliffProcess.Progress;
-			}
+			if (processingLanguagePair == null) return;
+			processingLanguagePair.XliffImportProgress = xliffProcess.Progress;
 		}
 
 		private void OnStudioProjectProgressChanged(ProjectCreationProgress projectCreationProgress)
 		{
 			var processingLanguagePair = GetProcessingLanguagePair(projectCreationProgress.TargetLanguage);
-			if (processingLanguagePair != null)
-			{
-				processingLanguagePair.ProjectLangPairProgress = projectCreationProgress.Progress;
-			}
+			if (processingLanguagePair == null) return;
+			processingLanguagePair.ProjectLangPairProgress = projectCreationProgress.Progress;
 		}
 
 		private TmSummaryOptions GetProcessingLanguagePair(CultureInfo targetCulture)

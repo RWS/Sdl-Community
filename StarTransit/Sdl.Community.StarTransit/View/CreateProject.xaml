@@ -149,15 +149,14 @@
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
-
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" 
-			           Style="{StaticResource Sdl.TextBlock.TitleStyle}" FontSize="20" HorizontalAlignment="Center" 
+			           Style="{StaticResource Sdl.TextBlock.TitleStyle}" FontSize="20" Margin="0" HorizontalAlignment="Center" 
 			           Text="{x:Static resx:PluginResources.CreateProject_Wait}"/>
-			<TextBlock Grid.Row="1" Margin="10 10" 
-			           Text="{Binding CreateMessage}" VerticalAlignment="Center"/>
+			<!--<TextBlock Grid.Row="1" Margin="10 10" 
+			           Text="{Binding CreateMessage}" VerticalAlignment="Center"/>-->
 			<TextBlock Grid.Row="2"
-			           Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}" FontSize="15" Margin="10 5 0 0"
+			           Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}" FontSize="15" Margin="10 0"
 			           Text="{x:Static resx:PluginResources.CreateProject_LangPair}" />
 			<ListView Grid.Row="3" Grid.Column="0"
 			          Style="{StaticResource CustomListViewStyle}"
@@ -167,30 +166,31 @@
 				</ListView.ItemContainerStyle>
 				<ListView.ItemTemplate>
 					<DataTemplate>
-						<WrapPanel Margin="0 5 0 0">
-							<Image
-								Margin="10 0 0 0"
-								Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}"
-								Width="24" Height="24" />
-							<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
-							<Image
-								Source="{Binding TargetFlag, Converter={StaticResource ImageConverter}}"
-								Width="24" Height="24" />
-							<TextBlock
-								Text="{Binding ProjectLangPairProgress,StringFormat={}{0:0}%}"
-								VerticalAlignment="Center" />
-
-							<Grid VerticalAlignment="Center" Margin="10 0">
+						<DockPanel Margin="0 5 0 0">
+							<DockPanel DockPanel.Dock="Top">
+								<Image
+									Margin="10 0 0 0"
+									Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}"
+									Width="24" Height="24" />
+								<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
+								<Image
+									Source="{Binding TargetFlag, Converter={StaticResource ImageConverter}}"
+									Width="24" Height="24" />
+								<TextBlock Margin="10 0"
+									Text="{Binding ProjectLangPairProgress,StringFormat={}{0:0}%}"
+									VerticalAlignment="Center"/>
+							</DockPanel>
+							<Grid VerticalAlignment="Center" Margin="10 0" DockPanel.Dock="Bottom">
 								<Grid.RowDefinitions>
 									<RowDefinition />
 									<RowDefinition />
 									<RowDefinition />
 								</Grid.RowDefinitions>
 								<Grid.ColumnDefinitions>
-									<ColumnDefinition />
+									<ColumnDefinition Width="Auto" />
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static resx:PluginResources.CreateProject_Convert}" />
+								<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static resx:PluginResources.CreateProject_Convert}"/>
 								<Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
 									<ProgressBar Name="pbStatus" VerticalAlignment="Center"
 									             Margin="10 0"
@@ -200,14 +200,13 @@
 									           HorizontalAlignment="Center"
 									           VerticalAlignment="Center" />
 								</Grid>
-								<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding XliffImportMessage}"/>
-
+								<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding FilesImportProgress}"/>
 							</Grid>
-						</WrapPanel>
+						</DockPanel>
+						
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>
-
 		</Grid>
 	</Grid>
 </UserControl>

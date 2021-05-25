@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Events;
 
 namespace Sdl.Community.StarTransit.Model
@@ -13,21 +14,12 @@ namespace Sdl.Community.StarTransit.Model
 		private int _totalTransitTmsFiles;
 		private bool _xliffImportStarted;
 		private int _projectLangPairProgress;
+		private string _filesImportProgress;
 
 		public Image SourceFlag { get; set; }
 		public Image TargetFlag { get; set; }
 		public CultureInfo TargetLanguage { get; set; }
 
-		public int TotalTransitTmsFiles
-		{
-			get => _totalTransitTmsFiles;
-			set
-			{
-				if (_totalTransitTmsFiles == value) return;
-				_totalTransitTmsFiles = value;
-				OnPropertyChanged(nameof(TotalTransitTmsFiles));
-			}
-		}
 
 		public int ProjectLangPairProgress
 		{
@@ -61,9 +53,6 @@ namespace Sdl.Community.StarTransit.Model
 			}
 		}
 
-		public string XliffImportMessage => string.Format(PluginResources.CreateProject_ImportXliff,
-			ImportingTmFileNumber, TotalTransitTmsFiles);
-
 		public int ImportingTmFileNumber
 		{
 			get => _importingTmFileNumber;
@@ -72,6 +61,17 @@ namespace Sdl.Community.StarTransit.Model
 				if (_importingTmFileNumber == value) return;
 				_importingTmFileNumber = value;
 				OnPropertyChanged(nameof(ImportingTmFileNumber));
+			}
+		}
+
+		public string FilesImportProgress
+		{
+			get => _filesImportProgress;
+			set
+			{
+				if (_filesImportProgress == value) return;
+				_filesImportProgress = value;
+				OnPropertyChanged(nameof(FilesImportProgress));
 			}
 		}
 
