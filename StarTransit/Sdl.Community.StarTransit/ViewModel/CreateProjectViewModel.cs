@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +19,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 	public class CreateProjectViewModel : WizardViewModelBase
 	{
 		private int _currentPageNumber;
-		private int _projectCreationProgress;
+		//private int _projectCreationProgress;
 		private string _displayName;
 		private string _tooltip;
 		private string _errorMessage;
@@ -144,17 +145,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				_currentPageNumber = value;
 				OnPropertyChanged(nameof(CurrentPageNumber));
-			}
-		}
-
-		public int ProjectCreationProgress
-		{
-			get => _projectCreationProgress;
-			set
-			{
-				if (_projectCreationProgress == value) return;
-				_projectCreationProgress = value;
-				OnPropertyChanged(nameof(ProjectCreationProgress));
 			}
 		}
 
@@ -284,13 +274,28 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 
 		}
+
 		private void OnXliffCreationProgressChanged(XliffCreationProgress xliffProcess)
 		{
-
+			var processingLanguagePair = GetProcessingLanguagePair(xliffProcess.TargetLanguage);
+			if (processingLanguagePair != null)
+			{
+				processingLanguagePair.XliffImportProgress = xliffProcess.Progress;
+			}
 		}
+
 		private void OnStudioProjectProgressChanged(ProjectCreationProgress projectCreationProgress)
 		{
-			ProjectCreationProgress = projectCreationProgress.Progress;
+			var processingLanguagePair = GetProcessingLanguagePair(projectCreationProgress.TargetLanguage);
+			if (processingLanguagePair != null)
+			{
+				processingLanguagePair.ProjectLangPairProgress = projectCreationProgress.Progress;
+			}
+		}
+
+		private TmSummaryOptions GetProcessingLanguagePair(CultureInfo targetCulture)
+		{
+			return TmImportProgress.FirstOrDefault(l => l.TargetLanguage.Equals(targetCulture));
 		}
 
 		private async Task CreateTradosProject()

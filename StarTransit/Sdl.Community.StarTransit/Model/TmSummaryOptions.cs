@@ -12,6 +12,7 @@ namespace Sdl.Community.StarTransit.Model
 		private int _importingTmFileNumber;
 		private int _totalTransitTmsFiles;
 		private bool _xliffImportStarted;
+		private int _projectLangPairProgress;
 
 		public Image SourceFlag { get; set; }
 		public Image TargetFlag { get; set; }
@@ -25,6 +26,17 @@ namespace Sdl.Community.StarTransit.Model
 				if (_totalTransitTmsFiles == value) return;
 				_totalTransitTmsFiles = value;
 				OnPropertyChanged(nameof(TotalTransitTmsFiles));
+			}
+		}
+
+		public int ProjectLangPairProgress
+		{
+			get => _projectLangPairProgress;
+			set
+			{
+				if (_projectLangPairProgress == value) return;
+				_projectLangPairProgress = value;
+				OnPropertyChanged(nameof(ProjectLangPairProgress));
 			}
 		}
 

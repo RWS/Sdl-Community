@@ -8,6 +8,6 @@ namespace Sdl.Community.StarTransit.Shared.Events
 		public List<string> BatchTaskIds { get; set; }
 		public int Progress { get; set; }
 		public CultureInfo TargetLanguage { get; set; }
-		public int TotalFileNumber { get; set; }
+		public int TotalFileNumber { get; set; }	
 	}
 }

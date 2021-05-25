@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -70,7 +71,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		}
 
 		public virtual MessageModel UpdateProjectSettings(IProject project, Guid[] targetFilesIds,
-			bool projectContainsTm)
+			bool projectContainsTm,CultureInfo targetLanguage)
 		{
 			var fileBasedProject = (FileBasedProject) project;
 
@@ -92,6 +93,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					projectCreationProgress.BatchTaskIds.Clear();
 					projectCreationProgress.BatchTaskIds.AddRange(args.TaskTemplateIds);
 					projectCreationProgress.Progress = args.PercentComplete;
+					projectCreationProgress.TargetLanguage = targetLanguage;
 					_eventAggregatorService.PublishEvent(projectCreationProgress);
 				}, (sender, args) => { });
 
@@ -134,7 +136,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					var targetFilesForLanguagePair = studioProject.AddFiles(languagePair.TargetFile.ToArray());
 					var filesIds = targetFilesForLanguagePair.GetIds();
-					_messageModel = UpdateProjectSettings(studioProject, filesIds, projectContainsTm); // runs Studio batchtask to save all the changes to the project
+					_messageModel = UpdateProjectSettings(studioProject, filesIds, projectContainsTm,languagePair.TargetLanguage); // runs Studio batchtask to save all the changes to the project
 				}
 				CreateMetadataFolder(transitPackage.Location, transitPackage.PathToPrjFile);
 				return studioProject;
