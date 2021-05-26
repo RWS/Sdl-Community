@@ -236,6 +236,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				if (languagePair.NoTm)
 				{
 					tmSummary.SelectedOption.Add(PluginResources.Tm_CreateWitoutTm);
+					tmSummary.CreateWithoutTm = true;
 				}
 
 				var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).ToList();
