@@ -148,7 +148,7 @@ namespace Sdl.Community.XliffCompare.Core.Comparer
             comparisonSegmentUnit.TranslationSectionsChangedTags=0;
 
        
-            if (string.Compare(segmentPairOriginal.Target, segmentPairUpdated.Target, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(segmentPairOriginal.Target, segmentPairUpdated.Target, StringComparison.InvariantCulture) != 0)
             {
                 try
                 {
