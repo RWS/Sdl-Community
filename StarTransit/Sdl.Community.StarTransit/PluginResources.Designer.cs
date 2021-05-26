@@ -110,6 +110,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project was created successfully.
+        /// </summary>
+        public static string CreateProject_Confirmation {
+            get {
+                return ResourceManager.GetString("CreateProject_Confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Converting Transit Tms into XLIFF Files.
         /// </summary>
         public static string CreateProject_Convert {

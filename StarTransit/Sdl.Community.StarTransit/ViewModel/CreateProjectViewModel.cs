@@ -3,23 +3,20 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Documents;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
 	public class CreateProjectViewModel : WizardViewModelBase
 	{
 		private int _currentPageNumber;
-		//private int _projectCreationProgress;
 		private string _displayName;
 		private string _tooltip;
 		private string _errorMessage;
@@ -31,10 +28,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _projectIsCreating;
 		private readonly IWizardModel _wizardModel;
 		private readonly IProjectService _projectService;
+		private readonly IEventAggregatorService _eventAggregatorService;
 		private ICommand _createProjectCommand;
 		private ObservableCollection<TmSummaryOptions> _tmSummaryOptions;
 		private ObservableCollection<TmSummaryOptions> _tmImportProgress;
-
 
 		public CreateProjectViewModel(IWizardModel wizardModel, IProjectService projectService,IEventAggregatorService eventAggregatorService, object view) : base(view)
 		{
@@ -45,14 +42,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_isPreviousEnabled = true;
 			_isNextEnabled = false;
 			_projectService = projectService;
-			eventAggregatorService?.Subscribe<TuImportStatistics>(OnTuStatisticsChanged);
-			eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
-			eventAggregatorService?.Subscribe<XliffCreationProgress>(OnXliffCreationProgressChanged);
-			eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
-
+			_eventAggregatorService = eventAggregatorService;
+			_eventAggregatorService?.Subscribe<TuImportStatistics>(OnTuStatisticsChanged);
+			_eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
+			_eventAggregatorService?.Subscribe<XliffCreationProgress>(OnXliffCreationProgressChanged);
+			_eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			TmImportProgress = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
+
+			 var test = (UserControl)view;
+
 		}
 
 		public string PackageName
@@ -300,8 +300,18 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private async Task CreateTradosProject()
 		{
 			ProjectIsCreating = true;
-			var proj = await _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
+			var createdProject = await _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
 			ProjectFinished = true;
+			IsPreviousEnabled = false;
+			IsComplete = true;
+
+			if (createdProject != null)
+			{
+				_eventAggregatorService.PublishEvent(new ProjectCreated
+				{
+					CreatedProject = createdProject
+				});
+			}
 		}
 	}
 }

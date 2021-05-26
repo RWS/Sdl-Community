@@ -23,14 +23,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class ProjectService:IProjectService
 	{
-		private readonly List<StarTranslationMemoryMetadata> _penaltiesTmsList;
-		private readonly List<StarTranslationMemoryMetadata> _machineTransList;
 		private TranslationProviderConfiguration _tmConfig;
 		private MessageModel _messageModel;
-		private readonly ProjectsController _projectsController;
+		//private readonly ProjectsController _projectsController;
 		private readonly string _iconPath;
 		private readonly IFileService _fileService;
-		private readonly IProjectsControllerService _projectControllerService;
+		//private readonly IProjectsControllerService _projectControllerService;
 		private readonly IEventAggregatorService _eventAggregatorService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _initialFolderPath;
@@ -38,7 +36,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		public ProjectService(Helpers helpers):this()
 		{
 			if (helpers == null) return;
-			_projectsController = helpers.GetProjectsController();
+			//_projectsController = helpers.GetProjectsController();
 			_iconPath = string.IsNullOrEmpty(_iconPath) ? helpers.GetIconPath() : _iconPath;
 		}
 
@@ -46,16 +44,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		{
 			_fileService = new FileService();
 			_messageModel = new MessageModel();
-			_penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
-			_machineTransList = new List<StarTranslationMemoryMetadata>();
 			_tmConfig = new TranslationProviderConfiguration();
 			var studioVersion = new StudioVersionService().GetStudioVersion();
 			_initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), studioVersion.StudioDocumentsFolderName, "Translation Memories");
 		}
 
-		public ProjectService(IProjectsControllerService projectsControllerService,IEventAggregatorService eventAggregatorService):this()
+		public ProjectService(IEventAggregatorService eventAggregatorService):this()
 		{
-			_projectControllerService = projectsControllerService;
 			_eventAggregatorService = eventAggregatorService;
 			_iconPath = string.IsNullOrEmpty(_iconPath) ? GetProjectIconPath() : _iconPath;
 		}
@@ -111,9 +106,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					}
 				}
 
-				_messageModel.Message = "Project could not be created.Error occured while running automatic tasks!";
-				_messageModel.Title = "Informative message";
-				return _messageModel;
+				throw new Exception("Project could not be created.Error occurred while running create project automatic task.");
 			}
 
 			fileBasedProject.Save();
@@ -174,6 +167,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			return newProject;
 		}
+
 		private MessageModel ImportTms(PackageModel package, LanguagePair languagePair)
 		{
 			if (!languagePair.HasTm || string.IsNullOrEmpty(package.Location))

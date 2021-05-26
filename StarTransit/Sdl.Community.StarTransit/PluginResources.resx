@@ -299,6 +299,9 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="CreateProject_Penalty" xml:space="preserve">
     <value>with penalty: </value>
   </data>
+  <data name="CreateProject_Confirmation" xml:space="preserve">
+    <value>Project was created successfully</value>
+  </data>
   <data name="CreateProject_Convert" xml:space="preserve">
     <value>Converting Transit Tms into XLIFF Files</value>
   </data>

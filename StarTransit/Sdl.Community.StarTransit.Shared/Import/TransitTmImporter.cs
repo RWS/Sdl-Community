@@ -5,7 +5,6 @@ using System.IO;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core.Tokenization;
@@ -18,7 +17,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitTmImporter
 	{
-		private readonly IFileService _fileService = new FileService();
 		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 		private readonly FileBasedTranslationMemory _translationMemory;
 		private readonly IEventAggregatorService _eventAggregator;
@@ -43,7 +41,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, CultureInfo targetLanguage, PackageModel package)
 		{
 			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles, targetLanguage,package);
-			//TODO: Rise event finished converting tms into xliffs
 			ImportSdlXliffsIntoTm(sdlXliffFolderFullPath, targetLanguage);
 		}
 

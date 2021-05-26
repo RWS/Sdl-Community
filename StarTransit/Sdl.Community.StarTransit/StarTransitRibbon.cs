@@ -34,21 +34,19 @@ namespace Sdl.Community.StarTransit
 	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 	public class StarTransitOpenPackageAction : AbstractAction
 	{
-		private IMessageBoxService _messageBoxService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly StudioVersionService _studioVersionService = new StudioVersionService();
+		private readonly IEventAggregatorService _eventAggregatorService = new EventAggregatorService(TransitApplicationInitializer.EventAggregator);
+		private ProjectsControllerService _projectControllerService;
+		private ProjectsController _projectsController;
 
 		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
-			var projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
-
 			var packageService = new PackageService();
 			var folderService = new FolderDialogService();
-			var studioService = new StudioService(projectsController);
+			var studioService = new StudioService(_projectsController);
 			var fileDialogService = new OpenFileDialogService();
-			var projectsControllerService = new ProjectsControllerService(projectsController);
-			var eventAggregatorService = new EventAggregatorService(TransitApplicationInitializer.EventAggregator);
-			var projectService = new ProjectService(projectsControllerService, eventAggregatorService);
+			var projectService = new ProjectService(_eventAggregatorService);
 
 			var shortStudioVersion = _studioVersionService.GetStudioVersion()?.ShortVersion;
 			var projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -58,14 +56,19 @@ namespace Sdl.Community.StarTransit
 			{
 				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath, new PackageDetails()),
 				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
-				new CreateProjectViewModel(wizardModel,projectService,eventAggregatorService,new CreateProject())
+				new CreateProjectViewModel(wizardModel,projectService,_eventAggregatorService,new CreateProject())
 			};
 		}
 
-		protected override async void Execute()
+		protected override void Execute()
 		{
+			var messageBoxService = new MessageBoxService();
+
 			try
 			{
+				_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
+				_projectControllerService = new ProjectsControllerService(_projectsController);
+
 				var fileDialog = new OpenFileDialog { Filter = @"Transit Project Package Files (*.ppf)|*.ppf" };
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult != DialogResult.OK) return;
@@ -77,14 +80,15 @@ namespace Sdl.Community.StarTransit
 					PathToTempFolder = pathToTempFolder
 				};
 				var pages = CreatePages(wizardModel);
-				var wizard = new ImportWizard(pages);
+				var wizard = new ImportWizard(pages, _eventAggregatorService,_projectControllerService);
 
 				ElementHost.EnableModelessKeyboardInterop(wizard);
 				wizard.ShowDialog();
 			}
+
 			catch (Exception ex)
 			{
-				_messageBoxService.ShowMessage(ex.Message, string.Empty);
+				messageBoxService.ShowMessage(ex.Message, string.Empty);
 				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}

@@ -140,6 +140,7 @@
     <Compile Include="..\Sdl.Community.StarTransit\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Events\ProjectCreated.cs" />
     <Compile Include="Events\ProjectCreationProgress.cs" />
     <Compile Include="Events\TmFilesProgress.cs" />
     <Compile Include="Events\XliffCreationProgress.cs" />

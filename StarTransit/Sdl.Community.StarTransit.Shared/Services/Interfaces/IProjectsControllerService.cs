@@ -1,7 +1,9 @@
-﻿namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
+﻿using Sdl.ProjectAutomation.Core;
+
+namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 {
 	public interface IProjectsControllerService
 	{
-		void RefreshProjects();
+		void OpenProjectInFilesView(IProject studioProject);
 	}
 }

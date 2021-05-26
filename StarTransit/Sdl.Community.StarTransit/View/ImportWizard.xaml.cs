@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Markup;
 using Sdl.Community.StarTransit.Helpers;
 using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Shared.Events;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.ViewModel;
 
 namespace Sdl.Community.StarTransit.View
@@ -15,8 +17,10 @@ namespace Sdl.Community.StarTransit.View
 	public partial class ImportWizard:IDisposable
 	{
 		private readonly WizardViewModel _model;
+		private readonly IEventAggregatorService _eventAggregatorService;
+		private readonly IProjectsControllerService _projectControllerService;
 
-		public ImportWizard(ObservableCollection<IProgressHeaderItem> pages)
+		public ImportWizard(ObservableCollection<IProgressHeaderItem> pages,IEventAggregatorService eventAggregatorService, IProjectsControllerService projectsControllerService)
 		{
 			InitializeComponent();
 			UpdatePageIndexes(pages);
@@ -25,9 +29,22 @@ namespace Sdl.Community.StarTransit.View
 			_model = new WizardViewModel(this, pages);
 			_model.SelectedPageChanged += Model_SelectedPageChanged;
 			_model.RequestClose += ProjectWizardViewModel_RequestClose;
+			_eventAggregatorService = eventAggregatorService;
+			_projectControllerService = projectsControllerService;
+			_eventAggregatorService.Subscribe<ProjectCreated>(OnProjectCreated);
 
 			DataContext = _model;
 		}
+
+		private void OnProjectCreated(ProjectCreated studioProject)
+		{
+			if (studioProject != null)
+			{
+				_projectControllerService.OpenProjectInFilesView(studioProject.CreatedProject);
+			}
+			Close();
+		}
+
 		private void Model_SelectedPageChanged(object sender, SelectedPageEventArgs e)
 		{
 			if (_model.CurrentPagePosition == e.PagePosition)

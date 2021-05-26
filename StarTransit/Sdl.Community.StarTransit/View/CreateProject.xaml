@@ -150,9 +150,20 @@
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" 
-			           Style="{StaticResource Sdl.TextBlock.TitleStyle}" FontSize="20" Margin="0" HorizontalAlignment="Center" 
-			           Text="{x:Static resx:PluginResources.CreateProject_Wait}"/>
+			<TextBlock Grid.Row="0" FontSize="20" Margin="0" HorizontalAlignment="Center">
+				<TextBlock.Style>
+					<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.TitleStyle}">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding ProjectFinished}" Value="True">
+								<Setter Property="Text" Value="{x:Static resx:PluginResources.CreateProject_Confirmation}"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding ProjectFinished}" Value="False">
+								<Setter Property="Text" Value="{x:Static resx:PluginResources.CreateProject_Wait}"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+			</TextBlock>
 			<!--<TextBlock Grid.Row="1" Margin="10 10" 
 			           Text="{Binding CreateMessage}" VerticalAlignment="Center"/>-->
 			<TextBlock Grid.Row="2"
