@@ -7,6 +7,7 @@
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.ViewModel"
              xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
              d:DataContext="{d:DesignInstance viewModels:CreateProjectViewModel}"
+             Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -39,35 +40,36 @@
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<Grid
+	<ScrollViewer VerticalScrollBarVisibility="Auto" PreviewMouseWheel="OnPreviewMouseWheel">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid
 			Name="DetailsGrid" 
 			Visibility="{Binding ProjectIsCreating,
 			Converter={StaticResource InvertedBoolToVisibility},ConverterParameter=Inverted}">
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition/>
-			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Row="0" Grid.Column="0" 
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Row="0" Grid.Column="0" 
 		           Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}" FontSize="15" Margin="10 0"
 		           Text="{x:Static resx:PluginResources.CreateProject_PackageDetails}"/>
-			<Button Grid.Row="0"
+				<Button Grid.Row="0"
 				Grid.Column="1"
 				HorizontalAlignment="Right"
 		        Style="{StaticResource Sdl.Button.DialogStyle}"
@@ -75,146 +77,147 @@
 		        Margin="10 0"
 		        Command="{Binding CreateProjectCommand}"
 		        Content="{x:Static resx:PluginResources.CreateProject_Btn}" />
-			<TextBlock Grid.Row="1" Grid.Column="0" 
+				<TextBlock Grid.Row="1" Grid.Column="0" 
 		           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"  Margin="10 0 0 0"
 		           Text="{x:Static resx:PluginResources.CreateProject_ProjectName}"/>
-			<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PackageName}"/>
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PackageName}"/>
 
-			<TextBlock Grid.Row="2" Grid.Column="0" 
+				<TextBlock Grid.Row="2" Grid.Column="0" 
 		           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"  Margin="10 0 0 0"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Location}"/>
-			<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ProjectLocation}"/>
+				<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ProjectLocation}"/>
 
-			<TextBlock Grid.Row="3" Grid.Column="0" 
+				<TextBlock Grid.Row="3" Grid.Column="0" 
 		           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"  Margin="10 0 0 0"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Template}"/>
-			<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Template}"/>
+				<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Template}"/>
 
-			<TextBlock Grid.Row="4" Grid.Column="0"
+				<TextBlock Grid.Row="4" Grid.Column="0"
 				   Visibility="{Binding Customer,Converter={StaticResource NullVisibilityConverter}}"
 		           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"  Margin="10 0 0 0"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Customer}"/>
-			<TextBlock Grid.Row="4" Grid.Column="1" 
+				<TextBlock Grid.Row="4" Grid.Column="1" 
 		           Visibility="{Binding Customer,Converter={StaticResource NullVisibilityConverter}}"
 		           Text="{Binding Customer}"/>
 
-			<TextBlock Grid.Row="5" Grid.Column="0" 
+				<TextBlock Grid.Row="5" Grid.Column="0" 
 		           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 		           Visibility="{Binding DueDate,Converter={StaticResource NullVisibilityConverter}}"
 		           Margin="10 0 0 0"
 		           Text="{x:Static resx:PluginResources.PackageDetails_DueDate}"/>
-			<TextBlock Grid.Row="5" Grid.Column="1" 
+				<TextBlock Grid.Row="5" Grid.Column="1" 
 		           Visibility="{Binding DueDate,Converter={StaticResource NullVisibilityConverter}}"
 		           Text="{Binding DueDate}"/>
 
-			<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+				<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
 		           Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}" FontSize="15" Margin="10 5 0 0"
 		           Text="{x:Static resx:PluginResources.Wizard_TM_DisplayName}" />
-			<ListView Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+				<ListView Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
 		          Style="{StaticResource CustomListViewStyle}"
 		          ItemsSource="{Binding TmSummaryOptions}">
-				<ListView.ItemContainerStyle>
-					<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource RemoveHoverFromItemStyle}" />
-				</ListView.ItemContainerStyle>
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<WrapPanel>
-							<Image Margin="10 0 0 0"
+					<ListView.ItemContainerStyle>
+						<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource RemoveHoverFromItemStyle}" />
+					</ListView.ItemContainerStyle>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<WrapPanel>
+								<Image Margin="10 0 0 0"
 						       Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
-							<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
-							<Image Source="{Binding TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
-							<ListView ItemsSource="{Binding SelectedOption}" 
+								<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
+								<Image Source="{Binding TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+								<ListView ItemsSource="{Binding SelectedOption}" 
 						          VerticalAlignment="Center" Style="{StaticResource CustomListViewStyle}">
-								<ListView.ItemContainerStyle>
-									<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource RemoveHoverFromItemStyle}" />
-								</ListView.ItemContainerStyle>
-								<ListView.ItemTemplate>
-									<DataTemplate>
-										<TextBlock
+									<ListView.ItemContainerStyle>
+										<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource RemoveHoverFromItemStyle}" />
+									</ListView.ItemContainerStyle>
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<TextBlock
 										Margin="10 0 0 0"
 										VerticalAlignment="Center"
 										Text="{Binding}" />
-									</DataTemplate>
-								</ListView.ItemTemplate>
-							</ListView>
-						</WrapPanel>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-		</Grid>
-		<Grid Name="ProgressGrid" Grid.Row="1" Grid.Column="0"
+										</DataTemplate>
+									</ListView.ItemTemplate>
+								</ListView>
+							</WrapPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</Grid>
+			<Grid Name="ProgressGrid" Grid.Row="1" Grid.Column="0"
 		      Visibility="{Binding ProjectIsCreating,Converter={StaticResource BooleanToVisibilityConverter}}">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" FontSize="20" Margin="0" HorizontalAlignment="Center">
-				<TextBlock.Style>
-					<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.TitleStyle}">
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding ProjectFinished}" Value="True">
-								<Setter Property="Text" Value="{x:Static resx:PluginResources.CreateProject_Confirmation}"/>
-							</DataTrigger>
-							<DataTrigger Binding="{Binding ProjectFinished}" Value="False">
-								<Setter Property="Text" Value="{x:Static resx:PluginResources.CreateProject_Wait}"/>
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</TextBlock.Style>
-			</TextBlock>
-			<TextBlock Grid.Row="2"
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<TextBlock Grid.Row="0" FontSize="20" Margin="0" HorizontalAlignment="Center">
+					<TextBlock.Style>
+						<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.TitleStyle}">
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding ProjectFinished}" Value="True">
+									<Setter Property="Text" Value="{x:Static resx:PluginResources.CreateProject_Confirmation}"/>
+								</DataTrigger>
+								<DataTrigger Binding="{Binding ProjectFinished}" Value="False">
+									<Setter Property="Text" Value="{x:Static resx:PluginResources.CreateProject_Wait}"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+				<TextBlock Grid.Row="2"
 			           Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}" FontSize="15" Margin="10 0"
 			           Text="{x:Static resx:PluginResources.CreateProject_LangPair}" />
-			<ListView Grid.Row="3" Grid.Column="0"
+				<ListView Grid.Row="3" Grid.Column="0"
 			          Style="{StaticResource CustomListViewStyle}"
 			          ItemsSource="{Binding TmSummaryOptions}">
-				<ListView.ItemContainerStyle>
-					<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource RemoveHoverFromItemStyle}" />
-				</ListView.ItemContainerStyle>
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<DockPanel Margin="0 5 0 0">
-							<DockPanel DockPanel.Dock="Top">
-								<Image
+					<ListView.ItemContainerStyle>
+						<Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource RemoveHoverFromItemStyle}" />
+					</ListView.ItemContainerStyle>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<DockPanel Margin="0 5 0 0">
+								<DockPanel DockPanel.Dock="Top">
+									<Image
 									Margin="10 0 0 0"
 									Source="{Binding SourceFlag , Converter={StaticResource ImageConverter}}"
 									Width="24" Height="24" />
-								<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
-								<Image
+									<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15" />
+									<Image
 									Source="{Binding TargetFlag, Converter={StaticResource ImageConverter}}"
 									Width="24" Height="24" />
-								<TextBlock Margin="10 0"
+									<TextBlock Margin="10 0"
 									Text="{Binding ProjectLangPairProgress,StringFormat={}{0:0}%}"
 									VerticalAlignment="Center"/>
-							</DockPanel>
-							<Grid VerticalAlignment="Center" Margin="10 0" DockPanel.Dock="Bottom"
+								</DockPanel>
+								<Grid VerticalAlignment="Center" Margin="10 0" DockPanel.Dock="Bottom"
 							      Visibility="{Binding  CreateWithoutTm,Converter={StaticResource InvertedBoolToVisibility},ConverterParameter=Inverted}">
-								<Grid.RowDefinitions>
-									<RowDefinition />
-									<RowDefinition />
-								</Grid.RowDefinitions>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto" />
-									<ColumnDefinition />
-								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static resx:PluginResources.CreateProject_Convert}"/>
-								<Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
-									<ProgressBar Name="pbStatus" VerticalAlignment="Center"
+									<Grid.RowDefinitions>
+										<RowDefinition />
+										<RowDefinition />
+									</Grid.RowDefinitions>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition />
+									</Grid.ColumnDefinitions>
+									<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static resx:PluginResources.CreateProject_Convert}"/>
+									<Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
+										<ProgressBar Name="pbStatus" VerticalAlignment="Center"
 									             Margin="10 0"
 									             Width="150" Height="15" Minimum="0" Maximum="100"
 									             Value="{Binding XliffImportProgress}" />
-									<TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}"
+										<TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}"
 									           HorizontalAlignment="Center"
 									           VerticalAlignment="Center" />
+									</Grid>
+									<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding FilesImportProgress}"/>
 								</Grid>
-								<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding FilesImportProgress}"/>
-							</Grid>
-						</DockPanel>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+							</DockPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</Grid>
 		</Grid>
-	</Grid>
+	</ScrollViewer>
 </UserControl>
