@@ -60,8 +60,31 @@
 
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
 		           Grid.Column="0" Grid.Row="2"
+		           Text="{x:Static resx:PluginResources.PackageDetails_Template}"><Span Foreground="Red">*</Span></TextBlock>
+		<ComboBox Style="{DynamicResource Sdl.ComboBox.Generic.Style}"				  
+		          Height="{Binding Path=ActualHeight,ElementName=LocationBox}"
+		          Width="{Binding Path=ActualWidth,ElementName=LocationBox}"
+		          HorizontalAlignment="Left"
+		          VerticalContentAlignment="Center"
+		          Grid.Column="1" Grid.Row="2" Margin="15 10"
+		          Cursor="Hand"
+		          SelectedItem="{Binding SelectedProjectTemplate}"
+		          ItemsSource="{Binding ProjectTemplates}">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+						<Image Source="../Resources/ProjectTemplates.ico" Width="15" Height="15" VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding Name}" 
+						           Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					</StackPanel>
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+
+		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
+		           Grid.Column="0" Grid.Row="3"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Location}"><Span Foreground="Red">*</Span></TextBlock>
-		<DockPanel Grid.Column="1" Grid.Row="2" Margin="15 0 0 0" LastChildFill="False">
+		<DockPanel Grid.Column="1" Grid.Row="3" Margin="15 0 0 0" LastChildFill="False">
 			<TextBox VerticalContentAlignment="Center"
 					 Name="LocationBox"
 			         Width="500"
@@ -76,14 +99,14 @@
 		</DockPanel>
 
 		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
-		           Grid.Column="0" Grid.Row="3"
+		           Grid.Column="0" Grid.Row="4"
 		           Text="{x:Static resx:PluginResources.PackageDetails_Customer}"/>
 		<ComboBox Style="{DynamicResource Sdl.ComboBox.Generic.Style}"
 		          Height="{Binding Path=ActualHeight,ElementName=LocationBox}"
 		          Width="{Binding Path=ActualWidth,ElementName=LocationBox}"
 		          HorizontalAlignment="Left"
 				  VerticalContentAlignment="Center"
-		          Grid.Column="1" Grid.Row="3" Margin="15 10"
+		          Grid.Column="1" Grid.Row="4" Margin="15 10"
 		          Cursor="Hand"
 				  SelectedItem="{Binding SelectedCustomer}"
 		          ItemsSource="{Binding Customers.Result}">
@@ -92,29 +115,6 @@
 					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 						<Image Source="../Resources/user.ico" Width="15" Height="15" VerticalAlignment="Center" 			       
 						       Visibility="{Binding Name, Converter={StaticResource NullVisibilityConverter} }"/>
-						<TextBlock Text="{Binding Name}" 
-						           Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-					</StackPanel>
-				</DataTemplate>
-			</ComboBox.ItemTemplate>
-		</ComboBox>
-
-		<TextBlock Style="{StaticResource DescriptionLabelStyle}" 
-		           Grid.Column="0" Grid.Row="4"
-		           Text="{x:Static resx:PluginResources.PackageDetails_Template}"><Span Foreground="Red">*</Span></TextBlock>
-		<ComboBox Style="{DynamicResource Sdl.ComboBox.Generic.Style}"				  
-		          Height="{Binding Path=ActualHeight,ElementName=LocationBox}"
-		          Width="{Binding Path=ActualWidth,ElementName=LocationBox}"
-		          HorizontalAlignment="Left"
-		          VerticalContentAlignment="Center"
-		          Grid.Column="1" Grid.Row="4" Margin="15 10"
-		          Cursor="Hand"
-		          SelectedItem="{Binding SelectedProjectTemplate}"
-		          ItemsSource="{Binding ProjectTemplates}">
-			<ComboBox.ItemTemplate>
-				<DataTemplate>
-					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-						<Image Source="../Resources/ProjectTemplates.ico" Width="15" Height="15" VerticalAlignment="Center"/>
 						<TextBlock Text="{Binding Name}" 
 						           Margin="10,0,0,0" FontFamily="Calibri" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					</StackPanel>
