@@ -15,14 +15,25 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class PackageService:IPackageService
 	{
-		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries =
-			new List<KeyValuePair<string, string>>();
-		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary =
-			new Dictionary<string, List<KeyValuePair<string, string>>>();
-		private static PackageModel _package = new PackageModel();
+		private readonly List<KeyValuePair<string, string>> _dictionaryPropetries;
+		private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary;
+		private static PackageModel _package;
 		private const char LanguageTargetSeparator = ' ';
-		private readonly IFileService _fileService = new FileService();
+		private readonly IFileService _fileService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly List<Language> _languagePlatformLanguages;
+		private Dictionary<int, CultureInfo> _transitMappingCulture; 
+
+		public PackageService()
+		{
+			_languagePlatformLanguages= Language.GetAllLanguages().ToList();
+			_fileService = new FileService();
+			_pluginDictionary =
+				new Dictionary<string, List<KeyValuePair<string, string>>>();
+			_dictionaryPropetries =
+				new List<KeyValuePair<string, string>>();
+			InitializeLcidMappingDictionary();
+		}
 
 		/// <summary>
 		/// Opens a ppf package and saves to files to temp folder
@@ -182,6 +193,24 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return packageModel.LanguagePairs.Any(pair => pair.StarTranslationMemoryMetadatas.Count != 0);
 		}
 
+		public CultureInfo GetMappingCultureForLcId(int lcId,string projectName)
+		{
+			var isLcidSupported = IsLcIdSupportedByStudio(lcId, projectName);
+			if (isLcidSupported)
+			{
+				return new CultureInfo(lcId);
+			}
+			var mappingExist = _transitMappingCulture.TryGetValue(lcId, out var languageCulture);
+			if (mappingExist)
+			{
+				return languageCulture;
+			}
+
+			_logger.Info($"For project{projectName} following LCID: {lcId} does not have Transit Mapping Language added");
+
+			return new CultureInfo(lcId);
+		}
+
 		/// <summary>
 		/// Creates a package model based on info read from .prj file
 		/// </summary>
@@ -211,7 +240,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					if (item.Key == "SourceLanguage")
 					{
 						var sourceLanguageCode = int.Parse(item.Value);
-						sourceLanguageCultureInfo = new CultureInfo(sourceLanguageCode);
+						sourceLanguageCultureInfo = GetMappingCultureForLcId(sourceLanguageCode, model.Name);
 					}
 
 					if (item.Key != "TargetLanguages") continue;
@@ -219,8 +248,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					foreach (var language in languages)
 					{
 						var targetLanguageCode = int.Parse(language);
-						var targetCultureInfo = new CultureInfo(targetLanguageCode);
+						var  targetCultureInfo = GetMappingCultureForLcId(targetLanguageCode, model.Name);
 						targetLanguages.Add(new Language(targetCultureInfo));
+
 						var pair = new LanguagePair
 						{
 							LanguagePairId = Guid.NewGuid(),
@@ -247,6 +277,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				var sourceFiles = GetFilesPathForLanguage(pathToTempFolder, sourceLanguageCultureInfo, filesNames);
 				var transitSourceExtensions =
 					_fileService.GetTransitCorrespondingExtension(model.LanguagePairs[0].SourceLanguage);
+				if (!sourceFiles.Any())
+				{
+					_logger.Error($"Could not find locally Transit source files for source extensions");
+					throw new Exception("Could not find Transit source files");
+				}
 
 				//for target
 				foreach (var languagePair in model.LanguagePairs)
@@ -258,7 +293,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					languagePair.SelectedTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>();
 					var transitTargetExtensions =
 						_fileService.GetTransitCorrespondingExtension(languagePair.TargetLanguage);
-
+					
+					if (!targetFiles.Any())
+					{
+						_logger.Error($"Could not find locally Transit target files for target extensions");
+						throw new Exception("Could not find Transit target files");
+					}
 					var tms = GetTransitTmsForLanguagePair(pathToTempFolder, model.Name, transitSourceExtensions,
 						transitTargetExtensions, languagePair);
 
@@ -377,6 +417,31 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Checks if the LCID used by transit is supported by Language Platform
+		/// </summary>
+		/// <param name="lcId">LCID from Transit Package</param>
+		/// <param name="projectName">Transit Project name</param>
+		public bool IsLcIdSupportedByStudio(int lcId,string projectName)
+		{
+			var languageExist = _languagePlatformLanguages.Any(l => l.CultureInfo.LCID.Equals(lcId));
+			if (!languageExist)
+			{
+				_logger.Info($"For project{projectName} following LCID: {lcId} is not supported by LanguagePlatform");
+			}
+
+			return languageExist;
+		}
+
+		private void InitializeLcidMappingDictionary()
+		{
+			_transitMappingCulture = new Dictionary<int, CultureInfo>
+			{
+				{2074, new CultureInfo("sr-Latn-RS")}, //Serbian Latin
+				{3098, new CultureInfo("sr-Cyrl-RS")} //Serbian Cyrillic
+			};
 		}
 	}
 }

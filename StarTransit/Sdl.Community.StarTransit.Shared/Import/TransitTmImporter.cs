@@ -66,42 +66,27 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				{
 					ImportSettings = importSettings
 				};
-				var tuImportStatistics = new TuImportStatistics
+
+				var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
+				if (!Directory.Exists(folderPath)) return;
+				var xliffFiles = Directory.GetFiles(folderPath);
+				var tmFileProgress = new TmFilesProgress
 				{
+					TotalFilesNumber = xliffFiles.Length,
 					TargetLanguage = targetLanguage
 				};
-				var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
-				if (Directory.Exists(folderPath))
-				{
-					var xliffFiles = Directory.GetFiles(folderPath);
-					var tmFileProgress = new TmFilesProgress
-					{
-						TotalFilesNumber = xliffFiles.Length,
-						TargetLanguage = targetLanguage
-					};
 
-					foreach (var xliffFile in xliffFiles)
-					{
-						tmFileProgress.ProcessingFileNumber++;
-						tmImporter.Import(xliffFile);
-						GetFileImportStatistics(tmImporter.Statistics, tuImportStatistics);
-						_eventAggregator?.PublishEvent(tmFileProgress);
-					}
+				foreach (var xliffFile in xliffFiles)
+				{
+					tmFileProgress.ProcessingFileNumber++;
+					tmImporter.Import(xliffFile);
+					_eventAggregator?.PublishEvent(tmFileProgress);
 				}
-				_eventAggregator?.PublishEvent(tuImportStatistics);
 			}
 			catch (Exception ex)
 			{
 				_logger.Error(ex);
 			}
-		}
-
-		private static void GetFileImportStatistics(ImportStatistics tmImporterStatistics, TuImportStatistics tuImportStatistics)
-		{
-			tuImportStatistics.AddedTusCount += tmImporterStatistics.AddedTranslationUnits;
-			tuImportStatistics.ReadTusCount += tmImporterStatistics.TotalRead;
-			tuImportStatistics.TotalImported = tmImporterStatistics.TotalImported;
-			tuImportStatistics.ErrorCount = tmImporterStatistics.Errors;
 		}
 
 		/// <summary>
@@ -147,6 +132,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				}, (sender, args) => { });
 
 			if (taskSequence.Status != TaskStatus.Failed) return pathToExtractFolder;
+
 			foreach (var subTask in taskSequence.SubTasks)
 			{
 				_logger.Error($"Name:{subTask.Name}");
@@ -158,7 +144,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				}
 			}
 
-			throw new Exception("Failed to create xliff for corresponding Transit TMs");
+			return string.Empty;
 		}
 
 		/// <summary>

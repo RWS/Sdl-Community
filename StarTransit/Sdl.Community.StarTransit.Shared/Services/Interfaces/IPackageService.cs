@@ -12,5 +12,6 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 		List<string> GetFilesNamesFromPrjFile(List<KeyValuePair<string, string>> fileNames);
 		List<string> GetFilesPathForLanguage(string pathToExtractedProject, CultureInfo cultureInfo, List<string> fileNames);
 		bool PackageContainsTms(PackageModel packageModel);
+		CultureInfo GetMappingCultureForLcId(int lcid,string projectName);
 	}
 }

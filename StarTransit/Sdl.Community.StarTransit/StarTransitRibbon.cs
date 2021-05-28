@@ -88,7 +88,7 @@ namespace Sdl.Community.StarTransit
 
 			catch (Exception ex)
 			{
-				messageBoxService.ShowMessage(ex.Message, string.Empty);
+				//messageBoxService.ShowMessage(ex.Message, string.Empty);
 				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
