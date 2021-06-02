@@ -11,9 +11,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		{
 			_studioEventAggregator = studioEventAggregator;
 		}
-		public void Subscribe<T>(Action<T> action)
+
+		public IDisposable Subscribe<T>(Action<T> action)
 		{
-			_studioEventAggregator?.GetEvent<T>().Subscribe(action);
+			return _studioEventAggregator?.GetEvent<T>().Subscribe(action);
 		}
 
 		public void PublishEvent<TEvent>(TEvent sampleEvent)

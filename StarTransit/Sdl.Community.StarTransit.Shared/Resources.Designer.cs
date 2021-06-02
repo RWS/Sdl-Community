@@ -61,6 +61,24 @@ namespace Sdl.Community.StarTransit.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not read the files name from Transit Project..
+        /// </summary>
+        public static string NoFilesFromPrj {
+            get {
+                return ResourceManager.GetString("NoFilesFromPrj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Star Transit files could not be found on local machine..
+        /// </summary>
+        public static string NoTransitFilesError {
+            get {
+                return ResourceManager.GetString("NoTransitFilesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Star Transit project.
         /// </summary>
         public static string ProjectOrigin {

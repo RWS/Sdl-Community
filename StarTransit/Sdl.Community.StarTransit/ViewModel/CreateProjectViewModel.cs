@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -29,6 +30,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private readonly IWizardModel _wizardModel;
 		private readonly IProjectService _projectService;
 		private readonly IEventAggregatorService _eventAggregatorService;
+		private readonly IDisposable _xliffCreationProgressEvent;
+		private readonly IDisposable _projectCreationProgressEvent;
+		private readonly IDisposable _fileProgressEvent;
 		private ICommand _createProjectCommand;
 		private ObservableCollection<TmSummaryOptions> _tmSummaryOptions;
 		private ObservableCollection<TmSummaryOptions> _tmImportProgress;
@@ -43,16 +47,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_isNextEnabled = false;
 			_projectService = projectService;
 			_eventAggregatorService = eventAggregatorService;
-			_eventAggregatorService?.Subscribe<TuImportStatistics>(OnTuStatisticsChanged);
-			_eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
-			_eventAggregatorService?.Subscribe<XliffCreationProgress>(OnXliffCreationProgressChanged);
-			_eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
+			_fileProgressEvent=_eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
+			_xliffCreationProgressEvent =_eventAggregatorService?.Subscribe<XliffCreationProgress>(OnXliffCreationProgressChanged);
+			_projectCreationProgressEvent= _eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			TmImportProgress = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
-
-			 var test = (UserControl)view;
-
 		}
 
 		public string PackageName
@@ -267,10 +267,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				TmImportProgress.Add(tmSummary);
 			}
 		}
-		private void OnTuStatisticsChanged(TuImportStatistics statistics)
-		{
-			//We finish importing all the mt files into xliffs and we have the statistics for Language pair
-		}
+
 		private void OnTmFileProgressChanged(TmFilesProgress fileProgress)
 		{
 			var processingLanguagePair = GetProcessingLanguagePair(fileProgress.TargetLanguage);
@@ -313,6 +310,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 					CreatedProject = createdProject
 				});
 			}
+		}
+
+		public override void Dispose()
+		{
+			_projectCreationProgressEvent?.Dispose();
+			_xliffCreationProgressEvent?.Dispose();
+			_fileProgressEvent?.Dispose();
 		}
 	}
 }

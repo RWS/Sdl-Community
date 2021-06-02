@@ -30,5 +30,6 @@
 		bool IsComplete { get; set; }
 
 		bool OnChangePage(int position, out string message);
+		void Dispose();
 	}
 }

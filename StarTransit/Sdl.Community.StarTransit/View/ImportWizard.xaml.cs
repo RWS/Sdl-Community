@@ -19,6 +19,7 @@ namespace Sdl.Community.StarTransit.View
 		private readonly WizardViewModel _model;
 		private readonly IEventAggregatorService _eventAggregatorService;
 		private readonly IProjectsControllerService _projectControllerService;
+		private readonly IDisposable _projectCreatedEvent;
 
 		public ImportWizard(ObservableCollection<IProgressHeaderItem> pages,IEventAggregatorService eventAggregatorService, IProjectsControllerService projectsControllerService)
 		{
@@ -31,7 +32,7 @@ namespace Sdl.Community.StarTransit.View
 			_model.RequestClose += ProjectWizardViewModel_RequestClose;
 			_eventAggregatorService = eventAggregatorService;
 			_projectControllerService = projectsControllerService;
-			_eventAggregatorService.Subscribe<ProjectCreated>(OnProjectCreated);
+			_projectCreatedEvent=_eventAggregatorService.Subscribe<ProjectCreated>(OnProjectCreated);
 
 			DataContext = _model;
 		}
@@ -113,16 +114,21 @@ namespace Sdl.Community.StarTransit.View
 			return template;
 		}
 
-		private void ProjectWizardViewModel_RequestClose(object sender, System.EventArgs e)
+		private void ProjectWizardViewModel_RequestClose(object sender, EventArgs e)
 		{
 			Close();
 		}
 
 		public void Dispose()
 		{
+			_projectCreatedEvent?.Dispose();
 			if (_model != null)
 			{
 				_model.RequestClose -= ProjectWizardViewModel_RequestClose;
+				foreach (var page in _model.Pages)
+				{
+					page?.Dispose();
+				}
 			}
 		}
 	}

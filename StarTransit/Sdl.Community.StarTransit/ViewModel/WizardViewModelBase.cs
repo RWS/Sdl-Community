@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Sdl.Community.StarTransit.Interface;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
-	public abstract class WizardViewModelBase : IProgressHeaderItem, INotifyPropertyChanged
+	public abstract class WizardViewModelBase : IProgressHeaderItem, INotifyPropertyChanged, IDisposable
 	{
 		private bool _isVisited;
 		private bool _isComplete;
@@ -163,6 +164,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		public virtual void Dispose()
+		{			
 		}
 	}
 }

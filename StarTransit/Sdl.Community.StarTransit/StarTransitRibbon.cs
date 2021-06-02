@@ -42,7 +42,7 @@ namespace Sdl.Community.StarTransit
 
 		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
-			var packageService = new PackageService();
+			var packageService = new PackageService(_eventAggregatorService);
 			var folderService = new FolderDialogService();
 			var studioService = new StudioService(_projectsController);
 			var fileDialogService = new OpenFileDialogService();
@@ -54,7 +54,7 @@ namespace Sdl.Community.StarTransit
 
 			return new ObservableCollection<IProgressHeaderItem>
 			{
-				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath, new PackageDetails()),
+				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath,_eventAggregatorService, new PackageDetails()),
 				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
 				new CreateProjectViewModel(wizardModel,projectService,_eventAggregatorService,new CreateProject())
 			};
@@ -80,10 +80,12 @@ namespace Sdl.Community.StarTransit
 					PathToTempFolder = pathToTempFolder
 				};
 				var pages = CreatePages(wizardModel);
-				var wizard = new ImportWizard(pages, _eventAggregatorService,_projectControllerService);
 
-				ElementHost.EnableModelessKeyboardInterop(wizard);
-				wizard.ShowDialog();
+				using (var wizard = new ImportWizard(pages, _eventAggregatorService, _projectControllerService))
+				{
+					ElementHost.EnableModelessKeyboardInterop(wizard);
+					wizard.ShowDialog();
+				};
 			}
 
 			catch (Exception ex)

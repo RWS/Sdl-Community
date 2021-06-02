@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.ProjectAutomation.Core;
@@ -30,9 +31,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private ICommand _browseCommand;
 		private ICommand _clearDueDateCommand;
 		private DateTime _displayStartDate;
+		private readonly IDisposable _errorMessageEvent;
 
 		public PackageDetailsViewModel(IWizardModel wizardModel, IPackageService packageService,
-			IFolderDialogService folderService, IStudioService studioService,string projectsXmlFilePath, object view) : base(view)
+			IFolderDialogService folderService, IStudioService studioService,string projectsXmlFilePath,IEventAggregatorService eventAggregator, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			CurrentPageNumber = 1;
@@ -52,6 +54,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_displayStartDate = DateTime.Now;
 			_errorMessage = string.Empty;
 			PropertyChanged += PackageDetailsViewModelChanged;
+
+			_errorMessageEvent = eventAggregator.Subscribe<Error>(OnErrorOccured);
 		}
 
 		private void PackageDetailsViewModelChanged(object sender, PropertyChangedEventArgs e)
@@ -384,6 +388,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 				languagePair.TmName = string.Empty;
 			}
 		}
+		private void OnErrorOccured(Error error)
+		{
+			ErrorMessage = error.ErrorMessage;
+		}
 
 		public override bool OnChangePage(int position, out string message)
 		{
@@ -401,6 +409,11 @@ namespace Sdl.Community.StarTransit.ViewModel
 				return false;
 			}
 			return true;
+		}
+
+		public override void Dispose()
+		{
+			_errorMessageEvent?.Dispose();
 		}
 	}
 }

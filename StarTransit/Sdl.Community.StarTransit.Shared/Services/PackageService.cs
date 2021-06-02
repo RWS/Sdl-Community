@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
@@ -20,6 +21,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private static PackageModel _package;
 		private const char LanguageTargetSeparator = ' ';
 		private readonly IFileService _fileService;
+		private readonly IEventAggregatorService _eventAggregatorService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly List<Language> _languagePlatformLanguages;
 		private Dictionary<int, CultureInfo> _transitMappingCulture; 
@@ -33,6 +35,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			_dictionaryPropetries =
 				new List<KeyValuePair<string, string>>();
 			InitializeLcidMappingDictionary();
+		}
+
+		public PackageService(IEventAggregatorService eventAggregatorService):this()
+		{
+			_eventAggregatorService = eventAggregatorService;
 		}
 
 		/// <summary>
@@ -161,6 +168,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			else
 			{
+				_eventAggregatorService.PublishEvent(new Error { ErrorMessage = Resources.NoFilesFromPrj });
+
 				_logger.Error("Could read any files information from [File]");
 			}
 			return fileNames;
@@ -216,9 +225,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// </summary>
 		private async Task<PackageModel> CreateModel(string pathToTempFolder)
 		{
-			var model = new PackageModel();
+			var model = new PackageModel
+			{
+				LanguagePairs = new List<LanguagePair>()
+			};
+
 			CultureInfo sourceLanguageCultureInfo = null;
-			var languagePairList = new List<LanguagePair>();
 			var filesNames = new List<string>();
 			var targetLanguages = new List<Language>();
 			if (_pluginDictionary.ContainsKey("Admin"))
@@ -248,7 +260,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					foreach (var language in languages)
 					{
 						var targetLanguageCode = int.Parse(language);
-						var  targetCultureInfo = GetMappingCultureForLcId(targetLanguageCode, model.Name);
+						var targetCultureInfo = GetMappingCultureForLcId(targetLanguageCode, model.Name);
 						targetLanguages.Add(new Language(targetCultureInfo));
 
 						var pair = new LanguagePair
@@ -260,7 +272,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage(),
 							NoTm = true
 						};
-						languagePairList.Add(pair);
+						model.LanguagePairs.Add(pair);
 					}
 				}
 			}
@@ -271,39 +283,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				filesNames.AddRange(GetFilesNamesFromPrjFile(filesList));
 			}
 
-			model.LanguagePairs = languagePairList;
 			if (model.LanguagePairs.Count > 0)
 			{
-				var sourceFiles = GetFilesPathForLanguage(pathToTempFolder, sourceLanguageCultureInfo, filesNames);
-				var transitSourceExtensions =
-					_fileService.GetTransitCorrespondingExtension(model.LanguagePairs[0].SourceLanguage);
-				if (!sourceFiles.Any())
-				{
-					_logger.Error($"Could not find locally Transit source files for source extensions");
-					throw new Exception("Could not find Transit source files");
-				}
-
-				//for target
-				foreach (var languagePair in model.LanguagePairs)
-				{
-					var targetFiles =
-						GetFilesPathForLanguage(pathToTempFolder, languagePair.TargetLanguage, filesNames);
-					languagePair.SourceFile = sourceFiles;
-					languagePair.TargetFile = targetFiles;
-					languagePair.SelectedTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>();
-					var transitTargetExtensions =
-						_fileService.GetTransitCorrespondingExtension(languagePair.TargetLanguage);
-					
-					if (!targetFiles.Any())
-					{
-						_logger.Error($"Could not find locally Transit target files for target extensions");
-						throw new Exception("Could not find Transit target files");
-					}
-					var tms = GetTransitTmsForLanguagePair(pathToTempFolder, model.Name, transitSourceExtensions,
-						transitTargetExtensions, languagePair);
-
-					languagePair.StarTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>(tms);
-				}
+				SetTransitFilesOnModel(pathToTempFolder, model, sourceLanguageCultureInfo, filesNames);
 			}
 
 			model.SourceLanguage = model.LanguagePairs[0].SourceLanguage;
@@ -312,6 +294,47 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			model.PackageContainsTms = PackageContainsTms(model);
 
 			return model;
+		}
+
+		private void SetTransitFilesOnModel(string pathToTempFolder, PackageModel model, CultureInfo sourceLanguageCultureInfo, List<string> filesNames)
+		{
+			var sourceFiles = GetFilesPathForLanguage(pathToTempFolder, sourceLanguageCultureInfo, filesNames);
+			var transitSourceExtensions =
+				_fileService.GetTransitCorrespondingExtension(model.LanguagePairs[0].SourceLanguage);
+			var filesFoundLocally = true;
+			if (!sourceFiles.Any())
+			{
+				filesFoundLocally = false;
+				_logger.Error($"Could not find Transit source files on local machine. Source language {sourceLanguageCultureInfo.Name}");
+			}
+
+			//for target
+			foreach (var languagePair in model.LanguagePairs)
+			{
+				var targetFiles =
+					GetFilesPathForLanguage(pathToTempFolder, languagePair.TargetLanguage, filesNames);
+				languagePair.SourceFile = sourceFiles;
+				languagePair.TargetFile = targetFiles;
+				languagePair.SelectedTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>();
+				var transitTargetExtensions =
+					_fileService.GetTransitCorrespondingExtension(languagePair.TargetLanguage);
+
+				if (!targetFiles.Any())
+				{
+					_logger.Error($"Could not find Transit target files on local machine for target language: {languagePair.TargetLanguage.Name}");
+					filesFoundLocally = false;
+				}
+
+				var tms = GetTransitTmsForLanguagePair(pathToTempFolder, model.Name, transitSourceExtensions,
+					transitTargetExtensions, languagePair);
+
+				languagePair.StarTranslationMemoryMetadatas = new List<StarTranslationMemoryMetadata>(tms);
+			}
+
+			if (!filesFoundLocally)
+			{
+				_eventAggregatorService.PublishEvent(new Error { ErrorMessage = Resources.NoTransitFilesError });
+			}
 		}
 
 		private List<StarTranslationMemoryMetadata> GetTransitTmsForLanguagePair(string pathToTempFolder,

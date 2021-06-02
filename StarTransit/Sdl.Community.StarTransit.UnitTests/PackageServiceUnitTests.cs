@@ -277,6 +277,18 @@ namespace Sdl.Community.StarTransit.UnitTests
 		}
 
 		[Fact]
+		public void GetFileName_CorrectValue()
+		{
+			var files = new List<KeyValuePair<string, string>>
+			{
+				new KeyValuePair<string, string>("File1",
+					@"File1=1|1|1|0|1|C:\Transit NXT\projects\Probeübersetzung\Probeübersetzung.ttc|Probeübersetzung_ttc|Probeübersetzung ttc|0")
+			};
+			var name = _service.GetFilesNamesFromPrjFile(files);
+			Assert.Equal("Probeübersetzung_ttc", name[0]);
+		}
+
+		[Fact]
 		public void GetFileName_NoDuplication()
 		{
 			var files = new List<KeyValuePair<string, string>>
