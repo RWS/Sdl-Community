@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.ProjectAutomation.Core;
@@ -25,7 +26,7 @@ namespace Sdl.Community.StarTransit.Interface
 		/// <summary>
 		/// Studio project template
 		/// </summary>
-		List<ProjectTemplateInfo> ProjectTemplates { get; set; }
+		ObservableCollection<ProjectTemplateInfo> ProjectTemplates { get; set; }
 		ProjectTemplateInfo SelectedTemplate { get; set; }
 		DateTime? DueDate { get; set; }
 	}

@@ -317,4 +317,13 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="CreateProject_Wait" xml:space="preserve">
     <value>Please wait...</value>
   </data>
+  <data name="BrowseLocation" xml:space="preserve">
+    <value>BrowseLocation</value>
+  </data>
+  <data name="SelectTemplate" xml:space="preserve">
+    <value>SelectTemplate</value>
+  </data>
+  <data name="TemplateTitle" xml:space="preserve">
+    <value>Open Project Template</value>
+  </data>
 </root>

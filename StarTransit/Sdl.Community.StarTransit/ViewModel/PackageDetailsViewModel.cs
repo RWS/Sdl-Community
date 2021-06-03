@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isValid;
 		private readonly IWizardModel _wizardModel;
 		private readonly IStudioService _studioService;
-		private readonly IFolderDialogService _dialogService;
+		private readonly IDialogService _dialogService;
 		private ICommand _clearCommand;
 		private ICommand _browseCommand;
 		private ICommand _clearDueDateCommand;
@@ -34,7 +35,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private readonly IDisposable _errorMessageEvent;
 
 		public PackageDetailsViewModel(IWizardModel wizardModel, IPackageService packageService,
-			IFolderDialogService folderService, IStudioService studioService,string projectsXmlFilePath,IEventAggregatorService eventAggregator, object view) : base(view)
+			IDialogService folderService, IStudioService studioService,string projectsXmlFilePath,IEventAggregatorService eventAggregator, object view) : base(view)
 		{
 			_wizardModel = wizardModel;
 			CurrentPageNumber = 1;
@@ -48,7 +49,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			PackageModel = new AsyncTaskWatcherService<PackageModel>(
 				packageService.OpenPackage(_wizardModel.TransitFilePathLocation, _wizardModel.PathToTempFolder));
 			Customers = new AsyncTaskWatcherService<List<Customer>>(_studioService.GetCustomers(projectsXmlFilePath));
-			ProjectTemplates = new List<ProjectTemplateInfo>(_studioService.GetProjectTemplates());
+			ProjectTemplates = new ObservableCollection<ProjectTemplateInfo>(_studioService.GetProjectTemplates());
 			SelectedProjectTemplate = ProjectTemplates[0];
 			DueDate = null;
 			_displayStartDate = DateTime.Now;
@@ -108,7 +109,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
-		public List<ProjectTemplateInfo> ProjectTemplates
+		public ObservableCollection<ProjectTemplateInfo> ProjectTemplates
 		{
 			get => _wizardModel.ProjectTemplates;
 			set
@@ -235,7 +236,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		}
 
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(ClearLocation));
-		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new RelayCommand(BrowseLocation));
+		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new CommandHandler(Browse));
 
 		public ICommand ClearDueDateCommand =>
 			_clearDueDateCommand ?? (_clearDueDateCommand = new RelayCommand(ClearDate));
@@ -245,14 +246,38 @@ namespace Sdl.Community.StarTransit.ViewModel
 			DueDate = null;
 		}
 
-		private void BrowseLocation()
+		private void Browse(object commandParameter)
 		{
 			ErrorMessage = string.Empty;
-			var location = _dialogService.ShowDialog(PluginResources.PackageDetails_FolderLocation);
-			if(string.IsNullOrEmpty(location))return;
+			if(commandParameter != null)
+			{
+				var parameter = commandParameter.ToString();
+				if (parameter.Equals(PluginResources.BrowseLocation))
+				{
+					var location = _dialogService.ShowFolderDialog(PluginResources.PackageDetails_FolderLocation);
+					if (string.IsNullOrEmpty(location)) return;
 
-			StudioProjectLocation = location;
-			PackageModel.Result.Location = location;
+					StudioProjectLocation = location;
+					PackageModel.Result.Location = location;
+				}
+				if (parameter.Equals(PluginResources.SelectTemplate))
+				{
+					var selectedTemplate = _dialogService.ShowFileDialog("Project Templates (*.sdltpl)| *.sdltpl",PluginResources.TemplateTitle);
+					if (!string.IsNullOrEmpty(selectedTemplate))
+					{
+						var template = new ProjectTemplateInfo
+						{
+							Uri = new Uri(selectedTemplate),
+							Name = Path.GetFileNameWithoutExtension(selectedTemplate),
+							Id = Guid.NewGuid()
+						};
+
+						ProjectTemplates.Add(template);
+						SelectedProjectTemplate = template;
+					}
+				}
+			}
+			
 		}
 
 		private void ValidateLocation(string location)

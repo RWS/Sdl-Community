@@ -101,6 +101,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BrowseLocation.
+        /// </summary>
+        public static string BrowseLocation {
+            get {
+                return ResourceManager.GetString("BrowseLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create project.
         /// </summary>
         public static string CreateProject_Btn {
@@ -449,6 +458,24 @@ namespace Sdl.Community.StarTransit {
             get {
                 object obj = ResourceManager.GetObject("return_package", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SelectTemplate.
+        /// </summary>
+        public static string SelectTemplate {
+            get {
+                return ResourceManager.GetString("SelectTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Project Template.
+        /// </summary>
+        public static string TemplateTitle {
+            get {
+                return ResourceManager.GetString("TemplateTitle", resourceCulture);
             }
         }
         

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Models;
@@ -15,7 +16,7 @@ namespace Sdl.Community.StarTransit.Model
 		private ProjectTemplateInfo _selectedTemplate;
 		private AsyncTaskWatcherService<List<Customer>> _customers;
 		private AsyncTaskWatcherService<PackageModel> _packageModel;
-		private List<ProjectTemplateInfo> _projectTemplates;
+		private ObservableCollection<ProjectTemplateInfo> _projectTemplates;
 
 		public string TransitFilePathLocation { get; set; }
 		public string PathToTempFolder { get; set; }
@@ -41,7 +42,7 @@ namespace Sdl.Community.StarTransit.Model
 			}
 		}
 		
-		public List<ProjectTemplateInfo> ProjectTemplates
+		public ObservableCollection<ProjectTemplateInfo> ProjectTemplates
 		{
 			get => _projectTemplates;
 			set
