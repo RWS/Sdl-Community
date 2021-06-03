@@ -155,10 +155,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				foreach (var file in files)
 				{
-					var textWithoutLastPipe = file.Value.Substring(0, file.Value.LastIndexOf("|", StringComparison.Ordinal));
-					var fileName =
-						textWithoutLastPipe.Substring(textWithoutLastPipe.LastIndexOf("|", StringComparison.Ordinal) + 1);
-
+					var splitedValues = file.Value.Split('|');
+					var fileName = splitedValues[splitedValues.Length - 3];
 					var fileExists = fileNames.Any(f => f.Equals(fileName));
 					if (!fileExists)
 					{
@@ -168,7 +166,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			else
 			{
-				_eventAggregatorService.PublishEvent(new Error { ErrorMessage = Resources.NoFilesFromPrj });
+				_eventAggregatorService?.PublishEvent(new Error { ErrorMessage = Resources.NoFilesFromPrj });
 
 				_logger.Error("Could read any files information from [File]");
 			}
@@ -296,6 +294,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return model;
 		}
 
+		/// <summary>
+		/// Set source,target and tms on language pairs
+		/// </summary>
+		/// <param name="filesNames">Name of the files read from prj file</param>
 		private void SetTransitFilesOnModel(string pathToTempFolder, PackageModel model, CultureInfo sourceLanguageCultureInfo, List<string> filesNames)
 		{
 			var sourceFiles = GetFilesPathForLanguage(pathToTempFolder, sourceLanguageCultureInfo, filesNames);
@@ -333,7 +335,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			if (!filesFoundLocally)
 			{
-				_eventAggregatorService.PublishEvent(new Error { ErrorMessage = Resources.NoTransitFilesError });
+				_eventAggregatorService?.PublishEvent(new Error { ErrorMessage = Resources.NoTransitFilesError });
 			}
 		}
 
