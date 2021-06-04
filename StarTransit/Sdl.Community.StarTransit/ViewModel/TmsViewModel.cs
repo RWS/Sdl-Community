@@ -33,6 +33,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_wizardModel = wizardModel;
 			IsPreviousEnabled = true;
 			IsNextEnabled = true;
+			CanCancel = true;
 			_fileDialogService = fileDialogService;
 			_isValid = true;
 			PropertyChanged += TmsViewModelChanged;

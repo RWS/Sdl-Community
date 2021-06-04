@@ -13,6 +13,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _nextIsVisited;
 		private bool _previousIsVisited;
 		private bool _isCurrentPage;
+		private bool _canCancel;
+		private bool _canFinish;
 		private double _itemLineWidth;
 		private double _itemTextWidth;
 
@@ -152,6 +154,28 @@ namespace Sdl.Community.StarTransit.ViewModel
 				OnPropertyChanged(nameof(PreviousIsVisited));
 			}
 		}
+
+		public bool CanCancel
+		{
+			get => _canCancel;
+			set
+			{
+				if (value == _canCancel) return;
+				_canCancel = value;
+				OnPropertyChanged(nameof(CanCancel));
+			}
+		}
+		public bool CanFinish
+		{
+			get => _canFinish;
+			set
+			{
+				if (value == _canFinish) return;
+				_canFinish = value;
+				OnPropertyChanged(nameof(CanFinish));
+			}
+		}
+
 
 		public abstract bool OnChangePage(int position, out string message);
 

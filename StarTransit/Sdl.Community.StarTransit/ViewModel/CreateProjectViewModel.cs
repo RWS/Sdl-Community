@@ -49,6 +49,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			TmImportProgress = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
+			CanCancel = true;
 		}		
 
 		public string PackageName
@@ -214,8 +215,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
 			TmSummaryOptions.Clear();
-			IsPreviousEnabled = false;
-			IsComplete = true;
+			CanFinish = true;
+			//IsComplete = true; //Enable create project button
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
 				languagePair.SelectedTranslationMemoryMetadatas.Clear();
@@ -293,11 +294,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private async void CreateTradosProject(CreateStudioProject createEvent)
 		{
 			ProjectIsCreating = true;
+			CanCancel = false;
+			CanFinish = false;
+			IsComplete = true; // Disable the button while project is creating
+
 			var createdProject = await _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
 			ProjectFinished = true;
 
-			IsPreviousEnabled = false;			
-			IsComplete = false;
+			IsPreviousEnabled = false;
 
 			if (createdProject != null)
 			{

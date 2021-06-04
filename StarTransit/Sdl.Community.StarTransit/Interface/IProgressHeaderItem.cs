@@ -29,7 +29,12 @@
 
 		bool IsComplete { get; set; }
 
+		bool CanCancel { get; set; }
+
+		bool CanFinish { get; set; }
+
 		bool OnChangePage(int position, out string message);
+
 		void Dispose();
 	}
 }

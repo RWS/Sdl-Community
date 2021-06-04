@@ -37,10 +37,10 @@
 				</Style.Triggers>
 			</Style>
 
-			<Style TargetType="Button" x:Key="SdlWizardStyleFinishButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
-				<Setter Property="MinWidth" Value="70"></Setter>
-				<Setter Property="Height" Value="34"></Setter>
-				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+			<Style TargetType="Button" x:Key="SdlWizardStyleFinishButton" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
+				<Setter Property="MinWidth" Value="70"/>
+				<Setter Property="Height" Value="34"/>
+				<Setter Property="Margin" Value="5,9,5,11"/>
 				<Setter Property="IsEnabled" Value="False" />
 				<Style.Triggers>
 					<DataTrigger Binding="{Binding Path=IsLastPage}" Value="True">
@@ -48,7 +48,6 @@
 					</DataTrigger>
 				</Style.Triggers>
 			</Style>
-
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}">

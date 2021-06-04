@@ -43,6 +43,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_tooltip = PluginResources.Wizard_PackageDetails_Tooltip;
 			IsPreviousEnabled = false;
 			IsNextEnabled = true;
+			CanCancel = true;
 			_isValid = false;
 			_dialogService = folderService;
 			_studioService = studioService;

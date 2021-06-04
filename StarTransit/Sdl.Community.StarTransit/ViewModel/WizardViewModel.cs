@@ -380,12 +380,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 			OnRequestClose();
 		}
 
-		private bool CanCancel => CurrentPage == null || !IsLastPage || !CurrentPage.IsComplete;
+		private bool CanCancel => CurrentPage != null && CurrentPage.CanCancel;
 
-		private bool CanFinish => CurrentPage != null
-								  && ((CurrentPagePosition == 0 && CurrentPage.IsValid)
-									  || (IsLastPage && CurrentPage.IsComplete)
-									  || (CurrentPagePosition > 0 && !IsLastPage));
+		private bool CanFinish => CurrentPage != null && CurrentPage.CanFinish;
 
 		private void FinishWizard()
 		{
@@ -411,7 +408,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private bool CanMoveToNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsLastPage;
 
-		private bool CanMoveToPreviousPage => (CurrentPagePosition > 0);
+		private bool CanMoveToPreviousPage => (CurrentPagePosition > 0) && !CurrentPage.IsComplete;
 
 		public event EventHandler RequestClose;
 
