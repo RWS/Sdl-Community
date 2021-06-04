@@ -343,10 +343,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			string packageName, string[] transitSourceExtensions, string[] transitTargetExtensions,LanguagePair languagePair)
 		{
 			var availableTms = new List<StarTranslationMemoryMetadata>();
-			var sourceTmFilesPath = new List<string>();
-			var targetTmFilesPath = new List<string>();
-			var sourceMtFilesPath = new List<string>();
-			var targetMtFilesPath = new List<string>();
+			var metadataFileInfo = new MetadataFileInfo
+			{
+				SourceMtFilesPath = new List<string>(),
+				SourceTmFilesPath = new List<string>(),
+				TargetMtFilesPath = new List<string>(),
+				TargetTmFilesPath = new List<string>()
+			};
 
 			//_AXTR TMs/MTs
 			var tempDirInfo = new DirectoryInfo(pathToTempFolder);
@@ -355,8 +358,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			foreach (var transitTargetExtension in transitTargetExtensions)
 			{
 				var targetExtension = $".{transitTargetExtension}";
-				GroupTmsIntoLists(allTms, targetExtension, transitSourceExtensions, targetTmFilesPath, targetMtFilesPath,
-					sourceTmFilesPath, sourceMtFilesPath);
+				GroupTmsIntoLists(allTms, targetExtension, transitSourceExtensions, metadataFileInfo);
+				SetAvailableTms(availableTms, languagePair, metadataFileInfo,packageName);
 			}
 
 			//Ref folder tms
@@ -375,36 +378,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						var targetLanguageExists = subDirFileInfo.Any(t => t.Key.Equals(targetExtension));
 						if (targetLanguageExists)
 						{
-							GroupTmsIntoLists(subDirFileInfo, targetExtension, transitSourceExtensions, targetTmFilesPath,
-								targetMtFilesPath, sourceTmFilesPath, sourceMtFilesPath);
+							GroupTmsIntoLists(subDirFileInfo, targetExtension, transitSourceExtensions, metadataFileInfo);
 						}
 					}
 				}
-			}
-
-			var sourceLangCode = languagePair.SourceLanguage.TwoLetterISOLanguageName;
-			var targetLangCode = languagePair.TargetLanguage.TwoLetterISOLanguageName;
-			if (sourceTmFilesPath.Any())
-			{
-				var tm = new StarTranslationMemoryMetadata
-				{
-					Name = $"{packageName}.{sourceLangCode}-{targetLangCode}",
-					TransitTmsSourceFilesPath = new List<string>(sourceTmFilesPath),
-					TransitTmsTargeteFilesPath = new List<string>(targetTmFilesPath)
-				};
-				availableTms.Add(tm);
-			}
-
-			if (sourceMtFilesPath.Any())
-			{
-				var mt = new StarTranslationMemoryMetadata
-				{
-					Name = $"MT_{packageName}.{sourceLangCode}-{targetLangCode}",
-					TransitTmsSourceFilesPath = new List<string>(sourceMtFilesPath),
-					TransitTmsTargeteFilesPath = new List<string>(targetMtFilesPath),
-					IsMtFile = true
-				};
-				availableTms.Add(mt);
+				metadataFileInfo.IsRefFolderMetadata = true;
+				SetAvailableTms(availableTms, languagePair, metadataFileInfo, packageName);
 			}
 
 			if (availableTms.Any())
@@ -415,8 +394,38 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return availableTms;
 		}
 
-		private void GroupTmsIntoLists(IEnumerable<IGrouping<string, FileInfo>> subDirFileInfo, string targetExtension, string[] transitSourceExtensions, List<string> targetTmFilesPath,
-			List<string> targetMtFilesPath, List<string> sourceTmFilesPath, List<string> sourceMtFilesPath)
+		private void SetAvailableTms(List<StarTranslationMemoryMetadata> availableTms,LanguagePair languagePair, MetadataFileInfo metadataFileInfo,string packageName)
+		{
+			var sourceLangCode = languagePair.SourceLanguage.TwoLetterISOLanguageName;
+			var targetLangCode = languagePair.TargetLanguage.TwoLetterISOLanguageName;
+			if (metadataFileInfo.SourceTmFilesPath.Any())
+			{
+				var tm = new StarTranslationMemoryMetadata
+				{
+					Name = $"{packageName}.{sourceLangCode}-{targetLangCode}",
+					TransitTmsSourceFilesPath = new List<string>(metadataFileInfo.SourceTmFilesPath),
+					TransitTmsTargeteFilesPath = new List<string>(metadataFileInfo.TargetTmFilesPath),
+					IsReferenceMeta = metadataFileInfo.IsRefFolderMetadata
+				};
+				availableTms.Add(tm);
+			}
+
+			if (metadataFileInfo.SourceMtFilesPath.Any())
+			{
+				var mt = new StarTranslationMemoryMetadata
+				{
+					Name = $"MT_{packageName}.{sourceLangCode}-{targetLangCode}",
+					TransitTmsSourceFilesPath = new List<string>(metadataFileInfo.SourceMtFilesPath),
+					TransitTmsTargeteFilesPath = new List<string>(metadataFileInfo.TargetMtFilesPath),
+					IsReferenceMeta = metadataFileInfo.IsRefFolderMetadata,
+					IsMtFile = true
+				};
+				availableTms.Add(mt);
+			}
+		}
+
+
+		private void GroupTmsIntoLists(IEnumerable<IGrouping<string, FileInfo>> subDirFileInfo, string targetExtension, string[] transitSourceExtensions, MetadataFileInfo metadataFileInfo)
 		{
 			foreach (var subGroupInfo in subDirFileInfo)
 			{
@@ -427,8 +436,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					.Select(f => f.FullName);
 				if (subGroupInfo.Key.Equals(targetExtension))
 				{
-					targetTmFilesPath.AddRange(tmFiles);
-					targetMtFilesPath.AddRange(mtFiles);
+					metadataFileInfo.TargetTmFilesPath.AddRange(tmFiles);
+					metadataFileInfo.TargetMtFilesPath.AddRange(mtFiles);
 				}
 				else
 				{
@@ -437,8 +446,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						var sourceExtension = $".{transitSourceExtension}";
 						if (!subGroupInfo.Key.Equals(sourceExtension)) continue;
-						sourceTmFilesPath.AddRange(tmFiles);
-						sourceMtFilesPath.AddRange(mtFiles);
+						metadataFileInfo.SourceTmFilesPath.AddRange(tmFiles);
+						metadataFileInfo.SourceMtFilesPath.AddRange(mtFiles);
 					}
 				}
 			}

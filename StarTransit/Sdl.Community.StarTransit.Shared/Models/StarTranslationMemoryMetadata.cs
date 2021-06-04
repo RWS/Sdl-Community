@@ -6,7 +6,8 @@ namespace Sdl.Community.StarTransit.Shared.Models
 	{
 		private int _tmPenalty;
 		private bool _isChecked;
-		public string SourceFile { get; set; }
+		public string SourceFile { get; set; }	
+		public bool IsReferenceMeta { get; set; }
 
 		//We'll import all the transit tms file into one TM. We are not creating one Studio TM per Transit Tm file
 		public List<string> TransitTmsSourceFilesPath { get; set; }

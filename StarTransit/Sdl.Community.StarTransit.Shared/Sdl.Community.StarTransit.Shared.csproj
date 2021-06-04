@@ -152,6 +152,7 @@
     <Compile Include="Import\TransitTextExtractor.cs" />
     <Compile Include="Import\TransitWriter.cs" />
     <Compile Include="Events\TuImportStatistics.cs" />
+    <Compile Include="Models\MetadataFileInfo.cs" />
     <Compile Include="Services\Interfaces\IEventAggregatorService.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Models\BaseViewModel.cs" />

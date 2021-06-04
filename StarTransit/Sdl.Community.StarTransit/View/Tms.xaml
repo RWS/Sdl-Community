@@ -144,10 +144,10 @@
 												</DataGridTemplateColumn.CellTemplate>
 											</DataGridTemplateColumn>
 
-											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" Width="Auto">
+											<DataGridTemplateColumn Header="{x:Static resx:PluginResources.Wizard_TmsName_Header}" MaxWidth="200">
 												<DataGridTemplateColumn.CellTemplate>
 													<DataTemplate>
-														<StackPanel Orientation="Horizontal">
+														<DockPanel>
 															<Image Width="15" Height="15">
 																<Image.Style>
 																	<Style TargetType="Image">
@@ -162,8 +162,8 @@
 																	</Style>
 																</Image.Style>
 															</Image>
-															<TextBlock Text="{Binding Name}" Margin="5" VerticalAlignment="Center" />
-														</StackPanel>
+															<TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" Margin="5" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
+														</DockPanel>
 													</DataTemplate>
 												</DataGridTemplateColumn.CellTemplate>
 											</DataGridTemplateColumn>
