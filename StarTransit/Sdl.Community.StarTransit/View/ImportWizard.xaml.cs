@@ -27,7 +27,7 @@ namespace Sdl.Community.StarTransit.View
 			UpdatePageIndexes(pages);
 			AddDataTemplates(this, pages);
 
-			_model = new WizardViewModel(this, pages);
+			_model = new WizardViewModel(this, pages,eventAggregatorService);
 			_model.SelectedPageChanged += Model_SelectedPageChanged;
 			_model.RequestClose += ProjectWizardViewModel_RequestClose;
 			_eventAggregatorService = eventAggregatorService;

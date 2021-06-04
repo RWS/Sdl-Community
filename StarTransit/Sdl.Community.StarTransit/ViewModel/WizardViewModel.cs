@@ -11,6 +11,8 @@ using System.Windows.Threading;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Helpers;
 using Sdl.Community.StarTransit.Interface;
+using Sdl.Community.StarTransit.Shared.Events;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -22,13 +24,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private double _actualWidth;
 		private IProgressHeaderItem _currentPage;
 		private ObservableCollection<IProgressHeaderItem> _pages;
+		private readonly IEventAggregatorService _eventAggregatorService;
 		private RelayCommand _moveNextCommand;
 		private RelayCommand _moveBackCommand;
 		private RelayCommand _finishCommand;
 		private RelayCommand _cancelCommand;
 		private ICommand _selectedPageCommand;
 
-		public WizardViewModel(Window window, ObservableCollection<IProgressHeaderItem> pages)
+		public WizardViewModel(Window window, ObservableCollection<IProgressHeaderItem> pages, IEventAggregatorService eventAggregatorService)
 		{
 			_window = window;
 
@@ -38,6 +41,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 
 			Pages = pages;
+			_eventAggregatorService = eventAggregatorService;
 
 			if (_window != null)
 			{
@@ -207,6 +211,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				OnPropertyChanged(nameof(Pages));
 			}
 		}
+
 
 		public int CurrentPagePosition
 		{
@@ -400,14 +405,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 			else
 			{
-				OnRequestClose();
+				_eventAggregatorService?.PublishEvent(new CreateStudioProject());
 			}
 		}
 
 		private bool CanMoveToNextPage => CurrentPage != null && CurrentPage.IsValid && !CurrentPage.IsLastPage;
 
-		private bool CanMoveToPreviousPage => (CurrentPagePosition > 0 && !CurrentPage.IsLastPage)
-											  || (CurrentPage.IsLastPage && !CurrentPage.IsComplete);
+		private bool CanMoveToPreviousPage => (CurrentPagePosition > 0);
 
 		public event EventHandler RequestClose;
 

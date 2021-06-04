@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Events;
@@ -20,8 +17,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private int _currentPageNumber;
 		private string _displayName;
 		private string _tooltip;
-		private string _errorMessage;
-		private string _createProjectMessage;
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
@@ -33,7 +28,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private readonly IDisposable _xliffCreationProgressEvent;
 		private readonly IDisposable _projectCreationProgressEvent;
 		private readonly IDisposable _fileProgressEvent;
-		private ICommand _createProjectCommand;
+		private readonly IDisposable _createProjectEvent;
 		private ObservableCollection<TmSummaryOptions> _tmSummaryOptions;
 		private ObservableCollection<TmSummaryOptions> _tmImportProgress;
 
@@ -50,10 +45,11 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_fileProgressEvent=_eventAggregatorService?.Subscribe<TmFilesProgress>(OnTmFileProgressChanged);
 			_xliffCreationProgressEvent =_eventAggregatorService?.Subscribe<XliffCreationProgress>(OnXliffCreationProgressChanged);
 			_projectCreationProgressEvent= _eventAggregatorService?.Subscribe<ProjectCreationProgress>(OnStudioProjectProgressChanged);
+			_createProjectEvent = _eventAggregatorService?.Subscribe<CreateStudioProject>(CreateTradosProject);
 			TmSummaryOptions = new ObservableCollection<TmSummaryOptions>();
 			TmImportProgress = new ObservableCollection<TmSummaryOptions>();
 			PropertyChanged += CreateProjectViewModelChanged;
-		}
+		}		
 
 		public string PackageName
 		{
@@ -195,9 +191,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
-		public ICommand CreateProjectCommand =>
-			_createProjectCommand ?? (_createProjectCommand = new AwaitableCommand(CreateTradosProject));
-
 		public override bool OnChangePage(int position, out string message)
 		{
 			message = string.Empty;
@@ -216,11 +209,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 			return true;
 		}
 
-		private void CreateProjectViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void CreateProjectViewModelChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
 			TmSummaryOptions.Clear();
+			IsPreviousEnabled = false;
+			IsComplete = true;
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
 				languagePair.SelectedTranslationMemoryMetadatas.Clear();
@@ -295,13 +290,14 @@ namespace Sdl.Community.StarTransit.ViewModel
 			return TmImportProgress.FirstOrDefault(l => l.TargetLanguage.Equals(targetCulture));
 		}
 
-		private async Task CreateTradosProject()
+		private async void CreateTradosProject(CreateStudioProject createEvent)
 		{
 			ProjectIsCreating = true;
 			var createdProject = await _projectService.CreateStudioProject(_wizardModel.PackageModel.Result);
 			ProjectFinished = true;
-			IsPreviousEnabled = false;
-			IsComplete = true;
+
+			IsPreviousEnabled = false;			
+			IsComplete = false;
 
 			if (createdProject != null)
 			{
@@ -317,6 +313,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_projectCreationProgressEvent?.Dispose();
 			_xliffCreationProgressEvent?.Dispose();
 			_fileProgressEvent?.Dispose();
+			_createProjectEvent?.Dispose();
 		}
 	}
 }
