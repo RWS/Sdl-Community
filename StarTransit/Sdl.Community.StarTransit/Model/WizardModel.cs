@@ -8,9 +8,10 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.Model
 {
-	public class WizardModel:BaseModel,IWizardModel
+	public class WizardModel : BaseModel, IWizardModel
 	{
 		private string _studioProjectLocation;
+		private bool _importRefMeta;
 		private DateTime? _dueDate;
 		private Customer _selectedCustomer;
 		private ProjectTemplateInfo _selectedTemplate;
@@ -41,7 +42,7 @@ namespace Sdl.Community.StarTransit.Model
 				OnPropertyChanged(nameof(PackageModel));
 			}
 		}
-		
+
 		public ObservableCollection<ProjectTemplateInfo> ProjectTemplates
 		{
 			get => _projectTemplates;
@@ -90,6 +91,16 @@ namespace Sdl.Community.StarTransit.Model
 			{
 				_selectedCustomer = value;
 				OnPropertyChanged(nameof(SelectedCustomer));
+			}
+		}
+		public bool ImportRefMeta
+		{
+			get => _importRefMeta;
+			set
+			{
+				if (_importRefMeta == value) return;
+				_importRefMeta = value;
+				OnPropertyChanged(nameof(ImportRefMeta));
 			}
 		}
 	}

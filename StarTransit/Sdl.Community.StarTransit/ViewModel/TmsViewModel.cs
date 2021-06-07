@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -15,10 +17,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private string _displayName;
 		private string _tooltip;
 		private string _errorMessage;
+		private string _pageDescription;
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
 		private bool _packageContainsTms;
+		private bool _isTmAreaVisible;
 		private readonly IWizardModel _wizardModel;
 		private LanguagePair _selectedLanguagePair;
 		private ICommand _selectTmCommand;
@@ -70,6 +74,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public string PageDescription
+		{
+			get => _pageDescription;
+			set
+			{
+				_pageDescription = value;
+				OnPropertyChanged(nameof(PageDescription));
+			}
+		}
+
 		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new RelayCommand(SelectTm));
 		public ICommand RemoveSelectedTmCommand => _removeTmCommand ?? (_removeTmCommand = new RelayCommand(RemoveTm));
 
@@ -98,6 +112,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				OnPropertyChanged(Tooltip);
 			}
 		}
+
 		public override bool IsValid
 		{
 			get => _isValid;
@@ -147,11 +162,30 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
-		public bool PackageContainsTms
+		public bool IsTmAreaVisible
 		{
-			get => _wizardModel.PackageModel.Result.PackageContainsTms;
-			set { _packageContainsTms = value; }
+			get => _isTmAreaVisible;
+			set
+			{
+				if (_isTmAreaVisible == value) return;
+				_isTmAreaVisible = value;
+				OnPropertyChanged(nameof(IsTmAreaVisible));
+			}
+		}	
+
+		public bool ImportRefMeta
+		{
+			get => _wizardModel.ImportRefMeta;
+			set
+			{
+				_wizardModel.ImportRefMeta = value;
+				SetTmsAreaVisibility();
+				SetPageDescription();
+				ClearSelectionForRef();
+			}
 		}
+
+		public bool PackageContainsTms  => _wizardModel.PackageModel.Result.PackageContainsTms;
 
 		public override bool OnChangePage(int position, out string message)
 		{
@@ -175,6 +209,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
+			SetPageDescription();
+			SetTmsAreaVisibility();
 
 			foreach (var languagePairsTmOption in LanguagePairsTmOptions)
 			{
@@ -184,6 +220,50 @@ namespace Sdl.Community.StarTransit.ViewModel
 				languagePairsTmOption.TmOptionChangedEventRaised += LanguagePairsTmOption_EventRaised;
 				languagePairsTmOption.BrowseTmChangedEventRaised -= LanguagePairsBrowseTm_EventRaised;
 				languagePairsTmOption.BrowseTmChangedEventRaised += LanguagePairsBrowseTm_EventRaised;
+			}
+		}
+
+		private void SetTmsAreaVisibility()
+		{
+			if (!_wizardModel.PackageModel.Result.PackageContainsTms || (ContainsOnlyRefMaterials() && !ImportRefMeta))
+			{
+				IsTmAreaVisible = false;
+			}
+			else
+			{
+				IsTmAreaVisible = true;
+			}
+		}
+
+		private void SetPageDescription()
+		{
+			if (!_wizardModel.PackageModel.Result.PackageContainsTms)
+			{
+				PageDescription = PluginResources.Tm_NoTmAvailableMessage;
+			}
+			else
+			{
+				if (ContainsOnlyRefMaterials() && !ImportRefMeta)
+				{
+					PageDescription = PluginResources.Tm_PageReference;
+				}
+				else
+				{
+					PageDescription = PluginResources.Tm_PageDescription;
+				}
+			}
+		}
+
+		private void ClearSelectionForRef()
+		{
+			if(!ImportRefMeta && ContainsOnlyRefMaterials())
+			{
+				foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
+				{
+					languagePair.NoTm = true;
+					languagePair.CreateNewTm = false;
+					languagePair.ChoseExistingTm = false;
+				}
 			}
 		}
 
@@ -256,6 +336,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 			var tmInfo = new FileBasedTranslationMemory(selectedTmPath);
 			var tmLanguageDirection = tmInfo.LanguageDirection;
 			return SelectedLanguagePair.SourceLanguage.Name.Equals(tmLanguageDirection.SourceLanguage.Name) && SelectedLanguagePair.TargetLanguage.Name.Equals(tmLanguageDirection.TargetLanguage.Name);
+		}
+
+		private bool ContainsOnlyRefMaterials()
+		{
+			foreach (var languagePair in _wizardModel.PackageModel.Result?.LanguagePairs)
+			{
+				var containsTm = languagePair.StarTranslationMemoryMetadatas.Any(t => !t.IsReferenceMeta);
+				if (containsTm) return false;
+			}
+
+			return true;
 		}
 	}
 }

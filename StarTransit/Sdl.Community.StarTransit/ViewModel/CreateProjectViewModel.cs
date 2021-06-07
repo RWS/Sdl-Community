@@ -236,6 +236,11 @@ namespace Sdl.Community.StarTransit.ViewModel
 				}
 
 				var selectedTms = languagePair.StarTranslationMemoryMetadatas.Where(t => t.IsChecked).ToList();
+				if (!_wizardModel.ImportRefMeta)
+				{
+					selectedTms = selectedTms.Where(t => !t.IsReferenceMeta).ToList();
+				}
+
 				if (languagePair.CreateNewTm)
 				{
 					foreach (var selectedTm in selectedTms)

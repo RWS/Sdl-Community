@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.StarTransit.View"
              xmlns:resx="clr-namespace:Sdl.Community.StarTransit"
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.ViewModel"
              xmlns:converters="clr-namespace:Sdl.Community.StarTransit.Converter"
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
-             xmlns:sdlConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
              xmlns:models1="clr-namespace:Sdl.Community.StarTransit.Shared.Models;assembly=Sdl.Community.StarTransit.Shared"
              d:DataContext="{d:DesignInstance viewModels:TmsViewModel}"
              Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
@@ -18,12 +16,12 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/radiobuttonresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/GroupboxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/NumericUpDown.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
 				<ResourceDictionary Source="../UiHelpers/General.xaml" />
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -36,36 +34,31 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<TextBlock
-			Margin="10 0 0 10"
+			Margin="10 0 0 10" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
 			FontSize="15"
-			Grid.Row="0">
-			<TextBlock.Style>
-				<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Sdl.TextBlock.SubtitleStyle}">
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding PackageContainsTms}" Value="True">
-							<Setter Property="Text" Value="{x:Static resx:PluginResources.Tm_PageDescription}"/>
-						</DataTrigger>
-						<DataTrigger Binding="{Binding PackageContainsTms}" Value="False">
-							<Setter Property="Text" Value="{x:Static resx:PluginResources.Tm_NoTmAvailableMessage}"/>
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</TextBlock.Style>
-		</TextBlock>
+			Grid.Row="0" Text="{Binding PageDescription}"/>
+
 		<TextBlock Grid.Row="1" 
 		           HorizontalAlignment="Center" FontSize="15"
 		           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
 		           Text="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}"
 		           Visibility="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullVisibilityConverter}, ConverterParameter=Inverted}" />
-		<ScrollViewer Grid.Row="2"
-					  Visibility="{Binding PackageContainsTms,Converter={StaticResource BooleanToVisibilityConverter}}"
+		<CheckBox Grid.Row="2" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+				  ToolTipService.ShowOnDisabled="true"
+				  ToolTip="{x:Static resx:PluginResources.NoTmTooltip}"
+				  IsEnabled="{Binding PackageContainsTms}"
+				  IsChecked="{Binding ImportRefMeta}" Margin="10 0" Content="{x:Static resx:PluginResources.Tm_ImportRefFolder}"/>
+			<ScrollViewer Grid.Row="3"
+					  Visibility="{Binding IsTmAreaVisible,Converter={StaticResource BooleanToVisibilityConverter}}"
 		              VerticalScrollBarVisibility="Auto" 
 		              PreviewMouseWheel="OnPreviewMouseWheel">
-			<DataGrid
+			<StackPanel>
+				<DataGrid
 				Name="TmsOptions"
 				AutoGenerateColumns="False"
 				GridLinesVisibility="None"
@@ -213,6 +206,8 @@
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
 			</DataGrid>
+			</StackPanel>
+			
 		</ScrollViewer>
 	</Grid>
 </UserControl>

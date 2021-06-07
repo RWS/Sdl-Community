@@ -29,5 +29,6 @@ namespace Sdl.Community.StarTransit.Interface
 		ObservableCollection<ProjectTemplateInfo> ProjectTemplates { get; set; }
 		ProjectTemplateInfo SelectedTemplate { get; set; }
 		DateTime? DueDate { get; set; }
+		bool ImportRefMeta { get; set; }
 	}
 }

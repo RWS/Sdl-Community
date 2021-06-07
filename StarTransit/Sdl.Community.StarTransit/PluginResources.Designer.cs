@@ -286,6 +286,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package doesn&apos;t contain any TM file.
+        /// </summary>
+        public static string NoTmTooltip {
+            get {
+                return ResourceManager.GetString("NoTmTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon open_package {
@@ -507,6 +516,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import TMs from Ref folder.
+        /// </summary>
+        public static string Tm_ImportRefFolder {
+            get {
+                return ResourceManager.GetString("Tm_ImportRefFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected TM language pair does not match with the Transit TM language pair.
         /// </summary>
         public static string Tm_LanguageValidation {
@@ -531,6 +549,15 @@ namespace Sdl.Community.StarTransit {
         public static string Tm_PageDescription {
             get {
                 return ResourceManager.GetString("Tm_PageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected package contains only Reference materials. To import them into a TM please check the box bellow.
+        /// </summary>
+        public static string Tm_PageReference {
+            get {
+                return ResourceManager.GetString("Tm_PageReference", resourceCulture);
             }
         }
         
