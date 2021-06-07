@@ -209,7 +209,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project name.
+        ///   Looks up a localized string similar to Project name:.
         /// </summary>
         public static string CreateProject_ProjectName {
             get {
@@ -282,15 +282,6 @@ namespace Sdl.Community.StarTransit {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Package doesn&apos;t contain any TM file.
-        /// </summary>
-        public static string NoTmTooltip {
-            get {
-                return ResourceManager.GetString("NoTmTooltip", resourceCulture);
             }
         }
         
@@ -516,7 +507,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import TMs from Ref folder.
+        ///   Looks up a localized string similar to Include reference materials.
         /// </summary>
         public static string Tm_ImportRefFolder {
             get {
@@ -576,6 +567,15 @@ namespace Sdl.Community.StarTransit {
         public static string Tm_SelectedTmName {
             get {
                 return ResourceManager.GetString("Tm_SelectedTmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include reference materials:.
+        /// </summary>
+        public static string TmCreate_RefFolder {
+            get {
+                return ResourceManager.GetString("TmCreate_RefFolder", resourceCulture);
             }
         }
         

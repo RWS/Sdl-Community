@@ -21,7 +21,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private bool _isNextEnabled;
 		private bool _isPreviousEnabled;
 		private bool _isValid;
-		private bool _packageContainsTms;
+		private bool _containsRefMeta;
 		private bool _isTmAreaVisible;
 		private readonly IWizardModel _wizardModel;
 		private LanguagePair _selectedLanguagePair;
@@ -184,6 +184,15 @@ namespace Sdl.Community.StarTransit.ViewModel
 				ClearSelectionForRef();
 			}
 		}
+		public bool ContainsRefMeta
+		{
+			get => _containsRefMeta; set
+			{
+				if (_containsRefMeta == value) return;
+				_containsRefMeta = value;
+				OnPropertyChanged(nameof(ContainsRefMeta));
+			}
+		}
 
 		public bool PackageContainsTms  => _wizardModel.PackageModel.Result.PackageContainsTms;
 
@@ -209,6 +218,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		{
 			if (e.PropertyName != nameof(CurrentPageChanged)) return;
 			if (!IsCurrentPage) return;
+			ContainsRefMeta = ContainsRefMaterials();
 			SetPageDescription();
 			SetTmsAreaVisibility();
 
@@ -347,6 +357,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 
 			return true;
+		}
+		private bool ContainsRefMaterials()
+		{
+			foreach (var languagePair in _wizardModel.PackageModel.Result?.LanguagePairs)
+			{
+				var containsTm = languagePair.StarTranslationMemoryMetadatas.Any(t => t.IsReferenceMeta);
+				if (containsTm) return true;
+			}
+
+			return false ;
 		}
 	}
 }

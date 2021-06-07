@@ -75,6 +75,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			get => _wizardModel?.DueDate?.ToString();
 		}
 
+		public bool ImportRefMaterials => _wizardModel.ImportRefMeta;
+
 		public string CreateMessage =>  string.Format(PluginResources.CreateProject_Creating, _wizardModel.PackageModel.Result.Name);
 
 		public ObservableCollection<TmSummaryOptions> TmSummaryOptions

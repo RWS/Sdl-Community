@@ -285,7 +285,7 @@ The selected Transit package doesn't contain any Translation Memories.</value>
     <value>Package details</value>
   </data>
   <data name="CreateProject_ProjectName" xml:space="preserve">
-    <value>Project name</value>
+    <value>Project name:</value>
   </data>
   <data name="CreateProject_CreateNewTm" xml:space="preserve">
     <value>Create new TM with name:</value>
@@ -326,11 +326,11 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="TemplateTitle" xml:space="preserve">
     <value>Open Project Template</value>
   </data>
-  <data name="NoTmTooltip" xml:space="preserve">
-    <value>Package doesn't contain any TM file</value>
+  <data name="TmCreate_RefFolder" xml:space="preserve">
+    <value>Include reference materials:</value>
   </data>
   <data name="Tm_ImportRefFolder" xml:space="preserve">
-    <value>Import TMs from Ref folder</value>
+    <value>Include reference materials</value>
   </data>
   <data name="Tm_PageReference" xml:space="preserve">
     <value>Selected package contains only Reference materials. To import them into a TM please check the box bellow</value>
