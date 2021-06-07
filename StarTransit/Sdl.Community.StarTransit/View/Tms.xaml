@@ -50,7 +50,7 @@
 		           Visibility="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullVisibilityConverter}, ConverterParameter=Inverted}" />
 		<CheckBox Grid.Row="2" Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
 				  ToolTipService.ShowOnDisabled="true"
-				  Visibility="{Binding PackageContainsTms,Converter={StaticResource BooleanToVisibilityConverter}}"
+				  Visibility="{Binding ContainsRefMeta,Converter={StaticResource BooleanToVisibilityConverter}}"
 				  IsChecked="{Binding ImportRefMeta}" Margin="10 0" Content="{x:Static resx:PluginResources.Tm_ImportRefFolder}"/>
 			<ScrollViewer Grid.Row="3"
 					  Visibility="{Binding IsTmAreaVisible,Converter={StaticResource BooleanToVisibilityConverter}}"

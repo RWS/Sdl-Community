@@ -273,6 +273,10 @@ namespace Sdl.Community.StarTransit.ViewModel
 					languagePair.NoTm = true;
 					languagePair.CreateNewTm = false;
 					languagePair.ChoseExistingTm = false;
+					foreach (var metadata in languagePair.StarTranslationMemoryMetadatas)
+					{
+						metadata.TmPenalty = 0;
+					}
 				}
 			}
 		}
