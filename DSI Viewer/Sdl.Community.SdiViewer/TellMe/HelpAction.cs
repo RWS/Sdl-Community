@@ -7,7 +7,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 	{
 		public HelpAction()
 		{
-			Name = "DSI Viewer wiki in the SDL Community";
+			Name = "DSI Viewer wiki in the RWS Community";
 		}
 
 		public override Icon Icon => PluginResources.Question;

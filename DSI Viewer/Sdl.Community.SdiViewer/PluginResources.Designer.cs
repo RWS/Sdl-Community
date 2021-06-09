@@ -181,7 +181,7 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  - SDL MT Cloud Filter:.
+        ///   Looks up a localized string similar to  - RWS MT Cloud Filter:.
         /// </summary>
         public static string Label_SDLMTCloudFilter {
             get {
@@ -199,7 +199,7 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Related.
+        ///   Looks up a localized string similar to RWS MT Cloud Related.
         /// </summary>
         public static string Label_SDLMTCloudRelated {
             get {
