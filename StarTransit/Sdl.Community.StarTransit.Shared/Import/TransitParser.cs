@@ -145,6 +145,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					segmentPairProperties, true);
 				paragraphUnit.Source.Add(srcSegment);
 				// add target segment to paragraph unit if available
+
 				if (item.SelectSingleNode(".") != null)
 				{
 					var trgSegment = CreateSegment(item.SelectSingleNode("."), segmentPairProperties, false);
@@ -245,7 +246,9 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 					if (item.NodeType == XmlNodeType.Whitespace)
 					{
+						//segment.Add(CreateText(string.Empty));
 						segment.Add(CreateText(" "));
+
 					}
 				}
 			}

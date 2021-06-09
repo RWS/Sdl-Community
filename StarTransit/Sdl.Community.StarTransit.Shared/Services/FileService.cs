@@ -50,7 +50,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public bool IsValidNode(XmlNode originalXmlNode)
 		{
-			return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text && !string.IsNullOrWhiteSpace(childNode.Value));
+			if (originalXmlNode.ChildNodes.Count > 0)
+			{
+				return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text && !string.IsNullOrWhiteSpace(childNode.Value));
+			}
+			return true;
 		}
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
