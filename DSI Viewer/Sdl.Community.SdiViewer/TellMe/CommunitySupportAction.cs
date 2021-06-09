@@ -7,7 +7,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 	{
 		public CommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override Icon Icon => PluginResources.ForumIcon;
