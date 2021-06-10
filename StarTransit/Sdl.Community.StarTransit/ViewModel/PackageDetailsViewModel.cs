@@ -292,7 +292,12 @@ namespace Sdl.Community.StarTransit.ViewModel
 				return;
 			}
 
-			if (Directory.Exists(location))
+			if (!Path.IsPathRooted(location))
+			{
+				IsValid = false;
+				ErrorMessage = PluginResources.Details_LocationValidation;
+			}
+			else if (Directory.Exists(location))
 			{
 				var isEmptyFolder = !Directory
 					.GetFiles(location, "*.*", SearchOption.AllDirectories)

@@ -247,6 +247,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project location is not a valid path.
+        /// </summary>
+        public static string Details_LocationValidation {
+            get {
+                return ResourceManager.GetString("Details_LocationValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {

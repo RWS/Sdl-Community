@@ -335,4 +335,7 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="Tm_PageReference" xml:space="preserve">
     <value>Selected package contains only Reference materials. To import them into a TM please check the box bellow</value>
   </data>
+  <data name="Details_LocationValidation" xml:space="preserve">
+    <value>Project location is not a valid path</value>
+  </data>
 </root>
