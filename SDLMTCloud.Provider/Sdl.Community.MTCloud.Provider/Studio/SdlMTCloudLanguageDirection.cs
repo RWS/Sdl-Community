@@ -135,7 +135,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					// If activeSegmentPair is not null, it means the user translates segments through Editor
 					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
 					var documentLastOpenPath = _translationUnits[0]?.DocumentProperties?.LastOpenedAsPath;
-					if (documentLastOpenPath == null || documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath))
+					if (!IsPretranslation(documentLastOpenPath))
 					{
 						if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
 						{
@@ -146,8 +146,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 						{
 							// do nothing
 						}
+					}
+					else
+					{
 						// If is already translated or is locked, then the request to server should not be done and it should not be translated
-						else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
+						if (IsDraftOrTranslated(correspondingTu))
 						{
 							alreadyTranslatedSegments.Add(CreateTranslatedSegment(segments, segmentIndex));
 						}
@@ -155,10 +158,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 						{
 							mtCloudSegments.Add(CreateMTCloudSegments(segments, segmentIndex));
 						}
-					}
-					else
-					{
-						mtCloudSegments.Add(CreateMTCloudSegments(segments, segmentIndex));
 					}
 				}
 
@@ -313,6 +312,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			throw new NotImplementedException();
 		}
 
+		private static bool IsDraftOrTranslated(TranslationUnit correspondingTu)
+		{
+			return correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked);
+		}
+
 		// Ignore when translations exists and segments are merged.
 		// When segments are merged, always the last one becomes empty and is removed. Eg: when merging segment 4 and 5, the text is added inside segment 4,
 		// and segment 5 becomes empty and hidden from Editor
@@ -423,6 +427,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			}
 
 			return false;
+		}
+
+		private bool IsPretranslation(string documentLastOpenPath)
+		{
+			return !(documentLastOpenPath == null || documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath));
 		}
 
 		private bool IsSameSourceTarget(TranslationUnit corespondingTu)
