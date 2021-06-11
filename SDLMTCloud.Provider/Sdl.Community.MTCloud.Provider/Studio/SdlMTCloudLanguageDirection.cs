@@ -118,6 +118,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					if (mask != null && !mask[segmentIndex])
 					{
 						results[segmentIndex] = null;
+						fileAndSegmentIds.Segments.Remove(fileAndSegmentIds.Segments.Keys.ElementAt(segmentIndex));
 						continue;
 					}
 
