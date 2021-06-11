@@ -174,11 +174,13 @@ namespace Sdl.Community.StarTransit
 
 				if (xliffFiles.Value)
 				{
-					var returnPackageWindow = new ReturnPackageWindow
+					using (var returnPackageWindow = new ReturnPackageWindow())
 					{
-						DataContext = new ReturnPackageWindowViewModel(transitReturnPackage.Item1, dialogService)
-					};
-					returnPackageWindow.ShowDialog();
+						var returnViewModel =
+							new ReturnPackageWindowViewModel(transitReturnPackage.Item1, dialogService);
+						returnPackageWindow.DataContext = returnViewModel;
+						returnPackageWindow.ShowDialog();
+					}
 
 					//var window = new ReturnPackageMainWindow(returnPackage?.Item1);
 					//window.ShowDialog();

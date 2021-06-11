@@ -256,7 +256,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project location is not a valid path.
+        ///   Looks up a localized string similar to Location is not a valid path.
         /// </summary>
         public static string Details_LocationValidation {
             get {

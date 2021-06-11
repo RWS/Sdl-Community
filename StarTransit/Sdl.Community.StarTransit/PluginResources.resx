@@ -336,7 +336,7 @@ The selected Transit package doesn't contain any Translation Memories.</value>
     <value>Selected package contains only Reference materials. To import them into a TM please check the box bellow</value>
   </data>
   <data name="Details_LocationValidation" xml:space="preserve">
-    <value>Project location is not a valid path</value>
+    <value>Location is not a valid path</value>
   </data>
   <data name="BrowsePackageLocation_Tooltip" xml:space="preserve">
     <value>Please select an output path for the .tpf file</value>
