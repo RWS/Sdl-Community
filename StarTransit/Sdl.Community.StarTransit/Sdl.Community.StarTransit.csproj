@@ -2,6 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>11.0.3344.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -196,6 +197,7 @@
     <Compile Include="VersionInfo.cs" />
     <Compile Include="ViewModel\CreateProjectViewModel.cs" />
     <Compile Include="ViewModel\PackageDetailsViewModel.cs" />
+    <Compile Include="ViewModel\ReturnPackageWindowViewModel.cs" />
     <Compile Include="ViewModel\TmsViewModel.cs" />
     <Compile Include="ViewModel\WizardViewModel.cs" />
     <Compile Include="ViewModel\WizardViewModelBase.cs" />
@@ -208,11 +210,15 @@
     <Compile Include="View\PackageDetails.xaml.cs">
       <DependentUpon>PackageDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ReturnPackageWindow.xaml.cs">
+      <DependentUpon>ReturnPackageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Tms.xaml.cs">
       <DependentUpon>Tms.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ShowPreviewAction.ico" />
     <Resource Include="Resources\trash-alt.png" />
     <Resource Include="Resources\translationmemory.ico" />
     <Resource Include="Resources\user.ico" />
@@ -227,7 +233,7 @@
     <None Include="Resources\Question.ico" />
     <Resource Include="Resources\ProjectTemplates.ico" />
     <Content Include="Resources\return.ico" />
-    <Content Include="Resources\return_package.ico" />
+    <Resource Include="Resources\return_package.ico" />
     <None Include="Resources\opensourceimage.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
@@ -300,6 +306,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PackageDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReturnPackageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

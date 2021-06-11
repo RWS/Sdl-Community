@@ -29,11 +29,11 @@
 				</Grid.ColumnDefinitions>
 
 				<!-- ICON TBD -->
-				<Image Grid.Column="1" DockPanel.Dock="Left" Width="32" Height="32" Margin="10 0 0 0" Source="{Binding Path=Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+				<Image Grid.Column="1" DockPanel.Dock="Left" Width="20" Height="20" Margin="10 0 5 0" Source="{Binding Path=Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
 
 				<!-- TITLE -->
 				<Grid Grid.Column="2">
-					<TextBlock TextTrimming="CharacterEllipsis" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+					<TextBlock TextTrimming="CharacterEllipsis" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center"
                            Margin="0,0,0,1" FontSize="14" Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
 						<TextBlock.Style>
 							<Style TargetType="TextBlock">

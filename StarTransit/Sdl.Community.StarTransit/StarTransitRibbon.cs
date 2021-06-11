@@ -44,7 +44,9 @@ namespace Sdl.Community.StarTransit
 		{
 			var packageService = new PackageService(_eventAggregatorService);
 			var folderService = new DialogService();
+			//TODO: Refactor and use projects controller service
 			var studioService = new StudioService(_projectsController);
+			//TODO: use dialog service
 			var fileDialogService = new OpenFileDialogService();
 			var projectService = new ProjectService(_eventAggregatorService);
 
@@ -62,8 +64,6 @@ namespace Sdl.Community.StarTransit
 
 		protected override void Execute()
 		{
-			var messageBoxService = new MessageBoxService();
-
 			try
 			{
 				_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
@@ -83,14 +83,12 @@ namespace Sdl.Community.StarTransit
 
 				using (var wizard = new ImportWizard(pages, _eventAggregatorService, _projectControllerService))
 				{
-					ElementHost.EnableModelessKeyboardInterop(wizard);
 					wizard.ShowDialog();
-				};
+				}
 			}
 
 			catch (Exception ex)
 			{
-				//messageBoxService.ShowMessage(ex.Message, string.Empty);
 				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
@@ -161,7 +159,10 @@ namespace Sdl.Community.StarTransit
 			Utils.EnsureApplicationResources();
 
 			var returnService = new ReturnPackageService();
+			var dialogService = new DialogService();
 			var returnPackage = returnService.GetReturnPackage();
+
+			var transitReturnPackage = returnService.GetPackage();
 
 			if (!string.IsNullOrEmpty(returnPackage?.Item2))
 			{
@@ -170,10 +171,17 @@ namespace Sdl.Community.StarTransit
 			else if (returnPackage?.Item1?.FileBasedProject != null && returnPackage?.Item1?.TargetFiles.Count > 0)
 			{
 				var xliffFiles = returnPackage?.Item1?.TargetFiles?.Any(file => file.Name.EndsWith(".sdlxliff"));
+
 				if (xliffFiles.Value)
 				{
-					var window = new ReturnPackageMainWindow(returnPackage?.Item1);
-					window.ShowDialog();
+					var returnPackageWindow = new ReturnPackageWindow
+					{
+						DataContext = new ReturnPackageWindowViewModel(transitReturnPackage.Item1, dialogService)
+					};
+					returnPackageWindow.ShowDialog();
+
+					//var window = new ReturnPackageMainWindow(returnPackage?.Item1);
+					//window.ShowDialog();
 				}
 				else
 				{

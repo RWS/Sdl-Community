@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -16,13 +17,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	public class ReturnPackageService
 	{
 		private readonly ProjectsController _projectsController;
-		private readonly List<bool> _isTransitProject;
 		private readonly ReturnPackage _returnPackage;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ReturnPackageService()
 		{
-			_isTransitProject = new List<bool>();
 			_returnPackage = new ReturnPackage();
 			var helpers = new Helpers();
 			_projectsController = helpers.GetProjectsController();
@@ -32,52 +31,44 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// Returns a list of StarTransit return package and  true if the projects selected are a StarTransit projects 
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<ReturnPackage, string> GetReturnPackage()
+		public Tuple<IReturnPackage, string> GetPackage()
 		{
 			try
 			{
-				_isTransitProject?.Clear();
 				var projects = _projectsController?.SelectedProjects.ToList();
-				var message = string.Empty;
-				if (projects?.Count > 1)
-				{
-					message = @"Please select only one project.";
-					return new Tuple<ReturnPackage, string>(null, message);
-				}
-
 				if (projects != null)
 				{
-					foreach (var project in projects)
+					if (projects.Count > 1)
 					{
-						var targetFiles = project.GetTargetLanguageFiles().ToList();
-						var isTransit = IsTransitProject(targetFiles);
-
-						if (isTransit)
-						{
-							_returnPackage.FileBasedProject = project;
-							_returnPackage.ProjectLocation = project.FilePath;
-							_returnPackage.TargetFiles = targetFiles;
-							//we take only the first file location, because the other files are in the same location
-							_returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
-							_isTransitProject?.Add(true);
-						}
-						else
-						{
-							_isTransitProject?.Add(false);
-						}
+						return new Tuple<IReturnPackage, string>(null, "Please select only one project.");
 					}
-				}
 
-				if (_isTransitProject != null)
-				{
-					if (_isTransitProject.Contains(false))
+					var project = projects[0];
+					var targetFiles = project.GetTargetLanguageFiles().ToList();
+					var isTransit = IsTransitProject(targetFiles);
+
+					if (!isTransit)
+						return new Tuple<IReturnPackage, string>(_returnPackage,
+							"Please select a StarTransit project");
+
+					_returnPackage.FileBasedProject = project;
+					_returnPackage.ProjectLocation = Path.GetDirectoryName(project.FilePath); //project.FilePath;
+					_returnPackage.TargetFiles = targetFiles;
+					//we take only the first file location, because the other files are in the same location
+					_returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
+					_returnPackage.PathToPrjFile = GetPathToPrjFile(project.FilePath);
+					_returnPackage.ReturnFilesDetails = new List<ReturnFileDetails>();
+
+					foreach (var targetFile in targetFiles)
 					{
-						message = @"Please select a StarTransit project!";
-						return new Tuple<ReturnPackage, string>(_returnPackage, message);
+						var fileDetails = new ReturnFileDetails
+						{
+							FileName = targetFile.Name, Path = targetFile.LocalFilePath, Id = targetFile.Id
+						};
+						_returnPackage.ReturnFilesDetails.Add(fileDetails);
 					}
+					return new Tuple<IReturnPackage, string>(_returnPackage, string.Empty);
 				}
-
-				return new Tuple<ReturnPackage, string>(_returnPackage, message);
 			}
 			catch (Exception ex)
 			{
@@ -86,6 +77,41 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return null;
 		}
 
+		public Tuple<ReturnPackage, string> GetReturnPackage()
+		{
+			try
+			{
+				var projects = _projectsController?.SelectedProjects.ToList();
+				if (projects != null)
+				{
+					if (projects.Count > 1)
+					{
+						return new Tuple<ReturnPackage, string>(null, "Please select only one project.");
+					}
+
+					var project = projects[0];
+					var targetFiles = project.GetTargetLanguageFiles().ToList();
+					var isTransit = IsTransitProject(targetFiles);
+
+					if (!isTransit)
+						return new Tuple<ReturnPackage, string>(_returnPackage,
+							"Please select a StarTransit project");
+
+					_returnPackage.FileBasedProject = project;
+					_returnPackage.ProjectLocation = Path.GetDirectoryName(project.FilePath); //project.FilePath;
+					_returnPackage.TargetFiles = targetFiles;
+					//we take only the first file location, because the other files are in the same location
+					_returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
+					_returnPackage.PathToPrjFile = GetPathToPrjFile(project.FilePath);
+					return new Tuple<ReturnPackage, string>(_returnPackage, string.Empty);
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
+			}
+			return null;
+		}
 		/// <summary>
 		/// Check to see if the file type is the same with the Transit File Type
 		/// </summary>
@@ -105,6 +131,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			var outputFiles = taskSequence.OutputFiles.ToList();
 			CreateArchive(package);
+		}
+
+		private string GetPathToPrjFile(string pathToProject)
+		{
+			var prjPath = Path.Combine(pathToProject.Substring(0, pathToProject.LastIndexOf(@"\", StringComparison.Ordinal)), "StarTransitMetadata");
+			if (!Directory.Exists(prjPath)) return string.Empty;
+			var filesPath = Directory.GetFiles(prjPath).ToList();
+			var prjFilePath = filesPath.FirstOrDefault(p => p.EndsWith("PRJ"));
+			return prjFilePath;
 		}
 
 		/// <summary>

@@ -153,6 +153,7 @@
     <Compile Include="Import\TransitWriter.cs" />
     <Compile Include="Events\TuImportStatistics.cs" />
     <Compile Include="Models\MetadataFileInfo.cs" />
+    <Compile Include="Models\ReturnFileDetails.cs" />
     <Compile Include="Services\Interfaces\IEventAggregatorService.cs" />
     <Compile Include="Interfaces\IMessageBoxService.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Services\EventAggregatorService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\Interfaces\IFileService.cs" />
+    <Compile Include="Services\Interfaces\IReturnPackage.cs" />
     <Compile Include="Services\Interfaces\IPackageService.cs" />
     <Compile Include="Services\Interfaces\IProjectsControllerService.cs" />
     <Compile Include="Services\Interfaces\IProjectService.cs" />

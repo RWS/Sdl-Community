@@ -338,4 +338,16 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="Details_LocationValidation" xml:space="preserve">
     <value>Project location is not a valid path</value>
   </data>
+  <data name="BrowsePackageLocation_Tooltip" xml:space="preserve">
+    <value>Please select an output path for the .tpf file</value>
+  </data>
+  <data name="ReturnPackageLocation_Watermark" xml:space="preserve">
+    <value>Return package folder path</value>
+  </data>
+  <data name="ReturnPackage_WindowDetails" xml:space="preserve">
+    <value>Please select an output path for the .tpf file, otherwise the package will be created within the project's folder.</value>
+  </data>
+  <data name="ShowPreviewAction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ShowPreviewAction.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

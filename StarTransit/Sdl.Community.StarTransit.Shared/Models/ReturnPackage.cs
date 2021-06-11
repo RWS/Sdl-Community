@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.StarTransit.Shared.Models
 {
-    public class ReturnPackage
-    {
+    public class ReturnPackage: IReturnPackage
+	{
         /// <summary>
         /// The location of the return package folder where the archive will be created
         /// </summary>
@@ -20,5 +17,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public string LocalFilePath { get; set; }
         public string FileName { get; set; }
         public string PathToPrjFile { get; set; }
-    }
+        public List<ReturnFileDetails> ReturnFilesDetails { get; set; }
+	}
 }

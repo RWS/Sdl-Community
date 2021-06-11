@@ -110,6 +110,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select an output path for the .tpf file.
+        /// </summary>
+        public static string BrowsePackageLocation_Tooltip {
+            get {
+                return ResourceManager.GetString("BrowsePackageLocation_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create project.
         /// </summary>
         public static string CreateProject_Btn {
@@ -471,11 +480,39 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select an output path for the .tpf file, otherwise the package will be created within the project&apos;s folder..
+        /// </summary>
+        public static string ReturnPackage_WindowDetails {
+            get {
+                return ResourceManager.GetString("ReturnPackage_WindowDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return package folder path.
+        /// </summary>
+        public static string ReturnPackageLocation_Watermark {
+            get {
+                return ResourceManager.GetString("ReturnPackageLocation_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SelectTemplate.
         /// </summary>
         public static string SelectTemplate {
             get {
                 return ResourceManager.GetString("SelectTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ShowPreviewAction {
+            get {
+                object obj = ResourceManager.GetObject("ShowPreviewAction", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
