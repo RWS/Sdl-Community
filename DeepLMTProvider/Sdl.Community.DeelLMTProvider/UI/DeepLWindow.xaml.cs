@@ -34,7 +34,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
 	        PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
-            SetSettingsOnWindow(credentialStore, isTellMeAction);
+			SetSettingsOnWindow(credentialStore, isTellMeAction);
         }
 
         public DeepLTranslationOptions Options { get; }
@@ -69,7 +69,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            Enum.TryParse<Formality>(Formality.SelectedIndex.ToString(), out var formality);
+	        SetApiKeyValidityLabel();
+
+			Enum.TryParse<Formality>(Formality.SelectedIndex.ToString(), out var formality);
             Options.Formality = formality;
 
             if (PlainText.IsChecked != null)
