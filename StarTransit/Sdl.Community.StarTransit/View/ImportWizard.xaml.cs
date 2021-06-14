@@ -17,7 +17,6 @@ namespace Sdl.Community.StarTransit.View
 	public partial class ImportWizard:IDisposable
 	{
 		private readonly WizardViewModel _model;
-		private readonly IEventAggregatorService _eventAggregatorService;
 		private readonly IProjectsControllerService _projectControllerService;
 		private readonly IDisposable _projectCreatedEvent;
 
@@ -30,9 +29,8 @@ namespace Sdl.Community.StarTransit.View
 			_model = new WizardViewModel(this, pages,eventAggregatorService);
 			_model.SelectedPageChanged += Model_SelectedPageChanged;
 			_model.RequestClose += ProjectWizardViewModel_RequestClose;
-			_eventAggregatorService = eventAggregatorService;
 			_projectControllerService = projectsControllerService;
-			_projectCreatedEvent=_eventAggregatorService.Subscribe<ProjectCreated>(OnProjectCreated);
+			_projectCreatedEvent=eventAggregatorService.Subscribe<ProjectCreated>(OnProjectCreated);
 
 			DataContext = _model;
 		}

@@ -154,7 +154,7 @@ namespace Sdl.Community.StarTransit
 		private IMessageBoxService _messageBoxService;
 		private ProjectsControllerService _projectsControllerService;
 		private ProjectsController _projectsController;
-
+		private readonly IEventAggregatorService _eventAggregatorService = new EventAggregatorService(TransitApplicationInitializer.EventAggregator);
 
 		protected override void Execute()
 		{
@@ -181,14 +181,13 @@ namespace Sdl.Community.StarTransit
 
 				if (xliffFiles.Value)
 				{
-					using (var returnPackageWindow = new ReturnPackageWindow())
+					using (var returnPackageWindow = new ReturnPackageWindow(_eventAggregatorService))
 					{
 						var returnViewModel =
-							new ReturnPackageWindowViewModel(returnPackage.Item1, returnService, dialogService);
+							new ReturnPackageWindowViewModel(returnPackage.Item1, returnService, dialogService,_eventAggregatorService);
 						returnPackageWindow.DataContext = returnViewModel;
 						returnPackageWindow.ShowDialog();
 					}
-
 					//var window = new ReturnPackageMainWindow(returnPackage.Item1);
 					//window.ShowDialog();
 				}

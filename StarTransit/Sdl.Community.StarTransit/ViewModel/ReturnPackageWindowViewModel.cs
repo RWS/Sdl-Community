@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using NLog.LayoutRenderers;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 
@@ -24,11 +22,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private string _returnPackageLocation;
 		private string _errorMessage;
 		private bool _isCreateButtonEnabled;
+		private readonly  IEventAggregatorService _eventAggregatorService;
 
-		public ReturnPackageWindowViewModel(IReturnPackage returnPackage,IReturnPackageService returnPackageService, IDialogService dialogService)
+		public ReturnPackageWindowViewModel(IReturnPackage returnPackage,IReturnPackageService returnPackageService, IDialogService dialogService,IEventAggregatorService eventAggregatorService)
 		{
 			_dialogService = dialogService;
 			_returnPackageService = returnPackageService;
+			_eventAggregatorService = eventAggregatorService;
 			ReturnPackage = returnPackage;
 
 			foreach (var returnFile in ReturnPackage.ReturnFilesDetails)
@@ -98,15 +98,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 
 		private async Task CreatePackage()
 		{
-			if (!string.IsNullOrEmpty(ReturnPackageLocation))
-			{
-				ReturnPackage.FolderLocation = ReturnPackageLocation;
-			}
-			else
-			{
-				// set to project folder
-			}
+			ReturnPackage.FolderLocation = !string.IsNullOrEmpty(ReturnPackageLocation) ? ReturnPackageLocation : ReturnPackage.ProjectLocation;
 			await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage));
+			_eventAggregatorService?.PublishEvent(new OpenReturnPackageLocation{RetuntPackageLocation = ReturnPackage.FolderLocation});
 		}
 
 		private void BrowseLocation()

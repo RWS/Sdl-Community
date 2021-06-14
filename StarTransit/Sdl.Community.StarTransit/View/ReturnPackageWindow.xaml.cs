@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
+using Sdl.Community.StarTransit.Shared.Events;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.ViewModel;
 
 namespace Sdl.Community.StarTransit.View
@@ -8,9 +11,23 @@ namespace Sdl.Community.StarTransit.View
 	/// </summary>
 	public partial class ReturnPackageWindow : IDisposable
 	{
-		public ReturnPackageWindow()
+		private readonly IDisposable _openPackageLocationEvent;
+
+		public ReturnPackageWindow(IEventAggregatorService eventAggregatorService)
 		{
 			InitializeComponent();
+
+			_openPackageLocationEvent =
+				eventAggregatorService?.Subscribe<OpenReturnPackageLocation>(OpenPackageLocation);
+		}
+
+		private void OpenPackageLocation(OpenReturnPackageLocation returnPackageEvent)
+		{
+			if (!string.IsNullOrEmpty(returnPackageEvent.RetuntPackageLocation))
+			{
+				Process.Start(returnPackageEvent.RetuntPackageLocation);
+			}
+			Close();
 		}
 
 		public void Dispose()
@@ -19,6 +36,7 @@ namespace Sdl.Community.StarTransit.View
 			{
 				returnViewModel.Dispose();
 			}
+			_openPackageLocationEvent.Dispose();
 		}
 	}
 }

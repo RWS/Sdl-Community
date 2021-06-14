@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="Events\CreateStudioProject.cs" />
     <Compile Include="Events\Error.cs" />
+    <Compile Include="Events\OpenReturnPackageLocation.cs" />
     <Compile Include="Events\ProjectCreated.cs" />
     <Compile Include="Events\ProjectCreationProgress.cs" />
     <Compile Include="Events\TmFilesProgress.cs" />
