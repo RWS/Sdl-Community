@@ -152,37 +152,44 @@ namespace Sdl.Community.StarTransit
 	public class ReturnPackageAction : AbstractAction
 	{
 		private IMessageBoxService _messageBoxService;
+		private ProjectsControllerService _projectsControllerService;
+		private ProjectsController _projectsController;
+
 
 		protected override void Execute()
 		{
 			_messageBoxService = new MessageBoxService();
 			Utils.EnsureApplicationResources();
 
-			var returnService = new ReturnPackageService();
+			_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
+			_projectsControllerService = new ProjectsControllerService(_projectsController);
+
+			//var returnService = new ReturnPackageService();
+			var returnService = new ReturnPackageService(_projectsControllerService);
 			var dialogService = new DialogService();
-			var returnPackage = returnService.GetReturnPackage();
 
-			var transitReturnPackage = returnService.GetPackage();
-
-			if (!string.IsNullOrEmpty(returnPackage?.Item2))
+			//var returnPackage = returnService.GetReturnPackage();
+			var returnPackage = returnService.GetPackage();
+			if (returnPackage.Item1 is null) return;
+			if (!string.IsNullOrEmpty(returnPackage.Item2))
 			{
 				_messageBoxService.ShowWarningMessage(returnPackage.Item2, "Warning");
 			}
-			else if (returnPackage?.Item1?.FileBasedProject != null && returnPackage?.Item1?.TargetFiles.Count > 0)
+			else if (returnPackage.Item1.FileBasedProject != null && returnPackage.Item1.TargetFiles.Count > 0)
 			{
-				var xliffFiles = returnPackage?.Item1?.TargetFiles?.Any(file => file.Name.EndsWith(".sdlxliff"));
+				var xliffFiles = returnPackage.Item1.TargetFiles?.Any(file => file.Name.EndsWith(".sdlxliff"));
 
 				if (xliffFiles.Value)
 				{
 					using (var returnPackageWindow = new ReturnPackageWindow())
 					{
 						var returnViewModel =
-							new ReturnPackageWindowViewModel(transitReturnPackage.Item1, dialogService);
+							new ReturnPackageWindowViewModel(returnPackage.Item1, returnService, dialogService);
 						returnPackageWindow.DataContext = returnViewModel;
 						returnPackageWindow.ShowDialog();
 					}
 
-					//var window = new ReturnPackageMainWindow(returnPackage?.Item1);
+					//var window = new ReturnPackageMainWindow(returnPackage.Item1);
 					//window.ShowDialog();
 				}
 				else

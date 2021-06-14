@@ -1,4 +1,5 @@
-﻿using Sdl.ProjectAutomation.Core;
+﻿using System.Collections.Generic;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -16,6 +17,11 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 		public void OpenProjectInFilesView(IProject studioProject)
 		{
 			_projectsController?.Open((FileBasedProject)studioProject);
+		}
+
+		public IEnumerable<FileBasedProject> GetSelectedProjects()
+		{
+			return _projectsController?.SelectedProjects;	
 		}
 	}
 }

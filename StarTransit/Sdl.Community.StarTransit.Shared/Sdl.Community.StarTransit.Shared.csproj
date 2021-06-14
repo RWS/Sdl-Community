@@ -180,6 +180,7 @@
     <Compile Include="Services\Interfaces\IPackageService.cs" />
     <Compile Include="Services\Interfaces\IProjectsControllerService.cs" />
     <Compile Include="Services\Interfaces\IProjectService.cs" />
+    <Compile Include="Services\Interfaces\IReturnPackageService.cs" />
     <Compile Include="Services\Interfaces\ProjectsControllerService.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="Services\PackageService.cs" />

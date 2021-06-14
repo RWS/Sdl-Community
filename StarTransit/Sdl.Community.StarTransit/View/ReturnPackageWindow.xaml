@@ -99,6 +99,7 @@
 			        VerticalAlignment="Bottom"
 					HorizontalAlignment="Right"
 					Margin="10"
+					Command="{Binding CreatePackageCommand}"
 					IsEnabled="{Binding IsCreateButtonEnabled}"
 			        Style="{StaticResource Sdl.Button.PrimaryStyle}" Content="Create package"/>
 		</Grid>

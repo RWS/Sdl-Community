@@ -18,15 +18,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 	public class ReturnPackageWindowViewModel : BaseModel,IDisposable
 	{
 		private readonly IDialogService _dialogService;
+		private readonly IReturnPackageService _returnPackageService;
 		private ICommand _browseCommand;
-		private ICommand _clearCommand;
+		private ICommand _createPackage;
 		private string _returnPackageLocation;
 		private string _errorMessage;
 		private bool _isCreateButtonEnabled;
 
-		public ReturnPackageWindowViewModel(IReturnPackage returnPackage, IDialogService dialogService)
+		public ReturnPackageWindowViewModel(IReturnPackage returnPackage,IReturnPackageService returnPackageService, IDialogService dialogService)
 		{
 			_dialogService = dialogService;
+			_returnPackageService = returnPackageService;
 			ReturnPackage = returnPackage;
 
 			foreach (var returnFile in ReturnPackage.ReturnFilesDetails)
@@ -90,12 +92,21 @@ namespace Sdl.Community.StarTransit.ViewModel
 		public IReturnPackage ReturnPackage { get; set; }
 
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new RelayCommand(BrowseLocation));
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(ClearLocation));
 
-		private void ClearLocation()
+		public ICommand CreatePackageCommand =>
+			_createPackage ?? (_createPackage = new AwaitableCommand(CreatePackage));
+
+		private async Task CreatePackage()
 		{
-			ErrorMessage = string.Empty;
-			ReturnPackageLocation = string.Empty;
+			if (!string.IsNullOrEmpty(ReturnPackageLocation))
+			{
+				ReturnPackage.FolderLocation = ReturnPackageLocation;
+			}
+			else
+			{
+				// set to project folder
+			}
+			await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage));
 		}
 
 		private void BrowseLocation()

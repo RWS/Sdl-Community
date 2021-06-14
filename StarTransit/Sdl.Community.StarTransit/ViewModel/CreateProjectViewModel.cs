@@ -218,7 +218,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 			if (!IsCurrentPage) return;
 			TmSummaryOptions.Clear();
 			CanFinish = true;
-			//IsComplete = true; //Enable create project button
 			foreach (var languagePair in _wizardModel.PackageModel.Result.LanguagePairs)
 			{
 				languagePair.SelectedTranslationMemoryMetadatas.Clear();
