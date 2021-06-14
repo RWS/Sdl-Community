@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -10,6 +10,8 @@ using Sdl.Community.StarTransit.Model;
 using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
+using Sdl.ProjectAutomation.Core;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StarTransit.ViewModel
 {
@@ -99,6 +101,17 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private async Task CreatePackage()
 		{
 			ReturnPackage.FolderLocation = !string.IsNullOrEmpty(ReturnPackageLocation) ? ReturnPackageLocation : ReturnPackage.ProjectLocation;
+			var selectedFiles = ReturnPackage.ReturnFilesDetails.Where(f => f.IsChecked);
+			var targetFiles = new List<ProjectFile>();
+			foreach (var selectedFile in selectedFiles)
+			{
+				var targetFile = ReturnPackage.TargetFiles.FirstOrDefault(f => f.Id.Equals(selectedFile.Id));
+				if (targetFile != null)
+				{
+					targetFiles.Add(targetFile);
+				}
+			}
+			ReturnPackage.SelectedTargetFilesForImport.AddRange(targetFiles);
 			await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage));
 			_eventAggregatorService?.PublishEvent(new OpenReturnPackageLocation{RetuntPackageLocation = ReturnPackage.FolderLocation});
 		}

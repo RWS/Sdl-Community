@@ -9,6 +9,7 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 	{
 		string FolderLocation { get; set; }
 		List<ProjectFile> TargetFiles { get; set; }
+		List<ProjectFile> SelectedTargetFilesForImport { get; set; }
 		string ProjectLocation { get; set; }
 		FileBasedProject FileBasedProject { get; set; }
 		string LocalFilePath { get; set; }

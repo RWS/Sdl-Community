@@ -20,12 +20,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private readonly ReturnPackage _returnPackage;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IProjectsControllerService _projectsControllerService;
-		
+
 
 		public ReturnPackageService(IProjectsControllerService projectsControllerService)
 		{
 			_projectsControllerService = projectsControllerService;
-			_returnPackage = new ReturnPackage();
+			_returnPackage = new ReturnPackage
+			{
+				SelectedTargetFilesForImport = new List<ProjectFile>(),
+				ReturnFilesDetails = new List<ReturnFileDetails>()
+			};
 		}
 
 		//TODO:Remove for the final implementation
@@ -60,12 +64,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						return (_returnPackage, "Please select a StarTransit project");
 
 					_returnPackage.FileBasedProject = project;
-					_returnPackage.ProjectLocation = Path.GetDirectoryName(project.FilePath); //project.FilePath;
+					_returnPackage.ProjectLocation = Path.GetDirectoryName(project.FilePath); 
 					_returnPackage.TargetFiles = targetFiles;
 					//we take only the first file location, because the other files are in the same location
 					_returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
 					_returnPackage.PathToPrjFile = GetPathToPrjFile(project.FilePath);
-					_returnPackage.ReturnFilesDetails = new List<ReturnFileDetails>();
 
 					foreach (var targetFile in targetFiles)
 					{
@@ -143,9 +146,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public void ExportFiles(IReturnPackage package)
 		{
-			var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(),
+			if (!(package.SelectedTargetFilesForImport?.Count() > 0)) return;
+			var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.SelectedTargetFilesForImport.GetIds(),
 				new string[] { AutomaticTaskTemplateIds.GenerateTargetTranslations });
-
+			//TODO: Log if the sequence is not succesfully
 			var outputFiles = taskSequence.OutputFiles.ToList();
 			CreateArchive(package);
 		}
