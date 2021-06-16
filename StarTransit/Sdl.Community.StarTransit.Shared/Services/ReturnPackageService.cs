@@ -134,23 +134,45 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 			return false;
 		}
-
+		//ToDO Remove
 		public void ExportFiles(ReturnPackage package)
 		{
-			var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(),
-				new string[] {AutomaticTaskTemplateIds.GenerateTargetTranslations});
+			if (package is null)
+			{
+				_logger.Info("Return package was null");
+				return;
+			}
+			_logger.Info($"Trying to create export package for Studio Project:{package.FileBasedProject?.GetProjectInfo()?.Name}");
 
-			var outputFiles = taskSequence.OutputFiles.ToList();
+			var taskSequence = package.FileBasedProject?.RunAutomaticTasks(package.TargetFiles?.GetIds(),
+				new [] {AutomaticTaskTemplateIds.GenerateTargetTranslations});
+
+			if (taskSequence?.Status != TaskStatus.Completed)
+			{
+				_logger.Info($"Generate target translation task sequence status:{taskSequence?.Status}");
+			}
+			
+			var outputFiles = taskSequence?.OutputFiles?.ToList();
 			CreateArchive(package);
 		}
 
 		public void ExportFiles(IReturnPackage package)
 		{
+			if (package is null)
+			{
+				_logger.Info("Return package was null");
+				return;
+			}
+			_logger.Info($"Trying to create export package for Studio Project:{package.FileBasedProject?.GetProjectInfo()?.Name}");
+
 			if (!(package.SelectedTargetFilesForImport?.Count() > 0)) return;
-			var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.SelectedTargetFilesForImport.GetIds(),
+			var taskSequence = package?.FileBasedProject?.RunAutomaticTasks(package.SelectedTargetFilesForImport?.GetIds(),
 				new string[] { AutomaticTaskTemplateIds.GenerateTargetTranslations });
-			//TODO: Log if the sequence is not succesfully
-			var outputFiles = taskSequence.OutputFiles.ToList();
+			if (taskSequence?.Status != TaskStatus.Completed)
+			{
+				_logger.Info($"Generate target translation task sequence status:{taskSequence?.Status}");
+			}
+			var outputFiles = taskSequence?.OutputFiles?.ToList();
 			CreateArchive(package);
 		}
 		/// <summary>

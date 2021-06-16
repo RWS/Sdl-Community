@@ -175,11 +175,6 @@ namespace Sdl.Community.StarTransit.ViewModel
 			return ReturnPackage.ReturnFilesDetails.All(f => f.IsChecked);
 		}
 
-		private bool AllFilesUnselected()
-		{
-			return ReturnPackage.ReturnFilesDetails.All(f => !f.IsChecked);
-		}
-
 		private bool AnyFileSelected()
 		{
 			return ReturnPackage.ReturnFilesDetails.Any(f => f.IsChecked);
