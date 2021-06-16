@@ -7,6 +7,7 @@
              xmlns:uiHelpers="clr-namespace:Sdl.Community.StarTransit.UiHelpers"
              WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen"
              d:DataContext="{d:DesignInstance viewModel:WizardViewModel}"
+             Icon="../Resources/open_package.ico" Title="Open StarTransit package"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Height="500" Width="1000">
 	<Window.Resources>

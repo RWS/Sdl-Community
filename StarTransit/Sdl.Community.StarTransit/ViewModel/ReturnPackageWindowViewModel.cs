@@ -19,12 +19,13 @@ namespace Sdl.Community.StarTransit.ViewModel
 	{
 		private readonly IDialogService _dialogService;
 		private readonly IReturnPackageService _returnPackageService;
+		private readonly IEventAggregatorService _eventAggregatorService;
 		private ICommand _browseCommand;
 		private ICommand _createPackage;
 		private string _returnPackageLocation;
 		private string _errorMessage;
 		private bool _isCreateButtonEnabled;
-		private readonly  IEventAggregatorService _eventAggregatorService;
+		private bool? _selectAll;
 
 		public ReturnPackageWindowViewModel(IReturnPackage returnPackage,IReturnPackageService returnPackageService, IDialogService dialogService,IEventAggregatorService eventAggregatorService)
 		{
@@ -32,7 +33,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			_returnPackageService = returnPackageService;
 			_eventAggregatorService = eventAggregatorService;
 			ReturnPackage = returnPackage;
-
+			SelectAll = false;
 			foreach (var returnFile in ReturnPackage.ReturnFilesDetails)
 			{
 				returnFile.PropertyChanged += ReturnFile_PropertyChanged;
@@ -91,6 +92,27 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public bool? SelectAll
+		{
+			get => _selectAll;
+			set
+			{
+				if (_selectAll == value) return;
+				_selectAll = value;
+				CheckAllFiles(value);
+				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
+
+		private void CheckAllFiles(bool? value)
+		{
+			if (value == null) return;
+			foreach (var file in ReturnPackage.ReturnFilesDetails)
+			{
+				file.IsChecked = (bool)value;
+			}
+		}
+
 		public IReturnPackage ReturnPackage { get; set; }
 
 		public ICommand BrowseCommand => _browseCommand ?? (_browseCommand = new RelayCommand(BrowseLocation));
@@ -127,8 +149,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void ReturnFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName != nameof(ReturnFileDetails.IsChecked)) return;
-			var anyFilesSelected = ReturnPackage.ReturnFilesDetails.Any(f => f.IsChecked);
-			if (string.IsNullOrEmpty(ErrorMessage) && anyFilesSelected)
+		
+			if (string.IsNullOrEmpty(ErrorMessage) && AnyFileSelected())
 			{
 				IsCreateButtonEnabled = true;
 			}
@@ -136,6 +158,31 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				IsCreateButtonEnabled = false;
 			}
+
+			if (AreAllFilesSelected())
+			{
+				SelectAll = true;
+			}
+			else
+			{
+				var allUnchecked = ReturnPackage.ReturnFilesDetails.All(f => !f.IsChecked);
+				SelectAll = allUnchecked ? (bool?)false : null;
+			}
+		}
+
+		private bool AreAllFilesSelected()
+		{
+			return ReturnPackage.ReturnFilesDetails.All(f => f.IsChecked);
+		}
+
+		private bool AllFilesUnselected()
+		{
+			return ReturnPackage.ReturnFilesDetails.All(f => !f.IsChecked);
+		}
+
+		private bool AnyFileSelected()
+		{
+			return ReturnPackage.ReturnFilesDetails.Any(f => f.IsChecked);
 		}
 
 		public void Dispose()

@@ -229,7 +229,7 @@
     <Resource Include="Resources\AutomatedTranslation.ico" />
     <Content Include="Resources\CreateProjectPackage_Icon.ico" />
     <Resource Include="Resources\delete.ico" />
-    <Content Include="Resources\open_package.ico" />
+    <Resource Include="Resources\open_package.ico" />
     <None Include="Resources\Question.ico" />
     <Resource Include="Resources\ProjectTemplates.ico" />
     <Content Include="Resources\return.ico" />

@@ -42,7 +42,7 @@
 			</Grid.RowDefinitions>
 			<uiHelpers:WindowsControl Grid.Row="0" DockPanel.Dock="Top" />
 			<TextBlock
-				Margin="10 5 0 20" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+				Margin="20 5 0 20" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
 				FontSize="15"
 				Grid.Row="1" Text="{x:Static resx:PluginResources.ReturnPackage_WindowDetails}"/>
 			<TextBlock Grid.Row="2" 
@@ -50,7 +50,7 @@
 			           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
 			           Text="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}"
 			           Visibility="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullVisibilityConverter}, ConverterParameter=Inverted}" />
-			<DockPanel  Grid.Row="3" Margin="10 0 0 0" LastChildFill="False">
+			<DockPanel  Grid.Row="3" Margin="20 0 0 0" LastChildFill="False">
 				<TextBox
 					VerticalContentAlignment="Center"
 					Name="LocationBox"
@@ -67,13 +67,17 @@
 			<DataGrid Grid.Row="4"
 			          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 					  ItemsSource="{Binding ReturnPackage.ReturnFilesDetails}"
-			          Margin="10 0"
+			          Margin="20 0"
 			          GridLinesVisibility="None"
 			          Background="Transparent"
 			          SelectionUnit="FullRow"
 			          SelectionMode="Single">
 				<DataGrid.Columns>
-					<DataGridTemplateColumn CanUserResize="False">
+					<DataGridTemplateColumn CanUserResize="False" Width="auto">
+						<DataGridTemplateColumn.Header>
+							<CheckBox IsChecked="{Binding Path=DataContext.SelectAll, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							          VerticalContentAlignment="Center"/>
+						</DataGridTemplateColumn.Header>
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox 
