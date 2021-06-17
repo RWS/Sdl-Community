@@ -385,12 +385,21 @@
     <value>Project location value is required</value>
   </data>
   <data name="V3Glossary" xml:space="preserve">
-    <value>Enter the URI whare the glossary is stored:</value>
+    <value>Enter the URI where the glossary is stored:</value>
   </data>
   <data name="UnidirectionalGlossary" xml:space="preserve">
     <value>Unidirectional glossaries</value>
   </data>
   <data name="MSSubscriptionRegionLabel" xml:space="preserve">
     <value>Subscription Region:</value>
+  </data>
+  <data name="AppLogFolder" xml:space="preserve">
+    <value>MTEnhanced</value>
+  </data>
+  <data name="LogsFileName" xml:space="preserve">
+    <value>MTEnhancedLogs.txt</value>
+  </data>
+  <data name="LogsFolderPath" xml:space="preserve">
+    <value>RWS AppStore</value>
   </data>
 </root>
