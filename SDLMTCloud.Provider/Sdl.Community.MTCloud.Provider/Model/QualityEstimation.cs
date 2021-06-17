@@ -36,9 +36,9 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		private Dictionary<string, int> Qualifiers { get; } = new()
 		{
-			["GOOD"] = 0,
-			["ADEQUATE"] = 1,
-			["POOR"] = 2
+			["Good"] = 0,
+			["Adequate"] = 1,
+			["Poor"] = 2
 		};
 	}
 }

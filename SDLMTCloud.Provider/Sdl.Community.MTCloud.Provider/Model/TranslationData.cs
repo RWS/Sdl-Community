@@ -10,7 +10,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public List<string> SourceSegments { get; set; }
 		public string TargetLanguage { get; set; }
 		public List<string> TargetSegments { get; set; }
+		public TranslationOriginData TranslationOriginData{ get; set; }
 
-		public TranslationOriginInformation TranslationOriginInformation { get; set; }
 	}
 }

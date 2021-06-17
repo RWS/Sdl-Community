@@ -12,5 +12,8 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 
 		[XmlElement("target")]
 		public TargetTranslation Translation { get; set; }
+		
+		[XmlAttribute("match-quality")]
+		public string MatchQuality { get; set; }
 	}
 }

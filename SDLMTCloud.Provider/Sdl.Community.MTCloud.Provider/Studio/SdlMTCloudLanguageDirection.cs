@@ -410,7 +410,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		}
 
 		private bool IsDraftOrTranslated(ISegmentPair segmentPair)
-																																	=> segmentPair.Target?.Count > 0 || segmentPair.Properties.IsLocked;
+			=> segmentPair.Target?.Count > 0 || segmentPair.Properties.IsLocked;
 
 		private bool IsTargetEqualToSource(ISegmentPair segmentPair)
 			=> segmentPair.Source.ToString().Equals(segmentPair.Target.ToString());

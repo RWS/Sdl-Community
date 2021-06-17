@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.MTCloud.Provider.Service.Interface
 {
-	public interface IMetadataSupervisor : ISupervisor<TranslationOriginInformation>
+	public interface IMetadataSupervisor : ISupervisor<TranslationOriginDatum>
 	{
 	}
 }
