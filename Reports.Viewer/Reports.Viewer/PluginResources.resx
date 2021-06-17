@@ -286,4 +286,10 @@
   <data name="WindowTitle_SelectReportFile" xml:space="preserve">
     <value>Select the {0} file</value>
   </data>
+  <data name="ReportsViewer_SaveReportAs" xml:space="preserve">
+	  <value>Save Report As...</value>
+  </data>
+  <data name="ErrorMessage_UnableToLocateXmlFile" xml:space="preserve">
+	  <value>Unable to locate the xml file: {0}</value>
+  </data>
 </root>

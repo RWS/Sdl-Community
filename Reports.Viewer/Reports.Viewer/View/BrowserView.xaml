@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
-             xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
-             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms" 
+             xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              mc:Ignorable="d" 			 
-             d:DesignHeight="150" d:DesignWidth="650">
+             d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ReportViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -34,17 +32,22 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Border Background="White" Grid.Column="0" Grid.Row="0" Margin="0">
-			<WindowsFormsHost>
-				<wf:WebBrowser AllowWebBrowserDrop="False" x:Name="WebBrowser"/>
-			</WindowsFormsHost>
-			<!--<ContentControl Content="{Binding Browser}"/>-->
-			<!--<WebBrowser x:Name="WebBrowser" controls:BindingWebBrowserSource.BindableSource="{Binding HtmlUri, 
-					Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>-->
-		</Border>
+		<ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=WebBrowser}"
+		             HorizontalAlignment="Stretch"
+		             VerticalAlignment="Top"
+		             Grid.Row="0"
+		             Height="2"
+		             Background="Transparent"
+		             Visibility="{Binding IsLoading, ElementName=Browser, Converter={StaticResource BooleanToVisibilityConverter}}"
+		             BorderThickness="0" />
+
+		<wpf:ChromiumWebBrowser x:Name="WebBrowser" 
+		                        Address="{Binding Address, Mode=OneWay,  UpdateSourceTrigger=PropertyChanged}"
+		                        Grid.Row="1" />
 
 	</Grid>
 

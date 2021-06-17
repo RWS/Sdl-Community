@@ -1,4 +1,5 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System.Net;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.MTEdge.Provider
@@ -9,6 +10,8 @@ namespace Sdl.Community.MTEdge.Provider
 		public void Execute()
 		{
 			Log.Setup();
+			ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls | SecurityProtocolType.Tls11 |
+			                                        SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 		}
 	}
 }

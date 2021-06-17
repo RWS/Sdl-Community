@@ -18,9 +18,9 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			return $"{AuthBaseUrl}/token?refresh_token={token}";
 		}
 
-		public static string SearchUri(string expand, string offset, string limit)
+		public static string SearchUri(string expand, int limit)
 		{
-			return $"{BaseApiUrl}/entries/_search?expand={expand}&offset={offset}&limit={limit}";
+			return $"{BaseApiUrl}/entries/_search?expand={expand}&limit={limit}";
 		}
 
 		public static string GetDomainUri()

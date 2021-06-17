@@ -64,6 +64,7 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
 			<Grid Grid.Row="0">
@@ -72,10 +73,6 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
 				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Path:" Margin="5,10,5,5"/>
 				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,10,5,5">
 					<TextBox HorizontalContentAlignment="Stretch" 
@@ -160,9 +157,9 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
-				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template:" 
+				<TextBlock Grid.Row="0" Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template:" 
 				           Margin="5,5,5,5"/>
-				<Grid Grid.Column="1" Height="24" Margin="0,0,5,0">
+				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,0,5,0">
 					<TextBox HorizontalContentAlignment="Stretch" 
 					         Padding="2,0,20,0" Height="24" 
 					         VerticalAlignment="Center"
@@ -220,15 +217,28 @@
 					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
 					</Button>
 				</Grid>
-				<Button Grid.Column="2" Content="..." 
+				<Button Grid.Row="0" Grid.Column="2" Content="..." 
 				        Command="{Binding BrowseFolderCommand}"
 				        CommandParameter="xslt"
-						ToolTip="Select the output folder"
+				        ToolTip="Select the output folder"
 				        HorizontalAlignment="Left" VerticalAlignment="Center" 
 				        Height="24" Width="24" Margin="0,0,0,0"/>
 			</Grid>
 
-			<Grid Grid.Row="2" Margin="0,5,0,0">
+			<Grid Grid.Row="2" Visibility="{Binding  CanUseDefaultStudioTemplate, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Column="0" Text="  " MinWidth="80" Margin="5,0,5,0" />
+				<CheckBox Grid.Column="1" Margin="0,5,0,5"
+						  Content="Use default Trados Studio template"
+						  IsChecked="{Binding UseDefaultStudioTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+
+			<Grid Grid.Row="3" Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -236,8 +246,8 @@
 				<TextBlock  Margin="5,0,5,5" VerticalAlignment="Center" Grid.Column="0" MinWidth="80" Text="Name:"/>
 				<TextBox Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
 			</Grid>
-			
-			<Grid Grid.Row="3" 
+
+			<Grid Grid.Row="4" 
 			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 			      Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
@@ -250,7 +260,7 @@
 				          Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</Grid>
 
-			<Grid Grid.Row="4"
+			<Grid Grid.Row="5"
 			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
@@ -285,7 +295,7 @@
 
 			</Grid>
 
-			<Grid Grid.Row="5" Margin="0,5,0,0">
+			<Grid Grid.Row="6" Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />

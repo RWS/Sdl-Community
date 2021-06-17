@@ -23,6 +23,7 @@ using System.Web;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MtEnhancedProvider.GoogleApi
@@ -33,13 +34,16 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 		//the structure is <targetLang, List<sourceLangs>>
 		public static Dictionary<string, List<string>> DictSupportedLangs;
 
-		public string ApiKey { get; set; }//for when this is already instantiated but key is changed in dialog
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-		public MtTranslationProviderGTApiConnecter(string key)
+		private readonly HtmlUtil _htmlUtil;
+		
+		public MtTranslationProviderGTApiConnecter(string key, HtmlUtil htmlUtil)
 		{
 			ApiKey = key;
+			_htmlUtil = htmlUtil;
 		}
+
+		public string ApiKey { get; set; }//for when this is already instantiated but key is changed in dialog
 
 		private void UpdateSupportedLangs(string target)
 		{
@@ -49,7 +53,11 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;
 				throw new Exception(message); //b/c list will come back null if key is bad
 			}
-			DictSupportedLangs.Add(target, list);
+
+			if (!DictSupportedLangs.ContainsKey(target))
+			{
+				DictSupportedLangs.Add(target, list);
+			}
 		}
 
 		public bool IsSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
@@ -57,9 +65,14 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			var sourceLang = GetLanguageCode(sourceCulture);
 			var targetLang = GetLanguageCode(targetCulture);
 			if (DictSupportedLangs == null)
+			{
 				DictSupportedLangs = new Dictionary<string, List<string>>();
+			}
+			
 			if (!DictSupportedLangs.ContainsKey(targetLang))
+			{
 				UpdateSupportedLangs(targetLang);
+			}
 
 			return DictSupportedLangs[targetLang].Any(source => source == sourceLang);
 		}
@@ -137,7 +150,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				//need to parse results and find key "translatedText" - there should be only one
 				var returnedResult = GetTranslation(result);
 
-				var decodedResult = HttpUtility.HtmlDecode(returnedResult); //google seems to send back html codes at times
+				var decodedResult = _htmlUtil.HtmlDecode(returnedResult); //google seems to send back html codes at times
 
 				//for some reason, GT is sometimes adding zero-width spaces, aka "bom", aka char(8203)
 				//so we need to remove it

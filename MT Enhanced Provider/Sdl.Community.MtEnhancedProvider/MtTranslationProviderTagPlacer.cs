@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Web;
 using NLog;
 using Sdl.Community.MtEnhancedProvider.Model;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MtEnhancedProvider
@@ -17,6 +17,7 @@ namespace Sdl.Community.MtEnhancedProvider
 	{
 		private string _returnedText;
 		private readonly Segment _sourceSegment;
+		private readonly HtmlUtil _htmlUtil;
 		private Dictionary<string, MtTag> _dict;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		public readonly string SimpleTagRegex;
@@ -25,15 +26,17 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public List<TagInfo> TagsInfo { get; set; }
 
-		public MtTranslationProviderTagPlacer(Segment sourceSegment):this()
+		public MtTranslationProviderTagPlacer(Segment sourceSegment, HtmlUtil htmlUtil):this(htmlUtil)
 		{
 			_sourceSegment = sourceSegment;
 			TagsInfo = new List<TagInfo>();
 			_dict = GetSourceTagsDict(); //fills the dictionary and populates our string to send to google
 		}
 
-		public MtTranslationProviderTagPlacer()
+		public MtTranslationProviderTagPlacer(HtmlUtil htmlUtil)
 		{
+			_htmlUtil = htmlUtil;
+			
 			const string simpleTagId = "tg[0-9]*";
 			const string guidTagId = "tg[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}";
 
@@ -55,7 +58,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			try
 			{
 				//decode the returned text
-				_returnedText = DecodeReturnedText(returnedText);
+				_returnedText = _htmlUtil.HtmlDecode(returnedText);
 
 				//our dictionary, dict, is already built
 				var segment = new Segment(); //our segment to return
@@ -89,21 +92,6 @@ namespace Sdl.Community.MtEnhancedProvider
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 				return new Segment();
-			}
-		}
-
-		private string DecodeReturnedText(string strInput)
-		{
-			try
-			{
-				// HtmlDecode takes care of everything we are doing now
-				strInput = HttpUtility.HtmlDecode(strInput);
-				return strInput;
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
-				return string.Empty;
 			}
 		}
 

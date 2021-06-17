@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
-using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -183,14 +182,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void PrintPreview(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
-			action.Run();
+			//var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			//action.Run();
 		}
 
 		private void PageSetup(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
-			action.Run();
+			//var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			//action.Run();
 		}
 
 		private void SaveAs(object parameter)

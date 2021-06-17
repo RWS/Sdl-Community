@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioViews.Services
 {
 	public class ProjectService
 	{
 		private readonly ProjectsController _projectsController;
+		private readonly StudioVersionService _studioVersionService;
 
-		public ProjectService(ProjectsController projectsController)
+		public ProjectService(ProjectsController projectsController, StudioVersionService studioVersionService)
 		{
 			_projectsController = projectsController;
+			_studioVersionService = studioVersionService;
 		}
 
 		public bool IsServerProject(FileBasedProject project)
@@ -30,11 +32,30 @@ namespace Sdl.Community.StudioViews.Services
 
 		public void ActivateProject(FileBasedProject project)
 		{
+			if (project == null)
+			{
+				return;
+			}
+
 			var projectId = project.GetProjectInfo().Id.ToString();
 			var selectedProjectId = _projectsController.CurrentProject?.GetProjectInfo().Id.ToString();
 			if (projectId != selectedProjectId)
 			{
-				Dispatcher.CurrentDispatcher.Invoke(delegate
+				var canActivateProject = CanActivateFileBasedProject(out var fullySupported);
+				if (!canActivateProject)
+				{
+					return;
+				}
+				
+				if (fullySupported)
+				{
+					_projectsController.ActivateProject(project);
+
+					//var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
+					//	BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					//activateProjectMethod?.Invoke(_projectsController, new object[] { project });
+				}
+				else
 				{
 					var internalProjectType = typeof(FileBasedProject).GetProperty("InternalProject",
 						BindingFlags.NonPublic | BindingFlags.Instance);
@@ -43,8 +64,7 @@ namespace Sdl.Community.StudioViews.Services
 					var activateProjectMethod = _projectsController.GetType().GetMethod("ActivateProject",
 						BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 					activateProjectMethod?.Invoke(_projectsController, new[] { projectInstance });
-
-				}, DispatcherPriority.ContextIdle);
+				}
 			}
 
 			Dispatcher.CurrentDispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
@@ -90,6 +110,28 @@ namespace Sdl.Community.StudioViews.Services
 			}
 
 			return analysisBands;
+		}
+
+		private bool CanActivateFileBasedProject(out bool fullySupported)
+		{
+			fullySupported = true;
+			var studioVersion = _studioVersionService.GetStudioVersion();
+			if (studioVersion != null)
+			{
+				var version = studioVersion.ExecutableVersion;
+				if (version.Major == 16 && version.Minor == 1 && version.Build == 3)
+				{
+					fullySupported = false;
+					return true;
+				}
+				
+				if (version.Major >= 16 && version.Minor >= 1 && version.Build >= 4)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }

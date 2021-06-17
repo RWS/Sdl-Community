@@ -4,6 +4,7 @@ using Sdl.Community.MtEnhancedProvider.GoogleApi;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -16,6 +17,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		private readonly LanguagePair _languageDirection;
 		private readonly IMtTranslationOptions _options;
 		private readonly MtTranslationProvider _provider;
+		private readonly HtmlUtil _htmlUtil;
 		private MtTranslationProviderGTApiConnecter _gtConnect;
 		private GoogleV3Connecter _googleV3Connecter;
 		private TranslationUnit _inputTu;
@@ -27,11 +29,12 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// Instantiates the variables and fills the list file content into
 		/// a Dictionary collection object.
 		/// </summary>
-		public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages)
+		public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages, HtmlUtil htmlUtil)
 		{
 			_provider = provider;
 			_languageDirection = languages;
 			_options = _provider.Options;
+			_htmlUtil = htmlUtil;
 		}
 
 		public bool CanReverseLanguageDirection { get; } = false;
@@ -188,13 +191,14 @@ namespace Sdl.Community.MtEnhancedProvider
 				if (_gtConnect == null)
 				{
 					// need to get and insert key
-					_gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey); //needs key
+					_gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey, _htmlUtil); //needs key
 				}
 				else
 				{
-					_gtConnect.ApiKey =
-						options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+					//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+					_gtConnect.ApiKey = options.ApiKey; 
 				}
+				
 				var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
 
 				return translatedText;
@@ -218,11 +222,12 @@ namespace Sdl.Community.MtEnhancedProvider
 			//instantiate ApiConnecter if necessary
 			if (_mstConnect == null)
 			{
-				_mstConnect = new ApiConnecter(_options.ClientId);
+				_mstConnect = new ApiConnecter(_options.ClientId, options.Region, _htmlUtil);
 			}
 			else
 			{
-				_mstConnect.ResetCrd(options.ClientId); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				_mstConnect.ResetCrd(options.ClientId, options.Region); 
 			}
 
 			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);
@@ -267,7 +272,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					newseg = GetEditedSegment(_preLookupSegmentEditor, newseg);
 				}
 				//return our tagged target segment
-				var tagplacer = new MtTranslationProviderTagPlacer(newseg);
+				var tagplacer = new MtTranslationProviderTagPlacer(newseg, _htmlUtil);
 				////tagplacer is constructed and gives us back a properly marked up source string for google
 				if (_options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
 				{

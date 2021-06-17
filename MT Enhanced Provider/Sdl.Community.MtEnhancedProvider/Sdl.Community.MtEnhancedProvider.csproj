@@ -124,8 +124,8 @@
     <Reference Include="MahApps.Metro">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Tokens">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
@@ -196,6 +196,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Services" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -242,6 +246,7 @@
     <Compile Include="Model\LanguageDetails.cs" />
     <Compile Include="Model\LanguageResponse.cs" />
     <Compile Include="Model\ResponseMessage.cs" />
+    <Compile Include="Model\SubscriptionRegion.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\Translation.cs" />
     <Compile Include="Model\TranslationDetails.cs" />
@@ -249,6 +254,7 @@
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\ViewDetails.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />
+    <Compile Include="MstConnect\RegionsProvider.cs" />
     <Compile Include="MTEnhancedTellMe\MTEhancedTellMeProvider.cs" />
     <Compile Include="MTEnhancedTellMe\MTEnhancedCommunityHelpAction.cs" />
     <Compile Include="MTEnhancedTellMe\MTEnhancedHelpAction.cs" />
@@ -289,6 +295,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service\HtmlUtil.cs" />
     <Compile Include="Service\Interface\IOpenFileDialogService.cs" />
     <Compile Include="Service\OpenFileDialogService.cs" />
     <Compile Include="StringExtensions.cs" />

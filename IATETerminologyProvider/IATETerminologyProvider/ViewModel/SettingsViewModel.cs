@@ -16,44 +16,125 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {
 	public class SettingsViewModel : ViewModelBase
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly InventoriesProvider _inventoriesProvider;
+		private readonly ICacheProvider _cacheService;
+		private readonly IMessageBoxService _messageBoxService;
+		
 		private ICommand _saveSettingsCommand;
 		private ICommand _resetToDefault;
 		private ICommand _clearCache;
-		private DomainModel _selectedDomain;		
+		private DomainModel _selectedDomain;
 		private TermTypeModel _selectedTermType;
-		private readonly DomainService _domainService;
-		private readonly TermTypeService _termTypeService;
-		private readonly IMessageBoxService _messageBoxService;
+
 		private ObservableCollection<DomainModel> _domains;
 		private ObservableCollection<TermTypeModel> _termTypes;
+		private int _maxEntries;
 		private bool _dialogResult;
 		private bool _searchInSubdomains;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private bool _isLoading;
+		private bool _isEnabled;
 
-		public SettingsViewModel(SettingsModel providerSettings, IMessageBoxService messageBocBoxService)
+		public SettingsViewModel(SettingsModel settings, InventoriesProvider inventoriesProvider,
+			ICacheProvider cacheService, IMessageBoxService messageBocBoxService)
 		{
 			_domains = new ObservableCollection<DomainModel>();
 			_termTypes = new ObservableCollection<TermTypeModel>();
-			_termTypeService = new TermTypeService();
-			_domainService = new DomainService();
+
+			_inventoriesProvider = inventoriesProvider;
+			_cacheService = cacheService;
 			_messageBoxService = messageBocBoxService;
+
 			ProviderSettings = new SettingsModel
 			{
 				Domains = new List<DomainModel>(),
 				TermTypes = new List<TermTypeModel>()
 			};
-			LoadDomains();
-			LoadTermTypes();
-			SetFieldsSelection(providerSettings);
+
+			Task.Run(async() => await Setup(settings));
 		}
 
+		public bool IsLoading
+		{
+			get => _isLoading;
+			set
+			{
+				if (_isLoading == value)
+				{
+					return;
+				}
+
+				_isLoading = value;
+				IsEnabled = !_isLoading;
+				
+				OnPropertyChanged(nameof(IsLoading));
+			}
+		}
+
+		public bool IsEnabled
+		{
+			get => _isEnabled;
+			set
+			{
+				if (_isEnabled == value)
+				{
+					return;
+				}
+
+				_isEnabled = value;
+				OnPropertyChanged(nameof(IsEnabled));
+			}
+		}
+
+		public int MaxEntries
+		{
+			get => _maxEntries;
+			set
+			{
+				if (_maxEntries == value)
+				{
+					return;
+				}
+
+				_maxEntries = value;
+				OnPropertyChanged(nameof(MaxEntries));
+			}
+		}
+		
 		public DomainModel SelectedDomain
 		{
 			get => _selectedDomain;
 			set
 			{
-				_selectedDomain = value;				
+				_selectedDomain = value;
 				OnPropertyChanged(nameof(SelectedDomain));
+			}
+		}
+
+		public ObservableCollection<DomainModel> Domains
+		{
+			get => _domains;
+			set
+			{
+				if (_domains.Any())
+				{
+					foreach (var domain in _domains)
+					{
+						domain.PropertyChanged -= DomainsOnPropertyChanged;
+					}
+				}
+
+				_domains = value;
+
+				if (_domains.Any())
+				{
+					foreach (var domain in _domains)
+					{
+						domain.PropertyChanged += DomainsOnPropertyChanged;
+					}
+				}
+
+				OnPropertyChanged(nameof(Domains));
 			}
 		}
 
@@ -62,7 +143,24 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => _termTypes;
 			set
 			{
+				if (_termTypes.Any())
+				{
+					foreach (var termType in _termTypes)
+					{
+						termType.PropertyChanged -= TermTypesOnPropertyChanged;
+					}
+				}
+				
 				_termTypes = value;
+
+				if (_termTypes.Any())
+				{
+					foreach (var termType in _termTypes)
+					{
+						termType.PropertyChanged += TermTypesOnPropertyChanged;
+					}
+				}
+
 				OnPropertyChanged(nameof(TermTypes));
 			}
 		}
@@ -73,6 +171,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			set
 			{
 				_selectedTermType = value;
+
 				OnPropertyChanged(nameof(SelectedTermType));
 			}
 		}
@@ -82,8 +181,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => _dialogResult;
 			set
 			{
-				if (_dialogResult == value) return;
+				if (_dialogResult == value)
+				{
+					return;
+				}
+
 				_dialogResult = value;
+
 				OnPropertyChanged(nameof(DialogResult));
 			}
 		}
@@ -97,6 +201,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				{
 					SelectAllDomains(true);
 				}
+
 				OnPropertyChanged(nameof(AllDomainsChecked));
 			}
 		}
@@ -110,6 +215,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				{
 					SelectAllTermTypes(true);
 				}
+
 				OnPropertyChanged(nameof(AllTermTypesChecked));
 			}
 		}
@@ -119,45 +225,64 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => _searchInSubdomains;
 			set
 			{
-				if (_searchInSubdomains == value) return;
+				if (_searchInSubdomains == value)
+				{
+					return;
+				}
+
 				_searchInSubdomains = value;
+
 				OnPropertyChanged(nameof(SearchInSubdomains));
 			}
 		}
 
-		public ObservableCollection<DomainModel> Domains
-		{
-			get => _domains;
-			set
-			{
-				_domains = value;
-				OnPropertyChanged(nameof(Domains));
-			}
-		}
-		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateDomains { get; set; }
-		public NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>> IateTermTypes { get; set; }
-
 		public SettingsModel ProviderSettings { get; set; }
 
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
+
 		public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset, true));
+
 		public ICommand ClearCache => _clearCache ?? (_clearCache = new CommandHandler(Clear, true));
+
+		private async Task Setup(SettingsModel settings)
+		{
+			if (!_inventoriesProvider.IsInitialized)
+			{
+				try
+				{
+					IsLoading = true;
+					await _inventoriesProvider.Initialize();
+				}
+				finally
+				{
+					IsLoading = false;
+				}
+			}
+
+			LoadDomains();
+			LoadTermTypes();
+
+			SetFieldsSelection(settings);
+
+			IsEnabled = true;
+		}
 
 		private void Clear()
 		{
 			var result = _messageBoxService.ShowYesNoMessageBox("", PluginResources.ClearConfirmation);
-			if (result != MessageDialogResult.Yes) return;
-			var activeProjectName = Utils.GetCurrentProjectName();
-			if (string.IsNullOrEmpty(activeProjectName)) return;
+			if (result != MessageDialogResult.Yes)
+			{
+				return;
+			}
 
-			var cacheService = new CacheService(activeProjectName);
-			Task.Run(async () => await cacheService.ClearCachedResults());
+			_cacheService?.ClearCachedResults();
 		}
 
 		private void Reset()
 		{
 			ResetDomains();
 			ResetTypes();
+			
 			SearchInSubdomains = false;
 		}
 
@@ -167,6 +292,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			{
 				type.IsSelected = false;
 			}
+			
 			OnPropertyChanged(nameof(AllTermTypesChecked));
 		}
 
@@ -176,6 +302,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			{
 				domain.IsSelected = false;
 			}
+
 			OnPropertyChanged(nameof(AllDomainsChecked));
 		}
 
@@ -190,9 +317,11 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			{
 				ProviderSettings.TermTypes = TermTypes.ToList();
 			}
+
 			ProviderSettings.SearchInSubdomains = SearchInSubdomains;
 
 			DialogResult = true;
+
 			UnSubscribeToEvents();
 		}
 
@@ -200,14 +329,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			try
 			{
-				if (DomainService.Domains?.Count > 0)
+				if (_inventoriesProvider.Domains?.Count > 0)
 				{
-					SetDomains(DomainService.Domains);
-				}
-				else
-				{
-					IateDomains = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_domainService.GetDomains());
-					IateDomains.PropertyChanged += IateDomains_PropertyChanged;
+					SetDomains(_inventoriesProvider.Domains);
 				}
 			}
 			catch (InvalidAsynchronousStateException e)
@@ -218,33 +342,15 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void LoadTermTypes()
 		{
-			if (TermTypeService.IateTermType?.Count > 0)
+			if (_inventoriesProvider.TermTypes?.Count > 0)
 			{
-				SetTermTypes(TermTypeService.IateTermType);
-			}
-			else
-			{
-				IateTermTypes = new NotifyTaskCompletion<ObservableCollection<ItemsResponseModel>>(_termTypeService.GetTermTypes());
-				IateTermTypes.PropertyChanged += IateTermTypes_PropertyChanged;
+				SetTermTypes(_inventoriesProvider.TermTypes);
 			}
 		}
 
-		private void IateTermTypes_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void SetDomains(List<ItemsResponseModel> iateDomains)
 		{
-			if (!e.PropertyName.Equals("Result")) return;
-			if (!(IateTermTypes.Result?.Count > 0)) return;
-			SetTermTypes(IateTermTypes.Result);
-		}
-
-		private void IateDomains_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (!e.PropertyName.Equals("Result")) return;
-			if (!(IateDomains.Result?.Count > 0)) return;
-			SetDomains(IateDomains.Result);
-		}
-
-		private void SetDomains(ObservableCollection<ItemsResponseModel>iateDomains)
-		{
+			var domains = new List<DomainModel>();
 			foreach (var domain in iateDomains)
 			{
 				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
@@ -255,14 +361,17 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 						Code = domain.Code,
 						Name = selectedDomainName,
 					};
-					domainModel.PropertyChanged += DomainModel_PropertyChanged;
-					Domains.Add(domainModel);
+
+					domains.Add(domainModel);
 				}
 			}
+
+			Domains = new ObservableCollection<DomainModel>(domains);
 		}
 
-		private void SetTermTypes(ObservableCollection<ItemsResponseModel> termTypesResponse)
+		private void SetTermTypes(List<ItemsResponseModel> termTypesResponse)
 		{
+			var termTypes = new List<TermTypeModel>();
 			foreach (var item in termTypesResponse)
 			{
 				var selectedTermTypeName = Utils.UppercaseFirstLetter(item.Name.ToLower());
@@ -272,24 +381,30 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 					Code = int.TryParse(item.Code, out _) ? int.Parse(item.Code) : 0,
 					Name = selectedTermTypeName
 				};
-				termType.PropertyChanged += TermType_PropertyChanged;
-				TermTypes.Add(termType);
+
+				termTypes.Add(termType);
 			}
+
+			TermTypes = new ObservableCollection<TermTypeModel>(termTypes);
 		}
 
-		// Set UI Settings fields selection based on the project settings (for domains and term types).
 		private void SetFieldsSelection(SettingsModel providerSettings)
 		{
-			if (providerSettings is null) return;
+			if (providerSettings is null)
+			{
+				return;
+			}
 
-			if (providerSettings.Domains?.Count> 0)
+			if (providerSettings.Domains?.Count > 0)
 			{
 				Domains = new ObservableCollection<DomainModel>(providerSettings.Domains);
 			}
+
 			if (providerSettings.TermTypes?.Count > 0)
 			{
 				TermTypes = new ObservableCollection<TermTypeModel>(providerSettings.TermTypes);
 			}
+
 			SearchInSubdomains = providerSettings.SearchInSubdomains;
 		}
 
@@ -297,6 +412,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			return Domains.Count > 0 && Domains.All(d => d.IsSelected);
 		}
+		
 		private bool AreAllTypesSelected()
 		{
 			return TermTypes.Count > 0 && TermTypes.All(t => t.IsSelected);
@@ -317,33 +433,37 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				termType.IsSelected = select;
 			}
 		}
-		private void TermType_PropertyChanged(object sender, PropertyChangedEventArgs e)
+
+		private void DomainsOnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != "IsSelected") return;
-			OnPropertyChanged(nameof(AllTermTypesChecked));
-		}
-		private void DomainModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName != "IsSelected") return;
+			if (e.PropertyName != "IsSelected")
+			{
+				return;
+			}
+
 			OnPropertyChanged(nameof(AllDomainsChecked));
 		}
+
+		private void TermTypesOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != "IsSelected")
+			{
+				return;
+			}
+
+			OnPropertyChanged(nameof(AllTermTypesChecked));
+		}
+
 		private void UnSubscribeToEvents()
 		{
 			foreach (var domain in Domains)
 			{
-				domain.PropertyChanged -= DomainModel_PropertyChanged;
+				domain.PropertyChanged -= DomainsOnPropertyChanged;
 			}
+
 			foreach (var termType in TermTypes)
 			{
-				termType.PropertyChanged -= TermType_PropertyChanged;
-			}
-			if (IateDomains != null)
-			{
-				IateDomains.PropertyChanged -= IateDomains_PropertyChanged;
-			}
-			if (IateTermTypes != null)
-			{
-				IateTermTypes.PropertyChanged -= IateTermTypes_PropertyChanged;
+				termType.PropertyChanged -= TermTypesOnPropertyChanged;
 			}
 		}
 	}

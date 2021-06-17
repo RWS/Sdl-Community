@@ -28,8 +28,8 @@ namespace Sdl.Community.MtEnhancedProvider
     /// </summary>
     public class MtTranslationOptions: IMtTranslationOptions
 	{
-        private static string _apiKey;
-        private static string _clientid;
+        private string _apiKey;
+        private string _clientid;
         const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
         const string GTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
@@ -255,7 +255,14 @@ namespace Sdl.Community.MtEnhancedProvider
             set => _clientid = value;
 		}
 
-        [JsonIgnore]
+		[JsonIgnore]
+		public string Region
+		{
+			get => GetStringParameter("region");
+			set => SetStringParameter("region", value);
+		}
+
+		[JsonIgnore]
         public bool PersistGoogleKey
         {
             get;

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
@@ -26,11 +28,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			_segmentMetadataCreator = segmentMetadataCreator;
 			_editorController = editorController;
+
+			MtCloudApplicationInitializer
+				.Subscribe<RefreshQeStatus>(OnQeStatus);
 		}
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public Dictionary<SegmentId, TargetSegmentData> ActiveDocumentData
+		public ConcurrentDictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
 		{
 			get
 			{
@@ -41,16 +46,32 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, Dictionary<SegmentId, TargetSegmentData>> Data { get; set; } = new();
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new();
+
+		public void CloseOpenedDocuments()
+		{
+			var activeDocs = _editorController.GetDocuments().ToList();
+
+			foreach (var activeDoc in activeDocs)
+			{
+				_editorController.Close(activeDoc);
+			}
+		}
+
+		public void OnQeStatus(RefreshQeStatus refreshQeStatus)
+		{
+			var storedQe = GetCurrentSegmentStoredQe();
+			SetCurrentSegmentEstimation(storedQe);
+		}
 
 		public void StartSupervising(ITranslationService translationService)
 		{
-			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
-
 			if (ActiveDocument != null)
 			{
 				ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 				ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+				ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+				ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 			}
 
 			_translationService = translationService;
@@ -60,6 +81,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				_translationService.TranslationReceived += TranslationService_TranslationReceived;
 			}
 
+			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
@@ -73,6 +95,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
 		}
 
+		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
+		{
+			var storedQe = GetCurrentSegmentStoredQe();
+			SetCurrentSegmentEstimation(storedQe);
+		}
+
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
 		{
 			var segment = (ISegment)((ISegmentContainerNode)sender).Item;
@@ -83,6 +111,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				AddToSegmentContextData();
 			}
+			else if (string.IsNullOrWhiteSpace(segment.ToString()))
+			{
+				SetCurrentSegmentEstimation(null);
+			}
 		}
 
 		private void AddTargetSegmentMetaData(TranslationOriginInformation translationOriginInformation, ISegmentPair currentSegmentPair)
@@ -90,17 +122,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			currentSegmentPair ??= ActiveDocument.ActiveSegmentPair;
 			var segmentId = currentSegmentPair.Properties.Id;
 
-			ActiveDocumentData.TryGetValue(segmentId, out var targetSegmentData);
-			if (targetSegmentData == null)
+			if (!ActiveDocumentData.TryGetValue(segmentId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation))
 			{
-				ActiveDocumentData[segmentId] = new TargetSegmentData
-				{
-					TranslationOriginInformation = translationOriginInformation
-				};
-			}
-			else
-			{
-				ActiveDocumentData[segmentId].TranslationOriginInformation = targetSegmentData.TranslationOriginInformation;
+				ActiveDocumentData[segmentId] = translationOriginInformation;
 			}
 		}
 
@@ -112,10 +136,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (translationOrigin is null)
 				return;
 
-			if (ActiveDocumentData.TryGetValue(ActiveDocument.ActiveSegmentPair.Properties.Id, out var targetData))
+			if (ActiveDocumentData.TryGetValue(currentSegmentPair.Properties.Id, out var targetData))
 			{
-				_segmentMetadataCreator.AddToCurrentSegmentContextData(ActiveDocument, targetData.TranslationOriginInformation);
+				_segmentMetadataCreator.AddToCurrentSegmentContextData(ActiveDocument, targetData);
 			}
+			SetCurrentSegmentEstimation(targetData?.QualityEstimation);
 		}
 
 		private void AttachToClosedEvent()
@@ -127,9 +152,23 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			if (ActiveDocument == null) return;
+			if (ActiveDocument?.ActiveFile == null) return;
 			SetIdAndActiveFile();
+			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+			ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+
+			var activeSegmentPair = ActiveDocument.ActiveSegmentPair;
+			if (activeSegmentPair is null) return;
+
+			ActiveDocumentData.TryGetValue(activeSegmentPair.Properties.Id, out var targetSegmentData);
+			SetCurrentSegmentEstimation(targetSegmentData?.QualityEstimation);
+		}
+
+		private string GetCurrentSegmentStoredQe()
+		{
+			return ActiveDocument?.ActiveSegmentPair?.Properties.TranslationOrigin.GetMetaData("quality_estimation");
 		}
 
 		private void SetBatchProcessingWindow()
@@ -138,12 +177,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_batchProcessingWindow = Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.GetCurrentWindow);
 		}
 
+		private void SetCurrentSegmentEstimation(string qualityEstimation)
+		{
+			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair?.Target.ToString());
+			var estimation = isActiveSegmentTranslated ? qualityEstimation : null;
+			MtCloudApplicationInitializer.PublishEvent(new ActiveSegmentQeChanged { Estimation = estimation });
+		}
+
 		private void SetIdAndActiveFile()
 		{
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
-				Data[_docId] = new Dictionary<SegmentId, TargetSegmentData>();
+				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginInformation>();
 			}
 		}
 
@@ -161,10 +207,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			else if (ActiveDocument is not null)
 			{
-				foreach (var sourceSegment in translationData.SourceSegments)
+				foreach (var sourceSegment in translationData.Segments)
 				{
 					var currentSegmentPair =
-						ActiveDocument.SegmentPairs.FirstOrDefault(segPair => segPair.Source.ToString() == sourceSegment);
+						ActiveDocument.SegmentPairs.FirstOrDefault(
+							segPair => segPair.Source.ToString() == sourceSegment.Value || segPair.Properties.Id == sourceSegment.Key);
 
 					AddTargetSegmentMetaData(translationData.TranslationOriginInformation, currentSegmentPair);
 				}
@@ -175,7 +222,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			_isFirstTime = true;
 			_batchProcessingWindow = null;
-			Application.Current.Dispatcher.Invoke(MtCloudApplicationInitializer.CloseOpenedDocuments);
+			Application.Current.Dispatcher.Invoke(CloseOpenedDocuments);
 			_segmentMetadataCreator.AddToSegmentContextData();
 		}
 	}

@@ -1,11 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>Reports Viewer Plus</PlugInName>
-	<Version>2.0.3.1</Version>
-	<Description>Reports Viewer Plus</Description>
-	<Author>SDL Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
-	<Include>
-		<File>Sdl.MultiSelectComboBox.dll</File>
-	</Include>
+		<PlugInName>Reports Viewer Plus</PlugInName>
+		<Version>2.1.2.0</Version>
+		<Description>Reports Viewer Plus</Description>
+		<Author>RWS AppStore Team</Author>
+		<RequiredProduct name="SDLTradosStudio" minversion="16.1.5"/>
+		<Include>
+				<File>Sdl.MultiSelectComboBox.dll</File>
+				<File>Microsoft.Office.Interop.Excel.dll</File>
+
+				<File>CefSharp.Wpf.dll</File>
+				<File>CefSharp.Core.dll</File>
+
+				<File>x86\CefSharp.dll</File>
+				<File>x86\CefSharp.Core.Runtime.dll</File>
+				<File>x86\CefSharp.BrowserSubprocess.Core.dll</File>
+				<File>x86\CefSharp.BrowserSubprocess.exe</File>
+
+				<File>x86\chrome_elf.dll</File>
+				<File>x86\libcef.dll</File>
+				<File>x86\icudtl.dat</File>
+				<File>x86\libEGL.dll</File>
+				<File>x86\libGLESv2.dll</File>
+
+				<File>x86\cef.pak</File>
+				<File>x86\cef_100_percent.pak</File>
+				<File>x86\cef_200_percent.pak</File>
+				<File>x86\cef_extensions.pak</File>
+
+				<File>x86\snapshot_blob.bin</File>
+				<File>x86\v8_context_snapshot.bin</File>
+		</Include>
 </PluginPackage>

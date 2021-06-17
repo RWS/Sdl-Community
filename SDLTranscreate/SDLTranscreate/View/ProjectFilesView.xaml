@@ -201,21 +201,21 @@
 					<Separator/>
 					<MenuItem Header="Open for Translation" 
 					          Command="{Binding OpenFileForTranslationCommand}" 
-					          IsEnabled="{Binding IsSingleProjectFileSelected}">
+					          IsEnabled="{Binding CanOpenSelectedInEditor}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForTranslation.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Open for Review" 
 					          Command="{Binding OpenFileForReviewCommand}"
-					          IsEnabled="{Binding IsSingleProjectFileSelected}">
+					          IsEnabled="{Binding CanOpenSelectedInEditor}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForReview.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Open for Sign-off" 
 					          Command="{Binding OpenFileForSignOffCommand}" 
-					          IsEnabled="{Binding IsSingleProjectFileSelected}">
+					          IsEnabled="{Binding CanOpenSelectedInEditor}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForSignOff.ico"/>
 						</MenuItem.Icon>

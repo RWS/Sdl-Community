@@ -16,7 +16,7 @@ namespace Trados.Transcreate.Model
 			StatusTranslationNotUpdatedId = string.Empty;
 			StatusSegmentNotImportedId = string.Empty;
 			ExcludeFilterIds = new List<string>();
-			ExcludeFilterIds.Add("Locked");
+			//ExcludeFilterIds.Add("Locked");
 		}
 
 		public bool BackupFiles { get; set; }

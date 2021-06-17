@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using Sdl.Community.StudioViews.Model;
@@ -21,6 +22,36 @@ namespace Sdl.Community.StudioViews.Services
 					&& segmentId == segmentPair.Properties.Id.Id)
 				{
 					return segmentPair;
+				}
+			}
+
+			return null;
+		}
+
+		public IParagraphUnit GetParagraphUnit(IStudioDocument document, string paragraphUnitId)
+		{
+			foreach (var segmentPair in document.SegmentPairs)
+			{
+				if (paragraphUnitId == segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id)
+				{
+					return document.GetParentParagraphUnit(segmentPair);
+				}
+			}
+
+			return null;
+		}
+
+		public IParagraphUnit GetParagraphUnit(ISegmentPair segmentPair)
+		{
+			var type = segmentPair.GetType();
+			var memberInfo = type.GetMember("_segmentPair", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (memberInfo.Length > 0)
+			{
+				var fieldInfo = memberInfo[0] as FieldInfo;
+				if (fieldInfo != null)
+				{
+					var iSegmentPair = fieldInfo.GetValue(segmentPair) as ISegmentPair;
+					return iSegmentPair?.Source.ParentParagraphUnit;
 				}
 			}
 

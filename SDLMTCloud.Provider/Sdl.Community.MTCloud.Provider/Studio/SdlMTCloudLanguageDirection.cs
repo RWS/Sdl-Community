@@ -37,8 +37,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 		public ITranslationProvider TranslationProvider => _translationProvider;
 
-		private static string ProjectInProcessing => Application.Current.Dispatcher.Invoke(
+		private static string ProjectInProcessing => Application.Current?.Dispatcher.Invoke(
 			() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath));
+
+		private ISegmentPair CurrentSegmentPair => _editorController?.ActiveDocument?.ActiveSegmentPair;
 
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
@@ -118,11 +120,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					if (mask != null && !mask[segmentIndex])
 					{
 						results[segmentIndex] = null;
+						fileAndSegmentIds?.Segments.Remove(fileAndSegmentIds.Segments.Keys.ElementAt(segmentIndex));
 						continue;
 					}
-
-					var activeSegmentPair = _editorController?.ActiveDocument?.ActiveSegmentPair;
-					var existsMergedSegments = CheckMergedSegments(results, activeSegmentPair, segmentIndex);
+					var existsMergedSegments = CheckMergedSegments(results, CurrentSegmentPair, segmentIndex);
 					if (existsMergedSegments)
 					{
 						continue;
@@ -131,30 +132,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 					// Set translation unit based on segment index: when the first 10 segments are translated for the first time,
 					// then the TU index is the same as segment index
 					var correspondingTu = _translationUnits[segmentIndex];
+					var currentSegment = correspondingTu.TargetSegment == null
+						? CurrentSegmentPair
+						: correspondingTu.DocumentSegmentPair;
 
-					// If activeSegmentPair is not null, it means the user translates segments through Editor
-					// If activeSegmentPair is null, it means the user executes Pre-Translate Batch task, so he does not navigate through segments in editor
-					var documentLastOpenPath = _translationUnits[0]?.DocumentProperties?.LastOpenedAsPath;
-					if (documentLastOpenPath == null || documentLastOpenPath.Equals(_editorController?.ActiveDocument?.ActiveFile?.LocalFilePath))
+					if (IsDraftOrTranslated(currentSegment) && !IsTargetEqualToSource(currentSegment))
 					{
-						if (activeSegmentPair != null && (activeSegmentPair.Target.Count > 0 || activeSegmentPair.Properties.IsLocked))
-						{
-							alreadyTranslatedSegments.Add(CreateTranslatedSegment(segments, segmentIndex));
-						}
-						// In case user copies the source to target and run the pre-translation, do nothing and continue the flow.
-						else if (correspondingTu != null && IsSameSourceTarget(correspondingTu))
-						{
-							// do nothing
-						}
-						// If is already translated or is locked, then the request to server should not be done and it should not be translated
-						else if (activeSegmentPair == null && correspondingTu != null && (correspondingTu.DocumentSegmentPair.Target.Count > 0 || correspondingTu.DocumentSegmentPair.Properties.IsLocked))
-						{
-							alreadyTranslatedSegments.Add(CreateTranslatedSegment(segments, segmentIndex));
-						}
-						else
-						{
-							mtCloudSegments.Add(CreateMTCloudSegments(segments, segmentIndex));
-						}
+						alreadyTranslatedSegments.Add(CreateTranslatedSegment(segments, segmentIndex));
 					}
 					else
 					{
@@ -270,7 +254,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				FilePath = GetSdlXliffFilePath(translationUnits[0].FileProperties) ??
 						   Path.GetFileName(translationUnits[0]?.FileProperties.FileConversionProperties.OriginalFilePath),
-				SegmentIds = translationUnits.Select(tu => tu.DocumentSegmentPair.Properties.Id).ToList(),
+				Segments = translationUnits.ToDictionary(tu => tu.DocumentSegmentPair.Properties.Id, tu => tu.SourceSegment.ToString())
 			};
 
 			if (translationUnits == null)
@@ -425,15 +409,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return false;
 		}
 
-		private bool IsSameSourceTarget(TranslationUnit corespondingTu)
-		{
-			if (corespondingTu.TargetSegment == null || corespondingTu.SourceSegment == null)
-			{
-				return false;
-			}
+		private bool IsDraftOrTranslated(ISegmentPair segmentPair)
+																																	=> segmentPair.Target?.Count > 0 || segmentPair.Properties.IsLocked;
 
-			return corespondingTu.SourceSegment.ToString().Equals(corespondingTu.TargetSegment.ToString());
-		}
+		private bool IsTargetEqualToSource(ISegmentPair segmentPair)
+			=> segmentPair.Source.ToString().Equals(segmentPair.Target.ToString());
 
 		private void SetSearchResults(SearchResults[] results, IEnumerable<MTCloudSegment> translatedSegments)
 		{

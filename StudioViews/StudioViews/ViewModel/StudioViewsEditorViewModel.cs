@@ -9,16 +9,19 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Sdl.Community.StudioViews.Actions;
 using Sdl.Community.StudioViews.Commands;
+using Sdl.Community.StudioViews.Common;
 using Sdl.Community.StudioViews.Controls.Folder;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using AnalysisBand = Sdl.Community.StudioViews.Model.AnalysisBand;
 
 namespace Sdl.Community.StudioViews.ViewModel
 {
@@ -26,11 +29,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 	{
 		private readonly EditorController _editorController;
 		private readonly FilterItemService _filterItemService;
-		private readonly ProjectService _projectService;
 		private readonly ProjectFileService _projectFileService;
 		private readonly SdlxliffMerger _sdlxliffMerger;
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
+		private readonly ParagraphUnitProvider _paragraphUnitProvider;
+		private readonly DisplayFilter _displayFilter;
 
 		private IStudioDocument _activeDocument;
 
@@ -56,15 +60,17 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private int _selectedTabItem;
 
 		public StudioViewsEditorViewModel(EditorController editorController,
-			FilterItemService filterItemService, ProjectService projectService, ProjectFileService projectFileService,
-			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
+			FilterItemService filterItemService, ProjectFileService projectFileService,
+			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader,
+			ParagraphUnitProvider paragraphUnitProvider, DisplayFilter displayFilter)
 		{
 			_filterItemService = filterItemService;
-			_projectService = projectService;
 			_projectFileService = projectFileService;
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
+			_paragraphUnitProvider = paragraphUnitProvider;
+			_displayFilter = displayFilter;
 
 			_editorController = editorController;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
@@ -456,27 +462,56 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			try
 			{
-				var analysisBands = _projectService.GetAnalysisBands(_activeDocument.Project);
 				var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-				var importResult = ImportFile(ImportPath, excludeFilterIds, analysisBands);
+				var importResult = ImportFile(ImportPath, excludeFilterIds);
 
-				WriteImportLogFile(importResult, ImportPath, LogFilePath);
+				if (!importResult.Success && importResult.Message == Constants.AlignmentDifferences)
+				{
+					ImportFileWithAlignmentDifferences(importResult.UpdatedFilePath, _activeDocument.ActiveFile.Language);
+				}
+				else
+				{
+					WriteImportLogFile(importResult, ImportPath, LogFilePath);
 
-				var message = PluginResources.Message_Successfully_Updated_Document;
-				message += Environment.NewLine + Environment.NewLine;
-				message += PluginResources.Message_Segments;
-				message += Environment.NewLine;
-				message += string.Format(PluginResources.Message_Tab_Updated, importResult.UpdatedSegments);
-				message += Environment.NewLine;
-				message += string.Format(PluginResources.Message_Tab_Excluded, importResult.ExcludedSegments);
-				message += Environment.NewLine + Environment.NewLine;
-				message += string.Format(PluginResources.Message_Import_File, ImportPath);
+					string message;
+					if (!importResult.Success && !string.IsNullOrEmpty(importResult.Message))
+					{
+						message = importResult.Message;
+					}
+					else
+					{
+						message = PluginResources.Message_Successfully_Updated_Document;
+						message += Environment.NewLine + Environment.NewLine;
+						message += PluginResources.Message_Segments;
+						message += Environment.NewLine;
+						message += string.Format(PluginResources.Message_Tab_Updated, importResult.UpdatedSegments);
+						message += Environment.NewLine;
+						message += string.Format(PluginResources.Message_Tab_Excluded, importResult.ExcludedSegments);
+						message += Environment.NewLine + Environment.NewLine;
+						message += string.Format(PluginResources.Message_Import_File, ImportPath);
+					}
 
-				ShowMessage(true, message, LogFilePath, Path.GetDirectoryName(importResult.FilePath));
+					ShowMessage(true, message, LogFilePath, Path.GetDirectoryName(importResult.FilePath));
+				}
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
+			}
+		}
+
+		private void ImportFileWithAlignmentDifferences(string updatedFilePath, Language language)
+		{
+			var dialogResult = MessageBox.Show(PluginResources.Message_UnableToImportTranslationsFromEditor +
+				Environment.NewLine + Environment.NewLine + PluginResources.Message_SelectYesToProceedWithImport,
+				PluginResources.Plugin_Name, MessageBoxButton.YesNo, MessageBoxImage.Question);
+			if (dialogResult == MessageBoxResult.Yes)
+			{
+				_editorController.Save(_activeDocument);
+				_editorController.Close(_activeDocument);
+
+				var importAction = SdlTradosStudio.Application.GetAction<ImportSelectedFilesAction>();
+				importAction.Execute(new List<SystemFileInfo> { new SystemFileInfo(updatedFilePath) }, language);
 			}
 		}
 
@@ -574,7 +609,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				});
 		}
 
-		private ImportResult ImportFile(string importFilePath, List<string> excludeFilterIds, List<AnalysisBand> analysisBands)
+		private ImportResult ImportFile(string importFilePath, List<string> excludeFilterIds)
 		{
 			var filePath = GetDocumentPath(_activeDocument);
 			var importResult = new ImportResult
@@ -598,6 +633,16 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath);
 
+			// If there are alignment differences, then the import needs to be performed after the document is closed
+			var alignmentDifferences = HasAlignmentDifferences(updatedSegmentPairs);
+			if (alignmentDifferences)
+			{
+				importResult.Success = false;
+				importResult.Message = Constants.AlignmentDifferences;
+				return importResult;
+			}
+
+			var refreshDocument = false;
 			foreach (var updatedSegmentPair in updatedSegmentPairs)
 			{
 				if (updatedSegmentPair.ParagraphUnit.IsStructure || !updatedSegmentPair.ParagraphUnit.SegmentPairs.Any())
@@ -608,40 +653,129 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var segmentPair = _projectFileService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId,
 					updatedSegmentPair.SegmentId);
 				if (segmentPair?.Target == null
-					|| IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target)
-					|| IsEmpty(updatedSegmentPair.SegmentPair.Target))
+					|| IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target))
 				{
 					continue;
 				}
 
-				if (excludeFilterIds.Count > 0)
+				if (IsEmpty(updatedSegmentPair.SegmentPair.Source) && !IsEmpty(segmentPair.Source) &&
+					updatedSegmentPair.SegmentPair.Properties.TranslationOrigin.OriginSystem == Constants.MergedParagraph)
 				{
-					var status = segmentPair.Properties.ConfirmationLevel.ToString();
-					var match = _filterItemService.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin,
-						analysisBands);
+					UpdateSegmentPair(segmentPair, updatedSegmentPair);
 
-					if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
-						|| excludeFilterIds.Exists(a => a == status)
-						|| excludeFilterIds.Exists(a => a == match))
-					{
-						importResult.ExcludedSegments++;
-						continue;
-					}
+					importResult.UpdatedSegments++;
+					refreshDocument = true;
+					continue;
 				}
 
-				segmentPair.Target.Clear();
-				foreach (var item in updatedSegmentPair.SegmentPair.Target)
+				var excludeSegment = ExcludeSegment(excludeFilterIds, segmentPair);
+				if (excludeSegment)
 				{
-					segmentPair.Target.Add(item.Clone() as IAbstractMarkupData);
+					importResult.ExcludedSegments++;
+					continue;
 				}
 
-				_activeDocument.UpdateSegmentPair(segmentPair);
-				_activeDocument.UpdateSegmentPairProperties(segmentPair, updatedSegmentPair.SegmentPair.Properties);
-
+				UpdateSegmentPair(segmentPair, updatedSegmentPair);
 				importResult.UpdatedSegments++;
 			}
 
+			if (refreshDocument)
+			{
+				_activeDocument.ApplyFilterOnSegments(_activeDocument.DisplayFilter ?? _displayFilter);
+			}
+
 			return importResult;
+		}
+
+		private void UpdateSegmentPair(ISegmentPair segmentPair, SegmentPairInfo updatedSegmentPair)
+		{
+			segmentPair.Source.Clear();
+			segmentPair.Target.Clear();
+
+			foreach (var item in updatedSegmentPair.SegmentPair.Source)
+			{
+				segmentPair.Source.Add(item.Clone() as IAbstractMarkupData);
+			}
+
+			foreach (var item in updatedSegmentPair.SegmentPair.Target)
+			{
+				segmentPair.Target.Add(item.Clone() as IAbstractMarkupData);
+			}
+
+			_activeDocument.UpdateSegmentPair(segmentPair);
+			_activeDocument.UpdateSegmentPairProperties(segmentPair, updatedSegmentPair.SegmentPair.Properties);
+		}
+
+		private bool ExcludeSegment(List<string> excludeFilterIds, ISegmentPair segmentPair)
+		{
+			var exclude = false;
+			if (excludeFilterIds.Count > 0)
+			{
+				var status = segmentPair.Properties.ConfirmationLevel.ToString();
+				var match = _filterItemService.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin);
+
+				if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
+				    || excludeFilterIds.Exists(a => a == status)
+				    || excludeFilterIds.Exists(a => a == match))
+				{
+					exclude = true;
+				}
+			}
+
+			return exclude;
+		}
+
+		private bool HasAlignmentDifferences(IEnumerable<SegmentPairInfo> updatedSegmentPairs)
+		{
+			var alignmentDifferences = false;
+			var updatedParagraphUnits = GetUpdatedParagraphUnits(updatedSegmentPairs);
+			foreach (var updatedParagraphUnit in updatedParagraphUnits)
+			{
+				var originalParagraphUnit = _projectFileService.GetParagraphUnit(_activeDocument,
+					updatedParagraphUnit.ParagraphUnit.Properties.ParagraphUnitId.Id);
+				if (originalParagraphUnit == null)
+				{
+					continue;
+				}
+
+				var alignments =
+					_paragraphUnitProvider.GetSegmentPairAlignments(originalParagraphUnit,
+						updatedParagraphUnit.ParagraphUnit);
+				if (alignments.Exists(a => a.Alignment == AlignmentInfo.AlignmentType.Added ||
+										  a.Alignment == AlignmentInfo.AlignmentType.Removed))
+				{
+					alignmentDifferences = true;
+				}
+			}
+
+			return alignmentDifferences;
+		}
+
+		private static IEnumerable<ParagraphUnitInfo> GetUpdatedParagraphUnits(IEnumerable<SegmentPairInfo> updatedSegmentPairs)
+		{
+			var updatedParagraphUnits = new List<ParagraphUnitInfo>();
+			foreach (var segmentPair in updatedSegmentPairs)
+			{
+				var paragraphUnit = updatedParagraphUnits.FirstOrDefault(
+					a => a.ParagraphUnit.Properties.ParagraphUnitId.Id == segmentPair.ParagraphUnitId);
+
+				if (paragraphUnit != null)
+				{
+					paragraphUnit.SegmentPairs.Add(segmentPair);
+				}
+				else
+				{
+					var paragraphUnitInfo = new ParagraphUnitInfo
+					{
+						ParagraphUnit = segmentPair.ParagraphUnit,
+						SegmentPairs = new List<SegmentPairInfo> { segmentPair },
+						FileId = segmentPair.FileId
+					};
+					updatedParagraphUnits.Add(paragraphUnitInfo);
+				}
+			}
+
+			return updatedParagraphUnits;
 		}
 
 		private void ShowMessage(bool success, string message, string logFilePath, string folder)

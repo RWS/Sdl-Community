@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvider", "Sdl.Community.DeelLMTProvider\Sdl.Community.DeepLMTProvider.csproj", "{5BAEE9B8-1C76-4CA0-9921-4F3C82746A17}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvider.WPF", "Sdl.Community.DeepLMTProvider.WPF\Sdl.Community.DeepLMTProvider.WPF.csproj", "{B645E128-286D-49E4-BC45-8EC319AB9CAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeepLMTProvider.Tests", "DeepLMTProvider.Tests\DeepLMTProvider.Tests.csproj", "{80CE1806-029A-403D-BBA4-6FC85D8EE68E}"
 EndProject
@@ -19,10 +17,6 @@ Global
 		{5BAEE9B8-1C76-4CA0-9921-4F3C82746A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BAEE9B8-1C76-4CA0-9921-4F3C82746A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BAEE9B8-1C76-4CA0-9921-4F3C82746A17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80CE1806-029A-403D-BBA4-6FC85D8EE68E}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.DeelLMTProvider.Model
+﻿namespace Sdl.Community.DeepLMTProvider.Model
 {
 	public class TranslationDetails
     {

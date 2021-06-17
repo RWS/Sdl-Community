@@ -2,6 +2,8 @@
 
 namespace Sdl.Community.MtEnhancedProvider
 {
+	//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
+	
 	class MtTranslationProviderElementVisitor : ISegmentElementVisitor
 	{
 		private MtTranslationOptions _options;

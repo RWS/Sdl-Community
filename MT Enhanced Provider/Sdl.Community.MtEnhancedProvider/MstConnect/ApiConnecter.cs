@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,48 +13,63 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using RestSharp;
-using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
-using Sdl.Community.MtEnhancedProvider.Model.Interface;
+using Sdl.Community.MtEnhancedProvider.Service;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
 	internal class ApiConnecter
 	{
-		private static string _authToken;
-		private static DateTime _tokenExpiresAt; //to keep track of when token expires
-		public static List<string> SupportedLangs { get; set; }
-		private string _subscriptionKey;
-		private const string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
-		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
+		private const string BaseUri = @"api.cognitive.microsofttranslator.com";
+		private const string ServiceBaseUri = @"api.cognitive.microsoft.com";
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
+
+		private List<string> _supportedLangs;
+		private string _authToken;
+
+		//TODO PACH (06/04/2021): identify if we can enhance the service using this value.
+		private DateTime _tokenExpiresAt;
+
+		private string _subscriptionKey;
+		private string _region;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly HtmlUtil _htmlUtil;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
-		/// <param name="clientId">Microsoft API key</param>
-		internal ApiConnecter(string clientId)
+		/// <param name="subscriptionKey">Microsoft API key</param>
+		/// <param name="region">Region</param>
+		internal ApiConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
-			_subscriptionKey = clientId;
+			_subscriptionKey = subscriptionKey;
+			_region = region;
+			_htmlUtil = htmlUtil;
+
 			if (_authToken == null)
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
 			}
-			if (SupportedLangs == null)
+			if (_supportedLangs == null)
 			{
-				SupportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
 			}
 		}
 
 		/// <summary>
 		/// Allows static credentials to be updated by the calling program
 		/// </summary>
-		/// <param name="cid">the client Id obtained from Microsoft</param>
-		/// <param name="cst">the client secret obtained from Microsoft</param>
-		internal void ResetCrd(string cid)
+		/// <param name="subscriptionKey">the client Id obtained from Microsoft</param>
+		/// <param name="region">Region</param>
+		internal void ResetCrd(string subscriptionKey, string region)
 		{
-			_subscriptionKey = cid;
+			if (subscriptionKey != _subscriptionKey || region != _region)
+			{
+				_subscriptionKey = subscriptionKey;
+				_region = region;
+				_authToken = GetAuthToken();
+				_supportedLangs = GetSupportedLanguages();
+			}
 		}
 
 		/// <summary>
@@ -66,7 +82,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			var targetLc = ConvertLangCode(targetLang);
 
 			//check to see if token is null
-			if (_authToken == null) _authToken = GetAuthToken();
+			if (_authToken == null)
+			{
+				_authToken = GetAuthToken();
+				if (_authToken == null)
+				{
+					throw new Exception("Authorization token not valid!");
+				}
+			}
 
 			var translatedText = string.Empty;
 			try
@@ -107,12 +130,12 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 						if (response.IsSuccessStatusCode)
 						{
 							var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
-							translatedText = responseTranslation[0]?.Translations[0]?.Text;
+							translatedText = _htmlUtil.HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
 						}
 						else
 						{
 							var responseMessage = JsonConvert.DeserializeObject<ResponseMessage>(responseBody);
-							throw  new Exception(responseMessage.Error.Message);
+							throw new Exception(responseMessage.Error.Message);
 						}
 					}
 				}
@@ -190,7 +213,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			var targetSupported = false;
 
 			//check to see if both the source and target languages are supported
-			foreach (var lang in SupportedLangs)
+			foreach (var lang in _supportedLangs)
 			{
 				if (lang.Equals(source)) sourceSupported = true;
 				if (lang.Equals(target)) targetSupported = true;
@@ -210,9 +233,10 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			var languageCodeList = new List<string>();
 			try
 			{
-				var client = new RestClient(TranslatorUri);
+				var uri = new Uri("https://" + BaseUri);
+				var client = new RestClient(uri);
+
 				var request = new RestRequest("languages", Method.GET);
-				request.AddHeader("Authorization", _authToken);
 				request.AddParameter("api-version", "3.0");
 				request.AddParameter("scope", "translation");
 
@@ -238,7 +262,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private string ProcessWebException(WebException e, string message)
 		{
 			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
-			
+
 			// Obtain detailed error information
 			string strResponse;
 			using (var response = (HttpWebResponse)e.Response)
@@ -291,19 +315,65 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			if (!string.IsNullOrWhiteSpace(_authToken)) return _authToken;
 			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
 
-			using (var client = new HttpClient())
-			using (var request = new HttpRequestMessage())
+
+			var uri = new Uri("https://"
+							  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
+							  + ServiceBaseUri + "/sts/v1.0/issueToken");
+
+			try
 			{
-				request.Method = HttpMethod.Post;
-				request.RequestUri = ServiceUrl;
-				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-				var response = await client.SendAsync(request);
-				response.EnsureSuccessStatusCode();
-				var token = await response.Content.ReadAsStringAsync();
-				_tokenExpiresAt = DateTime.Now;
-				_authToken = "Bearer " + token;
-				return _authToken;
+				using (var client = new HttpClient())
+				using (var request = new HttpRequestMessage())
+				{
+					request.Method = HttpMethod.Post;
+					request.RequestUri = uri;
+					request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
+					var response = await client.SendAsync(request);
+					response.EnsureSuccessStatusCode();
+					var tokenString = await response.Content.ReadAsStringAsync();
+
+					_authToken = "Bearer " + tokenString;
+
+					var token = ReadToken(tokenString);
+					_tokenExpiresAt = token?.ValidTo ?? DateTime.Now;
+
+				}
 			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{ex.Message}\n { ex.StackTrace}");
+				throw ex;
+			}
+
+			return _authToken;
+		}
+
+		private JwtSecurityToken ReadToken(string token)
+		{
+			if (string.IsNullOrEmpty(token))
+			{
+				return null;
+			}
+
+			try
+			{
+				var jwtHandler = new JwtSecurityTokenHandler();
+
+				//Check if readable token (string is in a JWT format)
+				var readableToken = jwtHandler.CanReadToken(token);
+				if (!readableToken)
+				{
+					return null;
+				}
+
+				return jwtHandler.ReadJwtToken(token);
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return null;
 		}
 
 		private string ConvertLangCode(string languageCode)

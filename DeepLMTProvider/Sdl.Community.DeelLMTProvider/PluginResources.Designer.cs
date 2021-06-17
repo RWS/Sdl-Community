@@ -19,10 +19,10 @@ namespace Sdl.Community.DeepLMTProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.DeepLMTProvider {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.DeepLMTProvider.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.DeepLMTProvider {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Api Key is required..
+        /// </summary>
+        public static string ApiKeyIsRequired_ValidationBlockMessage {
+            get {
+                return ResourceManager.GetString("ApiKeyIsRequired_ValidationBlockMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap DeepL {
+        public static System.Drawing.Bitmap DeepL {
             get {
                 object obj = ResourceManager.GetObject("DeepL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +82,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap deepL_logo_new {
+        public static System.Drawing.Bitmap deepL_logo_new {
             get {
                 object obj = ResourceManager.GetObject("deepL_logo_new", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +92,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon DeepL1 {
+        public static System.Drawing.Icon DeepL1 {
             get {
                 object obj = ResourceManager.GetObject("DeepL1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -93,7 +102,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon deepLIcon {
+        public static System.Drawing.Icon deepLIcon {
             get {
                 object obj = ResourceManager.GetObject("deepLIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -103,7 +112,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap deepLResized {
+        public static System.Drawing.Bitmap deepLResized {
             get {
                 object obj = ResourceManager.GetObject("deepLResized", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -111,9 +120,18 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to deepltranslationprovider:///.
+        /// </summary>
+        public static string DeeplTranslationProviderScheme {
+            get {
+                return ResourceManager.GetString("DeeplTranslationProviderScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Download {
+        public static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -121,9 +139,37 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The DeepL provider is returning a 403 forbidden status. This means there is a problem with your API key accessing the services you have requested. Please check you have a valid API key..
+        /// </summary>
+        public static string Forbidden_Message {
+            get {
+                return ResourceManager.GetString("Forbidden_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets whether the translated text should lean towards formal or informal language.
+        ///This feature currently works for all target languages except &quot;ES&quot; (Spanish), &quot;JA&quot; (Japanese) and &quot;ZH&quot; (Chinese)..
+        /// </summary>
+        public static string FormalityNotAvailableReason {
+            get {
+                return ResourceManager.GetString("FormalityNotAvailableReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *Not all languages are compatible with this option....
+        /// </summary>
+        public static string FormalityNotAvailableText {
+            get {
+                return ResourceManager.GetString("FormalityNotAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
+        public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -133,7 +179,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.DeepLMTProvider.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -142,7 +188,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized string similar to DeepL MT Provider.
         /// </summary>
-        internal static string Plugin_NiceName {
+        public static string Plugin_NiceName {
             get {
                 return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
             }
@@ -151,7 +197,7 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Question {
+        public static System.Drawing.Icon Question {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -159,12 +205,57 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The DeepL provider is returning a &apos;{0}&apos; status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity..
+        /// </summary>
+        public static string ServerGeneralResponse_Message {
+            get {
+                return ResourceManager.GetString("ServerGeneralResponse_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Settings {
+        public static System.Drawing.Icon Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings Updated.
+        /// </summary>
+        public static string SettingsUpdated {
+            get {
+                return ResourceManager.GetString("SettingsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In order for the new settings to take effect, you have to reopen the file for editing.
+        /// </summary>
+        public static string SettingsUpdated_ReopenFilesForEditing {
+            get {
+                return ResourceManager.GetString("SettingsUpdated_ReopenFilesForEditing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
             }
         }
     }

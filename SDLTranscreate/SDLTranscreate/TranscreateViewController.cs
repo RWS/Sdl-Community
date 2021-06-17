@@ -302,11 +302,16 @@ namespace Trados.Transcreate
 			}
 
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, project);
-			ReportsController.AddReports(ClientId, reports);
+			if (reports.Count > 0)
+			{
+				ReportsController.AddReports(ClientId, reports);
+			}
 
 			UpdateProjectSettingsBundle(project);
-
-			_projectsNavigationViewModel.Projects = _transcreateProjects;
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
 		}
 
 		public void UpdateBackTranslationProjectData(string parentProjectId, TaskContext taskContext)
@@ -368,9 +373,16 @@ namespace Trados.Transcreate
 			}
 
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, backTranslationProject);
-			ReportsController.AddReports(ClientId, reports);
+			if (reports.Count > 0)
+			{
+				ReportsController.AddReports(ClientId, reports);
+			}
 
 			UpdateBackTranslationProjectSettingsBundle(parentProject);
+			if (_projectsNavigationViewModel != null)
+			{
+				_projectsNavigationViewModel.Projects = _transcreateProjects;
+			}
 		}
 
 		private List<Report> CreateHtmlReports(TaskContext taskContext, FileBasedProject studioParentProject, IProject project)
@@ -535,6 +547,11 @@ namespace Trados.Transcreate
 
 		private void UpdateProjectSettingsBundle(IProject project)
 		{
+			if (project == null)
+			{
+				return;
+			}
+
 			var selectedProject = _projectsController.GetProjects()
 				.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == project.Id);
 
@@ -606,7 +623,7 @@ namespace Trados.Transcreate
 				return false;
 			}
 
-			var projectInfo = project.GetProjectInfo();
+			var projectInfo = GetNormalizedProjectOrigin(project);
 			try
 			{
 				if (_transcreateProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString()) != null)
@@ -622,7 +639,12 @@ namespace Trados.Transcreate
 
 				var settingsBundle = project.GetSettings();
 				var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
-				var sdlBackTranslationProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+
+				var sdlProjectFiles = DeserializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
+				if (sdlProjectFiles?.Count <= 0)
+				{
+					return false;
+				}
 
 				var xliffProject = new Project
 				{
@@ -637,11 +659,10 @@ namespace Trados.Transcreate
 					ProjectType = GetProjectType(project)
 				};
 
-				var sdlProjectFiles = SerializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
 				var projectFiles = GetProjectFiles(sdlProjectFiles, xliffProject);
-
 				if (projectFiles?.Count > 0)
 				{
+					var sdlBackTranslationProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
 					var sdlBackTranslationProject = SerializeBackProjects(sdlBackTranslationProjects.BackProjectsJson.Value);
 					var backProjects = GetBackProjects(projectInfo.LocalProjectFolder, sdlBackTranslationProject);
 
@@ -666,6 +687,23 @@ namespace Trados.Transcreate
 			}
 
 			return false;
+		}
+
+		private ProjectInfo GetNormalizedProjectOrigin(FileBasedProject project)
+		{
+			var projectInfo = project.GetProjectInfo();
+			if (projectInfo.ProjectOrigin == "Transcreate Project")
+			{
+				// required to force studio to recognize a 'case' difference.
+				projectInfo.ProjectOrigin = string.Empty;
+				project.UpdateProject(projectInfo);
+				
+				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject;
+				project.UpdateProject(projectInfo);
+				project.Save();
+			}
+
+			return projectInfo;
 		}
 
 		private List<ProjectFile> GetProjectFiles(IReadOnlyCollection<SDLTranscreateProjectFile> sdlProjectFiles, IProject project)
@@ -931,7 +969,7 @@ namespace Trados.Transcreate
 			return null;
 		}
 
-		private List<SDLTranscreateProjectFile> SerializeProjectFiles(string value)
+		private List<SDLTranscreateProjectFile> DeserializeProjectFiles(string value)
 		{
 			try
 			{
@@ -1018,130 +1056,133 @@ namespace Trados.Transcreate
 				var project = e.Document.Project;
 				var projectInfo = project.GetProjectInfo();
 				var projectId = projectInfo.Id.ToString();
-				var document = e.Document.Files?.FirstOrDefault();
-				var documentId = document?.Id.ToString();
-				var language = document?.Language;
 
 				IProject parentProject = null;
 				var transcreateProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
 					? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out parentProject)
 					: GetProjects().FirstOrDefault(a => a.Id == projectId);
 
-				var projectFile = transcreateProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
-					a.TargetLanguage == language.CultureInfo.Name);
-
-				if (projectFile != null)
+				foreach (var document in e.Document.Files)
 				{
-					if (!OverrideEditorWarningMessage)
-					{
-						if (projectFile.Action == Enumerators.Action.Export ||
-							projectFile.Action == Enumerators.Action.ExportBackTranslation)
-						{
-							var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date)
-								.FirstOrDefault(a => a.Action == Enumerators.Action.Export);
+					var documentId = document?.Id.ToString();
+					var language = document?.Language;
 
-							var message1 = string.Format(PluginResources.Message_FileWasExportedOn,
-								activityfile?.DateToString);
-							var message2 =
-								string.Format(PluginResources.Message_WarningTranslationsCanBeOverwrittenDuringImport,
+					var projectFile = transcreateProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
+						a.TargetLanguage == language.CultureInfo.Name);
+
+					if (projectFile != null)
+					{
+						if (!OverrideEditorWarningMessage)
+						{
+							if (projectFile.Action == Enumerators.Action.Export ||
+								projectFile.Action == Enumerators.Action.ExportBackTranslation)
+							{
+								var activityfile = projectFile.ProjectFileActivities.OrderByDescending(a => a.Date)
+									.FirstOrDefault(a => a.Action == Enumerators.Action.Export);
+
+								var message1 = string.Format(PluginResources.Message_FileWasExportedOn,
 									activityfile?.DateToString);
+								var message2 =
+									string.Format(PluginResources.Message_WarningTranslationsCanBeOverwrittenDuringImport,
+										activityfile?.DateToString);
 
-							MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2,
-								PluginResources.TranscreateManager_Name, MessageBoxButtons.OK,
-								MessageBoxIcon.Warning);
+								MessageBox.Show(message1 + Environment.NewLine + Environment.NewLine + message2,
+									PluginResources.TranscreateManager_Name, MessageBoxButtons.OK,
+									MessageBoxIcon.Warning);
+							}
 						}
-					}
 
-					OverrideEditorWarningMessage = false;
+						OverrideEditorWarningMessage = false;
 
-					var segmentBuilder = new SegmentBuilder();
-					//var projectAutomationService = new ProjectAutomationService(_imageService, this, _customerProvider);
+						var segmentBuilder = new SegmentBuilder();
 
-					var action = transcreateProject is BackTranslationProject
-						? Enumerators.Action.ExportBackTranslation
-						: Enumerators.Action.Export;
-					var workFlow = Enumerators.WorkFlow.Internal;
-					var setttings = GetSettings();
+						var action = transcreateProject is BackTranslationProject
+							? Enumerators.Action.ExportBackTranslation
+							: Enumerators.Action.Export;
+						var workFlow = Enumerators.WorkFlow.Internal;
+						var setttings = GetSettings();
 
-					var taskContext = new TaskContext(action, workFlow, setttings);
-					taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
-					taskContext.ExportOptions.IncludeBackTranslations = true;
-					taskContext.ExportOptions.IncludeTranslations = true;
-					taskContext.ExportOptions.CopySourceToTarget = false;
+						var taskContext = new TaskContext(action, workFlow, setttings);
+						taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
+						taskContext.ExportOptions.IncludeBackTranslations = true;
+						taskContext.ExportOptions.IncludeTranslations = true;
+						taskContext.ExportOptions.CopySourceToTarget = false;
 
-					taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
-					taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
-					var workingProject = _projectAutomationService.GetProject(project, new List<string> { projectFile.FileId });
+						taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
+						taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
+						var workingProject =
+							_projectAutomationService.GetProject(project, new List<string> { projectFile.FileId });
 
-					taskContext.Project = workingProject;
-					taskContext.FileBasedProject = project;
-					taskContext.ProjectFiles = workingProject.ProjectFiles;
+						taskContext.Project = workingProject;
+						taskContext.FileBasedProject = project;
+						taskContext.ProjectFiles = workingProject.ProjectFiles;
 
-					var targetFile = taskContext.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.FileId);
+						var targetFile = taskContext.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.FileId);
 
-					var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
-					var sdlxliffReader = new SdlxliffReader(segmentBuilder, taskContext.ExportOptions,
-						taskContext.AnalysisBands);
+						var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
+						var sdlxliffReader = new SdlxliffReader(segmentBuilder, taskContext.ExportOptions,
+							taskContext.AnalysisBands);
 
-					var languageFolder = GetLanguageFolder(taskContext, targetFile.TargetLanguage);
+						var languageFolder = GetLanguageFolder(taskContext, targetFile.TargetLanguage);
 
-					var xliffFolder = GetXliffFolder(languageFolder, targetFile);
-					var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
+						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
+						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
 
-					var inputPath = Path.Combine(taskContext.LocalProjectFolder, targetFile.Location);
-					var data = sdlxliffReader.ReadFile(transcreateProject.Id, targetFile.FileId, inputPath,
-						targetFile.TargetLanguage);
-					var exported = xliffWriter.WriteFile(data, xliffFilePath, true);
+						var inputPath = Path.Combine(taskContext.LocalProjectFolder, targetFile.Location);
+						var data = sdlxliffReader.ReadFile(transcreateProject.Id, targetFile.FileId, inputPath,
+							targetFile.TargetLanguage);
+						var exported = xliffWriter.WriteFile(data, xliffFilePath, true);
 
-					if (exported)
-					{
-						var tmpInputPath = inputPath + ".tmp.sdlxliff";
-						if (File.Exists(tmpInputPath))
+						if (exported)
 						{
-							File.Delete(tmpInputPath);
+							var tmpInputPath = inputPath + ".tmp.sdlxliff";
+							if (File.Exists(tmpInputPath))
+							{
+								File.Delete(tmpInputPath);
+							}
+
+							File.Copy(inputPath, tmpInputPath);
+
+							targetFile.XliffData = data;
+							targetFile.Date = taskContext.DateTimeStamp;
+							targetFile.Action = taskContext.Action;
+							targetFile.WorkFlow = taskContext.WorkFlow;
+							targetFile.Status = Enumerators.Status.Success;
+							targetFile.ExternalFilePath = xliffFilePath;
+							targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
+							targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
+							targetFile.Report = string.Empty;
 						}
 
-						File.Copy(inputPath, tmpInputPath);
+						var activityFile = new ProjectFileActivity
+						{
+							ProjectFileId = targetFile.FileId,
+							ActivityId = Guid.NewGuid().ToString(),
+							Action = taskContext.Action,
+							WorkFlow = taskContext.WorkFlow,
+							Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
+							Date = taskContext.DateTimeStamp,
+							Name = Path.GetFileName(xliffFilePath),
+							Path = Path.GetDirectoryName(xliffFilePath),
+							Report = string.Empty,
+							ProjectFile = targetFile,
+							ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics,
+							TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics
+						};
 
-						targetFile.XliffData = data;
-						targetFile.Date = taskContext.DateTimeStamp;
-						targetFile.Action = taskContext.Action;
-						targetFile.WorkFlow = taskContext.WorkFlow;
-						targetFile.Status = Enumerators.Status.Success;
-						targetFile.ExternalFilePath = xliffFilePath;
-						targetFile.ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics;
-						targetFile.TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics;
-						targetFile.Report = string.Empty;
-					}
+						targetFile.ProjectFileActivities.Add(activityFile);
+						taskContext.Completed = true;
 
-					var activityFile = new ProjectFileActivity
-					{
-						ProjectFileId = targetFile.FileId,
-						ActivityId = Guid.NewGuid().ToString(),
-						Action = taskContext.Action,
-						WorkFlow = taskContext.WorkFlow,
-						Status = exported ? Enumerators.Status.Success : Enumerators.Status.Error,
-						Date = taskContext.DateTimeStamp,
-						Name = Path.GetFileName(xliffFilePath),
-						Path = Path.GetDirectoryName(xliffFilePath),
-						Report = string.Empty,
-						ProjectFile = targetFile,
-						ConfirmationStatistics = sdlxliffReader.ConfirmationStatistics,
-						TranslationOriginStatistics = sdlxliffReader.TranslationOriginStatistics
-					};
+						_projectAutomationService.ActivateProject(project);
 
-					targetFile.ProjectFileActivities.Add(activityFile);
-					taskContext.Completed = true;
-
-					_projectAutomationService.ActivateProject(project);
-
-					if (transcreateProject is BackTranslationProject)
-					{
-						UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
-					}
-					else
-					{
-						UpdateProjectData(taskContext);
+						if (transcreateProject is BackTranslationProject)
+						{
+							UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
+						}
+						else
+						{
+							UpdateProjectData(taskContext);
+						}
 					}
 				}
 			}
@@ -1159,134 +1200,225 @@ namespace Trados.Transcreate
 				var project = e.Document.Project;
 				var projectInfo = project.GetProjectInfo();
 				var projectId = projectInfo.Id.ToString();
-				var document = e.Document.Files?.FirstOrDefault();
-				var documentId = document?.Id.ToString();
-				var language = document?.Language;
 
 				IProject parentProject = null;
 				var transcreateProject = IsBackTranslationProject(projectInfo.ProjectOrigin)
-					? GetBackTranslationProjectProject(projectId, out parentProject)
+					? GetBackTranslationProjectProject(projectInfo.Id.ToString(), out parentProject)
 					: GetProjects().FirstOrDefault(a => a.Id == projectId);
 
-				var projectFile = transcreateProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
-					a.TargetLanguage == language.CultureInfo.Name);
-				if (projectFile != null)
+				foreach (var document in e.Document.Files)
 				{
-					var segmentBuilder = new SegmentBuilder();
-					//var projectAutomationService = new ProjectAutomationService(_imageService, this, _projectsController, _customerProvider);
+					var documentId = document?.Id.ToString();
+					var language = document?.Language;
 
-					var action = transcreateProject is BackTranslationProject
-						? Enumerators.Action.ImportBackTranslation
-						: Enumerators.Action.Import;
-					var workFlow = Enumerators.WorkFlow.Internal;
-					var setttings = GetSettings();
-
-					var taskContext = new TaskContext(action, workFlow, setttings);
-					taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
-					taskContext.ExportOptions.IncludeBackTranslations = true;
-					taskContext.ExportOptions.IncludeTranslations = true;
-					taskContext.ExportOptions.CopySourceToTarget = false;
-					taskContext.ImportOptions.StatusTranslationUpdatedId = string.Empty;
-					taskContext.ImportOptions.StatusSegmentNotImportedId = string.Empty;
-					taskContext.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
-					taskContext.ImportOptions.OverwriteTranslations = true;
-					taskContext.ImportOptions.OriginSystem = Constants.OriginSystem_TranscreateAutomation;
-
-					taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
-					taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
-					var workingProject = _projectAutomationService.GetProject(project, new List<string> { projectFile.FileId });
-
-					taskContext.Project = workingProject;
-					taskContext.FileBasedProject = project;
-					taskContext.ProjectFiles = workingProject.ProjectFiles;
-
-					var targetFile = taskContext.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.FileId);
-
-					var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
-					var sdlxliffReader = new SdlxliffReader(segmentBuilder, taskContext.ExportOptions,
-						taskContext.AnalysisBands);
-					var sdlxliffWriter = new SdlxliffWriter(segmentBuilder, taskContext.ImportOptions,
-						taskContext.AnalysisBands);
-
-					var languageFolder = GetLanguageFolder(taskContext, targetFile.TargetLanguage);
-
-					var xliffFolder = GetXliffFolder(languageFolder, targetFile);
-					var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
-
-					var inputPath = Path.Combine(taskContext.LocalProjectFolder, targetFile.Location);
-					var data = sdlxliffReader.ReadFile(transcreateProject.Id, targetFile.FileId, inputPath,
-						targetFile.TargetLanguage);
-
-					var imported = false;
-					var exported = xliffWriter.WriteFile(data, xliffFilePath, true);
-					if (exported)
+					var projectFile = transcreateProject?.ProjectFiles.FirstOrDefault(a => a.FileId == documentId &&
+						a.TargetLanguage == language.CultureInfo.Name);
+					if (projectFile != null)
 					{
-						var tempFileName = Path.GetTempFileName();
-						File.Move(tempFileName, tempFileName + ".sdlxliff");
-						tempFileName = tempFileName + ".sdlxliff";
+						var segmentBuilder = new SegmentBuilder();
 
-						var tmpInputFile = inputPath + ".tmp.sdlxliff";
+						var action = transcreateProject is BackTranslationProject
+							? Enumerators.Action.ImportBackTranslation
+							: Enumerators.Action.Import;
+						var workFlow = Enumerators.WorkFlow.Internal;
+						var setttings = GetSettings();
 
-						if (File.Exists(tmpInputFile))
+						var taskContext = new TaskContext(action, workFlow, setttings);
+						taskContext.AnalysisBands = _projectAutomationService.GetAnalysisBands(project);
+						taskContext.ExportOptions.IncludeBackTranslations = true;
+						taskContext.ExportOptions.IncludeTranslations = true;
+						taskContext.ExportOptions.CopySourceToTarget = false;
+						taskContext.ImportOptions.StatusTranslationUpdatedId = string.Empty;
+						taskContext.ImportOptions.StatusSegmentNotImportedId = string.Empty;
+						taskContext.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
+						taskContext.ImportOptions.OverwriteTranslations = true;
+						taskContext.ImportOptions.OriginSystem = Constants.OriginSystem_TranscreateAutomation;
+
+						taskContext.LocalProjectFolder = projectInfo.LocalProjectFolder;
+						taskContext.WorkflowFolder = taskContext.GetWorkflowPath();
+						var workingProject =
+							_projectAutomationService.GetProject(project, new List<string> { projectFile.FileId });
+
+						taskContext.Project = workingProject;
+						taskContext.FileBasedProject = project;
+						taskContext.ProjectFiles = workingProject.ProjectFiles;
+
+						var targetFile = taskContext.ProjectFiles.FirstOrDefault(a => a.FileId == projectFile.FileId);
+
+						var xliffWriter = new XliffWriter(Enumerators.XLIFFSupport.xliff12sdl);
+						var sdlxliffReader = new SdlxliffReader(segmentBuilder, taskContext.ExportOptions,
+							taskContext.AnalysisBands);
+						var sdlxliffWriter = new SdlxliffWriter(segmentBuilder, taskContext.ImportOptions,
+							taskContext.AnalysisBands);
+
+						var languageFolder = GetLanguageFolder(taskContext, targetFile.TargetLanguage);
+
+						var xliffFolder = GetXliffFolder(languageFolder, targetFile);
+						var xliffFilePath = Path.Combine(xliffFolder, targetFile.Name + ".xliff");
+
+						var inputPath = Path.Combine(taskContext.LocalProjectFolder, targetFile.Location);
+						var data = sdlxliffReader.ReadFile(transcreateProject.Id, targetFile.FileId, inputPath,
+							targetFile.TargetLanguage);
+
+						var imported = false;
+						var exported = xliffWriter.WriteFile(data, xliffFilePath, true);
+						if (exported)
 						{
-							imported = sdlxliffWriter.UpdateFile(data, tmpInputFile, tempFileName);
+							var tempFileName = Path.GetTempFileName();
+							File.Move(tempFileName, tempFileName + ".sdlxliff");
+							tempFileName = tempFileName + ".sdlxliff";
 
-							if (File.Exists(tempFileName))
-							{
-								File.Delete(tempFileName);
-							}
+							var tmpInputFile = inputPath + ".tmp.sdlxliff";
 
 							if (File.Exists(tmpInputFile))
 							{
-								File.Delete(tmpInputFile);
+								imported = sdlxliffWriter.UpdateFile(data, tmpInputFile, tempFileName);
+
+								if (File.Exists(tempFileName))
+								{
+									File.Delete(tempFileName);
+								}
+
+								if (File.Exists(tmpInputFile))
+								{
+									File.Delete(tmpInputFile);
+								}
+
+								if (imported)
+								{
+									targetFile.XliffData = data;
+									targetFile.Date = taskContext.DateTimeStamp;
+									targetFile.Action = taskContext.Action;
+									targetFile.WorkFlow = taskContext.WorkFlow;
+									targetFile.Status = Enumerators.Status.Success;
+									targetFile.ExternalFilePath = xliffFilePath;
+									targetFile.ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics;
+									targetFile.TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics;
+									targetFile.Report = string.Empty;
+								}
+							}
+						}
+
+						foreach (var projectFileActivity in targetFile.ProjectFileActivities)
+						{
+							projectFileActivity.ProjectFile = targetFile;
+						}
+
+						// monitor internal changes only when the document is updated in the editor.
+						var projectTargetFile = transcreateProject.ProjectFiles.FirstOrDefault(a => a.FileId == targetFile.FileId);
+						if (projectTargetFile == null)
+						{
+							continue;
+						}
+
+						var projectTargetFileActivity = projectTargetFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
+						if (projectTargetFileActivity != null && (projectTargetFileActivity.Action == Enumerators.Action.Export ||
+							projectTargetFileActivity.Action == Enumerators.Action.ExportBackTranslation))
+						{
+
+							if (sdlxliffWriter.ConfirmationStatistics?.WordCounts?.Processed?.Count <= 0)
+							{
+								RemovePreviousProjectFileActivity(projectTargetFile, projectTargetFileActivity);
+								UpdateProjectSettingsBundle(transcreateProject is BackTranslationProject ? parentProject : transcreateProject);
+								if (_projectsNavigationViewModel != null)
+								{
+									_projectsNavigationViewModel.Projects = _transcreateProjects;
+								}
+								continue;
 							}
 
-							if (imported)
+							var activityFile = new ProjectFileActivity
 							{
-								targetFile.XliffData = data;
-								targetFile.Date = taskContext.DateTimeStamp;
-								targetFile.Action = taskContext.Action;
-								targetFile.WorkFlow = taskContext.WorkFlow;
-								targetFile.Status = Enumerators.Status.Success;
-								targetFile.ExternalFilePath = xliffFilePath;
-								targetFile.ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics;
-								targetFile.TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics;
-								targetFile.Report = string.Empty;
+								ProjectFileId = targetFile.FileId,
+								ActivityId = Guid.NewGuid().ToString(),
+								Action = taskContext.Action,
+								WorkFlow = taskContext.WorkFlow,
+								Status = imported ? Enumerators.Status.Success : Enumerators.Status.Error,
+								Date = taskContext.DateTimeStamp,
+								Name = Path.GetFileName(xliffFilePath),
+								Path = Path.GetDirectoryName(xliffFilePath),
+								Report = string.Empty,
+								ProjectFile = targetFile,
+								ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics,
+								TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics
+							};
+
+							targetFile.ProjectFileActivities.Add(activityFile);
+							taskContext.Completed = true;
+
+							_projectAutomationService.ActivateProject(project);
+							if (transcreateProject is BackTranslationProject)
+							{
+								UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
+							}
+							else
+							{
+								UpdateProjectData(taskContext);
 							}
 						}
 					}
-
-					var activityFile = new ProjectFileActivity
-					{
-						ProjectFileId = targetFile.FileId,
-						ActivityId = Guid.NewGuid().ToString(),
-						Action = taskContext.Action,
-						WorkFlow = taskContext.WorkFlow,
-						Status = imported ? Enumerators.Status.Success : Enumerators.Status.Error,
-						Date = taskContext.DateTimeStamp,
-						Name = Path.GetFileName(xliffFilePath),
-						Path = Path.GetDirectoryName(xliffFilePath),
-						Report = string.Empty,
-						ProjectFile = targetFile,
-						ConfirmationStatistics = sdlxliffWriter.ConfirmationStatistics,
-						TranslationOriginStatistics = sdlxliffWriter.TranslationOriginStatistics
-					};
-
-					targetFile.ProjectFileActivities.Add(activityFile);
-					taskContext.Completed = true;
-
-					_projectAutomationService.ActivateProject(project);
-
-					if (transcreateProject is BackTranslationProject)
-					{
-						UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
-					}
-					else
-					{
-						UpdateProjectData(taskContext);
-					}
 				}
 			}
+		}
+
+		private void RemovePreviousProjectFileActivity(ProjectFile projectTargetFile,
+			ProjectFileActivity projectFileActivity)
+		{
+			if (projectFileActivity == null)
+			{
+				return;
+			}
+
+			projectTargetFile.ProjectFileActivities.Remove(projectFileActivity);
+
+			var previousActivity = projectTargetFile.ProjectFileActivities.OrderByDescending(a => a.Date).FirstOrDefault();
+			if (previousActivity != null)
+			{
+				projectTargetFile.Action = previousActivity.Action;
+				projectTargetFile.ConfirmationStatistics = previousActivity.ConfirmationStatistics;
+				projectTargetFile.TranslationOriginStatistics = previousActivity.TranslationOriginStatistics;
+				projectTargetFile.Date = previousActivity.Date;
+				projectTargetFile.ExternalFilePath = Path.Combine(previousActivity.Path, previousActivity.Name);
+				projectTargetFile.Report = previousActivity.Report;
+			}
+		}
+
+		private static bool DocumentIsUpdated(IReadOnlyCollection<WordCount> currentWordCounts, IReadOnlyCollection<WordCount> updatedWordCounts)
+		{
+			if (currentWordCounts == null && updatedWordCounts == null)
+			{
+				return false;
+			}
+
+			if (currentWordCounts == null || updatedWordCounts == null)
+			{
+				return true;
+			}
+
+			if (currentWordCounts.Count != updatedWordCounts.Count)
+			{
+				return true;
+			}
+
+			foreach (var currentWordCount in currentWordCounts)
+			{
+				var updatedWordCount = updatedWordCounts.FirstOrDefault(x => x.Category == currentWordCount.Category);
+				if (updatedWordCount == null)
+				{
+					return true;
+				}
+
+				if (updatedWordCount.Segments != currentWordCount.Segments ||
+					updatedWordCount.Characters != currentWordCount.Characters ||
+					updatedWordCount.Placeables != currentWordCount.Placeables ||
+					updatedWordCount.Tags != currentWordCount.Tags ||
+					updatedWordCount.Words != currentWordCount.Words)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private Settings GetSettings()
@@ -1331,7 +1463,7 @@ namespace Trados.Transcreate
 			var date = successDate ? resultDate.ToUniversalTime() : DateTime.MinValue;
 			return date;
 		}
-		
+
 		private string GetDateToString(DateTime date)
 		{
 			var value = string.Empty;
@@ -1488,25 +1620,28 @@ namespace Trados.Transcreate
 
 			if (e.SelectedProject != null && _projectAutomationService != null)
 			{
-				if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
+				lock (_lockObject)
 				{
-					var fileBasedProject = _projectsController.GetProjects()
-						.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
-
-					if (fileBasedProject != null)
+					if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
 					{
-						try
-						{
-							lock (_lockObject)
-							{
-								_projectAutomationService.ActivateProject(fileBasedProject);
-							}
+						var fileBasedProject = _projectsController.GetProjects()
+							.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
 
-							_projectsController.SelectedProjects = new[] { fileBasedProject };
-						}
-						catch
+						if (fileBasedProject != null)
 						{
-							//ignore
+							try
+							{
+								lock (_lockObject)
+								{
+									_projectAutomationService.ActivateProject(fileBasedProject);
+								}
+
+								_projectsController.SelectedProjects = new[] {fileBasedProject};
+							}
+							catch
+							{
+								//ignore
+							}
 						}
 					}
 				}
@@ -1540,12 +1675,18 @@ namespace Trados.Transcreate
 			if (updated || updatedProjectSelection)
 			{
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
-
+				if (_projectsController?.CurrentProject == null)
+				{
+					return;
+				}
+				
 				lock (_lockObject)
 				{
-					// TODO: there is a bug with the API where the icon path is not updated
-					// we will need to create a new API enhancement proposal
-					var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+					var projectInfo = GetNormalizedProjectOrigin(_projectsController?.CurrentProject);
+					var iconPath = _projectAutomationService.IsBackTranslationProject(projectInfo?.ProjectOrigin)
+						? _projectAutomationService.GetBackTranslationIconPath(_pathInfo)
+						: _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+
 					_projectAutomationService?.UpdateProjectIcon(_projectsController?.CurrentProject, iconPath);
 				}
 			}

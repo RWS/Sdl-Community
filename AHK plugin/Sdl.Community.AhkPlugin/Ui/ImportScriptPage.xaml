@@ -5,11 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:helpers="clr-namespace:Sdl.Community.AhkPlugin.Helpers"
 	  xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
+	  d:DataContext="{d:DesignInstance viewModels:ImportScriptPageViewModel}"
       d:DesignHeight="600" d:DesignWidth="300">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\General.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\Buttons.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
@@ -17,9 +20,6 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<UserControl.DataContext>
-		<viewModels:ImportScriptPageViewModel /> 
-	</UserControl.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -28,14 +28,13 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="1*" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Column="0"  Grid.Row="0" Grid.ColumnSpan="2">In this step you can import AutoHotkey scripts using drag and drop into this interface.  Only scripts that have been exported using this plugin can be imported in this way.  
-			If you have files from other users that were created without using this plugin you should use the Add function in the previous window.</TextBox>
+		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Column="0"  Grid.Row="0" Grid.ColumnSpan="2" Text="In this step you can import AutoHotkey scripts using drag and drop into this interface. Only scripts that have been exported using this plugin can be imported in this way. If you have files from other users that were created without using this plugin you should use the Add function in the previous window."/>
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource SdlPrimaryButtonStyle}" Command="{Binding BackCommand}" Content="Scripts list" Margin="10,0,0,25"/>
 	
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
@@ -45,7 +44,7 @@
 		</StackPanel>
 		
 		<ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Hidden">
-			<ItemsControl   ItemsSource="{Binding FilesNameCollection}">
+			<ItemsControl ItemsSource="{Binding FilesNameCollection}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Orientation="Horizontal"/>
@@ -53,27 +52,57 @@
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-							<StackPanel Orientation="Vertical">
-								<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding Content}" Width="auto" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding FilePath}"/>
+							<StackPanel Orientation="Horizontal">
+								<Button Style="{DynamicResource BaseButtonStyle}" 
+								        Width="Auto" 
+								        Command="{Binding RemoveFileCommand}" 
+								        CommandParameter="{Binding FilePath}"
+								        ToolTip="Removes the script(s) imported from this file from the grid below.">
+									<StackPanel Orientation="Horizontal">
+										<Image Source="../Resources/trash-alt.png" Height="Auto" Width="Auto" Margin="0 0 5 0"/>
+										<TextBlock Text="{Binding Content}"/>
+									</StackPanel>
+								</Button>
 							</StackPanel>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
-
 		</ScrollViewer>
-		
-		<Grid  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Height="90" Margin="10,10,10,5" Background="GhostWhite" AllowDrop="True" helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
-			
+
+		<Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Height="100" Margin="10,10,10,5">
+			<StackPanel Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
+				<Border BorderThickness="1" Background="#eeeeee" MinHeight="50"  Height="100" HorizontalAlignment="Stretch"
+				        AllowDrop="True" helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}" >
+					<Border.BorderBrush>
+						<VisualBrush>
+							<VisualBrush.Visual>
+								<Rectangle StrokeDashArray="4 2" Stroke="DarkGray" StrokeThickness="1"
+								           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+								           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+							</VisualBrush.Visual>
+						</VisualBrush>
+					</Border.BorderBrush>
+
+					<StackPanel  Background="#eeeeee" VerticalAlignment="Center" >
+						<StackPanel HorizontalAlignment="Center">
+							<Image Source="../Resources/upload1.png" Width="100" Height="50" VerticalAlignment="Center" />
+							<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" Width="170" Content="Please select files" 
+							         Command="{Binding AddFilesCommand}"/>
+							<TextBlock Text="where your scripts are located or drag and drop them here (*.ahk)"/>
+						</StackPanel>
+					</StackPanel>
+				</Border>
+			</StackPanel>
 		</Grid>
 		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" Text="{Binding Message}" Visibility="{Binding MessageVisibility}"/>
-		<CheckBox  Grid.Row="5" Grid.Column="0" FontFamily="Segoe UI" Visibility="{Binding GridVisibility}" Margin="10,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<DataGrid Style="{DynamicResource FilesGridStyle}" Grid.Column="0" Visibility="{Binding GridVisibility}" 
-				  VerticalScrollBarVisibility="Auto"
+		          VerticalScrollBarVisibility="Auto"
+		          MaxHeight="175"
 		          SelectionMode="Extended"
-				  SelectionUnit="FullRow"
+		          SelectionUnit="FullRow"
 		          Grid.Row="6" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
 		          FontFamily="Segoe UI"
-				  RowHeight="22"
+		          RowHeight="22"
 		          ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,10,10,0"
 		          GridLinesVisibility="None">
 			<DataGrid.RowStyle>
@@ -87,7 +116,23 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}" Header="Select scripts" Binding ="{Binding Value.IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTemplateColumn Width="Auto" CanUserResize="False">
+					<DataGridTemplateColumn.Header>
+						<CheckBox Grid.Row="5" Grid.Column="0" 
+								  HorizontalAlignment="Left"
+						          Content="Select all"
+								  Margin="1 0 0 0"
+						          Style="{StaticResource CheckBoxStyle}" 
+						          IsChecked="{Binding Path=DataContext.SelectAll, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</DataGridTemplateColumn.Header>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox HorizontalAlignment="Left" Margin="5 0 0 0" VerticalAlignment="Center" Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding Value.IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="File name" Width="Auto" Binding="{Binding Value.FileName}"
+				                    IsReadOnly="True"/>
 				<DataGridTextColumn Header="Script name" Width="Auto" Binding="{Binding Value.Name}" />
 				<DataGridTextColumn Header="Description" Width="*" Binding="{Binding Value.Description}" />
 				<DataGridTemplateColumn Width="100">

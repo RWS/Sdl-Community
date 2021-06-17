@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Sdl.Community.MtEnhancedProvider.Service;
+using Xunit;
 
 namespace Sdl.Community.MtEnhancedProvider.Tests
 {
@@ -10,7 +11,8 @@ namespace Sdl.Community.MtEnhancedProvider.Tests
 		/// </summary>
 		public MtTranslationProviderTagPlacerTests()
 		{
-			_tagPlacer = new MtTranslationProviderTagPlacer();
+			var htmlUtil = new HtmlUtil();
+			_tagPlacer = new MtTranslationProviderTagPlacer(htmlUtil);
 		}
 
 		[Theory]

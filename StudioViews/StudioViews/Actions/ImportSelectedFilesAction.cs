@@ -1,17 +1,17 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Forms;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
 using Sdl.Community.StudioViews.ViewModel;
+using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using MessageBox = System.Windows.MessageBox;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioViews.Actions
 {
@@ -27,40 +27,47 @@ namespace Sdl.Community.StudioViews.Actions
 		private StudioViewsFilesImportView _window;
 		private FilesController _filesController;
 		private ProjectsController _projectsController;
+		private StudioVersionService _studioVersionService;
 
 		public override void Initialize()
 		{
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_studioVersionService = new StudioVersionService();
+		}
+
+		public void Execute(List<SystemFileInfo> importFiles, Language langauge)
+		{
+			_filesController.Activate();
+
+			Run(importFiles, langauge);
 		}
 
 		protected override void Execute()
 		{
-			var selectedFiles = _filesController.SelectedFiles.Where(projectFile => projectFile.Role == FileRole.Translatable).ToList();
-			if (selectedFiles.Count == 0)
-			{
-				MessageBox.Show(PluginResources.Message_No_files_selected, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
-				return;
-			}
+			Run(null, _filesController.CurrentSelectedLanguage);
+		}
 
-			var missingFiles = selectedFiles.Any(file => file.LocalFileState == LocalFileState.Missing);
-			if (missingFiles)
-			{
-				MessageBox.Show(PluginResources.Message_Missing_Project_Files_Download_From_Server, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Warning);
-				return;
-			}
-
-			var projectHelper = new ProjectService(_projectsController);
+		private void Run(IReadOnlyCollection<SystemFileInfo> importFiles, Language language)
+		{
+			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
 			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
-			var filterItemHelper = new FilterItemService();
+			var filterItemService = new FilterItemService(analysisBands);
 			var commonService = new ProjectFileService();
-			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemHelper, analysisBands);
+			var segmentVisitor = new SegmentVisitor();
+			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
+			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemService, paragraphUnitProvider);
 			var sdlXliffReader = new SdlxliffReader();
 
 			_window = new StudioViewsFilesImportView();
-			var model = new StudioViewsFilesImportViewModel(_window, selectedFiles, commonService, filterItemHelper, sdlxliffImporter, sdlXliffReader);
+			var model = new StudioViewsFilesImportViewModel(_window, _filesController, language, commonService, filterItemService, sdlxliffImporter, sdlXliffReader);
 
 			_window.DataContext = model;
+			if (importFiles != null)
+			{
+				model.AddFiles(importFiles);
+			}
+
 			_window.ShowDialog();
 
 			if (model.DialogResult != DialogResult.OK)

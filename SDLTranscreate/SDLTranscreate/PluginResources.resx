@@ -446,13 +446,13 @@
     <value>Project Properties</value>
   </data>
   <data name="TranscreateManager_ConvertProject_Description" xml:space="preserve">
-    <value>Convert to Transcreate Project</value>
+    <value>Convert to Transcreate project</value>
   </data>
   <data name="TranscreateManager_ConvertProject_Name" xml:space="preserve">
-    <value>Convert to Transcreate Project</value>
+    <value>Convert to Transcreate project</value>
   </data>
   <data name="TranscreateManager_CreateBackTranslationProject_Description" xml:space="preserve">
-    <value>Create Back-Translation Projects</value>
+    <value>Create Back-Translation projects</value>
   </data>
   <data name="TranscreateManager_CreateBackTranslationProject_Name" xml:space="preserve">
     <value>Create Back-Translations</value>
@@ -500,13 +500,13 @@
     <value>Convert Project Files</value>
   </data>
   <data name="JobProcess_CreateTranscreateProject" xml:space="preserve">
-    <value>Create Transcreate Project</value>
+    <value>Create Transcreate project</value>
   </data>
   <data name="WarningMessage_UnableToLocateProject" xml:space="preserve">
     <value>Unable to locate the selected project: {0}</value>
   </data>
   <data name="JobProcess_ConvertTranscreateProjectFiles" xml:space="preserve">
-    <value>Convert Transcreate Project Files</value>
+    <value>Convert Transcreate project files</value>
   </data>
   <data name="Label_ProjectName" xml:space="preserve">
     <value>Project Name: {0}</value>
@@ -530,7 +530,7 @@
     <value>Importing translations</value>
   </data>
   <data name="WizardMessage_CreatingTranscreateProject" xml:space="preserve">
-    <value>Creating Transcreate Project</value>
+    <value>Creating Transcreate project</value>
   </data>
   <data name="JobProcess_ProcessingPleaseWait" xml:space="preserve">
     <value>Processing... please wait</value>
@@ -665,7 +665,7 @@
     <value>Loading Project: {0}</value>
   </data>
   <data name="WizardMessage_CreatingBackTranslationProject" xml:space="preserve">
-    <value>Creating Back-Translation Project</value>
+    <value>Creating Back-Translation project</value>
   </data>
   <data name="Report_Label_CreateTranscreateProject" xml:space="preserve">
     <value>Create Transcreate project</value>
@@ -783,5 +783,8 @@
   </data>
   <data name="TranscreateManager_SwitchWithRecommendedTranslation_Name" xml:space="preserve">
     <value>Switch with Recommended Translation</value>
+  </data>
+  <data name="WizardTitle_CreateBackTranslationProject" xml:space="preserve">
+	  <value>Create Back-Translation project</value>
   </data>
 </root>

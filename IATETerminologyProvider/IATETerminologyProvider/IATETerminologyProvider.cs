@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.EventArgs;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
@@ -18,19 +20,47 @@ namespace Sdl.Community.IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly ProjectsController _projectsController;
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
-		private EditorController _editorController;
-		private ProjectsController _projectsController;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private EditorController _editorController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
+
 		public SettingsModel ProviderSettings { get; set; }
-		public IATETerminologyProvider(SettingsModel providerSettings)
+
+		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
+			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
+			_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
+
 			ProviderSettings = providerSettings;
-			UpdateSettings(ProviderSettings);
+			ConnectionProvider = connectionProvider;
+			InventoriesProvider = inventoriesProvider;
+			CacheProvider = cacheProvider;
+
+			Task.Run(async () => await Setup(ProviderSettings));
 		}
+
+		private async Task Setup(SettingsModel settings)
+		{
+			if (!InventoriesProvider.IsInitialized)
+			{
+				await InventoriesProvider.Initialize();
+			}
+
+			_entryModels = new List<EntryModel>();
+			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
+
+			InitializeEditorController();
+		}
+
+		public ConnectionProvider ConnectionProvider { get; private set; }
+
+		public InventoriesProvider InventoriesProvider { get; private set; }
+
+		public ICacheProvider CacheProvider { get; private set; }
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
 
@@ -58,35 +88,32 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{
-			_entryModels.Clear();
-			_logger.Info("--> Start Searching for segment");
-			var bodyModel = GetApiRequestBodyValues(source, target, text);
-			var modelString = JsonConvert.SerializeObject(bodyModel);
-			var activeProjectName = Utils.GetCurrentProjectName();
-			CacheService cacheService =null;
+		{	
+			ClearEntries();
+			_logger.Info("--> Try searching for segment");
 
-			if (!string.IsNullOrEmpty(activeProjectName))
-			{
-				cacheService = new CacheService(activeProjectName);
-			}
+			var jsonBody = GetApiRequestBodyValues(source, target, text);
+			var queryString = JsonConvert.SerializeObject(jsonBody);
+			var canConnect = CacheProvider?.Connect(_projectsController?.CurrentProject);
 
-			if (cacheService != null)
+			if (canConnect != null && (bool)canConnect)
 			{
 				_logger.Info("--> Try to get cache results");
 
-				var cachedResults = Task.Run(async () => await cacheService.GetCachedResults(text, target.Name, modelString)).Result;
+				var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
 				if (cachedResults != null && cachedResults.Count > 0)
 				{
 					CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
-					_logger.Info("--> Cache results found");
 
-					SubscribeToEntriesChangedEvent(text, source, target);
+					_logger.Info("--> Cache results found");
+					OnTermEntriesChanged(text, source, target);
+
 					return cachedResults;
 				}
 			}
 
-			var results = _searchService.GetTerms(text, source, target, maxResultsCount, modelString);
+			var config = _projectsController?.CurrentProject?.GetTermbaseConfiguration();
+			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -96,48 +123,23 @@ namespace Sdl.Community.IATETerminologyProvider
 				CreateEntryTerms(results, source, GetLanguages());
 
 				// add search to cache db
-				var searchResults = new SearchCache
+				var searchCache = new SearchCache
 				{
-					QueryString = modelString,
 					SourceText = text,
-					TargetLanguageName = target.Name
+					TargetLanguage = target.Locale.Name,
+					QueryString = queryString
 				};
 
-				if (cacheService != null)
+				if (CacheProvider != null)
 				{
 					_logger.Info("--> Try to add results in db");
-
-					Task.Run(async () => await cacheService.AddSearchResults(searchResults, results));
+					CacheProvider.AddSearchResults(searchCache, results);
 				}
 			}
 
-			SubscribeToEntriesChangedEvent(text, source, target);
+			OnTermEntriesChanged(text, source, target);
 
 			return results;
-		}
-
-		private void SubscribeToEntriesChangedEvent(string text, ILanguage source, ILanguage target)
-		{
-			if (IsActiveSegmentText(text, source))
-			{
-				OnTermEntriesChanged(new TermEntriesChangedEventArgs
-				{
-					EntryModels = _entryModels,
-					SourceLanguage = new Language(source.Locale.Name),
-					TargetLanguage = new Language(target.Locale.Name)
-				});
-			}
-		}
-
-		public void UpdateSettings(SettingsModel settings)
-		{
-			ProviderSettings.SearchInSubdomains = settings.SearchInSubdomains;
-			ProviderSettings.Domains = settings.Domains;
-			ProviderSettings.TermTypes = settings.TermTypes;
-			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(ProviderSettings);
-
-			InitializeEditorController();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -178,10 +180,15 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{			
+		{
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = _projectsController.CurrentProject;
-			if (currentProject == null) return result;
+
+			var currentProject = _projectsController?.CurrentProject;
+			if (currentProject == null)
+			{
+				return result;
+			}
+
 			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
@@ -221,6 +228,17 @@ namespace Sdl.Community.IATETerminologyProvider
 			}
 		}
 
+		public override void Dispose()
+		{
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_editorController.Opened -= EditorControllerOnOpened;
+			}
+
+			base.Dispose();
+		}
+
 		private object GetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
 		{
 			var targetLanguages = new List<string>();
@@ -242,9 +260,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				query = text,
 				source = source.Locale.TwoLetterISOLanguageName,
 				targets = targetLanguages,
-				include_subdomains = ProviderSettings?.SearchInSubdomains,
 				cascade_domains = ProviderSettings?.SearchInSubdomains,
-				query_operator = 0,
+				query_operator = 18,
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes
 			};
@@ -252,14 +269,27 @@ namespace Sdl.Community.IATETerminologyProvider
 			return bodyModel;
 		}
 
-		public override void Dispose()
+		private void ClearEntries()
 		{
-			if (_editorController != null)
+			if (_entryModels == null)
 			{
-				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_entryModels = new List<EntryModel>();
 			}
 
-			base.Dispose();
+			_entryModels.Clear();
+		}
+
+		private void OnTermEntriesChanged(string text, ILanguage source, ILanguage target)
+		{
+			if (IsActiveSegmentText(text, source))
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = new Language(source.Locale.Name),
+					TargetLanguage = new Language(target.Locale.Name)
+				});
+			}
 		}
 
 		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
@@ -269,6 +299,11 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private bool IsActiveSegmentText(string text, ILanguage source)
 		{
+			if (text == null || source == null)
+			{
+				return false;
+			}
+			
 			var selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			if (selectedSegmentPair?.Source == null)
 			{
@@ -288,13 +323,31 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void InitializeEditorController()
 		{
-			if (!(_editorController is null)) return;
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
-				
 			if (_editorController != null)
 			{
-				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
+				return;
+			}
+
+			_editorController = SdlTradosStudio.Application?.GetController<EditorController>();
+
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+				_editorController.Opened += EditorControllerOnOpened;
+			}
+		}
+
+		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
+		{
+			Application.DoEvents();
+			if (_editorController?.ActiveDocument != null)
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage,
+					TargetLanguage = _editorController.ActiveDocument.ActiveFile.Language
+				});
 			}
 		}
 
@@ -308,7 +361,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
-			_entryModels.Clear();
+			ClearEntries();
+
 			var termsForSourceLanguage = termsResult.Where(s =>
 				s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName));
 

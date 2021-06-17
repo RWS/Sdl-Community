@@ -15,7 +15,7 @@ namespace Trados.Transcreate.Model
 			CopySourceToTarget = true;
 			IncludeBackTranslations = false;
 			ExcludeFilterIds = new List<string>();
-			ExcludeFilterIds.Add("Locked");
+			//ExcludeFilterIds.Add("Locked");
 		}
 
 		public Enumerators.XLIFFSupport XliffSupport { get; set; }

@@ -1,6 +1,4 @@
-﻿using Sdl.Community.MtEnhancedProvider.Model.Interface;
-
-namespace Sdl.Community.MtEnhancedProvider.Model
+﻿namespace Sdl.Community.MtEnhancedProvider.Model
 {
 	public class ViewDetails:ModelBase
 	{

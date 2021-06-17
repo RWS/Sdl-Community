@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.StudioViews.Model;
+using Sdl.Community.StudioViews.Providers;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StudioViews.Services
@@ -11,19 +12,14 @@ namespace Sdl.Community.StudioViews.Services
 	{
 		private readonly ProjectFileService _projectFileService;
 		private readonly FilterItemService _filterItemService;
-		private readonly List<AnalysisBand> _analysisBands;
+		private readonly ParagraphUnitProvider _paragraphUnitProvider;
 
-		public SdlxliffImporter(ProjectFileService projectFileService, FilterItemService filterItemService, List<AnalysisBand> analysisBands)
+		public SdlxliffImporter(ProjectFileService projectFileService, FilterItemService filterItemService, 
+			ParagraphUnitProvider paragraphUnitProvider)
 		{
 			_projectFileService = projectFileService;
 			_filterItemService = filterItemService;
-			_analysisBands = analysisBands;
-		}
-		
-		public ImportResult UpdateFile( string importFilePath, List<string> excludeFilterIds, string filePathInput, string filePathOutput)
-		{
-			var updatedSegmentPairs = GetSegmentPairs(importFilePath);
-			return UpdateFile(updatedSegmentPairs, excludeFilterIds, filePathInput, filePathOutput);
+			_paragraphUnitProvider = paragraphUnitProvider;
 		}
 
 		public ImportResult UpdateFile(List<SegmentPairInfo> updatedSegmentPairs, List<string> excludeFilterIds, string filePathInput, string filePathOutput)
@@ -31,7 +27,8 @@ namespace Sdl.Community.StudioViews.Services
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds, _filterItemService, _analysisBands);
+			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds,
+				_filterItemService, _paragraphUnitProvider);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

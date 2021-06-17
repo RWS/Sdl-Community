@@ -62,7 +62,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new()
 		{
 			FilePath = GetFilePath(translationData),
-			SegmentIds = translationData.SegmentIds,
+			SegmentIds = translationData.Segments.Keys.ToList(),
 			TranslationOriginInformation = translationData.TranslationOriginInformation
 		};
 

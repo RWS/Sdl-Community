@@ -7,10 +7,8 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using LogManager = NLog.LogManager;
 
@@ -44,21 +42,22 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				{
 					throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 				}
-
-				var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
-				eventAggregator.Publish(new TranslationProviderAdded());
-
 				connectionService.SaveCredential(credentialStore);
 
-				var editorController = StudioInstance.GetEditorController();
 				MtCloudApplicationInitializer.SetTranslationService(connectionService);
 
 				var languageProvider = new LanguageProvider();
 				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
-					languageProvider,
-					editorController, true);
+					languageProvider);
 
-				return new ITranslationProvider[] { provider };
+				var optionsWindow = GetOptionsWindow(owner, languagePairs, provider);
+
+				optionsWindow.ShowDialog();
+				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
+				{
+					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
+					return new ITranslationProvider[] { provider };
+				}
 			}
 			catch (Exception e)
 			{
@@ -88,9 +87,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 				provider.TranslationService.ConnectionService.SaveCredential(credentialStore);
 
-				var optionsWindow = GetOptionsWindow(owner);
-				var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs.ToList());
-				optionsWindow.DataContext = optionsViewModel;
+				var optionsWindow = GetOptionsWindow(owner, languagePairs, provider);
 
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
@@ -135,14 +132,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return supportsProvider;
 		}
 
-		private static OptionsWindow GetOptionsWindow(IWin32Window owner)
+		private static OptionsWindow GetOptionsWindow(IWin32Window owner, LanguagePair[] languagePairs, SdlMTCloudTranslationProvider provider)
 		{
-			var window = new OptionsWindow();
-			var helper = new WindowInteropHelper(window)
+			var optionsWindow = new OptionsWindow();
+
+			var _ = new WindowInteropHelper(optionsWindow)
 			{
 				Owner = owner.Handle
 			};
-			return window;
+
+			var optionsViewModel = new OptionsViewModel(optionsWindow, provider, languagePairs.ToList());
+			optionsWindow.DataContext = optionsViewModel;
+			return optionsWindow;
 		}
 	}
 }

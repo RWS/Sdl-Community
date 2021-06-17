@@ -8,6 +8,7 @@ using Sdl.Community.Reports.Viewer.View;
 using Sdl.Community.Reports.Viewer.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Reports.Viewer.API.Model;
+using Sdl.Reports.Viewer.API.Services;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.Actions
@@ -38,9 +39,10 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			var reportTemplates = _reportsViewerController.ReportsController.GetCustomReportTemplates();
 			var reports = _reportsViewerController.GetReports();
 			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
-
+			var taskTemplateIdProvider = new TaskTemplateIdProvider();
+			
 			var viewModel = new AppendReportViewModel(report.Clone() as Report, _imageService,
-				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, true);
+				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, taskTemplateIdProvider, true);
 			var view = new AppendReportWindow(viewModel, null);
 			viewModel.Window = view;
 

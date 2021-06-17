@@ -14,6 +14,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			{
 				LogManager.Configuration = new LoggingConfiguration();
 			}
+			
 			var config = LogManager.Configuration;
 
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",

@@ -220,8 +220,8 @@
 							<Image Source="../Resources/Print.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Print Preview" 
-					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					<!--<MenuItem Header="Print Preview" 
+					          IsEnabled="False"
 					          Command="{Binding PrintPreviewCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
@@ -229,13 +229,13 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Page Setup" 
-					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          IsEnabled="False"
 					          Command="{Binding PageSetupCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/PageSetup.ico"/>
 						</MenuItem.Icon>
-					</MenuItem>
+					</MenuItem>-->
 					<MenuItem Header="Save As" 
 					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 					          Command="{Binding SaveAsCommand}"

@@ -590,7 +590,7 @@
 
 								<table class="InfoList" width="100%" border="0" cellpadding="0" cellspacing="2">
 										<xsl:choose>
-												<xsl:when  test="//@action = 'Export'">
+												<xsl:when  test="//@action = 'Export' or //@action = 'ExportBackTranslation'">
 														<tr>
 																<td class="InfoItem">
 																		Xliff Support:
@@ -618,7 +618,7 @@
 																</td>
 														</tr>
 												</xsl:when>
-												<xsl:when  test="//@action = 'Import'">
+												<xsl:when  test="//@action = 'Import' or //@action = 'ImportBackTranslation'">
 														<tr>
 																<td class="InfoItem">
 																		Overwrite existing translations:
@@ -673,7 +673,9 @@
 																</td>
 														</tr>
 												</xsl:when>
-												<xsl:otherwise>
+												<xsl:when  test="//@action = 'CreateBackTranslation'">
+												</xsl:when>
+												<xsl:when  test="//@action = 'Convert'">
 														<tr>
 																<td class="InfoItem">
 																		Max Alternative Translations:
@@ -691,7 +693,8 @@
 																		<xsl:value-of select="//taskInfo/settings/@closeProjectOnComplete"/>
 																</td>
 														</tr>
-												</xsl:otherwise>
+												</xsl:when>
+
 										</xsl:choose>
 
 										<tr>

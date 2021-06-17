@@ -338,6 +338,12 @@
     <value>Task: Export Filtered</value>
   </data>
   <data name="Message_Exported_Segments_into_Files" xml:space="preserve">
-	  <value>Exported {0} segments into {1} files</value>
+    <value>Exported {0} segments into {1} files</value>
+  </data>
+  <data name="Message_UnableToImportTranslationsFromEditor" xml:space="preserve">
+    <value>Unable to import translations with alignment differences to the segment structure while the document is open in the editor.</value>
+  </data>
+  <data name="Message_SelectYesToProceedWithImport" xml:space="preserve">
+    <value>Select 'Yes' to close the document and proceed with the import.</value>
   </data>
 </root>

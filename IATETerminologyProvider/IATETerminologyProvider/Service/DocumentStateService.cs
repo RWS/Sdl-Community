@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.Community.IATETerminologyProvider.Ui;
+using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider.Service

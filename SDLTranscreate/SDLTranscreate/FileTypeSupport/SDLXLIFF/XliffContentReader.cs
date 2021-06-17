@@ -138,7 +138,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 						|| _exportOptions.ExcludeFilterIds.Exists(a => a == status)
 						|| _exportOptions.ExcludeFilterIds.Exists(a => a == match))
 					{
-						AddWordCounts(status, segmentPairInfo, match);
+						AddWordExcludedCounts(status, segmentPairInfo, match);
 						continue;
 					}
 				}
@@ -205,7 +205,7 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 				};
 				transUnit.SegmentPairs.Add(newSegmentPair);
 
-				AddWordCounts(status, segmentPairInfo, match);
+				AddWordProcessedCounts(status, segmentPairInfo, match);
 			}
 
 			if (transUnit.SegmentPairs.Count > 0)
@@ -214,10 +214,26 @@ namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 			}
 		}
 
-		private void AddWordCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		private void AddWordProcessedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
 		{
 			AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
 			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
+
+		private void AddWordNotProcessedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
+
+		private void AddWordExcludedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
 			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
 			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
 		}

@@ -115,6 +115,10 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					scriptToBeUpdated.Name = ScriptName;
 					scriptToBeUpdated.Text = ScriptContent;
 					scriptToBeUpdated.Description = ScriptDescription;
+					if (string.IsNullOrWhiteSpace(scriptToBeUpdated.FileName))
+					{
+						scriptToBeUpdated.FileName = "AhkMasterScript";
+					}
 					scriptToBeUpdated.ScriptStateAction = !IsDisabled ? "Disable" : "Enable";
 					scriptToBeUpdated.RowColor = !IsDisabled ? "Black" : "DarkGray";
 					await DbContext.UpdateScript(masterScript);
