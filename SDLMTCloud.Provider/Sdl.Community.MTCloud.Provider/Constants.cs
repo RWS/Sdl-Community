@@ -16,8 +16,8 @@
 		public static string UserLoginAuthentication= "UserLogin";
 
 		public static string StudioAuthentication = "Studio credentials - SDL Language Cloud";
-		public static string UserAuthentication = "User credentials - SDL Machine Translation Cloud";
-		public static string ClientAuthentication = "Client credentials - SDL Machine Translation Cloud";
+		public static string UserAuthentication = $"User credentials - {PluginResources.Plugin_NiceName}";
+		public static string ClientAuthentication = $"Client credentials - {PluginResources.Plugin_NiceName}";
 
 
 		// TODO confirm if some or all of these should be managed in a resource file		
