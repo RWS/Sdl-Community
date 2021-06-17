@@ -7,7 +7,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.Interface
 	{
 		void AddTargetSegmentMetaData(TranslationData translationData);
 
-		void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginInformation translationOriginInformation);
+		void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginDatum translationOriginDatum);
 
 		void AddToSegmentContextData();
 	}

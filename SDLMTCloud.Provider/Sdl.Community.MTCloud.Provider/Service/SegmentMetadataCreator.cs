@@ -30,7 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			Data.Add(translationData);
 		}
 
-		public void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginInformation translationOriginInformation)
+		public void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginDatum translationOriginDatum)
 		{
 			var currentSegmentPair = activeDocument.ActiveSegmentPair;
 			var translationOrigin = currentSegmentPair.Properties.TranslationOrigin;
@@ -38,8 +38,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (translationOrigin is null)
 				return;
 
-			translationOrigin.SetMetaData("quality_estimation", translationOriginInformation.QualityEstimation);
-			translationOrigin.SetMetaData("model", translationOriginInformation.Model);
+			translationOrigin.SetMetaData("quality_estimation", translationOriginDatum.QualityEstimation);
+			translationOrigin.SetMetaData("model", translationOriginDatum.Model);
 
 			activeDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
@@ -63,7 +63,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			FilePath = GetFilePath(translationData),
 			SegmentIds = translationData.Segments.Keys.ToList(),
-			TranslationOriginInformation = translationData.TranslationOriginInformation
+			TranslationOriginData = translationData.TranslationOriginData
 		};
 
 		private string GetFilePath(TranslationData translationData)

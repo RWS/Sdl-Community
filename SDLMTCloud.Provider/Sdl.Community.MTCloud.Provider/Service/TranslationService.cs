@@ -144,7 +144,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			if (response is null) return null;
 
-			var (responseMessage, qualityEstimation) = await CheckTranslationStatus(translationResponse?.RequestId);
+			var responseMessage = await CheckTranslationStatus(translationResponse?.RequestId);
 			var translations = await _httpClient.GetResult<TranslationResponse>(responseMessage);
 
 			var translation = translations?.Translation?.FirstOrDefault();
@@ -154,27 +154,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (translatedXliff == null) return null;
 
 			var targetSegments = translatedXliff.GetTargetSegments();
+			var segments = fileAndSegments.Segments;
+			var segmentIds = fileAndSegments.Segments.Keys.ToList();
 
 			OnTranslationReceived(new TranslationData
 			{
-				SourceSegments = fileAndSegments.Segments.Values.ToList(),
-				TargetSegments = targetSegments.Select(seg => seg.ToString()).ToList(),
-				TranslationOriginInformation = new TranslationOriginInformation
-				{
+				SourceSegments = segments.Values.ToList(),
+				TargetSegments = targetSegments.Select(seg => seg.Segment.ToString()).ToList(),
+				TranslationOriginData = new TranslationOriginData{
 					Model = translations.Model,
-					QualityEstimation = qualityEstimation
+					QualityEstimations = segmentIds.Select((k, i) => new { k, v = targetSegments[i].QualityEstimation })
+						.ToDictionary(x => x.k, x => x.v)
 				},
 				FilePath = fileAndSegments.FilePath,
 				Segments = fileAndSegments.Segments,
 				TargetLanguage = model.TargetTradosCode
 			});
 
-			return targetSegments;
-		}
-
-		private static string GetQualityEstimation(TranslationResponseStatus responseStatus)
-		{
-			return responseStatus.QualityEstimation?[0];
+			return targetSegments.Select(seg => seg.Segment).ToArray();
 		}
 
 		private static void WaitForTranslation(TranslationResponseStatus responseStatus)
@@ -199,10 +196,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			throw new Exception(PluginResources.Message_Connection_token_has_expired);
 		}
 
-		private async Task<(HttpResponseMessage, string)> CheckTranslationStatus(string id)
+		private async Task<HttpResponseMessage> CheckTranslationStatus(string id)
 		{
 			var translationStatus = string.Empty;
-			string qualityEstimation = null;
 
 			do
 			{
@@ -217,8 +213,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				WaitForTranslation(responseStatus);
 
 				translationStatus = responseStatus.TranslationStatus;
-				qualityEstimation = GetQualityEstimation(responseStatus);
-
 				if (translationStatus.ToUpperInvariant() != Constants.FAILED) continue;
 
 				var response = await _httpClient.GetResult<ResponseError>(responseMessage);
@@ -236,7 +230,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				}
 			} while (translationStatus.ToUpperInvariant() == Constants.INIT || translationStatus.ToUpperInvariant() == Constants.TRANSLATING);
 
-			return (await GetTranslationResult(id), qualityEstimation);
+			return await GetTranslationResult(id);
 		}
 
 		private dynamic CreateFeedbackRequest(FeedbackInfo feedbackInfo)
