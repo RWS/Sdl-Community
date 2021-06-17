@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
@@ -10,9 +9,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[JsonProperty("outputFormat")]
 		public string OutputFormat { get; set; }
-
-		[JsonProperty("qualityEstimation")]
-		public string[] QualityEstimation { get; set; }
 
 		[JsonProperty("translationStats")]
 		public TranslationResponseStats TranslationStats { get; set; }
