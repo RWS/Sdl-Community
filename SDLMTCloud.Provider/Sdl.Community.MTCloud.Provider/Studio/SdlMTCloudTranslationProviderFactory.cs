@@ -10,7 +10,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
 		Name = "SDLMachineTranslationCloudProviderFactory",
-		Description = "SDL Machine Translation Cloud Provider")]
+		Description = "SDL Machine Translation Cloud")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,

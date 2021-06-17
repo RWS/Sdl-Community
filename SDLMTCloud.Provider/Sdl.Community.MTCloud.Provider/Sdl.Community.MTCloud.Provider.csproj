@@ -323,6 +323,7 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\MTCloud_logo_cropped.png" />
     <Page Include="Styles\SendFeedbackButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -331,7 +332,9 @@
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\checked.png" />
     <Resource Include="Resources\add_dictionary.ico" />
-    <Content Include="Resources\success.png" />
+    <Resource Include="Resources\Additional logo.png" />
+    <Resource Include="Resources\soontobecome.png" />
+    <Resource Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">

@@ -543,7 +543,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -748,7 +748,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        ///   Looks up a localized string similar to SDL MT Cloud.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -766,7 +766,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
         /// </summary>
         public static string SDLMTCloudName {
             get {
@@ -882,6 +882,16 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string SourceModifiedTextAndAdvice {
             get {
                 return ResourceManager.GetString("SourceModifiedTextAndAdvice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap success {
+            get {
+                object obj = ResourceManager.GetObject("success", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
