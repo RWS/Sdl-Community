@@ -8,12 +8,12 @@ namespace Sdl.Community.StudioViews.Services
 	public class SdlxliffExporter
 	{
 		private readonly SegmentBuilder _segmentBuilder;
-		
+
 		public SdlxliffExporter(SegmentBuilder segmentBuilder)
 		{
 			_segmentBuilder = segmentBuilder;
 		}
-		
+
 		public OutputFile ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
@@ -27,13 +27,13 @@ namespace Sdl.Community.StudioViews.Services
 			converter.Parse();
 
 
-			var outputFile =new OutputFile
+			var outputFile = new OutputFile
 			{
 				FilePath = filePathOutput,
 				SegmentCount = contentWriter.SegmentPairInfos.Count,
 				WordCount = contentWriter.SegmentPairInfos.Sum(a => a.SourceWordCounts.Words)
 			};
-			
+
 
 			return outputFile;
 		}

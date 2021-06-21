@@ -14,7 +14,7 @@ namespace Sdl.Community.StudioViews.TellMe
 
 		public CommunityAppStoreForumAction()
 		{
-			Name = "SDL Community AppStore Forum";
+			Name = "RWS Community AppStore Forum";
 		}
 
 		public override void Execute()
