@@ -44,10 +44,8 @@ namespace Sdl.Community.StarTransit
 		{
 			var packageService = new PackageService(_eventAggregatorService);
 			var folderService = new DialogService();
-			//TODO: Refactor and use projects controller service
 			var studioService = new StudioService(_projectsController);
-			//TODO: use dialog service
-			var fileDialogService = new OpenFileDialogService();
+			var dialogService = new DialogService();
 			var projectService = new ProjectService(_eventAggregatorService);
 
 			var shortStudioVersion = _studioVersionService.GetStudioVersion()?.ShortVersion;
@@ -57,7 +55,7 @@ namespace Sdl.Community.StarTransit
 			return new ObservableCollection<IProgressHeaderItem>
 			{
 				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath,_eventAggregatorService, new PackageDetails()),
-				new TmsViewModel(wizardModel,fileDialogService,new Tms()),
+				new TmsViewModel(wizardModel,dialogService,new Tms()),
 				new CreateProjectViewModel(wizardModel,projectService,_eventAggregatorService,new CreateProject())
 			};
 		}

@@ -134,8 +134,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 				}
 			}
 			ReturnPackage.SelectedTargetFilesForImport.AddRange(targetFiles);
-			await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage));
-			_eventAggregatorService?.PublishEvent(new OpenReturnPackageLocation{RetuntPackageLocation = ReturnPackage.FolderLocation});
+			var exportedWithSuccess =await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage));
+
+			if (exportedWithSuccess)
+			{
+				_eventAggregatorService?.PublishEvent(new OpenReturnPackageLocation { RetuntPackageLocation = ReturnPackage.FolderLocation });
+			}
+			else
+			{
+				ErrorMessage = "Return package could not be created. Please see log file for more details.";
+			}
 		}
 
 		private void BrowseLocation()

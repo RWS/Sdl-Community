@@ -7,6 +7,6 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 	{
 		(IReturnPackage, string) GetPackage();
 		bool IsTransitProject(List<ProjectFile> filesPath);
-		void ExportFiles(IReturnPackage package);
+		bool ExportFiles(IReturnPackage package);
 	}
 }

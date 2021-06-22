@@ -14,11 +14,7 @@ namespace Sdl.Community.StarTransit.Service
 				Title = title,
 				Multiselect = false
 			};
-			if (openFileDialog.ShowDialog() == true)
-			{
-				return openFileDialog.FileName;
-			}
-			return string.Empty;
+			return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : string.Empty;
 		}
 
 		public string ShowFolderDialog(string dialogTitle)

@@ -156,28 +156,40 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			CreateArchive(package);
 		}
 
-		public void ExportFiles(IReturnPackage package)
+		public bool ExportFiles(IReturnPackage package)
 		{
 			if (package is null)
 			{
 				_logger.Info("Return package was null");
-				return;
+				return false;
 			}
-			_logger.Info($"Trying to create export package for Studio Project:{package.FileBasedProject?.GetProjectInfo()?.Name}");
 
-			if (!(package.SelectedTargetFilesForImport?.Count() > 0)) return;
-			var taskSequence = package?.FileBasedProject?.RunAutomaticTasks(package.SelectedTargetFilesForImport?.GetIds(),
-				new string[] { AutomaticTaskTemplateIds.GenerateTargetTranslations });
-			if (taskSequence?.Status != TaskStatus.Completed)
+			_logger.Info(
+				$"Trying to create export package for Studio Project:{package.FileBasedProject?.GetProjectInfo()?.Name}");
+
+			if (!(package.SelectedTargetFilesForImport?.Count() > 0))
 			{
-				_logger.Info($"Generate target translation task sequence status:{taskSequence?.Status}");
+				_logger.Info("No selected target files for import.");
+				return false;
 			}
-			var outputFiles = taskSequence?.OutputFiles?.ToList();
-			CreateArchive(package);
+
+			var taskSequence = package?.FileBasedProject?.RunAutomaticTasks(
+				package.SelectedTargetFilesForImport?.GetIds(),
+				new[] {AutomaticTaskTemplateIds.GenerateTargetTranslations});
+			CreateArchive(package); // Create transit tpf file anyway
+
+			if (taskSequence?.Status == TaskStatus.Completed)
+			{
+				return true;
+			}
+
+			_logger.Info($"Generate target translation task sequence status:{taskSequence?.Status}");
+			return false;
 		}
+
 		/// <summary>
 		/// Creates an archive in the Return Package folder and add project files to it
-		/// For the moment we add the files without runing any task on them
+		/// For the moment we add the files without running any task on them
 		/// </summary>
 		private void CreateArchive(IReturnPackage package)
 		{
@@ -190,7 +202,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 				foreach (var targetFile in package.TargetFiles)
 				{
-					var pathToTargetFileFolder = targetFile.LocalFilePath.Substring(0, targetFile.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+					var pathToTargetFileFolder = Path.GetDirectoryName(targetFile.LocalFilePath);
 
 					if (!File.Exists(archivePath))
 					{
@@ -200,7 +212,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							archive.CreateEntryFromFile(package.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
 							foreach (var file in package.TargetFiles)
 							{
-								pathToTargetFileFolder = file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+								pathToTargetFileFolder = Path.GetDirectoryName(file.LocalFilePath);
 								var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
 								archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
@@ -251,7 +263,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					foreach (var file in returnPackagePackage.TargetFiles)
 					{
 						var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-						pathToTargetFileFolder = file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+						pathToTargetFileFolder = Path.GetDirectoryName(file.LocalFilePath);//file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
 						archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
 					}
 				}

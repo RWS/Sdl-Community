@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -27,9 +26,9 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private LanguagePair _selectedLanguagePair;
 		private ICommand _selectTmCommand;
 		private ICommand _removeTmCommand;
-		private readonly IOpenFileDialogService _fileDialogService;
+		private readonly IDialogService _dialogService;
 
-		public TmsViewModel(IWizardModel wizardModel,IOpenFileDialogService fileDialogService, object view) : base(view)
+		public TmsViewModel(IWizardModel wizardModel,IDialogService dialogService, object view) : base(view)
 		{
 			_currentPageNumber = 2;
 			_displayName = PluginResources.Wizard_TM_DisplayName;
@@ -38,7 +37,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 			IsPreviousEnabled = true;
 			IsNextEnabled = true;
 			CanCancel = true;
-			_fileDialogService = fileDialogService;
+			_dialogService = dialogService;
 			_isValid = true;
 			PropertyChanged += TmsViewModelChanged;
 		}
@@ -307,7 +306,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private void SelectTm()
 		{
 			ErrorMessage = string.Empty;
-			var selectedTm = _fileDialogService.ShowDialog("TM Files (.sdltm)|*.sdltm");
+			var selectedTm = _dialogService.ShowFileDialog("TM Files(.sdltm) | *.sdltm","Please select Translation memory");
 
 			if(SelectedLanguagePair is null)return;
 			if (string.IsNullOrEmpty(selectedTm))
