@@ -8,12 +8,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	public interface ISegmentSupervisor : ISupervisor<ImprovementFeedback>
 	{
 		event ConfirmationLevelChangedEventHandler SegmentConfirmed;
-
-		void AddImprovement(SegmentId segmentId, string improvement);
-
-		void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
-			string source);
-
 		ImprovementFeedback GetImprovement(SegmentId? segmentId = null);
 	}
 }

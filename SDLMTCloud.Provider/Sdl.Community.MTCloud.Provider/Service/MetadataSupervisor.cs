@@ -120,14 +120,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void AddTargetSegmentMetaData(TranslationOriginDatum translationOriginDatum, ISegmentPair currentSegmentPair)
+		private void AddTargetSegmentMetaData(TranslationOriginDatum translationOriginDatum, SegmentId currentSegmentPairId)
 		{
-			currentSegmentPair = currentSegmentPair ?? ActiveDocument.ActiveSegmentPair;
-			var segmentId = currentSegmentPair.Properties.Id;
-
-			if (!ActiveDocumentData.TryGetValue(segmentId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation))
+			if (!ActiveDocumentData.TryGetValue(currentSegmentPairId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation))
 			{
-				ActiveDocumentData[segmentId] = translationOriginDatum;
+				ActiveDocumentData[currentSegmentPairId] = translationOriginDatum;
 			}
 		}
 
@@ -214,17 +211,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				foreach (var sourceSegment in translationData.Segments)
 				{
-					var currentSegmentPair =
-						ActiveDocument.SegmentPairs.FirstOrDefault(
-							segPair => segPair.Source.ToString() == sourceSegment.Value || segPair.Properties.Id == sourceSegment.Key);
-
 					var translationOriginData = translationData.TranslationOriginData;
 					AddTargetSegmentMetaData(
 						new TranslationOriginDatum
 						{
 							Model = translationOriginData.Model,
-							QualityEstimation = translationOriginData.QualityEstimations[currentSegmentPair.Properties.Id]
-						}, currentSegmentPair);
+							QualityEstimation = translationOriginData.QualityEstimations[sourceSegment.Key]
+						}, sourceSegment.Key);
 				}
 			}
 		}
