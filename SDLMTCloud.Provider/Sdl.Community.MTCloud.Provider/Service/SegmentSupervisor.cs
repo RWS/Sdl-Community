@@ -49,19 +49,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (item.Improvement != improvement) item.Improvement = improvement;
 		}
 
-		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string targetOrigin,
-			string source)
+		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string source)
 		{
-			if (targetOrigin != PluginResources.SDLMTCloudName) return;
-
-			if (!ActiveDocumentData.TryGetValue(segmentId, out _))
-			{
-				ActiveDocumentData[segmentId] = new ImprovementFeedback(originalTarget, source);
-			}
-			else
-			{
-				ActiveDocumentData[segmentId] = new ImprovementFeedback(originalTarget, source);
-			}
+			ActiveDocumentData[segmentId] = new ImprovementFeedback(originalTarget, source);
 		}
 
 		public ImprovementFeedback GetImprovement(SegmentId? segmentId = null)
@@ -125,22 +115,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			SegmentConfirmed?.Invoke(segmentId);
 		}
 
-		private void CreateFeedback(List<string> sources, TranslationData targetSegmentData, int i, ISegmentPair currentSegmentPair)
-		{
-			var currentSegmentId = currentSegmentPair?.Properties.Id;
-
-			if (currentSegmentId != null)
-			{
-				CreateFeedbackEntry(currentSegmentId.Value, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
-					sources[i]);
-			}
-			else
-			{
-				CreateFeedbackEntry(ActiveDocument.ActiveSegmentPair.Properties.Id, targetSegmentData.TargetSegments[i], PluginResources.SDLMTCloudName,
-					ActiveDocument.ActiveSegmentPair.Source.ToString());
-			}
-		}
-
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			if (ActiveDocument == null) return;
@@ -168,12 +142,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private void TranslationService_TranslationReceived(TranslationData translationData)
 		{
 			if (ActiveDocument == null) return;
-			for (var i = 0; i < translationData.SourceSegments.Count; i++)
+			foreach (var currentSegmentPairId in translationData.Segments.Keys)
 			{
-				var currentSegmentPair =
-					ActiveDocument.SegmentPairs.FirstOrDefault(
-						segPair => segPair.Source.ToString() == translationData.SourceSegments[i]);
-				CreateFeedback(translationData.SourceSegments, translationData, i, currentSegmentPair);
+				CreateFeedbackEntry(currentSegmentPairId, translationData.TargetSegments[currentSegmentPairId],
+					translationData.Segments[currentSegmentPairId]);
 			}
 		}
 	}

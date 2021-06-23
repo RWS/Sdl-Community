@@ -154,17 +154,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (translatedXliff == null) return null;
 
 			var targetSegments = translatedXliff.GetTargetSegments();
-			var segments = fileAndSegments.Segments;
 			var segmentIds = fileAndSegments.Segments.Keys.ToList();
 
 			OnTranslationReceived(new TranslationData
 			{
-				SourceSegments = segments.Values.ToList(),
-				TargetSegments = targetSegments.Select(seg => seg.Segment.ToString()).ToList(),
-				TranslationOriginData = new TranslationOriginData{
+				TargetSegments =
+					segmentIds.Select((segmentId, index) => (segmentId, target:targetSegments[index].Segment.ToString())).ToDictionary(
+						x => x.segmentId,
+						x => x.target),
+				TranslationOriginData = new TranslationOriginData
+				{
 					Model = translations.Model,
-					QualityEstimations = segmentIds.Select((k, i) => new { k, v = targetSegments[i].QualityEstimation })
-						.ToDictionary(x => x.k, x => x.v)
+					QualityEstimations = segmentIds.Select((segmentId, index) => (segmentId, targetSegments[index].QualityEstimation))
+						.ToDictionary(x => x.segmentId, x => x.QualityEstimation)
 				},
 				FilePath = fileAndSegments.FilePath,
 				Segments = fileAndSegments.Segments,
