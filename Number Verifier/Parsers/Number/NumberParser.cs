@@ -388,10 +388,8 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 						if (numberParts[i + 1].Value.Length != 3)
 						{
 							numberParts[i].Type = NumberPart.NumberType.Invalid;
-
-							var valueText = GetPartText(numberParts, i, previousSeparatorTokenIndex);
 							numberParts[i].Message =
-								string.Format(PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange, valueText);
+								string.Format(PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange, numberParts[i + 1].Value);
 						}
 					}
 				}
@@ -406,17 +404,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 				lastValue.Type = NumberPart.NumberType.Invalid;
 				lastValue.Message = PluginResources.NumberParser_Message_LastCharIsNotANumber;
 			}
-		}
-
-		private static string GetPartText(IReadOnlyList<NumberPart> numberParts, int a, int b)
-		{
-			var valueText = string.Empty;
-			for (var i = a; i < b; i++)
-			{
-				valueText += numberParts[i].Value;
-			}
-
-			return valueText;
 		}
 
 		private static List<NumberSeparator> DefaultNumberSeparators()
