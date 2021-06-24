@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
@@ -15,12 +16,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		private const string FileType = "Transit";
 		private Dictionary<string, string> _starTransitLanguageDictionary;
 		private Dictionary<string, string> _starTransitFileLanguageDictionary;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public FileService()
 		{
 			BuildTransitLanguageDictionary();
 			BuildTransitFileLanguage();
 		}
+
 		public string[] GetTransitCorrespondingExtension(CultureInfo languageCulture)
 		{
 			var extension = languageCulture.ThreeLetterWindowsLanguageName;
@@ -28,6 +31,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
 			return extension.Split(',');
+		}
+
+		public string[] GetTransitCorrespondingExtension(string fileExtension)
+		{
+			return MapStarTransitLanguage(fileExtension).Split(',');
 		}
 
 		public bool IsTransitFile(string filePath)
@@ -60,6 +68,19 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{
 			return languagePairs != null ? languagePairs.Select(pair => new Language(pair.TargetLanguage)).ToArray() : new List<Language>().ToArray();
+		}
+
+		public bool AreFilesExtensionsSupported(string sourceFileExtension, string targetFileExtension)
+		{
+			var sourceExtensions = GetTransitCorrespondingExtension(sourceFileExtension);
+			var sourceCodeExists = sourceExtensions.Any(s => s.Contains(sourceFileExtension));
+
+			var targetExtensions = GetTransitCorrespondingExtension(targetFileExtension);
+			var targetCodeExists = targetExtensions.Any(t => t.Contains(targetFileExtension));
+
+			if (sourceCodeExists && targetCodeExists) return true;
+			_logger.Info($"Transit source file extension {sourceFileExtension} or target file extension: {targetFileExtension} could not be mapped by the plugin.");
+			return false;
 		}
 
 		public string MapFileLanguage(string fileExtension)
