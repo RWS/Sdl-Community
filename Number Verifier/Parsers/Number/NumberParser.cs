@@ -17,7 +17,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		{
 			_separators = separators ?? DefaultNumberSeparators();
 
-			CultureInfo.GetCultures(CultureTypes.AllCultures);
 			_currencySymbols =
 				CultureInfo.GetCultures(CultureTypes.AllCultures)
 					.Select(culture => culture.NumberFormat.CurrencySymbol)
