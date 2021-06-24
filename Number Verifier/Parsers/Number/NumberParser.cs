@@ -24,13 +24,12 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					.Distinct().ToList();
 		}
 
-
 		/// <summary>
 		/// Parse number value from <param name="text"/>
 		/// Convention: [ws] [$] [sign][integral-digits,]integral-digits[.[fractional-digits]][E[sign]exponential-digits][ws]
 		/// </summary>
 		/// <param name="text"></param>
-		/// <returns>Returns a <see cref="NumberToken"/></returns>
+		/// <returns>Returns a list of <see cref="NumberToken">NumberToken</see></returns>
 		public NumberToken Parse(string text)
 		{
 			if (string.IsNullOrEmpty(text))
@@ -40,7 +39,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 			// parse out the currency symbol
 			// [ws] [$]
-			var currencyParts = GetCurrencyPart(text);
+			var currencyParts = GetCurrencyParts(text);
 			if (currencyParts != null)
 			{
 				var value = currencyParts.Aggregate(string.Empty, (current, numberPart) => current + numberPart.Value);
@@ -49,7 +48,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 			// parse out the sign
 			// [sign]
-			var signParts = GetSignPart(text);
+			var signParts = GetSignParts(text);
 			if (signParts != null)
 			{
 				var value = signParts.Aggregate(string.Empty, (current, numberPart) => current + numberPart.Value);
@@ -100,7 +99,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					};
 
 					valuePart.Message = valuePart.Type == NumberPart.NumberType.Invalid
-						? string.Format("Separator is not recognized: {0}", chr)
+						? string.Format(PluginResources.NumberParser_Message_SeparatorIsNotRecognized, chr)
 						: null;
 
 					parts.Add(valuePart);
@@ -117,7 +116,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
-		private List<NumberPart> GetCurrencyPart(string text)
+		private List<NumberPart> GetCurrencyParts(string text)
 		{
 			if (string.IsNullOrEmpty(text))
 			{
@@ -160,13 +159,12 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			return numberParts;
 		}
 
-
 		/// <summary>
 		/// Get [sign] part
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
-		private static List<NumberPart> GetSignPart(string text)
+		private static List<NumberPart> GetSignParts(string text)
 		{
 			if (string.IsNullOrEmpty(text))
 			{
@@ -365,7 +363,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 								// should be all thousand separators from here onwards; 
 								// if this is not true, then set as invalid
 								numberParts[i].Type = NumberPart.NumberType.Invalid;
-								numberParts[i].Message = string.Format("Mixed group separators: {0}{1}",
+								numberParts[i].Message = string.Format(PluginResources.NumberParser_Message_MixedGroupSeparators,
 									numberParts[i].Value, numberParts[previousSeparatorTokenIndex].Value);
 							}
 						}
@@ -373,7 +371,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 						{
 							//invalid not a group separator
 							numberParts[i].Type = NumberPart.NumberType.Invalid;
-							numberParts[i].Message = string.Format("Invalid group separator: {0}", numberParts[i].Value);
+							numberParts[i].Message = string.Format(PluginResources.NumberParser_Message_InvalidGroupSeparator, numberParts[i].Value);
 						}
 					}
 
@@ -381,7 +379,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					if (numberParts[i].Type != NumberPart.NumberType.Invalid && previousSeparatorTokenIndex == (i + 1))
 					{
 						numberParts[i].Type = NumberPart.NumberType.Invalid;
-						numberParts[i].Message = "Invalid separator location; separators cannot be grouped together";
+						numberParts[i].Message = PluginResources.NumberParser_Message_InvalidSeparatorLocation;
 					}
 
 					// check for 3 digits exist between the thousand separators
@@ -393,7 +391,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 							var valueText = GetPartText(numberParts, i, previousSeparatorTokenIndex);
 							numberParts[i].Message =
-								string.Format("The group value is out of range: {0}", valueText);
+								string.Format(PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange, valueText);
 						}
 					}
 				}
@@ -406,7 +404,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			if (lastValue.Type != NumberPart.NumberType.Invalid && lastValue.Type != NumberPart.NumberType.Number)
 			{
 				lastValue.Type = NumberPart.NumberType.Invalid;
-				lastValue.Message = "The last char is not a number";
+				lastValue.Message = PluginResources.NumberParser_Message_LastCharIsNotANumber;
 			}
 		}
 

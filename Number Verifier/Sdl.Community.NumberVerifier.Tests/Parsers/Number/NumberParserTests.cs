@@ -47,8 +47,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.Number
 			// assert
 			Assert.True(value.Valid && value.HasCurrency);
 		}
-		
-		
+
 		[Fact]
 		public void ReturnsTrue_WhenMinusSignIsRecognized()
 		{
@@ -70,7 +69,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.Number
 			// assert
 			Assert.True(value.Valid && value.HasSign);
 		}
-
 
 		[Fact]
 		public void ReturnsTrue_WhenExponenentIsRecognized()
