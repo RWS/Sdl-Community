@@ -92,12 +92,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 				}
 				else
 				{
-					var valuePart = new NumberPart
-					{
-						Value = chr.ToString(),
-						Type = numberType
-					};
-
+					var valuePart = new NumberPart { Value = chr.ToString(), Type = numberType };
 					valuePart.Message = valuePart.Type == NumberPart.NumberType.Invalid
 						? string.Format(PluginResources.NumberParser_Message_SeparatorIsNotRecognized, chr)
 						: null;
@@ -124,36 +119,23 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			}
 
 			var numberParts = new List<NumberPart>();
-
 			var prefixWhiteSpaces = GetPrefixWhiteSpaces(text);
 			var inputText = text.Substring(prefixWhiteSpaces.Length);
-			
-			
+
 			if (!string.IsNullOrEmpty(prefixWhiteSpaces))
 			{
-				var numberPart = new NumberPart
-				{
-					Value = prefixWhiteSpaces,
-					Type = NumberPart.NumberType.WhiteSpace
-				};
-
+				var numberPart = new NumberPart { Value = prefixWhiteSpaces, Type = NumberPart.NumberType.WhiteSpace };
 				numberParts.Add(numberPart);
 			}
 
 			foreach (var currencySymbol in _currencySymbols)
 			{
-				if (!inputText.StartsWith(currencySymbol, StringComparison.OrdinalIgnoreCase))
+				if (inputText.StartsWith(currencySymbol, StringComparison.OrdinalIgnoreCase))
 				{
-					continue;
+					var numberPart = new NumberPart { Value = currencySymbol, Type = NumberPart.NumberType.Currency };
+					numberParts.Add(numberPart);
+					break;
 				}
-				
-				var numberPart = new NumberPart
-				{
-					Value = currencySymbol,
-					Type = NumberPart.NumberType.Currency
-				};
-
-				numberParts.Add(numberPart);
 			}
 
 			return numberParts;
@@ -178,25 +160,15 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 			if (!string.IsNullOrEmpty(prefixWhiteSpaces))
 			{
-				var numberPart = new NumberPart
-				{
-					Value = prefixWhiteSpaces,
-					Type = NumberPart.NumberType.WhiteSpace
-				};
-
+				var numberPart = new NumberPart { Value = prefixWhiteSpaces, Type = NumberPart.NumberType.WhiteSpace };
 				numberParts.Add(numberPart);
 			}
-			
+
 			var signRegex = new Regex(@"^\s*[+-]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 			var match = signRegex.Match(inputText);
 			if (match.Success)
 			{
-				var numberPart = new NumberPart
-				{
-					Value = match.Value,
-					Type = NumberPart.NumberType.Sign
-				};
-
+				var numberPart = new NumberPart { Value = match.Value, Type = NumberPart.NumberType.Sign };
 				numberParts.Add(numberPart);
 			}
 
@@ -219,11 +191,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			var match = exponentialRegex.Match(text);
 			if (match.Success)
 			{
-				return new NumberPart
-				{
-					Value = text.Substring(match.Index),
-					Type = NumberPart.NumberType.Exponent
-				};
+				return new NumberPart { Value = text.Substring(match.Index), Type = NumberPart.NumberType.Exponent };
 			}
 
 			return null;
@@ -233,12 +201,8 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		{
 			var prefixSpacesRegex = new Regex(@"^\s+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 			var match = prefixSpacesRegex.Match(text);
-			if (match.Success)
-			{
-				return match.Value;
-			}
-
-			return string.Empty;
+			
+			return match.Success ? match.Value : string.Empty;
 		}
 
 		private static List<NumberPart> CombineParts(IReadOnlyCollection<NumberPart> currencyParts, IReadOnlyCollection<NumberPart> signParts,
@@ -292,7 +256,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			return NumberPart.NumberType.Invalid;
 		}
 
-		private  bool IsOfSeparatorType(string value, NumberSeparator.SeparatorType type)
+		private bool IsOfSeparatorType(string value, NumberSeparator.SeparatorType type)
 		{
 			return _separators.Where(a => a.Type == type).Any(numberSeparator => numberSeparator.Value == value);
 		}
@@ -301,7 +265,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		/// Assign the number separator types
 		/// </summary>
 		/// <param name="numberParts"></param>
-		private  void AssignNumericSeparatorTypes(IReadOnlyList<NumberPart> numberParts)
+		private void AssignNumericSeparatorTypes(IReadOnlyList<NumberPart> numberParts)
 		{
 			if (numberParts == null || numberParts.Count == 0)
 			{
@@ -341,15 +305,15 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 						if (IsOfSeparatorType(numberParts[i].Value, NumberSeparator.SeparatorType.GroupSeparator))
 						{
 							if ((previousSeparatorToken.Value != numberParts[i].Value && !useGroupSeparatorOnly)
-							    || (previousSeparatorToken.Value == numberParts[i].Value
-							        && previousSeparatorToken.Type == NumberPart.NumberType.GroupSeparator))
+								|| (previousSeparatorToken.Value == numberParts[i].Value
+									&& previousSeparatorToken.Type == NumberPart.NumberType.GroupSeparator))
 							{
 								// if the char values are different, then we can start assuming that
 								// the thousand char is used.
 								numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
 							}
 							else if (previousSeparatorToken.Value == numberParts[i].Value
-							         && previousSeparatorToken.Type == NumberPart.NumberType.DecimalSeparator)
+									 && previousSeparatorToken.Type == NumberPart.NumberType.DecimalSeparator)
 							{
 								// we can assume that the numbers are only using thousand separators from here onwards.
 								// this means that we can automatically change the previous token type from decimal
