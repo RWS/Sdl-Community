@@ -67,7 +67,7 @@ namespace Sdl.Community.StarTransit
 				_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
 				_projectControllerService = new ProjectsControllerService(_projectsController);
 
-				var fileDialog = new OpenFileDialog { Filter = @"Transit Project Package Files (*.ppf;*.tpf)|*.ppf;*.tpf" };
+				var fileDialog = new OpenFileDialog { Filter = @"Transit Project Package Files (*.ppf)|*.ppf;" };
 				var dialogResult = fileDialog.ShowDialog();
 				if (dialogResult != DialogResult.OK) return;
 
