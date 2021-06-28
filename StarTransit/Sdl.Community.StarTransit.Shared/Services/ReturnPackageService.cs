@@ -200,7 +200,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				var prjFileName = Path.GetFileNameWithoutExtension(package.PathToPrjFile);
 				var archivePath = Path.Combine(package.FolderLocation, prjFileName + ".tpf");
 
-				foreach (var targetFile in package.TargetFiles)
+				foreach (var targetFile in package.SelectedTargetFilesForImport)
 				{
 					var pathToTargetFileFolder = Path.GetDirectoryName(targetFile.LocalFilePath);
 
@@ -210,7 +210,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 						using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
 						{
 							archive.CreateEntryFromFile(package.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
-							foreach (var file in package.TargetFiles)
+							foreach (var file in package.SelectedTargetFilesForImport)
 							{
 								pathToTargetFileFolder = Path.GetDirectoryName(file.LocalFilePath);
 								var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
@@ -248,7 +248,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							entry.Delete();
 						}
 
-						foreach (var project in returnPackagePackage.TargetFiles)
+						foreach (var project in returnPackagePackage.SelectedTargetFilesForImport)
 						{
 							var projectFromArchiveToBeDeleted = archive.Entries.FirstOrDefault(n => n.Name.Equals(Path.GetFileNameWithoutExtension(project.Name)));
 							projectFromArchiveToBeDeleted?.Delete();
@@ -260,10 +260,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
 				{
 					archive.CreateEntryFromFile(returnPackagePackage.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
-					foreach (var file in returnPackagePackage.TargetFiles)
+					foreach (var file in returnPackagePackage.SelectedTargetFilesForImport)
 					{
 						var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-						pathToTargetFileFolder = Path.GetDirectoryName(file.LocalFilePath);//file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+						pathToTargetFileFolder = Path.GetDirectoryName(file.LocalFilePath);
 						archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
 					}
 				}

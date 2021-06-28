@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Xml;
 using NLog;
@@ -32,9 +33,25 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			try
 			{
 				_targetFile = new XmlDocument {PreserveWhitespace = true};
-				_targetFile.Load(!string.IsNullOrEmpty(_documentInfo.LastOpenedAsPath)
-					? _documentInfo.LastOpenedAsPath
-					: _originalFileProperties.OriginalFilePath);
+				if (File.Exists(_originalFileProperties.OriginalFilePath))
+				{
+					_targetFile.Load(_originalFileProperties.OriginalFilePath);
+				}
+				else
+				{
+					//User changed the location of the project, we need to get the new path for source files, we can use the LastOpenedPath but there we
+					//have the location on target folder, we need the path to source language folder
+					var targetLanguageCode = _originalFileProperties.TargetLanguage.CultureInfo.Name;
+					if (!string.IsNullOrEmpty(_documentInfo?.LastOpenedAsPath))
+					{
+						var lastOpenedPath = _documentInfo?.LastOpenedAsPath;
+						var newRoothDirectory = lastOpenedPath.Substring(0, lastOpenedPath.LastIndexOf(targetLanguageCode, StringComparison.Ordinal));
+						var fileName = Path.GetFileName(_originalFileProperties.OriginalFilePath);
+						var newPath = Path.Combine(newRoothDirectory,
+							_originalFileProperties.SourceLanguage.CultureInfo.Name,fileName);
+						_targetFile.Load(newPath);
+					}
+				}
 			}
 			catch (Exception e)
 			{
