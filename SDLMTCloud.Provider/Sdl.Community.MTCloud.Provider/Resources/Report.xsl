@@ -259,7 +259,7 @@
 				</style>
 			</head>
 			<body>
-				<h1>Segments' quality estimations</h1>
+				<h1>Segment quality estimations</h1>
 				<h2 class="first">Summary</h2>
 				<xsl:for-each select="Report/Summary">
 					<table class="InfoList">

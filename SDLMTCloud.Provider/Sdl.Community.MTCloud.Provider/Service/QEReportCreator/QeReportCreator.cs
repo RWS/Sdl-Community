@@ -16,12 +16,12 @@ namespace Sdl.Community.MTCloud.Provider.Service.QEReportCreator
 			{
 				Summary = new ReportSummary
 				{
-					Task = "QE Report",
+					Task = "QE Report",  
 					Project = projectInfo.Name,
-					DueDate = projectInfo.DueDate,
+					DueDate = $"{projectInfo.DueDate?.ToShortDateString()} {projectInfo.DueDate?.ToLongTimeString()}",
 					Files = projectFiles.Length,
 					Location = projectInfo.LocalProjectFolder,
-					CreatedAt = projectInfo.CreatedAt,
+					CreatedAt = $"{projectInfo.CreatedAt.ToShortDateString()} {projectInfo.CreatedAt.ToLongTimeString()}",
 					Language = qeFileReports[0].LanguageDirection.TargetLanguage.DisplayName
 				}
 			};
