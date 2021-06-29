@@ -427,7 +427,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var message = PluginResources.Message_Successfully_Completed_Filter_Operation;
 				message += Environment.NewLine + Environment.NewLine;
 				message += string.Format(PluginResources.Message_Exported_Segments_From_Files,
-					segmentPairs?.Count, exportResult.InputFiles.Count);
+					exportResult.OutputFiles.Sum(a => a.SegmentCount), exportResult.InputFiles.Count);
 				message += Environment.NewLine + Environment.NewLine;
 				message += string.Format(PluginResources.Message_Export_File, filePathOutput);
 

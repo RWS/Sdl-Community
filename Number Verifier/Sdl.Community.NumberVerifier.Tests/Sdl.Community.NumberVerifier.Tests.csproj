@@ -76,6 +76,7 @@
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationAllow.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationPrevent.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationRequire.cs" />
+    <Compile Include="Parsers\Number\NumberParserTests.cs" />
     <Compile Include="OmitZero\OmitLeadingZero.cs" />
     <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="OmitZero\OmitZeroSourceAndTarget.cs" />
@@ -126,5 +127,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

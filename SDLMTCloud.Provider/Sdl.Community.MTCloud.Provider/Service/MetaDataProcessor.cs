@@ -2,6 +2,7 @@
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.MTCloud.Provider.Service
@@ -37,16 +38,18 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			foreach (var datum in TranslationData)
 			{
 				if (segmentPairsRemaining == 0) break;
-				var metaData = datum.TranslationOriginInformation;
+				var metaData = datum.TranslationOriginData;
 				var segmentPairs = GetValidSegmentPairs(paragraphUnit, datum.SegmentIds);
 
 				foreach (var segmentPair in segmentPairs)
 				{
 					segmentPairsRemaining--;
-					var translationOrigin = segmentPair.Properties.TranslationOrigin;
 
-					translationOrigin.SetMetaData("quality_estimation", metaData.QualityEstimation);
-					translationOrigin.SetMetaData("model", metaData.Model);
+					var segmentPairProperties = segmentPair.Properties;
+					var translationOrigin = segmentPairProperties.TranslationOrigin;
+
+					translationOrigin?.SetMetaData("quality_estimation", metaData.QualityEstimations[segmentPairProperties.Id]);
+					translationOrigin?.SetMetaData("model", metaData.Model);
 				}
 				_usedIds.AddRange(segmentPairs.Select(sp => sp.Properties.Id));
 				datum.SegmentIds = datum.SegmentIds.Except(_usedIds).ToList();

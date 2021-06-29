@@ -3,6 +3,6 @@
 	public class TargetSegmentData
 	{
 		public ImprovementFeedback Feedback { get; set; }
-		public TranslationOriginInformation TranslationOriginInformation { get; set; }
+		public TranslationOriginDatum TranslationOriginDatum { get; set; }
 	}
 }

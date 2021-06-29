@@ -6,10 +6,6 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 {
 	public class SdlMtCloudDisplayFilter : IDisplayFilter
 	{
-		private const string Adequate = "Adequate";
-		private const string Good = "Good";
-		private const string NoneAvailable = "N/A";
-		private const string Poor = "Poor";
 		public SdlMtCloudFilterSettings Settings { get; } = new();
 
 		public bool EvaluateRow(IDisplayFilterRowInfo rowInfo)

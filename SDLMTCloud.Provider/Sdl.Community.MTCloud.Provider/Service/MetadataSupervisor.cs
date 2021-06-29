@@ -35,7 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public ConcurrentDictionary<SegmentId, TranslationOriginInformation> ActiveDocumentData
+		public ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
 		{
 			get
 			{
@@ -46,7 +46,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginInformation>> Data { get; set; } = new();
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
 
 		public void CloseOpenedDocuments()
 		{
@@ -117,14 +117,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void AddTargetSegmentMetaData(TranslationOriginInformation translationOriginInformation, ISegmentPair currentSegmentPair)
+		private void AddTargetSegmentMetaData(TranslationOriginDatum translationOriginDatum, SegmentId currentSegmentPairId)
 		{
-			currentSegmentPair ??= ActiveDocument.ActiveSegmentPair;
-			var segmentId = currentSegmentPair.Properties.Id;
-
-			if (!ActiveDocumentData.TryGetValue(segmentId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation))
+			if (!ActiveDocumentData.TryGetValue(currentSegmentPairId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation))
 			{
-				ActiveDocumentData[segmentId] = translationOriginInformation;
+				ActiveDocumentData[currentSegmentPairId] = translationOriginDatum;
 			}
 		}
 
@@ -136,7 +133,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (translationOrigin is null)
 				return;
 
-			if (ActiveDocumentData.TryGetValue(currentSegmentPair.Properties.Id, out var targetData))
+			var currentSegmentId = currentSegmentPair.Properties.Id;
+			if (ActiveDocumentData.TryGetValue(currentSegmentId, out var targetData))
 			{
 				_segmentMetadataCreator.AddToCurrentSegmentContextData(ActiveDocument, targetData);
 			}
@@ -162,7 +160,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var activeSegmentPair = ActiveDocument.ActiveSegmentPair;
 			if (activeSegmentPair is null) return;
 
-			ActiveDocumentData.TryGetValue(activeSegmentPair.Properties.Id, out var targetSegmentData);
+			var currentSegmentId = activeSegmentPair.Properties.Id;
+			ActiveDocumentData.TryGetValue(currentSegmentId, out var targetSegmentData);
 			SetCurrentSegmentEstimation(targetSegmentData?.QualityEstimation);
 		}
 
@@ -189,7 +188,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
-				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginInformation>();
+				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginDatum>();
 			}
 		}
 
@@ -209,11 +208,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				foreach (var sourceSegment in translationData.Segments)
 				{
-					var currentSegmentPair =
-						ActiveDocument.SegmentPairs.FirstOrDefault(
-							segPair => segPair.Source.ToString() == sourceSegment.Value || segPair.Properties.Id == sourceSegment.Key);
-
-					AddTargetSegmentMetaData(translationData.TranslationOriginInformation, currentSegmentPair);
+					var translationOriginData = translationData.TranslationOriginData;
+					AddTargetSegmentMetaData(
+						new TranslationOriginDatum
+						{
+							Model = translationOriginData.Model,
+							QualityEstimation = translationOriginData.QualityEstimations[sourceSegment.Key]
+						}, sourceSegment.Key);
 				}
 			}
 		}
