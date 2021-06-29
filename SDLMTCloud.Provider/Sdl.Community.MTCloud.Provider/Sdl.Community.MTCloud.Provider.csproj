@@ -107,6 +107,10 @@
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
@@ -191,6 +195,12 @@
     <Compile Include="Model\FeedbackInfo.cs" />
     <Compile Include="Model\FileAndSegmentIds.cs" />
     <Compile Include="Model\MetadataTransferObject.cs" />
+    <Compile Include="Model\QELabelExtractorModel\File.cs" />
+    <Compile Include="Model\QELabelExtractorModel\QeFileReport.cs" />
+    <Compile Include="Model\QELabelExtractorModel\QeValue.cs" />
+    <Compile Include="Model\QELabelExtractorModel\Report.cs" />
+    <Compile Include="Model\QELabelExtractorModel\ReportSummary.cs" />
+    <Compile Include="Model\QELabelExtractorModel\Data.cs" />
     <Compile Include="Model\QualityEstimation.cs" />
     <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
@@ -231,14 +241,17 @@
     <Compile Include="Service\Interface\ISupervisor.cs" />
     <Compile Include="Service\MetaDataProcessor.cs" />
     <Compile Include="Service\MetadataSupervisor.cs" />
+    <Compile Include="Service\QEReportCreator\QeReportCreator.cs" />
     <Compile Include="Service\SegmentMetadataCreator.cs" />
     <Compile Include="Service\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Model\Term.cs" />
     <Compile Include="Service\TranslationService.cs" />
     <Compile Include="Studio\ContextMenuAction\AddDictionaryTermAction.cs" />
+    <Compile Include="Studio\QEReportBatchTask\QeLabelExtractor.cs" />
+    <Compile Include="Studio\QEReportBatchTask\QeReportBatchTask.cs" />
     <Compile Include="Studio\RateItController.cs" />
-    <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
     <Compile Include="Studio\ShortcutActions\FocusFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
@@ -286,9 +299,9 @@
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PrintService.cs" />
     <Compile Include="Studio\SdlMTCloudExcelRibbon.cs" />
-    <Compile Include="Studio\SdlMTCloudLanguageDirection.cs" />
-    <Compile Include="Studio\SdlMTCloudProviderWinFormsUI.cs" />
-    <Compile Include="Studio\SdlMTCloudTranslationProviderFactory.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudLanguageDirection.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudProviderWinFormsUI.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudTranslationProviderFactory.cs" />
     <Compile Include="Controls\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
@@ -329,6 +342,10 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ReportExample.xml" />
+    <EmbeddedResource Include="Resources\Report.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Resource Include="Resources\MTCloud_logo_cropped.png" />
     <Page Include="Styles\SendFeedbackButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>

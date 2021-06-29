@@ -16,7 +16,7 @@ using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using LogManager = NLog.LogManager;
 
-namespace Sdl.Community.MTCloud.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 {
 	public class SdlMTCloudTranslationProvider : ITranslationProvider
 	{
