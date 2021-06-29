@@ -6,6 +6,6 @@ namespace Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel
 	public class Data
 	{
 		[XmlElement]
-		public List<File> File { get; set; } = new();
+		public List<File> File { get; set; } = new List<File>();
 	}
 }

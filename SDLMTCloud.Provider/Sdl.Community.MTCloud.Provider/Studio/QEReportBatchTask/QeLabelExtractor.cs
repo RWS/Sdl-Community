@@ -54,7 +54,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 						FileName = _projectFile.Name,
 						SegmentsPerCategory = new Dictionary<string, List<ISegmentPair>>
 						{
-							[qualityEstimation] = new() {segmentPair}
+							[qualityEstimation] = new List<ISegmentPair> {segmentPair}
 						}
 					};
 				}

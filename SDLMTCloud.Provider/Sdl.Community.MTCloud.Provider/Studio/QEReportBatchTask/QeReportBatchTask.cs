@@ -16,8 +16,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	public class QeReportBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private readonly Dictionary<string, QeFileReport> _qeFileReports = new();
-		private readonly QeReportCreator _qeReportCreator = new();
+		private readonly Dictionary<string, QeFileReport> _qeFileReports = new Dictionary<string, QeFileReport>();
+		private readonly QeReportCreator _qeReportCreator = new QeReportCreator();
 
 		public override void TaskComplete()
 		{

@@ -9,6 +9,6 @@ namespace Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel
 		public string Name { get; set; }
 
 		[XmlElement]
-		public List<QeValue> QeValues { get; set; } = new();
+		public List<QeValue> QeValues { get; set; } = new List<QeValue>();
 	}
 }
