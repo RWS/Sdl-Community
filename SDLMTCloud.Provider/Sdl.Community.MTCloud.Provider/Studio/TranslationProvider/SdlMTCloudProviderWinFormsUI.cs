@@ -12,7 +12,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using LogManager = NLog.LogManager;
 
-namespace Sdl.Community.MTCloud.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 {
 	[TranslationProviderWinFormsUi(
 		Id = "SDLMachineTranslationCloudProviderUi",
