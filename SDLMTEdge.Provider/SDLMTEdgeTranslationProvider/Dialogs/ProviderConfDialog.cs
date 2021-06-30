@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
@@ -494,13 +495,13 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			lpPopulationTimer.Start();
 		}
 
+		
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			var credentialsValid = !string.IsNullOrEmpty(UsernameField.Text) &&
 								   !string.IsNullOrEmpty(PasswordField.Text) &&
 								   !string.IsNullOrEmpty(HostNameField.Text);
-
-			Cursor = Cursors.WaitCursor;
+			ToggleCursor();
 			if (!Options.UseBasicAuthentication || credentialsValid)
 			{
 				try
@@ -513,7 +514,16 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 					MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-			Cursor = Cursors.Default;
+
+			ToggleCursor();
+		}
+
+		private void ToggleCursor()
+		{
+			if (InvokeRequired)
+			{
+				Invoke(new Action(() => Cursor = Cursor == Cursors.WaitCursor ? Cursors.Default : Cursors.WaitCursor));
+			}
 		}
 
 		private void HostNameChanged(object sender, EventArgs e)
