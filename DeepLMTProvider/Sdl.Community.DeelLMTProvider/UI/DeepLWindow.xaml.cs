@@ -109,11 +109,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
                 SetValidationBlockMessage(Visibility.Collapsed);
 
                 var isApiKeyValidResponse = DeepLTranslationProviderConnecter.IsApiKeyValidResponse;
-                if (isApiKeyValidResponse.IsSuccessStatusCode) return;
+                if (isApiKeyValidResponse?.IsSuccessStatusCode ?? false) return;
 
-                SetValidationBlockMessage(Visibility.Visible, isApiKeyValidResponse.StatusCode == HttpStatusCode.Forbidden
+                SetValidationBlockMessage(Visibility.Visible, isApiKeyValidResponse?.StatusCode == HttpStatusCode.Forbidden
                     ? "Authorization failed. Please supply a valid API Key."
-                    : $"{isApiKeyValidResponse.StatusCode}");
+                    : $"{isApiKeyValidResponse?.StatusCode}");
 
                 return;
             }
