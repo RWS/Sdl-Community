@@ -38,14 +38,14 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
 		public static string GetAlphanumericsCustomSeparator(INumberVerifierSettings numberVerifierSettings)
 		{
 			return numberVerifierSettings.CustomsSeparatorsAlphanumerics ?
-				numberVerifierSettings.GetAlphanumericsCustomSeparator
+				numberVerifierSettings.AlphanumericsCustomSeparator
 				: string.Empty;
 		}
 
 		public static string GetHindi(INumberVerifierSettings numberVerifierSettings)
 		{
 			return numberVerifierSettings.HindiNumberVerification ?
-				numberVerifierSettings.GetHindi
+				numberVerifierSettings.HindiNumber
 				: string.Empty;
 		}
 
@@ -53,7 +53,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
         {
             yield return numberVerifierSettings.SourceDecimalComma ? @"\u002C" : string.Empty;
             yield return numberVerifierSettings.SourceDecimalPeriod ? @"\u002E" : string.Empty;
-            yield return numberVerifierSettings.SourceDecimalCustomSeparator ? numberVerifierSettings.GetSourceDecimalCustomSeparator
+            yield return numberVerifierSettings.SourceDecimalCustom ? numberVerifierSettings.SourceDecimalCustomSeparator
                 : string.Empty;
         }
 
@@ -61,8 +61,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
         {
             yield return numberVerifierSettings.TargetDecimalComma ? @"\u002C" : string.Empty;
             yield return numberVerifierSettings.TargetDecimalPeriod ? @"\u002E" : string.Empty;
-            yield return numberVerifierSettings.TargetDecimalCustomSeparator ?
-                numberVerifierSettings.GetTargetDecimalCustomSeparator
+            yield return numberVerifierSettings.TargetDecimalCustom ?
+                numberVerifierSettings.TargetDecimalCustomSeparator
                 : string.Empty;
         }
 
@@ -74,8 +74,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             yield return numberVerifierSettings.SourceThousandsNobreakThinSpace ? @"\u202F" : string.Empty;
             yield return numberVerifierSettings.SourceThousandsComma ? @"\u002C" : string.Empty;
             yield return numberVerifierSettings.SourceThousandsPeriod ? @"\u002E" : string.Empty;
-            yield return numberVerifierSettings.SourceThousandsCustomSeparator
-                ? numberVerifierSettings.GetSourceThousandsCustomSeparator
+            yield return numberVerifierSettings.SourceThousandsCustom
+                ? numberVerifierSettings.SourceThousandsCustomSeparator
                 : string.Empty;
         }
 		
@@ -87,8 +87,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             yield return numberVerifierSettings.TargetThousandsNobreakThinSpace ? @"\u202F" : string.Empty;
             yield return numberVerifierSettings.TargetThousandsComma ? @"\u002C" : string.Empty;
             yield return numberVerifierSettings.TargetThousandsPeriod ? @"\u002E" : string.Empty;
-            yield return numberVerifierSettings.TargetThousandsCustomSeparator
-                ? numberVerifierSettings.GetTargetThousandsCustomSeparator
+            yield return numberVerifierSettings.TargetThousandsCustom
+                ? numberVerifierSettings.TargetThousandsCustomSeparator
                 : string.Empty;
         }
 

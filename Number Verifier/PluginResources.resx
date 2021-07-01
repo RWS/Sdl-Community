@@ -186,7 +186,7 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
 	  <value>Invalid group separator: {0}</value>
   </data>
   <data name="NumberParser_Message_InvalidSeparatorLocation" xml:space="preserve">
-	  <value>Invalid separator location; separators cannot be grouped together</value>
+	  <value>Invalid separator location</value>
   </data>
   <data name="NumberParser_Message_TheGroupValidIsOutOfRange" xml:space="preserve">
 	  <value>The group value is out of range: {0}</value>
