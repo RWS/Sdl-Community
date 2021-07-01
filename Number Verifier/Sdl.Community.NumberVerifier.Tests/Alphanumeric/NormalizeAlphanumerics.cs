@@ -195,7 +195,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(d => d.GetAlphanumericsCustomSeparator).Returns("-");
+			numberVerifierSettings.Setup(d => d.AlphanumericsCustomSeparator).Returns("-");
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);

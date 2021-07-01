@@ -89,15 +89,15 @@ namespace Sdl.Community.NumberVerifier
             _Control.ExcludeDraftSegments = _ControlSettings.ExcludeDraftSegments;
             _Control.SourceOmitLeadingZero = _ControlSettings.SourceOmitLeadingZero;
             _Control.TargetOmitLeadingZero = _ControlSettings.TargetOmitLeadingZero;
-            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator;
-            _Control.TargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustomSeparator;
-            _Control.SourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustomSeparator;
-            _Control.TargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustomSeparator;
-            _Control.GetSourceThousandsCustomSeparator= _ControlSettings.GetSourceThousandsCustomSeparator;
-            _Control.GetTargetThousandsCustomSeparator= _ControlSettings.GetTargetThousandsCustomSeparator;
-            _Control.GetSourceDecimalCustomSeparator= _ControlSettings.GetSourceDecimalCustomSeparator;
-            _Control.GetTargetDecimalCustomSeparator= _ControlSettings.GetTargetDecimalCustomSeparator;
-			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
+            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustom;
+            _Control.TargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustom;
+            _Control.SourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustom;
+            _Control.TargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustom;
+            _Control.GetSourceThousandsCustomSeparator= _ControlSettings.SourceThousandsCustomSeparator;
+            _Control.GetTargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustomSeparator;
+            _Control.GetSourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustomSeparator;
+            _Control.GetTargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustomSeparator;
+			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.AlphanumericsCustomSeparator;
 		}
 
         #endregion
@@ -184,25 +184,25 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.Reset("SourceOmitLeadingZero");
             _Control.TargetOmitLeadingZero = _ControlSettings.TargetOmitLeadingZero;
             _ControlSettings.Reset("TargetOmitLeadingZero");
-            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator;
-            _ControlSettings.Reset("SourceThousandsCustomSeparator");
-            _Control.TargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustomSeparator;
-            _ControlSettings.Reset("TargetThousandsCustomSeparator");
-            _Control.SourceDecimalCustomSeparator = _ControlSettings.SourceDecimalCustomSeparator;
-            _ControlSettings.Reset("SourceDecimalCustomSeparator");
-            _Control.TargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustomSeparator;
-            _ControlSettings.Reset("TargetDecimalCustomSeparator");
+            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustom;
+            _ControlSettings.Reset("SourceThousandsCustom");
+            _Control.TargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustom;
+            _ControlSettings.Reset("TargetThousandsCustom");
+            _Control.SourceDecimalCustomSeparator = _ControlSettings.SourceDecimalCustom;
+            _ControlSettings.Reset("SourceDecimalCustom");
+            _Control.TargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustom;
+            _ControlSettings.Reset("TargetDecimalCustom");
             _Control.GetSourceThousandsCustomSeparator =
-            _ControlSettings.GetSourceThousandsCustomSeparator;
-            _ControlSettings.Reset("GetSourceThousandsCustomSeparator");
-            _Control.GetTargetThousandsCustomSeparator = _ControlSettings.GetTargetThousandsCustomSeparator;
-            _ControlSettings.Reset("GetTargetThousandsCustomSeparator");
-            _Control.GetSourceDecimalCustomSeparator = _ControlSettings.GetSourceDecimalCustomSeparator;
-            _ControlSettings.Reset("GetSourceDecimalCustomSeparator");
-            _Control.GetTargetDecimalCustomSeparator = _ControlSettings.GetTargetDecimalCustomSeparator;
-            _ControlSettings.Reset("GetTargetDecimalCustomSeparator");
-			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
-			_ControlSettings.Reset("GetAlphanumericsCustomSeparator");
+            _ControlSettings.SourceThousandsCustomSeparator;
+            _ControlSettings.Reset("SourceThousandsCustomSeparator");
+            _Control.GetTargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustomSeparator;
+            _ControlSettings.Reset("TargetThousandsCustomSeparator");
+            _Control.GetSourceDecimalCustomSeparator = _ControlSettings.SourceDecimalCustomSeparator;
+            _ControlSettings.Reset("SourceDecimalCustomSeparator");
+            _Control.GetTargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustomSeparator;
+            _ControlSettings.Reset("TargetDecimalCustomSeparator");
+			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.AlphanumericsCustomSeparator;
+			_ControlSettings.Reset("AlphanumericsCustomSeparator");
 
 		}
 		#endregion
@@ -262,15 +262,15 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ExcludeDraftSegments = _Control.ExcludeDraftSegments;
             _ControlSettings.SourceOmitLeadingZero = _Control.SourceOmitLeadingZero;
             _ControlSettings.TargetOmitLeadingZero = _Control.TargetOmitLeadingZero;
-            _ControlSettings.SourceThousandsCustomSeparator = _Control.SourceThousandsCustomSeparator;
-            _ControlSettings.TargetThousandsCustomSeparator = _Control.TargetThousandsCustomSeparator;
-            _ControlSettings.SourceDecimalCustomSeparator = _Control.SourceDecimalCustomSeparator;
-            _ControlSettings.TargetDecimalCustomSeparator = _Control.TargetDecimalCustomSeparator;
-            _ControlSettings.GetSourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
-            _ControlSettings.GetTargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
-            _ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
-            _ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
-			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
+            _ControlSettings.SourceThousandsCustom = _Control.SourceThousandsCustomSeparator;
+            _ControlSettings.TargetThousandsCustom = _Control.TargetThousandsCustomSeparator;
+            _ControlSettings.SourceDecimalCustom = _Control.SourceDecimalCustomSeparator;
+            _ControlSettings.TargetDecimalCustom = _Control.TargetDecimalCustomSeparator;
+            _ControlSettings.SourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
+            _ControlSettings.TargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
+            _ControlSettings.SourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
+            _ControlSettings.TargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
+			_ControlSettings.AlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
 
 		}
 
@@ -318,15 +318,15 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.ExcludeDraftSegments = _Control.ExcludeDraftSegments;
 			_ControlSettings.SourceOmitLeadingZero = _Control.SourceOmitLeadingZero;
 			_ControlSettings.TargetOmitLeadingZero = _Control.TargetOmitLeadingZero;
-			_ControlSettings.SourceThousandsCustomSeparator = _Control.SourceThousandsCustomSeparator;
-			_ControlSettings.TargetThousandsCustomSeparator = _Control.TargetThousandsCustomSeparator;
-			_ControlSettings.SourceDecimalCustomSeparator = _Control.SourceDecimalCustomSeparator;
-			_ControlSettings.TargetDecimalCustomSeparator = _Control.TargetDecimalCustomSeparator;
-			_ControlSettings.GetSourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
-			_ControlSettings.GetTargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
-			_ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
-			_ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
-			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
+			_ControlSettings.SourceThousandsCustom = _Control.SourceThousandsCustomSeparator;
+			_ControlSettings.TargetThousandsCustom = _Control.TargetThousandsCustomSeparator;
+			_ControlSettings.SourceDecimalCustom = _Control.SourceDecimalCustomSeparator;
+			_ControlSettings.TargetDecimalCustom = _Control.TargetDecimalCustomSeparator;
+			_ControlSettings.SourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
+			_ControlSettings.TargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
+			_ControlSettings.SourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
+			_ControlSettings.TargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
+			_ControlSettings.AlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
 			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
 		}
 

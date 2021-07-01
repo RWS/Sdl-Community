@@ -141,6 +141,8 @@
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
     <Compile Include="Interfaces\INumberVerifierSettings.cs" />
     <Compile Include="Interfaces\ISkipTheDashProcessor.cs" />
+    <Compile Include="Interfaces\INumberVerifier.cs" />
+    <Compile Include="Interfaces\ITextGenerator.cs" />
     <Compile Include="Interfaces\IVerifyProcessor.cs" />
     <Compile Include="Interfaces\IVerifySpecification.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageData.cs" />
@@ -228,6 +230,7 @@
     <Compile Include="TellMe\NumVerifierCommunityWikiAction.cs" />
     <Compile Include="TellMe\NumVerifierStoreAction.cs" />
     <Compile Include="TextGenerator.cs" />
+    <Compile Include="Processors\GenericNumberVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\NumberVerifierHelp.resx">

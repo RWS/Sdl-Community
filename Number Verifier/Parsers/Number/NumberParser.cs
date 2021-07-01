@@ -80,27 +80,85 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		private List<NumberPart> GetIntegralAndFractionalParts(string text)
 		{
 			var parts = new List<NumberPart>();
-			foreach (var chr in text.ToCharArray())
+			var sections = SplitMultiCharSeparators(text);
+
+			foreach (var part in sections)
 			{
-				var numberType = GetNumberType(chr);
-
-				var previousPart = parts.LastOrDefault();
-				if (previousPart != null && numberType == NumberPart.NumberType.Number && previousPart.Type == NumberPart.NumberType.Number)
+				if (part.Type == NumberPart.NumberType.Separator)
 				{
-					previousPart.Value += chr;
+					parts.Add(part);
+					continue;
 				}
-				else
-				{
-					var valuePart = new NumberPart { Value = chr.ToString(), Type = numberType };
-					valuePart.Message = valuePart.Type == NumberPart.NumberType.Invalid
-						? string.Format(PluginResources.NumberParser_Message_SeparatorIsNotRecognized, chr)
-						: null;
 
-					parts.Add(valuePart);
+				foreach (var chr in part.Value.ToCharArray())
+				{
+					var type = GetNumberType(chr);
+
+					var previousPart = parts.LastOrDefault();
+					if (previousPart != null && type == NumberPart.NumberType.Number &&
+						previousPart.Type == NumberPart.NumberType.Number)
+					{
+						previousPart.Value += chr;
+					}
+					else
+					{
+						var valuePart = new NumberPart { Value = chr.ToString(), Type = type };
+						valuePart.Message = valuePart.Type == NumberPart.NumberType.Invalid
+							? string.Format(PluginResources.NumberParser_Message_SeparatorIsNotRecognized, chr)
+							: null;
+
+						parts.Add(valuePart);
+					}
 				}
 			}
 
 			AssignNumericSeparatorTypes(parts);
+
+			return parts;
+		}
+
+		private IEnumerable<NumberPart> SplitMultiCharSeparators(string text)
+		{
+			var parts = new List<NumberPart>();
+
+			var multiCharSeparators = _separators.Where(a => a.Value.Length > 1).ToList();
+			if (multiCharSeparators.Count > 0)
+			{
+				var pattern = string.Empty;
+				foreach (var separator in multiCharSeparators.OrderByDescending(a => a.Value.Length))
+				{
+					pattern += (string.IsNullOrEmpty(pattern) ? string.Empty : "|") + separator.Value;
+				}
+
+				var regex = new Regex(pattern, RegexOptions.Multiline);
+				var matches = regex.Matches(text);
+
+				var lastIndex = 0;
+				if (matches.Count > 0)
+				{
+					foreach (Match match in matches)
+					{
+						var prefix = text.Substring(lastIndex, match.Index - lastIndex);
+						parts.Add(new NumberPart { Type = NumberPart.NumberType.None, Value = prefix });
+
+
+						var separator = text.Substring(match.Index, match.Length);
+						parts.Add(new NumberPart { Type = NumberPart.NumberType.Separator, Value = separator });
+
+						lastIndex = match.Index + match.Length;
+					}
+				}
+
+				if (lastIndex < text.Length)
+				{
+					var suffix = text.Substring(lastIndex);
+					parts.Add(new NumberPart { Type = NumberPart.NumberType.None, Value = suffix });
+				}
+			}
+			else
+			{
+				parts.Add(new NumberPart { Type = NumberPart.NumberType.None, Value = text });
+			}
 
 			return parts;
 		}
@@ -200,7 +258,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		{
 			var prefixSpacesRegex = new Regex(@"^\s+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 			var match = prefixSpacesRegex.Match(text);
-			
+
 			return match.Success ? match.Value : string.Empty;
 		}
 
@@ -287,11 +345,38 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					// further back in the stack.
 					if (IsOfSeparatorType(numberParts[i].Value, NumberSeparator.SeparatorType.DecimalSeparator))
 					{
-						numberParts[i].Type = NumberPart.NumberType.DecimalSeparator;
+						if (numberParts.Count > i + 1)
+						{
+							numberParts[i].Type = NumberPart.NumberType.DecimalSeparator;
+						}
+						else
+						{
+							numberParts[i].Type = NumberPart.NumberType.Invalid;
+							numberParts[i].Message = PluginResources.NumberParser_Message_InvalidSeparatorLocation;
+						}
 					}
 					else if (IsOfSeparatorType(numberParts[i].Value, NumberSeparator.SeparatorType.GroupSeparator))
 					{
-						numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
+						if (numberParts.Count > i + 1)
+						{
+							if (numberParts[i + 1].Type == NumberPart.NumberType.Number
+								&& numberParts[i + 1].Value.Length == 3)
+							{
+								useGroupSeparatorOnly = true;
+								numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
+							}
+							else
+							{
+								numberParts[i].Type = NumberPart.NumberType.Invalid;
+								numberParts[i].Message =
+									string.Format(PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange, numberParts[i + 1].Value);
+							}
+						}
+						else
+						{
+							numberParts[i].Type = NumberPart.NumberType.Invalid;
+							numberParts[i].Message = PluginResources.NumberParser_Message_InvalidSeparatorLocation;
+						}
 					}
 				}
 				else
@@ -299,43 +384,40 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					// get the previous separator token
 					var previousSeparatorToken = numberParts[previousSeparatorTokenIndex];
 
-					if (previousSeparatorToken.Type != NumberPart.NumberType.Invalid)
+					if (IsOfSeparatorType(numberParts[i].Value, NumberSeparator.SeparatorType.GroupSeparator))
 					{
-						if (IsOfSeparatorType(numberParts[i].Value, NumberSeparator.SeparatorType.GroupSeparator))
+						if (previousSeparatorToken.Type == NumberPart.NumberType.Invalid
+							|| (previousSeparatorToken.Value != numberParts[i].Value && !useGroupSeparatorOnly)
+							|| (previousSeparatorToken.Value == numberParts[i].Value && previousSeparatorToken.Type == NumberPart.NumberType.GroupSeparator))
 						{
-							if ((previousSeparatorToken.Value != numberParts[i].Value && !useGroupSeparatorOnly)
-								|| (previousSeparatorToken.Value == numberParts[i].Value
-									&& previousSeparatorToken.Type == NumberPart.NumberType.GroupSeparator))
-							{
-								// if the char values are different, then we can start assuming that
-								// the thousand char is used.
-								numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
-							}
-							else if (previousSeparatorToken.Value == numberParts[i].Value
-									 && previousSeparatorToken.Type == NumberPart.NumberType.DecimalSeparator)
-							{
-								// we can assume that the numbers are only using thousand separators from here onwards.
-								// this means that we can automatically change the previous token type from decimal
-								// separator to thousand separator.
-								useGroupSeparatorOnly = true;
-								numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
-								previousSeparatorToken.Type = NumberPart.NumberType.GroupSeparator;
-							}
-							else
-							{
-								// should be all thousand separators from here onwards; 
-								// if this is not true, then set as invalid
-								numberParts[i].Type = NumberPart.NumberType.Invalid;
-								numberParts[i].Message = string.Format(PluginResources.NumberParser_Message_MixedGroupSeparators,
-									numberParts[i].Value, numberParts[previousSeparatorTokenIndex].Value);
-							}
+							// if the char values are different, then we can start assuming that
+							// the thousand char is used.
+							numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
+						}
+						else if (previousSeparatorToken.Value == numberParts[i].Value
+								 && previousSeparatorToken.Type == NumberPart.NumberType.DecimalSeparator)
+						{
+							// we can assume that the numbers are only using thousand separators from here onwards.
+							// this means that we can automatically change the previous token type from decimal
+							// separator to thousand separator.
+							useGroupSeparatorOnly = true;
+							numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
+							previousSeparatorToken.Type = NumberPart.NumberType.GroupSeparator;
 						}
 						else
 						{
-							//invalid not a group separator
+							// should be all thousand separators from here onwards; 
+							// if this is not true, then set as invalid
 							numberParts[i].Type = NumberPart.NumberType.Invalid;
-							numberParts[i].Message = string.Format(PluginResources.NumberParser_Message_InvalidGroupSeparator, numberParts[i].Value);
+							numberParts[i].Message = string.Format(PluginResources.NumberParser_Message_MixedGroupSeparators,
+								numberParts[i].Value, numberParts[previousSeparatorTokenIndex].Value);
 						}
+					}
+					else
+					{
+						//invalid not a group separator
+						numberParts[i].Type = NumberPart.NumberType.Invalid;
+						numberParts[i].Message = string.Format(PluginResources.NumberParser_Message_InvalidGroupSeparator, numberParts[i].Value);
 					}
 
 					// check for connected separator chars

@@ -21,7 +21,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		{
 			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
 			numberVerifierSettings.Setup(c=>c.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(c => c.GetAlphanumericsCustomSeparator).Returns(customSeparators);
+			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
@@ -40,7 +40,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		{
 			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
 			numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(c => c.GetAlphanumericsCustomSeparator).Returns(customSeparators);
+			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
@@ -77,7 +77,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		public void AlphanumericVerification_CustomSeparator_WithErrors(string source, string target, string customSeparators)
 		{
 			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-			numberVerifierSettings.Setup(c => c.GetAlphanumericsCustomSeparator).Returns(customSeparators);
+			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -95,7 +95,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		public void AlphanumericVerification_CustomSeparator_NoErrors(string source, string target, string customSeparators)
 		{
 			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-			numberVerifierSettings.Setup(c => c.GetAlphanumericsCustomSeparator).Returns(customSeparators);
+			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -133,7 +133,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		{
 			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
 			numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(c => c.GetAlphanumericsCustomSeparator).Returns(customSeparators);
+			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 

@@ -4,6 +4,7 @@
 	{
 		public enum NumberType
 		{
+			None,
 			GroupSeparator,
 			DecimalSeparator,
 			Number,
