@@ -26,22 +26,18 @@ namespace Sdl.Community.DeepLMTProvider.Model
             {
                 LanguagesSupported = JsonConvert
                     .DeserializeObject<Dictionary<string, string>>(stateObject?["LanguagesSupported"]?.ToString());
-            }
+				SendPlainTextParameter = stateObject?["SendPlainTextParameter"]?.ToString();
+				if (Enum.TryParse<Formality>(stateObject["Formality"]?.ToString(), out var formality))
+				{
+					Formality = formality;
+				}
+			}
         }
 
         [JsonIgnore]
         public string ApiKey { get; set; }
 
-        [JsonIgnore]
-        public Formality Formality
-        {
-            get
-            {
-                Enum.TryParse<Formality>(GetStringParameter("formality"), out var formality);
-                return formality;
-            }
-            set => SetStringParameter("formality", value.ToString());
-        }
+        public Formality Formality { get; set; }
 
         [JsonIgnore]
         public string Identifier { get; set; }
@@ -55,12 +51,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set => SendPlainTextParameter = value.ToString();
         }
 
-        [JsonIgnore]
-        public string SendPlainTextParameter
-        {
-            get => GetStringParameter("sendPlain");
-            set => SetStringParameter("sendPlain", value);
-        }
+        public string SendPlainTextParameter { get; set; } 
 
         [JsonIgnore]
         public Uri Uri => _uriBuilder.Uri;
