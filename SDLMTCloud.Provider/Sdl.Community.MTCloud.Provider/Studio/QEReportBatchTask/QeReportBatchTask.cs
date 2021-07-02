@@ -9,8 +9,8 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 {
-	[AutomaticTask("QE Report",
-		"QE Report",
+	[AutomaticTask("MT QE Report",
+		"MT QE Report",
 		"Creates a Quality Evaluation Report.",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
