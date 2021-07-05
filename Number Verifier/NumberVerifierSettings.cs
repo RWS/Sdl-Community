@@ -46,6 +46,12 @@ namespace Sdl.Community.NumberVerifier
 			get { return GetSetting<bool>(nameof(ReportModifiedAlphanumerics)).Value; }
 		}
 
+		public bool ReportNumberFormatErrors
+		{
+			set { GetSetting<bool>(nameof(ReportNumberFormatErrors)).Value = value; }
+			get { return GetSetting<bool>(nameof(ReportNumberFormatErrors)).Value; }
+		}
+
 		public bool CustomsSeparatorsAlphanumerics
 		{
 			set { GetSetting<bool>(nameof(CustomsSeparatorsAlphanumerics)).Value = value; }
@@ -80,6 +86,12 @@ namespace Sdl.Community.NumberVerifier
 		{
 			set { GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value = value; }
 			get { return GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value; }
+		}
+
+		public string NumberFormatErrorType
+		{
+			set { GetSetting<string>(nameof(NumberFormatErrorType)).Value = value; }
+			get { return GetSetting<string>(nameof(NumberFormatErrorType)).Value; }
 		}
 
 		public bool ReportBriefMessages
@@ -343,6 +355,8 @@ namespace Sdl.Community.NumberVerifier
 					return true;
 				case nameof(ReportModifiedAlphanumerics):
 					return true;
+				case nameof(ReportNumberFormatErrors):
+					return true;
 				case nameof(CustomsSeparatorsAlphanumerics):
 					return true;
 				case nameof(HindiNumberVerification):
@@ -351,6 +365,8 @@ namespace Sdl.Community.NumberVerifier
 					return "Warning";
 				case nameof(RemovedNumbersErrorType):
 					return "Warning";
+				case nameof(NumberFormatErrorType):
+					return "Error";
 				case nameof(ModifiedNumbersErrorType):
 					return "Error";
 				case nameof(ModifiedAlphanumericsErrorType):

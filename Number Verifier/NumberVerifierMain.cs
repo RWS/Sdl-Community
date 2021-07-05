@@ -255,7 +255,7 @@ namespace Sdl.Community.NumberVerifier
 		{
 			get
 			{
-				return new GenericNumberVerifier(VerificationSettings, TextGenerator);
+				return new NumberFormatVerifier(VerificationSettings, TextGenerator);
 			}
 		}
 

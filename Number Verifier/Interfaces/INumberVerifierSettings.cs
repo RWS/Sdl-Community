@@ -16,6 +16,8 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 
 		bool ReportModifiedAlphanumerics { get; set; }
 
+		bool ReportNumberFormatErrors { get; set; }
+
 		bool CustomsSeparatorsAlphanumerics { get; set; }
 
 		bool HindiNumberVerification { get; set; }
@@ -27,6 +29,8 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 		string ModifiedNumbersErrorType { get; set; }
 
 		string ModifiedAlphanumericsErrorType { get; set; }
+
+		string NumberFormatErrorType { get; set; }
 
 		bool ReportBriefMessages { get; set; }
 
