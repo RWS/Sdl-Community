@@ -99,7 +99,13 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 					foreach (XmlNode item in segNodes)
 					{
-						if (_fileService.IsValidNode(item))
+						//if (_fileService.IsValidNode(item))
+						//{
+						//	Output.ProcessParagraphUnit(CreateParagraphUnit(item));
+						//}
+						var data = item.SelectSingleNode("./@Data").InnerText;
+
+						if (_fileService.IsValidNode(data))
 						{
 							Output.ProcessParagraphUnit(CreateParagraphUnit(item));
 						}
@@ -174,6 +180,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			var sdlxliffLevel = ConfirmationLevel.Translated;
 
 			var data = segmentXml.SelectSingleNode("./@Data").InnerText;
+			//TODO use method from interface
 			var stringBytes = Encoding.Unicode.GetBytes(data);
 			var sbBytes = new StringBuilder(stringBytes.Length * 2);
 			foreach (var b in stringBytes)

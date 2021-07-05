@@ -15,6 +15,7 @@ namespace Sdl.Community.StarTransit.Shared.Services.Interfaces
 		bool IsTransitFile(string filePath);
 		//Check for segments with empty tags or with empty tags in tags
 		bool IsValidNode(XmlNode originalXmlNode);
+		bool IsValidNode(string dataAttribute);
 		Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs);
 		bool AreFilesExtensionsSupported(string sourceFileExtension, string targetFileExtension);
 	}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -65,6 +66,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return true;
 		}
 
+		public bool IsValidNode(string dataAttribute)
+		{
+			var hexCode = ConvertStringToHex(dataAttribute, Encoding.Unicode);
+			return !hexCode.StartsWith("C0E80FE9");
+		}
+
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{
 			return languagePairs != null ? languagePairs.Select(pair => new Language(pair.TargetLanguage)).ToArray() : new List<Language>().ToArray();
@@ -98,6 +105,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 			var languageExists = _starTransitLanguageDictionary.TryGetValue(fileExtension, out var transitLanguageExtension);
 			return languageExists ? transitLanguageExtension : fileExtension;
+		}
+
+		//TODO: Make this method public
+		private  string ConvertStringToHex(string input, Encoding encoding)
+		{
+			var stringBytes = encoding.GetBytes(input);
+			var sbBytes = new StringBuilder(stringBytes.Length * 2);
+			foreach (var b in stringBytes)
+			{
+				sbBytes.AppendFormat("{0:X2}", b);
+			}
+			return sbBytes.ToString();
 		}
 
 		private void BuildTransitLanguageDictionary()
