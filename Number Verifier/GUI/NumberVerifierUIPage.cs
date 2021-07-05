@@ -51,12 +51,14 @@ namespace Sdl.Community.NumberVerifier
             _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
+            _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
 
 			_Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
             _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
             _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
-            _Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
+			_Control.ReportNumberFormatErrors = _ControlSettings.ReportNumberFormatErrors;
+			_Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
             _Control.ReportExtendedMessages = _ControlSettings.ReportExtendedMessages;
             _Control.ExcludeTagText = _ControlSettings.ExcludeTagText;
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
@@ -111,7 +113,9 @@ namespace Sdl.Community.NumberVerifier
             _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
-			_ControlSettings.Reset("ReportAddedNumbers");
+            _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
+			
+            _ControlSettings.Reset("ReportAddedNumbers");
             _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _ControlSettings.Reset("ReportRemovedNumbers");
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
@@ -119,6 +123,11 @@ namespace Sdl.Community.NumberVerifier
             _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
             _ControlSettings.Reset("ReportModifiedAlphanumerics");
             _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
+            
+            
+            _ControlSettings.Reset("ReportNumberFormatErrors");
+            _Control.ReportNumberFormatErrors = _ControlSettings.ReportNumberFormatErrors;
+            
 			_ControlSettings.Reset("CustomsSeparatorsAlphanumerics");
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
 			_ControlSettings.Reset("HindiNumberVerification");
@@ -223,12 +232,14 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
+            _ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
             _ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
             _ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
-            _ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
+			_ControlSettings.ReportNumberFormatErrors = _Control.ReportNumberFormatErrors;
+			_ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
             _ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
             _ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
 			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
@@ -282,12 +293,14 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
 			_ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
 			_ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
+			_ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
 			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
 			_ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
 			_ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
 			_ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
+			_ControlSettings.ReportNumberFormatErrors = _Control.ReportNumberFormatErrors;
 			_ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
 			_ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
 			_ControlSettings.ExcludeTagText = _Control.ExcludeTagText;

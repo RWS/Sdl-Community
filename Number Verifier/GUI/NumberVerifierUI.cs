@@ -47,10 +47,22 @@ namespace Sdl.Community.NumberVerifier
             set { cb_ReportModifiedAlphanumerics.Checked = value; }
         }
 
+		public bool ReportNumberFormatErrors
+		{
+			get { return cb_ReportNumberFormatErrors.Checked; }
+			set { cb_ReportNumberFormatErrors.Checked = value; }
+		}
+
 		public bool HindiNumberVerification
 		{
 			get { return cb_Hindi.Checked; }
 			set { cb_Hindi.Checked = value; }
+		}
+
+		public string NumberFormatErrorType
+		{
+			get { return combo_NumberFormatErrorType.Text; }
+			set { combo_NumberFormatErrorType.Text = value; }
 		}
 
 		public string ModifiedAlphanumericsErrorType

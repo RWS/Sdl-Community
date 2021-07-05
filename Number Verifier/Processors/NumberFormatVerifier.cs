@@ -12,9 +12,9 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.NumberVerifier.Processors
 {
-	public class GenericNumberVerifier : INumberVerifier
+	public class NumberFormatVerifier : INumberVerifier
 	{
-		public GenericNumberVerifier(INumberVerifierSettings settings, ITextGenerator textGenerator)
+		public NumberFormatVerifier(INumberVerifierSettings settings, ITextGenerator textGenerator)
 		{
 			VerificationSettings = settings;
 			TextGenerator = textGenerator;
@@ -28,7 +28,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 		{
 			var errors = new List<ErrorReporting>();
 
-			if (!VerificationSettings.ReportModifiedNumbers)
+			if (!VerificationSettings.ReportNumberFormatErrors)
 			{
 				return errors;
 			}
@@ -43,10 +43,10 @@ namespace Sdl.Community.NumberVerifier.Processors
 				VerificationSettings.GetTargetDecimalSeparators(),
 				VerificationSettings.GetTargetThousandSeparators());
 
-			foreach (var numberToken in sourceNumberTokens.Where(a => !a.Valid))
-			{
-				errors.AddRange(GetErrorMessages(numberToken, true));
-			}
+			//foreach (var numberToken in sourceNumberTokens.Where(a => !a.Valid))
+			//{
+			//	errors.AddRange(GetErrorMessages(numberToken, true));
+			//}
 
 			foreach (var numberToken in targetNumberTokens.Where(a => !a.Valid))
 			{
@@ -82,7 +82,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 
 		private ErrorLevel GetErrorLevel()
 		{
-			switch (VerificationSettings.ModifiedNumbersErrorType)
+			switch (VerificationSettings.NumberFormatErrorType)
 			{
 				case "Error":
 					return ErrorLevel.Error;
