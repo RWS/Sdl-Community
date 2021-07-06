@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("IATETerminologyProvider")]
-[assembly: AssemblyCopyright("Copyright © SDL 2018")]
+[assembly: AssemblyCopyright("Copyright © RWS")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

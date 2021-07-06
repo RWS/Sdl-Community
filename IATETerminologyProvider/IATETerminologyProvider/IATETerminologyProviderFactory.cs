@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
@@ -23,7 +25,13 @@ namespace Sdl.Community.IATETerminologyProvider
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
 			var savedSettings = new SettingsModel(terminologyProviderUri);
+			var savedTermTypesNumber = savedSettings.TermTypes.Count;
 
+			if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes.Count)
+			{
+				var availableTermTypes = GetAvailableTermTypes(savedSettings.TermTypes);
+				savedSettings.TermTypes = new List<TermTypeModel>(availableTermTypes);
+			}
 			if (!IATEApplication.ConnectionProvider.EnsureConnection())
 			{
 				var exception = new Exception("Failed login!");
@@ -39,6 +47,13 @@ namespace Sdl.Community.IATETerminologyProvider
 				IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider);
 
 			return terminologyProvider;
+		}
+		private List<TermTypeModel> GetAvailableTermTypes(List<TermTypeModel> savedList)
+		{
+			var availableTerms = savedList.Where(t =>
+				IATEApplication.InventoriesProvider.TermTypes.Any(t1 => t1.Code == t.Code.ToString())).ToList();
+
+			return availableTerms;
 		}
 	}
 }
