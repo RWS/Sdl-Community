@@ -17,7 +17,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
 				"IATEProviderLogs");
 
 			Directory.CreateDirectory(logDirectoryPath);
