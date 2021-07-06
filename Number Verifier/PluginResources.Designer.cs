@@ -147,6 +147,60 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid group separator: {0}.
+        /// </summary>
+        public static string NumberParser_Message_InvalidGroupSeparator {
+            get {
+                return ResourceManager.GetString("NumberParser_Message_InvalidGroupSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid separator location.
+        /// </summary>
+        public static string NumberParser_Message_InvalidSeparatorLocation {
+            get {
+                return ResourceManager.GetString("NumberParser_Message_InvalidSeparatorLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The last char is not a number.
+        /// </summary>
+        public static string NumberParser_Message_LastCharIsNotANumber {
+            get {
+                return ResourceManager.GetString("NumberParser_Message_LastCharIsNotANumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mixed group separators: {0}{1}.
+        /// </summary>
+        public static string NumberParser_Message_MixedGroupSeparators {
+            get {
+                return ResourceManager.GetString("NumberParser_Message_MixedGroupSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Separator is not recognized: {0}.
+        /// </summary>
+        public static string NumberParser_Message_SeparatorIsNotRecognized {
+            get {
+                return ResourceManager.GetString("NumberParser_Message_SeparatorIsNotRecognized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The group value is out of range: {0}.
+        /// </summary>
+        public static string NumberParser_Message_TheGroupValidIsOutOfRange {
+            get {
+                return ResourceManager.GetString("NumberParser_Message_TheGroupValidIsOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checks whether numbers in the target segment are identical to those in the source segment..
         /// </summary>
         public static string Plugin_Description {

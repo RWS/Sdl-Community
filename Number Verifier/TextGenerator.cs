@@ -1,5 +1,5 @@
 ﻿using System.Text;
-
+using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.NumberVerifier
@@ -9,7 +9,7 @@ namespace Sdl.Community.NumberVerifier
     /// text, tags, comments, placeholders, etc. In our implementation it is used to
     /// retrieve the plain text information (if required).
     /// </summary>
-    public class TextGenerator : IMarkupDataVisitor
+    public class TextGenerator : IMarkupDataVisitor, ITextGenerator
     {
         #region settings
         internal StringBuilder PlainText
@@ -31,7 +31,7 @@ namespace Sdl.Community.NumberVerifier
         // also contain the tag content for each tag.
         public string GetPlainText(ISegment segment, bool includeTagText)
         {
-            PlainText = new StringBuilder("");
+            PlainText = new StringBuilder(string.Empty);
             IncludeTagText = includeTagText;
             VisitChildren(segment);
             return PlainText.ToString();
