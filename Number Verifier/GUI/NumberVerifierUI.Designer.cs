@@ -179,7 +179,7 @@
 			// targetMisBox
 			// 
 			this.targetMisBox.Controls.Add(this.targetOmitZero);
-			this.targetMisBox.Location = new System.Drawing.Point(224, 717);
+			this.targetMisBox.Location = new System.Drawing.Point(234, 714);
 			this.targetMisBox.Name = "targetMisBox";
 			this.targetMisBox.Size = new System.Drawing.Size(191, 57);
 			this.targetMisBox.TabIndex = 3;
@@ -199,9 +199,9 @@
 			// sourceMisBox
 			// 
 			this.sourceMisBox.Controls.Add(this.sourceOmitZero);
-			this.sourceMisBox.Location = new System.Drawing.Point(16, 717);
+			this.sourceMisBox.Location = new System.Drawing.Point(16, 714);
 			this.sourceMisBox.Name = "sourceMisBox";
-			this.sourceMisBox.Size = new System.Drawing.Size(202, 57);
+			this.sourceMisBox.Size = new System.Drawing.Size(212, 57);
 			this.sourceMisBox.TabIndex = 2;
 			this.sourceMisBox.TabStop = false;
 			this.sourceMisBox.Text = "Source miscellaneous";
@@ -230,7 +230,7 @@
 			// 
 			this.tb_customsSeparators.Location = new System.Drawing.Point(16, 179);
 			this.tb_customsSeparators.Name = "tb_customsSeparators";
-			this.tb_customsSeparators.Size = new System.Drawing.Size(398, 20);
+			this.tb_customsSeparators.Size = new System.Drawing.Size(409, 20);
 			this.tb_customsSeparators.TabIndex = 39;
 			// 
 			// cb_customSeparators
@@ -253,7 +253,7 @@
 			this.groupBox8.Controls.Add(this.rb_ReportBriefMessages);
 			this.groupBox8.Location = new System.Drawing.Point(322, 15);
 			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(93, 98);
+			this.groupBox8.Size = new System.Drawing.Size(102, 115);
 			this.groupBox8.TabIndex = 37;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "Messages";
@@ -319,7 +319,7 @@
 			this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
 			this.groupBox7.Location = new System.Drawing.Point(16, 206);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(191, 135);
+			this.groupBox7.Size = new System.Drawing.Size(212, 135);
 			this.groupBox7.TabIndex = 11;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "&Exclude";
@@ -383,9 +383,9 @@
 			this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
 			this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
 			this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-			this.groupBox2.Location = new System.Drawing.Point(213, 206);
+			this.groupBox2.Location = new System.Drawing.Point(234, 206);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(202, 137);
+			this.groupBox2.Size = new System.Drawing.Size(191, 135);
 			this.groupBox2.TabIndex = 15;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "&Localizations";
@@ -440,7 +440,7 @@
 			this.groupBox6.Controls.Add(this.cb_TargetThousandsThinSpace);
 			this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakSpace);
 			this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
-			this.groupBox6.Location = new System.Drawing.Point(224, 349);
+			this.groupBox6.Location = new System.Drawing.Point(234, 349);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(190, 233);
 			this.groupBox6.TabIndex = 26;
@@ -556,7 +556,7 @@
 			this.groupBox5.Controls.Add(this.customTargetSep);
 			this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
 			this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-			this.groupBox5.Location = new System.Drawing.Point(224, 588);
+			this.groupBox5.Location = new System.Drawing.Point(234, 588);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(190, 119);
 			this.groupBox5.TabIndex = 36;
@@ -614,7 +614,7 @@
 			this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
 			this.groupBox4.Location = new System.Drawing.Point(16, 588);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(190, 119);
+			this.groupBox4.Size = new System.Drawing.Size(211, 119);
 			this.groupBox4.TabIndex = 33;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "S&ource decimal separators";
@@ -675,7 +675,7 @@
 			this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
 			this.groupBox3.Location = new System.Drawing.Point(16, 347);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(190, 235);
+			this.groupBox3.Size = new System.Drawing.Size(211, 235);
 			this.groupBox3.TabIndex = 19;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "&Source thousands separators";
