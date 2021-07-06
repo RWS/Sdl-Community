@@ -7,6 +7,7 @@ using SDLCopyTags.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using NLog;
 
 namespace SDLCopyTags
 {
@@ -14,10 +15,10 @@ namespace SDLCopyTags
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 1, DisplayType.Large)]
     public class CopyTagAction : AbstractViewControllerAction<EditorController>
     {
-		public static readonly Log Log = Log.Instance;
-
+	    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		protected override void Execute()
         {
+	        Log.Setup();
 			try
 			{
 				var currentSegment = Controller?.ActiveDocument?.GetActiveSegmentPair();
@@ -36,7 +37,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"CopyTagAction Execute method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 			}
 		}
 
@@ -51,7 +52,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"GetTags method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex); 
 				return new List<IAbstractMarkupData>();
 			}
 		}
