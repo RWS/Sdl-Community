@@ -40,10 +40,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
     </Reference>
@@ -267,10 +263,6 @@
     <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj">
       <Project>{80113c78-7889-4d14-a233-48de24de11a2}</Project>
       <Name>Sdl.Community.StarTransit.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.StarTransit.UI\Sdl.Community.StarTransit.UI.csproj">
-      <Project>{dc2686e0-8c10-4a3a-966a-2e7cd6806538}</Project>
-      <Name>Sdl.Community.StarTransit.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

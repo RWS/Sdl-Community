@@ -10,17 +10,14 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.ProjectAutomation.Core;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
 	public class ReturnPackageService: IReturnPackageService
 	{
-		private readonly ProjectsController _projectsController;
 		private readonly ReturnPackage _returnPackage;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IProjectsControllerService _projectsControllerService;
-
 
 		public ReturnPackageService(IProjectsControllerService projectsControllerService)
 		{
@@ -30,14 +27,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				SelectedTargetFilesForImport = new List<ProjectFile>(),
 				ReturnFilesDetails = new List<ReturnFileDetails>()
 			};
-		}
-
-		//TODO:Remove for the final implementation
-		public ReturnPackageService()
-		{
-			_returnPackage = new ReturnPackage();
-			var helpers = new Helpers();
-			_projectsController = helpers.GetProjectsController();
 		}
 
 		/// <summary>
@@ -88,41 +77,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return (null,string.Empty);
 		}
 
-		//ToDO Remove
-		public (IReturnPackage, string) GetReturnPackage()
-		{
-			try
-			{
-				var projects = _projectsControllerService?.GetSelectedProjects().ToList();
-				if (projects != null)
-				{
-					if (projects.Count > 1)
-					{
-						return (null, "Please select only one project.");
-					}
-
-					var project = projects[0];
-					var targetFiles = project.GetTargetLanguageFiles().ToList();
-					var isTransit = IsTransitProject(targetFiles);
-
-					if (!isTransit)
-						return (_returnPackage, "Please select a StarTransit project");
-
-					_returnPackage.FileBasedProject = project;
-					_returnPackage.ProjectLocation = Path.GetDirectoryName(project.FilePath); 
-					_returnPackage.TargetFiles = targetFiles;
-					//we take only the first file location, because the other files are in the same location
-					_returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
-					_returnPackage.PathToPrjFile = GetPathToPrjFile(project.FilePath);
-					return (_returnPackage, string.Empty);
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-			}
-			return (null,string.Empty);
-		}
 		/// <summary>
 		/// Check to see if the file type is the same with the Transit File Type
 		/// </summary>
@@ -133,27 +87,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				return filesPath.Any(f => f.FileTypeId != null && f.FileTypeId.Equals("Transit File Type 1.0.0.0"));
 			}
 			return false;
-		}
-		//ToDO Remove
-		public void ExportFiles(ReturnPackage package)
-		{
-			if (package is null)
-			{
-				_logger.Info("Return package was null");
-				return;
-			}
-			_logger.Info($"Trying to create export package for Studio Project:{package.FileBasedProject?.GetProjectInfo()?.Name}");
-
-			var taskSequence = package.FileBasedProject?.RunAutomaticTasks(package.TargetFiles?.GetIds(),
-				new [] {AutomaticTaskTemplateIds.GenerateTargetTranslations});
-
-			if (taskSequence?.Status != TaskStatus.Completed)
-			{
-				_logger.Info($"Generate target translation task sequence status:{taskSequence?.Status}");
-			}
-			
-			var outputFiles = taskSequence?.OutputFiles?.ToList();
-			CreateArchive(package);
 		}
 
 		public bool ExportFiles(IReturnPackage package)
@@ -281,94 +214,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var filesPath = Directory.GetFiles(prjPath).ToList();
 			var prjFilePath = filesPath.FirstOrDefault(p => p.EndsWith("PRJ"));
 			return prjFilePath;
-		}
-
-		//TODO: Remove for final implemtation
-		/// <summary>
-		/// Creates an archive in the Return Package folder and add project files to it
-		/// For the moment we add the files without runing any task on them
-		/// </summary>
-		private void CreateArchive(ReturnPackage package)
-		{
-			try
-			{
-				ChangeMetadataFile(package.PathToPrjFile);
-
-				var prjFileName = Path.GetFileNameWithoutExtension(package.PathToPrjFile);
-				var archivePath = Path.Combine(package.FolderLocation, prjFileName + ".tpf");
-
-				foreach (var targetFile in package.TargetFiles)
-				{
-					var pathToTargetFileFolder = targetFile.LocalFilePath.Substring(0, targetFile.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-
-					if (!File.Exists(archivePath))
-					{
-						//create the archive, and add files to it
-						using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
-						{
-							archive.CreateEntryFromFile(package.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
-							foreach (var file in package.TargetFiles)
-							{
-								pathToTargetFileFolder = file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-								var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-
-								archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
-							}
-						}
-					}
-					else
-					{
-						UpdateArchive(archivePath, prjFileName, package, pathToTargetFileFolder);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-			}
-		}
-
-		private void UpdateArchive(string archivePath, string prjFileName, ReturnPackage returnPackagePackage, string pathToTargetFileFolder)
-		{
-			try
-			{
-				// open the archive and delete old files
-				// archive in update mode not overrides existing files 
-				using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
-				{
-					var entriesCollection = new ObservableCollection<ZipArchiveEntry>(archive.Entries);
-					foreach (var entry in entriesCollection)
-					{
-
-						if (entry.Name.Equals(string.Concat(prjFileName, ".PRJ")))
-						{
-							entry.Delete();
-						}
-
-						foreach (var project in returnPackagePackage.TargetFiles)
-						{
-							var projectFromArchiveToBeDeleted = archive.Entries.FirstOrDefault(n => n.Name.Equals(Path.GetFileNameWithoutExtension(project.Name)));
-							projectFromArchiveToBeDeleted?.Delete();
-						}
-					}
-				}
-
-				//add files to archive
-				using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
-				{
-					archive.CreateEntryFromFile(returnPackagePackage.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
-					foreach (var file in returnPackagePackage.TargetFiles)
-					{
-						var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-						pathToTargetFileFolder = file.LocalFilePath.Substring(0, file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-						archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
-			}
 		}
 
 		/// <summary>

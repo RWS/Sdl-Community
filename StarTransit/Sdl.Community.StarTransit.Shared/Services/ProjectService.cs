@@ -15,7 +15,6 @@ using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Versioning;
 using TaskStatus = Sdl.ProjectAutomation.Core.TaskStatus;
 
@@ -25,20 +24,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 	{
 		private TranslationProviderConfiguration _tmConfig;
 		private MessageModel _messageModel;
-		//private readonly ProjectsController _projectsController;
 		private readonly string _iconPath;
 		private readonly IFileService _fileService;
-		//private readonly IProjectsControllerService _projectControllerService;
 		private readonly IEventAggregatorService _eventAggregatorService;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _initialFolderPath;
-
-		public ProjectService(Helpers helpers):this()
-		{
-			if (helpers == null) return;
-			//_projectsController = helpers.GetProjectsController();
-			_iconPath = string.IsNullOrEmpty(_iconPath) ? helpers.GetIconPath() : _iconPath;
-		}
 
 		public ProjectService()
 		{

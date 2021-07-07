@@ -10,7 +10,6 @@ using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.View;
 using Sdl.Community.StarTransit.ViewModel;
 using Sdl.Desktop.IntegrationApi;
@@ -154,16 +153,11 @@ namespace Sdl.Community.StarTransit
 		protected override void Execute()
 		{
 			_messageBoxService = new MessageBoxService();
-			Utils.EnsureApplicationResources();
-
 			_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
 			_projectsControllerService = new ProjectsControllerService(_projectsController);
-
-			//var returnService = new ReturnPackageService();
 			var returnService = new ReturnPackageService(_projectsControllerService);
 			var dialogService = new DialogService();
 
-			//var returnPackage = returnService.GetReturnPackage();
 			var returnPackage = returnService.GetPackage();
 			if (returnPackage.Item1 is null) return;
 			if (!string.IsNullOrEmpty(returnPackage.Item2))
@@ -183,8 +177,6 @@ namespace Sdl.Community.StarTransit
 						returnPackageWindow.DataContext = returnViewModel;
 						returnPackageWindow.ShowDialog();
 					}
-					//var window = new ReturnPackageMainWindow(returnPackage.Item1);
-					//window.ShowDialog();
 				}
 				else
 				{

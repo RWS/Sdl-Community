@@ -6,7 +6,6 @@
   <Author>RWS AppStore Team</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0" />
 	<Include>
-		<File>Sdl.Community.StarTransit.UI.dll</File>
 		<File>Sdl.Community.StarTransit.Shared.dll</File>
 		<File>System.Windows.Interactivity.dll</File>
 		<File>System.Reactive.dll</File>

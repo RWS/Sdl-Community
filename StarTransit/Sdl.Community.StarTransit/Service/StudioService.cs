@@ -288,10 +288,5 @@ namespace Sdl.Community.StarTransit.Service
 			}
 			return (false, null);
 		}
-
-		public void RefreshProjects()
-		{
-			_projectsController.RefreshProjects();
-		}
 	}
 }

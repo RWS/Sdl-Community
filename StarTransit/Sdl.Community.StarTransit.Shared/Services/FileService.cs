@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
@@ -55,15 +53,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 			}
 			return false;
-		}
-
-		public bool IsValidNode(XmlNode originalXmlNode)
-		{
-			if (originalXmlNode.ChildNodes.Count > 0)
-			{
-				return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text && !string.IsNullOrWhiteSpace(childNode.Value));
-			}
-			return true;
 		}
 
 		public bool IsValidNode(string dataAttributeHexCode)
