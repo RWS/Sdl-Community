@@ -66,10 +66,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return true;
 		}
 
-		public bool IsValidNode(string dataAttribute)
+		public bool IsValidNode(string dataAttributeHexCode)
 		{
-			var hexCode = ConvertStringToHex(dataAttribute, Encoding.Unicode);
-			return !hexCode.StartsWith("C0E80FE9");
+			return !dataAttributeHexCode.StartsWith("C0E80FE9");
 		}
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
@@ -107,8 +106,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return languageExists ? transitLanguageExtension : fileExtension;
 		}
 
-		//TODO: Make this method public
-		private  string ConvertStringToHex(string input, Encoding encoding)
+		public string ConvertStringToHex(string input, Encoding encoding)
 		{
 			var stringBytes = encoding.GetBytes(input);
 			var sbBytes = new StringBuilder(stringBytes.Length * 2);

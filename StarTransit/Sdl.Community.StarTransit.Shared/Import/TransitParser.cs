@@ -99,17 +99,15 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 					foreach (XmlNode item in segNodes)
 					{
-						//if (_fileService.IsValidNode(item))
-						//{
-						//	Output.ProcessParagraphUnit(CreateParagraphUnit(item));
-						//}
-						var data = item.SelectSingleNode("./@Data").InnerText;
-
-						if (_fileService.IsValidNode(data))
+						var dataAttribute = item.SelectSingleNode("./@Data")?.InnerText;
+						if (dataAttribute != null)
 						{
-							Output.ProcessParagraphUnit(CreateParagraphUnit(item));
+							var dataAttributeHexCode = _fileService.ConvertStringToHex(dataAttribute, Encoding.Unicode);
+							if (_fileService.IsValidNode(dataAttributeHexCode))
+							{
+								Output.ProcessParagraphUnit(CreateParagraphUnit(item, dataAttributeHexCode));
+							}
 						}
-
 						// update the progress report   
 						currentUnitCount++;
 						OnProgress(Convert.ToByte(Math.Round(100 * ((decimal)currentUnitCount / totalUnitCount), 0)));
@@ -127,7 +125,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		}
 
 		// helper function for creating paragraph units
-		private IParagraphUnit CreateParagraphUnit(XmlNode xmlUnit)
+		private IParagraphUnit CreateParagraphUnit(XmlNode xmlUnit,string dataAttributeHexCode)
 		{
 			// create paragraph unit object
 			var paragraphUnit = ItemFactory.CreateParagraphUnit(LockTypeFlags.Unlocked);
@@ -143,7 +141,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var tuOrg = ItemFactory.CreateTranslationOrigin();
 
 				// assign the appropriate confirmation level to the segment pair            
-				segmentPairProperties.ConfirmationLevel = CreateConfirmationLevel(item);
+				segmentPairProperties.ConfirmationLevel = CreateConfirmationLevel(dataAttributeHexCode);
 				tuOrg.MatchPercent = CreateMatchValue(item);
 
 				// add source segment to paragraph unit
@@ -175,20 +173,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			return null;
 		}
 
-		private ConfirmationLevel CreateConfirmationLevel(XmlNode segmentXml)
+		private ConfirmationLevel CreateConfirmationLevel(string dataAttributeHexCode)
 		{
 			var sdlxliffLevel = ConfirmationLevel.Translated;
 
-			var data = segmentXml.SelectSingleNode("./@Data").InnerText;
-			//TODO use method from interface
-			var stringBytes = Encoding.Unicode.GetBytes(data);
-			var sbBytes = new StringBuilder(stringBytes.Length * 2);
-			foreach (var b in stringBytes)
-			{
-				sbBytes.AppendFormat("{0:X2}", b);
-			}
-
-			var statusCode = sbBytes.ToString().Substring(0, 2).ToLower();
+			var statusCode = dataAttributeHexCode.Substring(0, 2).ToLower();
 
 			if (statusCode == "02")
 				sdlxliffLevel = ConfirmationLevel.Unspecified;
@@ -253,13 +242,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 					if (item.NodeType == XmlNodeType.Whitespace)
 					{
-						//segment.Add(CreateText(string.Empty));
 						segment.Add(CreateText(" "));
-
 					}
 				}
 			}
-
 			return segment;
 		}
 

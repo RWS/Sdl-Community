@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 using NLog;
 using Sdl.Community.StarTransit.Interface;
 using Sdl.Community.StarTransit.Model;
@@ -11,7 +10,6 @@ using Sdl.Community.StarTransit.Service;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
-using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.StarTransit.View;
 using Sdl.Community.StarTransit.ViewModel;
@@ -43,7 +41,6 @@ namespace Sdl.Community.StarTransit
 		private ObservableCollection<IProgressHeaderItem> CreatePages(IWizardModel wizardModel)
 		{
 			var packageService = new PackageService(_eventAggregatorService);
-			var folderService = new DialogService();
 			var studioService = new StudioService(_projectsController);
 			var dialogService = new DialogService();
 			var projectService = new ProjectService(_eventAggregatorService);
@@ -54,7 +51,7 @@ namespace Sdl.Community.StarTransit
 
 			return new ObservableCollection<IProgressHeaderItem>
 			{
-				new PackageDetailsViewModel(wizardModel, packageService, folderService, studioService,projectsPath,_eventAggregatorService, new PackageDetails()),
+				new PackageDetailsViewModel(wizardModel, packageService, dialogService, studioService,projectsPath,_eventAggregatorService, new PackageDetails()),
 				new TmsViewModel(wizardModel,dialogService,new Tms()),
 				new CreateProjectViewModel(wizardModel,projectService,_eventAggregatorService,new CreateProject())
 			};
