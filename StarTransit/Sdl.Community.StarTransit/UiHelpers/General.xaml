@@ -10,16 +10,17 @@
 		<Setter Property="Foreground" Value="#414141"/>
 	</Style>
 
-	<SolidColorBrush x:Key="SdlPrimaryButton.Background" Color="#FF25BD59"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Border" Color="#FF2CA754"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Foreground" Color="White"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.MouseOver.Background" Color="#FF2CA754"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.MouseOver.Border" Color="#FF2CA754"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Pressed.Background" Color="#FF2CA754"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Pressed.Border" Color="#FF2CA754"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Disabled.Background" Color="#8825BD59"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Disabled.Border" Color="#882CA754"/>
-	<SolidColorBrush x:Key="SdlPrimaryButton.Disabled.Foreground" Color="White"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_1" x:Key="SdlPrimaryButton.Background" Color="#FF008080"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_2" x:Key="SdlPrimaryButton.Border" Color="#FF006666"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_3" x:Key="SdlPrimaryButton.Foreground" Color="White"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_4" x:Key="SdlPrimaryButton.MouseOver.Background" Color="#FF006666"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_5" x:Key="SdlPrimaryButton.MouseOver.Border" Color="#FF006666"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_6" x:Key="SdlPrimaryButton.Pressed.Background" Color="#FF006666"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_7" x:Key="SdlPrimaryButton.Pressed.Border" Color="#FF006666"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_8" x:Key="SdlPrimaryButton.Disabled.Background" Color="#88008080"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_9" x:Key="SdlPrimaryButton.Disabled.Border" Color="#88006666"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_10" x:Key="SdlPrimaryButton.Disabled.Foreground" Color="White"/>
+
 
 	<SolidColorBrush x:Key="SdlSecondaryButton.Background" Color="#FFE1E7EB"/>
 	<SolidColorBrush x:Key="SdlSecondaryButton.Border" Color="#CACFD3"/>
@@ -50,14 +51,14 @@
 	<SolidColorBrush x:Key="WindowsControl.Navigation.Backround" Color="#F6F6F6" />
 
 	<SolidColorBrush x:Key="WizardProgressHeader.Subway.Default" Color="#E1E7EB" />
-	<SolidColorBrush x:Key="WizardProgressHeader.Subway.Active" Color="#25BD59" />
+	<SolidColorBrush x:Key="WizardProgressHeader.Subway.Active" Color="#FF008080" />
 	<SolidColorBrush x:Key="WizardProgressHeader.Default.Forground" Color="#5D6E7F" />
 	<SolidColorBrush x:Key="WizardProgressHeader.Active.Forground" Color="#0D1E2D" />
 	<SolidColorBrush x:Key="WizardProgressHeader.Label.Forground" Color="#808080" />
 
 	<SolidColorBrush x:Key="ProjectStatus.Label.InProgress" Color="#E4784C" />
 	<SolidColorBrush x:Key="ProjectStatus.Label.Archived" Color="#B5B5B5" />
-	<SolidColorBrush x:Key="ProjectStatus.Label.Completed" Color="#329264" />
+	<SolidColorBrush x:Key="ProjectStatus.Label.Completed" Color="#FF006666" />
 
 
 	<Style x:Uid="SdlHyperlink" x:Key="SdlHyperlinkStyle" TargetType="Hyperlink">
