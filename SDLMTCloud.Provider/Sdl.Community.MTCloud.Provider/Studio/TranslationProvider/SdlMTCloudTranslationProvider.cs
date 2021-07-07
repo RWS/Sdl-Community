@@ -404,14 +404,17 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		private void SwitchRateTranslationsControllerVisibility(bool onOffSwitch)
 		{
-			if (!onOffSwitch)
+			Application.Current.Dispatcher.Invoke(() =>
 			{
-				_rateItController?.Hide();
-			}
-			if (onOffSwitch)
-			{
-				_rateItController?.Activate();
-			}
+				if (!onOffSwitch)
+				{
+					_rateItController?.Hide();
+				}
+				if (onOffSwitch)
+				{
+					_rateItController?.Activate();
+				}
+			});
 		}
 
 		private void ValidateEngineExistence(InternalLanguageMapping mapping)
