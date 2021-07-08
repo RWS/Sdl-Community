@@ -210,7 +210,7 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Number Verifier.
+        ///   Looks up a localized string similar to Trados Number Verifier.
         /// </summary>
         public static string Plugin_Name {
             get {

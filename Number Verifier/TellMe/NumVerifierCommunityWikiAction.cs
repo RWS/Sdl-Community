@@ -12,7 +12,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public NumVerifierCommunityWikiAction()
 		{
-			Name = "SDL Community Number Verifier wiki";
+			Name = "Trados Number Verifier wiki";
 		}
 
 		public override void Execute()
