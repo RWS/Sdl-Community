@@ -41,6 +41,7 @@ namespace Sdl.Community.MTEdge.Provider
 		public string ApiToken { get; set; }
 
 		public bool UseBasicAuthentication { get; set; }
+		public bool RequiresSecureProtocol { get; set; }	
 
 		#region URI Properties
 		public string Host

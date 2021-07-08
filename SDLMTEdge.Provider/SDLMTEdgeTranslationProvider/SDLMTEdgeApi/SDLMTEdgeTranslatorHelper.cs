@@ -228,7 +228,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				var builder = new UriBuilder(options.Uri)
 				{
 					Path = $"/api/{options.ApiVersionString}/{path}",
-					Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps
+					Scheme = options.RequiresSecureProtocol ?   Uri.UriSchemeHttps:Uri.UriSchemeHttp
 				};
 
 				if (parameters != null)
