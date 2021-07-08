@@ -60,6 +60,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			PortField.Text = Options.Port.ToString();
 			SaveCredentialsOption.Checked = Options.PersistCredentials;
 			BasicAuthenticationOption.Checked = Options.UseBasicAuthentication;
+			ConnectionBox.Checked = Options.RequiresSecureProtocol;
 			PopulateCredentials();
 		}
 
@@ -604,6 +605,11 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			{
 				TryToAuthenticate();
 			}
+		}
+
+		private void connectionBox_CheckedChanged(object sender, EventArgs e)
+		{
+			Options.RequiresSecureProtocol = ConnectionBox.Checked;
 		}
 	}
 }
