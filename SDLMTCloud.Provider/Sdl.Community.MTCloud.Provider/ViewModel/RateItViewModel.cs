@@ -10,6 +10,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -25,12 +26,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private List<ISDLMTCloudAction> _actions;
 		private bool? _autoSendFeedback;
 		private ICommand _clearCommand;
-		private QualityEstimation _evaluation = new();
+		private QualityEstimation _currentSegmentEvaluation = new();
+		private Dictionary<SegmentId, QualityEstimation> _evaluationPerSegment = new();
 		private string _feedback;
 		private bool _qeEnabled;
 		private int _rating;
 		private ICommand _sendFeedbackCommand;
 		private ITranslationService _translationService;
+		private Evaluations _evaluations = new();
 
 		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService, EditorController editorController)
 		{
@@ -56,13 +59,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public ICommand ClearCommand => _clearCommand ??= new CommandHandler(ClearFeedbackBox);
 
-		public QualityEstimation Evaluation
+		public Evaluations Evaluations
 		{
-			get => _evaluation;
+			get => _evaluations;
 			set
 			{
-				_evaluation = value;
-				OnPropertyChanged(nameof(Evaluation));
+				_evaluations = value;
+				OnPropertyChanged(nameof(Evaluations));
 			}
 		}
 
@@ -79,7 +82,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public List<FeedbackOption> FeedbackOptions { get; set; }
 
-		public FeedbackSendingStatus FeedbackSendingStatus { get; set; } = new FeedbackSendingStatus();
+		public FeedbackSendingStatus FeedbackSendingStatus { get; set; } = new();
 
 		public bool IsSendFeedbackEnabled
 		{
@@ -191,6 +194,17 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			ResetFeedback();
 			ResetFeedbackSendingStatus(sender,
 				new PropertyChangedEventArgs(nameof(_editorController.ActiveDocument.ActiveSegmentChanged)));
+		}
+
+		private void AddEvaluationForCurrentSegment(string data)
+		{
+			if (!ActiveSegmentId.HasValue) return;
+
+			var evaluationPerSegment = Evaluations.EvaluationPerSegment;
+			if (!evaluationPerSegment.TryGetValue(ActiveSegmentId.Value, out _))
+			{
+				evaluationPerSegment[ActiveSegmentId.Value] = new QualityEstimation {OriginalEstimation = data};
+			}
 		}
 
 		private void BackupFeedback()
@@ -335,7 +349,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void MetadataSupervisor_ActiveSegmentQeChanged(ActiveSegmentQeChanged data)
 		{
-			Evaluation.OriginalEstimation = data.Estimation;
+			AddEvaluationForCurrentSegment(data.Estimation);
+			Evaluations.CurrentSegmentEvaluation = Evaluations.EvaluationPerSegment.TryGetValue(ActiveSegmentId.Value,
+				out var qualityEstimation)
+				? qualityEstimation
+				: null;
 		}
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
@@ -430,11 +448,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var rating = GetRatingObject(segmentId);
 
+			var activeDocument = _editorController.ActiveDocument;
+			var segmentSource = segmentId != null
+				? activeDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
+				: activeDocument.ActiveSegmentPair.Source.ToString();
+
 			var feedbackInfo = new FeedbackInfo
 			{
-				Evaluation = Evaluation.OriginalEstimation != null ? Evaluation : null,
+				Evaluation = Evaluations.EvaluationPerSegment.TryGetValue(segmentId ?? ActiveSegmentId.Value, out var qualityEstimation) ? qualityEstimation : null,
 				Rating = rating,
-				SegmentId = segmentId,
+				SegmentSource = segmentSource,
 				Suggestion = suggestionReplacement ?? suggestion?.Improvement,
 				OriginalMtCloudTranslation = suggestion?.OriginalMtCloudTranslation
 			};

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -13,7 +13,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
 
-namespace Sdl.Community.MTCloud.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 {
 	public class MetadataSupervisor : IMetadataSupervisor
 	{
@@ -97,6 +97,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
+			//if (UserChoseDifferently())
+			//{
+			//	Set
+			//}
+
 			var storedQe = GetCurrentSegmentStoredQe();
 			SetCurrentSegmentEstimation(storedQe);
 		}

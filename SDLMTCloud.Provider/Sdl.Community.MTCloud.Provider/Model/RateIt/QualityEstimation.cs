@@ -2,7 +2,7 @@
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
-namespace Sdl.Community.MTCloud.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model.RateIt
 {
 	public class QualityEstimation : BaseViewModel
 	{
