@@ -91,7 +91,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ADEQUATE.
+        ///   Looks up a localized string similar to Adequate.
         /// </summary>
         public static string AdequateQuality {
             get {
@@ -204,7 +204,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GOOD.
+        ///   Looks up a localized string similar to Good.
         /// </summary>
         public static string GoodQuality {
             get {
@@ -552,7 +552,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to POOR.
+        ///   Looks up a localized string similar to Poor.
         /// </summary>
         public static string PoorQuality {
             get {

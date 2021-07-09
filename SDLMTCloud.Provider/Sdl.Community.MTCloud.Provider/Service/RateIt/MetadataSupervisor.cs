@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
-using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -13,7 +13,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
 
-namespace Sdl.Community.MTCloud.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 {
 	public class MetadataSupervisor : IMetadataSupervisor
 	{
@@ -29,13 +29,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_segmentMetadataCreator = segmentMetadataCreator;
 			_editorController = editorController;
 
-			MtCloudApplicationInitializer
+			_ = MtCloudApplicationInitializer
 				.Subscribe<RefreshQeStatus>(OnQeStatus);
 		}
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
+		private Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
+
+		private ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
 		{
 			get
 			{
@@ -45,8 +47,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return Data[_docId];
 			}
 		}
-
-		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
 
 		public void CloseOpenedDocuments()
 		{

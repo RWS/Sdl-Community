@@ -2,10 +2,9 @@
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.MTCloud.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 {
 	internal class MetaDataProcessor : AbstractBilingualContentProcessor
 	{

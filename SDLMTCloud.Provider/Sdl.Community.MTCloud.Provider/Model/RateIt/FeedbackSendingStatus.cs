@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Sdl.Community.MTCloud.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model.RateIt
 {
 	public class FeedbackSendingStatus
 	{

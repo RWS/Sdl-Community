@@ -7,6 +7,7 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.Community.MTCloud.Provider.Service.RateIt;
 using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -33,6 +34,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static ProjectsController ProjectsController { get; private set; }
 
+		public static RateItController RateItController => IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 		public static TranslationService TranslationService { get; private set; }
 
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
@@ -40,8 +42,6 @@ namespace Sdl.Community.MTCloud.Provider
 																			 ? SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
-
-		public static RateItController RateItController => IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
@@ -96,9 +96,9 @@ namespace Sdl.Community.MTCloud.Provider
 			MetadataSupervisor?.StartSupervising(TranslationService);
 		}
 
-		public static void Subscribe<T>(Action<T> action)
+		public static IDisposable Subscribe<T>(Action<T> action)
 		{
-			EventAggregator?.GetEvent<T>().Subscribe(action);
+			return EventAggregator?.GetEvent<T>().Subscribe(action);
 		}
 
 		public void Execute()
