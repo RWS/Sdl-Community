@@ -29,13 +29,15 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_segmentMetadataCreator = segmentMetadataCreator;
 			_editorController = editorController;
 
-			MtCloudApplicationInitializer
+			_ = MtCloudApplicationInitializer
 				.Subscribe<RefreshQeStatus>(OnQeStatus);
 		}
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
+		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
+
+		private ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
 		{
 			get
 			{
@@ -45,8 +47,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 				return Data[_docId];
 			}
 		}
-
-		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
 
 		public void CloseOpenedDocuments()
 		{
@@ -97,11 +97,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
-			//if (UserChoseDifferently())
-			//{
-			//	Set
-			//}
-
 			var storedQe = GetCurrentSegmentStoredQe();
 			SetCurrentSegmentEstimation(storedQe);
 		}

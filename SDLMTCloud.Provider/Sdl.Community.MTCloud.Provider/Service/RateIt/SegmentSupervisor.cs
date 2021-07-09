@@ -38,7 +38,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			}
 		}
 
-		public Dictionary<Guid, ConcurrentDictionary<SegmentId, ImprovementFeedback>> Data { get; set; } = new();
+		private Dictionary<Guid, ConcurrentDictionary<SegmentId, ImprovementFeedback>> Data { get; set; } = new();
 
 		public void AddImprovement(SegmentId segmentId, string improvement)
 		{

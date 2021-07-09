@@ -238,17 +238,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private dynamic CreateFeedbackRequest(FeedbackInfo feedbackInfo)
 		{
-			var activeDocument = MtCloudApplicationInitializer.EditorController.ActiveDocument;
-
-			var segmentSource = feedbackInfo.SegmentId != null
-				? activeDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(feedbackInfo.SegmentId))?.Source.ToString()
-				: activeDocument.ActiveSegmentPair.Source.ToString();
-
 			var model = GetCorrespondingLanguageMappingModel();
 			dynamic translationFeedbackRequest = new ExpandoObject();
 			translationFeedbackRequest.Model = model?.SelectedModel.Model;
 			translationFeedbackRequest.SourceLanguageId = model?.SelectedSource.CodeName;
-			translationFeedbackRequest.SourceText = segmentSource;
+			translationFeedbackRequest.SourceText = feedbackInfo.SegmentSource;
 			translationFeedbackRequest.TargetLanguageId = model?.SelectedTarget.CodeName;
 			translationFeedbackRequest.TargetMTText = feedbackInfo.OriginalMtCloudTranslation;
 
