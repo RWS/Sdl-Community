@@ -238,4 +238,7 @@
 
 were ignored by the parser because they were not in the correct format (.sdlxliff)</value>
   </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Trados Studio</value>
+  </data>
 </root>

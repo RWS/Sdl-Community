@@ -280,7 +280,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 					_excelImportExportService.ExportRules(fileDialog.FileName, selectedRules);
 
-					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 					if (SelectedItem != null && File.Exists(fileDialog.FileName))
 					{
@@ -290,7 +290,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -352,7 +352,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		private void RemoveRule()
 		{
 			var message = MessageBox.Show(StringResources.RemoveRule_Are_you_sure_you_want_to_remove_selected_rules,
-				Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+				PluginResources.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
 			if (message == DialogResult.OK && SelectedItems != null)
 			{
@@ -579,12 +579,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			if (result.Cancelled)
 			{
 				SourceSearchResults.Clear();
-				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
+				MessageBox.Show(StringResources.Process_cancelled_by_user, PluginResources.ProductName);
 			}
 			else if (result.OperationFailed)
 			{
 				SourceSearchResults.Clear();
-				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, Application.ProductName);
+				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, PluginResources.ProductName);
 			}
 			else
 			{

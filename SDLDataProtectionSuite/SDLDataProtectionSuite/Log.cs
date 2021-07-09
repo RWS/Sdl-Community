@@ -16,13 +16,13 @@ namespace Sdl.Community.SdlDataProtectionSuite
 			}
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
-				"SDL Data Protection Suite Logs");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
+				"Trados Data Protection Suite Logs");
 			Directory.CreateDirectory(logDirectoryPath);
 
 			var target = new FileTarget
 			{
-				Name = "SDLDataProtectionSuite",
+				Name = "TradosDataProtectionSuite",
 				FileName = Path.Combine(logDirectoryPath, "SDLDataProtectionSuiteLogs.txt"),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
