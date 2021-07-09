@@ -27,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public ConcurrentDictionary<SegmentId, ImprovementFeedback> ActiveDocumentData
+		private ConcurrentDictionary<SegmentId, ImprovementFeedback> ActiveDocumentData
 		{
 			get
 			{

@@ -35,7 +35,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
-		public Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
+		private Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
 
 		private ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
 		{

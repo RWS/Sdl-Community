@@ -535,15 +535,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ToggleSupervisingQe(object sender = null, EventArgs e = null)
 		{
+			_onActiveSegmentQeChangedHandler?.Dispose();
 			if (_translationService?.IsActiveModelQeEnabled ?? false)
 			{
 				QeEnabled = true;
-				_onActiveSegmentQeChangedHandler?.Dispose();
 				_onActiveSegmentQeChangedHandler = MtCloudApplicationInitializer.Subscribe<ActiveSegmentQeChanged>(MetadataSupervisor_ActiveSegmentQeChanged);
 			}
 			else
 			{
-				_onActiveSegmentQeChangedHandler?.Dispose();
 				QeEnabled = false;
 			}
 		}
