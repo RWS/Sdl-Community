@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.Core;
 using File = Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel.File;
 
@@ -36,7 +37,8 @@ namespace Sdl.Community.MTCloud.Provider.Service.QEReportCreator
 				{
 					file.QeValues.Add(new QeValue
 					{
-						Total = item.Value.Count,
+						SegmentsTotal = item.Value.Count,
+						WordsTotal = GetWordsTotalInSegment(item.Value),
 						QualityEstimation = item.Key
 					});
 				}
@@ -48,6 +50,17 @@ namespace Sdl.Community.MTCloud.Provider.Service.QEReportCreator
 			new XmlSerializer(typeof(Report)).Serialize(stringWriter, report);
 
 			return stringWriter.ToString();
+		}
+
+		private static int GetWordsTotalInSegment(List<ISegmentPair> segmentPairs)
+		{
+			var wordsTotal = 0;
+			foreach (var segment in segmentPairs)
+			{
+				wordsTotal += segment.Target.ToString().Split(' ').Length;
+			}
+
+			return wordsTotal;
 		}
 	}
 }
