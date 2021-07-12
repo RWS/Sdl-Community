@@ -17,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.QEReportCreator
 			{
 				Summary = new ReportSummary
 				{
-					Task = "QE Report",  
+					Task = "MT QE Report",  
 					Project = projectInfo.Name,
 					DueDate = $"{projectInfo.DueDate?.ToShortDateString()} {projectInfo.DueDate?.ToLongTimeString()}",
 					Files = projectFiles.Length,
