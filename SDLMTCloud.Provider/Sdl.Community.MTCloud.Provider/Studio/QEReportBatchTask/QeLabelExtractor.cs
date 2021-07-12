@@ -51,12 +51,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 					QeFileReports[projectFileLocalFilePath] = new QeFileReport
 					{
 						LanguageDirection = _projectFile.GetLanguageDirection(),
-						FileName = _projectFile.Name,
-						SegmentsPerCategory = new Dictionary<string, List<ISegmentPair>>
-						{
-							[qualityEstimation] = new() {segmentPair}
-						}
+						FileName = _projectFile.Name
 					};
+					QeFileReports[projectFileLocalFilePath].SegmentsPerCategory[qualityEstimation].Add(segmentPair);
 				}
 			}
 		}
