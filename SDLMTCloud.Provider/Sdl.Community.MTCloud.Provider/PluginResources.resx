@@ -412,17 +412,14 @@ Response from SDL MT Cloud:
   <data name="add_dictionary" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\add_dictionary.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SDL_MT_Cloud_Provider_is_not_added_to_the_current_project" xml:space="preserve">
-	  <value>SDL MT Cloud Provider is not added to the current project</value>
-  </data>
-  <data name="PoorQuality" xml:space="preserve">
-	  <value>POOR</value>
-  </data>
   <data name="AdequateQuality" xml:space="preserve">
-	  <value>ADEQUATE</value>
+    <value>Adequate</value>
   </data>
   <data name="GoodQuality" xml:space="preserve">
-	  <value>GOOD</value>
+    <value>Good</value>
+  </data>
+  <data name="PoorQuality" xml:space="preserve">
+    <value>Poor</value>
   </data>
   <data name="success" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\success.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

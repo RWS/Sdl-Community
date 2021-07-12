@@ -7,6 +7,7 @@ using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.Community.MTCloud.Provider.Service.RateIt;
 using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -23,15 +24,15 @@ namespace Sdl.Community.MTCloud.Provider
 		private const string CreateNewProject = "create a new project";
 		private static IStudioEventAggregator _eventAggregator;
 		private static bool? _isStudioRunning;
-		public static MessageBoxService MessageService { get; } = new MessageBoxService();
-
 		public static IHttpClient Client { get; } = new HttpClient();
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
 		public static EditorController EditorController { get; set; }
-
+		public static MessageBoxService MessageService { get; } = new MessageBoxService();
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
 		public static ProjectsController ProjectsController { get; private set; }
+
+		public static RateItController RateItController => IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 
 		public static TranslationService TranslationService { get; private set; }
 
@@ -40,9 +41,6 @@ namespace Sdl.Community.MTCloud.Provider
 																			 ? SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
-
-		public static RateItController RateItController
-			=> IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
@@ -82,8 +80,7 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 			catch { }
 
-
-			return (bool) (_isStudioRunning = _isStudioRunning ?? false);
+			return (bool)(_isStudioRunning = _isStudioRunning ?? false);
 		}
 
 		public static void PublishEvent<TEvent>(TEvent sampleEvent)
@@ -106,9 +103,9 @@ namespace Sdl.Community.MTCloud.Provider
 			MetadataSupervisor?.StartSupervising(TranslationService);
 		}
 
-		public static void Subscribe<T>(Action<T> action)
+		public static IDisposable Subscribe<T>(Action<T> action)
 		{
-			EventAggregator?.GetEvent<T>().Subscribe(action);
+			return EventAggregator?.GetEvent<T>().Subscribe(action);
 		}
 
 		public void Execute()

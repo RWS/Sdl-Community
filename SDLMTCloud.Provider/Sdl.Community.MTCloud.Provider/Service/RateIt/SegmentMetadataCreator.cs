@@ -2,13 +2,14 @@
 using System.IO;
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.MTCloud.Provider.Service
+namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 {
 	public class SegmentMetadataCreator : ISegmentMetadataCreator
 	{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
@@ -10,6 +11,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -26,7 +28,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool? _autoSendFeedback;
 		private QualityEstimation _evaluation = new QualityEstimation();
 		private ICommand _clearCommand;
+		private Guid _docId;
+		private Evaluations _evaluations = new Evaluations();
 		private string _feedback;
+		private IDisposable _onActiveSegmentQeChangedHandler;
 		private bool _qeEnabled;
 		private int _rating;
 		private ICommand _sendFeedbackCommand;
@@ -44,6 +49,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			UpdateActionTooltips();
 		}
 
+		private Document ActiveDocument => _editorController.ActiveDocument;
+
+		public Evaluations ActiveDocumentData
+		{
+			get
+			{
+				if (Data.ContainsKey(_docId)) return Data[_docId];
+				SetIdAndActiveFile();
+
+				return Data[_docId];
+			}
+		}
+
 		public bool? AutoSendFeedback
 		{
 			get => _autoSendFeedback;
@@ -55,16 +73,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand ClearCommand => _clearCommand = _clearCommand ?? new CommandHandler(ClearFeedbackBox);
-
-		public QualityEstimation Evaluation
-		{
-			get => _evaluation;
-			set
-			{
-				_evaluation = value;
-				OnPropertyChanged(nameof(Evaluation));
-			}
-		}
 
 		public string FeedbackMessage
 		{
@@ -78,7 +86,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public List<FeedbackOption> FeedbackOptions { get; set; }
-
 		public FeedbackSendingStatus FeedbackSendingStatus { get; set; } = new FeedbackSendingStatus();
 
 		public bool IsSendFeedbackEnabled
@@ -120,8 +127,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand SendFeedbackCommand
 			=> _sendFeedbackCommand = _sendFeedbackCommand ?? new AsyncCommand(() => SendFeedback(null));
 
-		private SegmentId? ActiveSegmentId => _editorController.ActiveDocument.ActiveSegmentPair?.Properties.Id;
-
+		private SegmentId? ActiveSegmentId => ActiveDocument.ActiveSegmentPair?.Properties.Id;
+		private ConcurrentDictionary<Guid, Evaluations> Data { get; set; } = new ConcurrentDictionary<Guid, Evaluations>();
 		private Rating PreviousRating { get; set; } = new Rating();
 
 		private List<string> RateItControlProperties { get; set; }
@@ -167,8 +174,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_translationService = translationService;
 			_segmentSupervisor.StartSupervising(_translationService);
 
-			_editorController.ActiveDocumentChanged -= ToggleSupervisingQe;
-			_editorController.ActiveDocumentChanged += ToggleSupervisingQe;
 			ToggleSupervisingQe();
 
 			OnPropertyChanged(nameof(IsSendFeedbackEnabled));
@@ -190,7 +195,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			ResetFeedback();
 			ResetFeedbackSendingStatus(sender,
-				new PropertyChangedEventArgs(nameof(_editorController.ActiveDocument.ActiveSegmentChanged)));
+				new PropertyChangedEventArgs(nameof(ActiveDocument.ActiveSegmentChanged)));
+		}
+
+		private void AddEvaluationForCurrentSegment(string data)
+		{
+			if (!ActiveSegmentId.HasValue || string.IsNullOrWhiteSpace(data)) return;
+
+			var evaluationPerSegment = ActiveDocumentData.EvaluationPerSegment;
+			if (!evaluationPerSegment.TryGetValue(ActiveSegmentId.Value, out _))
+			{
+				evaluationPerSegment[ActiveSegmentId.Value] = new QualityEstimation { OriginalEstimation = data };
+			}
 		}
 
 		private void BackupFeedback()
@@ -215,16 +231,20 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			if (_editorController.ActiveDocument == null)
+			ToggleSupervisingQe();
+
+			if (ActiveDocument == null)
 			{
 				ResetFeedbackSendingStatus(null, null);
 				return;
 			}
 
+			SetIdAndActiveFile();
+
 			ResetFeedback();
 
-			_editorController.ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
-			_editorController.ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+			ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 		}
 
 		private List<string> GetCommentsAndFeedbackFromUi()
@@ -264,7 +284,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string GetSourceSegment(SegmentId? segmentId)
 		{
 			var currentSegmentId = segmentId ?? ActiveSegmentId;
-			return _editorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId)?.Source?
+			return ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId)?.Source?
 				.ToString();
 		}
 
@@ -272,6 +292,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			SetShortcutService();
 
+			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			_actions = _actionProvider.GetActions();
@@ -335,7 +356,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void MetadataSupervisor_ActiveSegmentQeChanged(ActiveSegmentQeChanged data)
 		{
-			Evaluation.OriginalEstimation = data.Estimation;
+			AddEvaluationForCurrentSegment(data.Estimation);
+
+			if (!ActiveSegmentId.HasValue) return;
+
+			ActiveDocumentData.CurrentSegmentEvaluation = ActiveDocumentData.EvaluationPerSegment.TryGetValue(ActiveSegmentId.Value,
+				out var qualityEstimation)
+				? qualityEstimation
+				: null;
+
+			OnPropertyChanged(nameof(ActiveDocumentData));
 		}
 
 		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
@@ -430,11 +460,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var rating = GetRatingObject(segmentId);
 
+			var segmentSource = segmentId != null
+				? ActiveDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
+				: ActiveDocument.ActiveSegmentPair.Source.ToString();
+
 			var feedbackInfo = new FeedbackInfo
 			{
-				Evaluation = Evaluation.OriginalEstimation != null ? Evaluation : null,
+				Evaluation = ActiveDocumentData.EvaluationPerSegment.TryGetValue(segmentId ?? ActiveSegmentId.Value, out var qualityEstimation) ? qualityEstimation : null,
 				Rating = rating,
-				SegmentId = segmentId,
+				SegmentSource = segmentSource,
 				Suggestion = suggestionReplacement ?? suggestion?.Improvement,
 				OriginalMtCloudTranslation = suggestion?.OriginalMtCloudTranslation
 			};
@@ -452,6 +486,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (feedBackOption != null)
 			{
 				feedBackOption.Tooltip = tooltipText ?? Resources.RateItViewModel_SetOptionTooltip_No_shortcut_was_set;
+			}
+		}
+
+		private void SetIdAndActiveFile()
+		{
+			_docId = ActiveDocument.ActiveFile.Id;
+			if (!Data.ContainsKey(_docId))
+			{
+				Data[_docId] = new Evaluations();
 			}
 		}
 
@@ -493,10 +536,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ToggleSupervisingQe(object sender = null, EventArgs e = null)
 		{
+			_onActiveSegmentQeChangedHandler?.Dispose();
 			if (_translationService?.IsActiveModelQeEnabled ?? false)
 			{
 				QeEnabled = true;
-				MtCloudApplicationInitializer.Subscribe<ActiveSegmentQeChanged>(MetadataSupervisor_ActiveSegmentQeChanged);
+				_onActiveSegmentQeChangedHandler = MtCloudApplicationInitializer.Subscribe<ActiveSegmentQeChanged>(MetadataSupervisor_ActiveSegmentQeChanged);
 			}
 			else
 			{
