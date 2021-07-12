@@ -309,6 +309,7 @@
 									<tr>
 										<th class="TypeHead">Estimation</th>
 										<th class="TypeHead">Number of segments</th>
+										<th class="TypeHead">Number of words</th>
 									</tr>
 									<xsl:for-each select="QeValues">
 										<tr>
@@ -316,7 +317,9 @@
 												<xsl:value-of select="." />
 											</td>
 											<td class="InfoData">
-												<xsl:value-of select="@Total" />
+												<xsl:value-of select="@SegmentsTotal" />
+											</td><td class="InfoData">
+												<xsl:value-of select="@WordsTotal" />
 											</td>
 										</tr>
 									</xsl:for-each>
