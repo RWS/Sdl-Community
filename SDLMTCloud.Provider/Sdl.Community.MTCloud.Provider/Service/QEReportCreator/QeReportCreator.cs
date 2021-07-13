@@ -57,7 +57,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.QEReportCreator
 			var wordsTotal = 0;
 			foreach (var segment in segmentPairs)
 			{
-				wordsTotal += segment.Target.ToString().Split(' ').Length;
+				wordsTotal += segment.Source.ToString().Split(' ').Length;
 			}
 
 			return wordsTotal;
