@@ -163,7 +163,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.SdlDataProtectionSuite.
+        ///   Looks up a localized string similar to Trados Data Protection Suite.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -251,7 +251,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Data Protection Suite.
+        ///   Looks up a localized string similar to Trados Data Protection Suite.
         /// </summary>
         internal static string SDLDataProtectionSuite {
             get {
