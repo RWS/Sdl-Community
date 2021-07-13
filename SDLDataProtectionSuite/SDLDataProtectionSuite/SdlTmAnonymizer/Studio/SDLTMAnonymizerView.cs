@@ -13,7 +13,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
 	[View(
 		Id = "SDLTMAnonymizerView",
-		Name = "SDLTM Anonymizer",
+		Name = "TradosTM Anonymizer",
 		Icon = "SDLTMAnonymizer",
 		Description = "Anonymize personal information in Translation Memories",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation),

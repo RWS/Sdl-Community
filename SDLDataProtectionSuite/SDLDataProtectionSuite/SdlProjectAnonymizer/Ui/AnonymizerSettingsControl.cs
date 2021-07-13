@@ -321,12 +321,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 						selectedExpressions.Add(regexPattern);
 					}
 					Expressions.ExportExporessions(fileDialog.FileName, selectedExpressions);
-					MessageBox.Show(StringResources.File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.File_was_exported_successfully_to_selected_location, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
 			else
 			{
-				MessageBox.Show(StringResources.Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Please_select_at_least_one_row_to_export, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
