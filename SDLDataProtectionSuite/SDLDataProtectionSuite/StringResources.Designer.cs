@@ -558,7 +558,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLTM Anonymizer is a plugin for SDL Trados Studio that provides functionality to anonymize personal information in both server and file-based Translation Memories.
+        ///   Looks up a localized string similar to TradosTM Anonymizer is a plugin for Trados Studio that provides functionality to anonymize personal information in both server and file-based Translation Memories.
         /// </summary>
         internal static string SDLTM_Anonymizer_Description {
             get {
@@ -567,7 +567,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLTM Anonymizer.
+        ///   Looks up a localized string similar to TradosTM Anonymizer.
         /// </summary>
         internal static string SDLTM_Anonymizer_Name {
             get {
@@ -585,7 +585,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
+        ///   Looks up a localized string similar to RWS accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
         /// </summary>
         internal static string SDLTMAnonymizer_AcceptsNoLiability_Description_Line02 {
             get {

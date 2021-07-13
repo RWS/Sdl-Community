@@ -7,6 +7,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public static class Constants
 	{
+		//We leave this for the time being so the users which already accepted 
 		public static string AcceptFolderPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			@"SDL Community\SDLProjectAnonymizer");
