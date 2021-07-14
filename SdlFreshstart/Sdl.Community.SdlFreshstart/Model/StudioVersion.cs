@@ -54,7 +54,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			AppDataRoamingPluginsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				pluginPath);
 
-			ShortVersion = publicVersion.Substring(11);
+			ShortVersion = publicVersion.Substring(!publicVersion.ToUpper().Contains("SDL") ? 7 : 11);
 
 			DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ShortVersion);
 

@@ -24,7 +24,7 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
-		<Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Margin="0,5,0,0" Content="The paths shown in the interface are based on the current version of Studio and MultiTerm.  For older versions the correct path will be used, but not displayed:"/>
+		<Label Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="0" Margin="0,5,0,0" Content="The paths shown in the interface are based on the current version of Trados Studio and MultiTerm.  For older versions the correct path will be used, but not displayed:"/>
 		<Label Grid.Column="0" Grid.Row="1" Content="All Studio versions are shown bellow:"/>
 
 		<ItemsControl Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" ItemsSource="{Binding StudioVersions}">
@@ -36,7 +36,7 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Margin="0 0 100 0">
-						<Label FontWeight="Bold" Foreground="#3EA691" Content="{Binding PublicVersion}" />
+						<Label FontWeight="Bold" Foreground="#008080" Content="{Binding PublicVersion}" />
 						<Label Content="{Binding MajorVersion}" />
 						<Label Content="{Binding AppDataStudioFolder}" />
 						<Label Content="{Binding VersionName}" />
@@ -55,7 +55,7 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Margin="0 0 100 0">
-						<Label FontWeight="Bold" Foreground="#3EA691" Content="{Binding PublicVersion}" />
+						<Label FontWeight="Bold" Foreground="#008080" Content="{Binding PublicVersion}" />
 						<Label Content="{Binding MajorVersion}" />
 						<Label Content="{Binding VersionName}" />
 					</StackPanel>
