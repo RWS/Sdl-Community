@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
@@ -10,7 +11,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 	{
 		private readonly string _studioPersistancePath;
 		private readonly string _multiTermPersistancePath;
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public Persistence()
 		{
@@ -37,7 +38,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.PersistenceConstructor} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.PersistenceConstructor} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -50,7 +51,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.SaveSettings} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.SaveSettings} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -63,7 +64,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.Load} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.Load} {ex.Message}\n {ex.StackTrace}");
 			}
 			return new List<LocationDetails>();
 		}
