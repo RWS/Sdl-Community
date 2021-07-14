@@ -41,6 +41,10 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.MultiSelectComboBox">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -245,9 +249,6 @@
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>16.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.MultiSelectComboBox">
-      <Version>1.0.18</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>
