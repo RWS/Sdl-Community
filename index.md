@@ -11,20 +11,20 @@
 
 ## Intro
 
-This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
+This repository contains around 80 plugins developed for [Trados Studio](https://www.rws.com/translation/software/trados-studio/). Most of the plugins were developed by RWS, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implementing new features or improving the documentation. To contribute, clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
 You can also use this repository for learning by reading and tinkering with real Trados Studio plugins. Please find the documentation [here](http://appstore.sdl.com/developers/sdk.html).
 
-If you have any questions, don't hesitate to ask on the [Sdl Language Developer Community](https://community.sdl.com/developers/language-developers/).
+If you have any questions, don't hesitate to ask on the [RWS Language Developer Community](https://community.sdl.com/developers/language-developers/).
 
 ## Getting started
 
 
 #### Required Tools
 To get started with this repository, install the following tools:
-1. **SDL Trados Studio 2019**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
+1. **Trados Studio 2021**. These libraries are built on top of the Trados Studio APIs so using them also requires having it installed.
 2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
 3. **.NET 4.7.2**
 4. **Microsoft Visual Studio 2013, 2015 or 2017**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
@@ -37,7 +37,7 @@ Once you have installed the tools, follow the steps below:
 
 2. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder. All you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-3. Build the solution. After the build has succeeded, open SDL Trados Studio 2019. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
+3. Build the solution. After the build has succeeded, open Trados Studio 2021. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
@@ -54,7 +54,7 @@ The Github source code for Visual Studio templates extension, can be downloaded 
 
 The following table shows all the plugins available in the repository. 
 
-By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in SDL App Store. Documentation column will redirect to the source code for the selected plugin.
+By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in the RWS AppStore. Documentation column will redirect to the source code for the selected plugin.
 
 ## Batch Task Api
 
@@ -65,7 +65,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [CleanUp Tasks](https://appstore.sdl.com/language/app/cleanup-tasks/963/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/CleanUpTasks)|
 | [Fail Safe Task](https://appstore.sdl.com/language/app/fail-safe-task/964/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/FailSafeTask)|
 | [Target Word Count](https://appstore.sdl.com/language/app/target-word-count/965/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TargetWordCount)|
-
+| [Trados Batch Anonymizer](https://appstore.sdl.com/language/app/sdl-batch-anonymizer/1072/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLBatchAnonymize)|
 
 
 ## Core Api
@@ -92,7 +92,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
 | [Project Terms](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
 | [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
-| [Report Exporter](https://appstore.sdl.com/language/app/sdl-trados-studio-export-analysis-reports/3/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Report%20Exporter)|
+| [Export Analysis Reports](https://appstore.sdl.com/language/app/sdl-trados-studio-export-analysis-reports/3/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Report%20Exporter)|
 | [Studio Migration Utility](http://appstore.sdl.com/app/studio-migration-utility/481/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Migration%20Utility)|
 
 ## Global Verifiers Api
@@ -135,6 +135,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 
 | Plugin Name | Description |
 | --- | --- |
+| [RapidAddTerm](https://appstore.sdl.com/language/app/rapid-add-term/1050/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/RapidAddTerm)|
 | [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
@@ -145,9 +146,8 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Community Advenced Display Filter](https://appstore.sdl.com/language/app/community-advanced-display-filter/849/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
 | [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin) |
 | [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
-| [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin)|
 | [DSI Viewer](https://appstore.sdl.com/language/app/dsi-viewer/995/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DSI%20Viewer)|
-| [GrpupShare Version Fetch](https://appstore.sdl.com/language/app/groupshare-version-fetch/993/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/GroupShare%20VersionFetch)|
+| [GroupShare Version Fetch](https://appstore.sdl.com/language/app/groupshare-version-fetch/993/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/GroupShare%20VersionFetch)|
 | [SDL Studio InQuote](https://appstore.sdl.com/language/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
 | [Jobs](https://appstore.sdl.com/language/app/jobs/463/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)|
 | [Legit](https://appstore.sdl.com/language/app/sdl-legit/299/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legit)|
@@ -157,7 +157,9 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Time Tracker](https://appstore.sdl.com/language/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
 | [Variables Manager](https://appstore.sdl.com/language/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/VariablesManager)|
 | [#YourProductivity](https://appstore.sdl.com/language/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
-
+| [CopyTags](https://appstore.sdl.com/language/app/sdl-copy-tags/1070/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/CopyTags)|
+| [SpotCheck (not on the appstore)] |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SpotCheck)|
+| [TermExcelerator](https://appstore.sdl.com/language/app/termexcelerator/534/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermExcelerator)|
 
 ## FileType Support API
 
@@ -181,6 +183,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
 | [MXLIFF File Type](https://appstore.sdl.com/language/app/mxliff-file-type/962/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/FileTypeSupport.MXLIFF)|
 | [XML Reader](https://appstore.sdl.com/language/app/xml-reader/845/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/XML%20Reader)|
+| [XLIFF Manager](https://appstore.sdl.com/language/app/sdl-xliff-manager-for-sdl-trados-studio/1099/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/XLIFF.Manager)|
 		
 ## Other plugins
 
