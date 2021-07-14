@@ -21,7 +21,7 @@ namespace Sdl.Community.TQA
 				var selectedProjectInfo = _currentProject.GetProjectInfo();
 				var currentProjectName = selectedProjectInfo.Name;
 				ProjectNameLabel.Text = $"Currently working on: {currentProjectName}";
-				outputSaveDialog.FileName = "QRF-121_XXX_XXXXXX_XXX_XX";
+				outputSaveDialog.FileName = "SDL-5-401-F001 Quality Evaluation Form_XXX_XXXXXX_XXX_XX";
 
 				var targetLanguages = selectedProjectInfo.TargetLanguages.Select(l => l.DisplayName).ToArray();
 				LanguageSelector.Items.AddRange(targetLanguages);
