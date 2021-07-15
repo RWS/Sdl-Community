@@ -163,7 +163,7 @@ namespace Sdl.Community.ExportAnalysisReports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Analysis Reports.
+        ///   Looks up a localized string similar to Trados Studio – Export Analysis Reports.
         /// </summary>
         internal static string Plugin_Name {
             get {
