@@ -9,7 +9,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 	{
 		public static string AcceptFolderPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			@"SDL Community\SDLProjectAnonymizer");
+			@"RWS AppStore\TradosProjectAnonymizer");
 
 		public static string Key = @"dGhpc2lzdGhlZW5jb2RlZGt0eQ==";
 
