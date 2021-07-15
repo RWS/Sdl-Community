@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
-using Sdl.MultiSelectComboBox.API;
+using Rws.MultiSelectComboBox.API;
 
 namespace Sdl.Community.XLIFF.Manager.Model
 {
