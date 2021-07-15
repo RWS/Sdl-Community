@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NLog;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -21,6 +21,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		public override void Initialize()
 		{
 			base.Initialize();
+			Helpers.Log.Setup();
 			Text = "Trados Export Analysis Reports";
 		}
 		protected override void Execute()
