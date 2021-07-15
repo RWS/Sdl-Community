@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
-using Sdl.Community.ExportAnalysisReports.Helpers;
+using NLog;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.Toolkit.Core.Services;
@@ -18,7 +18,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 {
 	public class ProjectService : IProjectService
 	{
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public ProjectService()
 		{
@@ -75,7 +75,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"CreateProjectDetails method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"CreateProjectDetails method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return projectDetails;
@@ -114,7 +114,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"RemoveSingleFileProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"RemoveSingleFileProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ConfigureProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ConfigureProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetStudioProjectsPath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetStudioProjectsPath method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return string.Empty;
@@ -218,7 +218,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"LoadLanguageDirections method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"LoadLanguageDirections method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return languages;
@@ -249,7 +249,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return projectDetails;
@@ -267,7 +267,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -301,7 +301,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetExternalProjectDetails method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetExternalProjectDetails method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return new ProjectDetails();
 		}
@@ -325,7 +325,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"GetInternalProjectStatus method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetInternalProjectStatus method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -344,7 +344,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"GetProjectStatus method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetProjectStatus method: {ex.Message}\n {ex.StackTrace}");
 
 			}
 			return projectStatus;

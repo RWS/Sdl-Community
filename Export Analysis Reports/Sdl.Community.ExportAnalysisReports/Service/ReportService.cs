@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
@@ -17,8 +18,9 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 {
 	public class ReportService : IReportService
 	{
-		public static readonly Log Log = Log.Instance;
-		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosExportAnalysisReports");
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IProjectService _projectService;
 		private string _reportFile;
@@ -30,7 +32,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			_projectService = projectService;
 		}
 
-		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
+		public string JsonPath => Path.Combine(_communityFolderPath, "TradosExportAnalysisReportSettings.json");
 		public string ReportsFolderPath { get; set; }
 
 
@@ -70,7 +72,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception exception)
 			{
-				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
+				_logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
 				throw;
 			}
 		}
@@ -95,7 +97,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetJsonReportPath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetJsonReportPath method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return string.Empty;
@@ -127,7 +129,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return false;
@@ -195,7 +197,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"LoadReports method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"LoadReports method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -226,7 +228,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetExternalProjectReportInfo method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetExternalProjectReportInfo method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return externalProjInfoList;
@@ -278,7 +280,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"PrepareAnalysisReport method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"PrepareAnalysisReport method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -306,7 +308,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetCsvContent method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetCsvContent method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -417,7 +419,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetCsvHeaderRow method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetCsvHeaderRow method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -458,7 +460,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return filePath;
@@ -495,7 +497,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ReportFileExist method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ReportFileExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
 		}
@@ -526,7 +528,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ConfigureReportDetails method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ConfigureReportDetails method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -552,7 +554,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetLanguageAnalysisReportPaths method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetLanguageAnalysisReportPaths method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -581,7 +583,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"WriteReportFile method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"WriteReportFile method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -609,7 +611,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetExternalProjectPath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetExternalProjectPath method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return filePath;
 		}
