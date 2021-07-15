@@ -16,7 +16,7 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "ExportAnalysisReports results";
+		public override string Category => "Trados Export Analysis Reports results";
 
 		public override Icon Icon => PluginResources.ForumIcon;
 	}
