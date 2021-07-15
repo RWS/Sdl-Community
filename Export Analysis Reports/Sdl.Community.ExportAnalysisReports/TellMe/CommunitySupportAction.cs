@@ -8,7 +8,7 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 	{
 		public CommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 		public override void Execute()
 		{

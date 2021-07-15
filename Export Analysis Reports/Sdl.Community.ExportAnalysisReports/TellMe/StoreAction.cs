@@ -8,12 +8,12 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 	{
 		public StoreAction()
 		{
-			Name = "Download ExportAnalysisReports from AppStore";
+			Name = "Download Trados Export Analysis Reports from AppStore";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/sdl-trados-studio-export-analysis-reports/3/");
+			Process.Start("https://appstore.sdl.com/language/app/trados-studio-export-analysis-reports/3/");
 		}
 
 		public override bool IsAvailable => true;

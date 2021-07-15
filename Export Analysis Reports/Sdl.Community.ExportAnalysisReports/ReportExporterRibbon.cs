@@ -9,19 +9,19 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.ExportAnalysisReports
 {
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
-	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Export Analysis Reports")]
+	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
 	public class ReportExporterRibbon : AbstractRibbonGroup
 	{
 	}
 
-	[Action("ExportAnalysisReports", Name = "Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Export Analysis Reports for all analysed projects")]
+	[Action("ExportAnalysisReports", Name = "Trados Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Trados Export Analysis Reports for all analysed projects")]
 	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
 	class ReportExporterViewPartAction : AbstractAction
 	{
 		public override void Initialize()
 		{
 			base.Initialize();
-			Text = "Export Analysis Reports";
+			Text = "Trados Export Analysis Reports";
 		}
 		protected override void Execute()
 		{
@@ -30,14 +30,14 @@ namespace Sdl.Community.ExportAnalysisReports
 		}
 	}
 
-	[Action("ExportAnalysisReports.Button", Name = "Export Analysis Reports (selected projects)", Description = "Open Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
+	[Action("ExportAnalysisReports.Button", Name = "Trados Export Analysis Reports (selected projects)", Description = "Open Trados Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
 	public class ReportExporter : AbstractAction
 	{
 		public override void Initialize()
 		{
 			base.Initialize();
-			Text = "Export Analysis Reports";
+			Text = "Trados Export Analysis Reports";
 		}
 		protected override void Execute()
 		{

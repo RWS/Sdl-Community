@@ -8,12 +8,12 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 	{
 		public HelpAction()
 		{
-			Name = "ExportAnalysisReports wiki in the SDL Community";
+			Name = "Trados Export Analysis Reports wiki in the RWS Community";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5254/export-analysis-reports");
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5254/trados-export-analysis-reports");
 		}
 
 		public override bool IsAvailable => true;

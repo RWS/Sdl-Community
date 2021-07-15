@@ -5,7 +5,7 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => "ExportAnalysisReports tell me provider";
+		public string Name => "Tados Export AnalysisR eports tell me provider";
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new CommunitySupportAction
