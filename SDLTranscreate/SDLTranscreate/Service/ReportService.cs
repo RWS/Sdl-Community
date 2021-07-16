@@ -47,7 +47,7 @@ namespace Trados.Transcreate.Service
 				OmitXmlDeclaration = true,
 				Indent = false
 			};
-			var reportName = "SDL Transcreate Report";
+			var reportName = "Trados Transcreate Report";
 
 			var studioProjectInfo = studioProject.GetProjectInfo();
 			var dateTimeStamp = DateTime.UtcNow;
@@ -121,7 +121,7 @@ namespace Trados.Transcreate.Service
 							writer.WriteAttributeString("created", dataTimeStampToString);
 
 							writer.WriteStartElement("taskInfo");
-							writer.WriteAttributeString("action", "SDL Transcreate Report");
+							writer.WriteAttributeString("action", "Trados Transcreate Report");
 							writer.WriteAttributeString("file", projectFile.Path + projectFile.Name);
 							writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
 							writer.WriteAttributeString("runAt", GetDisplayDateTime(dateTimeStamp));
