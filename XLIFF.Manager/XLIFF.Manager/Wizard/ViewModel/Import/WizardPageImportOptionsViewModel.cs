@@ -24,21 +24,21 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 		public WizardPageImportOptionsViewModel(Window owner, object view, WizardContext wizardContext) : base(owner, view, wizardContext)
 		{
 			BackupFiles = wizardContext.ImportOptions.BackupFiles;
-			OverwriteTranslations = wizardContext.ImportOptions.OverwriteTranslations;
-			OriginSystem = wizardContext.ImportOptions.OriginSystem;
+				OverwriteTranslations = wizardContext.ImportOptions.OverwriteTranslations;
+				OriginSystem = wizardContext.ImportOptions.OriginSystem;
 
-			ConfirmationStatuses = Enumerators.GetConfirmationStatuses();
-			StatusTranslationUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationUpdatedId, "Draft");
-			StatusTranslationNotUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationNotUpdatedId, string.Empty);
-			StatusSegmentNotImported = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusSegmentNotImportedId, string.Empty);
+				ConfirmationStatuses = Enumerators.GetConfirmationStatuses();
+				StatusTranslationUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationUpdatedId, "Draft");
+				StatusTranslationNotUpdated = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusTranslationNotUpdatedId, string.Empty);
+				StatusSegmentNotImported = Enumerators.GetConfirmationStatus(ConfirmationStatuses, wizardContext.ImportOptions.StatusSegmentNotImportedId, string.Empty);
 
-			FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
-			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, wizardContext.ImportOptions.ExcludeFilterIds));
+				FilterItems = new List<FilterItem>(Enumerators.GetFilterItems());
+				SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(Enumerators.GetFilterItems(FilterItems, wizardContext.ImportOptions.ExcludeFilterIds));
 
-			VerifyIsValid();
+				VerifyIsValid();
 
-			LoadPage += OnLoadPage;
-			LeavePage += OnLeavePage;
+				LoadPage += OnLoadPage;
+				LeavePage += OnLeavePage;
 		}
 
 		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
@@ -173,7 +173,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 			WizardContext.ImportOptions.StatusTranslationNotUpdatedId = StatusTranslationNotUpdated.Id;
 			WizardContext.ImportOptions.StatusSegmentNotImportedId = StatusSegmentNotImported.Id;
 			WizardContext.ImportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-			//WizardContext.ExcludeFilterItemIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 		}
 
 		private void ClearFilters(object parameter)

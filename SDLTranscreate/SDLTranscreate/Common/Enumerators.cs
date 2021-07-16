@@ -3,7 +3,7 @@ using System.Linq;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.MultiSelectComboBox.API;
+using Rws.MultiSelectComboBox.API;
 using Trados.Transcreate.Model;
 
 namespace Trados.Transcreate.Common
@@ -82,7 +82,7 @@ namespace Trados.Transcreate.Common
 				{
 					new XLIFFSupportItem
 					{
-						Name = "XLIFF 1.2 SDL",
+						Name = "XLIFF 1.2 RWS",
 						SupportType = Enumerators.XLIFFSupport.xliff12sdl
 					},
 					new XLIFFSupportItem

@@ -12,6 +12,7 @@ using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Studio;
+using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.LanguagePlatform.Core;
 using Application = System.Windows.Forms.Application;

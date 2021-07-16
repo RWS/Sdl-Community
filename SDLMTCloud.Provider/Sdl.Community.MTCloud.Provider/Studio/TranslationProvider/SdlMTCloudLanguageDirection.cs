@@ -15,7 +15,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 using Xliff = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Xliff;
 
-namespace Sdl.Community.MTCloud.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 {
 	public class SdlMTCloudLanguageDirection : ITranslationProviderLanguageDirection
 	{

@@ -210,13 +210,13 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private SearchResult CreateSearchResult(Segment segment, Segment translation)
         {
-            var tu = new TranslationUnit
-            {
-                SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
-                TargetSegment = translation
-            };
+			var tu = new TranslationUnit
+			{
+				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+				TargetSegment = translation
+			};
 
-            tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
             //maybe this we need to add the score which Christine  requested
             //
@@ -250,7 +250,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     var translation = new Segment(_languageDirection.TargetCulture);
                     var newSeg = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-                    if (newSeg.HasTags)
+                    if (newSeg.HasTags && !_options.SendPlainText)
                     {
                         var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
 

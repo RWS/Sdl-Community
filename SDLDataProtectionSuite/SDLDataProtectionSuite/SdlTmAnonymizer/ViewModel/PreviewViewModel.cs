@@ -81,13 +81,13 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 				if (result.Cancelled)
 				{
-					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, System.Windows.Forms.Application.ProductName);
+					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, PluginResources.ProductName);
 					_window.Close();
 				}
 
 				if (result.OperationFailed)
 				{
-					System.Windows.Forms.MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, System.Windows.Forms.Application.ProductName);
+					System.Windows.Forms.MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, PluginResources.ProductName);
 				}
 
 				RemoveSelectedTusToAnonymize();
@@ -96,7 +96,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				System.Windows.Forms.MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, System.Windows.Forms.Application.ProductName);
+				System.Windows.Forms.MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, PluginResources.ProductName);
 			}
 		}
 

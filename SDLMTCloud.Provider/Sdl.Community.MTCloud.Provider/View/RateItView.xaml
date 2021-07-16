@@ -133,25 +133,25 @@
 				        Visibility="{Binding QeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<ComboBox Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 					          Text="Reevaluation"
-					          SelectedIndex="{Binding Evaluation.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					          SelectedIndex="{Binding ActiveDocumentData.CurrentSegmentEvaluation.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 						<ComboBoxItem Name="GoodQe"
-						              Content="Good" Foreground="#11A200" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						              Content="{x:Static rsx:PluginResources.GoodQuality}" Foreground="#11A200" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
 						<ComboBoxItem Name="AdequateQe"
-						              Content="Adequate" Foreground="#F09C00" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						              Content="{x:Static rsx:PluginResources.AdequateQuality}" Foreground="#F09C00" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
 						<ComboBoxItem Name="PoorQe"
-						              Content="Poor" Foreground="#FF4848" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						              Content="{x:Static rsx:PluginResources.PoorQuality}" Foreground="#FF4848" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
 					</ComboBox>
 					<Border.Style>
 						<Style TargetType="{x:Type Border}">
 							<Setter Property="Background" Value="#B7B7DB" />
 							<Style.Triggers>
-								<DataTrigger Binding="{Binding Evaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.GoodQuality}">
+								<DataTrigger Binding="{Binding ActiveDocumentData.CurrentSegmentEvaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.GoodQuality}">
 									<Setter Property="Background" Value="#11A200" />
 								</DataTrigger>
-								<DataTrigger Binding="{Binding Evaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.AdequateQuality}">
+								<DataTrigger Binding="{Binding ActiveDocumentData.CurrentSegmentEvaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.AdequateQuality}">
 									<Setter Property="Background" Value="#F09C00" />
 								</DataTrigger>
-								<DataTrigger Binding="{Binding Evaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.PoorQuality}">
+								<DataTrigger Binding="{Binding ActiveDocumentData.CurrentSegmentEvaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.PoorQuality}">
 									<Setter Property="Background" Value="#FF4848" />
 								</DataTrigger>
 							</Style.Triggers>

@@ -8,16 +8,16 @@ namespace SDLCopyTags.CopyTagsTellMe
 	{
 		public CopyTagsHelpAction()
 		{
-			Name = "SDL Copy Tags wiki in the SDL Community";
+			Name = "Trados Copy Tags wiki in the RWS Community";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5247/sdl-copy-tags");
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5247/trados-copy-tags");
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDLCopyTags results";
+		public override string Category => "TradosCopyTags results";
 		public override Icon Icon => PluginResources.Question;
 	}
 }

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
 using Trados.Transcreate.Commands;
 using Trados.Transcreate.Common;
 using Trados.Transcreate.Interfaces;

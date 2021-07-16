@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.MTCloud.Provider.Model

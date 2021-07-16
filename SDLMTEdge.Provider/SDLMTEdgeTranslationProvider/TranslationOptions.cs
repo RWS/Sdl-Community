@@ -41,6 +41,7 @@ namespace Sdl.Community.MTEdge.Provider
 		public string ApiToken { get; set; }
 
 		public bool UseBasicAuthentication { get; set; }
+		public bool RequiresSecureProtocol { get; set; }	
 
 		#region URI Properties
 		public string Host
@@ -63,7 +64,7 @@ namespace Sdl.Community.MTEdge.Provider
 
 		public string ApiVersionString => ApiVersion == APIVersion.v1 ? "v1" : "v2";
 
-		public Uri Uri => _uriBuilder.Uri;
+		public Uri Uri => !string.IsNullOrWhiteSpace(_uriBuilder.HostName) ? _uriBuilder.Uri : null;
 
 		public TradosToMTEdgeLP[] SetPreferredLanguages(LanguagePair[] languagePairs)
 		{

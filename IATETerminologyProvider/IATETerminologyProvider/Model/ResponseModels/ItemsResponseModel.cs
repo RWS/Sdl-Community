@@ -19,5 +19,6 @@ namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 		public List<TermsDomainResponseModel> Domains { get; set; }
 		
 		public string Id { get; set; }
+		public bool? Deprecated { get; set; }
 	}
 }

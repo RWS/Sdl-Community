@@ -2,7 +2,7 @@
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
-namespace Sdl.Community.MTCloud.Provider.Model
+namespace Sdl.Community.MTCloud.Provider.Model.RateIt
 {
 	public class QualityEstimation : BaseViewModel
 	{
@@ -36,9 +36,9 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		private Dictionary<string, int> Qualifiers { get; } = new()
 		{
-			["Good"] = 0,
-			["Adequate"] = 1,
-			["Poor"] = 2
+			[PluginResources.GoodQuality] = 0,
+			[PluginResources.AdequateQuality] = 1,
+			[PluginResources.PoorQuality] = 2
 		};
 	}
 }

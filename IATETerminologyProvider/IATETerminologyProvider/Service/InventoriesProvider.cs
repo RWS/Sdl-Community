@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -121,7 +122,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 					if (jsonTermTypesModel?.Items != null)
 					{
-						termTypes = new List<ItemsResponseModel>(jsonTermTypesModel.Items);
+						var validTermTypes =
+							jsonTermTypesModel.Items.Where(t => t.Deprecated is null || t.Deprecated == false);
+						termTypes = new List<ItemsResponseModel>(validTermTypes);
 					}
 				}
 			}

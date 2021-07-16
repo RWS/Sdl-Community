@@ -62,7 +62,7 @@ namespace Trados.Transcreate.TestData
 				Id = Guid.NewGuid().ToString(),
 				Name = projectName,
 				Path = projectName,
-				ProjectType = "SDL Project"
+				ProjectType = "RWS Project"
 			};
 
 			var sourceLanguageInfo = new LanguageInfo
@@ -110,7 +110,7 @@ namespace Trados.Transcreate.TestData
 				Id = Guid.NewGuid().ToString(),
 				Name = projectName,
 				Path = projectName,
-				ProjectType = "SDL Project"
+				ProjectType = "RWS Project"
 			};
 
 			var sourceLanguageInfo = new LanguageInfo

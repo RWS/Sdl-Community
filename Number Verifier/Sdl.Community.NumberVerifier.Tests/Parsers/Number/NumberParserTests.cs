@@ -114,14 +114,14 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.Number
 			var numberParser = new NumberParser(separators);
 
 			// act
-			var value = numberParser.Parse("3.021.343.43");
+			var value = numberParser.Parse("3.021.343.432");
 
 			// assert
 			Assert.True(value.Valid && value.HasGroupSeparator && !value.HasDecimalSeparator);
 		}
 
 		[Fact]
-		public void ReturnsTrue_WhenCustomSeparatorIsRecognized()
+		public void ReturnsTrue_WhenCustomSingleCharSeparatorIsRecognized()
 		{
 			// arrange
 			var separators = new List<NumberSeparator>
@@ -134,6 +134,25 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.Number
 
 			// act
 			var value = numberParser.Parse("343-43");
+
+			// assert
+			Assert.True(value.Valid);
+		}
+
+		[Fact]
+		public void ReturnsTrue_WhenCustomMultiCharSeparatorIsRecognized()
+		{
+			// arrange
+			var separators = new List<NumberSeparator>
+			{
+				new NumberSeparator {Type = NumberSeparator.SeparatorType.DecimalSeparator, Value = "MySeparator"},
+				new NumberSeparator {Type = NumberSeparator.SeparatorType.GroupSeparator, Value = "--"}
+			};
+
+			var numberParser = new NumberParser(separators);
+
+			// act
+			var value = numberParser.Parse("343--456MySeparator3");
 
 			// assert
 			Assert.True(value.Valid);
@@ -189,6 +208,35 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.Number
 			// arrange
 			// act
 			var value = _numberParser.Parse("3433,");
+
+			// assert
+			Assert.False(value.Valid);
+		}
+
+		[Fact]
+		public void ReturnsTrue_WhenInvalidSeparatorLocationIsRecognized()
+		{
+			// arrange
+			// act
+			var value = _numberParser.Parse("123,234.");
+
+			// assert
+			Assert.False(value.Valid);
+		}
+
+		[Fact]
+		public void ReturnsTrue_WhenGroupValueIsOutOfRange()
+		{
+			// arrange
+			var separators = new List<NumberSeparator>
+			{
+				new NumberSeparator {Type = NumberSeparator.SeparatorType.GroupSeparator, Value = ","}
+			};
+
+			var numberParser = new NumberParser(separators);
+
+			// act
+			var value = numberParser.Parse("234,34");
 
 			// assert
 			Assert.False(value.Valid);

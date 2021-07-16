@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Number Verifier
-AppPublisher=SDL Community Developers
+AppPublisher=RWS AppStore Team
 AppPublisherURL=https://community.sdl.com/
 AppVersion=1.0.4.0
 DisableDirPage = yes

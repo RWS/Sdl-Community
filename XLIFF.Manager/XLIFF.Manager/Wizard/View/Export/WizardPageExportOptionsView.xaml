@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export"
-             xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:rws="http://schemas.rws.com/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:WizardPageExportOptionsViewModel}">
 	<UserControl.Resources>
@@ -135,23 +135,23 @@
 
 					<TextBlock VerticalAlignment="Center" Text="Exclude Segments" Style="{StaticResource TextBlockColor}" Margin="5,10,5,5"/>
 
-					<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
-				                Margin="5,0,5,0" 
-				                Height="55" 
-								MaxDropDownHeight="250"
-								Style="{StaticResource MultiSelectComboBox.Custom.Style}"
-				                SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
-				                DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
-					            ItemsSource="{Binding FilterItems}"            
-					            SelectedItems="{Binding SelectedExcludeFilterItems}"
-					            sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
-								EnableGrouping="True"
-								EnableFiltering="True"
-					            IsEditable="True"
-					            EnableAutoComplete="True"
-					            ClearFilterOnDropdownClosing="True"
-					            ClearSelectionOnFilterChanged="True"
-					            />
+					<rws:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+					                         Margin="5,0,5,0" 
+					                         Height="55" 
+					                         MaxDropDownHeight="250"
+					                         Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+					                         SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+					                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+					                         ItemsSource="{Binding FilterItems}"            
+					                         SelectedItems="{Binding SelectedExcludeFilterItems}"
+					                         rws:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+					                         EnableGrouping="True"
+					                         EnableFiltering="True"
+					                         IsEditable="True"
+					                         EnableAutoComplete="True"
+					                         ClearFilterOnDropdownClosing="True"
+					                         ClearSelectionOnFilterChanged="True"
+					/>
 					<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
 				        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
 						<Underline>Clear selected items</Underline>

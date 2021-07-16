@@ -1,12 +1,9 @@
 ﻿using System;
 using Sdl.Community.MTCloud.Languages.Provider;
-using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Service;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.MTCloud.Provider.Studio
+namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 {
 	[TranslationProviderFactory(Id = "SDLMachineTranslationCloudProviderFactory",
 		Name = "SDLMachineTranslationCloudProviderFactory",

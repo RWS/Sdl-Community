@@ -1,6 +1,6 @@
 ﻿using System;
 using Sdl.Community.XLIFF.Manager.Model;
-using Sdl.MultiSelectComboBox.API;
+using Rws.MultiSelectComboBox.API;
 
 namespace Sdl.Community.XLIFF.Manager.Service
 {

@@ -12,6 +12,7 @@ using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
+using Sdl.Community.NumberVerifier.Processors;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -116,11 +117,11 @@ namespace Sdl.Community.NumberVerifier
 		/// if tags should not be considered for the verification.
 		/// </summary>
 		#region "text generator"
-		private TextGenerator _textGeneratorProcessor;
+		private TextGenerator _textGenerator;
 
-		public TextGenerator TextGeneratorProcessor
+		public TextGenerator TextGenerator
 		{
-			get { return _textGeneratorProcessor ?? (_textGeneratorProcessor = new TextGenerator()); }
+			get { return _textGenerator ?? (_textGenerator = new TextGenerator()); }
 		}
 		#endregion
 
@@ -223,11 +224,6 @@ namespace Sdl.Community.NumberVerifier
 		private string _targetMatchingThousandSeparators = string.Empty;
 		private string _sourceMatchingDecimalSeparators = string.Empty;
 		private string _targetMatchingDecimalSeparators = string.Empty;
-		private string _sourceThousandSeparators = string.Empty;
-		private string _sourceDecimalSeparators = string.Empty;
-		private string _targetThousandSeparators = string.Empty;
-		private string _targetDecimalSeparators = string.Empty;
-		private string _alphanumericsCustomSeparators = string.Empty;
 
 		private bool _isSource;
 
@@ -238,47 +234,6 @@ namespace Sdl.Community.NumberVerifier
 			_sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
 			_targetMatchingDecimalSeparators = string.Concat(VerificationSettings.GetTargetDecimalSeparators());
 
-			_targetMatchingDecimalSeparators += VerificationSettings.TargetDecimalComma ? @"\u002C" : string.Empty;
-			_targetMatchingDecimalSeparators += VerificationSettings.TargetDecimalPeriod ? @"\u002E" : string.Empty;
-			_targetMatchingDecimalSeparators += VerificationSettings.TargetDecimalCustomSeparator
-				? VerificationSettings.GetTargetDecimalCustomSeparator
-				: string.Empty;
-
-
-			//used in NoSeparator method, we need the character chosed not the code.
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsSpace ? " " : string.Empty;
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsNobreakSpace ? " " : string.Empty;
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsThinSpace ? " " : string.Empty;
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsNobreakThinSpace ? " " : string.Empty;
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsComma ? "," : string.Empty;
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsPeriod ? "." : string.Empty;
-			_sourceThousandSeparators += VerificationSettings.SourceThousandsCustomSeparator
-				? VerificationSettings.GetSourceThousandsCustomSeparator
-				: string.Empty;
-
-			_sourceDecimalSeparators += VerificationSettings.SourceDecimalComma ? "," : string.Empty;
-			_sourceDecimalSeparators += VerificationSettings.SourceDecimalPeriod ? "." : string.Empty;
-			_sourceDecimalSeparators += VerificationSettings.SourceDecimalCustomSeparator
-				? VerificationSettings.GetSourceDecimalCustomSeparator
-				: string.Empty;
-
-			_targetThousandSeparators += VerificationSettings.TargetThousandsSpace ? " " : string.Empty;
-			_targetThousandSeparators += VerificationSettings.TargetThousandsNobreakSpace ? " " : string.Empty;
-			_targetThousandSeparators += VerificationSettings.TargetThousandsThinSpace ? " " : string.Empty;
-			_targetThousandSeparators += VerificationSettings.TargetThousandsNobreakThinSpace ? " " : string.Empty;
-			_targetThousandSeparators += VerificationSettings.TargetThousandsComma ? "," : string.Empty;
-			_targetThousandSeparators += VerificationSettings.TargetThousandsPeriod ? "." : string.Empty;
-			_targetThousandSeparators += VerificationSettings.TargetThousandsCustomSeparator
-				? VerificationSettings.GetTargetThousandsCustomSeparator
-				: string.Empty;
-			_targetDecimalSeparators += VerificationSettings.TargetDecimalComma ? "," : string.Empty;
-			_targetDecimalSeparators += VerificationSettings.TargetDecimalPeriod ? "." : string.Empty;
-			_targetDecimalSeparators += VerificationSettings.TargetDecimalCustomSeparator
-				? VerificationSettings.GetSourceDecimalCustomSeparator
-				: string.Empty;
-			_alphanumericsCustomSeparators += VerificationSettings.CustomsSeparatorsAlphanumerics
-			   ? VerificationSettings.GetAlphanumericsCustomSeparator
-			   : string.Empty;
 		}
 
 		#endregion
@@ -295,6 +250,14 @@ namespace Sdl.Community.NumberVerifier
 		}
 
 		#endregion
+
+		public INumberVerifier GenericNumberVerifier
+		{
+			get
+			{
+				return new NumberFormatVerifier(VerificationSettings, TextGenerator);
+			}
+		}
 
 		/// <summary>
 		/// The following member performs the actual verification. It traverses the segment pairs of the current document,
@@ -314,23 +277,30 @@ namespace Sdl.Community.NumberVerifier
 					_sourceText = GetSegmentText(segmentPair.Source);
 					_targetText = GetSegmentText(segmentPair.Target);
 
-					var errorMessageList = CheckSourceAndTarget(_sourceText, _targetText);
+					var errorMessages = CheckSourceAndTarget(_sourceText, _targetText);
 
+					// generic number verifier to identify errors related to the numeric convention taking
+					// into consideration the settings applied.
+					var genericErrorMeassages = GenericNumberVerifier.Verify(segmentPair);
+					if (genericErrorMeassages.Any())
+					{
+						errorMessages.AddRange(genericErrorMeassages);
+					}
+					
 					#region ReportingMessage
 
-					foreach (var errorMessage in errorMessageList)
+					foreach (var errorMessage in errorMessages)
 					{
 						if (errorMessage.ExtendedErrorMessage != string.Empty && VerificationSettings.ReportExtendedMessages)
 						{
-							var extendedMessageReporter =
-								MessageReporter as IBilingualContentMessageReporterWithExtendedData;
-							if (extendedMessageReporter != null)
+							if (MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
 							{
 								#region CreateExtendedData
+								
 								var messageDataModel = new MessageDataModel
 								{
-									SourceIssues = errorMessage.SourceNumberIssues.Replace(Environment.NewLine, string.Empty),
-									TargetIssues = errorMessage.TargetNumberIssues.Replace(Environment.NewLine, string.Empty),
+									SourceIssues = errorMessage.SourceNumberIssues?.Replace(Environment.NewLine, string.Empty),
+									TargetIssues = errorMessage.TargetNumberIssues?.Replace(Environment.NewLine, string.Empty),
 									ReplacementSuggestion = segmentPair.Target,
 									InitialSourceIssues = errorMessage.InitialSourceNumber,
 									InitialTargetIssues = errorMessage.InitialTargetNumber,
@@ -387,12 +357,12 @@ namespace Sdl.Community.NumberVerifier
 
 								else
 								{
-									List<string> targetNumbers = new List<string>();
-									var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"-?[0-9]+\.?[0-9,]*");
+									var targetNumbers = new List<string>();
+									var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+", RegexOptions.Singleline);
 
 									foreach (var value in numbers)
 									{
-										var targetNumber = string.Format(@"""{0}""", value.ToString());
+										var targetNumber = string.Format(@"""{0}""", value);
 										targetNumbers.Add(targetNumber);
 									}
 									var res = string.Join(", ", targetNumbers.ToArray());
@@ -417,7 +387,6 @@ namespace Sdl.Community.NumberVerifier
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
-
 
 		/// <summary>
 		/// Returns a list of errors after checking the alphanumerics
@@ -589,7 +558,8 @@ namespace Sdl.Community.NumberVerifier
 				TargetText = targetText
 			};
 
-			if (_verificationSettings.ReportModifiedAlphanumerics || _verificationSettings.CustomsSeparatorsAlphanumerics)
+
+			if (_verificationSettings.CustomsSeparatorsAlphanumerics || _verificationSettings.ReportModifiedAlphanumerics)
 			{
 				var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
 				errorList.AddRange(errorsListFromAlphanumerics);
@@ -828,12 +798,12 @@ namespace Sdl.Community.NumberVerifier
 		{
 			try
 			{
-				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.GetSourceDecimalCustomSeparator, VerificationSettings.GetTargetDecimalCustomSeparator, VerificationSettings.SourceDecimalCustomSeparator, VerificationSettings.TargetDecimalCustomSeparator);
-				var customThousandSeparators = GetCustomSeparators(VerificationSettings.GetSourceThousandsCustomSeparator, VerificationSettings.GetTargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator);
+				var customDecimalSeparators = GetCustomSeparators(VerificationSettings.SourceDecimalCustomSeparator, VerificationSettings.TargetDecimalCustomSeparator, VerificationSettings.SourceDecimalCustom, VerificationSettings.TargetDecimalCustom);
+				var customThousandSeparators = GetCustomSeparators(VerificationSettings.SourceThousandsCustomSeparator, VerificationSettings.TargetThousandsCustomSeparator, VerificationSettings.SourceThousandsCustom, VerificationSettings.TargetThousandsCustom);
 				var separatorChars = _textFormatter.GetSeparatorsChars(customDecimalSeparators, customThousandSeparators);
 				var separators = $".,{customDecimalSeparators}{customThousandSeparators}{Constants.SpaceSeparators}";
 				var pattern = $"[+-−]?\\d+[{separators}\\s]{{0,1}}\\d{{0,3}}(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d{{0,3}}" +
-				              $"(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d{{0,3}}(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d*";
+							  $"(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d{{0,3}}(?<![{separators}\\s])[{separators}\\s]{{0,1}}\\d*";
 
 				var numbers = Regex.Matches(normalizedNumber.Text, pattern);
 
@@ -846,7 +816,11 @@ namespace Sdl.Community.NumberVerifier
 							? _textFormatter.RemovePunctuationChar(text, separatorChars, _omitLeadingZero)
 							: string.Empty;
 
-						if (string.IsNullOrWhiteSpace(text)) continue;
+						if (string.IsNullOrWhiteSpace(text))
+						{
+							continue;
+						}
+
 						ProcessText(normalizedNumber, text, customDecimalSeparators, customThousandSeparators);
 					}
 				}
@@ -856,7 +830,7 @@ namespace Sdl.Community.NumberVerifier
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
 		}
-		
+
 		private void ProcessText(NormalizedNumber normalizedNumber, string text, string customDecimalSeparators, string customThousandSeparators)
 		{
 			var separatorModel = GetSeparatorModel(normalizedNumber, text, customDecimalSeparators, customThousandSeparators);
@@ -870,7 +844,7 @@ namespace Sdl.Community.NumberVerifier
 			else if (IsNumberThousandDecimal(text, separatorModel))
 			{
 				var separators = $"{normalizedNumber.ThousandSeparators}{normalizedNumber.DecimalSeparators}" +
-				                 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
+								 $"{_textFormatter.GetSeparators(separatorModel.DecimalCustomSeparators)}{_textFormatter.GetSeparators(separatorModel.ThousandCustomSeparators)}";
 
 				_isNoSeparator = VerificationSettings.SourceNoSeparator || VerificationSettings.TargetNoSeparator;
 				var customSeparators = $"{separatorModel.ThousandCustomSeparators}{separatorModel.DecimalCustomSeparators}";
@@ -911,10 +885,10 @@ namespace Sdl.Community.NumberVerifier
 		{
 			// if none of the below condition is accomplished then the number is not decimal, otherwise the decimal identification process should continue
 			if (!(separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthCommaOrCustomSep <= 2 && separatorModel.LengthPeriodOrCustomSep == 0
-			    || separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthCommaOrCustomSep == 0
-			    || separatorModel.LengthCommaOrCustomSep == 0 && separatorModel.LengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
-			    || (separatorModel.LengthCommaOrCustomSep == separatorModel.LengthPeriodOrCustomSep && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep > 0
-			        && separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)
+				|| separatorModel.LengthPeriodOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep <= 2 && separatorModel.LengthCommaOrCustomSep == 0
+				|| separatorModel.LengthCommaOrCustomSep == 0 && separatorModel.LengthPeriodOrCustomSep == 0 // -> it means the number does not contains , or . and is not a thousand number like 2 300
+				|| (separatorModel.LengthCommaOrCustomSep == separatorModel.LengthPeriodOrCustomSep && separatorModel.LengthCommaOrCustomSep > 0 && separatorModel.LengthPeriodOrCustomSep > 0
+					&& separatorModel.LengthCommaOrCustomSep < 3 && separatorModel.LengthPeriodOrCustomSep < 3)
 				|| Regex.IsMatch(numberText, @"\s")))
 			{
 				SetSeparateThousandDecimal(string.Empty, string.Empty);
@@ -925,13 +899,13 @@ namespace Sdl.Community.NumberVerifier
 			var regExExpression = $"-?\\{separators}d+(\\d+)*";
 
 			// get the last 3 digits, if the first char is empty space or has a separator, it corresponds to decimal number, eg: " 10" or ",10"
-			var numberDigits = numberText.Length >= 3 ? numberText.Substring(numberText.Length - 3) : string.Empty; 
-			
-			var decimalMatch = Regex.Matches(numberDigits, regExExpression).Count > 0 
+			var numberDigits = numberText.Length >= 3 ? numberText.Substring(numberText.Length - 3) : string.Empty;
+
+			var decimalMatch = Regex.Matches(numberDigits, regExExpression).Count > 0
 				? Regex.Matches(numberDigits, regExExpression)[Regex.Matches(numberDigits, regExExpression).Count - 1].Value
 				: string.Empty;
 
-			var replacedText = Regex.IsMatch(numberText, @"\s") ?  Regex.Replace(numberText, @"\s", "") : string.Empty;
+			var replacedText = Regex.IsMatch(numberText, @"\s") ? Regex.Replace(numberText, @"\s", "") : string.Empty;
 
 			// get the text before the separator
 			var textBeforeSeparator = !string.IsNullOrEmpty(numberText) && !string.IsNullOrEmpty(decimalMatch)
@@ -940,8 +914,8 @@ namespace Sdl.Community.NumberVerifier
 
 			// check if match is corresponding to decimal standard based on the separator or number of length
 			var isDigitChar = (!string.IsNullOrEmpty(decimalMatch) && decimalMatch.Length <= 3 || !string.IsNullOrEmpty(numberDigits) && Regex.IsMatch(numberDigits[0].ToString(), @"\s"))
-			                  && replacedText.Length <= 3
-			                  && textBeforeSeparator.Length <= 3; // text length before the separator should be <= 3 chars to correspond to decimal number standards
+							  && replacedText.Length <= 3
+							  && textBeforeSeparator.Length <= 3; // text length before the separator should be <= 3 chars to correspond to decimal number standards
 
 			SetSeparateThousandDecimal(textBeforeSeparator, decimalMatch);
 
@@ -955,7 +929,7 @@ namespace Sdl.Community.NumberVerifier
 
 			var isThousandFormat = !string.IsNullOrEmpty(textBeforeSeparator) && decimalMatch.Length >= 3;
 			return (isDigitChar || numberText.Length <= 3 || !string.IsNullOrEmpty(textBeforeSeparator))
-			       && !isThousandFormat;
+				   && !isThousandFormat;
 		}
 
 		private void SetSeparateThousandDecimal(string textBeforeSeparator, string decimalMatch)
@@ -1155,7 +1129,7 @@ namespace Sdl.Community.NumberVerifier
 
 				return;
 			}
-			
+
 			foreach (Match match in Regex.Matches(numberText, regExExpression))
 			{
 				SetNormalizedNumber(normalizedNumber, match.Value);
@@ -1289,10 +1263,10 @@ namespace Sdl.Community.NumberVerifier
 			{
 				var normalizedAlphaList = new List<string>();
 				var words = Regex.Split(text, @"\s");
-				var customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
-					? _verificationSettings.GetAlphanumericsCustomSeparator.Split(',')
+				var customsSeparators = !string.IsNullOrEmpty(_verificationSettings.AlphanumericsCustomSeparator)
+					? _verificationSettings.AlphanumericsCustomSeparator.Split(',')
 					: new string[0];
-				
+
 				// The below foreach is used when checking those tags like Source: "<color=70236>Word" and Target:<color=70236>OtherWord
 				// and no empty space is between the '>' and 'Word' or between the '>' and 'OtherWord'.
 				// Because of the missing of empty space, the functionality recognize as beeing alphanumeric and when source and target were not that same('Word' different than 'OtherWord'
@@ -1328,7 +1302,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 				}
 
-				var separators = _verificationSettings.CustomsSeparatorsAlphanumerics 
+				var separators = _verificationSettings.CustomsSeparatorsAlphanumerics
 					? _textFormatter.GetAlphanumericsCustomSeparators(customsSeparators)
 					: string.Empty;
 				var regex = $"(?i)(?=.*[0-9])(?=.*[a-z])([a-z0-9{separators}]+)";
@@ -1337,12 +1311,12 @@ namespace Sdl.Community.NumberVerifier
 					from word in wordsRes
 					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
-				
+
 				var unNormalizedAlphanumerics = new List<string>();
 				unNormalizedAlphanumerics.AddRange(from word in wordsRes
 												   from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 												   select word);
-				
+
 				return GetAlphnumericsTuple(unNormalizedAlphanumerics, normalizedAlphaList);
 			}
 			catch (Exception ex)
@@ -1356,7 +1330,7 @@ namespace Sdl.Community.NumberVerifier
 		{
 			try
 			{
-				return VerificationSettings.ExcludeTagText == false ? segment.ToString() : TextGeneratorProcessor.GetPlainText(segment, false);
+				return VerificationSettings.ExcludeTagText == false ? segment.ToString() : TextGenerator.GetPlainText(segment, false);
 			}
 			catch (Exception ex)
 			{

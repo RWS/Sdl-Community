@@ -156,7 +156,7 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid separator location; separators cannot be grouped together.
+        ///   Looks up a localized string similar to Invalid separator location.
         /// </summary>
         public static string NumberParser_Message_InvalidSeparatorLocation {
             get {
@@ -210,7 +210,7 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Number Verifier.
+        ///   Looks up a localized string similar to Trados Number Verifier.
         /// </summary>
         public static string Plugin_Name {
             get {
