@@ -114,8 +114,6 @@ namespace Sdl.Community.SdlFreshstart.Model
 				{
 					_numericVersion = numericVersion;
 				}
-				
-				//_numericVersion = numericVersion < 15 ? _versionToExecutableVersionLegacy[VersionName] : numericVersion;
 
 				return _numericVersion;
 			}
