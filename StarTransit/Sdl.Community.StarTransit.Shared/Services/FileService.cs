@@ -305,7 +305,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				{"ZHM", "zh-MO"},
 				{"ZUL", "zu-ZA"},
 				{"ROU", "ro-RO"},
-				{"WEL", "cy-GB"}
+				{"WEL", "cy-GB"},
+				{"RMS", "rm-CH"}
 			};
 		}
 	}
