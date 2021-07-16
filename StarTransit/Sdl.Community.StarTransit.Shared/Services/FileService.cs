@@ -1,50 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-	public class FileService: IFileService
+	public class FileService : IFileService
 	{
-		private const string TmFileType = "ExtFileType=\"Extract\"";
 		private const string FileType = "Transit";
-		private const string MtFilesName = "_AEXTR_MT";
+		private Dictionary<string, string> _starTransitLanguageDictionary;
+		private Dictionary<string, string> _starTransitFileLanguageDictionary;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		/// <summary>
-		/// MT Files are considered to be TMs. However the Transit MT file does not conain |"
-		/// </summary>
-		public bool IsTransitTm(string filePath)
+		public FileService()
 		{
-			if (!File.Exists(filePath)) return false;
-			var name = Path.GetFileName(filePath);
-			var containsMtName = name.Contains(MtFilesName);
-			using (var reader = new StreamReader(filePath, Encoding.Default))
-			{
-				string line;
-				while ((line = reader.ReadLine()) != null)
-				{
-					if (line.Trim().Contains(TmFileType))
-					{
-						return true;
-					}
+			BuildTransitLanguageDictionary();
+			BuildTransitFileLanguage();
+		}
 
-					if (containsMtName)
-					{
-						if (line.Contains(FileType))
-						{
-							return true;
-						}
-					}
-					if (line.Equals("<Header>")) break;
-				}
-			}
+		public string[] GetTransitCorrespondingExtension(CultureInfo languageCulture)
+		{
+			var extension = languageCulture.ThreeLetterWindowsLanguageName;
+			extension = MapStarTransitLanguage(extension);
 
-			return false;
+			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
+			return extension.Split(',');
+		}
+
+		public string[] GetTransitCorrespondingExtension(string fileExtension)
+		{
+			return MapStarTransitLanguage(fileExtension).Split(',');
 		}
 
 		public bool IsTransitFile(string filePath)
@@ -59,404 +49,264 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						return true;
 					}
-					if(line.Equals("<Header>")) break;
+					if (line.Equals("<Header>")) break;
 				}
 			}
-
 			return false;
 		}
 
-		public bool IsValidNode(XmlNode originalXmlNode)
+		public bool IsValidNode(string dataAttributeHexCode)
 		{
-			return originalXmlNode.ChildNodes.Cast<XmlNode>().Any(childNode => childNode.NodeType == XmlNodeType.Text && !string.IsNullOrWhiteSpace(childNode.Value));
+			return !dataAttributeHexCode.StartsWith("C0E80FE9");
 		}
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{
-			return languagePairs.Select(pair => new Language(pair.TargetLanguage)).ToArray();
+			return languagePairs != null ? languagePairs.Select(pair => new Language(pair.TargetLanguage)).ToArray() : new List<Language>().ToArray();
+		}
+
+		public bool AreFilesExtensionsSupported(string sourceFileExtension, string targetFileExtension)
+		{
+			var sourceExtensions = GetTransitCorrespondingExtension(sourceFileExtension);
+			var sourceCodeExists = sourceExtensions.Any(s => s.Contains(sourceFileExtension));
+
+			var targetExtensions = GetTransitCorrespondingExtension(targetFileExtension);
+			var targetCodeExists = targetExtensions.Any(t => t.Contains(targetFileExtension));
+
+			if (sourceCodeExists && targetCodeExists) return true;
+			_logger.Info($"Transit source file extension {sourceFileExtension} or target file extension: {targetFileExtension} could not be mapped by the plugin.");
+			return false;
 		}
 
 		public string MapFileLanguage(string fileExtension)
 		{
 			if (string.IsNullOrEmpty(fileExtension)) return string.Empty;
 			fileExtension = fileExtension.ToUpper();
-			switch (fileExtension)
-			{
-				case "DEU":
-					return "de-DE";
-				case "AFK":
-					return "af-ZA";
-				case "AMH":
-					return "am-ET";
-				case "SQI":
-					return "sq-AL";
-				case "ARG":
-					return "ar-DZ";
-				case "ARH":
-					return "ar-BH";
-				case "ARE":
-					return "ar-EG";
-				case "ARI":
-					return "ar-IQ";
-				case "ARJ":
-					return "ar-JO";
-				case "ARK":
-					return "ar-KW";
-				case "ARB":
-					return "ar-LB";
-				case "ARL":
-					return "ar-LY";
-				case "ARM":
-					return "ar-MA";
-				case "ARO":
-					return "ar-OM";
-				case "ARQ":
-					return "ar-QA";
-				case "ARA":
-					return "ar-SA";
-				case "ARS":
-					return "ar-SY";
-				case "ART":
-					return "ar-TN";
-				case "ARU":
-					return "ar-AE";
-				case "ARY":
-					return "ar-YE";
-				case "EUQ":
-					return "eu-ES";
-				case "BEL":
-					return "be-BY";
-				case "BGR":
-					return "bg-BG";
-				case "CAT":
-					return "ca-ES";
-				case "CHS":
-					return "zh-CN";
-				case "ZHH":
-					return "zh-HK";
-				case "ZHI":
-					return "zh-SG";
-				case "CHT":
-					return "zh-TW";
-				case "HRV":
-					return "hr-HR";
-				case "CSY":
-					return "cs-CZ";
-				case "DAN":
-					return "da-DK";
-				case "NLB":
-					return "nl-BE";
-				case "NLD":
-					return "nl-NL";
-				case "ENA":
-					return "en-AU";
-				case "ENL":
-					return "en-BZ";
-				case "ENC":
-					return "en-CA";
-				case "ENI":
-					return "en-IE";
-				case "ENJ":
-					return "en-JM";
-				case "ENZ":
-					return "en-NZ";
-				case "ENS":
-					return "en-ZA";
-				case "ENT":
-					return "en-TT";
-				case "ENG":
-					return "en-GB";
-				case "ENU":
-					return "en-US";
-				case "ETI":
-					return "et-EE";
-				case "FOS":
-					return "fo-FO";
-				case "FAR":
-					return "fa-IR";
-				case "FIN":
-					return "fi-FI";
-				case "FRB":
-					return "fr-BE";
-				case "FRC":
-					return "fr-CA";
-				case "FRL":
-					return "fr-LU";
-				case "FRS":
-					return "fr-CH";
-				case "DEA":
-					return "de-AT";
-				case "DEC":
-					return "de-LI";
-				case "DEL":
-					return "de-LU";
-				case "DES":
-					return "de-CH";
-				case "ELL":
-					return "el-GR";
-				case "HEB":
-					return "he-IL";
-				case "HIN":
-					return "hi-IN";
-				case "HUN":
-					return "hu-HU";
-				case "ISL":
-					return "is-IS";
-				case "ITA":
-					return "it-IT";
-				case "ITS":
-					return "it-CH";
-				case "JPN":
-					return "ja-JP";
-				case "KOR":
-					return "ko-KR";
-				case "LVI":
-					return "lv-LV";
-				case "LTH":
-					return "lt-LT";
-				case "MKD":
-					return "mk-MK";
-				case "PLK":
-					return "pl-PL";
-				case "PTB":
-					return "pt-BR";
-				case "ROM":
-					return "ro-RO";
-				case "RUS":
-					return "ru-RU";
-				case "SKY":
-					return "sk-SK";
-				case "SLV":
-					return "sl-SI";
-				case "ESS":
-					return "es-AR";
-				case "ESB":
-					return "es-BO";
-				case "ESL":
-					return "es-CL";
-				case "ESO":
-					return "es-CO";
-				case "ESC":
-					return "es-CR";
-				case "ESD":
-					return "es-DO";
-				case "ESF":
-					return "es-EC";
-				case "ESE":
-					return "es-SV";
-				case "ESG":
-					return "es-GT";
-				case "ESH":
-					return "es-HN";
-				case "ESM":
-					return "es-MX";
-				case "ESI":
-					return "es-NI";
-				case "ESA":
-					return "es-PA";
-				case "ESZ":
-					return "es-PY";
-				case "ESR":
-					return "es-PE";
-				case "ES":
-					return "es-PR";
-				case "ESP":
-					return "es-ES";
-				case "ESY":
-					return "es-UY";
-				case "ESV":
-					return "es-VE";
-				case "SVF":
-					return "sv-FI";
-				case "THA":
-					return "th-TH";
-				case "TRK":
-					return "tr-TR";
-				case "UKR":
-					return "uk-UA";
-				case "URD":
-					return "ur-PK";
-				case "VIT":
-					return "vi-VN";
-				case "AZC":
-					return "az-Cyrl-AZ";
-				case "AZE":
-					return "az-Cyrl-AZ";
-				case "ENN":
-					return "en-IN";
-				case "ENM":
-					return "en-MY";
-				case "ENP":
-					return "en-PH";
-				case "FRA":
-					return "fr-FR";
-				case "FRM":
-					return "fr-MC";
-				case "FRO":
-					return "fo-FO";
-				case "FRY":
-					return "fy-NL";
-				case "GAL":
-					return "gl-ES";
-				case "GRC":
-					return "el-GR";
-				case "IBO":
-					return "ig-NG";
-				case "IND":
-					return "id-ID";
-				case "KAZ":
-					return "kk-KZ";
-				case "MNG":
-					return "mn-MN";
-				case "MSB":
-					return "ms-BN";
-				case "MSL":
-					return "ms-MY";
-				case "NON":
-					return "nn-NO";
-				case "NOR":
-					return "nb-NO";
-				case "NSO":
-					return "nso-ZA";
-				case "PTG":
-					return "pt-PT";
-				case "SRL":
-					return "sr";
-				case "SVE":
-					return "sv-SE";
-				case "SRB":
-					return "sr-Latn";
-				case "SWK":
-					return "sw-KE";
-				case "TKM":
-					return "tk-TM";
-				case "UZB":
-					return "es-VE";
-				case "VEN":
-					return "uz-Cyrl-UZ";
-				case "ZHM":
-					return "zh-MO";
-				case "ZUL":
-					return "zu-ZA";
-				case "ROU":
-					return "ro-RO";
-				case "WEL":
-					return "cy-GB";
-
-				default:
-					return "";
-			}
+			var fileExtensionExists =
+				_starTransitFileLanguageDictionary.TryGetValue(fileExtension, out var languageCode);
+			return fileExtensionExists ? languageCode : string.Empty;
 		}
 
 		public string MapStarTransitLanguage(string fileExtension)
 		{
 			if (string.IsNullOrEmpty(fileExtension)) return string.Empty;
-			switch (fileExtension)
+
+			var languageExists = _starTransitLanguageDictionary.TryGetValue(fileExtension, out var transitLanguageExtension);
+			return languageExists ? transitLanguageExtension : fileExtension;
+		}
+
+		public string ConvertStringToHex(string input, Encoding encoding)
+		{
+			var stringBytes = encoding.GetBytes(input);
+			var sbBytes = new StringBuilder(stringBytes.Length * 2);
+			foreach (var b in stringBytes)
 			{
-				case "CYM":
-					return "WEL";
-				case "MNN":
-					return "MNG";
-				case "NGA":
-				case "BIN":
-					return "EDO,EFI,NGA";
-				case "FYN":
-					return "FRY,FYN";
-				case "GLA":
-				case "GLE":
-					return "GAE,GLA,GDH";
-				case "ELL":
-					return "GRC,ELL";
-				case "ITA":
-				case "ITS":
-					return "ITS,ITA";
-				case "KKZ":
-					return "KAZ,KKZ";
-				case "KIR":
-				case "KYR":
-					return "KYR,KIR";
-				case "LAT":
-					return "LAT";
-				case "SOT":
-					return "SXT";
-				case "TSN":
-					return "NBL,TSN,SRL,TNA,VEN";
-				case "TSO":
-					return "TSG";
-				case "AFK":
-					return "NBL,TSO,SRL,VEN";
-				case "XHO":
-					return "NBL,XHO,SRL,VEN";
-				case "ZUL":
-					return "NBL,ZUL,SRL,VEN";
-				case "ENW":
-					return "NDE,ENW";
-				case "SNA":
-					return "NDE,SNA";
-				case "ZZZ":
-					return "SSW,ZZZ";
-				case "TUK":
-					return "TKM,TUK";
-				case "ENN":
-					return "END";
-				case "ENE":
-					return "ENO";
-				case "FRR":
-					return "FRU";
-				case "FRI":
-					return "FRV";
-				case "FRD":
-				case "MAF":
-				case "GLP":
-					return "FRW";
-				case "FUL":
-				case "FUB":
-					return "FUB";
-				case "GRN":
-					return "GUA";
-				case "YOR":
-					return "YBA";
-				case "MLT":
-					return "MTL";
-				case "ORM":
-					return "ORO";
-				case "RMC":
-					return "RMS";
-				case "ROD":
-					return "ROV";
-				case "SOM":
-					return "SML";
-				case "SMB":
-				case "SMA":
-				case "SMK":
-				case "SMJ":
-				case "SMN":
-				case "SMS":
-					return "SZI";
-				case "TIR":
-					return "TGE";
-				case "TIE":
-					return "TGY";
-				case "GLC":
-					return "GAL";
-				case "SRM":
-				case "SRS":
-				case "SRP":
-					return "SRL";
-				case "SSW":
-					return "SSW";
-				case "NDE":
-					return "NDE";
-				case "NBL":
-					return "NBL";
-				case "VEN":
-					return "VEN";
-				case "NLD":
-				case "NLB":
-					return "NLD,NLB,NLS";
-				default:
-					return fileExtension;
+				sbBytes.AppendFormat("{0:X2}", b);
 			}
+			return sbBytes.ToString();
+		}
+
+		private void BuildTransitLanguageDictionary()
+		{
+			_starTransitLanguageDictionary = new Dictionary<string, string>
+			{
+				{"CYM", "WEL"},
+				{"MNN", "MNG"},
+				{"NGA", "EDO,EFI,NGA"},
+				{"BIN", "EDO,EFI,NGA"},
+				{"FYN", "FRY,FYN"},
+				{"GLA", "GAE,GLA,GDH"},
+				{"GLE", "GAE,GLA,GDH"},
+				{"ELL", "GRC,ELL"},
+				{"ITA", "ITS,ITA"},
+				{"ITS", "ITS,ITA"},
+				{"KKZ", "KAZ,KKZ"},
+				{"KIR", "KYR,KIR"},
+				{"KYR", "KYR,KIR"},
+				{"LAT", "LAT"},
+				{"SOT", "SXT"},
+				{"TSN", "NBL,TSN,SRL,TNA,VEN"},
+				{"TSO", "TSG"},
+				{"AFK", "NBL,TSO,SRL,VEN"},
+				{"XHO", "NBL,XHO,SRL,VEN"},
+				{"ZUL", "NBL,ZUL,SRL,VEN"},
+				{"ENW", "NDE,ENW"},
+				{"SNA", "NDE,SNA"},
+				{"ZZZ", "SSW,ZZZ"},
+				{"TUK", "TKM,TUK"},
+				{"ENN", "END"},
+				{"ENE", "ENO"},
+				{"FRR", "FRU"},
+				{"FRI", "FRV"},
+				{"FRD", "FRW"},
+				{"MAF", "FRW"},
+				{"GLP", "FRW"},
+				{"FUL", "FUB"},
+				{"FUB", "FUB"},
+				{"GRN", "GUA"},
+				{"YOR", "YBA"},
+				{"MLT", "MLT"},
+				{"ORM", "ORO"},
+				{"RMC", "RMS"},
+				{"ROD", "ROV"},
+				{"SOM", "SML"},
+				{"SMB", "SZI"},
+				{"SMA", "SZI"},
+				{"SMK", "SZI"},
+				{"SMJ", "SZI"},
+				{"SMN", "SZI"},
+				{"SMS", "SZI"},
+				{"TIR", "TGE"},
+				{"TIE", "TGY"},
+				{"GLC", "GAL"},
+				{"SRM", "SRL"},
+				{"SRS", "SRL"},
+				{"SRP", "SRL"},
+				{"SRO","SRB" }, // Serbian Cyrillic
+				{"SSW", "SSW"},
+				{"NDE", "NDE"},
+				{"NBL", "NBL"},
+				{"VEN", "VEN"},
+				{"NLD", "NLD,NLB,NLS"},
+				{"NLB", "NLD,NLB,NLS"}
+			};
+		}
+
+		private void BuildTransitFileLanguage()
+		{
+			_starTransitFileLanguageDictionary = new Dictionary<string, string>
+			{
+				{"DEU", "de-DE"},
+				{"AFK", "af-ZA"},
+				{"AMH", "am-ET"},
+				{"SQI", "sq-AL"},
+				{"ARG", "ar-DZ"},
+				{"ARH", "ar-BH"},
+				{"ARE", "ar-EG"},
+				{"ARI", "ar-IQ"},
+				{"ARJ", "ar-JO"},
+				{"ARK", "ar-KW"},
+				{"ARB", "ar-LB"},
+				{"ARL", "ar-LY"},
+				{"ARM", "ar-MA"},
+				{"ARO", "ar-OM"},
+				{"ARQ", "ar-QA"},
+				{"ARA", "ar-SA"},
+				{"ARS", "ar-SY"},
+				{"ART", "ar-TN"},
+				{"ARU", "ar-AE"},
+				{"ARY", "ar-YE"},
+				{"EUQ", "eu-ES"},
+				{"BEL", "be-BY"},
+				{"BGR", "bg-BG"},
+				{"CAT", "ca-ES"},
+				{"CHS", "zh-CN"},
+				{"ZHH", "zh-HK"},
+				{"ZHI", "zh-SG"},
+				{"CHT", "zh-TW"},
+				{"HRV", "hr-HR"},
+				{"CSY", "cs-CZ"},
+				{"DAN", "da-DK"},
+				{"NLB", "nl-BE"},
+				{"NLD", "nl-NL"},
+				{"ENA", "en-AU"},
+				{"ENL", "en-BZ"},
+				{"ENC", "en-CA"},
+				{"ENI", "en-IE"},
+				{"ENJ", "en-JM"},
+				{"ENZ", "en-NZ"},
+				{"ENS", "en-ZA"},
+				{"ENT", "en-TT"},
+				{"ENG", "en-GB"},
+				{"ENU", "en-US"},
+				{"ETI", "et-EE"},
+				{"FOS", "fo-FO"},
+				{"FAR", "fa-IR"},
+				{"FIN", "fi-FI"},
+				{"FRB", "fr-BE"},
+				{"FRC", "fr-CA"},
+				{"FRL", "fr-LU"},
+				{"FRS", "fr-CH"},
+				{"DEA", "de-AT"},
+				{"DEC", "de-LI"},
+				{"DEL", "de-LU"},
+				{"DES", "de-CH"},
+				{"ELL", "el-GR"},
+				{"HEB", "he-IL"},
+				{"HIN", "i-IN"},
+				{"HUN", "hu-HU"},
+				{"ISL", "is-IS"},
+				{"ITA", "it-IT"},
+				{"ITS", "it-CH"},
+				{"JPN", "ja-JP"},
+				{"KOR", "ko-KR"},
+				{"LVI", "lv-LV"},
+				{"LTH", "lt-LT"},
+				{"MKD", "mk-MK"},
+				{"PLK", "pl-PL"},
+				{"PTB", "pt-BR"},
+				{"ROM", "ro-RO"},
+				{"RUS", "ru-RU"},
+				{"SKY", "sk-SK"},
+				{"SLV", "sl-SI"},
+				{"ESS", "es-AR"},
+				{"ESB", "es-BO"},
+				{"ESL", "es-CL"},
+				{"ESO", "es-CO"},
+				{"ESC", "es-CR"},
+				{"ESD", "es-DO"},
+				{"ESF", "es-EC"},
+				{"ESE", "es-SV"},
+				{"ESG", "es-GT"},
+				{"ESH", "es-HN"},
+				{"ESM", "es-MX"},
+				{"ESI", "es-NI"},
+				{"ESA", "es-PA"},
+				{"ESZ", "es-PY"},
+				{"ESR", "es-PE"},
+				{"ES", "es-PR"},
+				{"ESP", "es-ES"},
+				{"ESY", "es-UY"},
+				{"ESV", "es-VE"},
+				{"SVF", "sv-FI"},
+				{"THA", "th-TH"},
+				{"TRK", "tr-TR"},
+				{"UKR", "uk-UA"},
+				{"URD", "ur-PK"},
+				{"VIT", "vi-VN"},
+				{"AZC", "az-Cyrl-AZ"},
+				{"AZE", "az-Cyrl-AZ"},
+				{"ENN", "en-IN"},
+				{"ENM", "en-MY"},
+				{"ENP", "en-PH"},
+				{"FRA", "fr-FR"},
+				{"FRM", "fr-MC"},
+				{"FRO", "fo-FO"},
+				{"FRY", "fy-NL"},
+				{"GAL", "gl-ES"},
+				{"GRC", "el-GR"},
+				{"IBO", "ig-NG"},
+				{"IND", "id-ID"},
+				{"KAZ", "kk-KZ"},
+				{"MNG", "mn-MN"},
+				{"MSB", "ms-BN"},
+				{"MSL", "ms-MY"},
+				{"NON", "nn-NO"},
+				{"NOR", "nb-NO"},
+				{"NSO", "nso-ZA"},
+				{"PTG", "pt-PT"},
+				{"SRL", "sr-Latn-RS"}, 
+				{"SVE", "sv-SE"},
+				{"SRB", "sr-Cyrl-RS"},
+				{"SWK", "sw-KE"},
+				{"TKM", "tk-TM"},
+				{"UZB", "es-VE"},
+				{"VEN", "uz-Cyrl-UZ"},
+				{"ZHM", "zh-MO"},
+				{"ZUL", "zu-ZA"},
+				{"ROU", "ro-RO"},
+				{"WEL", "cy-GB"}
+			};
 		}
 	}
 }

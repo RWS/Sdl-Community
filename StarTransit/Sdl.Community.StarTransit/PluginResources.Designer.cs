@@ -65,7 +65,27 @@ namespace Sdl.Community.StarTransit {
         /// </summary>
         public static System.Drawing.Icon _return {
             get {
-                object obj = ResourceManager.GetObject("_return", resourceCulture);
+                object obj = ResourceManager.GetObject("return", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap arrow_right_blue {
+            get {
+                object obj = ResourceManager.GetObject("arrow_right_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon AutomatedTranslation {
+            get {
+                object obj = ResourceManager.GetObject("AutomatedTranslation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -81,6 +101,170 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BrowseLocation.
+        /// </summary>
+        public static string BrowseLocation {
+            get {
+                return ResourceManager.GetString("BrowseLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select an output path for the .tpf file.
+        /// </summary>
+        public static string BrowsePackageLocation_Tooltip {
+            get {
+                return ResourceManager.GetString("BrowsePackageLocation_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create project.
+        /// </summary>
+        public static string CreateProject_Btn {
+            get {
+                return ResourceManager.GetString("CreateProject_Btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project was created successfully.
+        /// </summary>
+        public static string CreateProject_Confirmation {
+            get {
+                return ResourceManager.GetString("CreateProject_Confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting Transit Tms into XLIFF Files.
+        /// </summary>
+        public static string CreateProject_Convert {
+            get {
+                return ResourceManager.GetString("CreateProject_Convert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new TM with name:.
+        /// </summary>
+        public static string CreateProject_CreateNewTm {
+            get {
+                return ResourceManager.GetString("CreateProject_CreateNewTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating project {0}.
+        /// </summary>
+        public static string CreateProject_Creating {
+            get {
+                return ResourceManager.GetString("CreateProject_Creating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import into:.
+        /// </summary>
+        public static string CreateProject_Import {
+            get {
+                return ResourceManager.GetString("CreateProject_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing XLIFF Files into selected TM(s) {0} of {1}.
+        /// </summary>
+        public static string CreateProject_ImportXliff {
+            get {
+                return ResourceManager.GetString("CreateProject_ImportXliff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Pairs progress.
+        /// </summary>
+        public static string CreateProject_LangPair {
+            get {
+                return ResourceManager.GetString("CreateProject_LangPair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No TM option selected.
+        /// </summary>
+        public static string CreateProject_NoTm {
+            get {
+                return ResourceManager.GetString("CreateProject_NoTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package details.
+        /// </summary>
+        public static string CreateProject_PackageDetails {
+            get {
+                return ResourceManager.GetString("CreateProject_PackageDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to with penalty: .
+        /// </summary>
+        public static string CreateProject_Penalty {
+            get {
+                return ResourceManager.GetString("CreateProject_Penalty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project name:.
+        /// </summary>
+        public static string CreateProject_ProjectName {
+            get {
+                return ResourceManager.GetString("CreateProject_ProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait....
+        /// </summary>
+        public static string CreateProject_Wait {
+            get {
+                return ResourceManager.GetString("CreateProject_Wait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon CreateProjectPackage_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CreateProjectPackage_Icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon delete {
+            get {
+                object obj = ResourceManager.GetObject("delete", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location is not a valid path.
+        /// </summary>
+        public static string Details_LocationValidation {
+            get {
+                return ResourceManager.GetString("Details_LocationValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {
@@ -91,21 +275,20 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to Please select an empty folder.
         /// </summary>
-        public static System.Drawing.Icon ForumIcon {
+        public static string EmptyFolder_Error {
             get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("EmptyFolder_Error", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon help_icon {
+        public static System.Drawing.Icon ForumIcon {
             get {
-                object obj = ResourceManager.GetObject("help_icon", resourceCulture);
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -141,11 +324,138 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string PackageDetails_Browse {
+            get {
+                return ResourceManager.GetString("PackageDetails_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selected due date.
+        /// </summary>
+        public static string PackageDetails_ClearDateTooltip {
+            get {
+                return ResourceManager.GetString("PackageDetails_ClearDateTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer:.
+        /// </summary>
+        public static string PackageDetails_Customer {
+            get {
+                return ResourceManager.GetString("PackageDetails_Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description:.
+        /// </summary>
+        public static string PackageDetails_DescriptionLbl {
+            get {
+                return ResourceManager.GetString("PackageDetails_DescriptionLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Due date:.
+        /// </summary>
+        public static string PackageDetails_DueDate {
+            get {
+                return ResourceManager.GetString("PackageDetails_DueDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select folder path.
+        /// </summary>
+        public static string PackageDetails_FolderLocation {
+            get {
+                return ResourceManager.GetString("PackageDetails_FolderLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add a valid folder path.
+        /// </summary>
+        public static string PackageDetails_InvalidPath_Error {
+            get {
+                return ResourceManager.GetString("PackageDetails_InvalidPath_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project location:.
+        /// </summary>
+        public static string PackageDetails_Location {
+            get {
+                return ResourceManager.GetString("PackageDetails_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package name:.
+        /// </summary>
+        public static string PackageDetails_NameLbl {
+            get {
+                return ResourceManager.GetString("PackageDetails_NameLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source language:.
+        /// </summary>
+        public static string PackageDetails_SourceLanguage {
+            get {
+                return ResourceManager.GetString("PackageDetails_SourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target language(s):.
+        /// </summary>
+        public static string PackageDetails_TargetLanguage {
+            get {
+                return ResourceManager.GetString("PackageDetails_TargetLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project template:.
+        /// </summary>
+        public static string PackageDetails_Template {
+            get {
+                return ResourceManager.GetString("PackageDetails_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste folder path or click &quot;Browse&quot; .
+        /// </summary>
+        public static string PackageDetails_Watermark {
+            get {
+                return ResourceManager.GetString("PackageDetails_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.StarTransit.
         /// </summary>
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ProjectTemplates {
+            get {
+                object obj = ResourceManager.GetObject("ProjectTemplates", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -166,6 +476,299 @@ namespace Sdl.Community.StarTransit {
             get {
                 object obj = ResourceManager.GetObject("return_package", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select an output path for the .tpf file, otherwise the package will be created within the project&apos;s folder..
+        /// </summary>
+        public static string ReturnPackage_WindowDetails {
+            get {
+                return ResourceManager.GetString("ReturnPackage_WindowDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return package folder path.
+        /// </summary>
+        public static string ReturnPackageLocation_Watermark {
+            get {
+                return ResourceManager.GetString("ReturnPackageLocation_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SelectTemplate.
+        /// </summary>
+        public static string SelectTemplate {
+            get {
+                return ResourceManager.GetString("SelectTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ShowPreviewAction {
+            get {
+                object obj = ResourceManager.GetObject("ShowPreviewAction", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Project Template.
+        /// </summary>
+        public static string TemplateTitle {
+            get {
+                return ResourceManager.GetString("TemplateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import into existing TM.
+        /// </summary>
+        public static string Tm_BrowseTm {
+            get {
+                return ResourceManager.GetString("Tm_BrowseTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create and import into new TM.
+        /// </summary>
+        public static string Tm_CreateTm {
+            get {
+                return ResourceManager.GetString("Tm_CreateTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create project without TM.
+        /// </summary>
+        public static string Tm_CreateWitoutTm {
+            get {
+                return ResourceManager.GetString("Tm_CreateWitoutTm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include reference materials.
+        /// </summary>
+        public static string Tm_ImportRefFolder {
+            get {
+                return ResourceManager.GetString("Tm_ImportRefFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected TM language pair does not match with the Transit TM language pair.
+        /// </summary>
+        public static string Tm_LanguageValidation {
+            get {
+                return ResourceManager.GetString("Tm_LanguageValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information Only
+        ///The selected Transit package doesn&apos;t contain any Translation Memories..
+        /// </summary>
+        public static string Tm_NoTmAvailableMessage {
+            get {
+                return ResourceManager.GetString("Tm_NoTmAvailableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select Translation Memory option for each language pair identified in Transit package.
+        /// </summary>
+        public static string Tm_PageDescription {
+            get {
+                return ResourceManager.GetString("Tm_PageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected package contains only Reference materials. To import them into a TM please check the box bellow.
+        /// </summary>
+        public static string Tm_PageReference {
+            get {
+                return ResourceManager.GetString("Tm_PageReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selected TM.
+        /// </summary>
+        public static string Tm_RemoveTmTooltip {
+            get {
+                return ResourceManager.GetString("Tm_RemoveTmTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected TM name:.
+        /// </summary>
+        public static string Tm_SelectedTmName {
+            get {
+                return ResourceManager.GetString("Tm_SelectedTmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include reference materials:.
+        /// </summary>
+        public static string TmCreate_RefFolder {
+            get {
+                return ResourceManager.GetString("TmCreate_RefFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TranslationMemory {
+            get {
+                object obj = ResourceManager.GetObject("TranslationMemory", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap trash_alt {
+            get {
+                object obj = ResourceManager.GetObject("trash_alt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon user {
+            get {
+                object obj = ResourceManager.GetObject("user", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create project.
+        /// </summary>
+        public static string Wizard_CreateProj_DisplayName {
+            get {
+                return ResourceManager.GetString("Wizard_CreateProj_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Trados Studio Project.
+        /// </summary>
+        public static string Wizard_CreateProj_Tooltip {
+            get {
+                return ResourceManager.GetString("Wizard_CreateProj_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TransitPackage Handler.
+        /// </summary>
+        public static string Wizard_Name {
+            get {
+                return ResourceManager.GetString("Wizard_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Details.
+        /// </summary>
+        public static string Wizard_PackageDetails_DisplayName {
+            get {
+                return ResourceManager.GetString("Wizard_PackageDetails_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trados Studio project details.
+        /// </summary>
+        public static string Wizard_PackageDetails_Tooltip {
+            get {
+                return ResourceManager.GetString("Wizard_PackageDetails_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Penalty.
+        /// </summary>
+        public static string Wizard_Penalty_Header {
+            get {
+                return ResourceManager.GetString("Wizard_Penalty_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} completed.
+        /// </summary>
+        public static string Wizard_StepsCompleted {
+            get {
+                return ResourceManager.GetString("Wizard_StepsCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation Memories.
+        /// </summary>
+        public static string Wizard_TM_DisplayName {
+            get {
+                return ResourceManager.GetString("Wizard_TM_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation memories details.
+        /// </summary>
+        public static string Wizard_Tms_Tooltip {
+            get {
+                return ResourceManager.GetString("Wizard_Tms_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transit file name.
+        /// </summary>
+        public static string Wizard_TmsName_Header {
+            get {
+                return ResourceManager.GetString("Wizard_TmsName_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please fill all the required fields.
+        /// </summary>
+        public static string Wizard_ValidationMessage {
+            get {
+                return ResourceManager.GetString("Wizard_ValidationMessage", resourceCulture);
             }
         }
     }

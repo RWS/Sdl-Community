@@ -312,7 +312,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				CloseAction();
 				if (isEmpty)
 				{
-					await Task.Run(() => (messageModel, CreatedProject) = _projectService.CreateProject(packageModel));
+					//await Task.Run(() => (messageModel, CreatedProject) = _projectService.CreateProject(packageModel));
 				}
 				if (messageModel == null)
 				{

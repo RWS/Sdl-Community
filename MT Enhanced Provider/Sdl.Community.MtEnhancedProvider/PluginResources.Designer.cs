@@ -97,6 +97,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MTEnhanced.
+        /// </summary>
+        public static string AppLogFolder {
+            get {
+                return ResourceManager.GetString("AppLogFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Translation Provider.
         /// </summary>
         public static string BackBtnText {
@@ -375,6 +384,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string LangPairAuthErrorMsg3 {
             get {
                 return ResourceManager.GetString("LangPairAuthErrorMsg3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MTEnhancedLogs.txt.
+        /// </summary>
+        public static string LogsFileName {
+            get {
+                return ResourceManager.GetString("LogsFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RWS AppStore.
+        /// </summary>
+        public static string LogsFolderPath {
+            get {
+                return ResourceManager.GetString("LogsFolderPath", resourceCulture);
             }
         }
         
@@ -826,7 +853,7 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the URI whare the glossary is stored:.
+        ///   Looks up a localized string similar to Enter the URI where the glossary is stored:.
         /// </summary>
         public static string V3Glossary {
             get {

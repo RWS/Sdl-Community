@@ -130,7 +130,7 @@
   <data name="opensourceimage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\opensourceimage.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_return" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="return" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\return.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="open_package" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -138,9 +138,6 @@
   </data>
   <data name="return_package" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\return_package.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="help_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\help_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -150,5 +147,207 @@
   </data>
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WindowsControl_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="WindowsControl_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="Wizard_Name" xml:space="preserve">
+    <value>TransitPackage Handler</value>
+  </data>
+  <data name="Wizard_StepsCompleted" xml:space="preserve">
+    <value>{0} of {1} completed</value>
+  </data>
+  <data name="PackageDetails_Customer" xml:space="preserve">
+    <value>Customer:</value>
+  </data>
+  <data name="PackageDetails_DescriptionLbl" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="PackageDetails_DueDate" xml:space="preserve">
+    <value>Due date:</value>
+  </data>
+  <data name="PackageDetails_Location" xml:space="preserve">
+    <value>Project location:</value>
+  </data>
+  <data name="PackageDetails_NameLbl" xml:space="preserve">
+    <value>Package name:</value>
+  </data>
+  <data name="PackageDetails_SourceLanguage" xml:space="preserve">
+    <value>Source language:</value>
+  </data>
+  <data name="PackageDetails_TargetLanguage" xml:space="preserve">
+    <value>Target language(s):</value>
+  </data>
+  <data name="PackageDetails_Template" xml:space="preserve">
+    <value>Project template:</value>
+  </data>
+  <data name="Wizard_PackageDetails_DisplayName" xml:space="preserve">
+    <value>Package Details</value>
+  </data>
+  <data name="Wizard_ValidationMessage" xml:space="preserve">
+    <value>Please fill all the required fields</value>
+  </data>
+  <data name="PackageDetails_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="PackageDetails_FolderLocation" xml:space="preserve">
+    <value>Please select folder path</value>
+  </data>
+  <data name="PackageDetails_Watermark" xml:space="preserve">
+    <value>Paste folder path or click "Browse" </value>
+  </data>
+  <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\user.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CreateProjectPackage_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\CreateProjectPackage_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProjectTemplates" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ProjectTemplates.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EmptyFolder_Error" xml:space="preserve">
+    <value>Please select an empty folder</value>
+  </data>
+  <data name="PackageDetails_ClearDateTooltip" xml:space="preserve">
+    <value>Remove selected due date</value>
+  </data>
+  <data name="Wizard_PackageDetails_Tooltip" xml:space="preserve">
+    <value>Trados Studio project details</value>
+  </data>
+  <data name="Wizard_Tms_Tooltip" xml:space="preserve">
+    <value>Translation memories details</value>
+  </data>
+  <data name="Wizard_TM_DisplayName" xml:space="preserve">
+    <value>Translation Memories</value>
+  </data>
+  <data name="arrow_right_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\arrow_right_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PackageDetails_InvalidPath_Error" xml:space="preserve">
+    <value>Please add a valid folder path</value>
+  </data>
+  <data name="Tm_BrowseTm" xml:space="preserve">
+    <value>Import into existing TM</value>
+  </data>
+  <data name="Tm_CreateTm" xml:space="preserve">
+    <value>Create and import into new TM</value>
+  </data>
+  <data name="Tm_CreateWitoutTm" xml:space="preserve">
+    <value>Create project without TM</value>
+  </data>
+  <data name="Tm_PageDescription" xml:space="preserve">
+    <value>Please select Translation Memory option for each language pair identified in Transit package</value>
+  </data>
+  <data name="Tm_SelectedTmName" xml:space="preserve">
+    <value>Selected TM name:</value>
+  </data>
+  <data name="TranslationMemory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\translationmemory.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AutomatedTranslation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AutomatedTranslation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Wizard_Penalty_Header" xml:space="preserve">
+    <value> Penalty</value>
+  </data>
+  <data name="Wizard_TmsName_Header" xml:space="preserve">
+    <value>Transit file name</value>
+  </data>
+  <data name="Tm_RemoveTmTooltip" xml:space="preserve">
+    <value>Remove selected TM</value>
+  </data>
+  <data name="trash_alt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\trash-alt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Tm_LanguageValidation" xml:space="preserve">
+    <value>Selected TM language pair does not match with the Transit TM language pair</value>
+  </data>
+  <data name="Tm_NoTmAvailableMessage" xml:space="preserve">
+    <value>Information Only
+The selected Transit package doesn't contain any Translation Memories.</value>
+  </data>
+  <data name="Wizard_CreateProj_DisplayName" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="Wizard_CreateProj_Tooltip" xml:space="preserve">
+    <value>Create Trados Studio Project</value>
+  </data>
+  <data name="CreateProject_Btn" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="CreateProject_PackageDetails" xml:space="preserve">
+    <value>Package details</value>
+  </data>
+  <data name="CreateProject_ProjectName" xml:space="preserve">
+    <value>Project name:</value>
+  </data>
+  <data name="CreateProject_CreateNewTm" xml:space="preserve">
+    <value>Create new TM with name:</value>
+  </data>
+  <data name="CreateProject_Import" xml:space="preserve">
+    <value>Import into:</value>
+  </data>
+  <data name="CreateProject_NoTm" xml:space="preserve">
+    <value>No TM option selected</value>
+  </data>
+  <data name="CreateProject_Penalty" xml:space="preserve">
+    <value>with penalty: </value>
+  </data>
+  <data name="CreateProject_Confirmation" xml:space="preserve">
+    <value>Project was created successfully</value>
+  </data>
+  <data name="CreateProject_Convert" xml:space="preserve">
+    <value>Converting Transit Tms into XLIFF Files</value>
+  </data>
+  <data name="CreateProject_Creating" xml:space="preserve">
+    <value>Creating project {0}</value>
+  </data>
+  <data name="CreateProject_ImportXliff" xml:space="preserve">
+    <value>Importing XLIFF Files into selected TM(s) {0} of {1}</value>
+  </data>
+  <data name="CreateProject_LangPair" xml:space="preserve">
+    <value>Language Pairs progress</value>
+  </data>
+  <data name="CreateProject_Wait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="BrowseLocation" xml:space="preserve">
+    <value>BrowseLocation</value>
+  </data>
+  <data name="SelectTemplate" xml:space="preserve">
+    <value>SelectTemplate</value>
+  </data>
+  <data name="TemplateTitle" xml:space="preserve">
+    <value>Open Project Template</value>
+  </data>
+  <data name="TmCreate_RefFolder" xml:space="preserve">
+    <value>Include reference materials:</value>
+  </data>
+  <data name="Tm_ImportRefFolder" xml:space="preserve">
+    <value>Include reference materials</value>
+  </data>
+  <data name="Tm_PageReference" xml:space="preserve">
+    <value>Selected package contains only Reference materials. To import them into a TM please check the box bellow</value>
+  </data>
+  <data name="Details_LocationValidation" xml:space="preserve">
+    <value>Location is not a valid path</value>
+  </data>
+  <data name="BrowsePackageLocation_Tooltip" xml:space="preserve">
+    <value>Please select an output path for the .tpf file</value>
+  </data>
+  <data name="ReturnPackageLocation_Watermark" xml:space="preserve">
+    <value>Return package folder path</value>
+  </data>
+  <data name="ReturnPackage_WindowDetails" xml:space="preserve">
+    <value>Please select an output path for the .tpf file, otherwise the package will be created within the project's folder.</value>
+  </data>
+  <data name="ShowPreviewAction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ShowPreviewAction.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

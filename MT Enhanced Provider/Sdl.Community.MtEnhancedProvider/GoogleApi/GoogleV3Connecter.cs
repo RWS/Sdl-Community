@@ -158,35 +158,6 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			return glossaryLanguages;
 		}
 
-		//This will be removed for the final version, we use it for testing
-		public List<GoogleGlossary> GetProjectGlossaries(IMtTranslationOptions options)
-		{
-			var googleGlosaries = new List<GoogleGlossary>();
-			var request = new ListGlossariesRequest
-			{
-				ParentAsLocationName = new LocationName(options.ProjectName, options.ProjectLocation),
-				PageSize = 50,
-			};
-			try
-			{
-				var response = _translationServiceClient.ListGlossaries(request);
-				var test = response.AsRawResponses();
-
-				foreach (var glossaryResponse in test)
-				{
-					foreach (var glossary in glossaryResponse)
-					{
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
-				throw;
-			}
-			return googleGlosaries;
-		}
-
 		private Glossary CreateUnidirectionalCsvGlossary(string sourceLanguage,string targetLanguage)
 		{
 			var glossary = new Glossary

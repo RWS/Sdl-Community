@@ -8,8 +8,6 @@ namespace Sdl.Community.MtEnhancedProvider.Helpers
 {
 	public static class Log
 	{
-		private static readonly Constants Constants = new Constants();
-
 		public static void Setup()
 		{
 			if (LogManager.Configuration == null)
@@ -18,7 +16,7 @@ namespace Sdl.Community.MtEnhancedProvider.Helpers
 			}
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMTEnhanced);
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder);
 			if (!Directory.Exists(logDirectoryPath))
 			{
 				Directory.CreateDirectory(logDirectoryPath);
@@ -26,7 +24,7 @@ namespace Sdl.Community.MtEnhancedProvider.Helpers
 			var target = new FileTarget
 			{
 				Name = "MTEnhancedProvider",
-				FileName = Path.Combine(logDirectoryPath, Constants.SDLMTEnhancedLogFile),
+				FileName = Path.Combine(logDirectoryPath, PluginResources.LogsFileName),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
