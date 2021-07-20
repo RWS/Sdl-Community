@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -10,12 +11,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 	public class QeLabelExtractor : AbstractBilingualContentProcessor
 	{
 		private readonly ProjectFile _projectFile;
+		private readonly WordCounter _wordCounter;
+
 		public Dictionary<string, QeFileReport> QeFileReports { get; set; }
 
-		public QeLabelExtractor(ProjectFile projectFile, Dictionary<string, QeFileReport> qeFileReports)
+		public QeLabelExtractor(ProjectFile projectFile, Dictionary<string, QeFileReport> qeFileReports, WordCounter wordCounter)
 		{
 			_projectFile = projectFile;
 			QeFileReports = qeFileReports;
+			_wordCounter = wordCounter;
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -39,11 +43,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 				{
 					if (qeFileReport.SegmentsPerCategory.TryGetValue(qualityEstimation, out var segmentsOfCurrentQuality))
 					{
-						segmentsOfCurrentQuality.Add(segmentPair);
+						segmentsOfCurrentQuality.Item1.Add(segmentPair);
+						segmentsOfCurrentQuality.Item2.Increment(GetSegmentWordCount(segmentPair));
 					}
 					else
 					{
-						qeFileReport.SegmentsPerCategory[qualityEstimation] = new List<ISegmentPair> {segmentPair};
+						qeFileReport.SegmentsPerCategory[qualityEstimation] = Tuple.Create(new List<ISegmentPair>(), GetSegmentWordCount(segmentPair)).ToValueTuple();
 					}
 				}
 				else
@@ -53,9 +58,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 						LanguageDirection = _projectFile.GetLanguageDirection(),
 						FileName = _projectFile.Name
 					};
-					QeFileReports[projectFileLocalFilePath].SegmentsPerCategory[qualityEstimation].Add(segmentPair);
+					QeFileReports[projectFileLocalFilePath].SegmentsPerCategory[qualityEstimation].Item1.Add(segmentPair);
+					QeFileReports[projectFileLocalFilePath].SegmentsPerCategory[qualityEstimation].Item2.Increment(GetSegmentWordCount(segmentPair));
 				}
 			}
+		}
+
+		private CountData GetSegmentWordCount(ISegmentPair segmentPair)
+		{
+			return _wordCounter.Count(segmentPair.Source);
 		}
 	}
 }
