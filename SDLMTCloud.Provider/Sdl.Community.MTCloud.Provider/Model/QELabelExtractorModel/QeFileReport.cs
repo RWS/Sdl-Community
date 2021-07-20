@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel
 {
@@ -8,11 +10,11 @@ namespace Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel
 	{
 		public LanguageDirection LanguageDirection { get; set; }
 		public string FileName { get; set; }
-		public Dictionary<string, List<ISegmentPair>> SegmentsPerCategory { get; set; } = new Dictionary<string, List<ISegmentPair>>
+		public Dictionary<string, (List<ISegmentPair>, CountData)> SegmentsPerCategory { get; set; } = new Dictionary<string, (List<ISegmentPair>, CountData)>
 		{
-			[PluginResources.GoodQuality] = new List<ISegmentPair>(),
-			[PluginResources.AdequateQuality] = new List<ISegmentPair>(),
-			[PluginResources.PoorQuality] = new List<ISegmentPair>()
+			[PluginResources.GoodQuality] = Tuple.Create(new List<ISegmentPair>(), new CountData()).ToValueTuple(),
+			[PluginResources.AdequateQuality] = Tuple.Create(new List<ISegmentPair>(), new CountData()).ToValueTuple(),
+			[PluginResources.PoorQuality] = Tuple.Create(new List<ISegmentPair>(), new CountData()).ToValueTuple(),
 		};
 	}
 }

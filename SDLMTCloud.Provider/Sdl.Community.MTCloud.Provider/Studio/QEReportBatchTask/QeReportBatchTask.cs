@@ -35,7 +35,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new QeLabelExtractor(projectFile, _qeFileReports)));
+			var wordCounter = GetWordCounter(projectFile);
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new QeLabelExtractor(projectFile, _qeFileReports, wordCounter)));
 		}
 
 		private void CreateReport(LanguageDirection languageDirection, List<QeFileReport> qeFileReports)
