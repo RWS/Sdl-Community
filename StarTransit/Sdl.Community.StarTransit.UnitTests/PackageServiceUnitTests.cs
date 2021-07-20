@@ -276,16 +276,17 @@ namespace Sdl.Community.StarTransit.UnitTests
 			Assert.Equal("FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN",name[0]);
 		}
 
-		[Fact]
-		public void GetFileName_CorrectValue()
+		[Theory]
+		[InlineData(@"File1=1|1|1|0|1|C:\Transit NXT\projects\Probeübersetzung\Probeübersetzung.ttc|Probeübersetzung_ttc|Probeübersetzung ttc|0", "Probeübersetzung_ttc")]
+		[InlineData(@"File1=1|1|1|0|1|C:\testdateien\Vorlage DLV kommentiert_gek�rzt.docx|Vorlage DLV kommentiert_gek�rzt|Vorlage DLV kommentiert_gek�rzt|0", "Vorlage DLV kommentiert_gek�rzt")]
+		public void GetFileName_CorrectValue(string prjFileInfo,string expectedFileName)
 		{
 			var files = new List<KeyValuePair<string, string>>
 			{
-				new KeyValuePair<string, string>("File1",
-					@"File1=1|1|1|0|1|C:\Transit NXT\projects\Probeübersetzung\Probeübersetzung.ttc|Probeübersetzung_ttc|Probeübersetzung ttc|0")
+				new KeyValuePair<string, string>("File1",prjFileInfo)
 			};
 			var name = _service.GetFilesNamesFromPrjFile(files);
-			Assert.Equal("Probeübersetzung_ttc", name[0]);
+			Assert.Equal(expectedFileName, name[0]);
 		}
 
 		[Fact]
