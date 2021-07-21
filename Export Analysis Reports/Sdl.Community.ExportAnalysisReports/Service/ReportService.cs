@@ -475,12 +475,12 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					if (files.Any(file => file.Contains("Analyze Files")))
+					if (files.Any(file => new FileInfo(file).Name.Contains("Analyze Files")))
 					{
 						return true;
 					}
 
-					_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
+					//_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
 					return false;
 				}
 
@@ -490,7 +490,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					return !string.IsNullOrEmpty(fileName);
 				}
 
-				_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
+				//_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
 
 				return false;
 			}
