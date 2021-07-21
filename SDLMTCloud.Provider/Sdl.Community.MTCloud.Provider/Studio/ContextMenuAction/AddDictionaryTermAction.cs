@@ -46,7 +46,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 
 		private void EnableAction(TranslationProviderStatusChanged tpStatus = null)
 		{
-			if (MtCloudApplicationInitializer.GetProjectInProcessing().GetProjectInfo().Id !=
+			var currentProject = MtCloudApplicationInitializer.GetProjectInProcessing();
+			if (currentProject == null || currentProject.GetProjectInfo().Id !=
 				MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project.GetProjectInfo().Id) return;
 
 			bool? hasSdlMtAdded;
