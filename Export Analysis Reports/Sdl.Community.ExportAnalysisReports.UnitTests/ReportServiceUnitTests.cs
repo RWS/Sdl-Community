@@ -9,6 +9,8 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 {
 	public class ReportServiceUnitTests
 	{
+		private readonly PathInfo _pathInfo;
+		private readonly SettingsService _settingsService;
 		private readonly ReportService _reportService;
 		private ExportAnalysisReportsConfiguration _exportReportsConfiguration;
 		private readonly MessageBoxService _messageBoxService;
@@ -17,6 +19,8 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 
 		public ReportServiceUnitTests()
 		{
+			_pathInfo = new PathInfo();
+			_settingsService = new SettingsService(_pathInfo);
 			_messageBoxService = Substitute.For<MessageBoxService>();
 			_projectService = Substitute.For<ProjectService>();
 			_exportReportsConfiguration = new ExportAnalysisReportsConfiguration();
@@ -24,7 +28,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			_exportTempFolder = _exportReportsConfiguration.GetTempExportFolder();
 		}
 
-		[Fact]
+		/*[Fact]
 		private void GetReportPath_IsSuccessfullyReturned_UnitTest()
 		{			
 			_reportService.SaveExportPath(_exportTempFolder);
@@ -42,7 +46,7 @@ namespace Sdl.Community.ExportAnalysisReports.UnitTests
 			var jsonPath = _reportService.GetJsonReportPath(filePath);
 
 			Assert.True(string.IsNullOrEmpty(jsonPath));
-		}
+		}*/
 
 		[Theory]
 		[InlineData(false, true, "Project 2")]

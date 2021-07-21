@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Sdl.Community.ExportAnalysisReports.Service;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.ExportAnalysisReports
 {
-	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
 	public class ReportExporterRibbon : AbstractRibbonGroup
 	{
@@ -26,7 +25,9 @@ namespace Sdl.Community.ExportAnalysisReports
 		}
 		protected override void Execute()
 		{
-			var exporter = new ReportExporterControl();
+			var pathInfo = new PathInfo();
+			var settingsService = new SettingsService(pathInfo);
+			var exporter = new ReportExporterControl(settingsService);
 			exporter.ShowDialog();
 		}
 	}
@@ -44,12 +45,14 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedProjects = projectController?.SelectedProjects;
+			var pathInfo = new PathInfo();
+			var settingsService = new SettingsService(pathInfo);
 			var foldersPth = new List<string>();
 			foreach (var project in selectedProjects)
 			{
 				foldersPth.Add(project.FilePath);
 			}
-			var dialog = new ReportExporterControl(foldersPth);
+			var dialog = new ReportExporterControl(foldersPth, settingsService);
 			dialog.ShowDialog();
 		}
 	}

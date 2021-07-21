@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExportAnalysisReportsConfiguration.cs" />
+    <Compile Include="Helpers\CustomPathInfo.cs" />
     <Compile Include="ReportServiceUnitTests.cs" />
     <Compile Include="ProjectServiceUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

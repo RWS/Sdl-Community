@@ -19,21 +19,18 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 	public class ReportService : IReportService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosExportAnalysisReports");
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IProjectService _projectService;
+		private readonly SettingsService _settingsService;
 		private string _reportFile;
 		private IEnumerable<AnalyzedFile> _analyzedFiles;
 
-		public ReportService(IMessageBoxService messageBoxService, IProjectService projectService)
+		public ReportService(IMessageBoxService messageBoxService, IProjectService projectService, SettingsService settingsService)
 		{
 			_messageBoxService = messageBoxService;
 			_projectService = projectService;
+			_settingsService = settingsService;
 		}
-
-		public string JsonPath => Path.Combine(_communityFolderPath, "TradosExportAnalysisReportSettings.json");
-		public string ReportsFolderPath { get; set; }
 
 
 		/// <summary>
@@ -78,39 +75,13 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		/// <summary>
-		/// Get report output path from Json file
-		/// </summary>
-		/// <param name="jsonPath"></param>
-		/// <returns></returns>
-		public string GetJsonReportPath(string jsonPath)
-		{
-			try
-			{
-				if (!File.Exists(jsonPath)) return string.Empty;
-				JsonSettings item;
-				using (var r = new StreamReader(jsonPath))
-				{
-					var json = r.ReadToEnd();
-					item = JsonConvert.DeserializeObject<JsonSettings>(json);					
-				}
-				return item?.ExportPath ?? string.Empty;
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"GetJsonReportPath method: {ex.Message}\n {ex.StackTrace}");
-			}
-
-			return string.Empty;
-		}
-
-		/// <summary>
 		/// Check if the exported path is the same
 		/// </summary>
 		/// <param name="reportOutputPath"></param>
 		/// <returns></returns>
 		public bool IsSameReportPath(string reportOutputPath)
 		{
-			var jsonReportPath = GetJsonReportPath(JsonPath);
+			var jsonReportPath = _settingsService.GetSettings().ExportPath;
 			return !string.IsNullOrEmpty(jsonReportPath) && !string.IsNullOrEmpty(reportOutputPath) && jsonReportPath.Equals(reportOutputPath);
 		}
 
@@ -136,33 +107,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		/// <summary>
-		///  Save report output path within json file
-		/// (It is saved within a json file, because it is a general path and is not related to an individual project)
-		/// </summary>
-		/// <param name="reportOutputPath"></param>
-		public void SaveExportPath(string reportOutputPath)
-		{
-			if (string.IsNullOrEmpty(reportOutputPath)) return;
-			Directory.CreateDirectory(_communityFolderPath);
-
-			var jsonExportPath = new JsonSettings { ExportPath = reportOutputPath };
-			var jsonResult = JsonConvert.SerializeObject(jsonExportPath);
-
-			if (File.Exists(JsonPath))
-			{
-				File.Delete(JsonPath);
-			}
-
-			File.Create(JsonPath).Dispose();
-
-			using (var tw = new StreamWriter(JsonPath, true))
-			{
-				tw.WriteLine(jsonResult);
-				tw.Close();
-			}
-		}
-
-		/// <summary>
 		/// Set report information using the project xml document
 		/// </summary>
 		/// <param name="project"></param>
@@ -174,6 +118,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				doc.Load(project.ProjectPath);
 
 				var projectInfo = _projectService.GetProjectInfo(project.ProjectPath);
+				
 				project.LanguageAnalysisReportPaths?.Clear();
 
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
@@ -455,8 +400,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 						filePath = SetExternalProjectPath(projectInfoNode, filePath);
 					}
 				}
-
-				ReportsFolderPath = filePath;
 			}
 			catch (Exception ex)
 			{
@@ -476,12 +419,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					if (files.Any(file => file.Contains("Analyze Files")))
+					if (files.Any(file => new FileInfo(file).Name.Contains("Analyze Files")))
 					{
 						return true;
 					}
 
-					_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
 					return false;
 				}
 
@@ -490,8 +432,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					fileName = Path.GetFileNameWithoutExtension(fileName);
 					return !string.IsNullOrEmpty(fileName);
 				}
-
-				_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
 
 				return false;
 			}
