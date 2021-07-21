@@ -41,7 +41,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			{
 				projectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
 				projectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
-				_currentProject = projectsController.CurrentProject.GetProjectInfo();
+				_currentProject = projectsController?.CurrentProject?.GetProjectInfo();
 			}
 
 			LoadState(translationProviderState);

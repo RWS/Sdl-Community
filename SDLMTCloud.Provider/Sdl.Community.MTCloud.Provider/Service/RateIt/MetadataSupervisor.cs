@@ -185,6 +185,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private void SetIdAndActiveFile()
 		{
+			if (ActiveDocument == null) return;
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
