@@ -57,6 +57,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (Data.ContainsKey(_docId)) return Data[_docId];
 				SetIdAndActiveFile();
 
+				if (_docId == Guid.Empty) return null;
 				return Data[_docId];
 			}
 		}
@@ -490,6 +491,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void SetIdAndActiveFile()
 		{
+			if (ActiveDocument == null) return;
 			_docId = ActiveDocument.ActiveFile.Id;
 			if (!Data.ContainsKey(_docId))
 			{
