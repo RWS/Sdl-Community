@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Command;
 using Sdl.Community.StarTransit.Interface;
@@ -26,6 +27,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 		private string _errorMessage;
 		private bool _isCreateButtonEnabled;
 		private bool? _selectAll;
+		public List<EncodingInfo> Encodings { get; set; }
+		private EncodingInfo _selectedFileNameEncoding;
 
 		public ReturnPackageWindowViewModel(IReturnPackage returnPackage,IReturnPackageService returnPackageService, IDialogService dialogService,IEventAggregatorService eventAggregatorService)
 		{
@@ -38,6 +41,8 @@ namespace Sdl.Community.StarTransit.ViewModel
 			{
 				returnFile.PropertyChanged += ReturnFile_PropertyChanged;
 			}
+
+			LoadEncodingsOptions();
 		}
 
 		public string ReturnPackageLocation
@@ -104,6 +109,16 @@ namespace Sdl.Community.StarTransit.ViewModel
 			}
 		}
 
+		public EncodingInfo SelectedFileNameEncoding
+		{
+			get => _selectedFileNameEncoding;
+			set
+			{
+				_selectedFileNameEncoding = value;
+				OnPropertyChanged(nameof(SelectedFileNameEncoding));
+			}
+		}
+
 		private void CheckAllFiles(bool? value)
 		{
 			if (value == null) return;
@@ -134,7 +149,7 @@ namespace Sdl.Community.StarTransit.ViewModel
 				}
 			}
 			ReturnPackage.SelectedTargetFilesForImport.AddRange(targetFiles);
-			var exportedWithSuccess =await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage));
+			var exportedWithSuccess =await Task.Run(() => _returnPackageService.ExportFiles(ReturnPackage,SelectedFileNameEncoding.CodePage));
 
 			if (exportedWithSuccess)
 			{
@@ -145,7 +160,15 @@ namespace Sdl.Community.StarTransit.ViewModel
 				ErrorMessage = "Return package could not be created. Please see log file for more details.";
 			}
 		}
-
+		private void LoadEncodingsOptions()
+		{
+			Encodings = Encoding.GetEncodings().ToList();
+			var westernEncoding = Encodings.FirstOrDefault(e => e.CodePage.Equals(850));
+			if (westernEncoding != null)
+			{
+				SelectedFileNameEncoding = westernEncoding;
+			}
+		}
 		private void BrowseLocation()
 		{
 			var location = _dialogService.ShowFolderDialog(PluginResources.PackageDetails_FolderLocation);

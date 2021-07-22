@@ -480,6 +480,15 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set encoding for return package files name.
+        /// </summary>
+        public static string ReturnPackage_Encoding {
+            get {
+                return ResourceManager.GetString("ReturnPackage_Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select an output path for the .tpf file, otherwise the package will be created within the project&apos;s folder..
         /// </summary>
         public static string ReturnPackage_WindowDetails {

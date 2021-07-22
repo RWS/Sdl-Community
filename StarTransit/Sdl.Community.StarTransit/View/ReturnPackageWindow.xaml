@@ -22,6 +22,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
@@ -38,33 +39,48 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
-
 			</Grid.RowDefinitions>
-			<uiHelpers:WindowsControl Grid.Row="0" DockPanel.Dock="Top" />
-			<TextBlock
-				Margin="20 5 0 20" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
-				FontSize="15"
-				Grid.Row="1" Text="{x:Static resx:PluginResources.ReturnPackage_WindowDetails}"/>
-			<TextBlock Grid.Row="2" 
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="2*"/>
+			</Grid.ColumnDefinitions>
+			<uiHelpers:WindowsControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" />
+			<TextBlock Grid.Column="0" Grid.ColumnSpan="2"
+			           Margin="20 5 0 10" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+			           FontSize="15"
+			           Grid.Row="1" Text="{x:Static resx:PluginResources.ReturnPackage_WindowDetails}"/>
+			<TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
 			           HorizontalAlignment="Center" FontSize="15"
 			           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
 			           Text="{Binding ErrorMessage,UpdateSourceTrigger=PropertyChanged}"
 			           Visibility="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullVisibilityConverter}, ConverterParameter=Inverted}" />
-			<DockPanel  Grid.Row="3" Margin="20 0 0 0" LastChildFill="False">
+
+			<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+					  Grid.Column="0" Grid.Row="3"
+					  Margin="20 0 0 0"
+			          ItemsSource="{Binding Encodings}"
+			          DisplayMemberPath="DisplayName"
+			          VerticalContentAlignment="Center"
+			          ToolTip="{x:Static resx:PluginResources.ReturnPackage_Encoding}"
+			          SelectedItem="{Binding SelectedFileNameEncoding}"
+			          Width="Auto" Height="{Binding ElementName=LocationBox, Path=ActualHeight}"
+			/>
+			<DockPanel Grid.Row="3" Grid.Column="1" Margin="20 0 20 0" LastChildFill="false">
 				<TextBox
-					VerticalContentAlignment="Center"
+					VerticalContentAlignment="Center" 
 					Name="LocationBox"
-					Width="500"
-					Margin="0 10"
+					MinWidth="410"
+					Width="Auto"
+					Margin="0 10 0 10"
 					Text="{Binding ReturnPackageLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Delay=1000}" />
 				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
 				        FocusVisualStyle="{x:Null}"
 				        Cursor="Hand"
-				        Margin="10"
+				        Margin="10 10 0 10"
 				        Command="{Binding BrowseCommand}" CommandParameter="{x:Static resx:PluginResources.BrowseLocation}"
 				        Content="{x:Static resx:PluginResources.PackageDetails_Browse}"/>
 			</DockPanel>
-			<DataGrid Grid.Row="4"
+			<DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
 			          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 					  ItemsSource="{Binding ReturnPackage.ReturnFilesDetails}"
 			          Margin="20 0"
@@ -99,10 +115,10 @@
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
 			</DataGrid>
-			<Button Grid.Row="5" Width="115" 
+			<Button Grid.Row="5" Width="115" Grid.Column="1"
 			        VerticalAlignment="Bottom"
 					HorizontalAlignment="Right"
-					Margin="10"
+					Margin="10 10 20 10"
 					Command="{Binding CreatePackageCommand}"
 					IsEnabled="{Binding IsCreateButtonEnabled}"
 			        Style="{StaticResource Sdl.Button.PrimaryStyle}" Content="Create package"/>
