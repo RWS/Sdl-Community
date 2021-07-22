@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sdl.Community.Legit")]
+[assembly: AssemblyTitle("Trados Legit!")]
 [assembly: AssemblyDescription("Tool for converting files.")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
