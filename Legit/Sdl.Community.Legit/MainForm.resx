@@ -4142,7 +4142,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>CenterScreen</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>SDL legIt! - Batch convert source files to TTX or Bilingual Doc</value>
+    <value>Trados legIt! - Batch convert source files to TTX or Bilingual Doc</value>
   </data>
   <data name="&gt;&gt;HelpTooltip.Name" xml:space="preserve">
     <value>HelpTooltip</value>

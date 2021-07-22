@@ -19,7 +19,7 @@ namespace Sdl.Community.Legit.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResources {
@@ -115,7 +115,7 @@ namespace Sdl.Community.Legit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados Tools installation folder could not be found in the registry. Check your installation of client tools..
+        ///   Looks up a localized string similar to Trados Tools installation folder could not be found in the registry. Check your installation of client tools..
         /// </summary>
         internal static string InstallFolderNotFoundInRegistryText {
             get {
@@ -133,7 +133,7 @@ namespace Sdl.Community.Legit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados Studio 2014 is not licensed on this computer. Activate it first before using this add-on..
+        ///   Looks up a localized string similar to Trados Studio 2021 is not licensed on this computer. Activate it first before using this add-on..
         /// </summary>
         internal static string LicenseErrorMessage {
             get {
