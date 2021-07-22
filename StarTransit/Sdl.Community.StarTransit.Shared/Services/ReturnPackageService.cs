@@ -89,7 +89,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			return false;
 		}
 
-		public bool ExportFiles(IReturnPackage package)
+		public bool ExportFiles(IReturnPackage package,int encodingCode)
 		{
 			if (package is null)
 			{
@@ -109,7 +109,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var taskSequence = package?.FileBasedProject?.RunAutomaticTasks(
 				package.SelectedTargetFilesForImport?.GetIds(),
 				new[] {AutomaticTaskTemplateIds.GenerateTargetTranslations});
-			CreateArchive(package); // Create transit tpf file anyway
+			CreateArchive(package, encodingCode); // Create transit tpf file anyway
 
 			if (taskSequence?.Status == TaskStatus.Completed)
 			{
@@ -124,7 +124,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		/// Creates an archive in the Return Package folder and add project files to it
 		/// For the moment we add the files without running any task on them
 		/// </summary>
-		private void CreateArchive(IReturnPackage package)
+		private void CreateArchive(IReturnPackage package, int encodingCode)
 		{
 			try
 			{
@@ -148,7 +148,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 								pathToTargetFileFolder = Path.GetDirectoryName(file.LocalFilePath);
 								var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
-								archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName, CompressionLevel.Optimal);
+								var nameBytes = Encoding.Default.GetBytes(fileName);
+								var encodedFileName = Encoding.GetEncoding(encodingCode).GetString(nameBytes);
+
+								archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), encodedFileName, CompressionLevel.Optimal);
 							}
 						}
 					}
