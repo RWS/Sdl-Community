@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
+using NLog;
 using Sdl.Community.SdlFreshstart.ViewModel;
 
 namespace Sdl.Community.SdlFreshstart.Model
@@ -12,6 +12,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 	{
 		private const string SdlFolder = @"SDL\SDL Trados Studio";
 		private const string SdlBaseRegistryKey = @"HKEY_CURRENT_USER\Software\SDL\SDL Trados Studio\";
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		private readonly Dictionary<string, int> _versionToExecutableVersionLegacy = new Dictionary<string, int>
 		{
@@ -54,7 +55,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			AppDataRoamingPluginsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				pluginPath);
 
-			ShortVersion = publicVersion.Substring(11);
+			ShortVersion = publicVersion.Substring(!publicVersion.ToUpper().Contains("SDL") ? 7 : 11);
 
 			DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ShortVersion);
 
@@ -101,7 +102,18 @@ namespace Sdl.Community.SdlFreshstart.Model
 				if (_numericVersion > 0) return _numericVersion;
 
 				var numericVersion = ExtractNumber(VersionName);
-				_numericVersion = numericVersion < 15 ? _versionToExecutableVersionLegacy[VersionName] : numericVersion;
+				
+				if (numericVersion < 15)
+				{
+					_logger.Info($"Major Version: Numeric Version {numericVersion}");
+					_logger.Info($"Major Version: Version Name {VersionName}");
+
+					_versionToExecutableVersionLegacy.TryGetValue(VersionName, out _numericVersion);
+				}
+				else
+				{
+					_numericVersion = numericVersion;
+				}
 
 				return _numericVersion;
 			}

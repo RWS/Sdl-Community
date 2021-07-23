@@ -7,40 +7,34 @@ using NLog.Targets;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
-	public sealed class Log
+	public static class Log
 	{
-		public static Logger Logger;
-		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
-		public static Log Instance { get { return _instance.Value; } }
-
-		private Log()
+		public static void Setup()
 		{
-			var config = new LoggingConfiguration();
-			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
-				"SdlFreshstart");
-			if (!Directory.Exists(logDirectoryPath))
+			if (LogManager.Configuration == null)
 			{
-				Directory.CreateDirectory(logDirectoryPath);
+				LogManager.Configuration = new LoggingConfiguration();
 			}
+
+			var config = LogManager.Configuration;
+
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
+				"TradosFreshstartLogs");
+
+			Directory.CreateDirectory(logDirectoryPath);
+
 			var target = new FileTarget
 			{
-				FileName = Path.Combine(logDirectoryPath, "SdlFreshstartLogs.txt"),
-				// Roll over the log every 10 MB
-				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
-
-				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
-				// we need to do basic string concatenation.
-				ArchiveFileName = logDirectoryPath + "/" + assembly.GetName().Name + ".log.{#####}.txt"
+				Name = "TradosFreshstart",
+				FileName = Path.Combine(logDirectoryPath, "TradosFreshstartLogs.txt"),
+				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
-			config.AddTarget("file", target);
-			var rule = new LoggingRule("*", LogLevel.Debug, target);
-			config.LoggingRules.Add(rule);
-			LogManager.Configuration = config;
+			config.AddTarget(target);
+			config.AddRuleForAllLevels(target, "*SdlFreshstart*");
+
 			//NLog object
-			Logger = LogManager.GetCurrentClassLogger();
+			LogManager.ReconfigExistingLoggers();
 		}
 	}
 }
