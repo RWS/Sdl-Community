@@ -26,48 +26,69 @@ namespace Sdl.Community.SdlFreshstart.Model
 
 		public StudioVersion(string versionName, string publicVersion, string edition = "")
 		{
-			VersionName = $"{versionName}{edition}";
-			PublicVersion = publicVersion;
-			Edition = edition;
-			SdlRegistryKey = $"{SdlBaseRegistryKey}{AppDataStudioFolder}";
+			try
+			{
+				VersionName = $"{versionName}{edition}";
+				PublicVersion = publicVersion;
+				Edition = edition;
+				SdlRegistryKey = $"{SdlBaseRegistryKey}{AppDataStudioFolder}";
 
-			var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{edition}");
-			var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
+				var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{edition}");
+				var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
 
-			ProgramDataStudioPath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-				programDataStudioFolderPath);
+				ProgramDataStudioPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+					programDataStudioFolderPath);
 
-			ProgramDataPluginsPath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-				pluginPath);
+				ProgramDataPluginsPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+					pluginPath);
 
-			var appDataStudioFolderPath = Path.Combine(SdlFolder, AppDataStudioFolder);
-			AppDataLocalStudioPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-				appDataStudioFolderPath);
+				var appDataStudioFolderPath = Path.Combine(SdlFolder, AppDataStudioFolder);
+				AppDataLocalStudioPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+					appDataStudioFolderPath);
 
-			AppDataLocalPluginsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-				pluginPath);
+				AppDataLocalPluginsPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+					pluginPath);
 
-			AppDataRoamingStudioPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				appDataStudioFolderPath);
+				AppDataRoamingStudioPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					appDataStudioFolderPath);
 
-			AppDataRoamingPluginsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				pluginPath);
+				AppDataRoamingPluginsPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					pluginPath);
 
-			ShortVersion = publicVersion.Substring(!publicVersion.ToUpper().Contains("SDL") ? 7 : 11);
+				ShortVersion = publicVersion.Substring(!publicVersion.ToUpper().Contains("SDL") ? 7 : 11);
 
-			DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ShortVersion);
+				DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+					ShortVersion);
 
-			ProjectsXmlPath = Path.Combine(DocumentsPath, "Projects", "projects.xml");
+				ProjectsXmlPath = Path.Combine(DocumentsPath, "Projects", "projects.xml");
 
-			ProgramDataStudioDataSubfolderPath = $@"{ProgramDataStudioPath}\Updates";
+				ProgramDataStudioDataSubfolderPath = $@"{ProgramDataStudioPath}\Updates";
 
-			ProjectTemplatesPath = $@"{DocumentsPath}\Project Templates";
+				ProjectTemplatesPath = $@"{DocumentsPath}\Project Templates";
 
-			ProjectApiPath = Directory.GetDirectories(Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL", "ProjectApi")).FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
+
+				_logger.Info("Trying to get the Project API file path...");
+				var localProjectApiPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					"SDL", "ProjectApi");
+
+				_logger.Info($"Local Project APi path: {localProjectApiPath}");
+				_logger.Info($"Major version: {MajorVersion}");
+				ProjectApiPath = Directory.GetDirectories(localProjectApiPath)
+					.FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
+
+				_logger.Info($"Found ProjectAPI Path: {ProjectApiPath}");
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+			}
 		}
 
 		public string SdlRegistryKey { get; set; }
