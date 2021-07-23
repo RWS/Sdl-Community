@@ -61,7 +61,7 @@ namespace VariablesManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variables Manager for SDL Trados Studio.
+        ///   Looks up a localized string similar to Variables Manager for Trados Studio.
         /// </summary>
         internal static string Plugin_Name {
             get {
