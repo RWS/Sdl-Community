@@ -19,7 +19,7 @@ namespace Sdl.Community.Trados2007 {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -70,7 +70,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File-based SDL Tradso 2007 Translation Memory is closed..
+        ///   Looks up a localized string similar to File-based Tradso 2007 Translation Memory is closed..
         /// </summary>
         public static string Exception_FileBasedDisposed {
             get {
@@ -97,7 +97,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not parse SDL Trados 2007 locale ({0}) number..
+        ///   Looks up a localized string similar to Could not parse Trados 2007 locale ({0}) number..
         /// </summary>
         public static string Exception_TradosLocaleNotMapped {
             get {
@@ -115,7 +115,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected SDL Trados 2007 translation server ({0}) is not responding. Please, check your network settings or try again later..
+        ///   Looks up a localized string similar to Selected Trados 2007 translation server ({0}) is not responding. Please, check your network settings or try again later..
         /// </summary>
         public static string Information_ServerIsDown {
             get {
@@ -220,7 +220,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add SDL Trados 2007 Server.
+        ///   Looks up a localized string similar to Trados 2007 Server.
         /// </summary>
         public static string Trados2007_AddEditServerDialog_Add {
             get {
@@ -229,7 +229,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit SDL Trados 2007 Server.
+        ///   Looks up a localized string similar to Edit Trados 2007 Server.
         /// </summary>
         public static string Trados2007_AddEditServerDialog_Edit {
             get {
@@ -238,7 +238,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login to SDL Trados 2007 Server.
+        ///   Looks up a localized string similar to Login to Trados 2007 Server.
         /// </summary>
         public static string Trados2007_AddEditServerDialog_Login {
             get {
@@ -256,7 +256,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select SDL Trados 2007 Translation Memory.
+        ///   Looks up a localized string similar to Select Trados 2007 Translation Memory.
         /// </summary>
         public static string Trados2007_BrowseDialogTitle {
             get {
@@ -265,7 +265,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados 2007 Translation Memory (*.tmw) | *.tmw.
+        ///   Looks up a localized string similar to Trados 2007 Translation Memory (*.tmw) | *.tmw.
         /// </summary>
         public static string Trados2007_DialogFilterExtension {
             get {
@@ -343,7 +343,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados 2007 server-based translation memories cannot be supported because SDL Trados Server Manager 2007 is not installed on this machine..
+        ///   Looks up a localized string similar to Trados 2007 server-based translation memories cannot be supported because Trados Server Manager 2007 is not installed on this machine..
         /// </summary>
         public static string Trados2007_ServerManager2007NotInstalledMessage {
             get {
@@ -361,7 +361,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados 2007 Translation Memory.
+        ///   Looks up a localized string similar to Trados 2007 Translation Memory.
         /// </summary>
         public static string Trados2007_StatusMessage {
             get {
@@ -370,7 +370,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados 2007 Translation Memory.
+        ///   Looks up a localized string similar to Trados 2007 Translation Memory.
         /// </summary>
         public static string Trados2007_ToolTip {
             get {
@@ -379,7 +379,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A plug-in provider to use SDL Trados 2007 translation memories..
+        ///   Looks up a localized string similar to A plug-in provider to use Trados 2007 translation memories..
         /// </summary>
         public static string Trados2007_TypeDescription {
             get {
@@ -388,7 +388,7 @@ namespace Sdl.Community.Trados2007 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL &amp;Trados 2007 Translation Memory....
+        ///   Looks up a localized string similar to Trados 2007 Translation Memory....
         /// </summary>
         public static string Trados2007_TypeName {
             get {

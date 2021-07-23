@@ -160,7 +160,7 @@
             this.Name = "ServersForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "SDL Trados 2007 Servers";
+            this.Text = "Trados 2007 Servers";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serversGridView)).EndInit();

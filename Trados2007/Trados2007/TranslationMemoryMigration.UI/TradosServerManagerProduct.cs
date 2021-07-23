@@ -13,7 +13,7 @@ namespace Sdl.TranslationStudio.TranslationMemoryMigration.UI.References
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public TradosServerManagerProduct() : base("SDL Trados Server Manager 2007")
+        public TradosServerManagerProduct() : base("Trados Server Manager 2007")
         {
         }
     }
