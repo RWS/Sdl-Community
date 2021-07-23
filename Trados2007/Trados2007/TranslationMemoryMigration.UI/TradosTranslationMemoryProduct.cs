@@ -16,7 +16,7 @@ namespace Sdl.TranslationStudio.TranslationMemoryMigration.UI.References
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public TradosTranslationMemoryProduct() : base("SDL Trados 2007")
+        public TradosTranslationMemoryProduct() : base("Trados 2007")
         {
         }
 

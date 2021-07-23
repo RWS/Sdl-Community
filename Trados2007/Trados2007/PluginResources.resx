@@ -122,19 +122,19 @@
     <value>Resources\server_add.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Trados2007_StatusMessage" xml:space="preserve">
-    <value>SDL Trados 2007 Translation Memory</value>
+    <value>Trados 2007 Translation Memory</value>
   </data>
   <data name="Exception_TradosLocaleNotMapped" xml:space="preserve">
-    <value>Could not parse SDL Trados 2007 locale ({0}) number.</value>
+    <value>Could not parse Trados 2007 locale ({0}) number.</value>
   </data>
   <data name="Trados2007_TypeName" xml:space="preserve">
-    <value>SDL &amp;Trados 2007 Translation Memory...</value>
+    <value>Trados 2007 Translation Memory...</value>
   </data>
   <data name="Exception_FileNotFound" xml:space="preserve">
     <value>Requested translation provider could not be found.</value>
   </data>
   <data name="Trados2007_BrowseDialogTitle" xml:space="preserve">
-    <value>Select SDL Trados 2007 Translation Memory</value>
+    <value>Select Trados 2007 Translation Memory</value>
   </data>
   <data name="Exception_TMPartMissing" xml:space="preserve">
     <value>A {0} file is missing.</value>
@@ -143,10 +143,10 @@
     <value>Resources\server_connect.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Trados2007_DialogFilterExtension" xml:space="preserve">
-    <value>SDL Trados 2007 Translation Memory (*.tmw) | *.tmw</value>
+    <value>Trados 2007 Translation Memory (*.tmw) | *.tmw</value>
   </data>
   <data name="Trados2007_AddEditServerDialog_Add" xml:space="preserve">
-    <value>Add SDL Trados 2007 Server</value>
+    <value>Trados 2007 Server</value>
   </data>
   <data name="server_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\server_delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -158,16 +158,16 @@
     <value>Resources\loader.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Trados2007_ToolTip" xml:space="preserve">
-    <value>SDL Trados 2007 Translation Memory</value>
+    <value>Trados 2007 Translation Memory</value>
   </data>
   <data name="Trados2007_TypeDescription" xml:space="preserve">
-    <value>A plug-in provider to use SDL Trados 2007 translation memories.</value>
+    <value>A plug-in provider to use Trados 2007 translation memories.</value>
   </data>
   <data name="Sdl_trados2007_png" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\sdl_trados2007.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Trados2007_AddEditServerDialog_Edit" xml:space="preserve">
-    <value>Edit SDL Trados 2007 Server</value>
+    <value>Edit Trados 2007 Server</value>
   </data>
   <data name="Exception_UriNotSupported" xml:space="preserve">
     <value>The given URI ({0}) is not supported.</value>
@@ -179,13 +179,13 @@
     <value>Please check that you have entered the correct server connection settings and that server is available.</value>
   </data>
   <data name="Exception_FileBasedDisposed" xml:space="preserve">
-    <value>File-based SDL Tradso 2007 Translation Memory is closed.</value>
+    <value>File-based Tradso 2007 Translation Memory is closed.</value>
   </data>
   <data name="Trados2007_AddEditServerDialog_Login" xml:space="preserve">
-    <value>Login to SDL Trados 2007 Server</value>
+    <value>Login to Trados 2007 Server</value>
   </data>
   <data name="Information_ServerIsDown" xml:space="preserve">
-    <value>Selected SDL Trados 2007 translation server ({0}) is not responding. Please, check your network settings or try again later.</value>
+    <value>Selected Trados 2007 translation server ({0}) is not responding. Please, check your network settings or try again later.</value>
   </data>
   <data name="Exception_CouldNotOpen" xml:space="preserve">
     <value>Requested translation provider could not be opened.</value>
@@ -212,7 +212,7 @@
     <value>Resources\TmServer_b_little.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Trados2007_ServerManager2007NotInstalledMessage" xml:space="preserve">
-    <value>SDL Trados 2007 server-based translation memories cannot be supported because SDL Trados Server Manager 2007 is not installed on this machine.</value>
+    <value>Trados 2007 server-based translation memories cannot be supported because Trados Server Manager 2007 is not installed on this machine.</value>
   </data>
   <data name="MessageBox_ErrorTitle" xml:space="preserve">
     <value>Error</value>

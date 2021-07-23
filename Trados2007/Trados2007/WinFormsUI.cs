@@ -38,7 +38,7 @@ namespace Sdl.Community.Trados2007
         /// <summary>
         /// SDL Trados 2007 TranslationProvider plug-in string.
         /// </summary>
-        internal const string WinFormsUIDescription = "SDL Trados 2007 TranslationProvider plug-in";
+        internal const string WinFormsUIDescription = "Trados 2007 TranslationProvider plug-in";
 
         #endregion Consts
 

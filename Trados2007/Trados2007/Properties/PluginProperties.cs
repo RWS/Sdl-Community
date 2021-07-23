@@ -6,5 +6,5 @@
 // <email>klukianets@sdl.com</email>
 // <date>2011-10-07</date>
 // ---------------------------------
-[assembly: Sdl.Core.PluginFramework.Plugin("SDL Trados 2007 Translation Memory Plug-in")]
+[assembly: Sdl.Core.PluginFramework.Plugin("Trados 2007 Translation Memory Plug-in")]
 
