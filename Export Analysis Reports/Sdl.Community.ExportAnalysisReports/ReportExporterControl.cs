@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using NLog;
+using Sdl.Community.ExportAnalysisReports.Controls;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
@@ -19,6 +20,7 @@ namespace Sdl.Community.ExportAnalysisReports
 	public partial class ReportExporterControl : Form
 	{
 		private readonly BindingList<LanguageDetails> _languages = new BindingList<LanguageDetails>();
+		private readonly SettingsService _settingsService;
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IReportService _reportService;
 		private readonly IProjectService _projectService;
@@ -32,21 +34,24 @@ namespace Sdl.Community.ExportAnalysisReports
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 
-		public ReportExporterControl()
+		public ReportExporterControl( SettingsService settingsService)
 		{
+			_settingsService = settingsService;
 			_messageBoxService = new MessageBoxService();
 			_projectService = new ProjectService();
-			_reportService = new ReportService(_messageBoxService, _projectService);
+
+			_reportService = new ReportService(_messageBoxService, _projectService, _settingsService);
 
 			InitializeComponent();
 			InitializeSettings();
 		}
 
-		public ReportExporterControl(List<string> studioProjectsPaths)
+		public ReportExporterControl(List<string> studioProjectsPaths, SettingsService settingsService)
 		{
+			_settingsService = settingsService;
 			_messageBoxService = new MessageBoxService();
 			_projectService = new ProjectService();
-			_reportService = new ReportService(_messageBoxService, _projectService);
+			_reportService = new ReportService(_messageBoxService, _projectService, _settingsService);
 
 			InitializeComponent();
 			InitializeSettings(studioProjectsPaths);
@@ -251,7 +256,10 @@ namespace Sdl.Community.ExportAnalysisReports
 			if (!isSamePath)
 			{
 				// Save the new selected export folder path if it was changed by the user
-				_reportService.SaveExportPath(reportOutputPath.Text);
+				//_reportService.SaveExportPath(reportOutputPath.Text);
+				var settings = _settingsService.GetSettings();
+				settings.ExportPath = reportOutputPath.Text;
+				_settingsService.SaveSettings(settings);
 			}
 
 			GenerateReport();
@@ -334,7 +342,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			includeHeaderCheck.Checked = true;
 			_allStudioProjectsDetails = new List<ProjectDetails>();
 			LoadProjectsList(_projectService.ProjectsXmlPath, studioProjectsPaths);
-			reportOutputPath.Text = _reportService.GetJsonReportPath(_reportService.JsonPath);
+			reportOutputPath.Text = _settingsService.GetSettings().ExportPath;
 			targetBtn.Enabled = !IsNullOrEmpty(reportOutputPath.Text);
 			_optionalInformation = SetOptionalInformation();
 			projectStatusComboBox.SelectedIndex = 0;
@@ -447,9 +455,9 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				var projectXmlDocument = new XmlDocument();
 				var filePathNames = _projectService.AddFilePaths(studioProjectsPaths);
-
 				if (!IsNullOrEmpty(projectXmlPath))
 				{
+					var projectsWithoutAnalysis = new List<string>();
 					projectXmlDocument.Load(projectXmlPath);
 
 					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
@@ -459,14 +467,24 @@ namespace Sdl.Community.ExportAnalysisReports
 						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
 						if (projectInfo?.Attributes != null)
 						{
-							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath);
+							string filePath;
+							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath, out filePath);
 							if (reportExist)
 							{
 								SetProjectDetails(projectInfo, (XmlNode)item, filePathNames);
 							}
+							else
+							{
+								projectsWithoutAnalysis.Add(GetProjectName(projectInfo));
+							}
 						}
 					}
 					SetProjectDataSource();
+					if (projectsWithoutAnalysis.Count > 0 && !_settingsService.GetSettings().DontShowProjectNotAvailabeInfoMessage)
+					{
+						var messageBox = new InformationMessage(_settingsService, projectsWithoutAnalysis);
+						messageBox.ShowDialog();
+					}
 				}
 			}
 			catch (Exception ex)
@@ -475,16 +493,34 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
+		private static string GetProjectName(XmlNode projectInfo)
+		{
+			if (projectInfo.Attributes != null)
+			{
+				foreach (XmlAttribute attribute in projectInfo.Attributes)
+				{
+					if (attribute.Name != "Name")
+					{
+						continue;
+					}
+
+					return attribute.Value;
+				}
+			}
+
+			return null;
+		}
+
 		// Load all single file projects from projects.xml file inside UI's list
 		private void LoadSingleFileProjects(string projectXmlPath)
 		{
 			try
 			{
+				
 				var projectXmlDocument = new XmlDocument();
 				if (!IsNullOrEmpty(projectXmlPath))
-				{
+				{			
 					projectXmlDocument.Load(projectXmlPath);
-
 					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
 					if (projectsNodeList == null) return;
 					foreach (var item in projectsNodeList)
@@ -492,10 +528,11 @@ namespace Sdl.Community.ExportAnalysisReports
 						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
 						if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value == "true")
 						{
-							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath);
+							string filePath;
+							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath, out filePath);
 							if (reportExist)
 							{
-								var projectDetails = _projectService.CreateProjectDetails((XmlNode)item, true, _reportService.ReportsFolderPath);
+								var projectDetails = _projectService.CreateProjectDetails((XmlNode)item, true, _settingsService.GetSettings().ExportPath);
 								if (!_projectsDataSource.Any(p => p.ProjectName.Equals(projectDetails.ProjectName)))
 								{
 									if (chkBox_SelectAllProjects.Checked)
@@ -879,7 +916,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				var projectDetails = _projectService.CreateProjectDetails(item, isSingleFileProject, _reportService.ReportsFolderPath);
+				var projectDetails = _projectService.CreateProjectDetails(item, isSingleFileProject, _settingsService.GetSettings().ExportPath);
 				if (projectDetails != null)
 				{
 					_projectsDataSource.Add(projectDetails);
