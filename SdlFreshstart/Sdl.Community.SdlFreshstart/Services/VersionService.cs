@@ -48,6 +48,10 @@ namespace Sdl.Community.SdlFreshstart.Services
 						$"Installed Version:{studioVersion.Version} Public version: {studioVersion.PublicVersion}");
 				}
 			}
+			else
+			{
+				_logger.Info("Cannot find any Trados Version installed on the machine");
+			}
 
 			installedVersions?.Sort((item1, item2) =>
 				item1.MajorVersion < item2.MajorVersion ? 1 :
