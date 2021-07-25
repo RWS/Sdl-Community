@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Trados.TargetRenamer.BatchTask;
 using Trados.TargetRenamer.Services;
-using Trados.TargetRenamer.ViewModel;
 
 namespace Trados.TargetRenamer
 {
@@ -34,7 +34,6 @@ namespace Trados.TargetRenamer
 			_reportCreator = new ReportCreatorService();
 			_projectFiles = new List<ProjectFile>();
 			_renamedFiles = new Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>>();
-			_settings = GetSetting<TargetRenamerSettings>();
 			base.OnInitializeTask();
 		}
 
@@ -67,6 +66,7 @@ namespace Trados.TargetRenamer
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			_projectFiles.Add(projectFile);
+			_settings = Project.GetSettings(projectFile.Language).GetSettingsGroup<TargetRenamerSettings>();
 
 			var fileIds = new List<Guid>() { projectFile.Id };
 			var task = Project.RunAutomaticTask(fileIds.ToArray(), AutomaticTaskTemplateIds.GenerateTargetTranslations);
