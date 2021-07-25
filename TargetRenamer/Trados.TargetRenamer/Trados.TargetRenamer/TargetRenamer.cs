@@ -19,7 +19,7 @@ namespace Trados.TargetRenamer
 		"TargetRenamer_Description",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	[RequiresSettings(typeof(TargetRenamerSettingsViewModel), typeof(TargetRenamerSettingsPage))]
+	[RequiresSettings(typeof(TargetRenamerSettings), typeof(TargetRenamerSettingsPage))]
 	public class TargetRenamer : AbstractFileContentProcessingAutomaticTask
 	{
 		private List<ProjectFile> _projectFiles;
