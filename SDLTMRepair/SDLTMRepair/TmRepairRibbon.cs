@@ -4,13 +4,13 @@ using Sdl.Desktop.IntegrationApi.DefaultLocations;
 
 namespace Sdl.Community.TMRepair
 {
-	[RibbonGroup("Sdl.Community.TMRepair", Name = "TMRepair")]
+	[RibbonGroup("Sdl.Community.TMRepair", Name = "Trados Translation Memory Management Utility")]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	class TmRepairRibbon : AbstractRibbonGroup
 	{
 	}
 
-	[Action("Sdl.Community.TMRepair", Name = "TMRepair", Icon = "Repair", Description = "TMRepair")]
+	[Action("Sdl.Community.TMRepair", Name = "Trados Translation Memory Management Utility", Icon = "Repair", Description = "Trados Translation Memory Management Utility")]
 	[ActionLayout(typeof(TmRepairRibbon), 20, DisplayType.Large)]
 	class TmRepairViewPartAction : AbstractAction
 	{
