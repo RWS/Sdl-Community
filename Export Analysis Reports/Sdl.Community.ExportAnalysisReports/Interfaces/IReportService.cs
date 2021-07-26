@@ -11,7 +11,7 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 
 		bool IsSameReportPath(string reportOutputPath);
 
-		bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath, out string filePath);
+		bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath);
 
 		void SetReportInformation(ProjectDetails project);
 

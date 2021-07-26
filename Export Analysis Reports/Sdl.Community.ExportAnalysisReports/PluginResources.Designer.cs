@@ -136,6 +136,51 @@ namespace Sdl.Community.ExportAnalysisReports {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string InformationMessage_Cancel {
+            get {
+                return ResourceManager.GetString("InformationMessage_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show this again..
+        /// </summary>
+        internal static string InformationMessage_Don_t_show_this_again {
+            get {
+                return ResourceManager.GetString("InformationMessage_Don_t_show_this_again", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string InformationMessage_OK {
+            get {
+                return ResourceManager.GetString("InformationMessage_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Projects without analysis reports.
+        /// </summary>
+        internal static string InformationMessage_Projects_without_analysis_reports {
+            get {
+                return ResourceManager.GetString("InformationMessage_Projects_without_analysis_reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected projects cannot be exported; please run the &apos;Analyze Files&apos; batch task for these projects, otherwise they will be excluded from the export analysis reports procedure..
+        /// </summary>
+        internal static string InformationMessage_The_selected_projects_cannot_be_exported {
+            get {
+                return ResourceManager.GetString("InformationMessage_The_selected_projects_cannot_be_exported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Informative message.
         /// </summary>
         internal static string InformativeLabel {

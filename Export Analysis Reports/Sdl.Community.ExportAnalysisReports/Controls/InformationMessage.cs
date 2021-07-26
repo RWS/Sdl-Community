@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.ExportAnalysisReports.Service;
 
@@ -16,8 +10,16 @@ namespace Sdl.Community.ExportAnalysisReports.Controls
 		private readonly SettingsService _settingsService;
 		public InformationMessage(SettingsService settingsService, List<string> projectPaths)
 		{
-			_settingsService = settingsService;
 			InitializeComponent();
+
+			_settingsService = settingsService;
+			
+			this.TitleMessage_textbox.Text = PluginResources.InformationMessage_The_selected_projects_cannot_be_exported;
+			this.DontShowThisMessageAgain_CheckBox.Text = PluginResources.InformationMessage_Don_t_show_this_again;
+			this.Text = PluginResources.InformationMessage_Projects_without_analysis_reports;
+			this.OK_Button.Text = PluginResources.InformationMessage_OK;
+			this.Cancel_Button.Text = PluginResources.InformationMessage_Cancel;
+
 			this.DontShowThisMessageAgain_CheckBox.Checked = false;
 			var projectPathsText = string.Empty;
 			foreach (var projectPath in projectPaths)
@@ -35,7 +37,7 @@ namespace Sdl.Community.ExportAnalysisReports.Controls
 		private void OK_Button_Click(object sender, EventArgs e)
 		{
 			var settings = _settingsService.GetSettings();
-			settings.DontShowProjectNotAvailabeInfoMessage = this.DontShowThisMessageAgain_CheckBox.Checked;
+			settings.DontShowInfoMessage = this.DontShowThisMessageAgain_CheckBox.Checked;
 			_settingsService.SaveSettings(settings);
 			this.Close();
 		}

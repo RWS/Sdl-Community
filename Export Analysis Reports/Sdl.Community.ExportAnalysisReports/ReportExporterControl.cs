@@ -34,7 +34,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 
-		public ReportExporterControl( SettingsService settingsService)
+		public ReportExporterControl(SettingsService settingsService)
 		{
 			_settingsService = settingsService;
 			_messageBoxService = new MessageBoxService();
@@ -461,26 +461,40 @@ namespace Sdl.Community.ExportAnalysisReports
 					projectXmlDocument.Load(projectXmlPath);
 
 					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
-					if (projectsNodeList == null) return;
-					foreach (var item in projectsNodeList)
+					if (projectsNodeList == null)
 					{
-						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
-						if (projectInfo?.Attributes != null)
+						return;
+					}
+
+					var studioProjects = _projectService.GetSelectedStudioProjects();
+
+					foreach (XmlNode xmlNode in projectsNodeList)
+					{
+						var projectId = GetAttributeValue(xmlNode, "Guid");
+						
+						
+						var projectInfoNode = xmlNode.SelectSingleNode("./ProjectInfo");
+						if (projectInfoNode?.Attributes != null)
 						{
-							string filePath;
-							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath, out filePath);
+							var reportExist = _reportService.ReportFolderExist(xmlNode, _projectService.ProjectsXmlPath);
 							if (reportExist)
 							{
-								SetProjectDetails(projectInfo, (XmlNode)item, filePathNames);
+								SetProjectDetails(projectInfoNode, xmlNode, filePathNames);
 							}
 							else
 							{
-								projectsWithoutAnalysis.Add(GetProjectName(projectInfo));
+								var projectInfo = studioProjects.FirstOrDefault(a => a.GetProjectInfo()?.Id.ToString() == projectId)?.GetProjectInfo();
+								if (projectInfo != null)
+								{
+									projectsWithoutAnalysis.Add(projectInfo.Name);
+								}
 							}
 						}
 					}
+					
 					SetProjectDataSource();
-					if (projectsWithoutAnalysis.Count > 0 && !_settingsService.GetSettings().DontShowProjectNotAvailabeInfoMessage)
+					
+					if (projectsWithoutAnalysis.Count > 0 && !_settingsService.GetSettings().DontShowInfoMessage)
 					{
 						var messageBox = new InformationMessage(_settingsService, projectsWithoutAnalysis);
 						messageBox.ShowDialog();
@@ -493,13 +507,13 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
-		private static string GetProjectName(XmlNode projectInfo)
+		private static string GetAttributeValue(XmlNode xmlNode, string name)
 		{
-			if (projectInfo.Attributes != null)
+			if (xmlNode.Attributes != null)
 			{
-				foreach (XmlAttribute attribute in projectInfo.Attributes)
+				foreach (XmlAttribute attribute in xmlNode.Attributes)
 				{
-					if (attribute.Name != "Name")
+					if (attribute.Name != name)
 					{
 						continue;
 					}
@@ -528,8 +542,7 @@ namespace Sdl.Community.ExportAnalysisReports
 						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
 						if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value == "true")
 						{
-							string filePath;
-							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath, out filePath);
+							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath);
 							if (reportExist)
 							{
 								var projectDetails = _projectService.CreateProjectDetails((XmlNode)item, true, _settingsService.GetSettings().ExportPath);

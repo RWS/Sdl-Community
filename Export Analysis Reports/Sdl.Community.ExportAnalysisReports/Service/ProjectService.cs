@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using NLog;
-using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.Community.Toolkit.Core.Services;
@@ -23,10 +22,12 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 		public ProjectService()
 		{
+			ProjectController = GetProjectsController();
 			ProjectsXmlPath = GetStudioProjectsXmlPath();
 		}
 
 		public string ProjectsXmlPath { get; set; }
+		
 		public ProjectsController ProjectController { get; set; }
 
 		/// <summary>
@@ -95,6 +96,16 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			return projectInfo;
 		}
 
+		public List<FileBasedProject> GetStudioProjects()
+		{
+			return ProjectController?.GetAllProjects()?.ToList();
+		}
+
+		public List<FileBasedProject> GetSelectedStudioProjects()
+		{
+			return ProjectController?.SelectedProjects.ToList();
+		}
+
 		/// <summary>
 		/// Remove the languages corresponding to the single file project
 		/// </summary>
@@ -147,6 +158,46 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			allProjectDetails.RemoveAll(x => x.IsSingleFileProject);
 		}
 
+		// Get the short Studio's version
+		public virtual string GetInstalledStudioShortVersion()
+		{
+			var studioService = new StudioVersionService();
+			return studioService.GetStudioVersion()?.ShortVersion;
+		}
+
+		public ProjectDetails GetExternalProjectDetails(string path, string reportFolderPath)
+		{
+			try
+			{
+				var fileBasedProject = new FileBasedProject(path);
+				var projectInfo = fileBasedProject.GetProjectInfo();
+
+				var projectDetails = new ProjectDetails
+				{
+					ProjectName = projectInfo?.Name,
+					ProjectPath = projectInfo?.Uri.LocalPath,
+					Status = GetInternalProjectStatus(fileBasedProject),
+					ProjectLanguages = new Dictionary<string, bool>(),
+					ShouldBeExported = true,
+					ReportsFolderPath = reportFolderPath
+				};
+
+				foreach (var language in projectInfo?.TargetLanguages)
+				{
+					projectDetails.ProjectLanguages.Add(language.DisplayName, true);
+				}
+
+				ProjectController?.Close(fileBasedProject);
+
+				return projectDetails;
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"GetExternalProjectDetails method: {ex.Message}\n {ex.StackTrace}");
+			}
+			return new ProjectDetails();
+		}
+
 		// Configure the project languages using project details
 		private void ConfigureProjectLanguages(ProjectDetails projectDetails)
 		{
@@ -162,13 +213,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			{
 				_logger.Error($"ConfigureProjectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
-		}
-
-		// Get the short Studio's version
-		public virtual string GetInstalledStudioShortVersion()
-		{
-			var studioService = new StudioVersionService();
-			return studioService.GetStudioVersion()?.ShortVersion;
 		}
 
 		private ProjectsController GetProjectsController()
@@ -273,41 +317,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 		}
 
-		public ProjectDetails GetExternalProjectDetails(string path, string reportFolderPath)
-		{
-			try
-			{
-				var fileBasedProject = new FileBasedProject(path);
-				var projectInfo = fileBasedProject.GetProjectInfo();
-
-				var projectDetails = new ProjectDetails
-				{
-					ProjectName = projectInfo?.Name,
-					ProjectPath = projectInfo?.Uri.LocalPath,
-					Status = GetInternalProjectStatus(fileBasedProject),
-					ProjectLanguages = new Dictionary<string, bool>(),
-					ShouldBeExported = true,
-					ReportsFolderPath = reportFolderPath
-				};
-				foreach (var language in projectInfo?.TargetLanguages)
-				{
-					projectDetails.ProjectLanguages.Add(language.DisplayName, true);
-				}
-				if (ProjectController == null)
-				{
-					ProjectController = GetProjectsController();
-				}
-				ProjectController?.Close(fileBasedProject);
-
-				return projectDetails;
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"GetExternalProjectDetails method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return new ProjectDetails();
-		}
-
 		private string GetInternalProjectStatus(FileBasedProject studioProject)
 		{
 			try
@@ -350,15 +359,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 			}
 			return projectStatus;
-		}
-
-		private List<FileBasedProject> GetStudioProjects()
-		{
-			if (ProjectController == null)
-			{
-				ProjectController = GetProjectsController();
-			}
-			return ProjectController?.GetAllProjects()?.ToList();
 		}
 	}
 }

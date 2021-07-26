@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
-using NLog;
 using Sdl.Community.ExportAnalysisReports.Service;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.ExportAnalysisReports
 {
-	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
 	public class ReportExporterRibbon : AbstractRibbonGroup
 	{

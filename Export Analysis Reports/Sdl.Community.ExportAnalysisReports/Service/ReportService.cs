@@ -90,11 +90,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <param name="projectInfoNode"></param>
 		/// <param name="projectXmlPath"></param>
 		/// <returns></returns>
-		public bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath, out string filePath)
+		public bool ReportFolderExist(XmlNode projectInfoNode, string projectXmlPath)
 		{
 			try
 			{
-				filePath = SetProjectFilePath(projectInfoNode, projectXmlPath);
+				var filePath = SetProjectFilePath(projectInfoNode, projectXmlPath);
 				return ReportFileExist(filePath);
 			}
 			catch (Exception ex)
@@ -102,7 +102,6 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				_logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 
-			filePath = string.Empty;
 			return false;
 		}
 
@@ -118,6 +117,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				doc.Load(project.ProjectPath);
 
 				var projectInfo = _projectService.GetProjectInfo(project.ProjectPath);
+				
 				project.LanguageAnalysisReportPaths?.Clear();
 
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
