@@ -43,7 +43,6 @@
 					line-height: 20px;
 					}
 
-
 					.ReportTable {
 					border: #BFCDD4 1px solid;
 					border-collapse: collapse;
@@ -257,7 +256,6 @@
 					padding-left: 0px;
 					margin-left: 0px;
 					}
-
 				</style>
 			</head>
 			<body>
@@ -271,7 +269,6 @@
 						<td valign="top">
 						</td>
 					</tr>
-
 				</table>
 
 				<h2 class="first">
@@ -488,15 +485,15 @@
 					</tr>
 
 					<xsl:for-each select="//files/file/@location[not(.=preceding::file/@location)]">
-						<xsl:sort/>
-						<xsl:variable name ="Location" select="."/>
+						<xsl:sort />
+						<xsl:variable name ="Location" select="." />
 						<tr>
 							<td class="HeaderText">
 								Location:
-								<xsl:value-of select="."/>
+								<xsl:value-of select="." />
 							</td>
 							<td class="HeaderText">
-								<xsl:value-of select="../@newLocation"/>
+								<xsl:value-of select="../@newLocation" />
 							</td>
 						</tr>
 						<xsl:for-each select="//files/file[@location = current()]">
@@ -510,7 +507,6 @@
 							</tr>
 						</xsl:for-each>
 					</xsl:for-each>
-
 				</table>
 			</body>
 		</html>

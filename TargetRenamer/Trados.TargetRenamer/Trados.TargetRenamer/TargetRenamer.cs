@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
@@ -22,45 +21,17 @@ namespace Trados.TargetRenamer
 	[RequiresSettings(typeof(TargetRenamerSettings), typeof(TargetRenamerSettingsPage))]
 	public class TargetRenamer : AbstractFileContentProcessingAutomaticTask
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private List<ProjectFile> _projectFiles;
 		private Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> _renamedFiles;
 		private ReportCreatorService _reportCreator;
 		private TargetRenamerSettings _settings;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-		protected override void OnInitializeTask()
-		{
-			Log.Setup();
-			_reportCreator = new ReportCreatorService();
-			_projectFiles = new List<ProjectFile>();
-			_renamedFiles = new Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>>();
-			base.OnInitializeTask();
-		}
 
 		public override void TaskComplete()
 		{
 			base.TaskComplete();
 
 			GenerateReports();
-		}
-
-		private void GenerateReports()
-		{
-			var languageDirections = _projectFiles
-				.GroupBy(p => new { p.GetLanguageDirection().TargetLanguage, p.GetLanguageDirection().SourceLanguage })
-				.Select(g => g.First().GetLanguageDirection());
-
-			foreach (var languageDirection in languageDirections)
-			{
-				var reportName =
-					$"{PluginResources.TargetRenamer_Name}_{languageDirection.SourceLanguage.IsoAbbreviation}_{languageDirection.TargetLanguage.IsoAbbreviation}";
-
-				var projectFiles = _projectFiles
-					.Where(x => Equals(x.GetLanguageDirection().TargetLanguage, languageDirection.TargetLanguage)).ToList();
-				_reportCreator.CreateReport(Project, projectFiles, _renamedFiles, _settings, languageDirection);
-
-				CreateReport(reportName, PluginResources.ReportDescription, _reportCreator.ReportFile, languageDirection);
-			}
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -132,14 +103,31 @@ namespace Trados.TargetRenamer
 			RevertToSdlXliff(projectFile);
 		}
 
-		private void RevertToSdlXliff(ProjectFile projectFile)
+		protected override void OnInitializeTask()
 		{
-			Project.AddNewFileVersion(projectFile.Id, projectFile.LocalFilePath);
-			var latestFile = Directory.GetFiles(Path.GetDirectoryName(projectFile.LocalFilePath)).ToList().OrderByDescending(f => File.GetCreationTime(f)).FirstOrDefault();
-			if (string.IsNullOrWhiteSpace(Path.GetExtension(latestFile)) && Path.GetFileNameWithoutExtension(projectFile.OriginalName) == Path.GetFileNameWithoutExtension(latestFile))
+			Log.Setup();
+			_reportCreator = new ReportCreatorService();
+			_projectFiles = new List<ProjectFile>();
+			_renamedFiles = new Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>>();
+			base.OnInitializeTask();
+		}
+
+		private string CreateFileNameWithPrefix(string newFileName, string fileExtension, CultureInfo targetLanguage)
+		{
+			if (_settings.AppendTargetLanguage)
 			{
-				File.Delete(latestFile);
+				if (_settings.UseShortLocales)
+					newFileName = targetLanguage.TwoLetterISOLanguageName + _settings.Delimiter + newFileName +
+								  fileExtension;
+				else
+					newFileName = targetLanguage.Name + _settings.Delimiter + newFileName + fileExtension;
 			}
+			else if (_settings.AppendCustomString)
+			{
+				newFileName = _settings.CustomString + _settings.Delimiter + newFileName + fileExtension;
+			}
+
+			return newFileName;
 		}
 
 		private string CreateFileNameWithRegularExpression(string newFileName, string fileExtension)
@@ -167,22 +155,33 @@ namespace Trados.TargetRenamer
 			return newFileName;
 		}
 
-		private string CreateFileNameWithPrefix(string newFileName, string fileExtension, CultureInfo targetLanguage)
+		private void GenerateReports()
 		{
-			if (_settings.AppendTargetLanguage)
-			{
-				if (_settings.UseShortLocales)
-					newFileName = targetLanguage.TwoLetterISOLanguageName + _settings.Delimiter + newFileName +
-								  fileExtension;
-				else
-					newFileName = targetLanguage.Name + _settings.Delimiter + newFileName + fileExtension;
-			}
-			else if (_settings.AppendCustomString)
-			{
-				newFileName = _settings.CustomString + _settings.Delimiter + newFileName + fileExtension;
-			}
+			var languageDirections = _projectFiles
+				.GroupBy(p => new { p.GetLanguageDirection().TargetLanguage, p.GetLanguageDirection().SourceLanguage })
+				.Select(g => g.First().GetLanguageDirection());
 
-			return newFileName;
+			foreach (var languageDirection in languageDirections)
+			{
+				var reportName =
+					$"{PluginResources.TargetRenamer_Name}_{languageDirection.SourceLanguage.IsoAbbreviation}_{languageDirection.TargetLanguage.IsoAbbreviation}";
+
+				var projectFiles = _projectFiles
+					.Where(x => Equals(x.GetLanguageDirection().TargetLanguage, languageDirection.TargetLanguage)).ToList();
+				_reportCreator.CreateReport(Project, projectFiles, _renamedFiles, _settings, languageDirection);
+
+				CreateReport(reportName, PluginResources.ReportDescription, _reportCreator.ReportFile, languageDirection);
+			}
+		}
+
+		private void RevertToSdlXliff(ProjectFile projectFile)
+		{
+			Project.AddNewFileVersion(projectFile.Id, projectFile.LocalFilePath);
+			var latestFile = Directory.GetFiles(Path.GetDirectoryName(projectFile.LocalFilePath)).ToList().OrderByDescending(f => File.GetCreationTime(f)).FirstOrDefault();
+			if (string.IsNullOrWhiteSpace(Path.GetExtension(latestFile)) && Path.GetFileNameWithoutExtension(projectFile.OriginalName) == Path.GetFileNameWithoutExtension(latestFile))
+			{
+				File.Delete(latestFile);
+			}
 		}
 	}
 }
