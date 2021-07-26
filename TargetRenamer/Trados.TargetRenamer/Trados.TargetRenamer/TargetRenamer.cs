@@ -116,7 +116,7 @@ namespace Trados.TargetRenamer
 
 					Directory.CreateDirectory(Path.Combine(_settings.CustomLocation, targetLanguage.Name,
 							projectFile.Folder));
-					
+
 					File.Move(file.LocalFilePath, newFileName);
 				}
 				else
@@ -127,6 +127,18 @@ namespace Trados.TargetRenamer
 			catch (Exception e)
 			{
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
+			}
+
+			RevertToSdlXliff(projectFile);
+		}
+
+		private void RevertToSdlXliff(ProjectFile projectFile)
+		{
+			Project.AddNewFileVersion(projectFile.Id, projectFile.LocalFilePath);
+			var latestFile = Directory.GetFiles(Path.GetDirectoryName(projectFile.LocalFilePath)).ToList().OrderByDescending(f => File.GetCreationTime(f)).FirstOrDefault();
+			if (string.IsNullOrWhiteSpace(Path.GetExtension(latestFile)) && Path.GetFileNameWithoutExtension(projectFile.OriginalName) == Path.GetFileNameWithoutExtension(latestFile))
+			{
+				File.Delete(latestFile);
 			}
 		}
 
