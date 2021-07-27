@@ -176,8 +176,11 @@ namespace Trados.TargetRenamer
 		private void RevertToSdlXliff(ProjectFile projectFile)
 		{
 			Project.AddNewFileVersion(projectFile.Id, projectFile.LocalFilePath);
-			var latestFile = Directory.GetFiles(Path.GetDirectoryName(projectFile.LocalFilePath)).ToList().OrderByDescending(f => File.GetCreationTime(f)).FirstOrDefault();
-			if (string.IsNullOrWhiteSpace(Path.GetExtension(latestFile)) && Path.GetFileNameWithoutExtension(projectFile.OriginalName) == Path.GetFileNameWithoutExtension(latestFile))
+			var projectFileDirectory = Path.GetDirectoryName(projectFile.LocalFilePath);
+			if (projectFileDirectory == null) return;
+
+			var latestFile = Directory.GetFiles(projectFileDirectory).ToList().OrderByDescending(File.GetCreationTime).FirstOrDefault();
+			if (string.IsNullOrWhiteSpace(Path.GetExtension(latestFile)) && Path.GetFileNameWithoutExtension(projectFile.OriginalName) == Path.GetFileNameWithoutExtension(latestFile) && latestFile != null)
 			{
 				File.Delete(latestFile);
 			}
