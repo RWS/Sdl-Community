@@ -8,7 +8,7 @@ namespace Trados.TargetRenamer.TellMe
 	{
 		public HelpAction()
 		{
-			Name = $"{PluginResources.TargetRenamer_Name} wiki in the SDL Community";
+			Name = $"{PluginResources.TargetRenamer_Name} wiki in the RWS Community";
 		}
 
 		public override string Category => $"{PluginResources.TargetRenamer_Name} results";
