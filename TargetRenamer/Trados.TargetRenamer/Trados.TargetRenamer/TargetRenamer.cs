@@ -50,7 +50,6 @@ namespace Trados.TargetRenamer
 			var fileExtension = Path.GetExtension(file.LocalFilePath);
 			var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 			var oldFileName = Path.GetFileName(file.LocalFilePath);
-			string newFileName;
 			if (_settings.AppendAsPrefix) fileName = CreateFileNameWithPrefix(fileName, fileExtension, targetLanguage);
 
 			if (_settings.AppendAsSuffix) fileName = CreateFileNameWithSuffix(fileName, fileExtension, targetLanguage);
@@ -60,6 +59,7 @@ namespace Trados.TargetRenamer
 
 			try
 			{
+				string newFileName;
 				if (_settings.UseCustomLocation)
 				{
 					if (!Directory.Exists(_settings.CustomLocation))
@@ -162,6 +162,7 @@ namespace Trados.TargetRenamer
 
 			foreach (var languageDirection in languageDirections)
 			{
+				_settings = Project.GetSettings(languageDirection.TargetLanguage).GetSettingsGroup<TargetRenamerSettings>();
 				var reportName =
 					$"{PluginResources.TargetRenamer_Name}_{languageDirection.SourceLanguage.IsoAbbreviation}_{languageDirection.TargetLanguage.IsoAbbreviation}";
 

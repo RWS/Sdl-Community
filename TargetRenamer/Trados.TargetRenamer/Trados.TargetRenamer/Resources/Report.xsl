@@ -493,7 +493,12 @@
 								<xsl:value-of select="." />
 							</td>
 							<td class="HeaderText">
-								<xsl:value-of select="../@newLocation" />
+								<a>
+									<xsl:attribute name="href">
+										<xsl:value-of select="../@newLocation" />
+									</xsl:attribute>
+									<xsl:value-of select="../@newLocation" />
+								</a>
 							</td>
 						</tr>
 						<xsl:for-each select="//files/file[@location = current()]">
