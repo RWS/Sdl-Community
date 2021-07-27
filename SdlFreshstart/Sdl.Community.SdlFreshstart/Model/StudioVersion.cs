@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using NLog;
 using Sdl.Community.SdlFreshstart.ViewModel;
@@ -24,11 +25,12 @@ namespace Sdl.Community.SdlFreshstart.Model
 		private bool _isSelected;
 		private int _numericVersion;
 
-		public StudioVersion(string versionName, string publicVersion, string edition = "")
+		public StudioVersion(string versionName, string publicVersion, Version executableVersion, string edition = "")
 		{
 			try
 			{
 				VersionName = $"{versionName}{edition}";
+				ExecutableVersion = executableVersion;
 				PublicVersion = publicVersion;
 				Edition = edition;
 				SdlRegistryKey = $"{SdlBaseRegistryKey}{AppDataStudioFolder}";
@@ -101,6 +103,8 @@ namespace Sdl.Community.SdlFreshstart.Model
 		public string DocumentsPath { get; set; }
 		public string Edition { get; set; }
 
+		public Version ExecutableVersion { get; set; }
+
 		public bool IsSelected
 		{
 			get => _isSelected;
@@ -114,7 +118,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			}
 		}
 
-		public string LegacyVersion => MajorVersion < 15 ? ExtractNumber(VersionName).ToString() : (string.Empty);
+		public string LegacyVersion => MajorVersion <= 15 ? ExtractNumber(VersionName).ToString() : string.Empty;
 
 		public int MajorVersion
 		{

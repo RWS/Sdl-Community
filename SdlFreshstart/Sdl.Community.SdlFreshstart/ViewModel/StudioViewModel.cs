@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using NLog;
 using Sdl.Community.SdlFreshstart.Commands;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
@@ -42,6 +43,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private StudioLocationListItem _selectedLocation;
 		private ObservableCollection<StudioVersion> _studioVersionsCollection;
 		private bool _registryKeyChecked;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 
 		public StudioViewModel(MainWindow mainWindow, VersionService versionService, IMessageService messageService, IRegistryHelper registryHelper)
 		{
@@ -521,27 +524,27 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void RunRepair(StudioVersion version)
 		{
-			var directoriesPath = new DirectoryInfo(_packageCache).GetDirectories()
-				.Where(n => n.Name.Contains(version.CacheFolderName))
-				.Select(n => n.FullName).ToList();
-			foreach (var directoryPath in directoriesPath)
+			_logger.Info($"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
+
+			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(version.ExecutableVersion, version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
+			var msiName = GetMsiName(version);
+			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
+
+			_logger.Info($"Trying to repair Studio from following folder: {moduleDirectoryPath}");
+
+			if (Directory.Exists(moduleDirectoryPath))
 			{
-				var msiName = GetMsiName(version);
-				var moduleDirectoryPath = Path.Combine(directoryPath, "modules");
-				if (Directory.Exists(moduleDirectoryPath))
+				var msiFile = Path.Combine(moduleDirectoryPath, msiName);
+				if (File.Exists(msiFile))
 				{
-					var msiFile = Path.Combine(moduleDirectoryPath, msiName);
-					if (File.Exists(msiFile))
+					var process = new ProcessStartInfo
 					{
-						var process = new ProcessStartInfo
-						{
-							FileName = "msiexec",
-							WorkingDirectory = moduleDirectoryPath,
-							Arguments = "/fa " + msiName,
-							Verb = "runas"
-						};
-						Process.Start(process);
-					}
+						FileName = "msiexec",
+						WorkingDirectory = moduleDirectoryPath,
+						Arguments = "/fa " + msiName,
+						Verb = "runas"
+					};
+					Process.Start(process);
 				}
 			}
 		}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
 using NLog;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
@@ -18,17 +19,30 @@ namespace Sdl.Community.SdlFreshstart.Services
 		private readonly string _logPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SDL/Chainer/Logs");
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private readonly List<string> _possiblePackageCacheFolderName;
 
 		public VersionService()
 		{
 			_logger.Info("Version service initialized");
+			_possiblePackageCacheFolderName = new List<string>
+			{
+				"{0}_SR{1}_cu{2}",
+				"{0}_SR{1}_cu{2}_Beta",
+				"{0}_SR{1}",
+				"{0}_SR{1}_Beta",
+				"{0}SR{1}",
+				"{0}SR{1}_Beta",
+				"{0}SR{1}_cu{2}",
+				"{0}SR{1}_cu{2}_Beta"
+			};
 		}
 
 		public List<StudioVersion> GetListOfStudioVersions()
 		{
 			var versionsDictionary = Versions.KnownStudioVersions.Skip(1).TakeWhile(s => !s.Value.Contains("Next"));
 			
-			return versionsDictionary.Select(item => new StudioVersion(item.Key, item.Value)).ToList();
+			return versionsDictionary.Select(item => new StudioVersion(item.Key, item.Value,null)).ToList();
 		}
 
 		public List<StudioVersion> GetInstalledStudioVersions()
@@ -38,7 +52,7 @@ namespace Sdl.Community.SdlFreshstart.Services
 			_logger.Info("Installed Trados Studio Versions");
 
 			var installedVersions = installedStudioVersions
-				?.Select(v => new StudioVersion(v.Version, v.PublicVersion, v.Edition)).ToList();
+				?.Select(v => new StudioVersion(v.Version, v.PublicVersion,v.ExecutableVersion, v.Edition)).ToList();
 			
 			if (installedStudioVersions != null)
 			{
@@ -72,6 +86,42 @@ namespace Sdl.Community.SdlFreshstart.Services
 					: item1.MajorVersion > item2.MajorVersion ? -1 : 0);
 
 			return multitermVersions;
+		}
+
+		public string GetPackageCacheCurrentFolder(Version executableVersion, string versionName,bool isBeta)
+		{
+			var possibleVersions = new List<string>();
+			var folderPath = string.Empty;
+
+			//For folder name variants for SR and CU
+			if (executableVersion.Minor > 0)
+			{
+				possibleVersions = isBeta
+					? _possiblePackageCacheFolderName.Where(v => v.Contains("Beta")).ToList()
+					: _possiblePackageCacheFolderName.Where(v => !v.Contains("Beta")).ToList();
+				foreach (var possibleVersion in possibleVersions)
+				{
+					var folderName = string.Format(possibleVersion, versionName, executableVersion.Minor,
+						executableVersion.Build);
+					folderPath = Path.Combine(_packageCache, folderName);
+					if (Directory.Exists(folderPath)) return folderPath;
+				}
+			}
+
+			if (executableVersion.Minor == 0)
+			{
+				if (isBeta)
+				{
+					versionName = $"{versionName}_Beta";
+				}
+				folderPath = Path.Combine(_packageCache, versionName);
+				if (Directory.Exists(folderPath))
+				{
+					return folderPath;
+				}
+			}
+
+			return folderPath;
 		}
 	}
 }
