@@ -147,6 +147,10 @@
   <data name="OverwriteTargetFilesTooltip" xml:space="preserve">
     <value>Overwrites the generated target files if selected.</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ReplaceWith" xml:space="preserve">
     <value>Replace with:</value>
   </data>

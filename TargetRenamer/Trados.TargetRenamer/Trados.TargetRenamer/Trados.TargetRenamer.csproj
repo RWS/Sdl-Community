@@ -89,6 +89,10 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -128,6 +132,8 @@
     <Compile Include="Services\ReportCreatorService.cs" />
     <Compile Include="TargetRenamer.cs" />
     <Compile Include="BatchTask\TargetRenamerSettings.cs" />
+    <Compile Include="TellMe\HelpAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\TargetRenamerSettingsViewModel.cs" />
     <Compile Include="BatchTask\TargetRenamerSettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,6 +143,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Question.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>

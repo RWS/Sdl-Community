@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Trados.TargetRenamer.Helpers;
+﻿using System.Windows.Controls;
+using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.TargetRenamer.BatchTask;
+using Trados.TargetRenamer.Interfaces;
+using Trados.TargetRenamer.Services;
 using Trados.TargetRenamer.ViewModel;
 
 namespace Trados.TargetRenamer.View
@@ -20,11 +11,28 @@ namespace Trados.TargetRenamer.View
 	/// <summary>
 	/// Interaction logic for TargetRenamerSettingsView.xaml
 	/// </summary>
-	public partial class TargetRenamerSettingsView : UserControl
-	{
-		public TargetRenamerSettingsView()
-		{
-			InitializeComponent();
-		}
-	}
+	public partial class TargetRenamerSettingsView : IUISettingsControl, ISettingsAware<TargetRenamerSettings>
+    {
+        public TargetRenamerSettingsView()
+        {
+            InitializeComponent();
+            IFolderDialogService folderDialogService = new FolderDialogService();
+            TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel(folderDialogService);
+            DataContext = TargetRenamerSettingsViewModel;
+        }
+
+        public TargetRenamerSettings Settings { get; set; }
+
+        public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
+
+        public void Dispose()
+        {
+        }
+
+        public bool ValidateChildren()
+        {
+	        return Validation.GetErrors(CustomLocation).Count == 0
+	               && Validation.GetErrors(Delimiter).Count == 0;
+        }
+    }
 }
