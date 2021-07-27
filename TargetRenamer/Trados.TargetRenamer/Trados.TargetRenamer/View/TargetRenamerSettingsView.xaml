@@ -69,6 +69,7 @@
 				          IsChecked="{Binding UseCustomLocation}" />
                 <WrapPanel Grid.Column="0" Grid.Row="2">
                     <TextBox Margin="5"
+							 Name="CustomLocation"
 					         VerticalAlignment="Center"
 					         HorizontalAlignment="Left"
 					         Width="300"
@@ -223,6 +224,7 @@
                         </Label.Visibility>
                     </Label>
                     <TextBox VerticalAlignment="Center"
+							 Name="Delimiter"
 					         HorizontalAlignment="Left"
 					         Width="Auto"
 					         MinWidth="200"

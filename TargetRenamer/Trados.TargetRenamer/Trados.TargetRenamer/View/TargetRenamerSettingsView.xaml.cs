@@ -1,4 +1,5 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System.Windows.Controls;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Trados.TargetRenamer.BatchTask;
 using Trados.TargetRenamer.Interfaces;
@@ -30,7 +31,8 @@ namespace Trados.TargetRenamer.View
 
         public bool ValidateChildren()
         {
-            return true;
+	        return Validation.GetErrors(CustomLocation).Count == 0
+	               && Validation.GetErrors(Delimiter).Count == 0;
         }
     }
 }
