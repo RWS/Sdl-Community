@@ -30,7 +30,6 @@ namespace Trados.TargetRenamer
 		public override void TaskComplete()
 		{
 			base.TaskComplete();
-
 			GenerateReports();
 		}
 
