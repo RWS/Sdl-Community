@@ -1,14 +1,14 @@
 ﻿<UserControl x:Class="Trados.TargetRenamer.View.TargetRenamerSettingsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewModel="clr-namespace:Trados.TargetRenamer.ViewModel"
-			 xmlns:helpers="clr-namespace:Trados.TargetRenamer.Helpers"
-             xmlns:converters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
-			 xmlns:converters2="clr-namespace:Trados.TargetRenamer.Converters"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:converters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
 			 xmlns:resx="clr-namespace:Trados.TargetRenamer"
-			 mc:Ignorable="d" 
+			 xmlns:converters2="clr-namespace:Trados.TargetRenamer.Converters"
+			 xmlns:helpers="clr-namespace:Trados.TargetRenamer.Helpers"
+			 xmlns:viewModel="clr-namespace:Trados.TargetRenamer.ViewModel"
+			 mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:TargetRenamerSettingsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -17,213 +17,245 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textboxresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/radiobuttonresources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-			<converters2:BooleanToVisibilityConditionalConverter x:Key="ConditionalConverter"/>
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<converters2:BooleanToVisibilityConditionalConverter x:Key="ConditionalConverter" />
+			<Style TargetType="{x:Type TextBox}">
+				<Style.Triggers>
+					<Trigger Property="Validation.HasError" Value="true">
+						<Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                              Path=(Validation.Errors)[0].ErrorContent}" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<GroupBox Style="{StaticResource Sdl.GroupBox.SingleLineStyle}" Header="Settings">
-		<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
-		<CheckBox Grid.Row="0" Grid.Column="0"
-				  Width="Auto"
-				  Margin="5 10 5 10"
-		          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-		          Content="{x:Static resx:PluginResources.OverwriteTargetFiles}"
-				  ToolTip="{x:Static resx:PluginResources.OverwriteTargetFilesTooltip}"
-		          IsChecked="{Binding OverwriteTargetFiles, UpdateSourceTrigger=PropertyChanged}"/>
-		<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
-			<CheckBox Grid.Column="0"
-			          Margin="5 5 0 5"
-			          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-			          Content="{x:Static resx:PluginResources.CustomLocation}"
-			          ToolTip="{x:Static resx:PluginResources.CustomLocationTooltip}"
-			          IsChecked="{Binding UseCustomLocation}"/>
-			<TextBox Grid.Column="0" Grid.Row="1"
-			         Margin="5"
-			         VerticalAlignment="Center"
-			         HorizontalAlignment="Left"
-			         Width="300"
-			         VerticalContentAlignment="Center"
-			         Height="{Binding ActualHeight, ElementName=ComboBox}"
-			         IsEnabled="{Binding UseCustomLocation}">
-				<TextBox.Text>
-						<Binding Path="CustomLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+	<DockPanel>
+		<TextBlock Text="Target Renamer"
+		           Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+				   FontSize="15"
+		           DockPanel.Dock="Top" />
+		<TextBlock Text="Target Renamer is a batch tasks plugin that allows the user to save the target files with various options for custom naming."
+				   Margin="0 5 0 0"
+			   Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+		       DockPanel.Dock="Top" />
+		<GroupBox Header="Location" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}"
+				  DockPanel.Dock="Top"
+				  Margin="0 10 0 0"
+		          Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<CheckBox Grid.Row="0" Grid.Column="0"
+				          Width="Auto"
+				          Margin="5 10 5 10"
+				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				          Content="{x:Static resx:PluginResources.OverwriteTargetFiles}"
+				          ToolTip="{x:Static resx:PluginResources.OverwriteTargetFilesTooltip}"
+				          IsChecked="{Binding OverwriteTargetFiles, UpdateSourceTrigger=PropertyChanged}" />
+
+				<CheckBox Grid.Row="1" Grid.Column="0"
+				          Margin="5 5 0 5"
+				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				          Content="{x:Static resx:PluginResources.CustomLocation}"
+				          ToolTip="{x:Static resx:PluginResources.CustomLocationTooltip}"
+				          IsChecked="{Binding UseCustomLocation}" />
+				<WrapPanel Grid.Column="0" Grid.Row="2">
+					<TextBox Margin="5"
+							 Name="CustomLocation"
+					         VerticalAlignment="Center"
+					         HorizontalAlignment="Left"
+					         Width="300"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}"
+					         IsEnabled="{Binding UseCustomLocation}">
+						<TextBox.Text>
+							<Binding Path="CustomLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+								<Binding.ValidationRules>
+									<helpers:PathValidationRule />
+								</Binding.ValidationRules>
+							</Binding>
+						</TextBox.Text>
+					</TextBox>
+					<Button Margin="5"
+					        Command="{Binding SelectTargetFolder}"
+					        Style="{StaticResource Sdl.Button.GeneralStyle}"
+					        Content="Browse"
+					        IsEnabled="{Binding UseCustomLocation}" />
+				</WrapPanel>
+			</Grid>
+		</GroupBox>
+
+		<GroupBox Header="File name">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<WrapPanel Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0">
+					<Label FontWeight="Bold" Width="95" Content="{x:Static resx:PluginResources.SelectAction}" />
+					<ComboBox x:Name="ComboBox"
+					          Margin="5 5 0 5"
+					          HorizontalContentAlignment="Center"
+					          HorizontalAlignment="Left"
+					          Width="150"
+					          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+					          ItemsSource="{Binding ComboBoxItems}"
+					          SelectedItem="{Binding SelectedComboBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+				</WrapPanel>
+
+				<WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+					<Label Content="{x:Static resx:PluginResources.SearchFor}"
+					       HorizontalAlignment="Center"
+					       VerticalAlignment="Center"
+						   Width="100"
+					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					<TextBox VerticalAlignment="Center"
+					         HorizontalAlignment="Center"
+					         MinWidth="200"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}"
+					         Text="{Binding RegularExpressionSearchFor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+					         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
+				</WrapPanel>
+
+				<WrapPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+					<Label Content="{x:Static resx:PluginResources.ReplaceWith}"
+					       HorizontalAlignment="Left"
+						   Width="100"
+					       VerticalAlignment="Center"
+					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					<TextBox VerticalAlignment="Center"
+					         HorizontalAlignment="Center"
+					         Width="Auto"
+					         MinWidth="200"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}"
+					         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<TextBox.Text>
+							<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+								<Binding.ValidationRules>
+									<helpers:FileNameValidationRule />
+								</Binding.ValidationRules>
+							</Binding>
+						</TextBox.Text>
+					</TextBox>
+				</WrapPanel>
+				<RadioButton Grid.Row="1" Grid.Column="0" GroupName="Radios"
+				             Content="{x:Static resx:PluginResources.TargetLanguage}"
+				             HorizontalAlignment="Left"
+				             Margin="5"
+				             VerticalAlignment="Center"
+				             Style="{StaticResource Sdl.RadioButton.GenericStyle}"
+				             IsChecked="{Binding AppendTargetLanguage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+					<RadioButton.Visibility>
+						<MultiBinding Converter="{StaticResource ConditionalConverter}">
+							<Binding Path="AppendAsPrefix" />
+							<Binding Path="AppendAsSuffix" />
+						</MultiBinding>
+					</RadioButton.Visibility>
+				</RadioButton>
+				<CheckBox Grid.Row="1" Grid.Column="1"
+				          Margin="0 5 0 5"
+				          HorizontalAlignment="Left"
+				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				          Content="{x:Static resx:PluginResources.ShortLocales}"
+				          ToolTip="{x:Static resx:PluginResources.ShortLocalesTooltip}"
+				          IsChecked="{Binding UseShortLocales}"
+				          Visibility="{Binding AppendTargetLanguage, Converter={StaticResource BooleanToVisibilityConverter}}">
+				</CheckBox>
+				<RadioButton Grid.Row="2" Grid.Column="0" GroupName="Radios"
+				             Content="{x:Static resx:PluginResources.AppendCustomString}"
+				             HorizontalAlignment="Left"
+				             Margin="5"
+				             VerticalAlignment="Center"
+				             Style="{StaticResource Sdl.RadioButton.GenericStyle}"
+				             IsChecked="{Binding AppendCustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+					<RadioButton.Visibility>
+						<MultiBinding Converter="{StaticResource ConditionalConverter}">
+							<Binding Path="AppendAsPrefix" />
+							<Binding Path="AppendAsSuffix" />
+						</MultiBinding>
+					</RadioButton.Visibility>
+				</RadioButton>
+				<TextBox Grid.Row="2" Grid.Column="1"
+				         x:Name="CustomStringTextBox"
+				         VerticalAlignment="Center"
+				         HorizontalAlignment="Left"
+				         Width="Auto"
+				         MinWidth="200"
+				         VerticalContentAlignment="Center"
+				         Height="{Binding ActualHeight, ElementName=ComboBox}"
+				         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<TextBox.Text>
+						<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
 							<Binding.ValidationRules>
-								<helpers:PathValidationRule/>
+								<helpers:FileNameValidationRule />
 							</Binding.ValidationRules>
 						</Binding>
-				</TextBox.Text>
-			</TextBox>
-			<Button Grid.Column="1" Grid.Row="1"
-			        Margin="5"
-			        Command="{Binding SelectTargetFolder}"
-			        Style="{StaticResource Sdl.Button.GeneralStyle}"
-			        Content="Browse"
-			        IsEnabled="{Binding UseCustomLocation}"/>
-		</Grid>
-			<Label Grid.Row="2" Grid.Column="0" FontWeight="Bold" Content="{x:Static resx:PluginResources.SelectAction}"/>
-		<ComboBox Grid.Row="4" Grid.Column="0"
-				  x:Name="ComboBox"
-				  Margin="5 5 0 5"
-				  HorizontalContentAlignment="Center"
-				  HorizontalAlignment="Left"
-				  Width="150"
-		          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-				  ItemsSource="{Binding ComboBoxItems}"
-				  SelectedItem="{Binding SelectedComboBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-		<Label Grid.Row="5" Grid.Column="0" Content="{x:Static resx:PluginResources.SearchFor}"
-			   HorizontalAlignment="Left"
-			   VerticalAlignment="Center"
-		       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-		<TextBox Grid.Row="5" Grid.Column="1"
-				 VerticalAlignment="Center"
-				 HorizontalAlignment="Left"
-				 Width="Auto"
-				 MinWidth="200"
-				 VerticalContentAlignment="Center"
-				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-		         Text="{Binding RegularExpressionSearchFor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-		<Label Grid.Row="6" Grid.Column="0" Content="{x:Static resx:PluginResources.ReplaceWith}"
-			   HorizontalAlignment="Left"
-			   VerticalAlignment="Center"
-			   Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-		<TextBox Grid.Row="6" Grid.Column="1"
-				 VerticalAlignment="Center"
-				 HorizontalAlignment="Left"
-				 Width="Auto"
-				 MinWidth="200"
-				 VerticalContentAlignment="Center"
-				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-		         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
-			<TextBox.Text>
-				<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-					<Binding.ValidationRules>
-						<helpers:FileNameValidationRule/>
-					</Binding.ValidationRules>
-				</Binding>
-			</TextBox.Text>
-			</TextBox>
-		<RadioButton Grid.Row="5" Grid.Column="0" GroupName="Radios" Content="{x:Static resx:PluginResources.TargetLanguage}" 
-		             HorizontalAlignment="Left"
-		             Margin="5"
-		             VerticalAlignment="Center"
-		             Style="{StaticResource Sdl.RadioButton.GenericStyle}"
-		             IsChecked="{Binding AppendTargetLanguage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-			<RadioButton.Visibility>
-				<MultiBinding Converter="{StaticResource ConditionalConverter}">
-					<Binding Path="AppendAsPrefix"/>
-					<Binding Path="AppendAsSuffix"/>
-				</MultiBinding>
-			</RadioButton.Visibility>
-		</RadioButton>
-		<CheckBox Grid.Row="5" Grid.Column="1"
-				  Margin="0 5 0 5"
-				  HorizontalAlignment="Left"
-		          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-		          Content="{x:Static resx:PluginResources.ShortLocales}"
-				  ToolTip="{x:Static resx:PluginResources.ShortLocalesTooltip}"
-		          IsChecked="{Binding UseShortLocales}"
-		          Visibility="{Binding AppendTargetLanguage, Converter={StaticResource BooleanToVisibilityConverter}}">
-		</CheckBox>
-		<RadioButton Grid.Row="6" Grid.Column="0" GroupName="Radios" Content="{x:Static resx:PluginResources.AppendCustomString}"
-		             HorizontalAlignment="Left"
-					 Margin="5"
-		             VerticalAlignment="Center"
-					 Style="{StaticResource Sdl.RadioButton.GenericStyle}"
-		             IsChecked="{Binding AppendCustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-			<RadioButton.Visibility>
-				<MultiBinding Converter="{StaticResource ConditionalConverter}">
-					<Binding Path="AppendAsPrefix"/>
-					<Binding Path="AppendAsSuffix"/>
-				</MultiBinding>
-			</RadioButton.Visibility>
-		</RadioButton>
-		<TextBox Grid.Row="6" Grid.Column="1"
-				 x:Name="CustomStringTextBox"
-				 VerticalAlignment="Center"
-				 HorizontalAlignment="Left"
-				 Width="Auto"
-				 MinWidth="200"
-				 VerticalContentAlignment="Center"
-				 Height="{Binding ActualHeight, ElementName=ComboBox}"
-		         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
-			<TextBox.Text>
-				<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-					<Binding.ValidationRules>
-						<helpers:FileNameValidationRule/>
-					</Binding.ValidationRules>
-				</Binding>
-			</TextBox.Text>
-		</TextBox>
-		<Label Grid.Row="7" Grid.Column="0" Content="{x:Static resx:PluginResources.Delimiter}"
-		       Margin="0"
-		       FontWeight="Bold"
-		       HorizontalAlignment="Left"
-		       VerticalAlignment="Center">
-			<Label.Visibility>
-				<MultiBinding Converter="{StaticResource ConditionalConverter}">
-					<Binding Path="AppendAsPrefix"/>
-					<Binding Path="AppendAsSuffix"/>
-				</MultiBinding>
-			</Label.Visibility>
-		</Label>
-		<TextBox Grid.Row="7" Grid.Column="1"
-				 VerticalAlignment="Center"
-				 HorizontalAlignment="Left"
-				 Width="Auto"
-				 MinWidth="200"
-				 VerticalContentAlignment="Center"
-				 Height="{Binding ActualHeight, ElementName=ComboBox}">
-			<TextBox.Visibility>
-				<MultiBinding Converter="{StaticResource ConditionalConverter}">
-					<Binding Path="AppendAsPrefix"/>
-					<Binding Path="AppendAsSuffix"/>
-				</MultiBinding>
-			</TextBox.Visibility>
-			<TextBox.Text>
-				<Binding Path="Delimiter" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-					<Binding.ValidationRules>
-						<helpers:FileNameValidationRule/>
-					</Binding.ValidationRules>
-				</Binding>
-			</TextBox.Text>
-			</TextBox>
-		<Button Grid.Row="8" Grid.Column="0"
-		        Margin="5"
-		        VerticalAlignment="Bottom"
-		        HorizontalAlignment="Left"
-		        Content="{x:Static resx:PluginResources.Reset}"
-		        Style="{StaticResource Sdl.Button.GeneralStyle}"
-		        CommandParameter="{Binding}"
-		        Command="{Binding ResetToDefault}">
-		</Button>
-		</Grid>
-	</GroupBox>
+					</TextBox.Text>
+				</TextBox>
+				<WrapPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+					<Label  Content="{x:Static resx:PluginResources.Delimiter}"
+					       Margin="0"
+					       FontWeight="Bold"
+					       HorizontalAlignment="Left"
+					       VerticalAlignment="Center">
+						<Label.Visibility>
+							<MultiBinding Converter="{StaticResource ConditionalConverter}">
+								<Binding Path="AppendAsPrefix" />
+								<Binding Path="AppendAsSuffix" />
+							</MultiBinding>
+						</Label.Visibility>
+					</Label>
+					<TextBox VerticalAlignment="Center"
+							 Name="Delimiter"
+					         HorizontalAlignment="Left"
+					         Width="Auto"
+					         MinWidth="200"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}">
+						<TextBox.Visibility>
+							<MultiBinding Converter="{StaticResource ConditionalConverter}">
+								<Binding Path="AppendAsPrefix" />
+								<Binding Path="AppendAsSuffix" />
+							</MultiBinding>
+						</TextBox.Visibility>
+						<TextBox.Text>
+							<Binding Path="Delimiter" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+								<Binding.ValidationRules>
+									<helpers:FileNameValidationRule />
+								</Binding.ValidationRules>
+							</Binding>
+						</TextBox.Text>
+					</TextBox>
+				</WrapPanel>
+				<Button Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0"
+				        Margin="5"
+				        VerticalAlignment="Bottom"
+				        HorizontalAlignment="Right"
+				        Content="{x:Static resx:PluginResources.Reset}"
+				        Style="{StaticResource Sdl.Button.GeneralStyle}"
+				        CommandParameter="{Binding}"
+				        Command="{Binding ResetToDefault}">
+				</Button>
+			</Grid>
+		</GroupBox>
+	</DockPanel>
 </UserControl>

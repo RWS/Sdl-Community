@@ -1,4 +1,5 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System.Windows.Controls;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Trados.TargetRenamer.BatchTask;
 using Trados.TargetRenamer.Interfaces;
@@ -11,25 +12,27 @@ namespace Trados.TargetRenamer.View
 	/// Interaction logic for TargetRenamerSettingsView.xaml
 	/// </summary>
 	public partial class TargetRenamerSettingsView : IUISettingsControl, ISettingsAware<TargetRenamerSettings>
-	{
-		public TargetRenamerSettingsView()
-		{
-			InitializeComponent();
-			IFolderDialogService folderDialogService = new FolderDialogService();
-			TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel(folderDialogService);
-			DataContext = TargetRenamerSettingsViewModel;
-		}
+    {
+        public TargetRenamerSettingsView()
+        {
+            InitializeComponent();
+            IFolderDialogService folderDialogService = new FolderDialogService();
+            TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel(folderDialogService);
+            DataContext = TargetRenamerSettingsViewModel;
+        }
 
-		public void Dispose()
-		{
-		}
+        public TargetRenamerSettings Settings { get; set; }
 
-		public bool ValidateChildren()
-		{
-			return true;
-		}
+        public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
 
-		public TargetRenamerSettings Settings { get; set; }
-		public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
-	}
+        public void Dispose()
+        {
+        }
+
+        public bool ValidateChildren()
+        {
+	        return Validation.GetErrors(CustomLocation).Count == 0
+	               && Validation.GetErrors(Delimiter).Count == 0;
+        }
+    }
 }

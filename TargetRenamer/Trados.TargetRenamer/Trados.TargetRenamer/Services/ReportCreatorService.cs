@@ -13,145 +13,145 @@ using Trados.TargetRenamer.BatchTask;
 namespace Trados.TargetRenamer.Services
 {
 	public class ReportCreatorService
-	{
-		public string ReportFile;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+    {
+        public string ReportFile;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public void CreateReport(
-			IProject project,
-			List<ProjectFile> projectFiles,
-			Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
-			TargetRenamerSettings renamerSettings,
-			LanguageDirection languageDirection)
-		{
-			var languageCode = languageDirection.TargetLanguage.IsoAbbreviation;
-			var settings = new XmlWriterSettings {OmitXmlDeclaration = true, Indent = false};
-			var tempFile = Path.GetTempFileName();
+        public void CreateReport(
+            IProject project,
+            List<ProjectFile> projectFiles,
+            Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
+            TargetRenamerSettings renamerSettings,
+            LanguageDirection languageDirection)
+        {
+            var languageCode = languageDirection.TargetLanguage.IsoAbbreviation;
+            var settings = new XmlWriterSettings { OmitXmlDeclaration = true, Indent = false };
+            var tempFile = Path.GetTempFileName();
 
-			using (var writer = XmlWriter.Create(tempFile, settings))
-			{
-				writer.WriteStartElement("task");
-				writer.WriteAttributeString("name", PluginResources.TargetRenamer_Name);
-				writer.WriteAttributeString("created",
-					project.GetProjectInfo().CreatedAt.ToString("MM/dd/yyyy hh:mm tt"));
-				var location = project.GetProjectInfo().LocalProjectFolder;
+            using (var writer = XmlWriter.Create(tempFile, settings))
+            {
+                writer.WriteStartElement("task");
+                writer.WriteAttributeString("name", PluginResources.TargetRenamer_Name);
+                writer.WriteAttributeString("created",
+                    project.GetProjectInfo().CreatedAt.ToString("MM/dd/yyyy hh:mm tt"));
+                var location = project.GetProjectInfo().LocalProjectFolder;
 
-				WriteReportTaskInfo(project, location, languageCode, writer, renamerSettings);
+                WriteReportTaskInfo(project, location, languageCode, writer, renamerSettings);
 
-				WriteReportFilesInfo(projectFiles, renamedFiles, renamerSettings, writer);
+                WriteReportFilesInfo(projectFiles, renamedFiles, renamerSettings, writer);
 
-				writer.WriteEndElement(); // task end tag
-			}
+                writer.WriteEndElement(); // task end tag
+            }
 
-			string reportData;
-			using (var r = new StreamReader(tempFile, Encoding.UTF8))
-			{
-				reportData = r.ReadToEnd();
-				r.Close();
-			}
+            string reportData;
+            using (var r = new StreamReader(tempFile, Encoding.UTF8))
+            {
+                reportData = r.ReadToEnd();
+                r.Close();
+            }
 
-			ReportFile = reportData;
+            ReportFile = reportData;
 
-			try
-			{
-				if (File.Exists(tempFile)) File.Delete(tempFile);
-			}
-			catch (Exception exception)
-			{
-				_logger.Error($"{exception.Message}\n {exception.StackTrace}");
-			}
-		}
+            try
+            {
+                if (File.Exists(tempFile)) File.Delete(tempFile);
+            }
+            catch (Exception exception)
+            {
+                _logger.Error($"{exception.Message}\n {exception.StackTrace}");
+            }
+        }
 
-		private static void WriteReportFilesInfo(List<ProjectFile> projectFiles,
-			Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
-			TargetRenamerSettings renamerSettings,
-			XmlWriter writer)
-		{
-			writer.WriteStartElement("files");
-			foreach (var projectFile in projectFiles)
-			{
-				writer.WriteStartElement("file");
+        private static void WriteReportCustomerInfo(IProject project, XmlWriter writer)
+        {
+            if (!string.IsNullOrEmpty(project.GetProjectInfo().OrganizationPath))
+            {
+                writer.WriteStartElement("customer");
+                writer.WriteAttributeString("name", project.GetProjectInfo().OrganizationPath);
+                writer.WriteEndElement(); //customer end tag
+            }
+        }
 
-				var file = renamedFiles.Keys.SingleOrDefault(x => x.Item1.Id == projectFile.Id);
-				renamedFiles.TryGetValue(file, out var renamedFileNames);
-				writer.WriteAttributeString("name", projectFile.Name);
-				writer.WriteAttributeString("originalName", renamedFileNames.Item1);
-				writer.WriteAttributeString("newName", renamedFileNames.Item2);
-				writer.WriteAttributeString("location", file.Item1.Folder);
-				writer.WriteAttributeString("newLocation",
-					renamerSettings.UseCustomLocation
-						? Path.Combine(renamerSettings.CustomLocation, projectFile.Folder)
-						: Path.Combine(file.Item2.TargetLanguage.ToString(),projectFile.Folder));
-				writer.WriteEndElement(); // file end tag
-			}
+        private static void WriteReportFilesInfo(List<ProjectFile> projectFiles,
+                    Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> renamedFiles,
+            TargetRenamerSettings renamerSettings,
+            XmlWriter writer)
+        {
+            writer.WriteStartElement("files");
+            foreach (var projectFile in projectFiles)
+            {
+                writer.WriteStartElement("file");
 
-			writer.WriteEndElement(); // files end tag
-		}
+                var file = renamedFiles.Keys.SingleOrDefault(x => x.Item1.Id == projectFile.Id);
+                renamedFiles.TryGetValue(file, out var renamedFileNames);
+                writer.WriteAttributeString("name", projectFile.Name);
+                writer.WriteAttributeString("originalName", renamedFileNames.Item1);
+                writer.WriteAttributeString("newName", renamedFileNames.Item2);
+                writer.WriteAttributeString("location", file.Item1.Folder);
+                writer.WriteAttributeString("newLocation",
+                    renamerSettings.UseCustomLocation
+                        ? Path.Combine(renamerSettings.CustomLocation, projectFile.Folder)
+                        : Path.Combine(file.Item2.TargetLanguage.ToString(), projectFile.Folder));
+                writer.WriteEndElement(); // file end tag
+            }
 
-		private static void WriteReportTaskInfo(IProject project, string location, string languageCode,
-			XmlWriter writer, TargetRenamerSettings settings)
-		{
-			writer.WriteStartElement("taskInfo");
-			writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
-			writer.WriteAttributeString("runAt", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            writer.WriteEndElement(); // files end tag
+        }
 
-			WriteReportProjectInfo(project, writer);
+        private static void WriteReportLanguageInfo(string languageCode, XmlWriter writer)
+        {
+            writer.WriteStartElement("language");
+            writer.WriteAttributeString("id", languageCode);
+            writer.WriteAttributeString("name", new CultureInfo(languageCode).DisplayName);
+            writer.WriteEndElement(); //language end tag
+        }
 
-			WriteReportLanguageInfo(languageCode, writer);
+        private static void WriteReportProjectInfo(IProject project, XmlWriter writer)
+        {
+            writer.WriteStartElement("project");
+            writer.WriteAttributeString("name", project.GetProjectInfo().Name);
+            writer.WriteAttributeString("number", project.GetProjectInfo().Id.ToString());
+            if (project.GetProjectInfo().DueDate != DateTime.MinValue &&
+                project.GetProjectInfo().DueDate != DateTime.MaxValue)
+                writer.WriteAttributeString("dueDate", project.GetProjectInfo().DueDate.ToString());
 
-			WriteReportCustomerInfo(project, writer);
+            writer.WriteEndElement(); // project end tag
+        }
 
-			WriteReportSettingsInfo(location, writer, settings);
+        private static void WriteReportSettingsInfo(string location, XmlWriter writer, TargetRenamerSettings settings)
+        {
+            writer.WriteStartElement("settings");
+            writer.WriteAttributeString("overwriteTargetFiles", settings.OverwriteTargetFiles.ToString());
+            writer.WriteAttributeString("path", location);
+            writer.WriteAttributeString("delimiter", settings.Delimiter);
+            writer.WriteAttributeString("targetLanguage", settings.AppendTargetLanguage.ToString());
+            writer.WriteAttributeString("shortLocales", settings.UseShortLocales.ToString());
+            writer.WriteAttributeString("useCustomString", settings.AppendCustomString.ToString());
+            writer.WriteAttributeString("customString", settings.CustomString);
+            writer.WriteAttributeString("useRegExpr", settings.UseRegularExpression.ToString());
+            writer.WriteAttributeString("regExprSearchFor", settings.RegularExpressionSearchFor);
+            writer.WriteAttributeString("regExprReplaceWith", settings.RegularExpressionReplaceWith);
+            writer.WriteAttributeString("suffix", settings.AppendAsSuffix.ToString());
+            writer.WriteAttributeString("prefix", settings.AppendAsPrefix.ToString());
+            writer.WriteEndElement(); // settings end tag
+        }
 
-			writer.WriteEndElement(); // taskInfo end tag
-		}
+        private static void WriteReportTaskInfo(IProject project, string location, string languageCode,
+                                    XmlWriter writer, TargetRenamerSettings settings)
+        {
+            writer.WriteStartElement("taskInfo");
+            writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
+            writer.WriteAttributeString("runAt", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
 
-		private static void WriteReportSettingsInfo(string location, XmlWriter writer, TargetRenamerSettings settings)
-		{
-			writer.WriteStartElement("settings");
-			writer.WriteAttributeString("overwriteTargetFiles", settings.OverwriteTargetFiles.ToString());
-			writer.WriteAttributeString("path", location);
-			writer.WriteAttributeString("delimiter", settings.Delimiter);
-			writer.WriteAttributeString("targetLanguage", settings.AppendTargetLanguage.ToString());
-			writer.WriteAttributeString("shortLocales", settings.UseShortLocales.ToString());
-			writer.WriteAttributeString("useCustomString", settings.AppendCustomString.ToString());
-			writer.WriteAttributeString("customString", settings.CustomString);
-			writer.WriteAttributeString("useRegExpr", settings.UseRegularExpression.ToString());
-			writer.WriteAttributeString("regExprSearchFor", settings.RegularExpressionSearchFor);
-			writer.WriteAttributeString("regExprReplaceWith", settings.RegularExpressionReplaceWith);
-			writer.WriteAttributeString("suffix", settings.AppendAsSuffix.ToString());
-			writer.WriteAttributeString("prefix", settings.AppendAsPrefix.ToString());
-			writer.WriteEndElement(); // settings end tag
-		}
+            WriteReportProjectInfo(project, writer);
 
-		private static void WriteReportCustomerInfo(IProject project, XmlWriter writer)
-		{
-			if (!string.IsNullOrEmpty(project.GetProjectInfo().OrganizationPath))
-			{
-				writer.WriteStartElement("customer");
-				writer.WriteAttributeString("name", project.GetProjectInfo().OrganizationPath);
-				writer.WriteEndElement(); //customer end tag												  
-			}
-		}
+            WriteReportLanguageInfo(languageCode, writer);
 
-		private static void WriteReportLanguageInfo(string languageCode, XmlWriter writer)
-		{
-			writer.WriteStartElement("language");
-			writer.WriteAttributeString("id", languageCode);
-			writer.WriteAttributeString("name", new CultureInfo(languageCode).DisplayName);
-			writer.WriteEndElement(); //language end tag
-		}
+            WriteReportCustomerInfo(project, writer);
 
-		private static void WriteReportProjectInfo(IProject project, XmlWriter writer)
-		{
-			writer.WriteStartElement("project");
-			writer.WriteAttributeString("name", project.GetProjectInfo().Name);
-			writer.WriteAttributeString("number", project.GetProjectInfo().Id.ToString());
-			if (project.GetProjectInfo().DueDate != DateTime.MinValue &&
-			    project.GetProjectInfo().DueDate != DateTime.MaxValue)
-				writer.WriteAttributeString("dueDate", project.GetProjectInfo().DueDate.ToString());
+            WriteReportSettingsInfo(location, writer, settings);
 
-			writer.WriteEndElement(); // project end tag
-		}
-	}
+            writer.WriteEndElement(); // taskInfo end tag
+        }
+    }
 }
