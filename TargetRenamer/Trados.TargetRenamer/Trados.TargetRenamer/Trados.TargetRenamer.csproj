@@ -91,7 +91,7 @@
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -99,7 +99,7 @@ namespace Trados.TargetRenamer
 				_logger.Error($"{e.Message}\n {e.StackTrace}");
 			}
 
-			RevertToSdlXliff(projectFile);
+			Project.AddNewFileVersion(projectFile.Id, projectFile.LocalFilePath);
 		}
 
 		protected override void OnInitializeTask()
@@ -171,19 +171,6 @@ namespace Trados.TargetRenamer
 				_reportCreator.CreateReport(Project, projectFiles, _renamedFiles, _settings, languageDirection);
 
 				CreateReport(reportName, PluginResources.ReportDescription, _reportCreator.ReportFile, languageDirection);
-			}
-		}
-
-		private void RevertToSdlXliff(ProjectFile projectFile)
-		{
-			Project.AddNewFileVersion(projectFile.Id, projectFile.LocalFilePath);
-			var projectFileDirectory = Path.GetDirectoryName(projectFile.LocalFilePath);
-			if (projectFileDirectory == null) return;
-
-			var latestFile = Directory.GetFiles(projectFileDirectory).ToList().OrderByDescending(File.GetCreationTime).FirstOrDefault();
-			if (string.IsNullOrWhiteSpace(Path.GetExtension(latestFile)) && Path.GetFileNameWithoutExtension(projectFile.OriginalName) == Path.GetFileNameWithoutExtension(latestFile) && latestFile != null)
-			{
-				File.Delete(latestFile);
 			}
 		}
 	}
