@@ -33,10 +33,11 @@ namespace Trados.TargetRenamer.Control
 		{
             this.targetRenamerHost = new System.Windows.Forms.Integration.ElementHost();
             this.SuspendLayout();
-            // 
-            // targetRenamerHost
-            // 
-            this.targetRenamerHost.Location = new System.Drawing.Point(0, 0);
+			// 
+			// targetRenamerHost
+			// 
+			this.targetRenamerHost.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.targetRenamerHost.Location = new System.Drawing.Point(0, 0);
             this.targetRenamerHost.Name = "targetRenamerHost";
             this.targetRenamerHost.Size = new System.Drawing.Size(800, 450);
             this.targetRenamerHost.TabIndex = 0;
