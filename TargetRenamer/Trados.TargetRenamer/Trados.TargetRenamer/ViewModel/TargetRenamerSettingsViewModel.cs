@@ -19,12 +19,12 @@ namespace Trados.TargetRenamer.ViewModel
         private ICommand _resetToDefault;
         private string _selectedComboBoxItem;
         private ICommand _selectTargetFolder;
+		private TargetRenamerSettings _settings;
 
 		public TargetRenamerSettingsViewModel(IFolderDialogService folderDialogService)
 		{
 			_folderDialogService = folderDialogService;
 			ComboBoxItems = new ObservableCollection<string> { AppendSuffixText, AppendPrefixText, RegExprText };
-			//Reset(null);
 		}
 
         public bool AppendAsPrefix
@@ -148,7 +148,19 @@ namespace Trados.TargetRenamer.ViewModel
         public ICommand SelectTargetFolder =>
             _selectTargetFolder ?? (_selectTargetFolder = new CommandHandler(SelectFolder));
 
-        public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettings Settings
+		{
+			get => _settings;
+			set
+			{
+				if (string.IsNullOrWhiteSpace(value.CustomLocation)) value.CustomLocation = Path.GetTempPath();
+				if (string.IsNullOrWhiteSpace(value.Delimiter)) value.Delimiter = "_";
+				if (!value.AppendTargetLanguage) value.AppendTargetLanguage = true;
+				_settings = value;
+
+				SelectedComboBoxItem = AppendSuffixText;
+			}
+		}
 
 		public bool UseCustomLocation
 		{
