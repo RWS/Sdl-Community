@@ -15,37 +15,25 @@ namespace Trados.TargetRenamer.ViewModel
 		private const string AppendSuffixText = "Append As Suffix";
 		private const string RegExprText = "Use Regular Expression";
 		private readonly IFolderDialogService _folderDialogService;
-		private bool _appendAsPrefix;
-		private bool _appendAsSuffix;
-		private bool _appendCustomString;
-		private bool _appendTargetLanguage;
 		private ICommand _clearCommand;
-		private string _customLocation;
-		private string _customString;
-		private string _delimiter;
-		private string _regularExpressionReplaceWith;
-		private string _regularExpressionSearchFor;
 		private ICommand _resetToDefault;
 		private string _selectedComboBoxItem;
 		private ICommand _selectTargetFolder;
-		private bool _useCustomLocation;
-		private bool _useRegularExpression;
-		private bool _useShortLocales;
+		private TargetRenamerSettings _settings;
 
 		public TargetRenamerSettingsViewModel(IFolderDialogService folderDialogService)
 		{
 			_folderDialogService = folderDialogService;
 			ComboBoxItems = new ObservableCollection<string> { AppendSuffixText, AppendPrefixText, RegExprText };
-			//Reset(null);
 		}
 
 		public bool AppendAsPrefix
 		{
-			get => _appendAsPrefix;
+			get => Settings.AppendAsPrefix;
 			set
 			{
-				if (_appendAsPrefix == value) return;
-				_appendAsPrefix = value;
+				if (Settings.AppendAsPrefix == value) return;
+				Settings.AppendAsPrefix = value;
 				OnPropertyChanged(nameof(AppendAsPrefix));
 			}
 		}
@@ -113,7 +101,7 @@ namespace Trados.TargetRenamer.ViewModel
 			get => Settings.Delimiter;
 			set
 			{
-				if (string.IsNullOrWhiteSpace(_delimiter)) _delimiter = "_";
+				if (string.IsNullOrWhiteSpace(Settings.Delimiter)) Settings.Delimiter = "_";
 				if (Settings.Delimiter == value) return;
 				Settings.Delimiter = value;
 				OnPropertyChanged(nameof(Delimiter));
@@ -162,7 +150,18 @@ namespace Trados.TargetRenamer.ViewModel
 		public ICommand SelectTargetFolder =>
 			_selectTargetFolder ?? (_selectTargetFolder = new CommandHandler(SelectFolder));
 
-		public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettings Settings
+		{
+			get => _settings; set
+			{
+				if (string.IsNullOrWhiteSpace(value.CustomLocation)) value.CustomLocation = Path.GetTempPath();
+				if (string.IsNullOrWhiteSpace(value.Delimiter)) value.Delimiter = "_";
+				if (!value.AppendTargetLanguage) value.AppendTargetLanguage = true;
+				_settings = value;
+
+				SelectedComboBoxItem = AppendSuffixText;
+			}
+		}
 
 		public bool UseCustomLocation
 		{
