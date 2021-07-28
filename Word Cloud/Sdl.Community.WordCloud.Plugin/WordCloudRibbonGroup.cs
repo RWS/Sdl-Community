@@ -64,7 +64,7 @@ namespace Sdl.Community.WordCloud.Plugin
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3289.word-cloud");
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3289/trados-studio-word-cloud");
 		}
 	}
 }
