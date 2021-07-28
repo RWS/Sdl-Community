@@ -33,25 +33,13 @@ namespace Sdl.Community.ExportAnalysisReports
 		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-
-		public ReportExporterControl(SettingsService settingsService)
+		public ReportExporterControl(List<string> studioProjectsPaths, SettingsService settingsService, 
+			IProjectService projectService, IMessageBoxService messageBoxService, IReportService reportService)
 		{
 			_settingsService = settingsService;
-			_messageBoxService = new MessageBoxService();
-			_projectService = new ProjectService();
-
-			_reportService = new ReportService(_messageBoxService, _projectService, _settingsService);
-
-			InitializeComponent();
-			InitializeSettings();
-		}
-
-		public ReportExporterControl(List<string> studioProjectsPaths, SettingsService settingsService)
-		{
-			_settingsService = settingsService;
-			_messageBoxService = new MessageBoxService();
-			_projectService = new ProjectService();
-			_reportService = new ReportService(_messageBoxService, _projectService, _settingsService);
+			_projectService = projectService;
+			_messageBoxService = messageBoxService;
+			_reportService = reportService;
 
 			InitializeComponent();
 			InitializeSettings(studioProjectsPaths);
@@ -256,7 +244,6 @@ namespace Sdl.Community.ExportAnalysisReports
 			if (!isSamePath)
 			{
 				// Save the new selected export folder path if it was changed by the user
-				//_reportService.SaveExportPath(reportOutputPath.Text);
 				var settings = _settingsService.GetSettings();
 				settings.ExportPath = reportOutputPath.Text;
 				_settingsService.SaveSettings(settings);
@@ -471,29 +458,30 @@ namespace Sdl.Community.ExportAnalysisReports
 					foreach (XmlNode xmlNode in projectsNodeList)
 					{
 						var projectId = GetAttributeValue(xmlNode, "Guid");
-						
-						
+						var projectInfo = studioProjects.FirstOrDefault(a => a.GetProjectInfo()?.Id.ToString() == projectId)?.GetProjectInfo();
+						if (projectInfo == null)
+						{
+							continue;
+						}
+
+						var reportsFolderPath = Path.Combine(projectInfo.LocalProjectFolder, "Reports");
 						var projectInfoNode = xmlNode.SelectSingleNode("./ProjectInfo");
 						if (projectInfoNode?.Attributes != null)
 						{
 							var reportExist = _reportService.ReportFolderExist(xmlNode, _projectService.ProjectsXmlPath);
 							if (reportExist)
 							{
-								SetProjectDetails(projectInfoNode, xmlNode, filePathNames);
+								SetProjectDetails(reportsFolderPath, projectInfoNode, xmlNode, filePathNames);
 							}
 							else
 							{
-								var projectInfo = studioProjects.FirstOrDefault(a => a.GetProjectInfo()?.Id.ToString() == projectId)?.GetProjectInfo();
-								if (projectInfo != null)
-								{
-									projectsWithoutAnalysis.Add(projectInfo.Name);
-								}
+								projectsWithoutAnalysis.Add(projectInfo.Name);
 							}
 						}
 					}
-					
+
 					SetProjectDataSource();
-					
+
 					if (projectsWithoutAnalysis.Count > 0 && !_settingsService.GetSettings().DontShowInfoMessage)
 					{
 						var messageBox = new InformationMessage(_settingsService, projectsWithoutAnalysis);
@@ -530,10 +518,10 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
-				
+
 				var projectXmlDocument = new XmlDocument();
 				if (!IsNullOrEmpty(projectXmlPath))
-				{			
+				{
 					projectXmlDocument.Load(projectXmlPath);
 					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
 					if (projectsNodeList == null) return;
@@ -770,6 +758,10 @@ namespace Sdl.Community.ExportAnalysisReports
 			var reportPath = ((TextBox)sender).Text;
 			if (!IsNullOrWhiteSpace(reportPath))
 			{
+				var settings = _settingsService.GetSettings();
+				settings.ExportPath = reportOutputPath.Text;
+				_settingsService.SaveSettings(settings);
+
 				targetBtn.Enabled = true;
 			}
 
@@ -782,9 +774,13 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void ReportOutputPath_TextChanged(object sender, EventArgs e)
 		{
 			var selectedOutputPath = ((TextBox)sender).Text;
+
 			if (!IsNullOrEmpty(selectedOutputPath))
 			{
-				reportOutputPath.Text = selectedOutputPath;
+				var settings = _settingsService.GetSettings();
+				settings.ExportPath = reportOutputPath.Text;
+				_settingsService.SaveSettings(settings);
+
 				targetBtn.Enabled = true;
 			}
 			else
@@ -925,11 +921,12 @@ namespace Sdl.Community.ExportAnalysisReports
 			projListbox.DisplayMember = "ProjectName";
 		}
 
-		private void SetProjectDetails(XmlNode item, bool isSingleFileProject)
+		private void SetProjectDetails(string reportsFolderPath, XmlNode item, bool isSingleFileProject)
 		{
 			try
 			{
-				var projectDetails = _projectService.CreateProjectDetails(item, isSingleFileProject, _settingsService.GetSettings().ExportPath);
+
+				var projectDetails = _projectService.CreateProjectDetails(item, isSingleFileProject, reportsFolderPath);
 				if (projectDetails != null)
 				{
 					_projectsDataSource.Add(projectDetails);
@@ -942,24 +939,24 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 		}
 
-		private void SetProjectDetails(XmlNode projectInfo, XmlNode item, List<string> filePathNames)
+		private void SetProjectDetails(string reportsFolderPath, XmlNode projectInfoNode, XmlNode item, List<string> filePathNames)
 		{
-			if (projectInfo?.Attributes != null)
+			if (projectInfoNode?.Attributes != null)
 			{
 				var xmlAttributeCollection = item?.Attributes;
 				if (xmlAttributeCollection != null)
 				{
 					var projFileName = Path.GetFileName(xmlAttributeCollection["ProjectFilePath"]?.Value);
 					var projPath = filePathNames.FirstOrDefault(p => p.Equals(projFileName));
-					if (projectInfo.Attributes["IsInPlace"].Value.Equals("true") && !IsNullOrEmpty(projPath))
+					if (projectInfoNode.Attributes["IsInPlace"].Value.Equals("true") && !IsNullOrEmpty(projPath))
 					{
 						// Include the selected single file project ONLY when user selects it within Projects view -> right click -> Export Analysis Reports
-						SetProjectDetails(item, true);
+						SetProjectDetails(reportsFolderPath, item, true);
 					}
-					else if (projectInfo.Attributes["IsInPlace"].Value.Equals("false"))
+					else if (projectInfoNode.Attributes["IsInPlace"].Value.Equals("false"))
 					{
 						// Include all projects that are not single file project
-						SetProjectDetails(item, false);
+						SetProjectDetails(reportsFolderPath, item, false);
 					}
 				}
 			}
