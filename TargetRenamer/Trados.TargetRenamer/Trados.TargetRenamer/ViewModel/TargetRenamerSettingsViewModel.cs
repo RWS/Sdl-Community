@@ -36,7 +36,7 @@ namespace Trados.TargetRenamer.ViewModel
 		{
 			_folderDialogService = folderDialogService;
 			ComboBoxItems = new ObservableCollection<string> { AppendSuffixText, AppendPrefixText, RegExprText };
-			Reset(null);
+			//Reset(null);
 		}
 
 		public bool AppendAsPrefix
@@ -52,33 +52,33 @@ namespace Trados.TargetRenamer.ViewModel
 
 		public bool AppendAsSuffix
 		{
-			get => _appendAsSuffix;
+			get => Settings.AppendAsSuffix;
 			set
 			{
-				if (_appendAsSuffix == value) return;
-				_appendAsSuffix = value;
+				if (Settings.AppendAsSuffix == value) return;
+				Settings.AppendAsSuffix = value;
 				OnPropertyChanged(nameof(AppendAsSuffix));
 			}
 		}
 
 		public bool AppendCustomString
 		{
-			get => _appendCustomString;
+			get => Settings.AppendCustomString;
 			set
 			{
-				if (_appendCustomString == value) return;
-				_appendCustomString = value;
+				if (Settings.AppendCustomString == value) return;
+				Settings.AppendCustomString = value;
 				OnPropertyChanged(nameof(AppendCustomString));
 			}
 		}
 
 		public bool AppendTargetLanguage
 		{
-			get => _appendTargetLanguage;
+			get => Settings.AppendTargetLanguage;
 			set
 			{
-				if (_appendTargetLanguage == value) return;
-				_appendTargetLanguage = value;
+				if (Settings.AppendTargetLanguage == value) return;
+				Settings.AppendTargetLanguage = value;
 				OnPropertyChanged(nameof(AppendTargetLanguage));
 			}
 		}
@@ -88,34 +88,34 @@ namespace Trados.TargetRenamer.ViewModel
 
 		public string CustomLocation
 		{
-			get => _customLocation;
+			get => Settings.CustomLocation;
 			set
 			{
-				if (_customLocation == value) return;
-				_customLocation = value;
+				if (Settings.CustomLocation == value) return;
+				Settings.CustomLocation = value;
 				OnPropertyChanged(nameof(CustomLocation));
 			}
 		}
 
 		public string CustomString
 		{
-			get => _customString;
+			get => Settings.CustomString;
 			set
 			{
-				if (_customString == value) return;
-				_customString = value;
+				if (Settings.CustomString == value) return;
+				Settings.CustomString = value;
 				OnPropertyChanged(nameof(CustomString));
 			}
 		}
 
 		public string Delimiter
 		{
-			get => _delimiter;
+			get => Settings.Delimiter;
 			set
 			{
 				if (string.IsNullOrWhiteSpace(_delimiter)) _delimiter = "_";
-				if (_delimiter == value) return;
-				_delimiter = value;
+				if (Settings.Delimiter == value) return;
+				Settings.Delimiter = value;
 				OnPropertyChanged(nameof(Delimiter));
 			}
 		}
@@ -124,22 +124,22 @@ namespace Trados.TargetRenamer.ViewModel
 
 		public string RegularExpressionReplaceWith
 		{
-			get => _regularExpressionReplaceWith;
+			get => Settings.RegularExpressionReplaceWith;
 			set
 			{
-				if (_regularExpressionReplaceWith == value) return;
-				_regularExpressionReplaceWith = value;
+				if (Settings.RegularExpressionReplaceWith == value) return;
+				Settings.RegularExpressionReplaceWith = value;
 				OnPropertyChanged(nameof(RegularExpressionReplaceWith));
 			}
 		}
 
 		public string RegularExpressionSearchFor
 		{
-			get => _regularExpressionSearchFor;
+			get => Settings.RegularExpressionSearchFor;
 			set
 			{
-				if (_regularExpressionSearchFor == value) return;
-				_regularExpressionSearchFor = value;
+				if (Settings.RegularExpressionSearchFor == value) return;
+				Settings.RegularExpressionSearchFor = value;
 				OnPropertyChanged(nameof(RegularExpressionSearchFor));
 			}
 		}
@@ -166,33 +166,33 @@ namespace Trados.TargetRenamer.ViewModel
 
 		public bool UseCustomLocation
 		{
-			get => _useCustomLocation;
+			get => Settings.UseCustomLocation;
 			set
 			{
-				if (_useCustomLocation == value) return;
-				_useCustomLocation = value;
+				if (Settings.UseCustomLocation == value) return;
+				Settings.UseCustomLocation = value;
 				OnPropertyChanged(nameof(UseCustomLocation));
 			}
 		}
 
 		public bool UseRegularExpression
 		{
-			get => _useRegularExpression;
+			get => Settings.UseRegularExpression;
 			set
 			{
-				if (_useRegularExpression == value) return;
-				_useRegularExpression = value;
+				if (Settings.UseRegularExpression == value) return;
+				Settings.UseRegularExpression = value;
 				OnPropertyChanged(nameof(UseRegularExpression));
 			}
 		}
 
 		public bool UseShortLocales
 		{
-			get => _useShortLocales;
+			get => Settings.UseShortLocales;
 			set
 			{
-				if (_useShortLocales == value) return;
-				_useShortLocales = value;
+				if (Settings.UseShortLocales == value) return;
+				Settings.UseShortLocales = value;
 				OnPropertyChanged(nameof(UseShortLocales));
 			}
 		}

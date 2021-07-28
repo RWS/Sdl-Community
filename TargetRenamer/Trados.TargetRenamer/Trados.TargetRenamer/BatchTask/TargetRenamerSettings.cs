@@ -1,4 +1,5 @@
-﻿using Sdl.Core.Settings;
+﻿using System.ComponentModel;
+using Sdl.Core.Settings;
 using Trados.TargetRenamer.Interfaces;
 
 namespace Trados.TargetRenamer.BatchTask
