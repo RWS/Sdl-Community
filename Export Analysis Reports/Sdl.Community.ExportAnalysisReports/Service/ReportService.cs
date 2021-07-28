@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
@@ -118,7 +117,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				doc.Load(project.ProjectPath);
 
 				var projectInfo = _projectService.GetProjectInfo(project.ProjectPath);
-				
+
 				project.LanguageAnalysisReportPaths?.Clear();
 
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
@@ -135,7 +134,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 						foreach (var reportNode in reportNodes)
 						{
-							ConfigureReportDetails(project, projectInfo, (XmlNode) reportNode, doc);
+							ConfigureReportDetails(project, projectInfo, (XmlNode)reportNode, doc);
 						}
 					}
 				}
@@ -184,12 +183,18 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			try
 			{
 				var reportsPath = Path.GetDirectoryName(pathToXmlReport);
+				if (reportsPath == null)
+				{
+					return;
+				}
+
 				var reportName = Path.GetFileName(pathToXmlReport);
 				var directoryInfo = new DirectoryInfo(reportsPath);
-				if (directoryInfo != null)
 				{
 					var fileName = Path.GetFileNameWithoutExtension(reportName);
-					var fileInfo = directoryInfo?.GetFiles()?.OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n => n.Name.StartsWith(fileName));
+					var fileInfo = directoryInfo.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n =>
+							n.Name.StartsWith(fileName, StringComparison.CurrentCultureIgnoreCase) &&
+							n.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase));
 					_reportFile = fileInfo != null ? fileInfo.FullName : pathToXmlReport;
 
 					if (!File.Exists(_reportFile))
@@ -223,7 +228,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_logger.Error($"PrepareAnalysisReport method: {ex.Message}\n {ex.StackTrace}");
 			}
@@ -340,14 +345,15 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				}
 
 				headerColumns.Add("\"100% (TM)\"");
-				fuzzies.OrderByDescending(br => br.Max).ToList().ForEach(br => {
-						headerColumns.Add(string.Format("\"{0}% - {1}% (TM)\"", br.Max, br.Min));
-						headerColumns.Add(string.Format("\"{0}% - {1}% (AP)\"", br.Max, br.Min));
-						if (aditionalHeaders.IncludeInternalFuzzies)
-						{
-							headerColumns.Add(string.Format("\"{0}% - {1}% (Internal)\"", br.Max, br.Min));
-						}
-					});
+				fuzzies.OrderByDescending(br => br.Max).ToList().ForEach(br =>
+				{
+					headerColumns.Add(string.Format("\"{0}% - {1}% (TM)\"", br.Max, br.Min));
+					headerColumns.Add(string.Format("\"{0}% - {1}% (AP)\"", br.Max, br.Min));
+					if (aditionalHeaders.IncludeInternalFuzzies)
+					{
+						headerColumns.Add(string.Format("\"{0}% - {1}% (Internal)\"", br.Max, br.Min));
+					}
+				});
 
 				if (aditionalHeaders.IncludeAdaptiveBaseline)
 				{
@@ -419,12 +425,8 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					if (files.Any(file => new FileInfo(file).Name.Contains("Analyze Files")))
-					{
-						return true;
-					}
-
-					return false;
+					return files.Any(file => new FileInfo(file).Name.Contains("Analyze Files") && 
+					                         file.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase));
 				}
 
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles") && Directory.Exists(reportFolderPath))
@@ -505,7 +507,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		//  Write the report file based on the Analyse file 
-		private void WriteReportFile(ProjectDetails project, OptionalInformation optionalInformation, KeyValuePair<string,bool> languageReport, bool isChecked)
+		private void WriteReportFile(ProjectDetails project, OptionalInformation optionalInformation, KeyValuePair<string, bool> languageReport, bool isChecked)
 		{
 			try
 			{
