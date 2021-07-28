@@ -1,9 +1,6 @@
 ﻿using System.Windows.Controls;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Trados.TargetRenamer.BatchTask;
-using Trados.TargetRenamer.Interfaces;
-using Trados.TargetRenamer.Services;
 using Trados.TargetRenamer.ViewModel;
 
 namespace Trados.TargetRenamer.View
@@ -11,28 +8,47 @@ namespace Trados.TargetRenamer.View
 	/// <summary>
 	/// Interaction logic for TargetRenamerSettingsView.xaml
 	/// </summary>
-	public partial class TargetRenamerSettingsView : IUISettingsControl, ISettingsAware<TargetRenamerSettings>
-    {
-        public TargetRenamerSettingsView()
-        {
-            InitializeComponent();
-            IFolderDialogService folderDialogService = new FolderDialogService();
-            TargetRenamerSettingsViewModel = new TargetRenamerSettingsViewModel(folderDialogService);
-            DataContext = TargetRenamerSettingsViewModel;
-        }
+	public partial class TargetRenamerSettingsView : ISettingsAware<TargetRenamerSettings>
+	{
+		public TargetRenamerSettingsView()
+		{
+			InitializeComponent();
+			AddErrorHandlers();
+		}
 
-        public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel => (TargetRenamerSettingsViewModel)DataContext;
+		private bool CustomLocationHasErrors { get; set; }
+		private bool DelimiterHasErrors { get; set; }
 
-        public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
+		public void AddErrorHandlers()
+		{
+			Validation.AddErrorHandler(CustomLocation, ErrorHandler);
+			Validation.AddErrorHandler(Delimiter, ErrorHandler);
+		}
 
-        public void Dispose()
-        {
-        }
+		public void Dispose()
+		{
+		}
 
-        public bool ValidateChildren()
-        {
-	        return Validation.GetErrors(CustomLocation).Count == 0
-	               && Validation.GetErrors(Delimiter).Count == 0;
-        }
-    }
+		private void ErrorHandler(object sender, ValidationErrorEventArgs e)
+		{
+			var errorSource = e.OriginalSource as TextBox;
+			if (errorSource.Name == nameof(CustomLocation))
+			{
+				CustomLocationHasErrors = e.Action == ValidationErrorEventAction.Added;
+			}
+			if (errorSource.Name == nameof(Delimiter))
+			{
+				DelimiterHasErrors = e.Action == ValidationErrorEventAction.Added;
+			}
+
+			SetHasErrorOnViewModel();
+		}
+
+		private void SetHasErrorOnViewModel()
+		{
+			TargetRenamerSettingsViewModel.HasErrors = CustomLocationHasErrors || DelimiterHasErrors;
+		}
+	}
 }

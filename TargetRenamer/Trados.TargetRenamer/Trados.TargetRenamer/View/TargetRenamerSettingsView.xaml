@@ -28,8 +28,7 @@
 				<Style.Triggers>
 					<Trigger Property="Validation.HasError" Value="true">
 						<Setter Property="ToolTip"
-              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
-                              Path=(Validation.Errors)[0].ErrorContent}" />
+								Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}" />
 					</Trigger>
 				</Style.Triggers>
 			</Style>
@@ -78,7 +77,7 @@
 					         Height="{Binding ActualHeight, ElementName=ComboBox}"
 					         IsEnabled="{Binding UseCustomLocation}">
 						<TextBox.Text>
-							<Binding Path="CustomLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+							<Binding Path="CustomLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True">
 								<Binding.ValidationRules>
 									<helpers:PathValidationRule />
 								</Binding.ValidationRules>
@@ -238,7 +237,7 @@
 							</MultiBinding>
 						</TextBox.Visibility>
 						<TextBox.Text>
-							<Binding Path="Delimiter" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+							<Binding Path="Delimiter" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True">
 								<Binding.ValidationRules>
 									<helpers:FileNameValidationRule />
 								</Binding.ValidationRules>
