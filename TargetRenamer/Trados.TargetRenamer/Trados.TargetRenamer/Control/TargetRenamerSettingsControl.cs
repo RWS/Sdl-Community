@@ -32,8 +32,7 @@ namespace Trados.TargetRenamer.Control
 			targetRenamerHost.Child = targetRenamerSettingsControl;
 		}
 
-		public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
-
 		public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettingsViewModel TargetRenamerSettingsViewModel { get; set; }
 	}
 }

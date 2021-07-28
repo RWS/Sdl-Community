@@ -9,7 +9,6 @@
         string CustomLocation { get; set; }
         string CustomString { get; set; }
         string Delimiter { get; set; }
-        bool OverwriteTargetFiles { get; set; }
         string RegularExpressionReplaceWith { get; set; }
         string RegularExpressionSearchFor { get; set; }
         bool UseCustomLocation { get; set; }

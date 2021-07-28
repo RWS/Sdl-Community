@@ -23,7 +23,6 @@ namespace Trados.TargetRenamer.ViewModel
 		private string _customLocation;
 		private string _customString;
 		private string _delimiter;
-		private bool _overwriteTargetFiles;
 		private string _regularExpressionReplaceWith;
 		private string _regularExpressionSearchFor;
 		private ICommand _resetToDefault;
@@ -122,17 +121,6 @@ namespace Trados.TargetRenamer.ViewModel
 		}
 
 		public bool HasErrors { get; internal set; } = false;
-
-		public bool OverwriteTargetFiles
-		{
-			get => _overwriteTargetFiles;
-			set
-			{
-				if (_overwriteTargetFiles == value) return;
-				_overwriteTargetFiles = value;
-				OnPropertyChanged(nameof(OverwriteTargetFiles));
-			}
-		}
 
 		public string RegularExpressionReplaceWith
 		{
@@ -242,7 +230,6 @@ namespace Trados.TargetRenamer.ViewModel
 
 		private void Reset(object obj)
 		{
-			OverwriteTargetFiles = true;
 			AppendAsPrefix = false;
 			AppendAsSuffix = true;
 			UseCustomLocation = false;

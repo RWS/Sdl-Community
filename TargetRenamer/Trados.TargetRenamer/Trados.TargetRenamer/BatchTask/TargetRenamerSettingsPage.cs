@@ -25,7 +25,6 @@ namespace Trados.TargetRenamer.BatchTask
 		{
 			base.Save();
 			if (_settings is null) return;
-			_settings.OverwriteTargetFiles = _control.TargetRenamerSettingsViewModel.OverwriteTargetFiles;
 			_settings.AppendAsPrefix = _control.TargetRenamerSettingsViewModel.AppendAsPrefix;
 			_settings.AppendAsSuffix = _control.TargetRenamerSettingsViewModel.AppendAsSuffix;
 			_settings.UseRegularExpression = _control.TargetRenamerSettingsViewModel.UseRegularExpression;

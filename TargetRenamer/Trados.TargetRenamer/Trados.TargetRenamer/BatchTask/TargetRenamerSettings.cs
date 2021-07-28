@@ -47,12 +47,6 @@ namespace Trados.TargetRenamer.BatchTask
 			set => GetSetting<string>(nameof(Delimiter)).Value = value;
 		}
 
-		public bool OverwriteTargetFiles
-		{
-			get => GetSetting<bool>(nameof(OverwriteTargetFiles));
-			set => GetSetting<bool>(nameof(OverwriteTargetFiles)).Value = value;
-		}
-
 		public string RegularExpressionReplaceWith
 		{
 			get => GetSetting<string>(nameof(RegularExpressionReplaceWith));

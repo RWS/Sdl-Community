@@ -73,26 +73,19 @@ namespace Trados.TargetRenamer
 				}
 
 				_renamedFiles.Add(
-					(projectFile, projectFile.GetLanguageDirection()),
-					new Tuple<string, string>(oldFileName, fileName));
+				(projectFile, projectFile.GetLanguageDirection()),
+				new Tuple<string, string>(oldFileName, fileName));
 
-				if (_settings.OverwriteTargetFiles)
+				// Ensure that the file does not exist
+				if (File.Exists(newFileName))
 				{
-					// Ensure that the file does not exist
-					if (File.Exists(newFileName))
-					{
-						File.Delete(newFileName);
-					}
-
-					Directory.CreateDirectory(Path.Combine(_settings.CustomLocation, targetLanguage.Name,
-							projectFile.Folder));
-
-					File.Move(file.LocalFilePath, newFileName);
+					File.Delete(newFileName);
 				}
-				else
-				{
-					File.Copy(file.LocalFilePath, newFileName);
-				}
+
+				Directory.CreateDirectory(Path.Combine(_settings.CustomLocation, targetLanguage.Name,
+						projectFile.Folder));
+
+				File.Move(file.LocalFilePath, newFileName);
 			}
 			catch (Exception e)
 			{
