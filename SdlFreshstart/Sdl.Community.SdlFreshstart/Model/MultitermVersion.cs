@@ -9,9 +9,10 @@ namespace Sdl.Community.SdlFreshstart.Model
 	{
 		private bool _isSelected;
 
-		public MultitermVersion(string publicVersion)
+		public MultitermVersion(string publicVersion,Version executableVersion)
 		{
 			PublicVersion = publicVersion;
+			ExecutableVersion = executableVersion;
 		}
 
 		public string CacheFolderName
@@ -42,6 +43,8 @@ namespace Sdl.Community.SdlFreshstart.Model
 			var x when x.Contains("2021") => 16,
 			_ => 0
 		};
+
+		public Version ExecutableVersion { get; set; }
 
 		public string MultiTermLocal => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
 			MultitermFolderPath);

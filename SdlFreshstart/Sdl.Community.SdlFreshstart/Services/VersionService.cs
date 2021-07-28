@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Documents;
@@ -77,7 +78,7 @@ namespace Sdl.Community.SdlFreshstart.Services
 		public List<MultitermVersion> GetInstalledMultitermVersions()
 		{
 			var multitermVersioningService = new MultiTermVersionService();
-			var multitermVersions = multitermVersioningService.GetInstalledMultiTermVersions().Select(mv => new MultitermVersion(mv.PublicVersion))
+			var multitermVersions = multitermVersioningService.GetInstalledMultiTermVersions().Select(mv => new MultitermVersion(mv.PublicVersion,mv.ExecutableVersion))
 				.ToList();
 
 			multitermVersions.Sort((item1, item2) =>
@@ -122,6 +123,25 @@ namespace Sdl.Community.SdlFreshstart.Services
 			}
 
 			return folderPath;
+		}
+
+		public void RunRepairMsi(string pathToModuleFolder, string msiFileName)
+		{
+			if (Directory.Exists(pathToModuleFolder))
+			{
+				var msiFile = Path.Combine(pathToModuleFolder, msiFileName);
+				if (File.Exists(msiFile))
+				{
+					var process = new ProcessStartInfo
+					{
+						FileName = "msiexec",
+						WorkingDirectory = pathToModuleFolder,
+						Arguments = "/fa " + msiFileName,
+						Verb = "runas"
+					};
+					Process.Start(process);
+				}
+			}
 		}
 	}
 }

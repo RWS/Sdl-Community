@@ -524,29 +524,17 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void RunRepair(StudioVersion version)
 		{
-			_logger.Info($"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
+			_logger.Info(
+				$"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
 
-			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(version.ExecutableVersion, version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
+			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(version.ExecutableVersion,
+				version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
 			var msiName = GetMsiName(version);
 			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
 
 			_logger.Info($"Trying to repair Studio from following folder: {moduleDirectoryPath}");
 
-			if (Directory.Exists(moduleDirectoryPath))
-			{
-				var msiFile = Path.Combine(moduleDirectoryPath, msiName);
-				if (File.Exists(msiFile))
-				{
-					var process = new ProcessStartInfo
-					{
-						FileName = "msiexec",
-						WorkingDirectory = moduleDirectoryPath,
-						Arguments = "/fa " + msiName,
-						Verb = "runas"
-					};
-					Process.Start(process);
-				}
-			}
+			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
 		}
 
 		private void SetButtonColors()
