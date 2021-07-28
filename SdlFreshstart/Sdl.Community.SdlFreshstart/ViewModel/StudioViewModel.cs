@@ -27,7 +27,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private readonly Persistence _persistenceSettings;
 		private readonly VersionService _versionService;
 		private bool _checkAll;
-		private string _folderDescription;
 		private ObservableCollection<StudioLocationListItem> _locations;
 		private bool _isRemoveEnabled;
 		private bool _isRepairEnabled;
@@ -45,7 +44,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool _registryKeyChecked;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-
 		public StudioViewModel(MainWindow mainWindow, VersionService versionService, IMessageService messageService, IRegistryHelper registryHelper)
 		{
 			_versionService = versionService;
@@ -53,7 +51,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_registryHelper = registryHelper;
 			_mainWindow = mainWindow;
 			_persistenceSettings = new Persistence();
-			_folderDescription = string.Empty;
 			_isRemoveEnabled = false;
 			_isRepairEnabled = false;
 			_checkAll = false;
@@ -531,8 +528,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
 			var msiName = GetMsiName(version);
 			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
-
-			_logger.Info($"Trying to repair Studio from following folder: {moduleDirectoryPath}");
 
 			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
 		}

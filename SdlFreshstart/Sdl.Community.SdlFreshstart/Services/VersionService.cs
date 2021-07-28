@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Documents;
 using NLog;
-using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
-using Sdl.Community.Toolkit.Core;
 using Sdl.Community.Toolkit.Core.Services;
 using Sdl.Versioning;
 using StudioVersion = Sdl.Community.SdlFreshstart.Model.StudioVersion;
@@ -17,8 +14,6 @@ namespace Sdl.Community.SdlFreshstart.Services
 {
 	public class VersionService
 	{
-		private readonly string _logPath = Path.Combine(
-			Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"SDL/Chainer/Logs");
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private readonly List<string> _possiblePackageCacheFolderName;
@@ -78,15 +73,29 @@ namespace Sdl.Community.SdlFreshstart.Services
 		public List<MultitermVersion> GetInstalledMultitermVersions()
 		{
 			var multitermVersioningService = new MultiTermVersionService();
-			var multitermVersions = multitermVersioningService.GetInstalledMultiTermVersions().Select(mv => new MultitermVersion(mv.PublicVersion,mv.ExecutableVersion))
+			var multiTermVersions = multitermVersioningService.GetInstalledMultiTermVersions().Select(mv => new MultitermVersion(mv.PublicVersion,mv.ExecutableVersion))
 				.ToList();
 
-			multitermVersions.Sort((item1, item2) =>
+			if (multiTermVersions.Any())
+			{
+				foreach (var multiTermVersion in multiTermVersions)
+				{
+					_logger.Info(
+						$"Installed Version:{multiTermVersion.VersionName} Public version: {multiTermVersion.PublicVersion}");
+				}
+			}
+			else
+			{
+				_logger.Info("Cannot find any Multiterm Version installed on the machine");
+
+			}
+
+			multiTermVersions.Sort((item1, item2) =>
 				item1.MajorVersion < item2.MajorVersion
 					? 1
 					: item1.MajorVersion > item2.MajorVersion ? -1 : 0);
 
-			return multitermVersions;
+			return multiTermVersions;
 		}
 
 		public string GetPackageCacheCurrentFolder(Version executableVersion, string versionName,bool isBeta)
@@ -141,6 +150,10 @@ namespace Sdl.Community.SdlFreshstart.Services
 					};
 					Process.Start(process);
 				}
+			}
+			else
+			{
+				_logger.Info($"Could not find Module folder at the following path: {pathToModuleFolder}");
 			}
 		}
 	}
