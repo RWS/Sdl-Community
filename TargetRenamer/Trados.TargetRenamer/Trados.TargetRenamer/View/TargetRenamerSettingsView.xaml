@@ -53,7 +53,6 @@
 					<RowDefinition />
 					<RowDefinition />
 				</Grid.RowDefinitions>
-				
 
 				<CheckBox Grid.Row="0" Grid.Column="0"
 				          Margin="5 5 0 5"

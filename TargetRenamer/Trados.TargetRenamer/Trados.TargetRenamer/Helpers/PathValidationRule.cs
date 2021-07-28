@@ -11,36 +11,36 @@ namespace Trados.TargetRenamer.Helpers
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             var path = string.Empty;
-			try
-			{
+            try
+            {
                 if (((string)value).Length > 0)
                 {
                     path = value.ToString();
                 }
             }
             catch (Exception)
-			{
+            {
                 return new ValidationResult(false, PluginResources.EmptyPath);
             }
 
-			try
-			{
-				Path.GetDirectoryName(path);
-			}
+            try
+            {
+                Path.GetDirectoryName(path);
+            }
             catch (Exception)
-			{
+            {
                 return new ValidationResult(false, PluginResources.InvalidPath);
             }
 
-	        var folderPathRegEx =
-		        new Regex(@"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\\?");
+            var folderPathRegEx =
+                new Regex(@"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\\?");
 
-			var match = folderPathRegEx.Match(path);
+            var match = folderPathRegEx.Match(path);
 
-	        if (!match.Success || match.Length < path.Length)
-		        return new ValidationResult(false, PluginResources.InvalidPathChars);
+            if (!match.Success || match.Length < path.Length)
+                return new ValidationResult(false, PluginResources.InvalidPathChars);
 
-	        return ValidationResult.ValidResult;
+            return ValidationResult.ValidResult;
         }
     }
 }

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Trados.TargetRenamer.BatchTask;
 using Trados.TargetRenamer.Interfaces;
 using Trados.TargetRenamer.Services;
@@ -19,6 +10,7 @@ namespace Trados.TargetRenamer.Control
 	public partial class TargetRenamerSettingsControl : UserControl, ISettingsAware<TargetRenamerSettings>
 	{
 		private readonly IFolderDialogService _folderDialogService;
+
 		public TargetRenamerSettingsControl()
 		{
 			InitializeComponent();
