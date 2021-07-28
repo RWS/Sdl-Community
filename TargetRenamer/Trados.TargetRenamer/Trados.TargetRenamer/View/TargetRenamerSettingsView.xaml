@@ -134,6 +134,7 @@
 					       VerticalAlignment="Center"
 					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
 					<TextBox VerticalAlignment="Center"
+							 x:Name="RegexReplaceWith"
 					         HorizontalAlignment="Center"
 					         Width="Auto"
 					         MinWidth="200"
@@ -141,7 +142,7 @@
 					         Height="{Binding ActualHeight, ElementName=ComboBox}"
 					         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
 						<TextBox.Text>
-							<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+							<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True">
 								<Binding.ValidationRules>
 									<helpers:FileNameValidationRule />
 								</Binding.ValidationRules>
@@ -187,7 +188,7 @@
 					</RadioButton.Visibility>
 				</RadioButton>
 				<TextBox Grid.Row="2" Grid.Column="1"
-				         x:Name="CustomStringTextBox"
+				         x:Name="CustomString"
 				         VerticalAlignment="Center"
 				         HorizontalAlignment="Left"
 				         Width="Auto"
@@ -196,7 +197,7 @@
 				         Height="{Binding ActualHeight, ElementName=ComboBox}"
 				         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<TextBox.Text>
-						<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+						<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True">
 							<Binding.ValidationRules>
 								<helpers:FileNameValidationRule />
 							</Binding.ValidationRules>
