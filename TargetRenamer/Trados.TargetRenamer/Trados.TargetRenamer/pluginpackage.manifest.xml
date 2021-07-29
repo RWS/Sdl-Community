@@ -4,5 +4,5 @@
   <Version>1.0.0.2</Version>
   <Description>Plugin description</Description>
   <Author>RWS AppStore Team</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0"/>
 </PluginPackage>
