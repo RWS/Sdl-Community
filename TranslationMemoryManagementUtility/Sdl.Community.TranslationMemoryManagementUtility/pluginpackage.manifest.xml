@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL Translation Memory Management Utility</PlugInName>
+  <PlugInName>Trados Translation Memory Management Utility</PlugInName>
   <Version>2.0.1.0</Version>
   <Description>The RWS Translation Memory Management utility is a utility for administering file based RWS Trados Studio translation memories.</Description>
   <Author>RWS AppStore Team</Author>
