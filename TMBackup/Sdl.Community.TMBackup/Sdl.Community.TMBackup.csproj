@@ -151,6 +151,7 @@
     </None>
     <None Include="Resources\Download.ico" />
     <None Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\Question.ico" />
     <Content Include="Resources\windows_scheduler.png" />
     <Content Include="Resources\createbackup.png" />
     <Content Include="Resources\enable.png" />

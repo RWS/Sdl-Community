@@ -22,7 +22,7 @@ namespace Sdl.Community.BackupService.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.BackupService.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.BackupService.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.BackupService.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.BackupService.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trados TM Backup.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Sdl.Community.BackupService.Properties {
         /// <summary>
         ///   Looks up a localized string similar to RWS AppStore.
         /// </summary>
-        internal static string RWS_AppStore {
+        public static string RWS_AppStore {
             get {
                 return ResourceManager.GetString("RWS_AppStore", resourceCulture);
             }
