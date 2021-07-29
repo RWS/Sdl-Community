@@ -56,8 +56,12 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 						foreach (var languageReport in checkedLanguages)
 						{
-							project.ReportPath = reportOutputPath;
-							WriteReportFile(project, optionalInformation, languageReport, isChecked);
+							var reportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
+							if (!string.IsNullOrEmpty(reportPath.Value) && File.Exists(reportPath.Value))
+							{
+								project.ReportPath = reportOutputPath;
+								WriteReportFile(project, optionalInformation, languageReport, isChecked);
+							}
 						}
 					}
 					return true;
@@ -424,8 +428,8 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					return files.Any(file => new FileInfo(file).Name.Contains("Analyze Files") && 
-					                         file.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase));
+					return files.Any(file => new FileInfo(file).Name.Contains("Analyze Files") &&
+											 file.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase));
 				}
 
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles") && Directory.Exists(reportFolderPath))
@@ -462,6 +466,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					if (!string.IsNullOrEmpty(project.ReportsFolderPath))
 					{
 						reportPath = Path.Combine(project.ReportsFolderPath, Path.GetFileName(report.Attributes["PhysicalPath"].Value));
+					}
+
+					if (!File.Exists(reportPath))
+					{
+						continue;
 					}
 
 					SetLanguageAnalysisReportPaths(projectInfo, project, langDirNode, reportPath);
