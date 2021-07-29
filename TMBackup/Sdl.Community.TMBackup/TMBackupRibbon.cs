@@ -10,7 +10,7 @@ using Sdl.Versioning;
 
 namespace Sdl.Community.TMBackup
 {
-	[RibbonGroup("TM Backup", Name = "TM Backup")]
+	[RibbonGroup("Trados TM Backup", Name = "Trados TM Backup")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TMBackupRibbon : AbstractRibbonGroup
 	{
@@ -21,7 +21,7 @@ namespace Sdl.Community.TMBackup
 		   Environment.SpecialFolder.CommonApplicationData
 		};
 
-		[Action("Sdl.Community.TMBackup", Name = "TM Backup", Icon = "TMBackup_Icon", Description = "TM Backup")]
+		[Action("Trados TM Backup", Name = "Trados TM Backup", Icon = "TMBackup_Icon", Description = "Trados TM Backup")]
 		[ActionLayout(typeof(TMBackupRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class TMBackupAction : AbstractAction

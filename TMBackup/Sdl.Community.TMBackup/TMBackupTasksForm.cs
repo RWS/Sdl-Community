@@ -305,11 +305,11 @@ namespace Sdl.Community.TMBackup
 		}
 
 		/// <summary>
-		/// Open Help file from SDL Community site
+		/// Open Help file from RWS Community site
 		/// </summary>
 		private void OpenReadMe()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.trados-tm-backup");
 		}
 
 		/// <summary>
