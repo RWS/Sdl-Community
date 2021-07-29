@@ -240,30 +240,30 @@
             treeNode3.Text = "TM Task  ";
             this.tvTasks.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode3});
-            this.tvTasks.ShowNodeToolTips = true;
-            this.tvTasks.Size = new System.Drawing.Size(180, 350);
-            this.tvTasks.TabIndex = 7;
-            // 
-            // TMToolForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(642, 416);
-            this.Controls.Add(this.tabsPages);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(658, 455);
-            this.Name = "TMToolForm";
-            this.Text = "SDL Translation Memory Management 2019";
-            this.Load += new System.EventHandler(this.TMToolForm_Load);
-            this.Resize += new System.EventHandler(this.TMToolForm_Resize);
-            this.tabsPages.ResumeLayout(false);
-            this.tabFiles.ResumeLayout(false);
-            this.tabFiles.PerformLayout();
-            this.tabTasks.ResumeLayout(false);
-            this.scTasks.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.scTasks)).EndInit();
-            this.scTasks.ResumeLayout(false);
-            this.ResumeLayout(false);
+			this.tvTasks.ShowNodeToolTips = true;
+			this.tvTasks.Size = new System.Drawing.Size(180, 350);
+			this.tvTasks.TabIndex = 7;
+			// 
+			// TMToolForm
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(642, 416);
+			this.Controls.Add(this.tabsPages);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(658, 455);
+			this.Name = "TMToolForm";
+			this.Text = $"{PluginResources.Plugin_Name} 2019";
+			this.Load += new System.EventHandler(this.TMToolForm_Load);
+			this.Resize += new System.EventHandler(this.TMToolForm_Resize);
+			this.tabsPages.ResumeLayout(false);
+			this.tabFiles.ResumeLayout(false);
+			this.tabFiles.PerformLayout();
+			this.tabTasks.ResumeLayout(false);
+			this.scTasks.Panel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.scTasks)).EndInit();
+			this.scTasks.ResumeLayout(false);
+			this.ResumeLayout(false);
 
 		}
 
