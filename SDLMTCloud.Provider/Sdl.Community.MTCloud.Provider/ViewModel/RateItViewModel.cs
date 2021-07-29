@@ -27,8 +27,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private List<ISDLMTCloudAction> _actions;
 		private bool? _autoSendFeedback;
 		private ICommand _clearCommand;
-		private Guid _docId;
-		private Evaluations _evaluations = new();
 		private string _feedback;
 		private IDisposable _onActiveSegmentQeChangedHandler;
 		private bool _qeEnabled;
@@ -54,11 +52,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			get
 			{
-				if (Data.ContainsKey(_docId)) return Data[_docId];
-				SetIdAndActiveFile();
+				if (ActiveDocument == null) return null;
 
-				if (_docId == Guid.Empty) return null;
-				return Data[_docId];
+				var activeFileId = ActiveDocument.ActiveFile.Id;
+				if (!Data.ContainsKey(activeFileId))
+				{
+					Data[activeFileId] = new Evaluations();
+				}
+
+				return Data[activeFileId];
 			}
 		}
 
@@ -239,8 +241,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				return;
 			}
 
-			SetIdAndActiveFile();
-
 			ResetFeedback();
 
 			ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
@@ -284,8 +284,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string GetSourceSegment(SegmentId? segmentId)
 		{
 			var currentSegmentId = segmentId ?? ActiveSegmentId;
-			return ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id == currentSegmentId)?.Source?
-				.ToString();
+			return
+				ActiveDocument.SegmentPairs.FirstOrDefault(
+					sp => sp.Properties.Id == currentSegmentId && sp.GetProjectFile().Id == ActiveDocument.ActiveFile.Id)?.Source?
+					.ToString();
 		}
 
 		private void Initialize()
@@ -486,16 +488,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (feedBackOption != null)
 			{
 				feedBackOption.Tooltip = tooltipText ?? Resources.RateItViewModel_SetOptionTooltip_No_shortcut_was_set;
-			}
-		}
-
-		private void SetIdAndActiveFile()
-		{
-			if (ActiveDocument == null) return;
-			_docId = ActiveDocument.ActiveFile.Id;
-			if (!Data.ContainsKey(_docId))
-			{
-				Data[_docId] = new Evaluations();
 			}
 		}
 
