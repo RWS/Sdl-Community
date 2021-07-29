@@ -101,7 +101,6 @@ namespace Trados.TargetRenamer.ViewModel
 			get => Settings.Delimiter;
 			set
 			{
-				if (string.IsNullOrWhiteSpace(Settings.Delimiter)) Settings.Delimiter = "_";
 				if (Settings.Delimiter == value) return;
 				Settings.Delimiter = value;
 				OnPropertyChanged(nameof(Delimiter));
