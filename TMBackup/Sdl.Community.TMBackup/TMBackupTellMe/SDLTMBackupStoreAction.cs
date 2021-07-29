@@ -8,10 +8,10 @@ namespace Sdl.Community.TMBackup.TMBackupTellMe
 	{
 		public SDLTMBackupStoreAction()
 		{
-			Name = "Download Trados TM Backup from AppStore";
+			Name = $"Download {PluginResources.Plugin_Name} from AppStore";
 		}
 
-		public override string Category => "Trados TM Backup results";
+		public override string Category => $"{PluginResources.Plugin_Name} results";
 
 		public override Icon Icon => PluginResources.Download;
 

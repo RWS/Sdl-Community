@@ -11,7 +11,7 @@ namespace Sdl.Community.TMBackup.TMBackupTellMe
 			Name = "RWS Community AppStore forum";
 		}
 
-		public override string Category => "Trados TM Backup results";
+		public override string Category => $"{PluginResources.Plugin_Name} results";
 
 		public override Icon Icon => PluginResources.ForumIcon;
 

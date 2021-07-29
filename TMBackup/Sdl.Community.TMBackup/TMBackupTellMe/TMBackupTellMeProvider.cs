@@ -5,7 +5,7 @@ namespace Sdl.Community.TMBackup.TMBackupTellMe
 	[TellMeProvider]
 	public class TMBackupTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Trados TM Backup";
+		public string Name => $"{PluginResources.Plugin_Name}";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

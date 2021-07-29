@@ -29,7 +29,7 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public const string UpdateActionMessage = "Please ensure that all fields are filled in order to update the action!";
 		
-		public static readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{Properties.Resources.RWS_AppStore}\Trados TM Backup");
+		public static readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{Properties.Resources.RWS_AppStore}\{Properties.Resources.Plugin_Name}");
 		public static readonly string SdlCommunityPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Properties.Resources.RWS_AppStore);
 
 		public static readonly string TaskDetailValue = "TMBackupTask ";
