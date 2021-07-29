@@ -187,6 +187,15 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trados Translation Memory Management Utility.
+        /// </summary>
+        internal static string Plugin_Name {
+            get {
+                return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prerequisites check..
         /// </summary>
         internal static string PrerequisitesProblemTitle {
