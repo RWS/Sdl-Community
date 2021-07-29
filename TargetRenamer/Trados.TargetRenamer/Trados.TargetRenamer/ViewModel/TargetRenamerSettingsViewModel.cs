@@ -15,71 +15,58 @@ namespace Trados.TargetRenamer.ViewModel
 		private const string AppendSuffixText = "Append As Suffix";
 		private const string RegExprText = "Use Regular Expression";
 		private readonly IFolderDialogService _folderDialogService;
-		private bool _appendAsPrefix;
-		private bool _appendAsSuffix;
-		private bool _appendCustomString;
-		private bool _appendTargetLanguage;
 		private ICommand _clearCommand;
-		private string _customLocation;
-		private string _customString;
-		private string _delimiter;
-		private bool _overwriteTargetFiles;
-		private string _regularExpressionReplaceWith;
-		private string _regularExpressionSearchFor;
 		private ICommand _resetToDefault;
 		private string _selectedComboBoxItem;
 		private ICommand _selectTargetFolder;
-		private bool _useCustomLocation;
-		private bool _useRegularExpression;
-		private bool _useShortLocales;
+		private TargetRenamerSettings _settings;
 
 		public TargetRenamerSettingsViewModel(IFolderDialogService folderDialogService)
 		{
 			_folderDialogService = folderDialogService;
 			ComboBoxItems = new ObservableCollection<string> { AppendSuffixText, AppendPrefixText, RegExprText };
-			Reset(null);
 		}
 
 		public bool AppendAsPrefix
 		{
-			get => _appendAsPrefix;
+			get => Settings.AppendAsPrefix;
 			set
 			{
-				if (_appendAsPrefix == value) return;
-				_appendAsPrefix = value;
+				if (Settings.AppendAsPrefix == value) return;
+				Settings.AppendAsPrefix = value;
 				OnPropertyChanged(nameof(AppendAsPrefix));
 			}
 		}
 
 		public bool AppendAsSuffix
 		{
-			get => _appendAsSuffix;
+			get => Settings.AppendAsSuffix;
 			set
 			{
-				if (_appendAsSuffix == value) return;
-				_appendAsSuffix = value;
+				if (Settings.AppendAsSuffix == value) return;
+				Settings.AppendAsSuffix = value;
 				OnPropertyChanged(nameof(AppendAsSuffix));
 			}
 		}
 
 		public bool AppendCustomString
 		{
-			get => _appendCustomString;
+			get => Settings.AppendCustomString;
 			set
 			{
-				if (_appendCustomString == value) return;
-				_appendCustomString = value;
+				if (Settings.AppendCustomString == value) return;
+				Settings.AppendCustomString = value;
 				OnPropertyChanged(nameof(AppendCustomString));
 			}
 		}
 
 		public bool AppendTargetLanguage
 		{
-			get => _appendTargetLanguage;
+			get => Settings.AppendTargetLanguage;
 			set
 			{
-				if (_appendTargetLanguage == value) return;
-				_appendTargetLanguage = value;
+				if (Settings.AppendTargetLanguage == value) return;
+				Settings.AppendTargetLanguage = value;
 				OnPropertyChanged(nameof(AppendTargetLanguage));
 			}
 		}
@@ -89,69 +76,58 @@ namespace Trados.TargetRenamer.ViewModel
 
 		public string CustomLocation
 		{
-			get => _customLocation;
+			get => Settings.CustomLocation;
 			set
 			{
-				if (_customLocation == value) return;
-				_customLocation = value;
+				if (Settings.CustomLocation == value) return;
+				Settings.CustomLocation = value;
 				OnPropertyChanged(nameof(CustomLocation));
 			}
 		}
 
 		public string CustomString
 		{
-			get => _customString;
+			get => Settings.CustomString;
 			set
 			{
-				if (_customString == value) return;
-				_customString = value;
+				if (Settings.CustomString == value) return;
+				Settings.CustomString = value;
 				OnPropertyChanged(nameof(CustomString));
 			}
 		}
 
 		public string Delimiter
 		{
-			get => _delimiter;
+			get => Settings.Delimiter;
 			set
 			{
-				if (string.IsNullOrWhiteSpace(_delimiter)) _delimiter = "_";
-				if (_delimiter == value) return;
-				_delimiter = value;
+				if (string.IsNullOrWhiteSpace(Settings.Delimiter)) Settings.Delimiter = "_";
+				if (Settings.Delimiter == value) return;
+				Settings.Delimiter = value;
 				OnPropertyChanged(nameof(Delimiter));
 			}
 		}
 
 		public bool HasErrors { get; internal set; } = false;
 
-		public bool OverwriteTargetFiles
-		{
-			get => _overwriteTargetFiles;
-			set
-			{
-				if (_overwriteTargetFiles == value) return;
-				_overwriteTargetFiles = value;
-				OnPropertyChanged(nameof(OverwriteTargetFiles));
-			}
-		}
-
 		public string RegularExpressionReplaceWith
 		{
-			get => _regularExpressionReplaceWith;
+			get => Settings.RegularExpressionReplaceWith;
 			set
 			{
-				if (_regularExpressionReplaceWith == value) return;
-				_regularExpressionReplaceWith = value;
+				if (Settings.RegularExpressionReplaceWith == value) return;
+				Settings.RegularExpressionReplaceWith = value;
 				OnPropertyChanged(nameof(RegularExpressionReplaceWith));
 			}
 		}
 
 		public string RegularExpressionSearchFor
 		{
-			get => _regularExpressionSearchFor;
+			get => Settings.RegularExpressionSearchFor;
 			set
 			{
-				if (_regularExpressionSearchFor == value) return;
-				_regularExpressionSearchFor = value;
+				if (Settings.RegularExpressionSearchFor == value) return;
+				Settings.RegularExpressionSearchFor = value;
 				OnPropertyChanged(nameof(RegularExpressionSearchFor));
 			}
 		}
@@ -174,37 +150,48 @@ namespace Trados.TargetRenamer.ViewModel
 		public ICommand SelectTargetFolder =>
 			_selectTargetFolder ?? (_selectTargetFolder = new CommandHandler(SelectFolder));
 
-		public TargetRenamerSettings Settings { get; set; }
+		public TargetRenamerSettings Settings
+		{
+			get => _settings; set
+			{
+				if (string.IsNullOrWhiteSpace(value.CustomLocation)) value.CustomLocation = Path.GetTempPath();
+				if (string.IsNullOrWhiteSpace(value.Delimiter)) value.Delimiter = "_";
+				if (!value.AppendTargetLanguage) value.AppendTargetLanguage = true;
+				_settings = value;
+
+				SelectedComboBoxItem = AppendSuffixText;
+			}
+		}
 
 		public bool UseCustomLocation
 		{
-			get => _useCustomLocation;
+			get => Settings.UseCustomLocation;
 			set
 			{
-				if (_useCustomLocation == value) return;
-				_useCustomLocation = value;
+				if (Settings.UseCustomLocation == value) return;
+				Settings.UseCustomLocation = value;
 				OnPropertyChanged(nameof(UseCustomLocation));
 			}
 		}
 
 		public bool UseRegularExpression
 		{
-			get => _useRegularExpression;
+			get => Settings.UseRegularExpression;
 			set
 			{
-				if (_useRegularExpression == value) return;
-				_useRegularExpression = value;
+				if (Settings.UseRegularExpression == value) return;
+				Settings.UseRegularExpression = value;
 				OnPropertyChanged(nameof(UseRegularExpression));
 			}
 		}
 
 		public bool UseShortLocales
 		{
-			get => _useShortLocales;
+			get => Settings.UseShortLocales;
 			set
 			{
-				if (_useShortLocales == value) return;
-				_useShortLocales = value;
+				if (Settings.UseShortLocales == value) return;
+				Settings.UseShortLocales = value;
 				OnPropertyChanged(nameof(UseShortLocales));
 			}
 		}
@@ -242,7 +229,6 @@ namespace Trados.TargetRenamer.ViewModel
 
 		private void Reset(object obj)
 		{
-			OverwriteTargetFiles = true;
 			AppendAsPrefix = false;
 			AppendAsSuffix = true;
 			UseCustomLocation = false;

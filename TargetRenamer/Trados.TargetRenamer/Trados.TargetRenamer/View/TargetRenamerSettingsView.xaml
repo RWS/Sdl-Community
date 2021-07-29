@@ -38,6 +38,7 @@
 		<TextBlock Text="Target Renamer"
 		           Style="{StaticResource Sdl.TextBlock.TitleStyle}"
 				   FontSize="15"
+				   TextWrapping="Wrap"
 		           DockPanel.Dock="Top" />
 		<TextBlock Text="Target Renamer is a batch tasks plugin that allows the user to save the target files with various options for custom naming."
 				   Margin="0 5 0 0"
@@ -51,23 +52,15 @@
 				<Grid.RowDefinitions>
 					<RowDefinition />
 					<RowDefinition />
-					<RowDefinition />
 				</Grid.RowDefinitions>
-				<CheckBox Grid.Row="0" Grid.Column="0"
-				          Width="Auto"
-				          Margin="5 10 5 10"
-				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				          Content="{x:Static resx:PluginResources.OverwriteTargetFiles}"
-				          ToolTip="{x:Static resx:PluginResources.OverwriteTargetFilesTooltip}"
-				          IsChecked="{Binding OverwriteTargetFiles, UpdateSourceTrigger=PropertyChanged}" />
 
-				<CheckBox Grid.Row="1" Grid.Column="0"
+				<CheckBox Grid.Row="0" Grid.Column="0"
 				          Margin="5 5 0 5"
 				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 				          Content="{x:Static resx:PluginResources.CustomLocation}"
 				          ToolTip="{x:Static resx:PluginResources.CustomLocationTooltip}"
 				          IsChecked="{Binding UseCustomLocation}" />
-				<WrapPanel Grid.Column="0" Grid.Row="2">
+				<WrapPanel Grid.Column="0" Grid.Row="1">
 					<TextBox Margin="5"
 							 Name="CustomLocation"
 					         VerticalAlignment="Center"
@@ -141,6 +134,7 @@
 					       VerticalAlignment="Center"
 					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
 					<TextBox VerticalAlignment="Center"
+							 x:Name="RegexReplaceWith"
 					         HorizontalAlignment="Center"
 					         Width="Auto"
 					         MinWidth="200"
@@ -148,7 +142,7 @@
 					         Height="{Binding ActualHeight, ElementName=ComboBox}"
 					         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
 						<TextBox.Text>
-							<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+							<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True">
 								<Binding.ValidationRules>
 									<helpers:FileNameValidationRule />
 								</Binding.ValidationRules>
@@ -194,7 +188,7 @@
 					</RadioButton.Visibility>
 				</RadioButton>
 				<TextBox Grid.Row="2" Grid.Column="1"
-				         x:Name="CustomStringTextBox"
+				         x:Name="CustomString"
 				         VerticalAlignment="Center"
 				         HorizontalAlignment="Left"
 				         Width="Auto"
@@ -203,7 +197,7 @@
 				         Height="{Binding ActualHeight, ElementName=ComboBox}"
 				         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<TextBox.Text>
-						<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+						<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True">
 							<Binding.ValidationRules>
 								<helpers:FileNameValidationRule />
 							</Binding.ValidationRules>
