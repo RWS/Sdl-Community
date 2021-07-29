@@ -4,6 +4,7 @@ using System.Reflection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using Sdl.Community.BackupService.Properties;
 
 namespace Sdl.Community.BackupService.Helpers
 {
@@ -17,15 +18,15 @@ namespace Sdl.Community.BackupService.Helpers
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
-				"SDLTMBackup");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Resources.RWS_AppStore,
+				"TradosTMBackup");
 			if (!Directory.Exists(logDirectoryPath))
 			{
 				Directory.CreateDirectory(logDirectoryPath);
 			}
 			var target = new FileTarget
 			{
-				FileName = Path.Combine(logDirectoryPath, "SDLTMBackupLogs.txt"),
+				FileName = Path.Combine(logDirectoryPath, "TradosTMBackupLogs.txt"),
 				// Roll over the log every 10 MB
 				ArchiveAboveSize = 10000000,
 				ArchiveNumbering = ArchiveNumberingMode.Date,

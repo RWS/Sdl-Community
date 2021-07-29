@@ -10,7 +10,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.TMBackup
 {
-	[RibbonGroup("TM Backup", Name = "TM Backup")]
+	[RibbonGroup("Plugin_Name", Name = "Plugin_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TMBackupRibbon : AbstractRibbonGroup
 	{
@@ -21,7 +21,7 @@ namespace Sdl.Community.TMBackup
 		   Environment.SpecialFolder.CommonApplicationData
 		};
 
-		[Action("Sdl.Community.TMBackup", Name = "TM Backup", Icon = "TMBackup_Icon", Description = "TM Backup")]
+		[Action("Plugin_Name", Name = "Plugin_Name", Icon = "TMBackup_Icon", Description = "Plugin_Name")]
 		[ActionLayout(typeof(TMBackupRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class TMBackupAction : AbstractAction
@@ -77,7 +77,7 @@ namespace Sdl.Community.TMBackup
 			var executableVersion = new Studio().GetStudioVersion().ExecutableVersion.Major;
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
-				var unpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\SDL TMBackup";
+				var unpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\{PluginResources.Plugin_Name}";
 
 				if (Directory.Exists(unpackedFolder))
 				{

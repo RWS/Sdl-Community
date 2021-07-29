@@ -16,7 +16,7 @@ namespace Sdl.Community.BackupService
 		public Persistence()
 		{
 			_persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\SDLTMBackup\TMBackup.json");
+				$@"{Properties.Resources.RWS_AppStore}\{Properties.Resources.Plugin_Name}\{Properties.Resources.Plugin_Name}.json");
 			CheckIfJsonFileExist();
 		}
 
