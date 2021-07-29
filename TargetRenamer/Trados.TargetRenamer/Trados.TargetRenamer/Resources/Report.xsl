@@ -362,14 +362,6 @@
 				</h2>
 
 				<table class="InfoList" width="100%" border="0" cellpadding="0" cellspacing="2">
-					<tr>
-						<td class="InfoItem">
-							Overwrite Target Files:
-						</td>
-						<td class="InfoData">
-							<xsl:value-of select="//taskInfo/settings/@overwriteTargetFiles" />
-						</td>
-					</tr>
 					<xsl:choose>
 						<xsl:when test="//taskInfo/settings/@useRegExpr = 'True'">
 							<tr>

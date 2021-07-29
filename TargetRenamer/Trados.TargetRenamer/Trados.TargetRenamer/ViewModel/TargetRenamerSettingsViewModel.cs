@@ -15,144 +15,120 @@ namespace Trados.TargetRenamer.ViewModel
         private const string AppendSuffixText = "Append As Suffix";
         private const string RegExprText = "Use Regular Expression";
         private readonly IFolderDialogService _folderDialogService;
-        private bool _appendAsPrefix;
-        private bool _appendAsSuffix;
-        private bool _appendCustomString;
-        private bool _appendTargetLanguage;
         private ICommand _clearCommand;
-        private string _customLocation;
-        private string _customString;
-        private string _delimiter;
-        private bool _overwriteTargetFiles;
-        private string _regularExpressionReplaceWith;
-        private string _regularExpressionSearchFor;
         private ICommand _resetToDefault;
         private string _selectedComboBoxItem;
         private ICommand _selectTargetFolder;
-        private bool _useCustomLocation;
-        private bool _useRegularExpression;
-        private bool _useShortLocales;
 
-        public TargetRenamerSettingsViewModel(IFolderDialogService folderDialogService)
-        {
-            _folderDialogService = folderDialogService;
-            ComboBoxItems = new ObservableCollection<string> { AppendSuffixText, AppendPrefixText, RegExprText };
-            Reset(null);
-        }
+		public TargetRenamerSettingsViewModel(IFolderDialogService folderDialogService)
+		{
+			_folderDialogService = folderDialogService;
+			ComboBoxItems = new ObservableCollection<string> { AppendSuffixText, AppendPrefixText, RegExprText };
+			//Reset(null);
+		}
 
         public bool AppendAsPrefix
         {
-            get => _appendAsPrefix;
+            get => Settings.AppendAsPrefix;
             set
             {
-                if (_appendAsPrefix == value) return;
-                _appendAsPrefix = value;
+                if (Settings.AppendAsPrefix == value) return;
+	            Settings.AppendAsPrefix = value;
                 OnPropertyChanged(nameof(AppendAsPrefix));
             }
         }
 
-        public bool AppendAsSuffix
-        {
-            get => _appendAsSuffix;
-            set
-            {
-                if (_appendAsSuffix == value) return;
-                _appendAsSuffix = value;
-                OnPropertyChanged(nameof(AppendAsSuffix));
-            }
-        }
+		public bool AppendAsSuffix
+		{
+			get => Settings.AppendAsSuffix;
+			set
+			{
+				if (Settings.AppendAsSuffix == value) return;
+				Settings.AppendAsSuffix = value;
+				OnPropertyChanged(nameof(AppendAsSuffix));
+			}
+		}
 
-        public bool AppendCustomString
-        {
-            get => _appendCustomString;
-            set
-            {
-                if (_appendCustomString == value) return;
-                _appendCustomString = value;
-                OnPropertyChanged(nameof(AppendCustomString));
-            }
-        }
+		public bool AppendCustomString
+		{
+			get => Settings.AppendCustomString;
+			set
+			{
+				if (Settings.AppendCustomString == value) return;
+				Settings.AppendCustomString = value;
+				OnPropertyChanged(nameof(AppendCustomString));
+			}
+		}
 
-        public bool AppendTargetLanguage
-        {
-            get => _appendTargetLanguage;
-            set
-            {
-                if (_appendTargetLanguage == value) return;
-                _appendTargetLanguage = value;
-                OnPropertyChanged(nameof(AppendTargetLanguage));
-            }
-        }
+		public bool AppendTargetLanguage
+		{
+			get => Settings.AppendTargetLanguage;
+			set
+			{
+				if (Settings.AppendTargetLanguage == value) return;
+				Settings.AppendTargetLanguage = value;
+				OnPropertyChanged(nameof(AppendTargetLanguage));
+			}
+		}
 
         public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(Clear));
         public ObservableCollection<string> ComboBoxItems { get; }
 
-        public string CustomLocation
-        {
-            get => _customLocation;
-            set
-            {
-                if (_customLocation == value) return;
-                _customLocation = value;
-                OnPropertyChanged(nameof(CustomLocation));
-            }
-        }
+		public string CustomLocation
+		{
+			get => Settings.CustomLocation;
+			set
+			{
+				if (Settings.CustomLocation == value) return;
+				Settings.CustomLocation = value;
+				OnPropertyChanged(nameof(CustomLocation));
+			}
+		}
 
-        public string CustomString
-        {
-            get => _customString;
-            set
-            {
-                if (_customString == value) return;
-                _customString = value;
-                OnPropertyChanged(nameof(CustomString));
-            }
-        }
+		public string CustomString
+		{
+			get => Settings.CustomString;
+			set
+			{
+				if (Settings.CustomString == value) return;
+				Settings.CustomString = value;
+				OnPropertyChanged(nameof(CustomString));
+			}
+		}
 
-        public string Delimiter
-        {
-            get => _delimiter;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(_delimiter)) _delimiter = "_";
-                if (_delimiter == value) return;
-                _delimiter = value;
-                OnPropertyChanged(nameof(Delimiter));
-            }
-        }
+		public string Delimiter
+		{
+			get => Settings.Delimiter;
+			set
+			{
+				if (string.IsNullOrWhiteSpace(Settings.Delimiter)) Settings.Delimiter = "_";
+				if (Settings.Delimiter == value) return;
+				Settings.Delimiter = value;
+				OnPropertyChanged(nameof(Delimiter));
+			}
+		}
 
-        public bool OverwriteTargetFiles
-        {
-            get => _overwriteTargetFiles;
-            set
-            {
-                if (_overwriteTargetFiles == value) return;
-                _overwriteTargetFiles = value;
-                OnPropertyChanged(nameof(OverwriteTargetFiles));
-            }
-        }
+		public string RegularExpressionReplaceWith
+		{
+			get => Settings.RegularExpressionReplaceWith;
+			set
+			{
+				if (Settings.RegularExpressionReplaceWith == value) return;
+				Settings.RegularExpressionReplaceWith = value;
+				OnPropertyChanged(nameof(RegularExpressionReplaceWith));
+			}
+		}
 
-        public string RegularExpressionReplaceWith
-        {
-            get => _regularExpressionReplaceWith;
-            set
-            {
-                if (_regularExpressionReplaceWith == value) return;
-                _regularExpressionReplaceWith = value;
-                OnPropertyChanged(nameof(RegularExpressionReplaceWith));
-            }
-        }
-
-        public string RegularExpressionSearchFor
-        {
-            get => _regularExpressionSearchFor;
-            set
-            {
-                if (_regularExpressionSearchFor == value) return;
-                _regularExpressionSearchFor = value;
-                OnPropertyChanged(nameof(RegularExpressionSearchFor));
-            }
-        }
+		public string RegularExpressionSearchFor
+		{
+			get => Settings.RegularExpressionSearchFor;
+			set
+			{
+				if (Settings.RegularExpressionSearchFor == value) return;
+				Settings.RegularExpressionSearchFor = value;
+				OnPropertyChanged(nameof(RegularExpressionSearchFor));
+			}
+		}
 
         public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset));
 
@@ -174,38 +150,38 @@ namespace Trados.TargetRenamer.ViewModel
 
         public TargetRenamerSettings Settings { get; set; }
 
-        public bool UseCustomLocation
-        {
-            get => _useCustomLocation;
-            set
-            {
-                if (_useCustomLocation == value) return;
-                _useCustomLocation = value;
-                OnPropertyChanged(nameof(UseCustomLocation));
-            }
-        }
+		public bool UseCustomLocation
+		{
+			get => Settings.UseCustomLocation;
+			set
+			{
+				if (Settings.UseCustomLocation == value) return;
+				Settings.UseCustomLocation = value;
+				OnPropertyChanged(nameof(UseCustomLocation));
+			}
+		}
 
-        public bool UseRegularExpression
-        {
-            get => _useRegularExpression;
-            set
-            {
-                if (_useRegularExpression == value) return;
-                _useRegularExpression = value;
-                OnPropertyChanged(nameof(UseRegularExpression));
-            }
-        }
+		public bool UseRegularExpression
+		{
+			get => Settings.UseRegularExpression;
+			set
+			{
+				if (Settings.UseRegularExpression == value) return;
+				Settings.UseRegularExpression = value;
+				OnPropertyChanged(nameof(UseRegularExpression));
+			}
+		}
 
-        public bool UseShortLocales
-        {
-            get => _useShortLocales;
-            set
-            {
-                if (_useShortLocales == value) return;
-                _useShortLocales = value;
-                OnPropertyChanged(nameof(UseShortLocales));
-            }
-        }
+		public bool UseShortLocales
+		{
+			get => Settings.UseShortLocales;
+			set
+			{
+				if (Settings.UseShortLocales == value) return;
+				Settings.UseShortLocales = value;
+				OnPropertyChanged(nameof(UseShortLocales));
+			}
+		}
 
         private void Clear(object obj)
         {
