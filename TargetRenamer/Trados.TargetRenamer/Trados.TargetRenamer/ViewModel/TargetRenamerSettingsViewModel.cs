@@ -240,7 +240,6 @@ namespace Trados.TargetRenamer.ViewModel
 
         private void Reset(object obj)
         {
-            OverwriteTargetFiles = true;
             AppendAsPrefix = false;
             AppendAsSuffix = true;
             UseCustomLocation = false;

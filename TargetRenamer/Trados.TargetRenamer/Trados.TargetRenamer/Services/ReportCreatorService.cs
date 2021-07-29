@@ -121,7 +121,6 @@ namespace Trados.TargetRenamer.Services
         private static void WriteReportSettingsInfo(string location, XmlWriter writer, TargetRenamerSettings settings)
         {
             writer.WriteStartElement("settings");
-            writer.WriteAttributeString("overwriteTargetFiles", settings.OverwriteTargetFiles.ToString());
             writer.WriteAttributeString("path", location);
             writer.WriteAttributeString("delimiter", settings.Delimiter);
             writer.WriteAttributeString("targetLanguage", settings.AppendTargetLanguage.ToString());

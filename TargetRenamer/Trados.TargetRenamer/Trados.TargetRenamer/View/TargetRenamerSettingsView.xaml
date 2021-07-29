@@ -52,23 +52,15 @@
 				<Grid.RowDefinitions>
 					<RowDefinition />
 					<RowDefinition />
-					<RowDefinition />
 				</Grid.RowDefinitions>
-				<CheckBox Grid.Row="0" Grid.Column="0"
-				          Width="Auto"
-				          Margin="5 10 5 10"
-				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				          Content="{x:Static resx:PluginResources.OverwriteTargetFiles}"
-				          ToolTip="{x:Static resx:PluginResources.OverwriteTargetFilesTooltip}"
-				          IsChecked="{Binding OverwriteTargetFiles, UpdateSourceTrigger=PropertyChanged}" />
 
-				<CheckBox Grid.Row="1" Grid.Column="0"
+				<CheckBox Grid.Row="0" Grid.Column="0"
 				          Margin="5 5 0 5"
 				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 				          Content="{x:Static resx:PluginResources.CustomLocation}"
 				          ToolTip="{x:Static resx:PluginResources.CustomLocationTooltip}"
 				          IsChecked="{Binding UseCustomLocation}" />
-				<WrapPanel Grid.Column="0" Grid.Row="2">
+				<WrapPanel Grid.Column="0" Grid.Row="1">
 					<TextBox Margin="5"
 							 Name="CustomLocation"
 					         VerticalAlignment="Center"
