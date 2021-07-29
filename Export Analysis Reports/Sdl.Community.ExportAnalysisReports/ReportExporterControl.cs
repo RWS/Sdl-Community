@@ -33,7 +33,7 @@ namespace Sdl.Community.ExportAnalysisReports
 		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public ReportExporterControl(List<string> studioProjectsPaths, SettingsService settingsService, 
+		public ReportExporterControl(List<string> studioProjectsPaths, SettingsService settingsService,
 			IProjectService projectService, IMessageBoxService messageBoxService, IReportService reportService)
 		{
 			_settingsService = settingsService;
@@ -858,6 +858,12 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					foreach (var language in selectedProjectToExport.ProjectLanguages.ToList())
 					{
+						var languageReportExists = LanguageReportExists(selectedProject, language.Key);
+						if (!languageReportExists)
+						{
+							continue;
+						}
+
 						var languageDetails = _languages?.FirstOrDefault(n => n.LanguageName.Equals(language.Key));
 						if (languageDetails == null)
 						{
@@ -1129,6 +1135,12 @@ namespace Sdl.Community.ExportAnalysisReports
 			var projectsToBeExported = _projectsDataSource.Where(n => n.ProjectLanguages.ContainsKey(languageName) && n.ShouldBeExported).ToList();
 			foreach (var project in projectsToBeExported)
 			{
+				var languageReportExists = LanguageReportExists(project, languageName);
+				if (!languageReportExists)
+				{
+					continue;
+				}
+
 				var languageShouldBeExported = project.ProjectLanguages[languageName];
 				if (languageShouldBeExported)
 				{
@@ -1145,6 +1157,17 @@ namespace Sdl.Community.ExportAnalysisReports
 					_languages.Remove(languageToBeDeleted);
 				}
 			}
+		}
+
+		private static bool LanguageReportExists(ProjectDetails project, string languageName)
+		{
+			if (!project.LanguageAnalysisReportPaths.ContainsKey(languageName))
+			{
+				return false;
+			}
+
+			var languageReports = project.LanguageAnalysisReportPaths.Where(a => a.Key == languageName);
+			return languageReports.Any(languageReport => !IsNullOrEmpty(languageReport.Value) && File.Exists(languageReport.Value));
 		}
 
 		// Set the projects languages
