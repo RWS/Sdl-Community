@@ -15,7 +15,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 	public class SegmentSupervisor : ISegmentSupervisor
 	{
 		private readonly EditorController _editorController;
-		private Guid _docId;
 		private ITranslationService _translationService;
 
 		public SegmentSupervisor(EditorController editorController)
@@ -31,10 +30,15 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			get
 			{
-				if (Data.ContainsKey(_docId)) return Data[_docId];
-				SetIdAndActiveFile();
+				if (ActiveDocument == null) return null;
 
-				return Data[_docId];
+				var activeFileId = ActiveDocument.ActiveFile.Id;
+				if (!Data.ContainsKey(activeFileId))
+				{
+					Data[activeFileId] = new ConcurrentDictionary<SegmentId, ImprovementFeedback>();
+				}
+
+				return Data[activeFileId];
 			}
 		}
 
@@ -118,7 +122,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			if (ActiveDocument == null) return;
-			SetIdAndActiveFile();
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 		}
 
@@ -128,16 +131,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 				   ActiveDocumentData.ContainsKey(segmentId) &&
 				   ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
 				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
-		}
-
-		private void SetIdAndActiveFile()
-		{
-			if (ActiveDocument == null) return;
-			_docId = ActiveDocument.ActiveFile.Id;
-			if (!Data.ContainsKey(_docId))
-			{
-				Data[_docId] = new ConcurrentDictionary<SegmentId, ImprovementFeedback>();
-			}
 		}
 
 		private void TranslationService_TranslationReceived(TranslationData translationData)

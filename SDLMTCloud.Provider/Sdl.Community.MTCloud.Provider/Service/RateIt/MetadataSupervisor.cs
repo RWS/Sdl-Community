@@ -20,7 +20,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private readonly EditorController _editorController;
 		private readonly ISegmentMetadataCreator _segmentMetadataCreator;
 		private Window _batchProcessingWindow;
-		private Guid _docId;
 		private bool _isFirstTime = true;
 		private ITranslationService _translationService;
 
@@ -41,10 +40,15 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			get
 			{
-				if (Data.ContainsKey(_docId)) return Data[_docId];
-				SetIdAndActiveFile();
+				if (ActiveDocument == null) return null;
 
-				return Data[_docId];
+				var activeFileId = ActiveDocument.ActiveFile.Id;
+				if (!Data.ContainsKey(activeFileId))
+				{
+					Data[activeFileId] = new ConcurrentDictionary<SegmentId, TranslationOriginDatum>();
+				}
+
+				return Data[activeFileId];
 			}
 		}
 
@@ -151,7 +155,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			if (ActiveDocument?.ActiveFile == null) return;
-			SetIdAndActiveFile();
 			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
@@ -181,16 +184,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			var isActiveSegmentTranslated = !string.IsNullOrWhiteSpace(ActiveDocument?.ActiveSegmentPair?.Target.ToString());
 			var estimation = isActiveSegmentTranslated ? qualityEstimation : null;
 			MtCloudApplicationInitializer.PublishEvent(new ActiveSegmentQeChanged { Estimation = estimation });
-		}
-
-		private void SetIdAndActiveFile()
-		{
-			if (ActiveDocument == null) return;
-			_docId = ActiveDocument.ActiveFile.Id;
-			if (!Data.ContainsKey(_docId))
-			{
-				Data[_docId] = new ConcurrentDictionary<SegmentId, TranslationOriginDatum>();
-			}
 		}
 
 		private void TranslationService_TranslationReceived(TranslationData translationData)
