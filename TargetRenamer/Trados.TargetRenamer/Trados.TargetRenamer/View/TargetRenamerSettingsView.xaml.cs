@@ -32,7 +32,9 @@ namespace Trados.TargetRenamer.View
         public bool ValidateChildren()
         {
 	        return Validation.GetErrors(CustomLocation).Count == 0
-	               && Validation.GetErrors(Delimiter).Count == 0;
+	               && Validation.GetErrors(Delimiter).Count == 0
+	               && Validation.GetErrors(RegexReplaceWith).Count == 0
+	               && Validation.GetErrors(CustomString).Count == 0;
         }
     }
 }

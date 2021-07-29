@@ -135,6 +135,7 @@
 					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
 					<TextBox VerticalAlignment="Center"
 					         HorizontalAlignment="Center"
+					         Name="RegexReplaceWith"
 					         Width="Auto"
 					         MinWidth="200"
 					         VerticalContentAlignment="Center"
@@ -187,7 +188,7 @@
 					</RadioButton.Visibility>
 				</RadioButton>
 				<TextBox Grid.Row="2" Grid.Column="1"
-				         x:Name="CustomStringTextBox"
+				         x:Name="CustomString"
 				         VerticalAlignment="Center"
 				         HorizontalAlignment="Left"
 				         Width="Auto"
