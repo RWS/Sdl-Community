@@ -13,8 +13,8 @@ using Trados.TargetRenamer.Services;
 
 namespace Trados.TargetRenamer
 {
-	[AutomaticTask("Target Renamer",
-        "TargetRenamer_Name",
+	[AutomaticTask("Plugin_Name",
+        "Plugin_Name",
         "TargetRenamer_Description",
         GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
     [AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]

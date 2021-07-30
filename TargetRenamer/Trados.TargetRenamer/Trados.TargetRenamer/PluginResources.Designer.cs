@@ -260,7 +260,7 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target Renamer.
+        ///   Looks up a localized string similar to Trados Studio Target Renamer.
         /// </summary>
         public static string TargetRenamer_Name {
             get {

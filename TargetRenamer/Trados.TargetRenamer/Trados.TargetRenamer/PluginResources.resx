@@ -185,6 +185,6 @@
     <value>Changes the Finalized Target files based on the selected options.</value>
   </data>
   <data name="TargetRenamer_Name" xml:space="preserve">
-    <value>Target Renamer</value>
+    <value>Trados Studio Target Renamer</value>
   </data>
 </root>
