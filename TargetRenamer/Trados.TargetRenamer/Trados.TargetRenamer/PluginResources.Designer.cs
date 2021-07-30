@@ -260,7 +260,16 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target Renamer.
+        ///   Looks up a localized string similar to Trados Studio Target Renamer is a batch tasks plugin that allows the user to save the target files with various options for custom naming..
+        /// </summary>
+        public static string TargetRenamer_LongDescription {
+            get {
+                return ResourceManager.GetString("TargetRenamer_LongDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trados Studio Target Renamer.
         /// </summary>
         public static string TargetRenamer_Name {
             get {

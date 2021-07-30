@@ -13,19 +13,19 @@ using Trados.TargetRenamer.Services;
 
 namespace Trados.TargetRenamer
 {
-	[AutomaticTask("Target Renamer",
+	[AutomaticTask("TargetRenamer_Name",
 		"TargetRenamer_Name",
-		"TargetRenamer_Description",
-		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
-	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	[RequiresSettings(typeof(TargetRenamerSettings), typeof(TargetRenamerSettingsPage))]
-	public class TargetRenamer : AbstractFileContentProcessingAutomaticTask
-	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private List<ProjectFile> _projectFiles;
-		private Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> _renamedFiles;
-		private ReportCreatorService _reportCreator;
-		private TargetRenamerSettings _settings;
+        "TargetRenamer_Description",
+        GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
+    [AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
+    [RequiresSettings(typeof(TargetRenamerSettings), typeof(TargetRenamerSettingsPage))]
+    public class TargetRenamer : AbstractFileContentProcessingAutomaticTask
+    {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private List<ProjectFile> _projectFiles;
+        private Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> _renamedFiles;
+        private ReportCreatorService _reportCreator;
+        private TargetRenamerSettings _settings;
 
 		public override void TaskComplete()
 		{
