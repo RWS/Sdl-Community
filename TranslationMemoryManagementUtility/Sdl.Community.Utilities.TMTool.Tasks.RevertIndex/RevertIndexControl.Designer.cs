@@ -146,7 +146,7 @@
             this.rbPresegmentedSc.Size = new System.Drawing.Size(567, 17);
             this.rbPresegmentedSc.TabIndex = 8;
             this.rbPresegmentedSc.TabStop = true;
-            this.rbPresegmentedSc.Text = "The imported data will be primarily used with presegmented le&gacy SDL Trados ITD" +
+            this.rbPresegmentedSc.Text = "The imported data will be primarily used with presegmented le&gacy Trados ITD" +
     " or TTX files";
             this.rbPresegmentedSc.UseVisualStyleBackColor = true;
             // 
@@ -160,7 +160,7 @@
             this.rbDefaultSc.TabIndex = 7;
             this.rbDefaultSc.TabStop = true;
             this.rbDefaultSc.Text = "The imported data will be primarily used with &new, native source files or files " +
-    "processed only with SDL Trados Studio";
+    "processed only with Trados Studio";
             this.rbDefaultSc.UseVisualStyleBackColor = true;
             // 
             // RevertIndexControl
