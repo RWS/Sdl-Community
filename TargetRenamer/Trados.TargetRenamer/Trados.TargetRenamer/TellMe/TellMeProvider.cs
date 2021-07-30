@@ -11,7 +11,7 @@ namespace Trados.TargetRenamer.TellMe
         {
                 new HelpAction
                 {
-                    Keywords = new []{ "trados target renamer", "help", "guide" }
+                    Keywords = new []{ $"{PluginResources.TargetRenamer_Name.ToLower()}", "help", "guide" }
                 },
         };
     }

@@ -184,7 +184,10 @@
   <data name="TargetRenamer_Description" xml:space="preserve">
     <value>Changes the Finalized Target files based on the selected options.</value>
   </data>
+  <data name="TargetRenamer_LongDescription" xml:space="preserve">
+    <value>Trados Studio Target Renamer is a batch tasks plugin that allows the user to save the target files with various options for custom naming.</value>
+  </data>
   <data name="TargetRenamer_Name" xml:space="preserve">
-    <value>Target Renamer</value>
+    <value>Trados Studio Target Renamer</value>
   </data>
 </root>
