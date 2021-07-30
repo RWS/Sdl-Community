@@ -35,12 +35,12 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel>
-		<TextBlock Text="Target Renamer"
+		<TextBlock Text="{x:Static resx:PluginResources.TargetRenamer_Name}"
 		           Style="{StaticResource Sdl.TextBlock.TitleStyle}"
 				   FontSize="15"
 				   TextWrapping="Wrap"
 		           DockPanel.Dock="Top" />
-		<TextBlock Text="Target Renamer is a batch tasks plugin that allows the user to save the target files with various options for custom naming."
+		<TextBlock Text="{x:Static resx:PluginResources.TargetRenamer_LongDescription}"
 				   Margin="0 5 0 0"
 			   Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
 		       DockPanel.Dock="Top" />
