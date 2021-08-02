@@ -4,14 +4,15 @@
 					  xmlns:utilities="clr-namespace:Sdl.Community.ApplyTMTemplate.Utilities"
 			          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-					  xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
 					  xmlns:converters="clr-namespace:Sdl.Community.ApplyTMTemplate.Converters"
 					  xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
 					  xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
 					  xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
 					  xmlns:models="clr-namespace:Sdl.Community.ApplyTMTemplate.Models"
 					  xmlns:uiHelpers="clr-namespace:Sdl.Community.ApplyTMTemplate.UiHelpers"
+					  xmlns:generic="clr-namespace:Sdl.Community.ApplyTMTemplate.Themes.Generic"
 					  WindowStartupLocation="CenterScreen"
+					  Icon="../Resources/ATTA.ico"
 					  ResizeMode="NoResize"
 					  WindowStyle="None"
 		              mc:Ignorable="d"
@@ -26,12 +27,13 @@
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/CheckboxResources.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
-				<ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Sdl.Desktop.Platform.Styles;component/progressringasteriskstyle.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckboxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Buttonresources.xaml" />
 				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
 				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
+				<ResourceDictionary Source="../UiHelpers/CustomProgressRing.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:ImageToBitmapImageConverter x:Key="ImageToBitmapImageConverter"/>
@@ -100,9 +102,9 @@
 			</Grid.RowDefinitions>
 
 			<uiHelpers:WindowsControl Grid.Row="0" Grid.ColumnSpan="2"/>
-			<TextBlock Grid.Column="0" FontSize="13" FontWeight="Bold" Grid.Row="1" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="5,10,0,0"  Grid.ColumnSpan="3" />
+			<TextBlock Grid.Column="0" FontSize="13" FontWeight="Bold" Grid.Row="1" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="5,10,0,0"  Grid.ColumnSpan="2" />
 
-			<ui:TimedTextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="10,0,10,0"/>
+			<ui:TimedTextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="5,0,10,0"/>
 
 			<StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="3" Margin="0,5,0,0">
 				<TextBlock Text="What to apply:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
@@ -265,13 +267,13 @@
 				</DataGrid.Columns>
 			</DataGrid>
 			<StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-				<controls:ProgressRing Visibility="{Binding ProgressVisibility}" 
-				                       Width="Auto"
-									   Height="Auto"
-				                       Style="{StaticResource Sdl.ProgressRing.Asterisk}"
-				                       VerticalAlignment="Center"
-				                       VerticalContentAlignment="Center"/>
-				<Button Style="{StaticResource SdlWizardStyleButtonGreen}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+				<generic:CustomProgressRing  Style="{StaticResource Sdl.CustomProgressRing.Normal}"
+				                             Visibility="{Binding ProgressVisibility}"
+				                             Width="Auto"
+				                             Height="Auto"
+				                             VerticalAlignment="Center"
+				                             VerticalContentAlignment="Center"/>
+				<Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 			</StackPanel>
 		</Grid>
 	</Border>

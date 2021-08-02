@@ -14,7 +14,5 @@ namespace Sdl.Community.ApplyTMTemplate.Services.Interfaces
 		void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesContainer languageResourcesContainer, Settings settings);
 
 		void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesContainer languageResourcesContainer, Settings settings);
-
-		//bool ValidateTemplate(ILanguageResourcesContainer languageResourcesContainer, bool isImport);
 	}
 }
