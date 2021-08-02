@@ -56,8 +56,6 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		private async Task<List<ItemsResponseModel>> GetDomains()
 		{
-			var domains = new List<ItemsResponseModel>();
-
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Get,
@@ -66,6 +64,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 			var httpResponse = await _connectionProvider.HttpClient.SendAsync(httpRequest);
 
+			var jsonDomainsModel = new JsonDomainResponseModel();
 			try
 			{
 				httpResponse?.EnsureSuccessStatusCode();
@@ -74,21 +73,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				{
 					var httpResponseAsString = await httpResponse.Content?.ReadAsStringAsync();
 
-					var jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
-					if (jsonDomainsModel?.Items != null)
-					{
-						foreach (var item in jsonDomainsModel.Items)
-						{
-							var domain = new ItemsResponseModel
-							{
-								Code = item.Code,
-								Name = item.Name,
-								Subdomains = item.Subdomains,
-							};
-							
-							domains.Add(domain);
-						}
-					}
+					jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
 				}
 			}
 			finally
@@ -96,7 +81,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				httpResponse?.Dispose();
 			}
 
-			return await Task.FromResult(domains);
+			return await Task.FromResult(jsonDomainsModel.Items);
 		}
 
 		private async Task<List<ItemsResponseModel>> GetTermTypes()
