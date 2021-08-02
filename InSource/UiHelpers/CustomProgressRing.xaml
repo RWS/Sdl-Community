@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sdl.Community.InSource.Themes.Generic">
+	<Style TargetType="{x:Type controls:CustomProgressRing}" x:Key="Sdl.CustomProgressRing.Normal">
+		<Setter Property="Text" Value="" />
+		<Setter Property="Foreground" Value="#636463" />
+		<!--TODO: Use color from palette-->
+		<Setter Property="SpinnerColor"
+		        Value="#FF008080" />
+		<Setter Property="SpinnerSize"
+		        Value="40" />
+		<Setter Property="SpinnerThickness"
+		        Value="5" />
+		<Setter Property="Padding"
+		        Value="5" />
+	</Style>
+</ResourceDictionary>
