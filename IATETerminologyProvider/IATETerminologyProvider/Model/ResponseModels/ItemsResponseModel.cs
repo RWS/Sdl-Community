@@ -7,7 +7,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 	{
 		public string Code { get; set; }
 
-		[JsonProperty("eurovoc_code	")]
+		[JsonProperty("eurovoc_code")]
 		public string EurovocCode { get; set; }
 		
 		public string Name { get; set; }
@@ -20,5 +20,8 @@ namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 		
 		public string Id { get; set; }
 		public bool? Deprecated { get; set; }
+
+		[JsonProperty("cjeu_code")]
+		public string CjeuCode { get; set; }
 	}
 }

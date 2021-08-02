@@ -353,17 +353,20 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			var domains = new List<DomainModel>();
 			foreach (var domain in iateDomains)
 			{
-				if (!domain.Name.Equals(Constants.NotSpecifiedCode))
-				{
-					var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
-					var domainModel = new DomainModel
-					{
-						Code = domain.Code,
-						Name = selectedDomainName,
-					};
+				if (domain.Name.Equals(Constants.NotSpecifiedCode)) domain.EurovocCode = "00";
 
-					domains.Add(domainModel);
-				}
+				var selectedDomainName = Utils.UppercaseFirstLetter(domain.Name.ToLower());
+
+				var discriminator = "";
+				if (!string.IsNullOrWhiteSpace(domain.CjeuCode)) discriminator = "CJEU";
+
+				var domainModel = new DomainModel
+				{
+					Code = domain.Code,
+					Name = $"{domain.EurovocCode ?? domain.CjeuCode} {selectedDomainName} {discriminator}"
+				};
+
+				domains.Add(domainModel);
 			}
 
 			Domains = new ObservableCollection<DomainModel>(domains);

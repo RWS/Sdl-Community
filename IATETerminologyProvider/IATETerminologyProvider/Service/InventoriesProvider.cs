@@ -72,7 +72,6 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				if (httpResponse?.Content != null)
 				{
 					var httpResponseAsString = await httpResponse.Content?.ReadAsStringAsync();
-
 					jsonDomainsModel = JsonConvert.DeserializeObject<JsonDomainResponseModel>(httpResponseAsString);
 				}
 			}
