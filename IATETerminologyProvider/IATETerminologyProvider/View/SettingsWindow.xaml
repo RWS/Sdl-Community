@@ -25,6 +25,7 @@
 				<ResourceDictionary Source="../Styles/ProgressRingAsteriskStyle.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BoolToVis"/>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{DynamicResource WindowControlBorderStyle}">
@@ -167,7 +168,8 @@
 			<controls1:ProgressRing 
 				Style="{StaticResource ProgressRingAsterisk}"
 				Height="80"
-				IsActive="{Binding IsLoading, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}"			    
+				IsActive="False"
+				Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"
 				Canvas.ZIndex="110"   		                      
 				IsLarge="True" 
 				Margin="20" />
