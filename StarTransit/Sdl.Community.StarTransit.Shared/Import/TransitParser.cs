@@ -189,6 +189,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				sdlxliffLevel = ConfirmationLevel.Translated;
 			if (statusCode == "06")
 				sdlxliffLevel = ConfirmationLevel.Translated;
+			if (statusCode == "04")
+				sdlxliffLevel = ConfirmationLevel.Translated;
 			if (statusCode == "0c")
 				sdlxliffLevel = ConfirmationLevel.ApprovedTranslation;
 			if (statusCode == "08")
