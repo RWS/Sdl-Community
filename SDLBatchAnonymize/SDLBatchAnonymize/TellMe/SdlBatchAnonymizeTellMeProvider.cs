@@ -5,20 +5,20 @@ namespace Sdl.Community.SDLBatchAnonymize.TellMe
 	[TellMeProvider]
 	public class SdlBatchAnonymizeTellMeProvider: ITellMeProvider
 	{
-		public string Name => "SDL BatchAnonymize tell me provider";
+		public string Name => "Trados BatchAnonymize tell me provider";
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new SdlBatchAnonymizeCommunitySupportAction
 			{
-				Keywords = new []{ "sdl batch anonymizer", "sdlbatchanonymizer", "sdl batch anonymizer community", "sdl batch anonymizer support" }
+				Keywords = new []{ "trados batch anonymizer", "tradosbatchanonymizer", "trados batch anonymizer community", "trados batch anonymizer support" }
 			},
 			new SdlBatchAnonymizeStoreAction
 			{
-				Keywords = new []{ "sdl batch anonymizer", "sdl batch anonymizer store", "sdlbatchanonymizer store", "sdl batch anonymizer store download" }
+				Keywords = new []{ "trados batch anonymizer", "trados batch anonymizer store", "tradosbatchanonymizer store", "trados batch anonymizer store download" }
 			},
 			new SdlBatchAnonymizerWikiAction
 			{
-				Keywords = new []{ "sdl batch anonymizer", "sdl batch anonymizer wiki"}
+				Keywords = new []{ "trados batch anonymizer", "trados batch anonymizer wiki"}
 			}
 		};
 	}

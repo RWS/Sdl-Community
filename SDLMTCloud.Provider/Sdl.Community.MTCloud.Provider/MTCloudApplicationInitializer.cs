@@ -1,12 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Windows;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.Community.MTCloud.Provider.Service.RateIt;
+using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -17,19 +22,26 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
+		private static IStudioEventAggregator _eventAggregator;
 		private static bool? _isStudioRunning;
-
 		public static IHttpClient Client { get; } = new HttpClient();
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
 
 		public static EditorController EditorController { get; set; }
 
-		public static bool IsStudioRunning { get => _isStudioRunning ?? false; set => _isStudioRunning = value; }
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 
 		public static ProjectsController ProjectsController { get; private set; }
+
+		public static RateItController RateItController => IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 		public static TranslationService TranslationService { get; private set; }
+
+		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
+																		 (IsStudioRunning()
+																			 ? SdlTradosStudio.Application
+																				 .GetService<IStudioEventAggregator>()
+																			 : null);
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
@@ -50,18 +62,29 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
-		/// <summary>
-		/// Since SdlTradosStudio is a static class, the moment we access .Application on it without Studio running we get an exception
-		/// and the class itself cannot be referred to, therefore we cannot check if it has been initialized
-		/// </summary>
-		public static void SetIsStudioRunning()
+		public static bool IsStudioRunning()
 		{
-			if (_isStudioRunning.HasValue) return;
+			if (_isStudioRunning is not null) return _isStudioRunning.Value;
+
 			try
 			{
-				IsStudioRunning = SdlTradosStudio.Application is not null;
+				_isStudioRunning ??= SdlTradosStudio.Application is not null;
+				return _isStudioRunning.Value;
 			}
 			catch { }
+
+			return _isStudioRunning ??= false;
+		}
+
+		public static void PublishEvent<TEvent>(TEvent sampleEvent)
+		{
+			EventAggregator?.Publish(sampleEvent);
+		}
+
+		public static void RefreshQeStatus()
+		{
+			if (TranslationService?.IsActiveModelQeEnabled ?? false)
+				PublishEvent(new RefreshQeStatus());
 		}
 
 		public static void SetTranslationService(IConnectionService connectionService)
@@ -70,19 +93,25 @@ namespace Sdl.Community.MTCloud.Provider
 
 			//TODO: start supervising when a QE enabled model has been chosen
 
-			if (!IsStudioRunning) return;
-			MetadataSupervisor.StartSupervising(TranslationService);
+			MetadataSupervisor?.StartSupervising(TranslationService);
+		}
+
+		public static IDisposable Subscribe<T>(Action<T> action)
+		{
+			return EventAggregator?.GetEvent<T>().Subscribe(action);
 		}
 
 		public void Execute()
 		{
-			SetIsStudioRunning();
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			if (!IsStudioRunning) return;
-			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			CurrentViewDetector = new CurrentViewDetector();
-			EditorController = SdlTradosStudio.Application.GetController<EditorController>();
-			MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
+
+			if (IsStudioRunning())
+			{
+				ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+				CurrentViewDetector = new CurrentViewDetector();
+				EditorController = SdlTradosStudio.Application.GetController<EditorController>();
+				MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
+			}
 		}
 	}
 }

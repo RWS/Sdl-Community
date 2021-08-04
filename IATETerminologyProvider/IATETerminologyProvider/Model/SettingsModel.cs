@@ -8,6 +8,8 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SettingsModel
 	{
+		//public int DefaultMaxEntries = 500;
+		
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
 		public SettingsModel()
@@ -33,6 +35,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 				SetStringParameter("domains", domains);
 			}
 		}
+
 		public List<TermTypeModel> TermTypes
 		{
 			get
@@ -47,6 +50,22 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			}
 		}
 
+		//public int MaxEntries
+		//{
+		//	get
+		//	{
+		//		var success = int.TryParse(GetStringParameter("maxEntries"), out var value);
+
+		//		return success
+		//			? value < 100 ? DefaultMaxEntries : value
+		//			: DefaultMaxEntries;
+		//	}
+		//	set
+		//	{
+		//		SetStringParameter("maxEntries", value.ToString());
+		//	}
+		//}
+
 		public bool SearchInSubdomains
 		{
 			get => SearchInSubdomainsParameter != null && Convert.ToBoolean(SearchInSubdomainsParameter);
@@ -58,8 +77,8 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			get => GetStringParameter("searchInSubdomains");
 			set => SetStringParameter("searchInSubdomains", value);
 		}
-		public Uri Uri => _uriBuilder.Uri;
 
+		public Uri Uri => _uriBuilder.Uri;
 
 		private string GetStringParameter(string p)
 		{

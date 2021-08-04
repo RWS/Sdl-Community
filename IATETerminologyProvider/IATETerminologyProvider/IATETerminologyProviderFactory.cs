@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-	[TerminologyProviderFactory(Id = "IATETerminologyProvider",	Name = "IATE Terminology Provider", Icon= "Iate_logo", Description = "IATE terminology provider factory")]
+	[TerminologyProviderFactory(Id = "IATETerminologyProvider",
+		Name = "IATE Terminology Provider",
+		Icon = "Iate_logo",
+		Description = "IATE terminology provider factory")]
 	public class IATETerminologyProviderFactory : ITerminologyProviderFactory
-	{				
+	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
@@ -16,9 +25,37 @@ namespace Sdl.Community.IATETerminologyProvider
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
 			var savedSettings = new SettingsModel(terminologyProviderUri);
+			var savedTermTypesNumber = savedSettings.TermTypes.Count;
 
-			var terminologyProvider = new IATETerminologyProvider(savedSettings);
+			if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes.Count)
+			{
+				var availableTermTypes= GetAvailableTermTypes(savedSettings.TermTypes);
+				savedSettings.TermTypes = new List<TermTypeModel>(availableTermTypes);
+			}
+
+			if (!IATEApplication.ConnectionProvider.EnsureConnection())
+			{
+				var exception = new Exception("Failed login!");
+				_logger.Error(exception);
+
+				throw exception;
+			}
+
+			var sqlDatabaseProvider = new SqliteDatabaseProvider(new PathInfo());
+			var cacheProvider = new CacheProvider(sqlDatabaseProvider);
+
+			var terminologyProvider = new IATETerminologyProvider(savedSettings,
+				IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider);
+
 			return terminologyProvider;
+		}
+
+		private List<TermTypeModel> GetAvailableTermTypes(List<TermTypeModel> savedList)
+		{
+			var availableTerms = savedList.Where(t =>
+				IATEApplication.InventoriesProvider.TermTypes.Any(t1 => t1.Code == t.Code.ToString())).ToList();
+
+			return availableTerms;
 		}
 	}
 }

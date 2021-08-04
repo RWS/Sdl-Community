@@ -200,9 +200,10 @@ namespace Sdl.Community.TQA
 			wb.Save();
 
 		    var spreadsheet = SpreadsheetDocument.Open(path, true);
-			AddGradient(spreadsheet, "B6B6B6", "FFFF0000", "FFFFC000");
-		    AddGradient(spreadsheet, "B6B6B7", "FFFFC000", "FF009B00");
-		    spreadsheet.Save();
+			//colors took from webpart stylesheet
+			AddGradient(spreadsheet, "B6B6B6", "FFE16E73", "FFBDED0A");
+			AddGradient(spreadsheet, "B6B6B7", "FFBDED0A", "FF008080");
+			spreadsheet.Save();
 		    spreadsheet.Close();
 		}
 
@@ -219,9 +220,9 @@ namespace Sdl.Community.TQA
 	    {
 		    var wsReport = wb.Worksheet("Evaluation Report_Initial");
 
-		    wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
-		    wsReport.Cell("L8").Value = "TQA";
-		    wsReport.Cell("L11").Value = reportResults.QualityLevel;
+		    wsReport.Cell("C10").Value = DateTime.Now.ToString("dd-MMM-yyyy");
+		    wsReport.Cell("M9").Value = "TQA";
+		    wsReport.Cell("M12").Value = reportResults.QualityLevel;
 
 		    wsReport.Protect(ProtectionPassword);
 		    wsReport.Range(14, 1, 21, 9).Style.Protection.SetLocked(true); // only second table should be protected
@@ -238,14 +239,14 @@ namespace Sdl.Community.TQA
 
 	    private static void AjustCommentSize(IXLWorksheet wsReport)
 	    {
-		    wsReport.Cell("B3").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("B4").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("B5").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("B6").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("B9").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("L7").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("L8").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("L10").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C4").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C5").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C6").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C7").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C10").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("M8").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("M9").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("M10").Comment?.Style.Size.SetAutomaticSize();
 	    }
 
 	    private static void AddGradient(SpreadsheetDocument spreadSheet,string dummyColorCode,string firstColorCode, string secondColorCode)
@@ -264,21 +265,21 @@ namespace Sdl.Community.TQA
 	    }
 
 	    /// <summary>
-		/// Overwrithe the excel styles for "Evaluation Report Initial and Final result" to match the template 
+		///Overwrite the excel styles for "Evaluation Report Initial and Final result" to match the template 
 		/// </summary>
 		private static void ChangeStyleForEvaluationReport(IXLWorksheet wsReport)
 	    {
 			//Remove border which crosses the logo from first table
 			wsReport.Range("A1:Q1").Style.Border.BottomBorder = XLBorderStyleValues.None;
 		    wsReport.Range("A2:Q2").Style.Border.TopBorder = XLBorderStyleValues.None;
-		    var sdlGreen = XLColor.FromHtml("#24BD59");
-			wsReport.Style.Border.SetOutsideBorderColor(sdlGreen);
+		 //   var sdlGreen = XLColor.FromHtml("#00A89F");
+			//wsReport.Style.Border.SetOutsideBorderColor(sdlGreen);
 
 			//Dummy collor used later to replace with gradient
-		    wsReport.Cell("C32").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B6")); // use some unique color
-		    wsReport.Cell("F32").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B7")); // use some unique color
+		    wsReport.Cell("D33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B6")); // use some unique color
+		    wsReport.Cell("G33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B7")); // use some unique color
 
-			wsReport.Cell("C32").Style.Border.SetRightBorderColor(XLColor.White);
+			wsReport.Cell("D33").Style.Border.SetRightBorderColor(XLColor.White);
 	    }
 
 	}

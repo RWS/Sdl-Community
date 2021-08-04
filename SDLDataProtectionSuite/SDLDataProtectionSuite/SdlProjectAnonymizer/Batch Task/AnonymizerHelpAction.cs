@@ -5,7 +5,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	[Action("SDPSProjectAnonymizerHelpAction",
-		Name = "Project Anonymizer Help",
+		Name = "Trados Project Anonymizer Help",
 		Description = "Help",
 		Icon = "question"
 	)]
@@ -15,7 +15,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3199.gdpr");
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3199/trados-project-anonymizer");
 		}
 	}
 }

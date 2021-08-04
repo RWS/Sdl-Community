@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL Translation Memory Management Utility</PlugInName>
-  <Version>3.0.0.4</Version>
-  <Description>The SDL Translation Memory Management utility is a utility for administering file based SDL Trados Studio translation memories.</Description>
-  <Author>SDL Community Developers</Author>
+  <PlugInName>Trados Translation Memory Management Utility</PlugInName>
+  <Version>3.0.1.0</Version>
+  <Description>The Trados Translation Memory Management utility is a utility for administering file based Trados Studio translation memories.</Description>
+  <Author>RWS AppStore Team</Author>
   <Include>
     <File>Sdl.Community.Utilities.TMTool.Lib.dll</File>
     <File>Sdl.Community.Utilities.TMTool.Task.dll</File>

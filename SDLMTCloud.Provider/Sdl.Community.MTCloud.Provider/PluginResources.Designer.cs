@@ -91,6 +91,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adequate.
+        /// </summary>
+        public static string AdequateQuality {
+            get {
+                return ResourceManager.GetString("AdequateQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Send Feedback.
         /// </summary>
         public static string AutoSendFeedback {
@@ -191,6 +200,15 @@ namespace Sdl.Community.MTCloud.Provider {
             get {
                 object obj = ResourceManager.GetObject("global1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string GoodQuality {
+            get {
+                return ResourceManager.GetString("GoodQuality", resourceCulture);
             }
         }
         
@@ -525,11 +543,20 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
         /// </summary>
         public static string Plugin_NiceName {
             get {
                 return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poor.
+        /// </summary>
+        public static string PoorQuality {
+            get {
+                return ResourceManager.GetString("PoorQuality", resourceCulture);
             }
         }
         
@@ -712,7 +739,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        ///   Looks up a localized string similar to SDL MT Cloud.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -730,7 +757,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
         /// </summary>
         public static string SDLMTCloudName {
             get {
@@ -846,6 +873,16 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string SourceModifiedTextAndAdvice {
             get {
                 return ResourceManager.GetString("SourceModifiedTextAndAdvice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap success {
+            get {
+                object obj = ResourceManager.GetObject("success", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

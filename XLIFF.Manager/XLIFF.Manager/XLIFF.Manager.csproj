@@ -55,6 +55,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Rws.MultiSelectComboBox">
+      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Community.Toolkit.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.3.0.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -99,9 +102,6 @@
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.19.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.32\lib\net48\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <SpecificVersion>False</SpecificVersion>
@@ -584,6 +584,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Refresh.ico" />
+    <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
     <Resource Include="Resources\LanguageMapping.ico" />
     <Resource Include="Resources\Search.png" />
     <EmbeddedResource Include="BatchTasks\Report.xsl" />

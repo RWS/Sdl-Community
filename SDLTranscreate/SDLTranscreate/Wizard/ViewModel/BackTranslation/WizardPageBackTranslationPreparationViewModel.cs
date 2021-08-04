@@ -324,7 +324,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 
 					await UpdateProgress(jobProcess, JobProcess.ProcessStatus.Running, unit, PluginResources.Progres_Label_CreatingProject);
 
-					var iconPath = GetBackTranslationIconPath();
+					var iconPath = _projectAutomationService.GetBackTranslationIconPath(_pathInfo);
 					var newStudioProject = await _projectAutomationService.CreateBackTranslationProject(
 						TaskContext.FileBasedProject, projectFolderReference.LocalProjectFolder, languageName, iconPath,
 						sourceFiles, "BT");
@@ -565,7 +565,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 		private void WriteLogReportHeader()
 		{
 			_logReport = new StringBuilder();
-			_logReport.AppendLine("Start Process: Create Back-Translation Projects " + FormatDateTime(DateTime.UtcNow));
+			_logReport.AppendLine("Start Process: Create Back-Translation projects " + FormatDateTime(DateTime.UtcNow));
 			_logReport.AppendLine();
 
 			var indent = "   ";
@@ -597,7 +597,7 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 		private void FinalizeJobProcesses(bool success)
 		{
 			_logReport.AppendLine();
-			_logReport.AppendLine("End Process: Create Back-Translation Projects " + FormatDateTime(DateTime.UtcNow));
+			_logReport.AppendLine("End Process: Create Back-Translation projects " + FormatDateTime(DateTime.UtcNow));
 
 			if (success)
 			{
@@ -1247,20 +1247,6 @@ namespace Trados.Transcreate.Wizard.ViewModel.BackTranslation
 			}
 
 			return content;
-		}
-
-		private string GetBackTranslationIconPath()
-		{
-			var iconPath = Path.Combine(_pathInfo.ApplicationIconsFolderPath, "SDLBackTranslation.ico");
-			if (!File.Exists(iconPath))
-			{
-				using (var fs = new FileStream(iconPath, FileMode.Create))
-				{
-					PluginResources.back_translation_small.Save(fs);
-				}
-			}
-
-			return iconPath;
 		}
 
 		private string GetLanguageFolder(string name)

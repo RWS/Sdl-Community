@@ -79,6 +79,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RWS AppStore.
+        /// </summary>
+        public static string AppStoreFolder {
+            get {
+                return ResourceManager.GetString("AppStoreFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete settings.
         /// </summary>
         public static string ClearSettings {
@@ -180,6 +189,24 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backing up project....
+        /// </summary>
+        public static string LogMessage_BackingUpProject {
+            get {
+                return ResourceManager.GetString("LogMessage_BackingUpProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Batch task started....
+        /// </summary>
+        public static string LogMessage_BatchTaskStarted {
+            get {
+                return ResourceManager.GetString("LogMessage_BatchTaskStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove or replace the name of the user who last modified the translation.
         /// </summary>
         public static string ModifiedToolTip {
@@ -216,7 +243,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLBatchAnonymize.
+        ///   Looks up a localized string similar to Trados Batch Anonymizer.
         /// </summary>
         public static string Plugin_Name {
             get {

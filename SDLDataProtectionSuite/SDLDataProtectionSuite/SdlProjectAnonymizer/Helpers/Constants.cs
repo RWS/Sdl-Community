@@ -7,9 +7,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 {
 	public static class Constants
 	{
+		//We leave this for the time being so the users which already accepted 
 		public static string AcceptFolderPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			@"SDL Community\SDLProjectAnonymizer");
+			@"RWS AppStore\TradosProjectAnonymizer");
 
 		public static string Key = @"dGhpc2lzdGhlZW5jb2RlZGt0eQ==";
 

@@ -152,9 +152,9 @@
 			// 
 			this.projectStatusComboBox.FormattingEnabled = true;
 			this.projectStatusComboBox.Items.AddRange(new object[] {
-			"All",
-			"InProgress",
-			"Completed"});
+            "All",
+            "InProgress",
+            "Completed"});
 			this.projectStatusComboBox.Location = new System.Drawing.Point(432, 133);
 			this.projectStatusComboBox.Name = "projectStatusComboBox";
 			this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
@@ -386,7 +386,7 @@
 			this.MaximizeBox = false;
 			this.Name = "ReportExporterControl";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "SDL Trados Studio – Export Analysis Reports";
+			this.Text = "Trados Studio – Export Analysis Reports";
 			this.mainPanel.ResumeLayout(false);
 			this.mainPanel.PerformLayout();
 			this.ResumeLayout(false);

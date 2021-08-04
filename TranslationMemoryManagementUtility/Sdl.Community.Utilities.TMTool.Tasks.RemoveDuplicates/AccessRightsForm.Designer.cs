@@ -101,7 +101,7 @@
             this.Controls.Add(this.lblInfo);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AccessRightsForm";
-            this.Text = "SDL Translation Memory Password";
+            this.Text = "Trados Translation Memory Password";
             this.Load += new System.EventHandler(this.AccessRightsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

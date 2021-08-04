@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
@@ -12,15 +12,17 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		event TranslationReceivedEventHandler TranslationReceived;
 
 		IConnectionService ConnectionService { get; }
+		bool IsActiveModelQeEnabled { get; }
 		Options Options { get; set; }
+
+		Task AddTermToDictionary(Term term);
 
 		Task<MTCloudDictionaryInfo> GetDictionaries();
 
 		Task<SubscriptionInfo> GetLanguagePairs();
 
-		Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement);
+		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
-		Task AddTermToDictionary(Term term);
 	}
 }

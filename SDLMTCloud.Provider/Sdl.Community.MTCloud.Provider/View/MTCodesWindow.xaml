@@ -26,6 +26,9 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+			</Style>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{StaticResource WindowControlBorderStyle}" >
@@ -35,7 +38,8 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="35"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="50"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
@@ -47,12 +51,15 @@
 			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCodesLogo.png"/>
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo_cropped.png"/>
+			<Image Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Stretch="Uniform" HorizontalAlignment="Center" 
+			       Margin="0 0 0 0" VerticalAlignment="Top"  IsHitTestVisible="False"
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/soontobecome.png"/>
 
-			<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="50"
+			<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="50"
 						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-			<Border Grid.Column="1" Width="252" Height="28" Margin="0,15,47,7" BorderThickness="1" BorderBrush="#FFAEDCA1" HorizontalAlignment="Right" Grid.Row="1" >
+			<Border Grid.Column="1" Width="252" Height="28" Margin="0,15,47,7" BorderThickness="1" BorderBrush="#FFAEDCA1" HorizontalAlignment="Right" Grid.Row="2" >
 				<DockPanel Background="White" Height="28" >
 					<TextBox Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Query, UpdateSourceTrigger=PropertyChanged}" 
 					         Style="{DynamicResource SearchTextBoxStyle}" Height="24" Margin="0,2" Width="224"/>
@@ -60,7 +67,7 @@
 				</DockPanel>
 			</Border>
 
-			<Button Grid.Row="1" Grid.Column="1" Background="Transparent" BorderThickness="1" 
+			<Button Grid.Row="2" Grid.Column="1" Background="Transparent" BorderThickness="1" 
 			        Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MappedLanguagesGrid}" 
 				HorizontalAlignment="Right" Margin="0,15,15,7" ToolTip="Print MT Codes" BorderBrush="#B5B2B2">
 				<Image Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/Print.png" 
@@ -72,7 +79,7 @@
 			          DefaultColumnName="[none]"
 			          DefaultSortDirection="Ascending"
 			          Style="{StaticResource FilesGridStyle}" 
-			          Grid.Row="3" 
+			          Grid.Row="4" 
 			          Grid.Column="0" 
 			          Grid.ColumnSpan="2" 
 			          Margin="15,5,15,5" 
@@ -102,13 +109,13 @@
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 
-			<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="15,0,15,10" >
+			<Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="15,0,15,10" >
 				<TextBlock FontFamily="Segoe UI" FontSize="12" HorizontalAlignment="Left" Foreground="#3E3D3D"
 				           VerticalAlignment="Top"
 				           Text="{Binding ItemsCountLabel, FallbackValue='Languages: 0'}" />
 			</Grid>
 
-			<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"  Margin="0" BorderThickness="0,1,0,0" 
+			<Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"  Margin="0" BorderThickness="0,1,0,0" 
 			        BorderBrush="#ABB0B3" >
 				<Grid  Margin="15,15,15,15" >
 

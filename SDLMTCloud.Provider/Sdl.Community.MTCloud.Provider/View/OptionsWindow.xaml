@@ -31,7 +31,6 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
@@ -44,6 +43,9 @@
 				<Setter Property="Foreground" Value="#333232"/>
 				<Setter Property="FontSize" Value="13"/>
 			</Style>
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+			</Style>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -53,7 +55,8 @@
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="35" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
@@ -62,22 +65,25 @@
 
 			<!-- BORDER CONTROL -->
 			<controls:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" 
+			<Image Grid.Row="0" Grid.Column="0" Height="60" Stretch="Uniform" HorizontalAlignment="Center" 
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
 			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo.png"/>
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo_cropped.png"/>
+			<Image Grid.Row="1" Grid.Column="0" Height="25" Stretch="Uniform" HorizontalAlignment="Center" 
+			       Margin="0 0 0 0" VerticalAlignment="Top"  IsHitTestVisible="False"
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/soontobecome.png"/>
 
-			<Border Background="White" Grid.Column="0" Grid.Row="1"  >
+			<Border Background="White" Grid.Column="0" Grid.Row="2"  >
 				<TextBlock Margin="10,15,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
-						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
-						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
-						Using SDL's proprietary technology, customers can have the assurance of content privacy.
-						SDL Machine Translation is powered by SDL's state-of-the-art machine learning algorithms and supports a large number of languages.
+						Welcome to the SDL Machine Translation Cloud (soon to be Language Weaver) translation provider for Studio. <LineBreak/><LineBreak/>
+						SDL Machine Translation Cloud is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Using our proprietary technology, customers can have the assurance of content privacy.
+						SDL Machine Translation is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.
 				</TextBlock>
 			</Border>
 
-			<Grid Grid.Row="2" Margin="0,10,0,0">
+			<Grid Grid.Row="3" Margin="0,10,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
@@ -228,7 +234,7 @@
 				</StackPanel>
 			</Grid >
 
-			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">
+			<Border Grid.Row="5" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">
 				<Grid VerticalAlignment="Center" Margin="15,15,0,15">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
 						<Button Style="{StaticResource ButtonStyleShadowless}" 

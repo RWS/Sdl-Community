@@ -45,6 +45,8 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Sdl.Core.Globalization">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
@@ -106,10 +108,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationInitializer.cs" />
@@ -141,6 +145,8 @@
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
     <Compile Include="Interfaces\INumberVerifierSettings.cs" />
     <Compile Include="Interfaces\ISkipTheDashProcessor.cs" />
+    <Compile Include="Interfaces\INumberVerifier.cs" />
+    <Compile Include="Interfaces\ITextGenerator.cs" />
     <Compile Include="Interfaces\IVerifyProcessor.cs" />
     <Compile Include="Interfaces\IVerifySpecification.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageData.cs" />
@@ -153,8 +159,11 @@
     </Compile>
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
+    <Compile Include="Parsers\Number\Model\NumberSeparator.cs" />
+    <Compile Include="Parsers\Number\Model\NumberToken.cs" />
     <Compile Include="Model\HindiNumberModel.cs" />
     <Compile Include="Model\NormalizedNumber.cs" />
+    <Compile Include="Parsers\Number\Model\NumberPart.cs" />
     <Compile Include="Model\SeparatorModel.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
@@ -186,6 +195,7 @@
     <Compile Include="Processors\LocalizationProcessors\TargetDecimalRequireLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\TargetThousandRequireLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\ThousandAllowLocalizationExtractProcessor.cs" />
+    <Compile Include="Parsers\Number\NumberParser.cs" />
     <Compile Include="Processors\SkipTheDashProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\DecimalPreventLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\ThousandPreventLocalizationExtractProcessor.cs" />
@@ -224,6 +234,7 @@
     <Compile Include="TellMe\NumVerifierCommunityWikiAction.cs" />
     <Compile Include="TellMe\NumVerifierStoreAction.cs" />
     <Compile Include="TextGenerator.cs" />
+    <Compile Include="Processors\NumberFormatVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\NumberVerifierHelp.resx">
@@ -231,6 +242,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\NumberVerifierUI.resx">
       <DependentUpon>NumberVerifierUI.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageUI\NumberVerifierMessageUI.resx">
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>

@@ -168,12 +168,12 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			if (result.Cancelled)
 			{
 				tm.IsSelected = false;
-				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
+				MessageBox.Show(StringResources.Process_cancelled_by_user, PluginResources.ProductName);
 			}
 			if (result.OperationFailed)
 			{
 				tm.IsSelected = false;
-				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, Application.ProductName);
+				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, PluginResources.ProductName);
 			}
 			else
 			{
@@ -262,11 +262,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 			if (result.Cancelled)
 			{
-				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
+				MessageBox.Show(StringResources.Process_cancelled_by_user, PluginResources.ProductName);
 			}
 			if (result.OperationFailed)
 			{
-				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, Application.ProductName);
+				MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, PluginResources.ProductName);
 			}
 
 			Refresh();
@@ -375,7 +375,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 					}
 
 					_excelImportExportService.ExportUsers(fileDialog.FileName, selectedUsers);
-					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 					if (SelectedItem != null && File.Exists(fileDialog.FileName))
 					{
@@ -385,7 +385,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 

@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Rws.MultiSelectComboBox">
+      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
@@ -418,9 +421,6 @@
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>16.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Sdl.MultiSelectComboBox">
-      <Version>1.0.18</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="SdlCommunity.snk" />
@@ -437,6 +437,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
     <EmbeddedResource Include="Resources\TranscreateFinalReport.xsl" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\Report.png" />

@@ -430,7 +430,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					ActiveAccountId = LanguageCloudIdentityApi.ActiveAccountId,
 					ActiveUserId = LanguageCloudIdentityApi.ActiveUserId,
 					ActiveTenantId = LanguageCloudIdentityApi.ActiveTenantId,
-					ApiKey = LanguageCloudIdentityApi.ApiKey,
 					StudioApplicationKey = LanguageCloudIdentityApi.StudioApplicationKey,
 					StudioClientId = LanguageCloudIdentityApi.StudioClientId,
 					AccountName = LanguageCloudIdentityApi.LanguageCloudCredential?.AccountName,

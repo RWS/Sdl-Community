@@ -1,5 +1,5 @@
 ﻿using System;
-using Sdl.MultiSelectComboBox.API;
+using Rws.MultiSelectComboBox.API;
 using Trados.Transcreate.Model;
 
 namespace Trados.Transcreate.Service

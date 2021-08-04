@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro">
@@ -64,6 +66,12 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -120,26 +128,24 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeeplApplicationInitializer.cs" />
-    <Compile Include="DeepLMtTranslationProvider.cs" />
-    <Compile Include="DeepLMtTranslationProviderFactory.cs" />
-    <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
-    <Compile Include="DeepLMtTranslationProviderWinFormsUI.cs" />
+    <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
+    <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
+    <Compile Include="Studio\DeepLMtTranslationProviderLanguageDirection.cs" />
+    <Compile Include="Studio\DeepLMtTranslationProviderWinFormsUI.cs" />
     <Compile Include="DeepLTellMe\DeepLCommunitySupportAction.cs" />
     <Compile Include="DeepLTellMe\DeepLContactAction.cs" />
     <Compile Include="DeepLTellMe\DeepLHelpAction.cs" />
     <Compile Include="DeepLTellMe\DeepLSettingsAction.cs" />
     <Compile Include="DeepLTellMe\DeepLStoreAction.cs" />
     <Compile Include="DeepLTellMe\DeepLTellMeProvider.cs" />
-    <Compile Include="DeepLTranslationProviderConnecter.cs" />
-    <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Studio\DeepLTranslationProviderConnecter.cs" />
+    <Compile Include="Helpers\DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Model\DeepLTag.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\TranslationDetails.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
-    <Compile Include="NormalizeSourceTextHelper.cs" />
+    <Compile Include="Helpers\NormalizeSourceTextHelper.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,7 +158,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="AppInitializer.cs" />
+    <Compile Include="UI\DeepLWindow.xaml.cs">
+      <DependentUpon>DeepLWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Log.cs" />
+    <Compile Include="Model\DeepLTranslationOptions.cs" />
+    <Compile Include="Model\Formality.cs" />
+    <Compile Include="UI\UiHelpers\WindowsControl.xaml.cs">
+      <DependentUpon>WindowsControl.xaml</DependentUpon>
+    </Compile>
     <None Include="app.config" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
@@ -163,12 +179,13 @@
     <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\deepLIcon.ico" />
     <EmbeddedResource Include="Resources\DeepL.ico" />
-    <EmbeddedResource Include="Resources\deepLResized.png" />
+    <Resource Include="Resources\deepLResized.png" />
     <EmbeddedResource Include="Resources\deepL_logo_new.png" />
     <EmbeddedResource Include="Resources\DeepL.png" />
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
@@ -177,12 +194,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.DeepLMTProvider.WPF\Sdl.Community.DeepLMTProvider.WPF.csproj">
-      <Project>{b645e128-286d-49e4-bc45-8ec319ab9cae}</Project>
-      <Name>Sdl.Community.DeepLMTProvider.WPF</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -200,6 +211,37 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.4.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="UI\DeepLWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\ButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\General.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\TextBlockStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\WindowsBorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\WindowsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

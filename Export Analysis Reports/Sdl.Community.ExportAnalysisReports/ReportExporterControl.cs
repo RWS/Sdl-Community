@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using NLog;
+using Sdl.Community.ExportAnalysisReports.Controls;
 using Sdl.Community.ExportAnalysisReports.Helpers;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
@@ -18,6 +20,7 @@ namespace Sdl.Community.ExportAnalysisReports
 	public partial class ReportExporterControl : Form
 	{
 		private readonly BindingList<LanguageDetails> _languages = new BindingList<LanguageDetails>();
+		private readonly SettingsService _settingsService;
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IReportService _reportService;
 		private readonly IProjectService _projectService;
@@ -28,22 +31,15 @@ namespace Sdl.Community.ExportAnalysisReports
 		private bool _isStatusChanged;
 		private OptionalInformation _optionalInformation;
 		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public ReportExporterControl()
+		public ReportExporterControl(List<string> studioProjectsPaths, SettingsService settingsService,
+			IProjectService projectService, IMessageBoxService messageBoxService, IReportService reportService)
 		{
-			_messageBoxService = new MessageBoxService();
-			_projectService = new ProjectService();
-			_reportService = new ReportService(_messageBoxService, _projectService);
-
-			InitializeComponent();
-			InitializeSettings();
-		}
-
-		public ReportExporterControl(List<string> studioProjectsPaths)
-		{
-			_messageBoxService = new MessageBoxService();
-			_projectService = new ProjectService();
-			_reportService = new ReportService(_messageBoxService, _projectService);
+			_settingsService = settingsService;
+			_projectService = projectService;
+			_messageBoxService = messageBoxService;
+			_reportService = reportService;
 
 			InitializeComponent();
 			InitializeSettings(studioProjectsPaths);
@@ -77,7 +73,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"languagesListBox_SelectedIndexChanged_1 method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"languagesListBox_SelectedIndexChanged_1 method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -145,7 +141,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"chkBox_SelectAllLanguages_CheckedChanged method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"chkBox_SelectAllLanguages_CheckedChanged method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -232,7 +228,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception exception)
 			{
-				Log.Logger.Error($"copyBtn_Click method: {exception.Message}\n {exception.StackTrace}");
+				_logger.Error($"copyBtn_Click method: {exception.Message}\n {exception.StackTrace}");
 				throw;
 			}
 		}
@@ -248,7 +244,9 @@ namespace Sdl.Community.ExportAnalysisReports
 			if (!isSamePath)
 			{
 				// Save the new selected export folder path if it was changed by the user
-				_reportService.SaveExportPath(reportOutputPath.Text);
+				var settings = _settingsService.GetSettings();
+				settings.ExportPath = reportOutputPath.Text;
+				_settingsService.SaveSettings(settings);
 			}
 
 			GenerateReport();
@@ -331,7 +329,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			includeHeaderCheck.Checked = true;
 			_allStudioProjectsDetails = new List<ProjectDetails>();
 			LoadProjectsList(_projectService.ProjectsXmlPath, studioProjectsPaths);
-			reportOutputPath.Text = _reportService.GetJsonReportPath(_reportService.JsonPath);
+			reportOutputPath.Text = _settingsService.GetSettings().ExportPath;
 			targetBtn.Enabled = !IsNullOrEmpty(reportOutputPath.Text);
 			_optionalInformation = SetOptionalInformation();
 			projectStatusComboBox.SelectedIndex = 0;
@@ -371,7 +369,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"languagesListBox_ItemCheck method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"languagesListBox_ItemCheck method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -396,7 +394,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"languagesListBox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"languagesListBox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -430,7 +428,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"loadBtn_Click method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"loadBtn_Click method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -444,32 +442,75 @@ namespace Sdl.Community.ExportAnalysisReports
 			{
 				var projectXmlDocument = new XmlDocument();
 				var filePathNames = _projectService.AddFilePaths(studioProjectsPaths);
-
 				if (!IsNullOrEmpty(projectXmlPath))
 				{
+					var projectsWithoutAnalysis = new List<string>();
 					projectXmlDocument.Load(projectXmlPath);
 
 					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
-					if (projectsNodeList == null) return;
-					foreach (var item in projectsNodeList)
+					if (projectsNodeList == null)
 					{
-						var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
-						if (projectInfo?.Attributes != null)
+						return;
+					}
+
+					var studioProjects = _projectService.GetSelectedStudioProjects();
+
+					foreach (XmlNode xmlNode in projectsNodeList)
+					{
+						var projectId = GetAttributeValue(xmlNode, "Guid");
+						var projectInfo = studioProjects.FirstOrDefault(a => a.GetProjectInfo()?.Id.ToString() == projectId)?.GetProjectInfo();
+						if (projectInfo == null)
 						{
-							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath);
+							continue;
+						}
+
+						var reportsFolderPath = Path.Combine(projectInfo.LocalProjectFolder, "Reports");
+						var projectInfoNode = xmlNode.SelectSingleNode("./ProjectInfo");
+						if (projectInfoNode?.Attributes != null)
+						{
+							var reportExist = _reportService.ReportFolderExist(xmlNode, _projectService.ProjectsXmlPath);
 							if (reportExist)
 							{
-								SetProjectDetails(projectInfo, (XmlNode)item, filePathNames);
+								SetProjectDetails(reportsFolderPath, projectInfoNode, xmlNode, filePathNames);
+							}
+							else
+							{
+								projectsWithoutAnalysis.Add(projectInfo.Name);
 							}
 						}
 					}
+
 					SetProjectDataSource();
+
+					if (projectsWithoutAnalysis.Count > 0 && !_settingsService.GetSettings().DontShowInfoMessage)
+					{
+						var messageBox = new InformationMessage(_settingsService, projectsWithoutAnalysis);
+						messageBox.ShowDialog();
+					}
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"LoadProjectsList method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"LoadProjectsList method: {ex.Message}\n {ex.StackTrace}");
 			}
+		}
+
+		private static string GetAttributeValue(XmlNode xmlNode, string name)
+		{
+			if (xmlNode.Attributes != null)
+			{
+				foreach (XmlAttribute attribute in xmlNode.Attributes)
+				{
+					if (attribute.Name != name)
+					{
+						continue;
+					}
+
+					return attribute.Value;
+				}
+			}
+
+			return null;
 		}
 
 		// Load all single file projects from projects.xml file inside UI's list
@@ -477,11 +518,11 @@ namespace Sdl.Community.ExportAnalysisReports
 		{
 			try
 			{
+
 				var projectXmlDocument = new XmlDocument();
 				if (!IsNullOrEmpty(projectXmlPath))
 				{
 					projectXmlDocument.Load(projectXmlPath);
-
 					var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
 					if (projectsNodeList == null) return;
 					foreach (var item in projectsNodeList)
@@ -492,7 +533,7 @@ namespace Sdl.Community.ExportAnalysisReports
 							var reportExist = _reportService.ReportFolderExist((XmlNode)item, _projectService.ProjectsXmlPath);
 							if (reportExist)
 							{
-								var projectDetails = _projectService.CreateProjectDetails((XmlNode)item, true, _reportService.ReportsFolderPath);
+								var projectDetails = _projectService.CreateProjectDetails((XmlNode)item, true, _settingsService.GetSettings().ExportPath);
 								if (!_projectsDataSource.Any(p => p.ProjectName.Equals(projectDetails.ProjectName)))
 								{
 									if (chkBox_SelectAllProjects.Checked)
@@ -509,7 +550,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"LoadSingleFileProjects method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"LoadSingleFileProjects method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -546,7 +587,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"PrepareProjectToExport method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"PrepareProjectToExport method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -580,7 +621,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"projectStatusComboBox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"projectStatusComboBox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -618,7 +659,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"projListbox_ItemCheck method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"projListbox_ItemCheck method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -646,7 +687,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"projListbox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"projListbox_SelectedIndexChanged method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -668,7 +709,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"RefreshLanguageListbox method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"RefreshLanguageListbox method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -717,6 +758,10 @@ namespace Sdl.Community.ExportAnalysisReports
 			var reportPath = ((TextBox)sender).Text;
 			if (!IsNullOrWhiteSpace(reportPath))
 			{
+				var settings = _settingsService.GetSettings();
+				settings.ExportPath = reportOutputPath.Text;
+				_settingsService.SaveSettings(settings);
+
 				targetBtn.Enabled = true;
 			}
 
@@ -729,9 +774,13 @@ namespace Sdl.Community.ExportAnalysisReports
 		private void ReportOutputPath_TextChanged(object sender, EventArgs e)
 		{
 			var selectedOutputPath = ((TextBox)sender).Text;
+
 			if (!IsNullOrEmpty(selectedOutputPath))
 			{
-				reportOutputPath.Text = selectedOutputPath;
+				var settings = _settingsService.GetSettings();
+				settings.ExportPath = reportOutputPath.Text;
+				_settingsService.SaveSettings(settings);
+
 				targetBtn.Enabled = true;
 			}
 			else
@@ -770,7 +819,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"selectAllProjects_CheckedChanged method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"selectAllProjects_CheckedChanged method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -794,7 +843,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetLanguageCheckedState method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetLanguageCheckedState method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -809,6 +858,12 @@ namespace Sdl.Community.ExportAnalysisReports
 				{
 					foreach (var language in selectedProjectToExport.ProjectLanguages.ToList())
 					{
+						var languageReportExists = LanguageReportExists(selectedProject, language.Key);
+						if (!languageReportExists)
+						{
+							continue;
+						}
+
 						var languageDetails = _languages?.FirstOrDefault(n => n.LanguageName.Equals(language.Key));
 						if (languageDetails == null)
 						{
@@ -824,7 +879,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"AddNewLanguages method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"AddNewLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -848,7 +903,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetNewProjectLanguage method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetNewProjectLanguage method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -872,11 +927,12 @@ namespace Sdl.Community.ExportAnalysisReports
 			projListbox.DisplayMember = "ProjectName";
 		}
 
-		private void SetProjectDetails(XmlNode item, bool isSingleFileProject)
+		private void SetProjectDetails(string reportsFolderPath, XmlNode item, bool isSingleFileProject)
 		{
 			try
 			{
-				var projectDetails = _projectService.CreateProjectDetails(item, isSingleFileProject, _reportService.ReportsFolderPath);
+
+				var projectDetails = _projectService.CreateProjectDetails(item, isSingleFileProject, reportsFolderPath);
 				if (projectDetails != null)
 				{
 					_projectsDataSource.Add(projectDetails);
@@ -885,28 +941,28 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectDetails method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectDetails method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
-		private void SetProjectDetails(XmlNode projectInfo, XmlNode item, List<string> filePathNames)
+		private void SetProjectDetails(string reportsFolderPath, XmlNode projectInfoNode, XmlNode item, List<string> filePathNames)
 		{
-			if (projectInfo?.Attributes != null)
+			if (projectInfoNode?.Attributes != null)
 			{
 				var xmlAttributeCollection = item?.Attributes;
 				if (xmlAttributeCollection != null)
 				{
 					var projFileName = Path.GetFileName(xmlAttributeCollection["ProjectFilePath"]?.Value);
 					var projPath = filePathNames.FirstOrDefault(p => p.Equals(projFileName));
-					if (projectInfo.Attributes["IsInPlace"].Value.Equals("true") && !IsNullOrEmpty(projPath))
+					if (projectInfoNode.Attributes["IsInPlace"].Value.Equals("true") && !IsNullOrEmpty(projPath))
 					{
 						// Include the selected single file project ONLY when user selects it within Projects view -> right click -> Export Analysis Reports
-						SetProjectDetails(item, true);
+						SetProjectDetails(reportsFolderPath, item, true);
 					}
-					else if (projectInfo.Attributes["IsInPlace"].Value.Equals("false"))
+					else if (projectInfoNode.Attributes["IsInPlace"].Value.Equals("false"))
 					{
 						// Include all projects that are not single file project
-						SetProjectDetails(item, false);
+						SetProjectDetails(reportsFolderPath, item, false);
 					}
 				}
 			}
@@ -938,7 +994,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectsBasedOnStatus method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectsBasedOnStatus method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return projectsDetails;
@@ -956,7 +1012,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectsInformation method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectsInformation method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -990,7 +1046,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ShouldUnselectLanguages method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ShouldUnselectLanguages method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 		private void TargetBtn_Click(object sender, EventArgs e)
@@ -1079,6 +1135,12 @@ namespace Sdl.Community.ExportAnalysisReports
 			var projectsToBeExported = _projectsDataSource.Where(n => n.ProjectLanguages.ContainsKey(languageName) && n.ShouldBeExported).ToList();
 			foreach (var project in projectsToBeExported)
 			{
+				var languageReportExists = LanguageReportExists(project, languageName);
+				if (!languageReportExists)
+				{
+					continue;
+				}
+
 				var languageShouldBeExported = project.ProjectLanguages[languageName];
 				if (languageShouldBeExported)
 				{
@@ -1095,6 +1157,17 @@ namespace Sdl.Community.ExportAnalysisReports
 					_languages.Remove(languageToBeDeleted);
 				}
 			}
+		}
+
+		private static bool LanguageReportExists(ProjectDetails project, string languageName)
+		{
+			if (!project.LanguageAnalysisReportPaths.ContainsKey(languageName))
+			{
+				return false;
+			}
+
+			var languageReports = project.LanguageAnalysisReportPaths.Where(a => a.Key == languageName);
+			return languageReports.Any(languageReport => !IsNullOrEmpty(languageReport.Value) && File.Exists(languageReport.Value));
 		}
 
 		// Set the projects languages

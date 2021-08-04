@@ -22,7 +22,7 @@ namespace Sdl.Community.InSource
 {
 	[View(
 		Id = "InSourceView",
-		Name = "InSource!",
+		Name = "Trados InSource!",
 		Description = "Create projects from project request content",
 		Icon = "InSource_large",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]

@@ -233,7 +233,6 @@
     <Compile Include="EditCollection.cs" />
     <Compile Include="GoogleApi\GoogleV3Connecter.cs" />
     <Compile Include="Helpers\AssemblyResolver.cs" />
-    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
@@ -266,12 +265,6 @@
       <DependentUpon>MtProviderConfDialogResources.resx</DependentUpon>
     </Compile>
     <Compile Include="GoogleApi\MtTranslationProviderGTApiConnecter.cs" />
-    <Compile Include="MtProviderConfDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MtProviderConfDialog.Designer.cs">
-      <DependentUpon>MtProviderConfDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="MtTranslationOptions.cs" />
     <Compile Include="MtTranslationProvider.cs" />
     <Compile Include="MtTranslationProviderElementVisitor.cs" />
@@ -379,10 +372,6 @@
     </BootstrapperPackage>
   </ItemGroup>-->
   <ItemGroup>
-    <EmbeddedResource Include="MtProviderConfDialog.resx">
-      <DependentUpon>MtProviderConfDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="MtProviderConfDialogResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MtProviderConfDialogResources.Designer.cs</LastGenOutput>

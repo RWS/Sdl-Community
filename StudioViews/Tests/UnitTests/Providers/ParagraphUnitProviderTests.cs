@@ -142,7 +142,7 @@ namespace UnitTests.Providers
 			Assert.Equal("1 a", alignments[1].SegmentId);
 			Assert.Equal("1 b", alignments[2].SegmentId);
 
-			// verify that the expected alignment types
+			// verify the expected alignment types
 			Assert.Equal(AlignmentInfo.AlignmentType.Removed, alignments[0].Alignment);
 			Assert.Equal(AlignmentInfo.AlignmentType.Added, alignments[1].Alignment);
 			Assert.Equal(AlignmentInfo.AlignmentType.Added, alignments[2].Alignment);
@@ -172,7 +172,7 @@ namespace UnitTests.Providers
 			Assert.Equal("1 a", alignments[0].SegmentId);
 			Assert.Equal("1 b", alignments[1].SegmentId);
 
-			// verify that the expected alignment types
+			// verify the expected alignment types
 			Assert.Equal(AlignmentInfo.AlignmentType.Matched, alignments[0].Alignment);
 			Assert.Equal(AlignmentInfo.AlignmentType.Removed, alignments[1].Alignment);
 		}
@@ -215,7 +215,7 @@ namespace UnitTests.Providers
 			Assert.Equal("2 b", alignments[5].SegmentId);
 			Assert.Equal("3", alignments[6].SegmentId);
 
-			// verify that the expected alignment types
+			// verify the expected alignment types
 			Assert.Equal(AlignmentInfo.AlignmentType.Matched, alignments[0].Alignment);
 			Assert.Equal(AlignmentInfo.AlignmentType.Removed, alignments[1].Alignment);
 			Assert.Equal(AlignmentInfo.AlignmentType.Removed, alignments[2].Alignment);
@@ -246,7 +246,7 @@ namespace UnitTests.Providers
 			// verify that the expected segment ids exist and in the correct order
 			Assert.Equal("1", alignments[0].SegmentId);
 
-			// verify that the expected alignment types
+			// verify the expected alignment types
 			Assert.Equal(AlignmentInfo.AlignmentType.Matched, alignments[0].Alignment);
 		}
 	}

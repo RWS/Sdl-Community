@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Sdl.MultiSelectComboBox.API;
+using Rws.MultiSelectComboBox.API;
 
 namespace Trados.Transcreate.Model
 {

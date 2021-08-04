@@ -49,7 +49,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates
 		/// <summary>
 		/// file types that can be processed by current task
 		/// key - filter, value - description
-		/// e.g. key - "*.sdltm", value - "SDL Translation Memory files"
+		/// e.g. key - "*.sdltm", value - "Trados Translation Memory files"
 		/// </summary>
 		public Dictionary<string, string> SupportedFileTypes
 		{

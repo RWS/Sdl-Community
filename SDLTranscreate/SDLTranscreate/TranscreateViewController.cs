@@ -623,7 +623,7 @@ namespace Trados.Transcreate
 				return false;
 			}
 
-			var projectInfo = project.GetProjectInfo();
+			var projectInfo = GetNormalizedProjectOrigin(project);
 			try
 			{
 				if (_transcreateProjects.FirstOrDefault(a => a.Id == projectInfo.Id.ToString()) != null)
@@ -639,7 +639,12 @@ namespace Trados.Transcreate
 
 				var settingsBundle = project.GetSettings();
 				var sdlTranscreateProject = settingsBundle.GetSettingsGroup<SDLTranscreateProject>();
-				var sdlBackTranslationProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
+
+				var sdlProjectFiles = DeserializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
+				if (sdlProjectFiles?.Count <= 0)
+				{
+					return false;
+				}
 
 				var xliffProject = new Project
 				{
@@ -654,11 +659,10 @@ namespace Trados.Transcreate
 					ProjectType = GetProjectType(project)
 				};
 
-				var sdlProjectFiles = SerializeProjectFiles(sdlTranscreateProject.ProjectFilesJson.Value);
 				var projectFiles = GetProjectFiles(sdlProjectFiles, xliffProject);
-
 				if (projectFiles?.Count > 0)
 				{
+					var sdlBackTranslationProjects = settingsBundle.GetSettingsGroup<SDLTranscreateBackProjects>();
 					var sdlBackTranslationProject = SerializeBackProjects(sdlBackTranslationProjects.BackProjectsJson.Value);
 					var backProjects = GetBackProjects(projectInfo.LocalProjectFolder, sdlBackTranslationProject);
 
@@ -683,6 +687,23 @@ namespace Trados.Transcreate
 			}
 
 			return false;
+		}
+
+		private ProjectInfo GetNormalizedProjectOrigin(FileBasedProject project)
+		{
+			var projectInfo = project.GetProjectInfo();
+			if (projectInfo.ProjectOrigin == "Transcreate Project")
+			{
+				// required to force studio to recognize a 'case' difference.
+				projectInfo.ProjectOrigin = string.Empty;
+				project.UpdateProject(projectInfo);
+				
+				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject;
+				project.UpdateProject(projectInfo);
+				project.Save();
+			}
+
+			return projectInfo;
 		}
 
 		private List<ProjectFile> GetProjectFiles(IReadOnlyCollection<SDLTranscreateProjectFile> sdlProjectFiles, IProject project)
@@ -948,7 +969,7 @@ namespace Trados.Transcreate
 			return null;
 		}
 
-		private List<SDLTranscreateProjectFile> SerializeProjectFiles(string value)
+		private List<SDLTranscreateProjectFile> DeserializeProjectFiles(string value)
 		{
 			try
 			{
@@ -1294,7 +1315,7 @@ namespace Trados.Transcreate
 						if (projectTargetFileActivity != null && (projectTargetFileActivity.Action == Enumerators.Action.Export ||
 							projectTargetFileActivity.Action == Enumerators.Action.ExportBackTranslation))
 						{
-							
+
 							if (sdlxliffWriter.ConfirmationStatistics?.WordCounts?.Processed?.Count <= 0)
 							{
 								RemovePreviousProjectFileActivity(projectTargetFile, projectTargetFileActivity);
@@ -1599,25 +1620,28 @@ namespace Trados.Transcreate
 
 			if (e.SelectedProject != null && _projectAutomationService != null)
 			{
-				if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
+				lock (_lockObject)
 				{
-					var fileBasedProject = _projectsController.GetProjects()
-						.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
-
-					if (fileBasedProject != null)
+					if (_projectsController.CurrentProject?.GetProjectInfo().Id.ToString() != e.SelectedProject.Id)
 					{
-						try
-						{
-							lock (_lockObject)
-							{
-								_projectAutomationService.ActivateProject(fileBasedProject);
-							}
+						var fileBasedProject = _projectsController.GetProjects()
+							.FirstOrDefault(a => a.GetProjectInfo().Id.ToString() == e.SelectedProject.Id);
 
-							_projectsController.SelectedProjects = new[] { fileBasedProject };
-						}
-						catch
+						if (fileBasedProject != null)
 						{
-							//ignore
+							try
+							{
+								lock (_lockObject)
+								{
+									_projectAutomationService.ActivateProject(fileBasedProject);
+								}
+
+								_projectsController.SelectedProjects = new[] {fileBasedProject};
+							}
+							catch
+							{
+								//ignore
+							}
 						}
 					}
 				}
@@ -1651,10 +1675,18 @@ namespace Trados.Transcreate
 			if (updated || updatedProjectSelection)
 			{
 				_projectsNavigationViewModel.Projects = _transcreateProjects;
-
+				if (_projectsController?.CurrentProject == null)
+				{
+					return;
+				}
+				
 				lock (_lockObject)
 				{
-					var iconPath = _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+					var projectInfo = GetNormalizedProjectOrigin(_projectsController?.CurrentProject);
+					var iconPath = _projectAutomationService.IsBackTranslationProject(projectInfo?.ProjectOrigin)
+						? _projectAutomationService.GetBackTranslationIconPath(_pathInfo)
+						: _projectAutomationService.GetTranscreateIconPath(_pathInfo);
+
 					_projectAutomationService?.UpdateProjectIcon(_projectsController?.CurrentProject, iconPath);
 				}
 			}

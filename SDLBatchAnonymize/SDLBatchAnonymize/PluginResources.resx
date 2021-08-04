@@ -167,7 +167,7 @@
     <value>Anonymizer settings</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDLBatchAnonymize</value>
+    <value>Trados Batch Anonymizer</value>
   </data>
   <data name="ProviderNameToolTip" xml:space="preserve">
     <value>This allows you to specify the name of the Translation Memory used. It will be applied to Machine Translation or Translation Memory results depending on the options selected in the Anonymizer settings</value>
@@ -221,6 +221,15 @@
     <value>Remove MT Cloud quality estimation from the metadata of the segments</value>
   </data>
   <data name="MTCloudMetadata_GroupBoxHeader" xml:space="preserve">
-	  <value>Machine Translation Cloud Metadata</value>
+    <value>Machine Translation Cloud Metadata</value>
+  </data>
+  <data name="AppStoreFolder" xml:space="preserve">
+    <value>RWS AppStore</value>
+  </data>
+  <data name="LogMessage_BatchTaskStarted" xml:space="preserve">
+	  <value>Batch task started...</value>
+  </data>
+  <data name="LogMessage_BackingUpProject" xml:space="preserve">
+	  <value>Backing up project...</value>
   </data>
 </root>

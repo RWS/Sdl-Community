@@ -22,17 +22,9 @@ write-output "CertFile: $CertFile"
 
 attrib -r "$fileToSign"
 
-write-output "load plugin framework from nuget cache"
+#set the outputpath variable in the pipeline
 
-$Plugins = Resolve-Path -Path "$env:userprofile\.nuget\packages\sdl.core.pluginframework\*\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll" | Sort-Object Path –Descending
-
-write-output "plugin assemblies found:" + $Plugins.Count
-
-write-output $Plugins
-write-output ""
-
-$pluginpath = $Plugins[0].Path
-
+$pluginpath = "$env:outputpath\Sdl.Core.PluginFramework.PackageSupport.dll"
 write-output "trying $pluginpath"
 
 [Reflection.Assembly]::LoadFile($pluginpath)

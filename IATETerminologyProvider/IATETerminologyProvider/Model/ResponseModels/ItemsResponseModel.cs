@@ -9,10 +9,16 @@ namespace Sdl.Community.IATETerminologyProvider.Model.ResponseModels
 
 		[JsonProperty("eurovoc_code	")]
 		public string EurovocCode { get; set; }
+		
 		public string Name { get; set; }
+		
 		public string Level { get; set; }
+		
 		public List<SubdomainsResponseModel> Subdomains { get; set; }
+		
 		public List<TermsDomainResponseModel> Domains { get; set; }
+		
 		public string Id { get; set; }
+		public bool? Deprecated { get; set; }
 	}
 }

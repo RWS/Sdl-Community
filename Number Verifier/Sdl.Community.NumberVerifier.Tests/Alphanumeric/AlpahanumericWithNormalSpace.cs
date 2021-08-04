@@ -68,7 +68,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 			return textAlphanumericsList.Item2;
 		}
 
-		// To Do: mock somehow in GetAlphanumericList() method the customs separators retrieved in _verificationSettings.GetAlphanumericsCustomSeparator
+		// To Do: mock somehow in GetAlphanumericList() method the customs separators retrieved in _verificationSettings.AlphanumericsCustomSeparator
 		[Theory]
 		[InlineData("*BB-1254AE word")]
 		public List<string> AlphanumericCustomsSeparators(string text)

@@ -128,7 +128,7 @@
     <value>Checks whether numbers in the target segment are identical to those in the source segment.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL Number Verifier</value>
+    <value>Trados Number Verifier</value>
   </data>
   <data name="Setting_Description" xml:space="preserve">
     <value>Verification settings for numbers</value>
@@ -175,5 +175,23 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   </data>
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NumberParser_Message_SeparatorIsNotRecognized" xml:space="preserve">
+	  <value>Separator is not recognized: {0}</value>
+  </data>
+  <data name="NumberParser_Message_MixedGroupSeparators" xml:space="preserve">
+	  <value>Mixed group separators: {0}{1}</value>
+  </data>
+  <data name="NumberParser_Message_InvalidGroupSeparator" xml:space="preserve">
+	  <value>Invalid group separator: {0}</value>
+  </data>
+  <data name="NumberParser_Message_InvalidSeparatorLocation" xml:space="preserve">
+	  <value>Invalid separator location</value>
+  </data>
+  <data name="NumberParser_Message_TheGroupValidIsOutOfRange" xml:space="preserve">
+	  <value>The group value is out of range: {0}</value>
+  </data>
+  <data name="NumberParser_Message_LastCharIsNotANumber" xml:space="preserve">
+	  <value>The last char is not a number</value>
   </data>
 </root>

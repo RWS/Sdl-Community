@@ -91,6 +91,15 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to locate the xml file: {0}.
+        /// </summary>
+        internal static string ErrorMessage_UnableToLocateXmlFile {
+            get {
+                return ResourceManager.GetString("ErrorMessage_UnableToLocateXmlFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group Name.
         /// </summary>
         internal static string GroupType_GroupName {
@@ -417,6 +426,15 @@ namespace Sdl.Community.Reports.Viewer {
         internal static string ReportsViewer_SaveAsReport_Name {
             get {
                 return ResourceManager.GetString("ReportsViewer_SaveAsReport_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Report As....
+        /// </summary>
+        internal static string ReportsViewer_SaveReportAs {
+            get {
+                return ResourceManager.GetString("ReportsViewer_SaveReportAs", resourceCulture);
             }
         }
         

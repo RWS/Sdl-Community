@@ -8,7 +8,7 @@ namespace Sdl.Community.WordCloud.Plugin
 {
     [ViewPart(
        Id = "CodingBreeze.WordCloud.ProjectsViewPart",
-       Name = "Word Cloud",
+       Name = "Trados Studio Word Cloud",
        Description = "Show contents of the project in a word cloud.",
        Icon = "wordcloud")]
     [ViewPartLayout(Dock = DockType.Bottom, LocationByType = typeof(ProjectsController))]

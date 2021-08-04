@@ -223,7 +223,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert Transcreate Project Files.
+        ///   Looks up a localized string similar to Convert Transcreate project files.
         /// </summary>
         internal static string JobProcess_ConvertTranscreateProjectFiles {
             get {
@@ -241,7 +241,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Transcreate Project.
+        ///   Looks up a localized string similar to Create Transcreate project.
         /// </summary>
         internal static string JobProcess_CreateTranscreateProject {
             get {
@@ -1493,7 +1493,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
+        ///   Looks up a localized string similar to Convert to Transcreate project.
         /// </summary>
         internal static string TranscreateManager_ConvertProject_Description {
             get {
@@ -1502,7 +1502,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
+        ///   Looks up a localized string similar to Convert to Transcreate project.
         /// </summary>
         internal static string TranscreateManager_ConvertProject_Name {
             get {
@@ -1511,7 +1511,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation Projects.
+        ///   Looks up a localized string similar to Create Back-Translation projects.
         /// </summary>
         internal static string TranscreateManager_CreateBackTranslationProject_Description {
             get {
@@ -1952,7 +1952,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating Back-Translation Project.
+        ///   Looks up a localized string similar to Creating Back-Translation project.
         /// </summary>
         internal static string WizardMessage_CreatingBackTranslationProject {
             get {
@@ -1961,7 +1961,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating Transcreate Project.
+        ///   Looks up a localized string similar to Creating Transcreate project.
         /// </summary>
         internal static string WizardMessage_CreatingTranscreateProject {
             get {
@@ -2060,7 +2060,7 @@ namespace Trados.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation Project.
+        ///   Looks up a localized string similar to Create Back-Translation project.
         /// </summary>
         internal static string WizardTitle_CreateBackTranslationProject {
             get {

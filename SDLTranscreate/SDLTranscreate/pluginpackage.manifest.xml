@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Trados Transcreate</PlugInName>
-	<Version>2.0.5.8</Version>
+	<Version>2.0.8.0</Version>
 	<Description>Trados Transcreate is a plugin for Trados Studio designed to help manage the Transcreation process.</Description>
-	<Author>Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.1" />
+	<Author>RWS AppStore Team</Author>
+	<RequiredProduct name="SDLTradosStudio" minversion="16.1.5" />
 	<Include>
-		<File>Sdl.MultiSelectComboBox.dll</File>
+		<File>Rws.MultiSelectComboBox.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
 	</Include>

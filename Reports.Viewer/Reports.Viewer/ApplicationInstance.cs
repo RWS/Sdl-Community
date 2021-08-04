@@ -34,7 +34,7 @@ namespace Sdl.Community.Reports.Viewer
 		{
 			if (Application.Current == null)
 			{
-				// initialize the enviornments application instance
+				// initialize the environments application instance
 				new Application();
 			}
 

@@ -239,7 +239,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 		{
 			worksheet.Cells[columnLetter + lineNumber].Value = property;
 			worksheet.Cells[columnLetter + lineNumber].Style.Fill.PatternType = ExcelFillStyle.Solid;
-			worksheet.Cells[columnLetter + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(37, 189, 89));
+			worksheet.Cells[columnLetter + lineNumber].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 0, 128, 128));
 			worksheet.Cells[columnLetter + lineNumber].Style.Font.Color.SetColor(Color.White);
 			worksheet.Cells[columnLetter + lineNumber].Style.Font.Name = "Sommet Rounded";
 		}

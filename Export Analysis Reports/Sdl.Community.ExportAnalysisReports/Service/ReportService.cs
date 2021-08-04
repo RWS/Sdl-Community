@@ -7,8 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using Newtonsoft.Json;
-using Sdl.Community.ExportAnalysisReports.Helpers;
+using NLog;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.ProjectAutomation.Core;
@@ -17,21 +16,19 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 {
 	public class ReportService : IReportService
 	{
-		public static readonly Log Log = Log.Instance;
-		private readonly string _communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "ExportAnalysisReports");
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IMessageBoxService _messageBoxService;
 		private readonly IProjectService _projectService;
+		private readonly SettingsService _settingsService;
 		private string _reportFile;
 		private IEnumerable<AnalyzedFile> _analyzedFiles;
 
-		public ReportService(IMessageBoxService messageBoxService, IProjectService projectService)
+		public ReportService(IMessageBoxService messageBoxService, IProjectService projectService, SettingsService settingsService)
 		{
 			_messageBoxService = messageBoxService;
 			_projectService = projectService;
+			_settingsService = settingsService;
 		}
-
-		public string JsonPath => Path.Combine(_communityFolderPath, "ExportAnalysisReportSettings.json");
-		public string ReportsFolderPath { get; set; }
 
 
 		/// <summary>
@@ -59,8 +56,12 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 						foreach (var languageReport in checkedLanguages)
 						{
-							project.ReportPath = reportOutputPath;
-							WriteReportFile(project, optionalInformation, languageReport, isChecked);
+							var reportPath = project.LanguageAnalysisReportPaths.FirstOrDefault(l => l.Key.Equals(languageReport.Key));
+							if (!string.IsNullOrEmpty(reportPath.Value) && File.Exists(reportPath.Value))
+							{
+								project.ReportPath = reportOutputPath;
+								WriteReportFile(project, optionalInformation, languageReport, isChecked);
+							}
 						}
 					}
 					return true;
@@ -70,35 +71,9 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception exception)
 			{
-				Log.Logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
+				_logger.Error($"GenerateReport method: {exception.Message}\n {exception.StackTrace}");
 				throw;
 			}
-		}
-
-		/// <summary>
-		/// Get report output path from Json file
-		/// </summary>
-		/// <param name="jsonPath"></param>
-		/// <returns></returns>
-		public string GetJsonReportPath(string jsonPath)
-		{
-			try
-			{
-				if (!File.Exists(jsonPath)) return string.Empty;
-				JsonSettings item;
-				using (var r = new StreamReader(jsonPath))
-				{
-					var json = r.ReadToEnd();
-					item = JsonConvert.DeserializeObject<JsonSettings>(json);					
-				}
-				return item?.ExportPath ?? string.Empty;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"GetJsonReportPath method: {ex.Message}\n {ex.StackTrace}");
-			}
-
-			return string.Empty;
 		}
 
 		/// <summary>
@@ -108,7 +83,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		/// <returns></returns>
 		public bool IsSameReportPath(string reportOutputPath)
 		{
-			var jsonReportPath = GetJsonReportPath(JsonPath);
+			var jsonReportPath = _settingsService.GetSettings().ExportPath;
 			return !string.IsNullOrEmpty(jsonReportPath) && !string.IsNullOrEmpty(reportOutputPath) && jsonReportPath.Equals(reportOutputPath);
 		}
 
@@ -127,37 +102,10 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ReportFolderExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return false;
-		}
-
-		/// <summary>
-		///  Save report output path within json file
-		/// (It is saved within a json file, because it is a general path and is not related to an individual project)
-		/// </summary>
-		/// <param name="reportOutputPath"></param>
-		public void SaveExportPath(string reportOutputPath)
-		{
-			if (string.IsNullOrEmpty(reportOutputPath)) return;
-			Directory.CreateDirectory(_communityFolderPath);
-
-			var jsonExportPath = new JsonSettings { ExportPath = reportOutputPath };
-			var jsonResult = JsonConvert.SerializeObject(jsonExportPath);
-
-			if (File.Exists(JsonPath))
-			{
-				File.Delete(JsonPath);
-			}
-
-			File.Create(JsonPath).Dispose();
-
-			using (var tw = new StreamWriter(JsonPath, true))
-			{
-				tw.WriteLine(jsonResult);
-				tw.Close();
-			}
 		}
 
 		/// <summary>
@@ -172,6 +120,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				doc.Load(project.ProjectPath);
 
 				var projectInfo = _projectService.GetProjectInfo(project.ProjectPath);
+
 				project.LanguageAnalysisReportPaths?.Clear();
 
 				var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
@@ -188,14 +137,14 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 						foreach (var reportNode in reportNodes)
 						{
-							ConfigureReportDetails(project, projectInfo, (XmlNode) reportNode, doc);
+							ConfigureReportDetails(project, projectInfo, (XmlNode)reportNode, doc);
 						}
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"LoadReports method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"LoadReports method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -226,7 +175,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetExternalProjectReportInfo method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetExternalProjectReportInfo method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return externalProjInfoList;
@@ -237,12 +186,18 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			try
 			{
 				var reportsPath = Path.GetDirectoryName(pathToXmlReport);
+				if (reportsPath == null)
+				{
+					return;
+				}
+
 				var reportName = Path.GetFileName(pathToXmlReport);
 				var directoryInfo = new DirectoryInfo(reportsPath);
-				if (directoryInfo != null)
 				{
 					var fileName = Path.GetFileNameWithoutExtension(reportName);
-					var fileInfo = directoryInfo?.GetFiles()?.OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n => n.Name.StartsWith(fileName));
+					var fileInfo = directoryInfo.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault(n =>
+							n.Name.StartsWith(fileName, StringComparison.CurrentCultureIgnoreCase) &&
+							n.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase));
 					_reportFile = fileInfo != null ? fileInfo.FullName : pathToXmlReport;
 
 					if (!File.Exists(_reportFile))
@@ -276,9 +231,9 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				Log.Logger.Error($"PrepareAnalysisReport method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"PrepareAnalysisReport method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -306,7 +261,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetCsvContent method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetCsvContent method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -393,14 +348,15 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				}
 
 				headerColumns.Add("\"100% (TM)\"");
-				fuzzies.OrderByDescending(br => br.Max).ToList().ForEach(br => {
-						headerColumns.Add(string.Format("\"{0}% - {1}% (TM)\"", br.Max, br.Min));
-						headerColumns.Add(string.Format("\"{0}% - {1}% (AP)\"", br.Max, br.Min));
-						if (aditionalHeaders.IncludeInternalFuzzies)
-						{
-							headerColumns.Add(string.Format("\"{0}% - {1}% (Internal)\"", br.Max, br.Min));
-						}
-					});
+				fuzzies.OrderByDescending(br => br.Max).ToList().ForEach(br =>
+				{
+					headerColumns.Add(string.Format("\"{0}% - {1}% (TM)\"", br.Max, br.Min));
+					headerColumns.Add(string.Format("\"{0}% - {1}% (AP)\"", br.Max, br.Min));
+					if (aditionalHeaders.IncludeInternalFuzzies)
+					{
+						headerColumns.Add(string.Format("\"{0}% - {1}% (Internal)\"", br.Max, br.Min));
+					}
+				});
 
 				if (aditionalHeaders.IncludeAdaptiveBaseline)
 				{
@@ -417,7 +373,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"GetCsvHeaderRow method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"GetCsvHeaderRow method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return string.Empty;
 		}
@@ -453,12 +409,10 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 						filePath = SetExternalProjectPath(projectInfoNode, filePath);
 					}
 				}
-
-				ReportsFolderPath = filePath;
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetProjectFilePath method: {ex.Message}\n {ex.StackTrace}");
 			}
 
 			return filePath;
@@ -474,13 +428,8 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					if (files.Any(file => file.Contains("Analyze Files")))
-					{
-						return true;
-					}
-
-					_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
-					return false;
+					return files.Any(file => new FileInfo(file).Name.Contains("Analyze Files") &&
+											 file.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase));
 				}
 
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles") && Directory.Exists(reportFolderPath))
@@ -489,13 +438,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 					return !string.IsNullOrEmpty(fileName);
 				}
 
-				_messageBoxService.ShowInformationMessage(string.Format(PluginResources.ExecuteAnalyzeBatchTask_Message, fileName), PluginResources.InformativeLabel);
-
 				return false;
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ReportFileExist method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ReportFileExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
 		}
@@ -521,12 +468,17 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 						reportPath = Path.Combine(project.ReportsFolderPath, Path.GetFileName(report.Attributes["PhysicalPath"].Value));
 					}
 
+					if (!File.Exists(reportPath))
+					{
+						continue;
+					}
+
 					SetLanguageAnalysisReportPaths(projectInfo, project, langDirNode, reportPath);
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ConfigureReportDetails method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"ConfigureReportDetails method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -552,7 +504,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetLanguageAnalysisReportPaths method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetLanguageAnalysisReportPaths method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -563,7 +515,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 		}
 
 		//  Write the report file based on the Analyse file 
-		private void WriteReportFile(ProjectDetails project, OptionalInformation optionalInformation, KeyValuePair<string,bool> languageReport, bool isChecked)
+		private void WriteReportFile(ProjectDetails project, OptionalInformation optionalInformation, KeyValuePair<string, bool> languageReport, bool isChecked)
 		{
 			try
 			{
@@ -581,7 +533,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"WriteReportFile method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"WriteReportFile method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -609,7 +561,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"SetExternalProjectPath method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"SetExternalProjectPath method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return filePath;
 		}

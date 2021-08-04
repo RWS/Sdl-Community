@@ -11,7 +11,7 @@
 			set
 			{
 				_isSelected = value;
-				OnPropertyChanged(nameof(IsSelected));
+				OnPropertyChanged();
 			}
 		}
 	}

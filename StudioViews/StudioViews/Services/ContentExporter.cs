@@ -14,22 +14,23 @@ namespace Sdl.Community.StudioViews.Services
 		private readonly List<SegmentPairInfo> _selectedSegments;
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly List<string> _projectFilesFiltered;
-
+		private readonly List<string> _subSegmentParagraphUnitIds;
 		private IFileProperties _fileProperties;
 		private string _productName;
 		private SegmentPairProcessor _segmentPairProcessor;
-
+		
 		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder)
 		{
 			_selectedSegments = selectedSegments;
 			_segmentBuilder = segmentBuilder;
 
 			_projectFilesFiltered = new List<string>();
+			_subSegmentParagraphUnitIds = new List<string>();
 			SegmentPairInfos = new List<SegmentPairInfo>();
 		}
 
 		public List<SegmentPairInfo> SegmentPairInfos { get; }
-		
+
 		public CultureInfo SourceLanguage { get; private set; }
 
 		public CultureInfo TargetLanguage { get; private set; }
@@ -49,9 +50,9 @@ namespace Sdl.Community.StudioViews.Services
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-			if (paragraphUnit.IsStructure )
+			if (paragraphUnit.IsStructure)
 			{
-				
+
 				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
@@ -64,12 +65,19 @@ namespace Sdl.Community.StudioViews.Services
 			var segmentPairs = new List<ISegmentPair>();
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				if (_selectedSegments.Exists(a =>
+				if (_subSegmentParagraphUnitIds.Contains(paragraphUnit.Properties.ParagraphUnitId.Id) ||
+					_selectedSegments.Exists(a =>
 					a.ParagraphUnitId == paragraphUnit.Properties.ParagraphUnitId.Id &&
 					a.SegmentId == segmentPair.Properties.Id.Id))
 				{
 					segmentPairs.Add(segmentPair);
 
+					var subSegmentParagraphUnitIds = GetSubSegmentParagraphUnitIds(segmentPair);
+					foreach (var paragraphUnitId in subSegmentParagraphUnitIds.Where(paragraphUnitId =>
+						!_subSegmentParagraphUnitIds.Exists(a => a == paragraphUnitId)))
+					{
+						_subSegmentParagraphUnitIds.Add(paragraphUnitId);
+					}
 
 					var segmentPairInfo = new SegmentPairInfo
 					{
@@ -96,6 +104,50 @@ namespace Sdl.Community.StudioViews.Services
 			AddSegmentPairs(paragraphUnit, segmentPairs);
 		}
 
+		private static List<string> GetSubSegmentParagraphUnitIds(ISegmentPair segmentPair)
+		{
+			var paragraphUnitIds = GetSubSegmentParagraphUnitIds(segmentPair.Source);
+			foreach (var paragraphUnitId in GetSubSegmentParagraphUnitIds(segmentPair.Target))
+			{
+				if (paragraphUnitIds.Contains(paragraphUnitId))
+				{
+					continue;
+				}
+
+				paragraphUnitIds.Add(paragraphUnitId);
+			}
+
+			return paragraphUnitIds;
+		}
+
+		private static List<string> GetSubSegmentParagraphUnitIds(ISegment segment)
+		{
+			var paragraphUnitIds = new List<string>();
+			if (segment == null)
+			{
+				return paragraphUnitIds;
+			}
+
+			foreach (var item in segment)
+			{
+				if (item is ITagPair tagPair && tagPair.HasSubSegmentReferences
+											 && tagPair.StartTagProperties.HasLocalizableContent)
+				{
+					foreach (var subSegment in tagPair.SubSegments)
+					{
+						if (paragraphUnitIds.Contains(subSegment.ParagraphUnitId.Id))
+						{
+							continue;
+						}
+
+						paragraphUnitIds.Add(subSegment.ParagraphUnitId.Id);
+					}
+				}
+			}
+
+			return paragraphUnitIds;
+		}
+
 		private void AddSegmentPairs(IParagraphUnit paragraphUnit, IReadOnlyCollection<ISegmentPair> segmentPairs)
 		{
 			if (segmentPairs?.Count <= 0 || segmentPairs?.FirstOrDefault() == null)
@@ -104,7 +156,7 @@ namespace Sdl.Community.StudioViews.Services
 			}
 
 			var newParagraphUnit = _segmentBuilder.CreateParagraphUnit(paragraphUnit.Properties);
-			
+
 			foreach (var segmentPair in segmentPairs)
 			{
 				newParagraphUnit.Source.Add(segmentPair.Source.Clone() as ISegment);
@@ -120,13 +172,13 @@ namespace Sdl.Community.StudioViews.Services
 			{
 				return;
 			}
-			
+
 			if (!_projectFilesFiltered.Exists(a => a == _fileProperties.FileConversionProperties.FileId.Id))
 			{
 				base.SetFileProperties(_fileProperties);
 				_projectFilesFiltered.Add(_fileProperties.FileConversionProperties.FileId.Id);
 			}
-			
+
 			base.ProcessParagraphUnit(paragraphUnit);
 		}
 

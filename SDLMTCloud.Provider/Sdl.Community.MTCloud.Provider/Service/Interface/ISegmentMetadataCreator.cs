@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Service.Interface
@@ -7,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.Interface
 	{
 		void AddTargetSegmentMetaData(TranslationData translationData);
 
-		void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginInformation translationOriginInformation);
+		void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginDatum translationOriginDatum);
 
 		void AddToSegmentContextData();
 	}

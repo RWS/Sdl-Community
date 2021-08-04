@@ -9,7 +9,7 @@
              xmlns:converters="clr-namespace:Sdl.Community.XLIFF.Manager.Converters"
              xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export"
              xmlns:model="clr-namespace:Sdl.Community.XLIFF.Manager.Model"
-             xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:rws="http://schemas.rws.com/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:WizardPageExportFilesViewModel}">
 	<UserControl.Resources>

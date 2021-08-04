@@ -47,8 +47,8 @@ namespace Sdl.Community.Reports.Viewer
 		private BaseReportAction _addReportAction;
 		private BaseReportAction _editReportAction;
 		private BaseReportAction _openSettingsAction;
-		private BaseReportAction _pageSetupAction;
-		private BaseReportAction _printPreviewReportAction;
+		//private BaseReportAction _pageSetupAction;
+		//private BaseReportAction _printPreviewReportAction;
 		private BaseReportAction _printReportAction;
 		private BaseReportAction _refreshAction;
 		private BaseReportAction _saveAsReportAction;
@@ -61,16 +61,16 @@ namespace Sdl.Community.Reports.Viewer
 			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
 			_editReportAction = SdlTradosStudio.Application.GetAction<EditReportAction>();
 			_openSettingsAction = SdlTradosStudio.Application.GetAction<OpenSettingsAction>();
-			_pageSetupAction = SdlTradosStudio.Application.GetAction<PageSetupAction>();
-			_printPreviewReportAction = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			//_pageSetupAction = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			//_printPreviewReportAction = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
 			_printReportAction = SdlTradosStudio.Application.GetAction<PrintReportAction>();
 			_refreshAction = SdlTradosStudio.Application.GetAction<RefreshAction>();
 			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
 
 			_pathInfo = new PathInfo();
 			ReportsController = ReportsController.Instance;
-			ReportsController.ProjectChanging += Controller_ProjectChanging;
-			ReportsController.ProjectChanged += Controller_ProjectChanged;
+			ReportsController.ReportsChanging += Controller_ReportsChanging;
+			ReportsController.ReportsChanged += Controller_ReportsChanged;
 			ReportsController.ReportsAdded += Controller_ReportsAdded;
 			ReportsController.ReportsRemoved += Controller_ReportsRemoved;
 			ReportsController.ReportsUpdated += Controller_ReportsUpdated;
@@ -257,7 +257,7 @@ namespace Sdl.Community.Reports.Viewer
 				DataContext = _dataViewModel
 			};
 
-			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView);
+			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView, ReportsController.SelectedProject);
 			_reportView = new ReportView
 			{
 				DataContext = _reportViewModel
@@ -361,7 +361,7 @@ namespace Sdl.Community.Reports.Viewer
 			}
 		}
 
-		private void Controller_ProjectChanged(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangedEventArgs e)
+		private void Controller_ReportsChanged(object sender, Sdl.Reports.Viewer.API.Events.ReportsChangedEventArgs e)
 		{
 			if (_reportsNavigationViewModel != null)
 			{
@@ -373,7 +373,7 @@ namespace Sdl.Community.Reports.Viewer
 			EnableControls(false);
 		}
 
-		private void Controller_ProjectChanging(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangingEventArgs e)
+		private void Controller_ReportsChanging(object sender, Sdl.Reports.Viewer.API.Events.ReportsChangingEventArgs e)
 		{
 			EnableControls(true);
 		}
@@ -424,8 +424,8 @@ namespace Sdl.Community.Reports.Viewer
 				_removeReportAction.UpdateEnabled(isLoading);
 
 				_printReportAction.UpdateEnabled(isLoading);
-				_pageSetupAction.UpdateEnabled(isLoading);
-				_printPreviewReportAction.UpdateEnabled(isLoading);
+				//_pageSetupAction.UpdateEnabled(isLoading);
+				//_printPreviewReportAction.UpdateEnabled(isLoading);
 				_saveAsReportAction.UpdateEnabled(isLoading);
 
 				_refreshAction.UpdateEnabled(isLoading);

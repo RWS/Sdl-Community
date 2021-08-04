@@ -218,7 +218,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 			using (var httpClient = new HttpClient())
 			{
@@ -229,7 +228,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				var builder = new UriBuilder(options.Uri)
 				{
 					Path = $"/api/{options.ApiVersionString}/{path}",
-					Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps
+					Scheme = options.RequiresSecureProtocol ?   Uri.UriSchemeHttps:Uri.UriSchemeHttp
 				};
 
 				if (parameters != null)
@@ -354,7 +353,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+			
 
 			using (var httpClient = new HttpClient())
 			{
@@ -416,10 +415,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				culprit = culprit.InnerException;
 			}
 
-			if (culprit.HResult == (int)ErrorHResult.HandshakeFailure)
-			{
-				return new WebException("You are using an older version of the API that does not support username/password. Please use the API key instead.");
-			}
 			if (culprit.HResult == (int)ErrorHResult.ServerInaccessible)
 			{
 				return new WebException("Error with the server information. A connection cannot be formed. Please ensure the server information is correct.");

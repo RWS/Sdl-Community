@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using NLog;
 using Sdl.Community.SdlFreshstart.Commands;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
@@ -41,6 +41,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private string _repairForeground;
 		private ICommand _restoreCommand;
 		private MultiTermLocationListItem _selectedLocation;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService, VersionService versionService, RegistryHelper registryHelper)
 		{
@@ -413,6 +414,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 						RunRepair(selectedVersion);
 					}
 				}
+				else
+				{
+					_logger.Info($"Could not find PackageCache folder: {_packageCache}");
+				}
 			}
 			else
 			{
@@ -468,31 +473,11 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void RunRepair(MultitermVersion selectedVersion)
 		{
-			var directoriesPath = new DirectoryInfo(_packageCache)
-				.GetDirectories()
-				.Where(n => n.Name.Contains(selectedVersion.CacheFolderName))
-				.Select(n => n.FullName).ToList();
+			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(selectedVersion.ExecutableVersion, selectedVersion.CacheFolderName, false);
+			var msiName = GetMsiName(selectedVersion);
+			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
 
-			foreach (var directoryPath in directoriesPath)
-			{
-				var msiName = GetMsiName(selectedVersion);
-				var moduleDirectoryPath = Path.Combine(directoryPath, "modules");
-				if (Directory.Exists(moduleDirectoryPath))
-				{
-					var msiFile = Path.Combine(moduleDirectoryPath, msiName);
-					if (File.Exists(msiFile))
-					{
-						var process = new ProcessStartInfo
-						{
-							FileName = "msiexec",
-							WorkingDirectory = moduleDirectoryPath,
-							Arguments = "/fa " + msiName,
-							Verb = "runas"
-						};
-						Process.Start(process);
-					}
-				}
-			}
+			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
 		}
 
 		private void SetRemoveBtnColors()
