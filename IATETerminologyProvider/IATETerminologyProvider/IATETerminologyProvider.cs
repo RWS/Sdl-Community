@@ -40,10 +40,10 @@ namespace Sdl.Community.IATETerminologyProvider
 			InventoriesProvider = inventoriesProvider;
 			CacheProvider = cacheProvider;
 
-			Task.Run(async () => await Setup(ProviderSettings));
+			Task.Run(async () => await Setup());
 		}
 
-		private async Task Setup(SettingsModel settings)
+		private async Task Setup()
 		{
 			if (!InventoriesProvider.IsInitialized)
 			{

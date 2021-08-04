@@ -9,6 +9,7 @@
 		xmlns:viewModel="clr-namespace:Sdl.Community.IATETerminologyProvider.ViewModel"
 		xmlns:styles="clr-namespace:Sdl.Community.IATETerminologyProvider.Styles"
         xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:controls="clr-namespace:Sdl.Community.IATETerminologyProvider.Controls"
         Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
 		Title="IATE Real-time Terminology"
 		ResizeMode="CanResizeWithGrip"
@@ -23,6 +24,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="../Styles/ProgressRingAsteriskStyle.xaml" />
+				<ResourceDictionary Source="../UI Helpers/CustomProgressRing.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -165,14 +167,9 @@
 					</DockPanel>
 				</Border>
 			</Grid>
-			<controls1:ProgressRing 
-				Style="{StaticResource ProgressRingAsterisk}"
-				Height="80"
-				IsActive="False"
-				Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"
-				Canvas.ZIndex="110"   		                      
-				IsLarge="True" 
-				Margin="20" />
+			<controls:CustomProgressRing x:Name="ProgressRing"
+			                             Style="{StaticResource Sdl.CustomProgressRing.Normal}"
+			                             Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}" />
 		</Grid>
 	</Border>
 </Window>
