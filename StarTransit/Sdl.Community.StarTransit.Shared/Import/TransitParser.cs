@@ -182,15 +182,17 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			if (statusCode == "02")
 				sdlxliffLevel = ConfirmationLevel.Unspecified;
 			if (statusCode == "0e")
-				sdlxliffLevel = ConfirmationLevel.ApprovedTranslation;
+				sdlxliffLevel = ConfirmationLevel.ApprovedSignOff;
 			if (statusCode == "0f")
 				sdlxliffLevel = ConfirmationLevel.ApprovedSignOff;
 			if (statusCode == "0a")
 				sdlxliffLevel = ConfirmationLevel.Translated;
+			if (statusCode == "06")
+				sdlxliffLevel = ConfirmationLevel.Translated;
 			if (statusCode == "0c")
-				sdlxliffLevel = ConfirmationLevel.Translated;
+				sdlxliffLevel = ConfirmationLevel.ApprovedTranslation;
 			if (statusCode == "08")
-				sdlxliffLevel = ConfirmationLevel.Translated;
+				sdlxliffLevel = ConfirmationLevel.Draft;
 
 			return sdlxliffLevel;
 		}
