@@ -26,9 +26,9 @@ namespace Sdl.Community.Reports.Viewer.API.Example.Actions
 			foreach (var report in reports)
 			{
 				report.Name += " [updated]";
-			}
-
-			_reportsViewerController.UpdateReports(reports);
+				report.Description += " [updated]";				
+				_reportsViewerController.UpdateReport(report);
+			}			
 		}
 
 		public void Run()

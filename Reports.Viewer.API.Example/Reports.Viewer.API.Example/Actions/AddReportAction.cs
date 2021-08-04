@@ -1,6 +1,7 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Reports.Viewer.API.Model;
+using Sdl.ProjectAutomation.FileBased.Reports.Models;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.API.Example.Actions
@@ -23,12 +24,13 @@ namespace Sdl.Community.Reports.Viewer.API.Example.Actions
 			var report = new Report
 			{
 				Path = testData.CreateReport(),
-				//Group = "Analyze",
-				Name = "My Demo Report",
-				Language = string.Empty
+				TemplateId= "Sdl.ProjectApi.AutomaticTasks.Translate",
+				Name = $"Demo Report{DateTime.Now}",
+				Language = "de-de"
 			};
 
-			_reportsViewerController.AddReport(report);
+			_reportsViewerController.AddReport(report);	
+
 		}
 
 		public override void Initialize()

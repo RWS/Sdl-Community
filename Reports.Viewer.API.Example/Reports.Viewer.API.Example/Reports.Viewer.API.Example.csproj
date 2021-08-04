@@ -67,6 +67,7 @@
     <Compile Include="Controls\ReportViewControl.Designer.cs">
       <DependentUpon>ReportViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RichTextBoxHelper.cs" />
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\TextBoxWithEllipsis.cs" />
@@ -90,9 +91,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Sdl.Reports.Viewer.API">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Reports.Viewer.API.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
@@ -162,7 +160,7 @@
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
-		<DeployPluginPackage>true</DeployPluginPackage>
+    <DeployPluginPackage>true</DeployPluginPackage>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

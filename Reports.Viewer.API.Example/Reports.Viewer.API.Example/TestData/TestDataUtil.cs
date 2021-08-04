@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Sdl.Reports.Viewer.API.Model;
+using Sdl.ProjectAutomation.FileBased.Reports.Models;
 
 namespace Sdl.Community.Reports.Viewer.API.Example.TestData
 {

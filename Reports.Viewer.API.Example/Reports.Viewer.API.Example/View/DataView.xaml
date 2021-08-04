@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.Controls"
+             xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.Controls"			 
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.Converters"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.ViewModel"
-             xmlns:model="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
-             mc:Ignorable="d" 			 
+             xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.ViewModel"			
+             xmlns:model="clr-namespace:Sdl.ProjectAutomation.FileBased.Reports.Models;assembly=Sdl.ProjectAutomation.FileBased"
+			 mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:DataViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -41,12 +41,15 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<controls:SortAwareDataGrid Grid.Row="0"
+		<controls:SortAwareDataGrid 
+			          x:Name = "SortableDataGrid"
+					  Grid.Row="0"
 		              DefaultColumnName="Date"
 		              DefaultSortDirection="Descending"									
 		              Style="{StaticResource CustomGridStyle}"
 			          Margin="0" 			                           
-					  ItemsSource="{Binding Source={StaticResource Reports}}"                
+					  ItemsSource="{Binding Source={StaticResource Reports}}"   
+					  IsSynchronizedWithCurrentItem="True"
 					  SelectedItem="{Binding SelectedReports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		              SelectedItems="{Binding SelectedReports, Mode=OneWayToSource}"
 					  FontSize="12"
@@ -56,8 +59,14 @@
 		              SelectionUnit="FullRow"	
 					  GridLinesVisibility="Horizontal"
 					  VerticalScrollBarVisibility="Auto"
-					  HorizontalScrollBarVisibility="Disabled"
+					  HorizontalScrollBarVisibility="Disabled" 
 					  CanUserDeleteRows="False">
+			<DataGrid.InputBindings>
+				<MouseBinding 
+				MouseAction="LeftDoubleClick"
+				Command="{Binding RenderReportCommand}"	
+				CommandParameter="{Binding ElementName=SortableDataGrid, Path=SelectedItem}"/>				
+			</DataGrid.InputBindings>
 			<DataGrid.Columns>
 
 				<DataGridTemplateColumn Header="Name" CanUserSort="True" IsReadOnly="True" SortMemberPath="Name" Width="2*" >
@@ -88,7 +97,7 @@
 								</Image>
 
 								<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4,0,2,0"  
-								           Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+								           Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>						
 
 							</Grid>
 						</DataTemplate>
@@ -210,7 +219,7 @@
 						<MenuItem.Icon>
 							<Image Source="../Resources/Delete.ico"/>
 						</MenuItem.Icon>
-					</MenuItem>
+					</MenuItem>					
 					<Separator/>
 					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
@@ -231,5 +240,7 @@
 			<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 		</Grid>
-	</Grid>
+		
+		<TextBox Grid.Row="2" Text="{Binding ReportContent}" VerticalScrollBarVisibility="Visible" MaxHeight="500" Height="300" IsReadOnly="True"></TextBox>
+	</Grid>	
 </UserControl>

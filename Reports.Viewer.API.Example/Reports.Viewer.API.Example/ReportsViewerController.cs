@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.Reports.Viewer.API.Example.Controls;
@@ -9,8 +10,10 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Reports.Viewer.API;
-using Sdl.Reports.Viewer.API.Model;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.ProjectAutomation.FileBased.Reports.Models;
+using Sdl.ProjectAutomation.FileBased.Reports.Operations;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.Reports.Viewer.API.Example
@@ -26,23 +29,19 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 	{
 		private ReportViewControl _reportViewControl;
 		private List<Report> _reports;
-		private ReportsController _controller;
+		private ProjectsController _projectsController;
 		private DataViewModel _dataViewModel;
 		private DataView _dataView;
-		private string _clientId;
-		private bool _isActive;
 
 		protected override void Initialize(IViewContext context)
 		{
-			_clientId = Guid.NewGuid().ToString();
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_projectsController.CurrentProjectChanged += _projectsController_CurrentProjectChanged;			
+		}
 
-			_controller = ReportsController.Instance;
-			_controller.ProjectChanged += Controller_ProjectChanged;
-			_controller.ReportsAdded += Controller_ReportsAdded;
-			_controller.ReportsRemoved += Controller_ReportsRemoved;
-			_controller.ReportsUpdated += Controller_ReportsUpdated;
-
-			ActivationChanged += ReportsViewerController_ActivationChanged;			
+		private void _projectsController_CurrentProjectChanged(object sender, EventArgs e)
+		{
+			RefreshView();
 		}
 
 		protected override IUIControl GetContentControl()
@@ -50,7 +49,6 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			if (_reportViewControl == null)
 			{
 				_reportViewControl = new ReportViewControl();
-
 				InitializeViews();
 			}
 
@@ -63,19 +61,18 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			{
 				return;
 			}
-
-			report.IsSelected = true;
-
-			var result = _controller.AddReports(_clientId, new List<Report> { report });
-			if (!result.Success)
+			var fileBasedProject = GetSelectedProject();
+			if (fileBasedProject != null)
 			{
-				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
+				string reportData = File.ReadAllText(report.Path);
+				var addedReport = new ProjectReportsOperations(fileBasedProject)
+					.AddReport(report.TemplateId, report.Name, report.Description, report.Language, reportData);
+				RefreshView();
+				if (addedReport != null)
+				{
+					MessageBox.Show($"The report {addedReport.Name} was added", PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);					
+				}
 			}
-
-			_reports.Add(result.Reports[0]);
-			_dataViewModel.Reports = new List<Report>(_reports);
-
 		}
 
 		public void RemoveReports(List<Report> reports)
@@ -84,37 +81,52 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			{
 				return;
 			}
-
-			var result = _controller.RemoveReports(_clientId, reports.Select(a => a.Id).ToList());
-			if (!result.Success)
+			var fileBasedProject = GetSelectedProject();
+			if (fileBasedProject != null)
 			{
-				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
+				new ProjectReportsOperations(fileBasedProject).RemoveReports(reports.Select(r => r.Id).ToList());
+				RefreshView();
 			}
-
-			RemoveReportsInternal(result.Reports);
 		}
 
-		public void UpdateReports(List<Report> reports)
+		public void UpdateReport(Report report)
 		{
-			if (reports == null)
+			if (report == null)
 			{
 				return;
 			}
 
-			var result = _controller.UpdateReports(_clientId, reports);
-			if (!result.Success)
+			var fileBasedProject = GetSelectedProject();
+			if (fileBasedProject != null)
 			{
-				MessageBox.Show(result.Message);
-				return;
-			}
-
-			UpdateReportsInternal(result.Reports);
+				new ProjectReportsOperations(fileBasedProject).UpdateReport(report.Id, report.Name, report.Description, File.ReadAllText(fileBasedProject.GetProjectInfo().LocalProjectFolder + "\\" + report.Path));
+				RefreshView();
+				MessageBox.Show($"The report {report.Name} was be updated!", PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}			
 		}
-	
-		public IProject GetSelectedProject()
+
+		public string RenderReport(Report report)
 		{
-			return _controller?.SelectedProject;
+			string result = string.Empty;
+			if (report == null)
+			{
+				return result;
+			}
+			var fileBasedProject = GetSelectedProject();
+			if (fileBasedProject != null)
+			{
+				result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, "html"));	
+			}
+			return result;
+		}
+
+		public FileBasedProject GetSelectedProject()
+		{
+			if (_projectsController.CurrentProject is FileBasedProject fileBasedProject)
+			{
+				return fileBasedProject;
+			}
+			return null;
 		}
 
 		public List<Report> GetSelectedReports()
@@ -124,20 +136,28 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 
 		public void RefreshView()
 		{
-			_reports = _controller.GetReports(false).Result;
+			var fileBasedProject = GetSelectedProject();
+			_reports = new ProjectReportsOperations(fileBasedProject).GetProjectReports();
 			if (_dataViewModel != null)
 			{
 				_dataViewModel.Reports = new List<Report>(_reports);
-			}						
+			}
 		}
 
 		private void InitializeViews()
 		{
-			_reports = _controller.GetReports(false).Result;
-
-			_dataViewModel = new DataViewModel(_reports)
+			var fileBasedProject = GetSelectedProject();
+			if (fileBasedProject == null)
 			{
-				ProjectLocalFolder = _controller.GetProjectLocalFolder()
+				return;
+			}
+			else
+			
+			_reports = new ProjectReportsOperations(fileBasedProject).GetProjectReports();
+
+			_dataViewModel = new DataViewModel(_reports, this)
+			{
+				ProjectLocalFolder = fileBasedProject.GetProjectInfo().LocalProjectFolder
 			};
 
 			_dataView = new DataView
@@ -149,142 +169,16 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			_reportViewControl?.UpdateViewModel(_dataView);
 		}
 
-		private void Controller_ReportsUpdated(object sender, Sdl.Reports.Viewer.API.Events.ReportsUpdatedEventArgs e)
-		{
-			if (e.ClientId != _clientId && e.Reports != null)
-			{
-				UpdateReportsInternal(e.Reports);
-			}
-		}
-
-		private void Controller_ReportsRemoved(object sender, Sdl.Reports.Viewer.API.Events.ReportsRemovedEventArgs e)
-		{
-			if (e.ClientId != _clientId && e.Reports != null)
-			{
-				if (_dataViewModel != null)
-				{
-					RemoveReportsInternal(e.Reports);
-				}
-			}
-		}
-
-		private void Controller_ReportsAdded(object sender, Sdl.Reports.Viewer.API.Events.ReportsAddedEventArgs e)
-		{
-			if (e.ClientId != _clientId && e.Reports != null)
-			{
-				_reports.AddRange(e.Reports);
-				if (_dataViewModel != null)
-				{
-					_dataViewModel.Reports = new List<Report>(_reports);
-				}
-			}
-		}
-
-		private void Controller_ProjectChanged(object sender, Sdl.Reports.Viewer.API.Events.ProjectChangedEventArgs e)
-		{
-			_reports = e.Reports.ToList();
-
-			if (_dataViewModel != null)
-			{
-				_dataViewModel.ProjectLocalFolder = _controller.GetProjectLocalFolder();
-				_dataViewModel.Reports = _reports;
-			}
-		}
-
 		private IEnumerable<Report> GetReports(IEnumerable<string> reportIds)
 		{
 			var reports = new List<Report>();
 			foreach (var reportId in reportIds)
 			{
-				var report = _reports.FirstOrDefault(a => a.Id == reportId);
+				var report = _reports.FirstOrDefault(a => a.Id.ToString() == reportId);
 				reports.Add(report);
 			}
 
 			return reports;
-		}
-
-		private void UpdateReportsInternal(IEnumerable<Report> reports)
-		{
-			if (reports == null)
-			{
-				return;
-			}
-			foreach (var updatedReport in reports)
-			{
-				var report = _reports.FirstOrDefault(a => a.Id == updatedReport.Id);
-				if (report == null)
-				{
-					return;
-				}
-
-				report.IsSelected = true;
-				report.Path = updatedReport.Path;
-				report.Name = updatedReport.Name;
-				report.Description = updatedReport.Description;
-				report.Language = updatedReport.Language;
-				report.Group = updatedReport.Group;
-			}
-
-			if (_dataViewModel != null)
-			{				
-				_dataViewModel.Reports = new List<Report>(_reports);
-			}
-		}
-
-		private void RemoveReportsInternal(IEnumerable<Report> reports)
-		{
-			if (reports == null)
-			{
-				return;
-			}
-
-			foreach (var report in reports)
-			{
-				_reports.RemoveAll(a => a.Id == report.Id);
-			}
-
-			if (_dataViewModel != null)
-			{				
-				_dataViewModel.Reports = new List<Report>(_reports);
-			}
-		}
-
-		private void ReportsViewerController_ActivationChanged(object sender, ActivationChangedEventArgs e)
-		{
-			_isActive = e.Active;
-
-			if (_dataViewModel == null)
-			{
-				return;
-			}
-
-			if (e.Active)
-			{
-				var task = System.Threading.Tasks.Task.Run(() => _controller.GetStudioReportChanges());
-
-				task.ContinueWith(t =>
-				{
-					if (t.Result.AddedReports.Count > 0 || t.Result.RemovedReports.Count > 0)
-					{
-						DisplayRefreshViewMessage(t.Result.AddedReports, t.Result.RemovedReports);
-					}
-				});
-			}
-		}
-
-		private void DisplayRefreshViewMessage(IReadOnlyCollection<Report> addedRecords, IReadOnlyCollection<Report> removedRecords)
-		{
-			var message = "Studio has applied changes in the Reports view."
-			              + Environment.NewLine + Environment.NewLine
-			              + string.Format("Added Reports: {0}", addedRecords.Count) + Environment.NewLine
-			              + string.Format("Removed Reports: {0}", removedRecords.Count)
-			              + Environment.NewLine + Environment.NewLine
-			              + "Click on 'Yes' to refresh the view";
-			var dialogResult = MessageBox.Show(message, "Reports Viewer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-			if (dialogResult == DialogResult.Yes)
-			{
-				RefreshView();
-			}
 		}
 	}
 }
