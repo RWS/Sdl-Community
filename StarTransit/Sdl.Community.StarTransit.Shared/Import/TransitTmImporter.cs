@@ -53,6 +53,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			try
 			{
+				ConfirmationLevel[] levels = { ConfirmationLevel.ApprovedTranslation, ConfirmationLevel.Translated, ConfirmationLevel.ApprovedSignOff };
+
 				var importSettings = new ImportSettings
 				{
 					IsDocumentImport = true,
@@ -60,7 +62,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					IncrementUsageCount = true,
 					NewFields = ImportSettings.NewFieldsOption.AddToSetup,
 					PlainText = false,
-					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
+					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew,
+					ConfirmationLevels = levels
 				};
 				var tmImporter = new TranslationMemoryImporter(_translationMemory.LanguageDirection)
 				{
