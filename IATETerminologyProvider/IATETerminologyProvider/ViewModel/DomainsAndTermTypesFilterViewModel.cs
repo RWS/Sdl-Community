@@ -14,7 +14,7 @@ using Sdl.Community.IATETerminologyProvider.Service;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {
-	public class SettingsViewModel : ViewModelBase
+	public class DomainsAndTermTypesFilterViewModel : SettingsViewModelBase
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly InventoriesProvider _inventoriesProvider;
@@ -27,31 +27,30 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private DomainModel _selectedDomain;
 		private TermTypeModel _selectedTermType;
 
-		private ObservableCollection<DomainModel> _domains;
-		private ObservableCollection<TermTypeModel> _termTypes;
+		private ObservableCollection<DomainModel> _domains = new ObservableCollection<DomainModel>();
+		private ObservableCollection<TermTypeModel> _termTypes= new ObservableCollection<TermTypeModel>();
 		private int _maxEntries;
 		private bool _dialogResult;
 		private bool _searchInSubdomains;
 		private bool _isLoading;
 		private bool _isEnabled;
 
-		public SettingsViewModel(SettingsModel settings, InventoriesProvider inventoriesProvider,
+		public DomainsAndTermTypesFilterViewModel(InventoriesProvider inventoriesProvider,
 			ICacheProvider cacheService, IMessageBoxService messageBocBoxService)
 		{
-			_domains = new ObservableCollection<DomainModel>();
-			_termTypes = new ObservableCollection<TermTypeModel>();
-
 			_inventoriesProvider = inventoriesProvider;
 			_cacheService = cacheService;
 			_messageBoxService = messageBocBoxService;
 
-			ProviderSettings = new SettingsModel
-			{
-				Domains = new List<DomainModel>(),
-				TermTypes = new List<TermTypeModel>()
-			};
+			PropertyChanged += DomainsAndTermTypesFilterViewModel_PropertyChanged;
+		}
 
-			Task.Run(async() => await Setup(settings));
+		private async void DomainsAndTermTypesFilterViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(Settings))
+			{
+				await Setup();
+			}
 		}
 
 		public bool IsLoading
@@ -236,15 +235,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
-		public SettingsModel ProviderSettings { get; set; }
-
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
 
 		public ICommand ResetToDefault => _resetToDefault ?? (_resetToDefault = new CommandHandler(Reset, true));
 
 		public ICommand ClearCache => _clearCache ?? (_clearCache = new CommandHandler(Clear, true));
 
-		private async Task Setup(SettingsModel settings)
+		private async Task Setup()
 		{
 			if (!_inventoriesProvider.IsInitialized)
 			{
@@ -262,7 +259,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			LoadDomains();
 			LoadTermTypes();
 
-			SetFieldsSelection(settings);
+			SetFieldsSelection();
 
 			IsEnabled = true;
 		}
@@ -310,15 +307,15 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		{
 			if (Domains.Count > 0)
 			{
-				ProviderSettings.Domains = Domains.ToList();
+				Settings.Domains = Domains.ToList();
 			}
 
 			if (TermTypes.Count > 0)
 			{
-				ProviderSettings.TermTypes = TermTypes.ToList();
+				Settings.TermTypes = TermTypes.ToList();
 			}
 
-			ProviderSettings.SearchInSubdomains = SearchInSubdomains;
+			Settings.SearchInSubdomains = SearchInSubdomains;
 
 			DialogResult = true;
 
@@ -391,24 +388,24 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			TermTypes = new ObservableCollection<TermTypeModel>(termTypes);
 		}
 
-		private void SetFieldsSelection(SettingsModel providerSettings)
+		private void SetFieldsSelection()
 		{
-			if (providerSettings is null)
+			if (Settings is null)
 			{
 				return;
 			}
 
-			if (providerSettings.Domains?.Count > 0)
+			if (Settings.Domains?.Count > 0)
 			{
-				Domains = new ObservableCollection<DomainModel>(providerSettings.Domains);
+				Domains = new ObservableCollection<DomainModel>(Settings.Domains);
 			}
 
-			if (providerSettings.TermTypes?.Count > 0)
+			if (Settings.TermTypes?.Count > 0)
 			{
-				TermTypes = new ObservableCollection<TermTypeModel>(providerSettings.TermTypes);
+				TermTypes = new ObservableCollection<TermTypeModel>(Settings.TermTypes);
 			}
 
-			SearchInSubdomains = providerSettings.SearchInSubdomains;
+			SearchInSubdomains = Settings.SearchInSubdomains;
 		}
 
 		private bool AreAllDomainsSelected()

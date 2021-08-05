@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
+using Sdl.Community.IATETerminologyProvider.View;
+using Sdl.Community.IATETerminologyProvider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
@@ -15,6 +20,11 @@ namespace Sdl.Community.IATETerminologyProvider
 		public static ConnectionProvider ConnectionProvider { get; private set; }
 
 		public static InventoriesProvider InventoriesProvider { get; set; }
+
+		public static ICacheProvider CacheProvider { get; set; } =
+			new CacheProvider(new SqliteDatabaseProvider(new PathInfo()));
+
+		public static MainWindow MainWindow { get; set; }
 
 		public async void Execute()
 		{
@@ -37,6 +47,21 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				Logger.Error($"{ex.Message}\n{ex.StackTrace}");
 			}
+		}
+
+		public static MainWindow GetMainWindow(SettingsModel settingsModel = null)
+		{
+			if (!ConnectionProvider.EnsureConnection()) return null;
+
+			var listOfViewModels = new List<SettingsViewModelBase>
+			{
+				new DomainsAndTermTypesFilterViewModel(InventoriesProvider, CacheProvider, new MessageBoxService()),
+				new FineGrainedFilterViewModel()
+			};
+
+			MainWindow = new MainWindow(listOfViewModels, settingsModel);
+
+			return MainWindow;
 		}
 	}
 }

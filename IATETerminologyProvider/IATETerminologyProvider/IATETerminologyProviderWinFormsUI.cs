@@ -2,101 +2,87 @@
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
-using Sdl.Community.IATETerminologyProvider.ViewModel;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
-	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
-	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private SettingsViewModel _settingsViewModel;
-		private SettingsWindow _settingsWindow;
-		public string TypeName => PluginResources.IATETerminologyProviderName;
-		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
-		public bool SupportsEditing => true;
+    public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
+    {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private MainWindow _mainWindow;
+        public bool SupportsEditing => true;
+        public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
+        public string TypeName => PluginResources.IATETerminologyProviderName;
 
-		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-		{
-			var messageBoxService = new MessageBoxService();
+        public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
+        {
+            _mainWindow = IATEApplication.GetMainWindow();
+            if (_mainWindow != null)
+            {
+                //TODO: don't forget to fix this as this possibly doesn't trigger the SaveCommand
+                if (!_mainWindow.ShowDialog() ?? false)
+                {
+                    return null;
+                }
 
-			if (IATEApplication.ConnectionProvider.EnsureConnection())
-			{
-				var sqlDatabaseProvider = new SqliteDatabaseProvider(new PathInfo());
-				var cacheProvider = new CacheProvider(sqlDatabaseProvider);
+                var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
+                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider);
 
-				_settingsViewModel = new SettingsViewModel(null, IATEApplication.InventoriesProvider, cacheProvider, messageBoxService);
-				_settingsWindow = new SettingsWindow { DataContext = _settingsViewModel };
+                return new ITerminologyProvider[] { provider };
+            }
 
-				_settingsWindow.ShowDialog();
-				if (!_settingsViewModel.DialogResult)
-				{
-					return null;
-				}
+            var exception = new Exception("Failed login!");
+            _logger.Error(exception);
 
-				var settings = _settingsViewModel.ProviderSettings;
-				var provider = new IATETerminologyProvider(settings, IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider);
+            throw exception;
+        }
 
-				return new ITerminologyProvider[] { provider };
-			}
+        public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
+        {
+            if (!IATEApplication.ConnectionProvider.EnsureConnection())
+            {
+                var exception = new Exception("Failed login!");
+                _logger.Error(exception);
 
-			var exception = new Exception("Failed login!");
-			_logger.Error(exception);
-			
-			throw exception;
-		}
+                throw exception;
+            }
 
-		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
-		{
-			if (!IATEApplication.ConnectionProvider.EnsureConnection())
-			{
-				var exception = new Exception("Failed login!");
-				_logger.Error(exception);
-				
-				throw exception;
-			}
-			
-			var provider = terminologyProvider as IATETerminologyProvider;
-			if (provider == null)
-			{
-				return false;
-			}
+            var provider = terminologyProvider as IATETerminologyProvider;
+            if (provider == null)
+            {
+                return false;
+            }
 
-			var messageBoxService = new MessageBoxService();
+            var messageBoxService = new MessageBoxService();
 
-			_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, provider.CacheProvider, messageBoxService);
-			_settingsWindow = new SettingsWindow
-			{
-				DataContext = _settingsViewModel
-			};
+            //_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, provider.CacheProvider, messageBoxService);
+            _mainWindow = IATEApplication.GetMainWindow(provider.ProviderSettings);
 
-			_settingsWindow.ShowDialog();
-			if (!_settingsViewModel.DialogResult)
-			{
-				return false;
-			}
+            if (!_mainWindow.ShowDialog() ?? false)
+            {
+                return false;
+            }
 
-			provider.ProviderSettings = _settingsViewModel.ProviderSettings;
+            provider.ProviderSettings = _mainWindow.ProviderSettings;
 
-			return true;
-		}
+            return true;
+        }
 
-		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
-		{
-			return new TerminologyProviderDisplayInfo
-			{
-				Name = Constants.IATEProviderName,
-				TooltipText = Constants.IATEProviderDescription
-			};
-		}
+        public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
+        {
+            return new TerminologyProviderDisplayInfo
+            {
+                Name = Constants.IATEProviderName,
+                TooltipText = Constants.IATEProviderDescription
+            };
+        }
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-		}
-	}
+        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+        {
+            return terminologyProviderUri.Scheme == Constants.IATEGlossary;
+        }
+    }
 }

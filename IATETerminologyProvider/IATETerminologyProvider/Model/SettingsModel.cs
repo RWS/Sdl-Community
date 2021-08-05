@@ -15,6 +15,9 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 		public SettingsModel()
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(Constants.IATEGlossary);
+
+			Domains = new List<DomainModel>();
+			TermTypes = new List<TermTypeModel>();
 		}
 
 		public SettingsModel(Uri uri)

@@ -142,6 +142,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
+    <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\CloseOnClickBehaviour.cs" />
     <Compile Include="Helpers\Constants.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="IATETerminologyProviderFactory.cs" />
     <Compile Include="Interface\ICacheProvider.cs" />
     <Compile Include="Interface\IMessageBoxService.cs" />
+    <Compile Include="Interface\ISettingsViewModel.cs" />
     <Compile Include="Model\SearchCache.cs" />
     <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
     <Compile Include="Model\DocumentEntryState.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="Model\ResponseModels\TermTypeResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
     <Compile Include="Model\SettingsModel.cs" />
+    <Compile Include="Model\SettingsViewModelBase.cs" />
     <Compile Include="Model\TermResultGroup.cs" />
     <Compile Include="Model\TermTypeModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
@@ -196,9 +199,16 @@
     <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\SqliteDatabaseProvider.cs" />
     <Compile Include="Service\TermSearchService.cs" />
-    <Compile Include="Styles\WindowsControl.xaml.cs">
+    <Compile Include="View\FineGrainedFilter.xaml.cs">
+      <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\DomainsAndTermTypes.xaml.cs">
+      <DependentUpon>DomainsAndTermTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\SearchResultsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -212,10 +222,10 @@
     <Compile Include="View\IATETermsControl.Designer.cs">
       <DependentUpon>IATETermsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\DomainsAndTermTypesFilterViewModel.cs" />
     <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -236,7 +246,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\WindowsControl.xaml">
+    <Page Include="View\FineGrainedFilter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,7 +266,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SettingsWindow.xaml">
+    <Page Include="View\DomainsAndTermTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
