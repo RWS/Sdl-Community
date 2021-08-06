@@ -115,7 +115,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			var fileBasedProject = GetSelectedProject();
 			if (fileBasedProject != null)
 			{
-				result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, "html"));	
+				result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, "html"));
 			}
 			return result;
 		}

@@ -7,7 +7,8 @@
              xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.Controls"			 
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.Converters"
              xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.API.Example.ViewModel"			
-             xmlns:model="clr-namespace:Sdl.ProjectAutomation.FileBased.Reports.Models;assembly=Sdl.ProjectAutomation.FileBased"
+             xmlns:model="clr-namespace:Sdl.ProjectAutomation.FileBased.Reports.Models;assembly=Sdl.ProjectAutomation.FileBased"	
+			 xmlns:behaviours="clr-namespace:Sdl.Desktop.Platform.Controls.Behaviours;assembly=Sdl.Desktop.Platform.Controls"
 			 mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:DataViewModel}">
 	<UserControl.Resources>
@@ -239,8 +240,12 @@
 			<Button Grid.Column="0" Command="{Binding ClearSelectionCommand}" HorizontalAlignment="Left" Style="{StaticResource LinkButton}" Content="Clear selection" Margin="4,2,4,2"/>
 			<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-		</Grid>
+		</Grid>		
 		
-		<TextBox Grid.Row="2" Text="{Binding ReportContent}" VerticalScrollBarVisibility="Visible" MaxHeight="500" Height="300" IsReadOnly="True"></TextBox>
+		<Border Grid.Row="2" x:Uid="Border_1">
+			<WebBrowser x:Uid="ContentHost" x:Name="ContentHost"
+                            behaviours:WebBrowserContentSource.Html="{Binding ReportContent}" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+		</Border>
 	</Grid>	
 </UserControl>

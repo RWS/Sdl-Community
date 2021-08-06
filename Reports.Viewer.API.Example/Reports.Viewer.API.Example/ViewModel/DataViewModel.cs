@@ -27,12 +27,12 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 		private ICommand _removeReportCommand;
 		private ICommand _renderReportCommand;
 		private ICommand _openFolderCommand;
-		private readonly ReportsViewerController _reportViewController;
+		private readonly ReportsViewerController _reportViewerController;
 
-		public DataViewModel(List<Report> reports, ReportsViewerController reportViewController)
+		public DataViewModel(List<Report> reports, ReportsViewerController reportViewerController)
 		{
 			Reports = reports;
-			_reportViewController = reportViewController;
+			_reportViewerController = reportViewerController;			
 		}
 	
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
@@ -137,12 +137,20 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 		}
 
 		private void RenderReport(object parameter)
-		{			
-			ReportContent = _reportViewController.RenderReport(parameter as Report);
+		{
+			var report = parameter as Report;
+			ReportContent = _reportViewerController.RenderReport(report);
+			//var path = Path.Combine(ProjectLocalFolder, report.Path);
+			//File.WriteAllText(path, ReportContent);
 		}
 
 		private void OpenFolder(object parameter)
 		{
+			var reports = _reportViewerController.GetSelectedReports();
+			if(reports != null)
+			{
+				SelectedReport = reports[0];
+			}
 			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
 			                                 || !Directory.Exists(ProjectLocalFolder))
 			{
