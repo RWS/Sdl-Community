@@ -33,6 +33,20 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			_messageService = messageService;
 			ConnectionService = connectionService;
+
+			Options = new Options
+			{
+				AutoSendFeedback = true,
+				ResendDraft = true,
+				SendFeedback = true,
+			};
+
+			Options.PropertyChanged += Options_PropertyChanged;
+		}
+
+		private void Options_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(Options.SendFeedback));
 		}
 
 		public event TranslationReceivedEventHandler TranslationReceived;

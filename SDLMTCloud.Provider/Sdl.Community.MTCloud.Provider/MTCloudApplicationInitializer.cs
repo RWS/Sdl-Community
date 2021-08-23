@@ -34,12 +34,11 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static ProjectsController ProjectsController { get; private set; }
 
-		public static RateItController RateItController => IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
 		public static TranslationService TranslationService { get; private set; }
 
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
-																			 ? SdlTradosStudio.Application
+																			 ? _eventAggregator = SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
 
@@ -103,6 +102,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public void Execute()
 		{
+
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 			if (IsStudioRunning())
