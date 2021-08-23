@@ -33,6 +33,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			Uri = uri;
 			LanguageProvider = languageProvider;
 			TranslationService = translationService;
+
+			Options = new Options
+			{
+				AutoSendFeedback = true,
+				ResendDraft = true,
+				SendFeedback = true,
+			};
+
 			_editorController = MtCloudApplicationInitializer.EditorController;
 			_rateItController = MtCloudApplicationInitializer.RateItController;
 
@@ -179,22 +187,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public void LoadState(string translationProviderState)
 		{
-			if (translationProviderState is null) Options = new Options();
+			if (string.IsNullOrWhiteSpace(translationProviderState)) return;
 			try
 			{
 				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);
 			}
 			catch
 			{
-				// ignore any casting errors and simply create a new options instance
 			}
-
-			Options ??= new Options
-			{
-				AutoSendFeedback = true,
-				ResendDraft = true,
-				SendFeedback = true,
-			};
 		}
 
 		public void RefreshStatusInfo()
