@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -10,9 +11,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		Description = "SDL Machine Translation Cloud")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
 	{
+		public Dictionary<Guid, SdlMTCloudTranslationProvider> Providers { get; set; } = new Dictionary<Guid, SdlMTCloudTranslationProvider>();
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
+			var currentProjectId = MtCloudApplicationInitializer.ProjectsController.CurrentProject.GetProjectInfo().Id;
+
+			if (Providers.ContainsKey(currentProjectId)) return Providers[currentProjectId];
+
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
 				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
 
@@ -30,6 +36,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			var languageProvider = new LanguageProvider();
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
 				MtCloudApplicationInitializer.TranslationService, languageProvider);
+
+			Providers[currentProjectId] = provider;
 
 			return provider;
 		}
