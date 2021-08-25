@@ -11,13 +11,15 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		Description = "SDL Machine Translation Cloud")]
 	public class SdlMTCloudTranslationProviderFactory : ITranslationProviderFactory
 	{
-		public Dictionary<Guid, SdlMTCloudTranslationProvider> Providers { get; set; } = new Dictionary<Guid, SdlMTCloudTranslationProvider>();
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			var currentProjectId = MtCloudApplicationInitializer.ProjectsController.CurrentProject.GetProjectInfo().Id;
-
-			if (Providers.ContainsKey(currentProjectId)) return Providers[currentProjectId];
+			var currentProjProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
+			if (currentProjProvider != null)
+			{
+				MtCloudApplicationInitializer.SetTranslationService(null, currentProjProvider.TranslationService);
+				return currentProjProvider;
+			}
 
 			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
 				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
@@ -31,13 +33,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			}
 			connectionService.SaveCredential(credentialStore);
 
-			MtCloudApplicationInitializer.SetTranslationService(connectionService);
+			MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 
 			var languageProvider = new LanguageProvider();
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
 				MtCloudApplicationInitializer.TranslationService, languageProvider);
 
-			Providers[currentProjectId] = provider;
+			MtCloudApplicationInitializer.AddCurrentProjectProvider(provider);
 
 			return provider;
 		}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Windows;
@@ -8,7 +9,7 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.Community.MTCloud.Provider.Service.RateIt;
-using Sdl.Community.MTCloud.Provider.Studio;
+using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -27,20 +28,29 @@ namespace Sdl.Community.MTCloud.Provider
 		public static IHttpClient Client { get; } = new HttpClient();
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
-
 		public static EditorController EditorController { get; set; }
-
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
-
 		public static ProjectsController ProjectsController { get; private set; }
-
-		public static TranslationService TranslationService { get; private set; }
+		public static ITranslationService TranslationService { get; private set; }
+		private static Guid CurrentProjectId => ProjectsController.CurrentProject.GetProjectInfo().Id;
 
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
 																			 ? _eventAggregator = SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
+
+		private static Dictionary<Guid, SdlMTCloudTranslationProvider> Providers { get; set; } = new();
+
+		public static void AddCurrentProjectProvider(SdlMTCloudTranslationProvider provider)
+		{
+			Providers[CurrentProjectId] = provider;
+		}
+
+		public static SdlMTCloudTranslationProvider GetCurrentProjectProvider()
+		{
+			return Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
+		}
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
@@ -86,12 +96,9 @@ namespace Sdl.Community.MTCloud.Provider
 				PublishEvent(new RefreshQeStatus());
 		}
 
-		public static void SetTranslationService(IConnectionService connectionService)
+		public static void SetTranslationService(IConnectionService connectionService, ITranslationService translationService)
 		{
-			TranslationService = new TranslationService(connectionService, Client, new MessageBoxService());
-
-			//TODO: start supervising when a QE enabled model has been chosen
-
+			TranslationService = translationService ?? new TranslationService(connectionService, Client, new MessageBoxService());
 			MetadataSupervisor?.StartSupervising(TranslationService);
 		}
 
@@ -102,7 +109,6 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public void Execute()
 		{
-
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 			if (IsStudioRunning())
