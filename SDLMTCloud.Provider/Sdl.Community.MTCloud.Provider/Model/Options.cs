@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.RateItControl.Implementation;
 
 namespace Sdl.Community.MTCloud.Provider.Model
@@ -26,6 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_sendFeedback = value;
 				OnPropertyChanged(nameof(SendFeedback));
+				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(value));
 			}
 		}
 	}

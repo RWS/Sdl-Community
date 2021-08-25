@@ -40,13 +40,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				ResendDraft = true,
 				SendFeedback = true,
 			};
-
-			Options.PropertyChanged += Options_PropertyChanged;
-		}
-
-		private void Options_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(Options.SendFeedback));
 		}
 
 		public event TranslationReceivedEventHandler TranslationReceived;
@@ -174,7 +167,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			OnTranslationReceived(new TranslationData
 			{
 				TargetSegments =
-					segmentIds.Select((segmentId, index) => (segmentId, target:targetSegments[index].Segment.ToString())).ToDictionary(
+					segmentIds.Select((segmentId, index) => (segmentId, target: targetSegments[index].Segment.ToString())).ToDictionary(
 						x => x.segmentId,
 						x => x.target),
 				TranslationOriginData = new TranslationOriginData

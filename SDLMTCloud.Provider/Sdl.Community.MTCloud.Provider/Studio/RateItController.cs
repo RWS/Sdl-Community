@@ -45,9 +45,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		protected override void Initialize()
 		{
 			_control = new Lazy<View.RateItControl>(() => new View.RateItControl());
+			SwitchVisibility();
 		}
 
-		private static bool? GetTpStatus()
+		private static bool GetTpStatus()
 		{
 			var tpStatus =
 				Application.Current.Dispatcher.Invoke(
@@ -56,31 +57,35 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 							.FirstOrDefault(
 								e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider
 							.Enabled);
-			return tpStatus;
+			return tpStatus ?? false;
 		}
 
 		private void SwitchVisibility()
 		{
 			if (!MtCloudApplicationInitializer.IsStudioRunning()) return;
 
-			var visibility = GetTpStatus();
-			if (visibility is null)
+			if (!GetTpStatus())
 			{
 				SwitchVisibility(false);
 				return;
 			}
 
+			var currentProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
+			if (currentProvider is null) return;
+
+			var visibility = currentProvider.Options.SendFeedback;
+
+			SwitchVisibility(visibility);
+
 			try
 			{
 				Application.Current?.Dispatcher?.Invoke(
-					() => RateIt.SetTranslationService(MtCloudApplicationInitializer.TranslationService));
+					() => RateIt.SetTranslationService(currentProvider.TranslationService));
 			}
 			catch
 			{
 				// catch all; unable to locate the controller
 			}
-
-			SwitchVisibility(visibility.Value);
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
@@ -116,7 +121,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		private void TranslationProviderRateItOptionsChanged(TranslationProviderRateItOptionsChanged options)
 		{
-			SwitchVisibility(options.SendFeedback);
+			SwitchVisibility();
 		}
 	}
 }
