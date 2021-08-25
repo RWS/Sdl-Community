@@ -136,6 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="Samples\Analysis.xsl" />
+    <Content Include="Samples\SynergyPower.jpg" />
+    <Content Include="Samples\WordCount.xsl" />
     <Resource Include="Resources\Refresh.ico" />
     <Resource Include="Resources\StudioReport.ico" />
     <Resource Include="Resources\Add.ico" />

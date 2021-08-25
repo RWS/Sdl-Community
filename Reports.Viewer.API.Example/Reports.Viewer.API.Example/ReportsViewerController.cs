@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Community.Reports.Viewer.API.Example.Controls;
 using Sdl.Community.Reports.Viewer.API.Example.View;
@@ -36,7 +37,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 		protected override void Initialize(IViewContext context)
 		{
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_projectsController.CurrentProjectChanged += _projectsController_CurrentProjectChanged;			
+			_projectsController.CurrentProjectChanged += _projectsController_CurrentProjectChanged;
 		}
 
 		private void _projectsController_CurrentProjectChanged(object sender, EventArgs e)
@@ -70,7 +71,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 				RefreshView();
 				if (addedReport != null)
 				{
-					MessageBox.Show($"The report {addedReport.Name} was added", PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);					
+					MessageBox.Show($"The report {addedReport.Name} was added", PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
 		}
@@ -102,7 +103,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 				new ProjectReportsOperations(fileBasedProject).UpdateReport(report.Id, report.Name, report.Description, File.ReadAllText(fileBasedProject.GetProjectInfo().LocalProjectFolder + "\\" + report.Path));
 				RefreshView();
 				MessageBox.Show($"The report {report.Name} was be updated!", PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-			}			
+			}
 		}
 
 		public string RenderReport(Report report)
@@ -115,7 +116,8 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			var fileBasedProject = GetSelectedProject();
 			if (fileBasedProject != null)
 			{
-				result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, "html"));
+				result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, @"C:\Code\SampleApp\Reports.Viewer.API.Example\Reports.Viewer.API.Example\Samples\Analysis.xsl", "html"));
+				result = ReportCleanup(result);
 			}
 			return result;
 		}
@@ -152,8 +154,8 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 				return;
 			}
 			else
-			
-			_reports = new ProjectReportsOperations(fileBasedProject).GetProjectReports();
+
+				_reports = new ProjectReportsOperations(fileBasedProject).GetProjectReports();
 
 			_dataViewModel = new DataViewModel(_reports, this)
 			{
@@ -165,7 +167,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 				DataContext = _dataViewModel
 			};
 
-			
+
 			_reportViewControl?.UpdateViewModel(_dataView);
 		}
 
@@ -179,6 +181,11 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			}
 
 			return reports;
+		}
+
+		private string ReportCleanup(string report)
+		{
+			return Regex.Replace(report, @"[^\u0000-\u007F]+", string.Empty);
 		}
 	}
 }

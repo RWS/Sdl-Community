@@ -38,8 +38,8 @@
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="3*"/>
+			<RowDefinition Height="5*"/>
 		</Grid.RowDefinitions>
 
 		<controls:SortAwareDataGrid 
@@ -232,7 +232,7 @@
 			</DataGrid.ContextMenu>
 
 		</controls:SortAwareDataGrid>
-		<Grid Grid.Row="1" Margin="2,0,2,0">
+		<!--<Grid Grid.Row="1" Margin="2,0,2,0" Background="Yellow">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
@@ -240,9 +240,9 @@
 			<Button Grid.Column="0" Command="{Binding ClearSelectionCommand}" HorizontalAlignment="Left" Style="{StaticResource LinkButton}" Content="Clear selection" Margin="4,2,4,2"/>
 			<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-		</Grid>		
+		</Grid>-->		
 		
-		<Border Grid.Row="2" x:Uid="Border_1">
+		<Border Grid.Row="1" x:Uid="Border_1">
 			<WebBrowser x:Uid="ContentHost" x:Name="ContentHost"
                             behaviours:WebBrowserContentSource.Html="{Binding ReportContent}" ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>

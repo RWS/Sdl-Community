@@ -32,9 +32,9 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 		public DataViewModel(List<Report> reports, ReportsViewerController reportViewerController)
 		{
 			Reports = reports;
-			_reportViewerController = reportViewerController;			
+			_reportViewerController = reportViewerController;
 		}
-	
+
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
@@ -147,12 +147,12 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 		private void OpenFolder(object parameter)
 		{
 			var reports = _reportViewerController.GetSelectedReports();
-			if(reports != null)
+			if (reports != null)
 			{
 				SelectedReport = reports[0];
 			}
 			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
-			                                 || !Directory.Exists(ProjectLocalFolder))
+											 || !Directory.Exists(ProjectLocalFolder))
 			{
 				return;
 			}
