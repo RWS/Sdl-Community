@@ -20,28 +20,28 @@ namespace StudioStyles.ViewModel
 		private ICommand _windowLoadedCommand;
 		public MainWindowViewModel()
 		{
-			_searchWatermarkText = "Studio 2019 SR2";
+			_searchWatermarkText = "Trados Studio 2021";
 			_pluginsCollection = new ObservableCollection<Plugin>
 			{
 				new Plugin
 				{
-					PluginName = "Subtitling",
-					StudioVersion = "Studio 2019"
+					PluginName = "Studio Subtitling",
+					StudioVersion = "Trados Studio 2021"
 				},
 				new Plugin
 				{
 					PluginName = "IATE Real-time Terminology",
-					StudioVersion = "Studio 2017,2019"
+					StudioVersion = "Trados Studio 2021"
 				},
 				new Plugin
 				{
-					PluginName = "SDL BeGlobal (NMT)",
-					StudioVersion = "Studio 2015, 2017, 2019"
+					PluginName = "DSI Viewer",
+					StudioVersion = "Trados Studio 2021"
 				},
 				new Plugin
 				{
-					PluginName = "MT Comparison",
-					StudioVersion = "Studio 2017, 2019"
+					PluginName = "TransitPackage Handler",
+					StudioVersion = "Trados Studio 2019, 2021"
 				},
 			};
 			_uri = "https://google.com";
