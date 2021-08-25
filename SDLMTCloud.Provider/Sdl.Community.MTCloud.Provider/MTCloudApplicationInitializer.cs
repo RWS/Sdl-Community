@@ -23,6 +23,7 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
+		private const string ProjectInProcessing = "ProjectInProcessing";
 		private static IStudioEventAggregator _eventAggregator;
 		private static bool? _isStudioRunning;
 		public static IHttpClient Client { get; } = new HttpClient();
@@ -32,7 +33,15 @@ namespace Sdl.Community.MTCloud.Provider
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 		public static ProjectsController ProjectsController { get; private set; }
 		public static ITranslationService TranslationService { get; private set; }
-		private static Guid CurrentProjectId => ProjectsController.CurrentProject.GetProjectInfo().Id;
+
+		private static string CurrentProjectId
+		{
+			get
+			{
+				var currentProject = GetProjectInProcessing();
+				return currentProject is null ? ProjectInProcessing : currentProject.GetProjectInfo().Id.ToString();
+			}
+		}
 
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
@@ -40,25 +49,36 @@ namespace Sdl.Community.MTCloud.Provider
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
 
-		private static Dictionary<Guid, SdlMTCloudTranslationProvider> Providers { get; set; } = new();
+		private static Dictionary<string, SdlMTCloudTranslationProvider> Providers { get; set; } = new();
 
 		public static void AddCurrentProjectProvider(SdlMTCloudTranslationProvider provider)
 		{
+			if (IsProjectCreationTime())
+			{
+				AttachToProjectCreatedEvent();
+			}
+
+			if (string.IsNullOrEmpty(CurrentProjectId)) return;
+
 			Providers[CurrentProjectId] = provider;
 		}
 
 		public static SdlMTCloudTranslationProvider GetCurrentProjectProvider()
 		{
-			return Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
+			return Providers.ContainsKey(ProjectInProcessing)
+				? Providers[ProjectInProcessing]
+				: string.IsNullOrEmpty(CurrentProjectId) ? null : Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
 		}
 
-		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
-			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+		public static Window GetCurrentWindow()
+		{
+			return Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+		}
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
 			if (SdlTradosStudio.Application is null) return null;
-			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
+			if (Application.Current.Dispatcher.Invoke(GetCurrentWindow)?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -69,6 +89,11 @@ namespace Sdl.Community.MTCloud.Provider
 				_ => null
 			};
 			return projectInProcessing;
+		}
+
+		public static bool IsProjectCreationTime()
+		{
+			return Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower().Contains(CreateNewProject)) != null;
 		}
 
 		public static bool IsStudioRunning()
@@ -118,6 +143,20 @@ namespace Sdl.Community.MTCloud.Provider
 				EditorController = SdlTradosStudio.Application.GetController<EditorController>();
 				MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 			}
+		}
+
+		private static void AttachToProjectCreatedEvent()
+		{
+			ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+		}
+
+		private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
+		{
+			var currentProvider = Providers[ProjectInProcessing];
+			Providers.Remove(ProjectInProcessing);
+			Providers[ProjectsController.CurrentProject.GetProjectInfo().Id.ToString()] = currentProvider;
+
+			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
 		}
 	}
 }
