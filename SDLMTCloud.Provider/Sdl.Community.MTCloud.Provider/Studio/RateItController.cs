@@ -50,12 +50,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		private static bool GetTpStatus()
 		{
 			var tpStatus =
-				Application.Current.Dispatcher.Invoke(
-					() =>
-						MtCloudApplicationInitializer.GetProjectInProcessing()?.GetTranslationProviderConfiguration().Entries
-							.FirstOrDefault(
-								e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider
-							.Enabled);
+				MtCloudApplicationInitializer.GetProjectInProcessing()?.GetTranslationProviderConfiguration().Entries
+					.FirstOrDefault(
+						e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider
+					.Enabled;
 			return tpStatus ?? false;
 		}
 

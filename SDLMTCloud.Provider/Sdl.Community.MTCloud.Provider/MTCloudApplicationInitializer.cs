@@ -73,13 +73,18 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static Window GetCurrentWindow()
 		{
-			return Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+			return
+				Application.Current.Windows.Cast<Window>().FirstOrDefault(
+					window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 		}
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
 			if (SdlTradosStudio.Application is null) return null;
-			if (Invoke(GetCurrentWindow)?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
+			if (Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
+			{
+				return null;
+			}
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -92,14 +97,12 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
-		public static T Invoke<T>(Func<T> function)
-		{
-			return Application.Current.Dispatcher.Invoke(function);
-		}
-
 		public static bool IsProjectCreationTime()
 		{
-			return Invoke(() => Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower().Contains(CreateNewProject)) != null);
+			return
+				Application.Current.Dispatcher.Invoke(
+					() =>
+						GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
 		}
 
 		public static bool IsStudioRunning()
