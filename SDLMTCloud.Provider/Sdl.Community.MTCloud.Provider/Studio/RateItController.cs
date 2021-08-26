@@ -23,7 +23,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 		public RateItController()
 		{
-			MtCloudApplicationInitializer.ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
 			MtCloudApplicationInitializer.EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
@@ -89,11 +88,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
-		{
-			SwitchVisibility();
-		}
-
-		private void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
 			SwitchVisibility();
 		}

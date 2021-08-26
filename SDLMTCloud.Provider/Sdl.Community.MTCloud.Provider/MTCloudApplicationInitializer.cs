@@ -31,6 +31,7 @@ namespace Sdl.Community.MTCloud.Provider
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
 		public static EditorController EditorController { get; set; }
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
+		public static string ProjectInCreationFilePath { get; set; }
 		public static ProjectsController ProjectsController { get; private set; }
 		public static ITranslationService TranslationService { get; private set; }
 
@@ -78,7 +79,7 @@ namespace Sdl.Community.MTCloud.Provider
 		public static FileBasedProject GetProjectInProcessing()
 		{
 			if (SdlTradosStudio.Application is null) return null;
-			if (Application.Current.Dispatcher.Invoke(GetCurrentWindow)?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
+			if (Invoke(GetCurrentWindow)?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -91,9 +92,14 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
+		public static T Invoke<T>(Func<T> function)
+		{
+			return Application.Current.Dispatcher.Invoke(function);
+		}
+
 		public static bool IsProjectCreationTime()
 		{
-			return Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower().Contains(CreateNewProject)) != null;
+			return Invoke(() => Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower().Contains(CreateNewProject)) != null);
 		}
 
 		public static bool IsStudioRunning()
@@ -154,7 +160,11 @@ namespace Sdl.Community.MTCloud.Provider
 		{
 			var currentProvider = Providers[ProjectInProcessing];
 			Providers.Remove(ProjectInProcessing);
-			Providers[ProjectsController.CurrentProject.GetProjectInfo().Id.ToString()] = currentProvider;
+
+			var projectInCreation = ProjectsController.CurrentProject;
+
+			ProjectInCreationFilePath = projectInCreation.FilePath;
+			Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
 
 			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
 		}

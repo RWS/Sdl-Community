@@ -71,13 +71,16 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			if (File.Exists(translationData.FilePath)) return translationData.FilePath;
 
-			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectsController.CurrentProject.FilePath);
+			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectInCreationFilePath) ??
+			                  MtCloudApplicationInitializer.ProjectsController.CurrentProject.FilePath;
+
 			return $@"{projectPath}\{translationData.TargetLanguage}\{translationData.FilePath}.sdlxliff";
 		}
 
 		private void ResetData()
 		{
 			Data.Clear();
+			MtCloudApplicationInitializer.ProjectInCreationFilePath = null;
 		}
 	}
 }
