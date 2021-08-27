@@ -104,7 +104,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				{
 					Hide();
 				}
-				if (onOffSwitch)
+				else
 				{
 					Activate();
 				}
