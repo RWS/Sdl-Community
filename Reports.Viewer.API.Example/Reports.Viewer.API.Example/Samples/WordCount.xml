@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<task name="wordcount">
+
+
+	<taskInfo runTime="Less than 1 second" runAt="08/25/2021 11:03:30" taskId="ede54f31-e150-4405-b380-bf995f9fb896">
+
+		<project name="Local Project 3" number="b6f1afb4-d619-4345-b072-f88e532ce161"/>
+
+	</taskInfo>
+
+
+	<language name="German (Germany)" lcid="1031">
+
+
+		<file name="doc1.docx" guid="6353e037-a94a-428c-b71f-ff387a654a30">
+
+			<total words="2" tags="0" placeables="1" characters="7" segments="1"/>
+
+		</file>
+
+	</language>
+
+
+	<batchTotal>
+
+		<total words="2" tags="0" placeables="1" characters="7" segments="1"/>
+
+	</batchTotal>
+
+</task>
+
+

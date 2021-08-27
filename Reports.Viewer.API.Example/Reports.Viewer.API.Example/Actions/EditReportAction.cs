@@ -1,4 +1,5 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -26,7 +27,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example.Actions
 			foreach (var report in reports)
 			{
 				report.Name += " [updated]";
-				report.Description += " [updated]";				
+				report.Description += $" [updated] {DateTime.Now}";				
 				_reportsViewerController.UpdateReport(report);
 			}			
 		}

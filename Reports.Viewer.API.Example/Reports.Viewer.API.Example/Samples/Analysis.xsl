@@ -100,9 +100,7 @@
             </td>
             <td valign="top">
               <img>
-                <xsl:attribute name="src">
-	                C:\Code\SampleApp\Reports.Viewer.API.Example\Reports.Viewer.API.Example\Samples\SynergyPower.jpg
-				</xsl:attribute>
+                <xsl:attribute name="src">C:\Repos\Sdl-Community\Reports.Viewer.API.Example\Reports.Viewer.API.Example\Samples\SynergyPower.jpg</xsl:attribute>
               </img>
             </td>
           </tr>

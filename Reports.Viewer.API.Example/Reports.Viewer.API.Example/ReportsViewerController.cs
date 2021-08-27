@@ -74,7 +74,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 					MessageBox.Show($"The report {addedReport.Name} was added", PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
-		}
+		}	
 
 		public void RemoveReports(List<Report> reports)
 		{
@@ -116,7 +116,26 @@ namespace Sdl.Community.Reports.Viewer.API.Example
 			var fileBasedProject = GetSelectedProject();
 			if (fileBasedProject != null)
 			{
-				result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, @"C:\Code\SampleApp\Reports.Viewer.API.Example\Reports.Viewer.API.Example\Samples\Analysis.xsl", "html"));
+				switch (report.Group)
+				{
+					case "Analysis":
+						result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, $"{Directory.GetCurrentDirectory()}\\Samples\\Analysis.xsl", "html"));
+						break;
+
+					case "WordCount":
+						if (report.IsCustomReport)
+						{
+							result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, $"{Directory.GetCurrentDirectory()}\\Samples\\BasicTemplate.xsl", "html"));
+						}
+						else
+						{
+							result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, $"{Directory.GetCurrentDirectory()}\\Samples\\WordCount.xsl", "html"));
+						}
+						break;
+					default:
+						result = System.Text.Encoding.Default.GetString(new ProjectReportsOperations(fileBasedProject).GetReportRendering(report.Id, "html"));
+						break;
+				}				
 				result = ReportCleanup(result);
 			}
 			return result;
