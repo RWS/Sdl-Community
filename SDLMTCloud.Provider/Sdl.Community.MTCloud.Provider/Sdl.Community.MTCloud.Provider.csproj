@@ -176,6 +176,7 @@
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Events\ActiveSegmentQeChanged.cs" />
     <Compile Include="Events\RefreshQeStatus.cs" />
+    <Compile Include="Events\TranslationProviderRateItOptionsChanged.cs" />
     <Compile Include="Events\VoidEventHandler.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />

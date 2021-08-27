@@ -40,7 +40,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			get
 			{
-				if (ActiveDocument == null) return null;
+				if (ActiveDocument?.ActiveFile?.Id == null) return null;
 
 				var activeFileId = ActiveDocument.ActiveFile.Id;
 				if (!Data.ContainsKey(activeFileId))

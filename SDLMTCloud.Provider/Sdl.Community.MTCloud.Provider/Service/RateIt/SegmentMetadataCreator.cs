@@ -50,7 +50,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			foreach (var kvp in GroupedData)
 			{
 				var currentFilePath = kvp.Key;
-				if (!File.Exists(currentFilePath)) return;
+				if (currentFilePath == null) continue;
 
 				var converter = _manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
 				var contentProcessor = new MetaDataProcessor(kvp.ToList());
@@ -69,15 +69,23 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private string GetFilePath(TranslationData translationData)
 		{
-			if (File.Exists(translationData.FilePath)) return translationData.FilePath;
+			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectInCreationFilePath) ??
+			                  Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing().FilePath);
 
-			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectsController.CurrentProject.FilePath);
-			return $@"{projectPath}\{translationData.TargetLanguage}\{translationData.FilePath}.sdlxliff";
+			var filepath = $@"{projectPath}\{translationData.TargetLanguage}\{translationData.FilePath}.sdlxliff";
+
+			if (File.Exists(filepath)) return filepath;
+			filepath =
+				Directory.GetFiles($@"{projectPath}\{translationData.TargetLanguage}").FirstOrDefault(
+					f => Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(translationData.FilePath)));
+
+			return File.Exists(filepath) ? filepath : null;
 		}
 
 		private void ResetData()
 		{
 			Data.Clear();
+			MtCloudApplicationInitializer.ProjectInCreationFilePath = null;
 		}
 	}
 }

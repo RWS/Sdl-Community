@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Windows;
@@ -8,7 +9,7 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.Community.MTCloud.Provider.Service.RateIt;
-using Sdl.Community.MTCloud.Provider.Studio;
+using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -22,34 +23,68 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
+		private const string ProjectInProcessing = "ProjectInProcessing";
 		private static IStudioEventAggregator _eventAggregator;
 		private static bool? _isStudioRunning;
 		public static IHttpClient Client { get; } = new HttpClient();
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
-
 		public static EditorController EditorController { get; set; }
-
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
-
+		public static string ProjectInCreationFilePath { get; set; }
 		public static ProjectsController ProjectsController { get; private set; }
+		public static ITranslationService TranslationService { get; private set; }
 
-		public static RateItController RateItController => IsStudioRunning() ? SdlTradosStudio.Application.GetController<RateItController>() : null;
-		public static TranslationService TranslationService { get; private set; }
+		private static string CurrentProjectId
+		{
+			get
+			{
+				var currentProject = GetProjectInProcessing();
+				return currentProject is null ? ProjectInProcessing : currentProject.GetProjectInfo().Id.ToString();
+			}
+		}
 
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
-																			 ? SdlTradosStudio.Application
+																			 ? _eventAggregator = SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
 
-		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
-			window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+		private static Dictionary<string, SdlMTCloudTranslationProvider> Providers { get; set; } = new();
+
+		public static void AddCurrentProjectProvider(SdlMTCloudTranslationProvider provider)
+		{
+			if (IsProjectCreationTime())
+			{
+				AttachToProjectCreatedEvent();
+			}
+
+			if (string.IsNullOrEmpty(CurrentProjectId)) return;
+
+			Providers[CurrentProjectId] = provider;
+		}
+
+		public static SdlMTCloudTranslationProvider GetCurrentProjectProvider()
+		{
+			return Providers.ContainsKey(ProjectInProcessing)
+				? Providers[ProjectInProcessing]
+				: string.IsNullOrEmpty(CurrentProjectId) ? null : Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
+		}
+
+		public static Window GetCurrentWindow()
+		{
+			return
+				Application.Current.Windows.Cast<Window>().FirstOrDefault(
+					window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+		}
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
 			if (SdlTradosStudio.Application is null) return null;
-			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
+			if (Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
+			{
+				return null;
+			}
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -60,6 +95,14 @@ namespace Sdl.Community.MTCloud.Provider
 				_ => null
 			};
 			return projectInProcessing;
+		}
+
+		public static bool IsProjectCreationTime()
+		{
+			return
+				Application.Current.Dispatcher.Invoke(
+					() =>
+						GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
 		}
 
 		public static bool IsStudioRunning()
@@ -87,12 +130,9 @@ namespace Sdl.Community.MTCloud.Provider
 				PublishEvent(new RefreshQeStatus());
 		}
 
-		public static void SetTranslationService(IConnectionService connectionService)
+		public static void SetTranslationService(IConnectionService connectionService, ITranslationService translationService)
 		{
-			TranslationService = new TranslationService(connectionService, Client, new MessageBoxService());
-
-			//TODO: start supervising when a QE enabled model has been chosen
-
+			TranslationService = translationService ?? new TranslationService(connectionService, Client, new MessageBoxService());
 			MetadataSupervisor?.StartSupervising(TranslationService);
 		}
 
@@ -112,6 +152,26 @@ namespace Sdl.Community.MTCloud.Provider
 				EditorController = SdlTradosStudio.Application.GetController<EditorController>();
 				MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 			}
+		}
+
+		private static void AttachToProjectCreatedEvent()
+		{
+			ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+		}
+
+		private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
+		{
+			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
+
+			if (!Providers.ContainsKey(ProjectInProcessing)) return;
+
+			var currentProvider = Providers[ProjectInProcessing];
+			Providers.Remove(ProjectInProcessing);
+
+			var projectInCreation = ProjectsController.CurrentProject;
+
+			ProjectInCreationFilePath = projectInCreation.FilePath;
+			Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
 		}
 	}
 }
