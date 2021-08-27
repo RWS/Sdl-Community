@@ -75,7 +75,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			var filepath = $@"{projectPath}\{translationData.TargetLanguage}\{translationData.FilePath}.sdlxliff";
 
 			if (File.Exists(filepath)) return filepath;
-			filepath = Directory.GetFiles($@"{projectPath}\{translationData.TargetLanguage}").FirstOrDefault(f => Path.GetFileName(f).Contains(translationData.FilePath));
+			filepath =
+				Directory.GetFiles($@"{projectPath}\{translationData.TargetLanguage}").FirstOrDefault(
+					f => Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(translationData.FilePath)));
 
 			return File.Exists(filepath) ? filepath : null;
 		}

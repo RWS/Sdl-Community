@@ -161,6 +161,10 @@ namespace Sdl.Community.MTCloud.Provider
 
 		private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
+			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
+
+			if (!Providers.ContainsKey(ProjectInProcessing)) return;
+
 			var currentProvider = Providers[ProjectInProcessing];
 			Providers.Remove(ProjectInProcessing);
 
@@ -168,8 +172,6 @@ namespace Sdl.Community.MTCloud.Provider
 
 			ProjectInCreationFilePath = projectInCreation.FilePath;
 			Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
-
-			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
 		}
 	}
 }
