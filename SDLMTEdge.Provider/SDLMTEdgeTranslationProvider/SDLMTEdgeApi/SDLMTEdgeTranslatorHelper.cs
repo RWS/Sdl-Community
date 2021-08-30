@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -53,9 +54,8 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			LanguagePair languageDirection,
 			Xliff xliffFile)
 		{
-			_logger.Trace("");
 			var text = xliffFile.ToString();
-			var queryString = HttpUtility.ParseQueryString(string.Empty);
+			var queryString = new Dictionary<string, string>();
 			var encodedInput = text.Base64Encode();
 
 			lock (optionsLock)
@@ -71,6 +71,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				queryString["sourceLanguageId"] = languageDirection.SourceCulture.ToMTEdgeCode();
 				queryString["targetLanguageId"] = languageDirection.TargetCulture.ToMTEdgeCode();
 				queryString["text"] = encodedInput;
+
 			}
 			else
 			{
@@ -94,11 +95,10 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			}
 			queryString["inputFormat"] = "application/x-xliff";
 
-			_logger.Debug("Sending translation request for: {0}", encodedInput);
 			string jsonResult;
 			try
 			{
-				jsonResult = ContactMtEdgeServer(MtEdgePost, options, "translations/quick", queryString);
+				jsonResult = Translate(queryString, options, "translations/quick");
 			}
 			catch (Exception e)
 			{
@@ -110,6 +110,54 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			var decodedTranslation = encodedTranslation.Base64Decode();
 			_logger.Debug("Resultant translation is: {0}", encodedTranslation);
 			return decodedTranslation;
+		}
+
+		private static string Translate(Dictionary<string,string> parameters, TranslationOptions options, string path)
+		{
+			var content = GetStringContentFromParameters(parameters);
+
+			ServicePointManager.Expect100Continue = true;
+			ServicePointManager.DefaultConnectionLimit = 9999;
+			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+			using (var httpClient = new HttpClient())
+			{
+				httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
+					? new AuthenticationHeaderValue("Bearer", options.ApiToken)
+					: new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
+
+				var builder = new UriBuilder(options.Uri)
+				{
+					Path = $"/api/{options.ApiVersionString}/{path}",
+					Scheme = options.RequiresSecureProtocol ? Uri.UriSchemeHttps : Uri.UriSchemeHttp
+				};
+				var response = httpClient.PostAsync(builder.Uri, content).Result;
+				var result = response.Content.ReadAsStringAsync().Result;
+
+				return result;
+			}
+		}
+
+		private static StringContent GetStringContentFromParameters(IDictionary<string, string> parametersDictionary)
+		{
+			var limit = 32000;
+			var content = new StringContent(parametersDictionary.Aggregate(new StringBuilder(), (sb, nxt) =>
+			{
+				var sbInternal = new StringBuilder();
+				if (sb.Length > 0)
+					sb.Append("&");
+
+				var loops = nxt.Value.Length / limit;
+				for (var i = 0; i <= loops; i++)
+				{
+					if (i < loops)
+						sbInternal.Append(Uri.EscapeDataString(nxt.Value.Substring(limit * i, limit)));
+					else
+						sbInternal.Append(Uri.EscapeDataString(nxt.Value.Substring(limit * i)));
+				}
+				
+				return sb.Append(nxt.Key + "=" + sbInternal.ToString());
+			}).ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
+			return content;
 		}
 
 		/// <summary>
@@ -228,7 +276,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				var builder = new UriBuilder(options.Uri)
 				{
 					Path = $"/api/{options.ApiVersionString}/{path}",
-					Scheme = options.RequiresSecureProtocol ?   Uri.UriSchemeHttps:Uri.UriSchemeHttp
+					Scheme = options.RequiresSecureProtocol ? Uri.UriSchemeHttps : Uri.UriSchemeHttp
 				};
 
 				if (parameters != null)
