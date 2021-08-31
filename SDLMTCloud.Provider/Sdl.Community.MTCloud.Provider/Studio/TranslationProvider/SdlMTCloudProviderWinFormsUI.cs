@@ -44,7 +44,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				}
 				connectionService.SaveCredential(credentialStore);
 
-				MtCloudApplicationInitializer.SetTranslationService(connectionService);
+				MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 
 				var languageProvider = new LanguageProvider();
 				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
@@ -56,6 +56,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
 				{
 					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
+
+					MtCloudApplicationInitializer.AddCurrentProjectProvider(provider);
+
 					return new ITranslationProvider[] { provider };
 				}
 			}

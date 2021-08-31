@@ -37,9 +37,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 		public ITranslationProvider TranslationProvider => _translationProvider;
 
-		private static string ProjectInProcessing => Application.Current?.Dispatcher.Invoke(
-			() => Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing()?.FilePath));
-
 		private ISegmentPair CurrentSegmentPair => _editorController?.ActiveDocument?.ActiveSegmentPair;
 
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
@@ -252,8 +249,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		{
 			var sdlMtFileAndSegmentIds = new FileAndSegmentIds
 			{
-				FilePath = GetSdlXliffFilePath(translationUnits[0].FileProperties) ??
-						   Path.GetFileName(translationUnits[0]?.FileProperties.FileConversionProperties.OriginalFilePath),
+				FilePath = Path.GetFileName(translationUnits[0]?.FileProperties.FileConversionProperties.OriginalFilePath),
 				Segments = translationUnits.ToDictionary(tu => tu.DocumentSegmentPair.Properties.Id, tu => tu.SourceSegment.ToString())
 			};
 
@@ -376,19 +372,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			};
 
 			return alreadyTranslatedSegment;
-		}
-
-		private string GetSdlXliffFilePath(IFileProperties fileProperties)
-		{
-			var projectPath = ProjectInProcessing;
-			if (projectPath is null) return null;
-
-			var fileConversionProperties = fileProperties.FileConversionProperties;
-			var originalFilePath = fileConversionProperties.OriginalFilePath;
-			var fileName = Path.GetFileName(originalFilePath);
-
-			var sdlxliffFilePath = $@"{projectPath}\{fileConversionProperties.TargetLanguage.IsoAbbreviation}\{fileName}.sdlxliff";
-			return sdlxliffFilePath;
 		}
 
 		private bool GetTranslations(IReadOnlyList<MTCloudSegment> mtCloudSegments, FileAndSegmentIds fileAndSegmentIds)

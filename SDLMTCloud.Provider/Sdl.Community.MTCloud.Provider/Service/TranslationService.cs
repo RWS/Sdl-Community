@@ -33,6 +33,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			_messageService = messageService;
 			ConnectionService = connectionService;
+
+			Options = new Options
+			{
+				AutoSendFeedback = true,
+				ResendDraft = true,
+				SendFeedback = true,
+			};
 		}
 
 		public event TranslationReceivedEventHandler TranslationReceived;
@@ -160,7 +167,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			OnTranslationReceived(new TranslationData
 			{
 				TargetSegments =
-					segmentIds.Select((segmentId, index) => (segmentId, target:targetSegments[index].Segment.ToString())).ToDictionary(
+					segmentIds.Select((segmentId, index) => (segmentId, target: targetSegments[index].Segment.ToString())).ToDictionary(
 						x => x.segmentId,
 						x => x.target),
 				TranslationOriginData = new TranslationOriginData
