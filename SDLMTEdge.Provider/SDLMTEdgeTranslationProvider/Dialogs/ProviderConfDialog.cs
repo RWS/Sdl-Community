@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using Sdl.Community.MTEdge.LPConverter;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using NLog;
 using Sdl.LanguagePlatform.Core;
@@ -302,22 +301,29 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		{
 			const int comboboxColumnIndex = 1;
 			var comboBox = (DataGridViewComboBoxCell)TradosLPs.Rows[e.RowIndex].Cells[comboboxColumnIndex];
-			if (comboBox.Value != null)
-			{
-				var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
-				var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
+			if (comboBox.Value == null) return;
+			var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
+			var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
 
-				if (lpPairing != null)
+			if (lpPairing != null)
+			{
+				var languagePair = lpPairing.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
+				if (languagePair != null)
 				{
-					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.MtEdgeLPs.First(lp => lp.LanguagePairId == newLp);
+					Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
 				}
-				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+			}
+
+			if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries") && lpPairing != null)
+			{
+				lpPairing = TradosLPs[1, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
+				newLp = TradosLPs[1, e.RowIndex].Value as string;
+				var languagePair = lpPairing?.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
+				if (languagePair != null)
 				{
-					lpPairing = TradosLPs[1, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
-					newLp = TradosLPs[1, e.RowIndex].Value as string;
-					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.MtEdgeLPs.First(lp => lp.LanguagePairId == newLp);
-					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
+					Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
 				}
+				Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 			}
 		}
 
@@ -342,7 +348,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				{
 					continue;
 				}
-				
+
 				if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
 				{
 					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
@@ -489,7 +495,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			lpPopulationTimer.Start();
 		}
 
-		
+
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			var credentialsValid = !string.IsNullOrEmpty(UsernameField.Text) &&

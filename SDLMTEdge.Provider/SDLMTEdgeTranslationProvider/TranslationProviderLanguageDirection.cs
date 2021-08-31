@@ -57,14 +57,11 @@ namespace Sdl.Community.MTEdge.Provider
 			_logger.Trace("");
 
 			var results = new SearchResults();
-			var translation = TranslateSegments(new Segment[] { segment }).First();
-			if (translation != null)
-			{
-				results.SourceSegment = segment.Duplicate();
-				results.Add(CreateSearchResult(segment, translation));
-				return results;
-			}
-			return new SearchResults();
+			var translation = TranslateSegments(new Segment[] { segment }).FirstOrDefault();
+			if (translation == null) return new SearchResults();
+			results.SourceSegment = segment.Duplicate();
+			results.Add(CreateSearchResult(segment, translation));
+			return results;
 		}
 
 		/// <summary>
