@@ -57,16 +57,22 @@ namespace Sdl.Community.MTEdge.Provider.XliffConverter.Converter
 
 					// if the target result contains Carriage Return and Line Feed characters(\r\n), replace it with a soft return
 					// (otherwise a hard return is added and might crash Studio, the hard return is used for a new paragraph and not to display a new line inside of a segment)
-					if (targetText[i].Groups[1].Value.Contains("\r\n"))
+					var translationOption = xliff.File.Body.TranslationUnits[i].TranslationList.FirstOrDefault();
+					if (translationOption != null)
 					{
-						xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = regExPattern.Replace(targetText[i].Groups[1].Value, softReturn);
+						if (targetText[i].Groups[1].Value.Contains("\r\n"))
+						{
+							translationOption.Translation.Text = regExPattern.Replace(targetText[i].Groups[1].Value, softReturn);
+						}
+						else
+						{
+
+							translationOption.Translation.Text = targetText[i].Groups[1].Value;
+						}
+						translationOption.Translation.TargetLanguage = xliff.File.TargetLanguage;
 					}
-					else
-					{
-						xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
-					}
+
 					xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
-					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
 				}
 				return xliff;
 			}
