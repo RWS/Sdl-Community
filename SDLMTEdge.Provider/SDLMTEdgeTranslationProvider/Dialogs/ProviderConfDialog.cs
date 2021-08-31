@@ -303,22 +303,29 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		{
 			const int comboboxColumnIndex = 1;
 			var comboBox = (DataGridViewComboBoxCell)TradosLPs.Rows[e.RowIndex].Cells[comboboxColumnIndex];
-			if (comboBox.Value != null)
-			{
-				var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
-				var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as TradosToMTEdgeLP;
+			if (comboBox.Value == null) return;
+			var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
+			var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
 
-				if (lpPairing != null)
+			if (lpPairing != null)
+			{
+				var languagePair = lpPairing.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
+				if (languagePair != null)
 				{
-					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.MtEdgeLPs.First(lp => lp.LanguagePairId == newLp);
+					Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
 				}
-				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+			}
+
+			if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries") && lpPairing != null)
+			{
+				lpPairing = TradosLPs[1, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
+				newLp = TradosLPs[1, e.RowIndex].Value as string;
+				var languagePair = lpPairing?.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
+				if (languagePair != null)
 				{
-					lpPairing = TradosLPs[1, e.RowIndex].Tag as TradosToMTEdgeLP;
-					newLp = TradosLPs[1, e.RowIndex].Value as string;
-					Options.LPPreferences[lpPairing.TradosCulture] = lpPairing.MtEdgeLPs.First(lp => lp.LanguagePairId == newLp);
-					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
+					Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
 				}
+				Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 			}
 		}
 
