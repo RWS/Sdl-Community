@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -46,10 +45,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <summary>
 		/// Get the translation of an xliff file using the MTEdge API.
 		/// </summary>
-		/// <param name="options"></param>
-		/// <param name="languageDirection"></param>
-		/// <param name="xliffFile"></param>
-		/// <returns></returns>
 		public static string GetTranslation(TranslationOptions options,
 			LanguagePair languageDirection,
 			Xliff xliffFile)
@@ -71,7 +66,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				queryString["sourceLanguageId"] = languageDirection.SourceCulture.ToMTEdgeCode();
 				queryString["targetLanguageId"] = languageDirection.TargetCulture.ToMTEdgeCode();
 				queryString["text"] = encodedInput;
-
 			}
 			else
 			{
@@ -80,17 +74,21 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				// multiple LPs.
 				if (!options.LPPreferences.ContainsKey(languageDirection.TargetCulture))
 				{
-					options.SetPreferredLanguages(new LanguagePair[] { languageDirection });
+					options.SetPreferredLanguages(new[] { languageDirection });
 					if (!options.LPPreferences.ContainsKey(languageDirection.TargetCulture))
 					{
 						throw new Exception("There are no language pairs currently accessible via MtEdge.");
 					}
 				}
 				queryString["languagePairId"] = options.LPPreferences[languageDirection.TargetCulture].LanguagePairId;
-				if (!options.LPPreferences[languageDirection.TargetCulture].DictionaryId.Equals(Constants.NoDictionary))
+				if (options.LPPreferences[languageDirection.TargetCulture].DictionaryId != null)
 				{
-					queryString["dictionaryIds"] = options.LPPreferences[languageDirection.TargetCulture].DictionaryId;
+					if (!options.LPPreferences[languageDirection.TargetCulture].DictionaryId.Equals(Constants.NoDictionary))
+					{
+						queryString["dictionaryIds"] = options.LPPreferences[languageDirection.TargetCulture].DictionaryId;
+					}
 				}
+				
 				queryString["input"] = encodedInput;
 			}
 			queryString["inputFormat"] = "application/x-xliff";
@@ -167,7 +165,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <returns></returns>
 		public static SDLMTEdgeLanguagePair[] GetLanguagePairs(TranslationOptions options)
 		{
-			_logger.Trace("");
 			lock (languageLock)
 			{
 				if (_languagePairsOnServer == null || !_languagePairsOnServer.Any())
@@ -254,8 +251,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			NameValueCollection parameters = null,
 			bool useHTTP = false)
 		{
-			_logger.Trace("");
-
 			lock (optionsLock)
 			{
 				if (options.ApiVersion == APIVersion.Unknown)
@@ -342,18 +337,16 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <summary>
 		/// Verifies that the API Key passed by the user is a valid API key.
 		/// </summary>
-		/// <param name="options"></param>
-		/// <param name="credentials"></param>
 		public static void VerifyBasicAPIToken(TranslationOptions options, GenericCredentials credentials)
 		{
-			_logger.Trace("");
 			if (options == null)
 			{
 				throw new ArgumentNullException("Options is null");
 			}
-			var oldAPIKey = options.ApiToken;
+			var oldApiKey = options.ApiToken;
 			options.ApiToken = credentials["API-Key"];
 			options.UseBasicAuthentication = credentials["UseApiKey"] != "true";
+			options.RequiresSecureProtocol = credentials["RequiresSecureProtocol"] == "true";
 
 			try
 			{
@@ -372,7 +365,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			}
 			finally
 			{
-				options.ApiToken = oldAPIKey;
+				options.ApiToken = oldApiKey;
 			}
 		}
 
@@ -380,17 +373,11 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// Using the username and password passed in via credentials, obtain the authentication token that will be
 		/// later used to validate API calls.
 		/// </summary>
-		/// <param name="options"></param>
-		/// <param name="credentials"></param>
-		/// <param name="useHTTP"></param>
-		/// <returns></returns>
 		public static string GetAuthToken(
 			TranslationOptions options,
 			GenericCredentials credentials,
 			bool useHTTP = false)
 		{
-			_logger.Trace("");
-
 			lock (optionsLock)
 			{
 				if (options.ApiVersion == APIVersion.Unknown)
@@ -401,13 +388,14 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			
 
 			using (var httpClient = new HttpClient())
 			{
 				// Build the URI for querying the token
-				var builder = new UriBuilder(options.Uri);
-				builder.Path = string.Format("/api/{0}/auth", options.ApiVersionString);
+				var builder = new UriBuilder(options.Uri)
+				{
+					Path = $"/api/{options.ApiVersionString}/auth"
+				};
 
 				// Pass in the username and password as parameters to retrieve the auth token
 				var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -457,7 +445,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 		/// <returns></returns>
 		private static Exception TranslateAggregateException(Exception culprit)
 		{
-			_logger.Trace("");
 			while (culprit.InnerException != null)
 			{
 				culprit = culprit.InnerException;
@@ -480,28 +467,20 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			return culprit;
 		}
 
-		#region String encoding extension methods
 		/// <summary>
 		/// Encode a string using base64 encoding.
 		/// </summary>
-		/// <param name="text"></param>
-		/// <returns></returns>
 		private static string Base64Encode(this string text)
 		{
-			_logger.Trace("");
 			return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
 		}
 
 		/// <summary>
 		/// Decode a base64 encoded string.
 		/// </summary>
-		/// <param name="encodedText"></param>
-		/// <returns></returns>
 		private static string Base64Decode(this string encodedText)
 		{
-			_logger.Trace("");
 			return Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
 		}
-		#endregion
 	}
 }

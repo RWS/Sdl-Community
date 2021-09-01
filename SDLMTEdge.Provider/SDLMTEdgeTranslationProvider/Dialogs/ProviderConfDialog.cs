@@ -95,6 +95,8 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				PasswordField.Text = gCredentials.Password;
 				APIKeyField.Text = gCredentials["API-Key"];
 				BasicAuthenticationOption.Checked = gCredentials["UseApiKey"] != "true";
+				ConnectionBox.Checked = gCredentials["RequiresSecureProtocol"] == "true";
+				
 				APIKeyOption.Checked = !BasicAuthenticationOption.Checked;
 
 				DelayedLPPopulation();
@@ -241,8 +243,6 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		/// <summary>
 		/// This errror handle is for DataGridViewCombobox cell value is not valid error
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
 		private void TradosLPs_DataError(object sender, DataGridViewDataErrorEventArgs e)
 		{
 			if (e.Exception.Message.Contains("value is not valid"))
@@ -252,7 +252,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 				foreach (var langP in Options.LPPreferences)
 				{
-					_logger.Info($"LPPreferences foreach {langP.Value.LanguagePairId}");
+					_logger.Info($"LPPreferences foreach {langP.Value?.LanguagePairId}");
 				}
 
 				_logger.Error($"{e.Exception.Message}\n {e.Exception.StackTrace}");
@@ -338,12 +338,8 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
                 var entry = TradosLPs.Rows[i].DataBoundItem as TradosToMTEdgeLP;
                 if (entry == null) continue;
 
- 
-
                 comboCell.Tag = entry;
                 comboCell.DataSource = entry.MtEdgeLPs.Select(lp => lp.LanguagePairId).ToList();
-
- 
 
                 if (entry.Dictionaries != null)
                 {
@@ -355,12 +351,10 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
                     continue;
                 }
                 
-                if (Options.LPPreferences.ContainsKey(entry.TradosCulture))
+                if (Options.LPPreferences.ContainsKey(entry.TradosCulture) && Options.LPPreferences[entry.TradosCulture]!=null)
                 {
                     var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
                     comboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
-
- 
 
                     ConfigureDictionary(currentDictionaryId, dictionariesCombo, entry);
                 }
@@ -387,44 +381,37 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		private void OKClicked(object sender, EventArgs e)
 		{
-			if (!Options.LPPreferences.Any(lp => lp.Value == null))
+			var port = GetPort();
+			if (!port.HasValue)
 			{
-				int? port = GetPort();
-				if (!port.HasValue)
-				{
-					DialogResult = DialogResult.None;
-					var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
-					MessageBox.Show(error, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				var credentials = GetCredentials();
-				if (!AuthenticateCredentials(credentials))
-					return;
-
-				var creds = new TranslationProviderCredential(credentials.ToCredentialString(), Options.PersistCredentials);
-				credentialStore.AddCredential(Options.Uri, creds);
-
-				if (setDefaultTM.Checked)
-				{
-					PluginConfiguration.CurrentInstance.DefaultConnection = new Connection(
-						host: Options.Host,
-						port: Options.Port
-					);
-					PluginConfiguration.CurrentInstance.SaveToFile();
-				}
-				else if (!setDefaultTM.Checked
-				  && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
-				  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
-				  && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
-				{
-					PluginConfiguration.CurrentInstance.DefaultConnection = null;
-					PluginConfiguration.CurrentInstance.SaveToFile();
-				}
+				DialogResult = DialogResult.None;
+				var error = $"The port must be a valid port between {IPEndPoint.MinPort} and {IPEndPoint.MaxPort}.";
+				MessageBox.Show(error, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
 			}
-			else
+
+			var credentials = GetCredentials();
+			if (!AuthenticateCredentials(credentials))
+				return;
+
+			var cred = new TranslationProviderCredential(credentials.ToCredentialString(), Options.PersistCredentials);
+			credentialStore.AddCredential(Options.Uri, cred);
+
+			if (setDefaultTM.Checked)
 			{
-				MessageBox.Show(Constants.NoProviderSetup, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				PluginConfiguration.CurrentInstance.DefaultConnection = new Connection(
+					host: Options.Host,
+					port: Options.Port
+				);
+				PluginConfiguration.CurrentInstance.SaveToFile();
+			}
+			else if (!setDefaultTM.Checked
+			         && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
+			         && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
+			         && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
+			{
+				PluginConfiguration.CurrentInstance.DefaultConnection = null;
+				PluginConfiguration.CurrentInstance.SaveToFile();
 			}
 		}
 
@@ -432,9 +419,12 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		{
 			var userName = UsernameField.Text;
 			var password = PasswordField.Text;
-			var credentials = new GenericCredentials(userName, password);
-			credentials["API-Key"] = APIKeyField.Text;
-			credentials["UseApiKey"] = BasicAuthenticationOption.Checked ? "false" : "true";
+			var credentials = new GenericCredentials(userName, password)
+			{
+				["API-Key"] = APIKeyField.Text,
+				["UseApiKey"] = BasicAuthenticationOption.Checked ? "false" : "true",
+				["RequiresSecureProtocol"] = ConnectionBox.Checked ? "true" : "false"
+			};
 			return credentials;
 		}
 
