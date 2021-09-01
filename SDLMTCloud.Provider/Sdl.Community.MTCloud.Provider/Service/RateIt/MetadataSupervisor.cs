@@ -123,7 +123,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private void AddTargetSegmentMetaData(TranslationOriginDatum translationOriginDatum, SegmentId currentSegmentPairId)
 		{
-			if (!ActiveDocumentData.TryGetValue(currentSegmentPairId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation))
+			if (ActiveDocumentData != null && (!ActiveDocumentData.TryGetValue(currentSegmentPairId, out var targetData) || string.IsNullOrWhiteSpace(targetData?.QualityEstimation)))
 			{
 				ActiveDocumentData[currentSegmentPairId] = translationOriginDatum;
 			}
