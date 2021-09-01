@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using Newtonsoft.Json;
 using Sdl.Community.MTEdge.LPConverter;
 using Sdl.Community.MTEdge.Provider.Model;
@@ -15,13 +14,14 @@ namespace Sdl.Community.MTEdge.Provider
 	public class TranslationOptions
 	{
 		private string ResolvedHost { get; set; }
-		
-		readonly TranslationProviderUriBuilder _uriBuilder;
+
+		private readonly TranslationProviderUriBuilder _uriBuilder;
 
 		public TranslationOptions()
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(TranslationProvider.TranslationProviderScheme);
 			UseBasicAuthentication = true;
+			RequiresSecureProtocol = false;
 			Port = 8001;
 			LPPreferences = new Dictionary<CultureInfo, SDLMTEdgeLanguagePair>();
 		}
@@ -43,7 +43,6 @@ namespace Sdl.Community.MTEdge.Provider
 		public bool UseBasicAuthentication { get; set; }
 		public bool RequiresSecureProtocol { get; set; }
 
-		#region URI Properties
 		public string Host
 		{
 			get => _uriBuilder.HostName;
@@ -93,8 +92,6 @@ namespace Sdl.Community.MTEdge.Provider
 						mtEdgeLPs: installedLP.OrderBy(lp => lp.LanguagePairId).ToList())
 			).ToList();
 
-			var customEnginesMapping = new CustomEngines();
-
 			//Fix for Spanish latin amerincan flavours
 			CheckLatinSpanish(languagePairs, languagePairChoices, mtEdgeLanguagePairs);
 
@@ -110,7 +107,6 @@ namespace Sdl.Community.MTEdge.Provider
 		/// <summary>
 		/// Set dictionaries for each languagePairChoices 
 		/// </summary>
-		/// <param name="languagePairChoices"></param>
 		public void SetDictionaries(TradosToMTEdgeLP[] languagePairChoices)
 		{
 			foreach (var languagePair in languagePairChoices)
@@ -118,7 +114,6 @@ namespace Sdl.Community.MTEdge.Provider
 				SDLMTEdgeTranslatorHelper.GetDictionaries(languagePair, this);
 			}
 		}
-
 
 		private void CheckForPtbSource(LanguagePair[] languagePairs, List<TradosToMTEdgeLP> languagePairChoices, SDLMTEdgeLanguagePair[] mtEdgeLanguagePairs)
 		{
@@ -180,17 +175,16 @@ namespace Sdl.Community.MTEdge.Provider
 			}
 		}
 
-
 		/// <summary>
 		/// Used for flavours of a language to map the flavour to parent language code
 		/// </summary>
-		private void AddAditionalMtEdgeEngine(string languageWindowsCode, string engineCode,List<TradosToMTEdgeLP> languagePairChoices, SDLMTEdgeLanguagePair[] mtEdgeLanguagePairs)
+		private void AddAditionalMtEdgeEngine(string languageWindowsCode, string engineCode, List<TradosToMTEdgeLP> languagePairChoices, SDLMTEdgeLanguagePair[] mtEdgeLanguagePairs)
 		{
 			if (!string.IsNullOrEmpty(engineCode))
 			{
 				{
 					var mtEdgeLangPairEngines = mtEdgeLanguagePairs.Where(lp => lp.SourceLanguageId.Equals(engineCode.ToLower()) ||
-					                                                         lp.TargetLanguageId.Equals(engineCode.ToLower())).ToList();
+																			 lp.TargetLanguageId.Equals(engineCode.ToLower())).ToList();
 					var projectSourceLanguage = languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterWindowsLanguageName.Equals(languageWindowsCode));
 					foreach (var mtEdgeEngine in mtEdgeLangPairEngines)
 					{
@@ -199,7 +193,5 @@ namespace Sdl.Community.MTEdge.Provider
 				}
 			}
 		}
-		
-		#endregion
 	}
 }
