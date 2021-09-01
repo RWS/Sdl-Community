@@ -47,7 +47,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public IConnectionService ConnectionService { get; }
 
 		public bool IsActiveModelQeEnabled
-			=> GetCorrespondingLanguageMappingModel()?.SelectedModel.Model.ToLower().Contains("qe") ?? false;
+			=> GetCorrespondingLanguageMappingModel()?.SelectedModel.Model?.ToLower().Contains("qe") ?? false;
 
 		public Options Options { get; set; }
 
