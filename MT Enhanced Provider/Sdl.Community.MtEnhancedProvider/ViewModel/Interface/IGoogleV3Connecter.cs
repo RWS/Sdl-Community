@@ -6,7 +6,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 	public interface IGoogleV3Connecter
 	{
 		string GlossaryId { get; set; }
-		string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText);
+		string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText, string format);
 		void CreateGoogleGlossary(LanguagePair[] languagePairs);
 		void SetGoogleAvailableLanguages();
 		void TryToAuthenticateUser();

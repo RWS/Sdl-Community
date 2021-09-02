@@ -55,10 +55,12 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			}
 		}
 
-		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText)
+		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText, string format)
 		{
 			try
 			{
+				// V2 uses "html" and "text" but for V3 its "text/html" and "text/plain"
+				var mimeType = format == "text" ? "text/plain" : "text/html";
 				var request = new TranslateTextRequest
 				{
 					Contents =
@@ -68,7 +70,8 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 					Model = _modelPath,
 					TargetLanguageCode = targetLanguage.Name,
 					SourceLanguageCode = sourceLanguage.Name,
-					Parent = new ProjectName(_options.ProjectName).ToString()
+					Parent = new ProjectName(_options.ProjectName).ToString(),
+					MimeType = mimeType
 				};
 				if (!string.IsNullOrEmpty(_glossaryResourceLocation))
 				{
