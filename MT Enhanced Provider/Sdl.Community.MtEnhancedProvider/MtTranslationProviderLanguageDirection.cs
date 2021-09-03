@@ -206,7 +206,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			_googleV3Connecter = new GoogleV3Connecter(options);
 
 			var v3TranslatedText =
-				_googleV3Connecter.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext);
+				_googleV3Connecter.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext, format);
 
 			return v3TranslatedText;
 		}
@@ -309,7 +309,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				{
 					//now do lookup
 					case MtTranslationOptions.ProviderType.GoogleTranslate:
-						translatedText = LookupGt(sourcetext, _options, "html"); //plain??
+						translatedText = LookupGt(sourcetext, _options, "text");
 						break;
 					case MtTranslationOptions.ProviderType.MicrosoftTranslator:
 						translatedText = LookupMst(sourcetext, _options, "text/plain");
