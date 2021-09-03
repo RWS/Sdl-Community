@@ -8,7 +8,7 @@ namespace Sdl.Community.RecordSourceTU.TellMe
 	{
 		public CommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override bool IsAvailable => true;
