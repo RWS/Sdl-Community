@@ -27,6 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderStatusChanged>(Settings_TranslationProviderStatusChanged);
 			MtCloudApplicationInitializer.Subscribe<TranslationProviderRateItOptionsChanged>(TranslationProviderRateItOptionsChanged);
+			MtCloudApplicationInitializer.Subscribe<TranslationProviderAdded>(TranslationProviderAdded);
 		}
 
 		public IRatingService RateIt => _control?.Value.RatingService;
@@ -44,7 +45,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 		protected override void Initialize()
 		{
 			_control = new Lazy<View.RateItControl>(() => new View.RateItControl());
-			SwitchVisibility();
+			Setup();
 		}
 
 		private static bool GetTpStatus()
@@ -57,23 +58,32 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			return tpStatus ?? false;
 		}
 
-		private void SwitchVisibility()
+		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			if (!MtCloudApplicationInitializer.IsStudioRunning()) return;
+			Setup();
+		}
 
-			if (!GetTpStatus())
-			{
-				SwitchVisibility(false);
+		private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
+		{
+			if (!tpInfo.TpUri.ToString().Contains(PluginResources.SDLMTCloudUri)) return;
+			SwitchVisibility(tpInfo.NewStatus ?? false);
+		}
+
+		private void Setup(bool providerAdded = false)
+		{
+			if (MtCloudApplicationInitializer.CurrentViewDetector.View != Helpers.CurrentViewDetector.CurrentView.EditorView)
 				return;
-			}
+
+			var projectInProcessing = MtCloudApplicationInitializer.GetProjectInProcessing();
+			if (MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project !=
+			    projectInProcessing) return;
 
 			var currentProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
-			if (currentProvider is null) return;
 
-			var visibility = currentProvider.Options.SendFeedback;
-
+			var visibility = currentProvider != null && currentProvider.Options.SendFeedback && (GetTpStatus() || providerAdded);
 			SwitchVisibility(visibility);
 
+			if (currentProvider is null) return;
 			try
 			{
 				Application.Current?.Dispatcher?.Invoke(
@@ -83,17 +93,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			{
 				// catch all; unable to locate the controller
 			}
-		}
-
-		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
-		{
-			SwitchVisibility();
-		}
-
-		private void Settings_TranslationProviderStatusChanged(TranslationProviderStatusChanged tpInfo)
-		{
-			if (!tpInfo.TpUri.ToString().Contains(PluginResources.SDLMTCloudUri)) return;
-			SwitchVisibility(tpInfo.NewStatus ?? false);
 		}
 
 		private void SwitchVisibility(bool onOffSwitch)
@@ -106,14 +105,19 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				}
 				else
 				{
-					Activate();
+					Show();
 				}
 			});
 		}
 
+		private void TranslationProviderAdded(TranslationProviderAdded obj)
+		{
+			Setup(true);
+		}
+
 		private void TranslationProviderRateItOptionsChanged(TranslationProviderRateItOptionsChanged options)
 		{
-			SwitchVisibility();
+			Setup();
 		}
 	}
 }

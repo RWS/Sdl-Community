@@ -55,9 +55,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
 				{
-					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
-
 					MtCloudApplicationInitializer.AddCurrentProjectProvider(provider);
+					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
 
 					return new ITranslationProvider[] { provider };
 				}

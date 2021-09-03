@@ -247,6 +247,22 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
 		}
 
+		/// <summary>
+		/// We are doing this when the user forces the sending of the feedback(clicks on SendFeedback) without any improvement, rating or feedback message
+		/// because a feedback cannot be sent without any info so we're adding the original target itself as a suggestion
+		/// </summary>
+		/// <param name="segmentId">When this is null the user clicked on SendFeedback instead of it being sent automatically</param>
+		private string EnsureFeedbackWillGetThrough(SegmentId? segmentId, ImprovementFeedback suggestion, dynamic rating)
+		{
+			string suggestionReplacement = null;
+			if (segmentId == null &&  rating == null && suggestion?.Improvement == null)
+			{
+				suggestionReplacement = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
+			}
+
+			return suggestionReplacement;
+		}
+
 		private List<string> GetCommentsAndFeedbackFromUi()
 		{
 			var comments = new List<string>();
@@ -370,16 +386,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			OnPropertyChanged(nameof(ActiveDocumentData));
 		}
 
-		private async void OnConfirmationLevelChanged(SegmentId confirmedSegment)
-		{
-			if (!IsSendFeedbackEnabled) return;
-			await SendFeedback(confirmedSegment);
-		}
-
 		private void OnFeedbackSendingStatusChanged()
 		{
 			OnPropertyChanged(nameof(FeedbackSendingStatus));
 			SwitchListeningForPropertyChanges(true);
+		}
+
+		private async void OnShouldSendFeedback(SegmentId confirmedSegment)
+		{
+			if (!IsSendFeedbackEnabled) return;
+			await SendFeedback(confirmedSegment);
 		}
 
 		private void RateItViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -454,17 +470,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				return;
 			}
 
-			string suggestionReplacement = null;
-			if (segmentId == null && suggestion != null && suggestion.Improvement == null)
-			{
-				suggestionReplacement = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
-			}
-
 			var rating = GetRatingObject(segmentId);
 
 			var segmentSource = segmentId != null
 				? ActiveDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
 				: ActiveDocument.ActiveSegmentPair.Source.ToString();
+
+			string suggestionReplacement = EnsureFeedbackWillGetThrough(segmentId, suggestion, rating);
 
 			var feedbackInfo = new FeedbackInfo
 			{
@@ -502,14 +514,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (_segmentSupervisor == null) return;
 
-			_segmentSupervisor.SegmentConfirmed -= OnConfirmationLevelChanged;
-			_segmentSupervisor.SegmentConfirmed += OnConfirmationLevelChanged;
+			_segmentSupervisor.ShouldSendFeedback -= OnShouldSendFeedback;
+			_segmentSupervisor.ShouldSendFeedback += OnShouldSendFeedback;
 		}
 
 		private void StopSendingOnConfirmationLevelChanged()
 		{
 			if (_segmentSupervisor == null) return;
-			_segmentSupervisor.SegmentConfirmed -= OnConfirmationLevelChanged;
+			_segmentSupervisor.ShouldSendFeedback -= OnShouldSendFeedback;
 		}
 
 		private void SwitchListeningForPropertyChanges(bool listen)

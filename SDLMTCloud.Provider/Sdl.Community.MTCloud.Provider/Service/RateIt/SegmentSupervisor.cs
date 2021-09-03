@@ -22,7 +22,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_editorController = editorController;
 		}
 
-		public event ConfirmationLevelChangedEventHandler SegmentConfirmed;
+		public event ShouldSendFeedbackEventHandler ShouldSendFeedback;
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
 
@@ -90,43 +90,45 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
-		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin, bool lookInPrevious = false)
+		private static bool WasPreviousOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			//TODO: extract in helper
-			if (lookInPrevious)
-			{
-				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
-			}
+			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
+		}
+
+		private static bool IsOriginMTCloud(ITranslationOrigin translationOrigin)
+		{
 			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
 		{
-			var segment = (ISegment)((ISegmentContainerNode)sender).Item;
-			if (segment == null) return;
+			var targetSegment = (ISegment)((ISegmentContainerNode)sender).Item;
+			if (targetSegment == null) return;
 
-			var segmentId = segment.Properties.Id;
-			var translationOrigin = segment.Properties.TranslationOrigin;
-			var targetSegmentText = segment.ToString();
+			var segmentId = targetSegment.Properties.Id;
+			var translationOrigin = targetSegment.Properties.TranslationOrigin;
 
-			if (IsImprovementToTpTranslation(translationOrigin, segmentId, segment))
+			if (IsImprovementToTpTranslation(translationOrigin, segmentId, targetSegment))
 			{
-				AddImprovement(segmentId, targetSegmentText);
+				AddImprovement(segmentId, targetSegment.ToString());
 			}
 
-			if (segment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
-			SegmentConfirmed?.Invoke(segmentId);
+			if (!IsOriginMTCloud(translationOrigin) && !WasPreviousOriginMTCloud(translationOrigin) ||
+			    targetSegment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
+
+			ShouldSendFeedback?.Invoke(segmentId);
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			if (ActiveDocument == null) return;
+			ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
 			ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 		}
 
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
 		{
-			return IsFromSdlMtCloud(translationOrigin, true) &&
+			return WasPreviousOriginMTCloud(translationOrigin) &&
 				   ActiveDocumentData.ContainsKey(segmentId) &&
 				   ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
 				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
