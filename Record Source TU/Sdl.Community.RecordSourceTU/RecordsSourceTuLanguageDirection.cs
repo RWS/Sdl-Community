@@ -1,61 +1,20 @@
-﻿using System.IO;
-using System.Linq;
-using Sdl.LanguagePlatform.Core;
+﻿using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.RecordSourceTU
 {
 	public class RecordsSourceTuLanguageDirection : ITranslationMemoryLanguageDirection
     {
-		#region Private fields
 		private readonly ITranslationProviderLanguageDirection _fileBasedTranslationProviderLanguageDirection;
-        private readonly ITranslationMemoryLanguageDirection _tmlanguageDirection;
-		private EditorController _editorController = null;
-		private string _activeFileName = string.Empty;
-		#endregion
+        private readonly ITranslationMemoryLanguageDirection _tmLanguageDirection;
 
-		#region Constructors
 		public RecordsSourceTuLanguageDirection(ITranslationProviderLanguageDirection languageDirection, ITranslationMemoryLanguageDirection tmlanguageDirection)
         {
             _fileBasedTranslationProviderLanguageDirection = languageDirection;
-            _tmlanguageDirection = tmlanguageDirection;
-			_editorController = GetEditorController();
-			_editorController.Opened += _editorController_Opened;
-			
-		}
-		#endregion
+            _tmLanguageDirection = tmlanguageDirection;
+        }
 
-		#region Events
-		private void _editorController_Opened(object sender, DocumentEventArgs e)
-		{
-			var activeDoc = _editorController.ActiveDocument;
-			if (activeDoc != null)
-			{
-				activeDoc.ActiveSegmentChanged += ActiveDoc_ActiveSegmentChanged;
-			}
-		}
-
-		private void ActiveDoc_ActiveSegmentChanged(object sender, System.EventArgs e)
-		{
-			var document = sender as Document;
-			
-			// used to get the info for each active file when files are merged during project creation
-			if (document?.Files.Count() == 1)
-			{
-				_activeFileName = Path.GetFileName(document?.ActiveFileProperties?.FileConversionProperties?.OriginalFilePath);
-			}
-			else
-			{
-				// used to get the info for each active file when files are merged after creating project 
-				_activeFileName = Path.GetFileName(document?.ActiveFile?.LocalFilePath);
-			}
-
-		}
-		#endregion
-
-		#region ITranslationProviderLanguageDirection Members
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
         {
             var results = _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnits(
@@ -86,8 +45,8 @@ namespace Sdl.Community.RecordSourceTU
             var result = _fileBasedTranslationProviderLanguageDirection.AddTranslationUnit(translationUnit, settings);
             if (result == null) return null;
 
-			var translationUnits = new TranslationUnit[] { translationUnit };
-			var results = new ImportResult[] { result };
+			var translationUnits = new[] { translationUnit };
+			var results = new[] { result };
 
 			ProcessTranslationUnits(translationUnits, results);
 			return result;
@@ -182,8 +141,8 @@ namespace Sdl.Community.RecordSourceTU
             var result =  _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnit(translationUnit);
             if (result == null) return null;
 
-			var translationUnits = new TranslationUnit[] { translationUnit };
-			var results = new ImportResult[] { result };
+			var translationUnits = new[] { translationUnit };
+			var results = new[] { result };
 
 			ProcessTranslationUnits(translationUnits, results);
 
@@ -199,99 +158,91 @@ namespace Sdl.Community.RecordSourceTU
 			return results;
         }
 
-        #endregion
-
         public bool ApplyFieldsToTranslationUnit(FieldValues values, bool overwrite, PersistentObjectToken translationUnitId)
         {
-            return _tmlanguageDirection.ApplyFieldsToTranslationUnit(values, overwrite, translationUnitId);
+            return _tmLanguageDirection.ApplyFieldsToTranslationUnit(values, overwrite, translationUnitId);
         }
 
         public int ApplyFieldsToTranslationUnits(FieldValues values, bool overwrite, PersistentObjectToken[] translationUnitIds)
         {
-            return _tmlanguageDirection.ApplyFieldsToTranslationUnits(values, overwrite, translationUnitIds);
+            return _tmLanguageDirection.ApplyFieldsToTranslationUnits(values, overwrite, translationUnitIds);
         }
 
         public int DeleteAllTranslationUnits()
         {
-           return _tmlanguageDirection.DeleteAllTranslationUnits();
+           return _tmLanguageDirection.DeleteAllTranslationUnits();
         }
 
         public bool DeleteTranslationUnit(PersistentObjectToken translationUnitId)
         {
-           return _tmlanguageDirection.DeleteTranslationUnit(translationUnitId);
+           return _tmLanguageDirection.DeleteTranslationUnit(translationUnitId);
         }
 
         public int DeleteTranslationUnits(PersistentObjectToken[] translationUnitIds)
         {
-           return _tmlanguageDirection.DeleteTranslationUnits(translationUnitIds);
+           return _tmLanguageDirection.DeleteTranslationUnits(translationUnitIds);
         }
 
         public int DeleteTranslationUnitsWithIterator(ref RegularIterator iterator)
         {
-         return   _tmlanguageDirection.DeleteTranslationUnitsWithIterator(ref iterator);
+         return   _tmLanguageDirection.DeleteTranslationUnitsWithIterator(ref iterator);
         }
 
         public int EditTranslationUnits(LanguagePlatform.TranslationMemory.EditScripts.EditScript editScript, LanguagePlatform.TranslationMemory.EditScripts.EditUpdateMode updateMode, PersistentObjectToken[] translationUnitIds)
         {
-          return  _tmlanguageDirection.EditTranslationUnits(editScript, updateMode, translationUnitIds);
+          return  _tmLanguageDirection.EditTranslationUnits(editScript, updateMode, translationUnitIds);
         }
 
         public int EditTranslationUnitsWithIterator(LanguagePlatform.TranslationMemory.EditScripts.EditScript editScript, LanguagePlatform.TranslationMemory.EditScripts.EditUpdateMode updateMode, ref RegularIterator iterator)
         {
-           return _tmlanguageDirection.EditTranslationUnitsWithIterator(editScript, updateMode, ref iterator);
+           return _tmLanguageDirection.EditTranslationUnitsWithIterator(editScript, updateMode, ref iterator);
         }
 
         public TranslationUnit[] GetDuplicateTranslationUnits(ref DuplicateIterator iterator)
         {
-          return  _tmlanguageDirection.GetDuplicateTranslationUnits(ref iterator);
+          return  _tmLanguageDirection.GetDuplicateTranslationUnits(ref iterator);
         }
 
         public TranslationUnit GetTranslationUnit(PersistentObjectToken translationUnitId)
         {
-           return _tmlanguageDirection.GetTranslationUnit(translationUnitId);
+           return _tmLanguageDirection.GetTranslationUnit(translationUnitId);
         }
 
         public int GetTranslationUnitCount()
         {
-         return   _tmlanguageDirection.GetTranslationUnitCount();
+         return   _tmLanguageDirection.GetTranslationUnitCount();
         }
 
         public TranslationUnit[] GetTranslationUnits(ref RegularIterator iterator)
         {
-            return _tmlanguageDirection.GetTranslationUnits(ref iterator);
+            return _tmLanguageDirection.GetTranslationUnits(ref iterator);
         }
 
         public TranslationUnit[] PreviewEditTranslationUnitsWithIterator(LanguagePlatform.TranslationMemory.EditScripts.EditScript editScript, ref RegularIterator iterator)
         {
-            return _tmlanguageDirection.PreviewEditTranslationUnitsWithIterator(editScript, ref iterator);
+            return _tmLanguageDirection.PreviewEditTranslationUnitsWithIterator(editScript, ref iterator);
         }
 
         public bool ReindexTranslationUnits(ref RegularIterator iterator)
         {
-            return _tmlanguageDirection.ReindexTranslationUnits(ref iterator);
+            return _tmLanguageDirection.ReindexTranslationUnits(ref iterator);
         }
 
         ITranslationMemory ITranslationMemoryLanguageDirection.TranslationProvider
         {
-            get { return _tmlanguageDirection.TranslationProvider; }
+            get { return _tmLanguageDirection.TranslationProvider; }
         }
 
         public ImportResult[] UpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, bool[] mask)
         {
-            return _tmlanguageDirection.UpdateTranslationUnitsMasked(translationUnits, mask);
+            return _tmLanguageDirection.UpdateTranslationUnitsMasked(translationUnits, mask);
         }
 
-		#region Private Methods
-		private EditorController GetEditorController()
-		{
-			return SdlTradosStudio.Application.GetController<EditorController>();
-		}
-
-		private void ProcessTranslationUnits(TranslationUnit[] translationUnits, ImportResult[] results)
+        private void ProcessTranslationUnits(TranslationUnit[] translationUnits, ImportResult[] results)
 		{
 			var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
-			for (int i = 0; i < results.Length; i++)
+			for (var i = 0; i < results.Length; i++)
 			{
 				var result = results[i];
 				if (result == null) continue;
@@ -308,6 +259,6 @@ namespace Sdl.Community.RecordSourceTU
 				}
 			}
 		}
-		#endregion
+
 	}
 }
