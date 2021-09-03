@@ -2,8 +2,10 @@
 
 namespace Sdl.Community.IATETerminologyProvider.Interface
 {
-	internal interface ISettingsViewModel
+	public interface ISettingsViewModel
 	{
 		SettingsModel Settings{ get; set; }
+		void Setup();
+		void Reset();
 	}
 }

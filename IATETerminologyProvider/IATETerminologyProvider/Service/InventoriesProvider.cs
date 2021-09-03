@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
@@ -12,18 +14,18 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 {
 	public class InventoriesProvider
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly ConnectionProvider _connectionProvider;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public InventoriesProvider(ConnectionProvider connectionProvider)
 		{
 			_connectionProvider = connectionProvider;
 		}
 
-		public bool IsInitialized { get; private set; }
-
+		public List<IateCollection> Collections { get; set; }
 		public List<ItemsResponseModel> Domains { get; private set; }
-
+		public List<IateInstitution> Institutions { get; set; }
+		public bool IsInitialized { get; private set; }
 		public List<ItemsResponseModel> TermTypes { get; private set; }
 
 		public async Task<bool> Initialize()
@@ -35,13 +37,19 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 			try
 			{
-				_logger.Info($"--> Try to recover inventories");
+				_logger.Info("--> Try to recover inventories");
 
-				Domains = await Task.FromResult(await GetDomains());
-				_logger.Info($"--> Recoved {Domains?.Count} Domains");
+				Institutions = await GetInstitutions();
+				_logger.Info($"--> Recovered {Domains?.Count} Institutions");
 
-				TermTypes = await Task.FromResult(await GetTermTypes());
-				_logger.Info($"--> Recoved {TermTypes?.Count} Term Types");
+				Collections = await GetCollections();
+				_logger.Info($"--> Recovered {Domains?.Count} Collections");
+
+				Domains = await GetDomains();
+				_logger.Info($"--> Recovered {Domains?.Count} Domains");
+
+				TermTypes = await GetTermTypes();
+				_logger.Info($"--> Recovered {TermTypes?.Count} Term Types");
 
 				IsInitialized = true;
 			}
@@ -52,6 +60,42 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 
 			return IsInitialized;
+		}
+
+		private async Task<List<IateCollection>> GetCollections()
+		{
+			var getCollectionsRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Get,
+				RequestUri = new Uri(ApiUrls.GetCollectionsUri())
+			};
+			getCollectionsRequest.Headers.Add("Accept", "application/vnd.iate.collection+json;version=2");
+
+			var getCollectionsResponse = await _connectionProvider.HttpClient.SendAsync(getCollectionsRequest);
+
+			var collectionsJson = new List<IateCollection>();
+			try
+			{
+				getCollectionsResponse?.EnsureSuccessStatusCode();
+
+				if (getCollectionsResponse?.Content != null)
+				{
+					var getCollectionsResponseAsString = await getCollectionsResponse.Content?.ReadAsStringAsync();
+					collectionsJson =
+						JObject.Parse(getCollectionsResponseAsString)["items"].ToObject<List<IateCollection>>(
+							JsonSerializer.Create(new JsonSerializerSettings
+							{
+								ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() },
+								NullValueHandling = NullValueHandling.Ignore
+							}));
+				}
+			}
+			finally
+			{
+				getCollectionsResponse?.Dispose();
+			}
+
+			return collectionsJson;
 		}
 
 		private async Task<List<ItemsResponseModel>> GetDomains()
@@ -80,13 +124,49 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				httpResponse?.Dispose();
 			}
 
-			return await Task.FromResult(jsonDomainsModel.Items);
+			return jsonDomainsModel.Items;
+		}
+
+		private async Task<List<IateInstitution>> GetInstitutions()
+		{
+			var getInstitutionsRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Get,
+				RequestUri = new Uri(ApiUrls.GetInstitutionsUri())
+			};
+
+			var getInstitutionsResponse = await _connectionProvider.HttpClient.SendAsync(getInstitutionsRequest);
+
+			var institutionsJson = new List<IateInstitution>();
+
+			try
+			{
+				getInstitutionsResponse?.EnsureSuccessStatusCode();
+
+				if (getInstitutionsResponse?.Content != null)
+				{
+					var getCollectionsResponseAsString = await getInstitutionsResponse.Content?.ReadAsStringAsync();
+					institutionsJson =
+						JObject.Parse(getCollectionsResponseAsString)["items"].ToObject<List<IateInstitution>>(
+							JsonSerializer.Create(new JsonSerializerSettings
+							{
+								ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() },
+								NullValueHandling = NullValueHandling.Ignore
+							}));
+				}
+			}
+			finally
+			{
+				getInstitutionsResponse?.Dispose();
+			}
+
+			return institutionsJson;
 		}
 
 		private async Task<List<ItemsResponseModel>> GetTermTypes()
 		{
 			var termTypes = new List<ItemsResponseModel>();
-			
+
 			var httpRequest = new HttpRequestMessage
 			{
 				Method = HttpMethod.Get,
@@ -117,7 +197,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				httpResponse?.Dispose();
 			}
 
-			return await Task.FromResult(termTypes);
+			return termTypes;
 		}
 	}
 }

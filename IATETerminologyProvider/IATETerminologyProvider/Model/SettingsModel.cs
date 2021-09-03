@@ -8,8 +8,6 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SettingsModel
 	{
-		//public int DefaultMaxEntries = 500;
-		
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
 		public SettingsModel()
@@ -18,11 +16,27 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 
 			Domains = new List<DomainModel>();
 			TermTypes = new List<TermTypeModel>();
+			Collections = new List<CollectionModel>();
+			Institutions = new List<InstitutionModel>();
 		}
 
 		public SettingsModel(Uri uri)
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
+		}
+
+		public List<CollectionModel> Collections
+		{
+			get
+			{
+				var collections = JsonConvert.DeserializeObject<List<CollectionModel>>(GetStringParameter("collections"));
+				return collections;
+			}
+			set
+			{
+				var collections = JsonConvert.SerializeObject(value);
+				SetStringParameter("collections", collections);
+			}
 		}
 
 		public List<DomainModel> Domains
@@ -39,6 +53,32 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			}
 		}
 
+		public List<InstitutionModel> Institutions
+		{
+			get
+			{
+				var institutions = JsonConvert.DeserializeObject<List<InstitutionModel>>(GetStringParameter("institutions"));
+				return institutions;
+			}
+			set
+			{
+				var institutions = JsonConvert.SerializeObject(value);
+				SetStringParameter("institutions", institutions);
+			}
+		}
+
+		public bool SearchInSubdomains
+		{
+			get => SearchInSubdomainsParameter != null && Convert.ToBoolean(SearchInSubdomainsParameter);
+			set => SearchInSubdomainsParameter = value.ToString();
+		}
+
+		public string SearchInSubdomainsParameter
+		{
+			get => GetStringParameter("searchInSubdomains");
+			set => SetStringParameter("searchInSubdomains", value);
+		}
+
 		public List<TermTypeModel> TermTypes
 		{
 			get
@@ -51,34 +91,6 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 				var termTypes = JsonConvert.SerializeObject(value);
 				SetStringParameter("termTypes", termTypes);
 			}
-		}
-
-		//public int MaxEntries
-		//{
-		//	get
-		//	{
-		//		var success = int.TryParse(GetStringParameter("maxEntries"), out var value);
-
-		//		return success
-		//			? value < 100 ? DefaultMaxEntries : value
-		//			: DefaultMaxEntries;
-		//	}
-		//	set
-		//	{
-		//		SetStringParameter("maxEntries", value.ToString());
-		//	}
-		//}
-
-		public bool SearchInSubdomains
-		{
-			get => SearchInSubdomainsParameter != null && Convert.ToBoolean(SearchInSubdomainsParameter);
-			set => SearchInSubdomainsParameter = value.ToString();
-		}
-
-		public string SearchInSubdomainsParameter
-		{
-			get => GetStringParameter("searchInSubdomains");
-			set => SetStringParameter("searchInSubdomains", value);
 		}
 
 		public Uri Uri => _uriBuilder.Uri;

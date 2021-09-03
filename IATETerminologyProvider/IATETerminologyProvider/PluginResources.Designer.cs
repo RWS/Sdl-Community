@@ -191,6 +191,15 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select collection(s):.
+        /// </summary>
+        public static string SelectCollections_TextBlock {
+            get {
+                return ResourceManager.GetString("SelectCollections_TextBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {

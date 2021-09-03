@@ -51,6 +51,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Sdl.Community.RateItControl">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
       <Private>False</Private>
@@ -142,9 +146,13 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
+    <Compile Include="Model\CollectionModel.cs" />
+    <Compile Include="Model\InstitutionModel.cs" />
+    <Compile Include="Model\ResponseModels\IateLanguage.cs" />
+    <Compile Include="Model\ResponseModels\IateName.cs" />
+    <Compile Include="Model\ResponseModels\IateInstitution.cs" />
     <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
-    <Compile Include="Helpers\CloseOnClickBehaviour.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Log.cs" />
@@ -180,7 +188,6 @@
     <Compile Include="Model\ResponseModels\TermTypeResponseModel.cs" />
     <Compile Include="Model\SearchResultModel.cs" />
     <Compile Include="Model\SettingsModel.cs" />
-    <Compile Include="Model\SettingsViewModelBase.cs" />
     <Compile Include="Model\TermResultGroup.cs" />
     <Compile Include="Model\TermTypeModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
@@ -199,6 +206,8 @@
     <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\SqliteDatabaseProvider.cs" />
     <Compile Include="Service\TermSearchService.cs" />
+    <Compile Include="Model\ResponseModels\IateCollection.cs" />
+    <Compile Include="Events\ResetEvent.cs" />
     <Compile Include="View\FineGrainedFilter.xaml.cs">
       <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
     </Compile>
@@ -276,6 +285,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
+    <Content Include="3rd party\Sdl.Community.RateItControl.pdb" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

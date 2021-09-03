@@ -244,6 +244,8 @@ namespace Sdl.Community.IATETerminologyProvider
 			var targetLanguages = new List<string>();
 			var filteredDomains = new List<string>();
 			var filteredTermTypes = new List<int>();
+			var filteredCollections = new List<string>();
+			var filteredInstitutions = new List<string>();
 
 			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
 			if (ProviderSettings != null)
@@ -253,6 +255,12 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				var termTypes = ProviderSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
+
+				var collections = ProviderSettings.Collections.Select(c => c.Code).ToList();
+				filteredCollections.AddRange(collections);
+				
+				var institutions = ProviderSettings.Institutions.Select(i => i.Code).ToList();
+				filteredInstitutions.AddRange(institutions);
 			}
 
 			var bodyModel = new
@@ -263,7 +271,9 @@ namespace Sdl.Community.IATETerminologyProvider
 				cascade_domains = ProviderSettings?.SearchInSubdomains,
 				query_operator = 18,
 				filter_by_domains = filteredDomains,
-				search_in_term_types = filteredTermTypes
+				search_in_term_types = filteredTermTypes,
+				filter_by_entry_collection = filteredCollections,
+				filter_by_entry_institution_owner = filteredInstitutions
 			};
 
 			return bodyModel;

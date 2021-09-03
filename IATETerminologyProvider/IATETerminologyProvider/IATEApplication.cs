@@ -16,21 +16,36 @@ namespace Sdl.Community.IATETerminologyProvider
 	public class IATEApplication : IApplicationInitializer
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-		
-		public static ConnectionProvider ConnectionProvider { get; private set; }
-
-		public static InventoriesProvider InventoriesProvider { get; set; }
 
 		public static ICacheProvider CacheProvider { get; set; } =
 			new CacheProvider(new SqliteDatabaseProvider(new PathInfo()));
 
+		public static ConnectionProvider ConnectionProvider { get; private set; }
+
+		public static InventoriesProvider InventoriesProvider { get; set; }
 		public static MainWindow MainWindow { get; set; }
+		public static IMessageBoxService MessageBoxService { get; set; } = new MessageBoxService();
+
+		public static MainWindow GetMainWindow(SettingsModel settingsModel = null)
+		{
+			if (!ConnectionProvider.EnsureConnection()) return null;
+
+			var listOfViewModels = new List<ISettingsViewModel>
+			{
+				new DomainsAndTermTypesFilterViewModel(),
+				new FineGrainedFilterViewModel()
+			};
+
+			MainWindow = new MainWindow(listOfViewModels, settingsModel ?? new SettingsModel());
+
+			return MainWindow;
+		}
 
 		public async void Execute()
 		{
 			Log.Setup();
 			Logger.Info("--> IATE Initialize Application");
-			
+
 			try
 			{
 				Logger.Info("--> Try to login");
@@ -47,21 +62,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				Logger.Error($"{ex.Message}\n{ex.StackTrace}");
 			}
-		}
-
-		public static MainWindow GetMainWindow(SettingsModel settingsModel = null)
-		{
-			if (!ConnectionProvider.EnsureConnection()) return null;
-
-			var listOfViewModels = new List<SettingsViewModelBase>
-			{
-				new DomainsAndTermTypesFilterViewModel(InventoriesProvider, CacheProvider, new MessageBoxService()),
-				new FineGrainedFilterViewModel()
-			};
-
-			MainWindow = new MainWindow(listOfViewModels, settingsModel);
-
-			return MainWindow;
 		}
 	}
 }

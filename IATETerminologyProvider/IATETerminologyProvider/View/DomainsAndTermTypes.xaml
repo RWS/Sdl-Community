@@ -3,10 +3,11 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:viewModel="clr-namespace:Sdl.Community.IATETerminologyProvider.ViewModel"
 			 xmlns:resx="clr-namespace:Sdl.Community.IATETerminologyProvider"
 			 xmlns:controls="clr-namespace:Sdl.Community.IATETerminologyProvider.Controls"
-			 xmlns:helpers="clr-namespace:Sdl.Community.IATETerminologyProvider.Helpers"
 			 mc:Ignorable="d"
+			 d:DataContext="{d:DesignInstance viewModel:DomainsAndTermTypesFilterViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -22,12 +23,10 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
-		<Grid IsEnabled="{Binding IsEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*"     />
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
@@ -41,9 +40,9 @@
 			           Margin="10,5,0,0" Text="{x:Static resx:PluginResources.TermType_Description}" />
 
 			<DataGrid Grid.Row="1" Margin="10,5,10,10" Grid.Column="0" AutoGenerateColumns="False"
-			          ItemsSource="{Binding Domains,UpdateSourceTrigger=PropertyChanged}"
+			          ItemsSource="{Binding Domains, Mode=TwoWay}"
 			          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
-			          SelectionMode="Extended"
+			          SelectionMode="Single"
 			          SelectedValue="{Binding SelectedDomain,UpdateSourceTrigger=PropertyChanged}"
 			          SelectionUnit="FullRow"
 			          GridLinesVisibility="None"
@@ -52,11 +51,12 @@
 			          CanUserAddRows="False">
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Width="50">
-						<DataGridTemplateColumn.Header>
-							<CheckBox
-								IsChecked="{Binding DataContext.AllDomainsChecked, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-								Margin="5,0,0,0" />
-						</DataGridTemplateColumn.Header>
+						<DataGridTemplateColumn.HeaderTemplate>
+							<DataTemplate>
+								<CheckBox IsChecked="{Binding DataContext.AllDomainsChecked, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+										  Margin="5,0,0,0" />
+							</DataTemplate>
+						</DataGridTemplateColumn.HeaderTemplate>
 
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
@@ -77,7 +77,7 @@
 			</DataGrid>
 
 			<DataGrid Grid.Row="1" Margin="10,5,10,10" Grid.Column="1" AutoGenerateColumns="False"
-			          ItemsSource="{Binding TermTypes,UpdateSourceTrigger=PropertyChanged}"
+			          ItemsSource="{Binding TermTypes}"
 			          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
 			          SelectionMode="Extended"
 			          SelectedValue="{Binding SelectedTermType,UpdateSourceTrigger=PropertyChanged}"
@@ -87,11 +87,12 @@
 			          GridLinesVisibility="None">
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Width="50">
-						<DataGridTemplateColumn.Header>
-							<CheckBox
-								IsChecked="{Binding Path=DataContext.AllTermTypesChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},UpdateSourceTrigger=PropertyChanged}"
-								Margin="5,0,0,0" />
-						</DataGridTemplateColumn.Header>
+						<DataGridTemplateColumn.HeaderTemplate>
+							<DataTemplate>
+								<CheckBox IsChecked="{Binding Path=DataContext.AllTermTypesChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+										  Margin="6,0,0,0" />
+							</DataTemplate>
+						</DataGridTemplateColumn.HeaderTemplate>
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
@@ -115,35 +116,7 @@
 			          Content="{x:Static resx:PluginResources.Search_Subdomains}"
 			          ToolTip="{x:Static resx:PluginResources.Subdomains_Tooltip}"
 			          IsChecked="{Binding SearchInSubdomains}" />
-			<DockPanel Grid.Row="3" Grid.Column="0">
-				<Button HorizontalAlignment="Left" Margin="10" Cursor="Hand" Command="{Binding ResetToDefault}"
-				        Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default" />
-				<Button HorizontalAlignment="Left" Margin="10" Cursor="Hand" VerticalAlignment="Center"
-				        Command="{Binding ClearCache}"
-				        Style="{DynamicResource Sdl.Button.HyperLinkStyle}" MaxWidth="150"
-				        Content="{x:Static resx:PluginResources.ClearCache}" />
-			</DockPanel>
 
-			<Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0.2,0,0" BorderBrush="#ABB0B3">
-				<DockPanel>
-					<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" DockPanel.Dock="Right"
-					        ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
-					        IsCancel="True"
-					        Cursor="Hand"
-					        Margin="5,10,10,10"
-					        HorizontalAlignment="Right"
-					        Content="Cancel">
-					</Button>
-					<Button Style="{DynamicResource Sdl.Button.PrimaryStyle}"
-					        Cursor="Hand" IsDefault="True"
-					        Margin="10,10,5,10" DockPanel.Dock="Right"
-					        Command="{Binding SaveSettingsCommand}"
-					        helpers:CloseOnClickBehaviour.IsEnabled="True"
-					        HorizontalAlignment="Right"
-					        Content="OK">
-					</Button>
-				</DockPanel>
-			</Border>
 		</Grid>
 		<controls:CustomProgressRing x:Name="ProgressRing"
 		                             Style="{StaticResource Sdl.CustomProgressRing.Normal}"

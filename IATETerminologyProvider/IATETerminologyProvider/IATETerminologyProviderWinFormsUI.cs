@@ -22,8 +22,8 @@ namespace Sdl.Community.IATETerminologyProvider
             _mainWindow = IATEApplication.GetMainWindow();
             if (_mainWindow != null)
             {
-                //TODO: don't forget to fix this as this possibly doesn't trigger the SaveCommand
-                if (!_mainWindow.ShowDialog() ?? false)
+				_mainWindow.ShowDialog();
+				if (!_mainWindow?.DialogResult ?? true)
                 {
                     return null;
                 }

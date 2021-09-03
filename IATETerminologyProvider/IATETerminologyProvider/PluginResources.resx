@@ -187,4 +187,7 @@
   <data name="Label_MaximumEntries" xml:space="preserve">
     <value>Maximum number of term entries:</value>
   </data>
+  <data name="SelectCollections_TextBlock" xml:space="preserve">
+	  <value>Select collection(s):</value>
+  </data>
 </root>
