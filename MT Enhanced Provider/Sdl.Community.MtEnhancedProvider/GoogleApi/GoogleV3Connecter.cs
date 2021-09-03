@@ -55,7 +55,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 			}
 		}
 
-		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sorceText, string format)
+		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
 		{
 			try
 			{
@@ -65,7 +65,7 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 				{
 					Contents =
 					{
-						sorceText
+						sourceText
 					},
 					Model = _modelPath,
 					TargetLanguageCode = targetLanguage.Name,
