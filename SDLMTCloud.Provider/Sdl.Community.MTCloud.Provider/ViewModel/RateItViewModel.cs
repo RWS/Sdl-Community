@@ -252,13 +252,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		/// because a feedback cannot be sent without any info so we're adding the original target itself as a suggestion
 		/// </summary>
 		/// <param name="segmentId">When this is null the user clicked on SendFeedback instead of it being sent automatically</param>
-		/// <param name="suggestion"></param>
-		/// <param name="rating"></param>
-		/// <returns></returns>
 		private string EnsureFeedbackWillGetThrough(SegmentId? segmentId, ImprovementFeedback suggestion, dynamic rating)
 		{
 			string suggestionReplacement = null;
-			if (segmentId == null && suggestion != null && rating == null && suggestion.Improvement == null)
+			if (segmentId == null &&  rating == null && suggestion?.Improvement == null)
 			{
 				suggestionReplacement = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
 			}
