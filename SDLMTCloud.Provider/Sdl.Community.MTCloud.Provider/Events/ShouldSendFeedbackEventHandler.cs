@@ -2,5 +2,5 @@
 
 namespace Sdl.Community.MTCloud.Provider.Events
 {
-	public delegate void ConfirmationLevelChangedEventHandler(SegmentId segmentId);
+	public delegate void ShouldSendFeedbackEventHandler(SegmentId segmentId);
 }
