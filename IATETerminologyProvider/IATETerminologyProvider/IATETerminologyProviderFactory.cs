@@ -24,7 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
-			var savedSettings = new SettingsModel(terminologyProviderUri);
+			var savedSettings = SettingsService.GetSettingsForCurrentProject();
 			var savedTermTypesNumber = savedSettings.TermTypes.Count;
 
 			if (savedTermTypesNumber > 0 && savedTermTypesNumber > IATEApplication.InventoriesProvider.TermTypes?.Count)

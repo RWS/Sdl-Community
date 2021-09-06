@@ -9,6 +9,7 @@ using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Community.IATETerminologyProvider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
@@ -16,6 +17,7 @@ namespace Sdl.Community.IATETerminologyProvider
 	public class IATEApplication : IApplicationInitializer
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+		private static ProjectsController _projectsController;
 
 		public static ICacheProvider CacheProvider { get; set; } =
 			new CacheProvider(new SqliteDatabaseProvider(new PathInfo()));
@@ -23,11 +25,17 @@ namespace Sdl.Community.IATETerminologyProvider
 		public static ConnectionProvider ConnectionProvider { get; private set; }
 
 		public static InventoriesProvider InventoriesProvider { get; set; }
+
 		public static MainWindow MainWindow { get; set; }
+
 		public static IMessageBoxService MessageBoxService { get; set; } = new MessageBoxService();
 
-		public static MainWindow GetMainWindow(SettingsModel settingsModel = null)
+		public static ProjectsController ProjectsController
+			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
+
+		public static MainWindow GetMainWindow()
 		{
+			var settingsModel = SettingsService.GetSettingsForCurrentProject();
 			if (!ConnectionProvider.EnsureConnection()) return null;
 
 			var listOfViewModels = new List<ISettingsViewModel>

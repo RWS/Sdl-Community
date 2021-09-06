@@ -21,7 +21,6 @@ namespace Sdl.Community.IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly ProjectsController _projectsController;
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;		
@@ -33,7 +32,6 @@ namespace Sdl.Community.IATETerminologyProvider
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
 			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
-			_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
 
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
@@ -70,7 +68,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public override string Name => PluginResources.IATETerminologyProviderName;
 
-		public override Uri Uri => ProviderSettings.Uri;
+		public override Uri Uri => new Uri(Constants.IATEUriTemplate);
 
 		public override IEntry GetEntry(int id)
 		{
@@ -94,7 +92,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var jsonBody = GetApiRequestBodyValues(source, target, text);
 			var queryString = JsonConvert.SerializeObject(jsonBody);
-			var canConnect = CacheProvider?.Connect(_projectsController?.CurrentProject);
+			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
 
 			if (canConnect != null && (bool)canConnect)
 			{
@@ -112,7 +110,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 			}
 
-			var config = _projectsController?.CurrentProject?.GetTermbaseConfiguration();
+			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
 			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
 			if (results != null)
 			{
@@ -183,7 +181,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		{
 			var result = new List<IDefinitionLanguage>();
 
-			var currentProject = _projectsController?.CurrentProject;
+			var currentProject = IATEApplication.ProjectsController?.CurrentProject;
 			if (currentProject == null)
 			{
 				return result;

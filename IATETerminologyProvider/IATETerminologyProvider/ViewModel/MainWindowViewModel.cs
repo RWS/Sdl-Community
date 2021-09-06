@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using Newtonsoft.Json;
 using Sdl.Community.IATETerminologyProvider.Commands;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Service;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {
@@ -122,6 +126,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 						break;
 					}
 				}
+
+				SettingsService.SaveSettingsForCurrentProject(ProviderSettings);
 			}
 
 

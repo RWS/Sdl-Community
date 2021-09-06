@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {

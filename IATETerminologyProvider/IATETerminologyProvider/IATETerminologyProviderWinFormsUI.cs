@@ -59,7 +59,7 @@ namespace Sdl.Community.IATETerminologyProvider
             var messageBoxService = new MessageBoxService();
 
             //_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, provider.CacheProvider, messageBoxService);
-            _mainWindow = IATEApplication.GetMainWindow(provider.ProviderSettings);
+            _mainWindow = IATEApplication.GetMainWindow();
 
             if (!_mainWindow.ShowDialog() ?? false)
             {
