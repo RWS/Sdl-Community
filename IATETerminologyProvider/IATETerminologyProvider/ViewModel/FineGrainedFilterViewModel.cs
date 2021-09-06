@@ -11,6 +11,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private List<CollectionModel> _collections = new List<CollectionModel>();
 		private SettingsModel _settings;
 		private List<InstitutionModel> _institutions = new List<InstitutionModel>();
+		private bool _primary;
+		private bool _notPrimary;
 
 		public FineGrainedFilterViewModel()
 		{
@@ -114,6 +116,26 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
+		public bool Primary
+		{
+			get => _primary;
+			set
+			{
+				_primary = value;
+				OnPropertyChanged(nameof(Primary));
+			}
+		}
+		
+		public bool NotPrimary
+		{
+			get => _notPrimary;
+			set
+			{
+				_notPrimary = value;
+				OnPropertyChanged(nameof(NotPrimary));
+			}
+		}
+
 		public void Reset()
 		{
 			Collections.ForEach(c => c.IsSelected = false);
@@ -203,6 +225,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				}
 				if (currentInstitution != null) currentInstitution.IsSelected = true;
 			});
+
+			Primary = Settings.Primary;
+			NotPrimary = Settings.NotPrimary;
 		}
 	}
 }

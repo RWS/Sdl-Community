@@ -100,7 +100,7 @@
 
 		</DataGrid>
 	    
-	    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5,10,10" >
+	    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5,10,10">
 		    <Grid.ColumnDefinitions>
 			    <ColumnDefinition />
 			    <ColumnDefinition />
@@ -108,8 +108,8 @@
 			<DockPanel Grid.Column="0" LastChildFill="False">
 			    <TextBlock Foreground="DimGray" Text="Primarity" DockPanel.Dock="Top"/>
 			    <StackPanel Margin="5 5 0 0">
-				    <CheckBox DockPanel.Dock="Top" Content="Primary"/>
-					<CheckBox DockPanel.Dock="Top" Content="Not primary"/>
+				    <CheckBox DockPanel.Dock="Top" Content="Primary" IsChecked="{Binding Primary}"/>
+					<CheckBox DockPanel.Dock="Top" Content="Not primary" IsChecked="{Binding NotPrimary}"/>
 			    </StackPanel>
 		    </DockPanel>
 		    <DockPanel Grid.Column="1" LastChildFill="False">
@@ -120,7 +120,7 @@
 				                       EnableMouseHoverSelection="False"
 				                       VerticalAlignment="Top"
 				                       HorizontalAlignment="Right"
-				                       IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}"
+				                       IsEnabled="True"
 				                       Height="30"
 				                       ImageHeight="15"
 				                       Width="130"

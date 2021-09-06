@@ -116,6 +116,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 							ProviderSettings.Institutions = fineGrainedFilter.Institutions.Where(i => i.IsSelected).ToList();
 						}
 
+						ProviderSettings.Primary = fineGrainedFilter.Primary;
+						ProviderSettings.NotPrimary = fineGrainedFilter.NotPrimary;
+
 						break;
 					}
 				}

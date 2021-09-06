@@ -95,6 +95,33 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 
 		public Uri Uri => _uriBuilder.Uri;
 
+		public bool Primary
+		{
+			get
+			{
+				bool.TryParse(GetStringParameter("primary"), out var primary);
+				return primary;
+			}
+			set
+			{
+				SetStringParameter("primary", value.ToString());
+			}
+		}
+		
+		public bool NotPrimary
+		{
+			get
+			{
+				bool.TryParse(GetStringParameter("notPrimary"), out var notPrimary);
+				return notPrimary;
+			}
+			set
+			{
+				var notPrimary = JsonConvert.SerializeObject(value);
+				SetStringParameter("notPrimary", notPrimary);
+			}
+		}
+
 		private string GetStringParameter(string p)
 		{
 			var paramString = _uriBuilder[p];

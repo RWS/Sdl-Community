@@ -248,6 +248,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var filteredInstitutions = new List<string>();
 
 			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
+			var primarities = new List<int>();
 			if (ProviderSettings != null)
 			{
 				var domains = ProviderSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
@@ -261,6 +262,9 @@ namespace Sdl.Community.IATETerminologyProvider
 				
 				var institutions = ProviderSettings.Institutions.Select(i => i.Code).ToList();
 				filteredInstitutions.AddRange(institutions);
+
+				if (ProviderSettings.Primary) primarities.Add(1);
+				if (ProviderSettings.NotPrimary) primarities.Add(0);
 			}
 
 			var bodyModel = new
@@ -273,7 +277,8 @@ namespace Sdl.Community.IATETerminologyProvider
 				filter_by_domains = filteredDomains,
 				search_in_term_types = filteredTermTypes,
 				filter_by_entry_collection = filteredCollections,
-				filter_by_entry_institution_owner = filteredInstitutions
+				filter_by_entry_institution_owner = filteredInstitutions,
+				filter_by_entry_primarity = primarities
 			};
 
 			return bodyModel;
