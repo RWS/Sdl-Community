@@ -147,10 +147,12 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\CustomProgressRing.cs" />
+    <Compile Include="Converters\BoolToReliabilityConverter.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\InstitutionModel.cs" />
+    <Compile Include="Model\Reliabilities.cs" />
     <Compile Include="Model\ResponseModels\IateLanguage.cs" />
     <Compile Include="Model\ResponseModels\IateName.cs" />
     <Compile Include="Model\ResponseModels\IateInstitution.cs" />
@@ -294,6 +296,8 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\StarGrey.png" />
+    <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />
     <EmbeddedResource Include="View\SearchResultsControl.resx">
       <DependentUpon>SearchResultsControl.cs</DependentUpon>

@@ -35,11 +35,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => AreAllDomainsSelected();
 			set
 			{
-				if (value)
-				{
-					SelectAllDomains(true);
-				}
-
+				SwitchAllDomains(value);
 				OnPropertyChanged(nameof(AllDomainsChecked));
 			}
 		}
@@ -49,11 +45,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => AreAllTypesSelected();
 			set
 			{
-				if (value)
-				{
-					SelectAllTermTypes(true);
-				}
-
+				SwitchAllTermTypes(value);
 				OnPropertyChanged(nameof(AllTermTypesChecked));
 			}
 		}
@@ -297,7 +289,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			OnPropertyChanged(nameof(AllTermTypesChecked));
 		}
 
-		private void SelectAllDomains(bool select)
+		private void SwitchAllDomains(bool select)
 		{
 			foreach (var domain in Domains)
 			{
@@ -305,7 +297,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
-		private void SelectAllTermTypes(bool select)
+		private void SwitchAllTermTypes(bool select)
 		{
 			foreach (var termType in TermTypes)
 			{

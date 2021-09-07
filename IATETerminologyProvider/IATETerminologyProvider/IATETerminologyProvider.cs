@@ -86,7 +86,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
-		{	
+		{
 			ClearEntries();
 			_logger.Info("--> Try searching for segment");
 
@@ -247,6 +247,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
 			var primarities = new List<int>();
+			var sourceReliabilities = new List<int>(4);
+			var targetReliabilities = new List<int>(4);
 			if (ProviderSettings != null)
 			{
 				var domains = ProviderSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
@@ -263,6 +265,9 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				if (ProviderSettings.Primary) primarities.Add(1);
 				if (ProviderSettings.NotPrimary) primarities.Add(0);
+
+				sourceReliabilities = Reliability.GetReliabilityCodes(ProviderSettings.SourceReliabilities);
+				targetReliabilities = Reliability.GetReliabilityCodes(ProviderSettings.TargetReliabilities);
 			}
 
 			var bodyModel = new
@@ -276,7 +281,9 @@ namespace Sdl.Community.IATETerminologyProvider
 				search_in_term_types = filteredTermTypes,
 				filter_by_entry_collection = filteredCollections,
 				filter_by_entry_institution_owner = filteredInstitutions,
-				filter_by_entry_primarity = primarities
+				filter_by_entry_primarity = primarities,
+				filter_by_source_term_reliability = sourceReliabilities,
+				filter_by_target_term_reliability = targetReliabilities
 			};
 
 			return bodyModel;

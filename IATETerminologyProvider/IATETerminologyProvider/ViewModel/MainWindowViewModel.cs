@@ -123,6 +123,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 						ProviderSettings.Primary = fineGrainedFilter.Primary;
 						ProviderSettings.NotPrimary = fineGrainedFilter.NotPrimary;
 
+						ProviderSettings.SourceReliabilities = fineGrainedFilter.SourceReliabilities;
+						ProviderSettings.TargetReliabilities = fineGrainedFilter.TargetReliabilities;
+
 						break;
 					}
 				}

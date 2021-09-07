@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {
@@ -14,6 +13,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private List<InstitutionModel> _institutions = new List<InstitutionModel>();
 		private bool _primary;
 		private bool _notPrimary;
+		private Reliability.Reliabilities _sourceReliabilities;
+		private Reliability.Reliabilities _targetReliabilities;
 
 		public FineGrainedFilterViewModel()
 		{
@@ -25,11 +26,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => AreAllCollectionsSelected();
 			set
 			{
-				if (value)
-				{
-					SelectAllCollections(true);
-				}
-
+				SwitchAllCollections(value);
 				OnPropertyChanged(nameof(AllCollectionsChecked));
 			}
 		}
@@ -39,18 +36,14 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			get => AreAllInstitutionsSelected();
 			set
 			{
-				if (value)
-				{
-					SelectAllInstitutions(true);
-				}
-
+				SwitchAllInstitutions(value);
 				OnPropertyChanged(nameof(AllInstitutionsChecked));
 			}
 		}
 
-		private void SelectAllInstitutions(bool b)
+		private void SwitchAllInstitutions(bool onOff)
 		{
-			Institutions.ForEach(c => c.IsSelected = true);
+			Institutions.ForEach(c => c.IsSelected = onOff);
 		}
 
 		public List<CollectionModel> Collections
@@ -137,6 +130,34 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
+		public Reliability.Reliabilities SourceReliabilities
+		{
+			get => _sourceReliabilities;
+			set
+			{
+				if (value.HasFlag(Reliability.Reliabilities.Not))
+					_sourceReliabilities &= ~(value & ~Reliability.Reliabilities.Not);
+				else
+					_sourceReliabilities |= value;
+
+				OnPropertyChanged(nameof(SourceReliabilities));
+			}
+		}
+		
+		public Reliability.Reliabilities TargetReliabilities
+		{
+			get => _targetReliabilities;
+			set
+			{
+				if (value.HasFlag(Reliability.Reliabilities.Not))
+					_targetReliabilities &= ~(value & ~Reliability.Reliabilities.Not);
+				else
+					_targetReliabilities |= value;
+
+				OnPropertyChanged(nameof(TargetReliabilities));
+			}
+		}
+
 		public void Reset()
 		{
 			Collections.ForEach(c => c.IsSelected = false);
@@ -200,9 +221,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			Institutions = institutions;
 		}
 
-		private void SelectAllCollections(bool b)
+		private void SwitchAllCollections(bool onOff)
 		{
-			Collections.ForEach(c => c.IsSelected = true);
+			Collections.ForEach(c => c.IsSelected = onOff);
 		}
 
 		private void SetFieldsSelection()
@@ -218,17 +239,20 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				InstitutionModel currentInstitution = null;
 				foreach (var i in Institutions)
 				{
-					if (i.Name == si.Name)
-					{
-						currentInstitution = i;
-						break;
-					}
+					if (i.Name != si.Name || i.Parent != si.Parent) continue;
+					currentInstitution = i;
+					break;
 				}
 				if (currentInstitution != null) currentInstitution.IsSelected = true;
 			});
 
 			Primary = Settings.Primary;
 			NotPrimary = Settings.NotPrimary;
+
+			SourceReliabilities = Settings.SourceReliabilities;
+			TargetReliabilities = Settings.TargetReliabilities;
 		}
 	}
+
+	
 }

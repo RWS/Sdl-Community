@@ -18,12 +18,13 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 
 		public List<InstitutionModel> Institutions { get; set; }
 
+		public bool NotPrimary { get; set; }
+		public bool Primary { get; set; }
 		public bool SearchInSubdomains { get; set; }
 
+		public Reliability.Reliabilities SourceReliabilities { get; set; }
+		public Reliability.Reliabilities TargetReliabilities { get; set; }
+
 		public List<TermTypeModel> TermTypes { get; set; }
-
-		public bool Primary { get; set; }
-
-		public bool NotPrimary { get; set; }
 	}
 }

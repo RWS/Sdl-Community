@@ -7,6 +7,7 @@
 			 d:DataContext="{d:DesignInstance viewModel:FineGrainedFilterViewModel}"
              xmlns:resx="clr-namespace:Sdl.Community.IATETerminologyProvider"
              xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:converters="clr-namespace:Sdl.Community.IATETerminologyProvider.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -14,6 +15,10 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="StackPanel" x:Key="StarPanel">
+				<Setter Property="Margin" Value="0 5 10 0"/>
+			</Style>
+			<converters:BoolToReliabilityConverter x:Key="BoolToRel"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -24,7 +29,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="4*"   />
-			<RowDefinition Height="*"   />
+			<RowDefinition Height="Auto"   />
 		</Grid.RowDefinitions>
 
 	    <TextBlock Foreground="DimGray" Grid.Row="0" Grid.Column="0"
@@ -100,32 +105,141 @@
 
 		</DataGrid>
 	    
-	    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5,10,10">
+	    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10,5,10,10">
 		    <Grid.ColumnDefinitions>
 			    <ColumnDefinition />
 			    <ColumnDefinition />
 		    </Grid.ColumnDefinitions>
-			<DockPanel Grid.Column="0" LastChildFill="False">
+			<DockPanel Grid.Column="0" Grid.Row="0" LastChildFill="False">
 			    <TextBlock Foreground="DimGray" Text="Primarity" DockPanel.Dock="Top"/>
-			    <StackPanel Margin="5 5 0 0">
-				    <CheckBox DockPanel.Dock="Top" Content="Primary" IsChecked="{Binding Primary}"/>
-					<CheckBox DockPanel.Dock="Top" Content="Not primary" IsChecked="{Binding NotPrimary}"/>
-			    </StackPanel>
+			    <DockPanel Margin="5 5 0 0">
+				    <CheckBox VerticalAlignment="Center" Content="Primary" IsChecked="{Binding Primary}"/>
+					<CheckBox VerticalAlignment="Center" Content="Not primary" IsChecked="{Binding NotPrimary}"/>
+			    </DockPanel>
 		    </DockPanel>
-		    <DockPanel Grid.Column="1" LastChildFill="False">
-			<TextBlock Foreground="DimGray" Text="Reliability" DockPanel.Dock="Top" />
-			    <StackPanel Margin="5 5 0 0">
-				    <sdl:RateItControl BorderThickness="0"
-				                       Rating="{Binding Rating}"
-				                       EnableMouseHoverSelection="False"
-				                       VerticalAlignment="Top"
-				                       HorizontalAlignment="Right"
-				                       IsEnabled="True"
-				                       Height="30"
-				                       ImageHeight="15"
-				                       Width="130"
-				                       Cursor="Hand"/>
-			    </StackPanel>
+		    <DockPanel Grid.Row="0"  Grid.Column="1" LastChildFill="False">
+				<DockPanel DockPanel.Dock="Top">
+					<TextBlock DockPanel.Dock="Top" Text="Source" Foreground="DimGray"/>
+					<StackPanel DockPanel.Dock="Bottom" Margin="5 5 0 0" Orientation="Horizontal">
+						<CheckBox IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=NotVerified}">
+							<StackPanel Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15"/>
+							</StackPanel>
+						</CheckBox>
+						<CheckBox IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=MinimumReliability}">
+							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+						<CheckBox IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=Reliable}">
+							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+						<CheckBox  IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=VeryReliable}">
+							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+					</StackPanel>
+				</DockPanel>
+				<DockPanel DockPanel.Dock="Bottom" Margin="0 10 0 0">
+					<TextBlock DockPanel.Dock="Top" Text="Target" Foreground="DimGray"/>
+					<StackPanel DockPanel.Dock="Bottom" Margin="5 5 0 0" Orientation="Horizontal"  >
+						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=NotVerified}">
+							<StackPanel Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=MinimumReliability}">
+							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=Reliable}">
+							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=VeryReliable}">
+							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarYellow.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
+					</StackPanel>
+				</DockPanel>
 		    </DockPanel>
 	    </Grid>
 
