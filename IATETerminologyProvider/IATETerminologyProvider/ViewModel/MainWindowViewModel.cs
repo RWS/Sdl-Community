@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using Newtonsoft.Json;
 using Sdl.Community.IATETerminologyProvider.Commands;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
@@ -89,7 +86,6 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void SaveSettingsAction()
 		{
-
 			foreach (var viewModel in ViewModels)
 			{
 				switch (viewModel)
@@ -106,7 +102,6 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 						}
 						ProviderSettings.SearchInSubdomains = domainsAndTermTypes.SearchInSubdomains;
 						break;
-
 					}
 					case FineGrainedFilterViewModel fineGrainedFilter:
 					{
@@ -114,14 +109,13 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 						{
 							ProviderSettings.Collections = fineGrainedFilter.Collections.Where(c => c.IsSelected).ToList();
 						}
-						
+
 						if (fineGrainedFilter.Institutions.Count > 0)
 						{
 							ProviderSettings.Institutions = fineGrainedFilter.Institutions.Where(i => i.IsSelected).ToList();
 						}
 
-						ProviderSettings.Primary = fineGrainedFilter.Primary;
-						ProviderSettings.NotPrimary = fineGrainedFilter.NotPrimary;
+						ProviderSettings.Primarities = fineGrainedFilter.Primarities;
 
 						ProviderSettings.SourceReliabilities = fineGrainedFilter.SourceReliabilities;
 						ProviderSettings.TargetReliabilities = fineGrainedFilter.TargetReliabilities;
@@ -133,12 +127,10 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				SettingsService.SaveSettingsForCurrentProject(ProviderSettings);
 			}
 
-
 			//if (ProviderSettings.Domains.Count > 0)
 			//{
 			//	ProviderSettings.Domains = (ViewModels[0] as DomainsAndTermTypesFilterViewModel).Domains.ToList();
 			//}
-
 
 			//if (ProviderSettings.TermTypes.Count > 0)
 			//{

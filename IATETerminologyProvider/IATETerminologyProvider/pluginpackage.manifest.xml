@@ -7,7 +7,6 @@
 	<Include>
 		<File>System.Reactive.dll</File>
 		<File>System.Data.SQLite.dll</File>
-		<File>Sdl.Community.RateItControl.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="16.1"/>
 </PluginPackage> 

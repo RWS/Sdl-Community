@@ -263,11 +263,10 @@ namespace Sdl.Community.IATETerminologyProvider
 				var institutions = ProviderSettings.Institutions.Select(i => i.Code).ToList();
 				filteredInstitutions.AddRange(institutions);
 
-				if (ProviderSettings.Primary) primarities.Add(1);
-				if (ProviderSettings.NotPrimary) primarities.Add(0);
+				primarities = ProviderSettings.Primarities.GetPrimarities();
 
-				sourceReliabilities = Reliability.GetReliabilityCodes(ProviderSettings.SourceReliabilities);
-				targetReliabilities = Reliability.GetReliabilityCodes(ProviderSettings.TargetReliabilities);
+				sourceReliabilities = ProviderSettings.SourceReliabilities.GetReliabilityCodes();
+				targetReliabilities = ProviderSettings.TargetReliabilities.GetReliabilityCodes();
 			}
 
 			var bodyModel = new

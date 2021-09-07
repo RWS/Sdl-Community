@@ -13,8 +13,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private List<InstitutionModel> _institutions = new List<InstitutionModel>();
 		private bool _primary;
 		private bool _notPrimary;
-		private Reliability.Reliabilities _sourceReliabilities;
-		private Reliability.Reliabilities _targetReliabilities;
+		private Reliabilities _sourceReliabilities = new Reliabilities();
+		private Reliabilities _targetReliabilities = new Reliabilities();
 
 		public FineGrainedFilterViewModel()
 		{
@@ -110,50 +110,24 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
-		public bool Primary
-		{
-			get => _primary;
-			set
-			{
-				_primary = value;
-				OnPropertyChanged(nameof(Primary));
-			}
-		}
-		
-		public bool NotPrimary
-		{
-			get => _notPrimary;
-			set
-			{
-				_notPrimary = value;
-				OnPropertyChanged(nameof(NotPrimary));
-			}
-		}
+		public Primarities Primarities { get; set; }
 
-		public Reliability.Reliabilities SourceReliabilities
+		public Reliabilities SourceReliabilities
 		{
 			get => _sourceReliabilities;
 			set
 			{
-				if (value.HasFlag(Reliability.Reliabilities.Not))
-					_sourceReliabilities &= ~(value & ~Reliability.Reliabilities.Not);
-				else
-					_sourceReliabilities |= value;
-
+				_sourceReliabilities = value;
 				OnPropertyChanged(nameof(SourceReliabilities));
 			}
 		}
-		
-		public Reliability.Reliabilities TargetReliabilities
+
+		public Reliabilities TargetReliabilities
 		{
 			get => _targetReliabilities;
 			set
 			{
-				if (value.HasFlag(Reliability.Reliabilities.Not))
-					_targetReliabilities &= ~(value & ~Reliability.Reliabilities.Not);
-				else
-					_targetReliabilities |= value;
-
+				_targetReliabilities = value;
 				OnPropertyChanged(nameof(TargetReliabilities));
 			}
 		}
@@ -161,6 +135,10 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		public void Reset()
 		{
 			Collections.ForEach(c => c.IsSelected = false);
+			Institutions.ForEach(c => c.IsSelected = false);
+			Primarities = new Primarities();
+			SourceReliabilities = new Reliabilities();
+			TargetReliabilities = new Reliabilities();
 		}
 
 		public void Setup()
@@ -246,11 +224,10 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 				if (currentInstitution != null) currentInstitution.IsSelected = true;
 			});
 
-			Primary = Settings.Primary;
-			NotPrimary = Settings.NotPrimary;
+			Primarities = Settings.Primarities ?? new Primarities();
 
-			SourceReliabilities = Settings.SourceReliabilities;
-			TargetReliabilities = Settings.TargetReliabilities;
+			SourceReliabilities = Settings.SourceReliabilities ?? new Reliabilities();
+			TargetReliabilities = Settings.TargetReliabilities ?? new Reliabilities();
 		}
 	}
 

@@ -53,10 +53,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Sdl.Community.RateItControl">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
       <Private>False</Private>
@@ -147,11 +143,11 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\CustomProgressRing.cs" />
-    <Compile Include="Converters\BoolToReliabilityConverter.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\InstitutionModel.cs" />
+    <Compile Include="Model\Primarities.cs" />
     <Compile Include="Model\Reliabilities.cs" />
     <Compile Include="Model\ResponseModels\IateLanguage.cs" />
     <Compile Include="Model\ResponseModels\IateName.cs" />
@@ -291,8 +287,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
-    <Content Include="3rd party\Sdl.Community.RateItControl.pdb" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>

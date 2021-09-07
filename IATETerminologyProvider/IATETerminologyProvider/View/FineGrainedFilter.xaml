@@ -6,8 +6,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 d:DataContext="{d:DesignInstance viewModel:FineGrainedFilterViewModel}"
              xmlns:resx="clr-namespace:Sdl.Community.IATETerminologyProvider"
-             xmlns:sdl="http://schemas.sdl.com/xaml"
-             xmlns:converters="clr-namespace:Sdl.Community.IATETerminologyProvider.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -18,7 +16,6 @@
 			<Style TargetType="StackPanel" x:Key="StarPanel">
 				<Setter Property="Margin" Value="0 0 10 0"/>
 			</Style>
-			<converters:BoolToReliabilityConverter x:Key="BoolToRel"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -113,15 +110,15 @@
 			<DockPanel Grid.Column="0" Grid.Row="0" LastChildFill="False">
 			    <TextBlock Foreground="DimGray" Text="Primarity" DockPanel.Dock="Top"/>
 			    <StackPanel Margin="5 5 0 0" VerticalAlignment="Center">
-				    <CheckBox Content="Primary" IsChecked="{Binding Primary}"/>
-					<CheckBox Content="Not primary" IsChecked="{Binding NotPrimary}" Margin="0 5 0 0"/>
+				    <CheckBox Content="Primary" IsChecked="{Binding Primarities.Primary}"/>
+					<CheckBox Content="Not primary" IsChecked="{Binding Primarities.NotPrimary}" Margin="0 5 0 0"/>
 			    </StackPanel>
 		    </DockPanel>
 		    <DockPanel Grid.Row="0"  Grid.Column="1" LastChildFill="False">
 				<WrapPanel DockPanel.Dock="Top" Margin="0 5 0 0">
 					<TextBlock Text="Source reliability" VerticalAlignment="Center" Foreground="DimGray" Margin="0 0 5 0"/>
 					<StackPanel Orientation="Horizontal" >
-						<CheckBox IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=NotVerified}">
+						<CheckBox IsChecked="{Binding SourceReliabilities.NotVerified, UpdateSourceTrigger=PropertyChanged}">
 							<StackPanel Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -129,7 +126,7 @@
 								       Height="15"/>
 							</StackPanel>
 						</CheckBox>
-						<CheckBox IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=MinimumReliability}">
+						<CheckBox IsChecked="{Binding SourceReliabilities.MinimumReliability}">
 							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -141,7 +138,7 @@
 								       Height="15" />
 							</StackPanel>
 						</CheckBox>
-						<CheckBox IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=Reliable}">
+						<CheckBox IsChecked="{Binding SourceReliabilities.Reliable}">
 							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -157,7 +154,7 @@
 								       Height="15" />
 							</StackPanel>
 						</CheckBox>
-						<CheckBox  IsChecked="{Binding SourceReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=VeryReliable}">
+						<CheckBox  IsChecked="{Binding SourceReliabilities.VeryReliable}">
 							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -182,7 +179,7 @@
 				<WrapPanel DockPanel.Dock="Bottom" Margin="0 0 0 5" VerticalAlignment="Center">
 					<TextBlock Text="Target reliability" VerticalAlignment="Center" Foreground="DimGray" Margin="0 0 9 0"/>
 					<StackPanel Orientation="Horizontal">
-						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=NotVerified}">
+						<CheckBox IsChecked="{Binding TargetReliabilities.NotVerified}">
 							<StackPanel Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -190,7 +187,7 @@
 								       Height="15" />
 							</StackPanel>
 						</CheckBox>
-						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=MinimumReliability}">
+						<CheckBox IsChecked="{Binding TargetReliabilities.MinimumReliability}">
 							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -202,7 +199,7 @@
 								       Height="15" />
 							</StackPanel>
 						</CheckBox>
-						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=Reliable}">
+						<CheckBox IsChecked="{Binding TargetReliabilities.Reliable}">
 							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
@@ -218,7 +215,7 @@
 								       Height="15" />
 							</StackPanel>
 						</CheckBox>
-						<CheckBox IsChecked="{Binding TargetReliabilities, Converter={StaticResource BoolToRel}, ConverterParameter=VeryReliable}">
+						<CheckBox IsChecked="{Binding TargetReliabilities.VeryReliable}">
 							<StackPanel Orientation="Horizontal" Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
 								       Source="../Resources/StarYellow.png"
