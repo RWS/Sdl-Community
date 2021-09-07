@@ -52,8 +52,11 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Sdl.Community.UsefulTipsService">
-      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.Trados2019.1.1.9.3\lib\472\Sdl.Community.UsefulTipsService.dll</HintPath>
+    <Reference Include="RwsAppStore.UsefulTipsService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.6\lib\net472\RwsAppStore.UsefulTipsService.dll</HintPath>
+    </Reference>
+    <Reference Include="RwsAppStore.UsefulTipsService.Update, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.6\lib\net472\RwsAppStore.UsefulTipsService.Update.exe</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
