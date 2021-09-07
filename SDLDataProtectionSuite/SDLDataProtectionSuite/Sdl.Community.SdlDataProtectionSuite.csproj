@@ -61,19 +61,16 @@
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="RwsAppStore.UsefulTipsService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.4\lib\net48\RwsAppStore.UsefulTipsService.dll</HintPath>
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.6\lib\net472\RwsAppStore.UsefulTipsService.dll</HintPath>
     </Reference>
     <Reference Include="RwsAppStore.UsefulTipsService.Update, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.4\lib\net48\RwsAppStore.UsefulTipsService.Update.exe</HintPath>
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.6\lib\net472\RwsAppStore.UsefulTipsService.Update.exe</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <HintPath>..\packages\Sdl.Core.PluginFramework.2.1.0\lib\netstandard2.0\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
@@ -577,8 +574,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets')" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets')" />
 </Project>
