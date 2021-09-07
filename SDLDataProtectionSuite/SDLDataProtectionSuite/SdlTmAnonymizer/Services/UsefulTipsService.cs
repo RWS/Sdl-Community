@@ -1,40 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
-using Sdl.Community.UsefulTipsService;
-using Sdl.Community.UsefulTipsService.Model;
-using Sdl.Community.UsefulTipsService.Services;
+using RwsAppStore.UsefulTipsService;
+using RwsAppStore.UsefulTipsService.Model;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 {
 	public class UsefulTipsService
 	{
+		private readonly TipsProvider _tipsProvider;
 		private readonly SettingsService _settingsService;
 
-		public UsefulTipsService(SettingsService settingsService)
+		public UsefulTipsService(TipsProvider tipsProvider, SettingsService settingsService)
 		{
+			_tipsProvider = tipsProvider;
 			_settingsService = settingsService;
 		}
 
-		public void AddUsefulTips()
+		public int AddUsefulTips(List<TipContext> tipContexts, string applicationName)
 		{
-			try
-			{				
-				var pathService = new PathService();
-				var tipsProvider = new TipsProvider(pathService);
+			return _tipsProvider.AddTips(tipContexts, applicationName);
+		}
 
-				var tipContexts = new List<TipContext>();
-				foreach (var language in tipsProvider.SupportedLanguages)
-				{					
-					var tipsLanguageFullPath = GetTipsLanguagePath(language);
+		public int RemoveUsefulTips(List<TipContext> tipContexts, string applicationName)
+		{
+			return _tipsProvider.RemoveTips(tipContexts, applicationName);
+		}
 
-					CreateTipsImportContent(tipsLanguageFullPath, language);
-
+		public List<TipContext> GetPluginUsefulTips()
+		{
+			var tipContexts = new List<TipContext>();
+			foreach (var language in _tipsProvider.SupportedLanguages)
+			{
+				var tipsLanguageFullPath = GetTipsLanguagePath(language);
+				var success = GetTipsImportResources(tipsLanguageFullPath, language);
+				if (success)
+				{
 					var tipsImportFile = Path.Combine(tipsLanguageFullPath, "TipsImport.xml");
-					var tips = GetTipsForImport(tipsProvider, tipsImportFile, tipsLanguageFullPath);
+					var tips = NormalizePathInformation(_tipsProvider, tipsImportFile, tipsLanguageFullPath);
 
 					if (tips?.Count > 0)
 					{
@@ -45,31 +51,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						});
 					}
 				}
+			}
 
-				tipsProvider.AddTips(tipContexts, StringResources.SDLTM_Anonymizer_Name);
-			}
-			catch (Exception ex)
-			{
-				Trace.WriteLine(ex.Message);
-			}
+			return tipContexts;
 		}
 
-		private static List<Tip> GetTipsForImport(TipsProvider tipsService, string tipsImportFile, string tipsLanguageFullPath)
+		public int TipsInstalled(string context)
 		{
-			var tips = tipsService.ReadTipsImportFile(tipsImportFile);
-
-			// update the relative path info for each of the Tips
-			foreach (var tip in tips)
-			{
-				tip.Icon = GetFullPath(tip.Icon, tipsLanguageFullPath);
-				tip.Content = GetFullPath(tip.Content, tipsLanguageFullPath);
-				tip.DescriptionImage = GetFullPath(tip.DescriptionImage, tipsLanguageFullPath);
-			}
-
-			// save the updated tips with the relative path info
-			tipsService.CreateTipsImportFile(tipsImportFile, tips);
-
-			return tips;
+			var allTipContexts = _tipsProvider.GetAllTips();
+			return allTipContexts.Sum(tipContext => tipContext.Tips.Count(a => a.Context == context));
 		}
 
 		private string GetTipsLanguagePath(string languageId)
@@ -83,52 +73,89 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			return tipsLanguageFullPath;
 		}
 
-		private static string GetFullPath(string fileName, string tipsLanguageFullPath)
-		{
-			if (!string.IsNullOrEmpty(fileName))
-			{
-				var name = Path.GetFileName(fileName);
-				return Path.Combine(tipsLanguageFullPath, name);
-			}
-
-			return fileName;
-		}
-
-		private static void CreateTipsImportContent(string tipsLanguageFullPath, string languageId)
+		private bool GetTipsImportResources(string tipsLanguageFullPath, string languageId)
 		{
 			RemoveAllFilesInPath(tipsLanguageFullPath);
 
-			var tipsContentFileInput = "Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.UsefulTips." + languageId + "." + languageId + ".zip";
-			var tipsContentFileOutput = Path.Combine(tipsLanguageFullPath, languageId + ".zip");
+			var tipsOutputFile = Path.Combine(tipsLanguageFullPath, languageId + ".zip");
 
-			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tipsContentFileInput))
+			var success = WriteEmbeddedResourceToFile(languageId, tipsOutputFile);
+			if (success)
 			{
-				if (stream != null)
+				try
 				{
-					using (var reader = new BinaryReader(stream))
-					{
-						using (Stream writer = File.Create(tipsContentFileOutput))
-						{
-							var buffer = new byte[2048];
-							while (true)
-							{
-								var current = reader.Read(buffer, 0, buffer.Length);
-								if (current == 0)
-								{
-									break;
-								}
+					ZipFile.ExtractToDirectory(tipsOutputFile, tipsLanguageFullPath);
+				}
+				catch
+				{
+					//ignore; catch all
+				}
 
-								writer.Write(buffer, 0, current);
+				return true;
+			}
+
+			return false;
+		}
+
+		private List<Tip> NormalizePathInformation(TipsProvider ripsProvider, string tipsImportFile, string tipsLanguageFullPath)
+		{
+			// 1. read the tips from the import file
+			var tips = ripsProvider.ReadTipsImportFile(tipsImportFile);
+
+			// 2. update the relative path info for each of the tips
+			foreach (var tip in tips)
+			{
+				tip.Icon = GetFullPath(tip.Icon, tipsLanguageFullPath);
+				tip.Content = GetFullPath(tip.Content, tipsLanguageFullPath);
+				tip.DescriptionImage = GetFullPath(tip.DescriptionImage, tipsLanguageFullPath);
+			}
+
+			// 3. write the import file with the updated tips
+			ripsProvider.CreateTipsImportFile(tipsImportFile, tips);
+
+			return tips;
+		}
+
+		private string GetFullPath(string fileName, string tipsLanguageFullPath)
+		{
+			return !string.IsNullOrEmpty(fileName)
+				? Path.Combine(tipsLanguageFullPath, Path.GetFileName(fileName))
+				: fileName;
+		}
+
+		private bool WriteEmbeddedResourceToFile(string languageId, string tipsContentFileOutput)
+		{
+			var tipsEmbeddedResource = typeof(PluginResources).Namespace + ".SdlTmAnonymizer.UsefulTips." + languageId + "." + languageId + ".zip";
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tipsEmbeddedResource))
+			{
+				if (stream == null)
+				{
+					return false;
+				}
+
+				using (var reader = new BinaryReader(stream))
+				{
+					using (Stream writer = File.Create(tipsContentFileOutput))
+					{
+						var buffer = new byte[2048];
+						while (true)
+						{
+							var current = reader.Read(buffer, 0, buffer.Length);
+							if (current == 0)
+							{
+								break;
 							}
+
+							writer.Write(buffer, 0, current);
 						}
 					}
 				}
 			}
 
-			ZipFile.ExtractToDirectory(tipsContentFileOutput, tipsLanguageFullPath);
+			return true;
 		}
 
-		private static void RemoveAllFilesInPath(string tipsLanguageFullPath)
+		private void RemoveAllFilesInPath(string tipsLanguageFullPath)
 		{
 			try
 			{
@@ -140,7 +167,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			}
 			catch
 			{
-				//ignore
+				//ignore; catch all
 			}
 		}
 	}

@@ -60,8 +60,11 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Sdl.Community.UsefulTipsService, Version=2.1.9.1, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.1.9.5\lib\net48\Sdl.Community.UsefulTipsService.dll</HintPath>
+    <Reference Include="RwsAppStore.UsefulTipsService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.4\lib\net48\RwsAppStore.UsefulTipsService.dll</HintPath>
+    </Reference>
+    <Reference Include="RwsAppStore.UsefulTipsService.Update, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.4\lib\net48\RwsAppStore.UsefulTipsService.Update.exe</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
