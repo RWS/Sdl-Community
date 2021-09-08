@@ -11,10 +11,9 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private List<CollectionModel> _collections = new List<CollectionModel>();
 		private SettingsModel _settings;
 		private List<InstitutionModel> _institutions = new List<InstitutionModel>();
-		private bool _primary;
-		private bool _notPrimary;
 		private Reliabilities _sourceReliabilities = new Reliabilities();
 		private Reliabilities _targetReliabilities = new Reliabilities();
+		private Primarities _primarities;
 
 		public FineGrainedFilterViewModel()
 		{
@@ -110,7 +109,15 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			}
 		}
 
-		public Primarities Primarities { get; set; }
+		public Primarities Primarities
+		{
+			get => _primarities;
+			set
+			{
+				_primarities = value;
+				OnPropertyChanged(nameof(Primarities));
+			}
+		}
 
 		public Reliabilities SourceReliabilities
 		{
@@ -155,9 +162,12 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private void DataPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != nameof(CollectionModel.IsSelected) && e.PropertyName != nameof(InstitutionModel.IsSelected)) return;
-			OnPropertyChanged(nameof(AllCollectionsChecked));
-			OnPropertyChanged(nameof(AllInstitutionsChecked));
+			if (e.PropertyName is nameof(CollectionModel.IsSelected))
+			{
+				OnPropertyChanged(nameof(AllCollectionsChecked));
+			}
+			if (e.PropertyName is nameof(InstitutionModel.IsSelected))
+				OnPropertyChanged(nameof(AllInstitutionsChecked));
 		}
 
 		private void FineGrainedFilterViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

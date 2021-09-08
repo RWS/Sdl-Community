@@ -32,7 +32,7 @@
 	    <TextBlock Foreground="DimGray" Grid.Row="0" Grid.Column="0"
 	               Margin="10 5 0 0" Text="{x:Static resx:PluginResources.SelectCollections_TextBlock}" />
 	    <TextBlock Foreground="DimGray" Grid.Row="0" Grid.Column="1"
-	               Margin="10,5,0,0" Text="Primarity reliability owner" />
+	               Margin="10,5,0,0" Text="Select owner(s):" />
 
 		<DataGrid Grid.Row="1" 
 		          Grid.Column="0"
@@ -109,15 +109,25 @@
 		    </Grid.ColumnDefinitions>
 			<DockPanel Grid.Column="0" Grid.Row="0" LastChildFill="False">
 			    <TextBlock Foreground="DimGray" Text="Primarity" DockPanel.Dock="Top"/>
-			    <StackPanel Margin="5 5 0 0" VerticalAlignment="Center">
-				    <CheckBox Content="Primary" IsChecked="{Binding Primarities.Primary}"/>
-					<CheckBox Content="Not primary" IsChecked="{Binding Primarities.NotPrimary}" Margin="0 5 0 0"/>
-			    </StackPanel>
+			    <StackPanel Margin="5 5 0 0" VerticalAlignment="Center" Orientation="Horizontal">
+					<CheckBox Content="All" IsChecked="{Binding Primarities.All}" />
+				    <CheckBox Content="Primary" IsChecked="{Binding Primarities.Primary}" Margin="15 0 0 0"/>
+					<CheckBox Content="Not primary" IsChecked="{Binding Primarities.NotPrimary}" Margin="10 0 0 0"/>
+				</StackPanel>
 		    </DockPanel>
 		    <DockPanel Grid.Row="0"  Grid.Column="1" LastChildFill="False">
 				<WrapPanel DockPanel.Dock="Top" Margin="0 5 0 0">
-					<TextBlock Text="Source reliability" VerticalAlignment="Center" Foreground="DimGray" Margin="0 0 5 0"/>
+					<TextBlock Text="Source reliability" VerticalAlignment="Center" Foreground="DimGray" Margin="0 0 6 0"/>
 					<StackPanel Orientation="Horizontal" >
+						<CheckBox Content="All" IsChecked="{Binding SourceReliabilities.All, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 15 0"/>
+						<CheckBox IsChecked="{Binding SourceReliabilities.DowngradePriorToDeletion}">
+							<StackPanel Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarGrey.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
 						<CheckBox IsChecked="{Binding SourceReliabilities.NotVerified, UpdateSourceTrigger=PropertyChanged}">
 							<StackPanel Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"
@@ -176,9 +186,18 @@
 						</CheckBox>
 					</StackPanel>
 				</WrapPanel>
-				<WrapPanel DockPanel.Dock="Bottom" Margin="0 0 0 5" VerticalAlignment="Center">
+				<WrapPanel DockPanel.Dock="Bottom" Margin="0 5 0 5">
 					<TextBlock Text="Target reliability" VerticalAlignment="Center" Foreground="DimGray" Margin="0 0 9 0"/>
 					<StackPanel Orientation="Horizontal">
+						<CheckBox Content="All" IsChecked="{Binding TargetReliabilities.All, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 15 0"/>
+						<CheckBox IsChecked="{Binding TargetReliabilities.DowngradePriorToDeletion}">
+							<StackPanel Style="{StaticResource StarPanel}">
+								<Image x:Uid="Image_4"
+								       Source="../Resources/StarGrey.png"
+								       Width="15"
+								       Height="15" />
+							</StackPanel>
+						</CheckBox>
 						<CheckBox IsChecked="{Binding TargetReliabilities.NotVerified}">
 							<StackPanel Style="{StaticResource StarPanel}">
 								<Image x:Uid="Image_4"

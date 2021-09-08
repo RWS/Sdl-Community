@@ -1,14 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class Reliabilities : ViewModelBase
 	{
+		private readonly List<string> _propertyNames;
 		private bool _downgradePriorToDeletion;
 		private bool _minimumReliability;
 		private bool _notVerified;
 		private bool _reliable;
 		private bool _veryReliable;
+
+		public Reliabilities()
+		{
+			_propertyNames = GetType().GetProperties().Select(prop => prop.Name).ToList();
+			_propertyNames.Remove(nameof(All));
+
+			PropertyChanged += Reliabilities_PropertyChanged;
+		}
+
+		public bool All
+		{
+			get => AreAllChecked();
+			set
+			{
+				SwitchAll(value);
+				OnPropertyChanged(nameof(All));
+			}
+		}
 
 		public bool DowngradePriorToDeletion
 		{
@@ -76,6 +96,28 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 				codes.Add(4);
 
 			return codes;
+		}
+
+		private bool AreAllChecked()
+		{
+			return DowngradePriorToDeletion && NotVerified && MinimumReliability && Reliable && VeryReliable;
+		}
+
+		private void Reliabilities_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (_propertyNames.Contains(e.PropertyName))
+			{
+				OnPropertyChanged(nameof(All));
+			}
+		}
+
+		private void SwitchAll(bool onOff)
+		{
+			DowngradePriorToDeletion = onOff;
+			NotVerified = onOff;
+			MinimumReliability = onOff;
+			Reliable = onOff;
+			VeryReliable = onOff;
 		}
 	}
 }

@@ -13,9 +13,9 @@
 		ResizeMode="CanResizeWithGrip"
 		WindowStartupLocation="CenterScreen"
 		MinHeight="597"
-		MinWidth="551"
+		MinWidth="735"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
-        Height="600" Width="800">
+        Height="597" Width="943">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

@@ -7,6 +7,16 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 		private bool _notPrimary;
 		private bool _primary;
 
+		public bool All
+		{
+			get => Primary && NotPrimary;
+			set
+			{
+				Primary = value;
+				NotPrimary = value;
+			} 
+		}
+
 		public bool NotPrimary
 		{
 			get => _notPrimary;
@@ -14,6 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			{
 				_notPrimary = value;
 				OnPropertyChanged(nameof(NotPrimary));
+				OnPropertyChanged(nameof(All));
 			}
 		}
 
@@ -24,6 +35,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			{
 				_primary = value;
 				OnPropertyChanged(nameof(Primary));
+				OnPropertyChanged(nameof(All));
 			}
 		}
 
