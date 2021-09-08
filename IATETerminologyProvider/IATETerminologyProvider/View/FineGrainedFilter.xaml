@@ -37,6 +37,8 @@
 		<DataGrid Grid.Row="1" 
 		          Grid.Column="0"
 		          Margin="10,5,10,10"
+				  GridLinesVisibility="None"
+				  IsReadOnly="True"
 				  ItemsSource="{Binding Collections}"
 		          Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
 		          SelectionMode="Single">
@@ -72,8 +74,10 @@
 	              Grid.Column="1"
 	              Margin="10,5,10,10"
 	              ItemsSource="{Binding Institutions}"
+	              GridLinesVisibility="None"
 	              Style="{DynamicResource Sdl.DataGrid.GenericStyle}"
-	              SelectionMode="Single">
+	              SelectionMode="Single"
+	              IsReadOnly="True">
 
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Width="50">

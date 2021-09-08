@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -247,8 +248,9 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
 			var primarities = new List<int>();
-			var sourceReliabilities = new List<int>(4);
-			var targetReliabilities = new List<int>(4);
+			var sourceReliabilities = new List<int>();
+			var targetReliabilities = new List<int>();
+			var searchInSubdomains = false;
 			if (ProviderSettings != null)
 			{
 				var domains = ProviderSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
@@ -267,23 +269,39 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				sourceReliabilities = ProviderSettings.SourceReliabilities.GetReliabilityCodes();
 				targetReliabilities = ProviderSettings.TargetReliabilities.GetReliabilityCodes();
+
+				searchInSubdomains = ProviderSettings.SearchInSubdomains;
 			}
 
-			var bodyModel = new
-			{
-				query = text,
-				source = source.Locale.TwoLetterISOLanguageName,
-				targets = targetLanguages,
-				cascade_domains = ProviderSettings?.SearchInSubdomains,
-				query_operator = 18,
-				filter_by_domains = filteredDomains,
-				search_in_term_types = filteredTermTypes,
-				filter_by_entry_collection = filteredCollections,
-				filter_by_entry_institution_owner = filteredInstitutions,
-				filter_by_entry_primarity = primarities,
-				filter_by_source_term_reliability = sourceReliabilities,
-				filter_by_target_term_reliability = targetReliabilities
-			};
+			dynamic bodyModel = new ExpandoObject();
+
+			bodyModel.query = text;
+			bodyModel.source = source.Locale.TwoLetterISOLanguageName;
+			bodyModel.targets = targetLanguages;
+			bodyModel.cascade_domains = searchInSubdomains;
+			bodyModel.query_operator = 18;
+			bodyModel.search_in_fields = 0;
+
+			if (filteredDomains.Count > 0)
+				bodyModel.filter_by_domains = filteredDomains;
+
+			if (filteredTermTypes.Count > 0)
+				bodyModel.search_in_term_types = filteredTermTypes;
+
+			if (filteredCollections.Count > 0)
+				bodyModel.filter_by_entry_collection = filteredCollections;
+
+			if (filteredInstitutions.Count > 0)
+				bodyModel.filter_by_entry_institution_owner = filteredInstitutions;
+
+			if (primarities.Count > 0)
+				bodyModel.filter_by_entry_primarity = primarities;
+
+			if (sourceReliabilities.Count > 0)
+				bodyModel.filter_by_source_term_reliability = sourceReliabilities;
+
+			if (targetReliabilities.Count > 0)
+				bodyModel.filter_by_target_term_reliability = targetReliabilities;
 
 			return bodyModel;
 		}

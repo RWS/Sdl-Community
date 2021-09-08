@@ -50,7 +50,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 
 		public static string SearchUri(string expand, int limit)
 		{
-			return $"{BaseApiUrl}/entries/_search?expand={expand}&limit={limit}";
+			return $"{BaseApiUrl}/entries/_search?expand={expand}&offset=0&limit={limit}";
 		}
 
 		public static string GetInstitutionsUri()
