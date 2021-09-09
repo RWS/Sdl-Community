@@ -127,6 +127,16 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon IATE_settings {
+            get {
+                object obj = ResourceManager.GetObject("IATE_settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider based on the IATE database updated continuously by translators and terminologists..
         /// </summary>
         public static string IATETerminologyProviderDescription {
@@ -191,11 +201,39 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select collection(s):.
+        /// </summary>
+        public static string SelectCollections_TextBlock {
+            get {
+                return ResourceManager.GetString("SelectCollections_TextBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select settings file.
+        /// </summary>
+        public static string SelectSettingsFile_DialogTitle {
+            get {
+                return ResourceManager.GetString("SelectSettingsFile_DialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {
             get {
                 return ResourceManager.GetString("Settings_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap StarYellow {
+            get {
+                object obj = ResourceManager.GetObject("StarYellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

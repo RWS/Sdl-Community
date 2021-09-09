@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,7 +22,6 @@ namespace Sdl.Community.IATETerminologyProvider
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly ProjectsController _projectsController;
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
@@ -33,17 +33,15 @@ namespace Sdl.Community.IATETerminologyProvider
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
 			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
-			_projectsController = SdlTradosStudio.Application?.GetController<ProjectsController>();
-
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
 			InventoriesProvider = inventoriesProvider;
 			CacheProvider = cacheProvider;
 
-			Task.Run(async () => await Setup(ProviderSettings));
+			Task.Run(async () => await Setup());
 		}
 
-		private async Task Setup(SettingsModel settings)
+		private async Task Setup()
 		{
 			if (!InventoriesProvider.IsInitialized)
 			{
@@ -70,7 +68,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public override string Name => PluginResources.IATETerminologyProviderName;
 
-		public override Uri Uri => ProviderSettings.Uri;
+		public override Uri Uri => new Uri(Constants.IATEUriTemplate);
 
 		public override IEntry GetEntry(int id)
 		{
@@ -94,7 +92,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			var jsonBody = GetApiRequestBodyValues(source, target, text);
 			var queryString = JsonConvert.SerializeObject(jsonBody);
-			var canConnect = CacheProvider?.Connect(_projectsController?.CurrentProject);
+			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
 
 			if (canConnect != null && (bool)canConnect)
 			{
@@ -111,8 +109,8 @@ namespace Sdl.Community.IATETerminologyProvider
 					return cachedResults;
 				}
 			}
-			
-			var config = _projectsController?.CurrentProject?.GetTermbaseConfiguration();
+
+			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
 			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
 			if (results != null)
 			{
@@ -183,7 +181,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		{
 			var result = new List<IDefinitionLanguage>();
 
-			var currentProject = _projectsController?.CurrentProject;
+			var currentProject = IATEApplication.ProjectsController?.CurrentProject;
 			if (currentProject == null)
 			{
 				return result;
@@ -244,8 +242,14 @@ namespace Sdl.Community.IATETerminologyProvider
 			var targetLanguages = new List<string>();
 			var filteredDomains = new List<string>();
 			var filteredTermTypes = new List<int>();
+			var filteredCollections = new List<string>();
+			var filteredInstitutions = new List<string>();
 
 			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
+			var primarities = new List<int>();
+			var sourceReliabilities = new List<int>();
+			var targetReliabilities = new List<int>();
+			var searchInSubdomains = false;
 			if (ProviderSettings != null)
 			{
 				var domains = ProviderSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
@@ -253,18 +257,50 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				var termTypes = ProviderSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
 				filteredTermTypes.AddRange(termTypes);
+
+				var collections = ProviderSettings.Collections.Select(c => c.Code).ToList();
+				filteredCollections.AddRange(collections);
+				
+				var institutions = ProviderSettings.Institutions.Select(i => i.Code).ToList();
+				filteredInstitutions.AddRange(institutions);
+
+				primarities = ProviderSettings.Primarities.GetPrimarities();
+
+				sourceReliabilities = ProviderSettings.SourceReliabilities.GetReliabilityCodes();
+				targetReliabilities = ProviderSettings.TargetReliabilities.GetReliabilityCodes();
+
+				searchInSubdomains = ProviderSettings.SearchInSubdomains;
 			}
 
-			var bodyModel = new
-			{
-				query = text,
-				source = source.Locale.TwoLetterISOLanguageName,
-				targets = targetLanguages,
-				cascade_domains = ProviderSettings?.SearchInSubdomains,
-				query_operator = 18,
-				filter_by_domains = filteredDomains,
-				search_in_term_types = filteredTermTypes
-			};
+			dynamic bodyModel = new ExpandoObject();
+
+			bodyModel.query = text;
+			bodyModel.source = source.Locale.TwoLetterISOLanguageName;
+			bodyModel.targets = targetLanguages;
+			bodyModel.cascade_domains = searchInSubdomains;
+			bodyModel.query_operator = 18;
+			bodyModel.search_in_fields = 0;
+
+			if (filteredDomains.Count > 0)
+				bodyModel.filter_by_domains = filteredDomains;
+
+			if (filteredTermTypes.Count > 0)
+				bodyModel.search_in_term_types = filteredTermTypes;
+
+			if (filteredCollections.Count > 0)
+				bodyModel.filter_by_entry_collection = filteredCollections;
+
+			if (filteredInstitutions.Count > 0)
+				bodyModel.filter_by_entry_institution_owner = filteredInstitutions;
+
+			if (primarities.Count > 0)
+				bodyModel.filter_by_entry_primarity = primarities;
+
+			if (sourceReliabilities.Count > 0)
+				bodyModel.filter_by_source_term_reliability = sourceReliabilities;
+
+			if (targetReliabilities.Count > 0)
+				bodyModel.filter_by_target_term_reliability = targetReliabilities;
 
 			return bodyModel;
 		}
