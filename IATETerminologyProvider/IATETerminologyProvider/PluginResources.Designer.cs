@@ -127,16 +127,6 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon IATE_settings {
-            get {
-                object obj = ResourceManager.GetObject("IATE_settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Terminology provider based on the IATE database updated continuously by translators and terminologists..
         /// </summary>
         public static string IATETerminologyProviderDescription {

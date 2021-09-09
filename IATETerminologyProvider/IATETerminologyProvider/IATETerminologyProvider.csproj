@@ -279,6 +279,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\IATE_settings.ico" />
     <Resource Include="Resources\StarGrey.png" />
     <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />
@@ -287,7 +288,6 @@
     </EmbeddedResource>
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\IATE_logo.png" />
-    <Resource Include="Resources\IATE_settings.ico" />
     <Resource Include="Resources\IATE_settings.png" />
     <EmbeddedResource Include="Resources\report.xslt" />
     <None Include="packages.config" />

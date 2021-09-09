@@ -8,6 +8,7 @@
 		xmlns:resx="clr-namespace:Sdl.Community.IATETerminologyProvider"
 		xmlns:helpers="clr-namespace:Sdl.Community.IATETerminologyProvider.Helpers"
 		mc:Ignorable="d" 
+		Icon="../Resources/IATE_settings.ico"
 		WindowStyle="None" AllowsTransparency="True"
 		Title="IATE Real-time Terminology"
 		ResizeMode="CanResizeWithGrip"
