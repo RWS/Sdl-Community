@@ -24,7 +24,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
-		private EditorController _editorController;		
+		private EditorController _editorController;
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -33,7 +33,6 @@ namespace Sdl.Community.IATETerminologyProvider
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
 			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
-
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
 			InventoriesProvider = inventoriesProvider;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using NLog;
@@ -8,7 +7,6 @@ using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Model.ResponseModels;
-using Sdl.Community.IATETerminologyProvider.Service;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {

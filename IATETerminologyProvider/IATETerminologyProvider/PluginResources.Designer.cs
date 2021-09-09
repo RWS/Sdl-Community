@@ -200,6 +200,15 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select settings file.
+        /// </summary>
+        public static string SelectSettingsFile_DialogTitle {
+            get {
+                return ResourceManager.GetString("SelectSettingsFile_DialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {

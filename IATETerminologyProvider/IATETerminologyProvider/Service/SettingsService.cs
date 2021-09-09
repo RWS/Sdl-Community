@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Community.IATETerminologyProvider.Helpers;
@@ -59,18 +60,60 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			return null;
 		}
 
-		public static void SaveSettingsForCurrentProject(SettingsModel settings)
+		public static async Task<SettingsModel> GetSettingsFromTemplate(string path)
+		{
+			try
+			{
+				var settingsJson = await Task.Run(() => File.ReadAllText(path));
+				var settings = JsonConvert.DeserializeObject<SettingsModel>(settingsJson);
+
+				return settings;
+			}
+			catch { }
+
+			return null;
+		}
+
+		public static async Task SaveSettingsAtChosenLocation(SettingsModel settingsModel, string path)
+		{
+			var availableFilePath = GetAvailableFileName(path);
+			await Task.Run(() => File.WriteAllText(availableFilePath, JsonConvert.SerializeObject(settingsModel)));
+		}
+
+		private static string GetAvailableFileName(string filePath)
+		{
+			try
+			{
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+			}
+			catch 
+			{
+				return GetAvailableFileName(filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)"));
+			}
+
+			return filePath;
+		}
+
+
+		public static async Task SaveSettingsForCurrentProject(SettingsModel settings, string path = null)
 		{
 			var serializedSettings = JsonConvert.SerializeObject(settings);
 
-			var settingsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			var settingsFolderPath = path ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				$@"RWS AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}");
 
-			Directory.CreateDirectory(settingsFolderPath);
 
-			File.WriteAllText(
-				$@"{settingsFolderPath}\IATESettings.json",
-				serializedSettings);
+			await Task.Run(() =>
+			{
+				Directory.CreateDirectory(settingsFolderPath);
+
+				File.WriteAllText(
+					$@"{settingsFolderPath}\IATESettings.json",
+					serializedSettings);
+			});
 		}
 
 		public void Execute()

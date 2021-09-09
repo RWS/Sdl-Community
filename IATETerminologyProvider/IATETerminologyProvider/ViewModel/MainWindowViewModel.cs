@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.IATETerminologyProvider.Commands;
 using Sdl.Community.IATETerminologyProvider.Interface;
 using Sdl.Community.IATETerminologyProvider.Model;
 using Sdl.Community.IATETerminologyProvider.Service;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Sdl.Community.IATETerminologyProvider.ViewModel
 {
@@ -14,6 +17,8 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		private SettingsModel _providerSettings;
 		private ICommand _resetToDefault;
 		private ICommand _saveSettingsCommand;
+		private ICommand _saveTemplateCommand;
+		private ICommand _importSettingsCommand;
 
 		public MainWindowViewModel(List<ISettingsViewModel> viewModels, SettingsModel settingsModel)
 		{
@@ -39,6 +44,45 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 		public ICommand SaveSettingsCommand => _saveSettingsCommand ?? (_saveSettingsCommand = new CommandHandler(SaveSettingsAction, true));
 
 		public List<ISettingsViewModel> ViewModels { get; set; }
+
+		public ICommand SaveTemplateCommand => _saveTemplateCommand ?? (_saveTemplateCommand = new CommandHandler(SaveTemplateAction, true));
+
+		public ICommand ImportSettingsTemplateCommand => _importSettingsCommand ?? (_importSettingsCommand = new CommandHandler(ImportSettingsAction, true));
+
+		private async void ImportSettingsAction()
+		{
+			var newSettings = new SettingsModel();
+			var fileDialog = new OpenFileDialog
+			{
+				Title = PluginResources.SelectSettingsFile_DialogTitle,
+				Filter = @"JSON |*.json",
+				CheckFileExists = true,
+				CheckPathExists = true,
+				DefaultExt = "json",
+				Multiselect = false
+			};
+
+			var result = fileDialog.ShowDialog();
+			if (result != DialogResult.OK || fileDialog.FileName.Length <= 0) return;
+
+			newSettings = await SettingsService.GetSettingsFromTemplate(fileDialog.FileName);
+			ProviderSettings = newSettings;
+		}
+
+		private async void SaveTemplateAction()
+		{
+			var saveFileWindow = new SaveFileDialog
+			{
+				DefaultExt = ".json",
+				Filter = "JSON files (.json)|*.json",
+				FileName = "Settings template"
+			};
+
+			if (saveFileWindow.ShowDialog() == true)
+			{
+				await SettingsService.SaveSettingsAtChosenLocation(ProviderSettings, saveFileWindow.FileName);
+			}
+		}
 
 		public async void Setup()
 		{
@@ -84,7 +128,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			ViewModels.ForEach(vm => vm.Reset());
 		}
 
-		private void SaveSettingsAction()
+		private async void SaveSettingsAction()
 		{
 			foreach (var viewModel in ViewModels)
 			{
@@ -124,7 +168,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 					}
 				}
 
-				SettingsService.SaveSettingsForCurrentProject(ProviderSettings);
+				await SettingsService.SaveSettingsForCurrentProject(ProviderSettings);
 			}
 
 			//if (ProviderSettings.Domains.Count > 0)

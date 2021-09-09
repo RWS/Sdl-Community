@@ -37,11 +37,19 @@
 					        Command="{Binding ResetToDefault}"
 					        Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default" />
 					<Button DockPanel.Dock="Left" 
+					        Margin="10" Cursor="Hand" 
+					        Command="{Binding SaveTemplateCommand}"
+					        Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}" VerticalAlignment="Center" MaxWidth="150" Content="Export settings" />
+					<Button DockPanel.Dock="Left" 
+					        Margin="10" Cursor="Hand" 
+					        Command="{Binding ImportSettingsTemplateCommand}"
+					        Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}" VerticalAlignment="Center" MaxWidth="150" Content="Import settings" />
+					<Button DockPanel.Dock="Left" 
 					        Margin="10" 
 					        Cursor="Hand" 
 					        VerticalAlignment="Center"
 					        Command="{Binding ClearCache}"
-					        Style="{DynamicResource Sdl.Button.HyperLinkStyle}" 
+					        Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}" 
 					        MaxWidth="150"
 					        Content="{x:Static resx:PluginResources.ClearCache}" />
 					<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" 
