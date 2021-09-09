@@ -5,6 +5,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 	public class ApiUrls
 	{
 		private const string AuthBaseUrl = "https://iate.europa.eu/uac-api/auth";
+		private const string UacBaseUrl = "https://iate.europa.eu/uac-api";
 		private const string BaseApiUrl = "https://iate.europa.eu/em-api";
 		private const string BaseUrl = "https://iate.europa.eu";
 
@@ -13,19 +14,19 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			return $"{AuthBaseUrl}/login?username={userName}&password={password}";
 		}
 
-		public static string GetExtendAccessTokenUri(string token)
+		public static string GetCollectionsUri()
 		{
-			return $"{AuthBaseUrl}/token?refresh_token={token}";
-		}
-
-		public static string SearchUri(string expand, int limit)
-		{
-			return $"{BaseApiUrl}/entries/_search?expand={expand}&limit={limit}";
+			return $"{BaseApiUrl}/collections?expand=true&offset=0&limit=3000";
 		}
 
 		public static string GetDomainUri()
 		{
 			return $"{BaseApiUrl}/domains/_tree";
+		}
+
+		public static string GetExtendAccessTokenUri(string token)
+		{
+			return $"{AuthBaseUrl}/token?refresh_token={token}";
 		}
 
 		public static string GetTermTypeUri(string expand, string transLang, string limit, string offset)
@@ -36,7 +37,7 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 		public static string SearchAllUri(string currentSelection, string sourceLanguage)
 		{
 			var encodedString = HttpUtility.UrlEncode(currentSelection);
-			var uri = $"{BaseUrl}/search/byUrl?term={encodedString}&sl={sourceLanguage}&tl=all";						
+			var uri = $"{BaseUrl}/search/byUrl?term={encodedString}&sl={sourceLanguage}&tl=all";
 			return uri;
 		}
 
@@ -45,6 +46,16 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			var encodedString = HttpUtility.UrlEncode(currentSelection);
 			var uri = $"{BaseUrl}/search/byUrl?term={encodedString}&sl={sourceLanguage}&tl={targetLanguage}";
 			return uri;
+		}
+
+		public static string SearchUri(string expand, int limit)
+		{
+			return $"{BaseApiUrl}/entries/_search?expand={expand}&offset=0&limit={limit}";
+		}
+
+		public static string GetInstitutionsUri()
+		{
+			return $"{UacBaseUrl}/institutions?expand=true&offset=0&limit=3000";
 		}
 	}
 }

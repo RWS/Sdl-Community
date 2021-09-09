@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>IATE Real-time Terminology</PlugInName>
-  <Version>3.6.9.3</Version>
+  <Version>3.6.10.0</Version>
   <Description>Integration with IATE European Union terminology</Description>
   <Author>RWS AppStore Team</Author>
 	<Include>
 		<File>System.Reactive.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="16.1"/>
-</PluginPackage>
+  <RequiredProduct name="SDLTradosStudio" minversion="16.2"/>
+</PluginPackage> 

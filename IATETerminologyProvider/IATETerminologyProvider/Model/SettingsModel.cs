@@ -1,94 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
+﻿using System.Collections.Generic;
 
 namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class SettingsModel
 	{
-		//public int DefaultMaxEntries = 500;
-		
-		private readonly TranslationProviderUriBuilder _uriBuilder;
-
 		public SettingsModel()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(Constants.IATEGlossary);
+			Domains = new List<DomainModel>();
+			TermTypes = new List<TermTypeModel>();
+			Collections = new List<CollectionModel>();
+			Institutions = new List<InstitutionModel>();
 		}
 
-		public SettingsModel(Uri uri)
-		{
-			_uriBuilder = new TranslationProviderUriBuilder(uri);
-		}
+		public List<CollectionModel> Collections { get; set; }
 
-		public List<DomainModel> Domains
-		{
-			get
-			{
-				var domains = JsonConvert.DeserializeObject<List<DomainModel>>(GetStringParameter("domains"));
-				return domains;
-			}
-			set
-			{
-				var domains = JsonConvert.SerializeObject(value);
-				SetStringParameter("domains", domains);
-			}
-		}
+		public List<DomainModel> Domains { get; set; }
 
-		public List<TermTypeModel> TermTypes
-		{
-			get
-			{
-				var termTypes = JsonConvert.DeserializeObject<List<TermTypeModel>>(GetStringParameter("termTypes"));
-				return termTypes;
-			}
-			set
-			{
-				var termTypes = JsonConvert.SerializeObject(value);
-				SetStringParameter("termTypes", termTypes);
-			}
-		}
+		public List<InstitutionModel> Institutions { get; set; }
 
-		//public int MaxEntries
-		//{
-		//	get
-		//	{
-		//		var success = int.TryParse(GetStringParameter("maxEntries"), out var value);
+		public Primarities Primarities { get; set; }
+		public bool SearchInSubdomains { get; set; }
 
-		//		return success
-		//			? value < 100 ? DefaultMaxEntries : value
-		//			: DefaultMaxEntries;
-		//	}
-		//	set
-		//	{
-		//		SetStringParameter("maxEntries", value.ToString());
-		//	}
-		//}
+		public Reliabilities SourceReliabilities { get; set; }
+		public Reliabilities TargetReliabilities { get; set; }
 
-		public bool SearchInSubdomains
-		{
-			get => SearchInSubdomainsParameter != null && Convert.ToBoolean(SearchInSubdomainsParameter);
-			set => SearchInSubdomainsParameter = value.ToString();
-		}
-
-		public string SearchInSubdomainsParameter
-		{
-			get => GetStringParameter("searchInSubdomains");
-			set => SetStringParameter("searchInSubdomains", value);
-		}
-
-		public Uri Uri => _uriBuilder.Uri;
-
-		private string GetStringParameter(string p)
-		{
-			var paramString = _uriBuilder[p];
-			return paramString;
-		}
-
-		private void SetStringParameter(string p, string value)
-		{
-			_uriBuilder[p] = value;
-		}
+		public List<TermTypeModel> TermTypes { get; set; }
 	}
 }
