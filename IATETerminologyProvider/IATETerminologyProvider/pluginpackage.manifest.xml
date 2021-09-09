@@ -8,5 +8,5 @@
 		<File>System.Reactive.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="16.1"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="16.2"/>
 </PluginPackage> 
