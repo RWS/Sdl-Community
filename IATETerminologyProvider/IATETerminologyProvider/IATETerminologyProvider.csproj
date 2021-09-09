@@ -10,11 +10,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.IATETerminologyProvider</RootNamespace>
     <AssemblyName>Sdl.Community.IATETerminologyProvider</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -142,9 +143,19 @@
   <ItemGroup>
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
+    <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="Model\CollectionModel.cs" />
+    <Compile Include="Model\InstitutionModel.cs" />
+    <Compile Include="Model\Primarities.cs" />
+    <Compile Include="Model\Reliabilities.cs" />
+    <Compile Include="Model\ResponseModels\IateLanguage.cs" />
+    <Compile Include="Model\ResponseModels\IateName.cs" />
+    <Compile Include="Model\ResponseModels\IateInstitution.cs" />
+    <Compile Include="Service\SettingsService.cs" />
+    <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
-    <Compile Include="Helpers\CloseOnClickBehaviour.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Log.cs" />
@@ -163,6 +174,7 @@
     <Compile Include="IATETerminologyProviderFactory.cs" />
     <Compile Include="Interface\ICacheProvider.cs" />
     <Compile Include="Interface\IMessageBoxService.cs" />
+    <Compile Include="Interface\ISettingsViewModel.cs" />
     <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
     <Compile Include="Model\DocumentEntryState.cs" />
     <Compile Include="Model\DomainModel.cs" />
@@ -198,15 +210,18 @@
     <Compile Include="Service\SegmentVisitor.cs" />
     <Compile Include="Service\SqliteDatabaseProvider.cs" />
     <Compile Include="Service\TermSearchService.cs" />
-    <Compile Include="Styles\WindowsControl.xaml.cs">
+    <Compile Include="Model\ResponseModels\IateCollection.cs" />
+    <Compile Include="Events\ResetEvent.cs" />
+    <Compile Include="View\FineGrainedFilter.xaml.cs">
+      <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\IATETermsControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="View\DomainsAndTermTypes.xaml.cs">
+      <DependentUpon>DomainsAndTermTypes.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\IATETermsControl.Designer.cs">
-      <DependentUpon>IATETermsControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\SearchResultsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -214,10 +229,16 @@
       <DependentUpon>SearchResultsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="View\SearchResultsViewerController.cs" />
-    <Compile Include="View\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="View\IATETermsControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\IATETermsControl.Designer.cs">
+      <DependentUpon>IATETermsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\DomainsAndTermTypesFilterViewModel.cs" />
     <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -238,12 +259,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\WindowsControl.xaml">
+    <Page Include="View\FineGrainedFilter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WindowsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DomainsAndTermTypes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SettingsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="View\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
@@ -251,9 +279,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="View\IATETermsControl.resx">
-      <DependentUpon>IATETermsControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <Resource Include="Resources\StarGrey.png" />
+    <Resource Include="Resources\StarYellow.png" />
+    <Resource Include="Resources\Question.ico" />
     <EmbeddedResource Include="View\SearchResultsControl.resx">
       <DependentUpon>SearchResultsControl.cs</DependentUpon>
     </EmbeddedResource>
