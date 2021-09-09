@@ -51,7 +51,6 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 
 		private async void ImportSettingsAction()
 		{
-			var newSettings = new SettingsModel();
 			var fileDialog = new OpenFileDialog
 			{
 				Title = PluginResources.SelectSettingsFile_DialogTitle,
@@ -65,7 +64,7 @@ namespace Sdl.Community.IATETerminologyProvider.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result != DialogResult.OK || fileDialog.FileName.Length <= 0) return;
 
-			newSettings = await SettingsService.GetSettingsFromTemplate(fileDialog.FileName);
+			var newSettings = await SettingsService.GetSettingsFromTemplate(fileDialog.FileName);
 			ProviderSettings = newSettings;
 		}
 

@@ -10,6 +10,9 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 			TermTypes = new List<TermTypeModel>();
 			Collections = new List<CollectionModel>();
 			Institutions = new List<InstitutionModel>();
+			Primarities = new Primarities();
+			SourceReliabilities = new Reliabilities();
+			TargetReliabilities = new Reliabilities();
 		}
 
 		public List<CollectionModel> Collections { get; set; }
