@@ -175,7 +175,6 @@
     <Compile Include="Interface\ICacheProvider.cs" />
     <Compile Include="Interface\IMessageBoxService.cs" />
     <Compile Include="Interface\ISettingsViewModel.cs" />
-    <Compile Include="Model\SearchCache.cs" />
     <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
     <Compile Include="Model\DocumentEntryState.cs" />
     <Compile Include="Model\DomainModel.cs" />
