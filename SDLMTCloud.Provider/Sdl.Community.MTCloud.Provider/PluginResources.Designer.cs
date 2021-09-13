@@ -147,7 +147,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki..
+        ///   Looks up a localized string similar to To learn more about the information being sent to RWS with this option please visit the &quot;Rate Translations&quot; wiki..
         /// </summary>
         public static string EnableRatingCheckboxTooltip {
             get {
@@ -507,7 +507,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  (original MT Cloud translation is missing).
+        ///   Looks up a localized string similar to  (original LW translation is missing).
         /// </summary>
         public static string OriginalMtCloudTranslationMissing {
             get {
@@ -534,7 +534,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLMachineTranslationCloudProvider.
+        ///   Looks up a localized string similar to LanguageWeaverCloudProvider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -543,7 +543,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -680,6 +680,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Cloud Rate Translations.
+        /// </summary>
+        public static string RateTranslations_Name {
+            get {
+                return ResourceManager.GetString("RateTranslations_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon rating {
@@ -691,7 +700,7 @@ namespace Sdl.Community.MTCloud.Provider {
         
         /// <summary>
         ///   Looks up a localized string similar to {0}
-        ///Response from SDL MT Cloud: 
+        ///Response from Language Weaver: 
         ///{1}
         ///.
         /// </summary>
@@ -712,7 +721,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Language Mapping.
+        ///   Looks up a localized string similar to Language Weaver Language Mapping.
         /// </summary>
         public static string SDLMTCloud_Action_LanguageMapping_Description {
             get {
@@ -730,7 +739,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Description {
             get {
@@ -739,7 +748,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud.
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -748,20 +757,11 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud.
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
         /// </summary>
         public static string SDLMTCloud_RibbonGroup_Name {
             get {
                 return ResourceManager.GetString("SDLMTCloud_RibbonGroup_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
-        /// </summary>
-        public static string SDLMTCloudName {
-            get {
-                return ResourceManager.GetString("SDLMTCloudName", resourceCulture);
             }
         }
         

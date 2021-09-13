@@ -92,12 +92,12 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private static bool WasPreviousOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
+			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
 		}
 
 		private static bool IsOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
+			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)

@@ -8,7 +8,6 @@
 		xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
 		xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
 		mc:Ignorable="d" 
-		Title="SDL MT Cloud Language Codes"
 		ResizeMode="CanResizeWithGrip" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
 		d:DesignHeight="500" d:DesignWidth="800" MinWidth="600" MinHeight="400" Width="850" Height="600"
 		d:DataContext="{d:DesignInstance viewModel:MTCodesViewModel}">
@@ -23,7 +22,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridStyle.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/CustomProgressRing.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 			<Style TargetType="Image">
@@ -47,17 +46,15 @@
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<controls:WindowsControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Width="Auto"/>
-			<Image Grid.Row="0" Grid.Column="0" Height="42" Stretch="Uniform" HorizontalAlignment="Center" Grid.ColumnSpan="2"
-			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
+			<Image Grid.Row="0" Grid.Column="0" Height="30" Stretch="Uniform" HorizontalAlignment="Center" Grid.ColumnSpan="2"
+			       Margin="0 10 0 0" VerticalAlignment="Top"  IsHitTestVisible="False"
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo_cropped.png"/>
-			<Image Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Stretch="Uniform" HorizontalAlignment="Center" 
-			       Margin="0 0 0 0" VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/soontobecome.png"/>
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/LWLogo.png"/>
 
-			<mah:ProgressRing Style="{DynamicResource Sdl.ProgressRing.Asterisk}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="50"
-						    Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
+			<controls:CustomProgressRing Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="ProgressRing" Margin="0" SpinnerSize="24"
+			                             Style="{StaticResource Sdl.CustomProgressRing.Normal}"
+			                             Visibility="{Binding IsWaiting, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 			<Border Grid.Column="1" Width="252" Height="28" Margin="0,15,47,7" BorderThickness="1" BorderBrush="#FFAEDCA1" HorizontalAlignment="Right" Grid.Row="2" >
 				<DockPanel Background="White" Height="28" >

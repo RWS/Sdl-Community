@@ -94,9 +94,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			//TODO: extract in helper
 			if (lookInPrevious)
 			{
-				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloudName;
+				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
 			}
-			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloudName;
+			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
 		}
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)

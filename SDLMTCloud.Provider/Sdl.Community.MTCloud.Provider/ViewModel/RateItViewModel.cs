@@ -465,7 +465,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (suggestion != null && suggestion.OriginalSource != GetSourceSegment(segmentId))
 			{
 				_messageBoxService.ShowWarningMessage(
-					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloudName), PluginResources.SourceModified);
+					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloud_Provider_Name), PluginResources.SourceModified);
 
 				return;
 			}
