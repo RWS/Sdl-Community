@@ -162,7 +162,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (translatedXliff == null) return null;
 
 			var targetSegments = translatedXliff.GetTargetSegments();
-			var segmentIds = fileAndSegments.Segments.Keys.ToList();
+			var segmentIds = fileAndSegments?.Segments.Keys.ToList();
+
+			if (segmentIds is null) return null;
 
 			OnTranslationReceived(new TranslationData
 			{
@@ -283,10 +285,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var currentProject = activeDocument.Project.GetProjectInfo();
 
+			var activeFileId = activeDocument.ActiveFile;
+			if (activeFileId is null) return null;
+
 			var model = Options.LanguageMappings?.FirstOrDefault(l =>
 				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,
 					StringComparison.InvariantCultureIgnoreCase) &&
-				l.TargetTradosCode.Equals(activeDocument.ActiveFile.Language.IsoAbbreviation,
+				l.TargetTradosCode.Equals(activeFileId.Language.IsoAbbreviation,
 					StringComparison.InvariantCultureIgnoreCase));
 			return model;
 		}
