@@ -534,24 +534,6 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LanguageWeaverCloudProvider.
-        /// </summary>
-        public static string Plugin_Name {
-            get {
-                return ResourceManager.GetString("Plugin_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud provider.
-        /// </summary>
-        public static string Plugin_NiceName {
-            get {
-                return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Poor.
         /// </summary>
         public static string PoorQuality {
