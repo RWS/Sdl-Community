@@ -23,8 +23,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public bool SupportsEditing => true;
-		public string TypeDescription => PluginResources.Plugin_NiceName;
-		public string TypeName => PluginResources.Plugin_NiceName;
+		public string TypeDescription => PluginResources.SDLMTCloud_Provider_Name;
+		public string TypeName => PluginResources.SDLMTCloud_Provider_Name;
 
 		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
@@ -115,8 +115,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		{
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = PluginResources.Plugin_NiceName,
-				TooltipText = PluginResources.Plugin_NiceName,
+				Name = PluginResources.SDLMTCloud_Provider_Name,
+				TooltipText = PluginResources.SDLMTCloud_Provider_Name,
 				TranslationProviderIcon = PluginResources.global,
 				SearchResultImage = PluginResources.global1,
 			};

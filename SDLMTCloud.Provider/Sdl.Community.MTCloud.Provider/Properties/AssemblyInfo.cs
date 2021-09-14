@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SDL Machine Translation Cloud provider")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SDL Machine Translation Cloud provider")]
 [assembly: AssemblyCopyright("Copyright © SDL 2018")]
 [assembly: AssemblyTrademark("")]

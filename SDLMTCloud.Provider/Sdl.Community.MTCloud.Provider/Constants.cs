@@ -16,12 +16,12 @@
 		public static string UserLoginAuthentication= "UserLogin";
 
 		public static string StudioAuthentication = "Studio credentials - SDL Language Cloud";
-		public static string UserAuthentication = $"User credentials - {PluginResources.Plugin_NiceName}";
-		public static string ClientAuthentication = $"Client credentials - {PluginResources.Plugin_NiceName}";
+		public static string UserAuthentication = $"User credentials - {PluginResources.SDLMTCloud_Provider_Name}";
+		public static string ClientAuthentication = $"Client credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 
 
 		// TODO confirm if some or all of these should be managed in a resource file		
-		public static string SDLMachineTranslationCloud = "LanguageWeaver";
+		public static string SDLMachineTranslationCloud = "Language Weaver";
 		public static string RWSAppStore = "RWS AppStore";
 		public static string TraceId = "Trace-ID";
 		public static string FAILED = "FAILED";

@@ -42,7 +42,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public ILanguageProvider LanguageProvider { get; }
 
-		public string Name => PluginResources.Plugin_NiceName;
+		public string Name => PluginResources.SDLMTCloud_Provider_Name;
 
 		public Options Options
 		{
@@ -50,7 +50,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			set => TranslationService.Options = value;
 		}
 
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.SDLMTCloud_Provider_Name);
 
 		public bool SupportsConcordanceSearch => false;
 

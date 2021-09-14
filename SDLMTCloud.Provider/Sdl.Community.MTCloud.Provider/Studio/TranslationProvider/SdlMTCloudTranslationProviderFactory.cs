@@ -50,7 +50,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			var info = new TranslationProviderInfo
 			{
 				TranslationMethod = TranslationMethod.MachineTranslation,
-				Name = PluginResources.Plugin_NiceName
+				Name = PluginResources.SDLMTCloud_Provider_Name
 			};
 
 			return info;
