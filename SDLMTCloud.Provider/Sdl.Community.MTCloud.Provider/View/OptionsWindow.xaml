@@ -12,7 +12,6 @@
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
-			Title="SDL MT Cloud Options" 
 			WindowStyle="None" 
 			AllowsTransparency="True"
 			ResizeMode="CanResizeWithGrip"
@@ -65,21 +64,19 @@
 
 			<!-- BORDER CONTROL -->
 			<controls:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Image Grid.Row="0" Grid.Column="0" Height="60" Stretch="Uniform" HorizontalAlignment="Center" 
+			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" Margin="0 10 0 0"
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
-			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo_cropped.png"/>
-			<Image Grid.Row="1" Grid.Column="0" Height="25" Stretch="Uniform" HorizontalAlignment="Center" 
-			       Margin="0 0 0 0" VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/soontobecome.png"/>
+			       VerticalAlignment="Top"  IsHitTestVisible="False"
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/LWLogo.png"/>
+			
 
 			<Border Background="White" Grid.Column="0" Grid.Row="2"  >
 				<TextBlock Margin="10,15,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
-						Welcome to the SDL Machine Translation Cloud (soon to be Language Weaver) translation provider for Studio. <LineBreak/><LineBreak/>
-						SDL Machine Translation Cloud is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Welcome to the Language Weaver Cloud translation provider for Studio. <LineBreak/><LineBreak/>
+						Language Weaver Cloud is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using our proprietary technology, customers can have the assurance of content privacy.
-						SDL Machine Translation is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.
+						Language Weaver Cloud is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.
 				</TextBlock>
 			</Border>
 
@@ -188,7 +185,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="MT Cloud Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
+						<DataGridTemplateColumn Header="LW Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox  ItemsSource="{Binding Dictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
@@ -221,16 +218,11 @@
 						          IsChecked="{Binding SendFeedback}"
 						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
 					<Button Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-					        Content="To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki."
+					        Content="To learn more about the information being sent to RWS with this option please visit the &quot;Rate Translations&quot; wiki."
 					        Command="{Binding NavigateToWikiCommand}"
 							FontSize="13"
 							HorizontalAlignment="Left"
 					        Margin="15 5 0 5"/>
-					<!--<TextBlock Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}" Margin="15 5 0 5">
-							<Hyperlink Command="{Binding NavigateToWikiCommand}">
-								To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.
-							</Hyperlink>
-					</TextBlock>-->
 				</StackPanel>
 			</Grid >
 

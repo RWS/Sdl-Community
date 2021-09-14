@@ -56,7 +56,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public void AddTraceHeader(HttpRequestMessage request)
 		{
 			request.Headers.Add(Constants.TraceId,
-				$"{Constants.SDLMachineTranslationCloudProvider} {PluginVersion} - {StudioVersion}.{Guid.NewGuid()}");
+				$"{Constants.LanguageWeaver} {PluginVersion} - {StudioVersion}.{Guid.NewGuid()}");
 		}
 
 		public (bool, string) Connect(ICredential credential)

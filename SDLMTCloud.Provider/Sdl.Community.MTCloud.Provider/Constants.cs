@@ -21,14 +21,14 @@
 
 
 		// TODO confirm if some or all of these should be managed in a resource file		
-		public static string SDLMachineTranslationCloud = "SDLMachineTranslationCloud";
-		public static string SDLCommunity = "SDL Community";
+		public static string SDLMachineTranslationCloud = "LanguageWeaver";
+		public static string RWSAppStore = "RWS AppStore";
 		public static string TraceId = "Trace-ID";
 		public static string FAILED = "FAILED";
 		public static string INIT = "INIT";
 		public static string DONE = "DONE";
 		public static string TRANSLATING = "TRANSLATING";
-		public static string SDLMachineTranslationCloudProvider = "SDLMachineTranslationCloudProvider";			
+		public static string LanguageWeaver = "LanguageWeaverProvider";			
 		public static string SettingsGroupId = "SDLMTCloudLanguageMappings";			
 
 		// Logging
@@ -51,7 +51,7 @@
 		public static string RemoveMTCode = "RemoveMTCode method: ";
 		public static string FormatLanguageName = "FormatLanguageName method: ";
 		public static string SplitLanguagePair = "SplitLanguagePair method: ";
-		public static string MTCloudServerIPMessage = "The MTCloud IP Address is: ";
+		public static string MTCloudServerIPMessage = "The Language Weaver IP Address is: ";
 		public static string GetDictionaries = "GetDictionaries method: ";
 
 		// Messages
@@ -60,11 +60,11 @@
 		public static string TokenFailed = "Acquiring token failed";
 		public static string CredentialsValidation = "Please fill the credentials fields!";
 		public static string CredentialsNotValid = "Please verify your credentials!";
-		public static string CredentialsAndInternetValidation = "The MTCloud host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
-		public static string InternetConnection = "The The MTCloud host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
+		public static string CredentialsAndInternetValidation = "The Language Weaver host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
+		public static string InternetConnection = "The Language Weaver host could not be reached. Please check the internet connection and ensure you are able to connect to the server from this computer.";
 		public static string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
-		public static string NoEnginesLoaded = "No MT engines were received from MTCloud for the current project's Language Pairs";
+		public static string NoEnginesLoaded = "No LW engines were received from Language Weaver for the current project's Language Pairs";
 		public static string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
-		public static string NoTranslationMessage = "Translation cannot be received because MT Cloud engine is not set for the current Language Pair";				
+		public static string NoTranslationMessage = "Translation cannot be received because LW engine is not set for the current Language Pair";				
 	}
 }

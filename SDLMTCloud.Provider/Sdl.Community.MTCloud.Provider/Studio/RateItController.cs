@@ -12,9 +12,9 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.MTCloud.Provider.Studio
 {
 	[ViewPart(
-		Id = "SDL MT Cloud Rate Translations",
-		Name = "SDL MT Cloud Rate Translations",
-		Description = "SDL MT Cloud Rate Translations",
+		Id = "RateTranslations_Name",
+		Name = "RateTranslations_Name",
+		Description = "RateTranslations_Name",
 		Icon = "rating")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	public class RateItController : AbstractViewPartController

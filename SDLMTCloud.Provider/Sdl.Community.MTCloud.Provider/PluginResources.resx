@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDLMachineTranslationCloudProvider</value>
+    <value>LanguageWeaverCloudProvider</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="sdl" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -260,22 +260,22 @@
     <value>The LanguageCloudIdentityApi is not implemented!</value>
   </data>
   <data name="SDLMTCloud_Provider_Description" xml:space="preserve">
-    <value>SDL MT Cloud Provider</value>
+    <value>Language Weaver Cloud provider</value>
   </data>
   <data name="SDLMTCloud_Provider_Name" xml:space="preserve">
-    <value>SDL MT Cloud</value>
+    <value>Language Weaver Cloud provider</value>
   </data>
   <data name="SDLMTCloud_RibbonGroup_Name" xml:space="preserve">
-    <value>SDL MT Cloud</value>
+    <value>Language Weaver Cloud provider</value>
   </data>
   <data name="SDLMTCloud_Action_LanguageMapping_Description" xml:space="preserve">
-    <value>SDL MT Cloud Language Mapping</value>
+    <value>Language Weaver Language Mapping</value>
   </data>
   <data name="SDLMTCloud_Action_LanguageMapping_Name" xml:space="preserve">
     <value>Language Mapping</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>SDL Machine Translation Cloud</value>
+    <value>Language Weaver Cloud provider</value>
   </data>
   <data name="Message_No_dictionary" xml:space="preserve">
     <value>No dictionary</value>
@@ -346,9 +346,6 @@
   <data name="ToEnableRatingChangeTheSettings" xml:space="preserve">
     <value>To enable rating change the settings...</value>
   </data>
-  <data name="SDLMTCloudName" xml:space="preserve">
-    <value>SDL Machine Translation Cloud</value>
-  </data>
   <data name="OriginalTranslationMissingMessage" xml:space="preserve">
     <value>Original translation from {0} is missing. Translate again using the {1} if you want to be able to send a feedback for this segment pair</value>
   </data>
@@ -380,14 +377,14 @@
     <value>resources\rating.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="EnableRatingCheckboxTooltip" xml:space="preserve">
-    <value>To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.</value>
+    <value>To learn more about the information being sent to RWS with this option please visit the "Rate Translations" wiki.</value>
   </data>
   <data name="OriginalMtCloudTranslationMissing" xml:space="preserve">
-    <value> (original MT Cloud translation is missing)</value>
+    <value> (original LW translation is missing)</value>
   </data>
   <data name="ResponseFromServer" xml:space="preserve">
     <value>{0}
-Response from SDL MT Cloud: 
+Response from Language Weaver: 
 {1}
 </value>
   </data>
@@ -423,5 +420,8 @@ Response from SDL MT Cloud:
   </data>
   <data name="success" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\success.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RateTranslations_Name" xml:space="preserve">
+    <value>Language Weaver Cloud Rate Translations</value>
   </data>
 </root>
