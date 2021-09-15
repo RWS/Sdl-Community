@@ -138,6 +138,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 				return;
 
 			var currentSegmentId = currentSegmentPair.Properties.Id;
+
+			if (ActiveDocumentData is null) return;
+
 			if (ActiveDocumentData.TryGetValue(currentSegmentId, out var targetData))
 			{
 				_segmentMetadataCreator.AddToCurrentSegmentContextData(ActiveDocument, targetData);

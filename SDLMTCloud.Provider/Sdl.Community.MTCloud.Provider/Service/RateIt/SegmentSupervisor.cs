@@ -30,7 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			get
 			{
-				if (ActiveDocument == null) return null;
+				if (ActiveDocument?.ActiveFile?.Id == null) return null;
 
 				var activeFileId = ActiveDocument.ActiveFile.Id;
 				if (!Data.ContainsKey(activeFileId))
@@ -54,6 +54,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string source)
 		{
+			if (ActiveDocumentData is null) return;
 			ActiveDocumentData[segmentId] = new ImprovementFeedback(originalTarget, source);
 		}
 
@@ -128,6 +129,8 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
 		{
+			if (ActiveDocumentData is null) return false;
+
 			return WasPreviousOriginMTCloud(translationOrigin) &&
 				   ActiveDocumentData.ContainsKey(segmentId) &&
 				   ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
