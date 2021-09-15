@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel.Activation;
 using System.Windows.Input;
+using Sdl.Community.MtEnhancedProvider.Commands;
 using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.Model.Interface;
@@ -13,6 +15,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 	public class ProviderControlViewModel : ModelBase, IProviderControlViewModel
 	{
 		private readonly IMtTranslationOptions _options;
+		private ICommand _clearCommand;
 		private readonly RegionsProvider _regionsProvider;
 		private TranslationOption _selectedTranslationOption;
 		private GoogleApiVersion _selectedGoogleApiVersion;
@@ -108,6 +111,34 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			SetTranslationOption();
 
 			SetGoogleApiVersion();
+		}
+		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
+
+		private void Clear(object obj)
+		{
+			if (!(obj is string objectName)) return;
+
+			switch (objectName)
+			{
+				case "CategoryId":
+					CatId = string.Empty;
+					break;
+				case "JsonFilePath":
+					JsonFilePath = string.Empty;
+					break;
+				case "ProjectName":
+					ProjectName = string.Empty;
+					break;
+				case "ProjectLocation":
+					ProjectLocation = string.Empty;
+					break;
+				case "GoogleEngineModel":
+					GoogleEngineModel = string.Empty;
+					break;
+				case "GlossaryPath":
+					GlossaryPath = string.Empty;
+					break;
+			}
 		}
 
 		public ModelBase ViewModel { get; set; }

@@ -402,4 +402,7 @@
   <data name="LogsFolderPath" xml:space="preserve">
     <value>RWS AppStore</value>
   </data>
+  <data name="GoogleApiKeyDescription" xml:space="preserve">
+    <value>Please enter your Google Translate API Key</value>
+  </data>
 </root>

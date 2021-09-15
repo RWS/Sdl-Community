@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using StudioStyles.Commands;
 using StudioStyles.Model;
 
@@ -12,6 +13,7 @@ namespace StudioStyles.ViewModel
 		private ObservableCollection<Plugin> _pluginsCollection;
 		private string _searchWatermarkText;
 		private string _searchText;
+		private string _secondText;
 		private string _uri;
 		private string _content;
 		private string _password;
@@ -77,6 +79,17 @@ namespace StudioStyles.ViewModel
 				OnPropertyChanged(nameof(SearchText));
 			}
 		}
+
+		public string SecondText
+		{
+			get => _secondText;
+			set
+			{
+				_secondText = value;
+				OnPropertyChanged(nameof(SearchText));
+			}
+		}
+
 		public string Password
 		{
 			get => _password;
@@ -138,8 +151,8 @@ namespace StudioStyles.ViewModel
 
 		private void Clear()
 		{
-			SearchText = string.Empty;
-			SearchWatermarkText = "Studio 2019 SR2";
+			//SearchText = string.Empty;
+			//SearchWatermarkText = "Studio 2019 SR2";
 		}
 	}
 }

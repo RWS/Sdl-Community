@@ -289,6 +289,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter your Google Translate API Key.
+        /// </summary>
+        public static string GoogleApiKeyDescription {
+            get {
+                return ResourceManager.GetString("GoogleApiKeyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to V2 - Basic Translation.
         /// </summary>
         public static string GoogleApiVersionV2Description {

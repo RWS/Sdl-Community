@@ -74,19 +74,18 @@
 			         Width="200"
 			         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			         watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"/>
-			<TextBox Style="{DynamicResource WatermarkTextBox}" Width="200" Margin="20"/>
+			<TextBox Style="{DynamicResource WatermarkTextBox}" Text="{Binding SecondText}"  Width="200" Margin="20"/>
 
 		</DockPanel>
 		
-		<TextBox Style="{DynamicResource WatermarkTextBox}" 
+		<!--<TextBox Style="{DynamicResource WatermarkTextBox}" 
 				 Margin="20"
 				 Width="200"
 				 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-		         watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"/>
+		         watermarkTextBox:TextBoxWatermarkHelper.WatermarkText ="{Binding SearchWatermarkText}"/>-->
 		<controls:BindablePasswordBox 
 			Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
 			Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-			Width="200"
 			PasswordMaxLength="64"
 		/>
 

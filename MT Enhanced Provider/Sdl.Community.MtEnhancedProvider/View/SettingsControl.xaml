@@ -6,7 +6,7 @@
              xmlns:mtEnhanced="clr-namespace:Sdl.Community.MtEnhancedProvider"
              xmlns:viewModels="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
              xmlns:converters="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:uiHelpers ="clr-namespace:Sdl.Community.MtEnhancedProvider.UiHelpers"
              d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,14 +14,11 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 		</ResourceDictionary>
@@ -76,9 +73,11 @@
 					Margin="10 0 0 0"
 					DockPanel.Dock="Right"/>
 				<TextBox
+					Style="{StaticResource WatermarkTextBox}"
+					uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static mtEnhanced:PluginResources.PreLookupWaterMark}"
+					uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
+					uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					controls:TextBoxHelper.Watermark="{x:Static mtEnhanced:PluginResources.PreLookupWaterMark}"
-					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					Text="{Binding PreLookupFileName}"
 					VerticalContentAlignment="Center"/>
 			</DockPanel>
@@ -98,9 +97,11 @@
 					Margin="10 0 0 0"
 					DockPanel.Dock="Right"/>
 				<TextBox
+					Style="{StaticResource WatermarkTextBox}"
+					uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static mtEnhanced:PluginResources.PostLookupWaterMark}"
+					uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
+					uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					Text="{Binding PostLookupFileName}"
-					controls:TextBoxHelper.Watermark="{x:Static mtEnhanced:PluginResources.PostLookupWaterMark}"
-					controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 					IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					VerticalContentAlignment="Center"/>
 			</DockPanel>
