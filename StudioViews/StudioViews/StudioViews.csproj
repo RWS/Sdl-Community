@@ -41,6 +41,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Rws.MultiSelectComboBox">
+      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Community.Toolkit.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.3.0.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -79,9 +82,6 @@
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
@@ -249,7 +249,9 @@
     <Resource Include="Resources\import_small.ico" />
     <Resource Include="Resources\StudioViewsMain.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ThirdParty\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\CustomProgressRing.xaml">
       <SubType>Designer</SubType>

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:rws="http://schemas.rws.com/xaml"
              xmlns:behaviours="clr-namespace:Sdl.Community.StudioViews.Behaviours"
              xmlns:viewModel="clr-namespace:Sdl.Community.StudioViews.ViewModel"
              mc:Ignorable="d"
@@ -184,7 +184,7 @@
 
 							<TextBlock VerticalAlignment="Center" Text="Exclude existing segments:"  Margin="5,5,5,5"/>
 
-							<sdl:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+							<rws:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
 							                         Margin="5,0,5,0" 
 							                         Height="55" 
 							                         MaxDropDownHeight="250"
@@ -193,7 +193,7 @@
 							                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
 							                         ItemsSource="{Binding FilterItems}"            
 							                         SelectedItems="{Binding SelectedExcludeFilterItems}"
-							                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+							                         rws:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
 							                         EnableGrouping="True"
 							                         EnableFiltering="True"
 							                         IsEditable="True"

@@ -13,7 +13,7 @@ using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
 using Sdl.Core.Globalization;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using DataFormats = System.Windows.DataFormats;

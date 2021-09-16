@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
+using Rws.MultiSelectComboBox.API;
 using Sdl.Community.StudioViews.ViewModel;
-using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.StudioViews.Model
 {
