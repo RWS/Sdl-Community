@@ -481,8 +481,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			var rating = GetRatingObject(segmentId);
 
+			var segmentPairInProcessing = ActiveDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId));
 			var segmentSource = segmentId != null
-				? ActiveDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
+				? segmentPairInProcessing?.Source.ToString()
 				: ActiveDocument.ActiveSegmentPair.Source.ToString();
 
 			var currentSegmentId = segmentId ?? ActiveSegmentId.Value;
