@@ -16,10 +16,13 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 	{
 		private readonly EditorController _editorController;
 		private ITranslationService _translationService;
+		private static List<string> _providerNames;
+		
 
 		public SegmentSupervisor(EditorController editorController)
 		{
 			_editorController = editorController;
+			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName };
 		}
 
 		public event ShouldSendFeedbackEventHandler ShouldSendFeedback;
@@ -93,12 +96,12 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private static bool WasPreviousOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
+			return _providerNames.Contains(translationOrigin?.OriginBeforeAdaptation?.OriginSystem);
 		}
 
 		private static bool IsOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
+			return _providerNames.Contains(translationOrigin?.OriginSystem);
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
