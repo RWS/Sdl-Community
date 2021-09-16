@@ -134,6 +134,7 @@ namespace Sdl.Community.MTCloud.Provider
 		{
 			TranslationService = translationService ?? new TranslationService(connectionService, Client, new MessageBoxService());
 			MetadataSupervisor?.StartSupervising(TranslationService);
+			SegmentSupervisor?.StartSupervising(TranslationService);
 		}
 
 		public static IDisposable Subscribe<T>(Action<T> action)
@@ -151,8 +152,11 @@ namespace Sdl.Community.MTCloud.Provider
 				CurrentViewDetector = new CurrentViewDetector();
 				EditorController = SdlTradosStudio.Application.GetController<EditorController>();
 				MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
+				SegmentSupervisor = new SegmentSupervisor(EditorController);
 			}
 		}
+
+		public static ISegmentSupervisor SegmentSupervisor { get; set; }
 
 		private static void AttachToProjectCreatedEvent()
 		{

@@ -12,6 +12,7 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -175,7 +176,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public void SetTranslationService(ITranslationService translationService)
 		{
 			_translationService = translationService;
-			_segmentSupervisor.StartSupervising(_translationService);
 
 			ToggleSupervisingQe();
 
@@ -321,6 +321,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+			EditorController_ActiveDocumentChanged(null, null);
 
 			_actions = _actionProvider.GetActions();
 			var feedbackOptions = _actions.Where(action => IsFeedbackOption(action.GetType().Name));
@@ -436,7 +437,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ResetFeedback()
 		{
-			FeedbackOptions.ForEach(fb => fb.IsChecked = false);
+			FeedbackOptions?.ForEach(fb => fb.IsChecked = false);
 			FeedbackMessage = string.Empty;
 			Rating = 0;
 		}
@@ -560,6 +561,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				QeEnabled = true;
 				_onActiveSegmentQeChangedHandler = MtCloudApplicationInitializer.Subscribe<ActiveSegmentQeChanged>(MetadataSupervisor_ActiveSegmentQeChanged);
+
+				if (ActiveSegmentId is not null)
+				{
+					var estimation = MtCloudApplicationInitializer.MetadataSupervisor.GetSegmentQe(ActiveSegmentId.Value);
+					MetadataSupervisor_ActiveSegmentQeChanged(new ActiveSegmentQeChanged { Estimation = estimation });
+				}
 			}
 			else
 			{

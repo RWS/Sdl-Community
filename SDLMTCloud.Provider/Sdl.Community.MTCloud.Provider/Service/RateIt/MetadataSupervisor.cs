@@ -92,6 +92,11 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
+		public string GetSegmentQe(SegmentId segmentId)
+		{
+			return ActiveDocumentData.TryGetValue(segmentId, out var value) ? value.QualityEstimation : null;
+		}
+
 		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin)
 		{
 			return _providerNames.Contains(translationOrigin?.OriginSystem);
