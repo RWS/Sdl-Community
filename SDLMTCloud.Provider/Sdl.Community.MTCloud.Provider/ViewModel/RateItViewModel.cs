@@ -48,19 +48,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private IStudioDocument ActiveDocument => _editorController.ActiveDocument;
 
-		public Evaluations ActiveDocumentData
+		public Evaluations ActiveDocumentEvaluations
 		{
 			get
 			{
 				if (ActiveDocument == null) return null;
 
 				var activeFileId = ActiveDocument.ActiveFile.Id;
-				if (!Data.ContainsKey(activeFileId))
+				if (!Evaluations.ContainsKey(activeFileId))
 				{
-					Data[activeFileId] = new Evaluations();
+					Evaluations[activeFileId] = new Evaluations();
 				}
 
-				return Data[activeFileId];
+				return Evaluations[activeFileId];
 			}
 		}
 
@@ -130,7 +130,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			=> _sendFeedbackCommand ??= new AsyncCommand(() => SendFeedback(null));
 
 		private SegmentId? ActiveSegmentId => ActiveDocument.ActiveSegmentPair?.Properties.Id;
-		private ConcurrentDictionary<Guid, Evaluations> Data { get; set; } = new();
+		private ConcurrentDictionary<Guid, Evaluations> Evaluations { get; set; } = new();
 		private Rating PreviousRating { get; set; } = new Rating();
 
 		private List<string> RateItControlProperties { get; set; }
@@ -204,7 +204,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (!ActiveSegmentId.HasValue || string.IsNullOrWhiteSpace(data)) return;
 
-			var evaluationPerSegment = ActiveDocumentData.EvaluationPerSegment;
+			var evaluationPerSegment = ActiveDocumentEvaluations.EvaluationPerSegment;
 			if (!evaluationPerSegment.TryGetValue(ActiveSegmentId.Value, out _))
 			{
 				evaluationPerSegment[ActiveSegmentId.Value] = new QualityEstimation { OriginalEstimation = data };
@@ -252,15 +252,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		/// because a feedback cannot be sent without any info so we're adding the original target itself as a suggestion
 		/// </summary>
 		/// <param name="segmentId">When this is null the user clicked on SendFeedback instead of it being sent automatically</param>
-		private string EnsureFeedbackWillGetThrough(SegmentId? segmentId, ImprovementFeedback suggestion, dynamic rating)
+		/// <param name="feedbackInfo">The feedbackInfo that must be validated</param>
+		private void EnsureFeedbackWillGetThrough(SegmentId? segmentId, FeedbackInfo feedbackInfo)
 		{
-			string suggestionReplacement = null;
-			if (segmentId == null &&  rating == null && suggestion?.Improvement == null)
-			{
-				suggestionReplacement = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
-			}
+			if (feedbackInfo is null || feedbackInfo.Suggestion is not null) return;
 
-			return suggestionReplacement;
+			if (segmentId == null || feedbackInfo.Rating is not null || feedbackInfo.Evaluation is not null)
+			{
+				feedbackInfo.Suggestion = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
+			}
 		}
 
 		private List<string> GetCommentsAndFeedbackFromUi()
@@ -378,12 +378,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			if (!ActiveSegmentId.HasValue) return;
 
-			ActiveDocumentData.CurrentSegmentEvaluation = ActiveDocumentData.EvaluationPerSegment.TryGetValue(ActiveSegmentId.Value,
+			ActiveDocumentEvaluations.CurrentSegmentEvaluation = ActiveDocumentEvaluations.EvaluationPerSegment.TryGetValue(ActiveSegmentId.Value,
 				out var qualityEstimation)
 				? qualityEstimation
 				: null;
 
-			OnPropertyChanged(nameof(ActiveDocumentData));
+			OnPropertyChanged(nameof(ActiveDocumentEvaluations));
 		}
 
 		private void OnFeedbackSendingStatusChanged()
@@ -476,16 +476,20 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				? ActiveDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId))?.Source.ToString()
 				: ActiveDocument.ActiveSegmentPair.Source.ToString();
 
-			string suggestionReplacement = EnsureFeedbackWillGetThrough(segmentId, suggestion, rating);
+			var currentSegmentId = segmentId ?? ActiveSegmentId.Value;
+			var hasEstimation = ActiveDocumentEvaluations.EvaluationPerSegment.TryGetValue(currentSegmentId, out var estimation);
+			estimation = hasEstimation ? estimation.UserChoseDifferently ? estimation : null : null;
 
 			var feedbackInfo = new FeedbackInfo
 			{
-				Evaluation = ActiveDocumentData.EvaluationPerSegment.TryGetValue(segmentId ?? ActiveSegmentId.Value, out var qualityEstimation) ? qualityEstimation : null,
+				Evaluation = estimation,
 				Rating = rating,
 				SegmentSource = segmentSource,
-				Suggestion = suggestionReplacement ?? suggestion?.Improvement,
+				Suggestion = suggestion?.Improvement,
 				OriginalMtCloudTranslation = suggestion?.OriginalMtCloudTranslation
 			};
+
+			EnsureFeedbackWillGetThrough(segmentId, feedbackInfo);
 
 			var responseMessage = await _translationService.SendFeedback(feedbackInfo);
 
