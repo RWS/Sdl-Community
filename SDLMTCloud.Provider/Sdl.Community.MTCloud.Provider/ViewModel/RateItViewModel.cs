@@ -253,13 +253,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		/// </summary>
 		/// <param name="segmentId">When this is null the user clicked on SendFeedback instead of it being sent automatically</param>
 		/// <param name="feedbackInfo">The feedbackInfo that must be validated</param>
-		private void EnsureFeedbackWillGetThrough(SegmentId? segmentId, FeedbackInfo feedbackInfo)
+		/// <param name="segmentPair">Segment pair to be processed</param>
+		private void EnsureFeedbackWillGetThrough(SegmentId? segmentId, FeedbackInfo feedbackInfo, ISegmentPair segmentPair)
 		{
 			if (feedbackInfo is null || feedbackInfo.Suggestion is not null) return;
 
-			if (segmentId == null || feedbackInfo.Rating is not null || feedbackInfo.Evaluation is not null)
+			var activeDocument = _editorController?.ActiveDocument;
+			if (activeDocument is null) return;
+
+			if (segmentId == null && (feedbackInfo.Rating is not null || feedbackInfo.Evaluation is not null))
 			{
-				feedbackInfo.Suggestion = _editorController?.ActiveDocument?.ActiveSegmentPair.Target.ToString();
+				feedbackInfo.Suggestion = activeDocument.ActiveSegmentPair.Target.ToString();
+			}
+			else if (feedbackInfo.Rating is not null || feedbackInfo.Evaluation is not null)
+			{
+				feedbackInfo.Suggestion = segmentPair.Target.ToString();
 			}
 		}
 
