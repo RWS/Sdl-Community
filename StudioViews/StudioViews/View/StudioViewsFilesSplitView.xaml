@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:sdl="http://schemas.sdl.com/xaml"
+        xmlns:generic="clr-namespace:Sdl.Community.StudioViews.Themes.Generic"
         ResizeMode="CanResizeWithGrip"
         WindowStyle="ThreeDBorderWindow"
         AllowsTransparency="False" 
@@ -13,7 +14,6 @@
         xmlns:behaviours="clr-namespace:Sdl.Community.StudioViews.Behaviours"
         xmlns:viewModel="clr-namespace:Sdl.Community.StudioViews.ViewModel"
         xmlns:controls="clr-namespace:Sdl.Community.StudioViews.Controls"
-        xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:StudioViewsFilesSplitViewModel}" 
         MinHeight="400" MinWidth="600" Height="420" Width="620">
@@ -29,8 +29,9 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.StudioViews;component/Styles/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.StudioViews;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.StudioViews;component/Styles/NumberUpDown.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.StudioViews;component/Styles/ProgressRingAsteriskStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.StudioViews;component/Styles/CustomProgressRing.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BoolToVisConv" />
 
 			<Style TargetType="{x:Type Window}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
@@ -40,14 +41,10 @@
 		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
-
-		<controls1:ProgressRing 
-			Style="{StaticResource ProgressRingAsterisk}"
-			Height="80"
-			IsActive="{Binding ProgressIsVisible, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"			    
-			Canvas.ZIndex="110"   		                      
-			IsLarge="True" 
-			Margin="20" />
+		<generic:CustomProgressRing x:Name="ProgressRing"
+		                            Canvas.ZIndex="110" 
+		                            Visibility="{Binding ProgressIsVisible, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisConv}}"
+		                            Style="{StaticResource Sdl.CustomProgressRing.Normal}"/>
 
 		<Grid AllowDrop="True" Margin="5" IsEnabled="{Binding IsEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 			<Grid.RowDefinitions>

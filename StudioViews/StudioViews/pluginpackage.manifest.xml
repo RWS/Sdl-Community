@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>studioViews</PlugInName>
-	<Version>1.0.2.0</Version>
+	<Version>1.0.3.0</Version>
 	<Description>studioViews is a plugin that supports the ability to export/import files in a Studio project based on various filtering or selection criteria.</Description>
 	<Author>RWS AppStore Team</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="16.1"/>
