@@ -498,7 +498,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				OriginalMtCloudTranslation = suggestion?.OriginalMtCloudTranslation
 			};
 
-			EnsureFeedbackWillGetThrough(segmentId, feedbackInfo);
+			EnsureFeedbackWillGetThrough(segmentId, feedbackInfo, segmentPairInProcessing);
 
 			var responseMessage = await _translationService.SendFeedback(feedbackInfo);
 
