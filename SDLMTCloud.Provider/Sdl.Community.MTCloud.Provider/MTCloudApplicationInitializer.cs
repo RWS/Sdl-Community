@@ -54,6 +54,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static void AddCurrentProjectProvider(SdlMTCloudTranslationProvider provider)
 		{
+			if (!IsStudioRunning()) return;
 			if (IsProjectCreationTime())
 			{
 				AttachToProjectCreatedEvent();
@@ -80,7 +81,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
-			if (SdlTradosStudio.Application is null) return null;
+			if (!IsStudioRunning()) return null;
 			if (Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
 			{
 				return null;
