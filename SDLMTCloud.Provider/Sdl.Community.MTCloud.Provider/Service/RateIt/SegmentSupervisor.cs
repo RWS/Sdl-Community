@@ -47,7 +47,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private Dictionary<Guid, ConcurrentDictionary<SegmentId, ImprovementFeedback>> Data { get; set; } = new();
 
-		public void AddImprovement(SegmentId segmentId, string improvement)
+		public void UpdateImprovement(SegmentId segmentId, string improvement)
 		{
 			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
 
@@ -63,13 +63,22 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		public ImprovementFeedback GetImprovement(SegmentId? segmentId = null)
 		{
-			var currentSegment = segmentId ?? ActiveDocument.ActiveSegmentPair?.Properties.Id;
+			var targetSegment = ActiveDocument.ActiveSegmentPair.Target;
+			var currentSegmentId = segmentId ?? targetSegment?.Properties.Id;
 			ImprovementFeedback improvement = null;
 
-			var segmentHasImprovement = currentSegment != null && ActiveDocumentData.ContainsKey(currentSegment.Value);
+			if (currentSegmentId is null) return null;
+
+			var segmentHasImprovement = ActiveDocumentData.ContainsKey(currentSegmentId.Value);
 			if (segmentHasImprovement)
 			{
-				improvement = ActiveDocumentData[currentSegment.Value];
+				improvement = ActiveDocumentData[currentSegmentId.Value];
+
+				//segmentId == null means that the user is forcing feedback sending which means that the improvement may not be up to date
+				if (segmentId == null && IsImprovementToTpTranslation(targetSegment.Properties.TranslationOrigin, currentSegmentId.Value, targetSegment))
+				{
+					UpdateImprovement(currentSegmentId.Value, targetSegment.ToString());
+				}
 			}
 			return improvement;
 		}
@@ -114,7 +123,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 			if (IsImprovementToTpTranslation(translationOrigin, segmentId, targetSegment))
 			{
-				AddImprovement(segmentId, targetSegment.ToString());
+				UpdateImprovement(segmentId, targetSegment.ToString());
 			}
 
 			if (!IsOriginMTCloud(translationOrigin) && !WasPreviousOriginMTCloud(translationOrigin) ||
@@ -134,10 +143,10 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			if (ActiveDocumentData is null) return false;
 
-			return WasPreviousOriginMTCloud(translationOrigin) &&
-				   ActiveDocumentData.ContainsKey(segmentId) &&
-				   ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
-				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
+			return (WasPreviousOriginMTCloud(translationOrigin) || IsOriginMTCloud(translationOrigin)) &&
+			       ActiveDocumentData.ContainsKey(segmentId) &&
+			       ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
+			       segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
 		}
 
 		private void TranslationService_TranslationReceived(TranslationData translationData)
