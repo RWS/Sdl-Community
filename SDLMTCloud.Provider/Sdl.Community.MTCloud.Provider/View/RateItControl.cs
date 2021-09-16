@@ -33,9 +33,8 @@ namespace Sdl.Community.MTCloud.Provider.View
 			var messageBoxService = new MessageBoxService();
 
 			var editorController = MtCloudApplicationInitializer.EditorController;
-			var segmentSupervisor = new SegmentSupervisor(editorController);
 
-			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService,
+			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, MtCloudApplicationInitializer.SegmentSupervisor, messageBoxService,
 				editorController);
 			_rateItWindow = new RateItView
 			{
