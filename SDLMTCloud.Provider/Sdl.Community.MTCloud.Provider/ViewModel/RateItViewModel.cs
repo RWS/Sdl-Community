@@ -12,6 +12,7 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
