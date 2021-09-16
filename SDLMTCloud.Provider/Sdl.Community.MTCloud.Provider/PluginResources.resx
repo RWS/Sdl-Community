@@ -326,7 +326,7 @@
     <value>Enable "Send feedback option" from Settings</value>
   </data>
   <data name="Tooltip_DisabledMessage" xml:space="preserve">
-    <value>To enable RateIt check the "Enable Rating" checkbox in the SDL MT Cloud settings page.</value>
+    <value>To enable RateIt check the "Enable Rating" checkbox in the LW Cloud settings page.</value>
   </data>
   <data name="SendFeedbackResponseFromServer" xml:space="preserve">
     <value>Send feedback response from server: Status: {0} Response: {1}</value>
@@ -417,5 +417,8 @@ Response from Language Weaver:
   </data>
   <data name="RateTranslations_Name" xml:space="preserve">
     <value>Language Weaver Cloud Rate Translations</value>
+  </data>
+  <data name="SDLMTCloud_Provider_OldName" xml:space="preserve">
+	  <value>SDL Machine Translation Cloud</value>
   </data>
 </root>

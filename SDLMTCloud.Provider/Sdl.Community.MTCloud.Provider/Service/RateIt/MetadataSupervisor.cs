@@ -22,11 +22,14 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private Window _batchProcessingWindow;
 		private bool _isFirstTime = true;
 		private ITranslationService _translationService;
+		private static List<string> _providerNames;
 
 		public MetadataSupervisor(ISegmentMetadataCreator segmentMetadataCreator, EditorController editorController)
 		{
 			_segmentMetadataCreator = segmentMetadataCreator;
 			_editorController = editorController;
+
+			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName };
 
 			_ = MtCloudApplicationInitializer
 				.Subscribe<RefreshQeStatus>(OnQeStatus);
@@ -89,14 +92,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
-		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin, bool lookInPrevious = false)
+		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin)
 		{
-			//TODO: extract in helper
-			if (lookInPrevious)
-			{
-				return translationOrigin?.OriginBeforeAdaptation?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
-			}
-			return translationOrigin?.OriginSystem == PluginResources.SDLMTCloud_Provider_Name;
+			return _providerNames.Contains(translationOrigin?.OriginSystem);
 		}
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)

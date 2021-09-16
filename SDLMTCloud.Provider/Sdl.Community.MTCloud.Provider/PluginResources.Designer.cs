@@ -739,6 +739,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
+        /// </summary>
+        public static string SDLMTCloud_Provider_OldName {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_OldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Cloud provider.
         /// </summary>
         public static string SDLMTCloud_RibbonGroup_Name {
@@ -897,7 +906,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the SDL MT Cloud settings page..
+        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the LW Cloud settings page..
         /// </summary>
         public static string Tooltip_DisabledMessage {
             get {
