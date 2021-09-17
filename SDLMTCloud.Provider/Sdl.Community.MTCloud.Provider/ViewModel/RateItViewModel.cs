@@ -262,7 +262,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			var activeDocument = _editorController?.ActiveDocument;
 			if (activeDocument is null) return;
 
-			if (segmentId == null && (feedbackInfo.Rating is not null || feedbackInfo.Evaluation is not null))
+			if (segmentId == null)
 			{
 				feedbackInfo.Suggestion = activeDocument.ActiveSegmentPair.Target.ToString();
 			}
