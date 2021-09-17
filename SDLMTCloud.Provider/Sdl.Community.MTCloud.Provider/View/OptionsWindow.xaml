@@ -20,11 +20,6 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
@@ -35,6 +30,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
 				<Setter Property="Margin" Value="15 5 0 5"/>
@@ -89,18 +85,19 @@
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 
-				<controls:SortAwareDataGrid x:Name="LanguageMappingsGrid" Grid.Row="0"
-				  DefaultColumnName="[none]"
-				  DefaultSortDirection="Ascending"
-				  BorderBrush="#BEBEBE"
-		          Style="{StaticResource FilesGridStyle}"
-				  ItemsSource="{Binding LanguageMappingModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-				  SelectedItem="{Binding SelectedLanguageMappingModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				  Margin="15,10,15,5"
-				  CanUserResizeColumns="True" 
-				  MinWidth="850"
-				  HorizontalScrollBarVisibility="Disabled"
-				  CanUserDeleteRows="False">
+				<controls:SortAwareDataGrid 
+					x:Name="LanguageMappingsGrid" Grid.Row="0"
+					DefaultColumnName="[none]"
+					DefaultSortDirection="Ascending"
+					BorderBrush="#BEBEBE"
+					Style="{StaticResource FilesGridStyle}"
+					ItemsSource="{Binding LanguageMappingModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+					SelectedItem="{Binding SelectedLanguageMappingModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					Margin="15,10,15,5"
+					CanUserResizeColumns="True" 
+					MinWidth="850"
+					HorizontalScrollBarVisibility="Disabled"
+					CanUserDeleteRows="False">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="Project Language Pair" CanUserSort="True" IsReadOnly="True" SortMemberPath="ProjectLanguagePair" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
