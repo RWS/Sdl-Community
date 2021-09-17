@@ -59,7 +59,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void ApiKeyBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            PasswordChangedTimer.Enabled = true;
+	        PasswordChangedTimer.Enabled = true;
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -94,11 +94,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void OnPasswordChanged(object sender, EventArgs e)
         {
-            Options.ApiKey = ApiKeyBox.Password.Trim();
+	        Application.Current.Dispatcher?.Invoke(() =>
+	        {
+		        Options.ApiKey = ApiKeyBox.Password.Trim();
 
-	        DeepLTranslationProviderConnecter.ApiKey = Options.ApiKey;
+		        DeepLTranslationProviderConnecter.ApiKey = Options.ApiKey;
+	        });
 
-			SetApiKeyValidityLabel();
+	        SetApiKeyValidityLabel();
             SetFormalityCompatibilityLabel();
         }
 
