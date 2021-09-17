@@ -27,6 +27,21 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private string _exceptionMessage;
 		private List<Authentication> _authenticationOptions;
 		private Authentication _selectedAuthentication;
+		private ICommand _clearCommand;
+
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+		private void Clear(object obj)
+		{
+			if (!(obj is string objectName)) return;
+
+			switch (objectName)
+			{
+				case "UserName":
+					UserName = string.Empty;
+					break;
+			}
+		}
 
 		public CredentialsViewModel(Window owner, IConnectionService connectionService)
 		{

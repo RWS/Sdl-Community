@@ -36,10 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNetCore.JsonPatch">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
     </Reference>
@@ -308,6 +304,8 @@
     <Compile Include="Controls\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UiHelpers\Watermark\TextBoxWatermarkHelper.cs" />
+    <Compile Include="UiHelpers\Watermark\TreeHelper.cs" />
     <Compile Include="ViewModel\CredentialsViewModel.cs" />
     <Compile Include="ViewModel\RateItViewModel.cs" />
     <Compile Include="View\ActionProvider.cs" />
@@ -376,6 +374,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\Watermark\WatermarkTextBoxResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
