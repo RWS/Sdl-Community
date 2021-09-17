@@ -7,7 +7,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.ExportAnalysisReports
 {
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
 	public class ReportExporterRibbon : AbstractRibbonGroup
 	{
