@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Rws.MultiSelectComboBox.API;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.MultiSelectComboBox.API;
 
 namespace Sdl.Community.StudioViews.Services
 {

@@ -1,5 +1,5 @@
-﻿using Sdl.Community.StudioViews.ViewModel;
-using Sdl.MultiSelectComboBox.API;
+﻿using Rws.MultiSelectComboBox.API;
+using Sdl.Community.StudioViews.ViewModel;
 
 namespace Sdl.Community.StudioViews.Model
 {

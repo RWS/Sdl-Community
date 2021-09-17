@@ -5,6 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{97D7CCCE-0311-4027-9BC0-E5ACC4EC7C48}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.StudioViews</RootNamespace>
@@ -37,12 +38,12 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Rws.MultiSelectComboBox">
+      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Community.Toolkit.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.3.0.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -81,9 +82,6 @@
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
@@ -183,6 +181,7 @@
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
+    <Compile Include="Themes\Generic\CustomProgressRing.cs" />
     <Compile Include="ViewModel\BaseModel.cs" />
     <Compile Include="Model\ParagraphUnitContext.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -250,13 +249,15 @@
     <Resource Include="Resources\import_small.ico" />
     <Resource Include="Resources\StudioViewsMain.ico" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Folder Include="ThirdParty\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Styles\CustomProgressRing.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
+    <Page Include="Styles\DataGridStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -307,6 +308,14 @@
     <Page Include="Styles\TextBoxStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\CustomProgressRing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MessageBoxView.xaml">
       <Generator>MSBuild:Compile</Generator>

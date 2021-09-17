@@ -19,7 +19,7 @@ using Sdl.Community.StudioViews.Services;
 using Sdl.Community.StudioViews.View;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
