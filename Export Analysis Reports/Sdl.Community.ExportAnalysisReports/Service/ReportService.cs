@@ -494,7 +494,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 				if (langDirNode?.Attributes == null) return;
 				var targetLangCode = langDirNode?.Attributes["TargetLanguageCode"].Value;
-				var language = projectInfo?.TargetLanguages?.FirstOrDefault(n => n.IsoAbbreviation.Equals(targetLangCode));
+				var language = projectInfo?.TargetLanguages?.FirstOrDefault(n => n.IsoAbbreviation.ToLower().Equals(targetLangCode.ToLower()));
 
 				if (language == null) return;
 				if (projectDetails != null && !projectDetails.LanguageAnalysisReportPaths.ContainsKey(language.DisplayName))
