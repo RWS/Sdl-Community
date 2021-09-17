@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Sdl.Community.MtEnhancedProvider.ViewModel"
 			 xmlns:mtEnhanced="clr-namespace:Sdl.Community.MtEnhancedProvider"
-             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:helpers ="clr-namespace:Sdl.Community.MtEnhancedProvider.Helpers"
-			 xmlns:converters ="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
+             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+             xmlns:uiHelpers ="clr-namespace:Sdl.Community.MtEnhancedProvider.UiHelpers"
+             xmlns:converters ="clr-namespace:Sdl.Community.MtEnhancedProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="850" d:DesignWidth="800">
@@ -15,12 +15,10 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
@@ -54,18 +52,12 @@
 		            Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 		            >
 			<TextBlock Margin="10,10,0,5" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
-			<PasswordBox
+			<controls:BindablePasswordBox
 				HorizontalAlignment="Left"
 				Margin="10,0,0,5"
 				Width="400"
-				Style="{DynamicResource MetroButtonRevealedPasswordBox}"
-				helpers:PasswordHelper.Attach="True"
-				helpers:PasswordHelper.Password="{Binding ClientId, Mode=TwoWay}"
-				controls:TextBoxHelper.Watermark="API Key"
-				controls:TextBoxHelper.UseFloatingWatermark="True"  
-				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
-			</PasswordBox>
+				Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
+				Password="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 			<CheckBox
 				IsChecked="{Binding PersistMicrosoftKey}"
 				Content="{x:Static mtEnhanced:PluginResources.PersistMicrosoft}"
@@ -91,13 +83,16 @@
 				Margin="10 10, 0,5"
 				IsChecked="{Binding UseCatId, Mode=TwoWay}"/>
 			<TextBox
-				controls:TextBoxHelper.Watermark="Category Id"
+				Style="{StaticResource WatermarkTextBox}"
+				uiHelpers:TextBoxWatermarkHelper.WatermarkText="Category Id"
+				uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="CategoryId"
+				uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 				Text="{Binding CatId}"
 				IsEnabled="{Binding UseCatId,Converter={StaticResource InvertableBoolEnabledConverter}}"
-				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 				Width="200"
 				HorizontalAlignment="Left"
 				Margin="10, 0, 10, 10"/>
+
 		</StackPanel>
 		<!--Google API Options-->
 		<StackPanel 
@@ -113,19 +108,15 @@
 				Margin="10, 0,0,5"
 				Width="200"/>
 			<!--Google API V2-->
-			<PasswordBox
+			<TextBlock Margin="10,10,0,5" Text="{x:Static mtEnhanced:PluginResources.GoogleApiKeyDescription}"/>
+			<controls:BindablePasswordBox
 				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 				HorizontalAlignment="Left"
-				Margin="10"
+				Margin="10 0 0 5"
 				Width="400"
-				Style="{DynamicResource MetroButtonRevealedPasswordBox}"
-				helpers:PasswordHelper.Attach="True"
-				helpers:PasswordHelper.Password="{Binding ApiKey, Mode=TwoWay}"
-				controls:TextBoxHelper.Watermark="API Key"
-				controls:TextBoxHelper.UseFloatingWatermark="True"  
-				controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
-				controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on">
-			</PasswordBox>
+				Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
+				Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
 			<CheckBox
 				IsChecked="{Binding PersistGoogleKey}"
 				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
@@ -137,36 +128,46 @@
 				<TextBlock 
 					Margin="10, 5, 0, 5" 
 					Text="{x:Static mtEnhanced:PluginResources.V3JsonPathDescription}"/>
-				<TextBox controls:TextBoxHelper.Watermark="Json file path"
-				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				<TextBox Style="{StaticResource WatermarkTextBox}"
+				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Json file path"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="JsonFilePath"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 				         Margin="10 0"
-				         Text="{Binding JsonFilePath}"/>
+				         Text="{Binding JsonFilePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 				<TextBlock 
 					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.V3ProjectNameDescription}"/>
-				<TextBox controls:TextBoxHelper.Watermark="Project Name"
-				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				<TextBox Style="{StaticResource WatermarkTextBox}"
+				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Project name"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="ProjectName"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 				         Margin="10 0"
 				         Text="{Binding ProjectName}"/>
 				<TextBlock 
 					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.GoogleProjectLocation}"/>
-				<TextBox controls:TextBoxHelper.Watermark="Project location"
-				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				<TextBox Style="{StaticResource WatermarkTextBox}"
+				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Project location"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="ProjectLocation"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 				         Margin="10 0"
 				         Text="{Binding ProjectLocation}"/>
 				<TextBlock 
 					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.GoogleEngineModelDescription}"/>
-				<TextBox controls:TextBoxHelper.Watermark="Engine name"
-				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				<TextBox Style="{StaticResource WatermarkTextBox}"
+				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Engine name"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="GoogleEngineModel"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 				         Margin="10 0"
 				         Text="{Binding GoogleEngineModel}"/>
 				<TextBlock 
 					Margin="10 10,0,5" 
 					Text="{x:Static mtEnhanced:PluginResources.V3Glossary}"/>
-				<TextBox controls:TextBoxHelper.Watermark="Glossary URI"
-				         controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
+				<TextBox Style="{StaticResource WatermarkTextBox}"
+				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Glossary Uri"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="GlossaryPath"
+				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 				         Margin="10 0"
 				         Text="{Binding GlossaryPath}"/>
 				<CheckBox

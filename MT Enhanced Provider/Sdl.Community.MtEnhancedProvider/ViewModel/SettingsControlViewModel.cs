@@ -16,6 +16,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IMtTranslationOptions _options;
 		private readonly IOpenFileDialogService _openFileDialogService;
+		private ICommand _clearCommand;
 		private bool _reSendDraft;
 		private bool _sendPlainText;
 		private bool _doPreLookup;
@@ -143,7 +144,8 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				OnPropertyChanged(nameof(IsTellMeAction));
 			}
 		}
-
+		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
+		
 		private void SetSavedSettings()
 		{
 			ReSendDraft = _options.ResendDrafts;
@@ -152,6 +154,21 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			PreLookupFileName = _options.PreLookupFilename;
 			DoPostLookup = _options.UsePostEdit;
 			PostLookupFileName = _options.PostLookupFilename;
+		}
+
+		private void Clear(object obj)
+		{
+			if (!(obj is string objectName)) return;
+
+			switch (objectName)
+			{
+				case "PreLookupFileName":
+					PreLookupFileName = string.Empty;
+					break;
+				case "PostLookupFileName":
+					PostLookupFileName = string.Empty;
+					break;
+			}
 		}
 
 		private void Browse(object commandParameter)
