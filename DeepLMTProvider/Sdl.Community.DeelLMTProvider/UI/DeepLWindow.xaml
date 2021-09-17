@@ -1,91 +1,85 @@
 ﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.DeepLWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:wpf="clr-namespace:Sdl.Community.DeepLMTProvider"
 		xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+		xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
 		mc:Ignorable="d"
-        FontFamily="Calibri"
-        WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
+		Icon="../Resources/deepLIcon.ico"
+		WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="DeepL Translation Provider" Height="430" Width="600">
-
+        Title="DeepL Translation Provider" Height="320" Width="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="UiHelpers/TextBoxStyle.xaml" />
-				<ResourceDictionary Source="UiHelpers/ButtonsStyle.xaml" />
 				<ResourceDictionary Source="UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{DynamicResource WindowControlBorderStyle}">
 		<DockPanel>
 			<uiHelpers:WindowsControl  DockPanel.Dock="Top" />
-			<DockPanel DockPanel.Dock="Top" Margin="5,10,10,0" LastChildFill="False">
-				<Label VerticalAlignment="Center" Content="Welcome to the DeepL Translation Provider. Please add your account and provider settings." FontFamily="Calibri" FontSize="14" />
-				<Image Source="../Resources/deepLResized.png" Width="50" Height="50" DockPanel.Dock="Right" />
-			</DockPanel>
+				<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}"
+				           DockPanel.Dock="Top"
+				           Margin="10,5,0,0"
+				           VerticalAlignment="Center" Text="Welcome to the DeepL Translation Provider. Please add your account and provider settings." FontSize="15" />
 			<StackPanel>
-				<TextBlock Margin="10,20,10,15"
+				<TextBlock Margin="10,10,10,5"
 				           TextWrapping="WrapWithOverflow"
 				           FontSize="12"
 				           Text="The DeepL API is a paid machine translation service. Please purchase a DeepL Pro Subscription in order to get an API Key and use this service." />
 				<TextBlock Text="Please enter your API Key below:"  Margin="10,0,10,10" FontSize="12" />
-				<PasswordBox
+				<controls:BindablePasswordBox
 					Name="ApiKeyBox"
-					FontFamily="Calibri"
-					mah:TextBoxHelper.UseFloatingWatermark="True"
 					PasswordChanged="ApiKeyBox_PasswordChanged"
-					mah:TextBoxHelper.Watermark="API Key"
-					mah:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.HasText), Mode=OneWay}"
-					mah:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					Margin="10,0,20,0"
-					IsEnabled="True">
-				</PasswordBox>
-				<TextBlock Name="ValidationBlock" Foreground="DarkRed" VerticalAlignment="Center"
-				           Margin="10,0,0,5" Visibility="Hidden" FontFamily="Calibri"
-				           Text="API Key is required" FontSize="14" />
-				<TextBlock Style="{DynamicResource TextBlockColor}" Margin="10,0,0,10" FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
-				<TextBlock  Margin="10,0,0,10">
-					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate" FontFamily="Calibri">
+					Margin="10,0,20,5"
+					Style="{StaticResource Sdl.BindablePasswordBox.GenericStyle}"/>
+				<TextBlock Name="ValidationBlock"  
+				           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}" 
+				           VerticalAlignment="Center"
+				           Margin="10,0,0,0" Visibility="Collapsed"
+				           Text="API Key is required" />
+				<TextBlock Margin="10,0,0,5" FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
+				<TextBlock Margin="10,0,0,10" Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
+					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate">
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
 				</TextBlock>
-				<Label Content="Translation options" FontWeight="Bold" Margin="5 0 0 0" />
+				<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Translation options" Margin="10 0 0 5" />
 				<StackPanel>
-					<CheckBox Name="PlainText" Content="Translate as plain text" FontFamily="Calibri" Margin="10,0,0,0"
-						          Foreground="#0C2D47" />
+					<CheckBox 
+						Style="{StaticResource Sdl.Checkbox.GenericStyle}" VerticalContentAlignment="Center"
+						Name="PlainText" Content="Translate as plain text"  Margin="10,0,0,5"/>
 					<StackPanel Name="NotCompatibleStackPanel" Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
-						<Label Name="FormalityLabel" Content="Formality: " Margin="6 10 0 0" />
-						<ComboBox Name="Formality" FontFamily="Calibri" Margin="0,10,0,0" Foreground="#0C2D47" Width="100"
+						<TextBlock Name="FormalityLabel" Text="Formality: " Margin="10 0 0 0"  VerticalAlignment="Center"/>
+						<ComboBox Name="Formality" Margin="5,0,0,0" Foreground="#0C2D47" Width="100"
 							          HorizontalAlignment="Left">
 							<ComboBoxItem Content="Default" />
 							<ComboBoxItem Content="Less formal" ToolTip="- for a more informal language" />
 							<ComboBoxItem Content="More formal" ToolTip="- for a more formal language" />
 						</ComboBox>
-						<TextBlock Name="NotCompatibleBlock"
-								   Margin="10 10 0 0"
+						<TextBlock Name="NotCompatibleBlock" 
+								   Margin="10 0 0 0"
 								   VerticalAlignment="Center"
-						           Foreground="DarkRed"
+								   TextAlignment="Center"
+						           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
 						           Visibility="Collapsed"
-						           FontFamily="Calibri"
 								   TextWrapping="Wrap"
 						           Text="{x:Static wpf:PluginResources.FormalityNotAvailableText}"
-								   FontSize="14" />
+								   FontSize="12" />
 					</StackPanel>
 				</StackPanel>
 				<DockPanel LastChildFill="False" Margin="0 5 0 0">
-					<Button IsCancel="True" Content="Cancel" DockPanel.Dock="Right" Width="100" Margin="10,0,5,0" Cursor="Hand" FontFamily="Calibri" />
-					<Button Style="{StaticResource DarkBlueButtonsStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand" FontFamily="Calibri" />
+					<Button Style="{StaticResource Sdl.Button.SecondaryStyle}" IsCancel="True" Content="Cancel" DockPanel.Dock="Right"  Margin="10,0,5,0" Cursor="Hand" />
+					<Button Style="{StaticResource Sdl.Button.PrimaryStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand"  />
 				</DockPanel>
 			</StackPanel>
 		</DockPanel>
