@@ -7,11 +7,9 @@
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
     <Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
-
-    <Property Id="WIXUI_INSTALLDIR" Value="Studio16beta" />
+    <Property Id="WIXUI_INSTALLDIR" Value="Studio16" />
     <!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
-    <UIRef Id="WixUI_Minimal"/>
+    <UIRef Id="WixUI_Minimal_OX"/>
 
     <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
     <MediaTemplate EmbedCab="yes"/>
@@ -29,7 +27,7 @@
   <Fragment>
     <DirectoryRef Id="DesktopFolder">
       <Component Id="ApplicationShortcutDesktop" Guid="E35C5279-5050-4BE6-A871-CA341D323CD7">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16beta]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
+        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
         <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
         <RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
@@ -41,7 +39,7 @@
 	<Fragment>
 		<DirectoryRef Id="SDLTradosStudio2021Apps">
 			<Component Id="ApplicationProgramDataShortcut" Guid="31E97AFA-DFAB-43A9-81E0-C122DC1C9391">
-				<Shortcut Id="ApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16beta]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
+				<Shortcut Id="ApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
 				<RemoveFolder Id="RemoveSDLTradosStudio2021Apps" Directory="SDLTradosStudio2021Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
@@ -54,7 +52,7 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="SDL" Name="SDL" >
           <Directory Id="SDLTradosStudio" Name="SDL Trados Studio" >
-            <Directory Id="Studio16beta" Name="Studio16beta"/>
+            <Directory Id="Studio16" Name="Studio16"/>
           </Directory>
         </Directory>
       </Directory>
@@ -71,13 +69,13 @@
 
   <!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
   <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="Studio16beta">
+    <ComponentGroup Id="ProductComponents" Directory="Studio16">
       <Component Id="Sdl.Community.HunspellDictionaryManager">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="..\HunspellDictionaryManager\bin\Debug\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
       </Component>
 
       <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="7080065D-6A4A-436A-AE01-1D1CAF804499">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.HunspellDictionaryManager.exe.config" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="..\HunspellDictionaryManager\bin\Debug\Sdl.Community.HunspellDictionaryManager.exe.config" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>

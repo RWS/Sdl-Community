@@ -24,14 +24,14 @@ variables:
 - name: solution 
   value: '**/HunspellDictionaryManager.sln'
 - name: Version.MajorMinor
-  value: 3.1
+  value: 3.2
 - name: VersionPatch
   value: 0
 - name: Version.Year
   value: 2021
 
 - name: Version.Revision
-  value: $[counter(variables['Version.MajorMinor'], 22)]
+  value: $[counter(variables['Version.MajorMinor'], 0)]
 
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision).$(VersionPatch)
