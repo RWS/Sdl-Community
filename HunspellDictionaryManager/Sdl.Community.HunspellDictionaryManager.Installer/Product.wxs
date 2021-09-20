@@ -73,11 +73,11 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="Studio16beta">
       <Component Id="Sdl.Community.HunspellDictionaryManager">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16beta\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
       </Component>
 
       <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="7080065D-6A4A-436A-AE01-1D1CAF804499">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16beta\Sdl.Community.HunspellDictionaryManager.exe.config" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(env.ProgramFiles(x86))\SDL\SDL Trados Studio\Studio16\Sdl.Community.HunspellDictionaryManager.exe.config" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
