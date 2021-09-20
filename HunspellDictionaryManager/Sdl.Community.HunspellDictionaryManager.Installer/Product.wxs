@@ -50,8 +50,8 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- Define location where the app will be installed, Studio16 folder (it is used because dll's needs to be loaded from the Studio folder)-->
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="RWS" Name="RWS" >
-          <Directory Id="TradosStudio" Name="Trados Studio" >
+        <Directory Id="SDL" Name="SDL" >
+          <Directory Id="SDL TradosStudio" Name="SDL Trados Studio" >
             <Directory Id="Studio16" Name="Studio16"/>
           </Directory>
         </Directory>
