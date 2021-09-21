@@ -16,7 +16,7 @@ using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.MTCloud.Provider
+namespace Sdl.Community.MTCloud.Providerw
 {
 	[ApplicationInitializer]
 	internal class MtCloudApplicationInitializer : IApplicationInitializer
