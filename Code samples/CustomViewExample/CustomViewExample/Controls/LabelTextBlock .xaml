@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="CustomViewExample.Controls.LabelTextBlock "
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CustomViewExample.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="200">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+		<TextBlock Text="Label" Name="LabelBlock" MinWidth="90" VerticalAlignment="Center" 
+		           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" Margin="2" />
+		<TextBlock Text="Text" Name="TextBlock" VerticalAlignment="Center" HorizontalAlignment="Left"
+		           Style="{StaticResource Sdl.TextBlock.InformationTextStyle}" Margin="2"/>
+	</StackPanel>
+</UserControl>
