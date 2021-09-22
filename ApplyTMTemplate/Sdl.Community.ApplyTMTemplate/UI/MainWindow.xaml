@@ -22,7 +22,6 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../UiHelpers/MetroStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />

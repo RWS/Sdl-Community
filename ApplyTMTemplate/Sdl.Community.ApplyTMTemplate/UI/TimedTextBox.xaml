@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:applyTmTemplate="clr-namespace:Sdl.Community.ApplyTMTemplate"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              d:DataContext="{d:DesignInstance viewModels:TimedTextBox}"
              xmlns:ui="clr-namespace:Sdl.Community.ApplyTMTemplate.UI"
              xmlns:viewModels="clr-namespace:Sdl.Community.ApplyTMTemplate.ViewModels"
@@ -145,7 +144,6 @@
 					 FontSize="16"
 					 VerticalAlignment="Center" VerticalContentAlignment="Center"
 			         Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ui:TimedTextBox}, Path=Height}"
-			         controls:TextBoxHelper.Watermark="{x:Static applyTmTemplate:PluginResources.Enter_path_of_template}"
 			         Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 				<TextBox.Style>
 					<Style TargetType="TextBox">
