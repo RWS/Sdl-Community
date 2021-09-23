@@ -181,7 +181,7 @@ namespace Sdl.Community.Jobs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.Jobs.
+        ///   Looks up a localized string similar to Jobs.
         /// </summary>
         public static string Plugin_Name {
             get {
