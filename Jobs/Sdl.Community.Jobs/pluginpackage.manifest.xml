@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Jobs</PlugInName>
-  <Version>3.3.1.0</Version>
+  <Version>3.3.2.0</Version>
   <Description>Retrieve job postings from ProZ.</Description>
-  <Author>SDL Community Developers</Author>
+  <Author>RWS AppStore Team</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
   <Include>
     <File>RestSharp.dll</File>
     <File>PresentationCore.dll</File>
     <File>PresentationFramework.dll</File>
     <File>System.Xaml.dll</File>
-    <File>MahApps.Metro.dll</File>
   </Include>
 </PluginPackage>
