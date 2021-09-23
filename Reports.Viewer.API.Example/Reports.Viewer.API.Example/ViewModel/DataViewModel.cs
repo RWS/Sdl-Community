@@ -7,7 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Sdl.Community.Reports.Viewer.API.Example.Actions;
 using Sdl.Community.Reports.Viewer.API.Example.Commands;
-using Sdl.Reports.Viewer.API.Model;
+using Sdl.Community.Reports.Viewer.API.Example.Controls;
+using Sdl.ProjectAutomation.FileBased.Reports.Models;
+using Sdl.ProjectAutomation.FileBased.Reports.Operations;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
@@ -15,6 +17,7 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 	public class DataViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private string _windowTitle;
+		private string _reportContent;
 		private List<Report> _reports;
 		private Report _selectedReport;
 		private IList _selectedReports;
@@ -22,18 +25,23 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 		private ICommand _clearSelectionCommand;
 		private ICommand _editReportCommand;
 		private ICommand _removeReportCommand;
+		private ICommand _renderReportCommand;
 		private ICommand _openFolderCommand;
+		private readonly ReportsViewerController _reportViewerController;
 
-		public DataViewModel(List<Report> reports)
+		public DataViewModel(List<Report> reports, ReportsViewerController reportViewerController)
 		{
 			Reports = reports;
+			_reportViewerController = reportViewerController;
 		}
-	
+
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
 
 		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
 
 		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
+
+		public ICommand RenderReportCommand => _renderReportCommand ?? (_renderReportCommand = new CommandHandler(RenderReport));
 
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
 
@@ -46,6 +54,17 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 				OnPropertyChanged(nameof(WindowTitle));
 			}
 		}
+
+		public string ReportContent
+		{
+			get => _reportContent;
+			set
+			{
+				_reportContent = value;
+				OnPropertyChanged(nameof(ReportContent));
+			}
+		}
+
 
 		public string ProjectLocalFolder
 		{
@@ -117,10 +136,23 @@ namespace Sdl.Community.Reports.Viewer.API.Example.ViewModel
 			action.Run();
 		}
 
+		private void RenderReport(object parameter)
+		{
+			var report = parameter as Report;
+			ReportContent = _reportViewerController.RenderReport(report);
+			//var path = Path.Combine(ProjectLocalFolder, report.Path);
+			//File.WriteAllText(path, ReportContent);
+		}
+
 		private void OpenFolder(object parameter)
 		{
+			var reports = _reportViewerController.GetSelectedReports();
+			if (reports != null)
+			{
+				SelectedReport = reports[0];
+			}
 			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
-			                                 || !Directory.Exists(ProjectLocalFolder))
+											 || !Directory.Exists(ProjectLocalFolder))
 			{
 				return;
 			}
