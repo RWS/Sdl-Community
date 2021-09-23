@@ -37,10 +37,10 @@
 	<!-- Create shortcut to the SDLTradosStudio2021Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
-		<DirectoryRef Id="TradosStudio2021Apps">
+		<DirectoryRef Id="SDLTradosStudio2021Apps">
 			<Component Id="ApplicationProgramDataShortcut" Guid="31E97AFA-DFAB-43A9-81E0-C122DC1C9391">
 				<Shortcut Id="ApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
-				<RemoveFolder Id="RemoveTradosStudio2021Apps" Directory="TradosStudio2021Apps" On="uninstall" />
+				<RemoveFolder Id="RemoveTradosStudio2021Apps" Directory="SDLTradosStudio2021Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
@@ -59,7 +59,7 @@
       <!-- Define location where the shortcut will be added: in our case, folder SDLTradosStudio2021Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
-				<Directory Id="TradosStudio2021Apps" Name="Trados Studio 2021 Apps" />
+				<Directory Id="SDLTradosStudio2021Apps" Name="SDL Trados Studio 2021 Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
