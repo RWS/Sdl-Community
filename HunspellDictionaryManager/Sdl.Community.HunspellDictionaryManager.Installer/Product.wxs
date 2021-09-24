@@ -18,6 +18,7 @@
     <Feature Id="ProductFeature" Title="Sdl.Community.HunspellDictionaryManager.Installer" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
 	  <ComponentRef Id='TradosApplicationProgramDataShortcut' />
+	  <ComponentRef Id='BetaTradosApplicationProgramDataShortcut' />
 	  <ComponentRef Id='SDLTradosApplicationProgramDataShortcut' />
 	  <ComponentRef Id='ApplicationShortcutDesktop' />
     </Feature>
@@ -46,6 +47,15 @@
 			</Component>
 		</DirectoryRef>
 	</Fragment>
+  <Fragment>
+		<DirectoryRef Id="BetaTradosStudio2021Apps">
+			<Component Id="BetaTradosApplicationProgramDataShortcut" Guid="75EBEB36-7D1F-4212-9625-3622D4196472">
+				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
+				<RemoveFolder Id="RemoveBetaTradosStudio2021Apps" Directory="BetaTradosStudio2021Apps" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.BetaTradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
 		<Fragment>
 		<DirectoryRef Id="SDLTradosStudio2021Apps">
 			<Component Id="SDLTradosApplicationProgramDataShortcut" Guid="F009F106-2FFE-49F4-A0FA-4A611D241BD8">
@@ -71,6 +81,7 @@
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
 				<Directory Id="TradosStudio2021Apps" Name="Trados Studio 2021 Apps" />
 				<Directory Id="SDLTradosStudio2021Apps" Name="SDL Trados Studio 2021 Apps" />
+				<Directory Id="BetaTradosStudio2021Apps" Name="Trados Studio 2021 Beta Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
