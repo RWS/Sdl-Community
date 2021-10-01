@@ -559,7 +559,8 @@ namespace Sdl.Community.InvoiceAndQuotes
 
         private void BindDDL(ComboBox comboBox, List<KeyValuePair<String, String>> items)
         {
-            comboBox.ValueMember = "Key";
+	        btnGenerate.Enabled = items.Any();
+			comboBox.ValueMember = "Key";
             comboBox.DisplayMember = "Value";
             comboBox.DataSource = items;
         }
