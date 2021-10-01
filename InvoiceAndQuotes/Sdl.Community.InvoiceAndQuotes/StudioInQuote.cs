@@ -525,6 +525,7 @@ namespace Sdl.Community.InvoiceAndQuotes
 
 		private void BindDDL(ComboBox comboBox, List<KeyValuePair<String, String>> items)
 		{
+			btnGenerate.Enabled = items.Any();
 			comboBox.ValueMember = "Key";
 			comboBox.DisplayMember = "Value";
 			comboBox.DataSource = items;
@@ -641,7 +642,7 @@ namespace Sdl.Community.InvoiceAndQuotes
 					currentSelectedTemplate = _rates.GetSimpleWordTemplateFromState();
 				}
 			}
-			var project = new Project(cmbLanguagePair.SelectedValue.ToString(),
+			var project = new Project(cmbLanguagePair?.SelectedValue?.ToString(),
 				currentSelectedTemplate,
 				cmbReportType.SelectedIndex == 0 ? ReportType.Detailed : ReportType.Summary);
 
