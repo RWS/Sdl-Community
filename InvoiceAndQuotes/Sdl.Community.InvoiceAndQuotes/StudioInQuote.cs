@@ -114,7 +114,7 @@ namespace Sdl.Community.InvoiceAndQuotes
                     Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Italic),
                     ForeColor = SystemColors.InactiveCaption,
                     LabelText = "Street:",
-                    Location = new Point(5, 74),
+                    Location = new Point(6, 96),
                     Multiline = true,
                     Name = "txtCustomerStreet",
                     Size = new Size(301, 97),
@@ -129,7 +129,7 @@ namespace Sdl.Community.InvoiceAndQuotes
                     Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Italic),
                     ForeColor = SystemColors.InactiveCaption,
                     LabelText = "Customer name:",
-                    Location = new Point(6, 48),
+                    Location = new Point(6, 70),
                     Name = "txtCustomerName",
                     Size = new Size(301, 20),
                     TabIndex = 0
@@ -281,10 +281,10 @@ namespace Sdl.Community.InvoiceAndQuotes
                     Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Italic),
                     ForeColor = SystemColors.InactiveCaption,
                     LabelText = "Street:",
-                    Location = new Point(5, 66),
+                    Location = new Point(6, 96),
                     Multiline = true,
                     Name = "txtUserStreet",
-                    Size = new Size(301, 97),
+                    Size = new Size(301, 96),
                     TabIndex = 8
                 };
 
