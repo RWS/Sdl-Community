@@ -10,6 +10,15 @@ using Sdl.Versioning;
 
 namespace Sdl.Community.TMBackup
 {
+	[ApplicationInitializer]
+	public class TmBackupInitializer : IApplicationInitializer
+	{
+		public void Execute()
+		{
+			Log.Setup();
+		}
+	}
+
 	[RibbonGroup("Plugin_Name", Name = "Plugin_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TMBackupRibbon : AbstractRibbonGroup

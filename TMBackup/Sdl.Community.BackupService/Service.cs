@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.Win32.TaskScheduler;
+using NLog;
 using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
 using static Sdl.Community.BackupService.Helpers.Enums;
@@ -11,7 +12,7 @@ namespace Sdl.Community.BackupService
 {
 	public class Service
 	{
-		public static readonly Log Log = Log.Instance;
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 		public JsonRequestModel GetJsonInformation()
 		{
@@ -73,7 +74,7 @@ namespace Sdl.Community.BackupService
 				}
 				catch (Exception ex)
 				{
-					Log.Logger.Error($"{ Constants.AddTrigger} {ex.Message} \n {ex.StackTrace}");
+					Logger.Error($"{ Constants.AddTrigger} {ex.Message} \n {ex.StackTrace}");
 				}
 			}
 		}
