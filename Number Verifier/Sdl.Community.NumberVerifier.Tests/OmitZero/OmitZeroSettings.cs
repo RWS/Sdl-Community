@@ -49,6 +49,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var numberVerifierSettings = Utilities.NumberVerifierLocalizationsSettings.PreventLocalization();
 			numberVerifierSettings.Setup(z => z.SourceOmitLeadingZero).Returns(true);
+			numberVerifierSettings.Setup(z => z.TargetDecimalPeriod).Returns(true);
 
 			return numberVerifierSettings;
 		}

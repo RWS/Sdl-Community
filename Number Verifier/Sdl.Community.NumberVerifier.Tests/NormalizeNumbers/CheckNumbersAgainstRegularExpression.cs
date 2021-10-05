@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using Moq;
+using Sdl.Community.NumberVerifier.Parsers.Number;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
@@ -8,10 +10,12 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	public class CheckNumbersAgainstRegularExpression
 	{
 		private readonly Mock<IDocumentProperties> _documentProperties;
+		private readonly NumberNormalizer _numberNormalizer;
 
 		public CheckNumbersAgainstRegularExpression()
 		{
 			_documentProperties = new Mock<IDocumentProperties>();
+			_numberNormalizer = new NumberNormalizer();
 		}
 
 		/// <summary>
@@ -33,12 +37,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
-            var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
 
-            numberVerifierMain.NormalizeNumbers(normalizeNumber);
+			var normalizedNumbers = _numberNormalizer.GetNormalizedNumbers(text, numberVerifierSettings.Object, false);
 
-            Assert.Equal("34", normalizeNumber.InitialNumberList[0]);
-            Assert.Equal("34", normalizeNumber.NormalizedNumberList[0]);
+            Assert.Equal("34", normalizedNumbers.InitialPartsList[0]);
         }
 
         [Theory]
@@ -56,11 +58,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
 
-            var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
-            numberVerifierMain.NormalizeNumbers(normalizeNumber);
+	        var normalizeNumber = _numberNormalizer.GetNormalizedNumbers(text, numberVerifierSettings.Object, false);
 
-            Assert.Equal("−74,5", $"{normalizeNumber.InitialNumberList[0]}{normalizeNumber.InitialNumberList[1]}");
-            Assert.Equal("m74m5", $"{normalizeNumber.NormalizedNumberList[0]}{normalizeNumber.NormalizedNumberList[1]}");
+	        Assert.Equal(new List<string> { "−74,5"}, normalizeNumber.InitialPartsList);
+	        Assert.Equal(new List<string> { "m74m5" }, normalizeNumber.NormalizedPartsList);
         }
 
         [Theory]
@@ -78,12 +79,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
             var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
-           
-            var normalizeNumber = NumberVerifierSetup.GetNormalizedNumber(text, thousandSeparators, decimalSeparators, false, false);
-            numberVerifierMain.NormalizeNumbers(normalizeNumber);
 
-            Assert.Equal("46", normalizeNumber.InitialNumberList[0]);
-            Assert.Equal("46", normalizeNumber.NormalizedNumberList[0]);
+			var normalizeNumber = _numberNormalizer.GetNormalizedNumbers(text, numberVerifierSettings.Object, false);
+
+			Assert.Equal("46", normalizeNumber.InitialPartsList[0]);
         }
 
 		[Theory]
@@ -104,11 +103,11 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep, true);
 
 			// Act
-			var sourceResult = numberVerifierMain.GetNumbersTuple(sourceText, decimalSeparators, thousandSeparators, false, false);
-			var targetResult = numberVerifierMain.GetNumbersTuple(targetText, decimalSeparators, thousandSeparators, false, false);
+			var sourceResult = _numberNormalizer.GetNormalizedNumbers(sourceText, numberVerifierSettings.Object, false);
+			var targetResult = _numberNormalizer.GetNormalizedNumbers(targetText, numberVerifierSettings.Object, false);
 
 			// Assert
-			Assert.Equal(sourceResult.Item1[0], targetResult.Item1[0]);
+			Assert.Equal(sourceResult.InitialPartsList[0], targetResult.InitialPartsList[0]);
 		}
 
 
@@ -130,11 +129,11 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep, true);
 
 			// Act
-			var sourceResult = numberVerifierMain.GetNumbersTuple(sourceText, decimalSeparators, thousandSeparators, false, false);
-			var targetResult = numberVerifierMain.GetNumbersTuple(targetText, decimalSeparators, thousandSeparators, false, false);
+			var sourceResult = _numberNormalizer.GetNormalizedNumbers(sourceText, numberVerifierSettings.Object, false);
+			var targetResult = _numberNormalizer.GetNormalizedNumbers(targetText, numberVerifierSettings.Object, false);
 
 			// Assert
-			Assert.NotEqual(sourceResult.Item1, targetResult.Item1);
+			Assert.NotEqual(sourceResult.InitialPartsList, targetResult.InitialPartsList);
 		}
 	}
 }

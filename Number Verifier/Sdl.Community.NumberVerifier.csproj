@@ -15,7 +15,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkProfile />
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16beta\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -159,10 +159,11 @@
     </Compile>
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
+    <Compile Include="Model\NumberList.cs" />
+    <Compile Include="Model\Number.cs" />
     <Compile Include="Parsers\Number\Model\NumberSeparator.cs" />
     <Compile Include="Parsers\Number\Model\NumberToken.cs" />
     <Compile Include="Model\HindiNumberModel.cs" />
-    <Compile Include="Model\NormalizedNumber.cs" />
     <Compile Include="Parsers\Number\Model\NumberPart.cs" />
     <Compile Include="Model\SeparatorModel.cs" />
     <Compile Include="Model\NumberModel.cs" />
@@ -178,6 +179,7 @@
     </Compile>
     <Compile Include="NumberVerifierSettings.cs" />
     <Compile Include="GUI\NumberVerifierUIPage.cs" />
+    <Compile Include="Parsers\Number\NumberNormalizer.cs" />
     <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateSourceIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateTargetIssuesOnNewLineErrorMessageProcessor.cs" />

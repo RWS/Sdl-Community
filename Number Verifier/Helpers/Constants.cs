@@ -9,5 +9,6 @@
 		public static readonly string HindiLanguage = "Hindi (India)";
 		public static readonly string NumberVerifier = "Number Verifier";
 		public static readonly string SpaceSeparators = @"\u2009\u00A0\u0020\u202F";
+		public static readonly string NoSeparator = "No separator";
 	}
 }
