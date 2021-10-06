@@ -30,7 +30,7 @@ namespace Sdl.Community.TMBackup
 		   Environment.SpecialFolder.CommonApplicationData
 		};
 
-		[Action("Plugin_Name", Name = "Plugin_Name", Icon = "TMBackup_Icon", Description = "Plugin_Name")]
+		[Action("TMBackup", Name = "Plugin_Name", Icon = "TMBackup_Icon", Description = "Plugin_Name")]
 		[ActionLayout(typeof(TMBackupRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class TMBackupAction : AbstractAction
@@ -79,8 +79,10 @@ namespace Sdl.Community.TMBackup
 			var executableVersion = new StudioVersionService().GetStudioVersion()?.ExecutableVersion?.Major;
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
-				var unpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\Sdl.Community.TMBackup";
-
+				var devUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\Sdl.Community.TMBackup";
+				var productionUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\S{PluginResources.Plugin_Name}";
+				
+				var unpackedFolder = Directory.Exists(devUnpackedFolder) ? devUnpackedFolder : productionUnpackedFolder;
 				if (Directory.Exists(unpackedFolder))
 				{
 					var pluginExePath = Directory.GetFiles(unpackedFolder, "*.exe").FirstOrDefault();
