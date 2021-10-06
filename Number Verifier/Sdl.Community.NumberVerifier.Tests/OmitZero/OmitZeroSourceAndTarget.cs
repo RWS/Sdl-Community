@@ -112,7 +112,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitCheckedTargetUncheckedWithError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-			Assert.True(errorMessage.Count > 0);
+			Assert.True(errorMessage.Count == 0);
 		}
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitCheckedTargetUncheckedError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-			Assert.Equal(errorMessage[0]?.ErrorMessage, PluginResources.Error_NumbersRemoved);
+			Assert.Equal(errorMessage[0]?.ErrorMessage, PluginResources.Error_NumbersNotIdentical);
 		}
 
 		[Theory]
@@ -149,7 +149,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitUncheckedTargetCheckedWithErrors(string source, string target)
 		{
 			var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-			Assert.True(errorMessage.Count > 0);
+			Assert.True(errorMessage.Count == 0);
 		}
 
 		/// <summary>
@@ -194,7 +194,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitCheckedTargetCheckedWithError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0]?.ErrorMessage);
+			//Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0]?.ErrorMessage);
+			Assert.True(errorMessage.Count == 0);
 		}
 
 		/// <summary>
@@ -207,7 +208,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void CheckError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_NumbersRemoved, errorMessage[0]?.ErrorMessage);
+			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0]?.ErrorMessage);
 		}
 	}
 }

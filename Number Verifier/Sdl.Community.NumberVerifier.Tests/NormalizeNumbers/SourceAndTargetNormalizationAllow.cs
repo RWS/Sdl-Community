@@ -88,7 +88,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.AllTypesOfSpacesChecked();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-            numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+            numberVerifierSettings.Setup(d => d.SourceDecimalPeriod).Returns(true);
+
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 

@@ -1,5 +1,4 @@
 ﻿using Moq;
-using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
@@ -16,31 +15,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		}
 
 		[Theory]
-        [InlineData("1,55", " ", ",", true)]
-        public string NormalizeNoSeparatorNumbers(string text, string thousandSep, string decimalSep, bool noSeparator)
-        {
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
-			
-            var normalizedNumber = numberVerifierMain.NormalizeNumber(new SeparatorModel
-			{
-				MatchValue = text,
-				ThousandSeparators = thousandSep,
-				DecimalSeparators = decimalSep,
-				NoSeparator = noSeparator,
-				CustomSeparators = string.Empty
-			});
-
-            return normalizedNumber;
-        }
-
-        [Theory]
         [InlineData("1.55", "1,55 ")]
         public void NotNormalizeDecimalNumbers(string source, string target)
         {
