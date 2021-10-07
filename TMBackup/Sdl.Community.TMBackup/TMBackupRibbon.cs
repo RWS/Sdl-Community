@@ -80,7 +80,7 @@ namespace Sdl.Community.TMBackup
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
 				var devUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\Sdl.Community.TMBackup";
-				var productionUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\S{PluginResources.Plugin_Name}";
+				var productionUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\{PluginResources.Plugin_Name}";
 				
 				var unpackedFolder = Directory.Exists(devUnpackedFolder) ? devUnpackedFolder : productionUnpackedFolder;
 				if (Directory.Exists(unpackedFolder))
