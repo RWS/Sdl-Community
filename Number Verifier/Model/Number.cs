@@ -24,7 +24,7 @@ namespace Sdl.Community.NumberVerifier.Model
 		public int DigitCount => DigitsReversed.Count;
 		public string Sign { get; set; }
 
-		public List<(int, string)> ThousandSeparatorsPlacesFromRight { get; set; } = null;
+		public (List<int>, string) ThousandSeparatorsPlacesFromRight { get; set; } = (null, null);
 
 		private (int, string) DecimalPlaceFromRight { get; set; }
 		private List<char> DigitsReversed { get; } = new List<char>();
@@ -90,7 +90,7 @@ namespace Sdl.Community.NumberVerifier.Model
 			{
 				InsertSeparatorsAtAllThousandPlaces(digitsReversed);
 			}
-			else if (ThousandSeparatorsPlacesFromRight != null)
+			else if (ThousandSeparatorsPlacesFromRight != (null, null))
 			{
 				InsertThousandSeparators(normalize, digitsReversed);
 			}
@@ -170,8 +170,10 @@ namespace Sdl.Community.NumberVerifier.Model
 
 		private void AddThousandSeparatorPlace()
 		{
-			if (ThousandSeparatorsPlacesFromRight == null) ThousandSeparatorsPlacesFromRight = new List<(int, string)>();
-			ThousandSeparatorsPlacesFromRight.Add((_indexOfAddition, _characterAsString));
+			if (ThousandSeparatorsPlacesFromRight == (null, null))
+				ThousandSeparatorsPlacesFromRight = (new List<int>(), _characterAsString);
+
+			ThousandSeparatorsPlacesFromRight.Item1.Add((_indexOfAddition));
 		}
 
 		private void InsertSeparatorsAtAllThousandPlaces(List<string> digitsReversed)
@@ -185,9 +187,9 @@ namespace Sdl.Community.NumberVerifier.Model
 
 		private void InsertThousandSeparators(bool normalize, List<string> digitsReversed)
 		{
-			foreach (var separatorPlaceFromRight in ThousandSeparatorsPlacesFromRight)
+			foreach (var separatorPlaceFromRight in ThousandSeparatorsPlacesFromRight.Item1)
 			{
-				InsertSeparator(digitsReversed, separatorPlaceFromRight.Item1, normalize ? "m" : separatorPlaceFromRight.Item2);
+				InsertSeparator(digitsReversed, separatorPlaceFromRight, normalize ? "m" : ThousandSeparatorsPlacesFromRight.Item2);
 			}
 		}
 
@@ -206,7 +208,9 @@ namespace Sdl.Community.NumberVerifier.Model
 				? $@"\u{Convert.ToUInt16(character):X4}"
 				: _characterAsString;
 
-			return _thousandSeparators.Contains(currentCharacter);
+			return ThousandSeparatorsPlacesFromRight == (null, null)
+				? _thousandSeparators.Contains(currentCharacter)
+				: _characterAsString == ThousandSeparatorsPlacesFromRight.Item2;
 		}
 
 		private bool IsDecimalPlaceDefined()
