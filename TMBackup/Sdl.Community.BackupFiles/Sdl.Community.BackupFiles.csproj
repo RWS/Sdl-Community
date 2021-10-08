@@ -97,5 +97,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Sdl.Community.Toolkit.Core.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
