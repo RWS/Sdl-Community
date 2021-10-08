@@ -55,7 +55,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			_numberNormalizer.GetNormalizedNumbers(text, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
 			Assert.Equal(new List<string> { "−74,5" }, normalizedNumbers.InitialPartsList);
-			Assert.Equal(new List<string> { "m74m5" }, normalizedNumbers.NormalizedPartsList);
+			Assert.Equal(new List<string> { "s74d5" }, normalizedNumbers.NormalizedPartsList);
 		}
 
 		[Theory]
