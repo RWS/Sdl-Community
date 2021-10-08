@@ -23,67 +23,58 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		/// is a item in a list
 		/// </summary>
 		[Theory]
-        [InlineData("- 34", ".,", ",")]
-        public void SkipTheDash(string text, string thousandSep, string decimalSep)
-        {
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+		[InlineData("- 34", ".,", ",")]
+		public void SkipTheDash(string text, string thousandSep, string decimalSep)
+		{
+			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+			numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
+			//run initialize method in order to set chosen separators
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
-            var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
-            var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
+			_numberNormalizer.GetNormalizedNumbers(text, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
-			var normalizedNumbers = _numberNormalizer.GetNormalizedNumbers(text, numberVerifierSettings.Object, false);
+			Assert.Equal("34", normalizedNumbers.InitialPartsList[0]);
+		}
 
-            Assert.Equal("34", normalizedNumbers.InitialPartsList[0]);
-        }
+		[Theory]
+		[InlineData("−74,5", ".,", ",")]
+		public void NormalizeNegativeNumbers(string text, string thousandSep, string decimalSep)
+		{
+			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+			numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-        [Theory]
-        [InlineData("−74,5", ".,", ",")]
-        public void NormalizeNegativeNumbers(string text, string thousandSep, string decimalSep)
-        {
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+			//run initialize method in order to set chosen separators
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
-			
-            var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
-            var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
+			_numberNormalizer.GetNormalizedNumbers(text, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
-	        var normalizeNumber = _numberNormalizer.GetNormalizedNumbers(text, numberVerifierSettings.Object, false);
+			Assert.Equal(new List<string> { "−74,5" }, normalizedNumbers.InitialPartsList);
+			Assert.Equal(new List<string> { "m74m5" }, normalizedNumbers.NormalizedPartsList);
+		}
 
-	        Assert.Equal(new List<string> { "−74,5"}, normalizeNumber.InitialPartsList);
-	        Assert.Equal(new List<string> { "m74m5" }, normalizeNumber.NormalizedPartsList);
-        }
+		[Theory]
+		[InlineData("This ab46 is not an alphanumeric, the plugin will recognize only the number", ".,", ",")]
+		public void FindNumbersWithinTheWords(string text, string thousandSep, string decimalSep)
+		{
+			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+			numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-        [Theory]
-        [InlineData("This ab46 is not an alphanumeric, the plugin will recognize only the number", ".,", ",")]
-        public void FindNumbersWithinTheWords(string text, string thousandSep, string decimalSep)
-        {
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+			//run initialize method in order to set chosen separators
+			numberVerifierMain.Initialize(_documentProperties.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
+			_numberNormalizer.GetNormalizedNumbers(text, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
-            var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep,true);
-            var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep,true);
-
-			var normalizeNumber = _numberNormalizer.GetNormalizedNumbers(text, numberVerifierSettings.Object, false);
-
-			Assert.Equal("46", normalizeNumber.InitialPartsList[0]);
-        }
+			Assert.Equal("46", normalizedNumbers.InitialPartsList[0]);
+		}
 
 		[Theory]
 		[InlineData("Drill holes al least every 600 milimeters", "Perces de trous au moins tous les 600 centimeters", ".,", ",")]
@@ -99,12 +90,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			// run initialize method in order to set chosen separators
 			numberVerifierMain.Initialize(_documentProperties.Object);
 
-			var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep, true);
-			var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep, true);
-
 			// Act
-			var sourceResult = _numberNormalizer.GetNormalizedNumbers(sourceText, numberVerifierSettings.Object, false);
-			var targetResult = _numberNormalizer.GetNormalizedNumbers(targetText, numberVerifierSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(sourceText, targetText, numberVerifierSettings.Object, out var sourceResult, out var targetResult);
 
 			// Assert
 			Assert.Equal(sourceResult.InitialPartsList[0], targetResult.InitialPartsList[0]);
@@ -125,12 +112,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			//run initialize method in order to set chosen separators
 			numberVerifierMain.Initialize(_documentProperties.Object);
 
-			var thousandSeparators = numberVerifierMain.AddCustomSeparators(thousandSep, true);
-			var decimalSeparators = numberVerifierMain.AddCustomSeparators(decimalSep, true);
-
 			// Act
-			var sourceResult = _numberNormalizer.GetNormalizedNumbers(sourceText, numberVerifierSettings.Object, false);
-			var targetResult = _numberNormalizer.GetNormalizedNumbers(targetText, numberVerifierSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(sourceText, targetText, numberVerifierSettings.Object, out var sourceResult, out var targetResult);
 
 			// Assert
 			Assert.NotEqual(sourceResult.InitialPartsList, targetResult.InitialPartsList);

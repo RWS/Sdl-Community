@@ -22,7 +22,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var normalizedNumbers = _numberNormalizer.GetNormalizedNumbers(number, numberVerifierSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
 			return normalizedNumbers;
 		}
@@ -33,8 +33,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var numberList = OmitZeroChecked(number);
 
-			Assert.Equal("m55", numberList.NormalizedPartsList[0]);
-			Assert.Equal(".55", numberList.InitialPartsList[0]);
+			Assert.Equal("0m55", numberList.NormalizedPartsList[0]);
+			Assert.Equal("0.55", numberList.InitialPartsList[0]);
 		}
 
 		public NumberList GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(string text)
@@ -44,7 +44,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(iMockSettings);
 
-			var normalizedNumber = _numberNormalizer.GetNormalizedNumbers(text, iMockSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(text, null, iMockSettings.Object, out var normalizedNumber, out _);
 
 			return normalizedNumber;
 		}
@@ -79,7 +79,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
 
-			var normalizedNumber = _numberNormalizer.GetNormalizedNumbers(text, mockSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(null, text, mockSettings.Object, out _, out var normalizedNumber);
 
 			Assert.Equal("m0m55", normalizedNumber.NormalizedPartsList[0]);
 
@@ -104,10 +104,10 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
 
 			mockSettings.Setup(s => s.TargetDecimalPeriod).Returns(true);
-			var normalizedNumberWithPeriod = _numberNormalizer.GetNormalizedNumbers(numberWithPeriod, mockSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(null, numberWithPeriod, mockSettings.Object, out _, out var normalizedNumberWithPeriod);
 
 			mockSettings.Setup(s => s.TargetDecimalComma).Returns(true);
-			var normalizedNumberWithComma = _numberNormalizer.GetNormalizedNumbers(numberWithComma, mockSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
 
 			Assert.Equal("m0m55", normalizedNumberWithPeriod.NormalizedPartsList[0]);
 			Assert.Equal("m0m55", normalizedNumberWithComma.NormalizedPartsList[0]);
@@ -124,7 +124,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-			var normalizedNumbers = _numberNormalizer.GetNormalizedNumbers(number, numberVerifierSettings.Object, false);
+			_numberNormalizer.GetNormalizedNumbers(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
 			methodsMock.Verify(m => m.OmitZero(number), Times.Never);
 			return normalizedNumbers.InitialPartsList[0];

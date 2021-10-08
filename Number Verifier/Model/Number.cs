@@ -12,6 +12,7 @@ namespace Sdl.Community.NumberVerifier.Model
 		private readonly List<string> _thousandSeparators;
 		private string _characterAsString;
 		private int _indexOfAddition;
+		private static Number _sourceNumber;
 
 		private Number(List<string> thousandSeparators, List<string> decimalSeparators)
 		{
@@ -29,8 +30,9 @@ namespace Sdl.Community.NumberVerifier.Model
 		private (int, string) DecimalPlaceFromRight { get; set; }
 		private List<char> DigitsReversed { get; } = new List<char>();
 
-		public static List<Number> Parse(string text, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero)
+		public static List<Number> Parse(string text, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero, Number sourceNumber = null)
 		{
+			_sourceNumber = sourceNumber;
 			text = text.Trim();
 			var numberList = new List<Number> { new Number(thousandSeparators, decimalSeparators) };
 			var index = 0;
@@ -42,7 +44,8 @@ namespace Sdl.Community.NumberVerifier.Model
 				var currentNumber = numberList[index];
 				if (!betweenNumbers)
 				{
-					betweenNumbers = !currentNumber.AddCharacter(currentCharacter);
+					if (char.IsDigit(currentCharacter)) currentNumber.DigitsReversed.Add(currentCharacter);
+					else betweenNumbers = !currentNumber.AddSymbol(currentCharacter);
 				}
 				else
 				{
@@ -55,7 +58,7 @@ namespace Sdl.Community.NumberVerifier.Model
 						index++;
 					}
 
-					numberList[index].AddCharacter(currentCharacter);
+					numberList[index].DigitsReversed.Add(currentCharacter);
 				}
 			}
 
@@ -136,36 +139,39 @@ namespace Sdl.Community.NumberVerifier.Model
 		/// <param name="character"></param>
 		/// <returns><see langword="true"/> -> the character was added successfully
 		/// <para><see langword="false"/> -> character was not part of a number; number ended</para></returns>
-		private bool AddCharacter(char character)
+		private bool AddSymbol(char character)
 		{
 			_characterAsString = character.ToString();
 			_indexOfAddition = DigitsReversed.Count;
-			if (!char.IsDigit(character))
+
+			if (_indexOfAddition > 0 && Signs.Contains(_characterAsString))
 			{
-				if (_indexOfAddition > 0 && Signs.Contains(_characterAsString))
-				{
-					SetSign(_characterAsString);
-					return false;
-				}
+				SetSign(_characterAsString);
+				return false;
+			}
 
-				if (!IsAllowedThousandSeparator() && !IsAllowedDecimalSeparator()) return false;
+			if (!IsAllowedThousandSeparator() && !IsAllowedDecimalSeparator()) return false;
 
-				if (!IsDecimalPlaceDefined() && !IsValidThousandPlace() && IsAllowedDecimalSeparator())
+			if (!IsDecimalPlaceDefined() && IsAllowedDecimalSeparator())
+			{
+				if (!IsValidThousandPlace() || IsDecimalPlaceInSource())
 				{
 					SetDecimalPlace();
 					return true;
 				}
-
-				if (!IsValidThousandPlace() || !IsAllowedThousandSeparator()) return false;
-
-				AddThousandSeparatorPlace();
-				if (!IsDecimalPlaceDefined()) SetToNoDecimalPlace();
-
-				return true;
 			}
 
-			DigitsReversed.Add(character);
+			if (!IsValidThousandPlace() || !IsAllowedThousandSeparator()) return false;
+
+			AddThousandSeparatorPlace();
+			if (!IsDecimalPlaceDefined()) SetToNoDecimalPlace();
+
 			return true;
+		}
+
+		private bool IsDecimalPlaceInSource()
+		{
+			return _sourceNumber?.DecimalPlaceFromRight.Item1 == _indexOfAddition;
 		}
 
 		private void AddThousandSeparatorPlace()

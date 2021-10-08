@@ -460,23 +460,10 @@ namespace Sdl.Community.NumberVerifier
 				isHindiVerification = true;
 			}
 
-			_isSource = true;
-			var sourceNumbersNormalized = ValidateText(
-				numberModel.SourceText,
-				new SourceDecimalSeparatorsExtractComposer().Compose(),
-				new SourceThousandSeparatorsExtractComposer().Compose(),
-				VerificationSettings.SourceNoSeparator,
-				VerificationSettings.SourceOmitLeadingZero);
+			_numberNormalizer.GetNormalizedNumbers(numberModel.SourceText, numberModel.TargetText, VerificationSettings, out var sourceNumbersNormalized, out var targetNumbersNormalized);
 			var sourceNumberList = sourceNumbersNormalized?.InitialPartsList;
 			var sourceNormalizedNumberList = sourceNumbersNormalized?.NormalizedPartsList;
 
-			_isSource = false;
-			var targetNumbersNormalized = ValidateText(
-				numberModel.TargetText,
-				new TargetDecimalSeparatorsExtractComposer().Compose(),
-				new TargetThousandSeparatorsExtractComposer().Compose(),
-				VerificationSettings.TargetNoSeparator,
-				VerificationSettings.TargetOmitLeadingZero);
 			var targetNumberList = targetNumbersNormalized?.InitialPartsList;
 			var targetNormalizedNumberList = targetNumbersNormalized?.NormalizedPartsList;
 
@@ -641,16 +628,6 @@ namespace Sdl.Community.NumberVerifier
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 			}
-		}
-
-		private NumberList ValidateText(string text, IExtractProcessor decimalProcessor, IExtractProcessor thousandProcessor, bool noSeparator, bool omitLeadingZero)
-		{
-			var decimalSeparatorsData = decimalProcessor.Extract(new ExtractData(VerificationSettings, new[] { text }));
-			var thousandSeparatorData = thousandProcessor.Extract(new ExtractData(VerificationSettings, new[] { text }));
-			var decimalSeparators = _textFormatter.FormatSeparators(decimalSeparatorsData);
-			var thousandSeparators = _textFormatter.FormatSeparators(thousandSeparatorData);
-
-			return _numberNormalizer.GetNormalizedNumbers(text, VerificationSettings, _isSource);
 		}
 
 		private void RemoveNumbersIgnoreThousandsAndDecimalSeparators(IList sourceNumberList, IList<string> targetNormalizedNumberList,
