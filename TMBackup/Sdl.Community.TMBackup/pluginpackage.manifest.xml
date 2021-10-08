@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados TMBackup</PlugInName>
-  <Version>3.0.3.0</Version>
+  <Version>3.0.4.4</Version>
   <Description>This application provides a simple way to back up your Translation Memories and Termbases on a regular basis.</Description>>
   <Author>RWS AppStore Team</Author>
   <Include>
