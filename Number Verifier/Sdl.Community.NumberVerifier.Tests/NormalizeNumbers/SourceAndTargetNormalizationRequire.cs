@@ -804,7 +804,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	        //target settings
 	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
 	        numberVerifierSettings.Setup(t => t.TargetThousandsComma).Returns(true);
-	        numberVerifierSettings.Setup(t => t.TargetDecimalComma).Returns(false);
+	        numberVerifierSettings.Setup(t => t.TargetDecimalPeriod).Returns(true);
 
 	        // source settings
 	        numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);

@@ -12,14 +12,14 @@ namespace Sdl.Community.NumberVerifier.Model
 		private readonly List<string> _thousandSeparators;
 		private string _characterAsString;
 		private int _indexOfAddition;
-		private static Number _sourceNumber;
+		private static List<Number> _sourceNumber;
+		private static string _text;
+		private static int _currentProcessedNumberIndex;
 
 		private Number(List<string> thousandSeparators, List<string> decimalSeparators)
 		{
 			_thousandSeparators = thousandSeparators;
 			_decimalSeparators = decimalSeparators;
-
-			DecimalPlaceFromRight = (-1, null);
 		}
 
 		public int DigitCount => DigitsReversed.Count;
@@ -27,27 +27,25 @@ namespace Sdl.Community.NumberVerifier.Model
 
 		public (List<int>, string) ThousandSeparatorsPlacesFromRight { get; set; } = (null, null);
 
-		private (int, string) DecimalPlaceFromRight { get; set; }
+		public bool IsThousandSeparatorDefined() => ThousandSeparatorsPlacesFromRight != (null, null);
+
+		private (int, string) DecimalPlaceFromRight { get; set; } = (-1, null);
 		private List<char> DigitsReversed { get; } = new List<char>();
 
-		public static List<Number> Parse(string text, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero, Number sourceNumber = null)
+		public static List<Number> Parse(string text, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero, List<Number> sourceNumberList = null)
 		{
-			_sourceNumber = sourceNumber;
-			text = text.Trim();
+			_sourceNumber = sourceNumberList;
+			_text = text.Trim();
 			var numberList = new List<Number> { new Number(thousandSeparators, decimalSeparators) };
-			var index = 0;
+			_currentProcessedNumberIndex = 0;
 
 			var betweenNumbers = false;
-			for (var i = text.Length - 1; i >= 0; i--)
+			for (var i = _text.Length - 1; i >= 0; i--)
 			{
-				var currentCharacter = text[i];
-				var currentNumber = numberList[index];
-				if (!betweenNumbers)
-				{
-					if (char.IsDigit(currentCharacter)) currentNumber.DigitsReversed.Add(currentCharacter);
-					else betweenNumbers = !currentNumber.AddSymbol(currentCharacter);
-				}
-				else
+				var currentCharacter = _text[i];
+				var currentNumber = numberList[_currentProcessedNumberIndex];
+
+				if (betweenNumbers)
 				{
 					if (!char.IsDigit(currentCharacter)) continue;
 
@@ -55,11 +53,13 @@ namespace Sdl.Community.NumberVerifier.Model
 					if (!currentNumber.IsEmpty())
 					{
 						numberList.Add(new Number(thousandSeparators, decimalSeparators));
-						index++;
+						_currentProcessedNumberIndex++;
 					}
-
-					numberList[index].DigitsReversed.Add(currentCharacter);
 				}
+
+				if (char.IsDigit(currentCharacter)) numberList[_currentProcessedNumberIndex].DigitsReversed.Add(currentCharacter);
+				else betweenNumbers = !currentNumber.AddSymbol(currentCharacter);
+
 			}
 
 			if (omitZero)
@@ -68,6 +68,18 @@ namespace Sdl.Community.NumberVerifier.Model
 			}
 			return numberList;
 		}
+
+		public (int, string) GetNextThousandSeparatorFromText()
+		{
+			for (var i = ThousandSeparatorOffset + _characterAsString?.Length ?? 0; i < _text.Length; i += 3)
+			{
+				if (i > _indexOfAddition) return (i, _text[i].ToString());
+			}
+
+			return (-1, null);
+		}
+
+		public int ThousandSeparatorOffset => IsDecimalPlaceDefined() ? DecimalPlaceFromRight.Item1 : 0;
 
 		public void InsertSeparator(List<string> reversedNumber, int skippedDigitsTotal, string separator)
 		{
@@ -81,19 +93,19 @@ namespace Sdl.Community.NumberVerifier.Model
 
 			if (Sign != null)
 			{
-				digitsReversed.Add(normalize ? "m" : Sign);
+				digitsReversed.Add(normalize ? "s" : Sign);
 			}
 
 			if (IsDecimalPlaceSet())
 			{
-				digitsReversed.Insert(DecimalPlaceFromRight.Item1, normalize ? "m" : DecimalPlaceFromRight.Item2);
+				digitsReversed.Insert(DecimalPlaceFromRight.Item1, normalize ? "d" : DecimalPlaceFromRight.Item2);
 			}
 
 			if (normalize && _thousandSeparators.Contains(Constants.NoSeparator))
 			{
 				InsertSeparatorsAtAllThousandPlaces(digitsReversed);
 			}
-			else if (ThousandSeparatorsPlacesFromRight != (null, null))
+			else if (IsThousandSeparatorDefined())
 			{
 				InsertThousandSeparators(normalize, digitsReversed);
 			}
@@ -154,7 +166,8 @@ namespace Sdl.Community.NumberVerifier.Model
 
 			if (!IsDecimalPlaceDefined() && IsAllowedDecimalSeparator())
 			{
-				if (!IsValidThousandPlace() || IsDecimalPlaceInSource())
+				var differentApparentThousandSeparators = !IsThousandSeparatorDefined() && GetNextThousandSeparatorFromText().Item2 != _characterAsString;
+				if (!IsValidThousandPlace() || IsDecimalPlaceInSource() || differentApparentThousandSeparators)
 				{
 					SetDecimalPlace();
 					return true;
@@ -162,7 +175,7 @@ namespace Sdl.Community.NumberVerifier.Model
 			}
 
 			if (!IsValidThousandPlace() || !IsAllowedThousandSeparator()) return false;
-
+			
 			AddThousandSeparatorPlace();
 			if (!IsDecimalPlaceDefined()) SetToNoDecimalPlace();
 
@@ -171,7 +184,7 @@ namespace Sdl.Community.NumberVerifier.Model
 
 		private bool IsDecimalPlaceInSource()
 		{
-			return _sourceNumber?.DecimalPlaceFromRight.Item1 == _indexOfAddition;
+			return _sourceNumber?[_currentProcessedNumberIndex].DecimalPlaceFromRight.Item1 == _indexOfAddition;
 		}
 
 		private void AddThousandSeparatorPlace()
@@ -184,10 +197,9 @@ namespace Sdl.Community.NumberVerifier.Model
 
 		private void InsertSeparatorsAtAllThousandPlaces(List<string> digitsReversed)
 		{
-			var decimalPlaceOffset = IsDecimalPlaceDefined() ? DecimalPlaceFromRight.Item1 : 0;
-			for (var i = decimalPlaceOffset + 3; i < digitsReversed.Count - 1; i += 3)
+			for (var i = ThousandSeparatorOffset + 3; i < digitsReversed.Count - 1; i += 3)
 			{
-				InsertSeparator(digitsReversed, i, "m");
+				InsertSeparator(digitsReversed, i, "t");
 			}
 		}
 
@@ -195,7 +207,7 @@ namespace Sdl.Community.NumberVerifier.Model
 		{
 			foreach (var separatorPlaceFromRight in ThousandSeparatorsPlacesFromRight.Item1)
 			{
-				InsertSeparator(digitsReversed, separatorPlaceFromRight, normalize ? "m" : ThousandSeparatorsPlacesFromRight.Item2);
+				InsertSeparator(digitsReversed, separatorPlaceFromRight, normalize ? "t" : ThousandSeparatorsPlacesFromRight.Item2);
 			}
 		}
 
@@ -237,8 +249,7 @@ namespace Sdl.Community.NumberVerifier.Model
 		private bool IsValidThousandPlace()
 		{
 			if (_indexOfAddition < 3) return false;
-			var offset = IsDecimalPlaceDefined() ? DecimalPlaceFromRight.Item1 : 0;
-			return (_indexOfAddition - offset) % 3 == 0;
+			return (_indexOfAddition - ThousandSeparatorOffset) % 3 == 0;
 		}
 
 		private void SetDecimalPlace()

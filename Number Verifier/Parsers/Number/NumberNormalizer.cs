@@ -14,8 +14,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		public void GetNormalizedNumbers(string sourceText, string targetText, INumberVerifierSettings settings, out NumberList sourceNumberList, out NumberList targetNumberList)
 		{
 			_settings = settings;
-			sourceNumberList = GetNormalizedNumbers(sourceText, settings, true);
-			targetNumberList = GetNormalizedNumbers(targetText, settings, false);
+			(sourceNumberList, targetNumberList) = GetNormalizedNumbers(sourceText, targetText, settings);
 		}
 
 		public List<string> ToNormalizedNumbers(List<NumberVerifier.Model.Number> numbers)
@@ -73,22 +72,45 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			return thousandSeparatorsList;
 		}
 
-		private NumberList GetNormalizedNumbers(string sourceText, INumberVerifierSettings settings, bool isSource)
+		private (NumberList, NumberList) GetNormalizedNumbers(string sourceText, string targetText, INumberVerifierSettings settings)
 		{
-			if (sourceText is null) return null;
-			var thousandSeparators = GetAllowedThousandSeparators(isSource);
-			var decimalSeparators = GetAllowedDecimalSeparators(isSource);
+			var sourceThousandSeparators = GetAllowedThousandSeparators(true);
+			var sourceDecimalSeparators = GetAllowedDecimalSeparators(true);
+			
+			var targetThousandSeparators = GetAllowedThousandSeparators(false);
+			var targetDecimalSeparators = GetAllowedDecimalSeparators(false);
 
-			var numbers = NumberVerifier.Model.Number.Parse(sourceText, thousandSeparators, decimalSeparators,
-				isSource ? settings.SourceOmitLeadingZero : settings.TargetOmitLeadingZero);
+			var sourceNumbers = new List<NumberVerifier.Model.Number>();
+			if (sourceText != null)
+			{
+				sourceNumbers = NumberVerifier.Model.Number.Parse(sourceText, sourceThousandSeparators, sourceDecimalSeparators,
+					settings.SourceOmitLeadingZero);
+			}
 
-			var initialParts = new List<string>();
-			ToNumbers(numbers).ForEach(ip => initialParts.Add(ip.Normalize(NormalizationForm.FormKC)));
+			var targetNumbers = new List<NumberVerifier.Model.Number>();
+			if (targetText != null)
+			{
+				targetNumbers = NumberVerifier.Model.Number.Parse(targetText, targetThousandSeparators, targetDecimalSeparators,
+					settings.TargetOmitLeadingZero, sourceNumbers);
+			}
 
-			var normalizedNumbers = new List<string>();
-			ToNormalizedNumbers(numbers).ForEach(nn => normalizedNumbers.Add(nn.Normalize(NormalizationForm.FormKC)));
+			var initialSourceNumbers = new List<string>();
+			ToNumbers(sourceNumbers).ForEach(ip => initialSourceNumbers.Add(ip.Normalize(NormalizationForm.FormKC)));
 
-			return new NumberList(initialParts, normalizedNumbers);
+			var normalizedSourceNumbers = new List<string>();
+			ToNormalizedNumbers(sourceNumbers).ForEach(nn => normalizedSourceNumbers.Add(nn.Normalize(NormalizationForm.FormKC)));
+
+
+			var initialTargetNumbers = new List<string>();
+			ToNumbers(targetNumbers).ForEach(ip => initialTargetNumbers.Add(ip.Normalize(NormalizationForm.FormKC)));
+
+			var normalizedTargetNumbers = new List<string>();
+			ToNormalizedNumbers(targetNumbers).ForEach(nn => normalizedTargetNumbers.Add(nn.Normalize(NormalizationForm.FormKC)));
+
+			return
+				(
+					sourceNumbers.Count > 0 ? new NumberList(initialSourceNumbers, normalizedSourceNumbers) : null,
+						targetNumbers.Count > 0 ? new NumberList(initialTargetNumbers, normalizedTargetNumbers) : null);
 		}
 	}
 }

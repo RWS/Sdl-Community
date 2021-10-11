@@ -33,7 +33,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var numberList = OmitZeroChecked(number);
 
-			Assert.Equal("0m55", numberList.NormalizedPartsList[0]);
+			Assert.Equal("0d55", numberList.NormalizedPartsList[0]);
 			Assert.Equal("0.55", numberList.InitialPartsList[0]);
 		}
 
@@ -55,7 +55,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
 
-			Assert.Equal("m55", normalizedNumber.NormalizedPartsList[0]);
+			Assert.Equal("d55", normalizedNumber.NormalizedPartsList[0]);
 
 			return normalizedNumber.NormalizedPartsList[0];
 		}
@@ -66,7 +66,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
 
-			Assert.Equal("0m55", normalizedNumber.NormalizedPartsList[0]);
+			Assert.Equal("0d55", normalizedNumber.NormalizedPartsList[0]);
 		}
 
 		[Theory]
@@ -81,7 +81,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			_numberNormalizer.GetNormalizedNumbers(null, text, mockSettings.Object, out _, out var normalizedNumber);
 
-			Assert.Equal("m0m55", normalizedNumber.NormalizedPartsList[0]);
+			Assert.Equal("s0d55", normalizedNumber.NormalizedPartsList[0]);
 
 			return normalizedNumber.NormalizedPartsList[0];
 		}
@@ -91,7 +91,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void OmitZeroShortFormNegativeNumbersSpecialMinusSign(string text)
 		{
 			var normalizedNumber = OmitZeroShortFormNegativeNumbers(text);
-			Assert.Equal("m0m55", normalizedNumber);
+			Assert.Equal("s0d55", normalizedNumber);
 		}
 
 		[Theory]
@@ -109,8 +109,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			mockSettings.Setup(s => s.TargetDecimalComma).Returns(true);
 			_numberNormalizer.GetNormalizedNumbers(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
 
-			Assert.Equal("m0m55", normalizedNumberWithPeriod.NormalizedPartsList[0]);
-			Assert.Equal("m0m55", normalizedNumberWithComma.NormalizedPartsList[0]);
+			Assert.Equal("s0d55", normalizedNumberWithPeriod.NormalizedPartsList[0]);
+			Assert.Equal("s0d55", normalizedNumberWithComma.NormalizedPartsList[0]);
 		}
 
 		#region Omit leading zero option is unchecked
