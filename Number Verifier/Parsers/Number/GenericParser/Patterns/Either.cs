@@ -23,9 +23,12 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 					return new NoMoreText();
 
 				var match = el.Match(text);
+				match.Name = Name;
 
 				if (match.Success)
+				{
 					return match;
+				}
 			}
 
 			return new NoMatch();

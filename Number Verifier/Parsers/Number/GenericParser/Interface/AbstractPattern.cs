@@ -5,19 +5,18 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface
 {
 	public abstract class AbstractPattern : IPattern
 	{
+		protected List<IMatch> MatchArray { get; set; }
 		public abstract IMatch Match(TextToParse text);
 
-		public List<IMatch> MatchAll(TextToParse text)
+		public void MatchAll(TextToParse text)
 		{
-			var matchArray = new List<IMatch>();
+			MatchArray = new List<IMatch>();
 			while (!text.IsAtEnd())
 			{
 				var currentMatch = Match(text);
-				if (currentMatch.Success) matchArray.Add(currentMatch);
+				if (currentMatch.Success) MatchArray.Add(currentMatch);
 				else text.Advance();
 			}
-
-			return matchArray;
 		}
 
 		public string Name { get; set; }

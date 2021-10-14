@@ -9,7 +9,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 		private readonly IPattern _optionalPattern;
 
 		public Optional(IPattern pattern) => _optionalPattern = pattern;
-		public bool Flatten { get; set; }
 
 		public override IMatch Match(TextToParse text)
 		{

@@ -32,6 +32,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 
 			if (matchesArray.Matches.Any() && matchesArray.Matches.All(el => el.Success)) matchesArray.Success = true;
 
+			matchesArray.Name = Name;
 			return matchesArray;
 		}
 	}

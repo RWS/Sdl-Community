@@ -16,8 +16,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.GenericParser
 
 			var realNumber = new RealNumber(thousandSeparators, decimalSeparators);
 
-			var sourceMatch = realNumber.MatchAll(new TextToParse(source));
-			var targetMatch = realNumber.MatchAll(new TextToParse(target));
+			realNumber.MatchAll(new TextToParse(source));
+			realNumber.MatchAll(new TextToParse(target));
 			
 		}
 	}

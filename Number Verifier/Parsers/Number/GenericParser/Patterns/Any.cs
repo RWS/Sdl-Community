@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Events;
+﻿using System.Collections.Generic;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
@@ -10,12 +7,20 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 {
 	public class Any : AbstractPattern
 	{
+		private readonly bool _keepConsistent;
 		private readonly List<string> _pattern;
-		public event MatchedEventHandler Matched;
 
-		public Any(List<string> text)
+		/// <summary>
+		/// Match any string in list
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="keepConsistent">
+		/// <see langword="true"/>The first string found will be used consistently (all others will be removed from list
+		/// <see langword="false"/> Every string in the list will be used at every possible match location</param>
+		public Any(List<string> list, bool keepConsistent = false)
 		{
-			_pattern = text;
+			_pattern = list;
+			_keepConsistent = keepConsistent;
 		}
 
 		public override IMatch Match(TextToParse text)
@@ -31,7 +36,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 					Name = Name
 				};
 
-				Matched?.Invoke(match.Value);
+				if (_keepConsistent && _pattern.Count > 1) _pattern.RemoveAll(el => el != match.Value);
 
 				text.Advance();
 				return match;

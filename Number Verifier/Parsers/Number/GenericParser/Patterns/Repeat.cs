@@ -4,49 +4,46 @@ using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 
 namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 {
-    public class Repeat : AbstractPattern
-    {
-	    private readonly IPattern _pattern;
+	public class Repeat : AbstractPattern
+	{
+		private readonly int _end;
+		private readonly IPattern _pattern;
 		private readonly int _start;
-	    private readonly int _end;
+		private int _count;
 
-        public Repeat(IPattern pattern, int start = 0, int end = 0)
-        {
-            _pattern = pattern;
-            _start = start;
-            _end = end;
-        }
+		public Repeat(IPattern pattern, int start = 0, int end = 0)
+		{
+			_pattern = pattern;
+			_start = start;
+			_end = end;
+		}
 
-        public override IMatch Match(TextToParse text)
-        {
-            var matchedText = "";
-	        var originalText = text;
-			var isExactNumberOfMatches = _start == _end && _start != 0;
+		private bool InRange => _count >= _start && (!IsLimited || _count <= _end);
 
-            var match = _pattern.Match(text);
-            
-            var count = 0;
+		private bool IsLimited => _end != 0;
 
-	        var matchesArray = new MatchArray { Success = false };
-            while (match.Success && (!isExactNumberOfMatches || count != _end))
-            {
-                count++;
+		private bool ReachedEnd => _count == _end;
 
-                matchesArray.AddPattern(match);
-                match = _pattern.Match(text);
-            }
+		public override IMatch Match(TextToParse text)
+		{
+			_count = 0;
+			var matchesArray = new MatchArray { Success = false };
+			while (IsLimited && !ReachedEnd || !IsLimited)
+			{
+				var match = _pattern.Match(text);
+				if (!match.Success) break;
 
-            if (count >= _start && (_end == 0 || count <= _end))
-            {
-	            matchesArray.Success = true;
-	            return matchesArray;
-            }
+				_count++;
+				matchesArray.AddPattern(match);
+			}
 
-            if ((count < _start && count > 0) || count > _end)
-                return (new NoMatch($"Wrong number of <{_pattern}> objects", _pattern.ToString(), originalText.CurrentIndex));
+			if (InRange)
+			{
+				matchesArray.Success = true;
+				return matchesArray;
+			}
 
-            var noMatch = match as NoMatch;
-            return (new NoMatch(matchedText + noMatch.Value, noMatch.Expected ,matchedText.Length + noMatch.Value.Length-3));
-        }
-    }
+			return (new NoMatch());
+		}
+	}
 }

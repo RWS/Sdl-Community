@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
@@ -20,6 +21,16 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 		private IntegerNumber IntegerNumber { get; set; }
 		private Sequence Number { get; set; }
 
+		//public List<string> ToNumberList(bool normalize = false)
+		//{
+		//	List<string> numberList;
+		//	foreach (var match in MatchArray)
+		//	{
+		//		var realNumberMatch = (MatchArray)match;
+		//		var realNumberString = $"{realNumberMatch["Integer"]}"
+		//	}
+		//}
+
 		public override IMatch Match(TextToParse text)
 		{
 			ResetNumber();
@@ -31,7 +42,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 				{
 					EnsureUnambiguousDecimalSeparator(match as MatchArray);
 
-					(match as MatchArray)?.Flatten();
+					//(match as MatchArray)?.Flatten();
 					return match;
 				}
 
@@ -64,15 +75,16 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 					)
 				)
 			{
-				Name = "Fraction",
-				Flatten = true
+				Name = "Fraction"
 			};
 
 			Number =
 				new Sequence(
 					IntegerNumber,
-					FractionalNumber
-					);
+					FractionalNumber)
+				{
+					Name = "RealNumber"
+				};
 		}
 
 		private void EnsureUnambiguousDecimalSeparator(MatchArray match)
