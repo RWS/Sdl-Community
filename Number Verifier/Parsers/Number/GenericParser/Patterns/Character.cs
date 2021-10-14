@@ -1,8 +1,9 @@
-﻿using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Interface;
-using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Matches;
-using Match = Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Matches.Match;
+﻿using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
+using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
+using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
+using Match = Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches.Match;
 
-namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Patterns
+namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 {
 	public class Character : AbstractPattern
 	{

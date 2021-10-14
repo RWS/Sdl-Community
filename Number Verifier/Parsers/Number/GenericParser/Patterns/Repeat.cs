@@ -1,15 +1,16 @@
-﻿using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Interface;
-using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Matches;
+﻿using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
+using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
+using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 
-namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Patterns
+namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 {
-    public class Many : AbstractPattern
+    public class Repeat : AbstractPattern
     {
 	    private readonly IPattern _pattern;
 		private readonly int _start;
 	    private readonly int _end;
 
-        public Many(IPattern pattern, int start = 0, int end = 0)
+        public Repeat(IPattern pattern, int start = 0, int end = 0)
         {
             _pattern = pattern;
             _start = start;
@@ -19,14 +20,15 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Patterns
         public override IMatch Match(TextToParse text)
         {
             var matchedText = "";
-	        var matchesArray = new MatchArray { Success = false };
 	        var originalText = text;
+			var isExactNumberOfMatches = _start == _end && _start != 0;
 
             var match = _pattern.Match(text);
             
             var count = 0;
 
-            while (match.Success)
+	        var matchesArray = new MatchArray { Success = false };
+            while (match.Success && (!isExactNumberOfMatches || count != _end))
             {
                 count++;
 
@@ -44,7 +46,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Patterns
                 return (new NoMatch($"Wrong number of <{_pattern}> objects", _pattern.ToString(), originalText.CurrentIndex));
 
             var noMatch = match as NoMatch;
-            return (new NoMatch(matchedText + noMatch.Current, noMatch.Expected ,matchedText.Length + noMatch.Current.Length-3));
+            return (new NoMatch(matchedText + noMatch.Value, noMatch.Expected ,matchedText.Length + noMatch.Value.Length-3));
         }
     }
 }

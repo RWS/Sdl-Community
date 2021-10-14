@@ -4,6 +4,8 @@ using System.Text;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
+using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns;
+using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 
 namespace Sdl.Community.NumberVerifier.Parsers.Number
 {
@@ -14,6 +16,8 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		public void GetNormalizedNumbers(string sourceText, string targetText, INumberVerifierSettings settings, out NumberList sourceNumberList, out NumberList targetNumberList)
 		{
 			_settings = settings;
+			(sourceNumberList, targetNumberList) = GetNormalizedNumbers2(sourceText, targetText, settings);
+			
 			(sourceNumberList, targetNumberList) = GetNormalizedNumbers(sourceText, targetText, settings);
 		}
 
@@ -70,6 +74,21 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			ApplyTargetSettings(sourceThousandSeparators, targetThousandSeparators, thousandSeparatorsList);
 
 			return thousandSeparatorsList;
+		}
+
+		private (NumberList, NumberList) GetNormalizedNumbers2(string sourceText, string targetText, INumberVerifierSettings settings)
+		{
+			var sourceThousandSeparators = GetAllowedThousandSeparators(true);
+			var sourceDecimalSeparators = GetAllowedDecimalSeparators(true);
+
+			var targetThousandSeparators = GetAllowedThousandSeparators(false);
+			var targetDecimalSeparators = GetAllowedDecimalSeparators(false);
+
+			//var realNumber = new RealNumber();
+
+			//var sourceMatches = realNumber.MatchAll(new TextToParse(sourceText));
+
+			return (null, null);
 		}
 
 		private (NumberList, NumberList) GetNormalizedNumbers(string sourceText, string targetText, INumberVerifierSettings settings)

@@ -1,6 +1,6 @@
-﻿using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Interface;
+﻿using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
 
-namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Matches
+namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 {
 	public class NoMatch : IMatch
 	{
@@ -10,20 +10,22 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Matches
 
 		public NoMatch(string noMatch, string expected, int index)
 		{
-			Current = noMatch;
+			Value = noMatch;
 			IndexOfNoMatch = index;
 			Expected = expected;
 		}
 
-		public string Current { get; set; }
+		public string Value { get; set; }
+		
 		public string Expected { get; }
 
 		public int IndexOfNoMatch { get; }
 		public bool Success { get; set; } = false;
+		public string Name { get; set; }
 
 		public override string ToString()
 		{
-			return $"{Current}<{IndexOfNoMatch}>";
+			return $"{Value}<{IndexOfNoMatch}>";
 		}
 	}
 }

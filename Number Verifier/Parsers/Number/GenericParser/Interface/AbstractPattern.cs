@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 
-namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Interface
+namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface
 {
 	public abstract class AbstractPattern : IPattern
 	{
@@ -18,5 +19,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser.Interface
 
 			return matchArray;
 		}
+
+		public string Name { get; set; }
 	}
 }
