@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 
-namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
+namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns.Specialized
 {
 	public class RealNumber : AbstractPattern
 	{
@@ -42,8 +41,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 				{
 					EnsureUnambiguousDecimalSeparator(match as MatchArray);
 
-					//(match as MatchArray)?.Flatten();
-					return match;
+					return (match as MatchArray)?.FlattenByNamedGroups();
 				}
 
 				text.Advance();

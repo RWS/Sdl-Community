@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns;
+using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns.Specialized;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 using Xunit;
 

@@ -191,14 +191,14 @@
     <Compile Include="Parsers\Number\GenericParser\Patterns\AtLeastOnce.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Character.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Either.cs" />
-    <Compile Include="Parsers\Number\GenericParser\Patterns\IntegerNumber.cs" />
+    <Compile Include="Parsers\Number\GenericParser\Patterns\Specialized\IntegerNumber.cs" />
     <Compile Include="Parsers\Number\GenericParser\Interface\IMatch.cs" />
     <Compile Include="Parsers\Number\GenericParser\Interface\AbstractPattern.cs" />
     <Compile Include="Parsers\Number\GenericParser\Matches\MatchArray.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Repeat.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Optional.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Range.cs" />
-    <Compile Include="Parsers\Number\GenericParser\Patterns\RealNumber.cs" />
+    <Compile Include="Parsers\Number\GenericParser\Patterns\Specialized\RealNumber.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Sequence.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Text.cs" />
     <Compile Include="Parsers\Number\GenericParser\TextToParse.cs" />

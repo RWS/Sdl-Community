@@ -8,16 +8,28 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 	{
 		public string Value { get; set; }
 
-		public void Flatten()
+		public IMatch FlattenByNamedGroups()
 		{
-			if (Matches == null || Matches.Count == 0) return;
+			var newMatches = Matches.Select(item => item is MatchArray matchArray ? matchArray.FlattenByNamedGroups() : item).ToList();
+			newMatches.RemoveAll(m => m?.Name == null);
 
-			Matches?.ForEach(m => (m as MatchArray)?.Flatten());
+			if (Name == null)
+			{
+				switch (newMatches.Count)
+				{
+					case 0:
+						return null;
+					case 1:
+						return newMatches[0];
+				}
+			}
 
-			if (Matches.Count == 1 && Matches[0] is MatchArray matchArray) Matches = matchArray.Matches;
+			if (newMatches.Count == 0) return new Match(Value) { Name = Name };
 
+			Matches = newMatches;
+			return this;
 		}
-
+		
 		public List<IMatch> Matches { get; set; } = new List<IMatch>();
 
 		public bool Success { get; set; }

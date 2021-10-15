@@ -14,7 +14,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface
 			while (!text.IsAtEnd())
 			{
 				var currentMatch = Match(text);
-				if (currentMatch.Success) MatchArray.Add(currentMatch);
+				if (currentMatch?.Success ?? false) MatchArray.Add(currentMatch);
 				else text.Advance();
 			}
 		}
