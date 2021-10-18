@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
@@ -20,15 +21,59 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns.Spe
 		private IntegerNumber IntegerNumber { get; set; }
 		private Sequence Number { get; set; }
 
-		//public List<string> ToNumberList(bool normalize = false)
-		//{
-		//	List<string> numberList;
-		//	foreach (var match in MatchArray)
-		//	{
-		//		var realNumberMatch = (MatchArray)match;
-		//		var realNumberString = $"{realNumberMatch["Integer"]}"
-		//	}
-		//}
+		public List<string> ToNumberList()
+		{
+			var numberList = new List<string>();
+			foreach (var match in MatchArray)
+			{
+				var realNumberMatch = (MatchArray)match;
+				var realNumberString = $"{realNumberMatch["Integer"].Value}{realNumberMatch["Fraction"]?.Value}";
+
+				numberList.Add(realNumberString);
+			}
+
+			return numberList;
+		}
+		
+		public List<string> ToNormalizedNumberList()
+		{
+			var numberList = new List<string>();
+			foreach (var match in MatchArray)
+			{
+				var realNumberMatch = (MatchArray)match;
+				var thousandSeparator = realNumberMatch["ThousandSeparator"]?.Value;
+				var decimalSeparator = realNumberMatch["DecimalSeparator"]?.Value;
+
+				var integerPart = realNumberMatch["Integer"]?.Value;
+				var signPart = realNumberMatch["Sign"]?.Value;
+				string normalizedIntegerPart = null;
+				if (integerPart is not null)
+				{
+					normalizedIntegerPart = signPart is null
+						? integerPart
+						: integerPart.Replace(signPart, "s");
+
+					normalizedIntegerPart = thousandSeparator is null
+						? normalizedIntegerPart
+						: normalizedIntegerPart.Replace(thousandSeparator, "t");
+				}
+
+				var fractionPart = realNumberMatch["Fraction"]?.Value;
+				string normalizedFractionPart = null;
+				if (fractionPart is not null)
+				{
+					normalizedFractionPart = decimalSeparator is null
+						? fractionPart
+						: fractionPart.Replace(decimalSeparator, "d");
+				}
+
+				var realNumberString = $"{normalizedIntegerPart}{normalizedFractionPart}";
+
+				numberList.Add(realNumberString);
+			}
+
+			return numberList;
+		}
 
 		public override IMatch Match(TextToParse text)
 		{

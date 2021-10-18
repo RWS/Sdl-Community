@@ -30,7 +30,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 			return this;
 		}
 		
-		public List<IMatch> Matches { get; set; } = new List<IMatch>();
+		public List<IMatch> Matches { get; set; } = new();
 
 		public bool Success { get; set; }
 		public string Name { get; set; }
@@ -44,7 +44,16 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 			Matches.Add(match);
 		}
 
-		public IMatch this[string key] => Matches.FirstOrDefault(m => m.Name == key);
+		public IMatch this[string key]
+		{
+			get
+			{
+				var matchfound = Matches.FirstOrDefault(m => m.Name == key);
+				return matchfound ??
+				       Matches.Where(m => m is MatchArray).Cast<MatchArray>().Select(matchArray => matchArray[key]).FirstOrDefault(
+					       subArray => subArray is not null);
+			}
+		}
 
 		public override string ToString()
 		{

@@ -5,7 +5,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface
 {
 	public abstract class AbstractPattern : IPattern
 	{
-		protected List<IMatch> MatchArray { get; set; }
+		public List<IMatch> MatchArray { get; set; }
 		public abstract IMatch Match(TextToParse text);
 
 		public void MatchAll(TextToParse text)
