@@ -10,14 +10,15 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using Newtonsoft.Json;
+using Reports.Viewer.Api;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Api.Providers;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
-using Sdl.Reports.Viewer.API;
-using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.Versioning;
@@ -32,6 +33,7 @@ using Trados.Transcreate.Model.ProjectSettings;
 using Trados.Transcreate.Service;
 using Trados.Transcreate.View;
 using Trados.Transcreate.ViewModel;
+using Constants = Trados.Transcreate.Common.Constants;
 using IProject = Trados.Transcreate.Interfaces.IProject;
 using LanguageDirectionInfo = Trados.Transcreate.Model.LanguageDirectionInfo;
 using PathInfo = Trados.Transcreate.Common.PathInfo;
@@ -67,6 +69,10 @@ namespace Trados.Transcreate
 		private ReportService _reportService;
 		private StudioVersionService _studioVersionService;
 
+
+		private Reports.Viewer.Api.Model.PathInfo _reviewerPathInfo;
+		private TaskTemplateIdProvider _taskTemplateIdProvider;
+
 		protected override void Initialize(IViewContext context)
 		{
 			ClientId = Guid.NewGuid().ToString();
@@ -81,6 +87,13 @@ namespace Trados.Transcreate
 			_editorController.Opened += EditorController_Opened;
 			_editorController.Closed += EditorController_Closed;
 
+			_reviewerPathInfo = new Reports.Viewer.Api.Model.PathInfo();
+			_taskTemplateIdProvider = new TaskTemplateIdProvider();
+			ReportsController = new ReportsController(
+				_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault(),
+				_reviewerPathInfo, _taskTemplateIdProvider);
+
+
 			Controllers = new Controllers(_projectsController, _filesController, _editorController, this);
 
 			_pathInfo = new PathInfo();
@@ -93,10 +106,9 @@ namespace Trados.Transcreate
 				_imageService, this, _projectsController, _customerProvider, _studioVersionService);
 			_reportService = new ReportService(_pathInfo, _projectAutomationService, _segmentBuilder);
 
-			ReportsController = ReportsController.Instance;
-
 			LoadProjects();
 		}
+
 
 		public Controllers Controllers { get; private set; }
 
@@ -304,7 +316,7 @@ namespace Trados.Transcreate
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, project);
 			if (reports.Count > 0)
 			{
-				ReportsController.AddReports(ClientId, reports);
+				ReportsController.AddReports(reports);
 			}
 
 			UpdateProjectSettingsBundle(project);
@@ -375,7 +387,7 @@ namespace Trados.Transcreate
 			var reports = CreateHtmlReports(taskContext, taskContext.FileBasedProject, backTranslationProject);
 			if (reports.Count > 0)
 			{
-				ReportsController.AddReports(ClientId, reports);
+				ReportsController.AddReports(reports);
 			}
 
 			UpdateBackTranslationProjectSettingsBundle(parentProject);
@@ -697,7 +709,7 @@ namespace Trados.Transcreate
 				// required to force studio to recognize a 'case' difference.
 				projectInfo.ProjectOrigin = string.Empty;
 				project.UpdateProject(projectInfo);
-				
+
 				projectInfo.ProjectOrigin = Constants.ProjectOrigin_TranscreateProject;
 				project.UpdateProject(projectInfo);
 				project.Save();
@@ -1556,7 +1568,38 @@ namespace Trados.Transcreate
 			if (e.Active)
 			{
 				SetProjectFileActivityViewController();
+
+				var currentProject = _projectsController.CurrentProject;
+				var selectedProject = _projectsNavigationViewModel?.SelectedProject;
+
+				if (selectedProject == null)
+				{
+					return;
+				}
+
+				if (currentProject.GetProjectInfo()?.Id.ToString() != selectedProject.Id)
+				{
+					var studioProject = GetStudioProject(selectedProject.Id);
+					if (studioProject != null)
+					{
+						_projectsController.ActivateProject(studioProject);
+						_projectsController.SelectedProjects = new List<FileBasedProject> { studioProject };
+					}
+				}
 			}
+		}
+
+		private FileBasedProject GetStudioProject(string id)
+		{
+			foreach (var project in _projectsController.GetAllProjects())
+			{
+				if (project.GetProjectInfo()?.Id.ToString() == id)
+				{
+					return project;
+				}
+			}
+
+			return null;
 		}
 
 		private void SetProjectFileActivityViewController()
@@ -1636,7 +1679,7 @@ namespace Trados.Transcreate
 									_projectAutomationService.ActivateProject(fileBasedProject);
 								}
 
-								_projectsController.SelectedProjects = new[] {fileBasedProject};
+								_projectsController.SelectedProjects = new[] { fileBasedProject };
 							}
 							catch
 							{
@@ -1660,6 +1703,8 @@ namespace Trados.Transcreate
 				return;
 			}
 
+			ReportsController = new ReportsController(_projectsController.CurrentProject, _reviewerPathInfo, _taskTemplateIdProvider);
+
 			var updated = AddNewProjectToContainer(_projectsController?.CurrentProject);
 			if (!updated)
 			{
@@ -1679,7 +1724,7 @@ namespace Trados.Transcreate
 				{
 					return;
 				}
-				
+
 				lock (_lockObject)
 				{
 					var projectInfo = GetNormalizedProjectOrigin(_projectsController?.CurrentProject);

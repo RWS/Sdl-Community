@@ -8,11 +8,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Newtonsoft.Json;
+using Reports.Viewer.Api.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
-using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Versioning;
 using Trados.Transcreate.Common;
@@ -141,7 +141,7 @@ namespace Trados.Transcreate.Service
 			var report = task.Result?.OrderByDescending(a => a.Date).FirstOrDefault(a => a.Group == groupType);
 			if (report != null)
 			{
-				_controller.ReportsController.RemoveReports(_controller.ClientId, new List<string> { report.Id });
+				_controller.ReportsController.RemoveReports(new List<Guid> { report.Id });
 			}
 		}
 
@@ -152,7 +152,7 @@ namespace Trados.Transcreate.Service
 
 			if (task.Result != null)
 			{
-				_controller.ReportsController.RemoveReports(_controller.ClientId, task.Result.Select(a => a.Id).ToList());
+				_controller.ReportsController.RemoveReports(task.Result.Select(a => a.Id).ToList());
 			}
 		}
 

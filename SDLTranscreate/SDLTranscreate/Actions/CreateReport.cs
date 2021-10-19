@@ -67,8 +67,7 @@ namespace Trados.Transcreate.Actions
 			var reports = reportService.CreateFinalReport(project, studioProject, selectedFiles, out var workingPath);
 			if (reports.Count > 0)
 			{
-				_controllers.TranscreateController.ReportsController.AddReports(_controllers.TranscreateController.ClientId,
-					reports);
+				_controllers.TranscreateController.ReportsController.AddReports(reports);
 
 				var dr = MessageBox.Show(PluginResources.Message_TranscreateReportsCreatedSuccessfully
 				                         + Environment.NewLine + Environment.NewLine +
