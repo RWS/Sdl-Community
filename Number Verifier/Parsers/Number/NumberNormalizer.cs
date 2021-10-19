@@ -72,7 +72,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 			if (isSource) thousandSeparatorsList.AddRange(sourceThousandSeparators);
 
-			ApplyTargetSettings(sourceThousandSeparators, targetThousandSeparators, thousandSeparatorsList);
+			else ApplyTargetSettings(sourceThousandSeparators, targetThousandSeparators, thousandSeparatorsList);
 
 			return thousandSeparatorsList.Select(Regex.Unescape).ToList();
 		}
