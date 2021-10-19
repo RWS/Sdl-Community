@@ -70,6 +70,8 @@ namespace Sdl.Community.Reports.Viewer
 			_printReportAction = SdlTradosStudio.Application.GetAction<PrintReportAction>();
 			_refreshAction = SdlTradosStudio.Application.GetAction<RefreshAction>();
 			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
+
+			ActivationChanged += ReportsViewerController_ActivationChanged;
 		}
 
 		protected override IUIControl GetExplorerBarControl()
@@ -355,11 +357,24 @@ namespace Sdl.Community.Reports.Viewer
 		private void ProjectsControllerOnCurrentProjectChanged(object sender, EventArgs e)
 		{
 			_reportsController = new ReportsController(_projectsController.CurrentProject, _pathInfo, _taskTemplateIdProvider);
+			if (_reportsNavigationViewModel != null)
+			{
+				_reportsNavigationViewModel.ProjectLocalFolder = _reportsController.ProjectLocalFolder;
+				RefreshView();
+			}
 		}
 
 		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
 		{
 			ReportSelectionChanged?.Invoke(this, e);
+		}
+
+		private void ReportsViewerController_ActivationChanged(object sender, ActivationChangedEventArgs e)
+		{
+			if (e.Active && _reportsController.IsDirty)
+			{
+				RefreshView();
+			}
 		}
 	}
 }
