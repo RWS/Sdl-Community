@@ -8,7 +8,6 @@
              xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
              xmlns:model="clr-namespace:Sdl.Community.Reports.Viewer.Model"
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
-             xmlns:model1="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
              xmlns:behaviours="clr-namespace:Sdl.Community.Reports.Viewer.Behaviours"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:DataViewModel}">
@@ -18,7 +17,6 @@
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/General.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ExpanderStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TreeView.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ButtonsStyle.xaml"/>
@@ -64,7 +62,7 @@
 
 				<DataGridTemplateColumn Header="Name" CanUserSort="True" IsReadOnly="True" SortMemberPath="Name" Width="2*" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model1:Report">
+						<DataTemplate DataType="model:Report">
 							<Grid Margin="5,0,2,0" VerticalAlignment="Top">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
@@ -99,7 +97,7 @@
 
 				<DataGridTemplateColumn Header="Group" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="1*">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model1:Report">
+						<DataTemplate DataType="model:Report">
 							<TextBlock VerticalAlignment="Top" Margin="0,2,2,0">
 								<TextBlock.Style>
 									<Style TargetType="TextBlock">
@@ -121,7 +119,7 @@
 
 				<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" SortMemberPath="Name" Width="1*" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model1:Report">
+						<DataTemplate DataType="model:Report">
 							<Grid Margin="5,0,2,0" VerticalAlignment="Top">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
@@ -163,7 +161,7 @@
 				
 				<DataGridTemplateColumn Header="Date" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model1:Report">
+						<DataTemplate DataType="model:Report">
 							<TextBlock ToolTip="{Binding DateToString}" Margin="0,2,2,0"
 							           Text="{Binding DateToString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
 						</DataTemplate>
@@ -172,7 +170,7 @@
 
 				<DataGridTemplateColumn Header="Description" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model1:Report">
+						<DataTemplate DataType="model:Report">
 							<TextBlock ToolTip="{Binding Description}" Margin="0,2,2,0"
 								Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
 						</DataTemplate>
@@ -181,7 +179,7 @@
 
 				<DataGridTemplateColumn Header="Path" Width="2*" CanUserSort="True">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate DataType="model1:Report">
+						<DataTemplate DataType="model:Report">
 							<controls:TextBoxWithEllipsis Margin="2,2,4,0" IsReadOnly="True" Background="Transparent"
 							                              BorderThickness="0" BorderBrush="Transparent"
 							                              EllipsisPlacement="Left"

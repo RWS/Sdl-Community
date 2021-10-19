@@ -1,6 +1,4 @@
-﻿using Sdl.Reports.Viewer.API.Model;
-
-namespace Sdl.Community.Reports.Viewer.Model
+﻿namespace Reports.Viewer.Api.Model
 {
 	public class ReportTemplateScope
 	{

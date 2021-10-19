@@ -7,10 +7,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Reports.Viewer.Api.Model;
 using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
-using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
@@ -27,8 +27,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _removeReportCommand;
 		private ICommand _openFolderCommand;
 		private ICommand _printReportCommand;
-		private ICommand _printPreviewCommand;
-		private ICommand _pageSetupCommand;
 		private ICommand _saveAsCommand;
 		private ICommand _dragDropCommand;
 		private ICommand _mouseDoubleClick;
@@ -44,10 +42,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
 
 		public ICommand PrintReportCommand => _printReportCommand ?? (_printReportCommand = new CommandHandler(PrintReport));
-
-		public ICommand PrintPreviewCommand => _printPreviewCommand ?? (_printPreviewCommand = new CommandHandler(PrintPreview));
-
-		public ICommand PageSetupCommand => _pageSetupCommand ?? (_pageSetupCommand = new CommandHandler(PageSetup));
 
 		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
@@ -180,17 +174,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			action.Run();
 		}
 
-		private void PrintPreview(object parameter)
-		{
-			//var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
-			//action.Run();
-		}
-
-		private void PageSetup(object parameter)
-		{
-			//var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
-			//action.Run();
-		}
 
 		private void SaveAs(object parameter)
 		{

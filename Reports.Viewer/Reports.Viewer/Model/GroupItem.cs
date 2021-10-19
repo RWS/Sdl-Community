@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Sdl.Reports.Viewer.API.Model;
+using Reports.Viewer.Api.Model;
 
 namespace Sdl.Community.Reports.Viewer.Model
 {

@@ -190,6 +190,33 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter cannot be null.
+        /// </summary>
+        internal static string Message_TheParameterCannotBeNull {
+            get {
+                return ResourceManager.GetString("Message_TheParameterCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The report Id cannot be null!.
+        /// </summary>
+        internal static string Message_TheReportIdCannotBeNull {
+            get {
+                return ResourceManager.GetString("Message_TheReportIdCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to locate report {0}.
+        /// </summary>
+        internal static string Message_UnableToLocateReport {
+            get {
+                return ResourceManager.GetString("Message_UnableToLocateReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon PageSetup {

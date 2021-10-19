@@ -6,13 +6,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Reports.Viewer.Api.Model;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {

@@ -9,9 +9,9 @@ using System.Windows;
 using System.Windows.Controls;
 using CefSharp;
 using Microsoft.Win32;
+using Reports.Viewer.Api.Model;
 using Sdl.Community.Reports.Viewer.View;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Reports.Viewer.API.Model;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -89,16 +89,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			_browserView.WebBrowser.Print();
 		}
 
-		public void ShowPageSetupDialog()
-		{
-			//_browserView.WebBrowser.ShowPageSetupDialog();
-		}
-
-		public void ShowPrintPreviewDialog()
-		{
-			//_browserView.WebBrowser.ShowPrintPreviewDialog();
-		}
-
 		public void SaveReport()
 		{
 			var report = CurrentView.GetType() == typeof(BrowserView)
@@ -131,7 +121,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 							{
 								if (report.IsStudioReport)
 								{
-									_selectedProject.SaveTaskReportAs(new Guid(report.Id), dialog.FileName, ReportFormat.Excel);
+									_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Excel);
 								}
 								else
 								{
@@ -144,7 +134,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 							{
 								if (report.IsStudioReport)
 								{
-									_selectedProject.SaveTaskReportAs(new Guid(report.Id), dialog.FileName, ReportFormat.Html);
+									_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Html);
 								}
 								else
 								{
@@ -155,14 +145,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 							}
 						case "mht":
 							{
-								_selectedProject.SaveTaskReportAs(new Guid(report.Id), dialog.FileName, ReportFormat.Mht);
+								_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Mht);
 								break;
 							}
 						case "xml":
 							{
 								if (report.IsStudioReport)
 								{
-									_selectedProject.SaveTaskReportAs(new Guid(report.Id), dialog.FileName, ReportFormat.Xml);
+									_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Xml);
 								}
 								else
 								{

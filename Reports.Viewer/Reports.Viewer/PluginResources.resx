@@ -287,9 +287,18 @@
     <value>Select the {0} file</value>
   </data>
   <data name="ReportsViewer_SaveReportAs" xml:space="preserve">
-	  <value>Save Report As...</value>
+    <value>Save Report As...</value>
   </data>
   <data name="ErrorMessage_UnableToLocateXmlFile" xml:space="preserve">
-	  <value>Unable to locate the xml file: {0}</value>
+    <value>Unable to locate the xml file: {0}</value>
+  </data>
+  <data name="Message_TheParameterCannotBeNull" xml:space="preserve">
+    <value>The parameter cannot be null</value>
+  </data>
+  <data name="Message_TheReportIdCannotBeNull" xml:space="preserve">
+    <value>The report Id cannot be null!</value>
+  </data>
+  <data name="Message_UnableToLocateReport" xml:space="preserve">
+    <value>Unable to locate report {0}</value>
   </data>
 </root>

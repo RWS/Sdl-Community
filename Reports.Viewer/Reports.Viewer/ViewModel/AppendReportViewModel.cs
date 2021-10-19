@@ -8,13 +8,13 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Api.Providers;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.Service;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Reports.Viewer.API.Model;
-using Sdl.Reports.Viewer.API.Services;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
 {
@@ -383,15 +383,24 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Report.XsltPath = Xslt;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
-				if (!Report.IsStudioReport
-					&& CanUseDefaultStudioTemplate
-					&& UseDefaultStudioTemplate
-					&& string.IsNullOrEmpty(Report.TemplateId)
-					&& _taskTemplateIdProvider.TaskTemplateIdExists(Xslt))
+				if (!IsEditMode)
 				{
-					Report.TemplateId = Xslt;
+					if (CanUseDefaultStudioTemplate
+					    && UseDefaultStudioTemplate
+					    && string.IsNullOrEmpty(Report.TemplateId)
+					    && _taskTemplateIdProvider.TaskTemplateIdExists(Xslt))
+					{
+						Report.IsCustomReport = true;
+						Report.IsStudioReport = true;
+						Report.TemplateId = Xslt;
+					}
+					else
+					{
+						Report.IsCustomReport = false;
+						Report.IsStudioReport = false;
+					}
 				}
-
+				
 				Window.DialogResult = true;
 				Window?.Close();
 			}

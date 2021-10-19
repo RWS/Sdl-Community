@@ -9,9 +9,10 @@
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
              xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
-             xmlns:model="clr-namespace:Sdl.Reports.Viewer.API.Model;assembly=Sdl.Reports.Viewer.API"
              xmlns:model1="clr-namespace:Sdl.Community.Reports.Viewer.Model"
-             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"             
+             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:models="clr-namespace:Sdl.ProjectAutomation.FileBased.Reports.Models;assembly=Sdl.ProjectAutomation.FileBased"
+             xmlns:model="clr-namespace:Reports.Viewer.Api.Model;assembly=Reports.Viewer.Api"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
 	<UserControl.Resources>
