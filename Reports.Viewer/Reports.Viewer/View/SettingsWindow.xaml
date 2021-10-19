@@ -1,15 +1,14 @@
-﻿<Window x:Class="Sdl.Community.Reports.Viewer.View.SettingsWindow"
+﻿<Window x:Class="Reports.Viewer.Plus.View.SettingsWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"       
         xmlns:sdl="http://schemas.sdl.com/xaml"
-        xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
-        xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
-        xmlns:behaviours="clr-namespace:Sdl.Community.Reports.Viewer.Behaviours"
-        xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
-        xmlns:model="clr-namespace:Sdl.Community.Reports.Viewer.Model"
-
+        xmlns:converters="clr-namespace:Reports.Viewer.Plus.Converters"
+        xmlns:controls="clr-namespace:Reports.Viewer.Plus.Controls"
+        xmlns:behaviours="clr-namespace:Reports.Viewer.Plus.Behaviours"
+        xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
+        xmlns:model="clr-namespace:Reports.Viewer.Api.Model;assembly=Reports.Viewer.Api"
         Icon="../Resources/Settings.ico"
         WindowStyle="ThreeDBorderWindow"
 		WindowStartupLocation="CenterScreen"
@@ -22,16 +21,16 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/General.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TreeView.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>

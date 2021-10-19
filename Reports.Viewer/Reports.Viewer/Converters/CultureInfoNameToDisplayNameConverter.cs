@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Data;
 using Sdl.Core.Globalization;
 
-namespace Sdl.Community.Reports.Viewer.Converters
+namespace Reports.Viewer.Plus.Converters
 {
 	public class CultureInfoNameToDisplayNameConverter : IValueConverter
 	{

@@ -1,32 +1,31 @@
-﻿<UserControl x:Class="Sdl.Community.Reports.Viewer.View.ReportsNavigationView"
+﻿<UserControl x:Class="Reports.Viewer.Plus.View.ReportsNavigationView"
 			 x:Name="ReportsNavigationControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
-             xmlns:behaviours="clr-namespace:Sdl.Community.Reports.Viewer.Behaviours"
-             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             xmlns:controls="clr-namespace:Sdl.Community.Reports.Viewer.Controls"
-             xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
-             xmlns:model1="clr-namespace:Sdl.Community.Reports.Viewer.Model"
-             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+			 xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+			 xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:Sdl.ProjectAutomation.FileBased.Reports.Models;assembly=Sdl.ProjectAutomation.FileBased"
              xmlns:model="clr-namespace:Reports.Viewer.Api.Model;assembly=Reports.Viewer.Api"
+             xmlns:converters="clr-namespace:Reports.Viewer.Plus.Converters"
+             xmlns:behaviours="clr-namespace:Reports.Viewer.Plus.Behaviours"
+             xmlns:model1="clr-namespace:Reports.Viewer.Plus.Model"
+             xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/General.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TreeView.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ProgressRingAsteriskStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ProgressRingAsteriskStyle.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>

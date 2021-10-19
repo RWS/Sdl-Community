@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Sdl.Community.Reports.Viewer.Model
+namespace Reports.Viewer.Plus.Model
 {
 	public class ReportGroup : INotifyPropertyChanged
 	{

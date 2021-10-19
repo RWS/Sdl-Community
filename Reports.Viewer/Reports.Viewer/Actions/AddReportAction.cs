@@ -4,14 +4,14 @@ using System.Linq;
 using Newtonsoft.Json;
 using Reports.Viewer.Api.Model;
 using Reports.Viewer.Api.Providers;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Community.Reports.Viewer.View;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
+using Reports.Viewer.Plus.View;
+using Reports.Viewer.Plus.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	[Action("ReportsViewer_AddReport_Action",
 		Name = "ReportsViewer_AddReport_Name",

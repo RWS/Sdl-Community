@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:model="clr-namespace:Sdl.Community.Reports.Viewer.Model">
+                    xmlns:model="clr-namespace:Reports.Viewer.Plus.Model">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
-		<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+		<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+		<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
 
 	<DataTemplate x:Key="MultiSelectComboBox.Dropdown.ListBox.ItemTemplate" DataType="model:LanguageItem">

@@ -2,10 +2,10 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Plus.ViewModel;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectsNavigationView.xaml

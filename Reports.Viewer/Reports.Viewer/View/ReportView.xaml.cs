@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectFilesView.xaml

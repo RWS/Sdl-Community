@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Reports.Viewer {
+namespace Reports.Viewer.Plus {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.Reports.Viewer {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Reports.Viewer.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reports.Viewer.Plus.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

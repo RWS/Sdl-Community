@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {	
 	public partial class SettingsWindow : Window
 	{

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Reports.Viewer.Api.Model;
 
-namespace Sdl.Community.Reports.Viewer.Model
+namespace Reports.Viewer.Plus.Model
 {
 	public class GroupItem: INotifyPropertyChanged
 	{

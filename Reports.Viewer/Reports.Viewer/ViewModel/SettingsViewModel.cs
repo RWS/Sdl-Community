@@ -11,14 +11,14 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using Reports.Viewer.Api.Model;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Community.Reports.Viewer.View;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
+using Reports.Viewer.Plus.View;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class SettingsViewModel : INotifyPropertyChanged
 	{

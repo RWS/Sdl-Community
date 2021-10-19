@@ -8,11 +8,11 @@ using Newtonsoft.Json;
 using Reports.Viewer.Api;
 using Reports.Viewer.Api.Model;
 using Reports.Viewer.Api.Providers;
-using Sdl.Community.Reports.Viewer.Actions;
-using Sdl.Community.Reports.Viewer.CustomEventArgs;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.View;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Plus.Actions;
+using Reports.Viewer.Plus.CustomEventArgs;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.View;
+using Reports.Viewer.Plus.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -20,7 +20,7 @@ using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.Reports.Viewer
+namespace Reports.Viewer.Plus
 {
 	[View(
 		Id = "SDLReportsViewer_View",

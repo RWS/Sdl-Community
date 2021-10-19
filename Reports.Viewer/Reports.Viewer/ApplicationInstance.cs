@@ -4,7 +4,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Application = System.Windows.Application;
 
-namespace Sdl.Community.Reports.Viewer
+namespace Reports.Viewer.Plus
 {
 	[ApplicationInitializer]
 	internal class ApplicationInstance : IApplicationInitializer

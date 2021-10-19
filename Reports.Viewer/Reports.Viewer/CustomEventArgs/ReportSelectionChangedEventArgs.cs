@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Reports.Viewer.Api.Model;
 
-namespace Sdl.Community.Reports.Viewer.CustomEventArgs
+namespace Reports.Viewer.Plus.CustomEventArgs
 {
 	public class ReportSelectionChangedEventArgs: System.EventArgs
 	{

@@ -10,13 +10,13 @@ using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
 using Reports.Viewer.Api.Model;
-using Sdl.Community.Reports.Viewer.Actions;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.CustomEventArgs;
-using Sdl.Community.Reports.Viewer.Model;
+using Reports.Viewer.Plus.Actions;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.CustomEventArgs;
+using Reports.Viewer.Plus.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
 	{

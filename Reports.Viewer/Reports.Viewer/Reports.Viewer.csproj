@@ -7,8 +7,8 @@
     <ProjectGuid>{4CC9920F-CDD9-425E-9DB1-59C139F8E809}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Reports.Viewer</RootNamespace>
-    <AssemblyName>Sdl.Community.Reports.Viewer</AssemblyName>
+    <RootNamespace>Reports.Viewer.Plus</RootNamespace>
+    <AssemblyName>Reports.Viewer.Plus</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

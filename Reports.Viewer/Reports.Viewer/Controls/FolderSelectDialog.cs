@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Sdl.Community.Reports.Viewer.Controls
+namespace Reports.Viewer.Plus.Controls
 {
 	public class FolderSelectDialog
 	{

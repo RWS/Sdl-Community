@@ -10,13 +10,13 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using Reports.Viewer.Api.Model;
 using Reports.Viewer.Api.Providers;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class AppendReportViewModel : INotifyPropertyChanged
 	{

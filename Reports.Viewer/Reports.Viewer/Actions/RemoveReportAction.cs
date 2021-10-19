@@ -4,7 +4,7 @@ using System.Windows;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	[Action("ReportsViewer_RemoveReport_Action",
 		Name = "ReportsViewer_RemoveReport_Name",

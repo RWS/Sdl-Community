@@ -7,14 +7,14 @@ using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Reports.Viewer.Api.Model;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
 using Sdl.Core.Globalization;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class AppendTemplateViewModel : INotifyPropertyChanged
 	{		

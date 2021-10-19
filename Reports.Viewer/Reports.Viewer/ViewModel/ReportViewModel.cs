@@ -10,10 +10,10 @@ using System.Windows.Controls;
 using CefSharp;
 using Microsoft.Win32;
 using Reports.Viewer.Api.Model;
-using Sdl.Community.Reports.Viewer.View;
+using Reports.Viewer.Plus.View;
 using Sdl.ProjectAutomation.Core;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class ReportViewModel : INotifyPropertyChanged, IDisposable
 	{
