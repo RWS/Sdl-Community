@@ -79,18 +79,6 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\FolderSelectDialog.cs" />
     <Compile Include="Controls\Reflector.cs" />
-    <Compile Include="Controls\ReportViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ReportViewControl.Designer.cs">
-      <DependentUpon>ReportViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ReportsNavigationViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ReportsNavigationViewControl.Designer.cs">
-      <DependentUpon>ReportsNavigationViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\TextBoxWithEllipsis.cs" />
@@ -257,12 +245,6 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\ReportViewControl.resx">
-      <DependentUpon>ReportViewControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ReportsNavigationViewControl.resx">
-      <DependentUpon>ReportsNavigationViewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>

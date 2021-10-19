@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using Newtonsoft.Json;
 using Reports.Viewer.Api;
 using Reports.Viewer.Api.Model;
 using Reports.Viewer.Api.Providers;
 using Sdl.Community.Reports.Viewer.Actions;
-using Sdl.Community.Reports.Viewer.Controls;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
 using Sdl.Community.Reports.Viewer.View;
@@ -34,8 +34,6 @@ namespace Sdl.Community.Reports.Viewer
 		private ProjectsController _projectsController;
 		private ReportViewModel _reportViewModel;
 		private ReportsNavigationViewModel _reportsNavigationViewModel;
-		private ReportViewControl _reportViewControl;
-		private ReportsNavigationViewControl _reportsNavigationViewControl;
 		private ReportView _reportView;
 		private ReportsNavigationView _reportsNavigationView;
 		private DataView _dataView;
@@ -76,18 +74,17 @@ namespace Sdl.Community.Reports.Viewer
 
 		protected override IUIControl GetExplorerBarControl()
 		{
-			return _reportsNavigationViewControl ?? (_reportsNavigationViewControl = new ReportsNavigationViewControl());
+			return _reportsNavigationView ?? (_reportsNavigationView = new ReportsNavigationView());
 		}
 
 		protected override IUIControl GetContentControl()
 		{
-			if (_reportViewControl == null)
+			if (_reportView == null)
 			{
-				_reportViewControl = new ReportViewControl();
 				InitializeViews();
 			}
 
-			return _reportViewControl;
+			return _reportView;
 		}
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
@@ -280,12 +277,7 @@ namespace Sdl.Community.Reports.Viewer
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
 			_reportsNavigationViewModel.ProjectLocalFolder = _reportsController.ProjectLocalFolder;
-
-			_reportsNavigationView = new ReportsNavigationView(_reportsNavigationViewModel);
-			_reportsNavigationViewModel.ReportsNavigationView = _reportsNavigationView;
-
-			_reportViewControl.UpdateViewModel(_reportView);
-			_reportsNavigationViewControl.UpdateViewModel(_reportsNavigationView);
+			_reportsNavigationView.DataContext = _reportsNavigationViewModel;
 		}
 
 		private Settings GetSettings()
@@ -327,13 +319,11 @@ namespace Sdl.Community.Reports.Viewer
 				return;
 			}
 
-			if (_reportsNavigationViewControl.InvokeRequired)
+			var dispatcher = _reportsNavigationView.Dispatcher;
+
+			if (_reportsNavigationView != null)
 			{
-				_reportsNavigationViewControl.Invoke(new Action<bool>(EnableControls), isLoading);
-			}
-			else
-			{
-				if (_reportsNavigationViewControl != null)
+				dispatcher.Invoke(delegate
 				{
 					if (isLoading)
 					{
@@ -341,24 +331,24 @@ namespace Sdl.Community.Reports.Viewer
 					}
 
 					_reportsNavigationViewModel.IsLoading = isLoading;
-					_reportsNavigationViewControl.Enabled = !isLoading;
-				}
+					_reportsNavigationView.IsEnabled = !isLoading;
 
-				if (_reportViewControl != null)
-				{
-					_reportViewControl.Enabled = !isLoading;
-				}
+					if (_reportView != null)
+					{
+						_reportView.IsEnabled = !isLoading;
+					}
 
-				_openSettingsAction.UpdateEnabled(isLoading);
+					_openSettingsAction.UpdateEnabled(isLoading);
 
-				_addReportAction.UpdateEnabled(isLoading);
-				_editReportAction.UpdateEnabled(isLoading);
-				_removeReportAction.UpdateEnabled(isLoading);
+					_addReportAction.UpdateEnabled(isLoading);
+					_editReportAction.UpdateEnabled(isLoading);
+					_removeReportAction.UpdateEnabled(isLoading);
 
-				_printReportAction.UpdateEnabled(isLoading);
-				_saveAsReportAction.UpdateEnabled(isLoading);
+					_printReportAction.UpdateEnabled(isLoading);
+					_saveAsReportAction.UpdateEnabled(isLoading);
 
-				_refreshAction.UpdateEnabled(isLoading);
+					_refreshAction.UpdateEnabled(isLoading);
+				}, DispatcherPriority.Normal);
 			}
 		}
 

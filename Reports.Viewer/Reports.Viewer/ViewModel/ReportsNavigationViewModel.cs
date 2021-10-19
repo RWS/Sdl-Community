@@ -14,7 +14,6 @@ using Sdl.Community.Reports.Viewer.Actions;
 using Sdl.Community.Reports.Viewer.Commands;
 using Sdl.Community.Reports.Viewer.CustomEventArgs;
 using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.View;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Reports.Viewer.ViewModel
@@ -88,8 +87,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
 		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
-
-		public ReportsNavigationView ReportsNavigationView { get; set; }
 
 		public void AddReports(List<Report> reports)
 		{
