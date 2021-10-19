@@ -27,6 +27,8 @@ namespace Sdl.Community.NumberVerifier.Model
 
 		public NumberList(List<string> initialParts, List<string> normalizedParts)
 		{
+			if (initialParts is null) return;
+
 			for (var i = 0; i < initialParts.Count; i++)
 			{
 				_indexedList.Add((initialParts[i], normalizedParts[i]));

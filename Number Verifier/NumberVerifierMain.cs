@@ -225,7 +225,6 @@ namespace Sdl.Community.NumberVerifier
 		private string _sourceMatchingDecimalSeparators = string.Empty;
 		private string _targetMatchingDecimalSeparators = string.Empty;
 
-		private bool _isSource;
 		private readonly NumberNormalizer _numberNormalizer;
 
 		public void Initialize(IDocumentProperties documentInfo)
@@ -540,22 +539,21 @@ namespace Sdl.Community.NumberVerifier
 						}
 						return errorList;
 					}
-					return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, numberModel);
+					return ReturnErrorList(errorList, numberModel);
 				}
 			}
 			else
 			{
-				return ReturnErrorList(errorsListFromNormalizedNumbers, errorList, numberModel);
+				return ReturnErrorList(errorList, numberModel);
 			}
 			return errorList;
 		}
 
 		private List<ErrorReporting> ReturnErrorList(
-			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers,
 			List<ErrorReporting> errorList,
 			NumberModel numberModel)
 		{
-			errorsListFromNormalizedNumbers = CheckNumbers(string.Empty, string.Empty, numberModel);
+			var errorsListFromNormalizedNumbers = CheckNumbers(string.Empty, string.Empty, numberModel);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 			return errorList;
 		}
