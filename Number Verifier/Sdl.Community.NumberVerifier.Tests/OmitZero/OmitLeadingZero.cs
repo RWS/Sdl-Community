@@ -55,7 +55,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
 
-			Assert.Equal("d55", normalizedNumber.NormalizedPartsList[0]);
+			Assert.Equal("55", normalizedNumber.NormalizedPartsList[0]);
 
 			return normalizedNumber.NormalizedPartsList[0];
 		}

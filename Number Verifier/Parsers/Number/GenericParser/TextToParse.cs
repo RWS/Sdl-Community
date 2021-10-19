@@ -14,7 +14,11 @@
 
 		public string Text { get; }
 
-		public void Advance() => CurrentIndex++;
+		public void Advance()
+		{
+			if (CurrentIndex + 1 > Text.Length) return;
+			CurrentIndex++;
+		}
 
 		public bool IsAtEnd()
 		{

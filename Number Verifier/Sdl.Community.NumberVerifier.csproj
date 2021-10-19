@@ -197,7 +197,7 @@
     <Compile Include="Parsers\Number\GenericParser\Matches\MatchArray.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Repeat.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Optional.cs" />
-    <Compile Include="Parsers\Number\GenericParser\Patterns\Range.cs" />
+    <Compile Include="Parsers\Number\GenericParser\Patterns\DigitRange.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Specialized\RealNumber.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Sequence.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Text.cs" />

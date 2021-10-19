@@ -1,4 +1,5 @@
-﻿using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
+﻿using System.Linq;
+using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns.Specialized;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 using Xunit;
@@ -11,12 +12,12 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.GenericParser
 		[InlineData("1 554,544,44 some word 1.23434343434343,5 another word -1 222,3")]
 		public void RealNumberPattern_MatchTest(string source)
 		{
-			var thousandSeparators = ", .";
-			var decimalSeparators = ".,";
+			var thousandSeparators = ", .".Select(c => c.ToString()).ToList();
+			var decimalSeparators = ".,".Select(c => c.ToString()).ToList();
 
 			var realNumberPattern = new RealNumber(thousandSeparators, decimalSeparators);
 
-			realNumberPattern.MatchAll(new TextToParse(source));
+			realNumberPattern.MatchAll(source);
 			Assert.Collection(realNumberPattern.MatchArray,
 				item =>
 				{
@@ -83,16 +84,17 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.GenericParser
 					Assert.Collection(((MatchArray)item).Matches,
 						subItem =>
 						{
+							Assert.Equal(expected: "Sign", subItem.Name);
+							Assert.Equal(expected: "-", subItem.Value);
+						},
+						subItem =>
+						{
 							Assert.Equal(expected: "Integer", subItem.Name);
-							Assert.Equal(expected: "-1 222", subItem.Value);
+							Assert.Equal(expected: "1 222", subItem.Value);
 
 							var integerParts = ((MatchArray)subItem).Matches;
 							Assert.Collection(integerParts,
-								ip =>
-								{
-									Assert.Equal(expected: "Sign", ip.Name);
-									Assert.Equal(expected: "-", ip.Value);
-								},
+								
 								ip =>
 								{
 									Assert.Equal(expected: "ThousandSeparator", ip.Name);
