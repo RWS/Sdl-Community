@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using Sdl.Community.NumberVerifier.Interfaces;
-using Sdl.Community.NumberVerifier.Tests.Utilities;
-using Xunit;
+﻿using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
@@ -21,7 +13,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 		[Theory]
 		[InlineData("2400 bis 2483,5", "2400 to 2483.5")]
-		public void ShouldGetNoErrors_WhenDecimalSeparatorDifferent_LocalizationAllowed(string source, string target)
+		public void ShouldGetNoErrors_WhenDecimalSeparatorsDifferent_LocalizationAllowed(string source, string target)
 		{
 			var settings =
 				_settingsBuilder

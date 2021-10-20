@@ -162,7 +162,6 @@
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
     <Compile Include="Model\NumberList.cs" />
-    <Compile Include="Model\Number.cs" />
     <Compile Include="Parsers\Number\GenericParser\Events\MatchedEventHandler.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Any.cs" />
     <Compile Include="Parsers\Number\Model\NumberSeparator.cs" />

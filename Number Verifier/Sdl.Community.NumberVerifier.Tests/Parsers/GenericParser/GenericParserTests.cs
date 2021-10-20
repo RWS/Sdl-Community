@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns.Specialized;
-using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.Parsers.GenericParser
@@ -94,7 +93,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Parsers.GenericParser
 
 							var integerParts = ((MatchArray)subItem).Matches;
 							Assert.Collection(integerParts,
-								
+
 								ip =>
 								{
 									Assert.Equal(expected: "ThousandSeparator", ip.Name);
