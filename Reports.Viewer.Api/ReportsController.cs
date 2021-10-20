@@ -244,7 +244,7 @@ namespace Reports.Viewer.Api
 					}
 				}
 
-				var customReportTemplates = SerializeStudioReportTemplates(reportViewerSettings.CustomReportTemplatesJson.Value);
+				var customReportTemplates = DeserializeCustomReportTemplates(reportViewerSettings.CustomReportTemplatesJson.Value);
 				var overwrite = UICultureChanged(reportViewerSettings);
 
 				var reportTemplates = GetCustomReportTemplates();
@@ -437,7 +437,7 @@ namespace Reports.Viewer.Api
 			var settingsBundle = Project.GetSettings();
 			var reportViewerSettings = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
 			var reportTemplates = GetCustomReportTemplates();
-			var customReportTemplates = SerializeStudioReportTemplates(reportViewerSettings.CustomReportTemplatesJson.Value);
+			var customReportTemplates = DeserializeCustomReportTemplates(reportViewerSettings.CustomReportTemplatesJson.Value);
 			var overwrite = UICultureChanged(reportViewerSettings);
 
 			clonedReports = GetUpdatedReports(clonedReports, reportTemplates, overwrite, ref customReportTemplates);
@@ -854,7 +854,7 @@ namespace Reports.Viewer.Api
 			return new List<ReportTemplate>();
 		}
 
-		private static List<CustomReportTemplate> SerializeStudioReportTemplates(string value)
+		private static List<CustomReportTemplate> DeserializeCustomReportTemplates(string value)
 		{
 			try
 			{
