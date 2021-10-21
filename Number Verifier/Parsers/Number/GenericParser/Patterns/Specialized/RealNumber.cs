@@ -108,7 +108,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns.Spe
 		private string GetNumberWithThousandSeparatorsAdded(string normalizedIntegerPart, bool signed)
 		{
 			var noStart = signed ? 1 : 0;
-			for (var i = normalizedIntegerPart.Length -3; i >= noStart; i -= 3)
+			for (var i = normalizedIntegerPart.Length -3; i > noStart; i -= 3)
 			{
 				normalizedIntegerPart = normalizedIntegerPart.Insert(i, "t");
 			}
