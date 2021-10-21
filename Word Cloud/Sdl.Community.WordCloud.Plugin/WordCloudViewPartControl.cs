@@ -34,7 +34,7 @@ namespace Sdl.Community.WordCloud.Plugin
 
         void _viewModel_SelectedProjectChanged(object sender, EventArgs e)
         {
-            _generateButton.Enabled = ViewModel.Project != null;
+            _generateButton.Enabled = (ViewModel.Project != null) && (ViewModel.Project.GetProjectInfo().ProjectType != ProjectAutomation.Core.ProjectType.InLanguageCloud); 
             _generatingLabel.Visible = false;
             _progressBar.Visible = false;
             

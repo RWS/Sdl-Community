@@ -36,8 +36,8 @@ namespace Sdl.Community.WordCloud.Plugin
 
 		private void OnSelectedProjectsChanged()
 		{
-			Enabled = (ProjectsController.SelectedProjects.Count() == 1) 
-				&& ProjectsController.SelectedProjects.Single().GetProjectInfo().ProjectType == ProjectAutomation.Core.ProjectType.InLanguageCloud;
+			Enabled = (ProjectsController.SelectedProjects.Count() == 1)
+			&& (ProjectsController.SelectedProjects.Single().GetProjectInfo().ProjectType != ProjectAutomation.Core.ProjectType.InLanguageCloud);
 		}
 
 		private ProjectsController ProjectsController
