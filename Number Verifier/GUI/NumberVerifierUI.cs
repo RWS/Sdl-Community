@@ -318,11 +318,17 @@ namespace Sdl.Community.NumberVerifier
        
         private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
         {
-           
 
-            #region soutce separators
 
-            if (TargetThousandsSpace)
+	        if (TargetOmitLeadingZero)
+	        {
+				TargetOmitLeadingZero = false;
+			}
+			targetMisBox.Enabled = false;
+
+			#region soutce separators
+
+			if (TargetThousandsSpace)
             {
                 cb_TargetThousandsSpace.Checked = false;
             }
@@ -422,7 +428,7 @@ namespace Sdl.Community.NumberVerifier
             customTargetSep.Enabled = true;
 			cb_customSeparators.Enabled = true;
 			tb_customsSeparators.Enabled = true;
-
+			targetMisBox.Enabled = true;
 			targetDBox.Enabled = true;
 
             #endregion
