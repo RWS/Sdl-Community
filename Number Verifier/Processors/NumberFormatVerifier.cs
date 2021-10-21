@@ -43,11 +43,6 @@ namespace Sdl.Community.NumberVerifier.Processors
 				VerificationSettings.GetTargetDecimalSeparators(),
 				VerificationSettings.GetTargetThousandSeparators());
 
-			//foreach (var numberToken in sourceNumberTokens.Where(a => !a.Valid))
-			//{
-			//	errors.AddRange(GetErrorMessages(numberToken, true));
-			//}
-
 			foreach (var numberToken in targetNumberTokens.Where(a => !a.Valid))
 			{
 				errors.AddRange(GetErrorMessages(numberToken, false));
