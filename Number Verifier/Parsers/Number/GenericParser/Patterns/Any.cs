@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface;
 using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 using Sdl.Community.NumberVerifier.Parsers.Number.RealNumberParser;
@@ -28,10 +30,13 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 			if (text.IsAtEnd())
 				return new NoMoreText();
 
-			if (_pattern.Contains(text.Current.ToString()))
+			var patterns = _pattern.ToList();
+			patterns.Remove(Constants.NoSeparator);
+
+			var charPatterns = patterns.Where(p => p.Length == 1);
+			if (charPatterns.Contains(text.Current.ToString()))
 			{
-				var matchedChar = text.Current.ToString();
-				var match = new Match(matchedChar)
+				var match = new Match(text.Current.ToString())
 				{
 					Name = Name
 				};
@@ -41,6 +46,26 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 				text.Advance();
 				return match;
 			}
+
+			var stringPatterns = patterns.ToList();
+			stringPatterns.RemoveAll(p => charPatterns.Contains(p));
+			foreach (var sp in stringPatterns)
+			{
+				if (sp == text.Text.Substring(text.CurrentIndex, sp.Length))
+				{
+					var match = new Match(sp)
+					{
+						Name = Name
+					};
+
+					if (_keepConsistent && _pattern.Count > 1) _pattern.RemoveAll(el => el != match.Value);
+
+					text.Advance(sp.Length);
+					return match;
+				}
+			}
+
+			if (_pattern.Contains(Constants.NoSeparator)) return new Match(string.Empty);
 
 			return new NoMatch($"({text.Current})", string.Join(",", _pattern), text.CurrentIndex);
 		}

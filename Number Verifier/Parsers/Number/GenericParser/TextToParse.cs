@@ -14,10 +14,10 @@
 
 		public string Text { get; }
 
-		public void Advance()
+		public void Advance(int skip = 1)
 		{
-			if (CurrentIndex + 1 > Text.Length) return;
-			CurrentIndex++;
+			if (CurrentIndex + skip > Text.Length) return;
+			CurrentIndex+=skip;
 		}
 
 		public bool IsAtEnd()
