@@ -286,7 +286,7 @@ namespace Sdl.Community.NumberVerifier
 					{
 						errorMessages.AddRange(genericErrorMeassages);
 					}
-					
+
 					#region ReportingMessage
 
 					foreach (var errorMessage in errorMessages)
@@ -399,7 +399,7 @@ namespace Sdl.Community.NumberVerifier
 		{
 			try
 			{
-				var sourceAlphanumericsList = GetAlphanumericList(sourceText);
+				var sourceAlphanumericsList = GetAlphanumericList(sourceText, true);
 
 				// find all alphanumeric names in target and add to list
 				var targetAlphanumericsList = GetAlphanumericList(targetText);
@@ -481,8 +481,8 @@ namespace Sdl.Community.NumberVerifier
 			var numberModelRes = new NumberModel
 			{
 				Settings = VerificationSettings,
-				SourceNumbers = sourceNumberList,
-				TargetNumbers = targetNumberList,
+				SourceNumbers = sourceNormalizedNumberList,
+				TargetNumbers = targetNormalizedNumberList,
 				InitialSourceNumbers = sourceHindiList,
 				InitialTargetNumbers = targetHindiList,
 				SourceText = !string.IsNullOrEmpty(numberModel.SourceArabicText) ? numberModel.SourceArabicText : numberModel.SourceText,
@@ -808,7 +808,7 @@ namespace Sdl.Community.NumberVerifier
 			}
 		}
 
-		public Tuple<List<string>, List<string>> GetAlphanumericList(string text)
+		public Tuple<List<string>, List<string>> GetAlphanumericList(string text, bool isSource = false)
 		{
 			try
 			{
@@ -858,10 +858,13 @@ namespace Sdl.Community.NumberVerifier
 					: string.Empty;
 				var regex = $"(?i)(?=.*[0-9])(?=.*[a-z])([a-z0-9{separators}]+)";
 
+
 				normalizedAlphaList.AddRange(
 					from word in wordsRes
 					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
+
+				RemoveNonAlphanumericals(isSource, normalizedAlphaList);
 
 				var unNormalizedAlphanumerics = new List<string>();
 				unNormalizedAlphanumerics.AddRange(from word in wordsRes
@@ -875,6 +878,33 @@ namespace Sdl.Community.NumberVerifier
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
 				return new Tuple<List<string>, List<string>>(new List<string>(), new List<string>());
 			}
+		}
+
+		private void RemoveNonAlphanumericals(bool isSource, List<string> normalizedAlphaList)
+		{
+			var thoAndDecSeparators = new List<string>();
+			if (isSource)
+			{
+				thoAndDecSeparators.AddRange(VerificationSettings.GetSourceThousandSeparators());
+				thoAndDecSeparators.AddRange(VerificationSettings.GetSourceDecimalSeparators());
+			}
+			else
+			{
+				thoAndDecSeparators.AddRange(VerificationSettings.GetTargetThousandSeparators());
+				thoAndDecSeparators.AddRange(VerificationSettings.GetTargetDecimalSeparators());
+			}
+			thoAndDecSeparators.RemoveAll(string.IsNullOrEmpty);
+
+			var forRemoval = new List<string>();
+			foreach (var item in normalizedAlphaList)
+			{
+				var itemWoSeparators = item;
+
+				thoAndDecSeparators.ForEach(sep => itemWoSeparators = itemWoSeparators.Replace(sep, ""));
+
+				if (int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
+			}
+			forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
 		}
 
 		private string GetSegmentText(ISegment segment)
