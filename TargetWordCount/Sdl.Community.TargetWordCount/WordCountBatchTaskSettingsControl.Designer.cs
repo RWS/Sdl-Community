@@ -234,7 +234,7 @@
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.CheckBox lineCountCheckBox;
         private System.Windows.Forms.Label charPerLineLabel;
-        private System.Windows.Forms.TextBox charPerLineTextBox;
+        public System.Windows.Forms.TextBox charPerLineTextBox;
         private System.Windows.Forms.CheckBox includeSpacesCheckBox;
     }
 }

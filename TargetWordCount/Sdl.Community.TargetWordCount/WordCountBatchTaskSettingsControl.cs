@@ -32,12 +32,18 @@ namespace Sdl.Community.TargetWordCount
 		public WordCountBatchTaskSettingsControl()
 		{
 			InitializeComponent();
-			Settings = new WordCountBatchTaskSettings();
+			//Settings = new WordCountBatchTaskSettings();
 			lineCountCheckBox.CheckedChanged += LineCountCheckBox_CheckedChanged;
+			charPerLineTextBox.TextChanged += CharPerLineTextBox_TextChanged;
 			loadButton.Click += LoadButton_Click;
 			saveButton.Click += SaveButton_Click;
 			reportLockedCheckBox.CheckedChanged += ReportLockedCheckBox_CheckedChanged;
 			cultureComboBox.SelectedIndexChanged += CultureComboBox_SelectedIndexChanged;
+		}
+
+		private void CharPerLineTextBox_TextChanged(object sender, EventArgs e)
+		{
+			UpdateDataGridOnSettingsChanged();
 		}
 
 		public WordCountBatchTaskSettings Settings { get; set; }
@@ -204,18 +210,20 @@ namespace Sdl.Community.TargetWordCount
 
 		private void LineCountCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			if (dataGridView != null && dataGridView.Rows != null && dataGridView.Rows.Count > 0)
-			{
-				UpdateSettings();
-				dataGridView.Rows.Clear();
-				AddRows();
-			}
+			UpdateDataGridOnSettingsChanged();
+		}
+
+		private void UpdateDataGridOnSettingsChanged()
+		{
+			if (dataGridView == null || dataGridView.Rows.Count <= 0) return;
+			UpdateSettings();
+			dataGridView.Rows.Clear();
+			AddRows();
 		}
 
 		private void LoadButton_Click(object sender, EventArgs e)
 		{
-			var ofd = new OpenFileDialog();
-			ofd.Filter = "xml files (*.xml)|*.xml";
+			var ofd = new OpenFileDialog {Filter = "xml files (*.xml)|*.xml"};
 
 			var dr = ofd.ShowDialog();
 			if (dr == DialogResult.OK)
@@ -233,12 +241,7 @@ namespace Sdl.Community.TargetWordCount
 
 		private void ReportLockedCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			if (dataGridView != null && dataGridView.Rows != null && dataGridView.Rows.Count > 0)
-			{
-				UpdateSettings();
-				dataGridView.Rows.Clear();
-				AddRows();
-			}
+			UpdateDataGridOnSettingsChanged();
 		}
 
 		private void SaveButton_Click(object sender, EventArgs e)
@@ -278,8 +281,6 @@ namespace Sdl.Community.TargetWordCount
 			Settings.Culture = cultureComboBox.SelectedItem.ToString();
 
 			Settings.UseLineCount = lineCountCheckBox.Checked;
-
-			Settings.CharactersPerLine = charPerLineTextBox.Text;
 
 			Settings.IncludeSpaces = includeSpacesCheckBox.Checked;
 		}		
