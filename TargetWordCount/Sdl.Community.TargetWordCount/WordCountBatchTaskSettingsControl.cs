@@ -31,10 +31,10 @@ namespace Sdl.Community.TargetWordCount
 		public WordCountBatchTaskSettingsControl()
 		{
 			InitializeComponent();
-			Settings = new WordCountBatchTaskSettings();
 			lineCountCheckBox.CheckedChanged += LineCountCheckBox_CheckedChanged;
 			loadButton.Click += LoadButton_Click;
 			saveButton.Click += SaveButton_Click;
+			charPerLineTextBox.TextChanged += CharPerLineTextBox_TextChanged;
 			reportLockedCheckBox.CheckedChanged += ReportLockedCheckBox_CheckedChanged;
 			cultureComboBox.SelectedIndexChanged += CultureComboBox_SelectedIndexChanged;
 		}
@@ -53,6 +53,17 @@ namespace Sdl.Community.TargetWordCount
 				invoiceRates.Add(new InvoiceItem(rateType, rate));
 			}
 			Settings.InvoiceRates = invoiceRates;
+		}
+		private void UpdateDataGridOnSettingsChanged()
+		{
+			if (dataGridView == null || dataGridView.Rows.Count <= 0) return;
+			UpdateSettings();
+			dataGridView.Rows.Clear();
+			AddRows();
+		}
+		private void CharPerLineTextBox_TextChanged(object sender, EventArgs e)
+		{
+			UpdateDataGridOnSettingsChanged();
 		}
 
 		protected override void OnLeave(EventArgs e)
@@ -232,12 +243,7 @@ namespace Sdl.Community.TargetWordCount
 
 		private void ReportLockedCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			if (dataGridView != null && dataGridView.Rows != null && dataGridView.Rows.Count > 0)
-			{
-				UpdateSettings();
-				dataGridView.Rows.Clear();
-				AddRows();
-			}
+			UpdateDataGridOnSettingsChanged();
 		}
 
 		private void SaveButton_Click(object sender, EventArgs e)
@@ -277,8 +283,6 @@ namespace Sdl.Community.TargetWordCount
 			Settings.Culture = cultureComboBox.SelectedItem.ToString();
 
 			Settings.UseLineCount = lineCountCheckBox.Checked;
-
-			Settings.CharactersPerLine = charPerLineTextBox.Text;
 
 			Settings.IncludeSpaces = includeSpacesCheckBox.Checked;
 		}		
