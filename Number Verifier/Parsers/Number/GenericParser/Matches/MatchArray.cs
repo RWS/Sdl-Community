@@ -11,7 +11,9 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 		public IMatch FlattenByNamedGroups()
 		{
 			var newMatches = Matches.Select(item => item is MatchArray matchArray ? matchArray.FlattenByNamedGroups() : item).ToList();
+
 			newMatches.RemoveAll(m => m?.Name == null);
+			RemoveDuplicates(newMatches);
 
 			if (Name == null)
 			{
@@ -27,9 +29,23 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 			if (newMatches.Count == 0) return new Match(Value) { Name = Name };
 
 			Matches = newMatches;
+
+			Name ??= "Matches";
+
 			return this;
 		}
-		
+
+		private static void RemoveDuplicates(List<IMatch> newMatches)
+		{
+			var duplicatesIndexes = new List<int>();
+			for (var i = 0; i < newMatches.Count - 1 && !duplicatesIndexes.Contains(i); i++)
+				for (var j = 1; j < newMatches.Count && j != i; j++)
+				{
+					if (newMatches[i].Name == newMatches[j].Name) duplicatesIndexes.Add(j);
+				}
+			duplicatesIndexes.ForEach(newMatches.RemoveAt);
+		}
+
 		public List<IMatch> Matches { get; set; } = new();
 
 		public bool Success { get; set; }
