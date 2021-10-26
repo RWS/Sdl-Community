@@ -21,5 +21,21 @@ namespace Sdl.Community.StudioViews.Extensions
 
 			return paragraph;
 		}
+
+		public static IAbstractMarkupDataContainer AddSegment(this IAbstractMarkupDataContainer paragraph, ISegment segment, SegmentBuilder builder)
+		{
+			if (segment != null)
+			{
+				var newSegment = builder.CreateSegment(segment.Properties.Clone() as ISegmentPairProperties);
+				foreach (var item in segment)
+				{
+					newSegment.Add(item?.Clone() as IAbstractMarkupData);
+				}
+
+				paragraph.Add(newSegment);
+			}
+
+			return paragraph;
+		}
 	}
 }

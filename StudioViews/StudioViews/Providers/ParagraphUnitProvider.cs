@@ -39,12 +39,16 @@ namespace Sdl.Community.StudioViews.Providers
 			{
 				return null;
 			}
-			
+
 			result.Paragraph.Properties = paragraphUnitRight.Properties.Clone() as IParagraphUnitProperties;
 			result.Paragraph.Source.Clear();
 			result.Paragraph.Target.Clear();
 
 			var alignments = GetSegmentPairAlignments(paragraphUnitLeft, paragraphUnitRight);
+			
+			var sourceContainer = GetContainer(paragraphUnitLeft.Source, result.Paragraph.Source);
+			var targetContainer = GetContainer(paragraphUnitLeft.Target, result.Paragraph.Target);
+
 			foreach (var alignmentInfo in alignments)
 			{
 				switch (alignmentInfo.Alignment)
@@ -55,8 +59,8 @@ namespace Sdl.Community.StudioViews.Providers
 						if (isExcluded)
 						{
 							result.ExcludedSegments++;
-							result.Paragraph.Source.AddSegment(alignmentInfo.SegmentPairLeft.Source, _segmentBuilder);
-							result.Paragraph.Target.AddSegment(alignmentInfo.SegmentPairLeft.Target, _segmentBuilder);
+							sourceContainer.AddSegment(alignmentInfo.SegmentPairLeft.Source, _segmentBuilder);
+							targetContainer.AddSegment(alignmentInfo.SegmentPairLeft.Target, _segmentBuilder);
 						}
 						else
 						{
@@ -65,13 +69,13 @@ namespace Sdl.Community.StudioViews.Providers
 								result.UpdatedSegments++;
 							}
 
-							result.Paragraph.Source.AddSegment(alignmentInfo.SegmentPairRight.Source, _segmentBuilder);
-							result.Paragraph.Target.AddSegment(alignmentInfo.SegmentPairRight.Target, _segmentBuilder);
+							sourceContainer.AddSegment(alignmentInfo.SegmentPairRight.Source, _segmentBuilder);
+							targetContainer.AddSegment(alignmentInfo.SegmentPairRight.Target, _segmentBuilder);
 						}
 						break;
 					case AlignmentInfo.AlignmentType.LeftOnly:
-						result.Paragraph.Source.AddSegment(alignmentInfo.SegmentPairLeft.Source, _segmentBuilder);
-						result.Paragraph.Target.AddSegment(alignmentInfo.SegmentPairLeft.Target, _segmentBuilder);
+						sourceContainer.AddSegment(alignmentInfo.SegmentPairLeft.Source, _segmentBuilder);
+						targetContainer.AddSegment(alignmentInfo.SegmentPairLeft.Target, _segmentBuilder);
 						break;
 				}
 			}
@@ -208,8 +212,8 @@ namespace Sdl.Community.StudioViews.Providers
 					segmentPair.Target.Properties.TranslationOrigin);
 
 				if ((segmentPair.Properties.IsLocked && excludeFilterIds.Exists(a => a == "Locked"))
-				    || excludeFilterIds.Exists(a => a == status)
-				    || excludeFilterIds.Exists(a => a == match))
+					|| excludeFilterIds.Exists(a => a == status)
+					|| excludeFilterIds.Exists(a => a == match))
 				{
 					segmentIsExcluded = true;
 				}
@@ -251,6 +255,28 @@ namespace Sdl.Community.StudioViews.Providers
 		private static bool IsEmpty(ISegment segment)
 		{
 			return segment == null || segment.ToString().Trim() == string.Empty;
+		}
+
+		private static IAbstractMarkupDataContainer GetContainer(IAbstractMarkupDataContainer paragraph, IAbstractMarkupDataContainer container)
+		{
+			var result = container;
+			foreach (var abstractMarkupData in paragraph.AllSubItems)
+			{
+				if (abstractMarkupData is ISegment)
+				{
+					break;
+				}
+
+				if (abstractMarkupData.Clone() is ITagPair tagPair)
+				{
+					tagPair.Clear();
+					container.Add(tagPair);
+
+					result = tagPair;
+				}
+			}
+
+			return result;
 		}
 	}
 }
