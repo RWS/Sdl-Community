@@ -30,6 +30,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 			if (text.IsAtEnd())
 				return new NoMoreText();
 
+			var noMatch = new NoMatch($"({text.Current})", string.Join(",", _pattern), text.CurrentIndex);
 			var patterns = _pattern.ToList();
 			patterns.Remove(Constants.NoSeparator);
 
@@ -51,7 +52,10 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 			stringPatterns.RemoveAll(p => charPatterns.Contains(p));
 			foreach (var sp in stringPatterns)
 			{
-				if (sp == text.Text.Substring(text.CurrentIndex, sp.Length))
+				var currentSpLength = sp.Length;
+				var isValidPositionInString = text.CurrentIndex + currentSpLength < text.Text.Length;
+
+				if (isValidPositionInString && sp == text.Text.Substring(text.CurrentIndex, currentSpLength))
 				{
 					var match = new Match(sp)
 					{
@@ -60,14 +64,14 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Patterns
 
 					if (_keepConsistent && _pattern.Count > 1) _pattern.RemoveAll(el => el != match.Value);
 
-					text.Advance(sp.Length);
+					text.Advance(currentSpLength);
 					return match;
 				}
 			}
 
 			if (_pattern.Contains(Constants.NoSeparator)) return new Match(string.Empty);
 
-			return new NoMatch($"({text.Current})", string.Join(",", _pattern), text.CurrentIndex);
+			return noMatch;
 		}
 	}
 }
