@@ -4,6 +4,7 @@ using System.Linq;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Providers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.StudioViews.Services
 {
@@ -72,6 +73,17 @@ namespace Sdl.Community.StudioViews.Services
 			if (updatedSegmentPairs.Any())
 			{
 				var updatedParagraphUnit = updatedSegmentPairs.FirstOrDefault()?.ParagraphUnit;
+
+				// Import segment pairs across multiple paragraph units from different import files
+				foreach (var updatedSegmentPair in updatedSegmentPairs)
+				{
+					var segmentPair = updatedParagraphUnit?.GetSegmentPair(new SegmentId(updatedSegmentPair.SegmentId));
+					if (segmentPair == null)
+					{
+						updatedParagraphUnit?.Source.Add(updatedSegmentPair.SegmentPair.Source.Clone() as ISegment);
+						updatedParagraphUnit?.Target.Add(updatedSegmentPair.SegmentPair.Target.Clone() as ISegment);
+					}
+				}
 
 				var result = _paragraphUnitProvider.GetUpdatedParagraphUnit(
 					paragraphUnit, updatedParagraphUnit, _excludeFilterIds);
