@@ -47,7 +47,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			else ApplyTargetSettings(sourceDecimalSeparators, targetDecimalSeparators, decimalSeparatorsList);
 
 			decimalSeparatorsList.RemoveAll(string.IsNullOrEmpty);
-			return decimalSeparatorsList.Select(Regex.Unescape).ToList();
+			return decimalSeparatorsList.Select(Regex.Unescape).Distinct().ToList();
 		}
 
 		private List<string> GetAllowedThousandSeparators(bool isSource)
@@ -63,7 +63,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			else ApplyTargetSettings(sourceThousandSeparators, targetThousandSeparators, thousandSeparatorsList);
 
 			thousandSeparatorsList.RemoveAll(string.IsNullOrEmpty);
-			return thousandSeparatorsList.Select(Regex.Unescape).ToList();
+			return thousandSeparatorsList.Select(Regex.Unescape).Distinct().ToList();
 		}
 
 		private (NumberList, NumberList) GetNormalizedNumbers(string sourceText, string targetText)

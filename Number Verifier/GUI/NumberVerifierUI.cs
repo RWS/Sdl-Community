@@ -1,11 +1,15 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace Sdl.Community.NumberVerifier
 {
     public partial class NumberVerifierUI : UserControl
     {
+	    private string _exampleDNormalizedValue;
+	    private string _exampleTNormalizedValue;
+	    private string _exampleOmitLeadingZeroValue;
 
-        public bool ReportAddedNumbers
+	    public bool ReportAddedNumbers
         {
             get {return cb_ReportAddedNumbers.Checked; }
             set { cb_ReportAddedNumbers.Checked = value; }
@@ -264,8 +268,8 @@ namespace Sdl.Community.NumberVerifier
 
         public bool TargetThousandsCustomSeparator
         {
-            get { return targetTbox.Checked; }
-            set { targetTbox.Checked = value; }
+            get { return targetTBox.Checked; }
+            set { targetTBox.Checked = value; }
         }
 
         public bool SourceDecimalCustomSeparator
@@ -276,8 +280,8 @@ namespace Sdl.Community.NumberVerifier
 
         public bool TargetDecimalCustomSeparator
         {
-            get { return customTargetSep.Checked; }
-            set { customTargetSep.Checked = value; }
+            get { return customTargetDSep.Checked; }
+            set { customTargetDSep.Checked = value; }
         }
 
         public string GetSourceThousandsCustomSeparator
@@ -310,16 +314,122 @@ namespace Sdl.Community.NumberVerifier
             set { targetDBox.Text = value; }
         }
         public NumberVerifierUI()
+		{
+			InitializeComponent();
+			this.VScroll = true;
+
+			InitializeExample();
+		}
+
+		private void InitializeExample()
+		{
+			_exampleTNormalizedValue = "1t300t000";
+			var exampleTDefaultValue = "1300000";
+
+			_exampleDNormalizedValue = "1d25";
+			var exampleDDefaultValue = "125";
+
+			_exampleOmitLeadingZeroValue = "0,25";
+
+
+			tLabel1.Text = exampleTDefaultValue;
+			tLabel2.Text = exampleTDefaultValue;
+			tLabel3.Text = exampleTDefaultValue;
+			tLabel4.Text = exampleTDefaultValue;
+			tLabel5.Text = exampleTDefaultValue;
+			tLabel6.Text = exampleTDefaultValue;
+			tLabel7.Text = exampleTDefaultValue;
+			tLabel8.Text = exampleTDefaultValue;
+			
+			ttlabel1.Text = exampleTDefaultValue;
+			ttlabel2.Text = exampleTDefaultValue;
+			ttlabel3.Text = exampleTDefaultValue;
+			ttlabel4.Text = exampleTDefaultValue;
+			ttlabel5.Text = exampleTDefaultValue;
+			ttlabel6.Text = exampleTDefaultValue;
+			ttlabel7.Text = exampleTDefaultValue;
+			ttlabel8.Text = exampleTDefaultValue;
+
+			dlabel1.Text = exampleDDefaultValue;
+			dlabel2.Text = exampleDDefaultValue;
+			dlabel3.Text = exampleDDefaultValue;
+			tdlabel1.Text = exampleDDefaultValue;
+			tdlabel2.Text = exampleDDefaultValue;
+			tdlabel3.Text = exampleDDefaultValue;
+
+
+			tLabel1.Text = _exampleTNormalizedValue.Replace("t", cb_SourceThousandsSpace.Checked ? " " : string.Empty);
+			tLabel1.ForeColor = cb_SourceThousandsSpace.Checked ? Color.Green : Color.Blue;
+
+			tLabel2.Text = _exampleTNormalizedValue.Replace("t", cb_SourceThousandsNobreakSpace.Checked ? " " : string.Empty);
+			tLabel2.ForeColor = cb_SourceThousandsNobreakSpace.Checked ? Color.Green : Color.Blue;
+
+			tLabel3.Text = _exampleTNormalizedValue.Replace("t", cb_SourceThousandsThinSpace.Checked ? " " : string.Empty);
+			tLabel3.ForeColor = cb_SourceThousandsThinSpace.Checked ? Color.Green : Color.Blue;
+
+			tLabel4.Text = _exampleTNormalizedValue.Replace("t", cb_SourceThousandsNobreakThinSpace.Checked ? " " : string.Empty);
+			tLabel4.ForeColor = cb_SourceThousandsNobreakThinSpace.Checked ? Color.Green : Color.Blue;
+
+			tLabel5.Text = _exampleTNormalizedValue.Replace("t", cb_SourceThousandsComma.Checked ? "," : string.Empty);
+			tLabel5.ForeColor = cb_SourceThousandsComma.Checked ? Color.Green : Color.Blue;
+
+			tLabel6.Text = _exampleTNormalizedValue.Replace("t", cb_SourceThousandsPeriod.Checked ? "." : string.Empty);
+			tLabel6.ForeColor = cb_SourceThousandsPeriod.Checked ? Color.Green : Color.Blue;
+
+			tLabel8.Text = _exampleTNormalizedValue.Replace("t", customTSep.Checked ? sourceTBox.Text : string.Empty);
+			tLabel8.ForeColor = customTSep.Checked ? Color.Green : Color.Blue;
+
+
+			ttlabel1.Text = _exampleTNormalizedValue.Replace("t", cb_TargetThousandsSpace.Checked ? " " : string.Empty);
+			tLabel1.ForeColor = cb_TargetThousandsSpace.Checked ? Color.Green : Color.Blue;
+
+			ttlabel2.Text = _exampleTNormalizedValue.Replace("t", cb_TargetThousandsNobreakSpace.Checked ? " " : string.Empty);
+			tLabel2.ForeColor = cb_TargetThousandsNobreakSpace.Checked ? Color.Green : Color.Blue;
+
+			ttlabel3.Text = _exampleTNormalizedValue.Replace("t", cb_TargetThousandsThinSpace.Checked ? " " : string.Empty);
+			tLabel3.ForeColor = cb_TargetThousandsThinSpace.Checked ? Color.Green : Color.Blue;
+
+			ttlabel4.Text = _exampleTNormalizedValue.Replace("t", cb_TargetThousandsNobreakThinSpace.Checked ? " " : string.Empty);
+			tLabel4.ForeColor = cb_TargetThousandsNobreakThinSpace.Checked ? Color.Green : Color.Blue;
+
+			ttlabel5.Text = _exampleTNormalizedValue.Replace("t", cb_TargetThousandsComma.Checked ? "," : string.Empty);
+			tLabel5.ForeColor = cb_TargetThousandsComma.Checked ? Color.Green : Color.Blue;
+
+			ttlabel6.Text = _exampleTNormalizedValue.Replace("t", cb_TargetThousandsPeriod.Checked ? "." : string.Empty);
+			tLabel6.ForeColor = cb_TargetThousandsPeriod.Checked ? Color.Green : Color.Blue;
+
+			ttlabel8.Text = _exampleTNormalizedValue.Replace("t", targetTBox.Checked ? customTBox.Text : string.Empty);
+			tLabel8.ForeColor = targetTBox.Checked ? Color.Green : Color.Blue;
+
+
+			dlabel1.Text = _exampleDNormalizedValue.Replace("d", cb_SourceDecimalComma.Checked ? "," : string.Empty);
+			dlabel1.ForeColor = cb_SourceDecimalComma.Checked ? Color.Green : Color.Blue;
+
+			dlabel2.Text = _exampleDNormalizedValue.Replace("d", cb_SourceDecimalPeriod.Checked ? "." : string.Empty);
+			dlabel2.ForeColor = cb_SourceDecimalPeriod.Checked ? Color.Green : Color.Blue;
+
+			dlabel3.Text = _exampleDNormalizedValue.Replace("d", customDSep.Checked ? sourceDBox.Text : string.Empty);
+			dlabel3.ForeColor = customDSep.Checked ? Color.Green : Color.Blue;
+
+
+			tdlabel1.Text = _exampleDNormalizedValue.Replace("d", cb_TargetDecimalComma.Checked ? "," : string.Empty);
+			tdlabel1.ForeColor = cb_TargetDecimalComma.Checked ? Color.Green : Color.Blue;
+
+			tdlabel2.Text = _exampleDNormalizedValue.Replace("d", cb_TargetDecimalPeriod.Checked ? "." : string.Empty);
+			tdlabel2.ForeColor = cb_TargetDecimalPeriod.Checked ? Color.Green : Color.Blue;
+
+			tdlabel3.Text = _exampleDNormalizedValue.Replace("d", customTargetDSep.Checked ? targetDBox.Text : string.Empty);
+			tdlabel3.ForeColor = customTargetDSep.Checked ? Color.Green : Color.Blue;
+
+			sourceOmitLeadingZeroLabel.Text = sourceOmitZero.Checked ? _exampleOmitLeadingZeroValue.Replace("0", string.Empty) : _exampleOmitLeadingZeroValue;
+			sourceOmitLeadingZeroLabel.ForeColor = sourceOmitZero.Checked ? Color.Green : Color.Blue;
+
+			targetOmitLeadingZeroLabel.Text = targetOmitZero.Checked ? _exampleOmitLeadingZeroValue.Replace("0", string.Empty) : _exampleOmitLeadingZeroValue;
+			targetOmitLeadingZeroLabel.ForeColor = targetOmitZero.Checked ? Color.Green : Color.Blue;
+		}
+
+		private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
         {
-            InitializeComponent();
-            this.VScroll = true;
-        }
-
-       
-        private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
-        {
-
-
 	        if (TargetOmitLeadingZero)
 	        {
 				TargetOmitLeadingZero = false;
@@ -384,17 +494,17 @@ namespace Sdl.Community.NumberVerifier
 
             if (TargetThousandsCustomSeparator)
             {
-                targetTbox.Checked = false;
+                targetTBox.Checked = false;
             }
-            targetTbox.Enabled = false;
+            targetTBox.Enabled = false;
             customTBox.Clear();
             customTBox.Enabled = false;
 
             if (TargetDecimalCustomSeparator)
             {
-                customTargetSep.Checked = false;
+                customTargetDSep.Checked = false;
             }
-            customTargetSep.Enabled = false;
+            customTargetDSep.Enabled = false;
             targetDBox.Clear();
             targetDBox.Enabled = false;
 
@@ -423,9 +533,9 @@ namespace Sdl.Community.NumberVerifier
             cb_TargetNoSeparator.Enabled = true;
             cb_TargetDecimalComma.Enabled = true;
             cb_TargetDecimalPeriod.Enabled = true;
-            targetTbox.Enabled = true;
+            targetTBox.Enabled = true;
             customTBox.Enabled = true;
-            customTargetSep.Enabled = true;
+            customTargetDSep.Enabled = true;
 			cb_customSeparators.Enabled = true;
 			tb_customsSeparators.Enabled = true;
 			targetMisBox.Enabled = true;
@@ -444,9 +554,135 @@ namespace Sdl.Community.NumberVerifier
             EnableCheckBoxes();
         }
 
-		private void cb_customSeparators_CheckedChanged(object sender, System.EventArgs e)
-		{
+	    private void CheckedChanged(object sender, System.EventArgs e)
+	    {
+		    if (sender is not CheckBox checkBox) return;
 
+
+		    var isChecked = checkBox.Checked;
+		    switch (checkBox.Name)
+		    {
+			    case "cb_SourceThousandsSpace":
+				    tLabel1.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    tLabel1.ForeColor = isChecked ? Color.Green : Color.Blue;
+				    break;
+			    case "cb_SourceThousandsNobreakSpace":
+				    tLabel2.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    tLabel2.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_SourceThousandsThinSpace":
+				    tLabel3.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    tLabel3.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_SourceThousandsNobreakThinSpace":
+				    tLabel4.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    tLabel4.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_SourceThousandsComma":
+				    tLabel5.Text = _exampleTNormalizedValue.Replace("t", isChecked ? "," : string.Empty);
+				    tLabel5.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_SourceThousandsPeriod":
+				    tLabel6.Text = _exampleTNormalizedValue.Replace("t", isChecked ? "." : string.Empty);
+				    tLabel6.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "customTSep":
+				    tLabel8.Text = _exampleTNormalizedValue.Replace("t", isChecked ? sourceTBox.Text : string.Empty);
+				    tLabel8.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+
+
+				case "cb_SourceDecimalComma":
+					dlabel1.Text = _exampleDNormalizedValue.Replace("d", isChecked ? "," : string.Empty);
+					dlabel1.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_SourceDecimalPeriod":
+					dlabel2.Text = _exampleDNormalizedValue.Replace("d", isChecked ? "." : string.Empty);
+				    dlabel2.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "customDSep":
+					dlabel3.Text = _exampleDNormalizedValue.Replace("d", isChecked ? sourceDBox.Text : string.Empty);
+				    dlabel3.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    
+			    case "cb_TargetDecimalComma":
+					tdlabel1.Text = _exampleDNormalizedValue.Replace("d", isChecked ? "," : string.Empty);
+				    tdlabel1.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_TargetDecimalPeriod":
+					tdlabel2.Text = _exampleDNormalizedValue.Replace("d", isChecked ? "." : string.Empty);
+				    tdlabel2.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "customTargetDSep":
+					tdlabel3.Text = _exampleDNormalizedValue.Replace("d", isChecked ? targetDBox.Text : string.Empty);
+				    tdlabel3.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+
+
+				case "cb_TargetThousandsSpace":
+					ttlabel1.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+					ttlabel1.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_TargetThousandsNobreakSpace":
+				    ttlabel2.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    ttlabel2.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_TargetThousandsThinSpace":
+				    ttlabel3.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    ttlabel3.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_TargetThousandsNobreakThinSpace":
+				    ttlabel4.Text = _exampleTNormalizedValue.Replace("t", isChecked ? " " : string.Empty);
+				    ttlabel4.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_TargetThousandsComma":
+				    ttlabel5.Text = _exampleTNormalizedValue.Replace("t", isChecked ? "," : string.Empty);
+				    ttlabel5.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "cb_TargetThousandsPeriod":
+				    ttlabel6.Text = _exampleTNormalizedValue.Replace("t", isChecked ? "." : string.Empty);
+				    ttlabel6.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "targetTbox":
+				    ttlabel8.Text = _exampleTNormalizedValue.Replace("t", isChecked ? customTBox.Text : string.Empty);
+				    ttlabel8.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+
+				case "sourceOmitZero":
+					sourceOmitLeadingZeroLabel.Text = isChecked
+						? _exampleOmitLeadingZeroValue.Replace("0", string.Empty)
+						: _exampleOmitLeadingZeroValue;
+					sourceOmitLeadingZeroLabel.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			    case "targetOmitZero":
+					targetOmitLeadingZeroLabel.Text = isChecked
+						? _exampleOmitLeadingZeroValue.Replace("0", string.Empty)
+						: _exampleOmitLeadingZeroValue;
+				    targetOmitLeadingZeroLabel.ForeColor = isChecked ? Color.Green : Color.Blue;
+					break;
+			}
+
+	    }
+
+		private void TBox_TextChanged(object sender, System.EventArgs e)
+		{
+			if (sender is not TextBox textBox) return;
+			switch (textBox.Name)
+			{
+				case "sourceTBox" when customTSep.Checked:
+					tLabel8.Text = _exampleTNormalizedValue.Replace("t", sourceTBox.Text);
+					break;
+				case "customTBox" when targetTBox.Checked:
+					ttlabel8.Text = _exampleTNormalizedValue.Replace("t", customTBox.Text);
+					break;
+
+				case "sourceDBox" when customDSep.Checked:
+					dlabel3.Text = _exampleDNormalizedValue.Replace("d", sourceDBox.Text);
+					break;
+				case "targetDBox" when customTargetDSep.Checked:
+					tdlabel3.Text = _exampleDNormalizedValue.Replace("d", targetDBox.Text);
+					break;
+			}
 		}
 	}
 }
