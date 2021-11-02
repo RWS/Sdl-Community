@@ -157,13 +157,38 @@ namespace Sdl.Community.StudioViews.Services
 
 			var newParagraphUnit = _segmentBuilder.CreateParagraphUnit(paragraphUnit.Properties);
 
+			var sourceContainer = GetContainer(paragraphUnit.Source, newParagraphUnit.Source);
+			var targetContainer = GetContainer(paragraphUnit.Target, newParagraphUnit.Target);
+
 			foreach (var segmentPair in segmentPairs)
 			{
-				newParagraphUnit.Source.Add(segmentPair.Source.Clone() as ISegment);
-				newParagraphUnit.Target.Add(segmentPair.Target.Clone() as ISegment);
+				sourceContainer.Add(segmentPair.Source.Clone() as ISegment);
+				targetContainer.Add(segmentPair.Target.Clone() as ISegment);
 			}
 
 			UpdateParagraphUnit(newParagraphUnit);
+		}
+
+		private static IAbstractMarkupDataContainer GetContainer(IAbstractMarkupDataContainer paragraph, IAbstractMarkupDataContainer container)
+		{
+			var result = container;
+			foreach (var abstractMarkupData in paragraph.AllSubItems)
+			{
+				if (abstractMarkupData is ISegment)
+				{
+					break;
+				}
+
+				if (abstractMarkupData.Clone() is ITagPair tagPair)
+				{
+					tagPair.Clear();
+					container.Add(tagPair);
+
+					result = tagPair;
+				}
+			}
+
+			return result;
 		}
 
 		private void UpdateParagraphUnit(IParagraphUnit paragraphUnit)
