@@ -3,8 +3,11 @@ using System.Linq;
 
 namespace Sdl.Community.NumberVerifier.Model
 {
-	public class NumberList
+	public class PartsList
 	{
+		
+		public List<string> Separators { get; }
+
 		private readonly List<(string, string)> _indexedList = new List<(string, string)>();
 
 		public List<string> InitialPartsList
@@ -25,8 +28,9 @@ namespace Sdl.Community.NumberVerifier.Model
 			get => _indexedList[index].Item2;
 		}
 
-		public NumberList(List<string> initialParts, List<string> normalizedParts)
+		public PartsList(List<string> initialParts, List<string> normalizedParts, List<string> separators)
 		{
+			Separators = separators;
 			if (initialParts is null) return;
 
 			for (var i = 0; i < initialParts.Count; i++)

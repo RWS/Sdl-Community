@@ -8,12 +8,12 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 	{
 		public string Value { get; set; }
 
-		public IMatch FlattenByNamedGroups()
+		public IMatch FlattenByNamedGroups(bool removeDuplicates = true)
 		{
-			var newMatches = Matches.Select(item => item is MatchArray matchArray ? matchArray.FlattenByNamedGroups() : item).ToList();
+			var newMatches = Matches.Select(item => item is MatchArray matchArray ? matchArray.FlattenByNamedGroups(removeDuplicates) : item).ToList();
 
 			newMatches.RemoveAll(m => m?.Name == null);
-			RemoveDuplicates(newMatches);
+			if (removeDuplicates) RemoveDuplicates(newMatches);
 
 			if (Name == null)
 			{
@@ -60,14 +60,16 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches
 			Matches.Add(match);
 		}
 
-		public IMatch this[string key]
+		public List<IMatch> this[string key]
 		{
 			get
 			{
-				var matchfound = Matches.FirstOrDefault(m => m.Name == key);
-				return matchfound ??
-				       Matches.Where(m => m is MatchArray).Cast<MatchArray>().Select(matchArray => matchArray[key]).FirstOrDefault(
-					       subArray => subArray is not null);
+				var matches = Matches.Where(m => m.Name == key).ToList();
+
+				       matches.AddRange(Matches.Where(m => m is MatchArray).Cast<MatchArray>().Select(matchArray => matchArray[key]).SelectMany(l=>l).Where(
+					       subArray => subArray is not null));
+
+				return matches;
 			}
 		}
 

@@ -159,9 +159,11 @@
     <Compile Include="MessageUI\NumberVerifierMessageUI.designer.cs">
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Error.cs" />
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
-    <Compile Include="Model\NumberList.cs" />
+    <Compile Include="Model\PartsList.cs" />
+    <Compile Include="Model\NumberTexts.cs" />
     <Compile Include="Parsers\Number\GenericParser\Events\MatchedEventHandler.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Any.cs" />
     <Compile Include="Parsers\Number\Model\NumberSeparator.cs" />
@@ -182,7 +184,8 @@
     </Compile>
     <Compile Include="NumberVerifierSettings.cs" />
     <Compile Include="GUI\NumberVerifierUIPage.cs" />
-    <Compile Include="Parsers\Number\NumberNormalizer.cs" />
+    <Compile Include="Parsers\Number\Model\NumberText.cs" />
+    <Compile Include="Parsers\Number\NumberValidator.cs" />
     <Compile Include="Parsers\Number\GenericParser\Interface\IPattern.cs" />
     <Compile Include="Parsers\Number\GenericParser\Matches\Match.cs" />
     <Compile Include="Parsers\Number\GenericParser\Matches\NoMatch.cs" />
@@ -201,6 +204,7 @@
     <Compile Include="Parsers\Number\GenericParser\Patterns\Sequence.cs" />
     <Compile Include="Parsers\Number\GenericParser\Patterns\Text.cs" />
     <Compile Include="Parsers\Number\GenericParser\TextToParse.cs" />
+    <Compile Include="Parsers\RegexExtensions.cs" />
     <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateSourceIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateTargetIssuesOnNewLineErrorMessageProcessor.cs" />
@@ -262,6 +266,7 @@
   <ItemGroup>
     <EmbeddedResource Include="GUI\NumberVerifierHelp.resx">
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\NumberVerifierUI.resx">
       <DependentUpon>NumberVerifierUI.cs</DependentUpon>

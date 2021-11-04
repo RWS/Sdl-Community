@@ -91,7 +91,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+	        Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
 
 		/// <summary>
@@ -256,7 +256,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart);
 		}
 
 		/// <summary>
@@ -311,7 +311,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+			Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart);
 		}
 
 		/// <summary>
@@ -439,7 +439,9 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             //target settings
             var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.TargetDecimalComma).Returns(true);
+
+
+			numberVerifierSettings.Setup(d => d.TargetDecimalComma).Returns(true);
 
             //source settings
             numberVerifierSettings.Setup(s => s.SourceThousandsSpace).Returns(true);
@@ -452,7 +454,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -600,7 +602,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_NumberUnlocalised, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -653,7 +655,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_NumbersAdded, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_NumberAdded, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -761,7 +763,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+	        Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
 
 
@@ -790,7 +792,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+	        Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
 		
 		/// <summary>
@@ -846,7 +848,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+	        Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -887,7 +889,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	        //target settings
 	        var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
 
-	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
 	        //run initialize method in order to set chosen separators
@@ -895,7 +896,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 	        var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-	        Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+	        Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
 		#endregion
 	}

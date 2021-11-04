@@ -62,7 +62,7 @@ namespace Sdl.Community.NumberVerifier
 				_textFormatter = new TextFormatter();
 			}
 
-			_numberNormalizer = new NumberNormalizer();
+			_numberValidator = new NumberValidator();
 		}
 
 		private static ProjectsController GetProjectController()
@@ -225,7 +225,7 @@ namespace Sdl.Community.NumberVerifier
 		private string _sourceMatchingDecimalSeparators = string.Empty;
 		private string _targetMatchingDecimalSeparators = string.Empty;
 
-		private readonly NumberNormalizer _numberNormalizer;
+		private readonly NumberValidator _numberValidator;
 
 		public void Initialize(IDocumentProperties documentInfo)
 		{
@@ -435,6 +435,71 @@ namespace Sdl.Community.NumberVerifier
 			return Tuple.Create(alphaNumericsList, normalizedAlphaNumericsList);
 		}
 
+		private ErrorLevel GetNumbersErrorLevel(string setting)
+		{
+			switch (setting)
+			{
+				case "Error":
+					return ErrorLevel.Error;
+
+				case "Warning":
+					return ErrorLevel.Warning;
+
+				default:
+					return ErrorLevel.Note;
+			}
+		}
+
+		private List<ErrorReporting> GetErrorList(bool isHindiVerfication, NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
+		{
+			var index = 0;
+			var errorMessages = new List<ErrorReporting>();
+			if (!VerificationSettings.ReportNumberFormatErrors)
+			{
+				sourceNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(Parsers.Number.Model.NumberText.ErrorLevel.NumberLevel));
+
+				targetNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(Parsers.Number.Model.NumberText.ErrorLevel.NumberLevel));
+			}
+
+			foreach (var numberText in sourceNumberTexts.Texts)
+			{
+				index++;
+				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
+				foreach (var error in errors)
+				{
+					errorMessages.Add(new ErrorReporting
+					{
+						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
+						ErrorMessage = error.Message,
+						ExtendedErrorMessage = error.Message,
+						SourceNumberIssues = $"Number at index {index}: {numberText.Text}",
+						IsHindiVerification = isHindiVerfication
+					});
+				}
+			}
+
+			index = 0;
+			foreach (var numberText in targetNumberTexts.Texts)
+			{
+				index++;
+				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
+				foreach (var error in errors)
+				{
+					errorMessages.Add(new ErrorReporting
+					{
+						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
+						ErrorMessage = error.Message,
+						ExtendedErrorMessage = error.Message,
+						TargetNumberIssues = $"Number at index {index}: {numberText.Text}",
+						IsHindiVerification = isHindiVerfication
+					});
+				}
+			}
+
+			return errorMessages;
+		}
+
+
 		/// <summary>
 		/// Returns a errors list after numbers are normalized
 		/// </summary>
@@ -459,42 +524,12 @@ namespace Sdl.Community.NumberVerifier
 				isHindiVerification = true;
 			}
 
-			_numberNormalizer.GetNormalizedNumbers(numberModel.SourceText, numberModel.TargetText, VerificationSettings, out var sourceNumbersNormalized, out var targetNumbersNormalized);
-			var sourceNumberList = sourceNumbersNormalized?.InitialPartsList;
-			var sourceNormalizedNumberList = sourceNumbersNormalized?.NormalizedPartsList;
+			_numberValidator.GetErrors(numberModel.SourceText, numberModel.TargetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
 
-			var targetNumberList = targetNumbersNormalized?.InitialPartsList;
-			var targetNormalizedNumberList = targetNumbersNormalized?.NormalizedPartsList;
+			var errorMessages = GetErrorList(isHindiVerification, sourceNumbers, targetNumbers);
 
-			// remove identical numbers found both in source and target from respective list
-			RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList, sourceNormalizedNumberList);
-
-			// remove numbers found both in source and target from respective list disregarding difference in thousands and decimal separators
-			RemoveNumbersIgnoreThousandsAndDecimalSeparators(sourceNumberList, targetNormalizedNumberList, sourceNormalizedNumberList, targetNumberList);
-
-			// remove numbers found both in source and target from respective list disregarding difference when thousands and decimal separators are undefined due to ambiguity 
-			RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList, sourceNormalizedNumberList, targetNormalizedNumberList);
-
-			var sourceHindiList = initialSourceHindiText.Equals(numberModel.SourceText) ? new List<string> { numberModel.SourceText } : new List<string> { initialSourceHindiText };
-			var targetHindiList = initialTargetHindiText.Equals(numberModel.TargetText) ? new List<string> { numberModel.TargetText } : new List<string> { initialTargetHindiText };
-
-			var numberModelRes = new NumberModel
-			{
-				Settings = VerificationSettings,
-				SourceNumbers = sourceNormalizedNumberList,
-				TargetNumbers = targetNormalizedNumberList,
-				InitialSourceNumbers = sourceHindiList,
-				InitialTargetNumbers = targetHindiList,
-				SourceText = !string.IsNullOrEmpty(numberModel.SourceArabicText) ? numberModel.SourceArabicText : numberModel.SourceText,
-				TargetText = !string.IsNullOrEmpty(numberModel.TargetArabicText) ? numberModel.TargetArabicText : numberModel.TargetText,
-				IsHindiVerification = isHindiVerification
-			};
-
-			var numberResults = new NumberResults(numberModelRes);
-			var numberErrorComposer = new NumberErrorComposer();
-			var verifyProcessor = numberErrorComposer.Compose();
-
-			return verifyProcessor.Verify(numberResults);
+			return errorMessages;
+			
 		}
 
 		/// <summary>
@@ -556,190 +591,6 @@ namespace Sdl.Community.NumberVerifier
 			var errorsListFromNormalizedNumbers = CheckNumbers(string.Empty, string.Empty, numberModel);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 			return errorList;
-		}
-
-		private void RemoveNumbersUndefinedThousandsAndDecimalSeparator(IList targetNumberList, IList sourceNumberList,
-			IList<string> sourceNormalizedNumberList, IList<string> targetNormalizedNumberList)
-		{
-			try
-			{
-				if (VerificationSettings.AllowLocalizations || VerificationSettings.RequireLocalizations)
-				{
-					if (targetNumberList.Count > 0 && sourceNumberList.Count > 0)
-					{
-						int nJ;
-						for (nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
-						{
-							if (sourceNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
-								targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ].Replace("u", "d")))
-							{
-								targetNumberList.RemoveAt(
-									targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "d")));
-								targetNormalizedNumberList.RemoveAt(
-									targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "d")));
-								sourceNormalizedNumberList.RemoveAt(nJ);
-								sourceNumberList.RemoveAt(nJ);
-							}
-							else if (sourceNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
-									 targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ].Replace("u", "t")))
-							{
-								targetNumberList.RemoveAt(
-									targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "t")));
-								targetNormalizedNumberList.RemoveAt(
-									targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "t")));
-								sourceNormalizedNumberList.RemoveAt(nJ);
-								sourceNumberList.RemoveAt(nJ);
-							}
-						}
-					}
-
-					if (targetNumberList.Count > 0 && sourceNumberList.Count > 0)
-					{
-						int nJ;
-						for (nJ = targetNumberList.Count - 1; nJ >= 0; nJ--)
-						{
-							if (targetNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
-								sourceNormalizedNumberList.Contains(targetNormalizedNumberList[nJ].Replace("u", "d")))
-							{
-								sourceNumberList.RemoveAt(
-									sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "d")));
-								sourceNormalizedNumberList.RemoveAt(
-									sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "d")));
-								targetNormalizedNumberList.RemoveAt(nJ);
-								targetNumberList.RemoveAt(nJ);
-							}
-							else if (targetNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
-									 sourceNormalizedNumberList.Contains(targetNormalizedNumberList[nJ].Replace("u", "t")))
-							{
-								sourceNumberList.RemoveAt(
-									sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "t")));
-								sourceNormalizedNumberList.RemoveAt(
-									sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "t")));
-								targetNormalizedNumberList.RemoveAt(nJ);
-								targetNumberList.RemoveAt(nJ);
-							}
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
-			}
-		}
-
-		private void RemoveNumbersIgnoreThousandsAndDecimalSeparators(IList sourceNumberList, IList<string> targetNormalizedNumberList,
-			IList<string> sourceNormalizedNumberList, IList targetNumberList)
-		{
-			try
-			{
-				if (VerificationSettings.AllowLocalizations || VerificationSettings.RequireLocalizations)
-				{
-					int sourceNumberIndex;
-					for (sourceNumberIndex = sourceNumberList.Count - 1; sourceNumberIndex >= 0; sourceNumberIndex--)
-					{
-						var currentNormalizedSourceNumber = sourceNormalizedNumberList[sourceNumberIndex];
-
-						if (!targetNormalizedNumberList.Contains(currentNormalizedSourceNumber)) continue;
-						var indexOfSourceNumberInTarget = targetNormalizedNumberList.IndexOf(currentNormalizedSourceNumber);
-
-						targetNumberList.RemoveAt(indexOfSourceNumberInTarget);
-						targetNormalizedNumberList.RemoveAt(indexOfSourceNumberInTarget);
-
-						sourceNormalizedNumberList.RemoveAt(sourceNumberIndex);
-						sourceNumberList.RemoveAt(sourceNumberIndex);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
-			}
-		}
-
-		private void RemoveIdenticalNumbers(IList<string> sourceNumberList, IList<string> targetNumberList, List<string> targetNormalizedNumberList,
-			IList sourceNormalizedNumberList)
-		{
-			try
-			{
-				if (targetNormalizedNumberList == null) throw new ArgumentNullException("targetNormalizedNumberList");
-				if (VerificationSettings.PreventLocalizations || VerificationSettings.AllowLocalizations)
-				{
-					for (var nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
-					{
-						if (!targetNumberList.Contains(sourceNumberList[nJ])) continue;
-						targetNormalizedNumberList.RemoveAt(targetNumberList.IndexOf(sourceNumberList[nJ]));
-						targetNumberList.RemoveAt(targetNumberList.IndexOf(sourceNumberList[nJ]));
-						sourceNormalizedNumberList.RemoveAt(nJ);
-						sourceNumberList.RemoveAt(nJ);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
-			}
-		}
-
-		//For more information see: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
-		public string AddCustomSeparators(string selectedSeparators, bool isDecimalSeparator)
-		{
-			var separatorsList = new List<string>();
-			var selectedSep = string.Empty;
-			var separators = new StringBuilder();
-			try
-			{
-				// you can use in target as separators source separators or selected target separators
-				if (_verificationSettings.AllowLocalizations)
-				{
-					selectedSep = isDecimalSeparator ? _sourceMatchingDecimalSeparators : _sourceMatchingThousandSeparators;
-					selectedSep = isDecimalSeparator ? $"{selectedSep}{_targetMatchingDecimalSeparators}" : $"{selectedSep}{_targetMatchingThousandSeparators}";
-				}
-
-				// you can use only source separators selected
-				if (_verificationSettings.PreventLocalizations)
-				{
-					selectedSep = isDecimalSeparator ? _sourceMatchingDecimalSeparators : _sourceMatchingThousandSeparators;
-				}
-
-				if (_verificationSettings.RequireLocalizations)
-				{
-					selectedSep = selectedSeparators;
-				}
-
-				// Composition (ApostrophCompositionProcessor)
-				if (selectedSeparators.Contains("'"))
-				{
-					selectedSep = string.Concat(selectedSeparators, @"\u2019\u0027");
-				}
-
-				// get a list of source separators if we are in case of allow localization, or prevent localization
-				// Composition UniqueSeparatorComposition
-				if (!string.IsNullOrEmpty(selectedSep))
-				{
-					var sepSource = selectedSep.Split('\\').ToList();
-
-					// add the separator to list only if that separator does not exists
-					foreach (var separator in sepSource)
-					{
-						if (!separatorsList.Contains(@"\" + separator.ToLower()) && !string.IsNullOrEmpty(separator))
-						{
-							separatorsList.Add(@"\" + separator.ToLower());
-						}
-					}
-				}
-
-				// returns final string of separators used
-				foreach (var sep in separatorsList)
-				{
-					separators.Append(sep);
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
-			}
-			return separators.ToString();
 		}
 
 		public string NormalizeNumberWithMinusSign(string number)
@@ -938,7 +789,7 @@ namespace Sdl.Community.NumberVerifier
 			try
 			{
 				var sb = new StringBuilder();
-				var hindiNumbers = GetHindiNumbers();
+				var easternArabicNumbers = GetEasternArabicNumbers();
 				var hindiNumberModel = new HindiNumberModel
 				{
 					SourceGroups = source.Split(' ').ToArray(),
@@ -956,8 +807,8 @@ namespace Sdl.Community.NumberVerifier
 					{
 						foreach (var s in sourceGroup)
 						{
-							sourceResult = hindiNumbers.ContainsValue(s.ToString())
-								? sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key).ToString()
+							sourceResult = easternArabicNumbers.ContainsValue(s.ToString())
+								? sb.Append(easternArabicNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key).ToString()
 								: sb.Append(s.ToString()).ToString();
 						}
 
@@ -979,8 +830,8 @@ namespace Sdl.Community.NumberVerifier
 					{
 						foreach (var t in targetGroup)
 						{
-							targetResult = hindiNumbers.ContainsValue(t.ToString())
-								? sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key).ToString()
+							targetResult = easternArabicNumbers.ContainsValue(t.ToString())
+								? sb.Append(easternArabicNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key).ToString()
 								: sb.Append(t.ToString()).ToString();
 						}
 
@@ -1007,7 +858,7 @@ namespace Sdl.Community.NumberVerifier
 			return result;
 		}
 
-		public Dictionary<string, string> GetHindiNumbers()
+		public Dictionary<string, string> GetEasternArabicNumbers()
 		{
 			var hindiDictionary = new Dictionary<string, string>();
 			hindiDictionary.Add("0", "٠");
@@ -1078,7 +929,7 @@ namespace Sdl.Community.NumberVerifier
 
 					if (hindiNumberModel.SourceLanguage.Equals(Constants.HindiLanguage))
 					{
-						var sourceText = hindiNumberModel.HindiDictionary.Where(s => s.Key.Equals(numberRes.SourceText)).FirstOrDefault();
+						var sourceText = hindiNumberModel.HindiDictionary.FirstOrDefault(s => s.Key.Equals(numberRes.SourceText));
 						result.Add(new NumberModel
 						{
 							SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
@@ -1090,8 +941,9 @@ namespace Sdl.Community.NumberVerifier
 					// map to the corresponding source text for the Hindi target numbers found with issues
 					if (hindiNumberModel.TargetDictionary.Count > 0)
 					{
-						var sourceText = hindiNumberModel.HindiDictionary.Where(s => s.Key.Contains(numberRes.SourceText)).FirstOrDefault();
-						var targetText = hindiNumberModel.TargetDictionary.Where(t => t.Key.Contains(sourceText.Value)).FirstOrDefault();
+						var sourceText = hindiNumberModel.HindiDictionary.FirstOrDefault(s => s.Key.Contains(numberRes.SourceText));
+
+						var targetText = hindiNumberModel.TargetDictionary.FirstOrDefault(t => t.Key.Contains(sourceText.Value));
 						result.Add(new NumberModel
 						{
 							SourceText = !string.IsNullOrEmpty(sourceText.Key) ? sourceText.Key : numberRes.SourceText,

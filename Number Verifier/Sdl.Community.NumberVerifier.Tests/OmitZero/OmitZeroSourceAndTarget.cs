@@ -127,15 +127,19 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitCheckedTargetUncheckedError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-			Assert.Equal(errorMessage[0]?.ErrorMessage, PluginResources.Error_NumbersNotIdentical);
+
+			Assert.Collection(errorMessage,
+				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_NumberUnlocalised),
+				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart));
 		}
 
 		[Theory]
 		[InlineData("-.55", "-.55")]
 		public void SourceOmitCheckedTargetUncheckedNegativeNumbersNoError(string source, string target)
 		{
-			var errorMessage = SourceOmitUncheckedTargetUnchecked(source, target);
-			Assert.True(errorMessage.Count == 0);
+			var errorMessages = SourceOmitCheckedTargetUnchecked(source, target);
+			Assert.Collection(errorMessages,
+				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_NumberUnlocalised));
 		}
 
 		/// <summary>
@@ -164,7 +168,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitUncheckedTargetCheckedError(string source, string target)
 		{
 			var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+			Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
 		}
 
 		/// <summary>
@@ -194,7 +198,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitCheckedTargetCheckedWithError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-			//Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0]?.ErrorMessage);
+			//Assert.Equal(PluginResources.DoesNotCorrespondToItsSourceCounterpart, errorMessage[0]?.ErrorMessage);
 			Assert.True(errorMessage.Count == 0);
 		}
 
@@ -208,7 +212,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void CheckError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0]?.ErrorMessage);
+			Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0]?.ErrorMessage);
 		}
 	}
 }

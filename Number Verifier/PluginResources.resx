@@ -139,7 +139,7 @@
   <data name="Verifier_Description" xml:space="preserve">
     <value>Plug-in to compare source and target numbers.</value>
   </data>
-  <data name="Error_NumbersAdded" xml:space="preserve">
+  <data name="Error_NumberAdded" xml:space="preserve">
     <value>Number added. </value>
   </data>
   <data name="Error_NumbersRemoved" xml:space="preserve">
@@ -193,5 +193,38 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   </data>
   <data name="NumberParser_Message_LastCharIsNotANumber" xml:space="preserve">
 	  <value>The last char is not a number</value>
+  </data>
+  <data name="Segment_level_errors" xml:space="preserve">
+	  <value>Segment-level errors</value>
+  </data>
+  <data name="Text_area_level_errors" xml:space="preserve">
+	  <value>Text-area level errors</value>
+  </data>
+  <data name="Number_level_errors" xml:space="preserve">
+	  <value>Number level errors</value>
+  </data>
+  <data name="Error_SameSequenceButDifferentValue" xml:space="preserve">
+	  <value>Same sequence but different value</value>
+  </data>
+  <data name="Error_NumberUnlocalised" xml:space="preserve">
+	  <value>Number unlocalised</value>
+  </data>
+  <data name="ThousandSeparatorAfterDecimal" xml:space="preserve">
+	  <value>Thousand separator after decimal</value>
+  </data>
+  <data name="NumberCannotHaveTwoDifferentThousandSeparators" xml:space="preserve">
+	  <value>Number cannot have two different thousand separators</value>
+  </data>
+  <data name="TooManyDecimalSeparators" xml:space="preserve">
+	  <value>Too many decimal separators</value>
+  </data>
+  <data name="ThousandSeparatorAfterDecimalSeparator" xml:space="preserve">
+	  <value>Thousand separator after decimal separator</value>
+  </data>
+  <data name="TooManyTypesOfSeparators" xml:space="preserve">
+	  <value>Too many types of separators</value>
+  </data>
+  <data name="Error_DoesNotCorrespondToItsSourceCounterpart" xml:space="preserve">
+	  <value>Does not correspond to its source counterpart</value>
   </data>
 </root>

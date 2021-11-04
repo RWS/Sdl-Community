@@ -9,5 +9,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Interface
 		IMatch Match(TextToParse text);
 
 		void MatchAll(string text);
+		void Reset();
 	}
 }

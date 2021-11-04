@@ -84,7 +84,6 @@
     <Compile Include="OmitZero\OmitLeadingZero.cs" />
     <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="OmitZero\OmitZeroSourceAndTarget.cs" />
-    <Compile Include="Parsers\GenericParser\GenericParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsBuilder.cs" />
     <Compile Include="SourceSettings\SourceSettingsAndAllowLocalization.cs" />

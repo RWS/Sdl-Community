@@ -76,7 +76,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
         }
         /// <summary>
         /// Thousands sep: space, thin space, no-break space
@@ -175,7 +175,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.Equal(PluginResources.Error_NumbersNotIdentical, errorMessage[0].ErrorMessage);
+			Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
 		}
 
 		/// <summary>
@@ -247,7 +247,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
-            Assert.Equal(PluginResources.Error_NumbersAdded, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_NumberAdded, errorMessage[0].ErrorMessage);
         }
 
         #endregion
