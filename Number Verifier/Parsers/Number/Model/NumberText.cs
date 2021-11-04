@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.NumberVerifier.Model;
-using Sdl.Community.NumberVerifier.Parsers.Number.GenericParser.Matches;
 
 namespace Sdl.Community.NumberVerifier.Parsers.Number.Model
 {
@@ -28,8 +27,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number.Model
 		public bool IsValidTextArea => Errors[ErrorLevel.TextAreaLevel].Count == 0;
 
 		public string Normalized { get; set; }
-
-		public MatchArray RealNumberMatch { get; set; }
 
 		public List<string> Separators { get; set; }
 
