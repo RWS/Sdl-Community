@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,13 +11,12 @@ using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
-using Sdl.Community.NumberVerifier.Parsers.Number;
 using Sdl.Community.NumberVerifier.Processors;
+using Sdl.Community.NumberVerifier.Validator;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Verification.Api;
 
 namespace Sdl.Community.NumberVerifier
@@ -26,48 +24,30 @@ namespace Sdl.Community.NumberVerifier
 	/// <summary>
 	/// Required annotation for declaring the extension class.
 	/// </summary>
-	#region "Declaration"
+
 	[GlobalVerifier("Number Verifier", "Plugin_Name", "Plugin_Description")]
-	#endregion
 	public class NumberVerifierMain : IGlobalVerifier, IBilingualVerifier, ISharedObjectsAware
 	{
-		#region "PrivateMembers"
-		private ISharedObjects _sharedObjects;
-
-		private bool? _enabled;
-		private INumberVerifierSettings _verificationSettings;
-		private readonly TextFormatter _textFormatter;
-		private string _targetText;
-		private string _sourceText;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-		#endregion
+		private readonly TextFormatter _textFormatter;
+		private bool? _enabled;
+		private ISharedObjects _sharedObjects;
+		private string _sourceText;
+		private string _targetText;
+		private INumberVerifierSettings _verificationSettings;
 
 		public NumberVerifierMain() : this(null)
 		{
-			if (_textFormatter == null)
-			{
-				_textFormatter = new TextFormatter();
-			}
-
-			
+			_textFormatter ??= new TextFormatter();
 		}
 
 		public NumberVerifierMain(INumberVerifierSettings numberVerifierSettings)
 		{
 			_verificationSettings = numberVerifierSettings;
 
-			if (_textFormatter == null)
-			{
-				_textFormatter = new TextFormatter();
-			}
+			_textFormatter ??= new TextFormatter();
 
 			_numberValidator = new NumberValidator();
-		}
-
-		private static ProjectsController GetProjectController()
-		{
-			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 
 		public bool Enabled
@@ -95,7 +75,7 @@ namespace Sdl.Community.NumberVerifier
 		/// to be used in the verification logic, e.g. the context display code to
 		/// which the verification should be applied.
 		/// </summary>
-		#region Settings Bundle
+
 		public INumberVerifierSettings VerificationSettings
 		{
 			get
@@ -105,10 +85,8 @@ namespace Sdl.Community.NumberVerifier
 				if (bundle == null) return _verificationSettings;
 				_verificationSettings = bundle.GetSettingsGroup<NumberVerifierSettings>();
 				return _verificationSettings;
-
 			}
 		}
-		#endregion
 
 		/// <summary>
 		/// Creates the text generator, which traverses the elements of the current
@@ -116,33 +94,29 @@ namespace Sdl.Community.NumberVerifier
 		/// is used to retrieve only plain text information from the current segment,
 		/// if tags should not be considered for the verification.
 		/// </summary>
-		#region "text generator"
+
 		private TextGenerator _textGenerator;
 
 		public TextGenerator TextGenerator
 		{
-			get { return _textGenerator ?? (_textGenerator = new TextGenerator()); }
+			get { return _textGenerator ??= new TextGenerator(); }
 		}
-		#endregion
 
-
-		#region "ISharedObjectsAware Members"
 		public void SetSharedObjects(ISharedObjects sharedObjects)
 		{
 			_sharedObjects = sharedObjects;
 		}
-		#endregion
 
-		#region Members of IGlobalVerifier
 		/// <summary>
 		/// The following members set some general properties of the verification plug-in,
-		/// e.g. the plug-in name and the icon that are displayed in the user interface of SDL Trados Studio. 
+		/// e.g. the plug-in name and the icon that are displayed in the user interface of SDL Trados Studio.
 		/// </summary>
-		#region "DescriptionNameIcon"
+
 		public string Description
 		{
 			get { return PluginResources.Verifier_Description; }
 		}
+
 		public Icon Icon
 		{
 			get { return PluginResources.icon; }
@@ -152,7 +126,16 @@ namespace Sdl.Community.NumberVerifier
 		{
 			get { return PluginResources.Plugin_Name; }
 		}
-		#endregion
+
+		public string HelpTopic
+		{
+			get { return string.Empty; }
+		}
+
+		public string SettingsId
+		{
+			get { return "Number Verifier"; }
+		}
 
 		public IList<string> GetSettingsPageExtensionIds()
 		{
@@ -164,47 +147,32 @@ namespace Sdl.Community.NumberVerifier
 			return list;
 		}
 
-		public string SettingsId
-		{
-			get { return "Number Verifier"; }
-		}
-
-		public string HelpTopic
-		{
-			get { return string.Empty; }
-		}
-
-		public Type SettingsType
-		{
-			get { return typeof(NumberVerifierSettings); }
-		}
-		#endregion
-
-
-		#region IBilingualFilterComponent Members
-		#region "ItemFactory"
 		public IDocumentItemFactory ItemFactory
 		{
 			get;
 			set;
 		}
-		#endregion
 
 		/// <summary>
 		/// This member is used to output any verification messages in the user interface of SDL Trados Studio.
 		/// </summary>
-		#region "MessageReporter"
+
 		public IBilingualContentMessageReporter MessageReporter
 		{
 			get;
 			set;
 		}
-		#endregion
-		#endregion
 
+		private readonly NumberValidator _numberValidator;
 
+		private string _sourceMatchingDecimalSeparators = string.Empty;
 
-		#region IBilingualContentHandler Members
+		private string _sourceMatchingThousandSeparators = string.Empty;
+
+		private string _targetMatchingDecimalSeparators = string.Empty;
+
+		private string _targetMatchingThousandSeparators = string.Empty;
+
 		public void Complete()
 		{
 			// Not required for this implementation.
@@ -215,30 +183,18 @@ namespace Sdl.Community.NumberVerifier
 			// Not required for this implementation.
 		}
 
-		public void SetFileProperties(IFileProperties fileInfo)
-		{
-			// Not required for this implementation.
-		}
-
-		private string _sourceMatchingThousandSeparators = string.Empty;
-		private string _targetMatchingThousandSeparators = string.Empty;
-		private string _sourceMatchingDecimalSeparators = string.Empty;
-		private string _targetMatchingDecimalSeparators = string.Empty;
-
-		private readonly NumberValidator _numberValidator;
-
 		public void Initialize(IDocumentProperties documentInfo)
 		{
 			_sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
 			_targetMatchingThousandSeparators = string.Concat(VerificationSettings.GetTargetThousandSeparators());
 			_sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
 			_targetMatchingDecimalSeparators = string.Concat(VerificationSettings.GetTargetDecimalSeparators());
-
 		}
 
-		#endregion
-
-		#region "process"
+		public void SetFileProperties(IFileProperties fileInfo)
+		{
+			// Not required for this implementation.
+		}
 
 		public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
@@ -248,8 +204,6 @@ namespace Sdl.Community.NumberVerifier
 				CheckParagraphUnit(paragraphUnit);
 			}
 		}
-
-		#endregion
 
 		public INumberVerifier GenericNumberVerifier
 		{
@@ -287,16 +241,12 @@ namespace Sdl.Community.NumberVerifier
 						errorMessages.AddRange(genericErrorMeassages);
 					}
 
-					#region ReportingMessage
-
 					foreach (var errorMessage in errorMessages)
 					{
 						if (errorMessage.ExtendedErrorMessage != string.Empty && VerificationSettings.ReportExtendedMessages)
 						{
 							if (MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
 							{
-								#region CreateExtendedData
-								
 								var messageDataModel = new MessageDataModel
 								{
 									SourceIssues = errorMessage.SourceNumberIssues?.Replace(Environment.NewLine, string.Empty),
@@ -309,24 +259,16 @@ namespace Sdl.Community.NumberVerifier
 								};
 								var extendedData = new NumberVerifierMessageData(messageDataModel);
 
-								#endregion
-
-								#region ReportingMessageWithExtendedData
-
 								extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
 									errorMessage.ErrorLevel, errorMessage.ExtendedErrorMessage,
 									new TextLocation(new Location(segmentPair.Target, true), 0),
 									new TextLocation(new Location(segmentPair.Target, false),
 										segmentPair.Target.ToString().Length - 1),
 									extendedData);
-
-								#endregion
-
 							}
 						}
 						else if (errorMessage.ErrorMessage != string.Empty)
 						{
-							#region ReportingMessageWithoutExtendedData
 							if (!string.IsNullOrEmpty(errorMessage.TargetNumberIssues))
 							{
 								if (errorMessage.ErrorMessage == PluginResources.Error_AlphanumericsModified)
@@ -347,14 +289,13 @@ namespace Sdl.Community.NumberVerifier
 
 										foreach (var alphaElement in alphaList)
 										{
-											var alphanumericTarget = string.Format(@"""{0}""", alphaElement);
+											var alphanumericTarget = $@"""{alphaElement}""";
 											alphaTargetList.Add(alphanumericTarget);
 										}
 										var alphanumericRes = string.Join(", ", alphaTargetList.ToArray());
 										errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", alphanumericRes, ")");
 									}
 								}
-
 								else
 								{
 									var targetNumbers = new List<string>();
@@ -362,7 +303,7 @@ namespace Sdl.Community.NumberVerifier
 
 									foreach (var value in numbers)
 									{
-										var targetNumber = string.Format(@"""{0}""", value);
+										var targetNumber = $@"""{value}""";
 										targetNumbers.Add(targetNumber);
 									}
 									var res = string.Join(", ", targetNumbers.ToArray());
@@ -376,8 +317,6 @@ namespace Sdl.Community.NumberVerifier
 								new TextLocation(new Location(segmentPair.Target, true), 0),
 								new TextLocation(new Location(segmentPair.Target, false),
 									segmentPair.Target.ToString().Length - 1));
-
-							#endregion
 						}
 					}
 				}
@@ -430,106 +369,17 @@ namespace Sdl.Community.NumberVerifier
 			}
 		}
 
-		public Tuple<List<string>, List<string>> GetAlphnumericsTuple(List<string> alphaNumericsList, List<string> normalizedAlphaNumericsList)
-		{
-			return Tuple.Create(alphaNumericsList, normalizedAlphaNumericsList);
-		}
-
-		private ErrorLevel GetNumbersErrorLevel(string setting)
-		{
-			switch (setting)
-			{
-				case "Error":
-					return ErrorLevel.Error;
-
-				case "Warning":
-					return ErrorLevel.Warning;
-
-				default:
-					return ErrorLevel.Note;
-			}
-		}
-
-		private List<ErrorReporting> GetErrorList(bool isHindiVerfication, NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
-		{
-			var index = 0;
-			var errorMessages = new List<ErrorReporting>();
-			if (!VerificationSettings.ReportNumberFormatErrors)
-			{
-				sourceNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(Parsers.Number.Model.NumberText.ErrorLevel.NumberLevel));
-
-				targetNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(Parsers.Number.Model.NumberText.ErrorLevel.NumberLevel));
-			}
-
-			foreach (var numberText in sourceNumberTexts.Texts)
-			{
-				index++;
-				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
-				foreach (var error in errors)
-				{
-					errorMessages.Add(new ErrorReporting
-					{
-						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
-						ErrorMessage = error.Message,
-						ExtendedErrorMessage = error.Message,
-						SourceNumberIssues = $"Number at index {index}: {numberText.Text}",
-						IsHindiVerification = isHindiVerfication
-					});
-				}
-			}
-
-			index = 0;
-			foreach (var numberText in targetNumberTexts.Texts)
-			{
-				index++;
-				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
-				foreach (var error in errors)
-				{
-					errorMessages.Add(new ErrorReporting
-					{
-						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
-						ErrorMessage = error.Message,
-						ExtendedErrorMessage = error.Message,
-						TargetNumberIssues = $"Number at index {index}: {numberText.Text}",
-						IsHindiVerification = isHindiVerfication
-					});
-				}
-			}
-
-			return errorMessages;
-		}
-
-
 		/// <summary>
 		/// Returns a errors list after numbers are normalized
 		/// </summary>
-		/// <param name="sourceLanguage"></param>
-		/// <param name="targetLanguage"></param>
-		/// <param name="numberModel"></param>
+		/// <param name="sourceText"></param>
+		/// <param name="targetText"></param>
 		/// <returns></returns>
-		public IEnumerable<ErrorReporting> CheckNumbers(string sourceLanguage, string targetLanguage, NumberModel numberModel)
+		public IEnumerable<ErrorReporting> CheckNumbers(string sourceText, string targetText)
 		{
-			var initialSourceHindiText = numberModel.SourceText;
-			var initialTargetHindiText = numberModel.TargetText;
-			var isHindiVerification = false;
-			if (targetLanguage.Equals(Constants.HindiLanguage))
-			{
-				numberModel.SourceText = numberModel.SourceArabicText;
-				numberModel.TargetText = numberModel.TargetArabicText;
-				isHindiVerification = true;
-			}
-			if (sourceLanguage.Equals(Constants.HindiLanguage))
-			{
-				numberModel.SourceText = numberModel.SourceArabicText;
-				isHindiVerification = true;
-			}
+			_numberValidator.GetErrors(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
 
-			_numberValidator.GetErrors(numberModel.SourceText, numberModel.TargetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
-
-			var errorMessages = GetErrorList(isHindiVerification, sourceNumbers, targetNumbers);
-
-			return errorMessages;
-			
+			return GetErrorList(sourceNumbers, targetNumbers);
 		}
 
 		/// <summary>
@@ -541,122 +391,16 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
-			var errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
-			var numberModel = new NumberModel
-			{
-				SourceText = sourceText,
-				TargetText = targetText
-			};
-
-
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics || _verificationSettings.ReportModifiedAlphanumerics)
 			{
 				var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
 				errorList.AddRange(errorsListFromAlphanumerics);
 			}
 
-			if (_verificationSettings.HindiNumberVerification)
-			{
-				var projectController = GetProjectController();
-				if (projectController.CurrentProject != null)
-				{
-					var projectInfo = projectController.CurrentProject.GetProjectInfo();
-					var sourceLanguage = projectInfo.SourceLanguage.DisplayName;
-					if (sourceLanguage.Equals(Constants.HindiLanguage) || projectInfo.TargetLanguages.Any(l => l.DisplayName.Equals(Constants.HindiLanguage)))
-					{
-						var result = GetTargetFromHindiNumbers(sourceText, targetText, sourceLanguage);
-						var targetLanguage = projectInfo.TargetLanguages.FirstOrDefault(l => l.DisplayName.Equals(Constants.HindiLanguage));
-						var targetLanguageName = targetLanguage != null ? targetLanguage.DisplayName : string.Empty;
-						foreach (var targetRes in result)
-						{
-							errorsListFromNormalizedNumbers = CheckNumbers(sourceLanguage, targetLanguageName, targetRes);
-							errorList.AddRange(errorsListFromNormalizedNumbers);
-						}
-						return errorList;
-					}
-					return ReturnErrorList(errorList, numberModel);
-				}
-			}
-			else
-			{
-				return ReturnErrorList(errorList, numberModel);
-			}
-			return errorList;
-		}
-
-		private List<ErrorReporting> ReturnErrorList(
-			List<ErrorReporting> errorList,
-			NumberModel numberModel)
-		{
-			var errorsListFromNormalizedNumbers = CheckNumbers(string.Empty, string.Empty, numberModel);
+			var errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
+
 			return errorList;
-		}
-
-		public string NormalizeNumberWithMinusSign(string number)
-		{
-			try
-			{
-				var positionOfNormalMinus = number.IndexOf('-');
-				var positionOfSpecialMinus = number.IndexOf('\u2212');
-				var positionOfDash = number.IndexOf('\u2013');
-				char[] space = { ' ', '\u00a0', '\u2009', '\u202F', '\u0020' };
-				var spacePosition = number.IndexOfAny(space);
-
-				//if it has space is not a negative number
-				if (positionOfNormalMinus == 0 && spacePosition != 1)
-				{
-					number = number.Replace("-", "m");
-				}
-				if (positionOfSpecialMinus == 0 && spacePosition != 1)
-				{
-					number = number.Replace("\u2212", "m");
-				}
-				if (positionOfDash == 0 && spacePosition != 1)
-				{
-					number = number.Replace("\u2013", "m");
-				}
-				if (positionOfSpecialMinus == 1 && spacePosition == 0)
-				{
-					number = number.Replace("\u2212", "m");
-				}
-				return number.Normalize(NormalizationForm.FormKC);
-			}
-			catch (Exception ex)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
-				return string.Empty;
-			}
-		}
-
-		// Remove the matching items which are the same in both sourceAlphanumeric and targetAlphanumeric lists
-		// or in case sourceAlphanumericsList contains items which are not alphanumerics (ex: ABCD) 
-		private void RemoveMatchingAlphanumerics(IList<string> sourceAlphanumericsList, ICollection<string> targetAlphanumericsList)
-		{
-			for (var nJ = sourceAlphanumericsList.Count - 1; nJ >= 0; nJ--)
-			{
-				if (targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ]) || !sourceAlphanumericsList[nJ].Any(c => char.IsDigit(c)))
-				{
-					targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
-					sourceAlphanumericsList.RemoveAt(nJ);
-				}
-			}
-
-			// Remove the items which are not alphanumerics and where not identified within the sourceAlphanumericsList
-			RemoveNoAlphanumerics(targetAlphanumericsList);
-		}
-
-		// Remove the items which are not alphanumerics
-		private void RemoveNoAlphanumerics(ICollection<string> targetAlphanumericsList)
-		{
-			var itemsToRemove = targetAlphanumericsList.Where(item => !item.Any(char.IsDigit) || item.All(char.IsDigit)).ToList();
-			if (itemsToRemove.Any())
-			{
-				foreach (var item in itemsToRemove.Where(targetAlphanumericsList.Contains))
-				{
-					targetAlphanumericsList.Remove(item);
-				}
-			}
 		}
 
 		public Tuple<List<string>, List<string>> GetAlphanumericList(string text, bool isSource = false)
@@ -684,14 +428,12 @@ namespace Sdl.Community.NumberVerifier
 							var charIndex = w.IndexOf('<');
 							var wordReplace = w.Insert(charIndex, " ");
 							wRes = Regex.Split(wordReplace, @"\s");
-
 						}
 						if (w.Contains('>'))
 						{
 							var charIndex = w.IndexOf('>');
 							var wordReplace = w.Insert(charIndex + 1, " ");
 							wRes = Regex.Split(wordReplace, @"\s");
-
 						}
 						foreach (var r in wRes)
 						{
@@ -708,7 +450,6 @@ namespace Sdl.Community.NumberVerifier
 					? _textFormatter.GetAlphanumericsCustomSeparators(customsSeparators)
 					: string.Empty;
 				var regex = $"(?i)(?=.*[0-9])(?=.*[a-z])([a-z0-9{separators}]+)";
-
 
 				normalizedAlphaList.AddRange(
 					from word in wordsRes
@@ -731,56 +472,114 @@ namespace Sdl.Community.NumberVerifier
 			}
 		}
 
-		private void RemoveNonAlphanumericals(bool isSource, List<string> normalizedAlphaList)
+		public Tuple<List<string>, List<string>> GetAlphnumericsTuple(List<string> alphaNumericsList, List<string> normalizedAlphaNumericsList)
 		{
-			var thoAndDecSeparators = new List<string>();
-			if (isSource)
-			{
-				thoAndDecSeparators.AddRange(VerificationSettings.GetSourceThousandSeparators());
-				thoAndDecSeparators.AddRange(VerificationSettings.GetSourceDecimalSeparators());
-			}
-			else
-			{
-				thoAndDecSeparators.AddRange(VerificationSettings.GetTargetThousandSeparators());
-				thoAndDecSeparators.AddRange(VerificationSettings.GetTargetDecimalSeparators());
-			}
-			thoAndDecSeparators.RemoveAll(string.IsNullOrEmpty);
-
-			var forRemoval = new List<string>();
-			foreach (var item in normalizedAlphaList)
-			{
-				var itemWoSeparators = item;
-
-				thoAndDecSeparators.ForEach(sep => itemWoSeparators = itemWoSeparators.Replace(sep, ""));
-
-				if (int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
-			}
-			forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
+			return Tuple.Create(alphaNumericsList, normalizedAlphaNumericsList);
 		}
 
-		private string GetSegmentText(ISegment segment)
+		public Dictionary<string, string> GetEasternArabicNumbers()
 		{
+			var hindiDictionary = new Dictionary<string, string>
+			{
+				{ "0", "٠" },
+				{ "1", "١" },
+				{ "2", "٢" },
+				{ "3", "٣" },
+				{ "4", "٤" },
+				{ "5", "٥" },
+				{ "6", "٦" },
+				{ "7", "٧" },
+				{ "8", "٨" },
+				{ "9", "٩" }
+			};
+
+			return hindiDictionary;
+		}
+
+		public List<NumberModel> GetFormatedNumbers(HindiNumberModel hindiNumberModel)
+		{
+			var result = new List<NumberModel>();
+
 			try
 			{
-				return VerificationSettings.ExcludeTagText == false ? segment.ToString() : TextGenerator.GetPlainText(segment, false);
+				var res = hindiNumberModel.TextGroups.Zip(hindiNumberModel.TargetGroups, (s, t) => new NumberModel { SourceText = s, TargetText = t }).ToList();
+
+				// add thousand separator or decimal separtor in the target text as it is in the source text where needed
+				foreach (var numberRes in res)
+				{
+					if (!string.IsNullOrEmpty(numberRes.TargetText))
+					{
+						// add . separator in the translated number as it is in the source number(this change will work only for valid verification)
+						// source: the converted hindi to arabic/just arabic(depending on source langauge) and target; (arabic/converted hindi to arabic)
+						// valid ex: source: 1234,56 => target: 1.234,56/1,234.56 or source: 1.234,56 => target: 1.234,56
+						// invalid ex: soruce: 1234,56  => target: 12.34,56
+						if (numberRes.SourceText.Contains("."))
+						{
+							var sourceTextIndex = numberRes.SourceText.IndexOf(".");
+							if (!numberRes.TargetText.Contains("."))
+							{
+								numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ".");
+							}
+						}
+						if (numberRes.SourceText.Contains(","))
+						{
+							var sourceTextIndex = numberRes.SourceText.IndexOf(",");
+							if (!numberRes.TargetText.Contains(","))
+							{
+								numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
+							}
+							else
+							{
+								// Scenario of translation from Hindi to Arabic: ١٢٣٤,٨٩ => 1.234,56 or 1,234.56 should be valid.
+								// in scenario: ١٢٣٤,٨٩ => 1,234.56, the Hindi number is converted to 1234,56
+								// in the above code the . separator is added where it should be
+								// in the the bellow code, the , separator is moved at the right place
+								// so the target result it will be 1,234.56 for verification.
+								if (numberRes.TargetText.IndexOf(",.") != -1)
+								{
+									numberRes.TargetText = Regex.Replace(numberRes.TargetText, ",+\\.+", ".");
+									numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
+								}
+							}
+						}
+						if (numberRes.TargetText.IndexOf(".,") != -1)
+						{
+							numberRes.TargetText = Regex.Replace(numberRes.TargetText, "\\.+\\,+", ".");
+						}
+					}
+
+					if (hindiNumberModel.SourceLanguage.Equals(Constants.HindiLanguage))
+					{
+						var sourceText = hindiNumberModel.HindiDictionary.FirstOrDefault(s => s.Key.Equals(numberRes.SourceText));
+						result.Add(new NumberModel
+						{
+							SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
+							SourceArabicText = numberRes.SourceText,
+							TargetText = numberRes.TargetText,
+							TargetArabicText = sourceText.Key
+						});
+					}
+					// map to the corresponding source text for the Hindi target numbers found with issues
+					if (hindiNumberModel.TargetDictionary.Count > 0)
+					{
+						var sourceText = hindiNumberModel.HindiDictionary.FirstOrDefault(s => s.Key.Contains(numberRes.SourceText));
+
+						var targetText = hindiNumberModel.TargetDictionary.FirstOrDefault(t => t.Key.Contains(sourceText.Value));
+						result.Add(new NumberModel
+						{
+							SourceText = !string.IsNullOrEmpty(sourceText.Key) ? sourceText.Key : numberRes.SourceText,
+							SourceArabicText = numberRes.SourceText,
+							TargetText = targetText.Value,
+							TargetArabicText = targetText.Key
+						});
+					}
+				}
 			}
 			catch (Exception ex)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
-				return string.Empty;
 			}
-		}
-
-		private bool FilterSegmentPairs(ISegmentPair segmentPair)
-		{
-			return (VerificationSettings.ExcludeLockedSegments == false ||
-					segmentPair.Properties.IsLocked == false) &&
-				   (VerificationSettings.Exclude100Percents == false ||
-					((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
-					  segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
-					 segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
-					 && !(VerificationSettings.ExcludeUntranslatedSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified)
-					 && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
+			return result;
 		}
 
 		public List<NumberModel> GetTargetFromHindiNumbers(string source, string target, string sourceLanguage)
@@ -858,108 +657,185 @@ namespace Sdl.Community.NumberVerifier
 			return result;
 		}
 
-		public Dictionary<string, string> GetEasternArabicNumbers()
+		public string NormalizeNumberWithMinusSign(string number)
 		{
-			var hindiDictionary = new Dictionary<string, string>();
-			hindiDictionary.Add("0", "٠");
-			hindiDictionary.Add("1", "١");
-			hindiDictionary.Add("2", "٢");
-			hindiDictionary.Add("3", "٣");
-			hindiDictionary.Add("4", "٤");
-			hindiDictionary.Add("5", "٥");
-			hindiDictionary.Add("6", "٦");
-			hindiDictionary.Add("7", "٧");
-			hindiDictionary.Add("8", "٨");
-			hindiDictionary.Add("9", "٩");
-
-			return hindiDictionary;
-		}
-
-		public List<NumberModel> GetFormatedNumbers(HindiNumberModel hindiNumberModel)
-		{
-			var result = new List<NumberModel>();
-
 			try
 			{
-				var res = hindiNumberModel.TextGroups.Zip(hindiNumberModel.TargetGroups, (s, t) => new NumberModel { SourceText = s, TargetText = t }).ToList();
+				var positionOfNormalMinus = number.IndexOf('-');
+				var positionOfSpecialMinus = number.IndexOf('\u2212');
+				var positionOfDash = number.IndexOf('\u2013');
+				char[] space = { ' ', '\u00a0', '\u2009', '\u202F', '\u0020' };
+				var spacePosition = number.IndexOfAny(space);
 
-				// add thousand separator or decimal separtor in the target text as it is in the source text where needed
-				foreach (var numberRes in res)
+				//if it has space is not a negative number
+				if (positionOfNormalMinus == 0 && spacePosition != 1)
 				{
-					if (!string.IsNullOrEmpty(numberRes.TargetText))
-					{
-						// add . separator in the translated number as it is in the source number(this change will work only for valid verification)
-						// source: the converted hindi to arabic/just arabic(depending on source langauge) and target; (arabic/converted hindi to arabic)
-						// valid ex: source: 1234,56 => target: 1.234,56/1,234.56 or source: 1.234,56 => target: 1.234,56 
-						// invalid ex: soruce: 1234,56  => target: 12.34,56
-						if (numberRes.SourceText.Contains("."))
-						{
-							var sourceTextIndex = numberRes.SourceText.IndexOf(".");
-							if (!numberRes.TargetText.Contains("."))
-							{
-								numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ".");
-							}
-						}
-						if (numberRes.SourceText.Contains(","))
-						{
-							var sourceTextIndex = numberRes.SourceText.IndexOf(",");
-							if (!numberRes.TargetText.Contains(","))
-							{
-								numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
-							}
-							else
-							{
-								// Scenario of translation from Hindi to Arabic: ١٢٣٤,٨٩ => 1.234,56 or 1,234.56 should be valid.
-								// in scenario: ١٢٣٤,٨٩ => 1,234.56, the Hindi number is converted to 1234,56
-								// in the above code the . separator is added where it should be
-								// in the the bellow code, the , separator is moved at the right place
-								// so the target result it will be 1,234.56 for verification.
-								if (numberRes.TargetText.IndexOf(",.") != -1)
-								{
-									numberRes.TargetText = Regex.Replace(numberRes.TargetText, ",+\\.+", ".");
-									numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
-								}
-							}
-						}
-						if (numberRes.TargetText.IndexOf(".,") != -1)
-						{
-							numberRes.TargetText = Regex.Replace(numberRes.TargetText, "\\.+\\,+", ".");
-						}
-					}
-
-					if (hindiNumberModel.SourceLanguage.Equals(Constants.HindiLanguage))
-					{
-						var sourceText = hindiNumberModel.HindiDictionary.FirstOrDefault(s => s.Key.Equals(numberRes.SourceText));
-						result.Add(new NumberModel
-						{
-							SourceText = !string.IsNullOrEmpty(sourceText.Value) ? sourceText.Value : numberRes.SourceText,
-							SourceArabicText = numberRes.SourceText,
-							TargetText = numberRes.TargetText,
-							TargetArabicText = sourceText.Key
-						});
-					}
-					// map to the corresponding source text for the Hindi target numbers found with issues
-					if (hindiNumberModel.TargetDictionary.Count > 0)
-					{
-						var sourceText = hindiNumberModel.HindiDictionary.FirstOrDefault(s => s.Key.Contains(numberRes.SourceText));
-
-						var targetText = hindiNumberModel.TargetDictionary.FirstOrDefault(t => t.Key.Contains(sourceText.Value));
-						result.Add(new NumberModel
-						{
-							SourceText = !string.IsNullOrEmpty(sourceText.Key) ? sourceText.Key : numberRes.SourceText,
-							SourceArabicText = numberRes.SourceText,
-							TargetText = targetText.Value,
-							TargetArabicText = targetText.Key
-						});
-					}
+					number = number.Replace("-", "m");
 				}
+				if (positionOfSpecialMinus == 0 && spacePosition != 1)
+				{
+					number = number.Replace("\u2212", "m");
+				}
+				if (positionOfDash == 0 && spacePosition != 1)
+				{
+					number = number.Replace("\u2013", "m");
+				}
+				if (positionOfSpecialMinus == 1 && spacePosition == 0)
+				{
+					number = number.Replace("\u2212", "m");
+				}
+				return number.Normalize(NormalizationForm.FormKC);
 			}
 			catch (Exception ex)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+				return string.Empty;
 			}
-			return result;
 		}
-		#endregion
+
+		private bool FilterSegmentPairs(ISegmentPair segmentPair)
+		{
+			return (VerificationSettings.ExcludeLockedSegments == false ||
+					segmentPair.Properties.IsLocked == false) &&
+				   (VerificationSettings.Exclude100Percents == false ||
+					((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
+					  segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
+					 segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
+					 && !(VerificationSettings.ExcludeUntranslatedSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified)
+					 && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
+		}
+
+		private List<ErrorReporting> GetErrorList(NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
+		{
+			var index = 0;
+			var errorMessages = new List<ErrorReporting>();
+
+			if (!VerificationSettings.ReportNumberFormatErrors)
+			{
+				sourceNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(NumberText.ErrorLevel.NumberLevel));
+
+				targetNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(NumberText.ErrorLevel.NumberLevel));
+			}
+
+			foreach (var numberText in sourceNumberTexts.Texts)
+			{
+				index++;
+				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
+				foreach (var error in errors)
+				{
+					errorMessages.Add(new ErrorReporting
+					{
+						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
+						ErrorMessage = error.Message,
+						ExtendedErrorMessage = error.Message,
+						SourceNumberIssues = $"Number at index {index}: {numberText.Text}",
+					});
+				}
+			}
+
+			index = 0;
+			foreach (var numberText in targetNumberTexts.Texts)
+			{
+				index++;
+				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
+				foreach (var error in errors)
+				{
+					errorMessages.Add(new ErrorReporting
+					{
+						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
+						ErrorMessage = error.Message,
+						ExtendedErrorMessage = error.Message,
+						TargetNumberIssues = $"Number at index {index}: {numberText.Text}",
+					});
+				}
+			}
+
+			return errorMessages;
+		}
+
+		private ErrorLevel GetNumbersErrorLevel(string setting)
+		{
+			switch (setting)
+			{
+				case "Error":
+					return ErrorLevel.Error;
+
+				case "Warning":
+					return ErrorLevel.Warning;
+
+				default:
+					return ErrorLevel.Note;
+			}
+		}
+
+		private string GetSegmentText(ISegment segment)
+		{
+			try
+			{
+				return VerificationSettings.ExcludeTagText == false ? segment.ToString() : TextGenerator.GetPlainText(segment, false);
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+				return string.Empty;
+			}
+		}
+
+		// Remove the matching items which are the same in both sourceAlphanumeric and targetAlphanumeric lists
+		// or in case sourceAlphanumericsList contains items which are not alphanumerics (ex: ABCD)
+		private void RemoveMatchingAlphanumerics(IList<string> sourceAlphanumericsList, ICollection<string> targetAlphanumericsList)
+		{
+			for (var nJ = sourceAlphanumericsList.Count - 1; nJ >= 0; nJ--)
+			{
+				if (targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ]) || !sourceAlphanumericsList[nJ].Any(char.IsDigit))
+				{
+					targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
+					sourceAlphanumericsList.RemoveAt(nJ);
+				}
+			}
+
+			// Remove the items which are not alphanumerics and where not identified within the sourceAlphanumericsList
+			RemoveNoAlphanumerics(targetAlphanumericsList);
+		}
+
+		// Remove the items which are not alphanumerics
+		private void RemoveNoAlphanumerics(ICollection<string> targetAlphanumericsList)
+		{
+			var itemsToRemove = targetAlphanumericsList.Where(item => !item.Any(char.IsDigit) || item.All(char.IsDigit)).ToList();
+			if (itemsToRemove.Any())
+			{
+				foreach (var item in itemsToRemove.Where(targetAlphanumericsList.Contains))
+				{
+					targetAlphanumericsList.Remove(item);
+				}
+			}
+		}
+
+		private void RemoveNonAlphanumericals(bool isSource, List<string> normalizedAlphaList)
+		{
+			var thoAndDecSeparators = new List<string>();
+			if (isSource)
+			{
+				thoAndDecSeparators.AddRange(VerificationSettings.GetSourceThousandSeparators());
+				thoAndDecSeparators.AddRange(VerificationSettings.GetSourceDecimalSeparators());
+			}
+			else
+			{
+				thoAndDecSeparators.AddRange(VerificationSettings.GetTargetThousandSeparators());
+				thoAndDecSeparators.AddRange(VerificationSettings.GetTargetDecimalSeparators());
+			}
+			thoAndDecSeparators.RemoveAll(string.IsNullOrEmpty);
+
+			var forRemoval = new List<string>();
+			foreach (var item in normalizedAlphaList)
+			{
+				var itemWoSeparators = item;
+
+				thoAndDecSeparators.ForEach(sep => itemWoSeparators = itemWoSeparators.Replace(sep, ""));
+
+				if (int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
+			}
+			forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
+		}
 	}
 }

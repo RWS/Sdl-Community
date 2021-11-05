@@ -1,15 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Sdl.Community.NumberVerifier.Helpers;
 
-namespace Sdl.Community.NumberVerifier.Parsers
+namespace Sdl.Community.NumberVerifier.Validator
 {
 	public static class RegexExtensions
 	{
+		public static int CountStringOccurrences(string text, string pattern)
+		{
+			if (text is null || pattern is null) return 0;
+			// Loop through all instances of the string 'text'.
+			var count = 0;
+			var i = 0;
+			while ((i = text.IndexOf(pattern, i)) != -1)
+			{
+				i += pattern.Length;
+				count++;
+			}
+			return count;
+		}
+
 		public static string Normalize(this Match realNumberMatch, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero)
 		{
 			if (realNumberMatch is null) return null;
@@ -66,18 +78,14 @@ namespace Sdl.Community.NumberVerifier.Parsers
 			return joinedListString;
 		}
 
-		public static int CountStringOccurrences(string text, string pattern)
+		private static string GetNumberWithThousandSeparatorsAdded(string normalizedIntegerPart)
 		{
-			if (text is null || pattern is null) return 0;
-			// Loop through all instances of the string 'text'.
-			var count = 0;
-			var i = 0;
-			while ((i = text.IndexOf(pattern, i)) != -1)
+			for (var i = normalizedIntegerPart.Length - 3; i > 0; i -= 3)
 			{
-				i += pattern.Length;
-				count++;
+				normalizedIntegerPart = normalizedIntegerPart.Insert(i, "t");
 			}
-			return count;
+
+			return normalizedIntegerPart;
 		}
 
 		private static bool LeadingZeroOmitted(Match realNumberMatch, string realNumberString, bool normalized = false)
@@ -87,17 +95,7 @@ namespace Sdl.Community.NumberVerifier.Parsers
 			var decimalSeparator = normalized ? "d" : realNumberMatch.Groups["DecimalSeparator"].Captures.Cast<Capture>().FirstOrDefault()?.Value;
 
 			return firstSymbol == decimalSeparator
-			       || firstTwoSymbolsAreNotDigits;
-		}
-
-		private static string GetNumberWithThousandSeparatorsAdded(string normalizedIntegerPart)
-		{
-			for (var i = normalizedIntegerPart.Length - 3; i > 0; i -= 3)
-			{
-				normalizedIntegerPart = normalizedIntegerPart.Insert(i, "t");
-			}
-
-			return normalizedIntegerPart;
+				   || firstTwoSymbolsAreNotDigits;
 		}
 	}
 }

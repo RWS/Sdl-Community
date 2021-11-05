@@ -62,7 +62,6 @@ namespace Sdl.Community.NumberVerifier
             _Control.ReportExtendedMessages = _ControlSettings.ReportExtendedMessages;
             _Control.ExcludeTagText = _ControlSettings.ExcludeTagText;
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
-			_Control.HindiNumberVerification = _ControlSettings.HindiNumberVerification;
 			_Control.AllowLocalizations = _ControlSettings.AllowLocalizations;
             _Control.PreventLocalizations = _ControlSettings.PreventLocalizations;
             _Control.RequireLocalizations = _ControlSettings.RequireLocalizations;
@@ -131,7 +130,6 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.Reset("CustomsSeparatorsAlphanumerics");
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
 			_ControlSettings.Reset("HindiNumberVerification");
-			_Control.HindiNumberVerification = _ControlSettings.HindiNumberVerification;
 			_ControlSettings.Reset("ReportBriefMessages");
             _Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
             _ControlSettings.Reset("ReportExtendedMessages");
@@ -243,7 +241,6 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
             _ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
 			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
-			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
 
 			_ControlSettings.AllowLocalizations = _Control.AllowLocalizations;
             _ControlSettings.PreventLocalizations = _Control.PreventLocalizations;
@@ -340,7 +337,6 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.SourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
 			_ControlSettings.TargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
 			_ControlSettings.AlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
-			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
 		}
 
 		// Call EndEdit after all changes have been saved in the Save() call.
