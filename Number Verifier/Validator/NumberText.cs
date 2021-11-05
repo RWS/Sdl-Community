@@ -8,16 +8,16 @@ namespace Sdl.Community.NumberVerifier.Validator
 	{
 		private readonly Dictionary<char, char> _hindiDictionary = new()
 		{
-			{ '0', '٠' },
-			{ '1', '١' },
-			{ '2', '٢' },
-			{ '3', '٣' },
-			{ '4', '٤' },
-			{ '5', '٥' },
-			{ '6', '٦' },
-			{ '7', '٧' },
-			{ '8', '٨' },
-			{ '9', '٩' }
+			{ '٠', '0' },
+			{ '١', '1' },
+			{ '٢', '2' },
+			{ '٣', '3' },
+			{ '٤', '4' },
+			{ '٥', '5' },
+			{ '٦', '6' },
+			{ '٧', '7' },
+			{ '٨', '8' },
+			{ '٩', '9' }
 		};
 
 		public enum ComparisonResult
@@ -124,28 +124,6 @@ namespace Sdl.Community.NumberVerifier.Validator
 				}
 			}
 
-			//if (result == ComparisonResult.None && Normalized is not null && other.Normalized is not null)
-			//{
-			//	if (Normalized == other.Normalized) result = ComparisonResult.Equal;
-
-			//	//The only scenario in which a number can be ambiguous is when it has only one ambivalent separator placed in a thousand position
-			//	//In any other case it would be clearly determined
-			//	if (result == ComparisonResult.None && Signature == other.Signature && Separators.Count == 1 && other.Separators.Count == 1)
-			//	{
-			//		if (Normalized.Contains("u") || other.Normalized.Contains("u"))
-			//		{
-			//			result = ComparisonResult.Equal;
-			//		}
-			//	}
-
-			//	if (result == ComparisonResult.None && Text == other.Text) result = ComparisonResult.SameSequence;
-			//}
-
-			//if (result == ComparisonResult.None && Normalized is null && other.Normalized is null && Text == other.Text)
-			//	result = ComparisonResult.Equal;
-
-			//if (result == ComparisonResult.None) result = ComparisonResult.NotSimilar;
-
 			return result;
 		}
 
@@ -158,9 +136,9 @@ namespace Sdl.Community.NumberVerifier.Validator
 		private string GetWesternArabicNumber(string text)
 		{
 			var westernArabicNumber = text;
-			foreach (var easternArabicNumber in _hindiDictionary.Values.ToList())
+			foreach (var easternArabicNumber in _hindiDictionary.Keys)
 			{
-				var westernArabicDigit = _hindiDictionary.FirstOrDefault(kvp => kvp.Value == easternArabicNumber).Key;
+				var westernArabicDigit = _hindiDictionary[easternArabicNumber];
 				westernArabicNumber = westernArabicNumber.Replace(easternArabicNumber, westernArabicDigit);
 			}
 
