@@ -7,143 +7,143 @@ using Xunit;
 namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 {
 	public class AlphanumericCustomSeparators
-	{
-		private readonly Mock<IDocumentProperties> _documentProperties;
+    {
+        private readonly Mock<IDocumentProperties> _documentProperties;
 
-		public AlphanumericCustomSeparators()
-		{
-			_documentProperties = new Mock<IDocumentProperties>();
-		}
+        public AlphanumericCustomSeparators()
+        {
+            _documentProperties = new Mock<IDocumentProperties>();
+        }
 
-		[Theory]
-		[InlineData("BS2-3", "-")]
-		public void FindAlphanumericWithCustomSeparators(string text, string customSeparators)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
-			numberVerifierSettings.Setup(c=>c.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
+        [Theory]
+        [InlineData("The apartment number is 125H-B10. ", "The apartment number is 125H-B10.", "-")]
+        public void AlphanumericVerification_CustomSeparator_NoErrors(string source, string target, string customSeparators)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            //run initialize method in order to set chosen separators
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
+            Assert.True(errorMessage.Count == 0);
+        }
 
-			Assert.True(textAlphanumericsList.Item2.Count != 0);
-		}
+        [Theory]
+        [InlineData("The apartment number is 125H-B10. ", "The apartment number is 125H-C20.", "-")]
+        public void AlphanumericVerification_CustomSeparator_WithErrors(string source, string target, string customSeparators)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
-		[Theory]
-		[InlineData("BS44", "BS44", "*")]
-		public void FindAlphanumericWithCustomSeparators_NoError(string sourceText, string targetText, string customSeparators)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
-			numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            //run initialize method in order to set chosen separators
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
 
-			var errorMessages = numberVerifierMain.CheckAlphanumerics(sourceText, targetText);
+        [Theory]
+        [InlineData("BS2-3", "-")]
+        public void FindAlphanumericWithCustomSeparators(string text, string customSeparators)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
+            numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
+            numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
-			Assert.True(!errorMessages.Any());
-		}
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-		[Theory]
-		[InlineData("The class where I've studies was AB13 at the second floor.", "Die Klasse, in der ich studiert habe, war AB13 im zweiten Stock.")]
-		public void FindAlphanumericWithoutCustomSeparators_NoError(string sourceText, string targetText)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
-			numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			//run initialize method in order to set chosen separators
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
-			var sourceAlphanumerics = numberVerifierMain.GetAlphanumericList(sourceText);
-			var targetAlphanumerics = numberVerifierMain.GetAlphanumericList(targetText);
+            Assert.True(textAlphanumericsList.Item2.Count != 0);
+        }
 
-			Assert.Equal(sourceAlphanumerics.Item2[0], targetAlphanumerics.Item2[0]);
-		}
+        [Theory]
+        [InlineData("BS44", "BS44", "*")]
+        public void FindAlphanumericWithCustomSeparators_NoError(string sourceText, string targetText, string customSeparators)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
+            numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
+            numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
-		[Theory]
-		[InlineData("The apartment number is 125H-B10. ", "The apartment number is 125H-C20.", "-")]
-		public void AlphanumericVerification_CustomSeparator_WithErrors(string source, string target, string customSeparators)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			//run initialize method in order to set chosen separators
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+            var errorMessages = numberVerifierMain.CheckAlphanumerics(sourceText, targetText);
 
-			Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
-		}
+            Assert.True(!errorMessages.Any());
+        }
 
-		[Theory]
-		[InlineData("The apartment number is 125H-B10. ", "The apartment number is 125H-B10.", "-")]
-		public void AlphanumericVerification_CustomSeparator_NoErrors(string source, string target, string customSeparators)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
+        [Theory]
+        [InlineData("12S\\A*-3", "\\*-")]
+        public void FindAlphanumericWithMultipleCustomSeparators(string text, string customSeparators)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
+            numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
+            numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-			//run initialize method in order to set chosen separators
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			Assert.True(errorMessage.Count == 0);
-		}
+            var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
-		[Theory]
-		[InlineData("The bus is T13+", "Die bus ist T13")]
-		public void FindAlphanumericWithUnassignedCustomSeparators_NoError(string sourceText, string targetText)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
-			numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(false);
+            Assert.True(textAlphanumericsList.Item2.Count != 0);
+        }
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+        [Theory]
+        [InlineData("The class where I've studies was AB13 at the second floor.", "Die Klasse, in der ich studiert habe, war AB13 im zweiten Stock.")]
+        public void FindAlphanumericWithoutCustomSeparators_NoError(string sourceText, string targetText)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
+            numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
 
-			//run initialize method in order to set chosen separators
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var sourceAlphanumerics = numberVerifierMain.GetAlphanumericList(sourceText);
-			var targetAlphanumerics = numberVerifierMain.GetAlphanumericList(targetText);
+            //run initialize method in order to set chosen separators
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			Assert.Equal(sourceAlphanumerics.Item2[0], targetAlphanumerics.Item2[0]);
-		}
+            var sourceAlphanumerics = numberVerifierMain.GetAlphanumericList(sourceText);
+            var targetAlphanumerics = numberVerifierMain.GetAlphanumericList(targetText);
 
-		[Theory]
-		[InlineData("12S\\A*-3", "\\*-")]
-		public void FindAlphanumericWithMultipleCustomSeparators(string text, string customSeparators)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
-			numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(c => c.AlphanumericsCustomSeparator).Returns(customSeparators);
+            Assert.Equal(sourceAlphanumerics.Item2[0], targetAlphanumerics.Item2[0]);
+        }
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+        [Theory]
+        [InlineData("The bus is T13+", "Die bus ist T13")]
+        public void FindAlphanumericWithUnassignedCustomSeparators_NoError(string sourceText, string targetText)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CustomSeparators();
+            numberVerifierSettings.Setup(c => c.CustomsSeparatorsAlphanumerics).Returns(false);
 
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            //run initialize method in order to set chosen separators
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
+            var sourceAlphanumerics = numberVerifierMain.GetAlphanumericList(sourceText);
+            var targetAlphanumerics = numberVerifierMain.GetAlphanumericList(targetText);
 
-			Assert.True(textAlphanumericsList.Item2.Count != 0);
-		}
-	}
+            Assert.Equal(sourceAlphanumerics.Item2[0], targetAlphanumerics.Item2[0]);
+        }
+    }
 }

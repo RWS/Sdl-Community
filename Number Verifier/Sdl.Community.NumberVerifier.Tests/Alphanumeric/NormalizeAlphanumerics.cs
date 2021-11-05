@@ -9,24 +9,38 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 {
 	public class NormalizeAlphanumerics
     {
-		private readonly Mock<IDocumentProperties> _documentProperties;
+        private readonly Mock<IDocumentProperties> _documentProperties;
 
-		public NormalizeAlphanumerics()
-		{
-			_documentProperties = new Mock<IDocumentProperties>();
-		}
-
-		public List<ErrorReporting> ReportModifiedAlphanumerics(string source, string target,NumberVerifierMain numberVerifierMain)
-        {     
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
-
-            return numberVerifierMain.CheckSourceAndTarget(source, target);
+        public NormalizeAlphanumerics()
+        {
+            _documentProperties = new Mock<IDocumentProperties>();
         }
 
         [Theory]
-        [InlineData("This is an alphanumeric CDE45", "Wrong alphanumeric CE45")]
-        public void WrongAlphanumeric(string source, string target)
+        [InlineData("The bus number is 30F. ", "The bus number is 30E.")]
+        public void AlphanumericReportModifiedVerification_WithErrors(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            numberVerifierSettings.Setup(d => d.ReportModifiedAlphanumerics).Returns(true);
+            numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(false);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
+
+        /// <summary>
+        /// Alphanumerics which are items in a list
+        /// source and target normal -
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [Theory]
+        [InlineData("some text -AB23", "another text -AC23")]
+        public void AlphanumericsInList(string source, string target)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
@@ -34,90 +48,117 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            var errorMessage = ReportModifiedAlphanumerics(source, target,numberVerifierMain);
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
             Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
+
+        ///// <summary>
+        ///// Alphanumerics which are items in a list
+        ///// source normal - , target special −
+        ///// see http://www.fileformat.info/info/unicode/char/2212/browsertest.htm
+        ///// </summary>
+        ///// <param name="source"></param>
+        ///// <param name="target"></param>
+        [Theory]
+        [InlineData("some text -AB23", "another text −AC23")]
+        public void AlphanumericsInListDifferentLineReportsModified(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
+
+        [Theory]
+        [InlineData("some word -AB23", "another text -AB23")]
+        public void AlphanumericsInListSpecialSpace(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+            numberVerifierSettings.Setup(d => d.AlphanumericsCustomSeparator).Returns("-");
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.True(errorMessage.Count == 0);
+        }
+
+        [Theory]
+        [InlineData("The apartment number is 125H. ", "The apartment number is 125H.")]
+        public void AlphanumericVerification_NoErrors(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.True(errorMessage.Count == 0);
         }
 
         [Theory]
         [InlineData("The apartment is 23F. ", "The apartment is 23E.")]
         public void AlphanumericVerification_WithErrors(string source, string target)
         {
-	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-
-	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-	        Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
-        }
-
-
-        [Theory]
-        [InlineData("The bus number is 30F. ", "The bus number is 30E.")]
-        public void AlphanumericReportModifiedVerification_WithErrors(string source, string target)
-        {
-	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-	        numberVerifierSettings.Setup(d => d.ReportModifiedAlphanumerics).Returns(true);
-	        numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(false);
-
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-	        Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
-        }
-
-        [Theory]
-        [InlineData("The bus number is 30F. ", "The bus number is 30E.")]
-        public void NoAlphanumericReportModifiedVerification_NoErrors(string source, string target)
-        {
-	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-	        numberVerifierSettings.Setup(d => d.ReportModifiedAlphanumerics).Returns(false);
-	        numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
-
-	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-	        Assert.True(errorMessage.Count == 0);
-        }
-
-		[Theory]
-        [InlineData("The apartment number is 125H. ", "The apartment number is 125H.")]
-        public void AlphanumericVerification_NoErrors(string source, string target)
-        {
-	        var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-	        numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-
-	        NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-	        var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-	        var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-	        Assert.True(errorMessage.Count == 0);
-        }
-
-		[Theory]
-        [InlineData("12AC and CDE45", "12AB Wrong alphanumeric CE45")]
-        public void WrongAlphanumerics(string source, string target)
-        {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-            foreach (var errorMessage in errorMessages)
-            {
-                Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage.ErrorMessage);
-            }
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
-        /// This are not alphanumerics, number verifier should check only the 
+        /// Check for alphanumerics with same text
+        /// No error message.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [Theory]
+        [InlineData("some text NO8-T1", "another text NO8-T1")]
+        public void CheckAlphaNumerics_With_NoErrorMessage(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.True(errorMessage.Count == 0);
+        }
+
+        /// <summary>
+        /// Check for alphanumerics with different target text
+        /// Error message: Alphanumeric name modified.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [Theory]
+        [InlineData("some text NO8-T1", "another text NO8-T2")]
+        public void CheckAlphaNumerics_With_WrongNumber(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0]?.ErrorMessage);
+        }
+
+        /// <summary>
+        /// This are not alphanumerics, number verifier should check only the
         /// numbers in this case
         /// No error message
         /// </summary>
@@ -140,7 +181,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
 
-            Assert.True(errorMessages.Count==0);
+            Assert.True(errorMessages.Count == 0);
         }
 
         /// <summary>
@@ -168,61 +209,28 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessages[0].ErrorMessage);
         }
 
-        /// <summary>
-        /// Alphanumerics which are items in a list
-        /// source and target normal -
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [Theory]
-        [InlineData("some text -AB23", "another text -AC23")]
-        public void AlphanumericsInList(string source, string target)
+        [InlineData("The bus number is 30F. ", "The bus number is 30E.")]
+        public void NoAlphanumericReportModifiedVerification_NoErrors(string source, string target)
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            numberVerifierSettings.Setup(d => d.ReportModifiedAlphanumerics).Returns(false);
+            numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
 
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
-        }
-		
-        [Theory]
-        [InlineData("some word -AB23", "another text -AB23")]
-        public void AlphanumericsInListSpecialSpace(string source, string target)
-        {
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
-			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
-			numberVerifierSettings.Setup(d => d.AlphanumericsCustomSeparator).Returns("-");
-
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-            Assert.True(errorMessage.Count==0);
+            Assert.True(errorMessage.Count == 0);
         }
 
-        ///// <summary>
-        ///// Alphanumerics which are items in a list
-        ///// source normal - , target special −
-        ///// see http://www.fileformat.info/info/unicode/char/2212/browsertest.htm
-        ///// </summary>
-        ///// <param name="source"></param>
-        ///// <param name="target"></param>
-        [Theory]
-        [InlineData("some text -AB23", "another text −AC23")]
-        public void AlphanumericsInListDifferentLineReportsModified(string source, string target)
+        public List<ErrorReporting> ReportModifiedAlphanumerics(string source, string target, NumberVerifierMain numberVerifierMain)
         {
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            //run initialize method in order to set chosen separators
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+            return numberVerifierMain.CheckSourceAndTarget(source, target);
         }
 
         [Theory]
@@ -236,47 +244,38 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-            Assert.True(errorMessage.Count==0);
+            Assert.True(errorMessage.Count == 0);
         }
 
-		/// <summary>
-		/// Check for alphanumerics with different target text
-		/// Error message: Alphanumeric name modified.
-		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="target"></param>
-		[Theory]
-		[InlineData("some text NO8-T1", "another text NO8-T2")]
-		public void CheckAlphaNumerics_With_WrongNumber(string source, string target)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+        [Theory]
+        [InlineData("This is an alphanumeric CDE45", "Wrong alphanumeric CE45")]
+        public void WrongAlphanumeric(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-			Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0]?.ErrorMessage);
-		}
+            var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage[0].ErrorMessage);
+        }
 
-		/// <summary>
-		/// Check for alphanumerics with same text
-		/// No error message.
-		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="target"></param>
-		[Theory]
-		[InlineData("some text NO8-T1", "another text NO8-T1")]
-		public void CheckAlphaNumerics_With_NoErrorMessage(string source, string target)
-		{
-			var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
-			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+        [Theory]
+        [InlineData("12AC and CDE45", "12AB Wrong alphanumeric CE45")]
+        public void WrongAlphanumerics(string source, string target)
+        {
+            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
-			Assert.True(errorMessage.Count == 0);
-		}
-	}
+            var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
+            foreach (var errorMessage in errorMessages)
+            {
+                Assert.Equal(PluginResources.Error_AlphanumericsModified, errorMessage.ErrorMessage);
+            }
+        }
+    }
 }

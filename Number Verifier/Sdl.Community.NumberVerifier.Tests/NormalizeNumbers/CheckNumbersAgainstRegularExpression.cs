@@ -19,7 +19,7 @@
 //		}
 
 //		/// <summary>
-//		/// In case of -(space)number the dash should be ignored because is not a negative number  
+//		/// In case of -(space)number the dash should be ignored because is not a negative number
 //		/// is a item in a list
 //		/// </summary>
 //		[Theory]
@@ -96,7 +96,6 @@
 //			// Assert
 //			Assert.Equal(sourceResult.InitialPartsList[0], targetResult.InitialPartsList[0]);
 //		}
-
 
 //		[Theory]
 //		[InlineData("Drill holes al least every 600 milimeters", "Perces de trous au moins tous les 60 centimeters", ".,", ",")]

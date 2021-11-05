@@ -7,33 +7,33 @@ using Xunit;
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
 	public class CheckFullWidthJapaneseNumbers
-	{
-		private readonly Mock<IDocumentProperties> _documentProperties;
+    {
+        private readonly Mock<IDocumentProperties> _documentProperties;
 
-		public CheckFullWidthJapaneseNumbers()
-		{
-			_documentProperties = new Mock<IDocumentProperties>();
-		}
+        public CheckFullWidthJapaneseNumbers()
+        {
+            _documentProperties = new Mock<IDocumentProperties>();
+        }
 
-		/// <summary>
-		/// Validate the full-width Japanese numbers: ２０１６ -> 2016
-		/// </summary>
-		[Theory]
-		[InlineData("２０１６", "2016")]
-		public void ValidateFullWidthJapaneseNumbers(string source, string target)
-		{
-			//target settings
-			var numberVerifierSettings = SourceSettingsAndPreventLocalization.SpaceCommaPeriod();
+        /// <summary>
+        /// Validate the full-width Japanese numbers: ２０１６ -> 2016
+        /// </summary>
+        [Theory]
+        [InlineData("２０１６", "2016")]
+        public void ValidateFullWidthJapaneseNumbers(string source, string target)
+        {
+            //target settings
+            var numberVerifierSettings = SourceSettingsAndPreventLocalization.SpaceCommaPeriod();
 
-			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+            var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-			//run initialize method in order to set chosen separators
-			numberVerifierMain.Initialize(_documentProperties.Object);
+            //run initialize method in order to set chosen separators
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
-			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+            var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			Assert.True(errorMessage.Count == 0);
-		}
-	}
+            Assert.True(errorMessage.Count == 0);
+        }
+    }
 }
