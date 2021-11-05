@@ -1,148 +1,149 @@
-﻿//using Moq;
-//using Sdl.Community.NumberVerifier.Interfaces;
-//using Sdl.Community.NumberVerifier.Model;
-//using Sdl.Community.NumberVerifier.Parsers.Number;
-//using Sdl.Community.NumberVerifier.Tests.Utilities;
-//using Xunit;
+﻿using Moq;
+using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Community.NumberVerifier.Model;
+using Sdl.Community.NumberVerifier.Parsers.Number;
+using Sdl.Community.NumberVerifier.Tests.Utilities;
+using Sdl.Community.NumberVerifier.Validator;
+using Xunit;
 
-//namespace Sdl.Community.NumberVerifier.Tests.OmitZero
-//{
-//	public class OmitLeadingZero
-//	{
-//		private readonly NumberNormalizer _numberNormalizer;
+namespace Sdl.Community.NumberVerifier.Tests.OmitZero
+{
+	public class OmitLeadingZero
+	{
+		private readonly NumberValidator _numberValidator;
 
-//		public OmitLeadingZero()
-//		{
-//			_numberNormalizer = new NumberNormalizer();
-//		}
+		public OmitLeadingZero()
+		{
+			_numberValidator = new NumberValidator();
+		}
 
-//		public PartsList OmitZeroChecked(string number)
-//		{
-//			var numberVerifierSettings = OmitZeroSettings.OmitZeroCheckedAndPreventLocalization();
-//			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+		public NumberTexts OmitZeroChecked(string number)
+		{
+			var numberVerifierSettings = OmitZeroSettings.OmitZeroCheckedAndPreventLocalization();
+			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
-//			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-//			_numberNormalizer.GetNormalizedNumbers(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			_numberValidator.GetErrors(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
-//			return normalizedNumbers;
-//		}
+			return normalizedNumbers;
+		}
 
-//		[Theory]
-//		[InlineData(".55")]
-//		public void CheckNumberIfOmitZeroIsChecked(string number)
-//		{
-//			var numberList = OmitZeroChecked(number);
+		[Theory]
+		[InlineData(".55")]
+		public void CheckNumberIfOmitZeroIsChecked(string number)
+		{
+			var numberList = OmitZeroChecked(number);
 
-//			Assert.Equal("0d55", numberList.NormalizedPartsList[0]);
-//			Assert.Equal("0.55", numberList.InitialPartsList[0]);
-//		}
+			Assert.Equal("0d55", numberList.Texts[0].Normalized);
+		}
 
-//		public PartsList GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(string text)
-//		{
-//			var iMockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
-//			iMockSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+		public NumberTexts GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(string text)
+		{
+			var iMockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
+			iMockSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
-//			NumberVerifierLocalizationsSettings.InitSeparators(iMockSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(iMockSettings);
 
-//			_numberNormalizer.GetNormalizedNumbers(text, null, iMockSettings.Object, out var normalizedNumber, out _);
+			_numberValidator.GetErrors(text, null, iMockSettings.Object, out var normalizedNumber, out _);
 
-//			return normalizedNumber;
-//		}
+			return normalizedNumber;
+		}
 
-//		[Theory]
-//		[InlineData(".55")]
-//		public string OmitZeroShortForm(string text)
-//		{
-//			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
+		[Theory]
+		[InlineData(".55")]
+		public string OmitZeroShortForm(string text)
+		{
+			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
 
-//			Assert.Equal("55", normalizedNumber.NormalizedPartsList[0]);
+			Assert.Null(normalizedNumber.Texts[0].Normalized);
+			Assert.False(normalizedNumber.Texts[0].IsValidNumber);
 
-//			return normalizedNumber.NormalizedPartsList[0];
-//		}
+			return normalizedNumber.Texts[0].Normalized;
+		}
 
-//		[Theory]
-//		[InlineData("0.55")]
-//		public void OmitZeroLongForm(string text)
-//		{
-//			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
+		[Theory]
+		[InlineData("0.55")]
+		public void OmitZeroLongForm(string text)
+		{
+			var normalizedNumber = GetNormalizedNumberWhenLeadingZeroOmittedAndNotAllowed(text);
 
-//			Assert.Equal("0d55", normalizedNumber.NormalizedPartsList[0]);
-//		}
+			Assert.Equal("0d55", normalizedNumber.Texts[0].Normalized);
+		}
 
-//		[Theory]
-//		[InlineData("-.55")]
-//		public string OmitZeroShortFormNegativeNumbers(string text)
-//		{
-//			var mockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
-//			mockSettings.Setup(s => s.TargetOmitLeadingZero).Returns(true);
-//			mockSettings.Setup(s => s.TargetDecimalPeriod).Returns(true);
+		[Theory]
+		[InlineData("-.55")]
+		public string OmitZeroShortFormNegativeNumbers(string text)
+		{
+			var mockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
+			mockSettings.Setup(s => s.TargetOmitLeadingZero).Returns(true);
+			mockSettings.Setup(s => s.TargetDecimalPeriod).Returns(true);
 
-//			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
 
-//			_numberNormalizer.GetNormalizedNumbers(null, text, mockSettings.Object, out _, out var normalizedNumber);
+			_numberValidator.GetErrors(null, text, mockSettings.Object, out _, out var normalizedNumber);
 
-//			Assert.Equal("s0d55", normalizedNumber.NormalizedPartsList[0]);
+			Assert.Equal("s0d55", normalizedNumber.Texts[0].Normalized);
 
-//			return normalizedNumber.NormalizedPartsList[0];
-//		}
+			return normalizedNumber.Texts[0].Normalized;
+		}
 
-//		[Theory]
-//		[InlineData("−.55")]
-//		public void OmitZeroShortFormNegativeNumbersSpecialMinusSign(string text)
-//		{
-//			var normalizedNumber = OmitZeroShortFormNegativeNumbers(text);
-//			Assert.Equal("s0d55", normalizedNumber);
-//		}
+		[Theory]
+		[InlineData("−.55")]
+		public void OmitZeroShortFormNegativeNumbersSpecialMinusSign(string text)
+		{
+			var normalizedNumber = OmitZeroShortFormNegativeNumbers(text);
+			Assert.Equal("s0d55", normalizedNumber);
+		}
 
-//		[Theory]
-//		[InlineData("-0.55", "-0,55")]
-//		public void OmitZeroLongFormNegativeNumbersMinusSign(string numberWithPeriod, string numberWithComma)
-//		{
-//			var mockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
-//			mockSettings.Setup(s => s.TargetOmitLeadingZero).Returns(true);
+		[Theory]
+		[InlineData("-0.55", "-0,55")]
+		public void OmitZeroLongFormNegativeNumbersMinusSign(string numberWithPeriod, string numberWithComma)
+		{
+			var mockSettings = NumberVerifierLocalizationsSettings.AllowLocalization();
+			mockSettings.Setup(s => s.TargetOmitLeadingZero).Returns(true);
 
-//			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
 
-//			mockSettings.Setup(s => s.TargetDecimalPeriod).Returns(true);
-//			_numberNormalizer.GetNormalizedNumbers(null, numberWithPeriod, mockSettings.Object, out _, out var normalizedNumberWithPeriod);
+			mockSettings.Setup(s => s.TargetDecimalPeriod).Returns(true);
+			_numberValidator.GetErrors(null, numberWithPeriod, mockSettings.Object, out _, out var normalizedNumberWithPeriod);
 
-//			mockSettings.Setup(s => s.TargetDecimalComma).Returns(true);
-//			_numberNormalizer.GetNormalizedNumbers(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
+			mockSettings.Setup(s => s.TargetDecimalComma).Returns(true);
+			_numberValidator.GetErrors(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
 
-//			Assert.Equal("s0d55", normalizedNumberWithPeriod.NormalizedPartsList[0]);
-//			Assert.Equal("s0d55", normalizedNumberWithComma.NormalizedPartsList[0]);
-//		}
+			Assert.Equal("s0d55", normalizedNumberWithPeriod.Texts[0].Normalized);
+			Assert.Equal("s0d55", normalizedNumberWithComma.Texts[0].Normalized);
+		}
 
-//		#region Omit leading zero option is unchecked
+		//#region Omit leading zero option is unchecked
 
 
-//		public string OmitZeroUnchecked(string number)
-//		{
-//			var numberVerifierSettings = OmitZeroSettings.OmitZeroUncheckedAndAllowLocalization();
-//			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
-//			var methodsMock = new Mock<INumberVerifierMethods>(MockBehavior.Strict);
+		public string OmitZeroUnchecked(string number)
+		{
+			var numberVerifierSettings = OmitZeroSettings.OmitZeroUncheckedAndAllowLocalization();
+			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+			var methodsMock = new Mock<INumberVerifierMethods>(MockBehavior.Strict);
 
-//			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-//			_numberNormalizer.GetNormalizedNumbers(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
+			_numberValidator.GetErrors(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
-//			methodsMock.Verify(m => m.OmitZero(number), Times.Never);
-//			return normalizedNumbers.InitialPartsList[0];
-//		}
+			methodsMock.Verify(m => m.OmitZero(number), Times.Never);
+			return normalizedNumbers.Texts[0].Normalized;
+		}
 
-//		/// <summary>
-//		/// If the option is unchecked the method shouldn't be called
-//		/// </summary>
-//		/// <param name="number"></param>
-//		[Theory]
-//		[InlineData(".55")]
-//		public void CheckNumberIfOmitZeroIsUnchecked(string number)
-//		{
-//			var normalizedNumber = OmitZeroUnchecked(number);
+		/// <summary>
+		/// If the option is unchecked the method shouldn't be called
+		/// </summary>
+		/// <param name="number"></param>
+		[Theory]
+		[InlineData(".55")]
+		public void CheckNumberIfOmitZeroIsUnchecked(string number)
+		{
+			var normalizedNumber = OmitZeroUnchecked(number);
 
-//			Assert.True(normalizedNumber != "0.55");
-//		}
+			Assert.True(normalizedNumber != "0.55");
+		}
 
-//		#endregion
-//	}
-//}
+		//#endregion
+	}
+}

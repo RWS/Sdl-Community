@@ -23,8 +23,15 @@ namespace Sdl.Community.NumberVerifier.Validator
 		public void GetErrors(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
 		{
 			_settings = settings;
-			_sourceText = sourceText.Normalize(System.Text.NormalizationForm.FormKC);
-			_targetText = targetText.Normalize(System.Text.NormalizationForm.FormKC);
+			_sourceText = sourceText?.Normalize(System.Text.NormalizationForm.FormKC);
+			_targetText = targetText?.Normalize(System.Text.NormalizationForm.FormKC);
+
+			if (_sourceText is null && _targetText is null)
+			{
+				sourceNumberTexts = null;
+				targetNumberTexts = null;
+				return;
+			}
 
 			_sourceThousandSeparators = GetAllowedThousandSeparators(true);
 			_sourceDecimalSeparators = GetAllowedDecimalSeparators(true).Select(Regex.Unescape).ToList();
@@ -270,8 +277,11 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 			var textAreaPattern = new Regex($"((?<Sign>[+−-](?={_digitClass}|{allSeparators}))?(?:(?<=)(?<Separators>{allSeparators})?{_digitClass}+)*)");
 
-			var sourceTextMatches = textAreaPattern.Matches(_sourceText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
-			var targetTextMatches = textAreaPattern.Matches(_targetText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
+			var targetTextMatches = new List<Match>();
+			if (_targetText is not null) targetTextMatches = textAreaPattern.Matches(_targetText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
+
+			var sourceTextMatches = new List<Match>();
+			if (_sourceText is not null) sourceTextMatches = textAreaPattern.Matches(_sourceText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
 
 			sourceNumberTexts = GetTextAreas(sourceTextMatches);
 			targetNumberTexts = GetTextAreas(targetTextMatches);
