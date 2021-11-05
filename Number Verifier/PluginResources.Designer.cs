@@ -125,11 +125,11 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Same sequence but different value.
+        ///   Looks up a localized string similar to Same sequences but different values.
         /// </summary>
-        public static string Error_SameSequenceButDifferentValue {
+        public static string Error_SameSequencesButDifferentValues {
             get {
-                return ResourceManager.GetString("Error_SameSequenceButDifferentValue", resourceCulture);
+                return ResourceManager.GetString("Error_SameSequencesButDifferentValues", resourceCulture);
             }
         }
         

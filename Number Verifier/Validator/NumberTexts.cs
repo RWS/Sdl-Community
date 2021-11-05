@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.NumberVerifier.Parsers.Number.Model;
 
-namespace Sdl.Community.NumberVerifier.Model
+namespace Sdl.Community.NumberVerifier.Validator
 {
 	public class NumberTexts
 	{
@@ -34,27 +32,5 @@ namespace Sdl.Community.NumberVerifier.Model
 			}
 			return indexList;
 		}
-
-		public bool AreAllNumbersValid => Texts.All(tp => tp.IsValidNumber);
-
-
-		//public PartsList GetFlattenedList()
-		//{
-		//	var initialParts = new List<string>();
-		//	var normalizedParts = new List<string>();
-		//	var separators = new List<string>();
-
-		//	foreach (var textPart in _textParts)
-		//	{
-		//		initialParts.AddRange(textPart.Parts.InitialPartsList);
-		//		normalizedParts.AddRange(textPart.Parts.NormalizedPartsList);
-		//		separators.AddRange(textPart.Parts.Separators);
-		//	}
-
-		//	return new PartsList(initialParts, normalizedParts, separators);
-
-		//	return null;
-		//}
-
 	}
 }

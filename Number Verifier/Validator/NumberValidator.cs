@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
-using Sdl.Community.NumberVerifier.Model;
-using Sdl.Community.NumberVerifier.Parsers.Number.Model;
 using Match = System.Text.RegularExpressions.Match;
 
-namespace Sdl.Community.NumberVerifier.Parsers.Number
+namespace Sdl.Community.NumberVerifier.Validator
 {
 	public class NumberValidator
 	{
 		private List<string> _allSeparatorsList;
+		private string _digitClass = "[0-9٠-٩]";
+		private string _digitClassWithoutZero = "[1-9١-٩]";
 		private INumberVerifierSettings _settings;
 		private List<string> _sourceDecimalSeparators;
 		private string _sourceText;
@@ -68,7 +67,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 					case NumberText.ComparisonResult.SameSequence:
 						{
-							var message = PluginResources.Error_SameSequenceButDifferentValue;
+							var message = PluginResources.Error_SameSequencesButDifferentValues;
 							targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
 								message);
 
@@ -122,7 +121,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 						separators.Remove(misplacedSeparator);
 					}
 
-
 					textAreas[matchValue] = separators;
 				});
 
@@ -174,15 +172,14 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 				}
 
 				//the only scenario in which we have to take omitZero into account is when the number has ONLY ONE separator (and the number starts with it)
-				var omitZeroPattern = "?<=[0-9]";
+				var omitZeroPattern = $"?<={_digitClass}";
 				if (omitZero && area.Separators.Count == 1)
 				{
 					omitZeroPattern = null;
 				}
 
-				var integer = $"(?'Integer'(0|[1-9][0-9]*|[1-9][0-9]{{0,2}}((?'ThousandSeparators'{thousandClass.ToClassOfCharactersString()})[0-9]{{3}})*))";
-				var fraction = $"(?'Fraction'({omitZeroPattern})((?'DecimalSeparators'{decimalSeparators.ToClassOfCharactersString()})[0-9]+))";
-
+				var integer = $"(?'Integer'(0|٠|{_digitClassWithoutZero}{_digitClass}*|{_digitClassWithoutZero}{_digitClass}{{0,2}}((?'ThousandSeparators'{thousandClass.ToClassOfCharactersString()}){_digitClass}{{3}})*))";
+				var fraction = $"(?'Fraction'({omitZeroPattern})((?'DecimalSeparators'{decimalSeparators.ToClassOfCharactersString()}){_digitClass}+))";
 
 				var pattern = new Regex($"^({integer})?{fraction}?$");
 				var realNumberMatch = pattern.Match(area.Text);
@@ -202,7 +199,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 		private void CheckTextAreas(NumberTexts numberTexts, List<string> thousandSeparators, List<string> decimalSeparators)
 		{
-			var index = 0;
 			foreach (var textPart in numberTexts.Texts)
 			{
 				var separators = textPart.Separators;
@@ -237,8 +233,6 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 						}
 						break;
 				}
-
-				index++;
 			}
 		}
 
@@ -273,7 +267,8 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 		private void Verify(out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
 		{
 			var allSeparators = _allSeparatorsList.ToClassOfCharactersString();
-			var textAreaPattern = new Regex($"((?<Sign>[+−-](?=[0-9]|{allSeparators}))?(?:(?<=)(?<Separators>{allSeparators})?[0-9]+)*)");
+
+			var textAreaPattern = new Regex($"((?<Sign>[+−-](?={_digitClass}|{allSeparators}))?(?:(?<=)(?<Separators>{allSeparators})?{_digitClass}+)*)");
 
 			var sourceTextMatches = textAreaPattern.Matches(_sourceText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
 			var targetTextMatches = textAreaPattern.Matches(_targetText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();

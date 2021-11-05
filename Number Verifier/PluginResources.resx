@@ -203,8 +203,8 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   <data name="Number_level_errors" xml:space="preserve">
 	  <value>Number level errors</value>
   </data>
-  <data name="Error_SameSequenceButDifferentValue" xml:space="preserve">
-	  <value>Same sequence but different value</value>
+  <data name="Error_SameSequencesButDifferentValues" xml:space="preserve">
+	  <value>Same sequences but different values</value>
   </data>
   <data name="Error_NumberUnlocalised" xml:space="preserve">
 	  <value>Number unlocalised</value>

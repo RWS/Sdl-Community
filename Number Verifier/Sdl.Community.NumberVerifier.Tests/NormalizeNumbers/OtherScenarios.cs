@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.NumberVerifier.Parsers.Number;
+using Sdl.Community.NumberVerifier.Validator;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
@@ -72,9 +73,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 			_numberValidator.GetErrors(sourceText: source, targetText: target, settings: settings.Object, sourceNumberTexts: out var sourceNumbersNormalized, targetNumberTexts: out var targetNumbersNormalized);
 
 		}
-		
+
 		[Theory]
 		[InlineData("11,200.300", "11,200.300")]
+		[InlineData("1,234.89", "١,٢٣٤.٨٩")]
 		public void ErrorScenarios_WhenDecimalSeparatorsDifferent_LocalizationAllowed(string source, string target)
 		{
 			var settings =
@@ -86,6 +88,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 					.WithTargetDecimalSeparators(comma: false, period: true)
 					.Build();
 
+			settings.Setup(s => s.HindiNumberVerification).Returns(true);
+
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings: settings.Object);
 			numberVerifierMain.Initialize(documentInfo: null);
 
@@ -93,7 +97,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
 			Assert.Collection(collection: errorMessage,
 				m => Assert.Equal(expected: PluginResources.ThousandSeparatorAfterDecimal, actual: m.ErrorMessage),
-				m => Assert.Equal(expected: PluginResources.Error_SameSequenceButDifferentValue, actual: m.ErrorMessage));
+				m => Assert.Equal(expected: PluginResources.Error_SameSequencesButDifferentValues, actual: m.ErrorMessage));
 		}
 
 		[Theory]

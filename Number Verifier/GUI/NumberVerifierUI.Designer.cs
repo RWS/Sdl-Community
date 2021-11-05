@@ -39,7 +39,6 @@
             this.sourceMisBox = new System.Windows.Forms.GroupBox();
             this.sourceOmitLeadingZeroLabel = new System.Windows.Forms.Label();
             this.sourceOmitZero = new System.Windows.Forms.CheckBox();
-            this.cb_Hindi = new System.Windows.Forms.CheckBox();
             this.tb_customsSeparators = new System.Windows.Forms.TextBox();
             this.cb_customSeparators = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -148,7 +147,6 @@
             this.groupBox1.Controls.Add(this.cb_ReportNumberFormatErrors);
             this.groupBox1.Controls.Add(this.targetMisBox);
             this.groupBox1.Controls.Add(this.sourceMisBox);
-            this.groupBox1.Controls.Add(this.cb_Hindi);
             this.groupBox1.Controls.Add(this.tb_customsSeparators);
             this.groupBox1.Controls.Add(this.cb_customSeparators);
             this.groupBox1.Controls.Add(this.groupBox8);
@@ -204,7 +202,7 @@
             // 
             this.targetMisBox.Controls.Add(this.targetOmitLeadingZeroLabel);
             this.targetMisBox.Controls.Add(this.targetOmitZero);
-            this.targetMisBox.Location = new System.Drawing.Point(317, 714);
+            this.targetMisBox.Location = new System.Drawing.Point(317, 698);
             this.targetMisBox.Name = "targetMisBox";
             this.targetMisBox.Size = new System.Drawing.Size(295, 57);
             this.targetMisBox.TabIndex = 3;
@@ -238,7 +236,7 @@
             // 
             this.sourceMisBox.Controls.Add(this.sourceOmitLeadingZeroLabel);
             this.sourceMisBox.Controls.Add(this.sourceOmitZero);
-            this.sourceMisBox.Location = new System.Drawing.Point(16, 714);
+            this.sourceMisBox.Location = new System.Drawing.Point(16, 698);
             this.sourceMisBox.Name = "sourceMisBox";
             this.sourceMisBox.Size = new System.Drawing.Size(295, 57);
             this.sourceMisBox.TabIndex = 2;
@@ -268,19 +266,9 @@
             this.sourceOmitZero.UseVisualStyleBackColor = true;
             this.sourceOmitZero.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
-            // cb_Hindi
-            // 
-            this.cb_Hindi.AutoSize = true;
-            this.cb_Hindi.Location = new System.Drawing.Point(16, 135);
-            this.cb_Hindi.Name = "cb_Hindi";
-            this.cb_Hindi.Size = new System.Drawing.Size(142, 17);
-            this.cb_Hindi.TabIndex = 40;
-            this.cb_Hindi.Text = "Check for Hindi numbers";
-            this.cb_Hindi.UseVisualStyleBackColor = true;
-            // 
             // tb_customsSeparators
             // 
-            this.tb_customsSeparators.Location = new System.Drawing.Point(16, 179);
+            this.tb_customsSeparators.Location = new System.Drawing.Point(16, 159);
             this.tb_customsSeparators.Name = "tb_customsSeparators";
             this.tb_customsSeparators.Size = new System.Drawing.Size(596, 20);
             this.tb_customsSeparators.TabIndex = 39;
@@ -290,7 +278,7 @@
             this.cb_customSeparators.AutoSize = true;
             this.cb_customSeparators.Checked = true;
             this.cb_customSeparators.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_customSeparators.Location = new System.Drawing.Point(16, 156);
+            this.cb_customSeparators.Location = new System.Drawing.Point(16, 136);
             this.cb_customSeparators.Name = "cb_customSeparators";
             this.cb_customSeparators.Size = new System.Drawing.Size(179, 17);
             this.cb_customSeparators.TabIndex = 38;
@@ -368,7 +356,7 @@
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
-            this.groupBox7.Location = new System.Drawing.Point(16, 206);
+            this.groupBox7.Location = new System.Drawing.Point(16, 190);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(295, 135);
             this.groupBox7.TabIndex = 11;
@@ -434,7 +422,7 @@
             this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
             this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-            this.groupBox2.Location = new System.Drawing.Point(317, 206);
+            this.groupBox2.Location = new System.Drawing.Point(317, 190);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(295, 135);
             this.groupBox2.TabIndex = 15;
@@ -499,7 +487,7 @@
             this.groupBox6.Controls.Add(this.cb_TargetThousandsThinSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
-            this.groupBox6.Location = new System.Drawing.Point(317, 347);
+            this.groupBox6.Location = new System.Drawing.Point(317, 331);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(295, 235);
             this.groupBox6.TabIndex = 26;
@@ -725,7 +713,7 @@
             this.groupBox5.Controls.Add(this.customTargetDSep);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-            this.groupBox5.Location = new System.Drawing.Point(317, 588);
+            this.groupBox5.Location = new System.Drawing.Point(317, 572);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(295, 120);
             this.groupBox5.TabIndex = 36;
@@ -824,7 +812,7 @@
             this.groupBox4.Controls.Add(this.customDSep);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalPeriod);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
-            this.groupBox4.Location = new System.Drawing.Point(16, 588);
+            this.groupBox4.Location = new System.Drawing.Point(16, 572);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(295, 119);
             this.groupBox4.TabIndex = 33;
@@ -933,7 +921,7 @@
             this.groupBox3.Controls.Add(this.cb_SourceThousandsThinSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsNobreakSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
-            this.groupBox3.Location = new System.Drawing.Point(16, 347);
+            this.groupBox3.Location = new System.Drawing.Point(16, 331);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(295, 235);
             this.groupBox3.TabIndex = 19;
@@ -1325,7 +1313,6 @@
         private System.Windows.Forms.CheckBox sourceOmitZero;
 		private System.Windows.Forms.CheckBox cb_customSeparators;
 		private System.Windows.Forms.TextBox tb_customsSeparators;
-		private System.Windows.Forms.CheckBox cb_Hindi;
 		private System.Windows.Forms.ComboBox combo_NumberFormatErrorType;
 		private System.Windows.Forms.CheckBox cb_ReportNumberFormatErrors;
 		private System.Windows.Forms.Label ttlabel8;
