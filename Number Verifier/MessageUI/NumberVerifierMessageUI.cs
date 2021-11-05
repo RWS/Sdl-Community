@@ -209,9 +209,9 @@ namespace Sdl.Community.Extended.MessageUI
 			var formatedTexts = new List<string>();
 			//Check if textIssue is Hindi numbers
 			var numberVerifierMain = new NumberVerifierMain();
-			var hindiNumbers = numberVerifierMain.GetHindiNumbers();
+			var easternArabicNumbers = numberVerifierMain.GetEasternArabicNumbers();
 			var textIssueChars = textIssue.ToCharArray();
-			if(hindiNumbers.Any(h=>textIssueChars.Any(t=>t.ToString().Equals(h.Value))))
+			if(easternArabicNumbers.Any(h=>textIssueChars.Any(t=>t.ToString().Equals(h.Value))))
 			{
 				formatedTexts = Regex.Replace(textIssue, @"\r\n ? |\n ? |\r", " ")?.Split(' ')?.ToList();
 			}

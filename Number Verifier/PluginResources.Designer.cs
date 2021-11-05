@@ -80,11 +80,20 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does not correspond to its source counterpart.
+        /// </summary>
+        public static string Error_DoesNotCorrespondToItsSourceCounterpart {
+            get {
+                return ResourceManager.GetString("Error_DoesNotCorrespondToItsSourceCounterpart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number added. .
         /// </summary>
-        public static string Error_NumbersAdded {
+        public static string Error_NumberAdded {
             get {
-                return ResourceManager.GetString("Error_NumbersAdded", resourceCulture);
+                return ResourceManager.GetString("Error_NumberAdded", resourceCulture);
             }
         }
         
@@ -103,6 +112,24 @@ namespace Sdl.Community.NumberVerifier {
         public static string Error_NumbersRemoved {
             get {
                 return ResourceManager.GetString("Error_NumbersRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number unlocalised.
+        /// </summary>
+        public static string Error_NumberUnlocalised {
+            get {
+                return ResourceManager.GetString("Error_NumberUnlocalised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same sequence but different value.
+        /// </summary>
+        public static string Error_SameSequenceButDifferentValue {
+            get {
+                return ResourceManager.GetString("Error_SameSequenceButDifferentValue", resourceCulture);
             }
         }
         
@@ -143,6 +170,24 @@ namespace Sdl.Community.NumberVerifier {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number level errors.
+        /// </summary>
+        public static string Number_level_errors {
+            get {
+                return ResourceManager.GetString("Number_level_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number cannot have two different thousand separators.
+        /// </summary>
+        public static string NumberCannotHaveTwoDifferentThousandSeparators {
+            get {
+                return ResourceManager.GetString("NumberCannotHaveTwoDifferentThousandSeparators", resourceCulture);
             }
         }
         
@@ -229,6 +274,15 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Segment-level errors.
+        /// </summary>
+        public static string Segment_level_errors {
+            get {
+                return ResourceManager.GetString("Segment_level_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verification settings for numbers.
         /// </summary>
         public static string Setting_Description {
@@ -243,6 +297,51 @@ namespace Sdl.Community.NumberVerifier {
         public static string Setting_Name {
             get {
                 return ResourceManager.GetString("Setting_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text-area level errors.
+        /// </summary>
+        public static string Text_area_level_errors {
+            get {
+                return ResourceManager.GetString("Text_area_level_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thousand separator after decimal.
+        /// </summary>
+        public static string ThousandSeparatorAfterDecimal {
+            get {
+                return ResourceManager.GetString("ThousandSeparatorAfterDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thousand separator after decimal separator.
+        /// </summary>
+        public static string ThousandSeparatorAfterDecimalSeparator {
+            get {
+                return ResourceManager.GetString("ThousandSeparatorAfterDecimalSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many decimal separators.
+        /// </summary>
+        public static string TooManyDecimalSeparators {
+            get {
+                return ResourceManager.GetString("TooManyDecimalSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many types of separators.
+        /// </summary>
+        public static string TooManyTypesOfSeparators {
+            get {
+                return ResourceManager.GetString("TooManyTypesOfSeparators", resourceCulture);
             }
         }
         

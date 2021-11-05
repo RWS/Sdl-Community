@@ -103,7 +103,10 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
         public static Mock<INumberVerifierSettings> RequireLocalization()
         {
             var iNumberSettingsMock = Settings();
-            iNumberSettingsMock.Setup(x => x.RequireLocalizations).Returns(true);
+
+	        InitSeparators(iNumberSettingsMock);
+
+			iNumberSettingsMock.Setup(x => x.RequireLocalizations).Returns(true);
 
             return iNumberSettingsMock;
         }
