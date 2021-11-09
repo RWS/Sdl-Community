@@ -68,12 +68,27 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return realNumberString.Normalize(NormalizationForm.FormKC);
 		}
 
-		public static string ToClassOfCharactersString(this List<string> toBeJoined)
+		public static string ToRegexPattern(this List<string> toBeJoined)
 		{
-			if (toBeJoined.Count <= 0) return null;
+			var oneLetterSeparators = new List<string>();
+			var longerSeparators = new List<string>();
+			foreach (var separator in toBeJoined)
+			{
+				if (separator.Length == 1) oneLetterSeparators.Add(separator);
+				else longerSeparators.Add(separator);
+			}
 
-			var joinedListString = string.Join("", toBeJoined);
-			joinedListString = $"[{joinedListString}]";
+			var joinedListString = "";
+			if (oneLetterSeparators.Count > 0)
+			{
+				joinedListString = string.Join("", oneLetterSeparators);
+				joinedListString = $"[{joinedListString}]";
+			}
+
+			if (longerSeparators.Count > 0)
+			{
+				joinedListString = $"({joinedListString}|{string.Join("|", longerSeparators)})";
+			}
 
 			return joinedListString;
 		}

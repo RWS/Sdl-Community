@@ -32,7 +32,7 @@ namespace Sdl.Community.NumberVerifier.Composers
                         },
                         TruthProcessor = new VerifyProcessor()
                         {
-                            ErrorMessage = PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart
+                            ErrorMessage = PluginResources.Error_DifferentSequences
                         }
                     },
 

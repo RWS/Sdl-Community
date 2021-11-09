@@ -20,6 +20,17 @@ namespace Sdl.Community.NumberVerifier.Validator
 			{ '٩', '9' }
 		};
 
+		public int StartIndex{ get; set; }
+		public int Length{ get; set; }
+
+		public int GetErrorsTotal()
+		{
+			var errorsTotal = 0;
+			Errors.Values.ToList().ForEach(e => errorsTotal += e.Count);
+
+			return errorsTotal;
+		}
+
 		public enum ComparisonResult
 		{
 			DifferentSequence,
@@ -47,13 +58,13 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 		public bool IsValidNumber { get; set; }
 
-		public bool IsValidTextArea => Errors[ErrorLevel.TextAreaLevel].Count == 0;
+		public bool CanBeNumber => Errors[ErrorLevel.TextAreaLevel].Count == 0;
 
 		public string Normalized { get; set; }
 
 		public List<string> Separators { get; set; }
 
-		public string Signature
+		public string Digits
 		{
 			get
 			{
@@ -86,17 +97,18 @@ namespace Sdl.Community.NumberVerifier.Validator
 		{
 			if (other is null) return ComparisonResult.DifferentSequence;
 
-			var sourceWesternArabicNumber = GetWesternArabicNumber(Text);
-			var targetWesternArabicNumber = GetWesternArabicNumber(other.Text);
+			var sourceWesternArabicNumberText = GetWesternArabicNumber(Text);
+			var targetWesternArabicNumberText = GetWesternArabicNumber(other.Text);
 
 			var result = ComparisonResult.DifferentSequence;
 
 			//sequence level
-			if (sourceWesternArabicNumber == targetWesternArabicNumber) result = ComparisonResult.SameSequence;
+			if (sourceWesternArabicNumberText == targetWesternArabicNumberText) result = ComparisonResult.SameSequence;
 
 			if (result == ComparisonResult.SameSequence &&
 				IsValidNumber &&
 				!other.IsValidNumber)
+				//this condition can only be satisified if we're in "RequireLocalizations" mode; in any other mode, they'd both be valid if one of them is (and they'd be equal), since they both can have the same separators
 				result = ComparisonResult.Unlocalised;
 
 			if (result == ComparisonResult.SameSequence &&
@@ -112,7 +124,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 				ComparisonResult.DifferentValues;
 
 			if (result != ComparisonResult.Equal &&
-				Signature == other.Signature &&
+				Digits == other.Digits &&
 				Separators.Count == 1 &&
 				other.Separators.Count == 1)
 			{

@@ -19,7 +19,7 @@ namespace Sdl.Community.NumberVerifier {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -80,11 +80,20 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does not correspond to its source counterpart.
+        ///   Looks up a localized string similar to Different sequences.
         /// </summary>
-        public static string Error_DoesNotCorrespondToItsSourceCounterpart {
+        public static string Error_DifferentSequences {
             get {
-                return ResourceManager.GetString("Error_DoesNotCorrespondToItsSourceCounterpart", resourceCulture);
+                return ResourceManager.GetString("Error_DifferentSequences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Different values.
+        /// </summary>
+        public static string Error_DifferentValues {
+            get {
+                return ResourceManager.GetString("Error_DifferentValues", resourceCulture);
             }
         }
         
@@ -127,9 +136,9 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Same sequences but different values.
         /// </summary>
-        public static string Error_SameSequencesButDifferentValues {
+        public static string Error_SameSequenceDifferentValues {
             get {
-                return ResourceManager.GetString("Error_SameSequencesButDifferentValues", resourceCulture);
+                return ResourceManager.GetString("Error_SameSequenceDifferentValues", resourceCulture);
             }
         }
         
@@ -183,7 +192,7 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number cannot have two different thousand separators.
+        ///   Looks up a localized string similar to Number cannot have two different thousands separators.
         /// </summary>
         public static string NumberCannotHaveTwoDifferentThousandSeparators {
             get {
@@ -310,20 +319,11 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thousand separator after decimal.
+        ///   Looks up a localized string similar to Thousands separator after decimal.
         /// </summary>
         public static string ThousandSeparatorAfterDecimal {
             get {
                 return ResourceManager.GetString("ThousandSeparatorAfterDecimal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Thousand separator after decimal separator.
-        /// </summary>
-        public static string ThousandSeparatorAfterDecimalSeparator {
-            get {
-                return ResourceManager.GetString("ThousandSeparatorAfterDecimalSeparator", resourceCulture);
             }
         }
         

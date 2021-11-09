@@ -222,9 +222,7 @@
             // 
             // tb_SourceIssues
             // 
-            this.tb_SourceIssues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_SourceIssues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tb_SourceIssues.Location = new System.Drawing.Point(154, 16);
             this.tb_SourceIssues.Multiline = true;
             this.tb_SourceIssues.Name = "tb_SourceIssues";
@@ -236,9 +234,7 @@
             // 
             // tb_TargetIssues
             // 
-            this.tb_TargetIssues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_TargetIssues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tb_TargetIssues.Location = new System.Drawing.Point(267, 16);
             this.tb_TargetIssues.Multiline = true;
             this.tb_TargetIssues.Name = "tb_TargetIssues";
@@ -250,9 +246,7 @@
             // 
             // tb_ErrorDetails
             // 
-            this.tb_ErrorDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_ErrorDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tb_ErrorDetails.Location = new System.Drawing.Point(3, 16);
             this.tb_ErrorDetails.Multiline = true;
             this.tb_ErrorDetails.Name = "tb_ErrorDetails";
