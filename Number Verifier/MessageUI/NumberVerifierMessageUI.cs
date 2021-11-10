@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Community.NumberVerifier;
 using Sdl.Community.NumberVerifier.Helpers;
+using Sdl.Community.NumberVerifier.MessageUI;
 using Sdl.DesktopEditor.BasicControls;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -165,27 +166,58 @@ namespace Sdl.Community.Extended.MessageUI
 		/// <param name="messageEventArgs">message event arguments</param>
 		private void UpdateMessage(MessageEventArgs messageEventArgs)
 		{
-			var messageData = (NumberVerifierMessageData)messageEventArgs.ExtendedData;
-			tb_ErrorDetails.Text = messageEventArgs.Level.ToString() + "\r\n" + messageEventArgs.Message;
-			if (messageData.MessageType.Equals(Constants.AlphanumericIssue) || messageData.MessageType.Equals(Constants.HindiIssue))
+
+			if (messageEventArgs.ExtendedData is NumberVerifierMessageData messageData)
 			{
-				tb_SourceIssues.Text = messageData.InitialSourceIssues;
-				tb_TargetIssues.Text = messageData.InitialTargetIssues;
-			}
-			else
-			{
-				tb_SourceIssues.Text = messageData.SourceIssues;
-				tb_TargetIssues.Text = messageData.TargetIssues;
+				tb_ErrorDetails.Text = messageEventArgs.Level + Environment.NewLine + messageEventArgs.Message;
+				if (messageData.MessageType.Equals(Constants.AlphanumericIssue) ||
+				    messageData.MessageType.Equals(Constants.HindiIssue))
+				{
+					tb_SourceIssues.Text = messageData.InitialSourceIssues;
+					tb_TargetIssues.Text = messageData.InitialTargetIssues;
+				}
+				else
+				{
+					tb_SourceIssues.Text = messageData.SourceIssues;
+					tb_TargetIssues.Text = messageData.TargetIssues;
+				}
+				if (!string.IsNullOrEmpty(source_richTextBox.Text))
+				{
+					ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
+				}
+				if (!string.IsNullOrEmpty(target_richTextBox.Text))
+				{
+					ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
+				}
 			}
 
-			if (!string.IsNullOrEmpty(source_richTextBox.Text))
+
+			if (messageEventArgs.ExtendedData is AlignmentErrorExtendedData alignmentData)
 			{
-				ColorTextIssues(tb_SourceIssues.Text, source_richTextBox);
+				var sourceStartIndex = alignmentData.SourceRange.StartIndex;
+				var sourceRangeLength = alignmentData.SourceRange.Length;
+				var targetStartIndex = alignmentData.TargetRange.StartIndex;
+				var targetRangeLength = alignmentData.TargetRange.Length;
+
+				if (sourceRangeLength != 0)
+				{
+					source_richTextBox.Select(sourceStartIndex, sourceRangeLength);
+					source_richTextBox.SelectionBackColor = Color.Gold;
+				}
+				
+				if (targetRangeLength != 0)
+				{
+					target_richTextBox.Select(targetStartIndex, targetRangeLength);
+					target_richTextBox.SelectionBackColor = Color.Gold;
+				}
+
+				tb_ErrorDetails.Text = messageEventArgs.Message;
+				tb_SourceIssues.Text = alignmentData.SourceIssues;
+				tb_TargetIssues.Text = alignmentData.TargetIssues;
+				return;
 			}
-			if (!string.IsNullOrEmpty(target_richTextBox.Text))
-			{
-				ColorTextIssues(tb_TargetIssues.Text, target_richTextBox);
-			}
+
+
 		}
 
 		/// <summary>

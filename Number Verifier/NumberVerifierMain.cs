@@ -10,6 +10,7 @@ using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Community.NumberVerifier.MessageUI;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Processors;
 using Sdl.Community.NumberVerifier.Validator;
@@ -231,7 +232,7 @@ namespace Sdl.Community.NumberVerifier
 					_sourceText = GetSegmentText(segmentPair.Source);
 					_targetText = GetSegmentText(segmentPair.Target);
 
-					var errorMessages = CheckSourceAndTarget(_sourceText, _targetText);
+					var errorMessages = CheckSourceAndTarget(_sourceText, _targetText, segmentPair);
 
 					// generic number verifier to identify errors related to the numeric convention taking
 					// into consideration the settings applied.
@@ -299,7 +300,8 @@ namespace Sdl.Community.NumberVerifier
 								else
 								{
 									var targetNumbers = new List<string>();
-									var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+", RegexOptions.Singleline);
+									var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+",
+										RegexOptions.Singleline);
 
 									foreach (var value in numbers)
 									{
@@ -315,8 +317,7 @@ namespace Sdl.Community.NumberVerifier
 							MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
 								errorMessage.ErrorLevel, errorMessage.ErrorMessage,
 								new TextLocation(new Location(segmentPair.Target, true), 0),
-								new TextLocation(new Location(segmentPair.Target, false),
-									segmentPair.Target.ToString().Length - 1));
+								new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1));
 						}
 					}
 				}
@@ -375,11 +376,11 @@ namespace Sdl.Community.NumberVerifier
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
 		/// <returns></returns>
-		public IEnumerable<ErrorReporting> CheckNumbers(string sourceText, string targetText)
+		public void CheckNumbers(string sourceText, string targetText, ISegmentPair segmentPair)
 		{
 			_numberValidator.GetErrors(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
 
-			return GetErrorList(sourceNumbers, targetNumbers);
+			ReportErrors(sourceNumbers, targetNumbers, segmentPair);
 		}
 
 		/// <summary>
@@ -388,7 +389,7 @@ namespace Sdl.Community.NumberVerifier
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
 		/// <returns></returns>
-		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
+		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText, ISegmentPair segmentPair)
 		{
 			var errorList = new List<ErrorReporting>();
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics || _verificationSettings.ReportModifiedAlphanumerics)
@@ -397,8 +398,7 @@ namespace Sdl.Community.NumberVerifier
 				errorList.AddRange(errorsListFromAlphanumerics);
 			}
 
-			var errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
-			errorList.AddRange(errorsListFromNormalizedNumbers);
+			CheckNumbers(sourceText, targetText, segmentPair);
 
 			return errorList;
 		}
@@ -705,52 +705,126 @@ namespace Sdl.Community.NumberVerifier
 					 && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
 		}
 
-		private List<ErrorReporting> GetErrorList(NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
+		private void ReportErrors(NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts, ISegmentPair segmentPair)
 		{
-			var index = 0;
-			var errorMessages = new List<ErrorReporting>();
+			var sourceNumbersTotal = sourceNumberTexts.Texts.Count;
+			var targetNumbersTotal = targetNumberTexts.Texts.Count;
+			var errorPairsTotal = sourceNumbersTotal > targetNumbersTotal ? sourceNumbersTotal : targetNumbersTotal;
 
-			if (!VerificationSettings.ReportNumberFormatErrors)
+			for (var i = 0; i < errorPairsTotal; i++)
 			{
-				sourceNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(NumberText.ErrorLevel.NumberLevel));
+				var extendedReportInfo = GetExtendedReport(i, sourceNumberTexts, targetNumberTexts);
 
-				targetNumberTexts.Texts.ForEach(numberText => numberText.Errors.Remove(NumberText.ErrorLevel.NumberLevel));
-			}
-
-			foreach (var numberText in sourceNumberTexts.Texts)
-			{
-				index++;
-				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
-				foreach (var error in errors)
+				if (extendedReportInfo.Message is null) continue;
+				if (VerificationSettings.ReportExtendedMessages &&
+				    MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
 				{
-					errorMessages.Add(new ErrorReporting
-					{
-						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
-						ErrorMessage = error.Message,
-						ExtendedErrorMessage = error.Message,
-						SourceNumberIssues = $"Number at index {index}: {numberText.Text}",
-					});
+
+					extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+						extendedReportInfo.ErrorLevel,
+						extendedReportInfo.Message,
+						new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
+						new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length),
+						extendedReportInfo.Report);
+				}
+				else
+				{
+					MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+						extendedReportInfo.ErrorLevel,
+						extendedReportInfo.Message,
+						new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
+						new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length));
 				}
 			}
+		}
 
-			index = 0;
-			foreach (var numberText in targetNumberTexts.Texts)
+		[Flags]
+		public enum Range
+		{
+			Default = 0,
+			Source = 1,
+			Target = 2,
+			Both = 3
+		}
+
+		private ExtendedErrorReportInfo GetExtendedReport(int i, NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
+		{
+			var isInSourceRange = sourceNumberTexts.Texts.Count > i;
+			var isInTargetRange = targetNumberTexts.Texts.Count > i;
+
+			var range = Range.Default;
+			if (isInSourceRange) range = Range.Source;
+			if (isInTargetRange) range |= Range.Target;
+
+			var errorReportInfo = new ExtendedErrorReportInfo();
+			switch (range)
 			{
-				index++;
-				var errors = numberText.Errors.Select(kvp => kvp.Value).SelectMany(l => l).ToList();
-				foreach (var error in errors)
-				{
-					errorMessages.Add(new ErrorReporting
+				case Range.Source:
+					errorReportInfo.Message = sourceNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
+
+					errorReportInfo.Report = new AlignmentErrorExtendedData
 					{
-						ErrorLevel = GetNumbersErrorLevel(VerificationSettings.NumberFormatErrorType),
-						ErrorMessage = error.Message,
-						ExtendedErrorMessage = error.Message,
-						TargetNumberIssues = $"Number at index {index}: {numberText.Text}",
-					});
-				}
+						SourceIssues = GetFormattedError(sourceNumberTexts[i]),
+						TargetIssues = "-",
+						MessageType = "Segment-pair level errors"
+					};
+					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(VerificationSettings.AddedNumbersErrorType);
+
+					errorReportInfo.Report.SourceRange.StartIndex = sourceNumberTexts[i].StartIndex;
+					errorReportInfo.Report.SourceRange.Length = sourceNumberTexts[i].Length;
+					break;
+
+				case Range.Both:
+					errorReportInfo.Message = targetNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
+
+					errorReportInfo.Report = new AlignmentErrorExtendedData
+					{
+						SourceIssues = GetFormattedError(sourceNumberTexts[i]),
+						TargetIssues = GetFormattedError(targetNumberTexts[i]),
+						MessageType = "Segment-pair level errors"
+					};
+
+					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(VerificationSettings.ModifiedNumbersErrorType);
+
+					errorReportInfo.Report.SourceRange.StartIndex = sourceNumberTexts[i].StartIndex;
+					errorReportInfo.Report.SourceRange.Length = sourceNumberTexts[i].Length;
+					errorReportInfo.Report.TargetRange.StartIndex = targetNumberTexts[i].StartIndex;
+					errorReportInfo.Report.TargetRange.Length = targetNumberTexts[i].Length;
+
+					break;
+
+				case Range.Target:
+					errorReportInfo.Message = targetNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
+
+					errorReportInfo.Report = new AlignmentErrorExtendedData
+					{
+						SourceIssues = GetFormattedError(sourceNumberTexts[i]),
+						TargetIssues = GetFormattedError(targetNumberTexts[i]),
+						MessageType = "Segment-pair level errors",
+
+					};
+					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(VerificationSettings.AddedNumbersErrorType);
+
+					errorReportInfo.Report.TargetRange.StartIndex = targetNumberTexts[i].StartIndex;
+					errorReportInfo.Report.TargetRange.Length = targetNumberTexts[i].Length;
+					break;
 			}
 
-			return errorMessages;
+			errorReportInfo.Report.MessageType = "Alignment";
+			return errorReportInfo;
+		}
+
+		private static string GetFormattedError(NumberText numberText)
+		{
+			var explanation = numberText.Normalized;
+
+			if (!numberText.IsValidNumber)
+			{
+				explanation = numberText.Errors[NumberText.ErrorLevel.TextAreaLevel].FirstOrDefault()?.Message ??
+				              numberText.Errors[NumberText.ErrorLevel.NumberLevel].FirstOrDefault()?.Message;
+			}
+
+			return $"{numberText.Text}	[{explanation}]";
 		}
 
 		private ErrorLevel GetNumbersErrorLevel(string setting)

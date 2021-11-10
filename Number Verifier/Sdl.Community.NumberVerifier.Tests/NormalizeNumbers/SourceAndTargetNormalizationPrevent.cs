@@ -11,12 +11,12 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 	/// </summary>
 	public class SourceAndTargetNormalizationPrevent
     {
-	    private readonly Mock<IDocumentProperties> _documentProperties;
+        private readonly Mock<IDocumentProperties> _documentProperties;
 
-		public SourceAndTargetNormalizationPrevent()
-	    {
-			_documentProperties = new Mock<IDocumentProperties>();
-		}
+        public SourceAndTargetNormalizationPrevent()
+        {
+            _documentProperties = new Mock<IDocumentProperties>();
+        }
 
         /// <summary>
         /// Decimal separators : comma, period
@@ -27,7 +27,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             //target settings
             var numberVerifierSettings = SourceSettingsAndPreventLocalization.SpaceCommaPeriod();
- 
+
             //source settings
             numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);

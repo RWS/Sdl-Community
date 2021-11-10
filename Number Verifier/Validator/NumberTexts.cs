@@ -7,10 +7,9 @@ namespace Sdl.Community.NumberVerifier.Validator
 	{
 		public List<NumberText> Texts { get; } = new();
 
-		public List<string> this[string key]
+		public void AddNumberText(string text, List<string> separators, int startIndex, int endIndex)
 		{
-			get => Texts.FirstOrDefault(n => n.Text == key)?.Separators;
-			set => Texts.Add(new NumberText { Text = key, Separators = value });
+			Texts.Add(new NumberText { Text = text, Separators = separators, StartIndex = startIndex, Length = endIndex });
 		}
 
 		public NumberText this[int key]
@@ -27,9 +26,11 @@ namespace Sdl.Community.NumberVerifier.Validator
 			for (var i = 0; i < Texts.Count; i++)
 			{
 				var result = Texts[i].Compare(other);
-				if (result is NumberText.ComparisonResult.SameSequence or NumberText.ComparisonResult.Equal)
+				if (result > NumberText.ComparisonResult.DifferentSequence)
 					indexList.Add((i, result));
 			}
+
+			indexList.OrderByDescending(i => i);
 			return indexList;
 		}
 	}

@@ -203,28 +203,28 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   <data name="Number_level_errors" xml:space="preserve">
 	  <value>Number level errors</value>
   </data>
-  <data name="Error_SameSequencesButDifferentValues" xml:space="preserve">
+  <data name="Error_SameSequenceDifferentValues" xml:space="preserve">
 	  <value>Same sequences but different values</value>
   </data>
   <data name="Error_NumberUnlocalised" xml:space="preserve">
 	  <value>Number unlocalised</value>
   </data>
   <data name="ThousandSeparatorAfterDecimal" xml:space="preserve">
-	  <value>Thousand separator after decimal</value>
+	  <value>Thousands separator after decimal</value>
   </data>
   <data name="NumberCannotHaveTwoDifferentThousandSeparators" xml:space="preserve">
-	  <value>Number cannot have two different thousand separators</value>
+	  <value>Number cannot have two different thousands separators</value>
   </data>
   <data name="TooManyDecimalSeparators" xml:space="preserve">
 	  <value>Too many decimal separators</value>
   </data>
-  <data name="ThousandSeparatorAfterDecimalSeparator" xml:space="preserve">
-	  <value>Thousand separator after decimal separator</value>
-  </data>
   <data name="TooManyTypesOfSeparators" xml:space="preserve">
 	  <value>Too many types of separators</value>
   </data>
-  <data name="Error_DoesNotCorrespondToItsSourceCounterpart" xml:space="preserve">
-	  <value>Does not correspond to its source counterpart</value>
+  <data name="Error_DifferentSequences" xml:space="preserve">
+	  <value>Different sequences</value>
+  </data>
+  <data name="Error_DifferentValues" xml:space="preserve">
+	  <value>Different values</value>
   </data>
 </root>
