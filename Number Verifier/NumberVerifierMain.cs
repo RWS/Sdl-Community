@@ -166,13 +166,10 @@ namespace Sdl.Community.NumberVerifier
 
 		private readonly NumberValidator _numberValidator;
 
-		private string _sourceMatchingDecimalSeparators = string.Empty;
-
-		private string _sourceMatchingThousandSeparators = string.Empty;
-
-		private string _targetMatchingDecimalSeparators = string.Empty;
-
-		private string _targetMatchingThousandSeparators = string.Empty;
+		public void Initialize(IDocumentProperties documentInfo)
+		{
+			
+		}
 
 		public void Complete()
 		{
@@ -182,14 +179,6 @@ namespace Sdl.Community.NumberVerifier
 		public void FileComplete()
 		{
 			// Not required for this implementation.
-		}
-
-		public void Initialize(IDocumentProperties documentInfo)
-		{
-			_sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
-			_targetMatchingThousandSeparators = string.Concat(VerificationSettings.GetTargetThousandSeparators());
-			_sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
-			_targetMatchingDecimalSeparators = string.Concat(VerificationSettings.GetTargetDecimalSeparators());
 		}
 
 		public void SetFileProperties(IFileProperties fileInfo)
@@ -232,7 +221,7 @@ namespace Sdl.Community.NumberVerifier
 					_sourceText = GetSegmentText(segmentPair.Source);
 					_targetText = GetSegmentText(segmentPair.Target);
 
-					var errorMessages = CheckSourceAndTarget(_sourceText, _targetText, segmentPair);
+					var errorMessages = CheckSegmentPair(_sourceText, _targetText, segmentPair);
 
 					// generic number verifier to identify errors related to the numeric convention taking
 					// into consideration the settings applied.
@@ -375,12 +364,13 @@ namespace Sdl.Community.NumberVerifier
 		/// </summary>
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
+		/// <param name="segmentPair"></param>
 		/// <returns></returns>
-		public void CheckNumbers(string sourceText, string targetText, ISegmentPair segmentPair)
+		public void CheckNumbers(string sourceText, string targetText, ISegmentPair segmentPair = null)
 		{
-			_numberValidator.GetErrors(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
+			_numberValidator.Verify(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
 
-			ReportErrors(sourceNumbers, targetNumbers, segmentPair);
+			if (segmentPair is not null) ReportErrors(sourceNumbers, targetNumbers, segmentPair);
 		}
 
 		/// <summary>
@@ -388,8 +378,9 @@ namespace Sdl.Community.NumberVerifier
 		/// </summary>
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
+		/// <param name="segmentPair"></param>
 		/// <returns></returns>
-		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText, ISegmentPair segmentPair)
+		public List<ErrorReporting> CheckSegmentPair(string sourceText, string targetText, ISegmentPair segmentPair = null)
 		{
 			var errorList = new List<ErrorReporting>();
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics || _verificationSettings.ReportModifiedAlphanumerics)

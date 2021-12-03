@@ -72,11 +72,12 @@
     <Compile Include="NegativeNumbers\NegativeNumbers.cs" />
     <Compile Include="NormalizeNumbers\CheckFullWidthJapaneseNumbers.cs" />
     <Compile Include="NormalizeNumbers\CheckNumbersAgainstRegularExpression.cs" />
+    <Compile Include="Validator\CrossCheck.cs" />
     <Compile Include="NormalizeNumbers\HindiNumbers.cs" />
     <Compile Include="NormalizeNumbers\MultipleErrors.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersAllowLocalization.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersNoSeparator.cs" />
-    <Compile Include="NormalizeNumbers\OtherScenarios.cs" />
+    <Compile Include="Validator\InOrderCheck.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationAllow.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationPrevent.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationRequire.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="OmitZero\OmitZeroSourceAndTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rerouting.cs" />
     <Compile Include="SettingsBuilder.cs" />
     <Compile Include="SourceSettings\SourceSettingsAndAllowLocalization.cs" />
     <Compile Include="SourceSettings\SourceSettingsAndPreventLocalization.cs" />

@@ -16,6 +16,12 @@ namespace Sdl.Community.NumberVerifier
 		#region "setting"
 
 		// Return the value of the setting.
+		public bool CheckInOrder
+		{
+			set => GetSetting<bool>(nameof(CheckInOrder)).Value = value;
+			get => GetSetting<bool>(nameof(CheckInOrder)).Value;
+		}
+
 		public bool ExcludeTagText
 		{
 			set { GetSetting<bool>(nameof(ExcludeTagText)).Value = value; }

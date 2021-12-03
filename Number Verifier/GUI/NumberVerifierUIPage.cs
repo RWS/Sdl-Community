@@ -52,6 +52,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
             _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
+	        _Control.CheckInOrder = _ControlSettings.CheckInOrder;
 
 			_Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
@@ -113,8 +114,9 @@ namespace Sdl.Community.NumberVerifier
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
             _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
-			
-            _ControlSettings.Reset("ReportAddedNumbers");
+	        _Control.CheckInOrder = _ControlSettings.CheckInOrder;
+
+			_ControlSettings.Reset("ReportAddedNumbers");
             _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _ControlSettings.Reset("ReportRemovedNumbers");
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
@@ -231,6 +233,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
             _ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
+	        _ControlSettings.CheckInOrder = _Control.CheckInOrder;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;

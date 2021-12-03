@@ -25,9 +25,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
-
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
             Assert.True(errorMessage.Count == 0);
@@ -42,9 +39,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
-
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -63,7 +57,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
@@ -82,7 +75,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessages = numberVerifierMain.CheckAlphanumerics(sourceText, targetText);
 
@@ -101,7 +93,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var textAlphanumericsList = numberVerifierMain.GetAlphanumericList(text);
 
@@ -119,7 +110,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var sourceAlphanumerics = numberVerifierMain.GetAlphanumericList(sourceText);
             var targetAlphanumerics = numberVerifierMain.GetAlphanumericList(targetText);
@@ -138,7 +128,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var sourceAlphanumerics = numberVerifierMain.GetAlphanumericList(sourceText);
             var targetAlphanumerics = numberVerifierMain.GetAlphanumericList(targetText);

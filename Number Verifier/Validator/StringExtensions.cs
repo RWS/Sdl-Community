@@ -6,7 +6,7 @@ using Sdl.Community.NumberVerifier.Helpers;
 
 namespace Sdl.Community.NumberVerifier.Validator
 {
-	public static class RegexExtensions
+	public static class StringExtensions
 	{
 		public static int CountStringOccurrences(string text, string pattern)
 		{
@@ -21,6 +21,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 			}
 			return count;
 		}
+
+		
 
 		public static string Normalize(this Match realNumberMatch, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero)
 		{
