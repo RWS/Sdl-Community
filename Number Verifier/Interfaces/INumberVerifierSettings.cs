@@ -6,6 +6,8 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 	{
 		void Reset(string propertyName);
 
+		bool CheckInOrder { get; set; }
+
 		bool ExcludeTagText { get; set; }
 
 		bool ReportAddedNumbers { get; set; }

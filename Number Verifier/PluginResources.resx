@@ -177,54 +177,75 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NumberParser_Message_SeparatorIsNotRecognized" xml:space="preserve">
-	  <value>Separator is not recognized: {0}</value>
+    <value>Separator is not recognized: {0}</value>
   </data>
   <data name="NumberParser_Message_MixedGroupSeparators" xml:space="preserve">
-	  <value>Mixed group separators: {0}{1}</value>
+    <value>Mixed group separators: {0}{1}</value>
   </data>
   <data name="NumberParser_Message_InvalidGroupSeparator" xml:space="preserve">
-	  <value>Invalid group separator: {0}</value>
+    <value>Invalid group separator: {0}</value>
   </data>
   <data name="NumberParser_Message_InvalidSeparatorLocation" xml:space="preserve">
-	  <value>Invalid separator location</value>
+    <value>Invalid separator location</value>
   </data>
   <data name="NumberParser_Message_TheGroupValidIsOutOfRange" xml:space="preserve">
-	  <value>The group value is out of range: {0}</value>
+    <value>The group value is out of range: {0}</value>
   </data>
   <data name="NumberParser_Message_LastCharIsNotANumber" xml:space="preserve">
-	  <value>The last char is not a number</value>
+    <value>The last char is not a number</value>
   </data>
   <data name="Segment_level_errors" xml:space="preserve">
-	  <value>Segment-level errors</value>
+    <value>Segment-level errors</value>
   </data>
   <data name="Text_area_level_errors" xml:space="preserve">
-	  <value>Text-area level errors</value>
+    <value>Text-area level errors</value>
   </data>
   <data name="Number_level_errors" xml:space="preserve">
-	  <value>Number level errors</value>
+    <value>Number level errors</value>
   </data>
   <data name="Error_SameSequenceDifferentValues" xml:space="preserve">
-	  <value>Same sequences but different values</value>
+    <value>Same sequences but different values</value>
   </data>
   <data name="Error_NumberUnlocalised" xml:space="preserve">
-	  <value>Number unlocalised</value>
+    <value>Number unlocalised</value>
   </data>
   <data name="ThousandSeparatorAfterDecimal" xml:space="preserve">
-	  <value>Thousands separator after decimal</value>
+    <value>Thousands separator after decimal</value>
   </data>
   <data name="NumberCannotHaveTwoDifferentThousandSeparators" xml:space="preserve">
-	  <value>Number cannot have two different thousands separators</value>
+    <value>Number cannot have two different thousands separators</value>
   </data>
   <data name="TooManyDecimalSeparators" xml:space="preserve">
-	  <value>Too many decimal separators</value>
+    <value>Too many decimal separators</value>
   </data>
   <data name="TooManyTypesOfSeparators" xml:space="preserve">
-	  <value>Too many types of separators</value>
+    <value>Too many types of separators</value>
   </data>
   <data name="Error_DifferentSequences" xml:space="preserve">
-	  <value>Different sequences</value>
+    <value>Different sequences</value>
   </data>
   <data name="Error_DifferentValues" xml:space="preserve">
-	  <value>Different values</value>
+    <value>Different values</value>
+  </data>
+  <data name="NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator" xml:space="preserve">
+    <value>Number cannot have the same character as thousand and as decimal separator</value>
+  </data>
+  <data name="Error_SameSequencesButDifferentMeanings" xml:space="preserve">
+    <value>Same sequences but different meanings</value>
+  </data>
+  <data name="NumbersHaveDifferentValues" xml:space="preserve">
+    <value>Numbers have different values</value>
+  </data>
+  <data name="Error_DecimalSeparatorNotValid" xml:space="preserve">
+    <value>Decimal separator not valid</value>
+  </data>
+  <data name="Error_ThousandSeparatorNotValid" xml:space="preserve">
+	  <value>Thousand separator not valid</value>
+  </data>
+  <data name="SeparatorNotValid" xml:space="preserve">
+	  <value>Separator not valid</value>
+  </data>
+  <data name="SeparatorAfterDecimal" xml:space="preserve">
+	  <value>Separator after decimal</value>
   </data>
 </root>

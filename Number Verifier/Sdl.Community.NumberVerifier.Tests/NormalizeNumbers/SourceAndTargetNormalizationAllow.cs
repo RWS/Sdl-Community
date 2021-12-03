@@ -26,12 +26,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_DifferentValues, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -49,8 +47,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -60,7 +56,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <summary>
         /// Thousands sep: comma, period
         /// Decimal sep: period
-        /// Error: no error
         /// </summary>
         [Theory]
         [InlineData("1.554,5 negative number -1.554,5", "1,554,5 negative -1.554,5")]
@@ -71,12 +66,15 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
+	        Assert.Collection(errorMessage,
+		        error => Assert.Equal(error.ErrorMessage, PluginResources.Error_DifferentSequences),
+		        error =>
+			        Assert.Equal(error.ErrorMessage,
+				        PluginResources.NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator));
+
         }
 
         /// <summary>
@@ -99,13 +97,15 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
-        }
+			Assert.Collection(errorMessage,
+				error => Assert.Equal(error.ErrorMessage, PluginResources.Error_DifferentSequences),
+				error =>
+					Assert.Equal(error.ErrorMessage,
+						PluginResources.NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator));
+		}
 
         /// <summary>
         /// Thousands sep: comma, period, space
@@ -120,12 +120,14 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.True(errorMessage.Count == 0);
+	        Assert.Collection(errorMessage,
+		        error => Assert.Equal(error.ErrorMessage, PluginResources.Error_DifferentSequences),
+		        error =>
+			        Assert.Equal(error.ErrorMessage,
+				        PluginResources.NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator));
         }
 
         /// <summary>
@@ -142,8 +144,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -165,12 +165,10 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
+            Assert.Equal(PluginResources.Error_DifferentSequences, errorMessage[0].ErrorMessage);
         }
 
         /// <summary>
@@ -188,8 +186,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -211,8 +207,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
             Assert.Equal(PluginResources.Error_NumberAdded, errorMessage[0].ErrorMessage);
@@ -233,8 +227,6 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
-            //run initialize method in order to set chosen separators
-            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 

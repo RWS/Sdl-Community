@@ -19,7 +19,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void CheckError(string source, string target)
 		{
 			var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0]?.ErrorMessage);
+			Assert.Equal(PluginResources.Error_DifferentValues, errorMessage[0]?.ErrorMessage);
 		}
 
 		public List<ErrorReporting> SourceOmitCheckedTargetChecked(string source, string target)
@@ -36,7 +36,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			//run initialize method in order to set chosen separators
 			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -80,7 +80,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			//run initialize method in order to set chosen separators
 			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -102,7 +102,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			Assert.Collection(errorMessage,
 				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_NumberUnlocalised),
-				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart));
+				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_DifferentSequences));
 		}
 
 		[Theory]
@@ -142,7 +142,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			//run initialize method in order to set chosen separators
 			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
@@ -161,7 +161,10 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void SourceOmitUncheckedTargetCheckedError(string source, string target)
 		{
 			var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-			Assert.Equal(PluginResources.Error_DoesNotCorrespondToItsSourceCounterpart, errorMessage[0].ErrorMessage);
+
+			Assert.Collection(errorMessage,
+				error => Assert.Equal(PluginResources.Error_DifferentSequences, error.ErrorMessage),
+				error => Assert.Equal(PluginResources.Error_SameSequencesButDifferentMeanings, error.ErrorMessage));
 		}
 
 		/// <summary>
@@ -192,7 +195,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			//run initialize method in order to set chosen separators
 			var docPropMock = new Mock<IDocumentProperties>();
-			numberVerifierMain.Initialize(docPropMock.Object);
+			
 
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 

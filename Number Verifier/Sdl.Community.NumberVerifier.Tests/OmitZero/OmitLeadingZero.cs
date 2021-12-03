@@ -44,7 +44,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(iMockSettings);
 
-			_numberValidator.GetErrors(text, null, iMockSettings.Object, out var normalizedNumber, out _);
+			_numberValidator.Verify(text, null, iMockSettings.Object, out var normalizedNumber, out _);
 
 			return normalizedNumber;
 		}
@@ -55,7 +55,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
-			_numberValidator.GetErrors(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
+			_numberValidator.Verify(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
 			return normalizedNumbers;
 		}
@@ -79,10 +79,10 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
 
 			mockSettings.Setup(s => s.TargetDecimalPeriod).Returns(true);
-			_numberValidator.GetErrors(null, numberWithPeriod, mockSettings.Object, out _, out var normalizedNumberWithPeriod);
+			_numberValidator.Verify(null, numberWithPeriod, mockSettings.Object, out _, out var normalizedNumberWithPeriod);
 
 			mockSettings.Setup(s => s.TargetDecimalComma).Returns(true);
-			_numberValidator.GetErrors(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
+			_numberValidator.Verify(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
 
 			Assert.Equal("s0d55", normalizedNumberWithPeriod.Texts[0].Normalized);
 			Assert.Equal("s0d55", normalizedNumberWithComma.Texts[0].Normalized);
@@ -110,7 +110,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(mockSettings);
 
-			_numberValidator.GetErrors(null, text, mockSettings.Object, out _, out var normalizedNumber);
+			_numberValidator.Verify(null, text, mockSettings.Object, out _, out var normalizedNumber);
 
 			Assert.Equal("s0d55", normalizedNumber.Texts[0].Normalized);
 
@@ -135,7 +135,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 
-			_numberValidator.GetErrors(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
+			_numberValidator.Verify(number, null, numberVerifierSettings.Object, out var normalizedNumbers, out _);
 
 			methodsMock.Verify(m => m.OmitZero(number), Times.Never);
 			return normalizedNumbers.Texts[0].Normalized;

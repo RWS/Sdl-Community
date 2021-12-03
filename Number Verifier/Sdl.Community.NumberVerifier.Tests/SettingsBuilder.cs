@@ -39,6 +39,8 @@ namespace Sdl.Community.NumberVerifier.Tests
 
         private bool TargetThousandsPeriod { get; set; }
 
+        private bool CheckInOrder { get; set; }
+
         public ISettingsBuilder AllowLocalization()
         {
             AllowLocalizations = true;
@@ -50,6 +52,8 @@ namespace Sdl.Community.NumberVerifier.Tests
         public Mock<INumberVerifierSettings> Build()
         {
             var settingsMock = new Mock<INumberVerifierSettings>();
+
+			if (CheckInOrder) settingsMock.Setup(sm => sm.CheckInOrder).Returns(true);
 
             if (AllowLocalizations) settingsMock.Setup(sm => sm.AllowLocalizations).Returns(true);
             if (PreventLocalizations) settingsMock.Setup(sm => sm.PreventLocalizations).Returns(true);
@@ -96,8 +100,27 @@ namespace Sdl.Community.NumberVerifier.Tests
             settingsMock.Setup(sm => sm.GetTargetDecimalSeparators())
                 .Returns(targetDecimalSeparators);
 
+	        ResetFields();
+
             return settingsMock;
         }
+
+		public ISettingsBuilder ConsiderOrderOfNumbers()
+		{
+			CheckInOrder = true;
+			return this;
+		}
+
+		private void ResetFields()
+		{
+			var properties =
+				GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+			foreach (var property in properties)
+			{
+				if (property.PropertyType == typeof(bool)) property.SetValue(this, false);
+				if (property.PropertyType == typeof(string)) property.SetValue(this, null);
+			}
+		}
 
         public ISettingsBuilder OmitLeadingZeroInSource()
         {

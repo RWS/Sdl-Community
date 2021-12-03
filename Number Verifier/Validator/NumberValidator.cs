@@ -3,15 +3,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
-using Match = System.Text.RegularExpressions.Match;
+using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier.Validator
 {
 	public class NumberValidator
 	{
 		private List<string> _allSeparatorsList;
-		private string _digitClass = "[0-9٠-٩]";
-		private string _digitClassWithoutZero = "[1-9١-٩]";
 		private INumberVerifierSettings _settings;
 		private List<string> _sourceDecimalSeparators;
 		private string _sourceText;
@@ -19,8 +17,10 @@ namespace Sdl.Community.NumberVerifier.Validator
 		private List<string> _targetDecimalSeparators;
 		private string _targetText;
 		private List<string> _targetThousandSeparators;
+		private List<int> _visitedSourceIndexes;
+		private List<int> _visitedTargetIndexes;
 
-		public void GetErrors(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
+		public void Verify(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
 		{
 			_settings = settings;
 			_sourceText = sourceText?.Normalize(System.Text.NormalizationForm.FormKC);
@@ -45,101 +45,58 @@ namespace Sdl.Community.NumberVerifier.Validator
 			Verify(out sourceNumberTexts, out targetNumberTexts);
 		}
 
-		private static void CheckAlignment(NumberTexts sourceTextAreas, NumberTexts targetTextAreas)
+		private void AddError(NumberText targetTextArea, Comparer sourceTargetComparison)
 		{
-			for (var i = 0; i < sourceTextAreas.Texts.Count; i++)
+			switch (sourceTargetComparison.Result)
 			{
-				if (i >= targetTextAreas.Texts.Count)
-				{
-					var message = PluginResources.Error_NumbersRemoved;
-					sourceTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
-						message);
-					continue;
-				}
-
-				var sourceTargetComparison = sourceTextAreas[i].Compare(targetTextAreas[i]);
-				switch (sourceTargetComparison)
-				{
-					case NumberText.ComparisonResult.DifferentSequence:
-						{
-							var betterFitOptions = targetTextAreas.IndexesOf(sourceTextAreas[i]).Select(it => it.Item1);
-							var optionsString = string.Join(", ", betterFitOptions);
-							optionsString = betterFitOptions.Any() ? $"Segments {optionsString}" : null;
-
-							targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
-								PluginResources.Error_DifferentSequences, optionsString);
-
-							break;
-						}
-
-					case NumberText.ComparisonResult.SameSequence:
-						{
-							var message = PluginResources.Error_SameSequenceDifferentValues;
-							targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
-								message);
-
-							break;
-						}
-
-					case NumberText.ComparisonResult.DifferentValues:
-						targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
-							PluginResources.Error_DifferentValues);
-						break;
-
-					case NumberText.ComparisonResult.Unlocalised:
-						{
-							targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
-								PluginResources.Error_NumberUnlocalised);
-
-							break;
-						}
-				}
-			}
-
-			for (var i = sourceTextAreas.Texts.Count; i<targetTextAreas.Texts.Count; i++)
-			{
-				targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel, PluginResources.Error_NumberAdded);
-			}
-		}
-
-		private static List<string> GetAllSeparatorsCombined(List<string> sourceThousandSeparators, List<string> sourceDecimalSeparators, List<string> targetThousandSeparators, List<string> targetDecimalSeparators)
-		{
-			var allSeparators = new List<string>();
-
-			allSeparators.AddRange(sourceThousandSeparators);
-			allSeparators.AddRange(sourceDecimalSeparators);
-			allSeparators.AddRange(targetThousandSeparators);
-			allSeparators.AddRange(targetDecimalSeparators);
-
-			allSeparators = allSeparators.Distinct().ToList();
-
-			allSeparators.RemoveAll(s => s == Constants.NoSeparator);
-			return allSeparators;
-		}
-
-		private static NumberTexts GetTextAreas(List<Match> textMatches)
-		{
-			var textAreas = new NumberTexts();
-
-			textMatches.ForEach(
-				stm =>
-				{
-					var separators = stm.Groups["Separators"].Captures.Cast<Capture>().Select(c => c.Value).Where(c => !string.IsNullOrEmpty(c)).ToList();
-
-					var matchValue = stm.Value;
-					var sIndex = stm.Index;
-					var length = matchValue.Length;
-					var misplacedSeparator = matchValue[0].ToString();
-					if (string.IsNullOrWhiteSpace(misplacedSeparator))
+				case Comparer.ResultDescription.DifferentSequences:
 					{
-						matchValue = matchValue.Replace(misplacedSeparator, "");
-						separators.Remove(misplacedSeparator);
+						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel, PluginResources.Error_DifferentSequences);
+						break;
 					}
 
-					textAreas.AddNumberText(matchValue, separators, sIndex, length);
-				});
+				case Comparer.ResultDescription.DifferentValues:
+					targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
+						PluginResources.Error_DifferentValues);
+					break;
 
-			return textAreas;
+				case Comparer.ResultDescription.SameSequence:
+					{
+						var message = PluginResources.Error_SameSequencesButDifferentMeanings;
+						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
+							message);
+
+						break;
+					}
+
+				case Comparer.ResultDescription.SameSequence | Comparer.ResultDescription.DifferentValues:
+					{
+						var message = PluginResources.Error_SameSequenceDifferentValues;
+						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
+							message);
+
+						break;
+					}
+
+				case Comparer.ResultDescription.Unlocalised:
+					{
+						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
+							PluginResources.Error_NumberUnlocalised);
+
+						break;
+					}
+			}
+		}
+
+		private void AddErrorsForUnpairedItems(NumberTexts textAreas, bool isSource)
+		{
+			for (var i = 0; i < textAreas.Texts.Count; i++)
+			{
+				var visitedIndexes = isSource ? _visitedSourceIndexes : _visitedTargetIndexes;
+				var message = isSource ? PluginResources.Error_NumbersRemoved : PluginResources.Error_NumberAdded;
+				if (!visitedIndexes.Contains(i))
+					textAreas.Texts[i].AddError(NumberText.ErrorLevel.SegmentPairLevel, message);
+			}
 		}
 
 		private void ApplyTargetSettings(List<string> sourceSeparators, List<string> targetSeparators, List<string> separatorsList)
@@ -159,119 +116,71 @@ namespace Sdl.Community.NumberVerifier.Validator
 			}
 		}
 
-		private void CheckNumbers(NumberTexts areas, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero = false)
+		private void CheckAlignment(NumberTexts sourceTextAreas, NumberTexts targetTextAreas)
 		{
-			var thousandSeparatorsList = thousandSeparators.ToList();
-			thousandSeparatorsList.Remove(Constants.NoSeparator);
-
-			foreach (var area in areas.Texts)
+			for (var i = 0; i < sourceTextAreas.Texts.Count; i++)
 			{
-				if (!area.CanBeNumber) continue;
-
-				var sign = new Regex("([+−-])");
-
-				var isSigned = false;
-				var usedSign = sign.Match(area.Text[0].ToString());
-				if (usedSign.Success)
+				if (i >= targetTextAreas.Texts.Count)
 				{
-					isSigned = true;
-					area.Text = Regex.Replace(area.Text, sign.ToString(), "");
+					var message = PluginResources.Error_NumbersRemoved;
+					sourceTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel,
+						message);
+					continue;
 				}
 
-				var firstCharRemoved = false;
-				var firstChar = area.Text[0];
-				if (!char.IsDigit(firstChar) && !decimalSeparators.Contains(firstChar.ToString()))
-				{
-					firstCharRemoved = true;
-					area.Text = area.Text.Replace(firstChar.ToString(), "");
-				}
+				var sourceTargetComparison = sourceTextAreas[i].Compare(targetTextAreas[i]);
+				AddError(targetTextAreas[i], sourceTargetComparison);
+			}
 
-				//the only scenario in which we have to take omitZero into account is when the number has ONLY ONE separator (and the number starts with it)
-				var omitZeroPattern = $"?<={_digitClass}";
-				if (omitZero && area.Separators.Count == 1)
-				{
-					omitZeroPattern = null;
-				}
-
-				var integer = $"(?'Integer'(0|٠|{_digitClassWithoutZero}{_digitClass}*|{_digitClassWithoutZero}{_digitClass}{{0,2}}((?'ThousandSeparators'{thousandSeparatorsList.ToRegexPattern()}){_digitClass}{{3}})*))";
-				var fraction = $"(?'Fraction'({omitZeroPattern})((?'DecimalSeparators'{decimalSeparators.ToRegexPattern()}){_digitClass}+))";
-
-				var pattern = new Regex($"^({integer})?{fraction}?$");
-				var realNumberMatch = pattern.Match(area.Text);
-
-				if (!firstCharRemoved && isSigned) area.Text = area.Text.Insert(0, usedSign.Value);
-
-				var error = "";
-				if (realNumberMatch.Success)
-				{
-					var normalized = realNumberMatch.Normalize(thousandSeparators, decimalSeparators, omitZero).Insert(0, isSigned ? "s" : "");
-					area.SetAsValid(
-						normalized);
-				}
-				else
-				{
-					if (area.Separators.Count == 1)
-					{
-						if (!thousandSeparators.Contains(area.Separators[0]) &&
-						    !decimalSeparators.Contains(area.Separators[0])) error = "Separator not valid";
-
-						if (Regex.Split(area.Text, area.Separators[0])[1].Length < 3 && !decimalSeparators.Contains(area.Separators[0]))
-							error = "Decimal separator not valid";
-					}
-
-					if (area.Separators.Count > 1)
-					{
-						if (!thousandSeparators.Contains(area.Separators[0])) error = "Thousand separator not valid";
-
-						if (!decimalSeparators.Contains(area.Separators[1])) error += "Decimal separator not valid";
-					}
-
-					area.AddError(NumberText.ErrorLevel.NumberLevel, error);
-				}
+			for (var i = sourceTextAreas.Texts.Count; i < targetTextAreas.Texts.Count; i++)
+			{
+				targetTextAreas[i].AddError(NumberText.ErrorLevel.SegmentPairLevel, PluginResources.Error_NumberAdded);
 			}
 		}
 
-		private void CheckTextAreas(NumberTexts numberTexts, List<string> thousandSeparators, List<string> decimalSeparators)
+		private void CrossCheck(NumberTexts sourceTextAreas, NumberTexts targetTextAreas)
 		{
-			foreach (var textPart in numberTexts.Texts)
+			_visitedTargetIndexes = new List<int>();
+			_visitedSourceIndexes = new List<int>();
+
+			var crossComparisons = new List<ComparisonItem>();
+			for (var i = 0; i < targetTextAreas.Texts.Count; i++)
 			{
-				var separators = textPart.Separators;
-				var distinctSeparators = separators.Distinct().ToList();
-				var distinctSeparatorsTotal = distinctSeparators.Distinct().Count();
-
-				var ambiguousSeparators = thousandSeparators.Intersect(decimalSeparators);
-				var strictThousand = thousandSeparators.Except(ambiguousSeparators);
-
-				switch (distinctSeparatorsTotal)
+				var sourceIndexList = sourceTextAreas.IndexesOf(targetTextAreas[i]);
+				sourceIndexList.ForEach(sourceIndex => crossComparisons.Add(new ComparisonItem
 				{
-					case > 2:
-						textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.TooManyTypesOfSeparators);
-						break;
-
-					case 2 when distinctSeparators[0] != distinctSeparators[1]:
-					{
-						thousandSeparators.Remove(distinctSeparators[1]);
-
-							if (!thousandSeparators.Contains(distinctSeparators[0]))
-								textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.ThousandSeparatorAfterDecimal);
-							else if (distinctSeparators.All(ds => strictThousand.Contains(ds)))
-								textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.NumberCannotHaveTwoDifferentThousandSeparators);
-							else if (separators.Count(sep => sep == distinctSeparators[1]) > 1)
-								textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.TooManyDecimalSeparators);
-							else if (separators[separators.Count - 1] != distinctSeparators[1])
-								textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.ThousandSeparatorAfterDecimal);
+					SourceIndex = sourceIndex.Item1,
+					TargetIndex = i,
+					Comparer = sourceIndex.Item2
+				}));
 
 
+			}
+			crossComparisons = crossComparisons.OrderByDescending(i => i.Comparer.Score).ToList();
 
-							break;
-						}
-					case 2 when !thousandSeparators.Contains(distinctSeparators[0]):
-						{
-							textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.TooManyDecimalSeparators);
-						}
-						break;
+			var actualComparisonScores = crossComparisons.Select(cc => cc.Comparer.Score).Distinct();
+			foreach (var score in actualComparisonScores)
+			{
+				var comparisonsOfCurrentResult = crossComparisons.Where(cc => cc.Comparer.Score == score).ToList();
+
+				if (!comparisonsOfCurrentResult.Any()) continue;
+
+				//group comparisons by the element toBeCompared
+				var grouped = comparisonsOfCurrentResult.GroupBy(c => c.TargetIndex);
+				foreach (var group in grouped)
+				{
+					//since comparisonResults are ordered descendingly, the first in the group should be of highest similarity -> compare against that one
+					var first = group.FirstOrDefault(IndexesNotVisisted);
+
+					if (first == null) continue;
+
+					AddError(targetTextAreas[first.TargetIndex], first.Comparer);
+					UpdateVisitedList(first.SourceIndex, first.TargetIndex);
 				}
 			}
+
+			AddErrorsForUnpairedItems(sourceTextAreas, true);
+			AddErrorsForUnpairedItems(targetTextAreas, false);
 		}
 
 		private List<string> GetAllowedDecimalSeparators(bool isSource)
@@ -302,31 +211,47 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return thousandSeparatorsList.Select(Regex.Unescape).Distinct().ToList();
 		}
 
+		private List<string> GetAllSeparatorsCombined(List<string> sourceThousandSeparators, List<string> sourceDecimalSeparators, List<string> targetThousandSeparators, List<string> targetDecimalSeparators)
+		{
+			var allSeparators = new List<string>();
+
+			allSeparators.AddRange(sourceThousandSeparators);
+			allSeparators.AddRange(sourceDecimalSeparators);
+			allSeparators.AddRange(targetThousandSeparators);
+			allSeparators.AddRange(targetDecimalSeparators);
+
+			allSeparators = allSeparators.Distinct().ToList();
+			allSeparators.RemoveAll(s => s == Constants.NoSeparator);
+
+			return allSeparators;
+		}
+
+		private NumberFormattingSettings GetNumberFormattingSettings(bool isSource) => new()
+		{
+			AllSeparators = _allSeparatorsList,
+			ThousandSeparators = isSource ? _sourceThousandSeparators : _targetThousandSeparators,
+			DecimalSeparators = isSource ? _sourceDecimalSeparators : _targetDecimalSeparators,
+			OmitLeadingZero = isSource ? _settings.SourceOmitLeadingZero : _settings.TargetOmitLeadingZero
+		};
+
+		private bool IndexesNotVisisted(ComparisonItem first)
+		{
+			return !_visitedSourceIndexes.Contains(first.SourceIndex) && !_visitedTargetIndexes.Contains(first.TargetIndex);
+		}
+
+		private void UpdateVisitedList(int sourceIndex = -1, int targetIndex = -1)
+		{
+			if (sourceIndex != -1) _visitedSourceIndexes.Add(sourceIndex);
+			if (targetIndex != -1) _visitedTargetIndexes.Add(targetIndex);
+		}
+
 		private void Verify(out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
 		{
-			var allSeparators = _allSeparatorsList.ToRegexPattern();
+			sourceNumberTexts = new NumberTexts(_sourceText, GetNumberFormattingSettings(true));
+			targetNumberTexts = new NumberTexts(_targetText, GetNumberFormattingSettings(false));
 
-			var textAreaPattern = new Regex($"((?<Sign>[+−-](?={_digitClass}|{allSeparators}))?(?:(?<=)(?<Separators>{allSeparators})?{_digitClass}+)*)");
-
-			var targetTextMatches = new List<Match>();
-			if (_targetText is not null) targetTextMatches = textAreaPattern.Matches(_targetText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
-
-			var sourceTextMatches = new List<Match>();
-			if (_sourceText is not null) sourceTextMatches = textAreaPattern.Matches(_sourceText).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
-
-			sourceNumberTexts = GetTextAreas(sourceTextMatches);
-			targetNumberTexts = GetTextAreas(targetTextMatches);
-
-			//Text-areas-that-can-be-numbers level
-			CheckTextAreas(sourceNumberTexts, _sourceThousandSeparators, _sourceDecimalSeparators);
-			CheckTextAreas(targetNumberTexts, _targetThousandSeparators, _targetDecimalSeparators);
-
-			//Number level
-			CheckNumbers(sourceNumberTexts, _sourceThousandSeparators, _sourceDecimalSeparators, _settings.SourceOmitLeadingZero);
-			CheckNumbers(targetNumberTexts, _targetThousandSeparators, _targetDecimalSeparators, _settings.TargetOmitLeadingZero);
-
-			//SegmentPair level - alignment
-			CheckAlignment(sourceNumberTexts, targetNumberTexts);
+			if (_settings.CheckInOrder) CheckAlignment(sourceNumberTexts, targetNumberTexts);
+			else CrossCheck(sourceNumberTexts, targetNumberTexts);
 		}
 	}
 }

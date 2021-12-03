@@ -9,7 +9,14 @@ namespace Sdl.Community.NumberVerifier
 	    private string _exampleTNormalizedValue;
 	    private string _exampleOmitLeadingZeroValue;
 
-	    public bool ReportAddedNumbers
+		public bool CheckInOrder
+		{
+			get => cb_InOrder.Checked;
+			set => cb_InOrder.Checked = value;
+		}
+
+
+		public bool ReportAddedNumbers
         {
             get {return cb_ReportAddedNumbers.Checked; }
             set { cb_ReportAddedNumbers.Checked = value; }

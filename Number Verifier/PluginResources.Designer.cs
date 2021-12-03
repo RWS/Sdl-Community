@@ -19,7 +19,7 @@ namespace Sdl.Community.NumberVerifier {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -76,6 +76,15 @@ namespace Sdl.Community.NumberVerifier {
         public static string Error_AlphanumericsModified {
             get {
                 return ResourceManager.GetString("Error_AlphanumericsModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decimal separator not valid.
+        /// </summary>
+        public static string Error_DecimalSeparatorNotValid {
+            get {
+                return ResourceManager.GetString("Error_DecimalSeparatorNotValid", resourceCulture);
             }
         }
         
@@ -143,6 +152,24 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same sequences but different meanings.
+        /// </summary>
+        public static string Error_SameSequencesButDifferentMeanings {
+            get {
+                return ResourceManager.GetString("Error_SameSequencesButDifferentMeanings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thousand separator not valid.
+        /// </summary>
+        public static string Error_ThousandSeparatorNotValid {
+            get {
+                return ResourceManager.GetString("Error_ThousandSeparatorNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ForumIcon {
@@ -188,6 +215,15 @@ namespace Sdl.Community.NumberVerifier {
         public static string Number_level_errors {
             get {
                 return ResourceManager.GetString("Number_level_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number cannot have the same character as thousand and as decimal separator.
+        /// </summary>
+        public static string NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator {
+            get {
+                return ResourceManager.GetString("NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator", resourceCulture);
             }
         }
         
@@ -255,6 +291,15 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Numbers have different values.
+        /// </summary>
+        public static string NumbersHaveDifferentValues {
+            get {
+                return ResourceManager.GetString("NumbersHaveDifferentValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checks whether numbers in the target segment are identical to those in the source segment..
         /// </summary>
         public static string Plugin_Description {
@@ -288,6 +333,24 @@ namespace Sdl.Community.NumberVerifier {
         public static string Segment_level_errors {
             get {
                 return ResourceManager.GetString("Segment_level_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Separator after decimal.
+        /// </summary>
+        public static string SeparatorAfterDecimal {
+            get {
+                return ResourceManager.GetString("SeparatorAfterDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Separator not valid.
+        /// </summary>
+        public static string SeparatorNotValid {
+            get {
+                return ResourceManager.GetString("SeparatorNotValid", resourceCulture);
             }
         }
         

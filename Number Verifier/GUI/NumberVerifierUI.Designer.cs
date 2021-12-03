@@ -117,6 +117,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.cb_InOrder = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.targetMisBox.SuspendLayout();
@@ -143,6 +144,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cb_InOrder);
             this.groupBox1.Controls.Add(this.combo_NumberFormatErrorType);
             this.groupBox1.Controls.Add(this.cb_ReportNumberFormatErrors);
             this.groupBox1.Controls.Add(this.targetMisBox);
@@ -202,7 +204,7 @@
             // 
             this.targetMisBox.Controls.Add(this.targetOmitLeadingZeroLabel);
             this.targetMisBox.Controls.Add(this.targetOmitZero);
-            this.targetMisBox.Location = new System.Drawing.Point(317, 698);
+            this.targetMisBox.Location = new System.Drawing.Point(317, 722);
             this.targetMisBox.Name = "targetMisBox";
             this.targetMisBox.Size = new System.Drawing.Size(295, 57);
             this.targetMisBox.TabIndex = 3;
@@ -236,7 +238,7 @@
             // 
             this.sourceMisBox.Controls.Add(this.sourceOmitLeadingZeroLabel);
             this.sourceMisBox.Controls.Add(this.sourceOmitZero);
-            this.sourceMisBox.Location = new System.Drawing.Point(16, 698);
+            this.sourceMisBox.Location = new System.Drawing.Point(16, 722);
             this.sourceMisBox.Name = "sourceMisBox";
             this.sourceMisBox.Size = new System.Drawing.Size(295, 57);
             this.sourceMisBox.TabIndex = 2;
@@ -268,7 +270,7 @@
             // 
             // tb_customsSeparators
             // 
-            this.tb_customsSeparators.Location = new System.Drawing.Point(16, 159);
+            this.tb_customsSeparators.Location = new System.Drawing.Point(16, 183);
             this.tb_customsSeparators.Name = "tb_customsSeparators";
             this.tb_customsSeparators.Size = new System.Drawing.Size(596, 20);
             this.tb_customsSeparators.TabIndex = 39;
@@ -278,7 +280,7 @@
             this.cb_customSeparators.AutoSize = true;
             this.cb_customSeparators.Checked = true;
             this.cb_customSeparators.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_customSeparators.Location = new System.Drawing.Point(16, 136);
+            this.cb_customSeparators.Location = new System.Drawing.Point(16, 160);
             this.cb_customSeparators.Name = "cb_customSeparators";
             this.cb_customSeparators.Size = new System.Drawing.Size(179, 17);
             this.cb_customSeparators.TabIndex = 38;
@@ -356,7 +358,7 @@
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
-            this.groupBox7.Location = new System.Drawing.Point(16, 190);
+            this.groupBox7.Location = new System.Drawing.Point(16, 214);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(295, 135);
             this.groupBox7.TabIndex = 11;
@@ -422,7 +424,7 @@
             this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
             this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-            this.groupBox2.Location = new System.Drawing.Point(317, 190);
+            this.groupBox2.Location = new System.Drawing.Point(317, 214);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(295, 135);
             this.groupBox2.TabIndex = 15;
@@ -487,7 +489,7 @@
             this.groupBox6.Controls.Add(this.cb_TargetThousandsThinSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
-            this.groupBox6.Location = new System.Drawing.Point(317, 331);
+            this.groupBox6.Location = new System.Drawing.Point(317, 355);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(295, 235);
             this.groupBox6.TabIndex = 26;
@@ -713,7 +715,7 @@
             this.groupBox5.Controls.Add(this.customTargetDSep);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-            this.groupBox5.Location = new System.Drawing.Point(317, 572);
+            this.groupBox5.Location = new System.Drawing.Point(317, 596);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(295, 120);
             this.groupBox5.TabIndex = 36;
@@ -812,7 +814,7 @@
             this.groupBox4.Controls.Add(this.customDSep);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalPeriod);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
-            this.groupBox4.Location = new System.Drawing.Point(16, 572);
+            this.groupBox4.Location = new System.Drawing.Point(16, 596);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(295, 119);
             this.groupBox4.TabIndex = 33;
@@ -921,7 +923,7 @@
             this.groupBox3.Controls.Add(this.cb_SourceThousandsThinSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsNobreakSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
-            this.groupBox3.Location = new System.Drawing.Point(16, 331);
+            this.groupBox3.Location = new System.Drawing.Point(16, 355);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(295, 235);
             this.groupBox3.TabIndex = 19;
@@ -1216,6 +1218,18 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // cb_InOrder
+            // 
+            this.cb_InOrder.AutoSize = true;
+            this.cb_InOrder.Checked = true;
+            this.cb_InOrder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_InOrder.Location = new System.Drawing.Point(16, 136);
+            this.cb_InOrder.Name = "cb_InOrder";
+            this.cb_InOrder.Size = new System.Drawing.Size(212, 17);
+            this.cb_InOrder.TabIndex = 43;
+            this.cb_InOrder.Text = "Consider order of numbers in a segment";
+            this.cb_InOrder.UseVisualStyleBackColor = true;
+            // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1339,5 +1353,6 @@
 		private System.Windows.Forms.Label tLabel2;
 		private System.Windows.Forms.Label targetOmitLeadingZeroLabel;
 		private System.Windows.Forms.Label sourceOmitLeadingZeroLabel;
+		private System.Windows.Forms.CheckBox cb_InOrder;
 	}
 }
