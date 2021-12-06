@@ -20,17 +20,6 @@ namespace Sdl.Community.NumberVerifier.Validator
 			NotNumbers = 16
 		}
 
-		private static Dictionary<string, int> ComparisonScoreList { get; } = new()
-		{
-			[ComparisonConstants.SameNumberOfDigits] = 1,
-			[ComparisonConstants.SameDigits] = 1,
-			[ComparisonConstants.SameSequenceOfDigits] = 1,
-			[ComparisonConstants.SameNumberOfSeparators] = 1,
-			[ComparisonConstants.SameSequenceOfGroups] = 1,
-			[ComparisonConstants.SameSeparators] = 1,
-			[ComparisonConstants.SameSequenceOfSeparators] = 1,
-		};
-
 		public Dictionary<string, bool> ScoreList { get; } = new()
 		{
 			[ComparisonConstants.SameNumberOfDigits] = false,
@@ -48,10 +37,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 		{
 			get
 			{
-				var keysOfSimilarities = ScoreList.Where(s => s.Value).Select(s => s.Key);
-
-				var score = ComparisonScoreList.Where(item => keysOfSimilarities.Contains(item.Key)).Sum(item => item.Value);
-				score -= ComparisonScoreList.Where(item => !keysOfSimilarities.Contains(item.Key)).Sum(item => item.Value);
+				var score = ScoreList.Count(item => item.Value);
+				score -= ScoreList.Count(item => !item.Value);
 
 				return Result.HasFlag(ResultDescription.Equal)
 					? SameSequenceScore + 2
@@ -59,7 +46,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			}
 		}
 
-		private static int SameSequenceScore => ComparisonScoreList.Values.Sum();
+		private int SameSequenceScore => ScoreList.Values.Count;
 
 		public Comparer(NumberText first, NumberText second)
 		{
