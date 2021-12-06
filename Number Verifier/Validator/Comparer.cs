@@ -16,7 +16,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 			DifferentValues = 1,
 			SameSequence = 2,
 			Unlocalised = 4,
-			Equal = 8
+			Equal = 8,
+			NotNumbers = 16
 		}
 
 		private static Dictionary<string, int> ComparisonScoreList { get; } = new()
@@ -43,7 +44,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 		public ResultDescription Result{ get; set; }
 
-		public int Score
+		public int SimilarityDegree
 		{
 			get
 			{
@@ -53,12 +54,12 @@ namespace Sdl.Community.NumberVerifier.Validator
 				score -= ComparisonScoreList.Where(item => !keysOfSimilarities.Contains(item.Key)).Sum(item => item.Value);
 
 				return Result.HasFlag(ResultDescription.Equal)
-					? MaxScore + 2
-					: Result.HasFlag(ResultDescription.Unlocalised) ? MaxScore + 1 : score;
+					? SameSequenceScore + 2
+					: Result.HasFlag(ResultDescription.Unlocalised) ? SameSequenceScore + 1 : score;
 			}
 		}
 
-		private static int MaxScore => ComparisonScoreList.Values.Sum();
+		private static int SameSequenceScore => ComparisonScoreList.Values.Sum();
 
 		public Comparer(NumberText first, NumberText second)
 		{
@@ -79,24 +80,23 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 		private void InterpretResults()
 		{
-			if (Score == MaxScore)
+			if (SimilarityDegree == SameSequenceScore)
 			{
 				Result = ResultDescription.SameSequence;
 			}
 
-			switch (_first.IsValidNumber)
+			if (_first.IsValidNumber && _second.IsValidNumber)
 			{
-				case true when _second.IsValidNumber:
-				{
-					Result |= _first.Normalized == _second.Normalized ? ResultDescription.Equal : ResultDescription.DifferentValues;
-					if (_first.IsAmbiguous() || _second.IsAmbiguous()) Result = ResultDescription.Equal;
-					break;
-				}
-				case true when !_second.IsValidNumber:
-				{
-					if (Result.HasFlag(ResultDescription.SameSequence)) Result = ResultDescription.Unlocalised;
-					break;
-				}
+				if (_first.Normalized == _second.Normalized) Result = ResultDescription.Equal;
+				else Result |= ResultDescription.DifferentValues;
+				if (_first.IsAmbiguous() || _second.IsAmbiguous()) Result = ResultDescription.Equal;
+			}
+			else
+			{
+				if (!Result.HasFlag(ResultDescription.SameSequence)) return;
+
+				if (_first.IsValidNumber && !_second.IsValidNumber) Result = ResultDescription.Unlocalised;
+				if (!_first.IsValidNumber && !_second.IsValidNumber) Result |= ResultDescription.NotNumbers;
 			}
 		}
 

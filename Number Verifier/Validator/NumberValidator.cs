@@ -45,7 +45,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			Verify(out sourceNumberTexts, out targetNumberTexts);
 		}
 
-		private void AddError(NumberText targetTextArea, Comparer sourceTargetComparison)
+		private void AddError(NumberText targetTextArea, Comparer sourceTargetComparison)	
 		{
 			switch (sourceTargetComparison.Result)
 			{
@@ -156,12 +156,12 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 
 			}
-			crossComparisons = crossComparisons.OrderByDescending(i => i.Comparer.Score).ToList();
+			crossComparisons = crossComparisons.OrderByDescending(i => i.Comparer.SimilarityDegree).ToList();
 
-			var actualComparisonScores = crossComparisons.Select(cc => cc.Comparer.Score).Distinct();
+			var actualComparisonScores = crossComparisons.Select(cc => cc.Comparer.SimilarityDegree).Distinct();
 			foreach (var score in actualComparisonScores)
 			{
-				var comparisonsOfCurrentResult = crossComparisons.Where(cc => cc.Comparer.Score == score).ToList();
+				var comparisonsOfCurrentResult = crossComparisons.Where(cc => cc.Comparer.SimilarityDegree == score).ToList();
 
 				if (!comparisonsOfCurrentResult.Any()) continue;
 
