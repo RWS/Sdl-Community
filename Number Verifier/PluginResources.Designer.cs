@@ -107,6 +107,15 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing source separators.
+        /// </summary>
+        public static string Error_MissingSourceSeparators {
+            get {
+                return ResourceManager.GetString("Error_MissingSourceSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing target separators.
         /// </summary>
         public static string Error_MissingTargetSeparators {
@@ -157,15 +166,6 @@ namespace Sdl.Community.NumberVerifier {
         public static string Error_SameSequencesButDifferentMeanings {
             get {
                 return ResourceManager.GetString("Error_SameSequencesButDifferentMeanings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Missing source separators.
-        /// </summary>
-        public static string Error_SourceUnlocalised {
-            get {
-                return ResourceManager.GetString("Error_SourceUnlocalised", resourceCulture);
             }
         }
         

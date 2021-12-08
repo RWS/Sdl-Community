@@ -164,7 +164,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			Assert.Collection(errorMessage,
 				error => Assert.Equal(PluginResources.Error_DifferentSequences, error.ErrorMessage),
-				error => Assert.Equal(PluginResources.Error_SourceUnlocalised, error.ErrorMessage));
+				error => Assert.Equal(PluginResources.Error_MissingSourceSeparators, error.ErrorMessage));
 		}
 
 		/// <summary>

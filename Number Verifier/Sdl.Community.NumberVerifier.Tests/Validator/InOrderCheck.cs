@@ -129,7 +129,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 			Assert.Collection(errorMessage,
 				m => Assert.Equal(PluginResources.SeparatorAfterDecimal, m.ErrorMessage),
-				m => Assert.Equal(PluginResources.Error_SourceUnlocalised, m.ErrorMessage));
+				m => Assert.Equal(PluginResources.Error_MissingSourceSeparators, m.ErrorMessage));
 		}
 
 		[Theory]

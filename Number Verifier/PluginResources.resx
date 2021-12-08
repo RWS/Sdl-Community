@@ -248,7 +248,7 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   <data name="SeparatorAfterDecimal" xml:space="preserve">
 	  <value>Separator after decimal</value>
   </data>
-  <data name="Error_SourceUnlocalised" xml:space="preserve">
+  <data name="Error_MissingSourceSeparators" xml:space="preserve">
 	  <value>Missing source separators</value>
   </data>
 </root>

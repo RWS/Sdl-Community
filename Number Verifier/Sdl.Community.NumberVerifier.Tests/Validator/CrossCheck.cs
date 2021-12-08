@@ -153,7 +153,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var expectedErrors = new List<string>
 			{
 				PluginResources.SeparatorAfterDecimal,
-				PluginResources.Error_SourceUnlocalised
+				PluginResources.Error_MissingSourceSeparators
 			};
 
 			Assert.Equal(expectedErrors, errorMessage.Select(em => em.ErrorMessage));

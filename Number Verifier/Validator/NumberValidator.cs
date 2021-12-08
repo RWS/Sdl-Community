@@ -80,7 +80,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 				case Comparer.ResultDescription.SourceUnlocalised:
 					{
 						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
-							PluginResources.Error_SourceUnlocalised);
+							PluginResources.Error_MissingSourceSeparators);
 
 						break;
 					}
