@@ -22,7 +22,22 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return count;
 		}
 
-		
+		public static bool IsAlphanumeric(this Match match, string text)
+		{
+			var i = match.Index;
+			while (i >= 0 && !string.IsNullOrWhiteSpace(text[i].ToString()))
+			{
+				if (char.IsUpper(text[i--])) return true;
+			}
+
+			i = match.Index + match.Length;
+			while (i <text.Length && !string.IsNullOrWhiteSpace(text[i].ToString()))
+			{
+				if (char.IsUpper(text[i++])) return true;
+			}
+
+			return false;
+		}
 
 		public static string Normalize(this Match realNumberMatch, List<string> thousandSeparators, List<string> decimalSeparators, bool omitZero)
 		{

@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.NumberVerifier.Helpers;
+using Sdl.Community.NumberVerifier.Parsers.Number;
+using Sdl.Community.NumberVerifier.Parsers.Number.Model;
 
 namespace Sdl.Community.NumberVerifier.Validator
 {
@@ -11,6 +13,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 		private readonly List<string> _thousandSeparators;
 		private string _digitClass = "[0-9٠-٩]";
 		private string _digitClassWithoutZero = "[1-9١-٩]";
+		private readonly Regex _signRegex = new("([+−-])");
 
 		public NumberTexts(string text, NumberFormattingSettings formattingSettings)
 		{
@@ -18,8 +21,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 			_decimalSeparators = formattingSettings.DecimalSeparators;
 
 			//NumberTextArea level - detect possible numbers
-			var textMatches = GetTextAreas(text, formattingSettings.AllSeparators);
-			SetTextAreas(textMatches);
+			var textMatches = GetTextAreas(text, formattingSettings.NumberAreaSeparators);
+			SetTextAreas(textMatches, text);
 
 			//Number level
 			CheckTextAreas();
@@ -62,22 +65,12 @@ namespace Sdl.Community.NumberVerifier.Validator
 			{
 				if (!area.CanBeNumber) continue;
 
-				var sign = new Regex("([+−-])");
-
 				var isSigned = false;
-				var usedSign = sign.Match(area.Text[0].ToString());
+				var usedSign = _signRegex.Match(area.Text[0].ToString());
 				if (usedSign.Success)
 				{
 					isSigned = true;
-					area.Text = Regex.Replace(area.Text, sign.ToString(), "");
-				}
-
-				var firstCharRemoved = false;
-				var firstChar = area.Text[0];
-				if (!char.IsDigit(firstChar) && !_decimalSeparators.Contains(firstChar.ToString()))
-				{
-					firstCharRemoved = true;
-					area.Text = area.Text.Replace(firstChar.ToString(), "");
+					area.Text = Regex.Replace(area.Text, _signRegex.ToString(), "");
 				}
 
 				//the only scenario in which we have to take omitZero into account is when the number has ONLY ONE separator (and the number starts with it)
@@ -93,30 +86,13 @@ namespace Sdl.Community.NumberVerifier.Validator
 				var pattern = new Regex($"^({integer})?{fraction}?$");
 				var realNumberMatch = pattern.Match(area.Text);
 
-				if (!firstCharRemoved && isSigned) area.Text = area.Text.Insert(0, usedSign.Value);
+				if (isSigned) area.Text = area.Text.Insert(0, usedSign.Value);
 
-				if (realNumberMatch.Success)
-				{
-					var normalized = realNumberMatch.Normalize(_thousandSeparators, _decimalSeparators, omitZero).Insert(0, isSigned ? "s" : "");
-					area.SetAsValid(
-						normalized);
-				}
-				else
-				{
-					if (area.ActualSeparators.Count == 1)
-					{
-						if (!_thousandSeparators.Contains(area.ActualSeparators[0]) &&
-							!_decimalSeparators.Contains(area.ActualSeparators[0]))
-						{
-							area.AddError(NumberText.ErrorLevel.NumberLevel, PluginResources.SeparatorNotValid);
-						}
+				if (!realNumberMatch.Success) continue;
 
-						if (Regex.Split(area.Text, area.ActualSeparators[0])[1].Length < 3 && !_decimalSeparators.Contains(area.ActualSeparators[0]))
-						{
-							area.AddError(NumberText.ErrorLevel.NumberLevel, PluginResources.Error_DecimalSeparatorNotValid);
-						}
-					}
-				}
+				var normalized = realNumberMatch.Normalize(_thousandSeparators, _decimalSeparators, omitZero).Insert(0, isSigned ? "s" : "");
+				area.SetAsValid(
+					normalized);
 			}
 		}
 
@@ -138,10 +114,10 @@ namespace Sdl.Community.NumberVerifier.Validator
 				switch (distinctSeparatorsTotal)
 				{
 					case > 2:
-					{
-						textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.TooManyTypesOfSeparators);
-						break;
-					}
+						{
+							textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.TooManyTypesOfSeparators);
+							break;
+						}
 
 					case 2:
 						{
@@ -169,27 +145,47 @@ namespace Sdl.Community.NumberVerifier.Validator
 							break;
 						}
 
-					case 1 when separators.Count > 1:
-					{
-						var hasStrictFractionalPart = textPart.Groups[textPart.Groups.Length - 1].Length < 3;
-						if (hasStrictFractionalPart)
+					case 1 when separators.Count == 1:
 						{
-							textPart.AddError(NumberText.ErrorLevel.TextAreaLevel,
-								PluginResources.NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator);
+							if (!thousandSeparators.Contains(distinctSeparators[0]) && !_decimalSeparators.Contains(distinctSeparators[0]))
+							{
+								textPart.AddError(NumberText.ErrorLevel.TextAreaLevel, PluginResources.SeparatorNotValid);
+							}
+
+							if (!_thousandSeparators.Contains(textPart.ActualSeparators[0]) &&
+								!_decimalSeparators.Contains(textPart.ActualSeparators[0]))
+							{
+								textPart.AddError(NumberText.ErrorLevel.NumberLevel, PluginResources.SeparatorNotValid);
+							}
+
+							if (Regex.Split(textPart.Text, Regex.Escape(textPart.ActualSeparators[0]))[1].Length < 3 && !_decimalSeparators.Contains(textPart.ActualSeparators[0]))
+							{
+								textPart.AddError(NumberText.ErrorLevel.NumberLevel, PluginResources.Error_DecimalSeparatorNotValid);
+							}
+
+							break;
 						}
 
-						
+					case 1 when separators.Count > 1:
+						{
+							var hasStrictFractionalPart = textPart.Groups[textPart.Groups.Length - 1].Length < 3;
+							if (hasStrictFractionalPart)
+							{
+								textPart.AddError(NumberText.ErrorLevel.TextAreaLevel,
+									PluginResources.NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator);
+							}
 
-						break;
-					}
+							break;
+						}
 				}
 			}
 		}
 
 		private List<Match> GetTextAreas(string text, List<string> allSeparatorsList)
 		{
-			var allSeparators = allSeparatorsList.ToRegexPattern();
-			var textAreaPattern = new Regex($"((?<Sign>[+−-](?={_digitClass}|{allSeparators}))?(?:(?<=)(?<Separators>{allSeparators})?{_digitClass}+)*)");
+			var allSeparatorsRegex = allSeparatorsList.ToRegexPattern();
+
+			var textAreaPattern = new Regex($"((?<Sign>[+−-](?={_digitClass}|{allSeparatorsRegex}))?(?:(?<Separators>{allSeparatorsRegex})?{_digitClass}+)*)");
 
 			var textMatches = new List<Match>();
 			if (text is not null) textMatches = textAreaPattern.Matches(text).Cast<Match>().Where(match => !string.IsNullOrWhiteSpace(match.Value)).ToList();
@@ -197,7 +193,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return textMatches;
 		}
 
-		private void SetTextAreas(List<Match> textMatches)
+		private void SetTextAreas(List<Match> textMatches, string text)
 		{
 			textMatches.ForEach(
 				stm =>
@@ -207,17 +203,18 @@ namespace Sdl.Community.NumberVerifier.Validator
 					var matchValue = stm.Value;
 					var sIndex = stm.Index;
 					var length = matchValue.Length;
-					var misplacedSeparator = matchValue[0].ToString();
-					if (string.IsNullOrWhiteSpace(misplacedSeparator))
+					
+					var firstChar = matchValue[0];
+					if (string.IsNullOrWhiteSpace(firstChar.ToString()))
 					{
-						var misplacedSeparatorPattern = new Regex(misplacedSeparator);
+						var misplacedSeparatorPattern = new Regex(Regex.Escape(firstChar.ToString()));
 						matchValue = misplacedSeparatorPattern.Replace(matchValue, "", 1);
 
-						if (!misplacedSeparatorPattern.Match(matchValue).Success) separators.Remove(misplacedSeparator);
+						if (!misplacedSeparatorPattern.Match(matchValue).Success) separators.Remove(firstChar.ToString());
 					}
 
 					var sign = stm.Groups["Sign"].Captures.Cast<Capture>().Select(c => c.Value).FirstOrDefault();
-					AddNumberText(matchValue, separators, sIndex, length, sign);
+					if (!stm.IsAlphanumeric(text)) AddNumberText(matchValue, separators, sIndex, length, sign);
 				});
 		}
 	}

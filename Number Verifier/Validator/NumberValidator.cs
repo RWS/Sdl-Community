@@ -9,7 +9,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 {
 	public class NumberValidator
 	{
-		private List<string> _allSeparatorsList;
+		private List<string> _sourceNumberAreaSeparatorsList;
 		private INumberVerifierSettings _settings;
 		private List<string> _sourceDecimalSeparators;
 		private string _sourceText;
@@ -19,6 +19,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 		private List<string> _targetThousandSeparators;
 		private List<int> _visitedSourceIndexes;
 		private List<int> _visitedTargetIndexes;
+		private List<string> _targetNumberAreaSeparatorsList;
 
 		public void Verify(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
 		{
@@ -39,8 +40,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 			_targetThousandSeparators = GetAllowedThousandSeparators(false);
 			_targetDecimalSeparators = GetAllowedDecimalSeparators(false).Select(Regex.Unescape).ToList();
 
-			_allSeparatorsList = GetAllSeparatorsCombined(_sourceThousandSeparators, _sourceDecimalSeparators, _targetThousandSeparators,
-				_targetDecimalSeparators);
+			_sourceNumberAreaSeparatorsList = GetSourceNumberAreaSeparators();
+			_targetNumberAreaSeparatorsList = GetTargetNumberAreaSeparators();
 
 			Verify(out sourceNumberTexts, out targetNumberTexts);
 		}
@@ -60,15 +61,6 @@ namespace Sdl.Community.NumberVerifier.Validator
 						PluginResources.Error_DifferentValues);
 					break;
 
-				case Comparer.ResultDescription.SameSequence:
-					{
-						var message = PluginResources.Error_SameSequencesButDifferentMeanings;
-						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
-							message);
-
-						break;
-					}
-
 				case Comparer.ResultDescription.SameSequence | Comparer.ResultDescription.DifferentValues:
 					{
 						var message = PluginResources.Error_SameSequenceDifferentValues;
@@ -78,10 +70,17 @@ namespace Sdl.Community.NumberVerifier.Validator
 						break;
 					}
 
-				case Comparer.ResultDescription.Unlocalised:
+				case Comparer.ResultDescription.TargetUnlocalised:
 					{
 						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
-							PluginResources.Error_NumberUnlocalised);
+							PluginResources.Error_MissingTargetSeparators);
+
+						break;
+					}
+				case Comparer.ResultDescription.SourceUnlocalised:
+					{
+						targetTextArea.AddError(NumberText.ErrorLevel.SegmentPairLevel,
+							PluginResources.Error_SourceUnlocalised);
 
 						break;
 					}
@@ -211,14 +210,34 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return thousandSeparatorsList.Select(Regex.Unescape).Distinct().ToList();
 		}
 
-		private List<string> GetAllSeparatorsCombined(List<string> sourceThousandSeparators, List<string> sourceDecimalSeparators, List<string> targetThousandSeparators, List<string> targetDecimalSeparators)
+		private List<string> GetTargetNumberAreaSeparators()
 		{
 			var allSeparators = new List<string>();
 
-			allSeparators.AddRange(sourceThousandSeparators);
-			allSeparators.AddRange(sourceDecimalSeparators);
-			allSeparators.AddRange(targetThousandSeparators);
-			allSeparators.AddRange(targetDecimalSeparators);
+			if (!_settings.RequireLocalizations)
+			{
+				allSeparators.AddRange(_sourceThousandSeparators);
+				allSeparators.AddRange(_sourceDecimalSeparators);
+			}
+
+			if (!_settings.PreventLocalizations)
+			{
+				allSeparators.AddRange(_targetThousandSeparators);
+				allSeparators.AddRange(_targetDecimalSeparators);
+			}
+
+			allSeparators = allSeparators.Distinct().ToList();
+			allSeparators.RemoveAll(s => s == Constants.NoSeparator);
+
+			return allSeparators;
+		}
+
+		private List<string> GetSourceNumberAreaSeparators()
+		{
+			var allSeparators = new List<string>();
+
+			allSeparators.AddRange(_sourceThousandSeparators);
+			allSeparators.AddRange(_sourceDecimalSeparators);
 
 			allSeparators = allSeparators.Distinct().ToList();
 			allSeparators.RemoveAll(s => s == Constants.NoSeparator);
@@ -228,7 +247,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 		private NumberFormattingSettings GetNumberFormattingSettings(bool isSource) => new()
 		{
-			AllSeparators = _allSeparatorsList,
+			NumberAreaSeparators = isSource ? _sourceNumberAreaSeparatorsList : _targetNumberAreaSeparatorsList,
 			ThousandSeparators = isSource ? _sourceThousandSeparators : _targetThousandSeparators,
 			DecimalSeparators = isSource ? _sourceDecimalSeparators : _targetDecimalSeparators,
 			OmitLeadingZero = isSource ? _settings.SourceOmitLeadingZero : _settings.TargetOmitLeadingZero

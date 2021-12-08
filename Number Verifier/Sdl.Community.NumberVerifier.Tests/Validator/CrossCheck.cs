@@ -53,9 +53,11 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 			var expectedErrors = new List<string>
 			{
+				PluginResources.Error_DifferentValues,
 				PluginResources.Error_DifferentSequences,
 				PluginResources.Error_DifferentSequences,
-				PluginResources.Error_DifferentSequences,
+				PluginResources.Error_NumberAdded,
+				PluginResources.Error_NumberAdded
 			};
 
 			Assert.Equal(expectedErrors, errorMessage.Select(em => em.ErrorMessage));
@@ -151,7 +153,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var expectedErrors = new List<string>
 			{
 				PluginResources.SeparatorAfterDecimal,
-				PluginResources.Error_SameSequencesButDifferentMeanings
+				PluginResources.Error_SourceUnlocalised
 			};
 
 			Assert.Equal(expectedErrors, errorMessage.Select(em => em.ErrorMessage));
@@ -196,7 +198,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 			Assert.Collection(errorMessage,
-				m => Assert.Equal(PluginResources.Error_NumberUnlocalised, m.ErrorMessage),
+				m => Assert.Equal(PluginResources.Error_MissingTargetSeparators, m.ErrorMessage),
 				m => Assert.Equal(PluginResources.Error_DecimalSeparatorNotValid, m.ErrorMessage));
 		}
 
