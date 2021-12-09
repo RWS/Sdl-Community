@@ -92,10 +92,10 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var settings =
 				_settingsBuilder
 					.AllowLocalization()
-					.WithSourceDecimalSeparators(false, true)
-					.WithSourceThousandSeparators(true, false)
-					.WithTargetDecimalSeparators(false, true)
-					.WithTargetThousandSeparators(true, false)
+					.WithSourceDecimalSeparators(comma: false, period: true)
+					.WithSourceThousandSeparators(comma: true, period: false)
+					.WithTargetDecimalSeparators(comma: false, period: true)
+					.WithTargetThousandSeparators(comma: true, period: false)
 					.Build();
 
 			settings.Setup(s => s.HindiNumberVerification).Returns(true);
@@ -105,7 +105,11 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 			Assert.Collection(errorMessage,
-				m => Assert.Equal(PluginResources.Error_DecimalSeparatorNotValid, m.ErrorMessage),
+				m =>
+				{
+					var expectedMessage = PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange;
+					Assert.Contains(expectedMessage.Substring(0, expectedMessage.Length - 4), m.ErrorMessage);
+				},
 				m => Assert.Equal(PluginResources.Error_DifferentSequences, m.ErrorMessage));
 		}
 
@@ -132,7 +136,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 		[Theory]
 		[InlineData("11,200.300", "11,200.300")]
-		[InlineData("1,234.89", "١,٢٣٤.٨٩")]
+		[InlineData("1,234.890", "١,٢٣٤.٨٩٠")]
 		public void SameSequencesDifferentMeanings_WhenDecimalSeparatorsDifferent_LocalizationAllowed(string source, string target)
 		{
 			var settings =
@@ -143,20 +147,18 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 					.WithSourceDecimalSeparators(comma: true, period: false)
 					.WithTargetDecimalSeparators(comma: false, period: true)
 					.Build();
-
 			settings.Setup(s => s.HindiNumberVerification).Returns(true);
 
 			var numberVerifierMain = new NumberVerifierMain(settings.Object);
-
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-			var expectedErrors = new List<string>
-			{
-				PluginResources.SeparatorAfterDecimal,
-				PluginResources.Error_MissingSourceSeparators
-			};
-
-			Assert.Equal(expectedErrors, errorMessage.Select(em => em.ErrorMessage));
+			Assert.Collection(errorMessage,
+				m =>
+				{
+					var expectedMessage = PluginResources.NumberParser_Message_InvalidGroupSeparator;
+					m.ErrorMessage.Contains(expectedMessage.Substring(0, expectedMessage.Length - 4));
+				},
+				m => Assert.Equal(m.ErrorMessage, PluginResources.Error_MissingSourceSeparators));
 		}
 
 		[Theory]
@@ -199,7 +201,11 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 			Assert.Collection(errorMessage,
 				m => Assert.Equal(PluginResources.Error_MissingTargetSeparators, m.ErrorMessage),
-				m => Assert.Equal(PluginResources.Error_DecimalSeparatorNotValid, m.ErrorMessage));
+				m =>
+				{
+					var expectedMessage = PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange;
+					Assert.Contains(expectedMessage.Substring(0, expectedMessage.Length - 4), m.ErrorMessage);
+				});
 		}
 
 		//Other scenarios

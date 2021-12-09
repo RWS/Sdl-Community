@@ -23,14 +23,19 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					.Distinct().ToList();
 		}
 
+		public NumberParser(List<string> thousandSeparators, List<string> decimalSeparators) :
+			this(GetNumberSeparators(thousandSeparators, decimalSeparators)){}
+
 		/// <summary>
 		/// Parse number value from <param name="text"/>
 		/// Convention: [ws] [$] [sign][integral-digits,]integral-digits[.[fractional-digits]][E[sign]exponential-digits][ws]
 		/// </summary>
 		/// <param name="text"></param>
+		/// <param name="omitLeadingZero"></param>
 		/// <returns>Returns a list of <see cref="NumberToken">NumberToken</see></returns>
-		public NumberToken Parse(string text)
+		public NumberToken Parse(string text, bool? omitLeadingZero = null)
 		{
+			var originalText = text;
 			if (string.IsNullOrEmpty(text))
 			{
 				return null;
@@ -67,9 +72,29 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 
 			// combine the individual number parts
 			var numberParts = CombineParts(currencyParts, signParts, integralAndFractionalParts, exponentialPart);
-			var numberToken = new NumberToken(text, numberParts);
+			var numberToken = new NumberToken(originalText, numberParts, omitLeadingZero);
 
 			return numberToken;
+		}
+
+		private static List<NumberSeparator> GetNumberSeparators(List<string> thousandSeparators, List<string> decimalSeparators)
+		{
+			var separators = GetConvertedSeparators(thousandSeparators, NumberSeparator.SeparatorType.GroupSeparator);
+			separators.AddRange(GetConvertedSeparators(decimalSeparators, NumberSeparator.SeparatorType.DecimalSeparator));
+
+			return separators;
+		}
+
+		private static List<NumberSeparator> GetConvertedSeparators(List<string> thousandSeparators, NumberSeparator.SeparatorType type)
+		{
+			var convertedSeparators = new List<NumberSeparator>();
+			thousandSeparators.ForEach(sep => convertedSeparators.Add(new NumberSeparator
+			{
+				Type = type,
+				Value = sep
+			}));
+
+			return convertedSeparators;
 		}
 
 		/// <summary>
@@ -221,7 +246,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 				numberParts.Add(numberPart);
 			}
 
-			var signRegex = new Regex(@"^\s*[+-]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			var signRegex = new Regex(@"^\s*[+−-]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 			var match = signRegex.Match(inputText);
 			if (match.Success)
 			{
@@ -403,6 +428,8 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 							useGroupSeparatorOnly = true;
 							numberParts[i].Type = NumberPart.NumberType.GroupSeparator;
 							previousSeparatorToken.Type = NumberPart.NumberType.GroupSeparator;
+
+							ValidateGroup(numberParts, 0, previousSeparatorTokenIndex);
 						}
 						else
 						{
@@ -428,15 +455,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 					}
 
 					// check for 3 digits exist between the thousand separators
-					if (numberParts[i].Type == NumberPart.NumberType.GroupSeparator && previousSeparatorTokenIndex > -1)
-					{
-						if (numberParts[i + 1].Value.Length != 3)
-						{
-							numberParts[i].Type = NumberPart.NumberType.Invalid;
-							numberParts[i].Message =
-								string.Format(PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange, numberParts[i + 1].Value);
-						}
-					}
+					ValidateGroup(numberParts, previousSeparatorTokenIndex, i);
 				}
 
 				previousSeparatorTokenIndex = i;
@@ -448,6 +467,22 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 			{
 				lastValue.Type = NumberPart.NumberType.Invalid;
 				lastValue.Message = PluginResources.NumberParser_Message_LastCharIsNotANumber;
+			}
+		}
+
+		private static void ValidateGroup(IReadOnlyList<NumberPart> numberParts, int previousSeparatorTokenIndex, int i)
+		{
+			if (numberParts[i].Type == NumberPart.NumberType.GroupSeparator && previousSeparatorTokenIndex > -1)
+			{
+				if (numberParts[i + 1].Value.Length != 3)
+				{
+					numberParts[i].Type = NumberPart.NumberType.Invalid;
+					var message = previousSeparatorTokenIndex == 0
+						? PluginResources.NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator
+						: string.Format(PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange, numberParts[i + 1].Value);
+					numberParts[i].Message =
+						message;
+				}
 			}
 		}
 

@@ -174,7 +174,7 @@
     <Compile Include="GUI\NumberVerifierUIPage.cs" />
     <Compile Include="Validator\NumberText.cs" />
     <Compile Include="Validator\NumberValidator.cs" />
-    <Compile Include="Validator\StringExtensions.cs" />
+    <Compile Include="Validator\ValidatorExtensions.cs" />
     <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateSourceIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateTargetIssuesOnNewLineErrorMessageProcessor.cs" />

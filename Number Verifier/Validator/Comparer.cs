@@ -77,7 +77,6 @@ namespace Sdl.Community.NumberVerifier.Validator
 			{
 				if (_first.Normalized == _second.Normalized) Result = ResultDescription.Equal;
 				else Result |= ResultDescription.DifferentValues;
-				if (_first.IsAmbiguous() || _second.IsAmbiguous()) Result = ResultDescription.Equal;
 			}
 			else
 			{
