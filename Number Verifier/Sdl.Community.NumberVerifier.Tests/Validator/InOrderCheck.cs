@@ -78,7 +78,11 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 			Assert.Collection(errorMessage,
-				m => Assert.Equal(PluginResources.Error_DecimalSeparatorNotValid, m.ErrorMessage),
+				m =>
+				{
+					var expectedMessage = PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange;
+					Assert.Contains(expectedMessage.Substring(0, expectedMessage.Length - 4), m.ErrorMessage);
+				},
 				m => Assert.Equal(PluginResources.Error_DifferentSequences, m.ErrorMessage));
 		}
 
@@ -108,7 +112,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 		[Theory]
 		[InlineData("11,200.300", "11,200.300")]
-		[InlineData("1,234.89", "١,٢٣٤.٨٩")]
+		[InlineData("1,234.899", "١,٢٣٤.٨٩٩")]
 		public void SameSequencesDifferentMeanings_WhenDecimalSeparatorsDifferent_LocalizationAllowed(string source, string target)
 		{
 			var settings =
@@ -128,7 +132,11 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 			Assert.Collection(errorMessage,
-				m => Assert.Equal(PluginResources.SeparatorAfterDecimal, m.ErrorMessage),
+				m =>
+				{
+					var expectedMessage = PluginResources.NumberParser_Message_InvalidGroupSeparator;
+					Assert.Contains(expectedMessage.Substring(0, expectedMessage.Length - 4), m.ErrorMessage);
+				},
 				m => Assert.Equal(PluginResources.Error_MissingSourceSeparators, m.ErrorMessage));
 		}
 
@@ -174,7 +182,11 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 			Assert.Collection(errorMessage,
 				m => Assert.Equal(PluginResources.Error_MissingTargetSeparators, m.ErrorMessage),
-				m => Assert.Equal(PluginResources.Error_DecimalSeparatorNotValid, m.ErrorMessage));
+				m =>
+				{
+					var expectedMessage = PluginResources.NumberParser_Message_TheGroupValidIsOutOfRange;
+					Assert.Contains(expectedMessage.Substring(0, expectedMessage.Length - 4), m.ErrorMessage);
+				});
 		}
 
 		//Other scenarios

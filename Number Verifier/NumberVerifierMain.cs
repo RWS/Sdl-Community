@@ -811,8 +811,7 @@ namespace Sdl.Community.NumberVerifier
 
 			if (!numberText.IsValidNumber)
 			{
-				explanation = numberText.Errors[NumberText.ErrorLevel.TextAreaLevel].FirstOrDefault()?.Message ??
-				              numberText.Errors[NumberText.ErrorLevel.NumberLevel].FirstOrDefault()?.Message;
+				explanation = numberText.Errors[NumberText.ErrorLevel.TextAreaLevel].FirstOrDefault()?.Message;
 			}
 
 			return $"{numberText.Text}	[{explanation}]";
