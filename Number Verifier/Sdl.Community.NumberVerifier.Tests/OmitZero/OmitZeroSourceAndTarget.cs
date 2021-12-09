@@ -101,7 +101,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
 
 			Assert.Collection(errorMessage,
-				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_NumberUnlocalised),
+				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_MissingTargetSeparators),
 				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_DifferentSequences));
 		}
 
@@ -111,7 +111,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		{
 			var errorMessages = SourceOmitCheckedTargetUnchecked(source, target);
 			Assert.Collection(errorMessages,
-				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_NumberUnlocalised));
+				e => Assert.Equal(e.ErrorMessage, PluginResources.Error_MissingTargetSeparators));
 		}
 
 		/// <summary>
@@ -164,7 +164,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			Assert.Collection(errorMessage,
 				error => Assert.Equal(PluginResources.Error_DifferentSequences, error.ErrorMessage),
-				error => Assert.Equal(PluginResources.Error_SameSequencesButDifferentMeanings, error.ErrorMessage));
+				error => Assert.Equal(PluginResources.Error_MissingSourceSeparators, error.ErrorMessage));
 		}
 
 		/// <summary>

@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.panelNumberVerifierUI = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb_InOrder = new System.Windows.Forms.CheckBox();
             this.combo_NumberFormatErrorType = new System.Windows.Forms.ComboBox();
             this.cb_ReportNumberFormatErrors = new System.Windows.Forms.CheckBox();
             this.targetMisBox = new System.Windows.Forms.GroupBox();
@@ -117,7 +118,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.cb_InOrder = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.targetMisBox.SuspendLayout();
@@ -174,6 +174,18 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Number Verifier";
+            // 
+            // cb_InOrder
+            // 
+            this.cb_InOrder.AutoSize = true;
+            this.cb_InOrder.Checked = true;
+            this.cb_InOrder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_InOrder.Location = new System.Drawing.Point(16, 136);
+            this.cb_InOrder.Name = "cb_InOrder";
+            this.cb_InOrder.Size = new System.Drawing.Size(277, 17);
+            this.cb_InOrder.TabIndex = 43;
+            this.cb_InOrder.Text = "Consider the order of the numbers in the segment pair";
+            this.cb_InOrder.UseVisualStyleBackColor = true;
             // 
             // combo_NumberFormatErrorType
             // 
@@ -1217,18 +1229,6 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
-            // 
-            // cb_InOrder
-            // 
-            this.cb_InOrder.AutoSize = true;
-            this.cb_InOrder.Checked = true;
-            this.cb_InOrder.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_InOrder.Location = new System.Drawing.Point(16, 136);
-            this.cb_InOrder.Name = "cb_InOrder";
-            this.cb_InOrder.Size = new System.Drawing.Size(212, 17);
-            this.cb_InOrder.TabIndex = 43;
-            this.cb_InOrder.Text = "Consider order of numbers in a segment";
-            this.cb_InOrder.UseVisualStyleBackColor = true;
             // 
             // NumberVerifierUI
             // 

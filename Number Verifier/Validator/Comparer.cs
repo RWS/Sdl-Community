@@ -15,9 +15,10 @@ namespace Sdl.Community.NumberVerifier.Validator
 			DifferentSequences = 0,
 			DifferentValues = 1,
 			SameSequence = 2,
-			Unlocalised = 4,
+			TargetUnlocalised = 4,
 			Equal = 8,
-			NotNumbers = 16
+			NotNumbers = 16,
+			SourceUnlocalised = 32
 		}
 
 		public Dictionary<string, bool> ScoreList { get; } = new()
@@ -42,7 +43,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 				return Result.HasFlag(ResultDescription.Equal)
 					? SameSequenceScore + 2
-					: Result.HasFlag(ResultDescription.Unlocalised) ? SameSequenceScore + 1 : score;
+					: Result.HasFlag(ResultDescription.TargetUnlocalised) ? SameSequenceScore + 1 : score;
 			}
 		}
 
@@ -82,7 +83,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 			{
 				if (!Result.HasFlag(ResultDescription.SameSequence)) return;
 
-				if (_first.IsValidNumber && !_second.IsValidNumber) Result = ResultDescription.Unlocalised;
+				if (_first.IsValidNumber && !_second.IsValidNumber) Result = ResultDescription.TargetUnlocalised;
+				if (!_first.IsValidNumber && _second.IsValidNumber) Result = ResultDescription.SourceUnlocalised;
 				if (!_first.IsValidNumber && !_second.IsValidNumber) Result |= ResultDescription.NotNumbers;
 			}
 		}

@@ -110,7 +110,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
         private static Mock<INumberVerifierSettings> Settings()
         {
             var iNumberSettingsMock = new Mock<INumberVerifierSettings>(MockBehavior.Loose);
-            //iNumberSettingsMock.Setup(r => r.CheckInOrder).Returns(true);
+            iNumberSettingsMock.Setup(r => r.CheckInOrder).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportAddedNumbers).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportModifiedAlphanumerics).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportModifiedNumbers).Returns(true);

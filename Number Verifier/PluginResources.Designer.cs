@@ -107,6 +107,24 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing source separators.
+        /// </summary>
+        public static string Error_MissingSourceSeparators {
+            get {
+                return ResourceManager.GetString("Error_MissingSourceSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing target separators.
+        /// </summary>
+        public static string Error_MissingTargetSeparators {
+            get {
+                return ResourceManager.GetString("Error_MissingTargetSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number added. .
         /// </summary>
         public static string Error_NumberAdded {
@@ -130,15 +148,6 @@ namespace Sdl.Community.NumberVerifier {
         public static string Error_NumbersRemoved {
             get {
                 return ResourceManager.GetString("Error_NumbersRemoved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Number unlocalised.
-        /// </summary>
-        public static string Error_NumberUnlocalised {
-            get {
-                return ResourceManager.GetString("Error_NumberUnlocalised", resourceCulture);
             }
         }
         

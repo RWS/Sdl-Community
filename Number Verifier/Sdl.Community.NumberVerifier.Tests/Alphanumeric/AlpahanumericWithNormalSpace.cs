@@ -39,8 +39,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 		{
 			var alphanumericsList = FindAlphanumericsNormalSpace(text, decimalSeparators, thousandSeparators);
 
-			Assert.True(alphanumericsList.Contains("AB14"));
-			Assert.True(alphanumericsList.Contains("C12"));
+			Assert.Contains("AB14", alphanumericsList);
+			Assert.Contains("C12", alphanumericsList);
 		}
 
 		[Theory]

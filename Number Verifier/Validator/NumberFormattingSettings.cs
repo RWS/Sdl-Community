@@ -6,7 +6,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 	{
 		public List<string> DecimalSeparators { get; set; }
 		public bool OmitLeadingZero { get; set; }
-		public List<string> AllSeparators { get; set; }
+		public List<string> NumberAreaSeparators { get; set; }
 		public List<string> ThousandSeparators { get; set; }
 	}
 }

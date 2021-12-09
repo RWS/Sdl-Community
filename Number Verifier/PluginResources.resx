@@ -206,8 +206,8 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   <data name="Error_SameSequenceDifferentValues" xml:space="preserve">
     <value>Same sequences but different values</value>
   </data>
-  <data name="Error_NumberUnlocalised" xml:space="preserve">
-    <value>Number unlocalised</value>
+  <data name="Error_MissingTargetSeparators" xml:space="preserve">
+    <value>Missing target separators</value>
   </data>
   <data name="ThousandSeparatorAfterDecimal" xml:space="preserve">
     <value>Thousands separator after decimal</value>
@@ -247,5 +247,8 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   </data>
   <data name="SeparatorAfterDecimal" xml:space="preserve">
 	  <value>Separator after decimal</value>
+  </data>
+  <data name="Error_MissingSourceSeparators" xml:space="preserve">
+	  <value>Missing source separators</value>
   </data>
 </root>

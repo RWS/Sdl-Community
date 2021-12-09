@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Moq;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
@@ -707,7 +709,13 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(PluginResources.Error_NumberUnlocalised, errorMessage[0].ErrorMessage);
+	        var expectedErrors = new List<string>
+	        {
+		        PluginResources.Error_DifferentValues,
+		        PluginResources.Error_NumberAdded,
+	        };
+
+			Assert.Equal(expectedErrors, errorMessage.Select(em => em.ErrorMessage));
         }
 
         /// <summary>

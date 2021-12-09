@@ -129,7 +129,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 
 			Assert.Collection(errorMessage,
 				m => Assert.Equal(PluginResources.SeparatorAfterDecimal, m.ErrorMessage),
-				m => Assert.Equal(PluginResources.Error_SameSequencesButDifferentMeanings, m.ErrorMessage));
+				m => Assert.Equal(PluginResources.Error_MissingSourceSeparators, m.ErrorMessage));
 		}
 
 		[Theory]
@@ -173,7 +173,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
 			Assert.Collection(errorMessage,
-				m => Assert.Equal(PluginResources.Error_NumberUnlocalised, m.ErrorMessage),
+				m => Assert.Equal(PluginResources.Error_MissingTargetSeparators, m.ErrorMessage),
 				m => Assert.Equal(PluginResources.Error_DecimalSeparatorNotValid, m.ErrorMessage));
 		}
 
