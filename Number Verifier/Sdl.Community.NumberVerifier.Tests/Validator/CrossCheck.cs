@@ -27,6 +27,43 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 		}
 		
 		[Theory]
+		[InlineData("y225m")]
+		public void NumberIsAlphanumeric_EvenWhenUnitsOfMeasurementPresent_IfStartsWithLetters(string source)
+		{
+			var settings =
+				_settingsBuilder
+					.RequireLocalization()
+					.WithSourceDecimalSeparators(true, false)
+					.WithTargetThousandSeparators(true, false)
+					.Build();
+
+			var numberVerifierMain = new NumberVerifierMain(settings.Object);
+
+			var errorMessage = numberVerifierMain.GetAlphanumericList(source, true);
+
+			Assert.Equal("y225m", errorMessage.Item2[0]);
+
+		}
+		
+		[Theory]
+		[InlineData("225m")]
+		public void NumberIsNotAlphanumeric_WhenOnlyUnitsOfMeasurementPresent(string source)
+		{
+			var settings =
+				_settingsBuilder
+					.RequireLocalization()
+					.WithSourceDecimalSeparators(true, false)
+					.WithTargetThousandSeparators(true, false)
+					.Build();
+
+			var numberVerifierMain = new NumberVerifierMain(settings.Object);
+
+			var errorMessage = numberVerifierMain.GetAlphanumericList(source, true);
+
+			Assert.Empty(errorMessage.Item2);
+		}
+		
+		[Theory]
 		[InlineData("z-3")]
 		public void NonNumbersIgnoredByNumberConsistencyChecker(string source)
 		{

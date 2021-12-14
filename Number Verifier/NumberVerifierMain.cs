@@ -895,7 +895,7 @@ namespace Sdl.Community.NumberVerifier
 
 				thoAndDecSeparators.ForEach(sep => itemWoSeparators = itemWoSeparators.Replace(sep, ""));
 
-				if (Regex.Match(itemWoSeparators, "^\\d+[a-z]$").Success || int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
+				if (Regex.Match(itemWoSeparators, "(^(?![A-Za-z]))\\d+[a-z]+$").Success || int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
 			}
 			forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
 		}

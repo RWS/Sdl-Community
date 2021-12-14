@@ -19,7 +19,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			NumberParser = new NumberParser(thousandSeparators, decimalSeparators);
 
 			var textMatches = GetTextAreas(text, formattingSettings.NumberAreaSeparators);
-			SetTextAreas(textMatches, text, formattingSettings.OmitLeadingZero);
+			SetTextAreas(textMatches, formattingSettings.OmitLeadingZero);
 		}
 
 		public NumberParser NumberParser { get; }
@@ -86,7 +86,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return textMatches;
 		}
 
-		private void SetTextAreas(List<Match> textMatches, string text, bool omitLeadingZero)
+		private void SetTextAreas(List<Match> textMatches, bool omitLeadingZero)
 		{
 			textMatches.ForEach(
 				stm =>
@@ -95,8 +95,6 @@ namespace Sdl.Community.NumberVerifier.Validator
 
 					var sIndex = stm.Index;
 					var length = stm.Length;
-
-					//if (stm.IsAlphanumeric(text)) return;
 
 					var sign = stm.Groups["Sign"].Captures.Cast<Capture>().Select(c => c.Value).FirstOrDefault();
 					var token = NumberParser.Parse(stm.Value, omitLeadingZero);
