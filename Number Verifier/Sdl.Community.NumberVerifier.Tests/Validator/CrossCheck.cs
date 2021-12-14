@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.NumberVerifier.Model;
+using Sdl.Community.NumberVerifier.Parsers.Number;
+using Sdl.Community.NumberVerifier.Validator;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.Validator
@@ -13,6 +15,53 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 		{
 			_settingsBuilder = new SettingsBuilder();
 		}
+
+		[Theory]
+		[InlineData(" - 365")]
+		public void Normalize_ReturnsCorrectValue_EvenWhenThereAreSpacesBesidesSign(string toBeNormalized)
+		{
+			var numberParser = new NumberParser();
+			var numberToken = numberParser.Parse(toBeNormalized);
+
+			Assert.Equal("n365", numberToken.Normalize());
+		}
+		
+		[Theory]
+		[InlineData("z-3")]
+		public void NonNumbersIgnoredByNumberConsistencyChecker(string source)
+		{
+			var settings =
+				_settingsBuilder
+					.RequireLocalization()
+					.WithSourceDecimalSeparators(true, false)
+					.WithTargetThousandSeparators(true, false)
+					.Build();
+
+			var numberVerifierMain = new NumberVerifierMain(settings.Object);
+
+			var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, null);
+
+			Assert.Empty(errorMessage);
+		}
+
+		//[Theory]
+		//[InlineData("11,200", null)]
+		//public void NumberRemoved_WhenNumberIsNotPresentInTheTarget(string source, string target)
+		//{
+		//	var settings =
+		//		_settingsBuilder
+		//			.RequireLocalization()
+		//			.WithSourceDecimalSeparators(true, false)
+		//			.WithTargetThousandSeparators(true, false)
+		//			.Build();
+
+		//	var numberVerifierMain = new NumberVerifierMain(settings.Object);
+
+		//	var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+
+		//	Assert.Collection(errorMessage,
+		//		m => Assert.Equal(PluginResources.Error_NumbersRemoved, m.ErrorMessage));
+		//}
 
 		//Segment-pair-level comparison scenarios
 		[Theory]
