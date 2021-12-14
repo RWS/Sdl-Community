@@ -246,7 +246,7 @@ namespace Sdl.Community.NumberVerifier.Parsers.Number
 				numberParts.Add(numberPart);
 			}
 
-			var signRegex = new Regex(@"^\s*[+−-]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			var signRegex = new Regex(@"^\s*[+−–-]+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 			var match = signRegex.Match(inputText);
 			if (match.Success)
 			{

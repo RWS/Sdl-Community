@@ -84,8 +84,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 			mockSettings.Setup(s => s.TargetDecimalComma).Returns(true);
 			_numberValidator.Verify(null, numberWithComma, mockSettings.Object, out _, out var normalizedNumberWithComma);
 
-			Assert.Equal("s0d55", normalizedNumberWithPeriod.Texts[0].Normalized);
-			Assert.Equal("s0d55", normalizedNumberWithComma.Texts[0].Normalized);
+			Assert.Equal("n0d55", normalizedNumberWithPeriod.Texts[0].Normalized);
+			Assert.Equal("n0d55", normalizedNumberWithComma.Texts[0].Normalized);
 		}
 
 		[Theory]
@@ -112,7 +112,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
 			_numberValidator.Verify(null, text, mockSettings.Object, out _, out var normalizedNumber);
 
-			Assert.Equal("s0d55", normalizedNumber.Texts[0].Normalized);
+			Assert.Equal("n0d55", normalizedNumber.Texts[0].Normalized);
 
 			return normalizedNumber.Texts[0].Normalized;
 		}
@@ -122,7 +122,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 		public void OmitZeroShortFormNegativeNumbersSpecialMinusSign(string text)
 		{
 			var normalizedNumber = OmitZeroShortFormNegativeNumbers(text);
-			Assert.Equal("s0d55", normalizedNumber);
+			Assert.Equal("n0d55", normalizedNumber);
 		}
 
 		//#region Omit leading zero option is unchecked

@@ -807,12 +807,10 @@ namespace Sdl.Community.NumberVerifier
 
 		private static string GetFormattedError(NumberText numberText)
 		{
-			var explanation = numberText.Normalized;
-
-			if (!numberText.IsValidNumber)
-			{
-				explanation = numberText.Errors[NumberText.ErrorLevel.TextAreaLevel].FirstOrDefault()?.Message;
-			}
+			if (numberText is null) return null;
+			var explanation = numberText.IsValidNumber
+				? numberText.Normalized
+				: numberText.Errors[NumberText.ErrorLevel.TextAreaLevel].FirstOrDefault()?.Message;
 
 			return $"{numberText.Text}	[{explanation}]";
 		}
@@ -897,7 +895,7 @@ namespace Sdl.Community.NumberVerifier
 
 				thoAndDecSeparators.ForEach(sep => itemWoSeparators = itemWoSeparators.Replace(sep, ""));
 
-				if (int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
+				if (Regex.Match(itemWoSeparators, "(^(?![A-Za-z]))\\d+[a-z]+$").Success || int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
 			}
 			forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
 		}
