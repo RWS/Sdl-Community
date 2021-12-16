@@ -9,17 +9,20 @@ namespace Sdl.Community.NumberVerifier.Validator
 {
 	public class NumberTexts
 	{
+		private readonly NumberFormattingSettings _formattingSettings;
 		private readonly string _digitClass = "[0-9٠-٩]";
 
 		public NumberTexts(string text, NumberFormattingSettings formattingSettings)
 		{
+			_formattingSettings = formattingSettings;
+
 			var thousandSeparators = formattingSettings.ThousandSeparators;
 			var decimalSeparators = formattingSettings.DecimalSeparators;
 
 			NumberParser = new NumberParser(thousandSeparators, decimalSeparators);
 
-			var textMatches = GetTextAreas(text, formattingSettings.NumberAreaSeparators);
-			SetTextAreas(textMatches, formattingSettings.OmitLeadingZero);
+			var textMatches = GetTextAreas(text);
+			SetTextAreas(textMatches);
 		}
 
 		public NumberParser NumberParser { get; }
@@ -68,9 +71,9 @@ namespace Sdl.Community.NumberVerifier.Validator
 				ErrorLevel = NumberText.ErrorLevel.TextAreaLevel
 			}).ToList();
 
-		private List<Match> GetTextAreas(string text, List<string> numberAreaSeparators)
+		private List<Match> GetTextAreas(string text)
 		{
-			var allSeparatorsRegex = numberAreaSeparators.ToRegexPattern();
+			var allSeparatorsRegex = _formattingSettings.NumberAreaSeparators.ToRegexPattern();
 
 			var alphanumericsStartingPattern = "[A-Za-z]+[+−–-]?\\d*";
 			var alphanumericsEndingPattern = "\\d*[+−–-]?[A-Z]+";
@@ -83,10 +86,11 @@ namespace Sdl.Community.NumberVerifier.Validator
 				.Where(match => !string.IsNullOrWhiteSpace(match.Value) && Regex.Match(match.Value, "\\d").Success)
 				.ToList();
 
+			textMatches.ExcludeRanges(_formattingSettings.ExcludedRanges);
 			return textMatches;
 		}
 
-		private void SetTextAreas(List<Match> textMatches, bool omitLeadingZero)
+		private void SetTextAreas(List<Match> textMatches)
 		{
 			textMatches.ForEach(
 				stm =>
@@ -97,7 +101,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 					var length = stm.Length;
 
 					var sign = stm.Groups["Sign"].Captures.Cast<Capture>().Select(c => c.Value).FirstOrDefault();
-					var token = NumberParser.Parse(stm.Value, omitLeadingZero);
+					var token = NumberParser.Parse(stm.Value, _formattingSettings.OmitLeadingZero);
 					AddNumberText(separators, sIndex, length, sign, token);
 				});
 		}

@@ -53,6 +53,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
             _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
 	        _Control.CheckInOrder = _ControlSettings.CheckInOrder;
+	        _Control.RegexExclusionList = _ControlSettings.RegexExclusionList ?? new System.Collections.Generic.List<Model.RegexPattern>();
 
 			_Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
@@ -115,6 +116,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
             _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
 	        _Control.CheckInOrder = _ControlSettings.CheckInOrder;
+	        _Control.RegexExclusionList = _ControlSettings.RegexExclusionList;
 
 			_ControlSettings.Reset("ReportAddedNumbers");
             _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
@@ -234,6 +236,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
             _ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
 	        _ControlSettings.CheckInOrder = _Control.CheckInOrder;
+	        _ControlSettings.RegexExclusionList = _Control.RegexExclusionList;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;

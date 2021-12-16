@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -222,98 +223,94 @@ namespace Sdl.Community.NumberVerifier
 					_targetText = GetSegmentText(segmentPair.Target);
 
 					var errorMessages = CheckSegmentPair(_sourceText, _targetText, segmentPair);
-
-					// generic number verifier to identify errors related to the numeric convention taking
-					// into consideration the settings applied.
-					var genericErrorMeassages = GenericNumberVerifier.Verify(segmentPair);
-					if (genericErrorMeassages.Any())
-					{
-						errorMessages.AddRange(genericErrorMeassages);
-					}
-
-					foreach (var errorMessage in errorMessages)
-					{
-						if (errorMessage.ExtendedErrorMessage != string.Empty && VerificationSettings.ReportExtendedMessages)
-						{
-							if (MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
-							{
-								var messageDataModel = new MessageDataModel
-								{
-									SourceIssues = errorMessage.SourceNumberIssues?.Replace(Environment.NewLine, string.Empty),
-									TargetIssues = errorMessage.TargetNumberIssues?.Replace(Environment.NewLine, string.Empty),
-									ReplacementSuggestion = segmentPair.Target,
-									InitialSourceIssues = errorMessage.InitialSourceNumber,
-									InitialTargetIssues = errorMessage.InitialTargetNumber,
-									ErrorMessage = errorMessage.ErrorMessage,
-									IsHindiVerification = errorMessage.IsHindiVerification
-								};
-								var extendedData = new NumberVerifierMessageData(messageDataModel);
-
-								extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-									errorMessage.ErrorLevel, errorMessage.ExtendedErrorMessage,
-									new TextLocation(new Location(segmentPair.Target, true), 0),
-									new TextLocation(new Location(segmentPair.Target, false),
-										segmentPair.Target.ToString().Length - 1),
-									extendedData);
-							}
-						}
-						else if (errorMessage.ErrorMessage != string.Empty)
-						{
-							if (!string.IsNullOrEmpty(errorMessage.TargetNumberIssues))
-							{
-								if (errorMessage.ErrorMessage == PluginResources.Error_AlphanumericsModified)
-								{
-									var alphaList = new List<string>();
-									List<string> alphaTargetList = new List<string>();
-
-									var alphanumericsText = Regex.Matches(errorMessage.TargetNumberIssues, @"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)");
-
-									foreach (Match alphanumericText in alphanumericsText)
-									{
-										var words = Regex.Split(alphanumericText.Value, @"\s");
-
-										alphaList.AddRange(
-													from word in words
-													from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)")
-													select match.Value);
-
-										foreach (var alphaElement in alphaList)
-										{
-											var alphanumericTarget = $@"""{alphaElement}""";
-											alphaTargetList.Add(alphanumericTarget);
-										}
-										var alphanumericRes = string.Join(", ", alphaTargetList.ToArray());
-										errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", alphanumericRes, ")");
-									}
-								}
-								else
-								{
-									var targetNumbers = new List<string>();
-									var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+",
-										RegexOptions.Singleline);
-
-									foreach (var value in numbers)
-									{
-										var targetNumber = $@"""{value}""";
-										targetNumbers.Add(targetNumber);
-									}
-									var res = string.Join(", ", targetNumbers.ToArray());
-
-									errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", res, ")");
-								}
-							}
-
-							MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-								errorMessage.ErrorLevel, errorMessage.ErrorMessage,
-								new TextLocation(new Location(segmentPair.Target, true), 0),
-								new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1));
-						}
-					}
+					ReportErrors(segmentPair, errorMessages);
 				}
 			}
 			catch (Exception ex)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} \n {ex}");
+			}
+		}
+
+		private void ReportErrors(ISegmentPair segmentPair, List<ErrorReporting> errorMessages)
+		{
+			foreach (var errorMessage in errorMessages)
+			{
+				if (errorMessage.ExtendedErrorMessage != string.Empty && VerificationSettings.ReportExtendedMessages)
+				{
+					if (MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
+					{
+						var messageDataModel = new MessageDataModel
+						{
+							SourceIssues = errorMessage.SourceNumberIssues?.Replace(Environment.NewLine, string.Empty),
+							TargetIssues = errorMessage.TargetNumberIssues?.Replace(Environment.NewLine, string.Empty),
+							ReplacementSuggestion = segmentPair.Target,
+							InitialSourceIssues = errorMessage.InitialSourceNumber,
+							InitialTargetIssues = errorMessage.InitialTargetNumber,
+							ErrorMessage = errorMessage.ErrorMessage,
+							IsHindiVerification = errorMessage.IsHindiVerification
+						};
+						var extendedData = new NumberVerifierMessageData(messageDataModel);
+
+						extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+							errorMessage.ErrorLevel, errorMessage.ExtendedErrorMessage,
+							new TextLocation(new Location(segmentPair.Target, true), 0),
+							new TextLocation(new Location(segmentPair.Target, false),
+								segmentPair.Target.ToString().Length - 1),
+							extendedData);
+					}
+				}
+				else if (errorMessage.ErrorMessage != string.Empty)
+				{
+					if (!string.IsNullOrEmpty(errorMessage.TargetNumberIssues))
+					{
+						if (errorMessage.ErrorMessage == PluginResources.Error_AlphanumericsModified)
+						{
+							var alphaList = new List<string>();
+							List<string> alphaTargetList = new List<string>();
+
+							var alphanumericsText = Regex.Matches(errorMessage.TargetNumberIssues, @"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)");
+
+							foreach (Match alphanumericText in alphanumericsText)
+							{
+								var words = Regex.Split(alphanumericText.Value, @"\s");
+
+								alphaList.AddRange(
+											from word in words
+											from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)")
+											select match.Value);
+
+								foreach (var alphaElement in alphaList)
+								{
+									var alphanumericTarget = $@"""{alphaElement}""";
+									alphaTargetList.Add(alphanumericTarget);
+								}
+								var alphanumericRes = string.Join(", ", alphaTargetList.ToArray());
+								errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", alphanumericRes, ")");
+							}
+						}
+						else
+						{
+							var targetNumbers = new List<string>();
+							var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+",
+								RegexOptions.Singleline);
+
+							foreach (var value in numbers)
+							{
+								var targetNumber = $@"""{value}""";
+								targetNumbers.Add(targetNumber);
+							}
+							var res = string.Join(", ", targetNumbers.ToArray());
+
+							errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", res, ")");
+						}
+					}
+
+					MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+						errorMessage.ErrorLevel, errorMessage.ErrorMessage,
+						new TextLocation(new Location(segmentPair.Target, true), 0),
+						new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1));
+				}
 			}
 		}
 
@@ -323,15 +320,21 @@ namespace Sdl.Community.NumberVerifier
 		/// </summary>
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
+		/// <param name="sourceExcludedRanges"></param>
+		/// <param name="targetExcludedRanges"></param>
 		/// <returns></returns>
-		public IEnumerable<ErrorReporting> CheckAlphanumerics(string sourceText, string targetText)
+		public IEnumerable<ErrorReporting> CheckAlphanumerics(string sourceText, string targetText, List<ExcludedRange> sourceExcludedRanges = null, List<ExcludedRange> targetExcludedRanges = null)
 		{
+			if (!_verificationSettings.CustomsSeparatorsAlphanumerics && !_verificationSettings.ReportModifiedAlphanumerics)
+			{
+				return Enumerable.Empty<ErrorReporting>();
+			}
 			try
 			{
-				var sourceAlphanumericsList = GetAlphanumericList(sourceText, true);
+				var sourceAlphanumericsList = GetAlphanumericList(sourceText, true, sourceExcludedRanges);
 
 				// find all alphanumeric names in target and add to list
-				var targetAlphanumericsList = GetAlphanumericList(targetText);
+				var targetAlphanumericsList = GetAlphanumericList(targetText, false, targetExcludedRanges);
 
 				// remove alphanumeric names found both in source and target from respective list
 				RemoveMatchingAlphanumerics(sourceAlphanumericsList.Item2, targetAlphanumericsList.Item2);
@@ -364,11 +367,13 @@ namespace Sdl.Community.NumberVerifier
 		/// </summary>
 		/// <param name="sourceText"></param>
 		/// <param name="targetText"></param>
+		/// <param name="sourceExcludedRanges"></param>
+		/// <param name="targetExcludedRanges"></param>
 		/// <param name="segmentPair"></param>
 		/// <returns></returns>
-		public void CheckNumbers(string sourceText, string targetText, ISegmentPair segmentPair = null)
+		public void CheckSequences(string sourceText, string targetText, List<ExcludedRange> sourceExcludedRanges, List<ExcludedRange> targetExcludedRanges,  ISegmentPair segmentPair = null)
 		{
-			_numberValidator.Verify(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers);
+			_numberValidator.Verify(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers, sourceExcludedRanges, targetExcludedRanges);
 
 			if (segmentPair is not null) ReportErrors(sourceNumbers, targetNumbers, segmentPair);
 		}
@@ -382,19 +387,47 @@ namespace Sdl.Community.NumberVerifier
 		/// <returns></returns>
 		public List<ErrorReporting> CheckSegmentPair(string sourceText, string targetText, ISegmentPair segmentPair = null)
 		{
-			var errorList = new List<ErrorReporting>();
-			if (_verificationSettings.CustomsSeparatorsAlphanumerics || _verificationSettings.ReportModifiedAlphanumerics)
-			{
-				var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
-				errorList.AddRange(errorsListFromAlphanumerics);
-			}
+			var sourceExcludedRanges = GetExcludedRanges(sourceText);
+			var targetExcludedRanges = GetExcludedRanges(targetText);
 
-			CheckNumbers(sourceText, targetText, segmentPair);
+			var errorList = new List<ErrorReporting>();
+
+			var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText, sourceExcludedRanges, targetExcludedRanges);
+			errorList.AddRange(errorsListFromAlphanumerics);
+
+			CheckSequences(sourceText, targetText, sourceExcludedRanges, targetExcludedRanges, segmentPair);
+
+			// generic number verifier to identify errors related to the numeric convention taking
+			// into consideration the settings applied.
+			var genericErrorMeassages = GenericNumberVerifier.Verify(segmentPair, sourceExcludedRanges, targetExcludedRanges);
+			errorList.AddRange(genericErrorMeassages);
 
 			return errorList;
 		}
 
-		public Tuple<List<string>, List<string>> GetAlphanumericList(string text, bool isSource = false)
+		private List<ExcludedRange> GetExcludedRanges(string text)
+		{
+			if (VerificationSettings.RegexExclusionList is null) return new List<ExcludedRange>();
+			var excludedRanges = new List<ExcludedRange>();
+			foreach (var pattern in VerificationSettings.RegexExclusionList)
+			{
+				var matches =
+					Regex.Matches(text, pattern.Pattern)
+						.Cast<Match>()
+						.Where(m => !string.IsNullOrWhiteSpace(m.Value))
+						.ToList();
+
+				matches.ForEach(m => excludedRanges.Add(new ExcludedRange
+				{
+					LeftLimit = m.Index,
+					RightLimit = m.Index + m.Length - 1
+				}));
+			}
+
+			return excludedRanges.MergeAdjacentRanges();
+		}
+
+		public Tuple<List<string>, List<string>> GetAlphanumericList(string text, bool isSource = false, List<ExcludedRange> excludedRanges = null)
 		{
 			try
 			{
@@ -402,7 +435,7 @@ namespace Sdl.Community.NumberVerifier
 				var words = Regex.Split(text, @"\s");
 				var customsSeparators = !string.IsNullOrEmpty(_verificationSettings.AlphanumericsCustomSeparator)
 					? _verificationSettings.AlphanumericsCustomSeparator.Split(',')
-					: new string[0];
+					: Array.Empty<string>();
 
 				// The below foreach is used when checking those tags like Source: "<color=70236>Word" and Target:<color=70236>OtherWord
 				// and no empty space is between the '>' and 'Word' or between the '>' and 'OtherWord'.
@@ -443,9 +476,14 @@ namespace Sdl.Community.NumberVerifier
 				var regex = $"(?i)(?=.*[0-9])(?=.*[a-z])([a-z0-9{separators}]+)";
 
 				normalizedAlphaList.AddRange(
-					from word in wordsRes
-					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
-					select Regex.Replace(match.Value, "\u2212|-", "m"));
+					wordsRes.SelectMany(word =>
+					{
+						var matches = Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex).Cast<Match>().ToList();
+
+						matches.ExcludeRanges(excludedRanges);
+						return matches;
+					},
+						(word, match) => Regex.Replace(match.Value, "\u2212|-", "m")));
 
 				RemoveNonAlphanumericals(isSource, normalizedAlphaList);
 
@@ -895,7 +933,8 @@ namespace Sdl.Community.NumberVerifier
 
 				thoAndDecSeparators.ForEach(sep => itemWoSeparators = itemWoSeparators.Replace(sep, ""));
 
-				if (Regex.Match(itemWoSeparators, "(^(?![A-Za-z]))\\d+[a-z]+$").Success || int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
+				var unitsOfMeasurement = "(^(?![A-Za-z]))\\d+[a-z]+$";
+				if (Regex.Match(itemWoSeparators, unitsOfMeasurement).Success || int.TryParse(itemWoSeparators, out _)) forRemoval.Add(item);
 			}
 			forRemoval.ForEach(item => normalizedAlphaList.Remove(item));
 		}

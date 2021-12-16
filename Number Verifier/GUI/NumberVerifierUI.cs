@@ -1,5 +1,10 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
+using Sdl.Community.NumberVerifier.GUI;
+using Sdl.Community.NumberVerifier.Helpers;
+using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -9,7 +14,7 @@ namespace Sdl.Community.NumberVerifier
 	    private string _exampleTNormalizedValue;
 	    private string _exampleOmitLeadingZeroValue;
 
-		public bool CheckInOrder
+	    public bool CheckInOrder
 		{
 			get => cb_InOrder.Checked;
 			set => cb_InOrder.Checked = value;
@@ -685,5 +690,17 @@ namespace Sdl.Community.NumberVerifier
 					break;
 			}
 		}
+
+	    public List<RegexPattern> RegexExclusionList { get; set; }
+
+	    private void button1_Click(object sender, System.EventArgs e)
+	    {
+		    var regexExclusionsGrid = new RegexExclusions(new RegexImporter());
+
+		    regexExclusionsGrid.SetData(RegexExclusionList);
+			regexExclusionsGrid.ShowDialog();
+
+		    RegexExclusionList = regexExclusionsGrid.GetData();
+	    }
 	}
 }

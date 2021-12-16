@@ -251,4 +251,13 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   <data name="Error_MissingSourceSeparators" xml:space="preserve">
 	  <value>Missing source separators</value>
   </data>
+  <data name="Pattern_not_valid" xml:space="preserve">
+	  <value>Pattern not valid</value>
+  </data>
+  <data name="Please_select_the_files_you_want_to_import" xml:space="preserve">
+	  <value>Please select the files you want to import.</value>
+  </data>
+  <data name="Export_selected_expressions" xml:space="preserve">
+	  <value>Export selected expressions</value>
+  </data>
 </root>

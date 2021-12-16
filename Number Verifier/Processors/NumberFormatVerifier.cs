@@ -7,6 +7,7 @@ using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Parsers.Number;
 using Sdl.Community.NumberVerifier.Parsers.Number.Model;
+using Sdl.Community.NumberVerifier.Validator;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
@@ -24,7 +25,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 
 		public ITextGenerator TextGenerator { get; }
 
-		public List<ErrorReporting> Verify(ISegmentPair segmentPair)
+		public List<ErrorReporting> Verify(ISegmentPair segmentPair, List<ExcludedRange> sourceExcludedRanges = null, List<ExcludedRange> targetExcludedRanges = null)
 		{
 			var errors = new List<ErrorReporting>();
 
@@ -36,12 +37,12 @@ namespace Sdl.Community.NumberVerifier.Processors
 			var sourceText = TextGenerator.GetPlainText(segmentPair.Source, false);
 			var sourceNumberTokens = GetNumbersTokens(sourceText,
 				VerificationSettings.GetSourceDecimalSeparators(),
-				VerificationSettings.GetSourceThousandSeparators());
+				VerificationSettings.GetSourceThousandSeparators(), sourceExcludedRanges);
 
 			var targetText = TextGenerator.GetPlainText(segmentPair.Target, false);
 			var targetNumberTokens = GetNumbersTokens(targetText,
 				VerificationSettings.GetTargetDecimalSeparators(),
-				VerificationSettings.GetTargetThousandSeparators());
+				VerificationSettings.GetTargetThousandSeparators(), targetExcludedRanges);
 
 			foreach (var numberToken in targetNumberTokens.Where(a => !a.Valid))
 			{
@@ -88,7 +89,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 			}
 		}
 
-		private static IEnumerable<NumberToken> GetNumbersTokens(string text, IEnumerable<string> decimalSeparators, IEnumerable<string> groupSeparators)
+		private static IEnumerable<NumberToken> GetNumbersTokens(string text, IEnumerable<string> decimalSeparators, IEnumerable<string> groupSeparators, List<ExcludedRange> excludedRanges)
 		{
 			var numberTokens = new List<NumberToken>();
 
@@ -98,8 +99,10 @@ namespace Sdl.Community.NumberVerifier.Processors
 			var numberParser = new NumberParser(numberSeparators.Count > 0 ? numberSeparators : null);
 
 			var regexNumber = new Regex(@"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+", RegexOptions.Singleline);
-			var numberMatches = regexNumber.Matches(text);
-			foreach (Match numberMatch in numberMatches)
+
+			var numberMatches = regexNumber.Matches(text).Cast<Match>().ToList();
+			numberMatches.ExcludeRanges(excludedRanges);
+			foreach (var numberMatch in numberMatches)
 			{
 				var numberToken = numberParser.Parse(numberMatch.Value);
 				numberTokens.Add(numberToken);

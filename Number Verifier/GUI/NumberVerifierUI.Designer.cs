@@ -118,6 +118,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.button1 = new System.Windows.Forms.Button();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.targetMisBox.SuspendLayout();
@@ -365,6 +366,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.button1);
             this.groupBox7.Controls.Add(this.draftCheck);
             this.groupBox7.Controls.Add(this.untranslatedCheck);
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
@@ -1230,6 +1232,16 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(186, 19);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(103, 23);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Add regexes";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1354,5 +1366,6 @@
 		private System.Windows.Forms.Label targetOmitLeadingZeroLabel;
 		private System.Windows.Forms.Label sourceOmitLeadingZeroLabel;
 		private System.Windows.Forms.CheckBox cb_InOrder;
+		private System.Windows.Forms.Button button1;
 	}
 }
