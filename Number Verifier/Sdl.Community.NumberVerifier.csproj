@@ -95,9 +95,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +113,7 @@
     <Compile Include="Composers\NumberErrorComposer.cs" />
     <Compile Include="Composers\SourceErrorMessageComposer.cs" />
     <Compile Include="Composers\TargetErrorMessageComposer.cs" />
+    <Compile Include="Model\ExcludedRange.cs" />
     <Compile Include="GUI\NumberVerifierHelp.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -118,6 +121,14 @@
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
+    <Compile Include="GUI\RegexExclusions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\RegexExclusions.Designer.cs">
+      <DependentUpon>RegexExclusions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\RegexImporter.cs" />
+    <Compile Include="Model\RegexPattern.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\TextFormatter.cs" />
@@ -240,6 +251,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\NumberVerifierUI.resx">
       <DependentUpon>NumberVerifierUI.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\RegexExclusions.resx">
+      <DependentUpon>RegexExclusions.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageUI\NumberVerifierMessageUI.resx">

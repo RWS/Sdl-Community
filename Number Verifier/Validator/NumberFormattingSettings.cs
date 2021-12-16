@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier.Validator
 {
@@ -8,5 +9,6 @@ namespace Sdl.Community.NumberVerifier.Validator
 		public bool OmitLeadingZero { get; set; }
 		public List<string> NumberAreaSeparators { get; set; }
 		public List<string> ThousandSeparators { get; set; }
+		public List<ExcludedRange> ExcludedRanges { get; set; }
 	}
 }

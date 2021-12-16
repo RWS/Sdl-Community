@@ -119,7 +119,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Validator
 			Assert.Collection(errorMessage,
 				m => Assert.Equal(PluginResources.Error_NumbersRemoved, m.ErrorMessage));
 		}
-
+		
 		//TODO:Add some tests with more than one instance of a thousand sep
 
 		[Theory]

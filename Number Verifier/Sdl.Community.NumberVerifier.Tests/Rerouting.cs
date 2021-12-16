@@ -19,7 +19,7 @@ namespace Sdl.Community.NumberVerifier.Tests
 
 			var numberVerifierSettings = numberVerifierMain.VerificationSettings;
 			Setup();
-			_numberValidator.Verify(source, target, numberVerifierSettings, out var sourceNumbersNormalized, out var targetNumbersNormalized);
+			_numberValidator.Verify(source, target, numberVerifierSettings, out var sourceNumbersNormalized, out var targetNumbersNormalized, null, null);
 
 			var sourceErrorList = CreateSimplifiedErrorReport(sourceNumbersNormalized, true);
 			var targetErrorList = CreateSimplifiedErrorReport(targetNumbersNormalized, false);

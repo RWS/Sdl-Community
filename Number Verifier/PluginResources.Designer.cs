@@ -179,6 +179,15 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export selected expressions.
+        /// </summary>
+        public static string Export_selected_expressions {
+            get {
+                return ResourceManager.GetString("Export_selected_expressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ForumIcon {
@@ -305,6 +314,24 @@ namespace Sdl.Community.NumberVerifier {
         public static string NumbersHaveDifferentValues {
             get {
                 return ResourceManager.GetString("NumbersHaveDifferentValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pattern not valid.
+        /// </summary>
+        public static string Pattern_not_valid {
+            get {
+                return ResourceManager.GetString("Pattern_not_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the files you want to import..
+        /// </summary>
+        public static string Please_select_the_files_you_want_to_import {
+            get {
+                return ResourceManager.GetString("Please_select_the_files_you_want_to_import", resourceCulture);
             }
         }
         
