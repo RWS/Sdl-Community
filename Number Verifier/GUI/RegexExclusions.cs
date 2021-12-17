@@ -146,6 +146,7 @@ namespace Sdl.Community.NumberVerifier.GUI
 
 			try
 			{
+				RegexGrid.Rows[e.RowIndex].Cells[1].ErrorText = "";
 				_ = new Regex(e.FormattedValue.ToString());
 			}
 			catch (Exception ex)
