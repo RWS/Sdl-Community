@@ -53,12 +53,14 @@ namespace Sdl.Community.NumberVerifier.GUI
 		private async void ExportButton_Click(object sender, EventArgs e)
 		{
 			var selectedPatterns = GetSelectedPatterns();
-			if (selectedPatterns.Count == 0) return;
 
 			GetExportFilePath(out var fileDialog, out var result);
 			if (result != DialogResult.OK || fileDialog.FileName == string.Empty) return;
 
-			var text = selectedPatterns.Aggregate("", (current, pattern) => current + pattern + Environment.NewLine);
+			var text = (selectedPatterns.Count > 0
+				? selectedPatterns
+				: RegexPatterns.Select(rp => rp.Pattern)).Aggregate("",
+					(current, pattern) => current + pattern + Environment.NewLine);
 			await Task.Run(() => File.WriteAllText(fileDialog.FileName, text));
 		}
 
@@ -67,7 +69,8 @@ namespace Sdl.Community.NumberVerifier.GUI
 			fileDialog = new SaveFileDialog
 			{
 				Title = PluginResources.Export_selected_expressions,
-				Filter = @"Text |*.txt"
+				Filter = @"Text |*.txt",
+				FileName = "NumberVerifier_RegexPatterns"
 			};
 			result = fileDialog.ShowDialog();
 		}
