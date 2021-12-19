@@ -98,7 +98,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 				NormalizeStrings(groupSeparators));
 			var numberParser = new NumberParser(numberSeparators.Count > 0 ? numberSeparators : null);
 
-			var regexNumber = new Regex(@"[\+\-]?\s*[0-9\.\,]*[Ee]?[\+\-]?\d+", RegexOptions.Singleline);
+			var regexNumber = new Regex(@"([\+\-]\s*)?[0-9\.\,]*[Ee]?[\+\-]?\d+", RegexOptions.Singleline);
 
 			var numberMatches = regexNumber.Matches(text).Cast<Match>().ToList();
 			numberMatches.ExcludeRanges(excludedRanges);
