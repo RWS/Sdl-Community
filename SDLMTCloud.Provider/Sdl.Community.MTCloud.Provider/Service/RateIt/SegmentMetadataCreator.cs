@@ -78,7 +78,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			if (string.IsNullOrWhiteSpace(projectPath)) return null;
 
 			string[] targetLanguageFiles;
-			if (Directory.GetDirectories(projectPath).Any(d => d == targetLanguage))
+			if (Directory.GetDirectories(projectPath).Any(d => d.Contains(targetLanguage)))
 			{
 				targetLanguageFiles = Directory.GetFiles($@"{projectPath}\{targetLanguage}");
 				filepath =
