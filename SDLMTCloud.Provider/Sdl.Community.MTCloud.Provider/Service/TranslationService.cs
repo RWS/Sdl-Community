@@ -259,8 +259,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			if (feedbackInfo.Evaluation?.UserChoseDifferently ?? false)
 			{
-				translationFeedbackRequest.QualityEstimationMt = new List<string> { feedbackInfo.Evaluation.OriginalEstimation };
-				feedbackRequest.QualityEstimationMT = new List<string> { feedbackInfo.Evaluation.UserEstimation };
+				translationFeedbackRequest.QualityEstimationMT = feedbackInfo.Evaluation.OriginalEstimation.ToUpper();
+				feedbackRequest.QualityEstimation = feedbackInfo.Evaluation.UserEstimation.ToUpper();
 			}
 
 			if (!string.IsNullOrWhiteSpace(feedbackInfo.Suggestion))
