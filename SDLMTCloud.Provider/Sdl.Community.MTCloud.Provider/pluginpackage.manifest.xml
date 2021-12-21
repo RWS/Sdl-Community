@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Language Weaver Cloud</PlugInName>
-	<Version>4.2.15.6</Version>
+	<Version>4.2.15.7</Version>
 	<Description>Language Weaver Cloud</Description>
 	<Author>RWS AppStore Team</Author>
 	<Include>

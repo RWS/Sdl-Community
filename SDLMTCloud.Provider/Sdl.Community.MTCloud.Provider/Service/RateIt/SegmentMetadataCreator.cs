@@ -72,13 +72,14 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectInCreationFilePath) ??
 			                  Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing().FilePath);
 
-			var filepath = $@"{projectPath}\{targetLanguage}\{filename}.sdlxliff";
+			filename = filename.Contains(".sdlxliff") ? filename : $"{filename}.sdlxliff";
+			var filepath = $@"{projectPath}\{targetLanguage}\{filename}";
 
 			if (File.Exists(filepath)) return filepath;
 			if (string.IsNullOrWhiteSpace(projectPath)) return null;
 
 			string[] targetLanguageFiles;
-			if (Directory.GetDirectories(projectPath).Any(d => d == targetLanguage))
+			if (Directory.GetDirectories(projectPath).Select(d => d.ToUpper()).Any(d => d.Contains(targetLanguage.ToUpper())))
 			{
 				targetLanguageFiles = Directory.GetFiles($@"{projectPath}\{targetLanguage}");
 				filepath =
