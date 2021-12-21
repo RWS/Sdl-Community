@@ -78,23 +78,12 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			if (File.Exists(filepath)) return filepath;
 			if (string.IsNullOrWhiteSpace(projectPath)) return null;
 
-			string[] targetLanguageFiles;
-			if (Directory.GetDirectories(projectPath).Select(d => d.ToUpper()).Any(d => d.Contains(targetLanguage.ToUpper())))
-			{
-				targetLanguageFiles = Directory.GetFiles($@"{projectPath}\{targetLanguage}");
-				filepath =
-					targetLanguageFiles.FirstOrDefault(
-						f => Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(filename)));
-			}
-			else
-			{
-				targetLanguageFiles = Directory.GetFiles(projectPath);
-				filepath =
-					targetLanguageFiles.FirstOrDefault(
-						f =>
-							Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(filename)) &&
-							Path.GetExtension(f) == ".sdlxliff");
-			}
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
+			filepath =
+				targetLanguageFiles.FirstOrDefault(
+					f =>
+						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(filename)) &&
+						Path.GetExtension(f) == ".sdlxliff");
 
 			return File.Exists(filepath) ? filepath : null;
 		}
