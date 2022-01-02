@@ -62,22 +62,28 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new()
 		{
-			FilePath = GetFilePath(translationData),
+			FilePath = GetFilePath(translationData.FilePath, translationData.TargetLanguage),
 			SegmentIds = translationData.Segments.Keys.ToList(),
 			TranslationOriginData = translationData.TranslationOriginData
 		};
 
-		private string GetFilePath(TranslationData translationData)
+		private string GetFilePath(string filename, string targetLanguage)
 		{
 			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectInCreationFilePath) ??
 			                  Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing().FilePath);
 
-			var filepath = $@"{projectPath}\{translationData.TargetLanguage}\{translationData.FilePath}.sdlxliff";
+			filename = filename.Contains(".sdlxliff") ? filename : $"{filename}.sdlxliff";
+			var filepath = $@"{projectPath}\{targetLanguage}\{filename}";
 
 			if (File.Exists(filepath)) return filepath;
+			if (string.IsNullOrWhiteSpace(projectPath)) return null;
+
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
 			filepath =
-				Directory.GetFiles($@"{projectPath}\{translationData.TargetLanguage}").FirstOrDefault(
-					f => Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(translationData.FilePath)));
+				targetLanguageFiles.FirstOrDefault(
+					f =>
+						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(filename)) &&
+						Path.GetExtension(f) == ".sdlxliff");
 
 			return File.Exists(filepath) ? filepath : null;
 		}

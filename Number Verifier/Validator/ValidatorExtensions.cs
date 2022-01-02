@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Parsers.Number.Model;
 
 namespace Sdl.Community.NumberVerifier.Validator
@@ -10,6 +12,75 @@ namespace Sdl.Community.NumberVerifier.Validator
 		{
 			normalized = normalized.Insert(hasSign ? 1 : 0, "0");
 			return normalized;
+		}
+
+		public static void ExcludeRanges(this List<Match> textMatches, List<ExcludedRange> excludedRanges)
+		{
+			var exclusionList = new List<Match>();
+			foreach (var match in textMatches)
+			{
+				if (excludedRanges.Contain(match.Index, match.Index + match.Length - 1)) exclusionList.Add(match);
+			}
+
+			textMatches.RemoveAll(tm => exclusionList.Contains(tm));
+		}
+
+		public static bool Contain(this List<ExcludedRange> ranges, int left, int right)
+			=> ranges?.Any(range => range.Contains(left, right)) ?? false;
+
+		public static List<ExcludedRange> MergeAdjacentRanges(this List<ExcludedRange> ranges)
+		{
+			ranges = ranges.OrderBy(r => r.LeftLimit).ToList();
+			var limits = new Stack<ExcludedRange>();
+
+			var allLimits = new List<ExcludedRange>();
+			ranges.ForEach(r =>
+			{
+				allLimits.Add(new ExcludedRange { LeftLimit = r.LeftLimit });
+				allLimits.Add(new ExcludedRange { RightLimit = r.RightLimit });
+			});
+
+			var newRanges = new List<ExcludedRange>();
+			foreach (var limit in allLimits)
+			{
+				if (limits.Count == 0)
+				{
+					limits.Push(limit);
+					continue;
+				}
+
+				if (IsLeftLimit(limits.Peek()))
+				{
+					if (IsRightLimit(limit))
+					{
+						if (limits.Count == 1)
+						{
+							newRanges.Add(new ExcludedRange
+							{
+								LeftLimit = limits.Peek().LeftLimit,
+								RightLimit = limit.RightLimit
+							});
+						}
+						limits.Pop();
+					}
+					else
+					{
+						limits.Push(limit);
+					}
+				}
+			}
+
+			return newRanges;
+		}
+
+		private static bool IsRightLimit(ExcludedRange limit)
+		{
+			return limit.RightLimit != -1;
+		}
+
+		private static bool IsLeftLimit(ExcludedRange range)
+		{
+			return range.LeftLimit != -1;
 		}
 
 		public static bool IsLeadingZeroOmitted(NumberToken numberToken)

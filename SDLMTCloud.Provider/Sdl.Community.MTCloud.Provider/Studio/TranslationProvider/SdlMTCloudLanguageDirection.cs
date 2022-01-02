@@ -249,7 +249,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		{
 			var sdlMtFileAndSegmentIds = new FileAndSegmentIds
 			{
-				FilePath = Path.GetFileName(translationUnits[0]?.FileProperties.FileConversionProperties.OriginalFilePath),
+				FilePath = Path.GetFileName(translationUnits[0]?.DocumentProperties.LastOpenedAsPath),
 				Segments = translationUnits.ToDictionary(tu => tu.DocumentSegmentPair.Properties.Id, tu => tu.SourceSegment.ToString())
 			};
 

@@ -21,7 +21,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 		private List<int> _visitedTargetIndexes;
 		private List<string> _targetNumberAreaSeparatorsList;
 
-		public void Verify(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
+		public void Verify(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts, List<ExcludedRange> sourceExcludedRanges = null, List<ExcludedRange> targetExcludedRanges = null)
 		{
 			_settings = settings;
 			_sourceText = sourceText?.Normalize(System.Text.NormalizationForm.FormKC);
@@ -43,7 +43,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			_sourceNumberAreaSeparatorsList = GetSourceNumberAreaSeparators();
 			_targetNumberAreaSeparatorsList = GetTargetNumberAreaSeparators();
 
-			Verify(out sourceNumberTexts, out targetNumberTexts);
+			Verify(out sourceNumberTexts, out targetNumberTexts, sourceExcludedRanges, targetExcludedRanges);
 		}
 
 		private void AddError(NumberText targetTextArea, Comparer sourceTargetComparison)	
@@ -245,12 +245,13 @@ namespace Sdl.Community.NumberVerifier.Validator
 			return allSeparators;
 		}
 
-		private NumberFormattingSettings GetNumberFormattingSettings(bool isSource) => new()
+		private NumberFormattingSettings GetNumberFormattingSettings(bool isSource, List<ExcludedRange> excludedRanges) => new()
 		{
 			NumberAreaSeparators = isSource ? _sourceNumberAreaSeparatorsList : _targetNumberAreaSeparatorsList,
 			ThousandSeparators = isSource ? _sourceThousandSeparators : _targetThousandSeparators,
 			DecimalSeparators = isSource ? _sourceDecimalSeparators : _targetDecimalSeparators,
-			OmitLeadingZero = isSource ? _settings.SourceOmitLeadingZero : _settings.TargetOmitLeadingZero
+			OmitLeadingZero = isSource ? _settings.SourceOmitLeadingZero : _settings.TargetOmitLeadingZero,
+			ExcludedRanges = excludedRanges
 		};
 
 		private bool IndexesNotVisisted(ComparisonItem first)
@@ -264,10 +265,10 @@ namespace Sdl.Community.NumberVerifier.Validator
 			if (targetIndex != -1) _visitedTargetIndexes.Add(targetIndex);
 		}
 
-		private void Verify(out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts)
+		private void Verify(out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts, List<ExcludedRange> sourceExcludedRanges, List<ExcludedRange> targetExcludedRanges)
 		{
-			sourceNumberTexts = new NumberTexts(_sourceText, GetNumberFormattingSettings(true));
-			targetNumberTexts = new NumberTexts(_targetText, GetNumberFormattingSettings(false));
+			sourceNumberTexts = new NumberTexts(_sourceText, GetNumberFormattingSettings(true, sourceExcludedRanges));
+			targetNumberTexts = new NumberTexts(_targetText, GetNumberFormattingSettings(false, targetExcludedRanges));
 
 			if (_settings.CheckInOrder) CheckAlignment(sourceNumberTexts, targetNumberTexts);
 			else CrossCheck(sourceNumberTexts, targetNumberTexts);

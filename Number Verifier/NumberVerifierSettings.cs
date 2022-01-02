@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Community.NumberVerifier.Model;
+using Sdl.Community.NumberVerifier.Validator;
 using Sdl.Core.Settings;
 
 namespace Sdl.Community.NumberVerifier
@@ -21,6 +25,15 @@ namespace Sdl.Community.NumberVerifier
 			set => GetSetting<bool>(nameof(CheckInOrder)).Value = value;
 			get => GetSetting<bool>(nameof(CheckInOrder)).Value;
 		}
+
+		public List<RegexPattern> RegexExclusionList 
+		{
+			set => GetSetting<List<RegexPattern>>(nameof(RegexExclusionList)).Value = value;
+			get => GetSetting<List<RegexPattern>>(nameof(RegexExclusionList)).Value;
+		}
+
+		public List<ExcludedRange> SourceExcludedRanges { get; set; }
+		public List<ExcludedRange> TargetExcludedRanges { get; set; }
 
 		public bool ExcludeTagText
 		{
@@ -594,5 +607,7 @@ namespace Sdl.Community.NumberVerifier
 		{
 			return TargetThousandsCustom ? SourceThousandsCustomSeparator : string.Empty;
 		}
+
+		
 	}
 }

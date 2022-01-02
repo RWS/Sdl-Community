@@ -2,7 +2,7 @@
 {
 	public class Constants
 	{
-		public static string MTCloudTranslateAPIUri = "https://translate-api.sdlbeglobal.com";
+		public static string MTCloudTranslateAPIUri = "https://api.languageweaver.com";
 		public static string MTCloudTranslateUri = "https://translate.sdlbeglobal.com";
 		public static string MTCloudUriScheme = "sdlmtcloud";		
 		public static string MTCloudUriResourceUserToken = "/token/user";

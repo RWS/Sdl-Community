@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.NumberVerifier.Model;
 
 namespace Sdl.Community.NumberVerifier.Interfaces
 {
@@ -111,6 +112,7 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 		string AlphanumericsCustomSeparator { get; set; }
 
 		string HindiNumber { get; set; }
+		List<RegexPattern> RegexExclusionList { get; set; }
 
 		IEnumerable<string> GetSourceDecimalSeparators();
 

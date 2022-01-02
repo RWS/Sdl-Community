@@ -10,6 +10,6 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 
 		ITextGenerator TextGenerator { get; }
 
-		List<ErrorReporting> Verify(ISegmentPair segmentPair);
+		List<ErrorReporting> Verify(ISegmentPair segmentPair, List<ExcludedRange> sourceExcludedRanges = null, List<ExcludedRange> targetExcludedRanges = null);
 	}
 }
