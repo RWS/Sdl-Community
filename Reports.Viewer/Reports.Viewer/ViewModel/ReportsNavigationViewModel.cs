@@ -599,7 +599,11 @@ namespace Reports.Viewer.Plus.ViewModel
 				}
 			}
 
-			reportGroups[0].IsSelected = true;
+			var firstGroup = reportGroups.FirstOrDefault();
+			if (firstGroup != null)
+			{
+				firstGroup.IsSelected = true;
+			}
 
 			return reportGroups;
 		}
