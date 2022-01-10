@@ -187,13 +187,13 @@ namespace Reports.Viewer.Api
 		{
 			get
 			{
-				var settingsBundle = Project.GetSettings();
-				var reportViewerSettings = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
-				var nonStudioReports = DeserializeReports(reportViewerSettings.ReportsJson.Value).Where(a => !a.IsStudioReport).ToList();
-				var studioReports = _projectReportsOperations.GetProjectReports();
+				var settingsBundle = Project?.GetSettings();
+				var reportViewerSettings = settingsBundle?.GetSettingsGroup<ReportsViewerSettings>();
+				var nonStudioReports = DeserializeReports(reportViewerSettings?.ReportsJson?.Value)?.Where(a => !a.IsStudioReport).ToList();
+				var studioReports = _projectReportsOperations?.GetProjectReports();
 
-				var count1 = nonStudioReports.Count + studioReports.Count;
-				var count2 = _reports.Count;
+				var count1 = nonStudioReports?.Count + studioReports?.Count;
+				var count2 = _reports?.Count;
 
 				return count1 != count2;
 			}

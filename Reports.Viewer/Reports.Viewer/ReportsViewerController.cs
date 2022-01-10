@@ -278,7 +278,7 @@ namespace Reports.Viewer.Plus
 			_reportsNavigationViewModel = new ReportsNavigationViewModel(reports, GetSettings(), _pathInfo);
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
-			_reportsNavigationViewModel.ProjectLocalFolder = _reportsController.ProjectLocalFolder;
+			_reportsNavigationViewModel.ProjectLocalFolder = _reportsController?.ProjectLocalFolder;
 			_reportsNavigationView.DataContext = _reportsNavigationViewModel;
 		}
 
@@ -371,7 +371,7 @@ namespace Reports.Viewer.Plus
 
 		private void ReportsViewerController_ActivationChanged(object sender, ActivationChangedEventArgs e)
 		{
-			if (e.Active && _reportsController.IsDirty)
+			if (e.Active && _reportsController != null && _reportsController.IsDirty)
 			{
 				RefreshView();
 			}
