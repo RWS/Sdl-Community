@@ -11,7 +11,8 @@ namespace Sdl.Community.StudioViews.Model
 			Added,
 			Removed,
 			Matched,
-			LeftOnly
+			LeftOnly,
+			MarkupData
 		}
 		
 		public string SortId { get; set; }
@@ -23,6 +24,8 @@ namespace Sdl.Community.StudioViews.Model
 		public ISegmentPair SegmentPairLeft { get; set; }
 
 		public ISegmentPair SegmentPairRight { get; set; }
+
+		public IAbstractMarkupData MarkupData { get; set; }
 
 	}
 }

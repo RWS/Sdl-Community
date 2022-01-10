@@ -49,6 +49,7 @@ namespace Sdl.Community.StudioViews.Actions
 				return;
 			}
 
+			var project = _projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault();
 			var commonService = new ProjectFileService();
 			var sdlxliffMerger = new SdlxliffMerger();
 			var segmentBuilder = new SegmentBuilder();
@@ -56,7 +57,7 @@ namespace Sdl.Community.StudioViews.Actions
 			var sdlXliffReader = new SdlxliffReader();
 
 			_window = new StudioViewsFilesSplitView();
-			var model = new StudioViewsFilesSplitViewModel(_window, selectedFiles, commonService,
+			var model = new StudioViewsFilesSplitViewModel(_window, project, selectedFiles, commonService,
 				sdlxliffMerger, sdlxliffExporter, sdlXliffReader);
 
 			_window.DataContext = model;

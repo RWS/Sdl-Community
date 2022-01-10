@@ -6,14 +6,14 @@ namespace Sdl.Community.StudioViews.Model
 	{
 		public ParagraphInfo()
 		{
-			SegmentInfos = new List<SegmentInfo>();
+			SegmentIdInfos = new List<SegmentIdInfo>();
 			SegmentationMrks = new List<MrkInfo>();
 			ContextDefinitions = new List<ParagraphUnitContext>();
 		}
 
 		public string ParagraphId { get; set; }
 
-		public List<SegmentInfo> SegmentInfos { get; set; }
+		public List<SegmentIdInfo> SegmentIdInfos { get; set; }
 
 		public List<MrkInfo> SegmentationMrks { get; set; }
 

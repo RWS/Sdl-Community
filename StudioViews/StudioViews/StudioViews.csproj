@@ -139,6 +139,7 @@
     <Compile Include="Controls\SelectedItemsAwareDataGrid.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Extensions\ParagraphUnitExtensions.cs" />
+    <Compile Include="Model\AlignmentDataType.cs" />
     <Compile Include="Model\AlignmentInfo.cs" />
     <Compile Include="Model\AnalysisBand.cs" />
     <Compile Include="Model\ConfirmationStatus.cs" />
@@ -152,9 +153,12 @@
     <Compile Include="Model\ElementTagPair.cs" />
     <Compile Include="Model\ElementText.cs" />
     <Compile Include="Model\ExportResult.cs" />
+    <Compile Include="Interfaces\ISegmentInfo.cs" />
     <Compile Include="Model\MessageInfo.cs" />
     <Compile Include="Model\OutputFile.cs" />
     <Compile Include="Model\ParagraphUnitResult.cs" />
+    <Compile Include="Model\SegmentInfoBase.cs" />
+    <Compile Include="Model\SegmentMarkupInfo.cs" />
     <Compile Include="Model\SegmentPairMap.cs" />
     <Compile Include="Model\SystemFileInfo.cs" />
     <Compile Include="Model\FilterItem.cs" />
@@ -163,7 +167,7 @@
     <Compile Include="Model\ParagraphInfo.cs" />
     <Compile Include="Model\ParagraphUnitInfo.cs" />
     <Compile Include="Model\ProjectFileInfo.cs" />
-    <Compile Include="Model\SegmentInfo.cs" />
+    <Compile Include="Model\SegmentIdInfo.cs" />
     <Compile Include="Model\SegmentPairInfo.cs" />
     <Compile Include="Model\TokenInfo.cs" />
     <Compile Include="Providers\DisplayFilter.cs" />

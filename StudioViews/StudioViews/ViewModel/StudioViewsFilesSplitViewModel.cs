@@ -13,7 +13,10 @@ using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Services;
+using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.ProjectAutomation.FileBased.Reports.Operations;
 using MessageBox = System.Windows.MessageBox;
 using Task = System.Threading.Tasks.Task;
 
@@ -27,6 +30,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly List<ProjectFile> _selectedFiles;
 		private readonly ProjectFileService _projectFileService;
+		private readonly FileBasedProject _project;
 
 		private int _maxNumberOfWords;
 		private int _numberOfEqualParts;
@@ -45,10 +49,11 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _exportPathBrowseCommand;
 		private ICommand _openFolderInExplorerCommand;
 
-		public StudioViewsFilesSplitViewModel(Window window, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
+		public StudioViewsFilesSplitViewModel(Window window, FileBasedProject project, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
 			_window = window;
+			_project = project;
 			_selectedFiles = selectedFiles;
 			_projectFileService = projectFileService;
 			_sdlxliffMerger = sdlxliffMerger;
@@ -280,7 +285,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				return ExportPathIsValid && FileNameIsValid && segmentIdsIsValid;
 			}
 		}
-		
+
 		public DialogResult DialogResult { get; set; }
 
 		public string Message { get; private set; }
@@ -342,6 +347,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var logFileName = "StudioViews_" + "Split" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 				LogFilePath = Path.Combine(ExportPath, logFileName);
 
+				if (!HasSegmentationMarkers())
+				{
+					// needed to add segmentation markers to the files
+					RunPretranslateWithEmptyTm(_project, _selectedFiles.FirstOrDefault()?.Language);
+				}
+
 				var task = Task.Run(ExportFiles);
 				task.ContinueWith(t =>
 				{
@@ -351,7 +362,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					WriteLogFile(t.Result, LogFilePath);
 
 					DialogResult = DialogResult.OK;
-					
+
 					AttemptToCloseWindow();
 				});
 			}
@@ -363,6 +374,58 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
+		private void RunPretranslateWithEmptyTm(FileBasedProject project, Language langauge)
+		{
+			var operations = new ProjectReportsOperations(project);
+			
+			var tmProviderConfigOrig = project.GetTranslationProviderConfiguration();
+			var tmProviderConfig = project.GetTranslationProviderConfiguration();
+
+			foreach (var cascadeEntry in tmProviderConfig.Entries)
+			{
+				cascadeEntry.MainTranslationProvider.Enabled = false;
+				foreach (var providerReference in cascadeEntry.ProjectTranslationMemories)
+				{
+					providerReference.Enabled = false;
+				}
+			}
+
+			project.UpdateTranslationProviderConfiguration(tmProviderConfig);
+			project.Save();
+
+			try
+			{
+				var targetLanguageFileIds = project.GetTargetLanguageFiles(langauge)?.GetIds();
+				var task1 = project.RunAutomaticTask(targetLanguageFileIds,
+					AutomaticTaskTemplateIds.PreTranslateFiles);
+
+				operations.RemoveReports(task1.Reports.Select(a => a.Id).ToList());
+			}
+			catch
+			{
+				// ignore/ catch all
+			}
+			finally
+			{
+				project.UpdateTranslationProviderConfiguration(tmProviderConfigOrig);
+				project.Save();
+			}
+		}
+
+		private bool HasSegmentationMarkers()
+		{
+			foreach (var selectedFile in _selectedFiles)
+			{
+				var segmentPairs = _sdlxliffReader.GetSegmentPairs(selectedFile?.LocalFilePath);
+				if (segmentPairs.Count > 0)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		private void WriteLogFile(ExportResult exportResult, string logFilePath)
 		{
 			_window.Dispatcher.Invoke(
@@ -372,7 +435,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					{
 						sr.WriteLine(PluginResources.Plugin_Name);
 						sr.WriteLine(PluginResources.LogFile_Title_Task_Split_Files);
-						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing,  _projectFileService.GetDateTimeToString(ProcessingDateTime));
+						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
 
 						sr.WriteLine(string.Empty);
 						sr.WriteLine(PluginResources.LogFile_Tab_Label_Input_Files_Number, exportResult.InputFiles.Count);
@@ -444,9 +507,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 					return await Task.FromResult(exportResult);
 				}
 			}
-			
+
 			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
-			
+
 			var segmentPairSplits = GetSegmentPairSplits(segmentPairs);
 			if (segmentPairSplits == null)
 			{
@@ -476,7 +539,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			exportResult.Success = true;
 			exportResult.Message = Message = PluginResources.Message_Successfully_Completed_Split_Operation;
 			exportResult.Message += Environment.NewLine + Environment.NewLine;
-			exportResult.Message += string.Format(PluginResources.Message_Exported_Segments_into_Files, 
+			exportResult.Message += string.Format(PluginResources.Message_Exported_Segments_into_Files,
 				exportResult.OutputFiles.Sum(a => a.SegmentCount), fileIndex);
 
 

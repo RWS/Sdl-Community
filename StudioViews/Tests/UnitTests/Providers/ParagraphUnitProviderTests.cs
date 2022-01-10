@@ -29,7 +29,7 @@ namespace UnitTests.Providers
 			};
 			var filterItemService = new FilterItemService(analysisBands);
 			var segmentVisitor = new SegmentVisitor();
-			_paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
+			_paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService, segmentBuilder);
 		}
 
 		[Fact]

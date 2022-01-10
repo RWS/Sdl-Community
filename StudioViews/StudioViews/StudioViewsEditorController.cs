@@ -38,7 +38,7 @@ namespace Sdl.Community.StudioViews
 			var sdlxliffMerger = new SdlxliffMerger();
 			var segmentBuilder = new SegmentBuilder();
 			var segmentVisitor = new SegmentVisitor();
-			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
+			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService, segmentBuilder);
 			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
 			var displayFilter = new DisplayFilter();

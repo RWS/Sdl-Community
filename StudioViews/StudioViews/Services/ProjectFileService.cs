@@ -111,7 +111,7 @@ namespace Sdl.Community.StudioViews.Services
 					};
 
 				segmentPairInfo.FileId = GetProjectFileInfo(projectFiles, segmentPairInfo.ParagraphUnitId,
-					segmentPairInfo.SegmentId).FileId;
+					segmentPairInfo.SegmentId)?.FileId;
 
 				segmentPairInfos.Add(segmentPairInfo);
 			}
@@ -144,7 +144,7 @@ namespace Sdl.Community.StudioViews.Services
 			foreach (var projectFile in projectFiles)
 			{
 				var paragraphInfo = projectFile.ParagraphInfos.FirstOrDefault(a => a.ParagraphId == paragraphId);
-				var segmentInfo = paragraphInfo?.SegmentInfos.FirstOrDefault(a => a.OriginalSegmentId == segmentId);
+				var segmentInfo = paragraphInfo?.SegmentIdInfos.FirstOrDefault(a => a.OriginalSegmentId == segmentId);
 				if (segmentInfo != null)
 				{
 					return projectFile;
@@ -460,7 +460,7 @@ namespace Sdl.Community.StudioViews.Services
 
 					foreach (var segmentId in segmentIds)
 					{
-						paragraphInfo.SegmentInfos.Add(new SegmentInfo
+						paragraphInfo.SegmentIdInfos.Add(new SegmentIdInfo
 						{
 							OriginalSegmentId = segmentId,
 							SegmentId = (++segmentIdCounter).ToString()

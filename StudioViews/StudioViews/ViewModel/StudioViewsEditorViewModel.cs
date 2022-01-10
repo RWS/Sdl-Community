@@ -652,14 +652,20 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				var segmentPair = _projectFileService.GetSegmentPair(_activeDocument, updatedSegmentPair.ParagraphUnitId,
 					updatedSegmentPair.SegmentId);
-				if (segmentPair?.Target == null
-					|| IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair.Target))
+				
+				if (segmentPair?.Target == null)
 				{
 					continue;
 				}
 
-				if (IsEmpty(updatedSegmentPair.SegmentPair.Source) && !IsEmpty(segmentPair.Source) &&
-					updatedSegmentPair.SegmentPair.Properties.TranslationOrigin.OriginSystem == Constants.MergedParagraph)
+				if (IsSame(segmentPair.Source, updatedSegmentPair.SegmentPair?.Source) &&
+				    IsSame(segmentPair.Target, updatedSegmentPair.SegmentPair?.Target))
+				{
+					continue;
+				}
+
+				if (IsEmpty(updatedSegmentPair.SegmentPair?.Source) && !IsEmpty(segmentPair.Source) &&
+				    updatedSegmentPair.SegmentPair?.Properties?.TranslationOrigin?.OriginSystem == Constants.MergedParagraph)
 				{
 					UpdateSegmentPair(segmentPair, updatedSegmentPair);
 

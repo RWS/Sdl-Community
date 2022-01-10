@@ -55,8 +55,9 @@ namespace Sdl.Community.StudioViews.Actions
 			var filterItemService = new FilterItemService(analysisBands);
 			var commonService = new ProjectFileService();
 			var segmentVisitor = new SegmentVisitor();
-			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService);
-			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemService, paragraphUnitProvider);
+			var segmentBuilder = new SegmentBuilder();
+			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService, segmentBuilder);
+			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemService, paragraphUnitProvider, segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
 
 			_window = new StudioViewsFilesImportView();

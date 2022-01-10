@@ -16,11 +16,11 @@ namespace Sdl.Community.StudioViews.Providers
 		private readonly FilterItemService _filterItemService;
 		private readonly SegmentBuilder _segmentBuilder;
 
-		public ParagraphUnitProvider(SegmentVisitor segmentVisitor, FilterItemService filterItemService)
+		public ParagraphUnitProvider(SegmentVisitor segmentVisitor, FilterItemService filterItemService, SegmentBuilder segmentBuilder)
 		{
 			_segmentVisitor = segmentVisitor;
 			_filterItemService = filterItemService;
-			_segmentBuilder = new SegmentBuilder();
+			_segmentBuilder = segmentBuilder;
 		}
 
 		public ParagraphUnitResult GetUpdatedParagraphUnit(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight,
@@ -44,8 +44,9 @@ namespace Sdl.Community.StudioViews.Providers
 			result.Paragraph.Source.Clear();
 			result.Paragraph.Target.Clear();
 
+
 			var alignments = GetSegmentPairAlignments(paragraphUnitLeft, paragraphUnitRight);
-			
+
 			var sourceContainer = GetContainer(paragraphUnitLeft.Source, result.Paragraph.Source);
 			var targetContainer = GetContainer(paragraphUnitLeft.Target, result.Paragraph.Target);
 
@@ -53,6 +54,12 @@ namespace Sdl.Community.StudioViews.Providers
 			{
 				switch (alignmentInfo.Alignment)
 				{
+					case AlignmentInfo.AlignmentType.MarkupData:
+						{
+							sourceContainer.Add(alignmentInfo.MarkupData.Clone() as IAbstractMarkupData);
+							targetContainer.Add(alignmentInfo.MarkupData.Clone() as IAbstractMarkupData);
+							break;
+						}
 					case AlignmentInfo.AlignmentType.Added:
 					case AlignmentInfo.AlignmentType.Matched:
 						var isExcluded = SegmentIsExcluded(excludeFilterIds, alignmentInfo.SegmentPairLeft);
@@ -86,9 +93,52 @@ namespace Sdl.Community.StudioViews.Providers
 		public List<AlignmentInfo> GetSegmentPairAlignments(IParagraphUnit paragraphUnitLeft, IParagraphUnit paragraphUnitRight)
 		{
 			var alignments = new List<AlignmentInfo>();
+			var aligmentDataTypes = new List<AlignmentDataType>();
+			foreach (var markupData in paragraphUnitLeft.Source)
+			{
+				var aligmentDataType = new AlignmentDataType();
+				if (markupData is ISegment segment)
+				{
+					aligmentDataType.Id = segment.Properties.Id.Id;
+				}
+
+				if (markupData is ITagPair tagPair)
+				{
+					var innerSegment = GetSegment(tagPair);
+					if (innerSegment != null)
+					{
+						aligmentDataType.Id = innerSegment.Properties.Id.Id;
+					}
+				}
+
+				aligmentDataType.IndexInParent = markupData.IndexInParent;
+				aligmentDataType.MarkupData = markupData;
+
+				aligmentDataTypes.Add(aligmentDataType);
+			}
+
+			var previousIndexInParent = 0;
 
 			foreach (var segmentPairLeft in paragraphUnitLeft.SegmentPairs)
 			{
+				var markupDataLeft = aligmentDataTypes.FirstOrDefault(a => a.Id == segmentPairLeft.Properties.Id.Id);
+				if (markupDataLeft != null)
+				{
+					if ((previousIndexInParent + 1) < markupDataLeft.IndexInParent)
+					{
+						for (var i = (previousIndexInParent + 1); i < markupDataLeft.IndexInParent; i++)
+						{
+							alignments.Add(new AlignmentInfo
+							{
+								SortId = GetSortId(segmentPairLeft.Properties.Id.Id),
+								Alignment = AlignmentInfo.AlignmentType.MarkupData,
+								MarkupData = aligmentDataTypes[i].MarkupData
+							});
+						}
+					}
+					previousIndexInParent = markupDataLeft.IndexInParent;
+				}
+
 				var segmentIdLeft = segmentPairLeft.Properties.Id.Id;
 				var segmentPairRight = paragraphUnitRight.SegmentPairs.FirstOrDefault(
 					a => a.Properties.Id.Id == segmentIdLeft);
@@ -156,6 +206,24 @@ namespace Sdl.Community.StudioViews.Providers
 			}
 
 			return NormalizeAlignment(alignments.OrderBy(a => a.SortId).ToList());
+		}
+
+		private ISegment GetSegment(ITagPair tagPair)
+		{
+			foreach (var markupData in tagPair.AllSubItems)
+			{
+				if (markupData is ISegment segment)
+				{
+					return segment;
+				}
+
+				if (markupData is ITagPair innerTagPair)
+				{
+					return GetSegment(innerTagPair);
+				}
+			}
+
+			return null;
 		}
 
 		private List<AlignmentInfo> NormalizeAlignment(List<AlignmentInfo> alignments)

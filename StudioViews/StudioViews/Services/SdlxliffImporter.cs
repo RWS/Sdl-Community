@@ -13,13 +13,15 @@ namespace Sdl.Community.StudioViews.Services
 		private readonly ProjectFileService _projectFileService;
 		private readonly FilterItemService _filterItemService;
 		private readonly ParagraphUnitProvider _paragraphUnitProvider;
+		private readonly SegmentBuilder _segmentBuilder;
 
 		public SdlxliffImporter(ProjectFileService projectFileService, FilterItemService filterItemService, 
-			ParagraphUnitProvider paragraphUnitProvider)
+			ParagraphUnitProvider paragraphUnitProvider, SegmentBuilder segmentBuilder)
 		{
 			_projectFileService = projectFileService;
 			_filterItemService = filterItemService;
 			_paragraphUnitProvider = paragraphUnitProvider;
+			_segmentBuilder = segmentBuilder;
 		}
 
 		public ImportResult UpdateFile(List<SegmentPairInfo> updatedSegmentPairs, List<string> excludeFilterIds, string filePathInput, string filePathOutput)
@@ -28,7 +30,7 @@ namespace Sdl.Community.StudioViews.Services
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
 			var contentWriter = new ContentImporter(updatedSegmentPairs, excludeFilterIds,
-				_filterItemService, _paragraphUnitProvider);
+				_filterItemService, _paragraphUnitProvider, _segmentBuilder);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();
@@ -46,20 +48,20 @@ namespace Sdl.Community.StudioViews.Services
 			};
 		}
 
-		private List<SegmentPairInfo> GetSegmentPairs(string filePathInput)
-		{
-			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, null, null);
+		//private List<SegmentPairInfo> GetSegmentPairs(string filePathInput)
+		//{
+		//	var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
+		//	var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, null, null);
 
-			var contentReader = new ContentReader();
+		//	var contentReader = new ContentReader();
 
-			converter.AddBilingualProcessor(contentReader);
-			converter.SynchronizeDocumentProperties();
+		//	converter.AddBilingualProcessor(contentReader);
+		//	converter.SynchronizeDocumentProperties();
 
-			converter.Parse();
+		//	converter.Parse();
 
-			return contentReader.SegmentPairInfos;
-		}
+		//	return contentReader.SegmentPairInfos;
+		//}
 
 		private List<string> GetTagIds(string filePath)
 		{
