@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqParser;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 {
@@ -22,6 +24,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		private ContentSearchResult _selectedItem;
 		private string _textBoxColor;
 		private readonly Window _window;
+		private ICommand _applyFilterCommand;
 
 		public PreviewViewModel(Window window, List<ContentSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTms, TranslationMemoryViewModel model)
@@ -30,14 +33,68 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			_textBoxColor = "White";
 	
 			SourceSearchResults = new ObservableCollection<ContentSearchResult>(searchResults);
+			SourceSearchResultsCollectionView = CollectionViewSource.GetDefaultView(SourceSearchResults);
 
 			_model = model;
 			_anonymizeTms = anonymizeTms;
 		}
 
-		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ?? (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
+		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??= new CommandHandler(SelectResults, true);
 
-		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+		public ICommand ApplyCommand => _applyCommand ??= new CommandHandler(ApplyChanges, true);
+
+		public ICommand ApplyFilterCommand
+			=>
+				_applyFilterCommand ??=
+					new RelayCommand(ApplyFilter,
+						obj => obj?.ToString() switch { "Reset" => FilterPresent, _ => !FilterPresent });
+
+		public bool FilterPresent => SourceSearchResultsCollectionView.Filter is not null;
+
+		private void ApplyFilter(object parameter)
+		{
+			var parameterString = parameter.ToString();
+			if (parameterString == "Reset")
+			{
+				RemoveFilter();
+				return;
+			}
+
+			//by converting to FilterableTm, we choose which properties we let users filter on
+			var sourceSearchResultsFilterable = SourceSearchResults.Select(ssr => new FilterableTm
+			{
+				Id = ssr.TranslationUnit.ResourceId.Id,
+				ChangeDate = ssr.TranslationUnit.SystemFields.ChangeDate,
+				UseDate = ssr.TranslationUnit.SystemFields.UseDate,
+				CreationDate = ssr.TranslationUnit.SystemFields.CreationDate
+			});
+
+			try
+			{
+				sourceSearchResultsFilterable = sourceSearchResultsFilterable.Evaluate(parameterString);
+				var filteredResultsIds = sourceSearchResultsFilterable.Select(ssr => ssr.Id).ToList();
+				SetFilter(filteredResultsIds);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+
+		private void SetFilter(List<int> filteredResultsIds)
+		{
+			SourceSearchResultsCollectionView.Filter =
+				csr =>
+					csr is ContentSearchResult contentSearchResult &&
+					filteredResultsIds.Contains(contentSearchResult.TranslationUnit.ResourceId.Id);
+			OnPropertyChanged(nameof(FilterPresent));
+		}
+
+		private void RemoveFilter()
+		{
+			SourceSearchResultsCollectionView.Filter = null;
+			OnPropertyChanged(nameof(FilterPresent));
+		}
 
 		public void ApplyChanges()
 		{
@@ -273,6 +330,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		}
 
 		private bool SelectingAllAction { get; set; }
+
+		public ICollectionView SourceSearchResultsCollectionView { get; set; }
 
 		private void SelectResults()
 		{
