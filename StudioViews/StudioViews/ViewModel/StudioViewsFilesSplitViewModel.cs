@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
 using Sdl.Community.StudioViews.Model;
@@ -29,8 +31,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly List<ProjectFile> _selectedFiles;
+		private readonly FilterItemService _filterItemService;
 		private readonly ProjectFileService _projectFileService;
 		private readonly FileBasedProject _project;
+
 
 		private int _maxNumberOfWords;
 		private int _numberOfEqualParts;
@@ -44,13 +48,20 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private bool _fileNameIsValid;
 		private bool _progressIsVisible;
 
+		private List<FilterItem> _filterItems;
+		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
+
+
+		private ICommand _clearFiltersCommand;
+		private ICommand _selectedItemsChangedCommand;
+
 		private ICommand _okCommand;
 		private ICommand _resetCommand;
 		private ICommand _exportPathBrowseCommand;
 		private ICommand _openFolderInExplorerCommand;
 
 		public StudioViewsFilesSplitViewModel(Window window, FileBasedProject project, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
-			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
+			FilterItemService filterItemService, SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
 			_window = window;
 			_project = project;
@@ -59,12 +70,17 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_sdlxliffMerger = sdlxliffMerger;
 			_sdlxliffExporter = sdlxliffExporter;
 			_sdlxliffReader = sdlxliffReader;
+			_filterItemService = filterItemService;
 
 			WindowTitle = PluginResources.StudioViews_SplitSelectedFiles_Name;
 
 			DialogResult = DialogResult.None;
 			Reset(null);
 		}
+
+		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
+
+		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
 
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
 
@@ -176,6 +192,36 @@ namespace Sdl.Community.StudioViews.ViewModel
 				_splitBySegmentIds = value;
 				OnPropertyChanged(nameof(SplitBySegmentIds));
 				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+		public List<FilterItem> FilterItems
+		{
+			get => _filterItems;
+			set
+			{
+				if (_filterItems == value)
+				{
+					return;
+				}
+
+				_filterItems = value;
+				OnPropertyChanged(nameof(FilterItems));
+			}
+		}
+
+		public ObservableCollection<FilterItem> SelectedExcludeFilterItems
+		{
+			get => _selectedExcludeFilterItems ?? (_selectedExcludeFilterItems = new ObservableCollection<FilterItem>());
+			set
+			{
+				if (_selectedExcludeFilterItems == value)
+				{
+					return;
+				}
+
+				_selectedExcludeFilterItems = value;
+				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
 			}
 		}
 
@@ -469,6 +515,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private void Reset(object paramter)
 		{
+			FilterItems = new List<FilterItem>(_filterItemService.GetFilterItems());
+			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
+				_filterItemService.GetFilterItems(FilterItems, new List<string> { "Locked" }));
+
 			ProgressIsVisible = false;
 			SplitByWordCount = true;
 			MaxNumberOfWords = 1000;
@@ -595,16 +645,25 @@ namespace Sdl.Community.StudioViews.ViewModel
 			return segmentPairsSplits;
 		}
 
-		private IEnumerable<List<SegmentPairInfo>> GetSegmentPairsSplitByMaxWordCount(IEnumerable<SegmentPairInfo> segmentPairs, int maxWordCount)
+		private IEnumerable<List<SegmentPairInfo>> GetSegmentPairsSplitByMaxWordCount(IEnumerable<SegmentPairInfo> segmentPairInfos, int maxWordCount)
 		{
 			var segmentPairsSplits = new List<List<SegmentPairInfo>>();
-
+			var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
 			var splitWordCount = 0;
 			var segmentPairSplits = new List<SegmentPairInfo>();
-			foreach (var segmentPair in segmentPairs)
+			foreach (var segmentPairInfo in segmentPairInfos)
 			{
-				segmentPairSplits.Add(segmentPair);
-				splitWordCount += segmentPair.SourceWordCounts.Words;
+				segmentPairSplits.Add(segmentPairInfo);
+
+				// include the word count based on the segment status properties selected by the user
+				var status = segmentPairInfo.SegmentPair.Properties.ConfirmationLevel.ToString();
+				var match = _filterItemService.GetTranslationOriginType(segmentPairInfo.SegmentPair.Target.Properties.TranslationOrigin);
+				if ((!segmentPairInfo.SegmentPair.Properties.IsLocked || !excludeFilterIds.Exists(a => a == "Locked")) 
+				    && !excludeFilterIds.Exists(a => a == status) 
+				    && !excludeFilterIds.Exists(a => a == match))
+				{
+					splitWordCount += segmentPairInfo.SourceWordCounts.Words;
+				}
 
 				if (splitWordCount >= maxWordCount)
 				{
@@ -650,9 +709,25 @@ namespace Sdl.Community.StudioViews.ViewModel
 			return segmentIds;
 		}
 
-		private int GetTotalWordCount(IEnumerable<SegmentPairInfo> segmentPairs)
+		private int GetTotalWordCount(IEnumerable<SegmentPairInfo> segmentPairInfos)
 		{
-			return segmentPairs.Sum(segmentPair => segmentPair.SourceWordCounts.Words);
+			var excludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
+			var splitWordCount = 0;
+			foreach (var segmentPairInfo in segmentPairInfos)
+			{
+				// include the word count based on the segment status properties selected by the user
+				var status = segmentPairInfo.SegmentPair.Properties.ConfirmationLevel.ToString();
+				var match = _filterItemService.GetTranslationOriginType(segmentPairInfo.SegmentPair.Target.Properties
+					.TranslationOrigin);
+				if ((!segmentPairInfo.SegmentPair.Properties.IsLocked || !excludeFilterIds.Exists(a => a == "Locked"))
+				    && !excludeFilterIds.Exists(a => a == status)
+				    && !excludeFilterIds.Exists(a => a == match))
+				{
+					splitWordCount += segmentPairInfo.SourceWordCounts.Words;
+				}
+			}
+
+			return splitWordCount;
 		}
 
 		private string GetFilePathOutput(string fileName, string fileFolder, int fileIndex)
@@ -715,6 +790,20 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 			return outputFolder;
+		}
+
+		private void ClearFilters(object parameter)
+		{
+			SelectedExcludeFilterItems.Clear();
+			OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+		}
+
+		private void SelectedItemsChanged(object parameter)
+		{
+			if (parameter is SelectedItemsChangedEventArgs)
+			{
+				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
+			}
 		}
 	}
 }

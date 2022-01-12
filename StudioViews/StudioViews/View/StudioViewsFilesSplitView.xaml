@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:sdl="http://schemas.sdl.com/xaml"
+        xmlns:rws="http://schemas.rws.com/xaml"
         xmlns:generic="clr-namespace:Sdl.Community.StudioViews.Themes.Generic"
         ResizeMode="CanResizeWithGrip"
         WindowStyle="ThreeDBorderWindow"
@@ -16,7 +16,7 @@
         xmlns:controls="clr-namespace:Sdl.Community.StudioViews.Controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:StudioViewsFilesSplitViewModel}" 
-        MinHeight="400" MinWidth="600" Height="420" Width="620">
+        MinHeight="525" MinWidth="600" Height="535" Width="620">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -58,6 +58,7 @@
 			<GroupBox Grid.Row="1" Margin="5" Padding="5" Header="Split options">
 				<Grid >
 					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>
@@ -123,6 +124,41 @@
 						<TextBox Grid.Row="1" Grid.Column="1" Width="200" VerticalContentAlignment="Center"
 						 Text="{Binding SegmentIdsString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 						<Label Grid.Row="1" Grid.Column="2" Content="(comma-separated list)"/>
+					</Grid>
+
+					<Grid Grid.Row="3" Margin="5,20,5,2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<TextBlock VerticalAlignment="Center" Text="Exclude segments with the following status when calculating the word count to split the content:"  Margin="5,5,5,5"/>
+
+						<rws:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+						                         Margin="5,0,5,0" 
+						                         Height="55" 
+						                         MaxDropDownHeight="250"
+						                         Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+						                         SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+						                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+						                         ItemsSource="{Binding FilterItems}"            
+						                         SelectedItems="{Binding SelectedExcludeFilterItems}"
+						                         rws:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+						                         EnableGrouping="True"
+						                         EnableFiltering="True"
+						                         IsEditable="True"
+						                         EnableAutoComplete="True"
+						                         ClearFilterOnDropdownClosing="True"
+						                         ClearSelectionOnFilterChanged="True"
+						/>
+						<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+						        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
+							<Underline>Clear selected items</Underline>
+						</Button>
 					</Grid>
 				</Grid>
 			</GroupBox>

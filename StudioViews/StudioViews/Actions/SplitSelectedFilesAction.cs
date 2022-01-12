@@ -10,6 +10,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Versioning;
 using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.StudioViews.Actions
@@ -26,11 +27,13 @@ namespace Sdl.Community.StudioViews.Actions
 		private StudioViewsFilesSplitView _window;
 		private FilesController _filesController;
 		private ProjectsController _projectsController;
+		private StudioVersionService _studioVersionService;
 
 		public override void Initialize()
 		{
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			_studioVersionService = new StudioVersionService();
 		}
 
 		protected override void Execute()
@@ -50,14 +53,19 @@ namespace Sdl.Community.StudioViews.Actions
 			}
 
 			var project = _projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault();
-			var commonService = new ProjectFileService();
+			var projectFileService = new ProjectFileService();
 			var sdlxliffMerger = new SdlxliffMerger();
 			var segmentBuilder = new SegmentBuilder();
 			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
 
+
+			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
+			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
+			var filterItemService = new FilterItemService(analysisBands);
+
 			_window = new StudioViewsFilesSplitView();
-			var model = new StudioViewsFilesSplitViewModel(_window, project, selectedFiles, commonService,
+			var model = new StudioViewsFilesSplitViewModel(_window, project, selectedFiles, projectFileService, filterItemService,
 				sdlxliffMerger, sdlxliffExporter, sdlXliffReader);
 
 			_window.DataContext = model;
