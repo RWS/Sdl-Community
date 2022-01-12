@@ -10,10 +10,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 {
 	public static class StringToLinqParser
 	{
-		private const string BetweenExpressionPattern =
-			@$"(?<Property>{PropertyPattern})\s+(?<Negated>not\s+)?between\s+(?<FirstConstant>{ConstantPattern})\s+(,|and)\s+(?<SecondConstant>{ConstantPattern})";
+		private static readonly string BetweenExpressionPattern = @$"(?<Property>{PropertyPattern})\s+(?<Negated>not\s+)?between\s+(?<FirstConstant>{ConstantPattern})\s+(,|and)\s+(?<SecondConstant>{ConstantPattern})";
 
-		private const string ConstantPattern = @"(\d{4}-\d{2}-d{2}|\d+)";
+		private const string ConstantPattern = @"\d*[^\s]*\d*";
 		private const string OperatorsPattern = @"(?:[<>]=)|(?:[<>=])";
 		private const string PropertyPattern = "[a-zA-Z]+_?[a-zA-Z]+";
 
@@ -127,7 +126,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 
 		private static string GetExpandedExpression(string expression)
 		{
-			var ternaryExpression = Regex.Match(expression, BetweenExpressionPattern);
+			var ternaryExpression = Regex.Match(expression, BetweenExpressionPattern, RegexOptions.IgnoreCase);
 			if (!ternaryExpression.Success) return expression;
 
 			var negated = ternaryExpression.Groups["Negated"].Value.ToUpper().Trim() == "NOT";
@@ -190,7 +189,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 			}
 			catch { }
 
-			if (comparisonConstant is null) throw new Exception($"{{{expression.SecondTerm}}} couldn't be converted to a constant");
+			if (comparisonConstant is null) throw new Exception($"{{{expression.SecondTerm}}} couldn't be converted to a {filterByPropertyType}");
 			var objectParameter = System.Linq.Expressions.Expression.Parameter(type, "obj");
 			BinaryExpression binaryExpression;
 			if (filterByPropertyType == typeof(DateTime) || filterByPropertyType == typeof(int))
