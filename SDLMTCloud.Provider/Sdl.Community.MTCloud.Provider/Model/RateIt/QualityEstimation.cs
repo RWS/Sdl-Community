@@ -38,7 +38,8 @@ namespace Sdl.Community.MTCloud.Provider.Model.RateIt
 		{
 			[PluginResources.GoodQuality] = 0,
 			[PluginResources.AdequateQuality] = 1,
-			[PluginResources.PoorQuality] = 2
+			[PluginResources.PoorQuality] = 2,
+			[PluginResources.UnknownQuality] = 3
 		};
 	}
 }
