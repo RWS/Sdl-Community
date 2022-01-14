@@ -421,4 +421,7 @@ Response from Language Weaver:
   <data name="SDLMTCloud_Provider_OldName" xml:space="preserve">
 	  <value>SDL Machine Translation Cloud</value>
   </data>
+  <data name="UnknownQuality" xml:space="preserve">
+	  <value>Unknown</value>
+  </data>
 </root>

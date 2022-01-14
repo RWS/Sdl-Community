@@ -942,6 +942,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string UnknownQuality {
+            get {
+                return ResourceManager.GetString("UnknownQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string WindowsControl_Close {

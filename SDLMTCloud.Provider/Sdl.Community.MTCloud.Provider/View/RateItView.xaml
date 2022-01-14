@@ -135,11 +135,13 @@
 					          Text="Reevaluation"
 					          SelectedIndex="{Binding ActiveDocumentEvaluations.CurrentSegmentEvaluation.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 						<ComboBoxItem Name="GoodQe"
-						              Content="{x:Static rsx:PluginResources.GoodQuality}" Foreground="#11A200" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						              Content="{x:Static rsx:PluginResources.GoodQuality}" Foreground="#11A200"  />
 						<ComboBoxItem Name="AdequateQe"
-						              Content="{x:Static rsx:PluginResources.AdequateQuality}" Foreground="#F09C00" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						              Content="{x:Static rsx:PluginResources.AdequateQuality}" Foreground="#F09C00" />
 						<ComboBoxItem Name="PoorQe"
-						              Content="{x:Static rsx:PluginResources.PoorQuality}" Foreground="#FF4848" Style="{StaticResource Sdl.ComboBoxItem.Generic.Style}" />
+						              Content="{x:Static rsx:PluginResources.PoorQuality}" Foreground="#FF4848" />
+						<ComboBoxItem Name="UnknownQe"
+						              Content="{x:Static rsx:PluginResources.UnknownQuality}" Foreground="#B7B7DB"  />
 					</ComboBox>
 					<Border.Style>
 						<Style TargetType="{x:Type Border}">
@@ -153,6 +155,9 @@
 								</DataTrigger>
 								<DataTrigger Binding="{Binding ActiveDocumentEvaluations.CurrentSegmentEvaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.PoorQuality}">
 									<Setter Property="Background" Value="#FF4848" />
+								</DataTrigger>
+								<DataTrigger Binding="{Binding ActiveDocumentEvaluations.CurrentSegmentEvaluation.OriginalEstimation}" Value="{x:Static rsx:PluginResources.UnknownQuality}">
+									<Setter Property="Background" Value="#B7B7DB" />
 								</DataTrigger>
 							</Style.Triggers>
 						</Style>
