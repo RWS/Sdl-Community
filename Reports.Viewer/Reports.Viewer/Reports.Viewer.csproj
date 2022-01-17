@@ -41,6 +41,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.MultiSelectComboBox">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
@@ -152,7 +155,6 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
@@ -168,9 +170,6 @@
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
@@ -307,10 +306,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\MultiSelectComboBox.Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

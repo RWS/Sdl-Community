@@ -12,6 +12,7 @@
              xmlns:behaviours="clr-namespace:Reports.Viewer.Plus.Behaviours"
              xmlns:model1="clr-namespace:Reports.Viewer.Plus.Model"
              xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
+			 xmlns:dpc="http://schemas.trados.com/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
 	<UserControl.Resources>
@@ -25,7 +26,7 @@
 				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ProgressRingAsteriskStyle.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CustomProgressRingStyle.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
@@ -449,13 +450,13 @@
 				</Border>
 			</Grid>
 
-			<controls1:ProgressRing 
-				Style="{StaticResource ProgressRingAsterisk}"
-				Height="80"
-			    IsActive="{Binding IsLoading, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}"			    
-			    Canvas.ZIndex="110"   		                      
-			    IsLarge="True" 
-			    Margin="20" />
+			<dpc:CustomProgressRing Style="{StaticResource Sdl.CustomProgressRing.Normal}"
+			                        Height="80"
+			                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter},
+									Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}"		    
+			                        Canvas.ZIndex="110" 
+			                        DockPanel.Dock="Top"
+			                        Margin="20"/>
 		</Grid>
 	</Border>
 </UserControl>
