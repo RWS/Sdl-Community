@@ -120,7 +120,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			get
 			{
 				return _exportSelectedXliffSupportItemModel
-				       ?? (_exportSelectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
+				       ?? (_exportSelectedXliffSupportItemModel = XLIFFSupportItems?.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
 			}
 			set
 			{

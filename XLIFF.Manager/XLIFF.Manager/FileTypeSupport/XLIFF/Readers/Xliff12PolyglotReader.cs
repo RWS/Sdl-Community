@@ -28,10 +28,11 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			var xliff = new Xliff();
 
 			var xmlTextReader = new XmlTextReader(filePath);
+			xmlTextReader.WhitespaceHandling = WhitespaceHandling.All;
 			var xmlReaderSettings = new XmlReaderSettings
 			{
 				ValidationType = ValidationType.None,
-				IgnoreWhitespace = true,
+				IgnoreWhitespace = false,
 				IgnoreComments = true
 			};
 			using (var xmlReader = XmlReader.Create(xmlTextReader, xmlReaderSettings))
@@ -634,9 +635,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						elementTagPair.TagContent += xmlReader.Value;
-						break;
+					//case XmlNodeType.Whitespace:
+					//	elementTagPair.TagContent += xmlReader.Value;
+					//	break;
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
 						break;
@@ -681,9 +682,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						elementTagPair.TagContent += xmlReader.Value;
-						break;
+					//case XmlNodeType.Whitespace:
+					//	elementTagPair.TagContent += xmlReader.Value;
+					//	break;
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
 						break;
@@ -725,9 +726,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						placeholder.TagContent += xmlReader.Value;
-						break;
+					//case XmlNodeType.Whitespace:
+					//	placeholder.TagContent += xmlReader.Value;
+					//	break;
 					case XmlNodeType.Text:
 						placeholder.TagContent += xmlReader.Value;
 						break;
@@ -848,16 +849,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							xmlReaderSub.Close();
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						{
-							var whiteSpace = new ElementText
-							{
-								Text = xmlReader.Value
-							};
+					//case XmlNodeType.Whitespace:
+					//	{
+					//		var whiteSpace = new ElementText
+					//		{
+					//			Text = xmlReader.Value
+					//		};
 
-							elements.Add(whiteSpace);
-						}
-						break;
+					//		elements.Add(whiteSpace);
+					//	}
+					//	break;
 					case XmlNodeType.Text:
 						{
 							var text = new ElementText

@@ -41,9 +41,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
@@ -440,10 +437,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ExpanderStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
