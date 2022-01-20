@@ -238,6 +238,7 @@
     <Compile Include="Service\Interface\IHttpClient.cs" />
     <Compile Include="Service\Interface\ISegmentMetadataCreator.cs" />
     <Compile Include="Service\Interface\ISupervisor.cs" />
+    <Compile Include="Service\QEReportCreator\StringWriterWithEncoding.cs" />
     <Compile Include="Service\RateIt\MetaDataProcessor.cs" />
     <Compile Include="Service\RateIt\MetadataSupervisor.cs" />
     <Compile Include="Service\QEReportCreator\QeReportCreator.cs" />
