@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
 using Sdl.ProjectAutomation.Core;
@@ -45,7 +45,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.QEReportCreator
 			}
 			report.Data = data;
 
-			var stringWriter = new StringWriter();
+			var stringWriter = new StringWriterWithEncoding(Encoding.UTF8);
 			new XmlSerializer(typeof(Report)).Serialize(stringWriter, report);
 
 			return stringWriter.ToString();
