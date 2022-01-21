@@ -241,6 +241,11 @@ namespace Reports.Viewer.Api
 						XsltPath = savedReport?.XsltPath ?? string.Empty
 					};
 
+					if (!TaskTemplateIdProvider.TaskTemplateIdExists(studioReport.TemplateId))
+					{
+						TaskTemplateIdProvider.AddTemplateId(studioReport.TemplateId, studioReport.TemplateId);
+					}
+
 					reports.Add(report);
 				}
 

@@ -22,14 +22,23 @@ namespace Reports.Viewer.Api.Providers
 			};
 		}
 
-		public string GetTaskTemplateId(string taskType)
+		public void AddTemplateId(string name, string templateId)
 		{
-			return _templates.ContainsKey(taskType) ? _templates[taskType] : null;
+			if (!string.IsNullOrEmpty(name) && !_templates.Keys.Contains(name) &&
+			    !TaskTemplateIdExists(templateId))
+			{
+				_templates.Add(name, templateId);
+			}
+		}
+
+		public string GetTaskTemplateId(string name)
+		{
+			return _templates.ContainsKey(name) ? _templates[name] : null;
 		}
 
 		public bool TaskTemplateIdExists(string templateId)
 		{
-			return _templates.Values.Contains(templateId);
+			return !string.IsNullOrEmpty(templateId) && _templates.Values.Contains(templateId);
 		}
 	}
 }
