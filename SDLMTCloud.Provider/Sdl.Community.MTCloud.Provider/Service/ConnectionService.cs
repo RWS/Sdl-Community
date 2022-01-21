@@ -173,6 +173,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			credentialsWindow.DataContext = viewModel;
 
 			var message = string.Empty;
+			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;
+			credentialsWindow.ClientSecretBox.Password = viewModel.ClientSecret;
+			credentialsWindow.ClientIdBox.Password = viewModel.ClientId;
+
 			var result1 = credentialsWindow.ShowDialog();
 			if (result1.HasValue && result1.Value)
 			{
