@@ -72,7 +72,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			}
 		}
 
-		public FilterApplier FilterApplier => DsiViewerInitializer.FilterApplier;
+		public FilterApplier FilterApplier { get; set; } = new();
 
 		public bool HasComments => Comments.Any();
 
