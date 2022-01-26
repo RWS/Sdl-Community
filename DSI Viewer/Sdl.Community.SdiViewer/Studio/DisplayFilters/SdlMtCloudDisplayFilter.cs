@@ -47,7 +47,7 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 		}
 
 		private string GetQualityEstimation(ITranslationOrigin translationOrigin)
-			=> Settings.ShowAllQe || translationOrigin.OriginSystem == "Language Weaver Cloud provider"
+			=> Settings.ShowAllQe || translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC
 				? translationOrigin.GetMetaData("quality_estimation")
 				: null;
 	}
