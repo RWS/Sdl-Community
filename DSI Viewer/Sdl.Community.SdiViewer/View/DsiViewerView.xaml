@@ -166,6 +166,9 @@
 											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
 												<Setter Property="Background" Value="#FF4848" />
 											</DataTrigger>
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
+												<Setter Property="Background" Value="#B7B7DB" />
+											</DataTrigger>
 										</Style.Triggers>
 									</Style>
 								</Border.Style>
@@ -208,7 +211,7 @@
 								          Style="{StaticResource BindToQe}" />
 									<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Poor}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
 								          Style="{StaticResource BindToQe}" />
-									<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_NoneAvailable}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeNoneAvailable}"
+									<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Unknown}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeUnknown}"
 								          Style="{StaticResource BindToQe}" />
 								</StackPanel>
 							</GroupBox>

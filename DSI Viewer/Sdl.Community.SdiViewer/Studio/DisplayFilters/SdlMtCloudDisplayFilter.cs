@@ -23,7 +23,7 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 			if (Settings.ByQualityEstimation)
 			{
 				var anyQualityEstimation = false;
-				if (Settings.QeNoneAvailable)
+				if (Settings.QeUnknown)
 				{
 					anyQualityEstimation = GetQualityEstimation(translationOrigin) == DsiViewerInitializer.NoneAvailable;
 				}
