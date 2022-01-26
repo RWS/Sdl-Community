@@ -25,19 +25,19 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 				var anyQualityEstimation = false;
 				if (Settings.QeUnknown)
 				{
-					anyQualityEstimation = GetQualityEstimation(translationOrigin) == DsiViewerInitializer.UnknownQuality;
+					anyQualityEstimation = GetQualityEstimation(translationOrigin) == Constants.UnknownQuality;
 				}
 				if (Settings.QePoor)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.PoorQuality;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.PoorQuality;
 				}
 				if (Settings.QeGood)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.GoodQuality;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.GoodQuality;
 				}
 				if (Settings.QeAdequate)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.AdequateQuality;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.AdequateQuality;
 				}
 
 				shouldDisplayRow &= anyQualityEstimation;
