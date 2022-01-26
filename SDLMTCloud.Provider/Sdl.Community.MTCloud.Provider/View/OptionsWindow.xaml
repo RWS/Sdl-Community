@@ -9,6 +9,7 @@
 			xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
 			xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
 			xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
+			xmlns:provider="clr-namespace:Sdl.Community.MTCloud.Languages.Provider;assembly=Sdl.Community.MTCloud.Languages.Provider"
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
@@ -210,10 +211,16 @@
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
 				<StackPanel Grid.Row="1">
-					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" 
+							  IsChecked="{Binding ShowAllQEs}"
+					          Content="{x:Static provider:Resources.ShowAllQEs_CheckBox_Content}" 
+					          ToolTip="{x:Static provider:Resources.ShowAllQEs_CheckBox_ToolTip}"/>
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" 
+					          IsChecked="{Binding ReSendChecked}" 
+					          Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTranslationOption}"  />
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
-						          IsChecked="{Binding SendFeedback}"
-						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
+						      IsChecked="{Binding SendFeedback}"
+						      Content="{x:Static rsx:PluginResources.EnableRating}"/>
 					<Button Style="{StaticResource Sdl.Button.HyperLinkStyle}"
 					        Content="To learn more about the information being sent to RWS with this option please visit the &quot;Rate Translations&quot; wiki."
 					        Command="{Binding NavigateToWikiCommand}"

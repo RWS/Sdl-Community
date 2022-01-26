@@ -319,7 +319,7 @@
   <data name="SettingsWindow_FeedbackOption" xml:space="preserve">
     <value>Send Translation feedback</value>
   </data>
-  <data name="SettingsWindow_ReSendTransaltionOption" xml:space="preserve">
+  <data name="SettingsWindow_ReSendTranslationOption" xml:space="preserve">
     <value>Re-send draft and translated segments</value>
   </data>
   <data name="RateIt_Option_DisabledMessage" xml:space="preserve">

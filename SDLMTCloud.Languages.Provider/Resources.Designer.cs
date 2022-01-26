@@ -80,6 +80,15 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        /// </summary>
+        public static string OriginSystem_LWC {
+            get {
+                return ResourceManager.GetString("OriginSystem_LWC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No shortcut was set in Studio for this option.
         /// </summary>
         public static string RateItViewModel_SetOptionTooltip_No_shortcut_was_set {
@@ -94,6 +103,24 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
         public static string SendFeedback_ButtonTooltip {
             get {
                 return ResourceManager.GetString("SendFeedback_ButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show all QEs.
+        /// </summary>
+        public static string ShowAllQEs_CheckBox_Content {
+            get {
+                return ResourceManager.GetString("ShowAllQEs_CheckBox_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default setting only reports on segments that have an origin of NMT.  So segments that have a QE score but have been replaced with the match from a TM are excluded..
+        /// </summary>
+        public static string ShowAllQEs_CheckBox_ToolTip {
+            get {
+                return ResourceManager.GetString("ShowAllQEs_CheckBox.ToolTip", resourceCulture);
             }
         }
     }
