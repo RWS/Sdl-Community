@@ -72,7 +72,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			}
 		}
 
-		public FilterApplier FilterApplier => DsiViewerInitializer.FilterApplier;
+		public FilterApplier FilterApplier { get; set; } = new();
 
 		public bool HasComments => Comments.Any();
 
@@ -97,6 +97,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				OnPropertyChanged(nameof(HasTranslationOriginMetadata));
 			}
 		}
+
+		
 
 		public void Dispose()
 		{
@@ -279,6 +281,17 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			OnPropertyChanged(nameof(HasDocumentStructureInformation));
 		}
 
+		public bool ShowAllQEs
+		{
+			get => FilterApplier.SdlMtCloudFilterSettings.ShowAllQe;
+			set
+			{
+				FilterApplier.SdlMtCloudFilterSettings.ShowAllQe = value;
+				OnPropertyChanged();
+				UpdateTranslationOriginInformation();
+			}
+		}
+
 		private void UpdateTranslationOriginInformation()
 		{
 			TranslationOriginData = null;
@@ -290,12 +303,19 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				return;
 			}
 
-			var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
-			TranslationOriginData = new TranslationOriginData
+			if (ShowAllQEs || translationOrigin.OriginSystem == "Language Weaver Cloud provider")
 			{
-				QualityEstimation = qualityEstimation,
-				Model = translationOrigin.GetMetaData("model"),
-			};
+				var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
+				TranslationOriginData = new TranslationOriginData
+				{
+					QualityEstimation = qualityEstimation,
+					Model = translationOrigin.GetMetaData("model"),
+				};
+			}
+			else
+			{
+				TranslationOriginData = null;
+			}
 		}
 	}
 }

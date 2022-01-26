@@ -19,8 +19,9 @@
 			<Style TargetType="CheckBox">
 				<Setter Property="VerticalContentAlignment" Value="Center" />
 			</Style>
-			<Style x:Key="BindToQe" TargetType="CheckBox">
+			<Style x:Key="QeLabels" TargetType="CheckBox">
 				<Setter Property="IsEnabled" Value="{Binding ElementName=ByQe, Path=IsChecked}" />
+				<Setter Property="Margin" Value="0 2 0 0" />
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -157,16 +158,16 @@
 									<Style TargetType="{x:Type Border}">
 										<Setter Property="Background" Value="#B7B7DB" />
 										<Style.Triggers>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.GoodQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.GoodQuality}">
 												<Setter Property="Background" Value="#11A200" />
 											</DataTrigger>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.AdequateQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.AdequateQuality}">
 												<Setter Property="Background" Value="#F09C00" />
 											</DataTrigger>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.PoorQuality}">
 												<Setter Property="Background" Value="#FF4848" />
 											</DataTrigger>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.UnknownQuality}">
 												<Setter Property="Background" Value="#B7B7DB" />
 											</DataTrigger>
 										</Style.Triggers>
@@ -196,26 +197,34 @@
 								<RowDefinition Height="3*" />
 								<RowDefinition Height="*" />
 							</Grid.RowDefinitions>
-
 							<GroupBox Grid.Row="1" Grid.Column="0">
 								<GroupBox.Header>
 									<CheckBox x:Name="ByQe" Content="{x:Static dsiViewer:PluginResources.CheckBox_ByQualityEstimation}"
 								          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.ByQualityEstimation}" />
 								</GroupBox.Header>
-								<StackPanel HorizontalAlignment="Left"
-							            Margin="20 20 0 20">
-									<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Good}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeGood}"
-								          Style="{StaticResource BindToQe}" />
-									<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Adequate}"
-								          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeAdequate}"
-								          Style="{StaticResource BindToQe}" />
-									<CheckBox Margin="0 2 0 0" Content="{x:Static dsiViewer:PluginResources.CheckBox_Poor}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
-								          Style="{StaticResource BindToQe}" />
-									<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Unknown}" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeUnknown}"
-								          Style="{StaticResource BindToQe}" />
-								</StackPanel>
-							</GroupBox>
+								<DockPanel>
+									<StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left"
+									            Margin="20 20 0 20">
 
+										<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Good}"
+										          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeGood}"
+										          Style="{StaticResource QeLabels}" />
+										<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Adequate}"
+										          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeAdequate}"
+										          Style="{StaticResource QeLabels}" />
+										<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Poor}"
+										          IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QePoor}"
+										          Style="{StaticResource QeLabels}" />
+										<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Unknown}"
+												  IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeUnknown}"
+										          Style="{StaticResource QeLabels}" />
+										
+									</StackPanel>
+									<CheckBox VerticalAlignment="Center" Content="Show all QEs" DockPanel.Dock="Bottom"
+									          IsChecked="{Binding ShowAllQEs}"/>
+								</DockPanel>
+							</GroupBox>
+							
 							<GroupBox Grid.Row="1" Grid.Column="1">
 								<GroupBox.Header>
 									<CheckBox x:Name="ByModel" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.ByModel}"

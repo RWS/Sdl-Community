@@ -13,7 +13,7 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 			if (!rowInfo.IsSegment) return false;
 
 			var shouldDisplayRow = true;
-			var translationOrigin = rowInfo?.SegmentPair?.Properties?.TranslationOrigin;
+			var translationOrigin = rowInfo.SegmentPair?.Properties?.TranslationOrigin;
 
 			if (Settings.ByModel)
 			{
@@ -25,19 +25,19 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 				var anyQualityEstimation = false;
 				if (Settings.QeUnknown)
 				{
-					anyQualityEstimation = GetQualityEstimation(translationOrigin) == DsiViewerInitializer.NoneAvailable;
+					anyQualityEstimation = GetQualityEstimation(translationOrigin) == Constants.UnknownQuality;
 				}
 				if (Settings.QePoor)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.PoorQuality;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.PoorQuality;
 				}
 				if (Settings.QeGood)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.GoodQuality;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.GoodQuality;
 				}
 				if (Settings.QeAdequate)
 				{
-					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == DsiViewerInitializer.AdequateQuality;
+					anyQualityEstimation |= GetQualityEstimation(translationOrigin) == Constants.AdequateQuality;
 				}
 
 				shouldDisplayRow &= anyQualityEstimation;
@@ -46,9 +46,9 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 			return shouldDisplayRow;
 		}
 
-		private static string GetQualityEstimation(ITranslationOrigin translationOrigin)
-		{
-			return translationOrigin?.GetMetaData("quality_estimation");
-		}
+		private string GetQualityEstimation(ITranslationOrigin translationOrigin)
+			=> Settings.ShowAllQe || translationOrigin.OriginSystem == "Language Weaver Cloud provider"
+				? translationOrigin.GetMetaData("quality_estimation")
+				: null;
 	}
 }
