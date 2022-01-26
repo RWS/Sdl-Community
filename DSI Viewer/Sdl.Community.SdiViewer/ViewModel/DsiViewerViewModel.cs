@@ -303,7 +303,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				return;
 			}
 
-			if (ShowAllQEs || translationOrigin.OriginSystem == "Language Weaver Cloud provider")
+			if (ShowAllQEs || translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC)
 			{
 				var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				TranslationOriginData = new TranslationOriginData

@@ -208,6 +208,15 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        /// </summary>
+        public static string OriginSystem_LWC {
+            get {
+                return ResourceManager.GetString("OriginSystem_LWC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DSI Viewer.
         /// </summary>
         public static string Plugin_Name {
@@ -223,6 +232,15 @@ namespace Sdl.Community.DsiViewer {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default setting only reports on segments that have an origin of NMT.  So segments that have a QE score but have been replaced with the match from a TM are excluded..
+        /// </summary>
+        public static string ShowAllQEs_CheckBox_ToolTip {
+            get {
+                return ResourceManager.GetString("ShowAllQEs_CheckBox.ToolTip", resourceCulture);
             }
         }
         
