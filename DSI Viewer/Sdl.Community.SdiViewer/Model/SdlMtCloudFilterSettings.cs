@@ -7,7 +7,7 @@
 		private string _model;
 		private bool _qeAdequate;
 		private bool _qeGood;
-		private bool _qeNoneAvailable;
+		private bool _qeUnknown;
 		private bool _qePoor;
 
 		public bool ByModel
@@ -60,13 +60,13 @@
 			}
 		}
 
-		public bool QeNoneAvailable
+		public bool QeUnknown
 		{
-			get => _qeNoneAvailable;
+			get => _qeUnknown;
 			set
 			{
-				_qeNoneAvailable = value;
-				OnPropertyChanged(nameof(QeNoneAvailable));
+				_qeUnknown = value;
+				OnPropertyChanged(nameof(QeUnknown));
 			}
 		}
 
@@ -84,7 +84,7 @@
 		{
 			ByQualityEstimation = false;
 			Model = null;
-			QeNoneAvailable = false;
+			QeUnknown = false;
 			QePoor = false;
 			QeGood = false;
 			QeAdequate = false;
