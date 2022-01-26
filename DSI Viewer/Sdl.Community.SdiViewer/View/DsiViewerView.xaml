@@ -158,16 +158,16 @@
 									<Style TargetType="{x:Type Border}">
 										<Setter Property="Background" Value="#B7B7DB" />
 										<Style.Triggers>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.GoodQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.GoodQuality}">
 												<Setter Property="Background" Value="#11A200" />
 											</DataTrigger>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.AdequateQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.AdequateQuality}">
 												<Setter Property="Background" Value="#F09C00" />
 											</DataTrigger>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.PoorQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.PoorQuality}">
 												<Setter Property="Background" Value="#FF4848" />
 											</DataTrigger>
-											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:DsiViewerInitializer.UnknownQuality}">
+											<DataTrigger Binding="{Binding TranslationOriginData.QualityEstimation}" Value="{x:Static dsiViewer:Constants.UnknownQuality}">
 												<Setter Property="Background" Value="#B7B7DB" />
 											</DataTrigger>
 										</Style.Triggers>
