@@ -843,9 +843,9 @@ namespace Sdl.Community.MTCloud.Provider {
         /// <summary>
         ///   Looks up a localized string similar to Re-send draft and translated segments.
         /// </summary>
-        public static string SettingsWindow_ReSendTransaltionOption {
+        public static string SettingsWindow_ReSendTranslationOption {
             get {
-                return ResourceManager.GetString("SettingsWindow_ReSendTransaltionOption", resourceCulture);
+                return ResourceManager.GetString("SettingsWindow_ReSendTranslationOption", resourceCulture);
             }
         }
         

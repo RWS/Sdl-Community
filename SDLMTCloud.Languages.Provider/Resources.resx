@@ -121,13 +121,23 @@
   <data name="DefaultMTLanguageCodes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\defaultmtlanguagecodes.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-	<data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
+  <data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
     <value>No shortcut was set in Studio for this option</value>
   </data>
   <data name="AutoSendFeedback_CheckBoxTooltip" xml:space="preserve">
-	  <value>If this option is enabled, feedback is sent when the segment is confirmed</value>
+    <value>If this option is enabled, feedback is sent when the segment is confirmed</value>
   </data>
   <data name="SendFeedback_ButtonTooltip" xml:space="preserve">
-	  <value>All the information from Rate It form is sent to the server</value>
+    <value>All the information from Rate It form is sent to the server</value>
+  </data>
+  <data name="OriginSystem_LWC" xml:space="preserve">
+    <value>Language Weaver Cloud provider</value>
+  </data>
+  <data name="ShowAllQEs_CheckBox.ToolTip" xml:space="preserve">
+    <value>The default setting only reports on segments that have an origin of NMT. So segments that have a QE score but have been replaced with the match from a TM are excluded.
+This setting applies to both the Rate Translations View and the MT QE Report Batch Task.</value>
+  </data>
+  <data name="ShowAllQEs_CheckBox_Content" xml:space="preserve">
+    <value>Show all QEs</value>
   </data>
 </root>
