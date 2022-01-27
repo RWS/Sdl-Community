@@ -79,6 +79,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			{
 				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
+
 		}
 
 		private void SetFilter(List<int> filteredResultsIds)
@@ -88,12 +89,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 					csr is ContentSearchResult contentSearchResult &&
 					filteredResultsIds.Contains(contentSearchResult.TranslationUnit.ResourceId.Id);
 			OnPropertyChanged(nameof(FilterPresent));
+			UpdateCheckedAllState();
 		}
 
 		private void RemoveFilter()
 		{
 			SourceSearchResultsCollectionView.Filter = null;
 			OnPropertyChanged(nameof(FilterPresent));
+			UpdateCheckedAllState();
 		}
 
 		public void ApplyChanges()
@@ -340,7 +343,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			try
 			{
 				SelectingAllAction = true;
-				foreach (var result in _sourceSearchResults)
+				foreach (ContentSearchResult result in SourceSearchResultsCollectionView)
 				{
 					result.TuSelected = value;
 				}
@@ -356,14 +359,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 		private void UpdateCheckedAllState()
 		{
-			if (SourceSearchResults.Count > 0)
-			{
-				SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
-			}
-			else
-			{
-				SelectAllResults = false;
-			}
+			SelectAllResults = SourceSearchResultsCollectionView.Cast<object>().Any() &&
+			                   SourceSearchResultsCollectionView.Cast<ContentSearchResult>().All(csr => csr.TuSelected);
 		}
 
 		private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)
