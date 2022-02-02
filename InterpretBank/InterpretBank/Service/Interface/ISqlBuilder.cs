@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
-using InterpretBank.Service.Model;
 
 namespace InterpretBank.Service.Interface
 {
 	public interface ISqlBuilder
 	{
 		string Build();
-		ISqlBuilder Select(List<string> columnNames);
+
+		ISqlBuilder Columns(List<string> columnNames);
+		ISqlBuilder InnerJoin<T>(T tableName, string firstId, string secondId);
+		ISqlBuilder Insert(List<string> values);
+
+		ISqlBuilder Table<T>(T tableName);
+
 		ISqlBuilder Where(string condition);
-		ISqlBuilder From(string tableName);
+		ISqlBuilder Update(List<string> values);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using InterpretBank.Service;
+using InterpretBank.Service.Model;
 using Xunit;
 
 namespace InterpretBankTests
@@ -7,48 +8,32 @@ namespace InterpretBankTests
 	public class SqlBuilderTests
 	{
 		[Fact]
-		public void Select_Test()
+		public void InnerJoin_Test()
 		{
-			var languageIndices = new List<int> { 1, 2, 3 };
-			var sql = "".SelectTermsFromGlossary(languageIndices);
+			var sqlBuilder = new SqlBuilder();
+			var columns = new List<string> { "C1", "C2", "C3" };
+			var sqlStatement = sqlBuilder
+				.Columns(columns)
+				.Table(Tables.GlossaryData)
+				.InnerJoin(Tables.GlossaryMetadata, "Tag1", "GlossaryID")
+				.Build();
 
-			Assert.Equal(
-				@"SELECT Term1, Comment1a, Comment1b, Term2, Comment2a, Comment2b, Term3, Comment3a, Comment3b, ID, Tag1, Tag2, CommentAll FROM GlossaryData",
-				sql);
+			Assert.Equal("SELECT C1, C2, C3 FROM GlossaryData INNER JOIN GlossaryMetadata ON Tag1=GlossaryID", sqlStatement);
 		}
 
 		[Fact]
-		public void Test()
+		public void SqlBuild_Test()
 		{
 			var sqlBuilder = new SqlBuilder();
-
-			var languageIndices = new List<int> { 1, 2, 3 };
-
-			var conditionBuilder = new ConditionBuilder();
-			var condition = conditionBuilder
-				.Like("english", languageIndices)
+			var columns = new List<string> { "C1", "C2", "C3" };
+			var values = new List<string> { "V1", "V2", "V3" };
+			var sqlStatement = sqlBuilder
+				.Columns(columns)
+				.Table(Tables.GlossaryData)
+				.Insert(values)
 				.Build();
 
-			var sql = sqlBuilder
-				.Select(GlossaryService.DefaultColumnNamesInGlossaryData, languageIndices)
-				.From("GlossaryData")
-				.Where(condition)
-				.Build();
-
-			Assert.Equal(
-				"SELECT ID,Tag1,Tag2,CommentAll,Term1,Comment1a,Comment1b,Term2,Comment2a,Comment2b,Term3,Comment3a,Comment3b " +
-				"FROM GlossaryData " +
-				"WHERE (" +
-				"Term1 like \"%english%\" " +
-				"OR Comment1a like \"%english%\" " +
-				"OR Comment1b like \"%english%\" " +
-				"OR Term2 like \"%english%\" " +
-				"OR Comment2a like \"%english%\" " +
-				"OR Comment2b like \"%english%\" " +
-				"OR Term3 like \"%english%\" " +
-				"OR Comment3a like \"%english%\" " +
-				"OR Comment3b like \"%english%\")",
-				sql);
+			Assert.Equal(@"INSERT INTO GlossaryData C1, C2, C3 VALUES ""V1"", ""V2"", ""V3""", sqlStatement);
 		}
 	}
 }

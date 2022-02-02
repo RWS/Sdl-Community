@@ -1,4 +1,4 @@
-﻿namespace InterpretBank.Service
+﻿namespace InterpretBank.Service.Model
 {
 	public class Expression
 	{

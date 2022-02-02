@@ -1,9 +1,29 @@
-﻿namespace InterpretBank.Model
+﻿using System.Collections.Generic;
+
+namespace InterpretBank.Model
 {
 	public class LanguageEquivalent
 	{
-		public string CommentA{ get; set; }
-		public string CommentB{ get; set; }
-		public string Text{ get; set; }
+		public string CommentA { get; set; }
+		public string CommentB { get; set; }
+		public int LanguageIndex { get; set; }
+		public string Term { get; set; }
+
+		public static List<string> GetColumns(int languageIndex) => new()
+		{
+			$"Term{languageIndex}",
+			$"Comment{languageIndex}a",
+			$"Comment{languageIndex}b"
+		};
+
+		public List<string> GetColumns() => new()
+		{
+			$"TermEntry{LanguageIndex}",
+			$"Comment{LanguageIndex}a",
+			$"Comment{LanguageIndex}b"
+		};
+
+		public List<string> GetValues() =>
+			new() { Term, CommentA, CommentB };
 	}
 }

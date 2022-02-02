@@ -5,10 +5,10 @@ namespace InterpretBank.Service.Interface
 {
 	internal interface IGlossaryService
 	{
-		List<Term> GetTerms();
+		List<TermEntry> GetTerms(string searchString = null, List<int> languages = null, List<string> glossaryNames = null, List<string> tags = null);
 
-		List<LanguageEquivalent> GetTermsFromGlossaries(List<string> names);
+		void AddTerm(TermEntry termEntry);
 
-		List<LanguageEquivalent> GetTermsFromTaggedLocations(List<string> tags);
+		void UpdateTerm(TermEntry termEntry);
 	}
 }

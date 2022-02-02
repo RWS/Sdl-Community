@@ -6,10 +6,16 @@ namespace InterpretBank.Service.Interface
 	{
 		string Build();
 
-		IConditionBuilder In(string columnName, List<string> glossaryNames, string @operator);
+		IConditionBuilder Equals(List<string> values, string columnName, string @operator = "AND");
 
-		IConditionBuilder In(string columnName, string sqlSelect, string @operator);
+		IConditionBuilder Equals(string value, string columnName, string @operator = "AND");
 
-		IConditionBuilder Like(string likeStrings, List<int> languageIndices, string @operator);
+		IConditionBuilder In(string columnName, List<string> glossaryNames, string @operator = "AND");
+
+		IConditionBuilder In(string columnName, string sqlSelect, string @operator = "AND");
+
+		bool IsEmpty();
+
+		IConditionBuilder Like(string likeStrings, List<string> languageIndices, string @operator = "AND");
 	}
 }

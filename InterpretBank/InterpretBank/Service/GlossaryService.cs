@@ -1,126 +1,193 @@
 ﻿using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Linq;
 using InterpretBank.Model;
 using InterpretBank.Service.Interface;
-using InterpretBank.Service.Model;
 
 namespace InterpretBank.Service
 {
+	public enum Tables
+	{
+		GlossaryData,
+		GlossaryMetadata,
+		TagLink,
+	}
+
 	public class GlossaryService : IGlossaryService
 	{
-		private readonly SQLiteConnection _connection;
-		public Dictionary<string, int> LanguageIndicesDictionary { get; } = new();
+		private readonly IConditionBuilder _conditionBuilder;
+		private readonly IDatabaseConnection _connection;
+		private readonly ISqlBuilder _sqlBuilder;
 
-		public static List<string> DefaultColumnNamesInGlossaryData = new()
+		public GlossaryService(IDatabaseConnection connection, ISqlBuilder sqlBuilder, IConditionBuilder conditionBuilder)
 		{
-			"ID",
-			"Tag1",
-			"Tag2",
-			"CommentAll",
-		};
+			_connection = connection;
 
-		public GlossaryService(string filepath)
-		{
-			_connection = new SQLiteConnection($"Data Source='{filepath}';Cache=Shared");
+			_sqlBuilder = sqlBuilder;
+			_conditionBuilder = conditionBuilder;
 
-			LoadLanguageIndices();
+			SetLanguageIndices();
 		}
 
-		private void LoadLanguageIndices()
+		private Dictionary<string, int> LanguageIndicesDictionary { get; } = new();
+
+		public void AddTerm(TermEntry termEntry)
 		{
-			_connection.Open();
+			var columns = GetTermColumns(termEntry);
+			columns.Add("RecordCreation");
 
-			var sql = "SELECT * FROM DatabaseInfo";
-			var cmdQuery = new SQLiteCommand(sql, _connection);
-			var rdrSelect = cmdQuery.ExecuteReader();
+			var columnValues = GetTermValues(termEntry);
+			columnValues.Add("CURRENT_DATE");
 
-			rdrSelect.Read();
-			for (var i = 1; i <= 10; i++)
-			{
-				var current = rdrSelect[$"LanguageName{i}"];
-				if (current.ToString() == "undef") continue;
-				LanguageIndicesDictionary[current.ToString()] = i;
-			}
+			var insertSqlStatement = _sqlBuilder
+				.Table(Tables.GlossaryData)
+				.Columns(columns)
+				.Insert(columnValues)
+				.Build();
 
-			_connection.Close();
+			_connection.ExecuteCommand(insertSqlStatement);
 		}
 
-		public List<Term> GetTerms()
+		public List<TermEntry> GetTerms(string searchString, List<int> languages, List<string> glossaryNames, List<string> tags)
 		{
-			return GetTerms(null, null, null, null);
-		}
-
-		public List<Term> GetTerms(string searchString, List<string> languages, List<string> glossaryNames, List<string> tags)
-		{
-			_connection.Open();
-
 			var languageIndices = languages is null || languages.Count < 1
 				? LanguageIndicesDictionary.Values.ToList()
-				: languages.Select(language => LanguageIndicesDictionary[language]).ToList();
+				: languages;
 
-			var sqlBuilder = new SqlBuilder();
-			var conditionBuilder = new ConditionBuilder();
-
-			var condition = conditionBuilder
-				.Like(searchString, languageIndices)
-				.Build();
-
-			//TODO: Create separate method for getting the dynamically named rows
-			var sql = sqlBuilder
-				.Select(GetColumnNames(languageIndices))
-				.From("GlossaryData")
-				.Where(condition)
-				.Build();
-
-			var cmdQuery = new SQLiteCommand(sql, _connection);
-			var rdrSelect = cmdQuery.ExecuteReader();
-
-			var termList = new List<Term>();
-			while (rdrSelect.Read())
+			if (tags is not null && tags.Count > 0)
 			{
-				var languageEquivalents = new List<LanguageEquivalent>();
-				foreach (var index in languageIndices)
-					languageEquivalents.Add(new LanguageEquivalent
-					{
-						Text = rdrSelect[$"Term{index}"].ToString(),
-						CommentA = rdrSelect[$"Comment{index}a"].ToString(),
-						CommentB = rdrSelect[$"Comment{index}b"].ToString()
-					});
-
-				var term = new Term
-				{
-					Tag1 = rdrSelect["Tag1"].ToString(),
-					Tag2 = rdrSelect["Tag2"].ToString(),
-					CommentAll = rdrSelect["CommentAll"].ToString(),
-					LanguageEquivalents = languageEquivalents
-				};
-
-				termList.Add(term);
+				var tagCondition = _conditionBuilder
+					.In("TagName", tags)
+					.Build();
+				var joinStatement = _sqlBuilder
+					.Columns(new List<string> { "Tag1" })
+					.Table(Tables.GlossaryMetadata)
+					.InnerJoin(Tables.TagLink, "GlossaryID", "ID")
+					.Where(tagCondition)
+					.Build();
+				_conditionBuilder
+					.In("Tag1", joinStatement);
 			}
 
-			_connection.Close();
+			var glossaryNamesSelect = _conditionBuilder
+				.In("Tag1", glossaryNames)
+				.Like(searchString, GetTermColumns(languageIndices, false))
+				.Build();
+
+			var sql = _sqlBuilder
+				.Columns(GetTermColumns(languageIndices))
+				.Table(Tables.GlossaryData)
+				.Where(glossaryNamesSelect)
+				.Build();
+
+			var rows = _connection.ExecuteCommand(sql);
+			var termList = ReadTermEntries(rows, languageIndices);
 
 			return termList;
 		}
 
-		private static List<string> GetColumnNames(List<int> languageIndices)
+		public void UpdateTerm(TermEntry termEntry)
 		{
-			var indexedColumns = new List<string>(languageIndices.Count * 3);
-			foreach (var index in languageIndices)
-			{
-				indexedColumns.Add($"Term{index}");
-				indexedColumns.Add($"Comment{index}a");
-				indexedColumns.Add($"Comment{index}b");
-			}
-			var otherColumns = new List<string> { "ID", "Tag1", "Tag2", "CommentAll" };
-			var columnNames = indexedColumns.Concat(otherColumns).ToList();
-			return columnNames;
-		}
-	}
+			var updateCondition = _conditionBuilder
+				.Equals(termEntry.Id, "ID")
+				.Build();
+			var sqlUpdateStatement = _sqlBuilder
+				.Table(Tables.GlossaryData)
+				.Columns(GetTermColumns(LanguageIndicesDictionary.Values.ToList()))
+				.Update(GetTermValues(termEntry))
+				.Where(updateCondition)
+				.Build();
 
-	public enum Tables
-	{
-		GlossaryData,
+			_connection.ExecuteCommand(sqlUpdateStatement);
+		}
+
+		private static List<string> GetTermColumns(List<int> languageIndices, bool withLocation = true)
+		{
+			var columns = new List<string> { "CommentAll" };
+
+			if (withLocation)
+			{
+				columns.Insert(0, "Tag2");
+				columns.Insert(0, "Tag1");
+				columns.Insert(0, "ID");
+			}
+
+			foreach (var le in languageIndices)
+			{
+				columns.AddRange(LanguageEquivalent.GetColumns(le));
+			}
+
+			return columns;
+		}
+
+		private static List<TermEntry> ReadTermEntries(List<Dictionary<string, string>> rows, List<int> languageIndices)
+		{
+			var termList = new List<TermEntry>();
+
+			if (rows is null || rows.Count == 0) return termList;
+
+			foreach (var row in rows)
+			{
+				var term = new TermEntry
+				{
+					Id = row["ID"],
+					Tag1 = row["Tag1"],
+					Tag2 = row["Tag2"],
+					CommentAll = row["CommentAll"]
+				};
+
+				foreach (var index in languageIndices)
+					term.Add(new LanguageEquivalent
+					{
+						LanguageIndex = index,
+						Term = row[$"Term{index}"],
+						CommentA = row[$"Comment{index}a"],
+						CommentB = row[$"Comment{index}b"]
+					});
+
+				termList.Add(term);
+			}
+
+			return termList;
+		}
+
+		private List<string> GetTermColumns(TermEntry term)
+		{
+			var columns = new List<string> { "Tag1", "Tag2", "CommentAll" };
+			foreach (var le in term.LanguageEquivalents)
+			{
+				columns.AddRange(le.GetColumns());
+			}
+
+			return columns;
+		}
+
+		private List<string> GetTermValues(TermEntry term)
+		{
+			var values = new List<string> { term.Id, term.Tag1, term.Tag2, term.CommentAll };
+			foreach (var le in term.LanguageEquivalents)
+			{
+				values.AddRange(le.GetValues());
+			}
+
+			return values;
+		}
+
+		private void SetLanguageIndices()
+		{
+			var sql = "SELECT * FROM DatabaseInfo";
+			var rows = _connection.ExecuteCommand(sql);
+
+			if (rows is null || rows.Count == 0) return;
+
+			foreach (var row in rows)
+			{
+				for (var i = 1; i <= 10; i++)
+				{
+					var current = row[$"LanguageName{i}"];
+					if (current == "undef") continue;
+					LanguageIndicesDictionary[current] = i;
+				}
+			}
+		}
 	}
 }
