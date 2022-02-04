@@ -8,6 +8,7 @@ using System.Windows;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -117,7 +118,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 					if (mask != null && !mask[segmentIndex])
 					{
 						results[segmentIndex] = null;
-						fileAndSegmentIds?.Segments.Remove(fileAndSegmentIds.Segments.Keys.ElementAt(segmentIndex));
 						continue;
 					}
 					var existsMergedSegments = CheckMergedSegments(results, CurrentSegmentPair, segmentIndex);
@@ -145,6 +145,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 				if (mtCloudSegments.Count > 0)
 				{
+					RemoveSegmentsThatMustNotBeTranslated(fileAndSegmentIds, mtCloudSegments);
+
 					var hasTranslations = GetTranslations(mtCloudSegments, fileAndSegmentIds);
 					if (hasTranslations)
 					{
@@ -183,6 +185,18 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			}
 
 			return results;
+		}
+
+		private static void RemoveSegmentsThatMustNotBeTranslated(FileAndSegmentIds fileAndSegmentIds, List<MTCloudSegment> mtCloudSegments)
+		{
+			var kvps = new List<KeyValuePair<SegmentId, string>>();
+			foreach (var index in mtCloudSegments.Select(seg => seg.Index))
+			{
+				var key = fileAndSegmentIds.Segments.Keys.ElementAt((int)index);
+				kvps.Add(fileAndSegmentIds.Segments.FirstOrDefault(s => s.Key == key));
+			}
+
+			fileAndSegmentIds.Segments = kvps.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
