@@ -236,15 +236,6 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default setting only reports on segments that have an origin of NMT.  So segments that have a QE score but have been replaced with the match from a TM are excluded..
-        /// </summary>
-        public static string ShowAllQEs_CheckBox_ToolTip {
-            get {
-                return ResourceManager.GetString("ShowAllQEs_CheckBox.ToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Maximum value.
         /// </summary>
         public static string StructureContextInfo_MetaKey_length_max_value {
