@@ -13,16 +13,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 	{
 		private readonly ProjectFile _projectFile;
 		private readonly WordCounter _wordCounter;
-		private readonly bool _showAllQEs;
 
 		public Dictionary<string, QeFileReport> QeFileReports { get; set; }
 
-		public QeLabelExtractor(ProjectFile projectFile, Dictionary<string, QeFileReport> qeFileReports, WordCounter wordCounter, bool showAllQEs)
+		public QeLabelExtractor(ProjectFile projectFile, Dictionary<string, QeFileReport> qeFileReports, WordCounter wordCounter)
 		{
 			_projectFile = projectFile;
 			QeFileReports = qeFileReports;
 			_wordCounter = wordCounter;
-			_showAllQEs = showAllQEs;
 		}
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
@@ -39,7 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 			{
 				string qualityEstimation = null;
 				var translationOrigin = segmentPair.Properties.TranslationOrigin;
-				if (_showAllQEs || translationOrigin.OriginSystem == Resources.OriginSystem_LWC)
+				if (translationOrigin.OriginSystem == Resources.OriginSystem_LWC)
 				{
 					qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				}

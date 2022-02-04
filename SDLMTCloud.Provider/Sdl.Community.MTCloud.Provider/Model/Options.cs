@@ -30,7 +30,5 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(value));
 			}
 		}
-
-		public bool ShowAllQEs { get; set; }
 	}
 }

@@ -37,32 +37,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			var showAllQEs = GetStateVariable<bool>("ShowAllQEs");
-
 			var wordCounter = GetWordCounter(projectFile);
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new QeLabelExtractor(projectFile, _qeFileReports, wordCounter, showAllQEs)));
-		}
-
-		private T GetStateVariable<T>(string variableName)
-		{
-			var lwcState = GetLWCProviderState();
-			var variable = default(T);
-			if (lwcState is null) return variable;
-
-			var showAllQes = JObject.Parse(lwcState)[variableName];
-			variable = showAllQes.ToObject<T>();
-
-			return variable;
-		}
-
-		private string GetLWCProviderState()
-		{
-			var tpConfig = Project.GetTranslationProviderConfiguration();
-
-			var lwcTpEntry = tpConfig.Entries.FirstOrDefault(e =>
-				e.MainTranslationProvider.Uri.ToString() == PluginResources.SDLMTCloudUri);
-
-			return lwcTpEntry?.MainTranslationProvider.State;
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new QeLabelExtractor(projectFile, _qeFileReports, wordCounter)));
 		}
 
 		private void CreateReport(LanguageDirection languageDirection, List<QeFileReport> qeFileReports)
