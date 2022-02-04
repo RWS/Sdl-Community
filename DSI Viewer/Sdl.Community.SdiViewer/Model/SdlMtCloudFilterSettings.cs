@@ -80,8 +80,6 @@
 			}
 		}
 
-		public bool ShowAllQe { get; set; }
-
 		public void ClearFilter()
 		{
 			ByQualityEstimation = false;

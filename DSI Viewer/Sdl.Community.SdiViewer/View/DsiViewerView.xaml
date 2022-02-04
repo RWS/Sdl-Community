@@ -220,9 +220,6 @@
 										          Style="{StaticResource QeLabels}" />
 										
 									</StackPanel>
-									<CheckBox VerticalAlignment="Center" Content="Show all QEs" DockPanel.Dock="Bottom"
-									          IsChecked="{Binding ShowAllQEs}"
-									          ToolTip="{x:Static dsiViewer:PluginResources.ShowAllQEs_CheckBox_ToolTip}"/>
 								</DockPanel>
 							</GroupBox>
 							
