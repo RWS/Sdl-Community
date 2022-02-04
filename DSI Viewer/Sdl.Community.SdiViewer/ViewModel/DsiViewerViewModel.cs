@@ -281,17 +281,6 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			OnPropertyChanged(nameof(HasDocumentStructureInformation));
 		}
 
-		public bool ShowAllQEs
-		{
-			get => FilterApplier.SdlMtCloudFilterSettings.ShowAllQe;
-			set
-			{
-				FilterApplier.SdlMtCloudFilterSettings.ShowAllQe = value;
-				OnPropertyChanged();
-				UpdateTranslationOriginInformation();
-			}
-		}
-
 		private void UpdateTranslationOriginInformation()
 		{
 			TranslationOriginData = null;
@@ -303,7 +292,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				return;
 			}
 
-			if (ShowAllQEs || translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC)
+			if (translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC)
 			{
 				var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				TranslationOriginData = new TranslationOriginData
