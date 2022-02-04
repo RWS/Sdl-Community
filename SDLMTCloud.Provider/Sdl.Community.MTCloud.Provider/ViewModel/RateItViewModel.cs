@@ -393,22 +393,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				out var qualityEstimation);
 
 			ActiveDocumentEvaluations.CurrentSegmentEvaluation =
-				(ShowAllQEs || ActiveDocument.ActiveSegmentPair.Properties.TranslationOrigin.OriginSystem ==
-					Resources.OriginSystem_LWC) && currentSegmentEvaluation
+				ActiveDocument.ActiveSegmentPair.Properties.TranslationOrigin.OriginSystem ==
+					Resources.OriginSystem_LWC && currentSegmentEvaluation
 					? qualityEstimation
 					: null;
 
 			OnPropertyChanged(nameof(ActiveDocumentEvaluations));
-		}
-
-		public bool ShowAllQEs
-		{
-			get => _translationService.Options.ShowAllQEs;
-			set
-			{
-				_translationService.Options.ShowAllQEs = value; 
-				OnPropertyChanged();
-			}
 		}
 
 		private void OnFeedbackSendingStatusChanged()

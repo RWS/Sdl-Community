@@ -105,24 +105,5 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
                 return ResourceManager.GetString("SendFeedback_ButtonTooltip", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show all QEs.
-        /// </summary>
-        public static string ShowAllQEs_CheckBox_Content {
-            get {
-                return ResourceManager.GetString("ShowAllQEs_CheckBox_Content", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The default setting only reports on segments that have an origin of NMT. So segments that have a QE score but have been replaced with the match from a TM are excluded.
-        ///This setting applies to both the Rate Translations View and the MT QE Report Batch Task..
-        /// </summary>
-        public static string ShowAllQEs_CheckBox_ToolTip {
-            get {
-                return ResourceManager.GetString("ShowAllQEs_CheckBox.ToolTip", resourceCulture);
-            }
-        }
     }
 }

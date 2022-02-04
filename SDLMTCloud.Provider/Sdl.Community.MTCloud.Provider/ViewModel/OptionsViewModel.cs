@@ -38,7 +38,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
 		private bool _isWaiting;
 		private bool _sendFeedback;
-		private bool _showAllQEs;
 
 		public OptionsViewModel(Window owner, SdlMTCloudTranslationProvider provider, List<LanguagePair> languagePairs)
 		{
@@ -49,7 +48,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			ReSendChecked = provider.Options?.ResendDraft ?? true;
 			SendFeedback = provider.Options?.SendFeedback ?? true;
-			ShowAllQEs = provider.Options?.ShowAllQEs ?? false;
 
 			LoadLanguageMappings();
 		}
@@ -140,16 +138,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				_isWaiting = value;
 				OnPropertyChanged(nameof(IsWaiting));
-			}
-		}
-
-		public bool ShowAllQEs
-		{
-			get => _showAllQEs;
-			set
-			{
-				_showAllQEs = value;
-				OnPropertyChanged();
 			}
 		}
 
@@ -294,7 +282,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					_provider.Options.ResendDraft = ReSendChecked;
 					_provider.Options.LanguageMappings = LanguageMappingModels.ToList();
 					_provider.Options.SendFeedback = SendFeedback;
-					_provider.Options.ShowAllQEs = ShowAllQEs;
 
 					Dispose();
 
