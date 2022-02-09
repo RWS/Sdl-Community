@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.MTCloud.Provider.Service.Interface
 {
-	public interface ISupervisor<T>
+	public interface ISupervisor
 	{
 		void StartSupervising(ITranslationService translationService);
 	}

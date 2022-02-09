@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Windows;
@@ -13,6 +14,8 @@ using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -30,9 +33,11 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static CurrentViewDetector CurrentViewDetector { get; set; }
 		public static EditorController EditorController { get; set; }
+		public static IFileTypeManager FileTypeManager { get; set; }
 		public static MetadataSupervisor MetadataSupervisor { get; set; }
 		public static string ProjectInCreationFilePath { get; set; }
 		public static ProjectsController ProjectsController { get; private set; }
+		public static ISegmentSupervisor SegmentSupervisor { get; set; }
 		public static ITranslationService TranslationService { get; private set; }
 
 		private static string CurrentProjectId
@@ -149,6 +154,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 			if (IsStudioRunning())
 			{
+				FileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 				ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 				CurrentViewDetector = new CurrentViewDetector();
 				EditorController = SdlTradosStudio.Application.GetController<EditorController>();
@@ -157,7 +163,26 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 		}
 
-		public static ISegmentSupervisor SegmentSupervisor { get; set; }
+		public static string GetFilePath(string filename, string targetLanguage)
+		{
+			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
+							  Path.GetDirectoryName(GetProjectInProcessing().FilePath);
+
+			filename = filename.Contains(".sdlxliff") ? filename : $"{filename}.sdlxliff";
+			var filepath = $@"{projectPath}\{targetLanguage}\{filename}";
+
+			if (File.Exists(filepath)) return filepath;
+			if (string.IsNullOrWhiteSpace(projectPath)) return null;
+
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
+			filepath =
+				targetLanguageFiles.FirstOrDefault(
+					f =>
+						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(filename)) &&
+						Path.GetExtension(f) == ".sdlxliff");
+
+			return File.Exists(filepath) ? filepath : null;
+		}
 
 		private static void AttachToProjectCreatedEvent()
 		{

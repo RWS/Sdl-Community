@@ -6,10 +6,10 @@ namespace Sdl.Community.MTCloud.Provider.Service.Interface
 {
 	public interface ISegmentMetadataCreator
 	{
-		void AddTargetSegmentMetaData(TranslationData translationData);
+		void StoreMetadata(TranslationData translationData);
 
 		void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginDatum translationOriginDatum);
 
-		void AddToSegmentContextData();
+		void AddStoredMetadataToProjectFile();
 	}
 }

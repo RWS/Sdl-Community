@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -18,7 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		public SegmentMetadataCreator()
 		{
-			_manager = DefaultFileTypeManager.CreateInstance(true);
+			_manager = MtCloudApplicationInitializer.FileTypeManager;
 		}
 
 		private List<TranslationData> Data { get; } = new();
@@ -26,7 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private IEnumerable<IGrouping<string, MetadataTransferObject>> GroupedData
 			=> _groupedData ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
 
-		public void AddTargetSegmentMetaData(TranslationData translationData)
+		public void StoreMetadata(TranslationData translationData)
 		{
 			Data.Add(translationData);
 		}
@@ -45,7 +43,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			activeDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
-		public void AddToSegmentContextData()
+		public void AddStoredMetadataToProjectFile()
 		{
 			foreach (var kvp in GroupedData)
 			{
@@ -62,31 +60,10 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new()
 		{
-			FilePath = GetFilePath(translationData.FilePath, translationData.TargetLanguage),
+			FilePath = translationData.FilePath,
 			SegmentIds = translationData.Segments.Keys.ToList(),
 			TranslationOriginData = translationData.TranslationOriginData
 		};
-
-		private string GetFilePath(string filename, string targetLanguage)
-		{
-			var projectPath = Path.GetDirectoryName(MtCloudApplicationInitializer.ProjectInCreationFilePath) ??
-			                  Path.GetDirectoryName(MtCloudApplicationInitializer.GetProjectInProcessing().FilePath);
-
-			filename = filename.Contains(".sdlxliff") ? filename : $"{filename}.sdlxliff";
-			var filepath = $@"{projectPath}\{targetLanguage}\{filename}";
-
-			if (File.Exists(filepath)) return filepath;
-			if (string.IsNullOrWhiteSpace(projectPath)) return null;
-
-			var targetLanguageFiles = Directory.GetFiles(projectPath);
-			filepath =
-				targetLanguageFiles.FirstOrDefault(
-					f =>
-						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(filename)) &&
-						Path.GetExtension(f) == ".sdlxliff");
-
-			return File.Exists(filepath) ? filepath : null;
-		}
 
 		private void ResetData()
 		{

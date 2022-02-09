@@ -243,6 +243,7 @@
     <Compile Include="Service\RateIt\MetadataSupervisor.cs" />
     <Compile Include="Service\QEReportCreator\QeReportCreator.cs" />
     <Compile Include="Service\RateIt\SegmentMetadataCreator.cs" />
+    <Compile Include="Service\RateIt\SegmentRetriever.cs" />
     <Compile Include="Service\RateIt\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
     <Compile Include="Model\Term.cs" />
@@ -276,7 +277,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Service\VersionService.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
