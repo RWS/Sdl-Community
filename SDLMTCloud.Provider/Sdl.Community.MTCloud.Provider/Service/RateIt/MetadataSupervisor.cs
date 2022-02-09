@@ -202,7 +202,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 					AttachToClosedEvent();
 				}
 
-				_segmentMetadataCreator.AddTargetSegmentMetaData(translationData);
+				_segmentMetadataCreator.StoreMetadata(translationData);
 			}
 			else if (ActiveDocument is not null)
 			{
@@ -224,7 +224,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_isFirstTime = true;
 			_batchProcessingWindow = null;
 			Application.Current.Dispatcher.Invoke(CloseOpenedDocuments);
-			_segmentMetadataCreator.AddToSegmentContextData();
+			_segmentMetadataCreator.AddStoredMetadataToProjectFile();
 		}
 	}
 }
