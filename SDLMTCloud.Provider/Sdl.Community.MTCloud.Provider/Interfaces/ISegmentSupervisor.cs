@@ -5,7 +5,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
-	public interface ISegmentSupervisor : ISupervisor<ImprovementFeedback>
+	public interface ISegmentSupervisor : ISupervisor
 	{
 		event ShouldSendFeedbackEventHandler ShouldSendFeedback;
 
