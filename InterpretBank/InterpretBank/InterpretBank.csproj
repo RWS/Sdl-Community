@@ -85,11 +85,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\GlossaryMetadataEntry.cs" />
+    <Compile Include="Model\Interface\IGlossaryEntry.cs" />
     <Compile Include="Model\LanguageEquivalent.cs" />
     <Compile Include="Model\TermEntry.cs" />
     <Compile Include="Service\Interface\IDatabaseConnection.cs" />
     <Compile Include="Service\Model\DatabaseConnection.cs" />
-    <Compile Include="TestAction.cs" />
     <Compile Include="InterpretBankWinFormsUI.cs" />
     <Compile Include="InterpretBankProviderViewerWinFormsUI.cs" />
     <Compile Include="InterpretBankProvider.cs" />

@@ -33,7 +33,7 @@ namespace InterpretBankTests
 				.Insert(values)
 				.Build();
 
-			Assert.Equal(@"INSERT INTO GlossaryData C1, C2, C3 VALUES ""V1"", ""V2"", ""V3""", sqlStatement);
+			Assert.Equal(@"INSERT INTO GlossaryData (C1, C2, C3) VALUES (""V1"", ""V2"", ""V3"")", sqlStatement);
 		}
 	}
 }

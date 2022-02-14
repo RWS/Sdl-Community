@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using InterpretBank.Model;
+using InterpretBank.Model.Interface;
 using InterpretBank.Service.Interface;
 
 namespace InterpretBank.Service
@@ -32,10 +33,10 @@ namespace InterpretBank.Service
 
 		public void AddTerm(TermEntry termEntry)
 		{
-			var columns = GetTermColumns(termEntry);
+			var columns = termEntry.GetColumns();
 			columns.Add("RecordCreation");
 
-			var columnValues = GetTermValues(termEntry);
+			var columnValues = termEntry.GetValues();
 			columnValues.Add("CURRENT_DATE");
 
 			var insertSqlStatement = _sqlBuilder
@@ -47,7 +48,40 @@ namespace InterpretBank.Service
 			_connection.ExecuteCommand(insertSqlStatement);
 		}
 
-		public List<TermEntry> GetTerms(string searchString, List<int> languages, List<string> glossaryNames, List<string> tags)
+		public void CreateGlossary(List<int> languageIndices, List<string> tags, string note)
+		{
+			//_sqlBuilder
+			//	.Table(Tables.GlossaryMetadata)
+			//	.Columns()
+			//	.Build()
+		}
+
+		public void DeleteTerm(string termId)
+		{
+			var deleteCondition = _conditionBuilder
+				.Equals(termId, "ID")
+				.Build();
+			var deleteSqlStatement = _sqlBuilder
+				.Table(Tables.GlossaryData)
+				.Where(deleteCondition)
+				.Build();
+
+			_connection.ExecuteCommand(deleteSqlStatement);
+		}
+
+		public List<IGlossaryEntry> GetGlossaries()
+		{
+			var sqlStatement = _sqlBuilder
+				.Table(Tables.GlossaryMetadata)
+				.Build();
+
+			var rows = _connection.ExecuteCommand(sqlStatement);
+			var glossaries = ReadEntries<GlossaryMetadataEntry>(rows);
+
+			return glossaries;
+		}
+
+		public List<IGlossaryEntry> GetTerms(string searchString, List<int> languages, List<string> glossaryNames, List<string> tags)
 		{
 			var languageIndices = languages is null || languages.Count < 1
 				? LanguageIndicesDictionary.Values.ToList()
@@ -70,106 +104,69 @@ namespace InterpretBank.Service
 
 			var glossaryNamesSelect = _conditionBuilder
 				.In("Tag1", glossaryNames)
-				.Like(searchString, GetTermColumns(languageIndices, false))
+				.Like(searchString, TermEntry.GetTermColumns(languageIndices, false))
 				.Build();
 
 			var sql = _sqlBuilder
-				.Columns(GetTermColumns(languageIndices))
+				.Columns(TermEntry.GetTermColumns(languageIndices, isRead: true))
 				.Table(Tables.GlossaryData)
 				.Where(glossaryNamesSelect)
 				.Build();
 
 			var rows = _connection.ExecuteCommand(sql);
-			var termList = ReadTermEntries(rows, languageIndices);
+			var termList = ReadEntries<TermEntry>(rows);
 
 			return termList;
 		}
 
-		public void UpdateTerm(TermEntry termEntry)
+		public void MergeGlossaries(string firstGlossary, string secondGlossary, string subGlossary = null)
+		{
+			var mergeStatement = _sqlBuilder
+				.Table(Tables.GlossaryData)
+				.Columns(new List<string> { "Tag1", "Tag2" })
+				.Update(new List<string> { firstGlossary, subGlossary })
+				.Where($@"Tag1 = ""{secondGlossary}""")
+				.Build();
+
+			_connection.ExecuteCommand(mergeStatement);
+		}
+
+		public void UpdateTermContent(TermEntry termEntry)
 		{
 			var updateCondition = _conditionBuilder
-				.Equals(termEntry.Id, "ID")
+				.Equals(termEntry.ID, "ID")
 				.Build();
+			var updateColumns = TermEntry.GetTermColumns(LanguageIndicesDictionary.Values.ToList());
 			var sqlUpdateStatement = _sqlBuilder
 				.Table(Tables.GlossaryData)
-				.Columns(GetTermColumns(LanguageIndicesDictionary.Values.ToList()))
-				.Update(GetTermValues(termEntry))
+				.Columns(updateColumns)
+				.Update(termEntry.GetValues())
 				.Where(updateCondition)
 				.Build();
 
 			_connection.ExecuteCommand(sqlUpdateStatement);
 		}
 
-		private static List<string> GetTermColumns(List<int> languageIndices, bool withLocation = true)
+		private List<IGlossaryEntry> ReadEntries<T>(List<Dictionary<string, string>> rows)
+			where T : IGlossaryEntry, new()
 		{
-			var columns = new List<string> { "CommentAll" };
+			if (rows is null || rows.Count == 0) return null;
+			//var glossaryList = _entryFactory.CreateEntry<T>(rows);
 
-			if (withLocation)
-			{
-				columns.Insert(0, "Tag2");
-				columns.Insert(0, "Tag1");
-				columns.Insert(0, "ID");
-			}
-
-			foreach (var le in languageIndices)
-			{
-				columns.AddRange(LanguageEquivalent.GetColumns(le));
-			}
-
-			return columns;
-		}
-
-		private static List<TermEntry> ReadTermEntries(List<Dictionary<string, string>> rows, List<int> languageIndices)
-		{
-			var termList = new List<TermEntry>();
-
-			if (rows is null || rows.Count == 0) return termList;
-
+			var glossaryList = new List<IGlossaryEntry>();
 			foreach (var row in rows)
 			{
-				var term = new TermEntry
+				var glossaryEntry = new T();
+
+				foreach (var rowKey in row.Keys)
 				{
-					Id = row["ID"],
-					Tag1 = row["Tag1"],
-					Tag2 = row["Tag2"],
-					CommentAll = row["CommentAll"]
-				};
+					glossaryEntry[rowKey] = row[rowKey];
+				}
 
-				foreach (var index in languageIndices)
-					term.Add(new LanguageEquivalent
-					{
-						LanguageIndex = index,
-						Term = row[$"Term{index}"],
-						CommentA = row[$"Comment{index}a"],
-						CommentB = row[$"Comment{index}b"]
-					});
-
-				termList.Add(term);
+				glossaryList.Add(glossaryEntry);
 			}
 
-			return termList;
-		}
-
-		private List<string> GetTermColumns(TermEntry term)
-		{
-			var columns = new List<string> { "Tag1", "Tag2", "CommentAll" };
-			foreach (var le in term.LanguageEquivalents)
-			{
-				columns.AddRange(le.GetColumns());
-			}
-
-			return columns;
-		}
-
-		private List<string> GetTermValues(TermEntry term)
-		{
-			var values = new List<string> { term.Id, term.Tag1, term.Tag2, term.CommentAll };
-			foreach (var le in term.LanguageEquivalents)
-			{
-				values.AddRange(le.GetValues());
-			}
-
-			return values;
+			return glossaryList;
 		}
 
 		private void SetLanguageIndices()

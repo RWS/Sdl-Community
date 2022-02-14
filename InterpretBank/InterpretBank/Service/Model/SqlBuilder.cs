@@ -14,7 +14,7 @@ namespace InterpretBank.Service.Model
 		private string WhereCondition { get; set; }
 		private StatementType Type { get; set; }
 
-		public enum StatementType
+		private enum StatementType
 		{
 			Select,
 			Insert,
@@ -35,13 +35,11 @@ namespace InterpretBank.Service.Model
 					var insertValuesString = $@"""{InsertValues[0]}""";
 					foreach (var value in InsertValues.Skip(1))
 					{
-						if (value == "CURRENT_DATE")
-							insertValuesString += $@", {value}";
 						insertValuesString += $@", ""{value}""";
 					}
 
-					var insert = $"INSERT INTO {TableName} {columnNamesString}";
-					var values = $"VALUES {insertValuesString}";
+					var insert = $"INSERT INTO {TableName} ({columnNamesString})";
+					var values = $"VALUES ({insertValuesString})";
 					sqlStatement = $"{insert} {values}";
 					break;
 				}
@@ -59,7 +57,18 @@ namespace InterpretBank.Service.Model
 				case StatementType.Update:
 					if (ColumnNames is null || UpdateValues is null || ColumnNames.Count != UpdateValues.Count)
 						return null;
-					var set = $" SET {string.Join(", ", ColumnNames)}";
+
+					var pairs = new List<string>();
+
+					for (var index = 0; index < ColumnNames.Count; index++)
+					{
+						if (!string.IsNullOrWhiteSpace(UpdateValues[index]) &&
+						    !string.IsNullOrWhiteSpace(ColumnNames[index]))
+							pairs.Add($@"{ColumnNames[index]} = ""{UpdateValues[index]}""");
+					}
+
+					var set = $" SET {string.Join(", ", pairs)}";
+
 					var updateCondition = $" WHERE {WhereCondition}"; //will crash if no condition is given as this is too dangerous to be done without it
 					sqlStatement = $"UPDATE {TableName}{set}{updateCondition}";
 					break;
@@ -106,7 +115,7 @@ namespace InterpretBank.Service.Model
 			return this;
 		}
 
-		public List<string> UpdateValues { get; set; }
+		private List<string> UpdateValues { get; set; }
 
 		public ISqlBuilder Where(string condition)
 		{

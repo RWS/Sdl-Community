@@ -4,8 +4,8 @@ namespace InterpretBank.Model
 {
 	public class LanguageEquivalent
 	{
-		public string CommentA { get; set; }
-		public string CommentB { get; set; }
+		public string Commenta { get; set; }
+		public string Commentb { get; set; }
 		public int LanguageIndex { get; set; }
 		public string Term { get; set; }
 
@@ -24,6 +24,6 @@ namespace InterpretBank.Model
 		};
 
 		public List<string> GetValues() =>
-			new() { Term, CommentA, CommentB };
+			new() { Term, Commenta, Commentb };
 	}
 }
