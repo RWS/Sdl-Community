@@ -4,11 +4,11 @@ namespace InterpretBank.Model.Interface
 {
 	public interface IGlossaryEntry
 	{
+		string ID { get; set; }
 		string this[string property] { get; set; }
 
-		List<string> GetColumns();
-		List<string> GetValues();
+		List<string> GetColumns(bool includeId = false);
 
-		Dictionary<string, string> ToRow();
+		List<string> GetValues();
 	}
 }

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using InterpretBank;
 using InterpretBank.Model;
-using InterpretBank.Model.Interface;
 using InterpretBank.Service;
 using InterpretBank.Service.Interface;
 using InterpretBank.Service.Model;
@@ -20,14 +18,14 @@ namespace InterpretBankTests
 		}
 
 		[Fact]
-		public void AddTerm_Test()
+		public void CreateGlossary_Test()
 		{
 			var connectionMock = Substitute.For<IDatabaseConnection>();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
 
-			glossaryService.AddTerm(new TermEntry());
+			glossaryService.Create(new GlossaryMetadataEntry());
 
 			connectionMock
 				.Received()
@@ -35,7 +33,26 @@ namespace InterpretBankTests
 			connectionMock
 				.Received()
 				.ExecuteCommand(Arg.Is(
-					@"INSERT INTO GlossaryData (Tag1, Tag2, CommentAll, RecordCreation) VALUES ("""", """", """", ""CURRENT_DATE"")"));
+					@"INSERT INTO GlossaryMetadata (GlossaryCreator, GlossaryDataCreation, GlossaryDescription, GlossarySetting, Tag1, Tag2) VALUES ("""", """", """", """", """", """")"));
+		}
+
+		[Fact]
+		public void CreateTerm_Test()
+		{
+			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var glossaryService = _glossaryServiceBuilder
+				.WithDatabaseConnection(connectionMock)
+				.Build();
+
+			glossaryService.Create(new TermEntry());
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is(
+					@"INSERT INTO GlossaryData (CommentAll, Tag1, Tag2, RecordCreation) VALUES ("""", """", """", ""CURRENT_DATE"")"));
 		}
 
 		[Fact]
@@ -54,7 +71,44 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(@"SELECT * FROM GlossaryData WHERE (ID = ""5"")"));
+				.ExecuteCommand(Arg.Is(@"DELETE FROM GlossaryData WHERE (ID = ""5"")"));
+		}
+		
+		[Fact]
+		public void DeleteGlossary_Test()
+		{
+			var connectionMock = Substitute.For<IDatabaseConnection>();
+			connectionMock
+				.ExecuteCommand(default)
+				.ReturnsForAnyArgs
+				(
+					null,
+					new List<Dictionary<string, string>>
+					{
+						new() {["Tag1"] = "TestGlossary", ["Tag2"] = "TestSubGlossary"}
+					},
+					null,
+					null
+				);
+
+			var glossaryService = _glossaryServiceBuilder
+				.WithDatabaseConnection(connectionMock)
+				.Build();
+
+			glossaryService.DeleteGlossary("5");
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+			
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is("SELECT Tag1, Tag2 FROM GlossaryMetadata WHERE ID = 5"));
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(
+					Arg.Is(@"DELETE FROM GlossaryData WHERE Tag1 = TestGlossary AND Tag2 = TestSubGlossary"));
 		}
 
 		[Fact]
@@ -84,6 +138,7 @@ namespace InterpretBankTests
 				new List<string> { "AnotherTagOne" });
 
 			Assert.Single(termList);
+			Assert.Equal(2, ((TermEntry)termList[0]).LanguageEquivalents.Count);
 			Assert.Equal(typeof(TermEntry), termList[0].GetType());
 		}
 
@@ -159,14 +214,14 @@ namespace InterpretBankTests
 		}
 
 		[Fact]
-		public void UpdateTermContent_Test()
+		public void UpdateGlossaryMetadata_Test()
 		{
 			var connectionMock = Substitute.For<IDatabaseConnection>();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
 
-			glossaryService.UpdateTermContent(new TermEntry
+			glossaryService.UpdateContent(new GlossaryMetadataEntry
 			{
 				ID = "2",
 				Tag1 = "Glossary"
@@ -178,7 +233,30 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(@"UPDATE GlossaryData SET Tag1 = ""Glossary"" WHERE (ID = ""2"")"));
+				.ExecuteCommand(Arg.Is(@"UPDATE GlossaryMetadata SET Tag1 = ""Glossary"" WHERE (ID = ""2"")"));
+		}
+
+		[Fact]
+		public void UpdateTermContent_Test()
+		{
+			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var glossaryService = _glossaryServiceBuilder
+				.WithDatabaseConnection(connectionMock)
+				.Build();
+
+			glossaryService.UpdateContent(new TermEntry
+			{
+				ID = "2",
+				Tag1 = "Glossary"
+			});
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is(@"UPDATE GlossaryData SET Tag1 = ""Glossary"", RecordCreation = ""CURRENT_DATE"" WHERE (ID = ""2"")"));
 		}
 	}
 }

@@ -4,8 +4,7 @@ namespace InterpretBank.Service.Interface
 {
 	public interface IConditionBuilder
 	{
-		string Build();
-
+		ISqlBuilder EndCondition();
 		IConditionBuilder Equals(List<string> values, string columnName, string @operator = "AND");
 
 		IConditionBuilder Equals(string value, string columnName, string @operator = "AND");
