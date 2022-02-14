@@ -16,7 +16,7 @@ namespace InterpretBankTests
 				.Columns(columns)
 				.Table(Tables.GlossaryData)
 				.InnerJoin(Tables.GlossaryMetadata, "Tag1", "GlossaryID")
-				.Build();
+				.Continue();
 
 			Assert.Equal("SELECT C1, C2, C3 FROM GlossaryData INNER JOIN GlossaryMetadata ON Tag1=GlossaryID", sqlStatement);
 		}
@@ -26,14 +26,14 @@ namespace InterpretBankTests
 		{
 			var sqlBuilder = new SqlBuilder();
 			var columns = new List<string> { "C1", "C2", "C3" };
-			var values = new List<string> { "V1", "V2", "V3" };
+			var values = new List<object> { "V1", "V2", "V3" };
 			var sqlStatement = sqlBuilder
 				.Columns(columns)
 				.Table(Tables.GlossaryData)
 				.Insert(values)
 				.Build();
 
-			Assert.Equal(@"INSERT INTO GlossaryData (C1, C2, C3) VALUES (""V1"", ""V2"", ""V3"")", sqlStatement);
+			Assert.Equal(@"INSERT INTO GlossaryData (C1, C2, C3) VALUES (""@0"", ""@1"", ""@2"")", sqlStatement.CommandText);
 		}
 	}
 }

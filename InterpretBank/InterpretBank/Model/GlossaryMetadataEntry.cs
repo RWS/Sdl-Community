@@ -13,7 +13,7 @@ namespace InterpretBank.Model
 		public string GlossaryDataCreation { get; set; }
 		public string GlossaryDescription { get; set; }
 		public string GlossarySetting { get; set; }
-		public string ID { get; set; }
+		public int ID { get; set; }
 		public string Tag1 { get; set; }
 		public string Tag2 { get; set; }
 		private static PropertyInfo[] Properties => _properties ??= typeof(GlossaryMetadataEntry).GetProperties();
@@ -41,11 +41,11 @@ namespace InterpretBank.Model
 				.ToList();
 		}
 
-		public List<string> GetValues()
+		public List<object> GetValues()
 		{
 			return GetColumns()
 				.Select(column => GetType().GetProperty(column))
-				.Select(propertyInfo => propertyInfo?.GetValue(this, null)?.ToString())
+				.Select(propertyInfo => propertyInfo?.GetValue(this, null))
 				.ToList();
 		}
 	}

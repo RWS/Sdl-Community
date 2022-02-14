@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SQLite;
 using InterpretBank.Model;
 using InterpretBank.Service;
 using InterpretBank.Service.Interface;
@@ -29,11 +30,11 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(
-					@"INSERT INTO GlossaryMetadata (GlossaryCreator, GlossaryDataCreation, GlossaryDescription, GlossarySetting, Tag1, Tag2) VALUES ("""", """", """", """", """", """")"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText ==
+															@"INSERT INTO GlossaryMetadata (GlossaryCreator, GlossaryDataCreation, GlossaryDescription, GlossarySetting, Tag1, Tag2) VALUES (""@0"", ""@1"", ""@2"", ""@3"", ""@4"", ""@5"")"));
 		}
 
 		[Fact]
@@ -48,11 +49,11 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(
-					@"INSERT INTO GlossaryData (CommentAll, Tag1, Tag2, RecordCreation) VALUES ("""", """", """", ""CURRENT_DATE"")"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText ==
+					@"INSERT INTO GlossaryData (CommentAll, Tag1, Tag2, RecordCreation) VALUES (""@0"", ""@1"", ""@2"", ""@3"")"));
 		}
 
 		[Fact]
@@ -67,17 +68,19 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(@"DELETE FROM GlossaryData WHERE (ID = ""5"")"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == @"DELETE FROM GlossaryData WHERE (ID = @0)"));
 		}
 		
 		[Fact]
 		public void DeleteGlossary_Test()
 		{
 			var connectionMock = Substitute.For<IDatabaseConnection>();
+
+
 			connectionMock
 				.ExecuteCommand(default)
 				.ReturnsForAnyArgs
@@ -97,18 +100,22 @@ namespace InterpretBankTests
 
 			glossaryService.DeleteGlossary("5");
 
-			connectionMock
-				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
 			
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT Tag1, Tag2 FROM GlossaryMetadata WHERE ID = 5"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s =>
+					s.CommandText == "SELECT Tag1, Tag2 FROM GlossaryMetadata WHERE ID = 5"));
 
 			connectionMock
 				.Received()
 				.ExecuteCommand(
-					Arg.Is(@"DELETE FROM GlossaryData WHERE Tag1 = TestGlossary AND Tag2 = TestSubGlossary"));
+					Arg.Is<SQLiteCommand>(s =>
+						s.CommandText ==
+						@"DELETE FROM GlossaryData WHERE Tag1 = TestGlossary AND Tag2 = TestSubGlossary"));
 		}
 
 		[Fact]
@@ -152,17 +159,13 @@ namespace InterpretBankTests
 				.Build();
 			var languages = new List<int> { 1, 2 };
 			var expectedSqlStatement =
-				"SELECT ID, Tag1, Tag2, CommentAll, Term1, Comment1a, Comment1b, Term2, Comment2a, Comment2b " +
-				"FROM GlossaryData WHERE " +
-				"(Tag1 IN " +
-				"(SELECT Tag1 FROM GlossaryMetadata INNER JOIN TagLink ON GlossaryID=ID " +
-				"WHERE TagName IN ('AnotherTagOne')))";
+				"SELECT ID, Tag1, Tag2, CommentAll, Term1, Comment1a, Comment1b, Term2, Comment2a, Comment2b FROM GlossaryData WHERE (Tag1 IN (SELECT Tag1 FROM GlossaryMetadata INNER JOIN TagLink ON GlossaryID=ID WHERE TagName IN ('@0')))";
 
 			var sqlData = new List<Dictionary<string, string>>
 			{
 				new()
 				{
-					["ID"] = null,
+					["ID"] = "2",
 					["Tag1"] =  null,
 					["Tag2"] = null,
 					["Term1"] = null,
@@ -174,8 +177,9 @@ namespace InterpretBankTests
 					["Comment2b"] = null
 				}
 			};
+
 			connectionMock
-				.ExecuteCommand(expectedSqlStatement)
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == expectedSqlStatement))
 				.Returns(sqlData);
 
 			//Act
@@ -185,11 +189,11 @@ namespace InterpretBankTests
 			//Assert
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(expectedSqlStatement));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == expectedSqlStatement));
 
 			Assert.Single(termList);
 			Assert.Equal(typeof(TermEntry), termList[0].GetType());
@@ -207,10 +211,12 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(@"UPDATE GlossaryData SET Tag1 = ""Glossary"" WHERE Tag1 = ""ToBeMergedGlossary"""));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s =>
+					s.CommandText ==
+					@"UPDATE GlossaryData SET Tag1 = ""@0"", Tag2 = ""@1"" WHERE Tag1 = ""ToBeMergedGlossary"""));
 		}
 
 		[Fact]
@@ -223,17 +229,19 @@ namespace InterpretBankTests
 
 			glossaryService.UpdateContent(new GlossaryMetadataEntry
 			{
-				ID = "2",
+				ID = 2,
 				Tag1 = "Glossary"
 			});
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(@"UPDATE GlossaryMetadata SET Tag1 = ""Glossary"" WHERE (ID = ""2"")"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s =>
+					s.CommandText ==
+					@"UPDATE GlossaryMetadata SET GlossaryCreator = ""@0"", GlossaryDataCreation = ""@1"", GlossaryDescription = ""@2"", GlossarySetting = ""@3"", Tag1 = ""@4"", Tag2 = ""@5"" WHERE (ID = @6)"));
 		}
 
 		[Fact]
@@ -246,17 +254,19 @@ namespace InterpretBankTests
 
 			glossaryService.UpdateContent(new TermEntry
 			{
-				ID = "2",
+				ID = 2,
 				Tag1 = "Glossary"
 			});
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is("SELECT * FROM DatabaseInfo"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is(@"UPDATE GlossaryData SET Tag1 = ""Glossary"", RecordCreation = ""CURRENT_DATE"" WHERE (ID = ""2"")"));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s =>
+					s.CommandText ==
+					@"UPDATE GlossaryData SET CommentAll = ""@0"", Tag1 = ""@1"", Tag2 = ""@2"", RecordCreation = ""@3"" WHERE (ID = @4)"));
 		}
 	}
 }

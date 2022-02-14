@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Security.Claims;
 using InterpretBank.Service.Interface;
@@ -8,12 +10,11 @@ namespace InterpretBank.Service.Model
 {
 	public class SqlBuilder : ISqlBuilder, IConditionBuilder
 	{
-		private string WhereCondition;
+		private string WhereCondition { get; set; }
 		private List<string> ColumnNames { get; set; }
-		private List<string> InsertValues { get; set; }
+		private List<string> InsertValues { get; set; } = new();
 		private (string, string, string) JoinParameters { get; set; }
 		private string TableName { get; set; }
-		//private string WhereCondition { get; set; }
 		private StatementType Type { get; set; }
 
 		private enum StatementType
@@ -24,7 +25,7 @@ namespace InterpretBank.Service.Model
 			Delete
 		}
 
-		public string Build()
+		public SQLiteCommand Build()
 		{
 			var sqlStatement = "";
 
@@ -81,8 +82,82 @@ namespace InterpretBank.Service.Model
 					break;
 			}
 
+			var sqlCommand = new SQLiteCommand(sqlStatement);
+
+			foreach (var variable in Variables)
+			{
+				var dbType = variable.Value switch
+				{
+					int _ => DbType.Int64,
+					_ => DbType.String
+				};
+
+				sqlCommand.Parameters.Add(variable.Key, dbType);
+				sqlCommand.Parameters[variable.Key].Value = variable.Value;
+			}
 
 			ResetFields();
+			return sqlCommand;
+		}
+		
+		public string Continue()
+		{
+			var sqlStatement = "";
+
+			var columnNamesString =
+				ColumnNames is not null && ColumnNames.Count > 0 ? string.Join(", ", ColumnNames) : "*";
+
+			switch (Type)
+			{
+				case StatementType.Insert:
+				{
+					var insertValuesString = $@"""{InsertValues[0]}""";
+					foreach (var value in InsertValues.Skip(1))
+					{
+						insertValuesString += $@", ""{value}""";
+					}
+
+					var insert = $"INSERT INTO {TableName} ({columnNamesString})";
+					var values = $"VALUES ({insertValuesString})";
+					sqlStatement = $"{insert} {values}";
+					break;
+				}
+				case StatementType.Select:
+				{
+					var select = $"SELECT {columnNamesString}";
+
+					var join = JoinParameters.Item1 is not null ? $" INNER JOIN {JoinParameters.Item1} ON {JoinParameters.Item2}={JoinParameters.Item3}" : null;
+					var from = $" FROM {TableName}{@join}";
+					var where = WhereCondition is not null ? $" WHERE {WhereCondition}" : null;
+
+					sqlStatement = $"{@select}{@from}{@where}";
+					break;
+				}
+				case StatementType.Update:
+					if (ColumnNames is null || UpdateValues is null || ColumnNames.Count != UpdateValues.Count)
+						return null;
+
+					var pairs = new List<string>();
+
+					for (var index = 0; index < ColumnNames.Count; index++)
+					{
+						if (!string.IsNullOrWhiteSpace(UpdateValues[index]) &&
+						    !string.IsNullOrWhiteSpace(ColumnNames[index]))
+							pairs.Add($@"{ColumnNames[index]} = ""{UpdateValues[index]}""");
+					}
+
+					var set = $" SET {string.Join(", ", pairs)}";
+
+					var updateCondition = $" WHERE {WhereCondition}"; //will crash if no condition is given as this is too dangerous to be done without it
+					sqlStatement = $"UPDATE {TableName}{set}{updateCondition}";
+					break;
+				case StatementType.Delete:
+
+					sqlStatement = $"DELETE FROM {TableName} WHERE {WhereCondition}";
+					break;
+			}
+
+			//ResetFields(true);
 			return sqlStatement;
 		}
 
@@ -105,7 +180,7 @@ namespace InterpretBank.Service.Model
 		public ISqlBuilder Insert(List<string> values)
 		{
 			Type = StatementType.Insert;
-			InsertValues = values;
+			values.ForEach(v => InsertValues.Add(GetReference(v)));
 			return this;
 		}
 
@@ -124,11 +199,11 @@ namespace InterpretBank.Service.Model
 		public ISqlBuilder Update(List<string> values)
 		{
 			Type = StatementType.Update;
-			UpdateValues = values;
+			values.ForEach(v => UpdateValues.Add(GetReference(v)));
 			return this;
 		}
 
-		private List<string> UpdateValues { get; set; }
+		private List<string> UpdateValues { get; set; } = new();
 
 		public ISqlBuilder Where(string condition)
 		{
@@ -140,14 +215,15 @@ namespace InterpretBank.Service.Model
 
 		private void ResetFields()
 		{
-			ColumnNames = null;
+			ColumnNames = new();
 			TableName = null;
-			InsertValues = null;
-			UpdateValues = null;
+			InsertValues = new();
+			UpdateValues = new();
 			Type = StatementType.Select;
 			JoinParameters = (null, null, null);
-			Expressions = new List<Expression>();
+			Expressions = new();
 			WhereCondition = null;
+			InColumnName = null;
 		}
 
 		private List<Expression> Expressions { get; set; } = new();
@@ -162,31 +238,55 @@ namespace InterpretBank.Service.Model
 			return this;
 		}
 
-		public IConditionBuilder Equals(List<string> values, string columnName, string @operator = "AND")
+		//public IConditionBuilder Equals(List<string> values, string columnName, string @operator = "AND")
+		//{
+		//	if (values is null || values.Count == 0) return this;
+
+		//	var equalsExpressions = values
+		//		.Select(value => $@"{columnName} = ""{value}""").ToList();
+
+		//	var equalsExpression = string.Join(" OR ", equalsExpressions);
+		//	Expressions.Add(new Expression { Operator = @operator, Text = $"({equalsExpression})" });
+		//	return this;
+		//}
+
+		private Dictionary<string, object> Variables { get; set; } = new();
+
+		private string GetReference(object value)
 		{
-			if (values is null || values.Count == 0) return this;
+			var key = $"@{Variables.Count}";
+			Variables.Add(key, value);
 
-			var equalsExpressions = values
-				.Select(value => $@"{columnName} = ""{value}""").ToList();
-
-			var equalsExpression = string.Join(" OR ", equalsExpressions);
-			Expressions.Add(new Expression { Operator = @operator, Text = $"({equalsExpression})" });
-			return this;
+			return key;
 		}
 
-		public IConditionBuilder Equals(string value, string columnName, string @operator = "AND")
+		public IConditionBuilder Equals(object value, string columnName, string @operator = "AND")
 		{
-			if (string.IsNullOrWhiteSpace(value)) return this;
+			if (value is null) return this;
 
-			Expressions.Add(new Expression { Operator = @operator, Text = $@"({columnName} = ""{value}"")" });
+			var reference = GetReference(value);
+
+			Expressions.Add(new Expression { Operator = @operator, Text = $@"({columnName} = {reference})" });
 			return this;
 		}
 
 		public IConditionBuilder In(string columnName, List<string> glossaryNames, string @operator = "AND")
+		//public IConditionBuilder Equals(string value, string columnName, string @operator = "AND")
+		//{
+		//	if (string.IsNullOrWhiteSpace(value)) return this;
+
+		//	Expressions.Add(new Expression { Operator = @operator, Text = $@"({columnName} = ""{value}"")" });
+		//	return this;
+		//}
+
 		{
-			if (glossaryNames is null || glossaryNames.Count == 0) return this;
-			var glossaryNamesSql = new List<string>(glossaryNames.Count);
-			glossaryNamesSql.AddRange(glossaryNames.Select(glossaryName => $"'{glossaryName}'"));
+			if (values is null || values.Count == 0) return this;
+
+			var valueReferences = new List<string>();
+			values.ForEach(v => valueReferences.Add(GetReference(v)));
+
+			var glossaryNamesSql = new List<string>(valueReferences.Count);
+			glossaryNamesSql.AddRange(valueReferences.Select(glossaryName => $"'{glossaryName}'"));
 			var inString = $@"{columnName} IN ({string.Join(",", glossaryNamesSql)})";
 
 			Expressions.Add(new Expression { Operator = @operator, Text = inString });
@@ -194,11 +294,19 @@ namespace InterpretBank.Service.Model
 		}
 
 		public IConditionBuilder In(string columnName, string sqlSelect, string @operator = "AND")
+		//public IConditionBuilder In(string columnName, string sqlSelect, string @operator = "AND")
+		//{
+		//	var inString = $@"({columnName} IN ({sqlSelect}))";
+		//	Expressions.Add(new Expression { Operator = @operator, Text = inString });
+		//	return this;
+		//}
+
 		{
-			var inString = $@"({columnName} IN ({sqlSelect}))";
-			Expressions.Add(new Expression { Operator = @operator, Text = inString });
+			InColumnName = columnName;
 			return this;
 		}
+
+		private string InColumnName { get; set; }
 
 		public bool IsEmpty() => Expressions.Count == 0;
 

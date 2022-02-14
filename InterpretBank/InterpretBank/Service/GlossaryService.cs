@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using InterpretBank.Model;
 using InterpretBank.Model.Interface;
@@ -81,18 +82,17 @@ namespace InterpretBank.Service
 					.Table(Tables.GlossaryMetadata)
 					.InnerJoin(Tables.TagLink, "GlossaryID", "ID")
 					.Where()
-					.In("TagName", tags)
-					.EndCondition()
-					.Build();
+						.In("TagName", tags.Cast<object>().ToList())
+						.EndCondition()
+					.Continue();
 			}
 
-				
 			var sql = _sqlBuilder
 				.Columns(TermEntry.GetColumns(languageIndices, isRead: true))
 				.Table(Tables.GlossaryData)
 				.Where()
-					.In("Tag1", joinStatement)
-					.In("Tag1", glossaryNames)
+					//.In("Tag1", joinStatement)
+					.In("Tag1", glossaryNames?.Cast<object>().ToList())
 					.Like(searchString, TermEntry.GetColumns(languageIndices, false))
 					.EndCondition()
 				.Build();
@@ -108,7 +108,7 @@ namespace InterpretBank.Service
 			var mergeStatement = _sqlBuilder
 				.Table(Tables.GlossaryData)
 				.Columns(new List<string> { "Tag1", "Tag2" })
-				.Update(new List<string> { firstGlossary, subGlossary })
+				.Update(new List<object> { firstGlossary, subGlossary })
 				.Where($@"Tag1 = ""{secondGlossary}""")
 				.Build();
 
@@ -141,15 +141,15 @@ namespace InterpretBank.Service
 				.Table(Tables.GlossaryMetadata)
 				.Columns(new() {"Tag1", "Tag2"})
 				.Where(glossaryDeleteCondition)
-				.Build();
+				.Continue();
 
-			var tags = _connection.ExecuteCommand(tagsStatement);
+			var tags = _connection.ExecuteCommand(new SQLiteCommand(tagsStatement));
 
 			var deleteGlossaryStatement = _sqlBuilder
 				.Table(Tables.GlossaryMetadata)
 				.Delete()
 				.Where(glossaryDeleteCondition)
-				.Build();
+				.Continue();
 
 			var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
 
@@ -159,10 +159,10 @@ namespace InterpretBank.Service
 				.Table(Tables.GlossaryData)
 				.Where(termsDeleteCondition)
 				.Delete()
-				.Build();
+				.Continue();
 
-			_connection.ExecuteCommand(deleteGlossaryStatement);
-			_connection.ExecuteCommand(deleteGlossaryTerms);
+			_connection.ExecuteCommand(new SQLiteCommand(deleteGlossaryStatement));
+			_connection.ExecuteCommand(new SQLiteCommand(deleteGlossaryTerms));
 		}
 
 		private List<IGlossaryEntry> ReadEntries<T>(List<Dictionary<string, string>> rows)
@@ -189,7 +189,7 @@ namespace InterpretBank.Service
 		private void SetLanguageIndices()
 		{
 			var sql = "SELECT * FROM DatabaseInfo";
-			var rows = _connection.ExecuteCommand(sql);
+			var rows = _connection.ExecuteCommand(new SQLiteCommand(sql));
 
 			if (rows is null || rows.Count == 0) return;
 

@@ -13,11 +13,11 @@ namespace InterpretBank.Service.Model
 			_connection = new SQLiteConnection($"Data Source='{filepath}';Cache=Shared");
 		}
 
-		public List<Dictionary<string, string>> ExecuteCommand(string sql)
+		public List<Dictionary<string, string>> ExecuteCommand(SQLiteCommand cmdQuery)
 		{
 			_connection.Open();
 
-			var cmdQuery = new SQLiteCommand(sql, _connection);
+			cmdQuery.Connection = _connection;
 			var rdrSelect = cmdQuery.ExecuteReader();
 
 			var rows = new List<Dictionary<string, string>>(rdrSelect.FieldCount);

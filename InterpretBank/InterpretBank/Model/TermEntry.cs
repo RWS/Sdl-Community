@@ -11,7 +11,7 @@ namespace InterpretBank.Model
 	{
 		private static PropertyInfo[] _properties;
 		public string CommentAll { get; set; }
-		public string ID { get; set; }
+		public int ID { get; set; }
 		public List<LanguageEquivalent> LanguageEquivalents { get; set; } = new(10);
 		public string Tag1 { get; set; }
 		public string Tag2 { get; set; }
@@ -92,11 +92,11 @@ namespace InterpretBank.Model
 			return columns;
 		}
 
-		public List<string> GetValues()
+		public List<object> GetValues()
 		{
 			var values = GetColumns()
 				.Select(column => GetType().GetProperty(column))
-				.Select(propertyInfo => propertyInfo?.GetValue(this, null)?.ToString())
+				.Select(propertyInfo => propertyInfo?.GetValue(this, null))
 				.ToList();
 
 			LanguageEquivalents.ForEach(le => values.AddRange(le.GetValues()));
