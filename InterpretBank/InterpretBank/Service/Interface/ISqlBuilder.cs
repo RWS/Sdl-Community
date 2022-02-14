@@ -13,6 +13,9 @@ namespace InterpretBank.Service.Interface
 		ISqlBuilder Table<T>(T tableName);
 
 		ISqlBuilder Where(string condition);
+		
+		IConditionBuilder Where();
 		ISqlBuilder Update(List<string> values);
+		ISqlBuilder Delete();
 	}
 }

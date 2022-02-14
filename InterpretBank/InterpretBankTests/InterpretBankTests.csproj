@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConditionBuilderTests.cs" />
     <Compile Include="GlossaryServiceBuilder.cs" />
     <Compile Include="GlossaryServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

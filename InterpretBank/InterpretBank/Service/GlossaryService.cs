@@ -10,37 +10,31 @@ namespace InterpretBank.Service
 	{
 		GlossaryData,
 		GlossaryMetadata,
-		TagLink,
+		TagLink
 	}
 
 	public class GlossaryService : IGlossaryService
 	{
-		private readonly IConditionBuilder _conditionBuilder;
 		private readonly IDatabaseConnection _connection;
 		private readonly ISqlBuilder _sqlBuilder;
 
-		public GlossaryService(IDatabaseConnection connection, ISqlBuilder sqlBuilder, IConditionBuilder conditionBuilder)
+		public GlossaryService(IDatabaseConnection connection, ISqlBuilder sqlBuilder)
 		{
 			_connection = connection;
-
 			_sqlBuilder = sqlBuilder;
-			_conditionBuilder = conditionBuilder;
-
 			SetLanguageIndices();
 		}
 
 		private Dictionary<string, int> LanguageIndicesDictionary { get; } = new();
 
-		public void AddTerm(TermEntry termEntry)
+		public void Create(IGlossaryEntry entry)
 		{
-			var columns = termEntry.GetColumns();
-			columns.Add("RecordCreation");
+			var columns = entry.GetColumns();
+			var columnValues = entry.GetValues();
 
-			var columnValues = termEntry.GetValues();
-			columnValues.Add("CURRENT_DATE");
-
+			var table = entry is TermEntry ? Tables.GlossaryData : Tables.GlossaryMetadata;
 			var insertSqlStatement = _sqlBuilder
-				.Table(Tables.GlossaryData)
+				.Table(table)
 				.Columns(columns)
 				.Insert(columnValues)
 				.Build();
@@ -48,22 +42,14 @@ namespace InterpretBank.Service
 			_connection.ExecuteCommand(insertSqlStatement);
 		}
 
-		public void CreateGlossary(List<int> languageIndices, List<string> tags, string note)
-		{
-			//_sqlBuilder
-			//	.Table(Tables.GlossaryMetadata)
-			//	.Columns()
-			//	.Build()
-		}
-
 		public void DeleteTerm(string termId)
 		{
-			var deleteCondition = _conditionBuilder
-				.Equals(termId, "ID")
-				.Build();
 			var deleteSqlStatement = _sqlBuilder
 				.Table(Tables.GlossaryData)
-				.Where(deleteCondition)
+				.Where()
+					.Equals(termId, "ID")
+					.EndCondition()
+				.Delete()
 				.Build();
 
 			_connection.ExecuteCommand(deleteSqlStatement);
@@ -87,30 +73,28 @@ namespace InterpretBank.Service
 				? LanguageIndicesDictionary.Values.ToList()
 				: languages;
 
+			var joinStatement = "";
 			if (tags is not null && tags.Count > 0)
 			{
-				var tagCondition = _conditionBuilder
-					.In("TagName", tags)
-					.Build();
-				var joinStatement = _sqlBuilder
+				joinStatement = _sqlBuilder
 					.Columns(new List<string> { "Tag1" })
 					.Table(Tables.GlossaryMetadata)
 					.InnerJoin(Tables.TagLink, "GlossaryID", "ID")
-					.Where(tagCondition)
+					.Where()
+					.In("TagName", tags)
+					.EndCondition()
 					.Build();
-				_conditionBuilder
-					.In("Tag1", joinStatement);
 			}
 
-			var glossaryNamesSelect = _conditionBuilder
-				.In("Tag1", glossaryNames)
-				.Like(searchString, TermEntry.GetTermColumns(languageIndices, false))
-				.Build();
-
+				
 			var sql = _sqlBuilder
-				.Columns(TermEntry.GetTermColumns(languageIndices, isRead: true))
+				.Columns(TermEntry.GetColumns(languageIndices, isRead: true))
 				.Table(Tables.GlossaryData)
-				.Where(glossaryNamesSelect)
+				.Where()
+					.In("Tag1", joinStatement)
+					.In("Tag1", glossaryNames)
+					.Like(searchString, TermEntry.GetColumns(languageIndices, false))
+					.EndCondition()
 				.Build();
 
 			var rows = _connection.ExecuteCommand(sql);
@@ -131,27 +115,60 @@ namespace InterpretBank.Service
 			_connection.ExecuteCommand(mergeStatement);
 		}
 
-		public void UpdateTermContent(TermEntry termEntry)
+		public void UpdateContent(IGlossaryEntry entry)
 		{
-			var updateCondition = _conditionBuilder
-				.Equals(termEntry.ID, "ID")
-				.Build();
-			var updateColumns = TermEntry.GetTermColumns(LanguageIndicesDictionary.Values.ToList());
+			var updateColumns = entry.GetColumns();
+			var columnValues = entry.GetValues();
+
+			var table = entry is TermEntry ? Tables.GlossaryData : Tables.GlossaryMetadata;
 			var sqlUpdateStatement = _sqlBuilder
-				.Table(Tables.GlossaryData)
+				.Table(table)
 				.Columns(updateColumns)
-				.Update(termEntry.GetValues())
-				.Where(updateCondition)
+				.Update(columnValues)
+				.Where()
+					.Equals(entry.ID, "ID")
+					.EndCondition()
 				.Build();
 
 			_connection.ExecuteCommand(sqlUpdateStatement);
+		}
+
+		public void DeleteGlossary(string glossaryId)
+		{
+			var glossaryDeleteCondition = $"ID = {glossaryId}";
+
+			var tagsStatement = _sqlBuilder
+				.Table(Tables.GlossaryMetadata)
+				.Columns(new() {"Tag1", "Tag2"})
+				.Where(glossaryDeleteCondition)
+				.Build();
+
+			var tags = _connection.ExecuteCommand(tagsStatement);
+
+			var deleteGlossaryStatement = _sqlBuilder
+				.Table(Tables.GlossaryMetadata)
+				.Delete()
+				.Where(glossaryDeleteCondition)
+				.Build();
+
+			var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
+
+			var termsDeleteCondition = $"Tag1 = {tags[0]["Tag1"]}{tag2Condition}";
+
+			var deleteGlossaryTerms = _sqlBuilder
+				.Table(Tables.GlossaryData)
+				.Where(termsDeleteCondition)
+				.Delete()
+				.Build();
+
+			_connection.ExecuteCommand(deleteGlossaryStatement);
+			_connection.ExecuteCommand(deleteGlossaryTerms);
 		}
 
 		private List<IGlossaryEntry> ReadEntries<T>(List<Dictionary<string, string>> rows)
 			where T : IGlossaryEntry, new()
 		{
 			if (rows is null || rows.Count == 0) return null;
-			//var glossaryList = _entryFactory.CreateEntry<T>(rows);
 
 			var glossaryList = new List<IGlossaryEntry>();
 			foreach (var row in rows)
