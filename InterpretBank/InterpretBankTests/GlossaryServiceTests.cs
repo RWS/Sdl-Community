@@ -159,7 +159,7 @@ namespace InterpretBankTests
 				.Build();
 			var languages = new List<int> { 1, 2 };
 			var expectedSqlStatement =
-				"SELECT ID, Tag1, Tag2, CommentAll, Term1, Comment1a, Comment1b, Term2, Comment2a, Comment2b FROM GlossaryData WHERE (Tag1 IN (SELECT Tag1 FROM GlossaryMetadata INNER JOIN TagLink ON GlossaryID=ID WHERE TagName IN ('@0')))";
+				"SELECT ID, Tag1, Tag2, CommentAll, Term1, Comment1a, Comment1b, Term2, Comment2a, Comment2b FROM GlossaryData WHERE Tag1 IN (SELECT Tag1 FROM GlossaryMetadata INNER JOIN TagLink ON GlossaryID=ID WHERE TagName IN (@0))";
 
 			var sqlData = new List<Dictionary<string, string>>
 			{

@@ -16,9 +16,9 @@ namespace InterpretBankTests
 				.Columns(columns)
 				.Table(Tables.GlossaryData)
 				.InnerJoin(Tables.GlossaryMetadata, "Tag1", "GlossaryID")
-				.Continue();
+				.Build();
 
-			Assert.Equal("SELECT C1, C2, C3 FROM GlossaryData INNER JOIN GlossaryMetadata ON Tag1=GlossaryID", sqlStatement);
+			Assert.Equal("SELECT C1, C2, C3 FROM GlossaryData INNER JOIN GlossaryMetadata ON Tag1=GlossaryID", sqlStatement.CommandText);
 		}
 
 		[Fact]

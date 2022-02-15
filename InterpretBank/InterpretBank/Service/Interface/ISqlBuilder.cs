@@ -5,8 +5,6 @@ namespace InterpretBank.Service.Interface
 {
 	public interface ISqlBuilder
 	{
-		string Continue();
-
 		ISqlBuilder Columns(List<string> columnNames);
 		ISqlBuilder InnerJoin<T>(T tableName, string firstId, string secondId);
 		ISqlBuilder Insert(List<object> values);
