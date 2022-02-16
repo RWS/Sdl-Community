@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 
 namespace InterpretBank.Service.Interface
@@ -18,5 +19,6 @@ namespace InterpretBank.Service.Interface
 		ISqlBuilder Delete();
 		
 		SQLiteCommand Build();
+		ISqlBuilder CreateTable(List<DbType> types, List<string> constraints);
 	}
 }

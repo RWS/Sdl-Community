@@ -21,7 +21,7 @@ namespace InterpretBankTests
 		[Fact]
 		public void CreateGlossary_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
@@ -38,9 +38,54 @@ namespace InterpretBankTests
 		}
 
 		[Fact]
+		public void CreateDatabase_Test()
+		{
+			var connectionMock = GetConnectionMock();
+			var glossaryService = _glossaryServiceBuilder
+				.WithDatabaseConnection(connectionMock)
+				.Build();
+
+			glossaryService.CreateDb(@"C:\Users\ealbu\Desktop\Test7.db");
+
+			var createGlossaryDataCommand =
+					"CREATE TABLE GlossaryData (ID Int64, Tag1 String, Tag2 String, Term1 String, Comment1a String, Comment1b String, Term2 String, Comment2a String, Comment2b String, Term3 String, Comment3a String, Comment3b String, Term4 String, Comment4a String, Comment4b String, Term5 String, Comment5a String, Comment5b String, Term6 String, Comment6a String, Comment6b String, Term7 String, Comment7a String, Comment7b String, Term8 String, Comment8a String, Comment8b String, Term9 String, Comment9a String, Comment9b String, Term10 String, Comment10a String, Comment10b String, CommentAll String, RecordCreation String, RecordEdit String, RecordValidation String, RecordCreator String, RecordEditor String, Memorization String, Term1index String, Term2index String, Term3index String, Term4index String, Term5index String, Term6index String, Term7index String, Term8index String, Term9index String, Term10index String, TermFullindex String, Tags String, PRIMARY KEY(\"ID\"))";
+			var createGlossaryMetadataCommand =
+				"CREATE TABLE GlossaryMetadata (ID Int64, Tag1 String, Tag2 String, GlossarySetting String, GlossaryDescription String, GlossaryDataCreation String, GlossaryCreator String, PRIMARY KEY(\"ID\"))";
+			var createTagLinkCommand =
+				"CREATE TABLE TagLink (TagID Int64, TagName String, GlossaryID Int64, FOREIGN KEY (GlossaryID) REFERENCES GlossaryMetadata(ID), PRIMARY KEY(TagID))";
+			var createDatabaseInfoCommand =
+				"CREATE TABLE DatabaseInfo (ID Int64, LanguageName1 String, LanguageName2 String, LanguageName3 String, LanguageName4 String, LanguageName5 String, LanguageName6 String, LanguageName7 String, LanguageName8 String, LanguageName9 String, LanguageName10 String, FieldTermLabel String, FieldTermExtraALabel String, FieldTermExtraBLabel String, FieldConferenceInfoLabel String, FieldConferenceGlossaryLabel String, DatabaseVersion String, DatabaseCreation String, DatabaseUser String, Activation String, PRIMARY KEY(\"ID\"))";
+			var createTagListCommand =
+				"CREATE TABLE TagList (TagID Int64, TagName String, PRIMARY KEY(\"TagID\"))";
+
+			connectionMock
+				.ReceivedWithAnyArgs()
+				.CreateDatabaseFile(default);
+			connectionMock
+				.ReceivedWithAnyArgs()
+				.LoadDatabase(default);
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s=>s.CommandText == createGlossaryDataCommand));
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createGlossaryMetadataCommand));
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createTagLinkCommand));
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createDatabaseInfoCommand));
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createTagListCommand));
+		}
+
+		[Fact]
 		public void CreateTerm_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
@@ -56,10 +101,17 @@ namespace InterpretBankTests
 					@"INSERT INTO GlossaryData (CommentAll, Tag1, Tag2, RecordCreation) VALUES (""@0"", ""@1"", ""@2"", ""@3"")"));
 		}
 
+		private static IDatabaseConnection GetConnectionMock()
+		{
+			var databaseConnection = Substitute.For<IDatabaseConnection>();
+			databaseConnection.IsSet.Returns(true);
+			return databaseConnection;
+		}
+
 		[Fact]
 		public void DeleteTerm_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
@@ -78,7 +130,7 @@ namespace InterpretBankTests
 		[Fact]
 		public void DeleteGlossary_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 
 
 			connectionMock
@@ -153,7 +205,7 @@ namespace InterpretBankTests
 		public void GetTerms_Test()
 		{
 			//Arrange
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
@@ -202,7 +254,7 @@ namespace InterpretBankTests
 		[Fact]
 		public void MergeGlossaries_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
@@ -222,7 +274,7 @@ namespace InterpretBankTests
 		[Fact]
 		public void UpdateGlossaryMetadata_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();
@@ -247,7 +299,7 @@ namespace InterpretBankTests
 		[Fact]
 		public void UpdateTermContent_Test()
 		{
-			var connectionMock = Substitute.For<IDatabaseConnection>();
+			var connectionMock = GetConnectionMock();
 			var glossaryService = _glossaryServiceBuilder
 				.WithDatabaseConnection(connectionMock)
 				.Build();

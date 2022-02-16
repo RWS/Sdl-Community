@@ -4,24 +4,31 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using InterpretBank.Service.Interface;
+using InterpretBank.Service.Model;
 
-namespace InterpretBank.Service.Model
+namespace InterpretBank.Service
 {
 	public class SqlBuilder : ISqlBuilder, IConditionBuilder
 	{
 		private string WhereCondition { get; set; }
 		private List<string> ColumnNames { get; set; }
-		private List<string> InsertValues { get; set; } = new();
+		private List<string> InsertValues { get; set; }
 		private (string, string, string) JoinParameters { get; set; }
 		private string TableName { get; set; }
 		private StatementType Type { get; set; }
+
+		public SqlBuilder()
+		{
+			ResetFields();
+		}
 
 		private enum StatementType
 		{
 			Select,
 			Insert,
 			Update,
-			Delete
+			Delete,
+			Create
 		}
 
 		public SQLiteCommand Build()
@@ -66,7 +73,7 @@ namespace InterpretBank.Service.Model
 					for (var index = 0; index < ColumnNames.Count; index++)
 					{
 						if (!string.IsNullOrWhiteSpace(UpdateValues[index]) &&
-						    !string.IsNullOrWhiteSpace(ColumnNames[index]))
+							!string.IsNullOrWhiteSpace(ColumnNames[index]))
 							pairs.Add($@"{ColumnNames[index]} = ""{UpdateValues[index]}""");
 					}
 
@@ -79,11 +86,33 @@ namespace InterpretBank.Service.Model
 
 					sqlStatement = $"DELETE FROM {TableName} WHERE {WhereCondition}";
 					break;
+
+				case StatementType.Create:
+					if (ColumnNames == null || ColumnNames.Count != ColumnTypes.Count) return null;
+
+					pairs = new List<string>();
+					for (var index = 0; index < ColumnNames.Count; index++)
+					{
+						pairs.Add($"{ColumnNames[index]} {ColumnTypes[index]}");
+					}
+
+					pairs.AddRange(Constraints);
+
+					var columns = string.Join(", ", pairs);
+					sqlStatement = $"CREATE TABLE {TableName} ({columns})";
+					break;
 			}
 
 			var sqlCommand = new SQLiteCommand(sqlStatement);
+			AddParameters(sqlCommand);
 
-			foreach (var variable in Variables)
+			ResetFields();
+			return sqlCommand;
+		}
+
+		private void AddParameters(SQLiteCommand sqlCommand)
+		{
+			foreach (var variable in Parameters)
 			{
 				var dbType = variable.Value switch
 				{
@@ -94,16 +123,25 @@ namespace InterpretBank.Service.Model
 				sqlCommand.Parameters.Add(variable.Key, dbType);
 				sqlCommand.Parameters[variable.Key].Value = variable.Value;
 			}
-
-			ResetFields();
-			return sqlCommand;
 		}
-		
+
 		public ISqlBuilder Columns(List<string> columnNames)
 		{
 			ColumnNames = columnNames;
 			return this;
 		}
+
+		public ISqlBuilder CreateTable(List<DbType> types, List<string> constraints)
+		{
+			Type = StatementType.Create;
+			ColumnTypes = types;
+			Constraints.AddRange(constraints);
+			return this;
+		}
+
+		private List<string> Constraints { get; set; }
+
+		private List<DbType> ColumnTypes { get; set; }
 
 		public ISqlBuilder InnerJoin<T>(T tableName, string firstId, string secondId)
 		{
@@ -141,7 +179,7 @@ namespace InterpretBank.Service.Model
 			return this;
 		}
 
-		private List<string> UpdateValues { get; set; } = new();
+		private List<string> UpdateValues { get; set; } 
 
 		public ISqlBuilder Where(string condition)
 		{
@@ -159,29 +197,31 @@ namespace InterpretBank.Service.Model
 			UpdateValues = new();
 			Type = StatementType.Select;
 			JoinParameters = (null, null, null);
-			Expressions = new();
+			WhereExpressions = new();
 			WhereCondition = null;
-			Variables = new();
+			Parameters = new();
+			ColumnTypes = new();
+			Constraints = new();
 		}
 
-		private List<Expression> Expressions { get; set; } = new();
+		private List<Expression> WhereExpressions { get; set; } 
 
 		public ISqlBuilder EndCondition()
 		{
-			WhereCondition = Expressions.Count == 0
+			WhereCondition = WhereExpressions.Count == 0
 				? null
-				: Expressions.Skip(1).Aggregate(Expressions[0].Text,
+				: WhereExpressions.Skip(1).Aggregate(WhereExpressions[0].Text,
 					(current, expression) => current + $@" {expression.Operator} {expression.Text}");
 
 			return this;
 		}
 
-		private Dictionary<string, object> Variables { get; set; } = new();
+		private Dictionary<string, object> Parameters { get; set; } 
 
 		private string StoreAndGetReference(object value)
 		{
-			var key = $"@{Variables.Count}";
-			Variables.Add(key, value);
+			var key = $"@{Parameters.Count}";
+			Parameters.Add(key, value);
 
 			return key;
 		}
@@ -192,7 +232,7 @@ namespace InterpretBank.Service.Model
 
 			var reference = StoreAndGetReference(value);
 
-			Expressions.Add(new Expression { Operator = @operator, Text = $@"({columnName} = {reference})" });
+			WhereExpressions.Add(new Expression { Operator = @operator, Text = $@"({columnName} = {reference})" });
 			return this;
 		}
 
@@ -207,7 +247,7 @@ namespace InterpretBank.Service.Model
 			glossaryNamesSql.AddRange(valueReferences.Select(glossaryName => $"{glossaryName}"));
 			var inString = $@"{columnName} IN ({string.Join(",", glossaryNamesSql)})";
 
-			Expressions.Add(new Expression { Operator = @operator, Text = inString });
+			WhereExpressions.Add(new Expression { Operator = @operator, Text = inString });
 			return this;
 		}
 
@@ -221,7 +261,7 @@ namespace InterpretBank.Service.Model
 
 			var inString = $@"{columnName} IN ({sqlSelect.CommandText})";
 
-			Expressions.Add(new Expression { Operator = @operator, Text = inString});
+			WhereExpressions.Add(new Expression { Operator = @operator, Text = inString});
 
 			return this;
 		}
@@ -234,7 +274,7 @@ namespace InterpretBank.Service.Model
 
 			likeString = string.Join(" OR ", likeExpressions);
 
-			Expressions.Add(new Expression { Operator = @operator, Text = $@"({likeString})" });
+			WhereExpressions.Add(new Expression { Operator = @operator, Text = $@"({likeString})" });
 			return this;
 		}
 	}
