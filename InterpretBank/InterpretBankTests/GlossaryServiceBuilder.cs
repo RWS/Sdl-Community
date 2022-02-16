@@ -1,6 +1,5 @@
 ﻿using InterpretBank.Service;
 using InterpretBank.Service.Interface;
-using InterpretBank.Service.Model;
 using NSubstitute;
 
 namespace InterpretBankTests

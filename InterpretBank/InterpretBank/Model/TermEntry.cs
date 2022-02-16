@@ -13,10 +13,9 @@ namespace InterpretBank.Model
 		public string CommentAll { get; set; }
 		public int ID { get; set; }
 		public List<LanguageEquivalent> LanguageEquivalents { get; set; } = new(10);
+		public string RecordCreation { get; set; } = "CURRENT_DATE";
 		public string Tag1 { get; set; }
 		public string Tag2 { get; set; }
-		public string RecordCreation { get; set; } = "CURRENT_DATE";
-
 		private static PropertyInfo[] Properties => _properties ??= typeof(TermEntry).GetProperties();
 
 		public string this[string property]

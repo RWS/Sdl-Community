@@ -31,11 +31,9 @@ namespace InterpretBank.Service
 			LoadDb();
 		}
 
-		private Dictionary<string, int> LanguageIndicesDictionary { get; } = new();
-
-		private Dictionary<Tables, (List<string>,List<string>)> Columns { get; set; } = new()
+		private Dictionary<Tables, (List<string>, List<string>)> Columns { get; set; } = new()
 		{
-			[Tables.DatabaseInfo] = 
+			[Tables.DatabaseInfo] =
 				(new()
 				{
 					"ID",
@@ -153,6 +151,8 @@ namespace InterpretBank.Service
 			})
 		};
 
+		private Dictionary<string, int> LanguageIndicesDictionary { get; } = new();
+
 		public void Create(IGlossaryEntry entry)
 		{
 			var columns = entry.GetColumns();
@@ -166,6 +166,58 @@ namespace InterpretBank.Service
 				.Build();
 
 			_connection.ExecuteCommand(insertSqlStatement);
+		}
+
+		public void CreateDb(string filePath)
+		{
+			_connection.CreateDatabaseFile(filePath);
+			_connection.LoadDatabase(filePath);
+
+			foreach (Tables table in Enum.GetValues(typeof(Tables)))
+			{
+				var columnNames = Columns[table];
+				var types = new List<DbType>();
+				columnNames.Item1.ForEach(cn => { types.Add(cn.Contains("ID") ? DbType.Int64 : DbType.String); });
+				var createTablesCommand = _sqlBuilder
+					.Table(table)
+					.Columns(columnNames.Item1)
+					.CreateTable(types, columnNames.Item2)
+					.Build();
+
+				_connection.ExecuteCommand(createTablesCommand);
+			}
+		}
+
+		public void DeleteGlossary(string glossaryId)
+		{
+			var glossaryDeleteCondition = $"ID = {glossaryId}";
+
+			var tagsStatement = _sqlBuilder
+				.Table(Tables.GlossaryMetadata)
+				.Columns(new() { "Tag1", "Tag2" })
+				.Where(glossaryDeleteCondition)
+				.Build();
+
+			var tags = _connection.ExecuteCommand(tagsStatement);
+
+			var deleteGlossaryStatement = _sqlBuilder
+				.Table(Tables.GlossaryMetadata)
+				.Delete()
+				.Where(glossaryDeleteCondition)
+				.Build();
+
+			var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
+
+			var termsDeleteCondition = $"Tag1 = {tags[0]["Tag1"]}{tag2Condition}";
+
+			var deleteGlossaryTerms = _sqlBuilder
+				.Table(Tables.GlossaryData)
+				.Where(termsDeleteCondition)
+				.Delete()
+				.Build();
+
+			_connection.ExecuteCommand(deleteGlossaryStatement);
+			_connection.ExecuteCommand(deleteGlossaryTerms);
 		}
 
 		public void DeleteTerm(string termId)
@@ -228,6 +280,12 @@ namespace InterpretBank.Service
 			return termList;
 		}
 
+		public void LoadDb(string filePath = null)
+		{
+			if (filePath is not null) _connection.LoadDatabase(filePath);
+			if (_connection.IsSet) SetLanguageIndices();
+		}
+
 		public void MergeGlossaries(string firstGlossary, string secondGlossary, string subGlossary = null)
 		{
 			var mergeStatement = _sqlBuilder
@@ -256,64 +314,6 @@ namespace InterpretBank.Service
 				.Build();
 
 			_connection.ExecuteCommand(sqlUpdateStatement);
-		}
-
-		public void DeleteGlossary(string glossaryId)
-		{
-			var glossaryDeleteCondition = $"ID = {glossaryId}";
-
-			var tagsStatement = _sqlBuilder
-				.Table(Tables.GlossaryMetadata)
-				.Columns(new() {"Tag1", "Tag2"})
-				.Where(glossaryDeleteCondition)
-				.Build();
-
-			var tags = _connection.ExecuteCommand(tagsStatement);
-
-			var deleteGlossaryStatement = _sqlBuilder
-				.Table(Tables.GlossaryMetadata)
-				.Delete()
-				.Where(glossaryDeleteCondition)
-				.Build();
-
-			var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
-
-			var termsDeleteCondition = $"Tag1 = {tags[0]["Tag1"]}{tag2Condition}";
-
-			var deleteGlossaryTerms = _sqlBuilder
-				.Table(Tables.GlossaryData)
-				.Where(termsDeleteCondition)
-				.Delete()
-				.Build();
-
-			_connection.ExecuteCommand(deleteGlossaryStatement);
-			_connection.ExecuteCommand(deleteGlossaryTerms);
-		}
-
-		public void LoadDb(string filePath = null)
-		{
-			if (filePath is not null) _connection.LoadDatabase(filePath);
-			if (_connection.IsSet) SetLanguageIndices();
-		}
-
-		public void CreateDb(string filePath)
-		{
-			_connection.CreateDatabaseFile(filePath);
-			_connection.LoadDatabase(filePath);
-
-			foreach (Tables table in Enum.GetValues(typeof(Tables)))
-			{
-				var columnNames = Columns[table];
-				var types = new List<DbType>();
-				columnNames.Item1.ForEach(cn => { types.Add(cn.Contains("ID") ? DbType.Int64 : DbType.String); });
-				var createTablesCommand = _sqlBuilder
-					.Table(table)
-					.Columns(columnNames.Item1)
-					.CreateTable(types, columnNames.Item2)
-					.Build();
-
-				_connection.ExecuteCommand(createTablesCommand);
-			}
 		}
 
 		private List<IGlossaryEntry> ReadEntries<T>(List<Dictionary<string, string>> rows)

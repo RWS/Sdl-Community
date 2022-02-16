@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
@@ -10,13 +9,6 @@ namespace InterpretBank.Service
 {
 	public class SqlBuilder : ISqlBuilder, IConditionBuilder
 	{
-		private string WhereCondition { get; set; }
-		private List<string> ColumnNames { get; set; }
-		private List<string> InsertValues { get; set; }
-		private (string, string, string) JoinParameters { get; set; }
-		private string TableName { get; set; }
-		private StatementType Type { get; set; }
-
 		public SqlBuilder()
 		{
 			ResetFields();
@@ -30,6 +22,18 @@ namespace InterpretBank.Service
 			Delete,
 			Create
 		}
+
+		private List<string> ColumnNames { get; set; }
+		private List<DbType> ColumnTypes { get; set; }
+		private List<string> Constraints { get; set; }
+		private List<string> InsertValues { get; set; }
+		private (string, string, string) JoinParameters { get; set; }
+		private Dictionary<string, object> Parameters { get; set; }
+		private string TableName { get; set; }
+		private StatementType Type { get; set; }
+		private List<string> UpdateValues { get; set; }
+		private string WhereCondition { get; set; }
+		private List<Expression> WhereExpressions { get; set; }
 
 		public SQLiteCommand Build()
 		{
@@ -82,6 +86,7 @@ namespace InterpretBank.Service
 					var updateCondition = $" WHERE {WhereCondition}"; //will crash if no condition is given as this is too dangerous to be done without it
 					sqlStatement = $"UPDATE {TableName}{set}{updateCondition}";
 					break;
+
 				case StatementType.Delete:
 
 					sqlStatement = $"DELETE FROM {TableName} WHERE {WhereCondition}";
@@ -110,21 +115,6 @@ namespace InterpretBank.Service
 			return sqlCommand;
 		}
 
-		private void AddParameters(SQLiteCommand sqlCommand)
-		{
-			foreach (var variable in Parameters)
-			{
-				var dbType = variable.Value switch
-				{
-					int _ => DbType.Int64,
-					_ => DbType.String
-				};
-
-				sqlCommand.Parameters.Add(variable.Key, dbType);
-				sqlCommand.Parameters[variable.Key].Value = variable.Value;
-			}
-		}
-
 		public ISqlBuilder Columns(List<string> columnNames)
 		{
 			ColumnNames = columnNames;
@@ -139,72 +129,11 @@ namespace InterpretBank.Service
 			return this;
 		}
 
-		private List<string> Constraints { get; set; }
-
-		private List<DbType> ColumnTypes { get; set; }
-
-		public ISqlBuilder InnerJoin<T>(T tableName, string firstId, string secondId)
-		{
-			var tableNameString = tableName.ToString();
-			if (string.IsNullOrWhiteSpace(tableNameString) || string.IsNullOrWhiteSpace(firstId) ||
-				string.IsNullOrWhiteSpace(secondId)) return this;
-
-			JoinParameters = (tableNameString, firstId, secondId);
-			return this;
-		}
-
-		public ISqlBuilder Insert(List<object> values)
-		{
-			Type = StatementType.Insert;
-			values.ForEach(v => InsertValues.Add(StoreAndGetReference(v)));
-			return this;
-		}
-
-		public ISqlBuilder Table<T>(T tableName)
-		{
-			TableName = tableName.ToString();
-			return this;
-		}
-
 		public ISqlBuilder Delete()
 		{
 			Type = StatementType.Delete;
 			return this;
 		}
-
-		public ISqlBuilder Update(List<object> values)
-		{
-			Type = StatementType.Update;
-			values.ForEach(v => UpdateValues.Add(StoreAndGetReference(v)));
-			return this;
-		}
-
-		private List<string> UpdateValues { get; set; } 
-
-		public ISqlBuilder Where(string condition)
-		{
-			WhereCondition = condition;
-			return this;
-		}
-
-		public IConditionBuilder Where() => this;
-
-		private void ResetFields()
-		{
-			ColumnNames = new();
-			TableName = null;
-			InsertValues = new();
-			UpdateValues = new();
-			Type = StatementType.Select;
-			JoinParameters = (null, null, null);
-			WhereExpressions = new();
-			WhereCondition = null;
-			Parameters = new();
-			ColumnTypes = new();
-			Constraints = new();
-		}
-
-		private List<Expression> WhereExpressions { get; set; } 
 
 		public ISqlBuilder EndCondition()
 		{
@@ -214,16 +143,6 @@ namespace InterpretBank.Service
 					(current, expression) => current + $@" {expression.Operator} {expression.Text}");
 
 			return this;
-		}
-
-		private Dictionary<string, object> Parameters { get; set; } 
-
-		private string StoreAndGetReference(object value)
-		{
-			var key = $"@{Parameters.Count}";
-			Parameters.Add(key, value);
-
-			return key;
 		}
 
 		public IConditionBuilder Equals(object value, string columnName, string @operator = "AND")
@@ -261,8 +180,25 @@ namespace InterpretBank.Service
 
 			var inString = $@"{columnName} IN ({sqlSelect.CommandText})";
 
-			WhereExpressions.Add(new Expression { Operator = @operator, Text = inString});
+			WhereExpressions.Add(new Expression { Operator = @operator, Text = inString });
 
+			return this;
+		}
+
+		public ISqlBuilder InnerJoin<T>(T tableName, string firstId, string secondId)
+		{
+			var tableNameString = tableName.ToString();
+			if (string.IsNullOrWhiteSpace(tableNameString) || string.IsNullOrWhiteSpace(firstId) ||
+				string.IsNullOrWhiteSpace(secondId)) return this;
+
+			JoinParameters = (tableNameString, firstId, secondId);
+			return this;
+		}
+
+		public ISqlBuilder Insert(List<object> values)
+		{
+			Type = StatementType.Insert;
+			values.ForEach(v => InsertValues.Add(StoreAndGetReference(v)));
 			return this;
 		}
 
@@ -276,6 +212,65 @@ namespace InterpretBank.Service
 
 			WhereExpressions.Add(new Expression { Operator = @operator, Text = $@"({likeString})" });
 			return this;
+		}
+
+		public ISqlBuilder Table<T>(T tableName)
+		{
+			TableName = tableName.ToString();
+			return this;
+		}
+
+		public ISqlBuilder Update(List<object> values)
+		{
+			Type = StatementType.Update;
+			values.ForEach(v => UpdateValues.Add(StoreAndGetReference(v)));
+			return this;
+		}
+
+		public ISqlBuilder Where(string condition)
+		{
+			WhereCondition = condition;
+			return this;
+		}
+
+		public IConditionBuilder Where() => this;
+
+		private void AddParameters(SQLiteCommand sqlCommand)
+		{
+			foreach (var variable in Parameters)
+			{
+				var dbType = variable.Value switch
+				{
+					int _ => DbType.Int64,
+					_ => DbType.String
+				};
+
+				sqlCommand.Parameters.Add(variable.Key, dbType);
+				sqlCommand.Parameters[variable.Key].Value = variable.Value;
+			}
+		}
+
+		private void ResetFields()
+		{
+			ColumnNames = new();
+			TableName = null;
+			InsertValues = new();
+			UpdateValues = new();
+			Type = StatementType.Select;
+			JoinParameters = (null, null, null);
+			WhereExpressions = new();
+			WhereCondition = null;
+			Parameters = new();
+			ColumnTypes = new();
+			Constraints = new();
+		}
+
+		private string StoreAndGetReference(object value)
+		{
+			var key = $"@{Parameters.Count}";
+			Parameters.Add(key, value);
+
+			return key;
 		}
 	}
 }

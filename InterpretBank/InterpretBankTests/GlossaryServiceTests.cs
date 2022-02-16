@@ -3,7 +3,6 @@ using System.Data.SQLite;
 using InterpretBank.Model;
 using InterpretBank.Service;
 using InterpretBank.Service.Interface;
-using InterpretBank.Service.Model;
 using NSubstitute;
 using Xunit;
 
@@ -16,25 +15,6 @@ namespace InterpretBankTests
 		public GlossaryServiceTests()
 		{
 			_glossaryServiceBuilder = new GlossaryServiceBuilder();
-		}
-
-		[Fact]
-		public void CreateGlossary_Test()
-		{
-			var connectionMock = GetConnectionMock();
-			var glossaryService = _glossaryServiceBuilder
-				.WithDatabaseConnection(connectionMock)
-				.Build();
-
-			glossaryService.Create(new GlossaryMetadataEntry());
-
-			connectionMock
-				.Received()
-				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
-			connectionMock
-				.Received()
-				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText ==
-															@"INSERT INTO GlossaryMetadata (GlossaryCreator, GlossaryDataCreation, GlossaryDescription, GlossarySetting, Tag1, Tag2) VALUES (""@0"", ""@1"", ""@2"", ""@3"", ""@4"", ""@5"")"));
 		}
 
 		[Fact]
@@ -67,7 +47,7 @@ namespace InterpretBankTests
 
 			connectionMock
 				.Received()
-				.ExecuteCommand(Arg.Is<SQLiteCommand>(s=>s.CommandText == createGlossaryDataCommand));
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createGlossaryDataCommand));
 			connectionMock
 				.Received()
 				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createGlossaryMetadataCommand));
@@ -80,6 +60,25 @@ namespace InterpretBankTests
 			connectionMock
 				.Received()
 				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == createTagListCommand));
+		}
+
+		[Fact]
+		public void CreateGlossary_Test()
+		{
+			var connectionMock = GetConnectionMock();
+			var glossaryService = _glossaryServiceBuilder
+				.WithDatabaseConnection(connectionMock)
+				.Build();
+
+			glossaryService.Create(new GlossaryMetadataEntry());
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText ==
+															@"INSERT INTO GlossaryMetadata (GlossaryCreator, GlossaryDataCreation, GlossaryDescription, GlossarySetting, Tag1, Tag2) VALUES (""@0"", ""@1"", ""@2"", ""@3"", ""@4"", ""@5"")"));
 		}
 
 		[Fact]
@@ -98,40 +97,13 @@ namespace InterpretBankTests
 			connectionMock
 				.Received()
 				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText ==
-					@"INSERT INTO GlossaryData (CommentAll, Tag1, Tag2, RecordCreation) VALUES (""@0"", ""@1"", ""@2"", ""@3"")"));
+					@"INSERT INTO GlossaryData (CommentAll, RecordCreation, Tag1, Tag2) VALUES (""@0"", ""@1"", ""@2"", ""@3"")"));
 		}
 
-		private static IDatabaseConnection GetConnectionMock()
-		{
-			var databaseConnection = Substitute.For<IDatabaseConnection>();
-			databaseConnection.IsSet.Returns(true);
-			return databaseConnection;
-		}
-
-		[Fact]
-		public void DeleteTerm_Test()
-		{
-			var connectionMock = GetConnectionMock();
-			var glossaryService = _glossaryServiceBuilder
-				.WithDatabaseConnection(connectionMock)
-				.Build();
-
-			glossaryService.DeleteTerm("5");
-
-			connectionMock
-				.Received()
-				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
-
-			connectionMock
-				.Received()
-				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == @"DELETE FROM GlossaryData WHERE (ID = @0)"));
-		}
-		
 		[Fact]
 		public void DeleteGlossary_Test()
 		{
 			var connectionMock = GetConnectionMock();
-
 
 			connectionMock
 				.ExecuteCommand(default)
@@ -152,7 +124,6 @@ namespace InterpretBankTests
 
 			glossaryService.DeleteGlossary("5");
 
-			
 			connectionMock
 				.Received()
 				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
@@ -168,6 +139,25 @@ namespace InterpretBankTests
 					Arg.Is<SQLiteCommand>(s =>
 						s.CommandText ==
 						@"DELETE FROM GlossaryData WHERE Tag1 = TestGlossary AND Tag2 = TestSubGlossary"));
+		}
+
+		[Fact]
+		public void DeleteTerm_Test()
+		{
+			var connectionMock = GetConnectionMock();
+			var glossaryService = _glossaryServiceBuilder
+				.WithDatabaseConnection(connectionMock)
+				.Build();
+
+			glossaryService.DeleteTerm("5");
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == "SELECT * FROM DatabaseInfo"));
+
+			connectionMock
+				.Received()
+				.ExecuteCommand(Arg.Is<SQLiteCommand>(s => s.CommandText == @"DELETE FROM GlossaryData WHERE (ID = @0)"));
 		}
 
 		[Fact]
@@ -318,7 +308,14 @@ namespace InterpretBankTests
 				.Received()
 				.ExecuteCommand(Arg.Is<SQLiteCommand>(s =>
 					s.CommandText ==
-					@"UPDATE GlossaryData SET CommentAll = ""@0"", Tag1 = ""@1"", Tag2 = ""@2"", RecordCreation = ""@3"" WHERE (ID = @4)"));
+					@"UPDATE GlossaryData SET CommentAll = ""@0"", RecordCreation = ""@1"", Tag1 = ""@2"", Tag2 = ""@3"" WHERE (ID = @4)"));
+		}
+
+		private static IDatabaseConnection GetConnectionMock()
+		{
+			var databaseConnection = Substitute.For<IDatabaseConnection>();
+			databaseConnection.IsSet.Returns(true);
+			return databaseConnection;
 		}
 	}
 }
