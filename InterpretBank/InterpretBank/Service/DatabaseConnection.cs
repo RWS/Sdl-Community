@@ -1,16 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using InterpretBank.Service.Interface;
 
-namespace InterpretBank.Service.Model
+namespace InterpretBank.Service
 {
 	public class DatabaseConnection : IDatabaseConnection
 	{
 		private readonly SQLiteConnection _connection;
 
-		public DatabaseConnection(string filepath)
+		public DatabaseConnection()
 		{
-			_connection = new SQLiteConnection($"Data Source='{filepath}';Cache=Shared");
+			_connection = new SQLiteConnection();
+		}
+
+		public DatabaseConnection(string filePath)
+		{
+			_connection = new SQLiteConnection($"Data Source='{filePath}';Cache=Shared");
+		}
+
+		public bool IsSet => !string.IsNullOrWhiteSpace(_connection.ConnectionString);
+
+		public void CreateDatabaseFile(string filePath)
+		{
+			try
+			{
+				SQLiteConnection.CreateFile(filePath);
+			}
+			catch
+			{
+				throw new Exception("Database could not be created");
+			}
 		}
 
 		public List<Dictionary<string, string>> ExecuteCommand(SQLiteCommand cmdQuery)
@@ -34,6 +54,11 @@ namespace InterpretBank.Service.Model
 
 			_connection.Close();
 			return rows;
+		}
+
+		public void LoadDatabase(string filePath)
+		{
+			_connection.ConnectionString = $"Data Source='{filePath}';Cache=Shared";
 		}
 	}
 }
