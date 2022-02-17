@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqParser.Model;
-using Expression = Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqParser.Model.Expression;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqParser
 {
@@ -140,7 +140,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 					.Groups["SecondConstant"]}"));
 		}
 
-		private static Expression GetFirstExpression(string expression)
+		private static Model.Expression GetFirstExpression(string expression)
 		{
 			expression = RemoveRedundantParentheses(expression.Trim());
 			if (expression.Length == 0) return null;
@@ -152,7 +152,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 			var @operator = "";
 			var endOfFirstTerm = GetEndOfFirstTerm(expression, 0, ref secondTermFound, ref lastAndLocation, ref @operator);
 
-			return new Expression
+			return new Model.Expression
 			{
 				FirstTerm = expression.Substring(0, endOfFirstTerm),
 				Operator = @operator,
@@ -168,7 +168,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 			return expression;
 		}
 
-		private static IEnumerable<T> RunAtomicExpression<T>(Expression expression, IEnumerable<T> objects)
+		private static IEnumerable<T> RunAtomicExpression<T>(Model.Expression expression, IEnumerable<T> objects)
 		{
 			var type = typeof(T);
 
@@ -190,33 +190,47 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqPars
 			catch { }
 
 			if (comparisonConstant is null) throw new Exception($"{{{expression.SecondTerm}}} couldn't be converted to a {filterByPropertyType}");
-			var objectParameter = System.Linq.Expressions.Expression.Parameter(type, "obj");
+			var objectParameter = Expression.Parameter(type, "obj");
+
+
 			BinaryExpression binaryExpression;
 			if (filterByPropertyType == typeof(DateTime) || filterByPropertyType == typeof(int))
 			{
-				var systemField = System.Linq.Expressions.Expression.Property(objectParameter, filterByProperty);
+				var isSpecificDay = filterByPropertyType == typeof(DateTime) && expression.SecondTerm.Trim().Split(' ').Length == 1;
 
-				var constantExpression = System.Linq.Expressions.Expression.Constant(comparisonConstant);
+				var systemField = Expression.Property(objectParameter, filterByProperty);
+
+				var constantExpression = Expression.Constant(comparisonConstant);
 				binaryExpression = expression.Operator
 					switch
 				{
-					"<" => System.Linq.Expressions.Expression.LessThan(systemField, constantExpression),
-					">" => System.Linq.Expressions.Expression.GreaterThan(systemField, constantExpression),
-					"<=" => System.Linq.Expressions.Expression.LessThanOrEqual(systemField, constantExpression),
-					">=" => System.Linq.Expressions.Expression.GreaterThanOrEqual(systemField, constantExpression),
-					"=" => System.Linq.Expressions.Expression.Equal(systemField, constantExpression),
+					"<" => Expression.LessThan(systemField, constantExpression),
+					">" => Expression.GreaterThan(systemField, constantExpression),
+					"<=" => Expression.LessThanOrEqual(systemField, constantExpression),
+					">=" => Expression.GreaterThanOrEqual(systemField, constantExpression),
+					"=" =>  isSpecificDay ? GetInterval(systemField, (DateTime)comparisonConstant) : Expression.Equal(systemField, constantExpression),
 					_ => throw new Exception("Comparison operator not allowed")
-				};
+					};
 			}
 			else
 			{
 				throw new Exception("Type of comparison constant not allowed");
 			}
 
-			var comparison = System.Linq.Expressions.Expression.Lambda<Func<T, bool>>(binaryExpression, objectParameter);
+			var comparison = Expression.Lambda<Func<T, bool>>(binaryExpression, objectParameter);
 
 			var runAtomicExpression = objects.AsQueryable().Where(comparison);
 			return runAtomicExpression;
+		}
+
+		private static BinaryExpression GetInterval(MemberExpression leftSide, DateTime comparisonConstant)
+		{
+			var greaterThanConstant = Expression.Constant(comparisonConstant);
+			var lessThanConstant = Expression.Constant(comparisonConstant.AddDays(1));
+			var greaterThanExpression = Expression.GreaterThanOrEqual(leftSide, greaterThanConstant);
+			var lessThanExpression = Expression.LessThan(leftSide, lessThanConstant);
+
+			return Expression.And(greaterThanExpression, lessThanExpression);
 		}
 	}
 }
