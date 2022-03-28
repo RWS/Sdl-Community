@@ -146,16 +146,6 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			if (AuthenticateCredentials(credentials, false) && Options.ApiVersion == APIVersion.v2)
 			{
 
-				var serverCredential = credentialStore.GetCredential(Options.Uri).Credential;
-				if (!string.IsNullOrEmpty(serverCredential))
-				{
-					var genericCredentials = new GenericCredentials(serverCredential);
-					foreach (var languagePair in Options.LPPreferences)
-					{
-						languagePair.Value.DictionaryId = genericCredentials[languagePair.Key.Name];
-					}
-				}
-
 				var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
 
 				Options.SetDictionaries(languagePairChoices);
@@ -404,11 +394,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 
 			var credentials = GetCredentials();
-			foreach (var sdlmtEdgeLanguagePair in Options.LPPreferences)
-			{
-				credentials[sdlmtEdgeLanguagePair.Key.Name] = sdlmtEdgeLanguagePair.Value.DictionaryId;
-			}
-
+			
 			if (!AuthenticateCredentials(credentials))
 				return;
 
