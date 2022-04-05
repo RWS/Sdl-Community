@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Viewer", "Reports.Viewer\Reports.Viewer.csproj", "{4CC9920F-CDD9-425E-9DB1-59C139F8E809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Viewer.Api", "..\Reports.Viewer.Api\Reports.Viewer.Api.csproj", "{B47446D5-9F94-4ADA-A8A1-ABD796EAA535}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Viewer.Api", "Reports.Viewer.Api\Reports.Viewer.Api.csproj", "{B47446D5-9F94-4ADA-A8A1-ABD796EAA535}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

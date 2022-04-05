@@ -489,13 +489,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
-      <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
-      <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>
     </PackageReference>
@@ -509,7 +502,12 @@
       <Version>16.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
+      <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
+      <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
