@@ -28,8 +28,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private List<Authentication> _authenticationOptions;
 		private Authentication _selectedAuthentication;
 		private ICommand _clearCommand;
+		private WorkingPortal _selectedWorkingPortal;
+		private string _currentWeaverWorkingPlatformsUriLogin;
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+
 
 		private void Clear(object obj)
 		{
@@ -47,9 +51,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			_owner = owner;
 			_connectionService = connectionService;
-
+			FillWeaverWorkingPlatformsUrlLogin();
 			SignInCommand = new CommandHandler(Signin);
 			NavigateToCommand = new CommandHandler(NavigateTo);
+
+
 
 			AuthenticationOptions = new List<Authentication>
 			{
@@ -88,6 +94,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			SelectedAuthentication = authentication;
+			SelectedWorkingPortal = WorkingPortal.UEPortal;
+
 		}
 
 		public ICommand SignInCommand { get; }
@@ -235,7 +243,67 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				_exceptionMessage = value;
+				ShowLoginUrls(_exceptionMessage);
 				OnPropertyChanged(nameof(ExceptionMessage));
+			}
+		}
+
+		private void ShowLoginUrls(string exceptionMessage)
+		{
+			if (!string.IsNullOrEmpty(_exceptionMessage))
+			{
+				WeaverWorkingPlatformsUriLogin.TryGetValue(SelectedWorkingPortal,
+					out var currentWeaverWorkingPlatformsLogin);
+				CurrentWeaverWorkingPlatformsUriLogin = currentWeaverWorkingPlatformsLogin;
+				
+			}
+		}
+
+		public WorkingPortal SelectedWorkingPortal
+		{
+			get => _selectedWorkingPortal;
+			set
+			{
+				if (_selectedWorkingPortal == value)
+				{
+					return;
+				}
+
+				_selectedWorkingPortal = value;
+				_connectionService.CurrentWorkingPortalAddress =
+					WorkingPortalsAddress.GetWorkingPortalAddress(_selectedWorkingPortal);
+				ClearErrorMessageArea();
+				OnPropertyChanged(nameof(SelectedWorkingPortal));
+			}
+		}
+
+		private void ClearErrorMessageArea()
+		{
+			ExceptionMessage = string.Empty;
+			CurrentWeaverWorkingPlatformsUriLogin = string.Empty;
+		}
+
+		public Dictionary<WorkingPortal, string> WeaverWorkingPlatformsUriLogin;
+
+		public string CurrentWeaverWorkingPlatformsUriLogin
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(ExceptionMessage) &&
+					(ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingEUPortal) || ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingUSPortal)))
+					return _currentWeaverWorkingPlatformsUriLogin;
+				return string.Empty;
+			}
+			set
+			{
+				if (_currentWeaverWorkingPlatformsUriLogin == value)
+				{
+					return;
+				}
+
+				_currentWeaverWorkingPlatformsUriLogin = value;
+
+				OnPropertyChanged(nameof(CurrentWeaverWorkingPlatformsUriLogin));
 			}
 		}
 
@@ -262,7 +330,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				_selectedAuthentication = value;
 				OnPropertyChanged(nameof(SelectedAuthentication));
 
-				ExceptionMessage = string.Empty;
+				ClearErrorMessageArea();
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
@@ -280,7 +348,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private bool CanAttemptSignIn(bool showMessage = true)
 		{
-			ExceptionMessage = string.Empty;
+			ClearErrorMessageArea();
 
 			switch (SelectedAuthentication.Type)
 			{
@@ -310,7 +378,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					}
 					else
 					{
-						ExceptionMessage = string.Empty;
+						ClearErrorMessageArea();
 						return true;
 					}
 				case Authentication.AuthenticationType.Client:
@@ -325,11 +393,11 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					}
 					else
 					{
-						ExceptionMessage = string.Empty;
+						ClearErrorMessageArea();
 						return true;
 					}
 				default:
-					ExceptionMessage = string.Empty;
+					ClearErrorMessageArea();
 					return true;
 			}
 		}
@@ -393,7 +461,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					message = result.Item2;
 				}
 
-				ExceptionMessage = IsSignedIn ? string.Empty : message;
+				ExceptionMessage = IsSignedIn ? string.Empty : GetLoginFailMessagePlatformRelated(message);
 			}
 			catch (Exception ex)
 			{
@@ -405,7 +473,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				if (_owner != null)
 				{
 					Mouse.OverrideCursor = Cursors.Arrow;
-				}				
+				}
 
 				if (IsSignedIn && _owner != null)
 				{
@@ -413,6 +481,23 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					_owner.Close();
 				}
 			}
+		}
+
+		private string GetLoginFailMessagePlatformRelated(string message)
+		{
+			if (message.Contains(PluginResources.Message_Please_verify_your_credentials))
+				switch (SelectedWorkingPortal)
+				{
+					case WorkingPortal.UEPortal: return PluginResources.UnableToConnectToWorkingEUPortal;
+
+					case WorkingPortal.USPortal:
+						return PluginResources.UnableToConnectToWorkingUSPortal;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+
+			return message;
 		}
 
 		private void NavigateTo(object obj)
@@ -423,5 +508,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				Process.Start(value);
 			}
 		}
+
+		private void FillWeaverWorkingPlatformsUrlLogin()
+		{
+			WeaverWorkingPlatformsUriLogin = new Dictionary<WorkingPortal, string>
+			{
+					{WorkingPortal.UEPortal, Constants.MTCloudTranslateAPIUrlEULogin},
+					{WorkingPortal.USPortal, Constants.MTCloudTranslateAPIUrlUSLogin}
+				};
+		}
+
 	}
 }

@@ -45,5 +45,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
 
 		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
+		string CurrentWorkingPortalAddress { get; set; }
 	}
 }

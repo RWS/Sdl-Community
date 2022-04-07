@@ -64,7 +64,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return;
 			}
 
-			var uri = new Uri($@"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/dictionaries/{dictionaryId}/terms");
+			var uri = new Uri($@"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/dictionaries/{dictionaryId}/terms");
 			var request = GetRequestMessage(HttpMethod.Post, uri);
 
 			var content = JsonConvert.SerializeObject(term);
@@ -91,7 +91,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			CheckConnection();
 
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/dictionaries");
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/dictionaries");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
 
 			var response = await _httpClient.SendRequest(request);
@@ -102,7 +102,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			CheckConnection();
 
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs");
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
 
 			var response = await _httpClient.SendRequest(request);
@@ -124,7 +124,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			CheckConnection();
 
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/mt/translations/async");
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/mt/translations/async");
 			var request = GetRequestMessage(HttpMethod.Post, uri);
 
 			var engineModel = model.SelectedModel.Model;
@@ -188,7 +188,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private static void WaitForTranslation(TranslationResponseStatus responseStatus)
 		{
-			if (responseStatus.TranslationStatus.ToUpperInvariant() == Constants.DONE)
+			if (responseStatus.TranslationStatus.ToUpperInvariant() != Constants.DONE)
 			{
 				System.Threading.Thread.Sleep(300);
 			}
@@ -214,7 +214,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			do
 			{
-				var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/mt/translations/async/{id}");
+				var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/mt/translations/async/{id}");
 				var request = GetRequestMessage(HttpMethod.Get, uri);
 
 				var responseMessage = await _httpClient.SendRequest(request);
@@ -306,7 +306,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private async Task<HttpResponseMessage> GetTranslationResult(string id)
 		{
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + $"/mt/translations/async/{id}/content");
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4" + $"/mt/translations/async/{id}/content");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
 			var responseMessage = await _httpClient.SendRequest(request);
 			return responseMessage.IsSuccessStatusCode ? responseMessage : null;
@@ -321,7 +321,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			CheckConnection();
 
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
 
 			var request = GetRequestMessage(HttpMethod.Post, uri);
 			var serializerSettings =
