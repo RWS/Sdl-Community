@@ -212,7 +212,7 @@
     <value>User is signed out!</value>
   </data>
   <data name="Message_Please_verify_your_credentials" xml:space="preserve">
-    <value>Please verify your credentials!</value>
+    <value>Verify your credentials and try again.</value>
   </data>
   <data name="Message_Successfully_reset_language_mappings" xml:space="preserve">
     <value>Successfully reset language mappings</value>
@@ -419,9 +419,24 @@ Response from Language Weaver:
     <value>Language Weaver Cloud Rate Translations</value>
   </data>
   <data name="SDLMTCloud_Provider_OldName" xml:space="preserve">
-	  <value>SDL Machine Translation Cloud</value>
+    <value>SDL Machine Translation Cloud</value>
   </data>
   <data name="UnknownQuality" xml:space="preserve">
-	  <value>Unknown</value>
+    <value>Unknown</value>
+  </data>
+  <data name="UnableToConnectToWorkingEUPortal" xml:space="preserve">
+    <value>Unable to login to the Language Weaver EU instance. Verify your credentials and try again.</value>
+  </data>
+  <data name="UnableToConnectToWorkingUSPortal" xml:space="preserve">
+    <value>Unable to login to the Language Weaver US instance. Verify your credentials and try again.</value>
+  </data>
+  <data name="WorkingEUPortal" xml:space="preserve">
+    <value>Europe</value>
+  </data>
+  <data name="WorkingUSPortal" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="Label_AccountRegion" xml:space="preserve">
+    <value>Account region:</value>
   </data>
 </root>

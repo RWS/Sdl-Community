@@ -213,6 +213,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account region:.
+        /// </summary>
+        public static string Label_AccountRegion {
+            get {
+                return ResourceManager.GetString("Label_AccountRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Label_OK {
@@ -351,7 +360,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please verify your credentials!.
+        ///   Looks up a localized string similar to Verify your credentials and try again..
         /// </summary>
         public static string Message_Please_verify_your_credentials {
             get {
@@ -942,6 +951,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to login to the Language Weaver EU instance. Verify your credentials and try again..
+        /// </summary>
+        public static string UnableToConnectToWorkingEUPortal {
+            get {
+                return ResourceManager.GetString("UnableToConnectToWorkingEUPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to login to the Language Weaver US instance. Verify your credentials and try again..
+        /// </summary>
+        public static string UnableToConnectToWorkingUSPortal {
+            get {
+                return ResourceManager.GetString("UnableToConnectToWorkingUSPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         public static string UnknownQuality {
@@ -992,6 +1019,24 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string WindowsControl_Restore {
             get {
                 return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Europe.
+        /// </summary>
+        public static string WorkingEUPortal {
+            get {
+                return ResourceManager.GetString("WorkingEUPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to US.
+        /// </summary>
+        public static string WorkingUSPortal {
+            get {
+                return ResourceManager.GetString("WorkingUSPortal", resourceCulture);
             }
         }
     }

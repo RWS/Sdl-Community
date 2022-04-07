@@ -26,6 +26,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	{
 		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private string _currentWorkingPortalAddress;
 
 		public ConnectionService(IWin32Window owner, VersionService versionService, LanguageCloudIdentityApi languageCloudIdentityApi, IHttpClient httpClient)
 		{
@@ -52,6 +53,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public string PluginVersion { get; }
 		public string StudioVersion { get; }
 		public VersionService VersionService { get; }
+
+		public string CurrentWorkingPortalAddress
+		{
+			get
+			{
+				return _currentWorkingPortalAddress ??= WorkingPortalsAddress.GetWorkingPortalAddress(WorkingPortal.UEPortal);
+			}
+			set => _currentWorkingPortalAddress = value;
+		}
 
 		public void AddTraceHeader(HttpRequestMessage request)
 		{
@@ -172,10 +182,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
 			credentialsWindow.DataContext = viewModel;
 
+			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(viewModel.SelectedWorkingPortal);
+
 			var message = string.Empty;
 			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;
 			credentialsWindow.ClientSecretBox.Password = viewModel.ClientSecret;
 			credentialsWindow.ClientIdBox.Password = viewModel.ClientId;
+			
 
 			var result1 = credentialsWindow.ShowDialog();
 			if (result1.HasValue && result1.Value)
@@ -474,7 +487,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private async Task<(UserDetails, string)> GetUserDetailsAttempt(string resource)
 		{
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
+			var uri = new Uri($"{CurrentWorkingPortalAddress}/v4" + resource);
 			var request = GetRequestMessage(HttpMethod.Get, uri);
 
 			var responseMessage = await _httpClient.SendRequest(request);
@@ -513,7 +526,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private async Task<(AuthorizationResponse, string)> SignInAttempt(string resource, string content)
 		{
-			var uri = new Uri($"{Constants.MTCloudTranslateAPIUri}/v4" + resource);
+			var uri = new Uri($"{CurrentWorkingPortalAddress}/v4" + resource);
 
 			var request = GetRequestMessage(HttpMethod.Post, uri);
 			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");

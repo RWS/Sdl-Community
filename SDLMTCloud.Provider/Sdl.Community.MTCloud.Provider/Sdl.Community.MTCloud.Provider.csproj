@@ -171,6 +171,7 @@
     <Compile Include="Controls\ToolWindowsControl.xaml.cs">
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\EnumBooleanConverter.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
     <Compile Include="Events\ActiveSegmentQeChanged.cs" />
     <Compile Include="Events\RefreshQeStatus.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Model\TranslationResponseStats.cs" />
     <Compile Include="Model\TranslationResponseStatus.cs" />
     <Compile Include="Model\UserCredential.cs" />
+    <Compile Include="Model\WorkingPortalsAddress.cs" />
     <Compile Include="MTCloudApplicationInitializer.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
