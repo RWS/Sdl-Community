@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
@@ -14,6 +15,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 	public partial class ProviderConfDialog : Form
 	{
 		private ITranslationProviderCredentialStore credentialStore;
+		private bool inRemoveLanguagesPreferencesTab;
 		private LanguagePair[] LanguagePairs;
 		private System.Timers.Timer lpPopulationTimer = new System.Timers.Timer(500);
 		public TranslationOptions Options { get; set; }
@@ -96,7 +98,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				APIKeyField.Text = gCredentials["API-Key"];
 				BasicAuthenticationOption.Checked = gCredentials["UseApiKey"] != "true";
 				ConnectionBox.Checked = gCredentials["RequiresSecureProtocol"] == "true";
-				
+
 				APIKeyOption.Checked = !BasicAuthenticationOption.Checked;
 
 				DelayedLPPopulation();
@@ -140,8 +142,10 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				return;
 			}
 			var credentials = GetCredentials();
+
 			if (AuthenticateCredentials(credentials, false) && Options.ApiVersion == APIVersion.v2)
 			{
+
 				var languagePairChoices = Options.SetPreferredLanguages(LanguagePairs);
 
 				Options.SetDictionaries(languagePairChoices);
@@ -301,80 +305,79 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		}
 		private void TradosLPs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
-			const int comboboxColumnIndex = 1;
-			var comboBox = (DataGridViewComboBoxCell)TradosLPs.Rows[e.RowIndex].Cells[comboboxColumnIndex];
-			if (comboBox.Value == null) return;
-			var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
-			var lpPairing = TradosLPs[e.ColumnIndex, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
+			const int languagePairColumnIndex = 1;
+			var languagePairComboBox = (DataGridViewComboBoxCell)TradosLPs.Rows[e.RowIndex].Cells[languagePairColumnIndex];
+			if (languagePairComboBox.Value == null) return;
 
-			if (lpPairing != null)
-			{
-				var languagePair = lpPairing.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
-				if (languagePair != null)
+			//Valentin -> Only in the comboboxColumnIndex column the Tag it's bind with a TradosToMTEdgeLP correspondent object for the current row . olumn 2 or 3 have no bind in its Tag...
+			if (TradosLPs[languagePairColumnIndex, e.RowIndex].Tag is TradosToMTEdgeLP lpPairing)
+				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Language Pair"))
 				{
-					Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
+					var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
+					var languagePair = lpPairing.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
+					if (languagePair != null)
+						Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
 				}
-			}
-
-			if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries") && lpPairing != null)
-			{
-				lpPairing = TradosLPs[1, e.RowIndex].Tag as SDLMTEdgeApi.TradosToMTEdgeLP;
-				newLp = TradosLPs[1, e.RowIndex].Value as string;
-				var languagePair = lpPairing?.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
-				if (languagePair != null)
+				else
+				//Valentin - each column with its calls. Otherwise it's a mess. for each cell from the grid will execute the same for X times. Sometimes  it will ruin what the previous call set in Options, just because now it's on another column another cell etc. ....
+				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
 				{
-					Options.LPPreferences[lpPairing.TradosCulture] = languagePair;
+				
+					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 				}
-				Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
-			}
 		}
 
 		void TradosLPs_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            for (int i = 0; i < TradosLPs?.Rows.Count; i++)
-            {
-                var comboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Language Pair"];
-                var dictionariesCombo = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Dictionaries"];
-                var entry = TradosLPs.Rows[i].DataBoundItem as TradosToMTEdgeLP;
-                if (entry == null) continue;
+		{
+			if (inRemoveLanguagesPreferencesTab) return;
+			for (int i = 0; i < TradosLPs?.Rows.Count; i++)
+			{
+				var languagePairsComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Language Pair"];
+				var dictionariesComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Dictionaries"];
+				var entry = TradosLPs.Rows[i].DataBoundItem as TradosToMTEdgeLP;
+				if (entry == null) continue;
 
-                comboCell.Tag = entry;
-                comboCell.DataSource = entry.MtEdgeLPs.Select(lp => lp.LanguagePairId).ToList();
+				languagePairsComboCell.Tag = entry;
+				languagePairsComboCell.DataSource = entry.MtEdgeLPs.Select(lp => lp.LanguagePairId).ToList();
 
-                if (entry.Dictionaries != null)
-                {
-                    dictionariesCombo.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
-                    dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId; // set by default "No dictionary" value
-                }
-                if (Options?.LPPreferences == null || Options?.LPPreferences.Count == 0)
-                {
-                    continue;
-                }
-                
-                if (Options.LPPreferences.ContainsKey(entry.TradosCulture) && Options.LPPreferences[entry.TradosCulture]!=null)
-                {
-                    var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
-                    comboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
+				if (entry.Dictionaries != null)
+				{
+					dictionariesComboCell.DataSource = entry.Dictionaries.Select(d => d.DictionaryId).ToList();
+					dictionariesComboCell.Value = entry.Dictionaries[0].DictionaryId; // set by default "No dictionary" value
+				}
+				if (Options?.LPPreferences == null || Options?.LPPreferences.Count == 0)
+				{
+					continue;
+				}
 
-                    ConfigureDictionary(currentDictionaryId, dictionariesCombo, entry);
-                }
-                else
-                {
-                    dictionariesCombo.Value = Constants.NoDictionary;
-                }
-            }
-        }
+				if (Options.LPPreferences.ContainsKey(entry.TradosCulture) && Options.LPPreferences[entry.TradosCulture] != null)
+				{
+					var currentDictionaryId = Options.LPPreferences[entry.TradosCulture].DictionaryId;
+					languagePairsComboCell.Value = Options.LPPreferences[entry.TradosCulture].LanguagePairId;
+
+					ConfigureDictionary(currentDictionaryId, dictionariesComboCell, entry);
+				}
+				else
+				{
+					dictionariesComboCell.Value = Constants.NoDictionary;
+				}
+			}
+		}
 
 		private void ConfigureDictionary(string currentDictionaryId, DataGridViewComboBoxCell dictionariesCombo, TradosToMTEdgeLP entry)
 		{
 			if (string.IsNullOrEmpty(currentDictionaryId))
 			{
+				if (!dictionariesCombo.Value.Equals(entry.Dictionaries[0].DictionaryId))
+					dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId;
 				Options.LPPreferences[entry.TradosCulture].DictionaryId = entry.Dictionaries[0].DictionaryId;
-				dictionariesCombo.Value = entry.Dictionaries[0].DictionaryId;
+
 			}
 			else
 			{
-				dictionariesCombo.Value = currentDictionaryId;
+				//avoid to trigger again the grid cell changed event 
+				if (!dictionariesCombo.Value.Equals(currentDictionaryId))
+					dictionariesCombo.Value = currentDictionaryId;
 				Options.LPPreferences[entry.TradosCulture].DictionaryId = currentDictionaryId;
 			}
 		}
@@ -391,6 +394,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 
 			var credentials = GetCredentials();
+			
 			if (!AuthenticateCredentials(credentials))
 				return;
 
@@ -406,9 +410,9 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				PluginConfiguration.CurrentInstance.SaveToFile();
 			}
 			else if (!setDefaultTM.Checked
-			         && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
-			         && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
-			         && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
+					 && PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
+					 && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
+					 && PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port)
 			{
 				PluginConfiguration.CurrentInstance.DefaultConnection = null;
 				PluginConfiguration.CurrentInstance.SaveToFile();
@@ -446,6 +450,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 					token = APIKeyField.Text;
 					SDLMTEdgeTranslatorHelper.VerifyBasicAPIToken(Options, credentials);
 				}
+
 			}
 			catch (Exception e)
 			{
@@ -461,17 +466,27 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 			if (tabControl != null)
 			{
-				tabControl.Controls.RemoveByKey("LPTab");
-				if (Options?.ApiVersion == APIVersion.v2)
+				try
 				{
-					tabControl.Invoke(new Action(() =>
+					//avoiding to do binding when the window will be closed. Because removing and adding the tab will do the bind again.
+					inRemoveLanguagesPreferencesTab = true;
+					tabControl.Controls.RemoveByKey("LPTab");
+					if (Options?.ApiVersion == APIVersion.v2)
 					{
-						if (LPTab != null)
+						tabControl.Invoke(new Action(() =>
 						{
-							tabControl.Controls.Add(LPTab);
-						}
-					}));
+							if (LPTab != null)
+							{
+								tabControl.Controls.Add(LPTab);
+							}
+						}));
+					}
 				}
+				finally
+				{
+					inRemoveLanguagesPreferencesTab = false;
+				}
+
 			}
 
 			return true;
@@ -493,7 +508,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			lpPopulationTimer.Start();
 		}
 
-		
+
 		private void lpPopulationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			var credentialsValid = !string.IsNullOrEmpty(UsernameField.Text) &&
