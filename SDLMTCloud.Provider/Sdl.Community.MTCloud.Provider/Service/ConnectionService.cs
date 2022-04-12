@@ -43,7 +43,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			LanguageCloudIdentityApi = languageCloudIdentityApi;
 
-			Credential = new Credential();
+		
 		}
 
 		public virtual ICredential Credential { get; private set; }
@@ -58,9 +58,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			get
 			{
-				return _currentWorkingPortalAddress ??= WorkingPortalsAddress.GetWorkingPortalAddress(WorkingPortal.UEPortal);
+				_currentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(Credential.AccountRegion);
+				return _currentWorkingPortalAddress;
 			}
-			set => _currentWorkingPortalAddress = value;
+			set { _currentWorkingPortalAddress = value; }
 		}
 
 		public void AddTraceHeader(HttpRequestMessage request)
@@ -157,7 +158,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public string CredentialToString()
 		{
-			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary();
+			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary()+ "; AccountRegion=" + Credential.AccountRegion;
 		}
 
 		public (bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
@@ -170,6 +171,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return (IsSignedIn, PluginResources.Message_Invalid_credentials);
 			}
 
+			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(Credential.AccountRegion);
 			var result = Connect(Credential);
 			if (result.Item1 && !alwaysShowWindow)
 			{
@@ -182,13 +184,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
 			credentialsWindow.DataContext = viewModel;
 
-			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(viewModel.SelectedWorkingPortal);
 
 			var message = string.Empty;
 			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;
 			credentialsWindow.ClientSecretBox.Password = viewModel.ClientSecret;
 			credentialsWindow.ClientIdBox.Password = viewModel.ClientId;
-			
+
 
 			var result1 = credentialsWindow.ShowDialog();
 			if (result1.HasValue && result1.Value)
@@ -220,6 +221,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var token = string.Empty;
 			var accountId = string.Empty;
 			var validTo = DateTime.MinValue;
+			var accountRegion = WorkingPortal.UEPortal;
 
 			var regex = new Regex(@";");
 			var items = regex.Split(credentialString);
@@ -271,6 +273,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						validTo = DateTime.FromBinary(value);
 					}
 				}
+				if (string.Compare(itemName, "AccountRegion", StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					var success = Enum.TryParse(itemValue, out WorkingPortal value);
+					if (success)
+					{
+						accountRegion = value;
+					}
+				}
 			}
 
 			if (string.IsNullOrEmpty(name) &&
@@ -301,7 +311,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Password = password,
 					Token = token,
 					AccountId = accountId,
-					ValidTo = validTo
+					ValidTo = validTo,
+					AccountRegion = accountRegion
 				};
 
 				if (!string.IsNullOrEmpty(token) && credential.ValidTo == DateTime.MinValue)

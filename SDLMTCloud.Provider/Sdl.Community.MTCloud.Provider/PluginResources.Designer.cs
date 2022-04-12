@@ -63,16 +63,6 @@ namespace Sdl.Community.MTCloud.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon AdaptiveEngine {
-            get {
-                object obj = ResourceManager.GetObject("AdaptiveEngine", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         public static System.Drawing.Icon add_dictionary {
             get {
                 object obj = ResourceManager.GetObject("add_dictionary", resourceCulture);
@@ -114,6 +104,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string AutoSendFeedback_CheckBoxTooltip {
             get {
                 return ResourceManager.GetString("AutoSendFeedback_CheckBoxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        public static string ClickingHere {
+            get {
+                return ResourceManager.GetString("ClickingHere", resourceCulture);
             }
         }
         
@@ -245,36 +244,6 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string LanguageCountLabel {
             get {
                 return ResourceManager.GetString("LanguageCountLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap logoB {
-            get {
-                object obj = ResourceManager.GetObject("logoB", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap logoRe {
-            get {
-                object obj = ResourceManager.GetObject("logoRe", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap logoRes {
-            get {
-                object obj = ResourceManager.GetObject("logoRes", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -459,36 +428,6 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap MTCloud_logo {
-            get {
-                object obj = ResourceManager.GetObject("MTCloud_logo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap MTCloud_logo_small {
-            get {
-                object obj = ResourceManager.GetObject("MTCloud_logo_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap MTCodesLogo {
-            get {
-                object obj = ResourceManager.GetObject("MTCodesLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No dictionary has been selected.
         /// </summary>
         public static string No_dictionary_has_been_selected {
@@ -516,7 +455,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  (original LW translation is missing).
+        ///   Looks up a localized string similar to  (original Language Weaver translation is missing).
         /// </summary>
         public static string OriginalMtCloudTranslationMissing {
             get {
@@ -671,7 +610,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud Rate Translations.
+        ///   Looks up a localized string similar to Language Weaver Rate Translations.
         /// </summary>
         public static string RateTranslations_Name {
             get {
@@ -702,16 +641,6 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap sdl {
-            get {
-                object obj = ResourceManager.GetObject("sdl", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Language Mapping.
         /// </summary>
         public static string SDLMTCloud_Action_LanguageMapping_Description {
@@ -730,7 +659,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Description {
             get {
@@ -739,7 +668,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -758,6 +687,15 @@ namespace Sdl.Community.MTCloud.Provider {
         
         /// <summary>
         ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        /// </summary>
+        public static string SDLMTCloud_Provider_OldName2 {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_OldName2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string SDLMTCloud_RibbonGroup_Name {
             get {
@@ -915,7 +853,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the LW Cloud settings page..
+        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the Language Weaver settings page..
         /// </summary>
         public static string Tooltip_DisabledMessage {
             get {
@@ -951,7 +889,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to login to the Language Weaver EU instance. Verify your credentials and try again..
+        ///   Looks up a localized string similar to Unable to login to the Language Weaver EU instance. Verify your credentials by clicking .
         /// </summary>
         public static string UnableToConnectToWorkingEUPortal {
             get {
@@ -960,7 +898,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to login to the Language Weaver US instance. Verify your credentials and try again..
+        ///   Looks up a localized string similar to Unable to login to the Language Weaver US instance. Verify your credentials by clicking .
         /// </summary>
         public static string UnableToConnectToWorkingUSPortal {
             get {

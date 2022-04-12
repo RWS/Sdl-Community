@@ -22,7 +22,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		public SegmentSupervisor(EditorController editorController)
 		{
 			_editorController = editorController;
-			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName };
+			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName, PluginResources.SDLMTCloud_Provider_OldName2 };
 		}
 
 		public event ShouldSendFeedbackEventHandler ShouldSendFeedback;
