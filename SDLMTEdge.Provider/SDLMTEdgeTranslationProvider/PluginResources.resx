@@ -134,13 +134,13 @@
     <value>Resources\LanguagePairsIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
-    <value>A translation provider plug-in for performing searches.</value>
+    <value>Language Weaver on premise machine translation provider</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL Machine Translation Edge</value>
+    <value>Language Weaver Edge</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>SDL Machine Translation Edge</value>
+    <value>Language Weaver Edge</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
     <value>Enterprise Translation Services translation provider</value>
@@ -149,12 +149,12 @@
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Error" xml:space="preserve">
-	  <value>Error</value>
+    <value>Error</value>
   </data>
   <data name="URIException" xml:space="preserve">
-	  <value>URI exception</value>
+    <value>URI exception</value>
   </data>
   <data name="AuthenticationFailed" xml:space="preserve">
-	  <value>Authentication failed</value>
+    <value>Authentication failed</value>
   </data>
 </root>

@@ -80,7 +80,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string OriginSystem_LWC {
             get {

@@ -94,7 +94,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			SelectedAuthentication = authentication;
-			SelectedWorkingPortal = WorkingPortal.UEPortal;
+			SelectedWorkingPortal = connectionService.Credential.AccountRegion;
 
 		}
 
@@ -255,7 +255,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				WeaverWorkingPlatformsUriLogin.TryGetValue(SelectedWorkingPortal,
 					out var currentWeaverWorkingPlatformsLogin);
 				CurrentWeaverWorkingPlatformsUriLogin = currentWeaverWorkingPlatformsLogin;
-				
+				ClickingHere = PluginResources.ClickingHere;
+
 			}
 		}
 
@@ -270,8 +271,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				_selectedWorkingPortal = value;
-				_connectionService.CurrentWorkingPortalAddress =
-					WorkingPortalsAddress.GetWorkingPortalAddress(_selectedWorkingPortal);
+				_connectionService.Credential.AccountRegion = _selectedWorkingPortal;
+				//_connectionService.CurrentWorkingPortalAddress =
+				//	WorkingPortalsAddress.GetWorkingPortalAddress(_selectedWorkingPortal);
+
 				ClearErrorMessageArea();
 				OnPropertyChanged(nameof(SelectedWorkingPortal));
 			}
@@ -280,10 +283,34 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void ClearErrorMessageArea()
 		{
 			ExceptionMessage = string.Empty;
+			ClickingHere = string.Empty;
 			CurrentWeaverWorkingPlatformsUriLogin = string.Empty;
 		}
 
 		public Dictionary<WorkingPortal, string> WeaverWorkingPlatformsUriLogin;
+		private string _clickingHere;
+
+		public string ClickingHere
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(ExceptionMessage) &&
+				    (ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingEUPortal) ||
+				     ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingUSPortal)))
+
+					return _clickingHere;
+				return string.Empty;
+			}
+			set
+			{
+				if (_clickingHere == value)
+				{
+					return;
+				}
+				_clickingHere = value;
+				OnPropertyChanged(nameof(ClickingHere));
+			}
+		}
 
 		public string CurrentWeaverWorkingPlatformsUriLogin
 		{
@@ -426,7 +453,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					var result = _connectionService.Connect(
 						new Credential
 						{
-							Type = Authentication.AuthenticationType.Studio
+							Type = Authentication.AuthenticationType.Studio,
+							AccountRegion = SelectedWorkingPortal
 						});
 
 					IsSignedIn = result.Item1;
@@ -436,26 +464,30 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
 				{
-					var result = _connectionService.Connect(
-						new Credential
-						{
-							Type = Authentication.AuthenticationType.User,
-							Name = UserName,
-							Password = UserPassword
-						});
+					//var serviceCredential = _connectionService.Credential ?? new Credential();
+					var serviceCredential = new Credential()
+					{
+						Type = Authentication.AuthenticationType.User,
+						Name = UserName,
+						Password = UserPassword,
+						AccountRegion = SelectedWorkingPortal
+					};
+					var result = _connectionService.Connect(serviceCredential);
 
 					IsSignedIn = result.Item1;
 					message = result.Item2;
 				}
 				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.Client)
 				{
-					var result = _connectionService.Connect(
-						new Credential
-						{
-							Type = Authentication.AuthenticationType.Client,
-							Name = ClientId,
-							Password = ClientSecret
-						});
+					//var serviceCredential = _connectionService.Credential ?? new Credential();
+					var serviceCredential = new Credential
+					{
+						Type = Authentication.AuthenticationType.Client,
+						Name = ClientId,
+						Password = ClientSecret,
+						AccountRegion = SelectedWorkingPortal
+					};
+					var result = _connectionService.Connect(serviceCredential);
 
 					IsSignedIn = result.Item1;
 					message = result.Item2;

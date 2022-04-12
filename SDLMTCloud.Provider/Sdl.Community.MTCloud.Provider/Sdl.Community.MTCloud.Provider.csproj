@@ -351,7 +351,6 @@
     <EmbeddedResource Include="Resources\Report.xsl">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Resource Include="Resources\MTCloud_logo_cropped.png" />
     <Page Include="Styles\CustomProgressRing.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -391,25 +390,18 @@
     <Resource Include="Resources\selectedStar.png" />
     <Resource Include="Resources\defaultStar.png" />
     <Resource Include="Resources\warning.png" />
-    <Resource Include="Resources\MTCodesLogo.png" />
     <Resource Include="Resources\dictionaryIcon.ico" />
     <Resource Include="Resources\add_langcode.ico" />
     <Resource Include="Resources\Search %281%29.png" />
     <Resource Include="Resources\Print.png" />
     <None Include="app.config" />
     <None Include="Resources\global1.png" />
-    <Resource Include="Resources\MTCloud_logo_small.png" />
-    <Resource Include="Resources\MTCloud_logo.png" />
-    <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\logoRe.png" />
     <Resource Include="Resources\global.ico" />
-    <Resource Include="Resources\logoB.png" />
-    <Resource Include="Resources\sdl.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
