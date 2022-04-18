@@ -7,12 +7,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 	public class SDLMTEdgeCommunitySupportAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "SDL MT Edge results";
+		public override string Category => Properties.WeaverEdgeResource.WeaverEdge_CategoryResults;
 		public override Icon Icon => PluginResources.Question;
 
 		public SDLMTEdgeCommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()

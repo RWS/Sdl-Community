@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Resources;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using Newtonsoft.Json;
@@ -38,9 +39,9 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			setDefaultTM.Checked = PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
 				&& PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
 				&& PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port;
-
+		
 			UpdateDialog();
-			Text = @"SDL Machine Translation Edge";
+			Text = Properties.WeaverEdgeResource.WeaverEdge_OptionsWindowTitle;
 
 			// .5 seconds after certain events, run the populate command. This prevents us from authenticating each
 			// keypress (as that was causing massive lag).
@@ -186,10 +187,10 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 					ReadOnly = true
 				};
 
-				lpChoicesColumn.Name = "SDL MT Edge Language Pair";
+				lpChoicesColumn.Name = Properties.WeaverEdgeResource.WeaverEdge_LanguagePairColumnName;
 				lpChoicesColumn.FlatStyle = FlatStyle.Flat;
 
-				lpDictionariesColumn.Name = "SDL MT Edge Dictionaries";
+				lpDictionariesColumn.Name = Properties.WeaverEdgeResource.WeaverEdge_DictionariesColumnName;
 				lpDictionariesColumn.FlatStyle = FlatStyle.Flat;
 
 				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn, lpDictionariesColumn);
@@ -311,7 +312,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 			//Valentin -> Only in the comboboxColumnIndex column the Tag it's bind with a TradosToMTEdgeLP correspondent object for the current row . olumn 2 or 3 have no bind in its Tag...
 			if (TradosLPs[languagePairColumnIndex, e.RowIndex].Tag is TradosToMTEdgeLP lpPairing)
-				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Language Pair"))
+				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals(Properties.WeaverEdgeResource.WeaverEdge_LanguagePairColumnName))
 				{
 					var newLp = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 					var languagePair = lpPairing.MtEdgeLPs.FirstOrDefault(lp => lp.LanguagePairId == newLp);
@@ -320,7 +321,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				}
 				else
 				//Valentin - each column with its calls. Otherwise it's a mess. for each cell from the grid will execute the same for X times. Sometimes  it will ruin what the previous call set in Options, just because now it's on another column another cell etc. ....
-				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals("SDL MT Edge Dictionaries"))
+				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals(Properties.WeaverEdgeResource.WeaverEdge_DictionariesColumnName))
 				{
 				
 					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
@@ -330,10 +331,10 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		void TradosLPs_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
 		{
 			if (inRemoveLanguagesPreferencesTab) return;
-			for (int i = 0; i < TradosLPs?.Rows.Count; i++)
+			for (var i = 0; i < TradosLPs?.Rows.Count; i++)
 			{
-				var languagePairsComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Language Pair"];
-				var dictionariesComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells["SDL MT Edge Dictionaries"];
+				var languagePairsComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells[Properties.WeaverEdgeResource.WeaverEdge_LanguagePairColumnName];
+				var dictionariesComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells[Properties.WeaverEdgeResource.WeaverEdge_DictionariesColumnName];
 				var entry = TradosLPs.Rows[i].DataBoundItem as TradosToMTEdgeLP;
 				if (entry == null) continue;
 
