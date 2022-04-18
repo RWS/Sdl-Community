@@ -7,12 +7,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 	public class SDLMTEdgeTranslationServerAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "SDL MT Edge results";
+		public override string Category => Properties.WeaverEdgeResource.WeaverEdge_CategoryResults;
 		public override Icon Icon => PluginResources.ForumIcon;
 
 		public SDLMTEdgeTranslationServerAction()
 		{
-			Name = "SDL Enterprise translation server";
+			Name = "RWS Enterprise translation server";
 		}
 
 		public override void Execute()

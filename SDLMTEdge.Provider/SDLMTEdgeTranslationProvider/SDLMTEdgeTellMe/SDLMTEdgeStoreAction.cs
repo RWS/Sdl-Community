@@ -7,12 +7,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 	public class SDLMTEdgeStoreAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "SDL MT Edge results";
+		public override string Category => Properties.WeaverEdgeResource.WeaverEdge_CategoryResults;
 		public override Icon Icon => PluginResources.Download;
 
 		public SDLMTEdgeStoreAction()
 		{
-			Name = "Download SDL MT Edge provider from AppStore";
+			Name = Properties.WeaverEdgeResource.WeaverEdge_StoreAction;
 		}
 
 		public override void Execute()
