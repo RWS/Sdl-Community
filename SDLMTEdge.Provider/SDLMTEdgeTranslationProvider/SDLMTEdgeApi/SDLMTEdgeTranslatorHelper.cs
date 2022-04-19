@@ -116,7 +116,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 			using (var httpClient = new HttpClient())
 			{
 				httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
@@ -261,7 +260,6 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 
 			ServicePointManager.Expect100Continue = true;
 			ServicePointManager.DefaultConnectionLimit = 9999;
-			ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 			using (var httpClient = new HttpClient())
 			{
 				httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
@@ -404,10 +402,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 				builder.Query = queryString.ToString();
 				builder.Scheme = useHTTP ? Uri.UriSchemeHttp : Uri.UriSchemeHttps;
 
-				// Users may be hosting the service locally and therefore not sign their certificates. If so,
-				// we'll want to accept all certificates. Otherwise, this would throw an exception.
-				ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-
+				
 				try
 				{
 					var httpResponse = httpClient.PostAsync(builder.Uri, null).Result;
