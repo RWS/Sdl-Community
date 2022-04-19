@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SDLMTEdgePlugin")]
-[assembly: AssemblyDescription("RWS Plugin for enabling Trados Studio to use RWS Weaver Edge.")]
+[assembly: AssemblyDescription("RWS Plugin for enabling Trados Studio to use Language Weaver Edge.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("RWS")]
 [assembly: AssemblyProduct("SDLMTEdgePlugin")]
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.8.0")]
+[assembly: AssemblyFileVersion("3.0.8.1")]

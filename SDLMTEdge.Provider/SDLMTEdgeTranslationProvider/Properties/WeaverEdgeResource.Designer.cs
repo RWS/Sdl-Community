@@ -115,7 +115,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge.
+        ///   Looks up a localized string similar to language weaver edge.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeActionKey {
             get {
@@ -124,7 +124,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge documentation.
+        ///   Looks up a localized string similar to language weaver edge documentation.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeActionOperation {
             get {
@@ -133,7 +133,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge community.
+        ///   Looks up a localized string similar to language weaver edge community.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeCommunitySupportActionKey {
             get {
@@ -142,7 +142,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge support.
+        ///   Looks up a localized string similar to language weaver edge support.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeCommunitySupportActionOperation {
             get {
@@ -151,7 +151,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge language pairs.
+        ///   Looks up a localized string similar to language weaver edge language pairs.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeLanguagePairsActionOperation {
             get {
@@ -160,7 +160,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge official.
+        ///   Looks up a localized string similar to language weaver edge official.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeOfficialWebActionKey {
             get {
@@ -169,7 +169,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge official documentation.
+        ///   Looks up a localized string similar to language weaver edge official documentation.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeOfficialWebActionOperationDoc {
             get {
@@ -178,7 +178,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge official web site.
+        ///   Looks up a localized string similar to language weaver edge official web site.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeOfficialWebActionOperationWebServers {
             get {
@@ -187,7 +187,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge store.
+        ///   Looks up a localized string similar to language weaver edge store.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeStoreActionKey {
             get {
@@ -196,7 +196,7 @@ namespace Sdl.Community.MTEdge.Provider.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to weaver edge download.
+        ///   Looks up a localized string similar to language weaver edge download.
         /// </summary>
         internal static string WeaverEdge_TellMe_EdgeStoreActionOperation {
             get {

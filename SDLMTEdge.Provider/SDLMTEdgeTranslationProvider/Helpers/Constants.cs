@@ -17,7 +17,7 @@
 		public readonly static string AuthToken = "GetAuthToken method";
 		public readonly static string MTEdgeApiVersion = "SetMtEdgeApiVersion method";
 		public readonly static string TranslateAggregateException = "TranslateAggregateException method";
-		public readonly static string NoProviderSetup = "The provider cannot be setup because the language flavor was not received from the Weaver Edge server.";
+		public readonly static string NoProviderSetup = "The provider cannot be setup because the language flavor was not received from the Language Weaver Edge server.";
 
 		public readonly static string NoDictionary = "No dictionary";
 	}

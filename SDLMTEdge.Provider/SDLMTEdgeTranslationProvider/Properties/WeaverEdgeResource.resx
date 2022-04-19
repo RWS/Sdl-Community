@@ -143,34 +143,34 @@
     <value>Language Weaver Edge tell me provider</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeActionKey" xml:space="preserve">
-    <value>weaver edge</value>
+    <value>language weaver edge</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeActionOperation" xml:space="preserve">
-    <value>weaver edge documentation</value>
+    <value>language weaver edge documentation</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeCommunitySupportActionKey" xml:space="preserve">
-    <value>weaver edge community</value>
+    <value>language weaver edge community</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeCommunitySupportActionOperation" xml:space="preserve">
-    <value>weaver edge support</value>
+    <value>language weaver edge support</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeLanguagePairsActionOperation" xml:space="preserve">
-    <value>weaver edge language pairs</value>
+    <value>language weaver edge language pairs</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeOfficialWebActionKey" xml:space="preserve">
-    <value>weaver edge official</value>
+    <value>language weaver edge official</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeOfficialWebActionOperationDoc" xml:space="preserve">
-    <value>weaver edge official documentation</value>
+    <value>language weaver edge official documentation</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeOfficialWebActionOperationWebServers" xml:space="preserve">
-    <value>weaver edge official web site</value>
+    <value>language weaver edge official web site</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeStoreActionKey" xml:space="preserve">
-    <value>weaver edge store</value>
+    <value>language weaver edge store</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeStoreActionOperation" xml:space="preserve">
-    <value>weaver edge download</value>
+    <value>language weaver edge download</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeTranslationServerActionKey" xml:space="preserve">
     <value>enterprise translation server</value>

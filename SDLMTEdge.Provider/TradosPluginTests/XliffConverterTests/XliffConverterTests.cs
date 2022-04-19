@@ -21,7 +21,7 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 			var xliff = Converter.ParseXliffString(text);
 
 		//	Assert.AreEqual("MTEdge", xliff.File.Header.Tools[0].ToolId);
-			Assert.AreEqual("Weaver Edge", xliff.File.Header.Tools[0].ToolName);
+			Assert.AreEqual("Language Weaver Edge", xliff.File.Header.Tools[0].ToolName);
 			Assert.AreEqual("5.4", xliff.File.Header.Tools[0].ToolVersion);
 
 			Assert.AreEqual("ar", xliff.File.SourceLanguage);
