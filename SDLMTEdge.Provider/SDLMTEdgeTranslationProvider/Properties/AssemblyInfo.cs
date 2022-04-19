@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SDLMTEdgePlugin")]
 [assembly: AssemblyDescription("RWS Plugin for enabling Trados Studio to use Language Weaver Edge.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("RWS")]
+[assembly: AssemblyCompany("SDL")]
 [assembly: AssemblyProduct("SDLMTEdgePlugin")]
-[assembly: AssemblyCopyright("Copyright © RWS 2021")]
+[assembly: AssemblyCopyright("Copyright © SDL 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
