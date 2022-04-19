@@ -33,5 +33,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.1.0.1")]
+[assembly: AssemblyFileVersion("3.1.1.11")]
 [assembly: Sdl.Core.PluginFramework.Plugin("Plugin_Name")]
