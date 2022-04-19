@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Sdl.Community.MTEdge.LPConverter")]
-[assembly: AssemblyDescription("RWS language provider converter for Weaver Edge")]
+[assembly: AssemblyDescription("RWS language provider converter for Language Weaver Edge")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Sdl.Community.MTEdge.LPConverter")]

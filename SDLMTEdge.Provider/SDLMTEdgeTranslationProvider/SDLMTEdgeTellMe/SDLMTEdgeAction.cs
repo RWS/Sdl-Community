@@ -12,7 +12,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 
 		public SDLMTEdgeAction()
 		{
-			Name = "RWS official Weaver Edge documentation";
+			Name = "RWS official Language Weaver Edge documentation";
 		}
 
 		public override void Execute()
