@@ -176,6 +176,7 @@
     <Compile Include="UiHelpers\WizardProgressHeader.xaml.cs">
       <DependentUpon>WizardProgressHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VersionInfo.cs" />
     <Compile Include="ViewModel\CreateProjectViewModel.cs" />
     <Compile Include="ViewModel\PackageDetailsViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageWindowViewModel.cs" />
