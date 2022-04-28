@@ -29,7 +29,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private Authentication _selectedAuthentication;
 		private ICommand _clearCommand;
 		private WorkingPortal _selectedWorkingPortal;
-		private string _currentWeaverWorkingPlatformsUriLogin;
+		private string _currentWeaverWorkingPlatformsUriLogin; 
+		private string _currentWeaverClientWorkingPlatformsUri;
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
@@ -272,11 +273,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				_selectedWorkingPortal = value;
 				_connectionService.Credential.AccountRegion = _selectedWorkingPortal;
-				//_connectionService.CurrentWorkingPortalAddress =
-				//	WorkingPortalsAddress.GetWorkingPortalAddress(_selectedWorkingPortal);
+		
+				WeaverWorkingPlatformsUriLogin.TryGetValue(_selectedWorkingPortal,
+					out var currentWeaverWorkingPlatform);
+				CurrentWeaverClientWorkingPlatformsUri = currentWeaverWorkingPlatform;
 
 				ClearErrorMessageArea();
 				OnPropertyChanged(nameof(SelectedWorkingPortal));
+				
 			}
 		}
 
@@ -333,6 +337,28 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				OnPropertyChanged(nameof(CurrentWeaverWorkingPlatformsUriLogin));
 			}
 		}
+
+
+		public string CurrentWeaverClientWorkingPlatformsUri
+		{
+			get
+			{
+				return _currentWeaverClientWorkingPlatformsUri;
+			
+			}
+			set
+			{
+				if (_currentWeaverClientWorkingPlatformsUri == value)
+				{
+					return;
+				}
+
+				_currentWeaverClientWorkingPlatformsUri = value;
+
+				OnPropertyChanged(nameof(CurrentWeaverClientWorkingPlatformsUri));
+			}
+		}
+
 
 		public List<Authentication> AuthenticationOptions
 		{
