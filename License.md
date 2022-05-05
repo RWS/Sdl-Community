@@ -1,3 +1,5 @@
+Copyright © 2011 - 2022 SDL as part of the RWS Holdings Plc group of companies ("RWS Group").
+
 GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 
