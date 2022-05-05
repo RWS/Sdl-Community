@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SDLXLIFF Slice Toolkit")]
+[assembly: AssemblyTitle("SDLXLIFFSliceOrChange")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SDL")]
-[assembly: AssemblyProduct("SDLXLIFF Slice Toolkit")]
+[assembly: AssemblyProduct("SDLXLIFFSliceOrChange")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
