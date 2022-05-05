@@ -226,8 +226,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			
 			if (selectedTemplate != null)
 			{
-				int num = (int)selectedTemplate.TranslationProvidersAllLanguages;
-				TranslationProvidersAllLanguages.SelectedIndex = num;
+				TranslationProvidersAllLanguages.SelectedIndex = (int)selectedTemplate.TranslationProvidersAllLanguages;
 				TranslationProvidersSpecificLanguages.SelectedIndex = (int)selectedTemplate.TranslationProvidersSpecificLanguages;
 				//TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
 				//TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
