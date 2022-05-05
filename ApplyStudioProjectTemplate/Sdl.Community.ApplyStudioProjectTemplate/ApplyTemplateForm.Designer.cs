@@ -104,7 +104,7 @@
 			this.TranslationProvidersGroup.Size = new System.Drawing.Size(285, 84);
 			this.TranslationProvidersGroup.TabIndex = 1;
 			this.TranslationProvidersGroup.TabStop = false;
-			this.TranslationProvidersGroup.Text = "Translation Memory and Automated Translation";
+			this.TranslationProvidersGroup.Text = "Translation Providers (TMs, MTs ...)";
 			// 
 			// TranslationProviderSpecificLanguagesLabel
 			// 
@@ -124,16 +124,17 @@
 			this.TranslationProvidersSpecificLanguages.FormattingEnabled = true;
 			this.TranslationProvidersSpecificLanguages.Items.AddRange(new object[] {
             "Keep",
-            "Merge",
-            "Overwrite"});
+            "Prepend",
+            "Overwrite",
+			"Append"});
 			this.TranslationProvidersSpecificLanguages.Location = new System.Drawing.Point(194, 55);
 			this.TranslationProvidersSpecificLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
 			this.TranslationProvidersSpecificLanguages.Name = "TranslationProvidersSpecificLanguages";
 			this.TranslationProvidersSpecificLanguages.Size = new System.Drawing.Size(80, 21);
 			this.TranslationProvidersSpecificLanguages.TabIndex = 3;
 			this.TranslationProvidersSpecificLanguages.Tag = "Translation Providers Specific Languages";
-			this.FormToolTip.SetToolTip(this.TranslationProvidersSpecificLanguages, "Select the behaviour for applying the Translation Provider settings to specific l" +
-        "anguage pairs\r\n\r\n");
+			this.FormToolTip.SetToolTip(this.TranslationProvidersSpecificLanguages, "Select how the template's Translation Providers are applied to specific l" +
+		"anguage pairs Translation Providers' list");
 			this.TranslationProvidersSpecificLanguages.SelectedIndexChanged += new System.EventHandler(this.TranslationProvidersSpecificLanguages_SelectedIndexChanged);
 			this.TranslationProvidersSpecificLanguages.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 
@@ -155,16 +156,17 @@
 			this.TranslationProvidersAllLanguages.FormattingEnabled = true;
 			this.TranslationProvidersAllLanguages.Items.AddRange(new object[] {
             "Keep",
-            "Merge",
-            "Overwrite"});
+            "Prepend",
+            "Overwrite",
+			"Append"});
 			this.TranslationProvidersAllLanguages.Location = new System.Drawing.Point(194, 26);
 			this.TranslationProvidersAllLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
 			this.TranslationProvidersAllLanguages.Name = "TranslationProvidersAllLanguages";
 			this.TranslationProvidersAllLanguages.Size = new System.Drawing.Size(80, 21);
 			this.TranslationProvidersAllLanguages.TabIndex = 1;
 			this.TranslationProvidersAllLanguages.Tag = "Translation Providers All Languages";
-			this.FormToolTip.SetToolTip(this.TranslationProvidersAllLanguages, "Select the behaviour for applying the Translation Provider settings to all langua" +
-        "ge pairs");
+			this.FormToolTip.SetToolTip(this.TranslationProvidersAllLanguages, "Select how the template's Translation Providers should be applied to all langua" +
+		"ge pairs Translation Providers' list");
 			this.TranslationProvidersAllLanguages.SelectedIndexChanged += new System.EventHandler(this.TranslationProvidersAllLanguages_SelectedIndexChanged);
 			this.TranslationProvidersAllLanguages.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 
@@ -181,6 +183,10 @@
 			this.TranslationMemoriesGroup.TabIndex = 2;
 			this.TranslationMemoriesGroup.TabStop = false;
 			this.TranslationMemoriesGroup.Text = "Translation Memory settings";
+			this.TranslationMemoriesGroup.Tag = "Translation Memory settings (ie. search, penalties, filters...) ";
+			this.FormToolTip.SetToolTip(this.TranslationMemoriesGroup, "Select how the template's Translation Memory settings should be applied to the project.");
+			this.TranslationMemoriesGroup.MouseEnter += new System.EventHandler(this.ControlMouseEnter); this.EditTemplatesButton.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
+
 			// 
 			// TranslationMemoriesSpecificLanguagesLabel
 			// 
@@ -208,7 +214,7 @@
 			this.TranslationMemoriesSpecificLanguages.TabIndex = 3;
 			this.TranslationMemoriesSpecificLanguages.Tag = "Translation Memories Specific Languages";
 			this.FormToolTip.SetToolTip(this.TranslationMemoriesSpecificLanguages, "Select the behaviour for applying the Translation Memory settings to specific lan" +
-        "guage pairs\r\n");
+		"guage pairs (ie. search, penalties, filters...)");
 			this.TranslationMemoriesSpecificLanguages.SelectedIndexChanged += new System.EventHandler(this.TranslationMemoriesSpecificLanguages_SelectedIndexChanged);
 			this.TranslationMemoriesSpecificLanguages.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 
@@ -238,7 +244,7 @@
 			this.TranslationMemoriesAllLanguages.TabIndex = 1;
 			this.TranslationMemoriesAllLanguages.Tag = "Translation Memories All Languages";
 			this.FormToolTip.SetToolTip(this.TranslationMemoriesAllLanguages, "Select the behaviour for applying the Translation Memory settings to all language" +
-        " pairs\r\n");
+		" pairs (ie. search, penalties, filters...)");
 			this.TranslationMemoriesAllLanguages.SelectedIndexChanged += new System.EventHandler(this.TranslationMemoriesAllLanguages_SelectedIndexChanged);
 			this.TranslationMemoriesAllLanguages.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 
@@ -303,15 +309,16 @@
 			this.TerminologyTermbases.FormattingEnabled = true;
 			this.TerminologyTermbases.Items.AddRange(new object[] {
             "Keep",
-            "Merge",
-            "Overwrite"});
+            "Append",
+            "Overwrite",
+			"Prepend"});
 			this.TerminologyTermbases.Location = new System.Drawing.Point(194, 26);
 			this.TerminologyTermbases.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
 			this.TerminologyTermbases.Name = "TerminologyTermbases";
 			this.TerminologyTermbases.Size = new System.Drawing.Size(80, 21);
 			this.TerminologyTermbases.TabIndex = 1;
 			this.TerminologyTermbases.Tag = "Terminology Termbases";
-			this.FormToolTip.SetToolTip(this.TerminologyTermbases, "Select the behaviour for applying the Terminology Termbases");
+			this.FormToolTip.SetToolTip(this.TerminologyTermbases, "Select how the template's Terminology Termbases should be applied to the project");
 			this.TerminologyTermbases.SelectedIndexChanged += new System.EventHandler(this.TerminologyTermbases_SelectedIndexChanged);
 			this.TerminologyTermbases.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 

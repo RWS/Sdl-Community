@@ -226,11 +226,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			
 			if (selectedTemplate != null)
 			{
-				TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
-				TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
+				int num = (int)selectedTemplate.TranslationProvidersAllLanguages;
+				TranslationProvidersAllLanguages.SelectedIndex = num;
+				TranslationProvidersSpecificLanguages.SelectedIndex = (int)selectedTemplate.TranslationProvidersSpecificLanguages;
+				//TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
+				//TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
 				TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
 				TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
-				TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
+				TerminologyTermbases.SelectedIndex = (int)selectedTemplate.TerminologyTermbases;
+				//TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
 				TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
 				TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
 				BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
@@ -289,8 +293,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
 			{
 				applyTemplate.TranslationProvidersAllLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationProvidersAllLanguages.SelectedItem.ToString());
+					(ApplyTemplateOptions)TranslationProvidersAllLanguages.SelectedIndex;
+				//Enum.Parse(typeof(ApplyTemplateOptions),
+				//TranslationProvidersAllLanguages.SelectedItem.ToString());
 			}
 			CheckChanged();
 		}
@@ -305,8 +310,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
 			{
 				applyTemplate.TranslationProvidersSpecificLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationProvidersSpecificLanguages.SelectedItem.ToString());
+					(ApplyTemplateOptions)TranslationProvidersSpecificLanguages.SelectedIndex;
+					//Enum.Parse(typeof(ApplyTemplateOptions),
+					//	TranslationProvidersSpecificLanguages.SelectedItem.ToString());
 			}
 
 			CheckChanged();
@@ -323,7 +329,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				applyTemplate.TranslationMemoriesAllLanguages =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationMemoriesAllLanguages.SelectedItem.ToString());
+					TranslationMemoriesAllLanguages.SelectedItem.ToString());
 			}
 			CheckChanged();
 		}
@@ -354,8 +360,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
 			{
 				applyTemplate.TerminologyTermbases =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TerminologyTermbases.SelectedItem.ToString());
+					(ApplyTemplateOptions)TerminologyTermbases.SelectedIndex;
+				//Enum.Parse(typeof(ApplyTemplateOptions),
+				//TerminologyTermbases.SelectedItem.ToString());
 			}
 			CheckChanged();
 		}

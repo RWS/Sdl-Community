@@ -25,5 +25,16 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// Overwrite the current settings with the settings from the template
         /// </summary>
         Overwrite = 2,
+
+		/// <summary>
+		/// Alternative Merge of settings from the template with the existing settings
+		/// </summary>
+		/// <remarks>
+		/// This is to not to break older versions of settings file ASPT.xml.
+		/// ApplyTemplateForm actually uses Append and Prepend for Merge/AltMerge.
+		/// For translation providers the old Merge matches Prepend, 
+		/// for Termbases the old Merge matches Append.
+		/// </remarks>
+		AltMerge = 3
     }
 }
