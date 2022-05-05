@@ -48,13 +48,11 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Sdl.Core.Globalization">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
+     <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+      </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
@@ -66,11 +64,9 @@
     </Reference>
     <Reference Include="Sdl.DesktopEditor.EditorApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.DesktopEditor.EditorApi.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
@@ -80,7 +76,6 @@
  </Reference>
     <Reference Include="Sdl.Verification.Api">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Verification.Api.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
