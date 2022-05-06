@@ -292,7 +292,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				return;
 			}
 
-			if (translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC)
+			if (translationOrigin.OriginSystem.ToLower().Contains(PluginResources.ProviderId))
 			{
 				var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				TranslationOriginData = new TranslationOriginData
