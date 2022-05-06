@@ -4,7 +4,8 @@
 	  <TargetFramework>net48</TargetFramework>
 	  <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+      <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.JsonPatch">
