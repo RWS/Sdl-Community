@@ -268,8 +268,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				: translationUnits.Length > 1
 					? Path.GetFileName(translationUnits[1].DocumentProperties.LastOpenedAsPath)
 					: null;
-			return MtCloudApplicationInitializer.GetFilePath(filepath,
-				_languageDirection.TargetCulture.IetfLanguageTag);
+
+			return filepath;
 		}
 
 		public Dictionary<string, List<ISegment>> Segments { get; set; } = new();
