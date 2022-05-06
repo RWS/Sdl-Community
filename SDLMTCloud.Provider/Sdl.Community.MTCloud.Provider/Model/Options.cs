@@ -17,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public bool AutoSendFeedback { get; set; }
 
 		[JsonProperty("LanguagesSupported")]
-		public List<LanguageMappingModel> LanguageMappings { get; set; } = new();
+		public List<LanguageMappingModel> LanguageMappings { get; set; }
 		public bool ResendDraft { get; set; }
 
 		public bool SendFeedback

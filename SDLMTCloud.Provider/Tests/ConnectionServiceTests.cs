@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NSubstitute;
+using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service;
 using Xunit;
 
-namespace Sdl.Community.MTCloud.Provider.UnitTests
+namespace Tests
 {
 	public class ConnectionServiceTests
 	{
@@ -23,7 +25,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -63,7 +65,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -104,7 +106,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -155,7 +157,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<IConnectionService>();
 			connectionService.Credential.Returns(credential);
 			if (type == Authentication.AuthenticationType.Studio)
 			{
@@ -203,7 +205,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
@@ -218,7 +220,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.ValidTo = DateTime.UtcNow.Subtract(new TimeSpan(0, 1, 0, 0, 0));
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
@@ -233,7 +235,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.Name = string.Empty;
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
@@ -248,7 +250,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var credential = _common.GetDefaultCredential(type);
 			credential.Password = string.Empty;
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var result = connectionService.IsValidCredential(out var message);
@@ -261,7 +263,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(Authentication.AuthenticationType.Client);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			var strCredential = connectionService.CredentialToString();

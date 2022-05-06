@@ -3,7 +3,7 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Xunit;
 
-namespace Sdl.Community.MTCloud.Provider.UnitTests
+namespace Tests
 {
 	public class RateItViewModelTests
 	{
@@ -210,7 +210,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		public void Set_FeedbackText(string feedback)
 		{
 			_rateItViewModel.FeedbackMessage = feedback;
-			Assert.Equal(feedback,_rateItViewModel.FeedbackMessage);
+			Assert.Equal(feedback, _rateItViewModel.FeedbackMessage);
 		}
 
 		[Theory]
@@ -220,7 +220,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			_rateItViewModel.IncreaseRating();
 			_rateItViewModel.IncreaseRating();
 
-			Assert.Equal(ratingValue,_rateItViewModel.Rating);
+			Assert.Equal(ratingValue, _rateItViewModel.Rating);
 		}
 
 		[Theory]
@@ -240,7 +240,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			_rateItViewModel.Rating = 5;
 			_rateItViewModel.IncreaseRating();
 
-			Assert.Equal(5,_rateItViewModel.Rating);
+			Assert.Equal(5, _rateItViewModel.Rating);
 		}
 
 		[Fact]

@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Xunit;
 
-namespace Sdl.Community.MTCloud.Provider.UnitTests
+namespace Tests
 {
 	public class CredentialsViewModelTests
 	{
@@ -24,7 +25,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
 			if (type == Authentication.AuthenticationType.Studio)
@@ -36,7 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				});
 			}
 
-			
+
 			var model = Substitute.For<CredentialsViewModel>(null, connectionService);
 
 			Assert.True(model.SelectedAuthentication.Type == credential.Type, "Expected: '" + credential.Type + "' Found: '" + model.SelectedAuthentication.Type + "'");
@@ -53,8 +54,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				case Authentication.AuthenticationType.Client:
 					Assert.True(model.ClientId == credential.Name, "Expected: '" + credential.Name + "' Found: '" + model.ClientId + "'");
 					Assert.True(model.ClientSecret == credential.Password, "Expected: '" + credential.Password + "' Found: '" + model.ClientSecret + "'");
-					break;				
-			}		
+					break;
+			}
 		}
 
 		[Theory]
@@ -65,10 +66,10 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 		{
 			var credential = _common.GetDefaultCredential(type);
 
-			var connectionService = Substitute.For<Service.ConnectionService>(null, null, null);
+			var connectionService = Substitute.For<ConnectionService>(null, null, null);
 			connectionService.Credential.Returns(credential);
 
-			
+
 			if (type == Authentication.AuthenticationType.Studio)
 			{
 				connectionService.IsValidStudioCredential(out Arg.Any<string>()).Returns(x =>

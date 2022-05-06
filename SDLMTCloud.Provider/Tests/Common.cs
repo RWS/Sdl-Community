@@ -2,7 +2,7 @@
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 
-namespace Sdl.Community.MTCloud.Provider.UnitTests
+namespace Tests
 {
 	public class Common
 	{
@@ -19,6 +19,6 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			};
 
 			return credential;
-		}	
+		}
 	}
 }

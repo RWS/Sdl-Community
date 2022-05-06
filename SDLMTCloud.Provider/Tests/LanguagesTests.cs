@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Xunit;
 
-namespace Sdl.Community.MTCloud.Languages.Provider.IntegrationTests
+namespace Tests
 {
 	public class LanguagesTests
-	{			
+	{
 		[Fact]
 		public void ReadLanguages_NotEmpty_ReturnTrue()
 		{
@@ -37,7 +38,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.IntegrationTests
 
 			//// Act						
 			var result1 = languages.GetMappedLanguages(filePath);
-			
+
 			// update the first cell of the first row
 			result1[0].Name = expectedValue;
 
