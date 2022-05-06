@@ -269,6 +269,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 						if (selectedTemplate.TerminologyTermbases != ApplyTemplateOptions.Overwrite)
 						{
+							if (targetTermbaseConfig.TermbaseServerUri is null)
+							{
+								targetTermbaseConfig.TermbaseServerUri = sourceTermbaseConfig.TermbaseServerUri;
+							}
+							if (!targetTermbaseConfig.Termbases.Any())
+							{
+								targetTermbaseConfig.Termbases?.AddRange(sourceTermbaseConfig.Termbases);
+							}
+
 							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig, selectedTemplate.TerminologyTermbases);
 						}
 						else
@@ -482,7 +491,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					try
 					{
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
-						project.GetType().GetMethod("UpdateServerProjectSettings")?.Invoke(project, new object[] { false });
+						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
+						//For GS projects
+						updateServerMethod?.Invoke(project, new object[] { "UpdateServerProjectSettingsOperation", new object[] { true } });
+						//For LC projects
+						updateServerMethod?.Invoke(project, new object[] { "SynchronizeServerProjectDataOperation", new object[] { null } });
 					}
 					catch (Exception e)
 					{
