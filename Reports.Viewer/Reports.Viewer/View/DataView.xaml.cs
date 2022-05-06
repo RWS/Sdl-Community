@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {
 	public partial class DataView : UserControl
 	{				

@@ -1,13 +1,14 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
+[assembly: System.Windows.ThemeInfo(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
+
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SDL Machine Translation Cloud provider")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SDL Machine Translation Cloud provider")]
 [assembly: AssemblyCopyright("Copyright © SDL 2018")]
 [assembly: AssemblyTrademark("")]
@@ -31,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.1.4.0")]
-[assembly: AssemblyFileVersion("3.1.4.0")]
+[assembly: AssemblyVersion("4.2.18.0")]
+[assembly: AssemblyFileVersion("4.2.18.2")]

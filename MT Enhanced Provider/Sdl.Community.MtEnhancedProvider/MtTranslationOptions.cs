@@ -15,7 +15,10 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Sdl.Community.MtEnhancedProvider.Helpers;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using static System.Convert;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
@@ -23,14 +26,12 @@ namespace Sdl.Community.MtEnhancedProvider
     /// This class is used to hold the provider plug-in settings. 
     /// All settings are automatically stored in a URI.
     /// </summary>
-    public class MtTranslationOptions
-    {
-
-        private static string _apiKey;
-        private static string _clientsecret;
-        private static string _clientid;
-        const string msTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
-        const string gTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
+    public class MtTranslationOptions: IMtTranslationOptions
+	{
+        private string _apiKey;
+        private string _clientid;
+        const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
+        const string GTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
         //The translation method affects when/if the plugin gets called by Studio
         public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
@@ -52,62 +53,108 @@ namespace Sdl.Community.MtEnhancedProvider
 		[JsonIgnore]
         private string sendPlainTextOnly
         {
-            get { return GetStringParameter("sendplaintextonly"); }
-            set { SetStringParameter("sendplaintextonly", value); }
-        }
+            get => GetStringParameter("sendplaintextonly");
+			set => SetStringParameter("sendplaintextonly", value);
+		}
 
         [JsonIgnore]
         private string UseCatId
         {
-            get { return GetStringParameter("usecatid"); }
-            set { SetStringParameter("usecatid", value); }
+            get => GetStringParameter("usecatid");
+	        set => SetStringParameter("usecatid", value);
         }
 
         [JsonIgnore]
         public string resendDrafts
         {
-            get { return GetStringParameter("resenddrafts"); }
-            set { SetStringParameter("resenddrafts", value); }
+            get => GetStringParameter("resenddrafts");
+	        set => SetStringParameter("resenddrafts", value);
         }
 
         [JsonIgnore]
         public bool UsePreEdit
-        {
-            get { return Convert.ToBoolean(usePreEdit); }
-            set { usePreEdit = value.ToString(); }
+		{
+			get => ToBoolean(usePreEdit);
+			set => usePreEdit = value.ToString();
         }
-        [JsonIgnore]
+		[JsonIgnore]
         public bool UsePostEdit
         {
-            get { return Convert.ToBoolean(usePostEdit); }
-            set { usePostEdit = value.ToString(); }
-        }
-        [JsonIgnore]
+            get => ToBoolean(usePostEdit);
+			set => usePostEdit = value.ToString();
+		}
+		[JsonIgnore]
+		public bool BasicCsv
+		{
+			get => ToBoolean(SimpleCsv);
+			set => SimpleCsv = value.ToString();
+		}
+
+		[JsonIgnore]
         private string usePreEdit
         {
-            get { return GetStringParameter("usepreedit"); }
-            set { SetStringParameter("usepreedit", value); }
+            get => GetStringParameter("usepreedit");
+	        set => SetStringParameter("usepreedit", value);
         }
         [JsonIgnore]
         private string usePostEdit
         {
-            get { return GetStringParameter("usepostedit"); }
-            set { SetStringParameter("usepostedit", value); }
+            get => GetStringParameter("usepostedit");
+	        set => SetStringParameter("usepostedit", value);
         }
         [JsonIgnore]
         public string PreLookupFilename
         {
-            get { return GetStringParameter("prelookupfilename"); }
-            set { SetStringParameter("prelookupfilename", value); }
-        }
-        [JsonIgnore]
-        public string PostLookupFilename
-        {
-            get { return GetStringParameter("postlookupfilename"); }
-            set { SetStringParameter("postlookupfilename", value); }
+            get => GetStringParameter("prelookupfilename");
+	        set => SetStringParameter("prelookupfilename", value);
         }
 
-        public enum ProviderType
+		public string SimpleCsv
+		{
+			get => GetStringParameter("basiccsv");
+			set => SetStringParameter("basiccsv", value);
+		}
+
+		[JsonIgnore]
+        public string PostLookupFilename
+        {
+            get => GetStringParameter("postlookupfilename");
+	        set => SetStringParameter("postlookupfilename", value);
+        }
+		[JsonIgnore]
+		public string JsonFilePath
+		{
+			get => GetStringParameter("jsonfilepath");
+			set => SetStringParameter("jsonfilepath", value);
+		}
+		[JsonIgnore]
+		public string ProjectName
+		{
+			get => GetStringParameter("projectname");
+			set => SetStringParameter("projectname", value);
+		}
+
+		[JsonIgnore]
+		public string GlossaryPath {
+			get => GetStringParameter("glossarypath");
+			set => SetStringParameter("glossarypath", value);
+		}
+
+		[JsonIgnore]
+		public string GoogleEngineModel
+		{
+			get => GetStringParameter("googleenginemodel");
+			set => SetStringParameter("googleenginemodel", value);
+		}
+
+		[JsonIgnore]
+		public string ProjectLocation
+		{
+			get => GetStringParameter("projectlocation");
+			set => SetStringParameter("projectlocation", value);
+		}
+
+		public enum ProviderType
         {
             GoogleTranslate = 1,
             MicrosoftTranslator = 2,
@@ -116,60 +163,106 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public static string GetProviderTypeDescription(ProviderType type)
         {
-            if (type == ProviderType.GoogleTranslate)
-                return gTranslateString; //these strings should not be localized and are therefore hard-coded
-            else if (type == ProviderType.MicrosoftTranslator)
-                return msTranslatorString; //these strings should not be localized and are therefore hard-coded
-            else
-                return "";
+	        switch (type)
+	        {
+		        case ProviderType.GoogleTranslate:
+			        return GTranslateString; //these strings should not be localized and are therefore hard-coded
+		        case ProviderType.MicrosoftTranslator:
+			        return MsTranslatorString; //these strings should not be localized and are therefore hard-coded
+	        }
+	        return "";
         }
 
         public static ProviderType GetProviderType(string typeString)
         {
-            //we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
+	        //we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
             //the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator' ...they both leave it untranslated in their documentation in other languages
-            if (typeString == null)
-                return ProviderType.None;
-            else if (typeString.Equals(gTranslateString)) //these strings should not be localized and are therefore hard-coded
-                return ProviderType.GoogleTranslate;
-            else if (typeString.Equals(msTranslatorString)) //these strings should not be localized and are therefore hard-coded
-                return ProviderType.MicrosoftTranslator;
-            else
-                return ProviderType.None;
+	        switch (typeString)
+	        {
+		        case null:
+			        return ProviderType.None;
+		        case GTranslateString:
+			        return ProviderType.GoogleTranslate;
+		        case MsTranslatorString:
+			        return ProviderType.MicrosoftTranslator;
+		        default:
+			        return ProviderType.None;
+	        }
         }
+
         [JsonIgnore]
         public ProviderType SelectedProvider
         {
-            get 
+            get => GetProviderType(GetStringParameter("selectedprovider"));
+	        set 
             {
-                return GetProviderType(GetStringParameter("selectedprovider"));
-            }
-            set 
-            {
-                string typestring = GetProviderTypeDescription(value);
+                var typestring = GetProviderTypeDescription(value);
                 SetStringParameter("selectedprovider", typestring); 
             }
         }
 
-        [JsonIgnore]
-        public string ApiKey
-        {
-            get { return _apiKey; } //the apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
-            set { _apiKey = value; }
-        }
-        [JsonIgnore]
-        public string ClientId
-        {
-            get { return _clientid; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
-            set { _clientid = value; }
-        }
-        [JsonIgnore]
-        public string ClientSecret
-        {
-            get { return _clientsecret; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
-            set { _clientsecret = value; }
-        }
-        [JsonIgnore]
+
+		[JsonIgnore]
+		public Enums.GoogleApiVersion SelectedGoogleVersion
+		{
+			get => GetProviderGoogleApiVersion(GetStringParameter("selectedgoogleversion"));
+			set
+			{
+				var typestring = GetProviderTypeDescription(value);
+				SetStringParameter("selectedgoogleversion", typestring);
+			}
+		}
+
+		public static string GetProviderTypeDescription(Enums.GoogleApiVersion googleVersion)
+		{
+			switch (googleVersion)
+			{
+				case Enums.GoogleApiVersion.V2:
+					return "V2"; 
+				case Enums.GoogleApiVersion.V3:
+					return "V3";
+			}
+			return "V2";
+		}
+
+		public static Enums.GoogleApiVersion GetProviderGoogleApiVersion(string version)
+		{
+			switch (version)
+			{
+				case "V2":
+					return Enums.GoogleApiVersion.V2;
+				case "V3":
+					return Enums.GoogleApiVersion.V3;
+				default:
+					return Enums.GoogleApiVersion.V2;
+			}
+		}
+
+		[JsonIgnore]
+		//User for Google authentication
+		//The apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
+		public string ApiKey 
+		{
+			get => _apiKey;
+			set => _apiKey = value;
+		}
+
+		[JsonIgnore] 
+		//User for Microsoft authentication
+        public string ClientId 
+		{
+			get => _clientid;
+            set => _clientid = value;
+		}
+
+		[JsonIgnore]
+		public string Region
+		{
+			get => GetStringParameter("region");
+			set => SetStringParameter("region", value);
+		}
+
+		[JsonIgnore]
         public bool PersistGoogleKey
         {
             get;
@@ -184,26 +277,26 @@ namespace Sdl.Community.MtEnhancedProvider
         [JsonIgnore]
         public bool ResendDrafts //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
-            get { return Convert.ToBoolean(resendDrafts); }
-            set { resendDrafts = value.ToString(); }
+            get => ToBoolean(resendDrafts);
+	        set => resendDrafts = value.ToString();
         }
         [JsonIgnore]
         public bool SendPlainTextOnly //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
-            get { return Convert.ToBoolean(sendPlainTextOnly); }
-            set { sendPlainTextOnly = value.ToString(); }
+            get => ToBoolean(sendPlainTextOnly);
+	        set => sendPlainTextOnly = value.ToString();
         }
         [JsonIgnore]
         public bool UseCatID //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
-            get { return Convert.ToBoolean(UseCatId); }
-            set { UseCatId = value.ToString(); }
+            get => ToBoolean(UseCatId);
+	        set => UseCatId = value.ToString();
         }
         [JsonIgnore]
         public string CatId
         {
-            get { return GetStringParameter("catid"); }
-            set { SetStringParameter("catid", value); }
+            get => GetStringParameter("catid");
+	        set => SetStringParameter("catid", value);
         }
 
         private void SetStringParameter(string p, string value)
@@ -213,20 +306,11 @@ namespace Sdl.Community.MtEnhancedProvider
 
         private string GetStringParameter(string p)
         {
-            string paramString = _uriBuilder[p];
+            var paramString = _uriBuilder[p];
             return paramString;
         }
 
         [JsonIgnore]
-        public Uri Uri
-        {
-            get
-            {
-                return _uriBuilder.Uri;
-            }
-        }
-
-    }
-
-    
+        public Uri Uri => _uriBuilder.Uri;
+	}
 }

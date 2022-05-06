@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Sdl.Community.Transcreate.Service.ProgressDialog
+namespace Trados.Transcreate.Service.ProgressDialog
 {
 	[Serializable]
 	internal class ProgressDialogCancellationExcpetion : Exception

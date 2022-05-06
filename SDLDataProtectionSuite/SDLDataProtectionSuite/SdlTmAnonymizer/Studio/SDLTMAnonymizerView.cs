@@ -1,4 +1,5 @@
 ﻿using System;
+using RwsAppStore.UsefulTipsService;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.EventArgs;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services;
@@ -14,7 +15,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
 	[View(
 		Id = "SDLTMAnonymizerView",
-		Name = "SDLTM Anonymizer",
+		Name = "TradosTM Anonymizer",
 		Icon = "SDLTMAnonymizer",
 		Description = "Anonymize personal information in Translation Memories",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation),
@@ -47,8 +48,17 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 				Model.LogViewModel.IsEnabled = true;
 				_control = new TmAnonymizerViewControl(Model);
 
-				var usefulTipsService = new Services.UsefulTipsService(SettingsService);
-				usefulTipsService.AddUsefulTips();
+				var tipsProvider = new TipsProvider(new RwsAppStore.UsefulTipsService.Model.PathInfo("16"));
+				var usefulTipsService = new UsefulTipsService(tipsProvider, SettingsService);
+				var usefulTips = usefulTipsService.GetPluginUsefulTips();
+
+				var tipsInstalled = usefulTipsService.TipsInstalled("SDLTMAnonymizerView");
+				if (tipsInstalled == 0)
+				{
+					usefulTipsService.AddUsefulTips(usefulTips, StringResources.SDLTM_Anonymizer_Name);
+				}
+				// Debug
+				//var count = usefulTipsService.RemoveUsefulTips(usefulTips, StringResources.SDLTM_Anonymizer_Name);
 			}
 			else
 			{

@@ -5,19 +5,19 @@ using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Community.Toolkit.LanguagePlatform.Models;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Versioning;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Model;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Readers;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Visitors;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 {
 	internal class ContentWriter : AbstractBilingualContentProcessor
 	{
@@ -101,9 +101,17 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 				//var hasTrackedChanges = false;
 
 				var segmentIdentifier = string.Empty;
-				if (SegmentExists(paragraphUnit.Properties.ParagraphUnitId.Id, segmentPair.Properties.Id.Id, ref segmentIdentifier))
+				var updatedSegment = GetUpdatedSegmentContent(paragraphUnit.Properties.ParagraphUnitId.Id,
+					segmentPair.Properties.Id.Id, ref segmentIdentifier);
+
+				if (updatedSegment != null)
 				{
-					var noOverwrite = !_importOptions.OverwriteTranslations && segmentPair.Target.Any();
+					var canOverwriteTranslation = _importOptions.OverwriteTranslations || !segmentPair.Target.Any();
+					var canOverwriteBackTranslations = _importOptions.OverwriteTranslations
+								|| segmentPair.Target.Properties.TranslationOrigin == null
+								|| !segmentPair.Target.Properties.TranslationOrigin.MetaDataContainsKey("back-translation")
+								|| string.IsNullOrEmpty(segmentPair.Target.Properties.TranslationOrigin.GetMetaData("back-translation"));
+
 					var excludeFilter = false;
 					if (_importOptions.ExcludeFilterIds != null)
 					{
@@ -112,7 +120,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 										|| _importOptions.ExcludeFilterIds.Exists(a => a == match);
 					}
 
-					if (noOverwrite || excludeFilter)
+					if (excludeFilter || (!canOverwriteTranslation && !canOverwriteBackTranslations))
 					{
 						if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
 						{
@@ -126,10 +134,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 							match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 						}
 
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordExcludedCounts(status, segmentPairInfo, match);
 
 						continue;
 					}
@@ -144,24 +149,43 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						{
 							targetSegment.Properties.TranslationOrigin = _segmentBuilder.ItemFactory.CreateTranslationOrigin();
 						}
-						else
+
+						if (canOverwriteTranslation)
 						{
 							var currentTranslationOrigin = (ITranslationOrigin)targetSegment.Properties.TranslationOrigin.Clone();
 							targetSegment.Properties.TranslationOrigin.OriginBeforeAdaptation = currentTranslationOrigin;
+
+							SetTranslationOrigin(targetSegment);
+
+							if (updatedSegment.TranslationTokens.Count > 0)
+							{
+								targetSegment = _segmentBuilder.GetUpdatedSegment(targetSegment,
+									updatedSegment.TranslationTokens, segmentPair.Source);
+							}
 						}
 
-						SetTranslationOrigin(targetSegment);
-
-						var updatedSegment = _updatedSegments[segmentIdentifier];
-						if (updatedSegment.TranslationTokens.Count > 0)
-						{
-							targetSegment = _segmentBuilder.GetUpdatedSegment(targetSegment, updatedSegment.TranslationTokens, segmentPair.Source);
-						}
-
-						if (updatedSegment.BackTranslationTokens.Count > 0)
+						if (canOverwriteBackTranslations && updatedSegment.BackTranslationTokens.Count > 0)
 						{
 							var backTranslations = JsonConvert.SerializeObject(updatedSegment.BackTranslationTokens);
 							segmentPair.Target.Properties.TranslationOrigin.SetMetaData("back-translation", backTranslations);
+						}
+
+						if (!canOverwriteTranslation)
+						{
+							if (!string.IsNullOrEmpty(_importOptions.StatusTranslationNotUpdatedId))
+							{
+								var success = Enum.TryParse<ConfirmationLevel>(_importOptions.StatusTranslationNotUpdatedId, true, out var result);
+								var statusTranslationNotUpdated = success ? result : ConfirmationLevel.Unspecified;
+
+								segmentPair.Target.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+								segmentPair.Properties.ConfirmationLevel = statusTranslationNotUpdated;
+
+								status = segmentPair.Properties.ConfirmationLevel.ToString();
+								match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
+							}
+
+							AddWordExcludedCounts(status, segmentPairInfo, match);
+							continue;
 						}
 					}
 					catch (Exception ex)
@@ -187,10 +211,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 							match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 						}
 
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordProcessedCounts(status, segmentPairInfo, match);
 					}
 					else
 					{
@@ -205,10 +226,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						status = targetSegment.Properties.ConfirmationLevel.ToString();
 						match = Enumerators.GetTranslationOriginType(targetSegment.Properties.TranslationOrigin, _analysisBands);
 
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
-						AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-						AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+						AddWordExcludedCounts(status, segmentPairInfo, match);
 					}
 				}
 				else
@@ -225,10 +243,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 						match = Enumerators.GetTranslationOriginType(segmentPair.Target.Properties.TranslationOrigin, _analysisBands);
 					}
 
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
-					AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
-					AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+					AddWordNotProcessedCounts(status, segmentPairInfo, match);
 				}
 			}
 
@@ -252,6 +267,29 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 			return date.ToString(DateTimeFormatInfo.InvariantInfo);
 		}
 
+		private void AddWordProcessedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Processed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
+
+		private void AddWordNotProcessedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.NotProcessed, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
+
+		private void AddWordExcludedCounts(string status, SegmentPairInfo segmentPairInfo, string match)
+		{
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Excluded, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Excluded, segmentPairInfo);
+			AddWordCounts(status, ConfirmationStatistics.WordCounts.Total, segmentPairInfo);
+			AddWordCounts(match, TranslationOriginStatistics.WordCounts.Total, segmentPairInfo);
+		}
 
 		/// <summary>
 		/// Need to find out the segment identifier, there is a possibility that the old files 
@@ -261,19 +299,20 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 		/// <param name="segmentId"></param>
 		/// <param name="segmentIdentifier"></param>
 		/// <returns></returns>
-		private bool SegmentExists(string paragrahpUnitId, string segmentId, ref string segmentIdentifier)
+		private UpdatedSegmentContent GetUpdatedSegmentContent(string paragrahpUnitId, string segmentId, ref string segmentIdentifier)
 		{
 			if (_updatedSegments.ContainsKey(paragrahpUnitId + "_" + segmentId))
 			{
 				segmentIdentifier = paragrahpUnitId + "_" + segmentId;
-				return true;
+				return _updatedSegments[segmentIdentifier];
 			}
 			if (_updatedSegments.ContainsKey("_" + segmentId))
 			{
 				segmentIdentifier = "_" + segmentId;
-				return true;
+				return _updatedSegments[segmentIdentifier];
 			}
-			return false;
+
+			return null;
 		}
 
 		/// <summary>
@@ -327,10 +366,10 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
 
 
 				var productName = GetProductName();
-				var pathInfo = new Toolkit.LanguagePlatform.Models.PathInfo(productName);
+				var pathInfo = new Sdl.Community.Toolkit.LanguagePlatform.Models.PathInfo(productName);
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
+					new Sdl.Community.Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
 
 				return _segmentPairProcessor;
 			}

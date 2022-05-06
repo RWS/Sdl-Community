@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class LanguageInfo : BaseModel, ICloneable
 	{

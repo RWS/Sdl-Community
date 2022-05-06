@@ -16,7 +16,7 @@ namespace Sdl.Community.InSource.Helpers
 			}
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
 				"InSourceLogs");
 			Directory.CreateDirectory(logDirectoryPath);
 

@@ -697,7 +697,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 							}
 							else if (tmExporter.Status == ScheduledOperationStatus.Error)
 							{
-								MessageBox.Show(tmExporter.ErrorMessage, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+								MessageBox.Show(tmExporter.ErrorMessage, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}
 					}
@@ -715,11 +715,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			{
 				if (exception.Message.Equals(StringResources.TmService_BackupServerBasedTms_One_or_more_errors_occurred_) && exception.InnerException != null)
 				{
-					MessageBox.Show(exception.InnerException.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(exception.InnerException.Message, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 				else
 				{
-					MessageBox.Show(exception.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(exception.Message, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 			finally
@@ -766,7 +766,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message, PluginResources.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			finally
 			{

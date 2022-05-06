@@ -6,14 +6,14 @@ using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Model;
+using Trados.Transcreate.Model;
 using Color = System.Drawing.Color;
 using Comment = DocumentFormat.OpenXml.Wordprocessing.Comment;
 using Settings = DocumentFormat.OpenXml.Wordprocessing.Settings;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Writers
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Writers
 {
 	internal class WordWriter
 	{

@@ -93,15 +93,15 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data, Version=0.19.0.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+    <Reference Include="Simple.Data">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rd party\Simple.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data.Ado, Version=0.19.0.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+    <Reference Include="Simple.Data.Ado">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rd party\Simple.Data.Ado.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data.Sqlite, Version=0.18.3.2, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
+    <Reference Include="Simple.Data.Sqlite">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rd party\Simple.Data.Sqlite.dll</HintPath>
     </Reference>

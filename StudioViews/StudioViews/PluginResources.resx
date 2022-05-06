@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>studioViews</value>
+  </data>
+  <data name="StudioViewsEditorController_Description" xml:space="preserve">
+    <value>studioViews</value>
+  </data>
+  <data name="StudioViewsEditorController_Name" xml:space="preserve">
+    <value>studioViews</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="StudioViewsMain_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\studioviewsmain.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Warning_Message_UnableToParseFileLanguageCannotBeNull" xml:space="preserve">
+    <value>Unable to parse the file; {0} language cannot be null!</value>
+  </data>
+  <data name="Label_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Label_Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="StudioViews_SplitSelectedFiles_Description" xml:space="preserve">
+    <value>Split the selected files</value>
+  </data>
+  <data name="StudioViews_SplitSelectedFiles_Name" xml:space="preserve">
+    <value>Split the selected files</value>
+  </data>
+  <data name="StudioViewsExport_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StudioViewsImport_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\import.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StudioViews_ImportToSelectedFilesAction_Description" xml:space="preserve">
+    <value>Import into the selected files</value>
+  </data>
+  <data name="StudioViews_ImportToSelectedFilesAction_Name" xml:space="preserve">
+    <value>Import into the selected files</value>
+  </data>
+  <data name="StudioViewsSplit_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\studioviews_split.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Message_No_files_selected" xml:space="preserve">
+    <value>No files selected</value>
+  </data>
+  <data name="Message_Title_Task_Result" xml:space="preserve">
+    <value>Task Result</value>
+  </data>
+  <data name="Error_Message_Unable_To_Parse_File_Language_Null" xml:space="preserve">
+    <value>Unable to parse the file; {0} language cannot be null!</value>
+  </data>
+  <data name="TellMe_Download_StudioViews_From_AppStore" xml:space="preserve">
+    <value>Download studioViews from the AppStore</value>
+  </data>
+  <data name="TellMe_String_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
+  <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
+    <value>{0} TellMe provider</value>
+  </data>
+  <data name="FolderSelectDialog_Select_Export_Folder" xml:space="preserve">
+    <value>Select the export folder location</value>
+  </data>
+  <data name="OpenFileDialog_Select_Import_File" xml:space="preserve">
+    <value>Select the bilingual SDLXLIFF file</value>
+  </data>
+  <data name="Error_Message_Directory_Not_Found" xml:space="preserve">
+    <value>Directory not found</value>
+  </data>
+  <data name="Error_Message_No_Segments_Selected" xml:space="preserve">
+    <value>No segments selected</value>
+  </data>
+  <data name="Message_Successfully_Completed_Filter_Operation" xml:space="preserve">
+    <value>Successfully completed the filter operation.</value>
+  </data>
+  <data name="Message_Exported_Segments_From_Files" xml:space="preserve">
+    <value>Exported {0} segments from {1} files</value>
+  </data>
+  <data name="Message_Export_File" xml:space="preserve">
+    <value>Export File: {0}</value>
+  </data>
+  <data name="Message_Successfully_Updated_Document" xml:space="preserve">
+    <value>Successfully updated the document.</value>
+  </data>
+  <data name="Message_Segments" xml:space="preserve">
+    <value>Segments</value>
+  </data>
+  <data name="Message_Tab_Updated" xml:space="preserve">
+    <value>  Updated: {0}</value>
+  </data>
+  <data name="Message_Tab_Excluded" xml:space="preserve">
+    <value>  Excluded: {0}</value>
+  </data>
+  <data name="Message_Import_File" xml:space="preserve">
+    <value>Import File: {0}</value>
+  </data>
+  <data name="Error_Message_Expected_Bilingual_Format" xml:space="preserve">
+    <value>Expected bilingual SDLXLIFF format</value>
+  </data>
+  <data name="Error_Message_File_Not_Found" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="Error_Message_Unable_To_Locate_Document_File" xml:space="preserve">
+    <value>Unable to locate document file</value>
+  </data>
+  <data name="Status_Label_Files_Selected" xml:space="preserve">
+    <value>Files: {0}, Selected: {1}</value>
+  </data>
+  <data name="Message_Updated_Of_The_Selected_Files" xml:space="preserve">
+    <value>Updated {0} of the selected files.</value>
+  </data>
+  <data name="Message_Successfully_Completed_Import_Operation" xml:space="preserve">
+    <value>Successfully completed the import operation.</value>
+  </data>
+  <data name="Error_Message_The_Import_Operation_Failed" xml:space="preserve">
+    <value>The Import operation failed!</value>
+  </data>
+  <data name="LogFile_Title_Task_Import_Files" xml:space="preserve">
+    <value>Task: Import Files</value>
+  </data>
+  <data name="LogFile_Label_Start_Processing" xml:space="preserve">
+    <value>Start Processing: {0}</value>
+  </data>
+  <data name="LogFile_Label_Exclude_Filters" xml:space="preserve">
+    <value>Exclude Filters: </value>
+  </data>
+  <data name="LogFile_Label_Import_Files" xml:space="preserve">
+    <value>Import Files ({0})</value>
+  </data>
+  <data name="Message_Missing_Project_Files_Download_From_Server" xml:space="preserve">
+    <value>Some of the selected files could not be found locally. Connect to the server to get the latest version of these files</value>
+  </data>
+  <data name="LogFile_Tab_Label_File_Number_Path" xml:space="preserve">
+    <value>  File ({0}): {1}</value>
+  </data>
+  <data name="LogFile_Label_Updated_Files" xml:space="preserve">
+    <value>Updated Files: {0}</value>
+  </data>
+  <data name="LogFile_Label_Updated_Segments" xml:space="preserve">
+    <value>Updated Segments: {0}</value>
+  </data>
+  <data name="LogFile_Label_Selected_Files" xml:space="preserve">
+    <value>Selected Files ({0})</value>
+  </data>
+  <data name="LogFile_Label_File_Number_Path" xml:space="preserve">
+    <value>File ({0}): {1}</value>
+  </data>
+  <data name="LogFile_Label_Tab_Success" xml:space="preserve">
+    <value>  Success: </value>
+  </data>
+  <data name="LogFile_Label_Tab_Updated" xml:space="preserve">
+    <value>  Updated: </value>
+  </data>
+  <data name="LogFile_Label_Tab_Backup" xml:space="preserve">
+    <value>  Backup: </value>
+  </data>
+  <data name="Label_True" xml:space="preserve">
+    <value>True</value>
+  </data>
+  <data name="Label_False" xml:space="preserve">
+    <value>False</value>
+  </data>
+  <data name="Message_Tab_Segments" xml:space="preserve">
+    <value>  Segments</value>
+  </data>
+  <data name="Message_Tab_Tab_Updated" xml:space="preserve">
+    <value>     Updated: {0}</value>
+  </data>
+  <data name="Message_Tab_Tab_Excluded" xml:space="preserve">
+    <value>     Excluded: {0}</value>
+  </data>
+  <data name="LogFile_Label_End_Processing" xml:space="preserve">
+    <value>End Processing: {0}</value>
+  </data>
+  <data name="WindowTitle_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="LogFile_Title_Task_Split_Files" xml:space="preserve">
+    <value>Task: Split Files</value>
+  </data>
+  <data name="LogFile_Tab_Label_Input_Files_Number" xml:space="preserve">
+    <value>Input Files ({0})</value>
+  </data>
+  <data name="LogFile_Label_Output_Files_Number" xml:space="preserve">
+    <value>Output Files ({0})</value>
+  </data>
+  <data name="Message_Tab_Tab_Segments_Number" xml:space="preserve">
+    <value>     Segments: {0}</value>
+  </data>
+  <data name="Message_Tab_Tab_Words_Number" xml:space="preserve">
+    <value>     Words: {0}</value>
+  </data>
+  <data name="Error_Message_Unexpected_Error_Merging_Files" xml:space="preserve">
+    <value>Unexpected error while merging files.</value>
+  </data>
+  <data name="Message_Successfully_Completed_Split_Operation" xml:space="preserve">
+    <value>Successfully completed the split operation.</value>
+  </data>
+  <data name="LogFile_Tab_Label_Input_Files" xml:space="preserve">
+    <value>Import Files</value>
+  </data>
+  <data name="LogFile_Tab_Label_File_Number" xml:space="preserve">
+    <value>  File: {0}</value>
+  </data>
+  <data name="LogFile_Label_File" xml:space="preserve">
+    <value>File: {0}</value>
+  </data>
+  <data name="LogFile_Title_Task_Export_Filtered" xml:space="preserve">
+    <value>Task: Export Filtered</value>
+  </data>
+  <data name="Message_Exported_Segments_into_Files" xml:space="preserve">
+    <value>Exported {0} segments into {1} files</value>
+  </data>
+  <data name="Message_UnableToImportTranslationsFromEditor" xml:space="preserve">
+    <value>Unable to import translations with alignment differences to the segment structure while the document is open in the editor.</value>
+  </data>
+  <data name="Message_SelectYesToProceedWithImport" xml:space="preserve">
+    <value>Select 'Yes' to close the document and proceed with the import.</value>
+  </data>
+</root>

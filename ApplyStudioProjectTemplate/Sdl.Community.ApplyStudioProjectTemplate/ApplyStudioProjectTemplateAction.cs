@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Sdl.Core.Globalization;
 using Sdl.Core.PluginFramework;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -277,7 +279,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 							{
 								targetTermbaseConfig.Termbases?.AddRange(sourceTermbaseConfig.Termbases);
 							}
-
 							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig, selectedTemplate.TerminologyTermbases);
 						}
 						else
@@ -441,6 +442,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemoryUpdateTaskSettings", targetProject, null);
+							CopySettingsFuzzyBands(sourceSettingsBundle, targetSettingsBundle, "FuzzyBandsSettings", sourceProject, targetProject);
 						}
 						catch (Exception e)
 						{
@@ -490,6 +492,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					// Use reflection to synch the project to the server
 					try
 					{
+						targetProject.Save();
+
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
 						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
 						//For GS projects
@@ -511,6 +515,81 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			applyTemplateForm.SaveProjectTemplates();
 			Controller.RefreshProjects();
 		}
+
+		#region FuzzyBands 
+		private void CopySettingsFuzzyBands(ISettingsBundle sourceSettingsBundle, ISettingsBundle targetSettingsBundle, string settingsGroupId, FileBasedProject sourceProject, FileBasedProject targetProject)
+		{
+			//Valentin -> code already prepared for the "long term" Studio API solution change, if the "Studio team" will add this AnalysisBands settings in the BundleSettings where it should be.
+			//I hope that they will respect the naming convention and the section will be named "FuzzyBandsSettings"
+			if (!CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, settingsGroupId, targetProject))
+				CopySettingsFuzzyBands(sourceProject, targetProject);
+		}
+
+	
+		private void CopySettingsFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
+		{
+			
+			var sourceAnalysisBandsAsIntsx = GetAnalysisBandsAsIntArray(GetProjectUsingReflection(sourceProject));
+			var internalTargetProject = GetProjectUsingReflection(targetProject);
+			var setAnalysisBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
+			//update the FuzzyBands
+			setAnalysisBandsMethod?.Invoke(internalTargetProject, new object[]{sourceAnalysisBandsAsIntsx});
+		}
+
+
+		private int[] GetAnalysisBandsAsIntArray(dynamic internalDynamicProject)
+		{
+			var regex = new Regex(@"(?<min>[\d]*)([^\d]*)(?<max>[\d]*)", RegexOptions.IgnoreCase);
+			var analysisBandsMinsValues = new int[internalDynamicProject.AnalysisBands.Length];
+			int i = 0;
+			foreach (var analysisBand in internalDynamicProject.AnalysisBands)
+			{
+				Match match = regex.Match(analysisBand.ToString());
+				if (match.Success)
+				{
+					var min = match.Groups["min"].Value;
+					int.TryParse(min, out analysisBandsMinsValues[i]);
+					i++;
+				}
+			}
+
+			return analysisBandsMinsValues;
+		}
+
+
+		private dynamic GetProjectUsingReflection(FileBasedProject project)
+		{
+			var type = project.GetType();
+			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+			dynamic internalDynamicProject = internalProjectField?.GetValue(project);
+			return internalDynamicProject;
+		}
+
+
+		//should be AnalysisBand from Sdl.ProjectApi.Implementation but the class is internal and this  it's not accessible here. Also the IAnalysisBand that it's the base of AnalysisBand it's in SDL.ProjectAPI which can be referenced as assembly because it's restricted be the Studio rules. 
+		//To use IAnalysisBand we can't because the SDL.ProjectAPI is restricted to be referenced. It's marked as non public.
+		//so basically can't handle the AnalysisBand type that is used in Project.
+		private AnalysisBand[] GetAnalysisBandsValues(dynamic internalDynamicProject)
+		{
+			var analysisList = internalDynamicProject?.AnalysisBands;
+			
+			if (analysisList != null)
+			{
+				var result = new AnalysisBand[analysisList.Length];
+				
+				for (var i=0;i< analysisList.Length-1;i++)
+				{
+					result[i]=analysisList[i] as AnalysisBand;
+					
+				}
+			}
+
+			
+			return null;
+		}
+	
+
+		#endregion FuzzyBands 
 
 		/// <summary>
 		/// Validates the translation provider configuration.
@@ -571,6 +650,26 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					targetProject.UpdateSettings(targetLanguage, targetSettings);
 				}
 			}
+		}
+
+		private bool CopySettingsGroup(ISettingsBundle sourceSettings, ISettingsBundle targetSettings,
+			string settingsGroupId, FileBasedProject targetProject)
+		{
+			if (string.IsNullOrEmpty(settingsGroupId))
+				return false;
+
+			if (!sourceSettings.ContainsSettingsGroup(settingsGroupId))
+				return false;
+
+			if (targetSettings.ContainsSettingsGroup(settingsGroupId))
+			{
+				targetSettings.RemoveSettingsGroup(settingsGroupId);
+			}
+			var sourceSettingsGroup = sourceSettings.GetSettingsGroup(settingsGroupId);
+			var targetSettingsGroup = targetSettings.GetSettingsGroup(settingsGroupId);
+			targetSettingsGroup.ImportSettings(sourceSettingsGroup);
+			targetProject.UpdateSettings(targetSettings);
+			return true;
 		}
 
 		/// <summary>

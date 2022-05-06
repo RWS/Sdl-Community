@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.CustomEventArgs
+namespace Trados.Transcreate.CustomEventArgs
 {
 	public class ProjectFileSelectionChangedEventArgs: System.EventArgs
 	{

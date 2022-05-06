@@ -7,6 +7,7 @@ namespace Sdl.Community.Extended.MessageUI
 {
 	public class NumberVerifierMessageData : ExtendedMessageEventData
     {
+		public NumberVerifierMessageData(){}
 		public NumberVerifierMessageData(MessageDataModel messageDataModel)
 		{
 			SourceIssues = messageDataModel.SourceIssues;
@@ -36,25 +37,25 @@ namespace Sdl.Community.Extended.MessageUI
         public string SourceIssues
         {
             get;
-            private set;
+            set;
         }
 
         public string TargetIssues
         {
             get;
-            private set;
+            set;
         }
 
 		public string InitialSourceIssues
 		{
 			get;
-			private set;
+			set;
 		}
 
 		public string InitialTargetIssues
 		{
 			get;
-			private set;
+			set;
 		}
 
 		/// <summary>
@@ -63,7 +64,7 @@ namespace Sdl.Community.Extended.MessageUI
 		public ISegment ReplacementSuggestion
         {
             get; 
-            private set;
+            set;
         }
     }
 }

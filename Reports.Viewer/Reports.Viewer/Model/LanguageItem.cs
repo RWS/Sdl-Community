@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 using Sdl.MultiSelectComboBox.API;
-using System.Drawing;
 
-
-namespace Sdl.Community.Reports.Viewer.Model
+namespace Reports.Viewer.Plus.Model
 {
 	public class LanguageItem : IItemEnabledAware, IItemGroupAware, INotifyPropertyChanged
 	{

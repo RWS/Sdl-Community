@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
@@ -53,33 +55,43 @@
     <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="RwsAppStore.UsefulTipsService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.6\lib\net472\RwsAppStore.UsefulTipsService.dll</HintPath>
+    </Reference>
+    <Reference Include="RwsAppStore.UsefulTipsService.Update, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c2bf6e49b43accb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RwsAppStore.UsefulTips.Service.2.3.0.6\lib\net472\RwsAppStore.UsefulTipsService.Update.exe</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.2.0.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <HintPath>..\packages\Sdl.Core.PluginFramework.2.1.0\lib\netstandard2.0\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <Private>False</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>False</Private>
@@ -135,14 +147,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Sdl.Community.UsefulTipsService, Version=1.1.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.9\lib\net472\Sdl.Community.UsefulTipsService.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Sdl.Community.UsefulTipsService.Update, Version=1.1.9.0, Culture=neutral, PublicKeyToken=4ec26399346b52e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.UsefulTips.Service.1.1.9\lib\net472\Sdl.Community.UsefulTipsService.Update.exe</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="SegmentComparer, Version=1.0.3.0, Culture=neutral, PublicKeyToken=89aa17d6612aafb4, processorArchitecture=MSIL">
       <HintPath>..\packages\SegmentComparer.1.0.3\lib\net452\SegmentComparer.dll</HintPath>
       <Private>True</Private>
@@ -256,6 +260,7 @@
     <Compile Include="SdlTmAnonymizer\Controls\SelectAwareDataGrid.cs" />
     <Compile Include="SdlTmAnonymizer\Controls\SortAwareDataGrid.cs" />
     <Compile Include="SdlTmAnonymizer\Converters\GrayScaleConverter.cs" />
+    <Compile Include="SdlTmAnonymizer\Converters\StringToBoolConverter.cs" />
     <Compile Include="SdlTmAnonymizer\Converters\VisibilityToBooleanConverter.cs" />
     <Compile Include="SdlTmAnonymizer\EventArgs\SelectedTabIndexArgs.cs" />
     <Compile Include="SdlTmAnonymizer\Extensions\ListExtensions.cs" />
@@ -274,6 +279,7 @@
     <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\PicklistItem.cs" />
     <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\SinglePicklistFieldValue.cs" />
     <Compile Include="SdlTmAnonymizer\Model\FieldDefinitions\SingleStringFieldValue.cs" />
+    <Compile Include="SdlTmAnonymizer\Model\FilterableTm.cs" />
     <Compile Include="SdlTmAnonymizer\Model\LanguageDirection.cs" />
     <Compile Include="SdlTmAnonymizer\Model\Log\Action.cs" />
     <Compile Include="SdlTmAnonymizer\Model\Log\Report.cs" />
@@ -306,6 +312,8 @@
     <Compile Include="SdlTmAnonymizer\Services\Converters\SegmentElementTypeConverter.cs" />
     <Compile Include="SdlTmAnonymizer\Services\CustomFieldsService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\ExcelImportExportService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\LinqParser\Model\InnerExpressionException.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\LinqParser\Model\Expression.cs" />
     <Compile Include="SdlTmAnonymizer\Services\ReflectorService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SegmentElementVisitorService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SegmentService.cs" />
@@ -313,6 +321,7 @@
     <Compile Include="SdlTmAnonymizer\Services\SerializerService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SettingsService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SqliteTMService.cs" />
+    <Compile Include="SdlTmAnonymizer\Services\LinqParser\StringToLinqParser.cs" />
     <Compile Include="SdlTmAnonymizer\Services\SystemFieldsService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\TmService.cs" />
     <Compile Include="SdlTmAnonymizer\Services\UsefulTipsService.cs" />
@@ -395,6 +404,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\clear.png" />
     <Content Include="Resources\icon.ico" />
     <Resource Include="Resources\SDPS.ico" />
     <Resource Include="Resources\lockImage.png" />
@@ -579,8 +589,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.16.0.1\build\Sdl.Core.PluginFramework.Build.targets')" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.16.1.0\build\Sdl.Core.PluginFramework.Build.targets')" />
 </Project>

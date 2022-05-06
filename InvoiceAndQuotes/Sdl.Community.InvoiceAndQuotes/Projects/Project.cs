@@ -31,6 +31,7 @@ namespace Sdl.Community.InvoiceAndQuotes.Projects
         private void PrepareFilesList(String projectAnalyseFile)
         {
             ProjectFiles = new List<ProjectFile>();
+			if (projectAnalyseFile is null) return;
             var projectsFile = new XPathDocument(projectAnalyseFile);
             var nav = projectsFile.CreateNavigator();
             const string expression = "task/file";

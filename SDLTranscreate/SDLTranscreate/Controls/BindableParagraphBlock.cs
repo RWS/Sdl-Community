@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Documents;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	public class BindableParagraphBlock : Paragraph
 	{

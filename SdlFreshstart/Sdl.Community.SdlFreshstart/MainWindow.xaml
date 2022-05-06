@@ -9,11 +9,11 @@
 					  ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
 					  BorderThickness="0"
 					  FontSize="14"
-					  GlowBrush="#3EA691"
-                      WindowTitleBrush="#3EA691"
+					  GlowBrush="#008080"
+                      WindowTitleBrush="#008080"
 					  FontFamily="Calibri"
 					  Icon="icon.ico"
-					  Title="SDL Freshstart" Height="700" Width="1300" >
+					  Title="Trados Freshstart" Height="700" Width="1300" >
 	<Grid>
 		<Grid.Resources>
 			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
@@ -30,8 +30,8 @@
 		            Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" 
 		            Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
 		            controls:TabControlHelper.Underlined="SelectedTabItem"
-		            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
-			<TabItem Header="Read Me"  Foreground="#3C92C0">
+		            controls:TabControlHelper.UnderlineMouseOverBrush="#00A89F">
+			<TabItem Header="Read Me"  Foreground="#00A89F">
 				<views:ReadMe DataContext="{Binding ReadMeViewModel}"/>
 			</TabItem>
 			<TabItem  Header ="Studio">
@@ -40,7 +40,6 @@
 			<TabItem Header="MultiTerm" >
 				<views:MultiTerm DataContext="{Binding MultiTermViewModel}"/>
 			</TabItem>
-
 		</TabControl>
 	</Grid>
 </controls:MetroWindow>

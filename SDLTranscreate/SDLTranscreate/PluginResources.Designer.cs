@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Transcreate {
+namespace Trados.Transcreate {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace Sdl.Community.Transcreate {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -39,7 +39,7 @@ namespace Sdl.Community.Transcreate {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Transcreate.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Trados.Transcreate.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,56 @@ namespace Sdl.Community.Transcreate {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon back_translation {
+            get {
+                object obj = ResourceManager.GetObject("back_translation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon back_translation_small {
+            get {
+                object obj = ResourceManager.GetObject("back_translation_small", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Check {
+            get {
+                object obj = ResourceManager.GetObject("Check", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Checked {
+            get {
+                object obj = ResourceManager.GetObject("Checked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -94,6 +144,16 @@ namespace Sdl.Community.Transcreate {
         internal static string FolderDialog_Title {
             get {
                 return ResourceManager.GetString("FolderDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -163,7 +223,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert Transcreate Project Files.
+        ///   Looks up a localized string similar to Convert Transcreate project files.
         /// </summary>
         internal static string JobProcess_ConvertTranscreateProjectFiles {
             get {
@@ -172,7 +232,16 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Transcreate Project.
+        ///   Looks up a localized string similar to Create Back-Translations.
+        /// </summary>
+        internal static string JobProcess_CreateBackTranslations {
+            get {
+                return ResourceManager.GetString("JobProcess_CreateBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Transcreate project.
         /// </summary>
         internal static string JobProcess_CreateTranscreateProject {
             get {
@@ -186,15 +255,6 @@ namespace Sdl.Community.Transcreate {
         internal static string JobProcess_Done {
             get {
                 return ResourceManager.GetString("JobProcess_Done", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        internal static string JobProcess_Export {
-            get {
-                return ResourceManager.GetString("JobProcess_Export", resourceCulture);
             }
         }
         
@@ -235,6 +295,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Projects.
+        /// </summary>
+        internal static string JobProcess_LoadProjects {
+            get {
+                return ResourceManager.GetString("JobProcess_LoadProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparation.
         /// </summary>
         internal static string JobProcess_Preparation {
@@ -262,6 +331,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reading project files....
+        /// </summary>
+        internal static string JobProcess_ReadingProjectFiles {
+            get {
+                return ResourceManager.GetString("JobProcess_ReadingProjectFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive File: {0}.
         /// </summary>
         internal static string Label_ArchiveFile {
@@ -276,6 +354,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_AssignConfirmationStatus {
             get {
                 return ResourceManager.GetString("Label_AssignConfirmationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back-Translations created on: {0}.
+        /// </summary>
+        internal static string Label_BackTranslationsCreatedOn {
+            get {
+                return ResourceManager.GetString("Label_BackTranslationsCreatedOn", resourceCulture);
             }
         }
         
@@ -325,6 +412,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy source to target for empty translations: {0}.
+        /// </summary>
+        internal static string Label_CopySourceToTargetForEmptyTranslations {
+            get {
+                return ResourceManager.GetString("Label_CopySourceToTargetForEmptyTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created: {0}.
         /// </summary>
         internal static string Label_Created {
@@ -354,9 +450,9 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to Exception: {0}.
         /// </summary>
-        internal static string label_ExceptionMessage {
+        internal static string Label_ExceptionMessage {
             get {
-                return ResourceManager.GetString("label_ExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("Label_ExceptionMessage", resourceCulture);
             }
         }
         
@@ -460,6 +556,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading Project: {0}.
+        /// </summary>
+        internal static string Label_LoadingProject {
+            get {
+                return ResourceManager.GetString("Label_LoadingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location: {0}.
         /// </summary>
         internal static string Label_Location {
@@ -510,6 +615,15 @@ namespace Sdl.Community.Transcreate {
         internal static string label_OutputFile {
             get {
                 return ResourceManager.GetString("label_OutputFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overwrite existing Back-Translations: {0}.
+        /// </summary>
+        internal static string Label_OverwriteExistingBackTranslations {
+            get {
+                return ResourceManager.GetString("Label_OverwriteExistingBackTranslations", resourceCulture);
             }
         }
         
@@ -588,9 +702,9 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to SDLXLIFF File: {0}.
         /// </summary>
-        internal static string label_SdlXliffFile {
+        internal static string Label_SdlXliffFile {
             get {
-                return ResourceManager.GetString("label_SdlXliffFile", resourceCulture);
+                return ResourceManager.GetString("Label_SdlXliffFile", resourceCulture);
             }
         }
         
@@ -600,6 +714,15 @@ namespace Sdl.Community.Transcreate {
         internal static string Label_SelectedFiles {
             get {
                 return ResourceManager.GetString("Label_SelectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Files.
+        /// </summary>
+        internal static string Label_SourceFiles {
+            get {
+                return ResourceManager.GetString("Label_SourceFiles", resourceCulture);
             }
         }
         
@@ -687,9 +810,9 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to XLIFF File: {0}.
         /// </summary>
-        internal static string label_XliffFile {
+        internal static string Label_XliffFile {
             get {
-                return ResourceManager.GetString("label_XliffFile", resourceCulture);
+                return ResourceManager.GetString("Label_XliffFile", resourceCulture);
             }
         }
         
@@ -724,9 +847,27 @@ namespace Sdl.Community.Transcreate {
         /// <summary>
         ///   Looks up a localized string similar to This action will remove all back-projects from the selected project.
         /// </summary>
+        internal static string Message_ActionWillRemoveAllBackProjectData {
+            get {
+                return ResourceManager.GetString("Message_ActionWillRemoveAllBackProjectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will remove all data related to the selected Transcreate project..
+        /// </summary>
         internal static string Message_ActionWillRemoveAllProjectData {
             get {
                 return ResourceManager.GetString("Message_ActionWillRemoveAllProjectData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Back-Translations folder is not empty..
+        /// </summary>
+        internal static string Message_BackTranslationsFolderIsEmpty {
+            get {
+                return ResourceManager.GetString("Message_BackTranslationsFolderIsEmpty", resourceCulture);
             }
         }
         
@@ -812,11 +953,29 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to proceed and delete this folder?.
+        /// </summary>
+        internal static string Message_ProceedAndDeleteFolder {
+            get {
+                return ResourceManager.GetString("Message_ProceedAndDeleteFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the output folder.
         /// </summary>
         internal static string Message_SelectOutputFolder {
             get {
                 return ResourceManager.GetString("Message_SelectOutputFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Transcreate reports have been created successfully..
+        /// </summary>
+        internal static string Message_TranscreateReportsCreatedSuccessfully {
+            get {
+                return ResourceManager.GetString("Message_TranscreateReportsCreatedSuccessfully", resourceCulture);
             }
         }
         
@@ -914,7 +1073,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate.
+        ///   Looks up a localized string similar to Trados Transcreate.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -928,6 +1087,70 @@ namespace Sdl.Community.Transcreate {
         internal static string Proceed_and_copy_source_to_target_for_empty_translations {
             get {
                 return ResourceManager.GetString("Proceed_and_copy_source_to_target_for_empty_translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created project: {0}.
+        /// </summary>
+        internal static string Progres_Label_CreatedProject {
+            get {
+                return ResourceManager.GetString("Progres_Label_CreatedProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating project....
+        /// </summary>
+        internal static string Progres_Label_CreatingProject {
+            get {
+                return ResourceManager.GetString("Progres_Label_CreatingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merging project folders.....
+        /// </summary>
+        internal static string Progres_Label_MergingProjectFolders {
+            get {
+                return ResourceManager.GetString("Progres_Label_MergingProjectFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translating.....
+        /// </summary>
+        internal static string Progres_Label_Translating {
+            get {
+                return ResourceManager.GetString("Progres_Label_Translating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating task.....
+        /// </summary>
+        internal static string Progres_Label_UpdatingTask {
+            get {
+                return ResourceManager.GetString("Progres_Label_UpdatingTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder in explorer?.
+        /// </summary>
+        internal static string Question_OpenFolderInExplorer {
+            get {
+                return ResourceManager.GetString("Question_OpenFolderInExplorer", resourceCulture);
             }
         }
         
@@ -948,6 +1171,159 @@ namespace Sdl.Community.Transcreate {
             get {
                 object obj = ResourceManager.GetObject("Report", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_CreateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_CreatedBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreatedBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created Transcreate project.
+        /// </summary>
+        internal static string Report_Label_CreatedTranscreateProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreatedTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Transcreate project.
+        /// </summary>
+        internal static string Report_Label_CreateTranscreateProject {
+            get {
+                return ResourceManager.GetString("Report_Label_CreateTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string Report_Label_Export {
+            get {
+                return ResourceManager.GetString("Report_Label_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Back-Translations.
+        /// </summary>
+        internal static string Report_Label_ExportBackTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported for Back-Translation.
+        /// </summary>
+        internal static string Report_Label_ExportedForBackTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportedForBackTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported for Translation.
+        /// </summary>
+        internal static string Report_Label_ExportedForTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportedForTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Translations.
+        /// </summary>
+        internal static string Report_Label_ExportTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ExportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string Report_Label_Import {
+            get {
+                return ResourceManager.GetString("Report_Label_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Back-Translations.
+        /// </summary>
+        internal static string Report_Label_ImportBackTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportBackTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported Back-Translation.
+        /// </summary>
+        internal static string Report_Label_ImportedBackTranslation {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportedBackTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported Translations.
+        /// </summary>
+        internal static string Report_Label_ImportedTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportedTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Translations.
+        /// </summary>
+        internal static string Report_Label_ImportTranslations {
+            get {
+                return ResourceManager.GetString("Report_Label_ImportTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Creation.
+        /// </summary>
+        internal static string Report_Label_ProjectCreation {
+            get {
+                return ResourceManager.GetString("Report_Label_ProjectCreation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_UpdateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_UpdateBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated Back-Translation project.
+        /// </summary>
+        internal static string Report_Label_UpdatedBackTranslationProject {
+            get {
+                return ResourceManager.GetString("Report_Label_UpdatedBackTranslationProject", resourceCulture);
             }
         }
         
@@ -993,16 +1369,6 @@ namespace Sdl.Community.Transcreate {
         internal static string Result_Unsuccessful {
             get {
                 return ResourceManager.GetString("Result_Unsuccessful", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon sdl_transcreate_back {
-            get {
-                object obj = ResourceManager.GetObject("sdl_transcreate_back", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -1091,6 +1457,33 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude segments from being exported that match the properties selected..
+        /// </summary>
+        internal static string ToolTip_Label_ExcludeSegments_Export {
+            get {
+                return ResourceManager.GetString("ToolTip_Label_ExcludeSegments_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude segments from being updated that match the properties selected..
+        /// </summary>
+        internal static string ToolTip_Label_ExcludeSegments_Import {
+            get {
+                return ResourceManager.GetString("ToolTip_Label_ExcludeSegments_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the selected SDLXLIFF files already exist in the Back-Translation project, then they will be re-imported, overwriting the existing ones..
+        /// </summary>
+        internal static string ToolTip_Option_OverwreteExistingBackTranslationFiles {
+            get {
+                return ResourceManager.GetString("ToolTip_Option_OverwreteExistingBackTranslationFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         internal static string TranscreateManager_ActionsGroup_Name {
@@ -1100,7 +1493,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
+        ///   Looks up a localized string similar to Convert to Transcreate project.
         /// </summary>
         internal static string TranscreateManager_ConvertProject_Description {
             get {
@@ -1109,7 +1502,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to Transcreate Project.
+        ///   Looks up a localized string similar to Convert to Transcreate project.
         /// </summary>
         internal static string TranscreateManager_ConvertProject_Name {
             get {
@@ -1118,7 +1511,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Back-Translation Projects.
+        ///   Looks up a localized string similar to Create Back-Translation projects.
         /// </summary>
         internal static string TranscreateManager_CreateBackTranslationProject_Description {
             get {
@@ -1136,7 +1529,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Transcreate Reports.
+        ///   Looks up a localized string similar to Create Transcreate reports for the selected files.
         /// </summary>
         internal static string TranscreateManager_CreateReport_Description {
             get {
@@ -1154,7 +1547,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate Manager.
+        ///   Looks up a localized string similar to Trados Transcreate Manager.
         /// </summary>
         internal static string TranscreateManager_Description {
             get {
@@ -1217,7 +1610,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Transcreate.
+        ///   Looks up a localized string similar to Trados Transcreate.
         /// </summary>
         internal static string TranscreateManager_Name {
             get {
@@ -1262,7 +1655,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open For Translation.
+        ///   Looks up a localized string similar to Open for Translation.
         /// </summary>
         internal static string TranscreateManager_OpenFileForTranslation_Description {
             get {
@@ -1271,7 +1664,7 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open For Translation.
+        ///   Looks up a localized string similar to Open for Translation.
         /// </summary>
         internal static string TranscreateManager_OpenFileForTranslation_Name {
             get {
@@ -1370,6 +1763,24 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch with Recommended Translation.
+        /// </summary>
+        internal static string TranscreateManager_SwitchWithRecommendedTranslation_Description {
+            get {
+                return ResourceManager.GetString("TranscreateManager_SwitchWithRecommendedTranslation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch with Recommended Translation.
+        /// </summary>
+        internal static string TranscreateManager_SwitchWithRecommendedTranslation_Name {
+            get {
+                return ResourceManager.GetString("TranscreateManager_SwitchWithRecommendedTranslation_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View.
         /// </summary>
         internal static string TranscreateManager_ViewGroup_Name {
@@ -1388,6 +1799,15 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close all documents from the editor that are associated with the selected project before proceeding..
+        /// </summary>
+        internal static string Wanring_Message_CloseAllProjectDocumentBeforeProceeding {
+            get {
+                return ResourceManager.GetString("Wanring_Message_CloseAllProjectDocumentBeforeProceeding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File path cannot be null!.
         /// </summary>
         internal static string Warning_FilePathNull {
@@ -1402,6 +1822,42 @@ namespace Sdl.Community.Transcreate {
         internal static string Warning_LanguagesEmpty {
             get {
                 return ResourceManager.GetString("Warning_LanguagesEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No source files found!.
+        /// </summary>
+        internal static string Warning_Message_NoSourceFilesFound {
+            get {
+                return ResourceManager.GetString("Warning_Message_NoSourceFilesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project has already been converted to a Transcreate project..
+        /// </summary>
+        internal static string Warning_Message_ProjectAlreadyTranscreateProject {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectAlreadyTranscreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project folder already exists!.
+        /// </summary>
+        internal static string Warning_Message_ProjectFolderAlreadyExists {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectFolderAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project name suffix cannot be null!.
+        /// </summary>
+        internal static string Warning_Message_ProjectNameSuffixCannotBeNull {
+            get {
+                return ResourceManager.GetString("Warning_Message_ProjectNameSuffixCannotBeNull", resourceCulture);
             }
         }
         
@@ -1496,7 +1952,16 @@ namespace Sdl.Community.Transcreate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating Transcreate Project.
+        ///   Looks up a localized string similar to Creating Back-Translation project.
+        /// </summary>
+        internal static string WizardMessage_CreatingBackTranslationProject {
+            get {
+                return ResourceManager.GetString("WizardMessage_CreatingBackTranslationProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating Transcreate project.
         /// </summary>
         internal static string WizardMessage_CreatingTranscreateProject {
             get {
@@ -1591,6 +2056,15 @@ namespace Sdl.Community.Transcreate {
         internal static string WizardTitle_ConvertProject {
             get {
                 return ResourceManager.GetString("WizardTitle_ConvertProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Back-Translation project.
+        /// </summary>
+        internal static string WizardTitle_CreateBackTranslationProject {
+            get {
+                return ResourceManager.GetString("WizardTitle_CreateBackTranslationProject", resourceCulture);
             }
         }
         

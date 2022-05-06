@@ -6,6 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5D9C89B8-ACAC-4A3D-9373-43F6343D00E4}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.IATETerminologyProvider</RootNamespace>
@@ -15,6 +16,7 @@
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,79 +35,84 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MahApps.Metro">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.Tokens">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <Private>True</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <Private>False</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <Private>False</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <Private>False</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
-      <Private>False</Private>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt">
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -122,15 +130,24 @@
   <ItemGroup>
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
+    <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="Model\CollectionModel.cs" />
+    <Compile Include="Model\InstitutionModel.cs" />
+    <Compile Include="Model\Primarities.cs" />
+    <Compile Include="Model\Reliabilities.cs" />
+    <Compile Include="Model\ResponseModels\IateLanguage.cs" />
+    <Compile Include="Model\ResponseModels\IateName.cs" />
+    <Compile Include="Model\ResponseModels\IateInstitution.cs" />
+    <Compile Include="Service\SettingsService.cs" />
+    <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
-    <Compile Include="Helpers\CloseOnClickBehaviour.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\LanguageFlags.cs" />
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\NotifyTaskCompletion.cs" />
     <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="IateApplicationInitializer.cs" />
+    <Compile Include="IATEApplication.cs" />
     <Compile Include="IATEProviderTellMe\IATECommunityWikiAction.cs" />
     <Compile Include="IATEProviderTellMe\IATECommunityForumAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
@@ -141,8 +158,10 @@
     <Compile Include="IATETerminologyProviderViewerWinFormsUI.cs" />
     <Compile Include="IATETerminologyProvider.cs" />
     <Compile Include="IATETerminologyProviderFactory.cs" />
-    <Compile Include="Interface\IIateSettingsService.cs" />
-    <Compile Include="Interface\IProviderSettings.cs" />
+    <Compile Include="Interface\ICacheProvider.cs" />
+    <Compile Include="Interface\IMessageBoxService.cs" />
+    <Compile Include="Interface\ISettingsViewModel.cs" />
+    <Compile Include="Model\SearchCache.cs" />
     <Compile Include="Model\ResponseModels\JsonAccessTokenModel.cs" />
     <Compile Include="Model\DocumentEntryState.cs" />
     <Compile Include="Model\DomainModel.cs" />
@@ -151,7 +170,6 @@
     <Compile Include="Model\EntryModelItem.cs" />
     <Compile Include="Model\LanguageModel.cs" />
     <Compile Include="Model\PathInfo.cs" />
-    <Compile Include="Model\ProviderSettings.cs" />
     <Compile Include="Model\ResponseModels\JsonDomainResponseModel.cs" />
     <Compile Include="Model\ResponseModels\MetaResponseModel.cs" />
     <Compile Include="Model\ResponseModels\ItemsResponseModel.cs" />
@@ -170,54 +188,84 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Service\CacheProvider.cs" />
     <Compile Include="Service\DocumentStateService.cs" />
-    <Compile Include="Service\DomainService.cs" />
-    <Compile Include="Service\AccessTokenService.cs" />
-    <Compile Include="Service\IateSettingsService.cs" />
+    <Compile Include="Service\InventoriesProvider.cs" />
+    <Compile Include="Service\ConnectionProvider.cs" />
+    <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\SegmentVisitor.cs" />
+    <Compile Include="Service\SqliteDatabaseProvider.cs" />
     <Compile Include="Service\TermSearchService.cs" />
-    <Compile Include="Service\TermTypeService.cs" />
-    <Compile Include="UiHelpers\WindowsControl.xaml.cs">
+    <Compile Include="Model\ResponseModels\IateCollection.cs" />
+    <Compile Include="Events\ResetEvent.cs" />
+    <Compile Include="View\FineGrainedFilter.xaml.cs">
+      <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\SearchResultsControl.cs">
+    <Compile Include="View\DomainsAndTermTypes.xaml.cs">
+      <DependentUpon>DomainsAndTermTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="View\SearchResultsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\SearchResultsControl.Designer.cs">
+    <Compile Include="View\SearchResultsControl.Designer.cs">
       <DependentUpon>SearchResultsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\SearchResultsViewerController.cs" />
-    <Compile Include="Ui\IATETermsControl.cs">
+    <Compile Include="View\SearchResultsViewerController.cs" />
+    <Compile Include="View\IATETermsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\IATETermsControl.Designer.cs">
+    <Compile Include="View\IATETermsControl.Designer.cs">
       <DependentUpon>IATETermsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Page Include="UiHelpers\Buttons.xaml">
+    <Compile Include="ViewModel\DomainsAndTermTypesFilterViewModel.cs" />
+    <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\DataGridStyle.xaml">
+    <Page Include="Styles\DataGridStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\General.xaml">
+    <Page Include="Styles\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\WindowsBorder.xaml">
+    <Page Include="Styles\WindowsBorder.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\WindowsControl.xaml">
+    <Page Include="View\FineGrainedFilter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\SettingsWindow.xaml">
+    <Page Include="View\WindowsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI Helpers\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DomainsAndTermTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -226,8 +274,10 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\StarGrey.png" />
+    <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />
-    <EmbeddedResource Include="Ui\SearchResultsControl.resx">
+    <EmbeddedResource Include="View\SearchResultsControl.resx">
       <DependentUpon>SearchResultsControl.cs</DependentUpon>
     </EmbeddedResource>
     <Resource Include="Resources\IATE_logo.png" />
@@ -247,7 +297,7 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ui\IATETermsControl.resx">
+    <EmbeddedResource Include="View\IATETermsControl.resx">
       <DependentUpon>IATETermsControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -256,15 +306,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.0.0</Version>
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>16.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reactive">
-      <Version>4.4.1</Version>
+      <Version>16.1.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

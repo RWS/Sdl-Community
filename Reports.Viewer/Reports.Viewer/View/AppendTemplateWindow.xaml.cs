@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Plus.ViewModel;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {	
 	public partial class AppendTemplateWindow : Window
 	{

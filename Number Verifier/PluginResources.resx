@@ -128,7 +128,7 @@
     <value>Checks whether numbers in the target segment are identical to those in the source segment.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL Number Verifier</value>
+    <value>Trados Number Verifier</value>
   </data>
   <data name="Setting_Description" xml:space="preserve">
     <value>Verification settings for numbers</value>
@@ -139,7 +139,7 @@
   <data name="Verifier_Description" xml:space="preserve">
     <value>Plug-in to compare source and target numbers.</value>
   </data>
-  <data name="Error_NumbersAdded" xml:space="preserve">
+  <data name="Error_NumberAdded" xml:space="preserve">
     <value>Number added. </value>
   </data>
   <data name="Error_NumbersRemoved" xml:space="preserve">
@@ -175,5 +175,89 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   </data>
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NumberParser_Message_SeparatorIsNotRecognized" xml:space="preserve">
+    <value>Separator is not recognized: {0}</value>
+  </data>
+  <data name="NumberParser_Message_MixedGroupSeparators" xml:space="preserve">
+    <value>Mixed group separators: {0}{1}</value>
+  </data>
+  <data name="NumberParser_Message_InvalidGroupSeparator" xml:space="preserve">
+    <value>Invalid group separator: {0}</value>
+  </data>
+  <data name="NumberParser_Message_InvalidSeparatorLocation" xml:space="preserve">
+    <value>Invalid separator location</value>
+  </data>
+  <data name="NumberParser_Message_TheGroupValidIsOutOfRange" xml:space="preserve">
+    <value>The group value is out of range: {0}</value>
+  </data>
+  <data name="NumberParser_Message_LastCharIsNotANumber" xml:space="preserve">
+    <value>The last char is not a number</value>
+  </data>
+  <data name="Segment_level_errors" xml:space="preserve">
+    <value>Segment-level errors</value>
+  </data>
+  <data name="Text_area_level_errors" xml:space="preserve">
+    <value>Text-area level errors</value>
+  </data>
+  <data name="Number_level_errors" xml:space="preserve">
+    <value>Number level errors</value>
+  </data>
+  <data name="Error_SameSequenceDifferentValues" xml:space="preserve">
+    <value>Same sequences but different values</value>
+  </data>
+  <data name="Error_MissingTargetSeparators" xml:space="preserve">
+    <value>Missing target separators</value>
+  </data>
+  <data name="ThousandSeparatorAfterDecimal" xml:space="preserve">
+    <value>Thousands separator after decimal</value>
+  </data>
+  <data name="NumberCannotHaveTwoDifferentThousandSeparators" xml:space="preserve">
+    <value>Number cannot have two different thousands separators</value>
+  </data>
+  <data name="TooManyDecimalSeparators" xml:space="preserve">
+    <value>Too many decimal separators</value>
+  </data>
+  <data name="TooManyTypesOfSeparators" xml:space="preserve">
+    <value>Too many types of separators</value>
+  </data>
+  <data name="Error_DifferentSequences" xml:space="preserve">
+    <value>Different sequences</value>
+  </data>
+  <data name="Error_DifferentValues" xml:space="preserve">
+    <value>Different values</value>
+  </data>
+  <data name="NumberCannotHaveTheSameCharacterAsThousandAndAsDecimalSeparator" xml:space="preserve">
+    <value>Number cannot have the same character as thousand and as decimal separator</value>
+  </data>
+  <data name="Error_SameSequencesButDifferentMeanings" xml:space="preserve">
+    <value>Same sequences but different meanings</value>
+  </data>
+  <data name="NumbersHaveDifferentValues" xml:space="preserve">
+    <value>Numbers have different values</value>
+  </data>
+  <data name="Error_DecimalSeparatorNotValid" xml:space="preserve">
+    <value>Decimal separator not valid</value>
+  </data>
+  <data name="Error_ThousandSeparatorNotValid" xml:space="preserve">
+	  <value>Thousand separator not valid</value>
+  </data>
+  <data name="SeparatorNotValid" xml:space="preserve">
+	  <value>Separator not valid</value>
+  </data>
+  <data name="SeparatorAfterDecimal" xml:space="preserve">
+	  <value>Separator after decimal</value>
+  </data>
+  <data name="Error_MissingSourceSeparators" xml:space="preserve">
+	  <value>Missing source separators</value>
+  </data>
+  <data name="Pattern_not_valid" xml:space="preserve">
+	  <value>Pattern not valid</value>
+  </data>
+  <data name="Please_select_the_files_you_want_to_import" xml:space="preserve">
+	  <value>Please select the files you want to import.</value>
+  </data>
+  <data name="Export_selected_expressions" xml:space="preserve">
+	  <value>Export selected expressions</value>
   </data>
 </root>

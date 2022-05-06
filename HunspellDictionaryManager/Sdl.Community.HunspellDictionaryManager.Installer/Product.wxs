@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="$(var.productVersion)" Manufacturer="Sdl Community"  UpgradeCode="$(var.upgradeCode)">
+	<Product  Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="$(var.productVersion)" Manufacturer="RWS AppStore Team"  UpgradeCode="$(var.upgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
     <Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
-
     <Property Id="WIXUI_INSTALLDIR" Value="Studio16" />
     <!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
-    <UIRef Id="WixUI_Minimal"/>
+    <UIRef Id="WixUI_Minimal_OX"/>
 
     <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
     <MediaTemplate EmbedCab="yes"/>
@@ -19,7 +17,9 @@
     <!-- Compoments needed for the installation - by defining the below components, installer knows to install the application to Desktop and Program Data. -->
     <Feature Id="ProductFeature" Title="Sdl.Community.HunspellDictionaryManager.Installer" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-	  <ComponentRef Id='ApplicationProgramDataShortcut' />
+	  <ComponentRef Id='TradosApplicationProgramDataShortcut' />
+	  <ComponentRef Id='BetaTradosApplicationProgramDataShortcut' />
+	  <ComponentRef Id='SDLTradosApplicationProgramDataShortcut' />
 	  <ComponentRef Id='ApplicationShortcutDesktop' />
     </Feature>
   </Product>
@@ -39,11 +39,29 @@
 	<!-- Create shortcut to the SDLTradosStudio2021Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
+		<DirectoryRef Id="TradosStudio2021Apps">
+			<Component Id="TradosApplicationProgramDataShortcut" Guid="31E97AFA-DFAB-43A9-81E0-C122DC1C9391">
+				<Shortcut Id="TradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
+				<RemoveFolder Id="RemoveTradosStudio2021Apps" Directory="TradosStudio2021Apps" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.TradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+  <Fragment>
+		<DirectoryRef Id="BetaTradosStudio2021Apps">
+			<Component Id="BetaTradosApplicationProgramDataShortcut" Guid="75EBEB36-7D1F-4212-9625-3622D4196472">
+				<Shortcut Id="BetaTradosApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
+				<RemoveFolder Id="RemoveBetaTradosStudio2021Apps" Directory="BetaTradosStudio2021Apps" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.BetaTradosHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+		<Fragment>
 		<DirectoryRef Id="SDLTradosStudio2021Apps">
-			<Component Id="ApplicationProgramDataShortcut" Guid="31E97AFA-DFAB-43A9-81E0-C122DC1C9391">
-				<Shortcut Id="ApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
+			<Component Id="SDLTradosApplicationProgramDataShortcut" Guid="F009F106-2FFE-49F4-A0FA-4A611D241BD8">
+				<Shortcut Id="SDLApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2021" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2021" Target="[Studio16]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio16" />
 				<RemoveFolder Id="RemoveSDLTradosStudio2021Apps" Directory="SDLTradosStudio2021Apps" On="uninstall" />
-				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SDLHunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
@@ -58,10 +76,12 @@
           </Directory>
         </Directory>
       </Directory>
-      <!-- Define location where the shortcut will be added: in our case, folder SDLTradosStudio2021Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+      <!-- Define location where the shortcut will be added: in our case, folder TradosStudio2021Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
+				<Directory Id="TradosStudio2021Apps" Name="Trados Studio 2021 Apps" />
 				<Directory Id="SDLTradosStudio2021Apps" Name="SDL Trados Studio 2021 Apps" />
+				<Directory Id="BetaTradosStudio2021Apps" Name="Trados Studio 2021 Beta Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->

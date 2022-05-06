@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Sdl.Community.Transcreate.Behaviours
+namespace Trados.Transcreate.Behaviours
 {
 	public static class MouseDoubleClickBehaviour
 	{

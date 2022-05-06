@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectFilesView.xaml

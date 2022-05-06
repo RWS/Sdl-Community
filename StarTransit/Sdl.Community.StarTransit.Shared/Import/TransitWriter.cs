@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Xml;
-using Sdl.Community.StarTransit.Shared.Utils;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -12,8 +13,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	{
 		private IPersistentFileConversionProperties _originalFileProperties;
 		private INativeOutputFileProperties _nativeFileProperties;
+		private IDocumentProperties _documentInfo;
 		private XmlDocument _targetFile;
 		private TransitTextExtractor _textExtractor;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void GetProposedOutputFileInfo(IPersistentFileConversionProperties fileProperties, IOutputFileInfo proposedFileInfo)
 		{
@@ -27,20 +30,45 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		public void SetFileProperties(IFileProperties fileInfo)
 		{
-			_targetFile = new XmlDocument();
-			_targetFile.PreserveWhitespace = true;
-			_targetFile.Load(_originalFileProperties.OriginalFilePath);
+			try
+			{
+				_targetFile = new XmlDocument {PreserveWhitespace = true};
+				if (File.Exists(_originalFileProperties.OriginalFilePath))
+				{
+					_targetFile.Load(_originalFileProperties.OriginalFilePath);
+				}
+				else
+				{
+					//User changed the location of the project, we need to get the new path for source files, we can use the LastOpenedPath but there we
+					//have the location on target folder, we need the path to source language folder
+					var targetLanguageCode = _originalFileProperties.TargetLanguage.CultureInfo.Name;
+					if (!string.IsNullOrEmpty(_documentInfo?.LastOpenedAsPath))
+					{
+						var lastOpenedPath = _documentInfo?.LastOpenedAsPath;
+						var newRoothDirectory = lastOpenedPath.Substring(0, lastOpenedPath.LastIndexOf(targetLanguageCode, StringComparison.Ordinal));
+						var fileName = Path.GetFileName(_originalFileProperties.OriginalFilePath);
+						var newPath = Path.Combine(newRoothDirectory,
+							_originalFileProperties.SourceLanguage.CultureInfo.Name,fileName);
+						_targetFile.Load(newPath);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+				throw;
+			}
 		}
-
 
 		public void Initialize(IDocumentProperties documentInfo)
 		{
+			_documentInfo = documentInfo;
 			_textExtractor = new TransitTextExtractor();
 		}
 
 		public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-			string unitId = paragraphUnit.Properties.Contexts.Contexts[1].GetMetaData("UnitID");
+			var unitId = paragraphUnit.Properties.Contexts.Contexts[1].GetMetaData("UnitID");
 			var xmlUnit = _targetFile.SelectSingleNode("//Seg[@SegID='" + unitId + "']");
 
 			CreateParagraphUnit(paragraphUnit, xmlUnit);
@@ -70,78 +98,70 @@ namespace Sdl.Community.StarTransit.Shared.Import
 					target = xmlUnit.SelectSingleNode(".");
 					target.InnerXml = _textExtractor.GetPlainText(segmentPair.Target);
 					//update modified status  
-					string dataValue = xmlUnit.Attributes["Data"].InnerText;
+					var dataValue = xmlUnit.Attributes["Data"].InnerText;
 					xmlUnit.Attributes["Data"].InnerText = UpdateEditedStatus(dataValue, segmentPair.Properties.ConfirmationLevel);
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"CreateParagraphUnit method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
 		private string UpdateEditedStatus(string data, ConfirmationLevel unitLevel)
 		{
-			try
+			var status = string.Empty;
+			switch (unitLevel)
 			{
-				string status = string.Empty;
-				switch (unitLevel)
-				{
-					case ConfirmationLevel.Translated:
-						status = "0a";
-						break;
-					case ConfirmationLevel.Draft:
-						status = "02";
-						break;
-					case ConfirmationLevel.Unspecified:
-						status = "02";
-						break;
-					case ConfirmationLevel.ApprovedTranslation:
-						status = "0e";
-						break;
-					case ConfirmationLevel.ApprovedSignOff:
-						status = "0f";
-						break;
-					case ConfirmationLevel.RejectedSignOff:
-						status = "02";
-						break;
-					case ConfirmationLevel.RejectedTranslation:
-						status = "02";
-						break;
-					default:
-						status = "0a";
-						break;
-				}
-
-				Byte[] stringBytes = Encoding.Unicode.GetBytes(data);
-				var sbBytes = new StringBuilder(stringBytes.Length * 2);
-				foreach (byte b in stringBytes)
-				{
-					sbBytes.AppendFormat("{0:X2}", b);
-				}
-
-				string changedData = status + sbBytes.ToString().Substring(2, sbBytes.ToString().Length - 2);
-				int numberChars = changedData.Length;
-				byte[] bytes = new byte[numberChars / 2];
-				for (int i = 0; i < numberChars; i += 2)
-				{
-					bytes[i / 2] = Convert.ToByte(changedData.Substring(i, 2), 16);
-				}
-
-				return Encoding.Unicode.GetString(bytes);
+				case ConfirmationLevel.Translated:
+					status = "0a";
+					break;
+				case ConfirmationLevel.Draft:
+					status = "02";
+					break;
+				case ConfirmationLevel.Unspecified:
+					status = "02";
+					break;
+				case ConfirmationLevel.ApprovedTranslation:
+					status = "0e";
+					break;
+				case ConfirmationLevel.ApprovedSignOff:
+					status = "0f";
+					break;
+				case ConfirmationLevel.RejectedSignOff:
+					status = "02";
+					break;
+				case ConfirmationLevel.RejectedTranslation:
+					status = "02";
+					break;
+				default:
+					status = "0a";
+					break;
 			}
-			catch (Exception ex)
+
+			var stringBytes = Encoding.Unicode.GetBytes(data);
+			var sbBytes = new StringBuilder(stringBytes.Length * 2);
+			foreach (var b in stringBytes)
 			{
-				Log.Logger.Error($"UpdateEditedStatus method: {ex.Message}\n {ex.StackTrace}");
+				sbBytes.AppendFormat("{0:X2}", b);
 			}
-			return string.Empty;
+
+			var changedData = status + sbBytes.ToString().Substring(2, sbBytes.ToString().Length - 2);
+			var numberChars = changedData.Length;
+			var bytes = new byte[numberChars / 2];
+			for (int i = 0; i < numberChars; i += 2)
+			{
+				bytes[i / 2] = Convert.ToByte(changedData.Substring(i, 2), 16);
+			}
+
+			return Encoding.Unicode.GetString(bytes);
 		}
 
 		private void AddComment(XmlNode xmlUnit, string commentText)
 		{
 			try
 			{
-				string[] chunk = commentText.Split(';');
+				var chunk = commentText.Split(';');
 
 				var commentElement = _targetFile.CreateElement("comment");
 
@@ -149,7 +169,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 				var creationdate = _targetFile.CreateAttribute("creationdate");
 				var type = _targetFile.CreateAttribute("type");
 
-				string commentDate = this.GetCommentDate();
+				var commentDate = GetCommentDate();
 
 				creationdate.Value = commentDate;
 				creationid.Value = chunk[2];
@@ -178,7 +198,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"AddComment method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -188,18 +208,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			string month;
 
 			if (DateTime.UtcNow.Month.ToString().Length == 1)
-				month = "0" + DateTime.UtcNow.Month.ToString();
+				month = "0" + DateTime.UtcNow.Month;
 			else
-				month = "0" + DateTime.UtcNow.Month.ToString();
+				month = "0" + DateTime.UtcNow.Month;
 
 			if (DateTime.UtcNow.Day.ToString().Length == 1)
-				day = "0" + DateTime.UtcNow.Day.ToString();
+				day = "0" + DateTime.UtcNow.Day;
 			else
-				day = "0" + DateTime.UtcNow.Day.ToString();
+				day = "0" + DateTime.UtcNow.Day;
 
-			return DateTime.UtcNow.Year.ToString() + month + day + "T" +
-				DateTime.UtcNow.Hour.ToString() + DateTime.UtcNow.Minute.ToString() +
-				DateTime.UtcNow.Second.ToString() + "Z";
+			return DateTime.UtcNow.Year + month + day + "T" +
+				DateTime.UtcNow.Hour + DateTime.UtcNow.Minute +
+				DateTime.UtcNow.Second + "Z";
 		}
 
 		public void FileComplete()

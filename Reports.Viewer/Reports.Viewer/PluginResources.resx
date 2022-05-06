@@ -118,17 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Reports Viewer</value>
+    <value>Reports Viewer Plus</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ReportsView" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\report_viewer.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SDLReportsViewer_Description" xml:space="preserve">
-    <value>Reports Viewer</value>
+    <value>Reports Viewer Plus</value>
   </data>
   <data name="SDLReportsViewer_Name" xml:space="preserve">
-    <value>Reports Viewer</value>
+    <value>Reports Viewer Plus</value>
   </data>
   <data name="Label_AllLanguages" xml:space="preserve">
     <value>All Languages</value>
@@ -265,25 +265,40 @@
   <data name="WindowTitle_SelectTemplateFile" xml:space="preserve">
     <value>Select the template file</value>
   </data>
-	<data name="StatusLabel_ReportsSelected" xml:space="preserve">
+  <data name="StatusLabel_ReportsSelected" xml:space="preserve">
     <value>Reports: {0}, Selected: {1}</value>
   </data>
-	<data name="LanguageGroup_AvailableLanguages" xml:space="preserve">
+  <data name="LanguageGroup_AvailableLanguages" xml:space="preserve">
     <value>Available Languages</value>
   </data>
-	<data name="LanguageGroup_AllLanguages" xml:space="preserve">
+  <data name="LanguageGroup_AllLanguages" xml:space="preserve">
     <value>All Languages</value>
   </data>
-	<data name="TemplateScope_StudioOnly" xml:space="preserve">
+  <data name="TemplateScope_StudioOnly" xml:space="preserve">
     <value>Studio Reports only</value>
   </data>
-	<data name="TemplateScope_NonStudioOnly" xml:space="preserve">
+  <data name="TemplateScope_NonStudioOnly" xml:space="preserve">
     <value>Non Studio Reports only</value>
   </data>
-	<data name="TemplateScope_All" xml:space="preserve">
+  <data name="TemplateScope_All" xml:space="preserve">
     <value>All</value>
   </data>
-	<data name="WindowTitle_SelectReportFile" xml:space="preserve">
+  <data name="WindowTitle_SelectReportFile" xml:space="preserve">
     <value>Select the {0} file</value>
+  </data>
+  <data name="ReportsViewer_SaveReportAs" xml:space="preserve">
+    <value>Save Report As...</value>
+  </data>
+  <data name="ErrorMessage_UnableToLocateXmlFile" xml:space="preserve">
+    <value>Unable to locate the xml file: {0}</value>
+  </data>
+  <data name="Message_TheParameterCannotBeNull" xml:space="preserve">
+    <value>The parameter cannot be null</value>
+  </data>
+  <data name="Message_TheReportIdCannotBeNull" xml:space="preserve">
+    <value>The report Id cannot be null!</value>
+  </data>
+  <data name="Message_UnableToLocateReport" xml:space="preserve">
+    <value>Unable to locate report {0}</value>
   </data>
 </root>

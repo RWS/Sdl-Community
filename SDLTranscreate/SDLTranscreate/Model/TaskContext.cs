@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Sdl.Community.Transcreate.Common;
 using Sdl.ProjectAutomation.FileBased;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class TaskContext : BaseModel
 	{		
@@ -18,6 +18,7 @@ namespace Sdl.Community.Transcreate.Model
 			ExportOptions = settings.ExportOptions;
 			ImportOptions = settings.ImportOptions;
 			ConvertOptions = settings.ConvertOptions;
+			BackTranslationOptions = settings.BackTranslationOptions;
 
 			Owner = Enumerators.Controller.None;
 		}
@@ -74,6 +75,8 @@ namespace Sdl.Community.Transcreate.Model
 		public ImportOptions ImportOptions { get; set; }
 
 		public ConvertOptions ConvertOptions { get; set; }
+		
+		public BackTranslationOptions BackTranslationOptions { get; set; }
 
 		public string GetWorkflowPath()
 		{

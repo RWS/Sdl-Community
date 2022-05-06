@@ -19,7 +19,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -75,6 +75,15 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string AnonymizeCompleteToolTip {
             get {
                 return ResourceManager.GetString("AnonymizeCompleteToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RWS AppStore.
+        /// </summary>
+        public static string AppStoreFolder {
+            get {
+                return ResourceManager.GetString("AppStoreFolder", resourceCulture);
             }
         }
         
@@ -180,11 +189,38 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backing up project....
+        /// </summary>
+        public static string LogMessage_BackingUpProject {
+            get {
+                return ResourceManager.GetString("LogMessage_BackingUpProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Batch task started....
+        /// </summary>
+        public static string LogMessage_BatchTaskStarted {
+            get {
+                return ResourceManager.GetString("LogMessage_BatchTaskStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove or replace the name of the user who last modified the translation.
         /// </summary>
         public static string ModifiedToolTip {
             get {
                 return ResourceManager.GetString("ModifiedToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Machine Translation Cloud Metadata.
+        /// </summary>
+        public static string MTCloudMetadata_GroupBoxHeader {
+            get {
+                return ResourceManager.GetString("MTCloudMetadata_GroupBoxHeader", resourceCulture);
             }
         }
         
@@ -207,7 +243,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLBatchAnonymize.
+        ///   Looks up a localized string similar to Trados Batch Anonymizer.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -240,6 +276,24 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string RemoveMT {
             get {
                 return ResourceManager.GetString("RemoveMT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove MT Cloud quality estimation.
+        /// </summary>
+        public static string RemoveQE_CheckBoxContent {
+            get {
+                return ResourceManager.GetString("RemoveQE_CheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove MT Cloud quality estimation from the metadata of the segments.
+        /// </summary>
+        public static string RemoveQE_ToolTipContent {
+            get {
+                return ResourceManager.GetString("RemoveQE_ToolTipContent", resourceCulture);
             }
         }
         

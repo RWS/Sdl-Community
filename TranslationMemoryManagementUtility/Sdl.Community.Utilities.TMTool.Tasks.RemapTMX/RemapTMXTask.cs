@@ -25,7 +25,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 		private string extension = "*.sdltm";
 
 		/// <summary>
-		/// Cultures that are present in SDL Trados Studio 2009, but not in Trados Workbench 2007.
+		/// Cultures that are present in Trados Studio 2009, but not in Trados Workbench 2007.
 		/// </summary>
 		private string[] notSupportedCultures =
 												{

@@ -11,7 +11,7 @@ using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
 
 namespace Sdl.Community.XLIFF.Manager.BatchTasks.ViewModel
 {

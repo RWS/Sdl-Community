@@ -37,7 +37,8 @@ namespace Sdl.Community.MTEdge.LPConverter
 			// (ie nb-no doesn't have "no" as its first half, which in languages.xml, it should)
 			if (ForcedGenericLPs.ContainsValue(mtEdgeCode))
 			{
-				return CultureInfo.GetCultureInfo(ForcedGenericLPs.First(lp => lp.Value == mtEdgeCode).Key);
+				var code = ForcedGenericLPs.FirstOrDefault(lp => lp.Value == mtEdgeCode).Key;
+				return CultureInfo.GetCultureInfo(!string.IsNullOrEmpty(code) ? code : string.Empty);
 			}
 
 			var languageResource =

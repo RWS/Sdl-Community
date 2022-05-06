@@ -2,7 +2,7 @@
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.Transcreate
+namespace Trados.Transcreate
 {
 	[RibbonGroup("TranscreateManager_SettingsGroup", Name = "TranscreateManager_SettingsGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]

@@ -41,9 +41,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
@@ -55,6 +52,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Rws.MultiSelectComboBox">
+      <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Community.Toolkit.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.3.0.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -99,9 +99,6 @@
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.MultiSelectComboBox, Version=1.0.18.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.MultiSelectComboBox.1.0.18\lib\net47\Sdl.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <SpecificVersion>False</SpecificVersion>
@@ -165,6 +162,8 @@
     <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\WebBrowserHelper.cs" />
     <Compile Include="Converters\TextEmptyToVisibilityConverter.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\Context.cs" />
+    <Compile Include="FileTypeSupport\XLIFF\Model\ElementGenericPlaceholder.cs" />
     <Compile Include="LanguageMapping\Constants.cs" />
     <Compile Include="LanguageMapping\Implementation\Common.cs" />
     <Compile Include="LanguageMapping\Implementation\Reader.cs" />
@@ -441,10 +440,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Styles\TextBlockProjectInfoToolTipStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -582,6 +577,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Refresh.ico" />
+    <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
     <Resource Include="Resources\LanguageMapping.ico" />
     <Resource Include="Resources\Search.png" />
     <EmbeddedResource Include="BatchTasks\Report.xsl" />

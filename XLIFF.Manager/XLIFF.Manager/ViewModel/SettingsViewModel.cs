@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Model;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
 
 namespace Sdl.Community.XLIFF.Manager.ViewModel
 {
@@ -120,7 +120,7 @@ namespace Sdl.Community.XLIFF.Manager.ViewModel
 			get
 			{
 				return _exportSelectedXliffSupportItemModel
-					   ?? (_exportSelectedXliffSupportItemModel = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
+				       ?? (_exportSelectedXliffSupportItemModel = XLIFFSupportItems?.FirstOrDefault(a => a.SupportType == Enumerators.XLIFFSupport.xliff12polyglot));
 			}
 			set
 			{

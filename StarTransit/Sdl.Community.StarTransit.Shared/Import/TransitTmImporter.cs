@@ -1,174 +1,173 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using NLog;
+using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.StarTransit.Shared.Import
 {
 	public class TransitTmImporter
 	{
-		#region Private Fields
-		private readonly IFileTypeManager _fileTypeManager;
-		private readonly FileBasedTranslationMemory _fileBasedTM;
-		#endregion
+		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+		private readonly FileBasedTranslationMemory _translationMemory;
+		private readonly IEventAggregatorService _eventAggregator;
 
-		#region Constructors
-		public TransitTmImporter(LanguagePair pair,	IFileTypeManager fileTypeManager, string studioTranslationMemory)
+		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath,IEventAggregatorService eventAggregator)
 		{
-			_fileTypeManager = fileTypeManager;
+			_eventAggregator = eventAggregator;
+			_translationMemory = new FileBasedTranslationMemory(
+				tmPath,
+				description,
+				languagePair.SourceLanguage,
+				languagePair.TargetLanguage,
+				FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased |
+				FuzzyIndexes.TargetWordBased,
+				BuiltinRecognizers.RecognizeAll,
+				TokenizerFlags.DefaultFlags,
+				WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
 
-			if (pair.CreateNewTm)
-			{
-				_fileBasedTM = new FileBasedTranslationMemory(
-					studioTranslationMemory,
-					string.Empty,
-					pair.SourceLanguage,
-					pair.TargetLanguage,
-					GetFuzzyIndexes(),
-					GetRecognizers(),
-					TokenizerFlags.DefaultFlags,
-					GetWordCountFlags());
-			}
-			else
-			{
-				_fileBasedTM = new FileBasedTranslationMemory(pair.TmPath);
-			}
+			_translationMemory.Save();
 		}
 
-		public TransitTmImporter(IFileTypeManager fileTypeManager, LanguagePair pair, string projectPath, string fileName)
+		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, CultureInfo targetLanguage, PackageModel package)
 		{
-			_fileTypeManager = fileTypeManager;
-
-			_fileBasedTM = new FileBasedTranslationMemory(
-						Path.Combine(projectPath, string.Concat(fileName, ".sdltm")),
-						string.Concat(fileName, " description"),
-						pair.SourceLanguage,
-						pair.TargetLanguage,
-						GetFuzzyIndexes(),
-				 		GetRecognizers(),
-						TokenizerFlags.DefaultFlags,
-						GetWordCountFlags());
-
-			_fileBasedTM.LanguageResourceBundles.Clear();
-			_fileBasedTM.Save();
-			TMFilePath = _fileBasedTM.FilePath;
+			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles, targetLanguage,package);
+			ImportSdlXliffsIntoTm(sdlXliffFolderFullPath, targetLanguage);
 		}
 
-		#endregion
+		public TranslationProviderReference GetTranslationProviderReference()
+		{
+			return new TranslationProviderReference(_translationMemory.FilePath, true);
+		}
 
-		#region Public Properties
-		public string TMFilePath { get; set; }
-		#endregion
-
-		#region Public Methods
-		public void ImportStarTransitTm(string starTransitTm)
+		private void ImportSdlXliffsIntoTm(string sdlXliffFolderPath,CultureInfo targetLanguage)
 		{
 			try
 			{
-				var sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
-				ImportSdlXliffIntoTm(sdlXliffFullPath);
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"ImportStarTransitTm method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
+				ConfirmationLevel[] levels = { ConfirmationLevel.ApprovedTranslation, ConfirmationLevel.Translated, ConfirmationLevel.ApprovedSignOff };
 
-	    public TranslationProviderReference GetTranslationProviderReference()
-		{
-			return new TranslationProviderReference(_fileBasedTM.FilePath, true);
-		}
-		#endregion
-
-		#region Private Methods
-		private void ImportSdlXliffIntoTm(string sdlXliffFullPath)
-		{
-			try
-			{
-				var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
-				var importSettings = new ImportSettings()
+				var importSettings = new ImportSettings
 				{
-					IsDocumentImport = false,
+					IsDocumentImport = true,
 					CheckMatchingSublanguages = false,
-					IncrementUsageCount = false,
-					NewFields = ImportSettings.NewFieldsOption.Ignore,
+					IncrementUsageCount = true,
+					NewFields = ImportSettings.NewFieldsOption.AddToSetup,
 					PlainText = false,
-					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew
+					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew,
+					ConfirmationLevels = levels
 				};
-				tmImporter.ImportSettings = importSettings;
-				tmImporter.Import(sdlXliffFullPath);
+				var tmImporter = new TranslationMemoryImporter(_translationMemory.LanguageDirection)
+				{
+					ImportSettings = importSettings
+				};
+
+				var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
+				if (!Directory.Exists(folderPath)) return;
+				var xliffFiles = Directory.GetFiles(folderPath);
+				var tmFileProgress = new TmFilesProgress
+				{
+					TotalFilesNumber = xliffFiles.Length,
+					TargetLanguage = targetLanguage
+				};
+
+				foreach (var xliffFile in xliffFiles)
+				{
+					tmFileProgress.ProcessingFileNumber++;
+					tmImporter.Import(xliffFile);
+					_eventAggregator?.PublishEvent(tmFileProgress);
+				}
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ImportSdlXliffIntoTm method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 			}
 		}
 
 		/// <summary>
-		/// Create temporary bilingual file (sdlxliff) used to import the information
-		/// in Studio translation memories
+		/// Create temporary bilingual files (sdlxliff) used to import the information in Studio translation memories
 		/// </summary>
-		/// <param name="starTransitTM"></param>
-		/// <param name="pathToExtractFolder"></param>
-		/// <returns></returns>
-		private string CreateTemporarySdlXliff(string starTransitTM)
+		private string CreateTemporarySdlXliffs(List<string> sourceTmFiles, List<string> targetTmFiles, CultureInfo targetCultureInfo, PackageModel package)
 		{
-			try
+			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
+			var targetLang = new Language(targetCultureInfo);
+			var projectInfo = new ProjectInfo
 			{
-				var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(starTransitTM));
-				var generatedXliffName = string.Format("{0}{1}", Path.GetFileNameWithoutExtension(starTransitTM), ".sdlxliff");
+				Name = $"TMExtractProject_{Guid.NewGuid()}",
+				LocalProjectFolder = pathToExtractFolder,
+				SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
+				TargetLanguages = new[] {targetLang} 
+			};
 
-				var sdlXliffFullPath = Path.Combine(pathToExtractFolder, generatedXliffName);
-				var converter = _fileTypeManager.GetConverterToDefaultBilingual(starTransitTM, sdlXliffFullPath, null);
+			var newProject =
+				new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
+			newProject.AddFiles(sourceTmFiles.ToArray());
+			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
+			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
 
-				converter.Parse();
-				return sdlXliffFullPath;
-			}
-			catch (Exception ex)
+			var targetTms = newProject.AddFiles(targetTmFiles.ToArray());
+			newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
+
+			var xliffCreationProgress = new XliffCreationProgress
 			{
-				Log.Logger.Error($"CreateTemporarySdlXliff method: {ex.Message}\n {ex.StackTrace}");
+				BatchTaskIds = new List<string>(), TargetLanguage = targetLang.CultureInfo,TotalFileNumber = sourceTmFiles.Count
+			};
+
+			var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),
+				new[]
+				{
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
+					AutomaticTaskTemplateIds.CopyToTargetLanguages
+				}, (sender, args) =>
+				{
+					xliffCreationProgress.BatchTaskIds.Clear();
+					xliffCreationProgress.BatchTaskIds.AddRange(args.TaskTemplateIds);
+					xliffCreationProgress.Progress = args.PercentComplete;
+					_eventAggregator.PublishEvent(xliffCreationProgress);
+				}, (sender, args) => { });
+
+			if (taskSequence.Status != TaskStatus.Failed) return pathToExtractFolder;
+
+			foreach (var subTask in taskSequence.SubTasks)
+			{
+				_logger.Error($"Name:{subTask.Name}");
+
+				foreach (var messages in subTask.Messages)
+				{
+					_logger.Error($"Exception: {messages?.Exception}");
+					_logger.Error($"Message: {messages?.Message}");
+				}
 			}
+
 			return string.Empty;
 		}
 
 		/// <summary>
 		/// Create temporary folder for TM import
 		/// </summary>
-		/// <param name="pathToTemp"></param>
-		/// <returns></returns>
 		private string CreateFolderToExtract(string pathToTemp)
 		{
-			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract");
-			if (!Directory.Exists(pathToExtractFolder))
+			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract",Guid.NewGuid().ToString());
+
+			try
 			{
 				Directory.CreateDirectory(pathToExtractFolder);
 			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+			}
+			_logger.Info($"--> Temp Path folder for Studio project where we extract the tms: {pathToExtractFolder}");
+
 			return pathToExtractFolder;
 		}
-		
-		private static FuzzyIndexes GetFuzzyIndexes()
-		{
-			return FuzzyIndexes.SourceCharacterBased |
-				FuzzyIndexes.SourceWordBased |
-				FuzzyIndexes.TargetCharacterBased |
-				FuzzyIndexes.TargetWordBased;
-		}
-
-		private static BuiltinRecognizers GetRecognizers()
-		{
-			return BuiltinRecognizers.RecognizeAll;
-		}
-
-		private static WordCountFlags GetWordCountFlags()
-		{
-			return WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe;
-		}
-		#endregion
 	}
 }

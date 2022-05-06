@@ -176,6 +176,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View
 		{
 			((PreviewViewModel)DataContext).ApplyChanges();
 		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			Query.Clear();
+		}
 	}
 }
 

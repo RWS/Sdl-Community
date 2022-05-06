@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Sdl.Community.Reports.Viewer.Controls
+namespace Reports.Viewer.Plus.Controls
 {
 	public class WebBrowserHelper
 	{

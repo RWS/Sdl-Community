@@ -2,15 +2,16 @@
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Community.Reports.Viewer.View;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Api.Providers;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
+using Reports.Viewer.Plus.View;
+using Reports.Viewer.Plus.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	[Action("ReportsViewer_AddReport_Action",
 		Name = "ReportsViewer_AddReport_Name",
@@ -32,22 +33,14 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			Run(new Report());
 		}
 
-		private void AddNewReport(Report report)
+		public override void Initialize()
 		{
-			var reportTemplates = _reportsViewerController.ReportsController.GetCustomReportTemplates();
-			var reports = _reportsViewerController.GetReports();
-			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
+			_canEnable = true;
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
 
-			var viewModel = new AppendReportViewModel(report, _imageService,
-				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates);
-			var view = new AppendReportWindow(viewModel, null);
-			viewModel.Window = view;
-			
-			var result = view.ShowDialog();
-			if (result != null && (bool)result)
-			{
-				_reportsViewerController.AddReports(new List<Report> {viewModel.Report});
-			}
+			SetEnabled();
 		}
 
 		public override void UpdateEnabled(bool loading)
@@ -63,6 +56,26 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			AddNewReport(report);
 		}
 
+		private void AddNewReport(Report report)
+		{
+			var reportTemplates = GetCustomReportTemplates();
+
+			var reports = _reportsViewerController.GetReports();
+			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
+			var taskTemplateIdProvider = new TaskTemplateIdProvider();
+
+			var viewModel = new AppendReportViewModel(report, _imageService,
+				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, taskTemplateIdProvider);
+			var view = new AppendReportWindow(viewModel, null);
+			viewModel.Window = view;
+
+			var result = view.ShowDialog();
+			if (result != null && (bool)result)
+			{
+				_reportsViewerController.AddReports(new List<Report> { viewModel.Report });
+			}
+		}
+
 		private Settings GetSettings()
 		{
 			if (File.Exists(_pathInfo.SettingsFilePath))
@@ -74,14 +87,15 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			return new Settings();
 		}
 
-		public override void Initialize()
+		private List<ReportTemplate> GetCustomReportTemplates()
 		{
-			_canEnable = true;
-			_pathInfo = new PathInfo();
-			_imageService = new ImageService();
-			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
+			if (File.Exists(_pathInfo.CustomReportTemplatesFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.CustomReportTemplatesFilePath);
+				return JsonConvert.DeserializeObject<List<ReportTemplate>>(json);
+			}
 
-			SetEnabled();
+			return new List<ReportTemplate>();
 		}
 
 		private void SetEnabled()

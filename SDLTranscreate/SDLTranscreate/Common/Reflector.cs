@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sdl.Community.Transcreate.Common
+namespace Trados.Transcreate.Common
 {
 	public class Reflector
 	{

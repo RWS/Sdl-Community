@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
+namespace Trados.Transcreate.Wizard.ViewModel.Export
 {
 	public class WizardPageExportSummaryViewModel : WizardPageViewModelBase
 	{
@@ -93,7 +93,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 					var folder = Path.Combine(languageFolder, targetLanguageFile.Path.TrimStart('\\'));
 					var filePath = Path.Combine(folder, targetLanguageFile.Name + ".docx");
 
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 					summaryText += indent + string.Format(PluginResources.label_OutputFile, filePath) + Environment.NewLine + Environment.NewLine;										
 				}
 			}

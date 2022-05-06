@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Sdl.Community.Transcreate.Extensions
+namespace Trados.Transcreate.Extensions
 {
 	public static class WindowsControlUtils
 	{

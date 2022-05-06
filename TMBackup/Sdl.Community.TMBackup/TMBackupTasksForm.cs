@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
+using NLog;
 using Sdl.Community.BackupService;
 using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
@@ -12,22 +13,16 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupTasksForm : Form
 	{
-		public static readonly Log Log = Log.Instance;
-
-		#region Private fields
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 		private JsonRequestModel _jsonRquestModel = new JsonRequestModel();
 		private string _taskRunType = string.Empty;
-		#endregion
 
-		#region Constructors
 		public TMBackupTasksForm()
 		{
 			InitializeComponent();
 			GetBackupTasks();
 		}
-		#endregion
 
-		#region Public methods
 		/// <summary>
 		/// Get all backup tasks from Windows Task Scheduler and display in the TMBackup interface
 		/// </summary>
@@ -108,13 +103,11 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.GetBackupTasks} {ex.Message} \n {ex.StackTrace}");
+				Logger.Error($"{Constants.GetBackupTasks} {ex.Message} \n {ex.StackTrace}");
 			}
 			return backupTasks;
 		}
-		#endregion
 
-		#region Private methods
 		/// <summary>
 		/// Set info for the manually tasks when trying to start running the backup of one or more tasks 
 		/// </summary>
@@ -171,7 +164,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.AddInfoIntoJson} {ex.Message} \n {ex.StackTrace}");
+				Logger.Error($"{Constants.AddInfoIntoJson} {ex.Message} \n {ex.StackTrace}");
 			}
 		}
 
@@ -219,7 +212,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.RunManuallyTasks} {ex.Message} \n {ex.StackTrace}");
+				Logger.Error($"{Constants.RunManuallyTasks} {ex.Message} \n {ex.StackTrace}");
 			}
 		}
 
@@ -292,7 +285,7 @@ namespace Sdl.Community.TMBackup
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.RunDisabledTasks} {ex.Message} \n {ex.StackTrace}");
+				Logger.Error($"{Constants.RunDisabledTasks} {ex.Message} \n {ex.StackTrace}");
 			}
 		}
 
@@ -305,11 +298,11 @@ namespace Sdl.Community.TMBackup
 		}
 
 		/// <summary>
-		/// Open Help file from SDL Community site
+		/// Open Help file from RWS Community site
 		/// </summary>
 		private void OpenReadMe()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.trados-tm-backup");
 		}
 
 		/// <summary>
@@ -322,9 +315,7 @@ namespace Sdl.Community.TMBackup
 			var tmBackupForm = new TMBackupForm(true, string.Empty);
 			tmBackupForm.ShowDialog();
 		}
-		#endregion
 
-		#region Events	
 		/// <summary>
 		/// Open TMBackup form for the selected task on cell double click
 		/// </summary>
@@ -439,6 +430,5 @@ namespace Sdl.Community.TMBackup
 		{
 			OpenReadMe();
 		}
-		#endregion
 	}
 }

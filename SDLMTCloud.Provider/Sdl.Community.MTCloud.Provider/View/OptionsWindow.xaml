@@ -9,10 +9,10 @@
 			xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
 			xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
 			xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
+			xmlns:provider="clr-namespace:Sdl.Community.MTCloud.Languages.Provider;assembly=Sdl.Community.MTCloud.Languages.Provider"
 			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
-			Title="SDL MT Cloud Options" 
 			WindowStyle="None" 
 			AllowsTransparency="True"
 			ResizeMode="CanResizeWithGrip"
@@ -21,28 +21,26 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ProgressRingAsteriskStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBoxStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
 				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
 				<Setter Property="Margin" Value="15 5 0 5"/>
 				<Setter Property="FontFamily" Value="Segoe UI"/>
 				<Setter Property="Foreground" Value="#333232"/>
 				<Setter Property="FontSize" Value="13"/>
+			</Style>
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
 			</Style>
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
 		</ResourceDictionary>
@@ -53,7 +51,8 @@
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="35" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
@@ -62,22 +61,23 @@
 
 			<!-- BORDER CONTROL -->
 			<controls:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" 
+			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" Margin="0 10 0 0"
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
-			       Margin="0" VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/MTCloud_logo.png"/>
+			       VerticalAlignment="Top"  IsHitTestVisible="False"
+			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/LWLogo.png"/>
+			
 
-			<Border Background="White" Grid.Column="0" Grid.Row="1"  >
+			<Border Background="White" Grid.Column="0" Grid.Row="2"  >
 				<TextBlock Margin="10,15,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
-						Welcome to the SDL Machine Translation Cloud (formerly BeGlobal) translation provider for Studio. <LineBreak/><LineBreak/>
-						SDL Machine Translation Cloud is SDL's neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
-						Using SDL's proprietary technology, customers can have the assurance of content privacy.
-						SDL Machine Translation is powered by SDL's state-of-the-art machine learning algorithms and supports a large number of languages.
+						Welcome to the Language Weaver translation provider for Studio. <LineBreak/><LineBreak/>
+						Language Weaver is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Using our proprietary technology, customers can have the assurance of content privacy.
+						Language Weaver is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.
 				</TextBlock>
 			</Border>
 
-			<Grid Grid.Row="2" Margin="0,10,0,0">
+			<Grid Grid.Row="3" Margin="0,10,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
@@ -86,18 +86,19 @@
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 
-				<controls:SortAwareDataGrid x:Name="LanguageMappingsGrid" Grid.Row="0"
-				  DefaultColumnName="[none]"
-				  DefaultSortDirection="Ascending"
-				  BorderBrush="#BEBEBE"
-		          Style="{StaticResource FilesGridStyle}"
-				  ItemsSource="{Binding LanguageMappingModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-				  SelectedItem="{Binding SelectedLanguageMappingModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				  Margin="15,10,15,5"
-				  CanUserResizeColumns="True" 
-				  MinWidth="850"
-				  HorizontalScrollBarVisibility="Disabled"
-				  CanUserDeleteRows="False">
+				<controls:SortAwareDataGrid 
+					x:Name="LanguageMappingsGrid" Grid.Row="0"
+					DefaultColumnName="[none]"
+					DefaultSortDirection="Ascending"
+					BorderBrush="#BEBEBE"
+					Style="{StaticResource FilesGridStyle}"
+					ItemsSource="{Binding LanguageMappingModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+					SelectedItem="{Binding SelectedLanguageMappingModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					Margin="15,10,15,5"
+					CanUserResizeColumns="True" 
+					MinWidth="850"
+					HorizontalScrollBarVisibility="Disabled"
+					CanUserDeleteRows="False">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="Project Language Pair" CanUserSort="True" IsReadOnly="True" SortMemberPath="ProjectLanguagePair" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
@@ -182,7 +183,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="MT Cloud Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
+						<DataGridTemplateColumn Header="LW Dictionary" CanUserSort="True" SortMemberPath="SelectedMTCloudDictionary.Name" IsReadOnly="True" Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" >
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox  ItemsSource="{Binding Dictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
@@ -210,25 +211,22 @@
 					</DataGrid.Columns>
 				</controls:SortAwareDataGrid>
 				<StackPanel Grid.Row="1">
-					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" IsChecked="{Binding ReSendChecked}" Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTransaltionOption}"  />
+					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}" 
+					          IsChecked="{Binding ReSendChecked}" 
+					          Content="{x:Static rsx:PluginResources.SettingsWindow_ReSendTranslationOption}"  />
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
-						          IsChecked="{Binding SendFeedback}"
-						          Content="{x:Static rsx:PluginResources.EnableRating}"/>
+						      IsChecked="{Binding SendFeedback}"
+						      Content="{x:Static rsx:PluginResources.EnableRating}"/>
 					<Button Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-					        Content="To learn more about the information being sent to SDL with this option please visit the &quot;Rate Translations&quot; wiki."
+					        Content="To learn more about the information being sent to RWS with this option please visit the &quot;Rate Translations&quot; wiki."
 					        Command="{Binding NavigateToWikiCommand}"
 							FontSize="13"
 							HorizontalAlignment="Left"
 					        Margin="15 5 0 5"/>
-					<!--<TextBlock Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}" Margin="15 5 0 5">
-							<Hyperlink Command="{Binding NavigateToWikiCommand}">
-								To learn more about the information being sent to SDL with this option please visit the "Rate Translations" wiki.
-							</Hyperlink>
-					</TextBlock>-->
 				</StackPanel>
 			</Grid >
 
-			<Border Grid.Row="4" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">
+			<Border Grid.Row="5" Grid.Column="0"  Margin="0" BorderThickness="0,1,0,0" BorderBrush="#ABB0B3">
 				<Grid VerticalAlignment="Center" Margin="15,15,0,15">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
 						<Button Style="{StaticResource ButtonStyleShadowless}" 

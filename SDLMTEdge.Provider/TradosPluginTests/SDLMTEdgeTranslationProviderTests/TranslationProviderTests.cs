@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sdl.Community.MTEdge.Provider;
-using TradosPluginTests;
 
 namespace Sdl.Community.MTEdge.UnitTests.SDLMTEdgeTranslationProviderTests
 {

@@ -1,0 +1,602 @@
+<?xml version="1.0"?>
+<ProjectServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="3.2.0.0">
+  <Workflow Guid="00000000-0000-0000-0000-000000000001">
+    <ComplexTaskTemplates>
+      <ComplexTaskTemplate Description="ComplexTask_Prepare_NoProjectTM_Description" Name="ComplexTask_Prepare_NoProjectTM_Name" Id="Sdl.ProjectApi.AutomaticTask.Prepare.NoProjectTM">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.PerfectMatch" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Translate" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+      <ComplexTaskTemplate Description="ComplexTask_Prepare_Description" Name="ComplexTask_Prepare_Name" Id="Sdl.ProjectApi.AutomaticTask.Prepare">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.PerfectMatch" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Translate" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.ProjectTm" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+      <ComplexTaskTemplate Description="ComplexTask_AnalyzeOnly_Description" Name="ComplexTask_AnalyzeOnly_Name" Id="Sdl.ProjectApi.AutomaticTask.AnalyzeOnly">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Analysis" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.ProjectTm" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.TranslationCount" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+      <ComplexTaskTemplate Description="ComplexTask_Finalize_Description" Name="ComplexTask_Finalize_Name" Id="Sdl.ProjectApi.AutomaticTask.Finalize">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.UpdateMasterTm" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.GenerateTargetTranslation" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+      <ComplexTaskTemplate Description="ComplexTask_PseudoTranslateRoundTrip_Description" Name="ComplexTask_PseudoTranslateRoundTrip_Name" Id="Sdl.ProjectApi.AutomaticTask.PseudoTranslateRoundTrip">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.PseudoTranslate" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.GenerateTargetTranslation" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+      <ComplexTaskTemplate Description="ComplexTask_TranslateAndAnalyze_Description" Name="ComplexTask_TranslateAndAnalyze_Name" Id="Sdl.ProjectApi.AutomaticTasks.TranslateAndAnalyze">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Conversion" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.Split" />
+          <SubTaskTemplate TaskTemplateId="Sdl.ProjectApi.AutomaticTasks.TranslateAndAnalysis" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+      <ComplexTaskTemplate Description="" Name="Fail safe" Id="569ab835-6011-4e11-9879-37aa2db847cc">
+        <SubTaskTemplates>
+          <SubTaskTemplate TaskTemplateId="Sdl.Community.FailSafeTask" />
+        </SubTaskTemplates>
+      </ComplexTaskTemplate>
+    </ComplexTaskTemplates>
+    <ManualTaskTemplates>
+      <ManualTaskTemplate Id="Sdl.ProjectApi.ManualTask.Translate" Name="ManualTask_Translate_Name" Description="ManualTask_Translate_Description" WorkflowStageType="Translation">
+        <SupportedFileTypes />
+      </ManualTaskTemplate>
+      <ManualTaskTemplate Id="Sdl.ProjectApi.ManualTask.Review" Name="ManualTask_Review_Name" Description="ManualTask_Review_Description" WorkflowStageType="Review">
+        <SupportedFileTypes />
+      </ManualTaskTemplate>
+      <ManualTaskTemplate Id="Sdl.ProjectApi.ManualTask.Error" Name="ManualTask_Error_Name" Description="ManualTask_Error_Description" WorkflowStageType="Review">
+        <SupportedFileTypes />
+      </ManualTaskTemplate>
+      <ManualTaskTemplate Id="human-translation" Name="Translation" Description="Translation" WorkflowStageType="Translation">
+        <SupportedFileTypes />
+      </ManualTaskTemplate>
+    </ManualTaskTemplates>
+    <AutomaticTaskTemplates>
+      <AutomaticTaskTemplate Id="analysis" Name="Analysis" Description="Calculates analysis statistics and cross-file repetitions and creates quote for customer." />
+      <AutomaticTaskTemplate Id="copy-to-target" Name="Copy Source to Target" Description="Creates target files for a source file." />
+      <AutomaticTaskTemplate Id="convert" Name="File Format Conversion" Description="Converts source file to BCM format." />
+      <AutomaticTaskTemplate Id="scan" Name="File Type Detection" Description="Detect file type for source files." />
+      <AutomaticTaskTemplate Id="apply-machine-translation" Name="Machine Translation" Description="Applies machine translation." />
+      <AutomaticTaskTemplate Id="apply-translation-memory" Name="Translation Memory Matching" Description="Applies all TMs to the project." />
+    </AutomaticTaskTemplates>
+  </Workflow>
+  <Projects>
+    <ProjectListItem Guid="def623cc-552a-4bd6-8bb6-92ca879d447c" ProjectFilePath="C:\Users\aghisa\Documents\Studio 2019\Project 4\Project 4.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Project 4" CreatedAt="2020-07-07T11:10:54.3618681Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+    </ProjectListItem>
+    <ProjectListItem Guid="55953e24-1c69-47dc-851f-240344a07b52" ProjectFilePath="MtEnhancedRo-en\MtEnhancedRo-en.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="MtEnhancedRo-en" CreatedAt="2020-09-15T06:38:55.385512Z" StartedAt="2020-09-15T06:40:04.4132106Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+    </ProjectListItem>
+    <ProjectListItem Guid="c2fffd2b-513f-4eae-a440-668c0ab1adf5" ProjectFilePath="C:\Users\aghisa\Desktop\files\MultipleLang\Complex Word Test.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Complex Word Test" CreatedAt="2021-04-21T06:17:09.9270594Z" StartedAt="2021-04-21T06:17:10.0716723Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="604ddedf-add8-4bf1-bd16-89a251b2a994" ProjectFilePath="C:\Users\aghisa\Desktop\files\lang2\Complex Word Test.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Complex Word Test" CreatedAt="2021-04-21T06:28:30.2618578Z" StartedAt="2021-04-21T06:28:30.3676099Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="c394d69b-ccf7-4ac7-94b7-0e0f979c22be" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\ref1\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-04-21T14:06:14.1295747Z" StartedAt="2021-04-21T14:06:14.2381759Z" Status="Started" CreatedBy="GLOBAL\aghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath" />
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="1840e4e0-6aa9-4131-8561-b194668e7bf3" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\demo\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-04-22T14:13:31.3840826Z" StartedAt="2021-04-22T14:13:31.5566423Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath" />
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="e8bdced9-aec6-463a-8a15-c7d5d70bcc63" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\Empty\Complex Word Test.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Complex Word Test" CreatedAt="2021-04-23T06:29:34.1116284Z" StartedAt="2021-04-23T06:29:34.2732986Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="f3ff9ef9-1efa-4c90-a94e-32aae74816f2" ProjectFilePath="C:\Users\aghisa\Desktop\files\test\Probeübersetzung.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Probeübersetzung" CreatedAt="2021-04-23T09:35:59.4147129Z" StartedAt="2021-04-23T09:35:59.5104248Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="14072f36-b2d4-4fcc-bd54-0eb28bc51d43" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\cr\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-05-11T09:41:28.1261645Z" StartedAt="2021-05-11T09:41:28.299699Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="e5f8a9e5-e13f-4493-b256-efe7fe1916a9" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\crImport\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-05-11T10:34:39.8331772Z" StartedAt="2021-05-11T10:34:39.9000234Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="bfd8fcd5-5a14-4de5-a726-50c1a285713d" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\Import2\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-05-11T10:38:10.6503494Z" StartedAt="2021-05-11T10:38:10.6553511Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="aaef5864-e443-4769-bc2e-9938799be3eb" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\CrNoTm\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-05-11T10:47:04.2068276Z" StartedAt="2021-05-11T10:47:04.2107907Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="0d152b9e-5f39-4645-aa7f-f229d99d5b4b" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\MtBoth\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-11T12:18:16.3430186Z" StartedAt="2021-05-11T12:18:16.4218032Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="4ce10c1b-946f-4d2f-8c25-5f753ebc5a23" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\MtCreateOnlyTm\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-11T12:21:33.7255009Z" StartedAt="2021-05-11T12:21:33.7284669Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="e8effec5-71b9-4cd3-85da-42b241a6890d" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\MTCreateOnlyMT\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-11T12:23:29.8484536Z" StartedAt="2021-05-11T12:23:29.8534654Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="80165ab1-3e28-468c-a646-cb2a27785ea3" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\MTImport\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-11T12:41:04.9770592Z" StartedAt="2021-05-11T12:41:05.0881245Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="fbbb206c-d503-43b3-8c45-96c8b19d93a7" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\MtImport2\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-11T12:47:11.2292166Z" StartedAt="2021-05-11T12:47:11.2352014Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="bf093716-9112-4a18-b2c7-9eb96c4f8d96" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\TmOnly\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-11T12:52:06.9374735Z" StartedAt="2021-05-11T12:52:06.9404661Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="691d0da6-b412-431e-be38-89971382facc" ProjectFilePath="C:\Users\aghisa\Desktop\files\co1\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-12T07:51:58.1929115Z" StartedAt="2021-05-12T07:51:58.3247118Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="56e2b11a-5eb1-4313-b43d-d8f9d9c0df17" ProjectFilePath="C:\Users\aghisa\Desktop\files\multiple\Complex Word Test.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Complex Word Test" CreatedAt="2021-05-12T08:14:48.8462634Z" StartedAt="2021-05-12T08:14:48.8490593Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="b80dade2-df33-4a31-a591-5283c55a69b2" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\TestCreate\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-05-12T08:17:42.882776Z" StartedAt="2021-05-12T08:17:42.8887595Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="20b17739-b57d-444b-a5f3-ada96c044de7" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\TestCreate\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-12T08:21:22.3272728Z" StartedAt="2021-05-12T08:21:22.3368336Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="73996d7a-1bea-4638-970e-6161943ae0ef" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_MTFiles (1)\PackageWith_MTFiles\TestMT\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-12T08:25:25.7438586Z" StartedAt="2021-05-12T08:25:25.75058Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="6dbecfc8-2eec-4149-9156-d3e800b1a1ab" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\OldVersionIndCreate\693203001_Trumpf_ID.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="693203001_Trumpf_ID" CreatedAt="2021-05-12T08:36:23.7618175Z" StartedAt="2021-05-12T08:36:23.8116896Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\TransitPackage Handler\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="38b6aeb8-5b59-4d50-9fd4-6e0623ab0f3e" ProjectFilePath="C:\Users\aghisa\Desktop\files\PackageWith_TM\PackageWith_TM\OldVersionMTCreate\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_office" CreatedAt="2021-05-12T08:37:42.6351835Z" StartedAt="2021-05-12T08:37:42.6371832Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\TransitPackage Handler\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="a9c5759a-c230-4a16-8c2b-056b968f141b" ProjectFilePath="C:\Users\aghisa\Desktop\files\multi\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-12T08:49:06.1282557Z" StartedAt="2021-05-12T08:49:06.2120472Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="81f86166-01bc-4128-aa47-8feaf1deae2c" ProjectFilePath="C:\Users\aghisa\Desktop\files\MultiTms\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-12T08:59:16.9201047Z" StartedAt="2021-05-12T08:59:16.9280443Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="a3da5d9d-1cb0-495f-9fdf-231a7f9de7e5" ProjectFilePath="C:\Users\aghisa\Desktop\files\Multi Demo\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-12T12:37:50.0476846Z" StartedAt="2021-05-12T12:37:50.1036815Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="1ce57e57-0bff-4f3b-8289-3c4e63f711b4" ProjectFilePath="C:\Users\aghisa\Desktop\files\MultiAll\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo DueDate="2021-05-14T21:00:00Z" IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-13T08:23:02.4837295Z" StartedAt="2021-05-13T08:23:02.5418797Z" Status="Started" CreatedBy="GLOBAL\aghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="76de7f8d-7de4-4502-bed4-64c4bd438e40" ProjectFilePath="C:\Users\aghisa\Desktop\files\MultiEmpty\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-14T06:17:46.9649475Z" StartedAt="2021-05-14T06:17:47.0108005Z" Status="Started" CreatedBy="GLOBAL\aghisa" />
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="5c010170-4d60-4516-be15-acb04b20461a" ProjectFilePath="C:\Users\aghisa\Desktop\files\MultilingualOptionTemplate\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo DueDate="2021-05-27T21:00:00Z" IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-17T11:40:07.2931128Z" StartedAt="2021-05-17T11:40:07.3429788Z" Status="Started" CreatedBy="GLOBAL\aghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="0ba0b3fd-53a6-4da2-940d-61d67ca39eb5" ProjectFilePath="C:\Users\aghisa\Desktop\files\Test Multilingual Package Trados Plugin1\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo DueDate="2021-05-27T21:00:00Z" IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-18T10:09:42.6467938Z" StartedAt="2021-05-18T10:09:42.7305442Z" Status="Started" CreatedBy="GLOBAL\aghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="0bc5916c-7327-43c9-adb7-9abebcf9e2ad" ProjectFilePath="C:\Users\aghisa\Desktop\files\Test Multilingual Package Trados Plugin2\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo DueDate="2021-05-27T21:00:00Z" IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-18T10:14:21.8443703Z" StartedAt="2021-05-18T10:14:21.8483591Z" Status="Started" CreatedBy="GLOBAL\aghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="354b0da3-a97e-4613-9919-0245d0f99786" ProjectFilePath="C:\Users\aghisa\Desktop\files\Test Multilingual Package Trados Plugin1111\Test Multilingual Package Trados Plugin.sdlproj">
+      <ProjectInfo DueDate="2021-05-27T21:00:00Z" IsInPlace="false" IsCloudBased="false" IsImported="false" Name="Test Multilingual Package Trados Plugin" CreatedAt="2021-05-18T10:27:05.175613Z" StartedAt="2021-05-18T10:27:05.1815935Z" Status="Started" CreatedBy="GLOBAL\aghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="ProjectOrigin">Star Transit project</Setting>
+            <Setting Id="ProjectIconPath">C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins\Unpacked\Sdl.Community.StarTransit\transit.ico</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="6058a670-8243-b472-e501-8d57ffffffff" ProjectFilePath="">
+      <ProjectInfo DueDate="2021-03-29T17:15:01+03:00" IsInPlace="false" IsCloudBased="true" IsImported="false" Description="" Name="Andrea_NewAddonVersion" CreatedAt="2021-03-22T16:15:12+02:00" Status="Started" CreatedBy="Andrea-Melinda Ghisa">
+        <Customer Guid="f7ee94f5-4324-4ccd-9494-691c07bde847" Name="Root" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="AccountId">53c38504df93bc162367bd54</Setting>
+            <Setting Id="ShortAccountId">84458</Setting>
+            <Setting Id="TenatNameSetting">SDL Community Developers</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="6058967a-8243-b472-e56d-5e8bffffffff" ProjectFilePath="">
+      <ProjectInfo DueDate="2021-03-29T16:00:36+03:00" IsInPlace="false" IsCloudBased="true" IsImported="false" Description="" Name="Andrea_Test" CreatedAt="2021-03-22T15:07:06+02:00" Status="Started" CreatedBy="Andrea-Melinda Ghisa">
+        <Customer Guid="2378c88d-2d98-4faf-8c3a-20a376e2e77c" Name="Root" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="AccountId">53c38504df93bc162367bd54</Setting>
+            <Setting Id="ShortAccountId">84458</Setting>
+            <Setting Id="TenatNameSetting">SDL Community Developers</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="6054610e-8243-b472-e5e0-dbabffffffff" ProjectFilePath="">
+      <ProjectInfo DueDate="2021-03-26T11:30:32+02:00" IsInPlace="false" IsCloudBased="true" IsImported="false" Description="" Name="Andrea Test En-De" CreatedAt="2021-03-19T10:30:06+02:00" Status="Started" CreatedBy="Andrea-Melinda Ghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="AccountId">53c38504df93bc162367bd54</Setting>
+            <Setting Id="ShortAccountId">84458</Setting>
+            <Setting Id="TenatNameSetting">SDL Community Developers</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="5fb63be3-61cb-bc5e-8123-6033ffffffff" ProjectFilePath="">
+      <ProjectInfo DueDate="2020-11-26T18:00:00+02:00" IsInPlace="false" IsCloudBased="true" IsImported="false" Description="" Name="AndreaEnde" CreatedAt="2020-11-19T11:33:24+02:00" Status="Started" CreatedBy="Andrea-Melinda Ghisa">
+        <Customer Guid="d102f8d1-012c-4418-a2c3-b30dcc510569" Name="Root" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="AccountId">53c38504df93bc162367bd54</Setting>
+            <Setting Id="ShortAccountId">84458</Setting>
+            <Setting Id="TenatNameSetting">SDL Community Developers</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+    <ProjectListItem Guid="5fb636dc-95b7-0717-afd1-997effffffff" ProjectFilePath="">
+      <ProjectInfo DueDate="2020-11-30T18:00:00+02:00" IsInPlace="false" IsCloudBased="true" IsImported="false" Description="" Name="AndreaLCTest" CreatedAt="2020-11-19T11:11:58+02:00" Status="Started" CreatedBy="Andrea-Melinda Ghisa">
+        <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+      </ProjectInfo>
+      <SettingsBundle Guid="00000000-0000-0000-0000-000000000000">
+        <SettingsBundle>
+          <SettingsGroup Id="ProjectSettings">
+            <Setting Id="AccountId">53c38504df93bc162367bd54</Setting>
+            <Setting Id="ShortAccountId">84458</Setting>
+            <Setting Id="TenatNameSetting">SDL Community Developers</Setting>
+          </SettingsGroup>
+        </SettingsBundle>
+      </SettingsBundle>
+    </ProjectListItem>
+  </Projects>
+  <ProjectTemplates>
+    <ProjectTemplateListItem Guid="10004f3b-4acf-4425-a3e3-38d3b3514276" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\Default.sdltpl">
+      <ProjectTemplateInfo Description="assembly://SDLTradosStudio/Sdl.TranslationStudio.Application.StringResources/ProjectTemplate_Default_Desc" CreatedAt="2009-01-14T22:32:57.271375Z" CreatedBy="SDL" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="af980028-b2c4-4aee-90ac-ce9ae42fbc25" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\testbat.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-07-07T11:22:13.7918064Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="46a689d9-f4d2-43e7-b4e7-b341acda05c9" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\TemplTest.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-07-07T11:27:15.8454477Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="810089f0-ccd7-4ecc-aad7-7b364400d4c7" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\RATProjectTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-03T09:37:55.1131266Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="46f8dba4-0fb4-4c7e-94b9-ed0554188dc2" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\En-DeProjTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-03T09:38:59.1895058Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="59ee0118-2f37-4262-931a-8de65b7940a3" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\servertbEnDe.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-03T10:33:50.6606421Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="5d4a776a-84ca-44ca-b208-34747d9e9d68" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\En-tuTemplate'.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-03T10:46:01.1537947Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="c6b39113-68be-4fc1-bdf4-190676bc049a" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\TurkishLast.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-03T12:16:31.2266343Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="0c7096b5-55df-4b86-9533-ca8923109229" ProjectTemplateFilePath="C:\Users\aghisa\Downloads\JLR Tech Training_template_GS (2).sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2017-02-07T06:45:12.5192541Z" CreatedBy="GLOBAL\ialtas" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="40961d4b-2b36-461b-9f57-22047836d0c2" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\ApplyEnDeCorrectTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-06T14:45:46.6938836Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="c215100a-9e64-4707-9bb6-ee74e03c510a" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\HttpEn-DeTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-09T13:24:42.9199407Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="23ffa80f-b499-4f6a-a609-31b479940057" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\GermanTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-09T13:47:25.9661273Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="c9bfb6a6-bbc4-4910-9673-5f5b90d1b0a2" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\Apply2TB.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-09T14:37:59.6767272Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="de5745b7-86b8-4bfd-9cb7-fea6a7cb4d77" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\LanguageCloud.sdltpl">
+      <ProjectTemplateInfo Description="Cloud project template" CreatedAt="2020-11-19T09:12:01.4415322Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="fb3e5f4c-31eb-413f-9a64-16c5e3ed12a4" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\TemplatForCloudProjEn-De.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-11-19T09:15:44.4413851Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="dab037be-b59d-4301-9705-e3d3f889686b" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\AppEnDeTermbase.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-12-16T09:42:00.7941951Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="bf0b3310-2ddf-4746-a9a0-2cfea8bf4c60" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\TemplateTMandTbEnDe.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-12-16T09:47:26.3758018Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="64e9fbf6-d998-4937-9b6b-0e6e9c905508" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\MtCloudTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2020-12-17T09:57:13.9376827Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="9f2522bb-eff9-47b0-a3a0-8079e1f90916" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\MultilingualTradosTemplateWithTms.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2021-05-12T10:03:51.8045543Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="c2e4745c-e8ec-46dc-9c8e-0621ba2c54df" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\TransitMultilingualTemplate.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2021-05-13T08:23:32.4923933Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="e9bd7fb5-0a85-4dea-aebf-dbe6b35cb616" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\MultilingualNoOptions.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2021-05-14T06:18:28.2773642Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+    <ProjectTemplateListItem Guid="c968a26e-599c-4401-8516-f3ffdd1d3367" ProjectTemplateFilePath="C:\Users\aghisa\Documents\Studio 2021\Project Templates\TransitMultilingualPenaltiesOptions.sdltpl">
+      <ProjectTemplateInfo Description="" CreatedAt="2021-05-17T11:41:09.1447236Z" CreatedBy="GLOBAL\aghisa" />
+    </ProjectTemplateListItem>
+  </ProjectTemplates>
+  <Users>
+    <User UserId="GLOBAL\aghisa" FullName="Andrea-Melinda Ghisa" Description="" Email="aghisa@sdl.com" PhoneNumber="" EmailType="Smtp" />
+    <User UserId="emanuel" FullName="emanuel" EmailType="None" />
+  </Users>
+  <Customers>
+    <Customer Guid="5f2c2c35-ac21-5000-01e5-deaaffffffff" Name="Automotive" Email="" />
+    <Customer Guid="63693451-ba58-427e-8eaa-fe254447af04" Name="53c38504df93bc162367bd54" Email="" />
+  </Customers>
+  <ActiveManualTaskIndex />
+</ProjectServer>

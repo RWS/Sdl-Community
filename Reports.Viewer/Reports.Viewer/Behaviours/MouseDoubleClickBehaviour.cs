@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Sdl.Community.Reports.Viewer.Behaviours
+namespace Reports.Viewer.Plus.Behaviours
 {
 	public static class MouseDoubleClickBehaviour
 	{

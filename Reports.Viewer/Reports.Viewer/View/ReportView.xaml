@@ -1,11 +1,9 @@
-﻿<UserControl x:Class="Sdl.Community.Reports.Viewer.View.ReportView"             
+﻿<UserControl x:Class="Reports.Viewer.Plus.View.ReportView"             
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
-             xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
-             xmlns:view="clr-namespace:Sdl.Community.Reports.Viewer.View"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ReportViewModel}">
 	<Border Margin="0">

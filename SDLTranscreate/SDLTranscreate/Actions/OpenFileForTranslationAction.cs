@@ -1,7 +1,7 @@
 ﻿using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	[Action("TranscreateManager_OpenFileForTranslation_Action",
 		Name = "TranscreateManager_OpenFileForTranslation_Name",

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
@@ -27,6 +28,7 @@ namespace PretranslateSamplePlugin
 			};
 
 			var fileBasedProject = new FileBasedProject(projectInfo);
+			var allProviders = TranslationProviderManager.GetTranslationProviderFactories(); //get a list of all providers
 			AddServerTm(fileBasedProject, "", "", "", false, "",
 				"");
 

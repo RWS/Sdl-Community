@@ -1,27 +1,28 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Service.Events;
-using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
-	public delegate void TranslationFeedbackEventRaiser(FeedbackRequest translationFeedback);
-
 	public interface ITranslationService
 	{
 		event TranslationReceivedEventHandler TranslationReceived;
 
 		IConnectionService ConnectionService { get; }
+		bool IsActiveModelQeEnabled { get; }
 		Options Options { get; set; }
 
-		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
+		Task AddTermToDictionary(Term term);
 
-		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
+		Task<MTCloudDictionaryInfo> GetDictionaries();
 
-		Task<HttpResponseMessage> SendFeedback(SegmentId? segmentId, dynamic rating, string original, string improvement);
+		Task<SubscriptionInfo> GetLanguagePairs();
 
-		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
+		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
+
+		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
 	}
 }

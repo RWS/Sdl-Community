@@ -36,8 +36,10 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 							break;
 						case TagType.Standalone:
 						case TagType.TextPlaceholder:
-						case TagType.LockedContent:
 							result.Append($"<x id=\"{tag.TagID}\">{tagString}</x>");
+							break;
+						case TagType.LockedContent:
+							result.Append($"<x id=\"{tag.TagID}\">{tagString.Replace("/>", @" locked=""true""/>")}</x>");
 							break;
 						default:
 							System.Diagnostics.Debug.Assert(false, "Unexpected tag type");

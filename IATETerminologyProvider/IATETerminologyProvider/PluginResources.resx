@@ -172,4 +172,28 @@
   <data name="Reset_Tooltip" xml:space="preserve">
     <value>Reset all settings to default</value>
   </data>
+  <data name="Search_Subdomains" xml:space="preserve">
+    <value>Search in subdomains</value>
+  </data>
+  <data name="Subdomains_Tooltip" xml:space="preserve">
+    <value>Searching in subdomains will increase the response time from IATE service</value>
+  </data>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Clear local cache</value>
+  </data>
+  <data name="ClearConfirmation" xml:space="preserve">
+    <value>Are you sure you want to clear local cache?</value>
+  </data>
+  <data name="Label_MaximumEntries" xml:space="preserve">
+    <value>Maximum number of term entries:</value>
+  </data>
+  <data name="SelectCollections_TextBlock" xml:space="preserve">
+    <value>Select collection(s):</value>
+  </data>
+  <data name="StarYellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\staryellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SelectSettingsFile_DialogTitle" xml:space="preserve">
+	  <value>Select settings file</value>
+  </data>
 </root>

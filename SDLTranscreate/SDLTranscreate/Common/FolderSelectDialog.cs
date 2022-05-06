@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Sdl.Community.Transcreate.Common
+namespace Trados.Transcreate.Common
 {
 	public class FolderSelectDialog
 	{

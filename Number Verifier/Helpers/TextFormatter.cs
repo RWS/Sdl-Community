@@ -133,7 +133,7 @@ namespace Sdl.Community.NumberVerifier.Helpers
 		/// </summary>
 		/// <param name="separators"></param>
 		/// <returns></returns>
-		public bool IsSpaceSeparator(string separators)
+		public bool ContainsSpaceSeparator(string separators)
 		{
 			return separators.Contains("u00A0") || separators.Contains("u2009") || separators.Contains("u0020") || separators.Contains("u202F");
 		}

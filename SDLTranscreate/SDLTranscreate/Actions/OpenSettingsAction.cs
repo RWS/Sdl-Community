@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.View;
-using Sdl.Community.Transcreate.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.View;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	[Action("TranscreateManager_OpenSettings_Action", 
 		Name = "TranscreateManager_Settings_Name",

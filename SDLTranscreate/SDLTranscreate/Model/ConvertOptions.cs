@@ -1,10 +1,10 @@
-﻿namespace Sdl.Community.Transcreate.Model
+﻿namespace Trados.Transcreate.Model
 {
 	public class ConvertOptions : BaseModel
 	{		
 		public ConvertOptions()
 		{
-			MaxAlternativeTranslations = 2;
+			MaxAlternativeTranslations = 3;
 			CloseProjectOnComplete = true;
 		}
 

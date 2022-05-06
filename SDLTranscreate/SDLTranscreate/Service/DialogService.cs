@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Interfaces;
+using Trados.Transcreate.Controls;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class DialogService : IDialogService
 	{

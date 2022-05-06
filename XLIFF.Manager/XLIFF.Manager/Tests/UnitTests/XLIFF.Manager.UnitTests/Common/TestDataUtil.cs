@@ -50,7 +50,7 @@ namespace XLIFF.Manager.UnitTests.Common
 				Id = Guid.NewGuid().ToString(),
 				Name = projectName,
 				Path = projectName,
-				ProjectType = "SDL Project",
+				ProjectType = "RWS Project",
 				ProjectFiles = new List<ProjectFile>()
 			};
 

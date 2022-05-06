@@ -176,6 +176,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						ScriptId = Guid.NewGuid().ToString(),
 						Active = !IsDisabled,
 						Description = ScriptDescription,
+						FileName = "AhkMasterScript",
 						Name = ScriptName,
 						Text = ScriptContent
 					};

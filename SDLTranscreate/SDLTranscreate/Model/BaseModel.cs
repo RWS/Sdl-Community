@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class BaseModel: INotifyPropertyChanged
 	{
@@ -9,7 +9,17 @@ namespace Sdl.Community.Transcreate.Model
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			try
+			{
+				if (propertyName != null)
+				{
+					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+				}
+			}
+			catch
+			{
+				// ignore; catch all;
+			}
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Interfaces
+namespace Trados.Transcreate.Interfaces
 {
 	public interface ITranscreateController
 	{
@@ -13,6 +13,6 @@ namespace Sdl.Community.Transcreate.Interfaces
 
 		void UpdateProjectData(TaskContext taskContext);
 
-		void UpdateBackTranslationProjectData(IProject parentProject, TaskContext taskContext);
+		void UpdateBackTranslationProjectData(string parentProjectId, TaskContext taskContext);
 	}
 }

@@ -9,7 +9,7 @@ using Sdl.Community.XLIFF.Manager.Commands;
 using Sdl.Community.XLIFF.Manager.Common;
 using Sdl.Community.XLIFF.Manager.Interfaces;
 using Sdl.Community.XLIFF.Manager.Model;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
 
 namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 {
@@ -27,14 +27,14 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		private ICommand _clearExportFileCommand;
 		private ICommand _browseFolderCommand;
 		private ICommand _clearFiltersCommand;
-		private ICommand _selectedItemsChangedCommand;	
+		private ICommand _selectedItemsChangedCommand;
 
-		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService) 
+		public WizardPageExportOptionsViewModel(Window owner, object view, WizardContext wizardContext, IDialogService dialogService)
 			: base(owner, view, wizardContext)
 		{
 			_dialogService = dialogService;
 			XLIFFSupportItems = Enumerators.GetXLIFFSupportItems();
-			
+
 
 			SelectedXliffSupportItem = XLIFFSupportItems.FirstOrDefault(a => a.SupportType == WizardContext.ExportOptions.XliffSupport);
 			OutputFolder = WizardContext.TransactionFolder;
@@ -47,7 +47,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			LoadPage += OnLoadPage;
 			LeavePage += OnLeavePage;
 		}
-	
+
 		public ICommand ClearExportFileCommand => _clearExportFileCommand ?? (_clearExportFileCommand = new CommandHandler(ClearExportFile));
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ?? (_browseFolderCommand = new CommandHandler(BrowseFolder));
@@ -96,7 +96,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				}
 
 				_filterItems = value;
-				OnPropertyChanged(nameof(FilterItems));				
+				OnPropertyChanged(nameof(FilterItems));
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 				}
 
 				_copySourceToTargetEnabled = value;
-				OnPropertyChanged(nameof(CopySourceToTargetEnabled));			
+				OnPropertyChanged(nameof(CopySourceToTargetEnabled));
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		public override bool IsValid { get; set; }
 
 		private void VerifyIsValid()
-		{			
+		{
 			IsValid = Directory.Exists(OutputFolder);
 		}
 
@@ -254,7 +254,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 		}
 
 		private void OnLoadPage(object sender, EventArgs e)
-		{			
+		{
 			VerifyIsValid();
 		}
 
@@ -265,7 +265,6 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Export
 			WizardContext.ExportOptions.CopySourceToTarget = CopySourceToTarget;
 			WizardContext.ExportOptions.IncludeTranslations = IncludeTranslations;
 			WizardContext.ExportOptions.ExcludeFilterIds = SelectedExcludeFilterItems.Select(a => a.Id).ToList();
-			//WizardContext.ExcludeFilterItemIds =
 		}
 
 		public void Dispose()

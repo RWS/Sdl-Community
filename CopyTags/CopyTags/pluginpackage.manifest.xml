@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL Copy Tags</PlugInName>
-  <Version>3.0.0.0</Version>
+  <PlugInName>Trados Copy Tags</PlugInName>
+  <Version>3.0.1.1</Version>
   <Description>Copy Tags to Target</Description>
-  <Author>SDL Community Developers</Author>
+  <Author>RWS AppStore Team</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
 </PluginPackage>

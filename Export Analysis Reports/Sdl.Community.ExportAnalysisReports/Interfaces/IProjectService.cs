@@ -14,6 +14,10 @@ namespace Sdl.Community.ExportAnalysisReports.Interfaces
 
 		ProjectsController ProjectController { get; set; }
 
+		List<FileBasedProject> GetStudioProjects();
+
+		List<FileBasedProject> GetSelectedStudioProjects();
+
 		List<string> AddFilePaths(List<string> studioProjectsPaths);
 
 		ProjectDetails CreateProjectDetails(XmlNode projNode, bool isSingleFileProject, string reportsFolderPath);

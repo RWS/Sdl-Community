@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using NLog;
 using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class Paths
 	{
-		public static readonly Log Log = Log.Instance;
-		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart");
 
 		public static List<LocationDetails> GetLocationsFromVersions(List<string> locationNames, List<StudioVersion> studioVersions)
 		{

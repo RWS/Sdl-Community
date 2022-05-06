@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Sdl.Core.Globalization;
 
-namespace Sdl.Community.Reports.Viewer.Service
+namespace Reports.Viewer.Plus.Service
 {
 	public class ImageService
 	{

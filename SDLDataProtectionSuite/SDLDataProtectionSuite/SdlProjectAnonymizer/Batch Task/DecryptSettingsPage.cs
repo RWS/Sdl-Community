@@ -29,7 +29,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			if (!accepted)
 			{
 				MessageBox.Show(
-					"You must agree to the terms and conditions of the SDL Data Protection Suite before using Project Anonymizer",
+					"You must agree to the terms and conditions of the Trados Data Protection Suite before using Project Anonymizer",
 					"Agreement");
 			}
 

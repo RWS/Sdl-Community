@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
+namespace Trados.Transcreate.Wizard.ViewModel.Import
 {
 	public class WizardPageImportSummaryViewModel : WizardPageViewModelBase, IDisposable
 	{
@@ -98,7 +98,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Import
 					var archiveFile = Path.Combine(folder, targetLanguageFile.Name + ".docx");
 					var sdlXliffBackup = Path.Combine(folder, targetLanguageFile.Name);
 
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 					if (TaskContext.ImportOptions.BackupFiles)
 					{
 						summaryText += indent + string.Format(PluginResources.Label_BackupFile, sdlXliffBackup) + Environment.NewLine;

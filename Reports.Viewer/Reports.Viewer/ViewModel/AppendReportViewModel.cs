@@ -7,20 +7,23 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
+using System.Xml.Linq;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Api.Providers;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
-using Sdl.Reports.Viewer.API.Model;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class AppendReportViewModel : INotifyPropertyChanged
-	{		
+	{
 		private readonly ImageService _imageService;
 		private readonly IProject _project;
 		private readonly List<ReportTemplate> _reportTemplates;
+		private readonly TaskTemplateIdProvider _taskTemplateIdProvider;
 		private string _windowTitle;
 		private ICommand _saveCommand;
 		private ICommand _selectedItemsChangedCommand;
@@ -38,22 +41,25 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private bool _isEditMode;
 		private bool _canEditProperties;
 		private bool _canEditXslt;
+		private bool _useDefaultStudioTemplate;
 
 		public AppendReportViewModel(Report report,
 			ImageService imageService, IProject project,
-			List<string> groupNames, List<ReportTemplate> reportTemplates, bool isEditMode = false)
-		{			
+			List<string> groupNames, List<ReportTemplate> reportTemplates,
+			TaskTemplateIdProvider taskTemplateIdProvider, bool isEditMode = false)
+		{
 			Report = report;
 			_imageService = imageService;
 			_project = project;
 			_reportTemplates = reportTemplates;
+			_taskTemplateIdProvider = taskTemplateIdProvider;
 			GroupNames = groupNames;
 
 			IsEditMode = isEditMode;
 
 			WindowTitle = IsEditMode ? PluginResources.WindowTitle_EditProjectReport : PluginResources.WindowTitle_AddProjectReport;
 
-			var projectInfo = _project.GetProjectInfo();			
+			var projectInfo = _project.GetProjectInfo();
 			LanguageItems = projectInfo.TargetLanguages
 				.Select(language => new LanguageItem
 				{
@@ -64,15 +70,15 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				.ToList();
 
 			SelectedLanguageItems = new List<LanguageItem> {
-				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, Report.Language, 
-					                                 StringComparison.CurrentCultureIgnoreCase)==0) };
+				LanguageItems.FirstOrDefault(a=> string.Compare(a.CultureInfo.Name, Report.Language,
+													 StringComparison.CurrentCultureIgnoreCase)==0) };
 
 			Date = Report.Date;
 			Name = Report.Name;
 			Group = Report.Group;
 			Description = Report.Description;
 			Path = Report.Path ?? string.Empty;
-			Xslt = Report.XsltPath ?? string.Empty;			
+			Xslt = Report.XsltPath ?? string.Empty;
 
 			CanEditProperties = !report.IsStudioReport;
 		}
@@ -160,6 +166,52 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			}
 		}
 
+		public bool UseDefaultStudioTemplate
+		{
+			get => _useDefaultStudioTemplate;
+			set
+			{
+				if (_useDefaultStudioTemplate == value)
+				{
+					return;
+				}
+
+				_useDefaultStudioTemplate = value;
+				OnPropertyChanged(nameof(UseDefaultStudioTemplate));
+
+				Xslt = _useDefaultStudioTemplate ? GetReportTemplateId() : string.Empty;
+
+				ValidateReportTemplate();
+			}
+		}
+
+		public bool CanUseDefaultStudioTemplate
+		{
+			get
+			{
+				var reportTemplateId = GetReportTemplateId();
+				return !string.IsNullOrEmpty(reportTemplateId) && !string.IsNullOrWhiteSpace(reportTemplateId);
+			}
+		}
+
+		private string GetReportTemplateId()
+		{
+			if (_path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml"))
+			{
+				var doc = XDocument.Load(_path);
+				if (doc.Root?.Name.LocalName == "task")
+				{
+					var reportType = doc.Root.Attributes().FirstOrDefault(
+						a => a.Name.LocalName == "name")?.Value;
+					var reportTemplateId = _taskTemplateIdProvider.GetTaskTemplateId(reportType);
+
+					return reportTemplateId;
+				}
+			}
+
+			return null;
+		}
+
 		public string Description
 		{
 			get => _description;
@@ -189,7 +241,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				_group = value;
 				ValidateReportTemplate();
 				OnPropertyChanged(nameof(Group));
-				OnPropertyChanged(nameof(IsValid));				
+				OnPropertyChanged(nameof(IsValid));
 			}
 		}
 
@@ -292,7 +344,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						return false;
 					}
 
-					if (!string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
+					if (!UseDefaultStudioTemplate && !string.IsNullOrEmpty(Xslt) && !File.Exists(Xslt))
 					{
 						return false;
 					}
@@ -309,9 +361,16 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void ValidateReportTemplate()
 		{
-			CanEditXslt = _path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml");
+			_canEditXslt = _path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml");
+			if (_useDefaultStudioTemplate)
+			{
+				_canEditXslt = false;
+			}
+
+			OnPropertyChanged(nameof(CanEditXslt));
 			OnPropertyChanged(nameof(IsValid));
-		}			
+			OnPropertyChanged(nameof(CanUseDefaultStudioTemplate));
+		}
 
 		private void SaveChanges(object parameter)
 		{
@@ -324,6 +383,24 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				Report.XsltPath = Xslt;
 				Report.Language = SelectedLanguageItems?.FirstOrDefault()?.CultureInfo?.Name ?? string.Empty;
 
+				if (!IsEditMode)
+				{
+					if (CanUseDefaultStudioTemplate
+					    && UseDefaultStudioTemplate
+					    && string.IsNullOrEmpty(Report.TemplateId)
+					    && _taskTemplateIdProvider.TaskTemplateIdExists(Xslt))
+					{
+						Report.IsCustomReport = true;
+						Report.IsStudioReport = true;
+						Report.TemplateId = Xslt;
+					}
+					else
+					{
+						Report.IsCustomReport = false;
+						Report.IsStudioReport = false;
+					}
+				}
+				
 				Window.DialogResult = true;
 				Window?.Close();
 			}

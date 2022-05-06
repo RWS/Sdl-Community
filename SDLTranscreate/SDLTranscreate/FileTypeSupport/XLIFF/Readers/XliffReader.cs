@@ -1,9 +1,9 @@
-﻿using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Interfaces;
+﻿using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Readers
 {
 	public class XliffReder : IXliffReader
 	{

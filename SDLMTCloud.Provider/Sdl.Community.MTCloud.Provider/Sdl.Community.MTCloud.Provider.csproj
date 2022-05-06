@@ -6,11 +6,13 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.MTCloud.Provider</RootNamespace>
     <AssemblyName>Sdl.Community.MTCloud.Provider</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -34,10 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\MahApps.Metro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNetCore.JsonPatch">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
     </Reference>
@@ -90,11 +88,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguageCloud.IdentityApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
@@ -107,6 +103,10 @@
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -165,13 +165,20 @@
   <ItemGroup>
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\ToolWindowsControl.xaml.cs">
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\EnumBooleanConverter.cs" />
     <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
+    <Compile Include="Events\ActiveSegmentQeChanged.cs" />
+    <Compile Include="Events\RefreshQeStatus.cs" />
+    <Compile Include="Events\TranslationProviderRateItOptionsChanged.cs" />
+    <Compile Include="Events\VoidEventHandler.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Helpers\CurrentViewDetector.cs" />
     <Compile Include="Helpers\TaskUtilities.cs" />
     <Compile Include="Interfaces\IActionProvider.cs" />
     <Compile Include="Interfaces\IAsyncCommand.cs" />
@@ -185,25 +192,40 @@
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
     <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\RateIt\Evaluations.cs" />
+    <Compile Include="Model\RateIt\FeedbackInfo.cs" />
+    <Compile Include="Model\FileAndSegmentIds.cs" />
+    <Compile Include="Model\MetadataTransferObject.cs" />
+    <Compile Include="Model\QELabelExtractorModel\File.cs" />
+    <Compile Include="Model\QELabelExtractorModel\QeFileReport.cs" />
+    <Compile Include="Model\QELabelExtractorModel\QeValue.cs" />
+    <Compile Include="Model\QELabelExtractorModel\Report.cs" />
+    <Compile Include="Model\QELabelExtractorModel\ReportSummary.cs" />
+    <Compile Include="Model\QELabelExtractorModel\Data.cs" />
+    <Compile Include="Model\RateIt\QualityEstimation.cs" />
     <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
-    <Compile Include="Model\FeedbackRequest.cs" />
     <Compile Include="Model\FeedbackOption.cs" />
-    <Compile Include="Model\FeedbackSendingStatus.cs" />
-    <Compile Include="Model\Feedback.cs" />
-    <Compile Include="Model\Improvement.cs" />
+    <Compile Include="Model\RateIt\FeedbackSendingStatus.cs" />
+    <Compile Include="Model\RateIt\ImprovementFeedback.cs" />
+    <Compile Include="Model\RateIt\Improvement.cs" />
     <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
-    <Compile Include="Model\Rating.cs" />
+    <Compile Include="Model\RateIt\Rating.cs" />
     <Compile Include="Model\StudioShortcut.cs" />
-    <Compile Include="Model\TranslationFeedbackRequest.cs" />
+    <Compile Include="Model\RateIt\TranslationData.cs" />
+    <Compile Include="Model\RateIt\TranslationFeedbackRequest.cs" />
+    <Compile Include="Model\RateIt\TranslationOriginData.cs" />
+    <Compile Include="Model\RateIt\TranslationOriginDatum.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\TranslationResponseStats.cs" />
     <Compile Include="Model\TranslationResponseStatus.cs" />
     <Compile Include="Model\UserCredential.cs" />
+    <Compile Include="Model\WorkingPortalsAddress.cs" />
+    <Compile Include="MTCloudApplicationInitializer.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -211,13 +233,28 @@
     </Compile>
     <Compile Include="Service\ConnectionService.cs" />
     <Compile Include="Interfaces\ISegmentSupervisor.cs" />
-    <Compile Include="Service\Events\ConfirmationLevelChangedEventHandler.cs" />
-    <Compile Include="Service\Events\TranslationReceivedEventHandler.cs" />
-    <Compile Include="Service\SegmentSupervisor.cs" />
+    <Compile Include="Events\ShouldSendFeedbackEventHandler.cs" />
+    <Compile Include="Events\TranslationReceivedEventHandler.cs" />
+    <Compile Include="Service\HttpClient.cs" />
+    <Compile Include="Service\Interface\IMetadataSupervisor.cs" />
+    <Compile Include="Service\Interface\IHttpClient.cs" />
+    <Compile Include="Service\Interface\ISegmentMetadataCreator.cs" />
+    <Compile Include="Service\Interface\ISupervisor.cs" />
+    <Compile Include="Service\QEReportCreator\StringWriterWithEncoding.cs" />
+    <Compile Include="Service\RateIt\MetaDataProcessor.cs" />
+    <Compile Include="Service\RateIt\MetadataSupervisor.cs" />
+    <Compile Include="Service\QEReportCreator\QeReportCreator.cs" />
+    <Compile Include="Service\RateIt\SegmentMetadataCreator.cs" />
+    <Compile Include="Service\RateIt\SegmentRetriever.cs" />
+    <Compile Include="Service\RateIt\SegmentSupervisor.cs" />
     <Compile Include="Service\ShortcutService.cs" />
+    <Compile Include="Model\Term.cs" />
     <Compile Include="Service\TranslationService.cs" />
+    <Compile Include="Studio\ContextMenuAction\AddDictionaryTermAction.cs" />
+    <Compile Include="Studio\QEReportBatchTask\QeLabelExtractor.cs" />
+    <Compile Include="Studio\QEReportBatchTask\QeReportBatchTask.cs" />
     <Compile Include="Studio\RateItController.cs" />
-    <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudTranslationProvider.cs" />
     <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
     <Compile Include="Studio\ShortcutActions\FocusFeedbackAction.cs" />
     <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
@@ -229,6 +266,7 @@
     <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
     <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
+    <Compile Include="Events\TranslationProviderAdded.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
@@ -241,7 +279,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Service\VersionService.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
@@ -264,12 +301,14 @@
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PrintService.cs" />
     <Compile Include="Studio\SdlMTCloudExcelRibbon.cs" />
-    <Compile Include="Studio\SdlMTCloudLanguageDirection.cs" />
-    <Compile Include="Studio\SdlMTCloudProviderWinFormsUI.cs" />
-    <Compile Include="Studio\SdlMTCloudTranslationProviderFactory.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudLanguageDirection.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudProviderWinFormsUI.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudTranslationProviderFactory.cs" />
     <Compile Include="Controls\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UiHelpers\Watermark\TextBoxWatermarkHelper.cs" />
+    <Compile Include="UiHelpers\Watermark\TreeHelper.cs" />
     <Compile Include="ViewModel\CredentialsViewModel.cs" />
     <Compile Include="ViewModel\RateItViewModel.cs" />
     <Compile Include="View\ActionProvider.cs" />
@@ -307,6 +346,15 @@
     <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\LWLogo.png" />
+    <Resource Include="Resources\ReportExample.xml" />
+    <EmbeddedResource Include="Resources\Report.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Page Include="Styles\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\SendFeedbackButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -314,12 +362,27 @@
     <Resource Include="Resources\rating.ico" />
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\checked.png" />
-    <Content Include="Resources\success.png" />
+    <Resource Include="Resources\add_dictionary.ico" />
+    <Resource Include="Resources\Additional logo.png" />
+    <Resource Include="Resources\soontobecome.png" />
+    <Resource Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />
     <EmbeddedResource Include="View\RateItControl.resx">
       <DependentUpon>RateItControl.cs</DependentUpon>
     </EmbeddedResource>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\Watermark\WatermarkTextBoxResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\RateItView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -327,25 +390,18 @@
     <Resource Include="Resources\selectedStar.png" />
     <Resource Include="Resources\defaultStar.png" />
     <Resource Include="Resources\warning.png" />
-    <Resource Include="Resources\MTCodesLogo.png" />
     <Resource Include="Resources\dictionaryIcon.ico" />
     <Resource Include="Resources\add_langcode.ico" />
     <Resource Include="Resources\Search %281%29.png" />
     <Resource Include="Resources\Print.png" />
     <None Include="app.config" />
     <None Include="Resources\global1.png" />
-    <Resource Include="Resources\MTCloud_logo_small.png" />
-    <Resource Include="Resources\MTCloud_logo.png" />
-    <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\logoRe.png" />
     <Resource Include="Resources\global.ico" />
-    <Resource Include="Resources\logoB.png" />
-    <Resource Include="Resources\sdl.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -364,10 +420,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\GroupBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -431,27 +483,25 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
-      <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
-      <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
-      <Version>1.1.19</Version>
+      <Version>1.1.31</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.0.0</Version>
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>16.0.1</Version>
+      <Version>16.1.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
+      <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
+      <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

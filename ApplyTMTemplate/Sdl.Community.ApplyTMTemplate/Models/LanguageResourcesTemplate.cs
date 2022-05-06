@@ -11,7 +11,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public new BuiltinRecognizers Recognizers
 		{
-			get => base.Recognizers ?? BuiltinRecognizers.RecognizeAll;
+			get => base.Recognizers;
 			set => base.Recognizers = value;
 		}
 

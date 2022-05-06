@@ -2,7 +2,7 @@
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.Reports.Viewer
+namespace Reports.Viewer.Plus
 {
 	[RibbonGroup("ReportsViewer_SettingsGroup", Name = "ReportsViewer_SettingsGroup_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]

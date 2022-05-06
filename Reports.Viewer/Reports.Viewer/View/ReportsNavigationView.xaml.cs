@@ -2,37 +2,20 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Plus.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace Sdl.Community.Reports.Viewer.View
+namespace Reports.Viewer.Plus.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectsNavigationView.xaml
 	/// </summary>
-	public partial class ReportsNavigationView : UserControl
+	public partial class ReportsNavigationView : UserControl, IUIControl
 	{
-		private readonly ReportsNavigationViewModel _viewModel;
-
-		public ReportsNavigationView(ReportsNavigationViewModel viewModel)
+		public ReportsNavigationView()
 		{
 			InitializeComponent();
-
-			_viewModel = viewModel;
-			Loaded += ReportsNavigationView_Loaded;
 		}
-
-		/// <summary>
-		/// We need to wait for the view to be fully loaded before binding the view model
-		/// Ensure Loaded is called only once; unsubscribe to the Loaded event
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ReportsNavigationView_Loaded(object sender, RoutedEventArgs e)
-		{
-			Loaded -= ReportsNavigationView_Loaded;
-			DataContext = _viewModel;
-		}
-
 
 		private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -58,19 +41,25 @@ namespace Sdl.Community.Reports.Viewer.View
 
 		private void TreeView_OnPreviewKeyDown(object sender, KeyEventArgs e)
 		{
-			if (sender is TreeView treeView && _viewModel.ReportGroups.Count > 0)
+			var viewModel = DataContext as ReportsNavigationViewModel;
+			if (viewModel == null)
+			{
+				return;
+			}
+
+			if (sender is TreeView treeView && viewModel.ReportGroups.Count > 0)
 			{
 				var selectedItem = treeView.SelectedItem;
 				if (e.Key == Key.Up)
 				{
-					if (selectedItem == _viewModel.ReportGroups[0])
+					if (selectedItem == viewModel.ReportGroups[0])
 					{
 						e.Handled = true;
 					}
 				}
 				else if (e.Key == Key.Down)
 				{
-					var reprotGroup = _viewModel.ReportGroups[_viewModel.ReportGroups.Count - 1];
+					var reprotGroup = viewModel.ReportGroups[viewModel.ReportGroups.Count - 1];
 					var reportItem = reprotGroup?.GroupItems?[reprotGroup.GroupItems.Count - 1];
 					var report = reportItem?.Reports?[reportItem.Reports.Count - 1];
 
@@ -80,6 +69,10 @@ namespace Sdl.Community.Reports.Viewer.View
 					}
 				}
 			}
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }

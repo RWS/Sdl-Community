@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class ImportOptions : BaseModel
 	{
@@ -16,6 +16,7 @@ namespace Sdl.Community.Transcreate.Model
 			StatusTranslationNotUpdatedId = string.Empty;
 			StatusSegmentNotImportedId = string.Empty;
 			ExcludeFilterIds = new List<string>();
+			//ExcludeFilterIds.Add("Locked");
 		}
 
 		public bool BackupFiles { get; set; }

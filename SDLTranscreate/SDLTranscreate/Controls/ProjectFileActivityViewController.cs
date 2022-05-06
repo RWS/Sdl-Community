@@ -1,10 +1,10 @@
-﻿using System.Windows.Forms;
-using Sdl.Community.Transcreate.ViewModel;
-using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.Transcreate.View;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	[ViewPart(
 		Id = "TranscreateManager_ProjectFileActivity_ViewPart",
@@ -14,13 +14,13 @@ namespace Sdl.Community.Transcreate.Controls
 	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 1, LocationByType = typeof(TranscreateViewController))]
 	public class ProjectFileActivityViewController : AbstractViewPartController
 	{		
-		private ProjectFileActivityViewControl _control;
+		private ProjectFileActivityView _control;
 
 		private ProjectFileActivityViewModel _viewModel;
 
 		protected override void Initialize()
 		{			
-			_control = new ProjectFileActivityViewControl(ViewModel);
+			_control = new ProjectFileActivityView();
 		}
 
 		protected override IUIControl GetContentControl()
@@ -28,7 +28,7 @@ namespace Sdl.Community.Transcreate.Controls
 			return _control;
 		}
 
-		public Control Control => _control;
+		public IUIControl Control => _control;
 
 		public ProjectFileActivityViewModel ViewModel
 		{
@@ -36,7 +36,7 @@ namespace Sdl.Community.Transcreate.Controls
 			set
 			{
 				_viewModel = value;
-				_control.UpdateViewModel(_viewModel);
+				_control.DataContext = _viewModel;
 			}
 		}
 	}

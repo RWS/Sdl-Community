@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
+using NLog;
 using Sdl.Community.SdlFreshstart.ViewModel;
 
 namespace Sdl.Community.SdlFreshstart.Model
@@ -12,6 +13,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 	{
 		private const string SdlFolder = @"SDL\SDL Trados Studio";
 		private const string SdlBaseRegistryKey = @"HKEY_CURRENT_USER\Software\SDL\SDL Trados Studio\";
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		private readonly Dictionary<string, int> _versionToExecutableVersionLegacy = new Dictionary<string, int>
 		{
@@ -23,50 +25,72 @@ namespace Sdl.Community.SdlFreshstart.Model
 		private bool _isSelected;
 		private int _numericVersion;
 
-		public StudioVersion(string versionName, string publicVersion, string edition = "")
+		public StudioVersion(string versionName, string publicVersion, Version executableVersion, string edition = "")
 		{
-			VersionName = $"{versionName}{edition}";
-			PublicVersion = publicVersion;
-			Edition = edition;
-			SdlRegistryKey = $"{SdlBaseRegistryKey}{AppDataStudioFolder}";
+			try
+			{
+				VersionName = $"{versionName}{edition}";
+				ExecutableVersion = executableVersion;
+				PublicVersion = publicVersion;
+				Edition = edition;
+				SdlRegistryKey = $"{SdlBaseRegistryKey}{AppDataStudioFolder}";
 
-			var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{edition}");
-			var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
+				var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{edition}");
+				var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
 
-			ProgramDataStudioPath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-				programDataStudioFolderPath);
+				ProgramDataStudioPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+					programDataStudioFolderPath);
 
-			ProgramDataPluginsPath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-				pluginPath);
+				ProgramDataPluginsPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+					pluginPath);
 
-			var appDataStudioFolderPath = Path.Combine(SdlFolder, AppDataStudioFolder);
-			AppDataLocalStudioPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-				appDataStudioFolderPath);
+				var appDataStudioFolderPath = Path.Combine(SdlFolder, AppDataStudioFolder);
+				AppDataLocalStudioPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+					appDataStudioFolderPath);
 
-			AppDataLocalPluginsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-				pluginPath);
+				AppDataLocalPluginsPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+					pluginPath);
 
-			AppDataRoamingStudioPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				appDataStudioFolderPath);
+				AppDataRoamingStudioPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					appDataStudioFolderPath);
 
-			AppDataRoamingPluginsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				pluginPath);
+				AppDataRoamingPluginsPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					pluginPath);
 
-			ShortVersion = publicVersion.Substring(11);
+				ShortVersion = publicVersion.Substring(!publicVersion.ToUpper().Contains("SDL") ? 7 : 11);
 
-			DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ShortVersion);
+				DocumentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+					ShortVersion);
 
-			ProjectsXmlPath = Path.Combine(DocumentsPath, "Projects", "projects.xml");
+				ProjectsXmlPath = Path.Combine(DocumentsPath, "Projects", "projects.xml");
 
-			ProgramDataStudioDataSubfolderPath = $@"{ProgramDataStudioPath}\Updates";
+				ProgramDataStudioDataSubfolderPath = $@"{ProgramDataStudioPath}\Updates";
 
-			ProjectTemplatesPath = $@"{DocumentsPath}\Project Templates";
+				ProjectTemplatesPath = $@"{DocumentsPath}\Project Templates";
 
-			ProjectApiPath = Directory.GetDirectories(Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL", "ProjectApi")).FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
+
+				_logger.Info("Trying to get the Project API file path...");
+				var localProjectApiPath = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					"SDL", "ProjectApi");
+
+				_logger.Info($"Local Project APi path: {localProjectApiPath}");
+				_logger.Info($"Major version: {MajorVersion}");
+				ProjectApiPath = Directory.GetDirectories(localProjectApiPath)
+					.FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
+
+				_logger.Info($"Found ProjectAPI Path: {ProjectApiPath}");
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e);
+			}
 		}
 
 		public string SdlRegistryKey { get; set; }
@@ -78,6 +102,8 @@ namespace Sdl.Community.SdlFreshstart.Model
 		public string CacheFolderName => Regex.Replace(PublicVersion, @"\s+", "");
 		public string DocumentsPath { get; set; }
 		public string Edition { get; set; }
+
+		public Version ExecutableVersion { get; set; }
 
 		public bool IsSelected
 		{
@@ -92,7 +118,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			}
 		}
 
-		public string LegacyVersion => MajorVersion < 15 ? ExtractNumber(VersionName).ToString() : (string.Empty);
+		public string LegacyVersion => MajorVersion <= 15 ? ExtractNumber(VersionName).ToString() : string.Empty;
 
 		public int MajorVersion
 		{
@@ -101,7 +127,18 @@ namespace Sdl.Community.SdlFreshstart.Model
 				if (_numericVersion > 0) return _numericVersion;
 
 				var numericVersion = ExtractNumber(VersionName);
-				_numericVersion = numericVersion < 15 ? _versionToExecutableVersionLegacy[VersionName] : numericVersion;
+				
+				if (numericVersion < 15)
+				{
+					_logger.Info($"Major Version: Numeric Version {numericVersion}");
+					_logger.Info($"Major Version: Version Name {VersionName}");
+
+					_versionToExecutableVersionLegacy.TryGetValue(VersionName, out _numericVersion);
+				}
+				else
+				{
+					_numericVersion = numericVersion;
+				}
 
 				return _numericVersion;
 			}

@@ -34,7 +34,7 @@ steps:
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
        fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.SdlFreshstart.exe'
-       description: 'SdlFreshstart'
+       description: 'TradosFreshstart'
   - task: VSBuild@1
     inputs:
        solution: '**Sdl.Community.SdlFreshstart.Installer.wixproj'
@@ -46,7 +46,7 @@ steps:
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
      fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
-     description: 'SdlFreshstart'
+     description: 'TradosFreshstart'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'

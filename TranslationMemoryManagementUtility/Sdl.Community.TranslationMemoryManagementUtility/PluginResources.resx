@@ -181,4 +181,7 @@
   <data name="TM_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TM_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Trados Translation Memory Management Utility</value>
+  </data>
 </root>

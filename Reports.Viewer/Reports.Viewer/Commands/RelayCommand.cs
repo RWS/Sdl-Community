@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Sdl.Community.Reports.Viewer.Commands
+namespace Reports.Viewer.Plus.Commands
 {
 	/// <summary>
 	/// A command whose sole purpose is to 

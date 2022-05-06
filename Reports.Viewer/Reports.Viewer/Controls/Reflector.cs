@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sdl.Community.Reports.Viewer.Controls
+namespace Reports.Viewer.Plus.Controls
 {
 	public class Reflector
 	{
