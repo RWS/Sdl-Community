@@ -47,11 +47,12 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			foreach (var kvp in GroupedData)
 			{
-				var currentFilePath = kvp.Key;
+				var translationData = kvp.ToList();
+				var currentFilePath = MtCloudApplicationInitializer.EnsureValidPath(kvp.Key, translationData[0].TargetLanguage);
 				if (currentFilePath == null) continue;
 
 				var converter = _manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
-				var contentProcessor = new MetaDataProcessor(kvp.ToList());
+				var contentProcessor = new MetaDataProcessor(translationData);
 				converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
 				converter?.Parse();
 			}
@@ -62,7 +63,8 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			FilePath = translationData.FilePath,
 			SegmentIds = translationData.Segments.Keys.ToList(),
-			TranslationOriginData = translationData.TranslationOriginData
+			TranslationOriginData = translationData.TranslationOriginData,
+			TargetLanguage = translationData.TargetLanguage
 		};
 
 		private void ResetData()
