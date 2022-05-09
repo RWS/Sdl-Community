@@ -19,7 +19,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -216,7 +216,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Machine Translation Cloud Metadata.
+        ///   Looks up a localized string similar to Language Weaver provider metadata.
         /// </summary>
         public static string MTCloudMetadata_GroupBoxHeader {
             get {
@@ -280,7 +280,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove MT Cloud quality estimation.
+        ///   Looks up a localized string similar to Remove Language Weaver provider quality estimation.
         /// </summary>
         public static string RemoveQE_CheckBoxContent {
             get {
@@ -289,7 +289,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove MT Cloud quality estimation from the metadata of the segments.
+        ///   Looks up a localized string similar to Remove Language Weaver provider quality estimation from the metadata of the segments.
         /// </summary>
         public static string RemoveQE_ToolTipContent {
             get {
