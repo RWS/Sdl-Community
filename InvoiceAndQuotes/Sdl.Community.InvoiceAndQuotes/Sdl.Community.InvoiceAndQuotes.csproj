@@ -55,11 +55,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.System.IO.Packaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Sdl.Community.System.IO.Packaging">
       <HintPath>..\3rd party\Sdl.Community.System.IO.Packaging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -72,7 +70,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase">
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -218,11 +215,4 @@
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
