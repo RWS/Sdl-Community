@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
