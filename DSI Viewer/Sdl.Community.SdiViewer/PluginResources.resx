@@ -164,7 +164,7 @@
     <value>by Quality Estimation</value>
   </data>
   <data name="Label_SDLMTCloudFilter" xml:space="preserve">
-    <value> - SDL MT Cloud Filter:</value>
+    <value> - Language Weaver Filter:</value>
   </data>
   <data name="Label_Model" xml:space="preserve">
     <value>Model</value>
@@ -173,7 +173,7 @@
     <value>Quality Estimation</value>
   </data>
   <data name="Label_SDLMTCloudRelated" xml:space="preserve">
-    <value>SDL MT Cloud Related</value>
+    <value>Language Weaver Related</value>
   </data>
   <data name="Label_SDLMTCloudInfo" xml:space="preserve">
     <value> - Translation Origin Info:</value>
