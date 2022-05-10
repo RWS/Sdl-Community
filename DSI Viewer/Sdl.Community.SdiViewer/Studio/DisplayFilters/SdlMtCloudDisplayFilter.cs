@@ -47,9 +47,12 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 		}
 
 		private string GetQualityEstimation(ITranslationOrigin translationOrigin)
-			=> translationOrigin.OriginSystem.ToLower()
-				.Contains(PluginResources.ProviderId)
-				? translationOrigin.GetMetaData("quality_estimation")
-				: null;
+		{
+			if (translationOrigin?.OriginSystem is null) return null;
+			return translationOrigin.OriginSystem.ToLower()
+						   .Contains(PluginResources.ProviderId)
+						   ? translationOrigin.GetMetaData("quality_estimation")
+						   : null;
+		}
 	}
 }
