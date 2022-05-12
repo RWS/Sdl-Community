@@ -341,51 +341,6 @@ namespace Sdl.Community.Studio.Time.Tracker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Information.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroup_Name {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroup_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupAbout_Description {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupAbout_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupAbout_Name {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupAbout_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Online Help.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupHelp_Description {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupHelp_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Online Help.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupHelp_Name {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupHelp_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove Time Tracker Project.
         /// </summary>
         internal static string StudioTimeTrackeRemoveProjectAction_Description {
