@@ -90,7 +90,7 @@
     <Compile Include="Model\LanguageEquivalent.cs" />
     <Compile Include="Model\TermEntry.cs" />
     <Compile Include="Service\Interface\IDatabaseConnection.cs" />
-    <Compile Include="Service\Model\DatabaseConnection.cs" />
+    <Compile Include="Service\DatabaseConnection.cs" />
     <Compile Include="InterpretBankWinFormsUI.cs" />
     <Compile Include="InterpretBankProviderViewerWinFormsUI.cs" />
     <Compile Include="InterpretBankProvider.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="Service\Interface\ISqlBuilder.cs" />
     <Compile Include="Service\Model\TimeRange.cs" />
     <Compile Include="Service\GlossaryService.cs" />
-    <Compile Include="Service\Model\SqlBuilder.cs" />
+    <Compile Include="Service\SqlBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">

@@ -33,7 +33,7 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.SdlFreshstart.exe'
+       fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.exe'
        description: 'TradosFreshstart'
   - task: VSBuild@1
     inputs:

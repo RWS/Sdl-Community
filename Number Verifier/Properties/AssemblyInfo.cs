@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sdl.Verification.Sdk.NumberVerifier")]
+[assembly: AssemblyTitle("Trados Number Verifier")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sdl.Verification.Sdk.NumberVerifier")]
+[assembly: AssemblyProduct("Trados Number Verifier")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -33,5 +33,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.1.0.1")]
+[assembly: AssemblyFileVersion("3.1.1.11")]
 [assembly: Sdl.Core.PluginFramework.Plugin("Plugin_Name")]

@@ -56,15 +56,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+     <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />

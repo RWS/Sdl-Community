@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -44,28 +43,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.TM.ImportExport">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.TM.ImportExport.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.TM.ImportExport.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

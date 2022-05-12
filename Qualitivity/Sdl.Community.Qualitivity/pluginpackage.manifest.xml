@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Qualitivity</PlugInName>
-	<Version>4.1.4.0</Version>
+	<Version>4.1.5.0</Version>
 	<Description>Qualitivity </Description>
 	<Author>SDL Community Developers</Author>
 	<Include>
@@ -17,5 +17,5 @@
 		<File>Qualitivity.ObjectListView.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0"/>
+	<RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9"/>
 </PluginPackage>

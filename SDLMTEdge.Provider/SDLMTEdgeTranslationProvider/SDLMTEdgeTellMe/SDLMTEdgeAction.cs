@@ -7,12 +7,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 	public class SDLMTEdgeAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "SDL MT Edge results";
+		public override string Category => Properties.WeaverEdgeResource.WeaverEdge_CategoryResults;
 		public override Icon Icon => PluginResources.ForumIcon;
 
 		public SDLMTEdgeAction()
 		{
-			Name = "SDL official MT documentation";
+			Name = "RWS official Language Weaver Edge documentation";
 		}
 
 		public override void Execute()

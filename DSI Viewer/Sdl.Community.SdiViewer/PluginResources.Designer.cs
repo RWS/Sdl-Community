@@ -19,7 +19,7 @@ namespace Sdl.Community.DsiViewer {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -181,7 +181,7 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  - SDL MT Cloud Filter:.
+        ///   Looks up a localized string similar to  - Language Weaver Filter:.
         /// </summary>
         public static string Label_SDLMTCloudFilter {
             get {
@@ -199,20 +199,11 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Related.
+        ///   Looks up a localized string similar to Language Weaver Related.
         /// </summary>
         public static string Label_SDLMTCloudRelated {
             get {
                 return ResourceManager.GetString("Label_SDLMTCloudRelated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud provider.
-        /// </summary>
-        public static string OriginSystem_LWC {
-            get {
-                return ResourceManager.GetString("OriginSystem_LWC", resourceCulture);
             }
         }
         
@@ -222,6 +213,15 @@ namespace Sdl.Community.DsiViewer {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to weaver.
+        /// </summary>
+        public static string ProviderId {
+            get {
+                return ResourceManager.GetString("ProviderId", resourceCulture);
             }
         }
         

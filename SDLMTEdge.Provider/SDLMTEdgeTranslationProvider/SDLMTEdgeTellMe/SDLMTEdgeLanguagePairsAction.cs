@@ -7,12 +7,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 	public class SDLMTEdgeLanguagePairsAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "SDL MT Edge results";
+		public override string Category => Properties.WeaverEdgeResource.WeaverEdge_CategoryResults;
 		public override Icon Icon => PluginResources.LanguagePairsIcon;
 
 		public SDLMTEdgeLanguagePairsAction()
 		{
-			Name = "SDL MT Edge Language Pairs";
+			Name = Properties.WeaverEdgeResource.WeaverEdge_LanguagePairsActionName;
 		}
 
 		public override void Execute()

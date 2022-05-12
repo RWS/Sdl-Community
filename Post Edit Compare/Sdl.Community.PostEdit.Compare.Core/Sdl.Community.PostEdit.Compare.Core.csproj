@@ -29,7 +29,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,56 +60,43 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="Sdl.Core.Api">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Api.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Api.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -203,12 +189,6 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj">
-      <Project>{d772940c-6ddd-4468-ad06-9cd07b9e1f05}</Project>
-      <Name>Sdl.Community.PostEdit.Compare.DAL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="EPPlus">
       <Version>4.5.3</Version>
     </PackageReference>
@@ -219,12 +199,11 @@
       <Version>3.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj">
+      <Project>{d772940c-6ddd-4468-ad06-9cd07b9e1f05}</Project>
+      <Name>Sdl.Community.PostEdit.Compare.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

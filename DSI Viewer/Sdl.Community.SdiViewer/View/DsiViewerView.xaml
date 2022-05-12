@@ -7,6 +7,7 @@
 			 xmlns:controls="clr-namespace:Sdl.Community.DsiViewer.Controls"
 			 xmlns:viewModel="clr-namespace:Sdl.Community.DsiViewer.ViewModel"
 			 xmlns:nativeApi="clr-namespace:Sdl.FileTypeSupport.Framework.NativeApi;assembly=Sdl.FileTypeSupport.Framework.Core"
+			 xmlns:model="clr-namespace:Sdl.Community.DsiViewer.Model"
 			 mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModel:DsiViewerViewModel}">
 	<UserControl.Resources>
@@ -27,8 +28,9 @@
 	</UserControl.Resources>
 	<ScrollViewer VerticalScrollBarVisibility="Auto">
 		<StackPanel Orientation="Vertical">
-			<GroupBox Header="Document Structure Information" Padding="5" Margin="2,5,2,0" Visibility="{Binding Path=HasDocumentStructureInformation, Converter={StaticResource BooleanToVisibilityConverter}}">
-				<DataGrid Padding="3" Margin="5"
+			<GroupBox Header="Document Structure Information" 
+			          Margin="2,5,2,5" Visibility="{Binding Path=HasDocumentStructureInformation, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<DataGrid Margin="2,5,2,5"
 			          ItemsSource="{Binding Path=DocumentStructureInformation, Mode=OneWay}"
 			          GridLinesVisibility="None"
 			          BorderBrush="Transparent"
@@ -36,10 +38,11 @@
 			          BorderThickness="0"
 			          SelectionUnit="CellOrRowHeader"
 			          IsReadOnly="True"
+					  HorizontalScrollBarVisibility="Disabled"
 			          Style="{StaticResource CustomGridStyle}">
 					<DataGrid.RowStyle>
 						<Style TargetType="DataGridRow">
-							<Setter Property="Padding" Value="2,0,2,0" />
+							<Setter Property="Padding" Value="0,0,2,0" />
 						</Style>
 					</DataGrid.RowStyle>
 					<DataGrid.ContextMenu>
@@ -50,25 +53,28 @@
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="Color" Width="5">
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<Border Background="{Binding RowColor}" BorderThickness="1" BorderBrush="LightSlateGray" />
+								<DataTemplate DataType="model:DsiModel">
+									<Border Background="{Binding RowColor}"
+									        Height="16" VerticalAlignment="Top" BorderThickness="1" BorderBrush="LightSlateGray" />
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Width="Auto" Header="Location" Binding="{Binding DisplayName, Mode=OneWay}">
+						<DataGridTextColumn Width="2*" Header="Location" Binding="{Binding DisplayName, Mode=OneWay}">
 							<DataGridTextColumn.ElementStyle>
 								<Style>
-									<Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+									<Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
 									<Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
 									<Setter Property="TextBlock.ToolTip" Value="{Binding DisplayName}" />
 								</Style>
 							</DataGridTextColumn.ElementStyle>
 						</DataGridTextColumn>
 						<DataGridTextColumn Width="Auto" Header="Code" Binding="{Binding Code, Mode=OneWay}" />
-						<DataGridTextColumn Width="Auto" Header="Description" Binding="{Binding Description, Mode=OneWay}">
+						<DataGridTextColumn Width="5*" Header="Description" Binding="{Binding Description, Mode=OneWay}">
 							<DataGridTextColumn.ElementStyle>
 								<Style>
-									<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+									<Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+									<Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
+									<Setter Property="TextBlock.ToolTip" Value="{Binding Description}" />
 								</Style>
 							</DataGridTextColumn.ElementStyle>
 						</DataGridTextColumn>

@@ -215,13 +215,13 @@
     <value>Username</value>
   </data>
   <data name="RemoveQE_CheckBoxContent" xml:space="preserve">
-    <value>Remove MT Cloud quality estimation</value>
+    <value>Remove Language Weaver provider quality estimation</value>
   </data>
   <data name="RemoveQE_ToolTipContent" xml:space="preserve">
-    <value>Remove MT Cloud quality estimation from the metadata of the segments</value>
+    <value>Remove Language Weaver provider quality estimation from the metadata of the segments</value>
   </data>
   <data name="MTCloudMetadata_GroupBoxHeader" xml:space="preserve">
-    <value>Machine Translation Cloud Metadata</value>
+    <value>Language Weaver provider metadata</value>
   </data>
   <data name="AppStoreFolder" xml:space="preserve">
     <value>RWS AppStore</value>

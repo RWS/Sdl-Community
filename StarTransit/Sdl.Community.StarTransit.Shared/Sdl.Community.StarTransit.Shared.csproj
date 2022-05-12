@@ -40,75 +40,51 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.TM.ImportExport">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.TM.ImportExport.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -118,17 +94,8 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Reactive, Version=4.3.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.4.3.2\lib\net46\System.Reactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.Reactive">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows" />
@@ -192,7 +159,6 @@
     <Compile Include="Utils\Log.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +167,13 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\transit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Sdl.Core.PluginFramework">
+      <Version>2.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

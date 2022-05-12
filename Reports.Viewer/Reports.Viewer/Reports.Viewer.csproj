@@ -218,7 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CefSharp.Wpf">
-      <Version>89.0.170</Version>
+      <Version>100.0.140</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>
@@ -359,7 +359,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Reports.Viewer.Api\Reports.Viewer.Api.csproj">
+    <ProjectReference Include="..\Reports.Viewer.Api\Reports.Viewer.Api.csproj">
       <Project>{b47446d5-9f94-4ada-a8a1-abd796eaa535}</Project>
       <Name>Reports.Viewer.Api</Name>
     </ProjectReference>

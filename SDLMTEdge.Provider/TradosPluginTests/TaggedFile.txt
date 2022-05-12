@@ -5,7 +5,7 @@ and Pre-translation
 February, 2018
 Contents
 Setting up NMT via the MTEdge Plugin
-Navigate to the SDL AppStore to download the SDL MTEdge plugin:
+Navigate to the RWS AppStore to download the Language Weaver Edge plugin:
 <1 id=194>https://appstore.sdl.com/language/app/sdl-ets/843/</1>
 https://appstore.sdl.com/language/app/sdl-ets/843/
 Click on <1 id=201>Download</1> and log in with your <2 id=204>SDL Account</2> credentials (<3 id=207>https://</3><4 id=208>oos.sdl.com</4>).
@@ -13,11 +13,11 @@ Reach out to your manager or raise a ticket in <1 id=214>Service Center</1> if y
 C:\Users\dvaldivia\AppData\Local\Microsoft\Windows\Temporary Internet Files\Content.Outlook\KX69FSDP\oos.sdl.com
 Choose the latest version available, if applicable.
 Tick the box to accept <1 id=217>Terms and Conditions</1> and click <2 id=220>Continue</2>.
-Once downloaded, open the .sdlplugin file and the SDL Trados Studio plugin installer will launch.
+Once downloaded, open the .sdlplugin file and the Trados Studio plugin installer will launch.
 <1 id=223>Accept the License Agreement, click on <2 id=247>Next</2>, select the Studio instance where the plugin will be installed (</1><3 id=262>only 2017 version is allowed</3><4 id=271>) and choose <5 id=277>All your domain machines</5>.</4>
 Then, click on <1 id=283>Next</1> and <2 id=289>Finish</2>.
-After that, in SDL Trados Studio, go to <1 id=298>Project Settings</1> -> <2 id=304>All Language Pairs</2> (or your specific language pair, according to your project) -> <3 id=328>Use…</3>
-<1 id=334>Click </1><2 id=337>SDL MTEdge translation provider…</2>
+After that, in RWS Trados Studio, go to <1 id=298>Project Settings</1> -> <2 id=304>All Language Pairs</2> (or your specific language pair, according to your project) -> <3 id=328>Use…</3>
+<1 id=334>Click </1><2 id=337>Language Weaver Edge translation provider…</2>
 Note:
 At this point, please bear in mind that <1 id=355>you will only see any engine if it’s available for the language pairs in your project</1>.
 You won’t be able to add or apply any engine otherwise.
@@ -28,7 +28,7 @@ Port:
 8001
 API Key:
 ag_OQiGTPrOZgVC
-Please treat this as <1 id=380><2 id=376>CONFIDENTIAL SDL INTERNAL DATA</2><3 id=379>.</3></1>
+Please treat this as <1 id=380><2 id=376>CONFIDENTIAL RWS INTERNAL DATA</2><3 id=379>.</3></1>
 You must not disclose!
 Also, please note that this credential
 Note:
@@ -69,11 +69,11 @@ After clicking on <1 id=566>Perform Actions on all files in project</1>, your se
 Appendix A
 <1 id=577>Important consideration </1>in Project Package creation
 Please make sure to select the following option when creating a project package if you need to send it to an external resource.
-Otherwise, there will be “traces” of the MTEdge credential.
+Otherwise, there will be “traces” of the Language Weaver Edge credential.
 <1 id=591>Important consideration </1>in projects publishing
-Please delete the MTEdge translation provider line from your Project Settings before publishing any project to the server.
+Please delete the Language Weaver Edge translation provider line from your Project Settings before publishing any project to the server.
 Again, there will be traces of the credential shown to external users.
-AutoHotKey script to load the MTEdge credential
+AutoHotKey script to load the Language Weaver Edge credential
 Stef Mandigers (<1 id=605>thanks for that!</1>) from the Hengelo office has created a smart AutoHotKey script that populates the data fields with a convenient CTRL + V shortcut.
 Below you can find a working .ahk file that you can use or extract the script from to merge with any current .ahk file that you are already using.
 Preparations
@@ -119,12 +119,12 @@ As a general reference:
 ! is the Alt key
 Save the script and reload it.
 Appendix B
-Upgrading your SDL MTEdge app
+Upgrading your Language Weaver Edge app
 Please follow these steps in order to delete any existing installation of the SDL MTEdge plugin and replace it with an updated version:
-Click the link below to go to the SDL Trados Studio plugins folder:
+Click the link below to go to the RWS Trados Studio plugins folder:
 <1 id=762>C:\Users\%USERNAME%\AppData\Roaming\SDL\SDL Trados Studio\14\Plugins</1>
-C:\Users\%USERNAME%\AppData\Roaming\SDL\SDL Trados Studio\14\Plugins
-Delete any references to “SDL MTEdge” <1 id=772>in both folders</1>:
+C:\Users\%USERNAME%\AppData\Roaming\SDL\SDL Trados Studio\16\Plugins
+Delete any references to “Language Weaver Edge” <1 id=772>in both folders</1>:
 Namely, delete this file in “Packages” folder:
 And this folder too, under “Unpacked”:
 Go to the appstore, download the latest version available and install it.
@@ -132,8 +132,8 @@ Just follow the instructions in the initial section of this guide.
 <1 id=801>Enjoy</1> your brand new app. <2 id=802/>
 SDL (LSE:
 SDL) is the global innovator in language translation technology, services and content management.
-For more than 20 years, SDL has transformed business results by enabling nuanced digital experiences with customers across the globe so they can create personalized connections anywhere and on any device.
+For more than 20 years, RWS has transformed business results by enabling nuanced digital experiences with customers across the globe so they can create personalized connections anywhere and on any device.
 Are you in the know?
-Find out more at SDL.com.
-Copyright © 2017 SDL plc. All Rights Reserved.
+Find out more at RWS.com.
+Copyright © 2021 RWS plc. All Rights Reserved.
 All company product or service names referenced herein are properties of their respective owners.

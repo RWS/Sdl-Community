@@ -70,10 +70,10 @@
 
 			<Border Background="White" Grid.Column="0" Grid.Row="2"  >
 				<TextBlock Margin="10,15,15,0" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}" >
-						Welcome to the Language Weaver Cloud translation provider for Studio. <LineBreak/><LineBreak/>
-						Language Weaver Cloud is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
+						Welcome to the Language Weaver translation provider for Studio. <LineBreak/><LineBreak/>
+						Language Weaver is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models.
 						Using our proprietary technology, customers can have the assurance of content privacy.
-						Language Weaver Cloud is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.
+						Language Weaver is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.
 				</TextBlock>
 			</Border>
 

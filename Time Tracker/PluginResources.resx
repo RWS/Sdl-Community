@@ -190,21 +190,6 @@
   <data name="StudioTimeTrackerConfiguration_Name" xml:space="preserve">
     <value>Application Settings</value>
   </data>
-  <data name="StudioTimeTrackerContactRibbonGroupAbout_Description" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="StudioTimeTrackerContactRibbonGroupAbout_Name" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="StudioTimeTrackerContactRibbonGroupHelp_Description" xml:space="preserve">
-    <value>Online Help</value>
-  </data>
-  <data name="StudioTimeTrackerContactRibbonGroupHelp_Name" xml:space="preserve">
-    <value>Online Help</value>
-  </data>
-  <data name="StudioTimeTrackerContactRibbonGroup_Name" xml:space="preserve">
-    <value>Information</value>
-  </data>
   <data name="StudioTimeTrackeCreateProjectTaskAction_Description" xml:space="preserve">
     <value>New Project Activity</value>
   </data>

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Trados Studio Target Renamer</PlugInName>
-	<Version>2.0.0.3</Version>
+	<Version>2.0.1.0</Version>
 	<Description>Trados Studio Target Renamer is a batch task plugin that allows the user to save the target files with various options for custom naming.</Description>
-	<Author>RWS AppStore Team</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+	<Author>Trados AppStore Team</Author>
+	<RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9" />
 </PluginPackage>

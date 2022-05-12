@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,11 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TmAnonymizerTests\StringToLinqParser.cs" />
+    <Compile Include="TmAnonymizerTests\StringToLinqParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Linq.Dynamic.Core">
-      <Version>1.2.15</Version>
+      <Version>1.2.18</Version>
     </PackageReference>
     <PackageReference Include="xunit">
       <Version>2.4.1</Version>

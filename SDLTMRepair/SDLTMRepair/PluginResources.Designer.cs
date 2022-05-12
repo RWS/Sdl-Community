@@ -61,7 +61,7 @@ namespace Sdl.Community.TMRepair {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trados Translation Memory Management Utility.
+        ///   Looks up a localized string similar to SDLTM Repair.
         /// </summary>
         internal static string Plugin_Name {
             get {
