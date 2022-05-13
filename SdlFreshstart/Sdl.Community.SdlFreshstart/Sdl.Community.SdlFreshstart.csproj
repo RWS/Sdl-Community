@@ -57,11 +57,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\Sdl.Versioning.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -173,11 +176,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -187,8 +185,8 @@
     <PackageReference Include="NLog.Config">
       <Version>4.7.15</Version>
     </PackageReference>
-    <PackageReference Include="Sdl.Community.Toolkit.Core">
-      <Version>4.0.0</Version>
+    <PackageReference Include="Trados.Community.Toolkit.Core">
+      <Version>4.0.6</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

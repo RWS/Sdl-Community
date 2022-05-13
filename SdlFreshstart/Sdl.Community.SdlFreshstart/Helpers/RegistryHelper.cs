@@ -48,12 +48,13 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			var errorMessages = new List<string>();
 			foreach (var location in locations)
 			{
-				var productRegistry = BaseKey.OpenSubKey(tradosKeys ? TradosStudioRegistryPath : MultitermRegistryPath, true);
 				var subKey = Path.GetFileName(location.OriginalPath);
+				var productRegistryPath = location.OriginalPath.Replace(subKey, "");
+				var productRegistry = BaseKey.OpenSubKey(@$"Software\{productRegistryPath}\", true);
 
 				try
 				{
-					productRegistry?.DeleteSubKey(subKey);
+					productRegistry?.DeleteSubKeyTree(subKey);
 				}
 				catch (Exception ex)
 				{

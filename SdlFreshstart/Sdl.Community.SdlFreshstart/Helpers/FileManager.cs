@@ -91,9 +91,9 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var folder in foldersToBackup)
 				{
-					if (!Directory.Exists(folder.BackupFilePath))
+					if (!Directory.Exists(folder?.BackupFilePath))
 					{
-						if (!folder.OriginalPath.Contains("projects.xml"))
+						if (folder.OriginalPath != null && !folder.OriginalPath.Contains("projects.xml"))
 						{
 							Directory.CreateDirectory(folder.BackupFilePath);
 						}

@@ -27,7 +27,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private readonly Persistence _persistenceSettings;
 		private readonly VersionService _versionService;
 		private bool _checkAll;
-		private ObservableCollection<StudioLocationListItem> _locations;
+		private ObservableCollection<StudioLocationListItem> _locations = new ObservableCollection<StudioLocationListItem>();
 		private bool _isRemoveEnabled;
 		private bool _isRepairEnabled;
 		private string _removeBtnColor;
@@ -40,7 +40,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private ICommand _restoreCommand;
 		private string _restoreForeground;
 		private StudioLocationListItem _selectedLocation;
-		private ObservableCollection<StudioVersion> _studioVersionsCollection;
+		private ObservableCollection<IStudioVersion> _studioVersionsCollection;
 		private bool _registryKeyChecked;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -62,7 +62,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_restoreForeground = "Gray";
 
 			GetInstalledVersions();
-			FillFoldersLocationList();
 		}
 
 		public bool CheckAll
@@ -232,7 +231,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ObservableCollection<StudioVersion> StudioVersionsCollection
+		public ObservableCollection<IStudioVersion> StudioVersionsCollection
 		{
 			get => _studioVersionsCollection;
 
@@ -265,35 +264,34 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private StudioVersion LatestStudioVersion => StudioVersionsCollection.FirstOrDefault();
-
 		private void FillFoldersLocationList()
 		{
-			var listOfProperties = new List<string>
+			Locations?.Clear();
+			var listOfProperties = new List<(string, string)>
 			{
-				nameof(StudioVersion.AppDataRoamingStudioPath),
-				nameof(StudioVersion.AppDataRoamingPluginsPath),
-				nameof(StudioVersion.AppDataLocalStudioPath),
-				nameof(StudioVersion.AppDataLocalPluginsPath),
-				nameof(StudioVersion.ProgramDataPluginsPath),
-				nameof(StudioVersion.ProgramDataStudioDataSubfolderPath),
-				nameof(StudioVersion.ProjectsXmlPath),
-				nameof(StudioVersion.ProjectTemplatesPath),
-				nameof(StudioVersion.SdlRegistryKey)
+				(nameof(StudioVersion.GeneralSettingsFolder), "General settings"),
+				(nameof(StudioVersion.RoamingPluginsFolder), "Roaming plugins"),
+				(nameof(StudioVersion.LocalTradosLogsFolder), "Logs"),
+				(nameof(StudioVersion.LocalPluginsFolder), "Local plugins"),
+				(nameof(StudioVersion.ProgramDataPluginsFolder), "Program data plugins"),
+				(nameof(StudioVersion.ProgramDataUpdatesFolder), "Updates"),
+				(nameof(StudioVersion.ProjectsXmlPath), "Project list"),
+				(nameof(StudioVersion.ProgramDataProjectTemplatesFolder), "Project templates"),
+				(nameof(StudioVersion.SdlRegistryKeys), "Registry keys")
 			};
 			
-			_locations = new ObservableCollection<StudioLocationListItem>();
-
-			foreach (var property in listOfProperties)
+			foreach (var studioVersion in StudioVersionsCollection.Where(v => v.IsSelected))
 			{
-				var latestVersionPath = (string)LatestStudioVersion?.GetType().GetProperty(property)?.GetValue(LatestStudioVersion);
-				var description = (string)typeof(LocationsDescription).GetProperty(property)?.GetValue(null, null);
+				foreach (var property in listOfProperties)
+				{
+					var latestVersionPath = (string)studioVersion?.GetType().GetProperty(property.Item1)?.GetValue(studioVersion);
+					var description = (string)typeof(LocationsDescription).GetProperty(property.Item1)?.GetValue(null, null);
 
-				AddLocation(latestVersionPath, description, property);
+					AddLocation(latestVersionPath, description, property.Item1, property.Item2);
+				}
 			}
 
 			AddProjectApiFolderLocation();
-			_locations.Move(_locations.Count - 1, _locations.Count - 2);
 
 			foreach (var location in _locations)
 			{
@@ -306,19 +304,22 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		/// </summary>
 		private void AddProjectApiFolderLocation()
 		{
-			var projectApiFolderPath =
-				Path.GetDirectoryName(
-					StudioVersionsCollection.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.ProjectApiPath);
+			var projectApiFolderPaths =
+				StudioVersionsCollection.Where(v => v.IsSelected && !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.Select(
+					v => Path.GetDirectoryName(v.ProjectApiPath));
 			var apiPathDescription = LocationsDescription.ProjectApiPath;
 
-			AddLocation(projectApiFolderPath, apiPathDescription, nameof(StudioVersion.ProjectApiPath));
+			foreach (var path in projectApiFolderPaths)
+			{
+				AddLocation(path, apiPathDescription, nameof(StudioVersion.ProjectApiPath), "Project API folder");
+			}
 		}
 
-		private void AddLocation(string path, string description, string alias)
+		private void AddLocation(string path, string description, string alias, string pathName)
 		{
-			_locations.Add(new StudioLocationListItem
+			Locations.Add(new StudioLocationListItem
 			{
-				DisplayName = path,
+				DisplayName = $"{pathName}: {path}",
 				IsSelected = true,
 				Description = description,
 				Alias = alias
@@ -327,7 +328,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void GetInstalledVersions()
 		{
-			_studioVersionsCollection = new ObservableCollection<StudioVersion>(_versionService.GetInstalledStudioVersions());
+			_studioVersionsCollection = new ObservableCollection<IStudioVersion>(_versionService.GetInstalledStudioVersions());
 
 			foreach (var studioVersion in _studioVersionsCollection)
 			{
@@ -335,7 +336,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private string GetMsiName(StudioVersion version)
+		private string GetMsiName(IStudioVersion version)
 		{
 			var msiName = version.MajorVersion > 15
 				? "TradosStudio.msi"
@@ -405,10 +406,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 					{
 						locations = Paths.GetLocationsFromVersions(selectedLocations.Select(l => l.Alias).ToList(), selectedStudioVersions);
 
-						var registryLocations = locations.TakeWhile(l => l.Alias == nameof(StudioVersion.SdlRegistryKey)).ToList();
+						var registryLocations = locations.Where(l => l.Alias == nameof(StudioVersion.SdlRegistryKeys)).ToList();
 						registryToClearOrRestore.AddRange(registryLocations);
 
-						var folderLocations = locations.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKey)).ToList();
+						var folderLocations = locations.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKeys)).ToList();
 						foldersToClearOrRestore.AddRange(folderLocations);
 					}
 
@@ -501,7 +502,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private async Task RestoreRegistry(List<LocationDetails> locationsToRestore)
 		{
 			var registryToRestore = locationsToRestore
-				.TakeWhile(l => l.Alias == nameof(StudioVersion.SdlRegistryKey)).ToList();
+				.TakeWhile(l => l.Alias == nameof(StudioVersion.SdlRegistryKeys)).ToList();
 			try
 			{
 				await _registryHelper.RestoreKeys(registryToRestore);
@@ -515,11 +516,11 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private async Task RestoreFolders(List<LocationDetails> locationsToRestore)
 		{
 			var foldersToRestore = locationsToRestore
-				.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKey)).ToList();
+				.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKeys)).ToList();
 			await FileManager.RestoreBackupFiles(foldersToRestore);
 		}
 
-		private void RunRepair(StudioVersion version)
+		private void RunRepair(IStudioVersion version)
 		{
 			_logger.Info(
 				$"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
@@ -570,6 +571,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void StudioVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
+			FillFoldersLocationList();
 			SetButtonColors();
 		}
 
