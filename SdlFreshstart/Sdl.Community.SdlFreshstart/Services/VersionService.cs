@@ -5,8 +5,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using Sdl.Community.SdlFreshstart.Model;
-using Sdl.Community.Toolkit.Core.Services;
-using Sdl.Versioning;
+using Trados.Community.Toolkit.Core.Services;
 using StudioVersion = Sdl.Community.SdlFreshstart.Model.StudioVersion;
 using StudioVersionService = Sdl.Versioning.StudioVersionService;
 
@@ -17,6 +16,7 @@ namespace Sdl.Community.SdlFreshstart.Services
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private readonly List<string> _possiblePackageCacheFolderName;
+		private List<StudioVersion> _installedVersions;
 
 		public VersionService()
 		{
@@ -34,21 +34,16 @@ namespace Sdl.Community.SdlFreshstart.Services
 			};
 		}
 
-		public List<StudioVersion> GetListOfStudioVersions()
-		{
-			var versionsDictionary = Versions.KnownStudioVersions.Skip(1).TakeWhile(s => !s.Value.Contains("Next"));
-			
-			return versionsDictionary.Select(item => new StudioVersion(item.Key, item.Value,null)).ToList();
-		}
-
 		public List<StudioVersion> GetInstalledStudioVersions()
 		{
+			if (_installedVersions != null) return _installedVersions;
+
 			var studioVersionService = new StudioVersionService();
 			var installedStudioVersions = studioVersionService.GetInstalledStudioVersions();
 			_logger.Info("Installed Trados Studio Versions");
 
-			var installedVersions = installedStudioVersions
-				?.Select(v => new StudioVersion(v.Version, v.PublicVersion,v.ExecutableVersion, v.Edition)).ToList();
+			_installedVersions = installedStudioVersions
+				?.Select(v => new StudioVersion(v)).ToList();
 			
 			if (installedStudioVersions != null)
 			{
@@ -63,11 +58,11 @@ namespace Sdl.Community.SdlFreshstart.Services
 				_logger.Info("Cannot find any Trados Version installed on the machine");
 			}
 
-			installedVersions?.Sort((item1, item2) =>
-				item1.MajorVersion < item2.MajorVersion ? 1 :
-					item1.MajorVersion > item2.MajorVersion ? -1 : 0);
+			_installedVersions?.Sort((item1, item2) =>
+				item1.ExecutableVersion.Major < item2.ExecutableVersion.Major ? 1 :
+					item1.ExecutableVersion.Major > item2.ExecutableVersion.Major ? -1 : 0);
 
-			return installedVersions;
+			return _installedVersions;
 		}
 
 		public List<MultitermVersion> GetInstalledMultitermVersions()

@@ -19,7 +19,7 @@
 			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
 		</Grid.Resources>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
 		<Grid.ColumnDefinitions>
@@ -34,8 +34,8 @@
 			<TabItem Header="Read Me"  Foreground="#00A89F">
 				<views:ReadMe DataContext="{Binding ReadMeViewModel}"/>
 			</TabItem>
-			<TabItem  Header ="Studio">
-				<views:Studio DataContext="{Binding StudioViewModel}"/>
+			<TabItem Header ="Studio">
+				<views:Studio DataContext="{Binding StudioViewModel}" />
 			</TabItem>
 			<TabItem Header="MultiTerm" >
 				<views:MultiTerm DataContext="{Binding MultiTermViewModel}"/>

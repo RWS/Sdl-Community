@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -30,7 +31,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool _isRemoveEnabled;
 		private bool _isRepairEnabled;
 		private bool _isRestoreEnabled;
-		private List<MultiTermLocationListItem> _multiTermLocationCollection;
+		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>();
 		private List<MultitermVersion> _multiTermVersionsCollection;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _removeBtnColor;
@@ -60,7 +61,6 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_repairBtnColor = "LightGray";
 			_repairForeground = "Gray";
 			FillMultiTermVersionList();
-			FillMultiTermLocationList();
 		}
 
 		public bool CheckAll
@@ -124,7 +124,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public List<MultiTermLocationListItem> MultiTermLocationCollection
+		public ObservableCollection<MultiTermLocationListItem> MultiTermLocationCollection
 		{
 			get => _multiTermLocationCollection;
 			set
@@ -246,29 +246,30 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private MultitermVersion LatestMultitermVersion => MultiTermVersionsCollection.FirstOrDefault();
-
 		private void FillMultiTermLocationList()
 		{
-			var listOfProperties = new List<string>
+			MultiTermLocationCollection.Clear();
+			var listOfProperties = new List<(string, string)>
 			{
-				nameof(MultitermVersion.MultiTermRoaming),
-				nameof(MultitermVersion.MultiTermLocal),
-				nameof(MultitermVersion.MultiTermProgramDataSettings),
-				nameof(MultitermVersion.MultiTermProgramDataUpdates),
-				nameof(MultitermVersion.MultiTermRegistryKey)
+				(nameof(MultitermVersion.MultiTermRoaming), "General settings"),
+				(nameof(MultitermVersion.MultiTermLocal), "Logs"),
+				(nameof(MultitermVersion.MultiTermProgramDataSettings), "Termbase settings"),
+				(nameof(MultitermVersion.MultiTermProgramDataUpdates), "Updates"),
+				(nameof(MultitermVersion.MultiTermRegistryKey), "Registry keys")
 			};
 
-			_multiTermLocationCollection = new List<MultiTermLocationListItem>();
-			foreach (var property in listOfProperties)
+			foreach (var multiTermVersion in _multiTermVersionsCollection.Where(v => v.IsSelected))
 			{
-				_multiTermLocationCollection.Add(new MultiTermLocationListItem
+				foreach (var property in listOfProperties)
 				{
-					DisplayName = (string)LatestMultitermVersion?.GetType().GetProperty(property)?.GetValue(LatestMultitermVersion),
-					Description = (string)typeof(LocationsDescription).GetProperty(property)?.GetValue(null, null),
-					IsSelected = true,
-					Alias = property
-				});
+					MultiTermLocationCollection.Add(new MultiTermLocationListItem
+					{
+						DisplayName = $"{property.Item2}: {(string)multiTermVersion?.GetType().GetProperty(property.Item1)?.GetValue(multiTermVersion)}",
+						Description = (string)typeof(LocationsDescription).GetProperty(property.Item1)?.GetValue(null, null),
+						IsSelected = true,
+						Alias = property.Item1
+					});
+				}
 			}
 
 			foreach (var multiTermLocation in _multiTermLocationCollection)
@@ -323,6 +324,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void MultiTermVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
+			FillMultiTermLocationList();
 			SetRemoveBtnColors();
 		}
 
@@ -346,10 +348,10 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 						locations = Paths.GetMultiTermLocationsFromVersions(selectedMultiTermLocations.Select(l => l.Alias).ToList(),
 							selectedMultiTermVersions);
 
-						var registryLocations = locations.TakeWhile(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+						var registryLocations = locations.Where(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
 						registryToClearOrRestore.AddRange(registryLocations);
 
-						var folderLocations = locations.TakeWhile(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+						var folderLocations = locations.Where(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
 						foldersToClearOrRestore.AddRange(folderLocations);
 					}
 
