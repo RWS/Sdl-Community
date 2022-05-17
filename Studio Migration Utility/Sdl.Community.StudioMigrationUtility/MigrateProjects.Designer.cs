@@ -256,7 +256,6 @@
             // installedPluginsListView
             // 
             this.installedPluginsListView.AllColumns.Add(this.pluginsColumn);
-            this.installedPluginsListView.CellEditUseWholeCell = false;
             this.installedPluginsListView.CheckBoxes = true;
             this.installedPluginsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.pluginsColumn});
@@ -326,7 +325,6 @@
             // projectsToBeMoved
             // 
             this.projectsToBeMoved.AllColumns.Add(this.projectsNameColumn);
-            this.projectsToBeMoved.CellEditUseWholeCell = false;
             this.projectsToBeMoved.CheckBoxes = true;
             this.projectsToBeMoved.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.projectsNameColumn});
@@ -401,7 +399,6 @@
             // chkDestinationStudioVersion
             // 
             this.chkDestinationStudioVersion.AllColumns.Add(this.destinationStudioVersionColumn);
-            this.chkDestinationStudioVersion.CellEditUseWholeCell = false;
             this.chkDestinationStudioVersion.CheckBoxes = true;
             this.chkDestinationStudioVersion.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.destinationStudioVersionColumn});
@@ -473,7 +470,6 @@
             // chkSourceStudioVersions
             // 
             this.chkSourceStudioVersions.AllColumns.Add(this.sourceStudioVersionColumn);
-            this.chkSourceStudioVersions.CellEditUseWholeCell = false;
             this.chkSourceStudioVersions.CheckBoxes = true;
             this.chkSourceStudioVersions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.sourceStudioVersionColumn});
