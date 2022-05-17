@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PostEdit.Compare")]
 [assembly: AssemblyDescription("Post-Edit Compare")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sdl Community")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Post-Edit Compare")]
 [assembly: AssemblyCopyright("Copyright © 2018")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.7.9.0")]
-[assembly: AssemblyFileVersion("1.7.9.0")]
+[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: AssemblyFileVersion("6.5.4.0")]

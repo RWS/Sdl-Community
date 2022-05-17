@@ -234,15 +234,17 @@ namespace Sdl.Community.PostEdit.Versions
     {
     }
 
-    [Action("PostEditCompareContactAbout", typeof(PostEditCompareViewController), Name = "PostEditCompareContactAbout_Name", Description = "PostEditCompareContactAbout_Description", Icon = "PostEditCompareContactAbout_Icon")]
-    [ActionLayout(typeof(PostEditCompareViewContactRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Large)]
-    public class PostEditCompareContactAbout : AbstractViewControllerAction<PostEditCompareViewController>
-    {
-        protected override void Execute()
-        {
-            Controller.ViewAboutInfo();
-        }
-    }
+	//SDLCOM-3582 Valentin - We hide the about section until eill be clarified the copyright information
+
+    //[Action("PostEditCompareContactAbout", typeof(PostEditCompareViewController), Name = "PostEditCompareContactAbout_Name", Description = "PostEditCompareContactAbout_Description", Icon = "PostEditCompareContactAbout_Icon")]
+    //[ActionLayout(typeof(PostEditCompareViewContactRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Large)]
+    //public class PostEditCompareContactAbout : AbstractViewControllerAction<PostEditCompareViewController>
+    //{
+    //    protected override void Execute()
+    //    {
+    //        Controller.ViewAboutInfo();
+    //    }
+    //}
 
     [Action("PostEditCompareContactHelp", typeof(PostEditCompareViewController), Name = "PostEditCompareContactHelp_Name", Description = "PostEditCompareContactHelp_Description", Icon = "PostEditCompareContactHelp_Icon")]
     [ActionLayout(typeof(PostEditCompareViewContactRibbonGroup), ZIndex = 1, DisplayType = DisplayType.Normal)]
