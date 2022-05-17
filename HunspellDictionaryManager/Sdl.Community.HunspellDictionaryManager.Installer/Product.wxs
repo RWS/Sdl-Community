@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?include Defines.wxi ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product  Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="$(var.productVersion)" Manufacturer="RWS AppStore Team"  UpgradeCode="$(var.upgradeCode)">
+	<Product  Id="*" Name="Hunspell Dictionary Manager 2021" Language="1033" Version="$(var.productVersion)" Manufacturer="Trados AppStore Team"  UpgradeCode="$(var.upgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
