@@ -2,8 +2,8 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Qualitivity</PlugInName>
 	<Version>4.1.5.0</Version>
-	<Description>Qualitivity </Description>
-	<Author>SDL Community Developers</Author>
+	<Description>Qualitivity</Description>
+	<Author>Trados AppStore Team</Author>
 	<Include>
 		<File>Sdl.Community.Qualitivity.Comparison.dll</File>
 		<File>Sdl.Community.Qualitivity.Hooks.dll</File>
