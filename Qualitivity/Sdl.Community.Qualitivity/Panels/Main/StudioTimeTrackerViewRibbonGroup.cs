@@ -120,18 +120,18 @@ namespace Sdl.Community.Qualitivity.Panels.Main
     internal class QualitivityContactRibbonGroup : AbstractRibbonGroup
     {
     }
+	//SDLCOM-3583 - Valentin-> Temporary commented until will be clarified the copyrights
+	//[Action("QualitivityContactRibbonGroupAbout", typeof(QualitivityViewController), Name = "QualitivityContactRibbonGroupAbout_Name", Description = "QualitivityContactRibbonGroupAbout_Description", Icon = "QualitivityAbout_Icon")]
+	//[ActionLayout(typeof(QualitivityContactRibbonGroup), ZIndex = 4, DisplayType = DisplayType.Large)]
+	//public class QualitivityContactAbout : AbstractViewControllerAction<QualitivityViewController>
+	//{
+	//    protected override void Execute()
+	//    {
+	//        Controller.ViewAboutInfo();
+	//    }
+	//}
 
-    [Action("QualitivityContactRibbonGroupAbout", typeof(QualitivityViewController), Name = "QualitivityContactRibbonGroupAbout_Name", Description = "QualitivityContactRibbonGroupAbout_Description", Icon = "QualitivityAbout_Icon")]
-    [ActionLayout(typeof(QualitivityContactRibbonGroup), ZIndex = 4, DisplayType = DisplayType.Large)]
-    public class QualitivityContactAbout : AbstractViewControllerAction<QualitivityViewController>
-    {
-        protected override void Execute()
-        {
-            Controller.ViewAboutInfo();
-        }
-    }
-
-    [Action("QualitivityContactRibbonGroupHelp", typeof(QualitivityViewController), Name = "QualitivityContactRibbonGroupHelp_Name", Description = "QualitivityContactRibbonGroupHelp_Description", Icon = "QualitivityHelp_Icon")]
+	[Action("QualitivityContactRibbonGroupHelp", typeof(QualitivityViewController), Name = "QualitivityContactRibbonGroupHelp_Name", Description = "QualitivityContactRibbonGroupHelp_Description", Icon = "QualitivityHelp_Icon")]
     [ActionLayout(typeof(QualitivityContactRibbonGroup), ZIndex = 3, DisplayType = DisplayType.Normal)]
     public class QualitivityContactHelp : AbstractViewControllerAction<QualitivityViewController>
     {

@@ -3,7 +3,7 @@
 	<PlugInName>Qualitivity</PlugInName>
 	<Version>4.1.5.0</Version>
 	<Description>Qualitivity </Description>
-	<Author>SDL Community Developers</Author>
+	<Author>Trados AppStore Team</Author>
 	<Include>
 		<File>Sdl.Community.Qualitivity.Comparison.dll</File>
 		<File>Sdl.Community.Qualitivity.Hooks.dll</File>
