@@ -3,7 +3,7 @@
   <PlugInName>TM Optimizer</PlugInName>
   <Version>3.2.1.0</Version>
   <Description>TM Optimizer</Description>
-  <Author>SDL Community Developers</Author>
+  <Author>Trados AppStore Team</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9"/>
   <Include>
     <File>Sdl.Community.TMOptimizer.Control.dll</File>
