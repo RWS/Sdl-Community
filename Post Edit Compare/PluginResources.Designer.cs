@@ -130,7 +130,7 @@ namespace Sdl.Community.PostEdit.Versions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About {0} for Trados Studio 2021.
+        ///   Looks up a localized string similar to About {0} for SDL Trados Studio 2019.
         /// </summary>
         internal static string About_SDL_Trados_Studio_2015 {
             get {
@@ -1004,7 +1004,7 @@ namespace Sdl.Community.PostEdit.Versions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the Trados Studio Project and then specificy the name, location &amp;&amp; description of the project version..
+        ///   Looks up a localized string similar to Select the SDL Trados Studio Project and then specificy the name, location &amp;&amp; description of the project version..
         /// </summary>
         internal static string Select_the_SDL_Trados_Studio_Project_and_then_ {
             get {
