@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("PostEdit.Versions")]
 [assembly: AssemblyDescription("Post-Edit Versions")]
-[assembly: AssemblyCompany("Sdl Community")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Post-Edit Versions")]
 [assembly: AssemblyCopyright("Copyright © 2018")]
 
