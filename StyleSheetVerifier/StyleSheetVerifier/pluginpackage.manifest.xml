@@ -3,6 +3,6 @@
 	<PlugInName>Stylesheet Verifier</PlugInName>
 	<Version>3.0.4.0</Version>
 	<Description>This plugin provides a way to generate a preview of an XML file against a stylesheet, used by anyone working on the creation realtime previews for XML in Studio.</Description>
-	<Author>SDL Community Developers</Author>
+	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9" />
 </PluginPackage>
