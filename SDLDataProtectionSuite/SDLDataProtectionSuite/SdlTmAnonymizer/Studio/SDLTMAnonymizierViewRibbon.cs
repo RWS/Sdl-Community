@@ -353,14 +353,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-	[Action("SDLTMAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
-	[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
-	public class SDLTMAnonymizerHelpRibbonGroupAboutAction : AbstractAction
-	{
-		protected override void Execute()
-		{
-			var about = new AboutBox();
-			about.ShowDialog();
-		}
-	}
+	//[Action("SDLTMAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
+	//[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
+	//public class SDLTMAnonymizerHelpRibbonGroupAboutAction : AbstractAction
+	//{
+	//	protected override void Execute()
+	//	{
+	//		var about = new AboutBox();
+	//		about.ShowDialog();
+	//	}
+	//}
 }

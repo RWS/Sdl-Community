@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using RwsAppStore.UsefulTipsService;
+using RwsAppStore.UsefulTipsService.Model;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.EventArgs;
-using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
@@ -9,6 +12,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using PathInfo = Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model.PathInfo;
 using UserControl = System.Windows.Forms.UserControl;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
@@ -48,15 +52,40 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 				Model.LogViewModel.IsEnabled = true;
 				_control = new TmAnonymizerViewControl(Model);
 
-				var tipsProvider = new TipsProvider(new RwsAppStore.UsefulTipsService.Model.PathInfo("16"));
-				var usefulTipsService = new UsefulTipsService(tipsProvider, SettingsService);
-				var usefulTips = usefulTipsService.GetPluginUsefulTips();
+				var pathInfo = new RwsAppStore.UsefulTipsService.Model.PathInfo(PluginResources.Plugin_Name, "16");
+				var tipsProvider = new TipsProvider(pathInfo);
+				var usefulTipsService = new UsefulTipsService(tipsProvider, SettingsService.PathInfo);
 
-				var tipsInstalled = usefulTipsService.TipsInstalled("SDLTMAnonymizerView");
+				var tipLanguages = usefulTipsService.GetPluginUsefulTips();
+				
+
+				var tipsInstalled = TipsInstalled(tipLanguages, "SDLTMAnonymizerView");
 				if (tipsInstalled == 0)
 				{
-					usefulTipsService.AddUsefulTips(usefulTips, StringResources.SDLTM_Anonymizer_Name);
+					var importTips = new ImportTips { TipLanguages = tipLanguages };
+					var countInstalled = usefulTipsService.AddUsefulTips(importTips, true);
+
+					Trace.WriteLine(string.Format("Installed {0}", countInstalled));
 				}
+
+				AlignLanguageTipIds(tipLanguages, tipsProvider, usefulTipsService);
+
+				//var tipReferences = new List<TipReference>();
+				//foreach (var tipLanguage in tipLanguages)
+				//{
+				//	tipReferences.Add(new TipReference
+				//	{
+				//		LanguageId = tipLanguage.LanguageId,
+				//		Resources = tipLanguage.Resources.Select(a => a.RelativePath).ToList(),
+				//		TipIds = tipLanguage.Tips.Where(a => !string.IsNullOrEmpty(a.Id)).Select(a => a.Id).ToList()
+				//	});
+				//}
+
+				//var removeTips = new RemoveTips { TipReferences = tipReferences };
+
+				//var countRemoved = usefulTipsService.RemoveUsefulTips(removeTips);
+				//Trace.WriteLine(string.Format("Removed {0}", countRemoved));
+
 				// Debug
 				//var count = usefulTipsService.RemoveUsefulTips(usefulTips, StringResources.SDLTM_Anonymizer_Name);
 			}
@@ -64,6 +93,34 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 			{
 				Model.LogViewModel.IsEnabled = false;
 			}
+		}
+
+		private static void AlignLanguageTipIds(IEnumerable<TipLanguage> tipLanguages, TipsProvider tipsProvider, UsefulTipsService usefulTipsService)
+		{
+			var studioTips = tipsProvider.GetStudioTips();
+			foreach (var tipLanguage in tipLanguages)
+			{
+				var installedTipLanguages = studioTips.FirstOrDefault(a => a.LanguageId == tipLanguage.LanguageId);
+				if (installedTipLanguages == null)
+				{
+					continue;
+				}
+
+				foreach (var languageTip in tipLanguage.Tips)
+				{
+					var existingTip = usefulTipsService.GetExistingTip(installedTipLanguages.Tips, languageTip);
+					if (existingTip != null)
+					{
+						languageTip.Id = existingTip.Id;
+					}
+				}
+			}
+		}
+
+		public int TipsInstalled(List<TipLanguage> tipLanguages, string context)
+		{
+
+			return tipLanguages.Sum(tipContext => tipContext.Tips.Count(a => a.Context == context));
 		}
 
 		protected override IUIControl GetContentControl()
