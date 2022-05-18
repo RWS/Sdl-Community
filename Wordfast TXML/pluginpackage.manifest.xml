@@ -3,6 +3,6 @@
   <PlugInName>File Type Definition for Wordfast TXML</PlugInName>
   <Version>3.0.3.0</Version>
   <Description>This plugin provides support for handling TXML files created from Wordfast.</Description>
-  <Author>SDL Community Developers</Author>
+  <Author>Trados AppStore Team</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9" />
 </PluginPackage>
