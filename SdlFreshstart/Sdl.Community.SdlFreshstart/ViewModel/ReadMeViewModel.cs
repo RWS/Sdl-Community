@@ -8,7 +8,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	{
 		public ReadMeViewModel(VersionService versioningService)
 		{
-			StudioVersions = versioningService.GetListOfStudioVersions();
+			StudioVersions = versioningService.GetInstalledStudioVersions();
 			StudioVersions.Reverse();
 
 			MultitermVersions = versioningService.GetInstalledMultitermVersions();

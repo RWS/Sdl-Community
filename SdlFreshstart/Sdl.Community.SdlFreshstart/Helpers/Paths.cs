@@ -10,7 +10,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 	{
 		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart");
 
-		public static List<LocationDetails> GetLocationsFromVersions(List<string> locationNames, List<StudioVersion> studioVersions)
+		public static List<LocationDetails> GetLocationsFromVersions(List<string> locationNames, List<IStudioVersion> studioVersions)
 		{
 			var locations = new List<LocationDetails>(studioVersions.Count * locationNames.Count);
 			foreach (var locationName in locationNames)
@@ -20,7 +20,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 					var location = (string)studioVersions[0]?.GetType().GetProperty(locationName)?.GetValue(version);
 
 					var fileName = File.Exists(location) ? Path.GetFileName(location) : string.Empty;
-					fileName = locationName == nameof(StudioVersion.SdlRegistryKey) ? "sdlregkeys.reg" : fileName;
+					fileName = locationName == nameof(StudioVersion.SdlRegistryKeys) ? "sdlregkeys.reg" : fileName;
 
 					locations.Add(new LocationDetails
 					{

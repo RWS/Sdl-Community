@@ -592,7 +592,7 @@ Please wait until processing has completed.</value>
     <value>Severity Weight - Edit</value>
   </data>
   <data name="About_Qualitivity_for_SDL_Trados_Studio_2019" xml:space="preserve">
-    <value>About Qualitivity for SDL Trados Studio 2019</value>
+    <value>About Qualitivity for Trados Studio 2021</value>
   </data>
   <data name="Qualitivity___Version__0_" xml:space="preserve">
     <value>Qualitivity - Version {0}</value>
@@ -755,7 +755,7 @@ still associated with the client profile '{0}'</value>
     <value> (New)</value>
   </data>
   <data name="No_new_SDL_Studio_Project_available_" xml:space="preserve">
-    <value>No new SDL Studio Project available!</value>
+    <value>No new Trados Studio Project available!</value>
   </data>
   <data name="Note__All_Studio_Projects_are_currently_listed_in_the_navigation_area" xml:space="preserve">
     <value>Note: All Studio Projects are currently listed in the navigation area</value>

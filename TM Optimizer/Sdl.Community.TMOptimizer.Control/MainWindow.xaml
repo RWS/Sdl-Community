@@ -19,7 +19,7 @@
                  CanFinish="{Binding CanFinish}" Margin="1,0,-1.421,-0.093">
         <xctk:WizardPage x:Name="IntroPage" 
                                    Title="TM Optimizer"
-                                   Description="This wizard enables you to optimize translation memories created in TRADOS Workbench for use in SDL Trados Studio. Please choose one of the following options.">
+                                   Description="This wizard enables you to optimize translation memories created in TRADOS Workbench for use in Trados Studio. Please choose one of the following options.">
             <local:IntroWizardPageControl />
         </xctk:WizardPage>
          <xctk:WizardPage x:Name="InputPage" PageType="Interior"

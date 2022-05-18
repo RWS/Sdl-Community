@@ -2491,15 +2491,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
             }
         }
 
-
- 
-        public void ViewAboutInfo()
-        {
-            var f = new Dialogs.About();
-            f.ShowDialog();
-        }
-
-
         private static void LoadCurrencies()
         {
 

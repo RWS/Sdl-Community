@@ -35,7 +35,7 @@ namespace Sdl.Community.TMLifting
 			
 		}
 	}
-	[Action("HelpAction", typeof(TMLiftingRibbon), Name = "Help", Description = "An wiki page will be opened in browser uith user guide", Icon = "question")]
+	[Action("HelpAction", typeof(TMLiftingRibbon), Name = "Help", Description = "An wiki page will be opened in browser with user guide", Icon = "question")]
 	[ActionLayout(typeof(TMLiftingRibbonGroup), 0, DisplayType.Large)]
 	public class HelpAction : AbstractViewControllerAction<TMLiftingRibbon>
 	{
