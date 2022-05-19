@@ -6,7 +6,6 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Sdl.Community.TMOptimizer.Control")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Sdl.Community.TMOptimizer.Control")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 
@@ -46,4 +45,4 @@ using System.Windows;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.2.1.0")]
+[assembly: AssemblyFileVersion("3.2.2.0")]
