@@ -293,14 +293,13 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			return msiName;
 		}
 
-		private List<LocationDetails> GetLocationsForSelectedVersions()
+		private List<LocationDetails> GetLocationsForSelectedVersions(List<MultitermVersion> multitermVersions)
 		{
 			var allFolders = _persistence.Load(false);
-			var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
 			var locationsForSelectedVersion = new List<LocationDetails>();
-			if (selectedVersions.Any())
+			if (multitermVersions.Any())
 			{
-				foreach (var version in selectedVersions)
+				foreach (var version in multitermVersions)
 				{
 					var locations = allFolders.Where(v => v.Version.Equals(version.VersionName)).ToList();
 					locationsForSelectedVersion.AddRange(locations);
@@ -310,11 +309,24 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			return allFolders;
 		}
 
-		private bool MultiTermIsRunning()
+		private (List<MultitermVersion>, List<MultitermVersion>) GetUnchangeableAndChangeableVersions()
 		{
 			var processList = Process.GetProcesses();
-			var multiTermProcesses = processList.Where(p => p.ProcessName.Contains("MultiTerm")).ToList();
-			return multiTermProcesses.Any();
+
+			var studioProcesses = processList.Where(p => p.ProcessName.Contains(Constants.MultiTerm)).ToList();
+			var studioProcessesIds = studioProcesses.Select(p => p.MainModule.FileVersionInfo.FileMajorPart).ToList();
+
+			var selectedVersionsIds = GetSelectedVersions();
+
+			var unchangeable = selectedVersionsIds.Where(sv => studioProcessesIds.Contains(sv.MajorVersion)).ToList();
+			var changeable = selectedVersionsIds.Where(sv => !unchangeable.Contains(sv)).ToList();
+
+			return (unchangeable, changeable);
+		}
+
+		private List<MultitermVersion> GetSelectedVersions()
+		{
+			return MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
 		}
 
 		private void MultiTermLocation_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -333,44 +345,56 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RemoveMessage);
 			if (result == MessageBoxResult.Yes)
 			{
-				if (!MultiTermIsRunning())
+				var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+				var controller = await ShowProgress(Constants.Wait, Constants.RemoveFilesMessage);
+
+				var foldersToClearOrRestore = new List<LocationDetails>();
+				var registryToClearOrRestore = new List<LocationDetails>();
+
+				var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
+				var locations = new List<LocationDetails>();
+				if (changeableVersions.Any())
 				{
-					var controller = await ShowProgress(Constants.Wait, Constants.RemoveFilesMessage);
+					locations = Paths.GetMultiTermLocationsFromVersions(selectedMultiTermLocations.Select(l => l.Alias).ToList(),
+						changeableVersions);
 
-					var foldersToClearOrRestore = new List<LocationDetails>();
-					var registryToClearOrRestore = new List<LocationDetails>();
+					var registryLocations = locations.Where(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+					registryToClearOrRestore.AddRange(registryLocations);
 
-					var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
-					var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
-					var locations = new List<LocationDetails>();
-					if (selectedMultiTermVersions.Any())
-					{
-						locations = Paths.GetMultiTermLocationsFromVersions(selectedMultiTermLocations.Select(l => l.Alias).ToList(),
-							selectedMultiTermVersions);
-
-						var registryLocations = locations.Where(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
-						registryToClearOrRestore.AddRange(registryLocations);
-
-						var folderLocations = locations.Where(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
-						foldersToClearOrRestore.AddRange(folderLocations);
-					}
-
-					//save settings
-					_persistence.SaveSettings(locations, false);
-					await FileManager.BackupFiles(foldersToClearOrRestore);
-					await _registryHelper.BackupKeys(registryToClearOrRestore);
-
-					RemoveFromFolders(foldersToClearOrRestore);
-					RemoveFromRegistry(registryToClearOrRestore);
-
-					//to close the message
-					await controller.CloseAsync();
+					var folderLocations = locations.Where(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+					foldersToClearOrRestore.AddRange(folderLocations);
 				}
-				else
+
+				//save settings
+				_persistence.SaveSettings(locations, false);
+				await FileManager.BackupFiles(foldersToClearOrRestore);
+				await _registryHelper.BackupKeys(registryToClearOrRestore);
+
+				RemoveFromFolders(foldersToClearOrRestore);
+				RemoveFromRegistry(registryToClearOrRestore);
+
+				//to close the message
+				await controller.CloseAsync();
+
+				if (unchangeableVersions.Any())
 				{
-					_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.RemoveFoldersMessage);
+					GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+					_messageService.ShowWarningMessage(Constants.MultitermRun,
+						$"{Constants.RemoveFoldersMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
 				}
 			}
+		}
+
+		private static void GetWarningInfo(List<MultitermVersion> unchangeableVersions, List<MultitermVersion> changeableVersions, out string unchangedString, out string changedString)
+		{
+			unchangedString =
+				$"Currently running affected versions:{Environment.NewLine}{string.Join(Environment.NewLine, unchangeableVersions.Select(s => s.MultiTermLocal).ToList())}";
+
+			var changeable = changeableVersions.Select(s => s.MultiTermLocal).ToList();
+			changedString = changeable.Any()
+				? $"Changed:{Environment.NewLine}{string.Join(Environment.NewLine, changeable)}"
+				: null;
 		}
 
 		private void RemoveFromRegistry(List<LocationDetails> registryToClearOrRestore)
@@ -406,24 +430,25 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 		private void RepairMultiTerm()
 		{
-			if (!MultiTermIsRunning())
+			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+			if (Directory.Exists(_packageCache))
 			{
-				if (Directory.Exists(_packageCache))
+				foreach (var selectedVersion in changeableVersions)
 				{
-					var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
-					foreach (var selectedVersion in selectedVersions)
-					{
-						RunRepair(selectedVersion);
-					}
-				}
-				else
-				{
-					_logger.Info($"Could not find PackageCache folder: {_packageCache}");
+					RunRepair(selectedVersion);
 				}
 			}
 			else
 			{
-				_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.MultitermRepairMessage);
+				_logger.Info($"Could not find PackageCache folder: {_packageCache}");
+			}
+
+			if (unchangeableVersions.Any())
+			{
+				GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+				_messageService.ShowWarningMessage(Constants.MultitermRun,
+					$"{Constants.MultitermRepairMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
 			}
 		}
 
@@ -454,22 +479,24 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreMessage);
 
 			if (result != MessageBoxResult.Yes) return;
-			if (!MultiTermIsRunning())
+			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+			var controller = await ShowProgress(Constants.Wait, Constants.RestoringMessage);
+
+			var locationsToRestore = GetLocationsForSelectedVersions(changeableVersions);
+
+			await RestoreFolders(locationsToRestore);
+			await RestoreRegistry(locationsToRestore);
+
+			UnselectGrids();
+
+			await controller.CloseAsync();
+
+			if (unchangeableVersions.Any())
 			{
-				var controller = await ShowProgress(Constants.Wait, Constants.RestoringMessage);
-
-				var locationsToRestore = GetLocationsForSelectedVersions();
-
-				await RestoreFolders(locationsToRestore);
-				await RestoreRegistry(locationsToRestore);
-
-				UnselectGrids();
-
-				await controller.CloseAsync();
-			}
-			else
-			{
-				_messageService.ShowWarningMessage(Constants.MultitermRun, Constants.MultitermCloseMessage);
+				GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+				_messageService.ShowWarningMessage(Constants.MultitermRun,
+					$"{Constants.MultitermCloseMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
 			}
 		}
 

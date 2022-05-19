@@ -53,5 +53,7 @@
 		public static readonly string FilesNotDeletedMessage = @"Not all files/folder have been deleted";
 		public static readonly string SDLTradosStudio = "SDLTradosStudio";
 		public static readonly string RegistryNotDeleted = "Not all registry keys could be deleted: {0}";
+
+		public static readonly string MultiTerm = "MultiTerm";
 	}
 }
