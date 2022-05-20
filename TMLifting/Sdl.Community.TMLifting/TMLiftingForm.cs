@@ -135,7 +135,7 @@ namespace Sdl.Community.TMLifting
 			}
 			catch (Exception ex)
 			{
-				throw new SystemException(Constants.AuthentificationErrorMsg);				
+				MessageBox.Show(ex.Message);
 			}
 		}
 
