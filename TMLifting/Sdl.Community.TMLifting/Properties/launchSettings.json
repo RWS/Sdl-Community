@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Trados\\Trados Studio\\Studio17Beta\\SDLTradosStudio.exe"
+    }
+  }
+}
