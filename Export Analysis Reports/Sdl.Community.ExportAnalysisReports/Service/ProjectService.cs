@@ -9,10 +9,10 @@ using System.Xml;
 using NLog;
 using Sdl.Community.ExportAnalysisReports.Interfaces;
 using Sdl.Community.ExportAnalysisReports.Model;
-using Sdl.Community.Toolkit.Core.Services;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Community.Toolkit.Core.Services;
 
 namespace Sdl.Community.ExportAnalysisReports.Service
 {
