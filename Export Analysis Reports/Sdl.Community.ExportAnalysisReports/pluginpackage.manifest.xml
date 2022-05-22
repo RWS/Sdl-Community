@@ -5,7 +5,7 @@
   <Description>Plugin which exports Trados Studio analysis report to CSV</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>
-		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Trados.Community.Toolkit.Core.dll</File>
 	</Include>
 	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>
