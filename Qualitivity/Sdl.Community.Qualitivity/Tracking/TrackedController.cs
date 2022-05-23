@@ -15,11 +15,11 @@ using Sdl.Community.Structures.Documents.Records;
 using Sdl.Community.Structures.Projects;
 using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Community.TM.Database;
-using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Community.Toolkit.LanguagePlatform;
 using Comment = Sdl.Community.Structures.Documents.Records.Comment;
 using Document = Sdl.TranslationStudioAutomation.IntegrationApi.Document;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
@@ -508,7 +508,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
 
 			var segmentPairProcessor = new SegmentPairProcessor(
-				new Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Toolkit.LanguagePlatform.Models.PathInfo());
+				new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
 
 			var parser = new ContentGenerator();
 
