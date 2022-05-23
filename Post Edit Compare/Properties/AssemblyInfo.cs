@@ -7,7 +7,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PostEdit.Versions")]
 [assembly: AssemblyDescription("Post-Edit Versions")]
 [assembly: AssemblyProduct("Post-Edit Versions")]
-[assembly: AssemblyCopyright("Copyright © 2018")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
