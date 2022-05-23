@@ -368,7 +368,7 @@ namespace Trados.Transcreate.Service
 			if (studioVersion != null)
 			{
 				var version = studioVersion.ExecutableVersion;
-				if (version.Major < 16 || version.Minor < 1 || version.Build < 4)
+				if (version.Major < 16 && version.Minor < 1 && version.Build < 4)
 				{
 					return false;
 				}
