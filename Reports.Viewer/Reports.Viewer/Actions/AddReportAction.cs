@@ -58,14 +58,19 @@ namespace Reports.Viewer.Plus.Actions
 
 		private void AddNewReport(Report report)
 		{
+			var selectedProject = _reportsViewerController.GetSelectedProject();
+			if (selectedProject == null)
+			{
+				return;
+			}
+
 			var reportTemplates = GetCustomReportTemplates();
 
 			var reports = _reportsViewerController.GetReports();
 			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
 			var taskTemplateIdProvider = new TaskTemplateIdProvider();
 
-			var viewModel = new AppendReportViewModel(report, _imageService,
-				_reportsViewerController.GetSelectedProject(), groupNames, reportTemplates, taskTemplateIdProvider);
+			var viewModel = new AppendReportViewModel(report, _imageService, selectedProject, groupNames, reportTemplates, taskTemplateIdProvider);
 			var view = new AppendReportWindow(viewModel, null);
 			viewModel.Window = view;
 

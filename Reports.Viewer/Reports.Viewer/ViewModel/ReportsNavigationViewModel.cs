@@ -14,7 +14,9 @@ using Reports.Viewer.Plus.Actions;
 using Reports.Viewer.Plus.Commands;
 using Reports.Viewer.Plus.CustomEventArgs;
 using Reports.Viewer.Plus.Model;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Task = System.Threading.Tasks.Task;
 
 namespace Reports.Viewer.Plus.ViewModel
 {
@@ -27,6 +29,7 @@ namespace Reports.Viewer.Plus.ViewModel
 		private Report _selectedReport;
 		private bool _isReportSelected;
 		private ObservableCollection<ReportGroup> _reportGroups;
+		private IProject _selectedProject;
 		private GroupType _groupType;
 		private List<GroupType> _groupTypes;
 		private string _projectLocalFolder;
@@ -46,7 +49,7 @@ namespace Reports.Viewer.Plus.ViewModel
 		private ICommand _saveAsCommand;
 		private ICommand _mouseDoubleClick;
 
-		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
+		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo, IProject selectedProject)
 		{
 			_reports = reports;
 			_filteredReports = _reports;
@@ -54,6 +57,8 @@ namespace Reports.Viewer.Plus.ViewModel
 			Settings = settings;
 			_pathInfo = pathInfo;
 			_filterString = string.Empty;
+
+			SelectedProject = selectedProject;
 
 			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
@@ -188,6 +193,21 @@ namespace Reports.Viewer.Plus.ViewModel
 				if (ReportViewModel != null)
 				{
 					ReportViewModel.ProjectLocalFolder = ProjectLocalFolder;
+				}
+			}
+		}
+
+		public IProject SelectedProject
+		{
+			get { return _selectedProject; }
+			set
+			{
+				_selectedProject = value;
+				OnPropertyChanged(nameof(SelectedProject));
+
+				if (ReportViewModel != null)
+				{
+					ReportViewModel.SelectedProject = SelectedProject;
 				}
 			}
 		}

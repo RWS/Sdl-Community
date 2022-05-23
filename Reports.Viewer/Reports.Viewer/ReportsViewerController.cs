@@ -34,6 +34,7 @@ namespace Reports.Viewer.Plus
 		private ProjectsController _projectsController;
 		private ReportViewModel _reportViewModel;
 		private ReportsNavigationViewModel _reportsNavigationViewModel;
+
 		private ReportView _reportView;
 		private ReportsNavigationView _reportsNavigationView;
 		private DataView _dataView;
@@ -275,9 +276,10 @@ namespace Reports.Viewer.Plus
 
 			var reports = _reportsController.GetReports(true).Result;
 
-			_reportsNavigationViewModel = new ReportsNavigationViewModel(reports, GetSettings(), _pathInfo);
+			_reportsNavigationViewModel = new ReportsNavigationViewModel(reports, GetSettings(), _pathInfo, GetSelectedProject());
 			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
+			_reportsNavigationViewModel.SelectedProject = _reportsController?.Project;
 			_reportsNavigationViewModel.ProjectLocalFolder = _reportsController?.ProjectLocalFolder;
 			_reportsNavigationView.DataContext = _reportsNavigationViewModel;
 		}
@@ -359,6 +361,7 @@ namespace Reports.Viewer.Plus
 			_reportsController = new ReportsController(_projectsController.CurrentProject, _pathInfo, _taskTemplateIdProvider);
 			if (_reportsNavigationViewModel != null)
 			{
+				_reportsNavigationViewModel.SelectedProject = _reportsController.Project;
 				_reportsNavigationViewModel.ProjectLocalFolder = _reportsController.ProjectLocalFolder;
 				RefreshView();
 			}

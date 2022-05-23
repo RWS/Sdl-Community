@@ -193,7 +193,8 @@ namespace Reports.Viewer.Api
 					var reportViewerSettings = settingsBundle?.GetSettingsGroup<ReportsViewerSettings>();
 					var nonStudioReports = DeserializeReports(reportViewerSettings?.ReportsJson?.Value)
 						?.Where(a => !a.IsStudioReport).ToList();
-					var studioReports = _projectReportsOperations?.GetProjectReports();
+
+					var studioReports = GetStudioReports();
 
 					var count1 = nonStudioReports?.Count + studioReports?.Count;
 					var count2 = _reports?.Count;
@@ -209,6 +210,20 @@ namespace Reports.Viewer.Api
 			}
 		}
 
+		private List<Sdl.ProjectAutomation.FileBased.Reports.Models.Report> GetStudioReports()
+		{
+			try
+			{
+				return  _projectReportsOperations?.GetProjectReports();
+			}
+			catch
+			{
+				// ignore; catch all
+			}
+
+			return new List<Sdl.ProjectAutomation.FileBased.Reports.Models.Report>();
+		}
+
 		private async Task<List<Report>> GetProjectReports()
 		{
 			_reports = new List<Report>();
@@ -218,7 +233,7 @@ namespace Reports.Viewer.Api
 				var settingsBundle = Project.GetSettings();
 				var reportViewerSettings = settingsBundle.GetSettingsGroup<ReportsViewerSettings>();
 				var savedReports = DeserializeReports(reportViewerSettings.ReportsJson.Value);
-				var studioReports = _projectReportsOperations.GetProjectReports();
+				var studioReports = GetStudioReports();
 				var reports = new List<Report>();
 
 				// get the reports managed by studio with updated settings from the reviewer
@@ -317,7 +332,7 @@ namespace Reports.Viewer.Api
 			var updatedReports = GetUpdatedReports(clonedReports);
 			_reports.AddRange(updatedReports);
 
-			return clonedReports;
+			return _reports;
 		}
 
 		private List<Report> UpdateReportData(List<Report> reports)
@@ -396,7 +411,7 @@ namespace Reports.Viewer.Api
 
 				if (!report.IsStudioReport)
 				{
-					xsltPath = Path.Combine(ProjectLocalFolder, report.XsltPath);
+					xsltPath = Path.Combine(ProjectLocalFolder, report.XsltPath ?? string.Empty);
 					if (!xmlPath.ToLower().EndsWith(".xml"))
 					{
 						xmlPath = GetPreviousExtensionPath(xmlPath);

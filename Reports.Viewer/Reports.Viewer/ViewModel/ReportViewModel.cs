@@ -21,7 +21,6 @@ namespace Reports.Viewer.Plus.ViewModel
 		private readonly BrowserView _browserView;
 		private readonly DataView _dataView;
 		private readonly DataViewModel _dataViewModel;
-		private readonly IProject _selectedProject;
 		private string _projectLocalFolder;
 		private ContentControl _currentView;
 		private string _address;
@@ -33,7 +32,7 @@ namespace Reports.Viewer.Plus.ViewModel
 			_browserView = browserView;
 			_dataViewModel = dataViewModel;
 			_dataView = dataView;
-			_selectedProject = selectedProject;
+			SelectedProject = selectedProject;
 			_dataViewModel.ReportSelectionChanged += DataViewModel_ReportSelectionChanged;
 
 			CurrentView = _dataView;
@@ -63,6 +62,8 @@ namespace Reports.Viewer.Plus.ViewModel
 				OnPropertyChanged(nameof(CurrentView));
 			}
 		}
+
+		public IProject SelectedProject { get; set; }
 
 		public string ProjectLocalFolder
 		{
@@ -95,7 +96,7 @@ namespace Reports.Viewer.Plus.ViewModel
 				? _currentReport
 				: _dataViewModel.SelectedReport;
 
-			var projectInfo = _selectedProject.GetProjectInfo();
+			var projectInfo = SelectedProject.GetProjectInfo();
 			var projectPath = projectInfo.LocalProjectFolder;
 			var filter = GetFileDialogFilter(report);
 
@@ -121,7 +122,7 @@ namespace Reports.Viewer.Plus.ViewModel
 							{
 								if (report.IsStudioReport)
 								{
-									_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Excel);
+									SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Excel);
 								}
 								else
 								{
@@ -134,7 +135,7 @@ namespace Reports.Viewer.Plus.ViewModel
 							{
 								if (report.IsStudioReport)
 								{
-									_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Html);
+									SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Html);
 								}
 								else
 								{
@@ -145,14 +146,14 @@ namespace Reports.Viewer.Plus.ViewModel
 							}
 						case "mht":
 							{
-								_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Mht);
+								SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Mht);
 								break;
 							}
 						case "xml":
 							{
 								if (report.IsStudioReport)
 								{
-									_selectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Xml);
+									SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Xml);
 								}
 								else
 								{
