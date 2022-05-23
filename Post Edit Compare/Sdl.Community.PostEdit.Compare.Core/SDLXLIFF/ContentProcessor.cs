@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Trados.Community.Toolkit.LanguagePlatform;
 
 namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 {
@@ -32,8 +32,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 				var targetLanguage = GetSpecificCulture(new CultureInfo(TargetLanguageId));
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage),
-					new Toolkit.LanguagePlatform.Models.PathInfo());
+					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage),
+					new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
 
 				return _segmentPairProcessor;
 			}
