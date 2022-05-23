@@ -1025,3 +1025,4 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /TMBackup/build/Customisation.dll
 /TMBackup/build/Crc32C.NET.dll
 /Export Analysis Reports/Sdl.Community.ExportAnalysisReports/Properties/launchSettings.json
+/Export to Excel/Export to Excel/Properties/launchSettings.json
