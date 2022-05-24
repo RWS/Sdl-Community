@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17beta\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
 		<ApplicationIcon>Resources\Approved.ico</ApplicationIcon>
