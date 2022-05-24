@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="Trados Freshstart" Language="1033" Version="1.0.6.2" Manufacturer="Trados AppStore Team" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
+	<Product Id="*" Name="Trados Freshstart" Language="1033" Version="1.0.6.3" Manufacturer="Trados AppStore Team" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
-		
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 		<UIRef Id="WixUI_InstallDir" />
-		
+
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate EmbedCab="yes"/>
+		<MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="ProductFeature" Title="Trados Freshstart" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 			<ComponentRef Id="ApplicationShortcutDesktop" />
 		</Feature>
+		<UI>
+			<UIRef Id="WixUI_InstallDir" />
+			<Publish Dialog="WelcomeDlg"
+					 Control="Next"
+					 Event="NewDialog"
+					 Value="InstallDirDlg"
+					 Order="2">1</Publish>
+			<Publish Dialog="InstallDirDlg"
+					 Control="Back"
+					 Event="NewDialog"
+					 Value="WelcomeDlg"
+					 Order="2">1</Publish>
+		</UI>
 	</Product>
 
 	<Fragment>
@@ -30,7 +41,7 @@
 			</Component>
 		</DirectoryRef>
 	</Fragment>
-	
+
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
@@ -70,5 +81,5 @@
 				<File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Versioning.dll"></File>
 			</Component>
 		</ComponentGroup>
-	</Fragment>	
+	</Fragment>
 </Wix>
