@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17beta\Plugins</PluginDeploymentPath>
