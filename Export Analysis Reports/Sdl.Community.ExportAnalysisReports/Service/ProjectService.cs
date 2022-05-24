@@ -12,7 +12,7 @@ using Sdl.Community.ExportAnalysisReports.Model;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Trados.Community.Toolkit.Core.Services;
+using Sdl.Versioning;
 
 namespace Sdl.Community.ExportAnalysisReports.Service
 {
