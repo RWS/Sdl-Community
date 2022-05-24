@@ -6,7 +6,7 @@ using Sdl.Community.StudioViews.Common;
 using Sdl.Community.StudioViews.Interfaces;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Providers;
-using Sdl.Community.Toolkit.LanguagePlatform.Models;
+using Trados.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Extensions;

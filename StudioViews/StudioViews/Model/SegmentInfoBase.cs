@@ -13,6 +13,6 @@ namespace Sdl.Community.StudioViews.Model
 
 		public IParagraphUnit ParagraphUnit { get; set; }
 
-		public Toolkit.LanguagePlatform.Models.WordCounts SourceWordCounts { get; set; }
+		public Trados.Community.Toolkit.LanguagePlatform.Models.WordCounts SourceWordCounts { get; set; }
 	}
 }

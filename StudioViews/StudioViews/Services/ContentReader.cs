@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Sdl.Community.StudioViews.Model;
-using Sdl.Community.Toolkit.LanguagePlatform;
+using Trados.Community.Toolkit.LanguagePlatform;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.Versioning;
 
@@ -91,10 +91,10 @@ namespace Sdl.Community.StudioViews.Services
 				}
 
 				var productName = GetProductName();
-				var pathInfo = new Toolkit.LanguagePlatform.Models.PathInfo(productName);
+				var pathInfo = new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo(productName);
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
+					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
 
 				return _segmentPairProcessor;
 			}
