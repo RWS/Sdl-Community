@@ -8,12 +8,12 @@ namespace SDLCommunityCleanUpTasks.TellMe
     {
         public CleanUpTasksHelpAction()
         {
-            Name = "CleanUpTasks wiki in the SDL Community";
+            Name = "CleanUpTasks wiki in the RWS Community";
         }
 
         public override void Execute()
         {
-            Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4040.cleanup-tasks");
+            Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/4040/cleanup-tasks");
         }
 
 		public override bool IsAvailable => true;
