@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Post-Edit Compare</PlugInName>
-	<Version>7.5.4.0</Version>
+	<Version>7.5.4.1</Version>
 	<Description>Post-Edit Compare</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
@@ -12,5 +12,7 @@
 		<File>PostEdit.Compare.WinFormsUI.Docking.dll</File>
 		<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
 		<File>Trados.Community.Toolkit.Core.dll</File>
+		<File>Microsoft.IO.RecyclableMemoryStream.dll</File>
+		<File>EPPlus.dll</File>
 	</Include>
 </PluginPackage>
