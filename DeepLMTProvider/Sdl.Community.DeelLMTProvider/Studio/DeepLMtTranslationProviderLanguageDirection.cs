@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Helpers;
@@ -167,7 +168,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 if (preTranslateList.Count > 0)
                 {
                     //Create temp file with translations
-                    var translatedSegments = PrepareTempData(preTranslateList).Result;
+                    var translatedSegments = PrepareTempData(preTranslateList);
                     var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
                     foreach (var result in preTranslateSearchResults)
@@ -282,7 +283,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return _connecter.Translate(_languageDirection, sourceText);
         }
 
-        private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
+        private List<PreTranslateSegment> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
         {
             try
             {
@@ -307,16 +308,21 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     }
                 }
 
-                await Task.Run(() => Parallel.ForEach(preTranslateSegments, segment =>
-                {
-                    if (segment != null)
-                    {
-                        segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText);
-                    }
-                })).ConfigureAwait(true);
+				string[] segmentTranslation = _connecter.Translate(
+					_languageDirection,
+					preTranslateSegments.Where(ps => ps != null).Select(ps => ps.SourceText));
 
-                return preTranslateSegments;
-            }
+				int translatedSegmentIndex = 0;
+				for (var i = 0; i < preTranslateSegments.Count; i++)
+				{
+					if (preTranslateSegments[i] != null)
+					{
+						preTranslateSegments[i].PlainTranslation = segmentTranslation[translatedSegmentIndex++];
+					}
+				}
+
+				return preTranslateSegments;
+			}
             catch (Exception e)
             {
                 _logger.Error($"{e.Message}\n {e.StackTrace}");
