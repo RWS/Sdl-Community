@@ -777,14 +777,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		}
 	}
 
-	[Action("ApplyStudioProjectTemplateHelpAction", Icon = "question", Name = "Apply Studio Project Template Help", Description = "An wiki page will be opened in browser uith user documentation")]
-	[ActionLayout(typeof(ApplyStudioProjectTemplateRibbonGroup), 10, DisplayType.Large)]
-	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
-	public class ApplyStudioProjectTemplateHelpAction : AbstractViewControllerAction<ProjectsController>
-	{
-		protected override void Execute()
-		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3157.apply-studio-project-template");
-		}
-	}
+	//[Action("ApplyStudioProjectTemplateHelpAction", Icon = "question", Name = "Apply Studio Project Template Help", Description = "An wiki page will be opened in browser uith user documentation")]
+	//[ActionLayout(typeof(ApplyStudioProjectTemplateRibbonGroup), 10, DisplayType.Large)]
+	//[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
+	//public class ApplyStudioProjectTemplateHelpAction : AbstractViewControllerAction<ProjectsController>
+	//{
+	//	protected override void Execute()
+	//	{
+	//		System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3157/apply-studio-project-template");
+	//	}
+	//}
 }
