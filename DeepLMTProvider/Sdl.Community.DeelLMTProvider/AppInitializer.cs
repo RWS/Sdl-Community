@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             Client.Timeout = TimeSpan.FromMinutes(5);
             var pluginVersion = GetPluginVersion();
-            Client.DefaultRequestHeaders.Add("Trace-ID", $"SDL Trados Studio 2021 /plugin {pluginVersion}");
+            Client.DefaultRequestHeaders.Add("Trace-ID", $"Trados Studio 2022 /plugin {pluginVersion}");
         }
 
         private static string GetPluginVersion()
