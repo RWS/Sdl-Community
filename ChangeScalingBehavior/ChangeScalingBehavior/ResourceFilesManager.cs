@@ -1,7 +1,7 @@
-﻿using Sdl.Community.Toolkit.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Trados.Community.Toolkit.Core;
 
 namespace ChangeScalingBehavior
 {
