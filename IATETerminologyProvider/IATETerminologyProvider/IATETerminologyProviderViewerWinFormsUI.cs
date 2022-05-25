@@ -2,12 +2,12 @@
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Service;
-using IATETerminologyProvider.Ui;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Service;
+using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider
+namespace Sdl.Community.IATETerminologyProvider
 {
 	[TerminologyProviderViewerWinFormsUI]
 	internal class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
-        Title="AutoHotKey Plugin" Height="500" Width="950">
+        Title="AutoHotKey Manager" Height="500" Width="950">
 	<Window.Resources>
 		<ResourceDictionary>
 			<DataTemplate DataType="{x:Type viewModels:ScriptsWindowViewModel}">

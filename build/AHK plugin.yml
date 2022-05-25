@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AHK plugin/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AHK plugin/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.AhkPlugin.sln'
+- name: pathToPublish
+  value: 'AHK plugin\Sdl.Community.AhkPlugin\bin\Release\Sdl.Community.AhkPlugin.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

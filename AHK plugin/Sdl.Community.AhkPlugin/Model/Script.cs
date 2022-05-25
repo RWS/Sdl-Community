@@ -9,6 +9,7 @@
 		private string _description;
 		private string _text;
 
+		public string FileName { get; set; }
 		public string ScriptId { get; set; }
 		public string Name { get; set; }
 		public string Description

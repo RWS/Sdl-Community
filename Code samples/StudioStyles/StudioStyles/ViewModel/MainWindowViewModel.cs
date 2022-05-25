@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using StudioStyles.Commands;
 using StudioStyles.Model;
 
@@ -12,6 +13,7 @@ namespace StudioStyles.ViewModel
 		private ObservableCollection<Plugin> _pluginsCollection;
 		private string _searchWatermarkText;
 		private string _searchText;
+		private string _secondText;
 		private string _uri;
 		private string _content;
 		private string _password;
@@ -20,28 +22,28 @@ namespace StudioStyles.ViewModel
 		private ICommand _windowLoadedCommand;
 		public MainWindowViewModel()
 		{
-			_searchWatermarkText = "Studio 2019 SR2";
+			_searchWatermarkText = "Trados Studio 2021";
 			_pluginsCollection = new ObservableCollection<Plugin>
 			{
 				new Plugin
 				{
-					PluginName = "Subtitling",
-					StudioVersion = "Studio 2019"
+					PluginName = "Studio Subtitling",
+					StudioVersion = "Trados Studio 2021"
 				},
 				new Plugin
 				{
 					PluginName = "IATE Real-time Terminology",
-					StudioVersion = "Studio 2017,2019"
+					StudioVersion = "Trados Studio 2021"
 				},
 				new Plugin
 				{
-					PluginName = "SDL BeGlobal (NMT)",
-					StudioVersion = "Studio 2015, 2017, 2019"
+					PluginName = "DSI Viewer",
+					StudioVersion = "Trados Studio 2021"
 				},
 				new Plugin
 				{
-					PluginName = "MT Comparison",
-					StudioVersion = "Studio 2017, 2019"
+					PluginName = "TransitPackage Handler",
+					StudioVersion = "Trados Studio 2019, 2021"
 				},
 			};
 			_uri = "https://google.com";
@@ -77,6 +79,17 @@ namespace StudioStyles.ViewModel
 				OnPropertyChanged(nameof(SearchText));
 			}
 		}
+
+		public string SecondText
+		{
+			get => _secondText;
+			set
+			{
+				_secondText = value;
+				OnPropertyChanged(nameof(SearchText));
+			}
+		}
+
 		public string Password
 		{
 			get => _password;
@@ -138,8 +151,8 @@ namespace StudioStyles.ViewModel
 
 		private void Clear()
 		{
-			SearchText = string.Empty;
-			SearchWatermarkText = "Studio 2019 SR2";
+			//SearchText = string.Empty;
+			//SearchWatermarkText = "Studio 2019 SR2";
 		}
 	}
 }

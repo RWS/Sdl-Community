@@ -1,43 +1,43 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Commands;
 using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.Interfaces;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Sdl.ProjectAutomation.Core;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
 	public class StarTransitMainWindowViewModel : BaseViewModel, IWindowActions
 	{
-		#region Private Fields
 		private ICommand _nextCommand;
 		private ICommand _backCommand;
 		private ICommand _createCommand;
 		private bool _canExecuteNext;
 		private bool _canExecuteBack;
 		private bool _canExecuteCreate;
-		private readonly PackageDetailsViewModel _packageDetailsViewModel;
-		private readonly PackageDetails _packageDetails;
 		private bool _isDetailsSelected;
 		private bool _isTmSelected;
 		private bool _isFinishSelected;
-		private readonly FinishViewModel _finishViewModel;
-		private readonly ProjectService _projectService;
 		private bool _active;
 		private bool _isEnabled;
-		private string _color;
 		private bool _hasTm;
+		private string _color;
+		private readonly PackageDetailsViewModel _packageDetailsViewModel;
+		private readonly PackageDetails _packageDetails;
+		private readonly FinishViewModel _finishViewModel;
+		private readonly ProjectService _projectService;
 		private readonly TranslationMemories _translationMemories;
 		private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
         private readonly IMessageBoxService _messageBoxService;
-		#endregion
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		#region Constructors
+		public IProject CreatedProject { get; set; }
+
 		public StarTransitMainWindowViewModel(
 			PackageDetailsViewModel packageDetailsViewModel,
 			PackageDetails packageDetails,
@@ -60,12 +60,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_finishViewModel = finishViewModel;
 			Color = "#FFB69476";
 			var helpers = new Shared.Utils.Helpers();
-			_projectService = new ProjectService(DefaultFileTypeManager.CreateInstance(true), helpers);
+			_projectService = new ProjectService(helpers);
 		}
-		#endregion
-
-		#region Public Properties
-
 		public bool DetailsSelected
 		{
 			get => _isDetailsSelected;
@@ -192,13 +188,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				OnPropertyChanged(nameof(Active));
 			}
 		}
-		#endregion
-
-		#region Actions
 		public Action CloseAction { get; set; }
-		#endregion
 
-		#region Commands
 		public ICommand NextCommand => _nextCommand ?? (_nextCommand = new CommandHandler(Next, true));
 
 		public ICommand BackCommand
@@ -216,110 +207,96 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 
 		public ICommand CreateCommand => _createCommand ?? (_createCommand = new CommandHandler(Create, true));
-		#endregion
 
-		#region Public Methods
 		public void Next()
 		{
-			try
-			{
-				var model = _packageDetailsViewModel.GetPackageModel();
-				_hasTm = false;
-				var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
+			var model = _packageDetailsViewModel.GetPackageModel();
+			_hasTm = false;
+			var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
 
-				if (isEmpty)
+			if (isEmpty)
+			{
+				foreach (var pair in model.LanguagePairs)
 				{
-					foreach (var pair in model.LanguagePairs)
+					if (pair.StarTranslationMemoryMetadatas.Count != 0)
 					{
-						if (pair.StarTranslationMemoryMetadatas.Count != 0)
-						{
-							_hasTm = true;
-						}
-					}//tm page is disabled
-					if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
-					{
-						DetailsSelected = false;
-						TmSelected = false;
-						FinishSelected = true;
-						CanExecuteBack = true;
-						CanExecuteNext = false;
-						_finishViewModel.Refresh();
-						CanExecuteCreate = true;
-						IsEnabled = false;
-						Color = "Gray";
-					}//tm page
-					else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
-					{
-						DetailsSelected = false;
-						TmSelected = true;
-						FinishSelected = false;
-						CanExecuteBack = true;
-						CanExecuteNext = true;
-						CanExecuteCreate = false;
-						IsEnabled = true;
-						Color = "#FF66290B";
-					}//finish page
-					else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
-					{
-						DetailsSelected = false;
-						CanExecuteNext = false;
-						CanExecuteCreate = true;
-						CanExecuteBack = true;
-						TmSelected = false;
-						IsEnabled = true;
-						FinishSelected = true;
-						_finishViewModel.Refresh();
-						Color = "#FFB69476";
+						_hasTm = true;
 					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"Next method: {ex.Message}\n {ex.StackTrace}");
-			}
-		}
+				} //tm page is disabled
 
-		public void Back()
-		{
-			try
-			{
-				if (DetailsSelected)
+				if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
 				{
-					CanExecuteBack = false;
-				}
-				else if (FinishSelected && _hasTm == false)
-				{
-					CanExecuteBack = false;
-					DetailsSelected = true;
+					DetailsSelected = false;
 					TmSelected = false;
-					CanExecuteNext = true;
-					FinishSelected = false;
-					CanExecuteCreate = false;
-				}
-				else if (FinishSelected && _hasTm)
+					FinishSelected = true;
+					CanExecuteBack = true;
+					CanExecuteNext = false;
+					_finishViewModel.Refresh();
+					CanExecuteCreate = true;
+					IsEnabled = false;
+					Color = "Gray";
+				} //tm page
+				else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
 				{
 					DetailsSelected = false;
 					TmSelected = true;
 					FinishSelected = false;
 					CanExecuteBack = true;
-					CanExecuteCreate = false;
 					CanExecuteNext = true;
+					CanExecuteCreate = false;
+					IsEnabled = true;
 					Color = "#FF66290B";
-				}
-				else if (TmSelected)
+				} //finish page
+				else if (_packageDetails.FieldsAreCompleted() && TmSelected &&
+				         _translationMemories.TmFieldIsCompleted())
 				{
-					DetailsSelected = true;
+					DetailsSelected = false;
+					CanExecuteNext = false;
+					CanExecuteCreate = true;
+					CanExecuteBack = true;
 					TmSelected = false;
-					FinishSelected = false;
-					CanExecuteBack = false;
-					CanExecuteCreate = false;
-					CanExecuteNext = true;
+					IsEnabled = true;
+					FinishSelected = true;
+					_finishViewModel.Refresh();
 					Color = "#FFB69476";
 				}
 			}
-			catch (Exception ex)
+		}
+
+		public void Back()
+		{
+			if (DetailsSelected)
 			{
-				Log.Logger.Error($"Back method: {ex.Message}\n {ex.StackTrace}");
+				CanExecuteBack = false;
+			}
+			else if (FinishSelected && _hasTm == false)
+			{
+				CanExecuteBack = false;
+				DetailsSelected = true;
+				TmSelected = false;
+				CanExecuteNext = true;
+				FinishSelected = false;
+				CanExecuteCreate = false;
+			}
+			else if (FinishSelected && _hasTm)
+			{
+				DetailsSelected = false;
+				TmSelected = true;
+				FinishSelected = false;
+				CanExecuteBack = true;
+				CanExecuteCreate = false;
+				CanExecuteNext = true;
+				Color = "#FF66290B";
+			}
+			else if (TmSelected)
+			{
+				DetailsSelected = true;
+				TmSelected = false;
+				FinishSelected = false;
+				CanExecuteBack = false;
+				CanExecuteCreate = false;
+				CanExecuteNext = true;
+				Color = "#FFB69476";
 			}
 		}
 
@@ -332,41 +309,34 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				var packageModel = _translationMemoriesViewModel.GetPackageModel();
 				var isEmpty = IsFolderEmpty(packageModel?.Location);
 				var messageModel = new MessageModel();
-
 				CloseAction();
-
 				if (isEmpty)
 				{
-					await Task.Run(() => messageModel = _projectService.CreateProject(packageModel));
+					//await Task.Run(() => (messageModel, CreatedProject) = _projectService.CreateProject(packageModel));
 				}
 				if (messageModel == null)
 				{
 					CanExecuteBack = CanExecuteCreate = false;
 					Active = false;
 					CloseAction();
-					Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 				}
 				else
 				{
-                    _messageBoxService.ShowInformationMessage(messageModel.Message, messageModel.Title);
 					Active = false;
 					CanExecuteBack = CanExecuteCreate = false;
+					_messageBoxService.ShowInformationResultMessage(messageModel.Message, messageModel.Title);
+					CloseAction.Invoke(); // close window
 				}
-				Helpers.Utils.DeleteFolder(packageModel?.PathToPrjFile);
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"Create method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
-		#endregion
 
-		#region Private Methods
 		/// <summary>
 		/// Check to see if the folder is empty, in case the user just paste the path in text box
 		/// </summary>
-		/// <param name="folderPath"></param>
-		/// <returns></returns>
 		private bool IsFolderEmpty(string folderPath)
 		{
 			if(string.IsNullOrEmpty(folderPath))
@@ -374,13 +344,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 _messageBoxService.ShowWarningMessage("All fields are required!", "Warning");
 				return false;
 			}
-			if (!Helpers.Utils.IsFolderEmpty(folderPath))
-			{
-                _messageBoxService.ShowWarningMessage("Please select an empty folder", "Folder not empty!");
-				return false;
-			}
-			return true;
+
+			if (Helpers.Utils.IsFolderEmpty(folderPath)) return true;
+			_messageBoxService.ShowWarningMessage("Please select an empty folder", "Folder not empty!");
+			return false;
 		}
-		#endregion
 	}
 }

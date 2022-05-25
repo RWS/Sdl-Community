@@ -1,37 +1,39 @@
 ﻿using System;
 using System.IO;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class PathInfo
 	{
-		private const string SdlCommunityPathName = "SDL Community";
+		private const string RWSAppStorePathName = "RWS AppStore";
 		private const string ApplicationPathName = "IATETerminologyProvider";
 		private const string TemporaryStoragePathName = "TemporaryStorage";
+		private const string DbaseCachePathName = "Cache";
 		private const string SettingsFileName = "IATETerminology.json";
 		
-		private string _sdlCommunityFullPath;
+		private string _rwsAppStoreFullPath;
 		private string _applicationFullPath;
-		private string _temporaryStorageFullPath;		
+		private string _temporaryStorageFullPath;
+		private string _dbaseCacheFullPath;
 
-		public string SdlCommunityFullPath
+		public string RWSAppStoreFullPath
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(_sdlCommunityFullPath))
+				if (!string.IsNullOrEmpty(_rwsAppStoreFullPath))
 				{
-					return _sdlCommunityFullPath;
+					return _rwsAppStoreFullPath;
 				}
 
-				_sdlCommunityFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					SdlCommunityPathName);
+				_rwsAppStoreFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					RWSAppStorePathName);
 
-				if (!Directory.Exists(_sdlCommunityFullPath))
+				if (!Directory.Exists(_rwsAppStoreFullPath))
 				{
-					Directory.CreateDirectory(_sdlCommunityFullPath);
+					Directory.CreateDirectory(_rwsAppStoreFullPath);
 				}
 
-				return _sdlCommunityFullPath;
+				return _rwsAppStoreFullPath;
 			}
 		}
 
@@ -44,7 +46,7 @@ namespace IATETerminologyProvider.Model
 					return _applicationFullPath;
 				}
 
-				_applicationFullPath = Path.Combine(SdlCommunityFullPath, ApplicationPathName);
+				_applicationFullPath = Path.Combine(RWSAppStoreFullPath, ApplicationPathName);
 				if (!Directory.Exists(_applicationFullPath))
 				{
 					Directory.CreateDirectory(_applicationFullPath);
@@ -53,6 +55,7 @@ namespace IATETerminologyProvider.Model
 				return _applicationFullPath;
 			}
 		}
+		
 		public string TemporaryStorageFullPath
 		{
 			get
@@ -71,7 +74,26 @@ namespace IATETerminologyProvider.Model
 				return _temporaryStorageFullPath;
 			}
 		}
-	
+
+		public string DbaseCacheFullPath
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(_dbaseCacheFullPath))
+				{
+					return _dbaseCacheFullPath;
+				}
+
+				_dbaseCacheFullPath = Path.Combine(ApplicationFullPath, DbaseCachePathName);
+				if (!Directory.Exists(_dbaseCacheFullPath))
+				{
+					Directory.CreateDirectory(_dbaseCacheFullPath);
+				}
+
+				return _dbaseCacheFullPath;
+			}
+		}
+
 		public string SettingsFilePath => Path.Combine(ApplicationFullPath, SettingsFileName);
 	}
 }

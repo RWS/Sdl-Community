@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class TermTypeModel : ViewModelBase
     {
@@ -11,7 +11,7 @@
 			set
 			{
 				_isSelected = value;
-				OnPropertyChanged(nameof(IsSelected));
+				OnPropertyChanged();
 			}
 		}
 	}

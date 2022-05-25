@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.AntidoteVerifier.Utils
 {
@@ -16,9 +14,9 @@ namespace Sdl.Community.AntidoteVerifier.Utils
             _ids = new Dictionary<Guid, int>();
         }
 
-        public static DocumentIdGenerator Instance { get { return lazy.Value; } }
+        public static DocumentIdGenerator Instance => lazy.Value;
 
-        public int GetDocumentId(Guid id)
+	    public int GetDocumentId(Guid id)
         {
             if (_ids.ContainsKey(id))
             {

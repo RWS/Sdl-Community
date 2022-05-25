@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Qualitivity</PlugInName>
-	<Version>3.1.4.0</Version>
-	<Description>Qualitivity </Description>
-	<Author>SDL Community Developers</Author>
+	<Version>5.1.5.1</Version>
+	<Description>Qualitivity</Description>
+	<Author>Trados AppStore Team</Author>
 	<Include>
 		<File>Sdl.Community.Qualitivity.Comparison.dll</File>
 		<File>Sdl.Community.Qualitivity.Hooks.dll</File>
@@ -12,10 +11,10 @@
 		<File>Sdl.Community.Qualitivity.Report.dll</File>
 		<File>Sdl.Community.Qualitivity.TM.dll</File>
 		<File>Sdl.Community.Qualitivity.WPFListView.dll</File>
-		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
-		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
+		<File>Trados.Community.Toolkit.Core.dll</File>
 		<File>Qualitivity.ObjectListView.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>
-	<RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0"/>
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>

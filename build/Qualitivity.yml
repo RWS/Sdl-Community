@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Qualitivity/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Qualitivity/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.Qualitivity.sln'
+- name: pathToPublish
+  value: 'Qualitivity\Sdl.Community.Qualitivity\bin\Release\Sdl.Community.Qualitivity.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - CopyTags/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - CopyTags/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.SDLCopyTags.sln'
+  pathToPublish: 'CopyTags\CopyTags\bin\Release\SDLCopyTags.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

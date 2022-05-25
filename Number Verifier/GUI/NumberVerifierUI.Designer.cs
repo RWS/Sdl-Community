@@ -31,7 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.panelNumberVerifierUI = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cb_Hindi = new System.Windows.Forms.CheckBox();
+            this.cb_InOrder = new System.Windows.Forms.CheckBox();
+            this.combo_NumberFormatErrorType = new System.Windows.Forms.ComboBox();
+            this.cb_ReportNumberFormatErrors = new System.Windows.Forms.CheckBox();
+            this.targetMisBox = new System.Windows.Forms.GroupBox();
+            this.targetOmitLeadingZeroLabel = new System.Windows.Forms.Label();
+            this.targetOmitZero = new System.Windows.Forms.CheckBox();
+            this.sourceMisBox = new System.Windows.Forms.GroupBox();
+            this.sourceOmitLeadingZeroLabel = new System.Windows.Forms.Label();
+            this.sourceOmitZero = new System.Windows.Forms.CheckBox();
             this.tb_customsSeparators = new System.Windows.Forms.TextBox();
             this.cb_customSeparators = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -50,26 +58,48 @@
             this.rb_RequireLocalizations = new System.Windows.Forms.RadioButton();
             this.rb_AllowLocalizations = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.ttlabel8 = new System.Windows.Forms.Label();
             this.customTBox = new System.Windows.Forms.TextBox();
-            this.targetTbox = new System.Windows.Forms.CheckBox();
+            this.ttlabel7 = new System.Windows.Forms.Label();
+            this.targetTBox = new System.Windows.Forms.CheckBox();
+            this.ttlabel6 = new System.Windows.Forms.Label();
             this.cb_TargetNoSeparator = new System.Windows.Forms.CheckBox();
+            this.ttlabel5 = new System.Windows.Forms.Label();
             this.cb_TargetThousandsPeriod = new System.Windows.Forms.CheckBox();
+            this.ttlabel4 = new System.Windows.Forms.Label();
             this.cb_TargetThousandsComma = new System.Windows.Forms.CheckBox();
+            this.ttlabel3 = new System.Windows.Forms.Label();
+            this.ttlabel1 = new System.Windows.Forms.Label();
             this.cb_TargetThousandsNobreakThinSpace = new System.Windows.Forms.CheckBox();
+            this.ttlabel2 = new System.Windows.Forms.Label();
             this.cb_TargetThousandsThinSpace = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsNobreakSpace = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsSpace = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tdlabel1 = new System.Windows.Forms.Label();
+            this.tdlabel3 = new System.Windows.Forms.Label();
             this.targetDBox = new System.Windows.Forms.TextBox();
-            this.customTargetSep = new System.Windows.Forms.CheckBox();
+            this.tdlabel2 = new System.Windows.Forms.Label();
+            this.customTargetDSep = new System.Windows.Forms.CheckBox();
             this.cb_TargetDecimalPeriod = new System.Windows.Forms.CheckBox();
             this.cb_TargetDecimalComma = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.dlabel1 = new System.Windows.Forms.Label();
+            this.dlabel3 = new System.Windows.Forms.Label();
+            this.dlabel2 = new System.Windows.Forms.Label();
             this.sourceDBox = new System.Windows.Forms.TextBox();
             this.customDSep = new System.Windows.Forms.CheckBox();
             this.cb_SourceDecimalPeriod = new System.Windows.Forms.CheckBox();
             this.cb_SourceDecimalComma = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tLabel8 = new System.Windows.Forms.Label();
+            this.tLabel7 = new System.Windows.Forms.Label();
+            this.tLabel6 = new System.Windows.Forms.Label();
+            this.tLabel5 = new System.Windows.Forms.Label();
+            this.tLabel4 = new System.Windows.Forms.Label();
+            this.tLabel3 = new System.Windows.Forms.Label();
+            this.tLabel1 = new System.Windows.Forms.Label();
+            this.tLabel2 = new System.Windows.Forms.Label();
             this.sourceTBox = new System.Windows.Forms.TextBox();
             this.customTSep = new System.Windows.Forms.CheckBox();
             this.cb_SourceNoSeparator = new System.Windows.Forms.CheckBox();
@@ -87,13 +117,12 @@
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.sourceMisBox = new System.Windows.Forms.GroupBox();
-            this.sourceOmitZero = new System.Windows.Forms.CheckBox();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.targetMisBox = new System.Windows.Forms.GroupBox();
-            this.targetOmitZero = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.targetMisBox.SuspendLayout();
+            this.sourceMisBox.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -101,8 +130,6 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.sourceMisBox.SuspendLayout();
-            this.targetMisBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelNumberVerifierUI
@@ -113,12 +140,16 @@
             this.panelNumberVerifierUI.Controls.Add(this.groupBox1);
             this.panelNumberVerifierUI.Location = new System.Drawing.Point(0, 0);
             this.panelNumberVerifierUI.Name = "panelNumberVerifierUI";
-            this.panelNumberVerifierUI.Size = new System.Drawing.Size(565, 687);
+            this.panelNumberVerifierUI.Size = new System.Drawing.Size(628, 785);
             this.panelNumberVerifierUI.TabIndex = 1;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cb_Hindi);
+            this.groupBox1.Controls.Add(this.cb_InOrder);
+            this.groupBox1.Controls.Add(this.combo_NumberFormatErrorType);
+            this.groupBox1.Controls.Add(this.cb_ReportNumberFormatErrors);
+            this.groupBox1.Controls.Add(this.targetMisBox);
+            this.groupBox1.Controls.Add(this.sourceMisBox);
             this.groupBox1.Controls.Add(this.tb_customsSeparators);
             this.groupBox1.Controls.Add(this.cb_customSeparators);
             this.groupBox1.Controls.Add(this.groupBox8);
@@ -140,26 +171,121 @@
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.MinimumSize = new System.Drawing.Size(0, 750);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(565, 750);
+            this.groupBox1.Size = new System.Drawing.Size(628, 785);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Number Verifier";
             // 
-            // cb_Hindi
+            // cb_InOrder
             // 
-            this.cb_Hindi.AutoSize = true;
-            this.cb_Hindi.Location = new System.Drawing.Point(16, 112);
-            this.cb_Hindi.Name = "cb_Hindi";
-            this.cb_Hindi.Size = new System.Drawing.Size(142, 17);
-            this.cb_Hindi.TabIndex = 40;
-            this.cb_Hindi.Text = "Check for Hindi numbers";
-            this.cb_Hindi.UseVisualStyleBackColor = true;
+            this.cb_InOrder.AutoSize = true;
+            this.cb_InOrder.Checked = true;
+            this.cb_InOrder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_InOrder.Location = new System.Drawing.Point(16, 136);
+            this.cb_InOrder.Name = "cb_InOrder";
+            this.cb_InOrder.Size = new System.Drawing.Size(277, 17);
+            this.cb_InOrder.TabIndex = 43;
+            this.cb_InOrder.Text = "Consider the order of the numbers in the segment pair";
+            this.cb_InOrder.UseVisualStyleBackColor = true;
+            // 
+            // combo_NumberFormatErrorType
+            // 
+            this.combo_NumberFormatErrorType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combo_NumberFormatErrorType.FormattingEnabled = true;
+            this.combo_NumberFormatErrorType.Items.AddRange(new object[] {
+            "Error",
+            "Warning",
+            "Note"});
+            this.combo_NumberFormatErrorType.Location = new System.Drawing.Point(219, 111);
+            this.combo_NumberFormatErrorType.Name = "combo_NumberFormatErrorType";
+            this.combo_NumberFormatErrorType.Size = new System.Drawing.Size(81, 21);
+            this.combo_NumberFormatErrorType.TabIndex = 42;
+            // 
+            // cb_ReportNumberFormatErrors
+            // 
+            this.cb_ReportNumberFormatErrors.AutoSize = true;
+            this.cb_ReportNumberFormatErrors.Checked = true;
+            this.cb_ReportNumberFormatErrors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_ReportNumberFormatErrors.Location = new System.Drawing.Point(16, 113);
+            this.cb_ReportNumberFormatErrors.Name = "cb_ReportNumberFormatErrors";
+            this.cb_ReportNumberFormatErrors.Size = new System.Drawing.Size(157, 17);
+            this.cb_ReportNumberFormatErrors.TabIndex = 41;
+            this.cb_ReportNumberFormatErrors.Text = "Report number format errors";
+            this.cb_ReportNumberFormatErrors.UseVisualStyleBackColor = true;
+            // 
+            // targetMisBox
+            // 
+            this.targetMisBox.Controls.Add(this.targetOmitLeadingZeroLabel);
+            this.targetMisBox.Controls.Add(this.targetOmitZero);
+            this.targetMisBox.Location = new System.Drawing.Point(317, 722);
+            this.targetMisBox.Name = "targetMisBox";
+            this.targetMisBox.Size = new System.Drawing.Size(295, 57);
+            this.targetMisBox.TabIndex = 3;
+            this.targetMisBox.TabStop = false;
+            this.targetMisBox.Text = "Target miscellaneous";
+            // 
+            // targetOmitLeadingZeroLabel
+            // 
+            this.targetOmitLeadingZeroLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.targetOmitLeadingZeroLabel.AutoSize = true;
+            this.targetOmitLeadingZeroLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.targetOmitLeadingZeroLabel.ForeColor = System.Drawing.Color.Blue;
+            this.targetOmitLeadingZeroLabel.Location = new System.Drawing.Point(181, 22);
+            this.targetOmitLeadingZeroLabel.Name = "targetOmitLeadingZeroLabel";
+            this.targetOmitLeadingZeroLabel.Size = new System.Drawing.Size(28, 13);
+            this.targetOmitLeadingZeroLabel.TabIndex = 40;
+            this.targetOmitLeadingZeroLabel.Text = "0,25";
+            // 
+            // targetOmitZero
+            // 
+            this.targetOmitZero.AutoSize = true;
+            this.targetOmitZero.Location = new System.Drawing.Point(19, 20);
+            this.targetOmitZero.Name = "targetOmitZero";
+            this.targetOmitZero.Size = new System.Drawing.Size(107, 17);
+            this.targetOmitZero.TabIndex = 0;
+            this.targetOmitZero.Text = "Omit leading zero";
+            this.targetOmitZero.UseVisualStyleBackColor = true;
+            this.targetOmitZero.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            // 
+            // sourceMisBox
+            // 
+            this.sourceMisBox.Controls.Add(this.sourceOmitLeadingZeroLabel);
+            this.sourceMisBox.Controls.Add(this.sourceOmitZero);
+            this.sourceMisBox.Location = new System.Drawing.Point(16, 722);
+            this.sourceMisBox.Name = "sourceMisBox";
+            this.sourceMisBox.Size = new System.Drawing.Size(295, 57);
+            this.sourceMisBox.TabIndex = 2;
+            this.sourceMisBox.TabStop = false;
+            this.sourceMisBox.Text = "Source miscellaneous";
+            // 
+            // sourceOmitLeadingZeroLabel
+            // 
+            this.sourceOmitLeadingZeroLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sourceOmitLeadingZeroLabel.AutoSize = true;
+            this.sourceOmitLeadingZeroLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.sourceOmitLeadingZeroLabel.ForeColor = System.Drawing.Color.Blue;
+            this.sourceOmitLeadingZeroLabel.Location = new System.Drawing.Point(183, 22);
+            this.sourceOmitLeadingZeroLabel.Name = "sourceOmitLeadingZeroLabel";
+            this.sourceOmitLeadingZeroLabel.Size = new System.Drawing.Size(28, 13);
+            this.sourceOmitLeadingZeroLabel.TabIndex = 39;
+            this.sourceOmitLeadingZeroLabel.Text = "0,25";
+            // 
+            // sourceOmitZero
+            // 
+            this.sourceOmitZero.AutoSize = true;
+            this.sourceOmitZero.Location = new System.Drawing.Point(17, 20);
+            this.sourceOmitZero.Name = "sourceOmitZero";
+            this.sourceOmitZero.Size = new System.Drawing.Size(107, 17);
+            this.sourceOmitZero.TabIndex = 0;
+            this.sourceOmitZero.Text = "Omit leading zero";
+            this.sourceOmitZero.UseVisualStyleBackColor = true;
+            this.sourceOmitZero.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // tb_customsSeparators
             // 
-            this.tb_customsSeparators.Location = new System.Drawing.Point(16, 158);
+            this.tb_customsSeparators.Location = new System.Drawing.Point(16, 183);
             this.tb_customsSeparators.Name = "tb_customsSeparators";
-            this.tb_customsSeparators.Size = new System.Drawing.Size(398, 20);
+            this.tb_customsSeparators.Size = new System.Drawing.Size(596, 20);
             this.tb_customsSeparators.TabIndex = 39;
             // 
             // cb_customSeparators
@@ -167,14 +293,13 @@
             this.cb_customSeparators.AutoSize = true;
             this.cb_customSeparators.Checked = true;
             this.cb_customSeparators.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_customSeparators.Location = new System.Drawing.Point(16, 135);
+            this.cb_customSeparators.Location = new System.Drawing.Point(16, 160);
             this.cb_customSeparators.Name = "cb_customSeparators";
             this.cb_customSeparators.Size = new System.Drawing.Size(179, 17);
             this.cb_customSeparators.TabIndex = 38;
             this.cb_customSeparators.Text = "Alphanumeric custom separators";
             this.toolTip1.SetToolTip(this.cb_customSeparators, "Select this to to allow custom separators in alphanumerics verification");
             this.cb_customSeparators.UseVisualStyleBackColor = true;
-            this.cb_customSeparators.CheckedChanged += new System.EventHandler(this.cb_customSeparators_CheckedChanged);
             // 
             // groupBox8
             // 
@@ -182,7 +307,7 @@
             this.groupBox8.Controls.Add(this.rb_ReportBriefMessages);
             this.groupBox8.Location = new System.Drawing.Point(322, 15);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(93, 98);
+            this.groupBox8.Size = new System.Drawing.Size(290, 115);
             this.groupBox8.TabIndex = 37;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Messages";
@@ -230,7 +355,7 @@
             this.cb_ReportModifiedAlphanumerics.AutoSize = true;
             this.cb_ReportModifiedAlphanumerics.Checked = true;
             this.cb_ReportModifiedAlphanumerics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportModifiedAlphanumerics.Location = new System.Drawing.Point(16, 88);
+            this.cb_ReportModifiedAlphanumerics.Location = new System.Drawing.Point(16, 90);
             this.cb_ReportModifiedAlphanumerics.Name = "cb_ReportModifiedAlphanumerics";
             this.cb_ReportModifiedAlphanumerics.Size = new System.Drawing.Size(171, 17);
             this.cb_ReportModifiedAlphanumerics.TabIndex = 9;
@@ -241,14 +366,15 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.button1);
             this.groupBox7.Controls.Add(this.draftCheck);
             this.groupBox7.Controls.Add(this.untranslatedCheck);
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
-            this.groupBox7.Location = new System.Drawing.Point(16, 195);
+            this.groupBox7.Location = new System.Drawing.Point(16, 214);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(191, 135);
+            this.groupBox7.Size = new System.Drawing.Size(295, 135);
             this.groupBox7.TabIndex = 11;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "&Exclude";
@@ -256,7 +382,7 @@
             // draftCheck
             // 
             this.draftCheck.AutoSize = true;
-            this.draftCheck.Location = new System.Drawing.Point(17, 111);
+            this.draftCheck.Location = new System.Drawing.Point(18, 111);
             this.draftCheck.Name = "draftCheck";
             this.draftCheck.Size = new System.Drawing.Size(136, 17);
             this.draftCheck.TabIndex = 16;
@@ -312,9 +438,9 @@
             this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
             this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-            this.groupBox2.Location = new System.Drawing.Point(213, 195);
+            this.groupBox2.Location = new System.Drawing.Point(317, 214);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(202, 137);
+            this.groupBox2.Size = new System.Drawing.Size(295, 135);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "&Localizations";
@@ -360,23 +486,43 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.ttlabel8);
             this.groupBox6.Controls.Add(this.customTBox);
-            this.groupBox6.Controls.Add(this.targetTbox);
+            this.groupBox6.Controls.Add(this.ttlabel7);
+            this.groupBox6.Controls.Add(this.targetTBox);
+            this.groupBox6.Controls.Add(this.ttlabel6);
             this.groupBox6.Controls.Add(this.cb_TargetNoSeparator);
+            this.groupBox6.Controls.Add(this.ttlabel5);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsPeriod);
+            this.groupBox6.Controls.Add(this.ttlabel4);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsComma);
+            this.groupBox6.Controls.Add(this.ttlabel3);
+            this.groupBox6.Controls.Add(this.ttlabel1);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakThinSpace);
+            this.groupBox6.Controls.Add(this.ttlabel2);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsThinSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
-            this.groupBox6.Location = new System.Drawing.Point(224, 338);
+            this.groupBox6.Location = new System.Drawing.Point(317, 355);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(190, 233);
+            this.groupBox6.Size = new System.Drawing.Size(295, 235);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "&Target thousands separators";
             this.toolTip1.SetToolTip(this.groupBox6, "Select all separators that should be considered thousands separators\r\nwhen they a" +
         "ppear in a place which is appropriate for a thousands separator.");
+            // 
+            // ttlabel8
+            // 
+            this.ttlabel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel8.AutoSize = true;
+            this.ttlabel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel8.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel8.Location = new System.Drawing.Point(181, 183);
+            this.ttlabel8.Name = "ttlabel8";
+            this.ttlabel8.Size = new System.Drawing.Size(55, 13);
+            this.ttlabel8.TabIndex = 42;
+            this.ttlabel8.Text = "1-000-300";
             // 
             // customTBox
             // 
@@ -384,16 +530,42 @@
             this.customTBox.Name = "customTBox";
             this.customTBox.Size = new System.Drawing.Size(100, 20);
             this.customTBox.TabIndex = 34;
+            this.customTBox.TextChanged += new System.EventHandler(this.TBox_TextChanged);
             // 
-            // targetTbox
+            // ttlabel7
             // 
-            this.targetTbox.AutoSize = true;
-            this.targetTbox.Location = new System.Drawing.Point(20, 181);
-            this.targetTbox.Name = "targetTbox";
-            this.targetTbox.Size = new System.Drawing.Size(108, 17);
-            this.targetTbox.TabIndex = 33;
-            this.targetTbox.Text = "Custom separator";
-            this.targetTbox.UseVisualStyleBackColor = true;
+            this.ttlabel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel7.AutoSize = true;
+            this.ttlabel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel7.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel7.Location = new System.Drawing.Point(181, 159);
+            this.ttlabel7.Name = "ttlabel7";
+            this.ttlabel7.Size = new System.Drawing.Size(49, 13);
+            this.ttlabel7.TabIndex = 41;
+            this.ttlabel7.Text = "1000300";
+            // 
+            // targetTBox
+            // 
+            this.targetTBox.AutoSize = true;
+            this.targetTBox.Location = new System.Drawing.Point(20, 181);
+            this.targetTBox.Name = "targetTBox";
+            this.targetTBox.Size = new System.Drawing.Size(108, 17);
+            this.targetTBox.TabIndex = 33;
+            this.targetTBox.Text = "Custom separator";
+            this.targetTBox.UseVisualStyleBackColor = true;
+            this.targetTBox.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            // 
+            // ttlabel6
+            // 
+            this.ttlabel6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel6.AutoSize = true;
+            this.ttlabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel6.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel6.Location = new System.Drawing.Point(181, 136);
+            this.ttlabel6.Name = "ttlabel6";
+            this.ttlabel6.Size = new System.Drawing.Size(55, 13);
+            this.ttlabel6.TabIndex = 40;
+            this.ttlabel6.Text = "1.000.300";
             // 
             // cb_TargetNoSeparator
             // 
@@ -406,6 +578,19 @@
             this.cb_TargetNoSeparator.TabIndex = 27;
             this.cb_TargetNoSeparator.Text = "No Separator";
             this.cb_TargetNoSeparator.UseVisualStyleBackColor = true;
+            this.cb_TargetNoSeparator.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            // 
+            // ttlabel5
+            // 
+            this.ttlabel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel5.AutoSize = true;
+            this.ttlabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel5.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel5.Location = new System.Drawing.Point(181, 113);
+            this.ttlabel5.Name = "ttlabel5";
+            this.ttlabel5.Size = new System.Drawing.Size(55, 13);
+            this.ttlabel5.TabIndex = 39;
+            this.ttlabel5.Text = "1,000,300";
             // 
             // cb_TargetThousandsPeriod
             // 
@@ -418,6 +603,19 @@
             this.cb_TargetThousandsPeriod.TabIndex = 32;
             this.cb_TargetThousandsPeriod.Text = "Period";
             this.cb_TargetThousandsPeriod.UseVisualStyleBackColor = true;
+            this.cb_TargetThousandsPeriod.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            // 
+            // ttlabel4
+            // 
+            this.ttlabel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel4.AutoSize = true;
+            this.ttlabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel4.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel4.Location = new System.Drawing.Point(181, 90);
+            this.ttlabel4.Name = "ttlabel4";
+            this.ttlabel4.Size = new System.Drawing.Size(51, 13);
+            this.ttlabel4.TabIndex = 38;
+            this.ttlabel4.Text = "1 000 300";
             // 
             // cb_TargetThousandsComma
             // 
@@ -430,6 +628,32 @@
             this.cb_TargetThousandsComma.TabIndex = 31;
             this.cb_TargetThousandsComma.Text = "Comma";
             this.cb_TargetThousandsComma.UseVisualStyleBackColor = true;
+            this.cb_TargetThousandsComma.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            // 
+            // ttlabel3
+            // 
+            this.ttlabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel3.AutoSize = true;
+            this.ttlabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel3.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel3.Location = new System.Drawing.Point(181, 67);
+            this.ttlabel3.Name = "ttlabel3";
+            this.ttlabel3.Size = new System.Drawing.Size(53, 13);
+            this.ttlabel3.TabIndex = 37;
+            this.ttlabel3.Text = "1 000 300";
+            // 
+            // ttlabel1
+            // 
+            this.ttlabel1.AccessibleName = "";
+            this.ttlabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel1.AutoSize = true;
+            this.ttlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel1.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel1.Location = new System.Drawing.Point(181, 21);
+            this.ttlabel1.Name = "ttlabel1";
+            this.ttlabel1.Size = new System.Drawing.Size(55, 13);
+            this.ttlabel1.TabIndex = 35;
+            this.ttlabel1.Text = "1 000 300";
             // 
             // cb_TargetThousandsNobreakThinSpace
             // 
@@ -442,6 +666,20 @@
             this.cb_TargetThousandsNobreakThinSpace.TabIndex = 30;
             this.cb_TargetThousandsNobreakThinSpace.Text = "Narrow no-break space";
             this.cb_TargetThousandsNobreakThinSpace.UseVisualStyleBackColor = true;
+            this.cb_TargetThousandsNobreakThinSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            // 
+            // ttlabel2
+            // 
+            this.ttlabel2.AccessibleName = "";
+            this.ttlabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ttlabel2.AutoSize = true;
+            this.ttlabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ttlabel2.ForeColor = System.Drawing.Color.Blue;
+            this.ttlabel2.Location = new System.Drawing.Point(181, 44);
+            this.ttlabel2.Name = "ttlabel2";
+            this.ttlabel2.Size = new System.Drawing.Size(55, 13);
+            this.ttlabel2.TabIndex = 36;
+            this.ttlabel2.Text = "1 000 300";
             // 
             // cb_TargetThousandsThinSpace
             // 
@@ -454,6 +692,7 @@
             this.cb_TargetThousandsThinSpace.TabIndex = 29;
             this.cb_TargetThousandsThinSpace.Text = "Thin space";
             this.cb_TargetThousandsThinSpace.UseVisualStyleBackColor = true;
+            this.cb_TargetThousandsThinSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_TargetThousandsNobreakSpace
             // 
@@ -466,6 +705,7 @@
             this.cb_TargetThousandsNobreakSpace.TabIndex = 28;
             this.cb_TargetThousandsNobreakSpace.Text = "No-break space";
             this.cb_TargetThousandsNobreakSpace.UseVisualStyleBackColor = true;
+            this.cb_TargetThousandsNobreakSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_TargetThousandsSpace
             // 
@@ -478,21 +718,49 @@
             this.cb_TargetThousandsSpace.TabIndex = 27;
             this.cb_TargetThousandsSpace.Text = "Space";
             this.cb_TargetThousandsSpace.UseVisualStyleBackColor = true;
+            this.cb_TargetThousandsSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.tdlabel1);
+            this.groupBox5.Controls.Add(this.tdlabel3);
             this.groupBox5.Controls.Add(this.targetDBox);
-            this.groupBox5.Controls.Add(this.customTargetSep);
+            this.groupBox5.Controls.Add(this.tdlabel2);
+            this.groupBox5.Controls.Add(this.customTargetDSep);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-            this.groupBox5.Location = new System.Drawing.Point(224, 577);
+            this.groupBox5.Location = new System.Drawing.Point(317, 596);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(190, 119);
+            this.groupBox5.Size = new System.Drawing.Size(295, 120);
             this.groupBox5.TabIndex = 36;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Target &decimal separators";
             this.toolTip1.SetToolTip(this.groupBox5, "Select all separators that should be considered decimal separators\r\nwhen they app" +
         "ear in a place which is appropriate for a decimal separator.");
+            // 
+            // tdlabel1
+            // 
+            this.tdlabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tdlabel1.AutoSize = true;
+            this.tdlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tdlabel1.ForeColor = System.Drawing.Color.Blue;
+            this.tdlabel1.Location = new System.Drawing.Point(181, 21);
+            this.tdlabel1.Name = "tdlabel1";
+            this.tdlabel1.Size = new System.Drawing.Size(28, 13);
+            this.tdlabel1.TabIndex = 39;
+            this.tdlabel1.Text = "1,25";
+            // 
+            // tdlabel3
+            // 
+            this.tdlabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tdlabel3.AutoSize = true;
+            this.tdlabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tdlabel3.ForeColor = System.Drawing.Color.Blue;
+            this.tdlabel3.Location = new System.Drawing.Point(181, 63);
+            this.tdlabel3.Name = "tdlabel3";
+            this.tdlabel3.Size = new System.Drawing.Size(28, 13);
+            this.tdlabel3.TabIndex = 41;
+            this.tdlabel3.Text = "1-25";
             // 
             // targetDBox
             // 
@@ -500,55 +768,110 @@
             this.targetDBox.Name = "targetDBox";
             this.targetDBox.Size = new System.Drawing.Size(100, 20);
             this.targetDBox.TabIndex = 40;
+            this.targetDBox.TextChanged += new System.EventHandler(this.TBox_TextChanged);
             // 
-            // customTargetSep
+            // tdlabel2
             // 
-            this.customTargetSep.AutoSize = true;
-            this.customTargetSep.Location = new System.Drawing.Point(19, 61);
-            this.customTargetSep.Name = "customTargetSep";
-            this.customTargetSep.Size = new System.Drawing.Size(108, 17);
-            this.customTargetSep.TabIndex = 39;
-            this.customTargetSep.Text = "Custom separator";
-            this.customTargetSep.UseVisualStyleBackColor = true;
+            this.tdlabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tdlabel2.AutoSize = true;
+            this.tdlabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tdlabel2.ForeColor = System.Drawing.Color.Blue;
+            this.tdlabel2.Location = new System.Drawing.Point(181, 43);
+            this.tdlabel2.Name = "tdlabel2";
+            this.tdlabel2.Size = new System.Drawing.Size(28, 13);
+            this.tdlabel2.TabIndex = 40;
+            this.tdlabel2.Text = "1.25";
+            // 
+            // customTargetDSep
+            // 
+            this.customTargetDSep.AutoSize = true;
+            this.customTargetDSep.Location = new System.Drawing.Point(19, 61);
+            this.customTargetDSep.Name = "customTargetDSep";
+            this.customTargetDSep.Size = new System.Drawing.Size(108, 17);
+            this.customTargetDSep.TabIndex = 39;
+            this.customTargetDSep.Text = "Custom separator";
+            this.customTargetDSep.UseVisualStyleBackColor = true;
+            this.customTargetDSep.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_TargetDecimalPeriod
             // 
             this.cb_TargetDecimalPeriod.AutoSize = true;
             this.cb_TargetDecimalPeriod.Checked = true;
             this.cb_TargetDecimalPeriod.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_TargetDecimalPeriod.Location = new System.Drawing.Point(20, 42);
+            this.cb_TargetDecimalPeriod.Location = new System.Drawing.Point(19, 41);
             this.cb_TargetDecimalPeriod.Name = "cb_TargetDecimalPeriod";
             this.cb_TargetDecimalPeriod.Size = new System.Drawing.Size(56, 17);
             this.cb_TargetDecimalPeriod.TabIndex = 38;
             this.cb_TargetDecimalPeriod.Text = "Period";
             this.cb_TargetDecimalPeriod.UseVisualStyleBackColor = true;
+            this.cb_TargetDecimalPeriod.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_TargetDecimalComma
             // 
             this.cb_TargetDecimalComma.AutoSize = true;
             this.cb_TargetDecimalComma.Checked = true;
             this.cb_TargetDecimalComma.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_TargetDecimalComma.Location = new System.Drawing.Point(20, 19);
+            this.cb_TargetDecimalComma.Location = new System.Drawing.Point(19, 19);
             this.cb_TargetDecimalComma.Name = "cb_TargetDecimalComma";
             this.cb_TargetDecimalComma.Size = new System.Drawing.Size(61, 17);
             this.cb_TargetDecimalComma.TabIndex = 37;
             this.cb_TargetDecimalComma.Text = "Comma";
             this.cb_TargetDecimalComma.UseVisualStyleBackColor = true;
+            this.cb_TargetDecimalComma.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.dlabel1);
+            this.groupBox4.Controls.Add(this.dlabel3);
+            this.groupBox4.Controls.Add(this.dlabel2);
             this.groupBox4.Controls.Add(this.sourceDBox);
             this.groupBox4.Controls.Add(this.customDSep);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalPeriod);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
-            this.groupBox4.Location = new System.Drawing.Point(16, 577);
+            this.groupBox4.Location = new System.Drawing.Point(16, 596);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(190, 119);
+            this.groupBox4.Size = new System.Drawing.Size(295, 119);
             this.groupBox4.TabIndex = 33;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "S&ource decimal separators";
             this.toolTip1.SetToolTip(this.groupBox4, "Select all separators that should be considered decimal separators\r\nwhen they app" +
         "ear in a place which is appropriate for a decimal separator.");
+            // 
+            // dlabel1
+            // 
+            this.dlabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dlabel1.AutoSize = true;
+            this.dlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.dlabel1.ForeColor = System.Drawing.Color.Blue;
+            this.dlabel1.Location = new System.Drawing.Point(183, 21);
+            this.dlabel1.Name = "dlabel1";
+            this.dlabel1.Size = new System.Drawing.Size(28, 13);
+            this.dlabel1.TabIndex = 35;
+            this.dlabel1.Text = "1,25";
+            // 
+            // dlabel3
+            // 
+            this.dlabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dlabel3.AutoSize = true;
+            this.dlabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.dlabel3.ForeColor = System.Drawing.Color.Blue;
+            this.dlabel3.Location = new System.Drawing.Point(183, 63);
+            this.dlabel3.Name = "dlabel3";
+            this.dlabel3.Size = new System.Drawing.Size(28, 13);
+            this.dlabel3.TabIndex = 38;
+            this.dlabel3.Text = "1-25";
+            // 
+            // dlabel2
+            // 
+            this.dlabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dlabel2.AutoSize = true;
+            this.dlabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.dlabel2.ForeColor = System.Drawing.Color.Blue;
+            this.dlabel2.Location = new System.Drawing.Point(183, 43);
+            this.dlabel2.Name = "dlabel2";
+            this.dlabel2.Size = new System.Drawing.Size(28, 13);
+            this.dlabel2.TabIndex = 36;
+            this.dlabel2.Text = "1.25";
             // 
             // sourceDBox
             // 
@@ -556,6 +879,7 @@
             this.sourceDBox.Name = "sourceDBox";
             this.sourceDBox.Size = new System.Drawing.Size(100, 20);
             this.sourceDBox.TabIndex = 37;
+            this.sourceDBox.TextChanged += new System.EventHandler(this.TBox_TextChanged);
             // 
             // customDSep
             // 
@@ -566,33 +890,44 @@
             this.customDSep.TabIndex = 36;
             this.customDSep.Text = "Custom separator";
             this.customDSep.UseVisualStyleBackColor = true;
+            this.customDSep.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceDecimalPeriod
             // 
             this.cb_SourceDecimalPeriod.AutoSize = true;
             this.cb_SourceDecimalPeriod.Checked = true;
             this.cb_SourceDecimalPeriod.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_SourceDecimalPeriod.Location = new System.Drawing.Point(18, 42);
+            this.cb_SourceDecimalPeriod.Location = new System.Drawing.Point(17, 41);
             this.cb_SourceDecimalPeriod.Name = "cb_SourceDecimalPeriod";
             this.cb_SourceDecimalPeriod.Size = new System.Drawing.Size(56, 17);
             this.cb_SourceDecimalPeriod.TabIndex = 35;
             this.cb_SourceDecimalPeriod.Text = "Period";
             this.cb_SourceDecimalPeriod.UseVisualStyleBackColor = true;
+            this.cb_SourceDecimalPeriod.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceDecimalComma
             // 
             this.cb_SourceDecimalComma.AutoSize = true;
             this.cb_SourceDecimalComma.Checked = true;
             this.cb_SourceDecimalComma.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_SourceDecimalComma.Location = new System.Drawing.Point(18, 19);
+            this.cb_SourceDecimalComma.Location = new System.Drawing.Point(17, 19);
             this.cb_SourceDecimalComma.Name = "cb_SourceDecimalComma";
             this.cb_SourceDecimalComma.Size = new System.Drawing.Size(61, 17);
             this.cb_SourceDecimalComma.TabIndex = 34;
             this.cb_SourceDecimalComma.Text = "Comma";
             this.cb_SourceDecimalComma.UseVisualStyleBackColor = true;
+            this.cb_SourceDecimalComma.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.tLabel8);
+            this.groupBox3.Controls.Add(this.tLabel7);
+            this.groupBox3.Controls.Add(this.tLabel6);
+            this.groupBox3.Controls.Add(this.tLabel5);
+            this.groupBox3.Controls.Add(this.tLabel4);
+            this.groupBox3.Controls.Add(this.tLabel3);
+            this.groupBox3.Controls.Add(this.tLabel1);
+            this.groupBox3.Controls.Add(this.tLabel2);
             this.groupBox3.Controls.Add(this.sourceTBox);
             this.groupBox3.Controls.Add(this.customTSep);
             this.groupBox3.Controls.Add(this.cb_SourceNoSeparator);
@@ -602,14 +937,109 @@
             this.groupBox3.Controls.Add(this.cb_SourceThousandsThinSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsNobreakSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
-            this.groupBox3.Location = new System.Drawing.Point(16, 336);
+            this.groupBox3.Location = new System.Drawing.Point(16, 355);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(190, 235);
+            this.groupBox3.Size = new System.Drawing.Size(295, 235);
             this.groupBox3.TabIndex = 19;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Source thousands separators";
             this.toolTip1.SetToolTip(this.groupBox3, "Select all separators that should be considered thousands separators\r\nwhen they a" +
         "ppear in a place which is appropriate for a thousands separator.");
+            // 
+            // tLabel8
+            // 
+            this.tLabel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel8.AutoSize = true;
+            this.tLabel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel8.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel8.Location = new System.Drawing.Point(177, 183);
+            this.tLabel8.Name = "tLabel8";
+            this.tLabel8.Size = new System.Drawing.Size(55, 13);
+            this.tLabel8.TabIndex = 34;
+            this.tLabel8.Text = "1-000-300";
+            // 
+            // tLabel7
+            // 
+            this.tLabel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel7.AutoSize = true;
+            this.tLabel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel7.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel7.Location = new System.Drawing.Point(177, 159);
+            this.tLabel7.Name = "tLabel7";
+            this.tLabel7.Size = new System.Drawing.Size(49, 13);
+            this.tLabel7.TabIndex = 33;
+            this.tLabel7.Text = "1000300";
+            // 
+            // tLabel6
+            // 
+            this.tLabel6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel6.AutoSize = true;
+            this.tLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel6.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel6.Location = new System.Drawing.Point(177, 136);
+            this.tLabel6.Name = "tLabel6";
+            this.tLabel6.Size = new System.Drawing.Size(55, 13);
+            this.tLabel6.TabIndex = 32;
+            this.tLabel6.Text = "1.000.300";
+            // 
+            // tLabel5
+            // 
+            this.tLabel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel5.AutoSize = true;
+            this.tLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel5.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel5.Location = new System.Drawing.Point(177, 113);
+            this.tLabel5.Name = "tLabel5";
+            this.tLabel5.Size = new System.Drawing.Size(55, 13);
+            this.tLabel5.TabIndex = 31;
+            this.tLabel5.Text = "1,000,300";
+            // 
+            // tLabel4
+            // 
+            this.tLabel4.AutoSize = true;
+            this.tLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel4.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel4.Location = new System.Drawing.Point(177, 90);
+            this.tLabel4.Name = "tLabel4";
+            this.tLabel4.Size = new System.Drawing.Size(51, 13);
+            this.tLabel4.TabIndex = 30;
+            this.tLabel4.Text = "1 000 300";
+            // 
+            // tLabel3
+            // 
+            this.tLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel3.AutoSize = true;
+            this.tLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel3.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel3.Location = new System.Drawing.Point(177, 67);
+            this.tLabel3.Name = "tLabel3";
+            this.tLabel3.Size = new System.Drawing.Size(53, 13);
+            this.tLabel3.TabIndex = 29;
+            this.tLabel3.Text = "1 000 300";
+            // 
+            // tLabel1
+            // 
+            this.tLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel1.AutoSize = true;
+            this.tLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel1.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel1.Location = new System.Drawing.Point(177, 21);
+            this.tLabel1.Name = "tLabel1";
+            this.tLabel1.Size = new System.Drawing.Size(55, 13);
+            this.tLabel1.TabIndex = 17;
+            this.tLabel1.Text = "1 000 300";
+            // 
+            // tLabel2
+            // 
+            this.tLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tLabel2.AutoSize = true;
+            this.tLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tLabel2.ForeColor = System.Drawing.Color.Blue;
+            this.tLabel2.Location = new System.Drawing.Point(177, 44);
+            this.tLabel2.Name = "tLabel2";
+            this.tLabel2.Size = new System.Drawing.Size(55, 13);
+            this.tLabel2.TabIndex = 18;
+            this.tLabel2.Text = "1 000 300";
             // 
             // sourceTBox
             // 
@@ -617,6 +1047,7 @@
             this.sourceTBox.Name = "sourceTBox";
             this.sourceTBox.Size = new System.Drawing.Size(100, 20);
             this.sourceTBox.TabIndex = 28;
+            this.sourceTBox.TextChanged += new System.EventHandler(this.TBox_TextChanged);
             // 
             // customTSep
             // 
@@ -627,6 +1058,7 @@
             this.customTSep.TabIndex = 27;
             this.customTSep.Text = "Custom separator";
             this.customTSep.UseVisualStyleBackColor = true;
+            this.customTSep.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceNoSeparator
             // 
@@ -651,6 +1083,7 @@
             this.cb_SourceThousandsPeriod.TabIndex = 25;
             this.cb_SourceThousandsPeriod.Text = "Period";
             this.cb_SourceThousandsPeriod.UseVisualStyleBackColor = true;
+            this.cb_SourceThousandsPeriod.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceThousandsComma
             // 
@@ -663,6 +1096,7 @@
             this.cb_SourceThousandsComma.TabIndex = 24;
             this.cb_SourceThousandsComma.Text = "Comma";
             this.cb_SourceThousandsComma.UseVisualStyleBackColor = true;
+            this.cb_SourceThousandsComma.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceThousandsNobreakThinSpace
             // 
@@ -675,6 +1109,7 @@
             this.cb_SourceThousandsNobreakThinSpace.TabIndex = 23;
             this.cb_SourceThousandsNobreakThinSpace.Text = "Narrow no-break space";
             this.cb_SourceThousandsNobreakThinSpace.UseVisualStyleBackColor = true;
+            this.cb_SourceThousandsNobreakThinSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceThousandsThinSpace
             // 
@@ -687,6 +1122,7 @@
             this.cb_SourceThousandsThinSpace.TabIndex = 22;
             this.cb_SourceThousandsThinSpace.Text = "Thin space";
             this.cb_SourceThousandsThinSpace.UseVisualStyleBackColor = true;
+            this.cb_SourceThousandsThinSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceThousandsNobreakSpace
             // 
@@ -699,6 +1135,7 @@
             this.cb_SourceThousandsNobreakSpace.TabIndex = 21;
             this.cb_SourceThousandsNobreakSpace.Text = "No-break space";
             this.cb_SourceThousandsNobreakSpace.UseVisualStyleBackColor = true;
+            this.cb_SourceThousandsNobreakSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceThousandsSpace
             // 
@@ -711,6 +1148,7 @@
             this.cb_SourceThousandsSpace.TabIndex = 20;
             this.cb_SourceThousandsSpace.Text = "Space";
             this.cb_SourceThousandsSpace.UseVisualStyleBackColor = true;
+            this.cb_SourceThousandsSpace.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // combo_ModifiedNumbersErrorType
             // 
@@ -756,7 +1194,7 @@
             this.cb_ReportModifiedNumbers.AutoSize = true;
             this.cb_ReportModifiedNumbers.Checked = true;
             this.cb_ReportModifiedNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportModifiedNumbers.Location = new System.Drawing.Point(16, 65);
+            this.cb_ReportModifiedNumbers.Location = new System.Drawing.Point(16, 67);
             this.cb_ReportModifiedNumbers.Name = "cb_ReportModifiedNumbers";
             this.cb_ReportModifiedNumbers.Size = new System.Drawing.Size(143, 17);
             this.cb_ReportModifiedNumbers.TabIndex = 7;
@@ -768,7 +1206,7 @@
             this.cb_ReportRemovedNumbers.AutoSize = true;
             this.cb_ReportRemovedNumbers.Checked = true;
             this.cb_ReportRemovedNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportRemovedNumbers.Location = new System.Drawing.Point(16, 42);
+            this.cb_ReportRemovedNumbers.Location = new System.Drawing.Point(16, 44);
             this.cb_ReportRemovedNumbers.Name = "cb_ReportRemovedNumbers";
             this.cb_ReportRemovedNumbers.Size = new System.Drawing.Size(145, 17);
             this.cb_ReportRemovedNumbers.TabIndex = 5;
@@ -780,7 +1218,7 @@
             this.cb_ReportAddedNumbers.AutoSize = true;
             this.cb_ReportAddedNumbers.Checked = true;
             this.cb_ReportAddedNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportAddedNumbers.Location = new System.Drawing.Point(16, 19);
+            this.cb_ReportAddedNumbers.Location = new System.Drawing.Point(16, 21);
             this.cb_ReportAddedNumbers.Name = "cb_ReportAddedNumbers";
             this.cb_ReportAddedNumbers.Size = new System.Drawing.Size(134, 17);
             this.cb_ReportAddedNumbers.TabIndex = 3;
@@ -794,59 +1232,31 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // sourceMisBox
+            // button1
             // 
-            this.sourceMisBox.Controls.Add(this.sourceOmitZero);
-            this.sourceMisBox.Location = new System.Drawing.Point(16, 702);
-            this.sourceMisBox.Name = "sourceMisBox";
-            this.sourceMisBox.Size = new System.Drawing.Size(202, 77);
-            this.sourceMisBox.TabIndex = 2;
-            this.sourceMisBox.TabStop = false;
-            this.sourceMisBox.Text = "Source miscellaneous";
-            // 
-            // sourceOmitZero
-            // 
-            this.sourceOmitZero.AutoSize = true;
-            this.sourceOmitZero.Location = new System.Drawing.Point(7, 20);
-            this.sourceOmitZero.Name = "sourceOmitZero";
-            this.sourceOmitZero.Size = new System.Drawing.Size(107, 17);
-            this.sourceOmitZero.TabIndex = 0;
-            this.sourceOmitZero.Text = "Omit leading zero";
-            this.sourceOmitZero.UseVisualStyleBackColor = true;
-            // 
-            // targetMisBox
-            // 
-            this.targetMisBox.Controls.Add(this.targetOmitZero);
-            this.targetMisBox.Location = new System.Drawing.Point(224, 702);
-            this.targetMisBox.Name = "targetMisBox";
-            this.targetMisBox.Size = new System.Drawing.Size(191, 77);
-            this.targetMisBox.TabIndex = 3;
-            this.targetMisBox.TabStop = false;
-            this.targetMisBox.Text = "Target miscellaneous";
-            // 
-            // targetOmitZero
-            // 
-            this.targetOmitZero.AutoSize = true;
-            this.targetOmitZero.Location = new System.Drawing.Point(7, 20);
-            this.targetOmitZero.Name = "targetOmitZero";
-            this.targetOmitZero.Size = new System.Drawing.Size(107, 17);
-            this.targetOmitZero.TabIndex = 0;
-            this.targetOmitZero.Text = "Omit leading zero";
-            this.targetOmitZero.UseVisualStyleBackColor = true;
+            this.button1.Location = new System.Drawing.Point(186, 19);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(103, 23);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Add regexes";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.Controls.Add(this.targetMisBox);
-            this.Controls.Add(this.sourceMisBox);
             this.Controls.Add(this.panelNumberVerifierUI);
             this.Name = "NumberVerifierUI";
-            this.Size = new System.Drawing.Size(568, 785);
+            this.Size = new System.Drawing.Size(631, 785);
             this.panelNumberVerifierUI.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.targetMisBox.ResumeLayout(false);
+            this.targetMisBox.PerformLayout();
+            this.sourceMisBox.ResumeLayout(false);
+            this.sourceMisBox.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -861,10 +1271,6 @@
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.sourceMisBox.ResumeLayout(false);
-            this.sourceMisBox.PerformLayout();
-            this.targetMisBox.ResumeLayout(false);
-            this.targetMisBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -919,9 +1325,9 @@
         private System.Windows.Forms.TextBox sourceTBox;
         private System.Windows.Forms.CheckBox customTSep;
         private System.Windows.Forms.TextBox customTBox;
-        private System.Windows.Forms.CheckBox targetTbox;
+        private System.Windows.Forms.CheckBox targetTBox;
         private System.Windows.Forms.CheckBox customDSep;
-        private System.Windows.Forms.CheckBox customTargetSep;
+        private System.Windows.Forms.CheckBox customTargetDSep;
         private System.Windows.Forms.TextBox targetDBox;
         private System.Windows.Forms.TextBox sourceDBox;
         private System.Windows.Forms.CheckBox draftCheck;
@@ -933,6 +1339,33 @@
         private System.Windows.Forms.CheckBox sourceOmitZero;
 		private System.Windows.Forms.CheckBox cb_customSeparators;
 		private System.Windows.Forms.TextBox tb_customsSeparators;
-		private System.Windows.Forms.CheckBox cb_Hindi;
+		private System.Windows.Forms.ComboBox combo_NumberFormatErrorType;
+		private System.Windows.Forms.CheckBox cb_ReportNumberFormatErrors;
+		private System.Windows.Forms.Label ttlabel8;
+		private System.Windows.Forms.Label ttlabel7;
+		private System.Windows.Forms.Label ttlabel6;
+		private System.Windows.Forms.Label ttlabel5;
+		private System.Windows.Forms.Label ttlabel4;
+		private System.Windows.Forms.Label ttlabel3;
+		private System.Windows.Forms.Label ttlabel1;
+		private System.Windows.Forms.Label ttlabel2;
+		private System.Windows.Forms.Label tdlabel1;
+		private System.Windows.Forms.Label tdlabel3;
+		private System.Windows.Forms.Label tdlabel2;
+		private System.Windows.Forms.Label dlabel1;
+		private System.Windows.Forms.Label dlabel3;
+		private System.Windows.Forms.Label dlabel2;
+		private System.Windows.Forms.Label tLabel8;
+		private System.Windows.Forms.Label tLabel7;
+		private System.Windows.Forms.Label tLabel6;
+		private System.Windows.Forms.Label tLabel5;
+		private System.Windows.Forms.Label tLabel4;
+		private System.Windows.Forms.Label tLabel3;
+		private System.Windows.Forms.Label tLabel1;
+		private System.Windows.Forms.Label tLabel2;
+		private System.Windows.Forms.Label targetOmitLeadingZeroLabel;
+		private System.Windows.Forms.Label sourceOmitLeadingZeroLabel;
+		private System.Windows.Forms.CheckBox cb_InOrder;
+		private System.Windows.Forms.Button button1;
 	}
 }

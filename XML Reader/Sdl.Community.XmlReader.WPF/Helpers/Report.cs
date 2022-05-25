@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.XmlReader.WPF.ViewModels;
 
 
@@ -38,7 +35,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 			if (_automaticTasksAnalysisAssembly != null)
 			{
 				var resourceNames = _automaticTasksAnalysisAssembly.GetManifestResourceNames();
-				var xslResourceName = resourceNames.FirstOrDefault(resourceName => resourceName.EndsWith(".xsl"));
+				var xslResourceName = resourceNames.FirstOrDefault(resourceName => resourceName.EndsWith(".Analysis.xsl"));
 				if (xslResourceName != null)
 				{
 					using (var stream = _automaticTasksAnalysisAssembly.GetManifestResourceStream(xslResourceName))

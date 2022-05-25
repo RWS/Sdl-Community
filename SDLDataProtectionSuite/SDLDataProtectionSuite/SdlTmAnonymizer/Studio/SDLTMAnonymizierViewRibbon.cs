@@ -349,18 +349,18 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdltmanonymizer");
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272/tradostmanonymizer");
 		}
 	}
 
-	[Action("SDLTMAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
-	[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
-	public class SDLTMAnonymizerHelpRibbonGroupAboutAction : AbstractAction
-	{
-		protected override void Execute()
-		{
-			var about = new AboutBox();
-			about.ShowDialog();
-		}
-	}
+	//[Action("SDLTMAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
+	//[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
+	//public class SDLTMAnonymizerHelpRibbonGroupAboutAction : AbstractAction
+	//{
+	//	protected override void Execute()
+	//	{
+	//		var about = new AboutBox();
+	//		about.ShowDialog();
+	//	}
+	//}
 }

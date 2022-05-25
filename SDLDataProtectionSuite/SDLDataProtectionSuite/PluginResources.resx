@@ -122,7 +122,7 @@
     <value>Resources\SDLTMAnonymizer.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Sdl.Community.SdlDataProtectionSuite</value>
+    <value>Trados Data Protection Suite</value>
   </data>
   <data name="Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Remove.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -224,5 +224,21 @@
   </data>
   <data name="question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FileIgnoredByParser" xml:space="preserve">
+    <value>{0} was ignored by the parser because it was not in the correct format (.sdlxliff)</value>
+  </data>
+  <data name="SDLDataProtectionSuite" xml:space="preserve">
+    <value>Trados Data Protection Suite</value>
+  </data>
+  <data name="FilesIgnoredByParser" xml:space="preserve">
+    <value>Files: 
+
+   {0}
+
+were ignored by the parser because they were not in the correct format (.sdlxliff)</value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Trados Studio</value>
   </data>
 </root>

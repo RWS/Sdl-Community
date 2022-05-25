@@ -4,15 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Sdl.Community.SpotCheck.Helpers;
+using Sdl.Community.SpotCheck.SdlXliff;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.Studio.SpotCheck.SdlXliff;
-using Sdl.Studio.SpotCheck.Helpers;
 
-namespace Sdl.Studio.SpotCheck
+namespace Sdl.Community.SpotCheck
 {
-    public partial class SpotCheckViewPartControl : UserControl
-    {
+    public partial class SpotCheckViewPartControl : UserControl, IUIControl
+	{
         #region variables
 
         private SpotCheckProcessor _processor;
@@ -275,8 +276,8 @@ namespace Sdl.Studio.SpotCheck
         private void ClearEditor()
         {
             // need to close documents to ensure the modified ones are reloaded
-            List<Document> allDocs = new List<Document>(_editorController.GetDocuments());
-            foreach (Document doc in allDocs)
+            var allDocs = new List<IStudioDocument>(_editorController.GetDocuments());
+            foreach (var doc in allDocs)
             {
                 _editorController.Save(doc);
                 _editorController.Close(doc);

@@ -1,89 +1,88 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Service;
-using IATETerminologyProvider.Ui;
-using IATETerminologyProvider.ViewModel;
+using NLog;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Service;
+using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider
+namespace Sdl.Community.IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
-	public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
-	{	
-		private SettingsViewModel _settingsViewModel;
-		private SettingsWindow _settingsWindow;
-		private readonly IateSettingsService _settingsService = new IateSettingsService();
+    public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
+    {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private MainWindow _mainWindow;
+        public bool SupportsEditing => true;
+        public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
+        public string TypeName => PluginResources.IATETerminologyProviderName;
 
+        public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
+        {
+            _mainWindow = IATEApplication.GetMainWindow();
+            if (_mainWindow != null)
+            {
+				_mainWindow.ShowDialog();
+				if (!_mainWindow?.DialogResult ?? true)
+                {
+                    return null;
+                }
 
-		public string TypeName => PluginResources.IATETerminologyProviderName;
-		public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
-		public bool SupportsEditing => true;
-		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-		{
-			var result = SetTerminologyProvider(null, null);
-			return result;					
-		}
-		
-		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
-		{
-			var savedSettings = _settingsService.GetProviderSettings();
-			var providerSettings = new SettingsModel
-			{
-				Domains = new List<DomainModel>(),
-				TermTypes = new List<TermTypeModel>()
-			};
-			if (savedSettings != null)
-			{
-				providerSettings.Domains.AddRange(savedSettings.Domains);
-				providerSettings.TermTypes.AddRange(savedSettings.TermTypes);
-			}
-			SetTerminologyProvider(terminologyProvider as IATETerminologyProvider, providerSettings);
+                var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
+                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider);
 
-			return true;
-		}
+                return new ITerminologyProvider[] { provider };
+            }
 
-		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
-		{
-			return new TerminologyProviderDisplayInfo
-			{
-				Name = Constants.IATEProviderName,
-				TooltipText = Constants.IATEProviderDescription
-			};
-		}
+            var exception = new Exception("Failed login!");
+            _logger.Error(exception);
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-		}
+            throw exception;
+        }
 
-		private ITerminologyProvider[] SetTerminologyProvider(IATETerminologyProvider provider, SettingsModel providerSettings)
-		{
-			var result = new List<ITerminologyProvider>();
-			_settingsViewModel = new SettingsViewModel(providerSettings, _settingsService);
-			_settingsWindow = new SettingsWindow
-			{
-				DataContext = _settingsViewModel
-			};
-			
-			_settingsWindow.ShowDialog();
-			if (!_settingsViewModel.DialogResult) return null;
-			providerSettings = _settingsViewModel.ProviderSettings;
+        public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
+        {
+            if (!IATEApplication.ConnectionProvider.EnsureConnection())
+            {
+                var exception = new Exception("Failed login!");
+                _logger.Error(exception);
 
-			if (provider is null)
-			{
-				provider = new IATETerminologyProvider(providerSettings);
-			}
-			else
-			{
-				provider.UpdateSettings(providerSettings);
-			}
+                throw exception;
+            }
 
-			result.Add(provider);
+            var provider = terminologyProvider as IATETerminologyProvider;
+            if (provider == null)
+            {
+                return false;
+            }
 
-			return result.ToArray();
-		}
-	}
+            var messageBoxService = new MessageBoxService();
+
+            //_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, provider.CacheProvider, messageBoxService);
+            _mainWindow = IATEApplication.GetMainWindow();
+
+            if (!_mainWindow.ShowDialog() ?? false)
+            {
+                return false;
+            }
+
+            provider.ProviderSettings = _mainWindow.ProviderSettings;
+
+            return true;
+        }
+
+        public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
+        {
+            return new TerminologyProviderDisplayInfo
+            {
+                Name = Constants.IATEProviderName,
+                TooltipText = Constants.IATEProviderDescription
+            };
+        }
+
+        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+        {
+            return terminologyProviderUri.Scheme == Constants.IATEGlossary;
+        }
+    }
 }

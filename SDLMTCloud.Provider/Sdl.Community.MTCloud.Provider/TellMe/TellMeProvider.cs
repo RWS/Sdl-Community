@@ -5,24 +5,24 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => "SDLMachineTranslationCloud tell me provider";
+		public string Name => $"{PluginResources.SDLMTCloud_Provider_Name} tell me provider";
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new CommunitySupportAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud community", "sdlmachinetranslationcloud support" }
+				Keywords = new []{ $"{PluginResources.SDLMTCloud_Provider_Name.ToLower()}", "machine translation", "community", "support", "lw" }
 			},
 			new ContactAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud contact", "sdlmachinetranslationcloud trial" }
+				Keywords = new []{ $"{PluginResources.SDLMTCloud_Provider_Name.ToLower()}", "machine translation", "contact", "trial", "lw" }
 			},
 			new HelpAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud help", "sdlmachinetranslationcloud guide" }
+				Keywords = new []{ $"{PluginResources.SDLMTCloud_Provider_Name.ToLower()}", "machine translation", "help", "guide", "lw" }
 			},
 			new StoreAction
 			{
-				Keywords = new []{ "sdlmachinetranslationcloud", "sdl machine translation cloud", "sdlmachinetranslationcloud store", "sdlmachinetranslationcloud download" }
+				Keywords = new []{ $"{PluginResources.SDLMTCloud_Provider_Name.ToLower()}", "machine translation", "store", "download", "lw" }
 			}
 		};
 	}

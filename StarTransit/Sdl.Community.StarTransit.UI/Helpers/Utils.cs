@@ -22,13 +22,5 @@ namespace Sdl.Community.StarTransit.UI.Helpers
 				new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
 			}
 		}
-
-		public static void DeleteFolder(string path)
-		{
-			if (Directory.Exists(Path.GetDirectoryName(path)))
-			{
-				Directory.Delete(Path.GetDirectoryName(Path.GetDirectoryName(path)), true);
-			}
-		}
 	}
 }

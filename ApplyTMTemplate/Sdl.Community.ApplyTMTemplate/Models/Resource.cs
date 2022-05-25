@@ -1,4 +1,5 @@
-﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
+﻿using Sdl.Community.ApplyTMTemplate.Models.Interfaces;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.ApplyTMTemplate.Models
 {

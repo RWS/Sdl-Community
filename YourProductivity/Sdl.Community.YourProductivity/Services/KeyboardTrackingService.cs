@@ -20,11 +20,11 @@ namespace Sdl.Community.YourProductivity.Services
         private readonly List<TrackInfo> _trackingInfos; 
         private readonly TrackInfoDb db;
         private readonly Logger _logger;
-        private Document _activeDocument;
+        private IStudioDocument _activeDocument;
         private object lockObject = new object();
         private Timer _timer;
 
-        public Document ActiveDocument
+        public IStudioDocument ActiveDocument
         {
             get { return _activeDocument; }
             set
@@ -49,7 +49,7 @@ namespace Sdl.Community.YourProductivity.Services
             _timer = new Timer(AutoSave);
         }
 
-        public async void RegisterDocument(Document document)
+        public async void RegisterDocument(IStudioDocument document)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace Sdl.Community.YourProductivity.Services
         /// on the disk
         /// </summary>
         /// <param name="document"></param>
-        public async void UnregisterDocument(Document document)
+        public async void UnregisterDocument(IStudioDocument document)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Sdl.Community.YourProductivity.Services
                     return;
                 }
 
-                var file = ActiveDocument.TryGetActiveFile();
+                var file = ActiveDocument.ActiveFile;
                 
                 if (file == null)
                 {
@@ -192,14 +192,17 @@ namespace Sdl.Community.YourProductivity.Services
 
                     return;
                 }
-                var file = ActiveDocument.TryGetActiveFile();
+                var file = ActiveDocument.ActiveFile;
                 if (file == null)
                 {
                     _logger.Error(string.Format("ContentChanged level active document has no active file but has {0} files part of it.", ActiveDocument.Files.Count()));
                     return;
                 }
-                SetTrackingElement(file.Id, e.Document.ActiveSegmentPair.Target, keyStrokes);
-                KeyboardTracking.Instance.ClearShortcuts();
+				if (file != null)
+				{
+					SetTrackingElement(file.Id, e.Document.ActiveSegmentPair.Target, keyStrokes);
+					KeyboardTracking.Instance.ClearShortcuts();
+				}                
             }
             catch (Exception ex)
             {

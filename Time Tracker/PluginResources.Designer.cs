@@ -19,7 +19,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -61,7 +61,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Studio.Time.Tracker.
+        ///   Looks up a localized string similar to Studio Time Tracker.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -337,51 +337,6 @@ namespace Sdl.Community.Studio.Time.Tracker {
         internal static string StudioTimeTrackerConfigurationRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationRibbonGroup_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Information.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroup_Name {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroup_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupAbout_Description {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupAbout_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupAbout_Name {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupAbout_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Online Help.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupHelp_Description {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupHelp_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Online Help.
-        /// </summary>
-        internal static string StudioTimeTrackerContactRibbonGroupHelp_Name {
-            get {
-                return ResourceManager.GetString("StudioTimeTrackerContactRibbonGroupHelp_Name", resourceCulture);
             }
         }
         

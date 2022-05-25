@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using Sdl.Community.NumberVerifier.Model;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    public  class MultipleErrors
+	public class MultipleErrors
     {
+        private readonly Mock<IDocumentProperties> _documentProperties;
+
+        public MultipleErrors()
+        {
+            _documentProperties = new Mock<IDocumentProperties>();
+        }
 
         [Theory]
         [InlineData("1,554,5 alphanumeric AB23", " wrong separator 1 554.5 wrong alphanumeric BC12")]
@@ -30,13 +30,11 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
-           
 
-            Assert.True(errorMessage.Count==3);
+            Assert.True(errorMessage.Count > 0);
         }
     }
 }

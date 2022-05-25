@@ -1,17 +1,28 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface ITranslationService
 	{
-		IConnectionService ConnectionService { get; }	
+		event TranslationReceivedEventHandler TranslationReceived;
 
-		Task<Segment[]> TranslateText(string text, LanguageMappingModel model);
+		IConnectionService ConnectionService { get; }
+		bool IsActiveModelQeEnabled { get; }
+		Options Options { get; set; }
 
-		Task<SubscriptionInfo> GetLanguagePairs(string accountId);
+		Task AddTermToDictionary(Term term);
 
-		Task<MTCloudDictionaryInfo> GetDictionaries(string accountId);
+		Task<MTCloudDictionaryInfo> GetDictionaries();
+
+		Task<SubscriptionInfo> GetLanguagePairs();
+
+		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
+
+		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
 	}
 }

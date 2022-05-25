@@ -4,36 +4,32 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.10</ProductVersion>
-    <ProjectGuid>680a51b9-3b9c-4022-a7a5-f2aa309fe967</ProjectGuid>
+    <ProjectGuid>BA98AC17-29F3-4664-BAD9-A02C569BC558</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Sdl.Community.HunspellDictionaryManager.Installer</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio15\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants>Debug;Version=3.0.1.6</DefineConstants>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>True</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Version=3.0.1.6</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="defines.wxi" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Product.wxs" />
+    <Compile Include="WixUI_Minimal_OX.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="terms_and_conditions.rtf" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.csproj">
-      <Name>Sdl.Community.HunspellDictionaryManager</Name>
-      <Project>{d42381e5-30f4-4915-aea1-72d8110e20c1}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">

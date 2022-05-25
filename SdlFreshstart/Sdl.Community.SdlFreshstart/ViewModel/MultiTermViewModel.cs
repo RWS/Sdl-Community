@@ -5,40 +5,51 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using NLog;
+using Sdl.Community.SdlFreshstart.Commands;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
 using Sdl.Community.SdlFreshstart.Properties;
+using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
-    public class MultiTermViewModel : INotifyPropertyChanged
+	public class MultiTermViewModel : BaseModel
 	{
-	    private readonly MainWindow _mainWindow;
+		private readonly MainWindow _mainWindow;
+		private readonly IMessageService _messageService;
+		private readonly VersionService _versionService;
+		private readonly RegistryHelper _registryHelper;
+		private readonly Persistence _persistence;
 		private readonly string _userName;
-		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
-		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
-		private MultiTermLocationListItem _selectedLocation;
-		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
-		private string _folderDescription;
-		private ICommand _removeCommand;
-		private ICommand _repairCommand;
-		private ICommand _restoreCommand;
-		private Persistence _persistence; 
-		private string _removeForeground;
-		private string _removeBtnColor;
-		private string _repairBtnColor;
-		private string _repairForeground;
-		private bool _isRemoveEnabled;
-		private bool _isRestoreEnabled;
-		private bool _isRepairEnabled;
 		private bool _checkAll;
+		private string _folderDescription;
+		private bool _isRemoveEnabled;
+		private bool _isRepairEnabled;
+		private bool _isRestoreEnabled;
+		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>();
+		private List<MultitermVersion> _multiTermVersionsCollection;
+		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private string _removeBtnColor;
+		private ICommand _removeCommand;
+		private string _removeForeground;
+		private string _repairBtnColor;
+		private ICommand _repairCommand;
+		private string _repairForeground;
+		private ICommand _restoreCommand;
+		private MultiTermLocationListItem _selectedLocation;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public MultiTermViewModel(MainWindow mainWindow)
+		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService, VersionService versionService, RegistryHelper registryHelper)
 		{
 			_mainWindow = mainWindow;
+			_messageService = messageService;
+			_versionService = versionService;
+			_registryHelper = registryHelper;
 			_userName = Environment.UserName;
 			_persistence = new Persistence();
 			_folderDescription = string.Empty;
@@ -50,303 +61,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_repairBtnColor = "LightGray";
 			_repairForeground = "Gray";
 			FillMultiTermVersionList();
-			FillMultiTermLocationList();
 		}
 
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
-		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairMultiTerm, true));
-		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
-
-		private async void RestoreFolders()
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-
-			};
-			var result = await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RestoreMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
-			if (result == MessageDialogResult.Affirmative)
-			{
-				if (!MultiTermIsRunning())
-				{
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RestoringMessage);
-					controller.SetIndeterminate();
-
-					var foldersToRestore = LocationsForSelectedVersions();
-					await Remove.RestoreBackupFiles(foldersToRestore);
-					UnselectGrids();
-					CheckAll = false;
-
-					//to close the message
-					await controller.CloseAsync();
-				}
-				else
-				{
-					await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.MultitermCloseMessage, MessageDialogStyle.Affirmative, dialog);
-				}
-			}
-		}
-
-		private async void RepairMultiTerm()
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-
-			};
-			if (!MultiTermIsRunning())
-			{
-				if (Directory.Exists(_packageCache))
-				{
-					var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
-					foreach (var selectedVersion in selectedVersions)
-					{
-						RunRepair(selectedVersion);
-					}
-				}
-			}
-			else
-			{
-				await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.MultitermRepairMessage, MessageDialogStyle.Affirmative, dialog);
-			}
-		}
-
-		private void RunRepair(MultiTermVersionListItem selectedVersion)
-		{
-			var directoriesPath = new DirectoryInfo(_packageCache)
-				.GetDirectories()
-				.Where(n => n.Name.Contains(selectedVersion.CacheFolderName))
-				.Select(n => n.FullName).ToList();
-
-			foreach (var directoryPath in directoriesPath)
-			{
-				var msiName = GetMsiName(selectedVersion);
-				var moduleDirectoryPath = Path.Combine(directoryPath, "modules");
-				if (Directory.Exists(moduleDirectoryPath))
-				{
-					var msiFile = Path.Combine(moduleDirectoryPath, msiName);
-					if (File.Exists(msiFile))
-					{
-						var process = new ProcessStartInfo
-						{
-							FileName = "msiexec",
-							WorkingDirectory = moduleDirectoryPath,
-							Arguments = "/fa " + msiName,
-							Verb = "runas"
-						};
-						Process.Start(process);
-					}
-				}
-			}
-		}
-
-		private string GetMsiName(MultiTermVersionListItem selectedVersion)
-		{
-			var msiName = string.Format("MTCore{0}.msi", selectedVersion.MajorVersionNumber);
-			return msiName;
-		}
-
-		private void FillMultiTermLocationList()
-		{
-			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>
-			{
-			 new MultiTermLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm15",
-					IsSelected = false,
-					Description = FoldersDescriptionText.MultiTermLocal(),
-					Alias = "appDataLocal"
-				},new MultiTermLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm15",
-					IsSelected = false,
-					Description =FoldersDescriptionText.MultiTermRoaming(),
-					Alias = "appDataRoming"
-				}
-			};
-
-			foreach (var multiTermLocation in _multiTermLocationCollection)
-			{	
-				multiTermLocation.PropertyChanged += MultiTermLocation_PropertyChanged;
-			}
-		}
-
-		private async void RemoveFiles()
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-
-			};
-			var result = await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RemoveMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
-			if (result == MessageDialogResult.Affirmative)
-			{
-				if (!MultiTermIsRunning())
-				{
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
-					controller.SetIndeterminate();
-
-					var foldersToClearOrRestore = new List<LocationDetails>();
-					controller.SetIndeterminate();
-
-					var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
-					var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
-					if (selectedMultiTermVersions.Any())
-					{
-						var documentsFolderLocation = await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
-						foldersToClearOrRestore.AddRange(documentsFolderLocation);
-					}
-
-					//save settings 
-					_persistence.SaveSettings(foldersToClearOrRestore,false);
-					
-					await Remove.BackupFiles(foldersToClearOrRestore);
-
-					await Remove.FromSelectedLocations(foldersToClearOrRestore);
-					
-					//to close the message
-					await controller.CloseAsync();
-				}
-				else
-				{
-					await _mainWindow.ShowMessageAsync(Constants.MultitermRun, Constants.RemoveFoldersMessage, MessageDialogStyle.Affirmative, dialog);
-				}				
-			}
-		}
-
-		private List<LocationDetails> LocationsForSelectedVersions()
-		{
-			var allFolders = _persistence.Load(false);
-			var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
-			var locationsForSelectedVersion = new List<LocationDetails>();
-			if (selectedVersions.Any())
-			{
-				foreach (var version in selectedVersions)
-				{
-					var locations = allFolders.Where(v => v.Version.Equals(version.DisplayName)).ToList();
-					locationsForSelectedVersion.AddRange(locations);
-				}
-				return locationsForSelectedVersion;
-			}
-			return allFolders;
-		}
-
-		private bool MultiTermIsRunning()
-		{
-			var processList = Process.GetProcesses();
-			var multiTermProcesses = processList.Where(p => p.ProcessName.Contains("MultiTerm")).ToList();
-			return multiTermProcesses.Any();
-		}
-
-		public MultiTermLocationListItem SelectedLocation
-		{
-			get => _selectedLocation;
-			set
-			{
-				_selectedLocation = value;
-				OnPropertyChanged();
-			}
-		}
-		public bool IsRestoreEnabled
-		{
-			get => _isRestoreEnabled;
-
-			set
-			{
-				if (Equals(value, _isRestoreEnabled))
-				{
-					return;
-				}
-				_isRestoreEnabled = value;
-				OnPropertyChanged(nameof(IsRestoreEnabled));
-			}
-		}
-
-		private  void UnselectGrids()
-		{
-			var selectedVersions = MultiTermVersionsCollection.Where(v => v.IsSelected).ToList();
-			foreach (var version in selectedVersions)
-			{
-				version.IsSelected = false;
-			}
-
-			var selectedLocations = MultiTermLocationCollection.Where(l => l.IsSelected).ToList();
-			foreach (var selectedLocation in selectedLocations)
-			{
-				selectedLocation.IsSelected = false;
-			}
-		}
-		private void MultiTermLocation_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			var lastSelectedItem = sender as MultiTermLocationListItem;
-			var selectedLocations = MultiTermLocationCollection.Where(s => s.IsSelected).ToList();
-			if (lastSelectedItem != null)
-			{
-				if (lastSelectedItem.IsSelected)
-				{
-					FolderDescription = lastSelectedItem.Description;
-				}
-				else
-				{
-
-					if (selectedLocations.Any())
-					{
-						FolderDescription = selectedLocations.First().Description;
-					}
-				}
-			}
-			if (!selectedLocations.Any())
-			{
-				FolderDescription = string.Empty;
-			}
-			SetRemoveBtnColors();
-		}
-
-		private void FillMultiTermVersionList()
-		{
-			_multiTermVersionsCollection = new ObservableCollection<MultiTermVersionListItem>
-			{
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2019",
-					IsSelected = false,
-					MajorVersionNumber = "15",
-					ReleaseNumber = "2019",
-					CacheFolderName = "SDLMultiTermDesktop2019"
-
-				},
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2017",
-					IsSelected = false,
-					MajorVersionNumber = "14",
-					ReleaseNumber = "2017",
-					CacheFolderName = "SDLMultiTermDesktop2017"
-
-				},
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2015",
-					IsSelected = false,
-					MajorVersionNumber = "12",
-					ReleaseNumber = "2015",
-					CacheFolderName = "SDLMultiTermDesktop2015"
-				},
-				new MultiTermVersionListItem
-				{
-					DisplayName = "MultiTerm 2014",
-					MajorVersionNumber = "11",
-					IsSelected = false,
-					ReleaseNumber = "2014",
-					CacheFolderName = "SDLMultiTermDesktop2014"
-				}
-			};
-
-			foreach (var multiTermVersion in _multiTermVersionsCollection)
-			{
-				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
-			}
-		}
 		public bool CheckAll
 		{
 			get => _checkAll;
@@ -362,17 +78,166 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				CheckAllLocations(value);
 			}
 		}
-		private void MultiTermVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
+
+		public bool IsRemoveEnabled
 		{
-			SetRemoveBtnColors();
+			get => _isRemoveEnabled;
+
+			set
+			{
+				if (Equals(value, _isRemoveEnabled))
+				{
+					return;
+				}
+				_isRemoveEnabled = value;
+				OnPropertyChanged(nameof(IsRemoveEnabled));
+			}
+		}
+
+		public bool IsRepairEnabled
+		{
+			get => _isRepairEnabled;
+
+			set
+			{
+				if (Equals(value, _isRepairEnabled))
+				{
+					return;
+				}
+				_isRepairEnabled = value;
+				OnPropertyChanged(nameof(IsRepairEnabled));
+			}
+		}
+
+		public bool IsRestoreEnabled
+		{
+			get => _isRestoreEnabled;
+
+			set
+			{
+				if (Equals(value, _isRestoreEnabled))
+				{
+					return;
+				}
+				_isRestoreEnabled = value;
+				OnPropertyChanged(nameof(IsRestoreEnabled));
+			}
+		}
+
+		public ObservableCollection<MultiTermLocationListItem> MultiTermLocationCollection
+		{
+			get => _multiTermLocationCollection;
+			set
+			{
+				if (Equals(value, _multiTermLocationCollection))
+				{
+					return;
+				}
+				_multiTermLocationCollection = value;
+				OnPropertyChanged(nameof(MultiTermLocationCollection));
+			}
+		}
+
+		public List<MultitermVersion> MultiTermVersionsCollection
+		{
+			get => _multiTermVersionsCollection;
+			set
+			{
+				if (Equals(value, _multiTermVersionsCollection))
+				{
+					return;
+				}
+				_multiTermVersionsCollection = value;
+				OnPropertyChanged(nameof(MultiTermVersionsCollection));
+			}
+		}
+
+		public string RemoveBtnColor
+		{
+			get => _removeBtnColor;
+
+			set
+			{
+				if (Equals(value, _removeBtnColor))
+				{
+					return;
+				}
+				_removeBtnColor = value;
+				OnPropertyChanged(nameof(RemoveBtnColor));
+			}
+		}
+
+		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFromLocations, true);
+
+		public string RemoveForeground
+		{
+			get => _removeForeground;
+
+			set
+			{
+				if (Equals(value, _removeForeground))
+				{
+					return;
+				}
+				_removeForeground = value;
+				OnPropertyChanged(nameof(RemoveForeground));
+			}
+		}
+
+		public string RepairBtnColor
+		{
+			get => _repairBtnColor;
+
+			set
+			{
+				if (Equals(value, _repairBtnColor))
+				{
+					return;
+				}
+				_repairBtnColor = value;
+				OnPropertyChanged(nameof(RepairBtnColor));
+			}
+		}
+
+		public ICommand RepairCommand => _repairCommand ??= new CommandHandler(RepairMultiTerm, true);
+
+		public string RepairForeground
+		{
+			get => _repairForeground;
+
+			set
+			{
+				if (Equals(value, _repairForeground))
+				{
+					return;
+				}
+				_repairForeground = value;
+				OnPropertyChanged(nameof(RepairForeground));
+			}
+		}
+
+		public ICommand RestoreCommand => _restoreCommand ??= new CommandHandler(RestoreLocations, true);
+
+		public MultiTermLocationListItem SelectedLocation
+		{
+			get => _selectedLocation;
+			set
+			{
+				_selectedLocation = value;
+				OnPropertyChanged();
+			}
 		}
 
 		private bool AnyLocationSelected()
 		{
-
 			return MultiTermLocationCollection.Any(l => l.IsSelected);
-
 		}
+
+		private bool AnyVersionSelected()
+		{
+			return MultiTermVersionsCollection.Any(v => v.IsSelected);
+		}
+
 		private void CheckAllLocations(bool check)
 		{
 			foreach (var location in MultiTermLocationCollection)
@@ -380,9 +245,273 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				location.IsSelected = check;
 			}
 		}
+
+		private void FillMultiTermLocationList()
+		{
+			MultiTermLocationCollection.Clear();
+			var listOfProperties = new List<(string, string)>
+			{
+				(nameof(MultitermVersion.MultiTermRoaming), "General settings"),
+				(nameof(MultitermVersion.MultiTermLocal), "Logs"),
+				(nameof(MultitermVersion.MultiTermProgramDataSettings), "Termbase settings"),
+				(nameof(MultitermVersion.MultiTermProgramDataUpdates), "Updates"),
+				(nameof(MultitermVersion.MultiTermRegistryKey), "Registry keys")
+			};
+
+			foreach (var multiTermVersion in _multiTermVersionsCollection.Where(v => v.IsSelected))
+			{
+				foreach (var property in listOfProperties)
+				{
+					MultiTermLocationCollection.Add(new MultiTermLocationListItem
+					{
+						DisplayName = $"{property.Item2}: {(string)multiTermVersion?.GetType().GetProperty(property.Item1)?.GetValue(multiTermVersion)}",
+						Description = (string)typeof(LocationsDescription).GetProperty(property.Item1)?.GetValue(null, null),
+						IsSelected = true,
+						Alias = property.Item1
+					});
+				}
+			}
+
+			foreach (var multiTermLocation in _multiTermLocationCollection)
+			{
+				multiTermLocation.PropertyChanged += MultiTermLocation_PropertyChanged;
+			}
+		}
+
+		private void FillMultiTermVersionList()
+		{
+			_multiTermVersionsCollection = new List<MultitermVersion>(_versionService.GetInstalledMultitermVersions());
+			foreach (var multiTermVersion in _multiTermVersionsCollection)
+			{
+				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
+			}
+		}
+
+		private string GetMsiName(MultitermVersion selectedVersion)
+		{
+			var msiName = $"MTCore{selectedVersion.MajorVersion}.msi";
+			return msiName;
+		}
+
+		private List<LocationDetails> GetLocationsForSelectedVersions(List<MultitermVersion> multitermVersions)
+		{
+			var allFolders = _persistence.Load(false);
+			var locationsForSelectedVersion = new List<LocationDetails>();
+			if (multitermVersions.Any())
+			{
+				foreach (var version in multitermVersions)
+				{
+					var locations = allFolders.Where(v => v.Version.Equals(version.VersionName)).ToList();
+					locationsForSelectedVersion.AddRange(locations);
+				}
+				return locationsForSelectedVersion;
+			}
+			return allFolders;
+		}
+
+		private (List<MultitermVersion>, List<MultitermVersion>) GetUnchangeableAndChangeableVersions()
+		{
+			var processList = Process.GetProcesses();
+
+			var studioProcesses = processList.Where(p => p.ProcessName.Contains(Constants.MultiTerm)).ToList();
+			var studioProcessesIds = studioProcesses.Select(p => p.MainModule.FileVersionInfo.FileMajorPart).ToList();
+
+			var selectedVersionsIds = GetSelectedVersions();
+
+			var unchangeable = selectedVersionsIds.Where(sv => studioProcessesIds.Contains(sv.MajorVersion)).ToList();
+			var changeable = selectedVersionsIds.Where(sv => !unchangeable.Contains(sv)).ToList();
+
+			return (unchangeable, changeable);
+		}
+
+		private List<MultitermVersion> GetSelectedVersions()
+		{
+			return MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
+		}
+
+		private void MultiTermLocation_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			SetRemoveBtnColors();
+		}
+
+		private void MultiTermVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			FillMultiTermLocationList();
+			SetRemoveBtnColors();
+		}
+
+		private async void RemoveFromLocations()
+		{
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RemoveMessage);
+			if (result == MessageBoxResult.Yes)
+			{
+				var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+				var controller = await ShowProgress(Constants.Wait, Constants.RemoveFilesMessage);
+
+				var foldersToClearOrRestore = new List<LocationDetails>();
+				var registryToClearOrRestore = new List<LocationDetails>();
+
+				var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
+				var locations = new List<LocationDetails>();
+				if (changeableVersions.Any())
+				{
+					locations = Paths.GetMultiTermLocationsFromVersions(selectedMultiTermLocations.Select(l => l.Alias).ToList(),
+						changeableVersions);
+
+					var registryLocations = locations.Where(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+					registryToClearOrRestore.AddRange(registryLocations);
+
+					var folderLocations = locations.Where(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+					foldersToClearOrRestore.AddRange(folderLocations);
+				}
+
+				//save settings
+				_persistence.SaveSettings(locations, false);
+				await FileManager.BackupFiles(foldersToClearOrRestore);
+				await _registryHelper.BackupKeys(registryToClearOrRestore);
+
+				RemoveFromFolders(foldersToClearOrRestore);
+				RemoveFromRegistry(registryToClearOrRestore);
+
+				//to close the message
+				await controller.CloseAsync();
+
+				if (unchangeableVersions.Any())
+				{
+					GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+					_messageService.ShowWarningMessage(Constants.MultitermRun,
+						$"{Constants.RemoveFoldersMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
+				}
+			}
+		}
+
+		private static void GetWarningInfo(List<MultitermVersion> unchangeableVersions, List<MultitermVersion> changeableVersions, out string unchangedString, out string changedString)
+		{
+			unchangedString =
+				$"Currently running affected versions:{Environment.NewLine}{string.Join(Environment.NewLine, unchangeableVersions.Select(s => s.MultiTermLocal).ToList())}";
+
+			var changeable = changeableVersions.Select(s => s.MultiTermLocal).ToList();
+			changedString = changeable.Any()
+				? $"Changed:{Environment.NewLine}{string.Join(Environment.NewLine, changeable)}"
+				: null;
+		}
+
+		private void RemoveFromRegistry(List<LocationDetails> registryToClearOrRestore)
+		{
+			try
+			{
+				_registryHelper.DeleteKeys(registryToClearOrRestore, false);
+			}
+			catch (Exception ex)
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, string.Format(Constants.RegistryNotDeleted, ex.Message));
+			}
+		}
+
+		private void RemoveFromFolders(List<LocationDetails> foldersToClearOrRestore)
+		{
+			try
+			{
+				FileManager.RemoveFromSelectedFolderLocations(foldersToClearOrRestore);
+			}
+			catch
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, Constants.FilesNotDeletedMessage);
+			}
+		}
+
+		private async Task<ProgressDialogController> ShowProgress(string title, string message)
+		{
+			var controller = await _mainWindow.ShowProgressAsync(title, message);
+			controller.SetIndeterminate();
+			return controller;
+		}
+
+		private void RepairMultiTerm()
+		{
+			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+			if (Directory.Exists(_packageCache))
+			{
+				foreach (var selectedVersion in changeableVersions)
+				{
+					RunRepair(selectedVersion);
+				}
+			}
+			else
+			{
+				_logger.Info($"Could not find PackageCache folder: {_packageCache}");
+			}
+
+			if (unchangeableVersions.Any())
+			{
+				GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+				_messageService.ShowWarningMessage(Constants.MultitermRun,
+					$"{Constants.MultitermRepairMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
+			}
+		}
+
+		private async Task RestoreFolders(List<LocationDetails> locationsToRestore)
+		{
+			var foldersToRestore = locationsToRestore
+				.TakeWhile(l => l.Alias != nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+			await FileManager.RestoreBackupFiles(foldersToRestore);
+		}
+
+		private async Task RestoreRegistry(List<LocationDetails> locationsToRestore)
+		{
+			var registryToRestore = locationsToRestore
+				.TakeWhile(l => l.Alias == nameof(MultitermVersion.MultiTermRegistryKey)).ToList();
+			try
+			{
+				await _registryHelper.RestoreKeys(registryToRestore);
+			}
+			catch (Exception e)
+			{
+				_messageService.ShowWarningMessage(Constants.Warning,
+					string.Format(Resources.NotAllRegistriesCouldBeRestored, e.Message));
+			}
+		}
+
+		private async void RestoreLocations()
+		{
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreMessage);
+
+			if (result != MessageBoxResult.Yes) return;
+			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+			var controller = await ShowProgress(Constants.Wait, Constants.RestoringMessage);
+
+			var locationsToRestore = GetLocationsForSelectedVersions(changeableVersions);
+
+			await RestoreFolders(locationsToRestore);
+			await RestoreRegistry(locationsToRestore);
+
+			UnselectGrids();
+
+			await controller.CloseAsync();
+
+			if (unchangeableVersions.Any())
+			{
+				GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+				_messageService.ShowWarningMessage(Constants.MultitermRun,
+					$"{Constants.MultitermCloseMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
+			}
+		}
+
+		private void RunRepair(MultitermVersion selectedVersion)
+		{
+			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(selectedVersion.ExecutableVersion, selectedVersion.CacheFolderName, false);
+			var msiName = GetMsiName(selectedVersion);
+			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
+
+			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
+		}
+
 		private void SetRemoveBtnColors()
 		{
-			if (AnyLocationSelected()&&AnyVersionSelected())
+			if (AnyLocationSelected() && AnyVersionSelected())
 			{
 				IsRemoveEnabled = true;
 				RemoveBtnColor = "#3D9DAA";
@@ -407,150 +536,22 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				RepairBtnColor = "LightGray";
 				RepairForeground = "Gray";
 			}
-
 		}
 
-		public bool IsRepairEnabled
+		private void UnselectGrids()
 		{
-			get => _isRepairEnabled;
-
-			set
+			var selectedVersions = MultiTermVersionsCollection.Where(v => v.IsSelected).ToList();
+			foreach (var version in selectedVersions)
 			{
-				if (Equals(value, _isRepairEnabled))
-				{
-					return;
-				}
-				_isRepairEnabled = value;
-				OnPropertyChanged(nameof(IsRepairEnabled));
+				version.IsSelected = false;
 			}
-		}
-		public string RepairForeground
-		{
-			get => _repairForeground;
 
-			set
+			var selectedLocations = MultiTermLocationCollection.Where(l => l.IsSelected).ToList();
+			foreach (var selectedLocation in selectedLocations)
 			{
-				if (Equals(value, _repairForeground))
-				{
-					return;
-				}
-				_repairForeground = value;
-				OnPropertyChanged(nameof(RepairForeground));
+				selectedLocation.IsSelected = false;
 			}
-		}
-
-		public string RepairBtnColor
-		{
-			get => _repairBtnColor;
-
-			set
-			{
-				if (Equals(value, _repairBtnColor))
-				{
-					return;
-				}
-				_repairBtnColor = value;
-				OnPropertyChanged(nameof(RepairBtnColor));
-			}
-		}
-
-		private bool AnyVersionSelected()
-		{
-			return MultiTermVersionsCollection.Any(v => v.IsSelected);
-		}
-
-		public ObservableCollection<MultiTermVersionListItem> MultiTermVersionsCollection
-		{
-			get => _multiTermVersionsCollection;
-			set
-			{
-				if (Equals(value, _multiTermVersionsCollection))
-				{
-					return;
-				}
-				_multiTermVersionsCollection = value;
-				OnPropertyChanged(nameof(MultiTermVersionsCollection));
-			}
-		}
-
-		public string RemoveForeground
-		{
-			get => _removeForeground;
-
-			set
-			{
-				if (Equals(value, _removeForeground))
-				{
-					return;
-				}
-				_removeForeground = value;
-				OnPropertyChanged(nameof(RemoveForeground));
-			}
-		}
-
-		public string RemoveBtnColor
-		{
-			get => _removeBtnColor;
-
-			set
-			{
-				if (Equals(value, _removeBtnColor))
-				{
-					return;
-				}
-				_removeBtnColor = value;
-				OnPropertyChanged(nameof(RemoveBtnColor));
-			}
-		}
-
-		public bool IsRemoveEnabled
-		{
-			get => _isRemoveEnabled;
-
-			set
-			{
-				if (Equals(value, _isRemoveEnabled))
-				{
-					return;
-				}
-				_isRemoveEnabled = value;
-				OnPropertyChanged(nameof(IsRemoveEnabled));
-			}
-		}
-		public string FolderDescription
-		{
-			get => _folderDescription;
-			set
-			{
-				if (Equals(value, _folderDescription))
-				{
-					return;
-				}
-				_folderDescription = value;
-				OnPropertyChanged(nameof(FolderDescription));
-			}
-		}
-
-		public ObservableCollection<MultiTermLocationListItem> MultiTermLocationCollection
-		{
-			get => _multiTermLocationCollection;
-			set
-			{
-				if (Equals(value, _multiTermLocationCollection))
-				{
-					return;
-				}
-				_multiTermLocationCollection = value;
-				OnPropertyChanged(nameof(MultiTermLocationCollection));
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			CheckAll = false;
 		}
 	}
 }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.Community.DeelLMTProvider.Model
+namespace Sdl.Community.DeepLMTProvider.Model
 {
 	public class TranslationResponse
-	{
-		public List<TranslationDetails> Translations { get; set; }
-	}
+    {
+        public List<TranslationDetails> Translations { get; set; }
+    }
 }

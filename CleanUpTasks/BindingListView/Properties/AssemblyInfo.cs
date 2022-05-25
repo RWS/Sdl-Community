@@ -7,12 +7,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("BindingListView")]
 [assembly: AssemblyDescription("Advanced, data bindable, object list view.")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Equin")]
 [assembly: AssemblyProduct("BindingListView")]
 [assembly: AssemblyCopyright("Copyright © Andrew Davey 2005")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM componenets.  If you need to access a type in this assembly from

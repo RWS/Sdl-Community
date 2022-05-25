@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Record Source TU/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Record Source TU/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.RecordSourceTU.sln'
+- name: pathToPublish
+  value: 'Record Source TU\Sdl.Community.RecordSourceTU\bin\Release\Sdl.Community.RecordSourceTU.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

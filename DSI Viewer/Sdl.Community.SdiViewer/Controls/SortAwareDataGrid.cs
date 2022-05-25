@@ -10,121 +10,121 @@ using System.Windows.Data;
 namespace Sdl.Community.DsiViewer.Controls
 {
 	public class SortAwareDataGrid : DataGrid, IDisposable
-	{
-		public SortAwareDataGrid()
-		{
-			SelectionChanged += SortAwareDataGrid_SelectionChanged;
-			Loaded += SortAwareDataGrid_Loaded;
-		}
+    {
+        public static readonly DependencyProperty SelectedItemsListProperty =
+            DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
 
-		public string DefaultColumnName { get; set; }
+        private List<SortDescription> _sortDescriptions;
 
-		public ListSortDirection DefaultSortDirection { get; set; }
+        public SortAwareDataGrid()
+        {
+            SelectionChanged += SortAwareDataGrid_SelectionChanged;
+            Loaded += SortAwareDataGrid_Loaded;
+        }
 
-		public IList SelectedItemsList
-		{
-			get => (IList)GetValue(SelectedItemsListProperty);
-			set => SetValue(SelectedItemsListProperty, value);
-		}
+        public string DefaultColumnName { get; set; }
 
-		public static readonly DependencyProperty SelectedItemsListProperty =
-			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
+        public ListSortDirection DefaultSortDirection { get; set; }
 
-		private List<SortDescription> _sortDescriptions;
+        public IList SelectedItemsList
+        {
+            get => (IList)GetValue(SelectedItemsListProperty);
+            set => SetValue(SelectedItemsListProperty, value);
+        }
 
-		protected override void OnSorting(DataGridSortingEventArgs eventArgs)
-		{
-			base.OnSorting(eventArgs);
+        public void Dispose()
+        {
+            SelectionChanged -= SortAwareDataGrid_SelectionChanged;
+            Loaded -= SortAwareDataGrid_Loaded;
+        }
 
-			UpdateSorting();
-		}
+        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+            base.OnItemsSourceChanged(oldValue, newValue);
 
-		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
-		{
-			Loaded -= SortAwareDataGrid_Loaded;
-			SelectedItem = Items.Count > 0 ? Items[0] : null;
-		}
+            if (newValue == null)
+            {
+                return;
+            }
 
-		protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
-		{
-			base.OnItemsSourceChanged(oldValue, newValue);
+            var view = CollectionViewSource.GetDefaultView(newValue);
+            view.SortDescriptions.Clear();
 
-			if (newValue == null)
-			{
-				return;
-			}
+            if (_sortDescriptions == null || _sortDescriptions.Count == 0)
+            {
+                SetDefaultSortDescriptions();
+            }
 
-			var view = CollectionViewSource.GetDefaultView(newValue);
-			view.SortDescriptions.Clear();
+            if (_sortDescriptions == null)
+            {
+                return;
+            }
 
-			if (_sortDescriptions == null || _sortDescriptions.Count == 0)
-			{
-				SetDefaultSortDescriptions();
-			}
+            foreach (var sortDescription in _sortDescriptions)
+            {
+                view.SortDescriptions.Add(sortDescription);
 
-			if (_sortDescriptions == null)
-			{
-				return;
-			}
+                var column = Columns.FirstOrDefault(c => c.SortMemberPath == sortDescription.PropertyName);
+                if (column != null)
+                {
+                    column.SortDirection = sortDescription.Direction;
+                }
+            }
+        }
 
-			foreach (var sortDescription in _sortDescriptions)
-			{
-				view.SortDescriptions.Add(sortDescription);
+        protected override void OnSorting(DataGridSortingEventArgs eventArgs)
+        {
+            base.OnSorting(eventArgs);
 
-				var column = Columns.FirstOrDefault(c => c.SortMemberPath == sortDescription.PropertyName);
-				if (column != null)
-				{
-					column.SortDirection = sortDescription.Direction;
-				}
-			}
-		}
+            UpdateSorting();
+        }
 
-		private void UpdateSorting()
-		{
-			if (ItemsSource == null)
-			{
-				return;
-			}
+        private void SetDefaultSortDescriptions()
+        {
+            if (string.IsNullOrEmpty(DefaultColumnName) || DefaultColumnName == "[none]")
+            {
+                return;
+            }
 
-			var view = CollectionViewSource.GetDefaultView(ItemsSource);
+            _sortDescriptions = new List<SortDescription>
+            {
+                new SortDescription(DefaultColumnName, DefaultSortDirection)
+            };
+        }
 
-			if (_sortDescriptions == null)
-			{
-				_sortDescriptions = new List<SortDescription>();
-			}
-			else
-			{
-				_sortDescriptions.Clear();
-			}
+        private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= SortAwareDataGrid_Loaded;
+            SelectedItem = Items.Count > 0 ? Items[0] : null;
+        }
 
-			foreach (var sortDescription in view.SortDescriptions)
-			{
-				_sortDescriptions.Add(new SortDescription(sortDescription.PropertyName, sortDescription.Direction));
-			}
-		}
+        private void SortAwareDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedItemsList = SelectedItems;
+        }
 
-		private void SetDefaultSortDescriptions()
-		{
-			if (string.IsNullOrEmpty(DefaultColumnName) || DefaultColumnName == "[none]")
-			{
-				return;
-			}
+        private void UpdateSorting()
+        {
+            if (ItemsSource == null)
+            {
+                return;
+            }
 
-			_sortDescriptions = new List<SortDescription>
-			{
-				new SortDescription(DefaultColumnName, DefaultSortDirection)
-			};
-		}
+            var view = CollectionViewSource.GetDefaultView(ItemsSource);
 
-		private void SortAwareDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			SelectedItemsList = SelectedItems;
-		}
+            if (_sortDescriptions == null)
+            {
+                _sortDescriptions = new List<SortDescription>();
+            }
+            else
+            {
+                _sortDescriptions.Clear();
+            }
 
-		public void Dispose()
-		{
-			SelectionChanged -= SortAwareDataGrid_SelectionChanged;
-			Loaded -= SortAwareDataGrid_Loaded;
-		}
-	}
+            foreach (var sortDescription in view.SortDescriptions)
+            {
+                _sortDescriptions.Add(new SortDescription(sortDescription.PropertyName, sortDescription.Direction));
+            }
+        }
+    }
 }

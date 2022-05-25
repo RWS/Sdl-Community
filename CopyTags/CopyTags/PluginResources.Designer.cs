@@ -91,7 +91,7 @@ namespace SDLCopyTags {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Copy Tags.
+        ///   Looks up a localized string similar to Trados Copy Tags.
         /// </summary>
         internal static string Plugin_Name {
             get {

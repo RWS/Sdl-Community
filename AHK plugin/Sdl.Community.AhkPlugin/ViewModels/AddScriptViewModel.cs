@@ -34,7 +34,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		    _scriptDescription = string.Empty;
 		    _scriptContent = string.Empty;
 		    _message = string.Empty;
-		    _messageVisibility = "Hidden";
+		    _messageVisibility = "Collapsed";
 		    _messageColor = string.Empty;
 			_dbContext = new DbContext();
 		    _isDisabled = false;
@@ -176,6 +176,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						ScriptId = Guid.NewGuid().ToString(),
 						Active = !IsDisabled,
 						Description = ScriptDescription,
+						FileName = "AhkMasterScript",
 						Name = ScriptName,
 						Text = ScriptContent
 					};

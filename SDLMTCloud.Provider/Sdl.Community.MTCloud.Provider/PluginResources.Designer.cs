@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -63,9 +63,9 @@ namespace Sdl.Community.MTCloud.Provider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon AdaptiveEngine {
+        public static System.Drawing.Icon add_dictionary {
             get {
-                object obj = ResourceManager.GetObject("AdaptiveEngine", resourceCulture);
+                object obj = ResourceManager.GetObject("add_dictionary", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -81,12 +81,94 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adequate.
+        /// </summary>
+        public static string AdequateQuality {
+            get {
+                return ResourceManager.GetString("AdequateQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto Send Feedback.
+        /// </summary>
+        public static string AutoSendFeedback {
+            get {
+                return ResourceManager.GetString("AutoSendFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If this option is enabled, feedback is sent when the segment is confirmed.
+        /// </summary>
+        public static string AutoSendFeedback_CheckBoxTooltip {
+            get {
+                return ResourceManager.GetString("AutoSendFeedback_CheckBoxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        public static string ClickingHere {
+            get {
+                return ResourceManager.GetString("ClickingHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap defaultStar {
+            get {
+                object obj = ResourceManager.GetObject("defaultStar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon dictionaryIcon {
             get {
                 object obj = ResourceManager.GetObject("dictionaryIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable &quot;Rate Translations&quot;.
+        /// </summary>
+        public static string EnableRating {
+            get {
+                return ResourceManager.GetString("EnableRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To learn more about the information being sent to RWS with this option please visit the &quot;Rate Translations&quot; wiki..
+        /// </summary>
+        public static string EnableRatingCheckboxTooltip {
+            get {
+                return ResourceManager.GetString("EnableRatingCheckboxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request failed.
+        /// </summary>
+        public static string FeedbackNotSent_TooltipMessage {
+            get {
+                return ResourceManager.GetString("FeedbackNotSent_TooltipMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feedback sent successfully..
+        /// </summary>
+        public static string FeedbackSentSuccessfully {
+            get {
+                return ResourceManager.GetString("FeedbackSentSuccessfully", resourceCulture);
             }
         }
         
@@ -121,6 +203,24 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string GoodQuality {
+            get {
+                return ResourceManager.GetString("GoodQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account region:.
+        /// </summary>
+        public static string Label_AccountRegion {
+            get {
+                return ResourceManager.GetString("Label_AccountRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Label_OK {
@@ -144,36 +244,6 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string LanguageCountLabel {
             get {
                 return ResourceManager.GetString("LanguageCountLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap logoB {
-            get {
-                object obj = ResourceManager.GetObject("logoB", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap logoRe {
-            get {
-                object obj = ResourceManager.GetObject("logoRe", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap logoRes {
-            get {
-                object obj = ResourceManager.GetObject("logoRes", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -259,7 +329,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please verify your credentials!.
+        ///   Looks up a localized string similar to Verify your credentials and try again..
         /// </summary>
         public static string Message_Please_verify_your_credentials {
             get {
@@ -358,50 +428,65 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to No dictionary has been selected.
         /// </summary>
-        public static System.Drawing.Bitmap MTCloud_logo {
+        public static string No_dictionary_has_been_selected {
             get {
-                object obj = ResourceManager.GetObject("MTCloud_logo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("No_dictionary_has_been_selected", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Operation complete.
         /// </summary>
-        public static System.Drawing.Bitmap MTCloud_logo_small {
+        public static string Operation_complete {
             get {
-                object obj = ResourceManager.GetObject("MTCloud_logo_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Operation_complete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Operation failed.
         /// </summary>
-        public static System.Drawing.Bitmap MTCodesLogo {
+        public static string Operation_failed {
             get {
-                object obj = ResourceManager.GetObject("MTCodesLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Operation_failed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDLMachineTranslationCloudProvider.
+        ///   Looks up a localized string similar to  (original Language Weaver translation is missing).
         /// </summary>
-        public static string Plugin_Name {
+        public static string OriginalMtCloudTranslationMissing {
             get {
-                return ResourceManager.GetString("Plugin_Name", resourceCulture);
+                return ResourceManager.GetString("OriginalMtCloudTranslationMissing", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Cloud Provider.
+        ///   Looks up a localized string similar to Original translation from {0} is missing. Translate again using the {1} if you want to be able to send a feedback for this segment pair.
         /// </summary>
-        public static string Plugin_NiceName {
+        public static string OriginalTranslationMissingMessage {
             get {
-                return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+                return ResourceManager.GetString("OriginalTranslationMissingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original translation missing.
+        /// </summary>
+        public static string OriginalTranslationMissingTitle {
+            get {
+                return ResourceManager.GetString("OriginalTranslationMissingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poor.
+        /// </summary>
+        public static string PoorQuality {
+            get {
+                return ResourceManager.GetString("PoorQuality", resourceCulture);
             }
         }
         
@@ -426,17 +511,137 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Send Feedback.
         /// </summary>
-        public static System.Drawing.Bitmap sdl {
+        public static string RateIt_FeedbackBtn {
             get {
-                object obj = ResourceManager.GetObject("sdl", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("RateIt_FeedbackBtn", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Language Mapping.
+        ///   Looks up a localized string similar to Add feedback (optional).
+        /// </summary>
+        public static string RateIt_FeedbackWatermark {
+            get {
+                return ResourceManager.GetString("RateIt_FeedbackWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capitalization, punctuation.
+        /// </summary>
+        public static string RateIt_Option_Capitalization {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Capitalization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable &quot;Send feedback option&quot; from Settings.
+        /// </summary>
+        public static string RateIt_Option_DisabledMessage {
+            get {
+                return ResourceManager.GetString("RateIt_Option_DisabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grammar.
+        /// </summary>
+        public static string RateIt_Option_Grammar {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Grammar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spelling.
+        /// </summary>
+        public static string RateIt_Option_Spelling {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Spelling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unintelligible.
+        /// </summary>
+        public static string RateIt_Option_Unintelligence {
+            get {
+                return ResourceManager.GetString("RateIt_Option_Unintelligence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word choice.
+        /// </summary>
+        public static string RateIt_Option_WordChoice {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words addition.
+        /// </summary>
+        public static string RateIt_Option_WordsAddition {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordsAddition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WordsAdditionOptionId.
+        /// </summary>
+        public static string Rateit_Option_WordsAdditionOptionId {
+            get {
+                return ResourceManager.GetString("Rateit_Option_WordsAdditionOptionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words omission.
+        /// </summary>
+        public static string RateIt_Option_WordsOmission {
+            get {
+                return ResourceManager.GetString("RateIt_Option_WordsOmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Rate Translations.
+        /// </summary>
+        public static string RateTranslations_Name {
+            get {
+                return ResourceManager.GetString("RateTranslations_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon rating {
+            get {
+                object obj = ResourceManager.GetObject("rating", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}
+        ///Response from Language Weaver: 
+        ///{1}
+        ///.
+        /// </summary>
+        public static string ResponseFromServer {
+            get {
+                return ResourceManager.GetString("ResponseFromServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Language Mapping.
         /// </summary>
         public static string SDLMTCloud_Action_LanguageMapping_Description {
             get {
@@ -454,7 +659,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Description {
             get {
@@ -463,7 +668,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud Provider.
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -472,11 +677,38 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL MT Cloud.
+        ///   Looks up a localized string similar to SDL Machine Translation Cloud.
+        /// </summary>
+        public static string SDLMTCloud_Provider_OldName {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_OldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Cloud provider.
+        /// </summary>
+        public static string SDLMTCloud_Provider_OldName2 {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_OldName2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver provider.
         /// </summary>
         public static string SDLMTCloud_RibbonGroup_Name {
             get {
                 return ResourceManager.GetString("SDLMTCloud_RibbonGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sdlmtcloud:///.
+        /// </summary>
+        public static string SDLMTCloudUri {
+            get {
+                return ResourceManager.GetString("SDLMTCloudUri", resourceCulture);
             }
         }
         
@@ -491,6 +723,52 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap selectedStar {
+            get {
+                object obj = ResourceManager.GetObject("selectedStar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When this button is clicked all the information applied to the checkboxes, any comment and suggestion (or whatever there is in the target segment) will be sent to the server..
+        /// </summary>
+        public static string SendFeedback_ButtonTooltip {
+            get {
+                return ResourceManager.GetString("SendFeedback_ButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send feedback response from server: Status: {0} Response: {1}.
+        /// </summary>
+        public static string SendFeedbackResponseFromServer {
+            get {
+                return ResourceManager.GetString("SendFeedbackResponseFromServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sent.
+        /// </summary>
+        public static string Sent {
+            get {
+                return ResourceManager.GetString("Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sent with the original translation as improvement..
+        /// </summary>
+        public static string SentWithNoImprovement {
+            get {
+                return ResourceManager.GetString("SentWithNoImprovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Settings {
@@ -501,12 +779,85 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send Translation feedback.
+        /// </summary>
+        public static string SettingsWindow_FeedbackOption {
+            get {
+                return ResourceManager.GetString("SettingsWindow_FeedbackOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-send draft and translated segments.
+        /// </summary>
+        public static string SettingsWindow_ReSendTranslationOption {
+            get {
+                return ResourceManager.GetString("SettingsWindow_ReSendTranslationOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source modified.
+        /// </summary>
+        public static string SourceModified {
+            get {
+                return ResourceManager.GetString("SourceModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source has been modified since the {0} translation was received. To send feedback you need the original source for the translation, or translate again using the modified source..
+        /// </summary>
+        public static string SourceModifiedTextAndAdvice {
+            get {
+                return ResourceManager.GetString("SourceModifiedTextAndAdvice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap success {
+            get {
+                object obj = ResourceManager.GetObject("success", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon TellMe1 {
             get {
                 object obj = ResourceManager.GetObject("TellMe1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term has been successfully added to the current dictionary.
+        /// </summary>
+        public static string The_term_has_been_successfully_added_to_the_current_dictionary {
+            get {
+                return ResourceManager.GetString("The_term_has_been_successfully_added_to_the_current_dictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To enable rating change the settings....
+        /// </summary>
+        public static string ToEnableRatingChangeTheSettings {
+            get {
+                return ResourceManager.GetString("ToEnableRatingChangeTheSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To enable RateIt check the &quot;Enable Rating&quot; checkbox in the Language Weaver settings page..
+        /// </summary>
+        public static string Tooltip_DisabledMessage {
+            get {
+                return ResourceManager.GetString("Tooltip_DisabledMessage", resourceCulture);
             }
         }
         
@@ -534,6 +885,33 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string TranslationLookupDraftNotResentMessage {
             get {
                 return ResourceManager.GetString("TranslationLookupDraftNotResentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to login to the Language Weaver EU instance. Verify your credentials by clicking .
+        /// </summary>
+        public static string UnableToConnectToWorkingEUPortal {
+            get {
+                return ResourceManager.GetString("UnableToConnectToWorkingEUPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to login to the Language Weaver US instance. Verify your credentials by clicking .
+        /// </summary>
+        public static string UnableToConnectToWorkingUSPortal {
+            get {
+                return ResourceManager.GetString("UnableToConnectToWorkingUSPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string UnknownQuality {
+            get {
+                return ResourceManager.GetString("UnknownQuality", resourceCulture);
             }
         }
         
@@ -579,6 +957,24 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string WindowsControl_Restore {
             get {
                 return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Europe.
+        /// </summary>
+        public static string WorkingEUPortal {
+            get {
+                return ResourceManager.GetString("WorkingEUPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to US.
+        /// </summary>
+        public static string WorkingUSPortal {
+            get {
+                return ResourceManager.GetString("WorkingUSPortal", resourceCulture);
             }
         }
     }

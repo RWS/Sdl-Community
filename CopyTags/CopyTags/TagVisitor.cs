@@ -2,13 +2,14 @@
 using SDLCopyTags.Helpers;
 using System;
 using System.Collections.Generic;
+using NLog;
 
 namespace SDLCopyTags
 {
 	internal class TagVisitor : IMarkupDataVisitor
 	{
 		public IList<IAbstractMarkupData> Tags { get; private set; } = new List<IAbstractMarkupData>();
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
@@ -56,7 +57,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"VisitTagPair method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 			}
 		}
 
@@ -94,7 +95,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"ClearContentInTagPairs method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 			}
 		}
 
@@ -109,7 +110,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"VisitChildren method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 			}
 		}
 	}

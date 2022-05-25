@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - BringBackTheButton/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - BringBackTheButton/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.BringBackTheButton.sln'
+- name: pathToPublish
+  value: 'BringBackTheButton\BringBackTheButton\bin\Release\Sdl.Community.BringBackTheButton.sdlplugin'
+
+steps:
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'BringBackTheButtonInSonar'
+      organization: 'sdl'
+      scannerMode: 'MSBuild'
+      projectKey: 'bring-back-the-button'
+      projectName: 'Bring back the button'
+  - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@1
+  - template: jobs/publish-build-artifact-task.yml
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'

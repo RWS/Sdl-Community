@@ -19,7 +19,7 @@ namespace Sdl.Community.Qualitivity {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -169,7 +169,7 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About Qualitivity for SDL Trados Studio 2019.
+        ///   Looks up a localized string similar to About Qualitivity for Trados Studio 2021.
         /// </summary>
         internal static string About_Qualitivity_for_SDL_Trados_Studio_2019 {
             get {
@@ -647,7 +647,7 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No new SDL Studio Project available!.
+        ///   Looks up a localized string similar to No new Trados Studio Project available!.
         /// </summary>
         internal static string No_new_SDL_Studio_Project_available_ {
             get {

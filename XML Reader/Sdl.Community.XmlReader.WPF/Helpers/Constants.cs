@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.XmlReader.WPF.Helpers
 {
@@ -11,7 +7,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 	{
 		public static  string StudioLocation => ExecutingStudioLocation();
 		public static string ProjectApiDll = "Sdl.ProjectApi.Reporting.dll";
-		public static string AnalysidDll = "Sdl.ProjectApi.AutomaticTasks.Analysis.dll";
+		public static string AnalysidDll = "Sdl.ProjectApi.AutomaticTasks.dll";
 		public static string  XmlReportingDll="Sdl.ProjectApi.Reporting.XmlReporting.dll";
 		public static string ExcelReportRendererType = "Sdl.ProjectApi.Reporting.XmlReporting.ExcelReportRenderer";
 		public  static string ReportDefinitionType= "Sdl.ProjectApi.Reporting.ReportDefinition";

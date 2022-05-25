@@ -2,7 +2,7 @@
 using System.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace IATETerminologyProvider.Model
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class EntryLanguageModel : IEntryLanguage
 	{

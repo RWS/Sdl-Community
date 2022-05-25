@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Google API Validator" Language="1033" Version="1.0.0.3" Manufacturer="Sdl Community" UpgradeCode="eb801ff6-6c88-4f37-b046-9aa0da311c44">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+		
+		<Icon Id="GAV.ico" SourceFile="$(var.ProjectDir)GAV.ico" />
+		<Property Id="ARPPRODUCTICON" Value="GAV.ico" />
+		
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+		
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<UIRef Id="WixUI_InstallDir" />
+		
+		<Feature Id="ProductFeature" Title="GoogleApiValidator.Setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="GoogleApiValidator.Setup" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+	
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="cde1e030-eb64-49a5-b7b8-400b379c2d1a">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="Google API Validator" Icon="GAV.ico" Description="Google API Validator" Target="[INSTALLFOLDER]Sdl.Community.GoogleApiValidator.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Google API Validator" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+	<Fragment>
+	<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+		<ComponentRef Id="grpc_csharp_ext.x86.dll"/>
+		<ComponentRef Id="grpc_csharp_ext.x64.dll"/>
+		<ComponentRef Id="libgrpc_csharp_ext.x86.so"/>
+		<ComponentRef Id="libgrpc_csharp_ext.x64.so"/>
+		<ComponentRef Id="libgrpc_csharp_ext.x86.dylib"/>
+		<ComponentRef Id="libgrpc_csharp_ext.x64.dylib"/>
+		<ComponentRef Id="Sdl.Community.GoogleApiValidator.exe"/>
+		<ComponentRef Id="Sdl.Community.GoogleApiValidator.exe.config"/>
+		<ComponentRef Id="Google.Cloud.Translate.V3.dll"/>
+		<ComponentRef Id="Google.Cloud.Translation.V2.dll"/>
+		<ComponentRef Id="Google.Api.Gax.dll"/>
+		<ComponentRef Id="Google.Api.Gax.Grpc.dll"/>
+		<ComponentRef Id="Google.Protobuf.dll"/>
+		<ComponentRef Id="ControlzEx.dll"/>
+		<ComponentRef Id="Microsoft.Xaml.Behaviors.dll"/>
+		<ComponentRef Id="Google.Api.CommonProtos.dll"/>
+		<ComponentRef Id="Google.LongRunning.dll"/>
+		<ComponentRef Id="Grpc.Core.Api.dll"/>
+		<ComponentRef Id="System.Memory.dll"/>
+		<ComponentRef Id="System.Numerics.Vectors.dll"/>
+		<ComponentRef Id="System.Runtime.CompilerServices.Unsafe.dll"/>
+		<ComponentRef Id="System.Buffers.dll"/>
+		<ComponentRef Id="Grpc.Core.dll"/>
+		<ComponentRef Id="Google.Api.Gax.Grpc.GrpcCore.dll"/>
+		<ComponentRef Id="Google.Apis.Translate.v2.dll"/>
+		<ComponentRef Id="Google.Apis.Core.dll"/>
+		<ComponentRef Id="Google.Apis.dll"/>
+		<ComponentRef Id="Newtonsoft.Json.dll"/>
+		<ComponentRef Id="Google.Apis.Auth.dll"/>
+		<ComponentRef Id="Google.Api.Gax.Rest.dll"/>
+		<ComponentRef Id="Microsoft.Bcl.AsyncInterfaces.dll"/>
+		<ComponentRef Id="System.Threading.Tasks.Extensions.dll"/>
+		<ComponentRef Id="Grpc.Auth.dll"/>
+		<ComponentRef Id="Google.Apis.Auth.PlatformServices.dll"/>
+		<ComponentRef Id="MahApps.Metro.dll"/>
+	</ComponentGroup>
+		<DirectoryRef Id="INSTALLFOLDER" FileSource="..\GoogleApiValidator\bin\Release\">
+			<Component>
+				<File Checksum="yes" Name="grpc_csharp_ext.x86.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="grpc_csharp_ext.x64.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="libgrpc_csharp_ext.x86.so"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="libgrpc_csharp_ext.x64.so"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="libgrpc_csharp_ext.x86.dylib"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="libgrpc_csharp_ext.x64.dylib"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Sdl.Community.GoogleApiValidator.exe" KeyPath="yes"/>
+			</Component>
+			<Component>
+				<File Name="Sdl.Community.GoogleApiValidator.exe.config"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Cloud.Translate.V3.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Cloud.Translation.V2.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Api.Gax.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Api.Gax.Grpc.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Protobuf.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="ControlzEx.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Microsoft.Xaml.Behaviors.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Api.CommonProtos.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.LongRunning.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Grpc.Core.Api.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="System.Memory.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="System.Numerics.Vectors.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="System.Runtime.CompilerServices.Unsafe.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="System.Buffers.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Grpc.Core.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Api.Gax.Grpc.GrpcCore.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Apis.Translate.v2.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Apis.Core.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Apis.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Newtonsoft.Json.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Apis.Auth.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Api.Gax.Rest.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Microsoft.Bcl.AsyncInterfaces.dll" />
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="System.Threading.Tasks.Extensions.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Grpc.Auth.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="Google.Apis.Auth.PlatformServices.dll"/>
+			</Component>
+			<Component>
+				<File Checksum="yes" Name="MahApps.Metro.dll"/>
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+</Wix>

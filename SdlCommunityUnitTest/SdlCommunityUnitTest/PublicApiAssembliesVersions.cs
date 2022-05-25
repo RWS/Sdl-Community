@@ -12,7 +12,7 @@ namespace SdlCommunityUnitTest
 		private readonly PublicApiVersion _publicApiService = new PublicApiVersion();
 
 		[Theory]
-		[InlineData("Studio15")]
+		[InlineData("Studio16")]
 		public void CheckAssembliesVersions(string studioVersion)
 		{
 			var studioVersionFolderPath = Path.Combine(_studioFolderPath,studioVersion);
@@ -37,7 +37,7 @@ namespace SdlCommunityUnitTest
 		}
 
 		[Theory]
-		[InlineData("Studio15")]
+		[InlineData("Studio16")]
 		public void AllApiExists(string studioVersion)
 		{
 			var studioVersionFolderPath = Path.Combine(_studioFolderPath, studioVersion);

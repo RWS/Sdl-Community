@@ -1,46 +1,45 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-	public sealed class Log
-	{
-		public static Logger Logger;
-		private static readonly Lazy<Log> _instance = new Lazy<Log>(() => new Log());
-		public static Log Instance => _instance.Value;
+	public static class Log
+    {
+        private static bool _isInitialized;
 
-		private Log()
-		{
-			var config = new LoggingConfiguration();
-			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
-				"DeeplLogs");
-			if (!Directory.Exists(logDirectoryPath))
-			{
-				Directory.CreateDirectory(logDirectoryPath);
-			}
-			var target = new FileTarget
-			{
-				FileName = Path.Combine(logDirectoryPath, "DeeplLogs.txt"),
-				// Roll over the log every 10 MB
-				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
+        public static Logger GetLogger(string name)
+        {
+            if (!_isInitialized) Log.Setup();
+            return LogManager.GetLogger(name);
+        }
 
-				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
-				// we need to do basic string concatenation.
-				ArchiveFileName = logDirectoryPath + "/" + assembly.GetName().Name + ".log.{#####}.txt"
-			};
+        private static void Setup()
+        {
+            _isInitialized = true;
+            if (LogManager.Configuration == null)
+            {
+                LogManager.Configuration = new LoggingConfiguration();
+            }
+            var config = LogManager.Configuration;
 
-			config.AddTarget("file", target);
-			var rule = new LoggingRule("*", LogLevel.Debug, target);
-			config.LoggingRules.Add(rule);
-			LogManager.Configuration = config;
-			//NLog object
-			Logger = LogManager.GetCurrentClassLogger();
-		}
-	}
+            var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
+                "DeepLLogs");
+            Directory.CreateDirectory(logDirectoryPath);
+
+            var target = new FileTarget
+            {
+                Name = "DeepL",
+                FileName = Path.Combine(logDirectoryPath, "DeeplLogs.txt"),
+                Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
+            };
+
+            config.AddTarget(target);
+            config.AddRuleForAllLevels(target, "*DeepL*");
+
+            LogManager.ReconfigExistingLoggers();
+        }
+    }
 }

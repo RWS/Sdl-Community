@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StudioMigrationUtility", "Sdl.Community.StudioMigrationUtility\Sdl.Community.StudioMigrationUtility.csproj", "{DCD95D2B-60E7-4D11-B6AC-5A63B590195A}"
 EndProject
@@ -10,11 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF8E838B-5F09-4875-9420-EAA4B7EAE578}"
 	ProjectSection(SolutionItems) = preProject
 		setup.iss = setup.iss
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{76294D1A-2B02-4034-BCD1-6F6FAEC61A7D}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PluginInfo", "Sdl.Community.PluginInfo\Sdl.Community.PluginInfo.csproj", "{867DB6EF-2B27-4626-8C2E-FD6EC7A4A943}"

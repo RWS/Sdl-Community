@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Studio;
+using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.LanguagePlatform.Core;
 using Application = System.Windows.Forms.Application;
 using Cursors = System.Windows.Input.Cursors;
 using MessageBox = System.Windows.Forms.MessageBox;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -22,15 +26,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 	{
 		private readonly SdlMTCloudTranslationProvider _provider;
 		private readonly List<LanguagePair> _languagePairs;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
+		private ICommand _navigateToWikiCommand;
 
 		private bool _reSendChecked;
 		private LanguageMappingModel _selectedLanguageMappingModel;
 		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
 		private bool _isWaiting;
+		private bool _sendFeedback;
 
 		public OptionsViewModel(Window owner, SdlMTCloudTranslationProvider provider, List<LanguagePair> languagePairs)
 		{
@@ -40,10 +47,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			_languagePairs = languagePairs;
 
 			ReSendChecked = provider.Options?.ResendDraft ?? true;
+			SendFeedback = provider.Options?.SendFeedback ?? true;
+
 			LoadLanguageMappings();
 		}
 
 		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
+		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
+
+		private void NavigateToWiki(object obj)
+		{
+			Process.Start(
+				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
+		}
 
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
 														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
@@ -105,6 +121,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public bool SendFeedback
+		{
+			get => _sendFeedback;
+			set
+			{
+				_sendFeedback = value; 
+				OnPropertyChanged(nameof(SendFeedback));
+			}
+		}
+
 		public bool IsWaiting
 		{
 			get => _isWaiting;
@@ -141,6 +167,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			try
 			{
 				ReSendChecked = true;
+				SendFeedback = true;
 
 				_provider.Options = new Options();
 
@@ -165,7 +192,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			catch (Exception ex)
 			{
 				IsWaiting = false;
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 
 				if (Owner != null)
 				{
@@ -202,7 +229,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			catch (Exception ex)
 			{
 				IsWaiting = false;
-				Log.Logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
 
 				if (Owner != null)
 				{
@@ -254,6 +281,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					_provider.Options.ResendDraft = ReSendChecked;
 					_provider.Options.LanguageMappings = LanguageMappingModels.ToList();
+					_provider.Options.SendFeedback = SendFeedback;
 
 					Dispose();
 

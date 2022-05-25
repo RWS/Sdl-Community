@@ -10,7 +10,7 @@ using Sdl.ProjectAutomation.Settings;
 namespace Sdl.Community.FailSafeTask
 {
 	[AutomaticTask("Sdl.Community.FailSafeTask",
-		"Failsafe Task",
+		"Fail Safe Task",
 		"Verifies generating target translation is possible",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
@@ -166,9 +166,9 @@ namespace Sdl.Community.FailSafeTask
 				root.Add(new XElement("Result",
 						new XAttribute("Name", projectFile.Name),
 						new XAttribute("Failed", true),
-						FormatMessage(task.Messages)));
+						FormatMessage(task?.Messages)));
 
-				errorMsgReporter.StoreMessage(projectFile.Name, FormatMessage(task.Messages));
+				errorMsgReporter.StoreMessage(projectFile.Name, FormatMessage(task?.Messages));
 			}
 		}
 	}

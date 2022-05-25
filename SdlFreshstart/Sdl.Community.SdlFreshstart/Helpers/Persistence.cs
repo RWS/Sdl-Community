@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using NLog;
 using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
@@ -10,14 +11,14 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 	{
 		private readonly string _studioPersistancePath;
 		private readonly string _multiTermPersistancePath;
-		public static readonly Log Log = Log.Instance;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public Persistence()
 		{
 			try
 			{
-				_studioPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup", "Settings", "studioSettings.json");
-				_multiTermPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup", "Settings", "multiTermSettings.json");
+				_studioPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart", "Settings", "studioSettings.json");
+				_multiTermPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart", "Settings", "multiTermSettings.json");
 				if (!File.Exists(_studioPersistancePath))
 				{
 					var studioDirectory = Path.GetDirectoryName(_studioPersistancePath);
@@ -37,27 +38,20 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.PersistenceConstructor} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.PersistenceConstructor} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
-		public void SaveSettings(List<LocationDetails> locations,bool studioSettings)
+		public void SaveSettings(List<LocationDetails> locations, bool studioSettings)
 		{
 			try
 			{
 				var json = JsonConvert.SerializeObject(locations);
-				if (studioSettings)
-				{
-					File.WriteAllText(_studioPersistancePath, json);
-				}
-				else
-				{
-					File.WriteAllText(_multiTermPersistancePath, json);
-				}
+				File.WriteAllText(studioSettings ? _studioPersistancePath : _multiTermPersistancePath, json);
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.SaveSettings} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.SaveSettings} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -70,7 +64,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.Load} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{Constants.Load} {ex.Message}\n {ex.StackTrace}");
 			}
 			return new List<LocationDetails>();
 		}

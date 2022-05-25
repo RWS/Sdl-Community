@@ -2,11 +2,12 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Sdl.Community.WordCloud.Controls.Geometry;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.WordCloud.Plugin
 {
-    public partial class WordCloudViewPartControl : UserControl
-    {
+    public partial class WordCloudViewPartControl : UserControl, IUIControl
+	{
         public WordCloudViewPartControl()
         {
             InitializeComponent();
@@ -33,7 +34,7 @@ namespace Sdl.Community.WordCloud.Plugin
 
         void _viewModel_SelectedProjectChanged(object sender, EventArgs e)
         {
-            _generateButton.Enabled = ViewModel.Project != null;
+            _generateButton.Enabled = (ViewModel.Project != null) && (ViewModel.Project.GetProjectInfo().ProjectType != ProjectAutomation.Core.ProjectType.InLanguageCloud); 
             _generatingLabel.Visible = false;
             _progressBar.Visible = false;
             

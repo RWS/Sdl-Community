@@ -4,13 +4,13 @@ using Sdl.Desktop.IntegrationApi.DefaultLocations;
 
 namespace Sdl.Community.TMRepair
 {
-	[RibbonGroup("Sdl.Community.TMRepair", Name = "TMRepair")]
+	[RibbonGroup("Sdl.Community.TMRepair", Name = "SDLTM Repair")]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	class TmRepairRibbon : AbstractRibbonGroup
 	{
 	}
 
-	[Action("Sdl.Community.TMRepair", Name = "TMRepair", Icon = "Repair", Description = "TMRepair")]
+	[Action("Sdl.Community.TMRepair", Name = "SDLTM Repair", Icon = "Repair", Description = "SDLTM Repair")]
 	[ActionLayout(typeof(TmRepairRibbon), 20, DisplayType.Large)]
 	class TmRepairViewPartAction : AbstractAction
 	{

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiTermSearchExample", "MultiTermSearchExample\MultiTermSearchExample.csproj", "{763F497C-18B5-4543-888F-EF67F1D1621B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{763F497C-18B5-4543-888F-EF67F1D1621B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{763F497C-18B5-4543-888F-EF67F1D1621B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{763F497C-18B5-4543-888F-EF67F1D1621B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{763F497C-18B5-4543-888F-EF67F1D1621B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29BCBAFC-C877-4146-ADEA-94EDC27D327B}
+	EndGlobalSection
+EndGlobal

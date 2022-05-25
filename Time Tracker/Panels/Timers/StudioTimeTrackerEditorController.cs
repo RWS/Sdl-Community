@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
@@ -15,9 +16,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
     [ViewPartLayout(typeof(EditorController), Dock = DockType.Right)]
     public class StudioTimeTrackerEditorController : AbstractViewPartController
     {
-
-
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }
@@ -26,9 +25,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
         {
    
         }
-
-       
-
         private static readonly Lazy<StudioTimeTrackerEditorControl> Control = new Lazy<StudioTimeTrackerEditorControl>(() => new StudioTimeTrackerEditorControl());      
     }
 }

@@ -10,6 +10,8 @@
         Title="Preview changes"
         mc:Ignorable="d"		
 		xmlns:controls="clr-namespace:Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls"
+        xmlns:converters="clr-namespace:Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Converters"
+        xmlns:platformConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
 		xmlns:model="clr-namespace:Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model"
 		d:DesignHeight="300" d:DesignWidth="600"
 		d:DataContext="{d:DesignData PreviewWindowViewModel}">
@@ -18,16 +20,31 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\Styles\DataGridStyle.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<Style x:Key="SummaryLabel" TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+				<Setter Property="VerticalContentAlignment" Value="Bottom"/>
+			</Style>
+			<converters:StringToBoolConverter x:Key="StringToBool"/>
+			<BooleanToVisibilityConverter x:Key="BoolToVis" />
+			<platformConverters:InverseBooleanConverter x:Key="InverseBoolConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
 
 	<Grid Name="Grid" ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto" >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="4*"/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition  />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<Grid Grid.Row="0">
+		<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
 			<controls:SortAwareDataGrid x:Name="SortAwareDataGrid"
 			        DefaultColumnName="TranslationUnit.ResourceId.Id"
 			        DefaultSortDirection="Ascending"
@@ -121,29 +138,43 @@
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</Grid>
-		<StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,0,10,15">
-			<Grid>
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
-					<Label Content="Filtered:" Padding="2,0,2,0"/>
-					<Label Content="{Binding ElementName=SortAwareDataGrid, Path=Items.Count}" Padding="2,0,2,0"/>
-					<Label Content=", " Padding="0"/>
-					<Label Content="Selected:" Padding="2,0,2,0" Height="33" VerticalAlignment="Top"/>
-					<Label Content="{Binding Path=SelectedCount, FallbackValue=0}" Padding="2,0,2,0"/>
+		<Label Grid.Row="2" Grid.Column="0" Content="Filter by" Foreground="Gray" Margin="10 0 2 0" Padding="0"/>
+		<TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10 0 0 0" Name="Query"
+				 IsEnabled="{Binding ElementName=ResetButton, Path=IsEnabled, Converter={StaticResource InverseBoolConverter}}"
+		         Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		</TextBox>
+		<Button Grid.Row="3" Grid.Column="1" Click="Button_Click" HorizontalAlignment="Right" Style="{StaticResource Sdl.Button.EmbeddedStyle}">
+			<Image Source="../../Resources/Clear.png" Height="12" Width="12" Visibility="{Binding ElementName=ApplyFilterButton, Path=IsEnabled, Converter={StaticResource BoolToVis}}"/>
+		</Button>
+		<DockPanel Grid.Row="4" Grid.Column="1">
+			<Button Height="20" Content="Reset filter" Command="{Binding ApplyFilterCommand}" CommandParameter="Reset"
+					Margin="5"
+					Name="ResetButton"
+					IsEnabled="{Binding FilterPresent}"
+			        Style="{DynamicResource Sdl.Button.GeneralStyle}" />
+			<Button Height="20" Content="Apply filter" Name="ApplyFilterButton" Command="{Binding ApplyFilterCommand}" CommandParameter="{Binding ElementName=Query, Path=Text}"
+					IsEnabled="{Binding ElementName=Query, Path=Text, Converter={StaticResource StringToBool}}"
+			        Style="{DynamicResource Sdl.Button.GeneralStyle}" />
+		</DockPanel>
+		<StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10 0 0 10">
+				<Label Style="{StaticResource SummaryLabel}" Content="Filtered:" Padding="0,0,2,0"/>
+				<Label Style="{StaticResource SummaryLabel}" Content="{Binding ElementName=SortAwareDataGrid, Path=Items.Count}" Padding="2,0,2,0"/>
+				<Label Style="{StaticResource SummaryLabel}" Content=", " Padding="0"/>
+				<Label Style="{StaticResource SummaryLabel}" Content="Selected:" Padding="2,0,2,0" Height="33" VerticalAlignment="Top"/>
+				<Label Style="{StaticResource SummaryLabel}" Content="{Binding Path=SelectedCount, FallbackValue=0}" Padding="2,0,2,0"/>
+		</StackPanel>
+		<StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 10">
+			<Button Style="{StaticResource Sdl.Button.PrimaryStyle }" Command="{Binding ApplyCommand}" Height="Auto" Margin="0,0,10,0">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="../../Resources/ApplyChanges.ico" Margin="0,0,5,0"/>
+					<TextBlock>Apply changes</TextBlock>
 				</StackPanel>
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-					<Button  Width="127" Style="{DynamicResource LightGreenButtonsStyle }" Command="{Binding ApplyCommand}" Height="Auto" Margin="0,0,10,5">
-						<StackPanel Orientation="Horizontal">
-							<Image Source="../../Resources/ApplyChanges.ico" Margin="0,0,5,0"/>
-							<TextBlock>Apply changes</TextBlock>
-						</StackPanel>
-					</Button>
-					<Button Margin="0,0,0,5" Style="{DynamicResource LightGreenButtonsStyle }" Width="90" IsCancel="True" Height="Auto">
-						<StackPanel Orientation="Horizontal">
-							<TextBlock>Cancel</TextBlock>
-						</StackPanel>
-					</Button>
+			</Button>
+			<Button Margin="0,0,0,0" Style="{StaticResource Sdl.Button.SecondaryStyle }" Width="90" IsCancel="True" Height="Auto">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock>Cancel</TextBlock>
 				</StackPanel>
-			</Grid>
+			</Button>
 		</StackPanel>
 	</Grid>
 

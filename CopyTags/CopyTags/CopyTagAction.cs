@@ -3,10 +3,10 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using SDLCopyTags.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using NLog;
+using SDLCopyTags.Helpers;
 
 namespace SDLCopyTags
 {
@@ -14,12 +14,14 @@ namespace SDLCopyTags
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 1, DisplayType.Large)]
     public class CopyTagAction : AbstractViewControllerAction<EditorController>
     {
-		public static readonly Log Log = Log.Instance;
+	    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		protected override void Execute()
+	    protected override void Execute()
         {
+	        Log.Setup();
 			try
 			{
+				_logger.Info("Log initialized");
 				var currentSegment = Controller?.ActiveDocument?.GetActiveSegmentPair();
 
 				if (currentSegment != null && currentSegment.Target.Count == 0)
@@ -36,7 +38,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"CopyTagAction Execute method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 			}
 		}
 
@@ -51,7 +53,7 @@ namespace SDLCopyTags
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{"GetTags method: "} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error(ex);
 				return new List<IAbstractMarkupData>();
 			}
 		}

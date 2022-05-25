@@ -1,45 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using Sdl.Community.NumberVerifier.Interfaces;
-using Sdl.Community.NumberVerifier.Model;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    public class NormalizeNumbersAllowLocalization
+	public class NormalizeNumbersAllowLocalization
     {
-        [Theory]
-        [InlineData("1,55", " ", ",")]
-        public void NormalizeDecimalNumbersComma(string text, string thousandSep, string decimalSep)
+        private readonly Mock<IDocumentProperties> _documentProperties;
+
+        public NormalizeNumbersAllowLocalization()
         {
-            // add to settings allow localization and thousnds separators
-            var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
-            numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            _documentProperties = new Mock<IDocumentProperties>();
+        }
+
+        [Theory]
+        [InlineData("1,55", "1.55")]
+        public void NormalizeDecimalNumbersComma(string source, string target)
+        {
+            //target settings
+            var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+            numberVerifierSettings.Setup(t => t.TargetNoSeparator).Returns(true);
+            numberVerifierSettings.Setup(t => t.TargetDecimalPeriod).Returns(true);
+
+            // source settings
+            numberVerifierSettings.Setup(s => s.SourceNoSeparator).Returns(true);
+            numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
 
             NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
-            var docPropMock = new Mock<IDocumentProperties>();
-            numberVerifierMain.Initialize(docPropMock.Object);
+            numberVerifierMain.Initialize(_documentProperties.Object);
 
+            var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            var normalizedNumber = numberVerifierMain.NormalizedNumber(new SeparatorModel
-				{
-					MatchValue = text,
-					ThousandSeparators = thousandSep,
-					DecimalSeparators = decimalSep,
-					NoSeparator = false,
-					CustomSeparators = string.Empty
-				});
-			
-            Assert.Equal(normalizedNumber, "1d55");
+            Assert.True(errorMessage.Count == 0);
         }
     }
 }

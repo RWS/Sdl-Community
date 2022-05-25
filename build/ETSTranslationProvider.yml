@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ETS Translation Provider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ETS Translation Provider/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/ETSTranslationProvider.sln'
+- name: pathToPublish
+  value: 'ETS Translation Provider\ETSTranslationProvider\Trados2019_Plugin\bin\Release\SDLMachineTranslationEdgeProvider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -1,18 +1,24 @@
-﻿using Sdl.Community.ProjectTerms.Plugin.Views;
+﻿using System;
+using System.Windows.Forms;
+using Sdl.Community.ProjectTerms.Plugin.Views;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using System;
-using System.Windows.Forms;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 {
-    [Action("ExtractProjectTermsFiles", Name = "Extract Project Terms", Description = "ProjectTerms_Description")]
+	[Action("ExtractProjectTermsFiles", Name = "Extract Project Terms Files", Description = "ProjectTerms_Description")]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 2, DisplayType.Large)]
     public class ProjectTermsFilesControllerAction : AbstractViewControllerAction<FilesController>
     {
-        protected override void Execute()
+	    public override void Initialize()
+	    {
+		    base.Initialize();
+		    Text = "Extract Project Terms";
+	    }
+    
+	    protected override void Execute()
         {
             if (Utils.Utils.VerifySingleFileProjectType())
             {

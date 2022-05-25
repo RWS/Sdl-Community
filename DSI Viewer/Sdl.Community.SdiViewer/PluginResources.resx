@@ -139,4 +139,58 @@
   <data name="StructureContextInfo_MetaValue_chars" xml:space="preserve">
     <value>characters</value>
   </data>
+  <data name="ClearFilter_Button_Content" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
+  <data name="ApplyFilter_Button_Content" xml:space="preserve">
+    <value>Apply filter</value>
+  </data>
+  <data name="CheckBox_ByModel_Content" xml:space="preserve">
+    <value>by Model</value>
+  </data>
+  <data name="CheckBox_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="CheckBox_Poor" xml:space="preserve">
+    <value>Poor</value>
+  </data>
+  <data name="CheckBox_Good" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="CheckBox_Adequate" xml:space="preserve">
+    <value>Adequate</value>
+  </data>
+  <data name="CheckBox_ByQualityEstimation" xml:space="preserve">
+    <value>by Quality Estimation</value>
+  </data>
+  <data name="Label_SDLMTCloudFilter" xml:space="preserve">
+    <value> - Language Weaver Filter:</value>
+  </data>
+  <data name="Label_Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="Label_QualityEstimation" xml:space="preserve">
+    <value>Quality Estimation</value>
+  </data>
+  <data name="Label_SDLMTCloudRelated" xml:space="preserve">
+    <value>Language Weaver Related</value>
+  </data>
+  <data name="Label_SDLMTCloudInfo" xml:space="preserve">
+    <value> - Translation Origin Info:</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Global" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\global.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\tellme.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProviderId" xml:space="preserve">
+    <value>weaver</value>
+  </data>
 </root>

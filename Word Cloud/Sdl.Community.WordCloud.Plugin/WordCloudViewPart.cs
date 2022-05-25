@@ -1,19 +1,22 @@
 ﻿using System;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.WordCloud.Plugin
 {
     [ViewPart(
        Id = "CodingBreeze.WordCloud.ProjectsViewPart",
-       Name = "Word Cloud",
+       Name = "Trados Studio Word Cloud",
        Description = "Show contents of the project in a word cloud.",
        Icon = "wordcloud")]
     [ViewPartLayout(Dock = DockType.Bottom, LocationByType = typeof(ProjectsController))]
     public class WordCloudViewPart : AbstractViewPartController
     {
-        protected override System.Windows.Forms.Control GetContentControl()
+	    private readonly Lazy<WordCloudViewPartControl> _control = new Lazy<WordCloudViewPartControl>(() => new WordCloudViewPartControl());
+
+		protected override IUIControl GetContentControl()
         {
             return _control.Value;
         }
@@ -22,9 +25,6 @@ namespace Sdl.Community.WordCloud.Plugin
         {
             _control.Value.ViewModel = WordCloudViewModel.Instance;
         }
-
-        private readonly Lazy<WordCloudViewPartControl> _control = new Lazy<WordCloudViewPartControl>(() => new WordCloudViewPartControl());
-
 
         internal void GenerateWordCloud()
         {

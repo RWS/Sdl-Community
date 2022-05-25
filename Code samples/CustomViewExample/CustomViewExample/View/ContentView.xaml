@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="CustomViewExample.View.ContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:CustomViewExample.ViewModel"
+             xmlns:controls="clr-namespace:CustomViewExample.Controls"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModel:ContentViewModel}"
+             d:DesignHeight="280" d:DesignWidth="700">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="10">
+
+		<GroupBox Header="Project Information">
+			<StackPanel Orientation="Vertical" Margin="10">
+				<controls:LabelTextBlock Label="Name: " Text="{Binding Path=Project.Name}"/>
+				<controls:LabelTextBlock Label="Description: " Text="{Binding Path=Project.Description}"/>
+				<controls:LabelTextBlock Label="Type: " Text="{Binding Path=Project.ProjectType}"/>
+				<controls:LabelTextBlock Label="Origin: " Text="{Binding Path=Project.ProjectOrigin}"/>
+				<controls:LabelTextBlock Label="Path: " Text="{Binding Path=Project.Path}"/>
+				<controls:LabelTextBlock Label="Created: " Text="{Binding Path=Project.CreatedToString}"/>
+				<controls:LabelTextBlock Label="Due: " Text="{Binding Path=Project.DueDateToString}"/>
+
+				<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+					<TextBlock Text="Source: " Width="90"
+				           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" TextWrapping="WrapWithOverflow" Margin="2" />
+					<Grid Margin="2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+
+						<Image Grid.Column="0" Margin="0"  RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+								       Source="{Binding Project.SourceLanguage.Image}" />
+						<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="2,0,5,0"
+								           Text="{Binding Project.SourceLanguage.CultureInfo.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+					</Grid>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+					<TextBlock Text="Target: " Width="90" 
+				           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" TextWrapping="WrapWithOverflow" Margin="2" />
+					<ItemsControl Margin="2" ItemsSource="{Binding Path=Project.TargetLanguages}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid Margin="0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="*" />
+									</Grid.ColumnDefinitions>
+
+									<Image Grid.Column="0" Margin="0" Source="{Binding Image}" 
+								       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"/>
+									<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="2,0,5,0"
+							           Text="{Binding CultureInfo.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</StackPanel>
+			</StackPanel>
+		</GroupBox>
+	</Grid>
+</UserControl>

@@ -2,7 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Xml;
-using Sdl.Community.StarTransit.Shared.Utils;
+using NLog;
+using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
@@ -14,14 +16,14 @@ namespace Sdl.Community.StarTransit.Shared.Import
 	public class TransitParser : AbstractBilingualFileTypeComponent, IBilingualParser, INativeContentCycleAware, ISettingsAware
 	{
 		private IFileProperties _fileProperties;
-		private IDocumentProperties _documentProperties;
-		private XmlDocument _document;
+		private readonly IFileService _fileService = new FileService();
+		private XmlDocument _trgDocument;
 		private XmlDocument _srcDocument;
 		public event EventHandler<ProgressEventArgs> Progress;
-
 		private int _totalTagCount;
 		private int _tmpTotalTagCount;
 		private int _srcSegmentTagCount;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public void SetFileProperties(IFileProperties properties)
 		{
@@ -30,38 +32,36 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		public void StartOfInput()
 		{
-			try
+			OnProgress(0);
+			var trgFilePath = _fileProperties?.FileConversionProperties?.OriginalFilePath;
+			if (!File.Exists(trgFilePath)) return;
+
+			_trgDocument = new XmlDocument {PreserveWhitespace = true};
+			_srcDocument = new XmlDocument {PreserveWhitespace = true};
+			_trgDocument.Load(trgFilePath);
+
+			var directoryPath = Path.GetDirectoryName(trgFilePath);
+			if (string.IsNullOrEmpty(directoryPath)) return;
+
+			//search for source tm file corresponding to the target tm
+			foreach (var file in Directory.GetFiles(directoryPath))
 			{
-				OnProgress(0);
-				_document = new XmlDocument();
-				_document.PreserveWhitespace = true;
-				_srcDocument = new XmlDocument();
-				_srcDocument.PreserveWhitespace = true;
-				var trgFilePath = _fileProperties.FileConversionProperties.OriginalFilePath;
-				_document.Load(trgFilePath);
-
-				var pos = trgFilePath.LastIndexOf("\\");
-				var path = trgFilePath.Substring(0, pos);
-
-				foreach (var fileName in Directory.GetFiles(path))
+				var currentFileName = Path.GetFileNameWithoutExtension(file);
+				var targetFileName = Path.GetFileNameWithoutExtension(trgFilePath);
+				var currentFileExtension = Path.GetExtension(file);
+				var targetFileExtension = Path.GetExtension(trgFilePath);
+				if (currentFileName == targetFileName && currentFileExtension != targetFileExtension)
 				{
-					if (fileName.Substring(0, fileName.Length - 4) == trgFilePath.Substring(0, trgFilePath.Length - 4) &&
-						fileName.Substring(fileName.Length - 4, 4) != trgFilePath.Substring(trgFilePath.Length - 4, 4))
-					{
-						_srcDocument.Load(fileName);
-					}
+					_srcDocument.Load(file);
+					break;
 				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"StartOfInput method: {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
 		public void EndOfInput()
 		{
 			OnProgress(100);
-			_document = null;
+			_trgDocument = null;
 		}
 
 		protected virtual void OnProgress(byte percent)
@@ -69,17 +69,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			Progress?.Invoke(this, new ProgressEventArgs(percent));
 		}
 
-		public IDocumentProperties DocumentProperties
-		{
-			get
-			{
-				return _documentProperties;
-			}
-			set
-			{
-				_documentProperties = value;
-			}
-		}
+		public IDocumentProperties DocumentProperties { get; set; }
 
 		public IBilingualContentHandler Output
 		{
@@ -91,28 +81,36 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		{
 			try
 			{
-				if (_documentProperties == null)
+				if (DocumentProperties == null)
 				{
-					_documentProperties = ItemFactory.CreateDocumentProperties();
+					DocumentProperties = ItemFactory.CreateDocumentProperties();
 				}
-				Output.Initialize(_documentProperties);
+				Output.Initialize(DocumentProperties);
 
 				var fileInfo = ItemFactory.CreateFileProperties();
 				fileInfo.FileConversionProperties = _fileProperties.FileConversionProperties;
 				Output.SetFileProperties(fileInfo);
 
-				// variables for the progress report
-				if (!(_document is null))
+				var segNodes = _trgDocument?.SelectNodes("//Seg");
+				if (segNodes != null)
 				{
-					var totalUnitCount = _document.SelectNodes("//Seg").Count;
+					var totalUnitCount = segNodes.Count;
 					var currentUnitCount = 0;
-					foreach (XmlNode item in _document.SelectNodes("//Seg"))
-					{
-						Output.ProcessParagraphUnit(CreateParagraphUnit(item));
 
+					foreach (XmlNode item in segNodes)
+					{
+						var dataAttribute = item.SelectSingleNode("./@Data")?.InnerText;
+						if (dataAttribute != null)
+						{
+							var dataAttributeHexCode = _fileService.ConvertStringToHex(dataAttribute, Encoding.Unicode);
+							if (_fileService.IsValidNode(dataAttributeHexCode))
+							{
+								Output.ProcessParagraphUnit(CreateParagraphUnit(item, dataAttributeHexCode));
+							}
+						}
 						// update the progress report   
 						currentUnitCount++;
-						OnProgress(Convert.ToByte(Math.Round(100 * ((decimal) currentUnitCount / totalUnitCount), 0)));
+						OnProgress(Convert.ToByte(Math.Round(100 * ((decimal)currentUnitCount / totalUnitCount), 0)));
 					}
 				}
 
@@ -121,109 +119,95 @@ namespace Sdl.Community.StarTransit.Shared.Import
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"ParseNext method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
 		}
 
 		// helper function for creating paragraph units
-		private IParagraphUnit CreateParagraphUnit(XmlNode xmlUnit)
+		private IParagraphUnit CreateParagraphUnit(XmlNode xmlUnit,string dataAttributeHexCode)
 		{
-			try
+			// create paragraph unit object
+			var paragraphUnit = ItemFactory.CreateParagraphUnit(LockTypeFlags.Unlocked);
+
+			// create paragraph unit context
+			var id = xmlUnit.SelectSingleNode("./@SegID").InnerText;
+			paragraphUnit.Properties.Contexts = CreateContext("Paragraph", id);
+
+			foreach (XmlNode item in xmlUnit.SelectNodes("."))
 			{
-				// create paragraph unit object
-				var paragraphUnit = ItemFactory.CreateParagraphUnit(LockTypeFlags.Unlocked);
+				// create segment pair object
+				var segmentPairProperties = ItemFactory.CreateSegmentPairProperties();
+				var tuOrg = ItemFactory.CreateTranslationOrigin();
 
-				// create paragraph unit context
-				var id = xmlUnit.SelectSingleNode("./@SegID").InnerText;
-				paragraphUnit.Properties.Contexts = CreateContext("Paragraph", id);
+				// assign the appropriate confirmation level to the segment pair            
+				segmentPairProperties.ConfirmationLevel = CreateConfirmationLevel(dataAttributeHexCode);
+				tuOrg.MatchPercent = CreateMatchValue(item);
 
-				foreach (XmlNode item in xmlUnit.SelectNodes("."))
+				// add source segment to paragraph unit
+				var srcSegment = CreateSegment(_srcDocument.SelectSingleNode("//Seg[@SegID='" + id + "']"),
+					segmentPairProperties, true);
+				paragraphUnit.Source.Add(srcSegment);
+				// add target segment to paragraph unit if available
+
+				if (item.SelectSingleNode(".") != null)
 				{
-					// create segment pair object
-					var segmentPairProperties = ItemFactory.CreateSegmentPairProperties();
-					var tuOrg = ItemFactory.CreateTranslationOrigin();
-
-					// assign the appropriate confirmation level to the segment pair            
-					segmentPairProperties.ConfirmationLevel = CreateConfirmationLevel(item);
-					tuOrg.MatchPercent = CreateMatchValue(item);
-
-					// add source segment to paragraph unit
-					var srcSegment = CreateSegment(_srcDocument.SelectSingleNode("//Seg[@SegID='" + id + "']"), segmentPairProperties, true);
-					paragraphUnit.Source.Add(srcSegment);
-					// add target segment to paragraph unit if available
-					if (item.SelectSingleNode(".") != null)
-					{
-						var trgSegment = CreateSegment(item.SelectSingleNode("."), segmentPairProperties, false);
-						paragraphUnit.Target.Add(trgSegment);
-					}
-					else
-					{
-						item.SelectSingleNode(".").InnerText = "";
-						var trgSegment = CreateSegment(item.SelectSingleNode("."), segmentPairProperties, false);
-						paragraphUnit.Target.Add(trgSegment);
-					}
-
-					if (tuOrg.MatchPercent > 0)
-					{
-						tuOrg.OriginType = DefaultTranslationOrigin.TranslationMemory;
-					}
-					segmentPairProperties.TranslationOrigin = tuOrg;
-					return paragraphUnit;
+					var trgSegment = CreateSegment(item.SelectSingleNode("."), segmentPairProperties, false);
+					paragraphUnit.Target.Add(trgSegment);
 				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreateParagraphUnit method: {ex.Message}\n {ex.StackTrace}");
+				else
+				{
+					item.SelectSingleNode(".").InnerText = "";
+					var trgSegment = CreateSegment(item.SelectSingleNode("."), segmentPairProperties, false);
+					paragraphUnit.Target.Add(trgSegment);
+				}
+
+				if (tuOrg.MatchPercent > 0)
+				{
+					tuOrg.OriginType = DefaultTranslationOrigin.TranslationMemory;
+				}
+
+				segmentPairProperties.TranslationOrigin = tuOrg;
+				return paragraphUnit;
 			}
 			return null;
 		}
 
-		private ConfirmationLevel CreateConfirmationLevel(XmlNode segmentXml)
+		private ConfirmationLevel CreateConfirmationLevel(string dataAttributeHexCode)
 		{
 			var sdlxliffLevel = ConfirmationLevel.Translated;
-			try
-			{
-				var data = segmentXml.SelectSingleNode("./@Data").InnerText;
-				var stringBytes = Encoding.Unicode.GetBytes(data);
-				var sbBytes = new StringBuilder(stringBytes.Length * 2);
-				foreach (var b in stringBytes)
-				{
-					sbBytes.AppendFormat("{0:X2}", b);
-				}
-				var statusCode = sbBytes.ToString().Substring(0, 2).ToLower();
 
-				if (statusCode == "02")
-					sdlxliffLevel = ConfirmationLevel.Unspecified;
-				if (statusCode == "0e")
-					sdlxliffLevel = ConfirmationLevel.ApprovedTranslation;
-				if (statusCode == "0f")
-					sdlxliffLevel = ConfirmationLevel.ApprovedSignOff;
-				if (statusCode == "0a")
-					sdlxliffLevel = ConfirmationLevel.Translated;
-				if (statusCode == "0c")
-					sdlxliffLevel = ConfirmationLevel.Translated;
-				if (statusCode == "08")
-					sdlxliffLevel = ConfirmationLevel.Translated;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreateConfirmationLevel method: {ex.Message}\n {ex.StackTrace}");
-			}
+			var statusCode = dataAttributeHexCode.Substring(0, 2).ToLower();
+
+			if (statusCode == "02")
+				sdlxliffLevel = ConfirmationLevel.Unspecified;
+			if (statusCode == "0e")
+				sdlxliffLevel = ConfirmationLevel.ApprovedSignOff;
+			if (statusCode == "0f")
+				sdlxliffLevel = ConfirmationLevel.ApprovedSignOff;
+			if (statusCode == "0a")
+				sdlxliffLevel = ConfirmationLevel.Translated;
+			if (statusCode == "06")
+				sdlxliffLevel = ConfirmationLevel.Translated;
+			if (statusCode == "04")
+				sdlxliffLevel = ConfirmationLevel.Translated;
+			if (statusCode == "0c")
+				sdlxliffLevel = ConfirmationLevel.ApprovedTranslation;
+			if (statusCode == "08")
+				sdlxliffLevel = ConfirmationLevel.Draft;
+
 			return sdlxliffLevel;
 		}
 
 		private byte CreateMatchValue(XmlNode segmentXml)
 		{
 			byte matchValue = 0;
-			if (!(segmentXml is null))
-			{
-				var data = segmentXml.SelectSingleNode("./@Data").InnerText;
+			if (segmentXml is null) return matchValue;
+			var data = segmentXml.SelectSingleNode("./@Data").InnerText;
 
-				if (data.Contains("\\") && segmentXml.SelectSingleNode(".").InnerText != "")
-				{
-					matchValue = 100;
-				}
+			if (data.Contains("\\") && segmentXml.SelectSingleNode(".").InnerText != "")
+			{
+				matchValue = 100;
 			}
 
 			return matchValue;
@@ -232,48 +216,41 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		// helper function for creating segment objects
 		private ISegment CreateSegment(XmlNode segNode, ISegmentPairProperties pair, bool source)
 		{
-			try
+			var segment = ItemFactory.CreateSegment(pair);
+			if (source)
 			{
-				var segment = ItemFactory.CreateSegment(pair);
-				if (source)
+				_srcSegmentTagCount = 0;
+				if (_totalTagCount < _tmpTotalTagCount)
 				{
-					_srcSegmentTagCount = 0;
-					if (_totalTagCount < _tmpTotalTagCount)
+					_totalTagCount = _tmpTotalTagCount;
+				}
+			}
+			else
+			{
+				_totalTagCount = _totalTagCount - _srcSegmentTagCount;
+			}
+
+			if (segNode != null)
+			{
+				foreach (XmlNode item in segNode.ChildNodes)
+				{
+					if (item.NodeType == XmlNodeType.Text)
 					{
-						_totalTagCount = _tmpTotalTagCount;
+						segment.Add(CreateText(item.InnerText));
+					}
+
+					if (item.NodeType == XmlNodeType.Element)
+					{
+						segment.Add(CreatePhTag(item.Name, item, source));
+					}
+
+					if (item.NodeType == XmlNodeType.Whitespace)
+					{
+						segment.Add(CreateText(" "));
 					}
 				}
-				else
-				{
-					_totalTagCount = _totalTagCount - _srcSegmentTagCount;
-				}
-				if (segNode != null)
-				{
-					foreach (XmlNode item in segNode.ChildNodes)
-					{
-						if (item.NodeType == XmlNodeType.Text)
-						{
-							segment.Add(CreateText(item.InnerText));
-						}
-
-						if (item.NodeType == XmlNodeType.Element)
-						{
-							segment.Add(CreatePhTag(item.Name, item, source));
-						}
-
-						if (item.NodeType == XmlNodeType.Whitespace)
-						{
-							segment.Add(CreateText(" "));
-						}
-					}
-				}
-				return segment;
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreateSegment method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return null;
+			return segment;
 		}
 
 
@@ -287,58 +264,43 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		private IPlaceholderTag CreatePhTag(string tagContent, XmlNode item, bool source)
 		{
-			try
+			var phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
+			var phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
+
+			var cont = item.NextSibling != null ? item.NextSibling.Value : string.Empty;
+
+			phTagProperties.SegmentationHint = SegmentationHint.IncludeWithText;
+			phTagProperties.TagContent = item.OuterXml;
+			phTagProperties.DisplayText = item.Name;
+			phTagProperties.CanHide = false;
+
+			//determine tag id
+			if (source)
 			{
-				var phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
-				var phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
-
-				var cont = item.NextSibling != null ? item.NextSibling.Value : string.Empty;
-
-				phTagProperties.SegmentationHint = SegmentationHint.IncludeWithText;
-				phTagProperties.TagContent = item.OuterXml;
-				phTagProperties.DisplayText = item.Name;
-				phTagProperties.CanHide = false;
-
-				//determine tag id
-				if (source)
-				{
-					_totalTagCount += 1;
-					_tmpTotalTagCount += 1;
-					_srcSegmentTagCount += 1;
-				}
-				return phTag;
+				_totalTagCount += 1;
+				_tmpTotalTagCount += 1;
+				_srcSegmentTagCount += 1;
 			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreatePhTag method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return null;
+
+			return phTag;
 		}
 
 		private IContextProperties CreateContext(string spec, string unitID)
 		{
-			try
-			{
-				var contextProperties = PropertiesFactory.CreateContextProperties();
-				var contextInfo = PropertiesFactory.CreateContextInfo(StandardContextTypes.Paragraph);
-				contextInfo.Purpose = ContextPurpose.Information;
+			var contextProperties = PropertiesFactory.CreateContextProperties();
+			var contextInfo = PropertiesFactory.CreateContextInfo(StandardContextTypes.Paragraph);
+			contextInfo.Purpose = ContextPurpose.Information;
 
-				// add unit id as metadata
-				var contextId = PropertiesFactory.CreateContextInfo("UnitId");
-				contextId.SetMetaData("UnitID", unitID);
-				contextId.Description = "Original paragraph unit id";
-				contextId.DisplayCode = "ID";
+			// add unit id as metadata
+			var contextId = PropertiesFactory.CreateContextInfo("UnitId");
+			contextId.SetMetaData("UnitID", unitID);
+			contextId.Description = "Original paragraph unit id";
+			contextId.DisplayCode = "ID";
 
-				contextProperties.Contexts.Add(contextInfo);
-				contextProperties.Contexts.Add(contextId);
+			contextProperties.Contexts.Add(contextInfo);
+			contextProperties.Contexts.Add(contextId);
 
-				return contextProperties;
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"CreateContext method: {ex.Message}\n {ex.StackTrace}");
-			}
-			return null;
+			return contextProperties;
 		}
 
 		public void InitializeSettings(Sdl.Core.Settings.ISettingsBundle settingsBundle, string configurationId)
@@ -348,7 +310,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
 		public void Dispose()
 		{
-			_document = null;
+			_trgDocument = null;
 		}
 	}
 }

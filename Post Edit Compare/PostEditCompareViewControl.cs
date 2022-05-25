@@ -1,9 +1,10 @@
 using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.PostEdit.Versions
 {
-    public partial class PostEditCompareViewControl : UserControl
-    {
+    public partial class PostEditCompareViewControl : UserControl, IUIControl
+	{
         public PostEditCompareViewControl()
         {
             InitializeComponent();

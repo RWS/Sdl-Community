@@ -7,6 +7,7 @@ using Sdl.Community.Qualitivity.Panels.Main;
 using Sdl.Community.Structures.Documents.Records;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Qualitivity.Panels.QualityMetrics
@@ -40,7 +41,7 @@ namespace Sdl.Community.Qualitivity.Panels.QualityMetrics
         internal static string SelectedSegmentId { get; set; }
         internal static string SelectedParagraphId { get; set; }
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return Control.Value;
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -9,39 +8,30 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 {
 	public sealed class Log
 	{
-		private static Logger _logger;
-
-		public static Logger Logger => _logger ?? (_logger = GetLogger());
-
-		private static Logger GetLogger()
+		public static void Setup()
 		{
-			var config = new LoggingConfiguration();
-			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.SDLCommunity, Constants.SDLMachineTranslationCloud);
-			if (!Directory.Exists(logDirectoryPath))
+			if (LogManager.Configuration == null)
 			{
-				Directory.CreateDirectory(logDirectoryPath);
+				LogManager.Configuration = new LoggingConfiguration();
 			}
 
-			var target = new FileTarget("SDLMTCloud")
-			{
-				FileName = Path.Combine(logDirectoryPath, "SDLMachineTranslationCloudLogs.txt"),
-				// Roll over the log every 10 MB
-				ArchiveAboveSize = 10000000,
-				ArchiveNumbering = ArchiveNumberingMode.Date,
+			var config = LogManager.Configuration;
 
-				// Path.combine nor string.format like the {#####}, which is used to replace the date, therefore
-				// we need to do basic string concatenation.
-				ArchiveFileName = logDirectoryPath + "/" + assembly.GetName().Name + ".log.{#####}.txt"
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.RWSAppStore, Constants.SDLMachineTranslationCloud);
+
+			Directory.CreateDirectory(logDirectoryPath);
+
+			var target = new FileTarget
+			{
+				Name = "SDLMTCloud",
+				FileName = Path.Combine(logDirectoryPath, "LanguageWeaverCloudLogs.txt"),
+				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
-			config.AddTarget("file", target);
-			var rule = new LoggingRule("*", LogLevel.Debug, target);
-			config.LoggingRules.Add(rule);
-			LogManager.Configuration = config;
+			config.AddTarget(target);
+			config.AddRuleForAllLevels(target, "*MTCloud*");
 
-			//NLog object
-			return LogManager.GetCurrentClassLogger();
+			LogManager.ReconfigExistingLoggers();
 		}
 	}
 }

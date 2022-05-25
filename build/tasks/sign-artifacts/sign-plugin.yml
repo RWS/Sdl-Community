@@ -1,0 +1,14 @@
+parameters:
+  fileToSign: '$PSScriptRoot\signme.exe'
+ 
+steps:
+
+- task: PowerShell@2
+  displayName: 'Sign ${{ parameters.fileToSign }}'
+  inputs:
+    targetType: filePath
+    filePath: './build/tasks/sign-artifacts/sign-plugin.ps1'
+    arguments: '"${{ parameters.fileToSign }}" '
+    pwsh: true
+  env:
+    OpenXSecret: $(OpenXSecret)

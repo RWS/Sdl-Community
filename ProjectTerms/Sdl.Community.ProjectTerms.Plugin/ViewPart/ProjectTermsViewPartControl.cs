@@ -1,9 +1,10 @@
 ﻿using System.Windows.Forms;
 using System;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
 {
-    public partial class ProjectTermsViewPartControl : UserControl
+    public partial class ProjectTermsViewPartControl : UserControl, IUIControl
     {
         ProjectTermsViewModel viewModel;
         internal ProjectTermsViewModel ViewModel

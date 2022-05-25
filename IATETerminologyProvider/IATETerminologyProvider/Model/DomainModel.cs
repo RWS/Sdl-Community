@@ -1,4 +1,4 @@
-﻿namespace IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class DomainModel : ViewModelBase
 	{		
@@ -14,6 +14,6 @@
 				_isSelected = value;
 				OnPropertyChanged(nameof(IsSelected));
 			}
-		}	
+		}
 	}
 }

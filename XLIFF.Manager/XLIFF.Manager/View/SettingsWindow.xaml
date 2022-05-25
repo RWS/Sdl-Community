@@ -1,0 +1,270 @@
+﻿<Window x:Class="Sdl.Community.XLIFF.Manager.View.SettingsWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
+		xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
+		xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.ViewModel"
+		xmlns:rws="http://schemas.rws.com/xaml"
+		WindowStyle="ThreeDBorderWindow"
+		WindowStartupLocation="CenterScreen"
+        AllowsTransparency="False" 
+        ResizeMode="CanResizeWithGrip"
+		mc:Ignorable="d" 
+        Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+        MinHeight="500" MinWidth="600" Height="500" Width="600"
+		d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid Margin="10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Border Grid.Row="0" >
+			<Grid Margin="2">
+			</Grid>
+			
+		</Border>
+		<TabControl Grid.Row="1" Margin="5,5,5,5"
+		            SelectedIndex="{Binding SelectedPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<TabItem Header="Export" >
+				<Grid Margin="20">
+
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					
+					<Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
+						           Text="XLIFF Support:" Margin="0,0,10,0"/>
+						<ComboBox Grid.Row="0" Grid.Column="1" Width="150" HorizontalAlignment="Left" Height="22"
+				          VerticalAlignment="Center"
+				          VerticalContentAlignment="Center"
+				          ItemsSource="{Binding XLIFFSupportItems}"
+				          DisplayMemberPath="Name"
+				          SelectedItem="{Binding ExportSelectedXliffSupportItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					</Grid>
+
+					<CheckBox Grid.Row="2" Margin="0,10,0,0" Grid.Column="0" Content="Include Translations" 
+				          IsChecked="{Binding ExportIncludeTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<CheckBox Grid.Row="3" Margin="0,10,0,0" Grid.Column="0" Content="Copy Source to Target for empty translations" 
+				          IsEnabled="{Binding ExportCopySourceToTargetEnabled}"
+				          IsChecked="{Binding ExportCopySourceToTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<Grid Grid.Row="4" Margin="0,5,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<TextBlock VerticalAlignment="Center" Text="Exclude Segments" 
+					           Style="{StaticResource TextBlockColor}" Margin="0,10,5,5"/>
+
+						<rws:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+						                         Margin="0,0,5,0" 
+						                         Height="55" 
+						                         MaxDropDownHeight="250"
+						                         Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+						                         SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+						                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+						                         ItemsSource="{Binding ExcludeFilterItems}"            
+						                         SelectedItems="{Binding ExportSelectedExcludeFilterItems}"
+						                         rws:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+						                         EnableGrouping="True"
+						                         EnableFiltering="True"
+						                         IsEditable="True"
+						                         EnableAutoComplete="True"
+						                         ClearFilterOnDropdownClosing="True"
+						                         ClearSelectionOnFilterChanged="True"/>
+						<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+					        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}"  HorizontalAlignment="Right" Height="20">
+							<Underline>Clear selected items</Underline>
+						</Button>
+					</Grid>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Import" IsSelected="True">
+				<Grid Margin="20">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+			
+					<CheckBox Grid.Row="1" Grid.Column="0"  Margin="0,10,0,0"  Content="Overwrite existing translations" 
+					          IsChecked="{Binding ImportOverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<Grid Grid.Row="2" HorizontalAlignment="Left"  Margin="0,10,0,10" >
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Grid.Column="0" Text="Origin system:" Margin="0,0,10,0" VerticalAlignment="Center"/>
+						<TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Width="200" Height="22"
+						         VerticalAlignment="Center"
+						         VerticalContentAlignment="Center"
+						         Text="{Binding ImportOriginSystem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+					</Grid>
+
+					<TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource TextBlockColor}" 
+					           Text="Segment Status Assignment" Margin="0,10,0,0" VerticalAlignment="Center"/>
+
+					<Grid Grid.Row="4" Margin="15,0,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+
+						<TextBlock Grid.Row="0" Grid.Column="0" Text="Translations updated:" Margin="0,5,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						<ComboBox Grid.Row="0" Grid.Column="1"  Margin="0,5,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
+					          VerticalAlignment="Center"
+					          VerticalContentAlignment="Center"
+					          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
+					          SelectedItem="{Binding ImportStatusTranslationUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					          />
+
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="Translations not updated:" Margin="0,5,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						<ComboBox Grid.Row="1" Grid.Column="1"  Margin="0,5,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
+				          VerticalAlignment="Center"
+				          VerticalContentAlignment="Center"
+				          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
+				          SelectedItem="{Binding ImportStatusTranslationNotUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Row="2" Grid.Column="0" Text="Segments not imported:" Margin="0,5,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						<ComboBox Grid.Row="2" Grid.Column="1"  Margin="0,5,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
+				          VerticalAlignment="Center"
+				          VerticalContentAlignment="Center"
+				          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
+				          SelectedItem="{Binding ImportStatusSegmentNotImported, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+					</Grid>
+
+					<Grid Grid.Row="5" Margin="0,5,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<TextBlock VerticalAlignment="Center" Text="Exclude Segments" 
+					           Style="{StaticResource TextBlockColor}" Margin="0,10,5,5"/>
+
+						<rws:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+						                         Margin="0,0,5,0" 
+						                         Height="55" 
+						                         MaxDropDownHeight="250"
+						                         Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+						                         SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+						                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+						                         ItemsSource="{Binding ImportFilterItems}"            
+						                         SelectedItems="{Binding ImportSelectedExcludeFilterItems}"
+						                         rws:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding SelectedItemsChangedCommand}"
+						                         EnableGrouping="True"
+						                         EnableFiltering="True"
+						                         IsEditable="True"
+						                         EnableAutoComplete="True"
+						                         ClearFilterOnDropdownClosing="True"
+						                         ClearSelectionOnFilterChanged="True"/>
+						<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+					        Command="{Binding ClearFiltersCommand}" 
+						        Style="{StaticResource LinkButton}" 
+						        HorizontalAlignment="Right" Height="20">
+							<Underline>Clear selected items</Underline>
+						</Button>
+					</Grid>
+				</Grid>
+
+
+			</TabItem>
+
+		</TabControl>
+		<StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
+			<Grid Height="28">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+					<Button Margin="0,0,10,0" Width="90" Command="{Binding SaveCommand}" IsDefault="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>OK</TextBlock>
+						</StackPanel>
+					</Button>
+					<Button Margin="0" Width="90" IsCancel="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>Cancel</TextBlock>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+				<Button Command="{Binding ResetCommand}" 
+				        HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" 
+				        Style="{StaticResource LinkButton}"
+				        Width="90" Height="25">
+					<Underline>
+						Reset defaults
+					</Underline>
+				</Button>
+			</Grid>
+		</StackPanel>
+	</Grid>
+</Window>

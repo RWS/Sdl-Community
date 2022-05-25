@@ -6,5 +6,6 @@ namespace Sdl.Community.TQA.Model
 	{
 		public List<Entry> Entries { get; set; }
 		public List<string> EvaluationComments { get; set; }
+		public string QualityLevel { get; set; }
 	}
 }

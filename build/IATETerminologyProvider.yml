@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - IATETerminologyProvider/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - IATETerminologyProvider/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.IATETerminologyProvider.sln'
+- name: pathToPublish
+  value: 'IATETerminologyProvider\IATETerminologyProvider\bin\Release\Sdl.Community.IATETerminologyProvider.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

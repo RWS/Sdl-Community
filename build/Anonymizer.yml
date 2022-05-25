@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Anonymizer/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Anonymizer/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.projectAnonymizer.sln'
+- name: pathToPublish
+  value: 'Anonymizer\Anonymizer\bin\Release\Sdl.Community.projectAnonymizer.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

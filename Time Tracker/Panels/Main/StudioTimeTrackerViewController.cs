@@ -10,6 +10,7 @@ using Sdl.Community.Studio.Time.Tracker.Structures;
 using Sdl.Community.Studio.Time.Tracker.Tracking;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -42,11 +43,11 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
         private bool IsLoading { get; set; }
 
 
-        protected override Control GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _viewContent.Value;
         }
-        protected override Control GetExplorerBarControl()
+        protected override IUIControl GetExplorerBarControl()
         {
             return _viewNavigation.Value;
         }
@@ -398,9 +399,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
             Tracked.TarckerCheckNewProjectId = string.Empty;
 
             UpdateNavigationControl(selectedProject);
-
-
-
         }
 
 
@@ -2492,15 +2490,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
                 // ignored
             }
         }
-
-
- 
-        public void ViewAboutInfo()
-        {
-            var f = new Dialogs.About();
-            f.ShowDialog();
-        }
-
 
         private static void LoadCurrencies()
         {

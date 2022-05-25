@@ -1,0 +1,73 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Reports.Viewer/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - Reports.Viewer/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- group: 'SDLPLC Authenticode Credentials'
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Reports.Viewer.sln'
+- name: pathToPublish
+  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
+- name: outputpath
+  value: '$(Build.Repository.LocalPath)\Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)'
+steps:
+- task: PowerShell@2
+  displayName: 'set x86path'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download Trados Studio Binaries Pipeline Artifact'
+  inputs:
+    buildType: 'specific'
+    project: 'TradosStudio'
+    definition: '1258'
+    artifactName: 'binaries'
+    buildVersionToDownload: 'latestFromBranch'
+    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+    runBranch: '$(StudioBranch)'
+    tags: 'Package'
+
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet last version'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(solution)'
+    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
+
+- template: tasks/sign-artifacts/prepare-plugin-signing.yml
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- template: tasks/sign-artifacts/sign-plugin.yml
+  parameters:
+    fileToSign: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
+
+- template: jobs/publish-build-artifact-task.yml

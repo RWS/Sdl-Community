@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sdl.Community.AhkPlugin.Helpers
+namespace Sdl.Community.ApplyTMTemplate.Utilities
 {
 	public class Reflector
 	{

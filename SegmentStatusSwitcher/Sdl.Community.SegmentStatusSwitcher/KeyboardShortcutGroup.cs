@@ -1,6 +1,9 @@
-﻿using Sdl.Core.Globalization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -17,21 +20,29 @@ namespace Sdl.Community.SegmentStatusSwitcher
 
         public static void ChangeSegmentStatus(ConfirmationLevel confirmationLevel)
         {
-            var _editorController = GetEditorController();
+            var activeDocument = GetEditorController().ActiveDocument;
+	        if (activeDocument == null) return;
 
-            if (_editorController != null && _editorController.ActiveDocument != null)
-            {
-                var segmentPair = _editorController.ActiveDocument.ActiveSegmentPair;
+	        var selectedSegmentPairs = activeDocument.GetSelectedSegmentPairs().ToList();
+	        AddSegmentPair(selectedSegmentPairs, activeDocument.ActiveSegmentPair);
 
-                if (segmentPair != null)
-                {
-                    segmentPair.Properties.ConfirmationLevel = confirmationLevel;
-                    _editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
-                }
-            }
+	        foreach (var segmentPair in selectedSegmentPairs)
+	        {
+		        segmentPair.Properties.ConfirmationLevel = confirmationLevel;
+		        activeDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+	        }
         }
 
-        [Action("NotTranslatedStatusAction", Name = "Not Translated", Description = "Not Translated", Icon = "ConfirmationLevel_Unspecified")]
+	    private static void AddSegmentPair(List<ISegmentPair> selectedSegmentPairs, ISegmentPair newSegmentPair)
+	    {
+			if (newSegmentPair == null) return;
+		    if (selectedSegmentPairs.All(sp => sp.Properties.Id != newSegmentPair.Properties.Id))
+		    {
+			    selectedSegmentPairs.Add(newSegmentPair);
+		    }
+	    }
+
+	    [Action("NotTranslatedStatusAction", Name = "Not Translated", Description = "Not Translated", Icon = "ConfirmationLevel_Unspecified")]
         [ActionLayout(typeof(KeyboardShortcutGroup), DisplayType = DisplayType.ImageOnly)]
         public class NotTranslatedStatusAction : AbstractAction
         {        

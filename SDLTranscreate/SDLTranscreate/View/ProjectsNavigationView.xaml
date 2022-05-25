@@ -1,0 +1,214 @@
+﻿<UserControl x:Class="Trados.Transcreate.View.ProjectsNavigationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:metroControls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:behaviours="clr-namespace:Trados.Transcreate.Behaviours"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
+             xmlns:viewModel="clr-namespace:Trados.Transcreate.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ProjectsNavigationViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="{x:Type UserControl}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="12"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+
+			<Style x:Key="ContextMenuStyle" TargetType="{x:Type StackPanel}">
+				<Setter Property="ContextMenu" Value="{DynamicResource TreeViewContextMenu}"/>
+			</Style>
+			<ContextMenu x:Key="TreeViewContextMenu">
+
+				<MenuItem Header="Remove Transcreate project" 
+				          IsEnabled="{Binding DataContext.IsEnabledDeleteProject, 
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+				          Command="{Binding DataContext.RemoveProjectCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/Delete.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+
+				<MenuItem Header="Create Back-Translation projects" 
+				          IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+				          Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/back_translation_small.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<MenuItem Header="Remove Back-Translation projects" 
+							IsEnabled="{Binding DataContext.IsEnabledRemoveBackProjects, 
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							Command="{Binding DataContext.RemoveBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/Delete.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<Separator/>
+				<MenuItem Header="Open folder in explorer" 
+				          Command="{Binding DataContext.OpenProjectFolderCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/Folder.png"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</ContextMenu>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Border BorderBrush="Gainsboro" BorderThickness="1" Background="White">
+		<Grid Margin="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<Grid Margin="2" Grid.Column="0" Grid.Row="0" Height="24">
+				<TextBox Padding="0,0,20,0" Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				         VerticalContentAlignment="Center"
+				         IsEnabled="True"/>
+				<TextBlock IsHitTestVisible="False" Padding="0,0,20,0" Text="Filter project name" VerticalAlignment="Center" HorizontalAlignment="Left" 
+				           Margin="5,0,0,0" Foreground="DarkGray">
+					<TextBlock.Style>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Visibility" Value="Collapsed" />
+							<Style.Triggers>
+								<MultiDataTrigger>
+									<MultiDataTrigger.Conditions>
+										<Condition Binding="{Binding FilterString}" Value="" />
+									</MultiDataTrigger.Conditions>
+									<MultiDataTrigger.Setters>
+										<Setter Property="Visibility" Value="Visible" />
+									</MultiDataTrigger.Setters>
+								</MultiDataTrigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+				<Button Command="{Binding ClearFilterCommand}" Cursor="Hand" ToolTip="Clear filter"
+					HorizontalAlignment="Right" Margin="0,0,0,0" Width="20" VerticalContentAlignment="Center">
+					<Button.Style>
+						<Style TargetType="{x:Type Button}">
+							<Setter Property="Visibility" Value="Visible" />
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border Background="Transparent">
+											<ContentPresenter/>
+										</Border>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+							<Style.Triggers>
+								<MultiDataTrigger>
+									<MultiDataTrigger.Conditions>
+										<Condition Binding="{Binding FilterString}" Value="" />
+									</MultiDataTrigger.Conditions>
+									<MultiDataTrigger.Setters>
+										<Setter Property="Visibility" Value="Collapsed" />
+									</MultiDataTrigger.Setters>
+								</MultiDataTrigger>
+							</Style.Triggers>
+
+						</Style>
+					</Button.Style>
+					<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="../Resources/Close.png" Height="10" 
+					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
+				</Button>
+			</Grid>
+
+			<TreeView Grid.Column="0" Padding="2,5,2,2" Grid.Row="1" 					  
+			          ItemsSource="{Binding CustomerGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
+				<TreeView.ItemContainerStyle>
+					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
+						<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</Style>
+				</TreeView.ItemContainerStyle>
+				<TreeView.ItemTemplate >
+					<HierarchicalDataTemplate ItemsSource="{Binding Projects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataType="{x:Type model:CustomerGroup}">
+						<StackPanel Orientation="Horizontal" Margin="0,1,0,1">
+							<TextBlock FontWeight="Bold" FontSize="13" Text="{Binding Customer.Name}" Margin="0"/>
+							<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=" (" />
+							<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Text="projects: "  />
+							<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Text="{Binding Projects.Count}" />
+							<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=")" />
+						</StackPanel>
+						<HierarchicalDataTemplate.ItemTemplate>
+							<HierarchicalDataTemplate ItemsSource="{Binding BackTranslationProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" 
+							                          DataType="{x:Type model:Project}">
+
+								<StackPanel Orientation="Horizontal" Margin="0,1,0,1"
+								            Style="{StaticResource ContextMenuStyle}">
+									<Image Focusable="False"
+									       Stretch="UniformToFill"
+									       RenderOptions.BitmapScalingMode="HighQuality" 
+									       RenderOptions.EdgeMode="Aliased"
+									       HorizontalAlignment="Center"
+									       VerticalAlignment="Center"		
+									       Width="17"
+									       Source="../Resources/sdl_transcreate_view.ico"
+									       Margin="0,0,2,0"/>
+									<TextBlock FontWeight="Bold" FontSize="13" Text="{Binding Name}" Margin="0"/>
+									<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=" (" />
+									<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Text="back-projects: "  />
+									<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Text="{Binding BackTranslationProjects.Count}" />
+									<TextBlock FontWeight="Regular" Foreground="#7C7979" FontSize="13" Margin="0" Text=")" />
+								</StackPanel>
+								<HierarchicalDataTemplate.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:BackTranslationProject}" >
+										<StackPanel Orientation="Horizontal" Margin="0,1,0,1">
+											<Image Focusable="False"
+											       Stretch="UniformToFill"
+											       RenderOptions.BitmapScalingMode="HighQuality" 
+											       RenderOptions.EdgeMode="Aliased"
+											       HorizontalAlignment="Center"
+											       VerticalAlignment="Center"		
+											       Width="17"
+											       Source="../Resources/back_translation_small.ico"
+											       Margin="0,0,2,0"/>
+											<TextBlock FontWeight="Regular" FontSize="13" Text="{Binding Name}" Margin="0,1,0,1"/>
+										</StackPanel>
+									</DataTemplate>
+								</HierarchicalDataTemplate.ItemTemplate>
+							</HierarchicalDataTemplate>
+						</HierarchicalDataTemplate.ItemTemplate>
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+			</TreeView>
+
+			<Grid Grid.Column="0" Grid.Row="2" Margin="2,0,2,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<!--<Button Grid.Column="0" IsEnabled="False" Command="{Binding ClearSelectionCommand}" HorizontalAlignment="Left" Style="{StaticResource LinkButton}" Content="Clear selection" Margin="2,2,4,2"/>-->
+				<Label Grid.Column="1" Foreground="#4E4D4D" Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+		</Grid>
+	</Border>
+</UserControl>

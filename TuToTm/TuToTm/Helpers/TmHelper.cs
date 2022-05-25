@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using Sdl.Community.Toolkit.Core.Services;
+using Sdl.Versioning;
 using Sdl.Community.TuToTm.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -27,29 +27,32 @@ namespace Sdl.Community.TuToTm.Helpers
 		{
 			var localTms = new List<TmDetails>();
 			var xmlDocument = new XmlDocument();
-			xmlDocument.Load(_tmsConfigPath);
-			if (xmlDocument.DocumentElement == null)
+			if (File.Exists(_tmsConfigPath))
 			{
-				return null;
-			}
-			var tmNodes = xmlDocument.SelectNodes("/TranslationMemoryRepository/TranslationMemories/TranslationMemory");
-			if (tmNodes != null)
-			{
-				foreach (XmlElement tmNode in tmNodes)
+				xmlDocument.Load(_tmsConfigPath);
+				if (xmlDocument.DocumentElement == null)
 				{
-					var tmPath = tmNode.GetAttribute("path");
-					if (!string.IsNullOrEmpty(tmPath))
+					return null;
+				}
+				var tmNodes = xmlDocument.SelectNodes("/TranslationMemoryRepository/TranslationMemories/TranslationMemory");
+				if (tmNodes != null)
+				{
+					foreach (XmlElement tmNode in tmNodes)
 					{
-						var tm = new FileBasedTranslationMemory(tmPath);
-						var tmDetails = new TmDetails
+						var tmPath = tmNode.GetAttribute("path");
+						if (!string.IsNullOrEmpty(tmPath))
 						{
-							TmPath = tmPath,
-							Name = tm.Name,
-							SourceFlag = new Language(tm.LanguageDirection.SourceLanguage.Name).GetFlagImage(),
-							TargetFlag = new Language(tm.LanguageDirection.TargetLanguage.Name).GetFlagImage(),
-							FileBasedTranslationMemory = tm
-						};
-						localTms.Add(tmDetails);
+							var tm = new FileBasedTranslationMemory(tmPath);
+							var tmDetails = new TmDetails
+							{
+								TmPath = tmPath,
+								Name = tm.Name,
+								SourceFlag = new Language(tm.LanguageDirection.SourceLanguage.Name).GetFlagImage(),
+								TargetFlag = new Language(tm.LanguageDirection.TargetLanguage.Name).GetFlagImage(),
+								FileBasedTranslationMemory = tm
+							};
+							localTms.Add(tmDetails);
+						}
 					}
 				}
 			}

@@ -1,0 +1,16 @@
+steps:
+
+- task: UniversalPackages@0
+  displayName: 'signing tools'
+  inputs:
+    vstsFeed: '35b7ee7d-77cc-45b7-97ec-af5915143636'
+    vstsFeedPackage: 'ab6a7eee-f4d3-4e0a-8e9a-906cce713a29'
+    vstsPackageVersion: '1.1.0'
+
+- task: CmdLine@2
+  displayName: 'copy to nuget location'
+  inputs:
+    script: |
+      IF not exist "%USERPROFILE%\.nuget\packages\SdlKeys" (MD  "%USERPROFILE%\.nuget\packages\SdlKeys")
+
+      XCOPY /c/h/i/e/r/y "%SYSTEM_DEFAULTWORKINGDIRECTORY%\tools\*.*" "%USERPROFILE%\.nuget\packages\SdlKeys\2.0.0\tools"

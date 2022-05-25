@@ -1,5 +1,4 @@
 ﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
-using System;
 using System.Collections.ObjectModel;
 using System.Text;
 
@@ -7,70 +6,63 @@ namespace Sdl.Community.AntidoteVerifier
 {
     public class CustomTextCollectionVisitor : IMarkupDataVisitor
     {
-        string _collectedText;//text of the segment
-        bool _inLockedContent;//the markup visited is locked
-        int _startOfRange;//start of the range 
-        int _endOfRange;//end of the range
+	    bool _inLockedContent;//the markup visited is locked
+	    readonly int _startOfRange;//start of the range 
+	    readonly int _endOfRange;//end of the range
         int _startOffsetOfFirstElemInRange;//offset of the start of the range in the first element in the range
         int _endOffsetOfLastElemInRange;//offset of the end of the range in the last element in the range
-        Collection<IText> _markupsListInRange;//list of markups in the range 
-        Collection<IAbstractMarkupData> _markupsListVisited;//list of markups visited 
-        public Collection<RangeOfCharacterInfos> _listOfLockedRanges;//List of ranges of text locked
-        ISegment _segment;//the segment visited
+	    readonly Collection<IText> _markupsListInRange;//list of markups in the range 
+	    readonly Collection<IAbstractMarkupData> _markupsListVisited;//list of markups visited 
+        public Collection<RangeOfCharacterInfos> ListOfLockedRanges;//List of ranges of text locked
+	    readonly ISegment _segment;//the segment visited
 
         //Constructors
         public CustomTextCollectionVisitor(ISegment theSegment)
-            : base()
         {
             _segment = theSegment;
-            _collectedText = "";
+            CollectedText = "";
             _startOffsetOfFirstElemInRange = 0;
             _endOffsetOfLastElemInRange = 0;
             _startOfRange = -1;
             _endOfRange = -1;
             _markupsListInRange = new Collection<IText>();
             _markupsListVisited = new Collection<IAbstractMarkupData>();
-            _listOfLockedRanges = new Collection<RangeOfCharacterInfos>();
+            ListOfLockedRanges = new Collection<RangeOfCharacterInfos>();
         }
 
         public CustomTextCollectionVisitor(ISegment theSegment, int theStart, int theEnd)
-            : base()
         {
             _segment = theSegment;
-            _collectedText = "";
+            CollectedText = "";
             _startOffsetOfFirstElemInRange = 0;
             _endOffsetOfLastElemInRange = 0;
             _startOfRange = theStart;
             _endOfRange = theEnd;
             _markupsListInRange = new Collection<IText>();
             _markupsListVisited = new Collection<IAbstractMarkupData>();
-            _listOfLockedRanges = new Collection<RangeOfCharacterInfos>();
+            ListOfLockedRanges = new Collection<RangeOfCharacterInfos>();
         }
 
         //Destructor
         ~CustomTextCollectionVisitor()
         {
             _markupsListVisited.Clear();
-            _listOfLockedRanges.Clear();
+            ListOfLockedRanges.Clear();
         }
 
         //The text that has been collected by the visitor.
-        public string CollectedText
-        {
-            get { return _collectedText; }
-            set { _collectedText = value; }
-        }
+        public string CollectedText { get; set; }
 
-        //check if the range ( _startOfRange, _endOfRange ) contains locked text
+	    //check if the range ( _startOfRange, _endOfRange ) contains locked text
         public bool RangeContainsTextLocked()
         {
-            bool contains = false;
+            var contains = false;
             if (_endOfRange > _startOfRange)
             {
-                foreach (RangeOfCharacterInfos item in _listOfLockedRanges)
+                foreach (var item in ListOfLockedRanges)
                 {
-                    int startOfIgnoredRange = item.start;
-                    int endOfIgnoredRange = item.start + item.length;
+                    var startOfIgnoredRange = item.start;
+                    var endOfIgnoredRange = item.start + item.length;
                     //a part of the range contains locked text
                     if ((_startOfRange > startOfIgnoredRange && _startOfRange < endOfIgnoredRange)//The start of the range is inside
                          || (_endOfRange > startOfIgnoredRange && _endOfRange < endOfIgnoredRange))//The end of the range is inside
@@ -90,20 +82,16 @@ namespace Sdl.Community.AntidoteVerifier
         //Get the text of the range ( _startOfRange, _endOfRange ) 
         public string GetText()
         {
-            string aString = "";
+            var aString = string.Empty;
             if (_startOfRange == -1 && _endOfRange == -1)
             {
-                aString = _collectedText;
+                aString = CollectedText;
             }
-            else if (_endOfRange > _startOfRange && _endOfRange <= _collectedText.Length)
+            else if (_endOfRange > _startOfRange && _endOfRange <= CollectedText.Length)
             {
-                aString = _collectedText.Substring(_startOfRange, _endOfRange - _startOfRange);
+                aString = CollectedText.Substring(_startOfRange, _endOfRange - _startOfRange);
             }
-            else
-            {
-                //empty string
-            }
-            return aString;
+	        return aString;
         }
 
         //Replace the text of the range ( _startOfRange, _endOfRange ) with the text "replacementText"
@@ -114,13 +102,13 @@ namespace Sdl.Community.AntidoteVerifier
                 return;//nothing to do
             }
 
-            IText firstElem = _markupsListInRange[0];
-            IText lastElem = _markupsListInRange[_markupsListInRange.Count - 1];
+            var firstElem = _markupsListInRange[0];
+            var lastElem = _markupsListInRange[_markupsListInRange.Count - 1];
 
-            int _endOffsetOfFirstElemInRange = _markupsListInRange.Count == 1 ? _endOffsetOfLastElemInRange : firstElem.Properties.Text.Length;
+            var endOffsetOfFirstElemInRange = _markupsListInRange.Count == 1 ? _endOffsetOfLastElemInRange : firstElem.Properties.Text.Length;
             if (_markupsListInRange.Count > 1)
             {
-                bool keepLastElement = _endOffsetOfLastElemInRange < lastElem.Properties.Text.Length;
+                var keepLastElement = _endOffsetOfLastElemInRange < lastElem.Properties.Text.Length;
                 //delete some elements
                 for (var index = 1; index < _markupsListInRange.Count; index++)
                 {
@@ -148,7 +136,7 @@ namespace Sdl.Community.AntidoteVerifier
             //Location startLocation = new Location(_segment, firstElem);
             //TextLocation startTextLocation = new TextLocation(startLocation, _startOffsetOfFirstElemInRange);
             var sb = new StringBuilder(firstElem.ToString());
-            sb.Remove(_startOffsetOfFirstElemInRange, _endOffsetOfFirstElemInRange - _startOffsetOfFirstElemInRange);
+            sb.Remove(_startOffsetOfFirstElemInRange, endOffsetOfFirstElemInRange - _startOffsetOfFirstElemInRange);
             sb.Insert(_startOffsetOfFirstElemInRange, replacementText);
             firstElem.Properties.Text = sb.ToString();
         }
@@ -156,47 +144,33 @@ namespace Sdl.Community.AntidoteVerifier
         //collect the text
         private void AddCollectedText(string theString)
         {
-            _collectedText += theString;
+            CollectedText += theString;
         }
 
         //check if "theAncestor" is an ancestor of "theMarkupData"  
         private bool IsAncestorOfMarkup(IAbstractMarkupData theMarkupData, ISegment theAncestor)
         {
-            bool ret = false;
-            if (theMarkupData != null && theAncestor != null)
-            {
-                IAbstractMarkupDataContainer parent = theMarkupData.Parent;
-                if (parent != null)
-                {
-                    if (parent.Equals(theAncestor))
-                    {
-                        ret = true;
-                    }
-                    else
-                    {
-                        ret = theAncestor.Contains(theMarkupData);
-                    }
-                }
-            }
-            return ret;
+            var ret = false;
+	        if (theMarkupData == null || theAncestor == null) return ret;
+	        var parent = theMarkupData.Parent;
+	        if (parent == null) return ret;
+	        ret = parent.Equals(theAncestor) || theAncestor.Contains(theMarkupData);
+	        return ret;
         }
 
         //check if the markup is in the list of the markups visited
         private bool ListContainsMarkupData(IAbstractMarkupData theMarkupData)
         {
-            bool contains = false;
+            var contains = false;
             //Why isn't the text in a PlaceHolder in the segment?
-            Location newItemLocation = IsAncestorOfMarkup(theMarkupData, _segment) ? new Location(_segment, theMarkupData) : new Location(theMarkupData.Parent, theMarkupData);
+            var newItemLocation = IsAncestorOfMarkup(theMarkupData, _segment) ? new Location(_segment, theMarkupData) : new Location(theMarkupData.Parent, theMarkupData);
 
-            foreach (IAbstractMarkupData item in _markupsListVisited)
+            foreach (var item in _markupsListVisited)
             {
                 if (item.Equals(theMarkupData))
                 {
-                    Location itemLocation = IsAncestorOfMarkup(theMarkupData, _segment) ? new Location(_segment, item) : new Location(item.Parent, item);
-                    if (newItemLocation != null && itemLocation != null)
-                    {
-                        contains = itemLocation.Equals(newItemLocation);
-                    }
+                    var itemLocation = IsAncestorOfMarkup(theMarkupData, _segment) ? new Location(_segment, item) : new Location(item.Parent, item);
+	                contains = itemLocation.Equals(newItemLocation);
                 }
             }
             return contains;
@@ -205,7 +179,7 @@ namespace Sdl.Community.AntidoteVerifier
         //visit functions
         public void VisitCommentMarker(ICommentMarker commentMarker)
         {
-            foreach (IAbstractMarkupData item in commentMarker.AllSubItems)
+            foreach (var item in commentMarker.AllSubItems)
             {
                 item.AcceptVisitor(this);
             }
@@ -227,7 +201,7 @@ namespace Sdl.Community.AntidoteVerifier
                 return;
             }
             _inLockedContent = true;
-            foreach (IAbstractMarkupData item in lockedContent.Content.AllSubItems)
+            foreach (var item in lockedContent.Content.AllSubItems)
             {
                 item.AcceptVisitor(this);
             }
@@ -236,7 +210,7 @@ namespace Sdl.Community.AntidoteVerifier
 
         public void VisitOtherMarker(IOtherMarker marker)
         {
-            foreach (IAbstractMarkupData item in marker.AllSubItems)
+            foreach (var item in marker.AllSubItems)
             {
                 item.AcceptVisitor(this);
             }
@@ -246,9 +220,9 @@ namespace Sdl.Community.AntidoteVerifier
         {
             if (tag.Properties.DisplayText.Length > 0)
             {
-                RangeOfCharacterInfos item = new RangeOfCharacterInfos { start = _collectedText.Length, length = tag.Properties.DisplayText.Length };
-                _listOfLockedRanges.Add(item);
-                _collectedText += tag.Properties.DisplayText;
+                var item = new RangeOfCharacterInfos { start = CollectedText.Length, length = tag.Properties.DisplayText.Length };
+                ListOfLockedRanges.Add(item);
+                CollectedText += tag.Properties.DisplayText;
             }
         }
 
@@ -257,7 +231,7 @@ namespace Sdl.Community.AntidoteVerifier
             //don't add delete revisions
             if (revisionMarker.Properties.RevisionType != RevisionType.Delete)
             {
-                foreach (IAbstractMarkupData item in revisionMarker.AllSubItems)
+                foreach (var item in revisionMarker.AllSubItems)
                 {
                     item.AcceptVisitor(this);
                 }
@@ -270,7 +244,7 @@ namespace Sdl.Community.AntidoteVerifier
 
         public void VisitTagPair(ITagPair tagPair)
         {
-            foreach (IAbstractMarkupData item in tagPair.AllSubItems)
+            foreach (var item in tagPair.AllSubItems)
             {
                 item.AcceptVisitor(this);
             }
@@ -281,7 +255,7 @@ namespace Sdl.Community.AntidoteVerifier
             //Exclude text of the revision for deleted text
             if (text.Parent is IRevisionMarker)
             {
-                IRevisionMarker parent = text.Parent as IRevisionMarker;
+                var parent = text.Parent as IRevisionMarker;
                 if (parent != null && parent.Properties.RevisionType == RevisionType.Delete)
                 {
                     return;
@@ -296,16 +270,16 @@ namespace Sdl.Community.AntidoteVerifier
                     //get the information about ranges of locked text
                     if (_inLockedContent)
                     {
-                        RangeOfCharacterInfos item = new RangeOfCharacterInfos { start = _collectedText.Length, length = text.Properties.Text.Length };
-                        _listOfLockedRanges.Add(item);
+                        var item = new RangeOfCharacterInfos { start = CollectedText.Length, length = text.Properties.Text.Length };
+                        ListOfLockedRanges.Add(item);
                     }
 
                     //Get information about the range
                     if (_startOfRange != -1 && _endOfRange != -1)
                     {
-                        int startOfMarkup = _collectedText.Length;
-                        int endOfMarkup = _collectedText.Length + text.Properties.Text.Length;
-                        bool isMarkupInRange = false;
+                        var startOfMarkup = CollectedText.Length;
+                        var endOfMarkup = CollectedText.Length + text.Properties.Text.Length;
+                        var isMarkupInRange = false;
                         //set start of the range
                         if (_startOfRange >= startOfMarkup && _startOfRange <= endOfMarkup)
                         {
@@ -333,7 +307,7 @@ namespace Sdl.Community.AntidoteVerifier
                     }
 
                     //Collect the text
-                    _collectedText += text.Properties.Text;
+                    CollectedText += text.Properties.Text;
                 }
             }
         }

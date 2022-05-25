@@ -36,8 +36,11 @@ namespace Sdl.Community.TargetWordCount
 			}
 			else
 			{
-				counters.Add(key, new List<ISegmentWordCounter>() { tempCounter });
-				keys.Add(key, projectFile.GetLanguageDirection());
+				counters.Add(key, new List<ISegmentWordCounter> { tempCounter });
+				if (!keys.ContainsKey(key))
+				{
+					keys.Add(key, projectFile.GetLanguageDirection());
+				}
 			}
 
 			return false;

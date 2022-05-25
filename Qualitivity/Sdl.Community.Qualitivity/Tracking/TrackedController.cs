@@ -15,11 +15,11 @@ using Sdl.Community.Structures.Documents.Records;
 using Sdl.Community.Structures.Projects;
 using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Community.TM.Database;
-using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Trados.Community.Toolkit.LanguagePlatform;
 using Comment = Sdl.Community.Structures.Documents.Records.Comment;
 using Document = Sdl.TranslationStudioAutomation.IntegrationApi.Document;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
@@ -64,7 +64,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			ProgressWindow.ProgressDialogWorker.ReportProgress(current, progress);
 		}
 
-		public static void TrackNewDocumentEntry(Document doc)
+		public static void TrackNewDocumentEntry(IStudioDocument doc)
 		{
 			var projectFile = doc.Files.FirstOrDefault();
 			if (projectFile == null || Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
@@ -383,7 +383,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		public static Project NewQualitivityProject(Document doc)
+		public static Project NewQualitivityProject(IStudioDocument doc)
 		{
 
 			Project newProject = null;
@@ -450,7 +450,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			return newProject;
 		}
 
-		public static List<StateCountItem> InitializeDocumentStatisticalState(Document doc, string fileId)
+		public static List<StateCountItem> InitializeDocumentStatisticalState(IStudioDocument doc, string fileId)
 		{
 			var stateCountItems = new List<StateCountItem>();
 
@@ -508,7 +508,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
 
 			var segmentPairProcessor = new SegmentPairProcessor(
-				new Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Toolkit.LanguagePlatform.Models.PathInfo());
+				new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
 
 			var parser = new ContentGenerator();
 
@@ -930,7 +930,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			return stateCountItems;
 		}
 
-		public static List<StateCountItem> InitalizeDocumentConfirmationStatisticalState(Document doc, string fileId)
+		public static List<StateCountItem> InitalizeDocumentConfirmationStatisticalState(IStudioDocument doc, string fileId)
 		{
 
 			var tccsos = new List<StateCountItem>();
@@ -1527,7 +1527,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		public static void TrackSegmentPairs(Document doc)
+		public static void TrackSegmentPairs(IStudioDocument doc)
 		{
 			Tracked.DocumentSegmentPairs = new Dictionary<string, SegmentPair>();
 
@@ -1546,7 +1546,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 			}
 		}
 
-		public static void InitializeDocumentTracking(Document doc)
+		public static void InitializeDocumentTracking(IStudioDocument doc)
 		{
 			#region  |  initialize document cache item  |
 

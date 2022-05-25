@@ -3,9 +3,11 @@ using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
+	//We'll not rebrand the ViewPartId because is used by Useful tips
 	[ViewPart(
 		Id = "SDLTMAnonymizerLogViewPart",
 		Name = "Log Report",
@@ -29,7 +31,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 			_control = new TmAnonymizerLogViewControl(_model);			
 		}
 
-		protected override Control GetContentControl()
+		protected override IUIControl GetContentControl()
 		{
 			return _control;
 		}

@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StarTransit/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - StarTransit/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/Sdl.Community.StarTransit.sln'
+- name: pathToPublish
+  value: 'StarTransit\Sdl.Community.StarTransit\bin\Release\Sdl.Community.StarTransit.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

@@ -6,12 +6,16 @@
              xmlns:model="clr-namespace:Sdl.Community.Jobs.Model"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-
 	<UserControl.Resources>
-		<ResourceDictionary Source="../UiHelpers/MetroStyle.xaml" />
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
 	</UserControl.Resources>
+
 	<Grid>
-        <DataGrid Name="DataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Style="{StaticResource AzureDataGrid}">
+        <DataGrid Style="{StaticResource Sdl.DataGrid.GenericStyle}" Name="DataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding (model:JobViewModel.TimePosted)}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Languages" Width="Auto" Binding="{Binding (model:JobViewModel.LanguagePairs)}">

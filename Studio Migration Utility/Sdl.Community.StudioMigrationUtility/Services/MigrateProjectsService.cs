@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using Sdl.Community.StudioMigrationUtility.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StudioMigrationUtility.Services
 {
@@ -115,20 +116,19 @@ namespace Sdl.Community.StudioMigrationUtility.Services
 
         public string GetProjectsPath(StudioVersion studioVersion)
         {
-             var myDocumnetsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+	        var myDocumnetsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            return Path.Combine(myDocumnetsPath, string.Format("{0}\\Projects\\projects.xml", studioVersion.PublicVersion));
+            return Path.Combine(myDocumnetsPath, $@"{studioVersion.StudioDocumentsFolderName}\Projects\projects.xml");
         }
 
         public string GetTranslationMemoryPath(StudioVersion studioVersion)
         {
             var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var folderName = string.Format("{0}.0.0.0", studioVersion.ExecutableVersion.Major);
+            var folderName = $@"{studioVersion.ExecutableVersion.Major}.0.0.0";
 
-            return Path.Combine(appDataPath, string.Format("SDL\\SDL Trados Studio\\{0}\\TranslationMemoryRepository.xml", folderName));
+            return Path.Combine(appDataPath, $@"SDL\SDL Trados Studio\{folderName}\TranslationMemoryRepository.xml");
         }
-
-        
+		
         public void MigrateProjects(List<Project> projects, List<Project> projectsToBeMoved, bool migrateCustomers, Action<int> reportProgress)
         {
             var destinationProjectPath = GetProjectsPath(_destinationStudioVersion);

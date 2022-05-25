@@ -213,15 +213,11 @@ namespace Sdl.Community.CleanUpTasks.Tests
 			Assert.Equal("file3", convFile.FileName);
 		}
 
-		#region Fixture
-
 		private readonly TestUtilities utility = null;
 
 		public ConversionSettingsPresenterTests(TestUtilities utility)
 		{
 			this.utility = utility;
 		}
-
-		#endregion Fixture
 	}
 }

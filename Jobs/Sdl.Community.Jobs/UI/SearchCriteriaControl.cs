@@ -4,11 +4,12 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Sdl.Community.Jobs.Model;
 using Sdl.Community.Jobs.Services;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Jobs.UI
 {
-    public partial class SearchCriteriaControl : UserControl
-    {
+    public partial class SearchCriteriaControl : UserControl, IUIControl
+	{
         private readonly JobService _service;
 
         public SearchCriteriaControl()

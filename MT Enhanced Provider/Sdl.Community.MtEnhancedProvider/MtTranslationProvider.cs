@@ -14,7 +14,11 @@
 
 using System;
 using Newtonsoft.Json;
+using Sdl.Community.MtEnhancedProvider.GoogleApi;
+using Sdl.Community.MtEnhancedProvider.Helpers;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -27,16 +31,21 @@ namespace Sdl.Community.MtEnhancedProvider
 		///     It is the string that precedes the plug-in URI.
 		/// </summary>
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
+		private MtTranslationProviderGTApiConnecter _gtConnect;
+		private GoogleV3Connecter _googleV3Connecter;
+		private ApiConnecter _mstConnect;
+		private readonly HtmlUtil _htmlUtil;
 
-		private MtTranslationProviderGTApiConnecter gtConnect;
-		private ApiConnecter mstConnect;
-
-		public MtTranslationProvider(MtTranslationOptions options)
+		public MtTranslationProvider(IMtTranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
 		{
 			Options = options;
+			RegionsProvider = regionProvider;
+			_htmlUtil = htmlUtil;
 		}
 
-		public MtTranslationOptions Options { get; set; }
+		public RegionsProvider RegionsProvider { get; }
+
+		public IMtTranslationOptions Options { get; set; }
 
 		public bool IsReadOnly => true;
 
@@ -45,7 +54,9 @@ namespace Sdl.Community.MtEnhancedProvider
 			get
 			{
 				if (Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
-					return PluginResources.Google_Name;
+				{
+					return Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
+				}
 				if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 					return PluginResources.Microsoft_Name;
 				return PluginResources.Plugin_Name;
@@ -60,10 +71,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public bool SupportsFilters { get; } = false;
 
-		public bool SupportsFuzzySearch
-		{
-			get { return false; }
-		}
+		public bool SupportsFuzzySearch => false;
 
 		public bool SupportsMultipleResults => false;
 
@@ -95,7 +103,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new MtTranslationProviderLanguageDirection(this, languageDirection);
+			return new MtTranslationProviderLanguageDirection(this, languageDirection, _htmlUtil);
 		}
 
 		public void LoadState(string translationProviderState)
@@ -122,28 +130,38 @@ namespace Sdl.Community.MtEnhancedProvider
 		{
 			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 			{
-				if (mstConnect == null) //construct ApiConnecter if necessary 
-					mstConnect = new ApiConnecter(Options);
+				if (_mstConnect == null) //construct ApiConnecter if necessary 
+				{
+					_mstConnect = new ApiConnecter(Options.ClientId, Options.Region, _htmlUtil);
+				}
 				else
-					mstConnect.resetCrd(Options.ClientId,
-						Options.ClientSecret); //reset in case changed since last time the class was constructed
+				{
+					//reset in case changed since last time the class was constructed
+					_mstConnect.ResetCrd(Options.ClientId, Options.Region); 
+				}
 
-				return mstConnect.isSupportedLangPair(languageDirection.SourceCulture.Name,
-					languageDirection.TargetCulture.Name);
+				return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 			}
 
-			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
+			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
 			{
-				if (gtConnect == null) //instantiate GtApiConnecter if necessary
-					gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
+				if (_gtConnect == null) //instantiate GtApiConnecter if necessary
+				{
+					_gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey, _htmlUtil);
+				}
 				else
-					gtConnect.ApiKey =
-						Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
-				return gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
-			}
+				{
+					//reset in case it has been changed since last time GtApiConnecter was instantiated
+					_gtConnect.ApiKey = Options.ApiKey; 
+				}
 
-			//not likely to get here but...
-			return true;
+				return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+			
+			_googleV3Connecter = new GoogleV3Connecter(Options);
+
+
+			return _googleV3Connecter.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 	}
 }

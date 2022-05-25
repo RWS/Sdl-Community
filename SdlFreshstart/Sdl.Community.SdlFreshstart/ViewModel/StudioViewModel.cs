@@ -5,47 +5,52 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using NLog;
+using Sdl.Community.SdlFreshstart.Commands;
 using Sdl.Community.SdlFreshstart.Helpers;
 using Sdl.Community.SdlFreshstart.Model;
 using Sdl.Community.SdlFreshstart.Properties;
+using Sdl.Community.SdlFreshstart.Services;
 
 namespace Sdl.Community.SdlFreshstart.ViewModel
 {
-	public class StudioViewModel:INotifyPropertyChanged
+	public class StudioViewModel : BaseModel
 	{
-	    private ObservableCollection<StudioVersionListItem> _studioVersionsCollection;
-	    private ObservableCollection<StudioLocationListItem> _foldersLocations;
-		private StudioLocationListItem _selectedLocation;
-		public event PropertyChangedEventHandler PropertyChanged;
-		private string _folderDescription;
-		private ICommand _removeCommand;
-		private ICommand _repairCommand;
-		private ICommand _restoreCommand;
 		private readonly MainWindow _mainWindow;
-		private readonly string _userName;
+		private readonly IMessageService _messageService;
+		private readonly IRegistryHelper _registryHelper;
+		private readonly string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private readonly Persistence _persistenceSettings;
+		private readonly VersionService _versionService;
+		private bool _checkAll;
+		private ObservableCollection<StudioLocationListItem> _locations = new ObservableCollection<StudioLocationListItem>();
 		private bool _isRemoveEnabled;
 		private bool _isRepairEnabled;
-		private bool _checkAll;
 		private string _removeBtnColor;
+		private ICommand _removeCommand;
 		private string _removeForeground;
 		private string _repairBtnColor;
+		private ICommand _repairCommand;
 		private string _repairForeground;
 		private string _restoreBtnColor;
+		private ICommand _restoreCommand;
 		private string _restoreForeground;
-		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
-		private readonly Persistence _persistenceSettings;
-		private readonly IDialogCoordinator _dialogCoordinator;
+		private StudioLocationListItem _selectedLocation;
+		private ObservableCollection<IStudioVersion> _studioVersionsCollection;
+		private bool _registryKeyChecked;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public StudioViewModel(MainWindow mainWindow, IDialogCoordinator dialogCoordinator)
+		public StudioViewModel(MainWindow mainWindow, VersionService versionService, IMessageService messageService, IRegistryHelper registryHelper)
 		{
-			_dialogCoordinator = dialogCoordinator;
+			_versionService = versionService;
+			_messageService = messageService;
+			_registryHelper = registryHelper;
 			_mainWindow = mainWindow;
 			_persistenceSettings = new Persistence();
-		    _folderDescription = string.Empty;
-			_userName = Environment.UserName;
 			_isRemoveEnabled = false;
 			_isRepairEnabled = false;
 			_checkAll = false;
@@ -55,168 +60,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_repairForeground = "Gray";
 			_restoreBtnColor = "LightGray";
 			_restoreForeground = "Gray";
-			FillStudioVersionList();
-		    FillFoldersLocationList();
-		}
-		
-		public StudioLocationListItem SelectedLocation
-		{
-			get => _selectedLocation;
-			set
-			{
-				_selectedLocation = value;
-				OnPropertyChanged();
-			}
-		}
 
-		public ObservableCollection<StudioVersionListItem> StudioVersionsCollection
-		{
-			get => _studioVersionsCollection;
-
-			set
-			{
-				if (Equals(value, _studioVersionsCollection))
-				{
-					return;
-				}
-				_studioVersionsCollection = value;
-				OnPropertyChanged(nameof(StudioVersionsCollection));
-			}
-		}
-
-		public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
-		{
-			get => _foldersLocations;
-
-			set
-			{
-				if (Equals(value, _foldersLocations))
-				{
-					return;
-				}
-				_foldersLocations = value;
-				OnPropertyChanged(nameof(FoldersLocationsCollection));
-			}
-		}
-
-		public string FolderDescription
-		{
-			get => _folderDescription;
-
-			set
-			{
-				if (Equals(value, _folderDescription))
-				{
-					return;
-				}
-				_folderDescription = value;
-				OnPropertyChanged(nameof(FolderDescription));
-			}
-		}
-
-		public string RemoveForeground
-		{
-			get => _removeForeground;
-
-			set
-			{
-				if (Equals(value, _removeForeground))
-				{
-					return;
-				}
-				_removeForeground = value;
-				OnPropertyChanged(nameof(RemoveForeground));
-			}
-		}
-
-		public string RemoveBtnColor
-		{
-			get => _removeBtnColor;
-
-			set
-			{
-				if (Equals(value, _removeBtnColor))
-				{
-					return;
-				}
-				_removeBtnColor = value;
-				OnPropertyChanged(nameof(RemoveBtnColor));
-			}
-		}
-
-		public string RestoreForeground
-		{
-			get => _restoreForeground;
-
-			set
-			{
-				if (Equals(value, _restoreForeground))
-				{
-					return;
-				}
-				_restoreForeground = value;
-				OnPropertyChanged(nameof(RestoreForeground));
-			}
-		}
-
-		public string RestoreBtnColor
-		{
-			get => _restoreBtnColor;
-
-			set
-			{
-				if (Equals(value, _restoreBtnColor))
-				{
-					return;
-				}
-				_restoreBtnColor = value;
-				OnPropertyChanged(nameof(RestoreBtnColor));
-			}
-		}
-
-		public string RepairForeground
-		{
-			get => _repairForeground;
-
-			set
-			{
-				if (Equals(value, _repairForeground))
-				{
-					return;
-				}
-				_repairForeground = value;
-				OnPropertyChanged(nameof(RepairForeground));
-			}
-		}
-
-		public string RepairBtnColor
-		{
-			get => _repairBtnColor;
-
-			set
-			{
-				if (Equals(value, _repairBtnColor))
-				{
-					return;
-				}
-				_repairBtnColor = value;
-				OnPropertyChanged(nameof(RepairBtnColor));
-			}
-		}
-
-		public bool IsRemoveEnabled
-		{
-			get => _isRemoveEnabled;
-
-			set
-			{
-				if (Equals(value, _isRemoveEnabled))
-				{
-					return;
-				}
-				_isRemoveEnabled = value;
-				OnPropertyChanged(nameof(IsRemoveEnabled));
-			}
+			GetInstalledVersions();
 		}
 
 		public bool CheckAll
@@ -235,6 +80,36 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
+		public ObservableCollection<StudioLocationListItem> Locations
+		{
+			get => _locations;
+
+			set
+			{
+				if (Equals(value, _locations))
+				{
+					return;
+				}
+				_locations = value;
+				OnPropertyChanged(nameof(Locations));
+			}
+		}
+
+		public bool IsRemoveEnabled
+		{
+			get => _isRemoveEnabled;
+
+			set
+			{
+				if (Equals(value, _isRemoveEnabled))
+				{
+					return;
+				}
+				_isRemoveEnabled = value;
+				OnPropertyChanged(nameof(IsRemoveEnabled));
+			}
+		}
+
 		public bool IsRepairEnabled
 		{
 			get => _isRepairEnabled;
@@ -250,123 +125,439 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
-		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairStudio, true));
-		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+		public string RemoveBtnColor
+		{
+			get => _removeBtnColor;
+
+			set
+			{
+				if (Equals(value, _removeBtnColor))
+				{
+					return;
+				}
+				_removeBtnColor = value;
+				OnPropertyChanged(nameof(RemoveBtnColor));
+			}
+		}
+
+		public ICommand RemoveCommand => _removeCommand ??= new CommandHandler(RemoveFromLocations, true);
+
+		public string RemoveForeground
+		{
+			get => _removeForeground;
+
+			set
+			{
+				if (Equals(value, _removeForeground))
+				{
+					return;
+				}
+				_removeForeground = value;
+				OnPropertyChanged(nameof(RemoveForeground));
+			}
+		}
+
+		public string RepairBtnColor
+		{
+			get => _repairBtnColor;
+
+			set
+			{
+				if (Equals(value, _repairBtnColor))
+				{
+					return;
+				}
+				_repairBtnColor = value;
+				OnPropertyChanged(nameof(RepairBtnColor));
+			}
+		}
+
+		public ICommand RepairCommand => _repairCommand ??= new CommandHandler(RepairStudio, true);
+
+		public string RepairForeground
+		{
+			get => _repairForeground;
+
+			set
+			{
+				if (Equals(value, _repairForeground))
+				{
+					return;
+				}
+				_repairForeground = value;
+				OnPropertyChanged(nameof(RepairForeground));
+			}
+		}
+
+		public string RestoreBtnColor
+		{
+			get => _restoreBtnColor;
+
+			set
+			{
+				if (Equals(value, _restoreBtnColor))
+				{
+					return;
+				}
+				_restoreBtnColor = value;
+				OnPropertyChanged(nameof(RestoreBtnColor));
+			}
+		}
+
+		public ICommand RestoreCommand => _restoreCommand ??= new CommandHandler(RestoreLocations, true);
+
+		public string RestoreForeground
+		{
+			get => _restoreForeground;
+
+			set
+			{
+				if (Equals(value, _restoreForeground))
+				{
+					return;
+				}
+				_restoreForeground = value;
+				OnPropertyChanged(nameof(RestoreForeground));
+			}
+		}
+
+		public StudioLocationListItem SelectedLocation
+		{
+			get => _selectedLocation;
+			set
+			{
+				_selectedLocation = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public ObservableCollection<IStudioVersion> StudioVersionsCollection
+		{
+			get => _studioVersionsCollection;
+
+			set
+			{
+				if (Equals(value, _studioVersionsCollection))
+				{
+					return;
+				}
+				_studioVersionsCollection = value;
+				OnPropertyChanged(nameof(StudioVersionsCollection));
+			}
+		}
+
+		private bool AnyLocationSelected()
+		{
+			return Locations.Any(l => l.IsSelected) || RegistryKeyChecked;
+		}
+
+		private bool AnyVersionSelected()
+		{
+			return StudioVersionsCollection.Any(v => v.IsSelected);
+		}
+
+		private void CheckAllLocations(bool check)
+		{
+			foreach (var location in Locations)
+			{
+				location.IsSelected = check;
+			}
+		}
 
 		private void FillFoldersLocationList()
 		{
-			_foldersLocations = new ObservableCollection<StudioLocationListItem>
+			Locations?.Clear();
+			var listOfProperties = new List<(string, string)>
 			{
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\15.0.0.0",
-					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataRoamingMajorFull(),
-					Alias = "roamingMajorFull"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\15",
-					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataLocalMajor(),
-					Alias = "localMajor"
-				},
-
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\15",
-					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataRoamingMajor(),
-					Alias = "roamingMajor"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\15.0.0.0",
-					IsSelected = true,
-					Description = FoldersDescriptionText.AppDataLocalMajorFull(),
-					Alias = "localMajorFull"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\15",
-					IsSelected = true,
-					Description = FoldersDescriptionText.ProgramData(),
-					Alias = "programDataMajor"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\15.0.0.0",
-					IsSelected = true,
-					Description = FoldersDescriptionText.ProgramDataFull(),
-					Alias = "programDataMajorFull"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio15",
-					IsSelected = true,
-					Description = FoldersDescriptionText.ProgramDataVersionNumber(),
-					Alias = "programData"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2019\Projects\projects.xml",
-					IsSelected = false,
-					Description = FoldersDescriptionText.ProjectsXml(),
-					Alias = "projectsXml"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2019\Project Templates",
-					IsSelected = false,
-					Description = FoldersDescriptionText.ProjectsTemplates(),
-					Alias = "projectTemplates"
-				},
-				new StudioLocationListItem
-				{
-					DisplayName = $@"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\",
-					IsSelected = false,
-					Description = FoldersDescriptionText.ProjectApi(),
-					Alias = "roamingProjectApi"
-				}
+				(nameof(StudioVersion.GeneralSettingsFolder), "General settings"),
+				(nameof(StudioVersion.RoamingPluginsFolder), "Roaming plugins"),
+				(nameof(StudioVersion.LocalTradosLogsFolder), "Logs"),
+				(nameof(StudioVersion.LocalPluginsFolder), "Local plugins"),
+				(nameof(StudioVersion.ProgramDataPluginsFolder), "Program data plugins"),
+				(nameof(StudioVersion.ProgramDataUpdatesFolder), "Updates"),
+				(nameof(StudioVersion.ProjectsXmlPath), "Project list"),
+				(nameof(StudioVersion.ProgramDataProjectTemplatesFolder), "Project templates"),
+				(nameof(StudioVersion.SdlRegistryKeys), "Registry keys")
 			};
+			
+			foreach (var studioVersion in StudioVersionsCollection.Where(v => v.IsSelected))
+			{
+				foreach (var property in listOfProperties)
+				{
+					var latestVersionPath = (string)studioVersion?.GetType().GetProperty(property.Item1)?.GetValue(studioVersion);
+					var description = (string)typeof(LocationsDescription).GetProperty(property.Item1)?.GetValue(null, null);
 
-		    foreach (var location in _foldersLocations)
-		    {
+					AddLocation(latestVersionPath, description, property.Item1, property.Item2);
+				}
+			}
+
+			AddProjectApiFolderLocation();
+
+			foreach (var location in _locations)
+			{
 				location.PropertyChanged += Location_PropertyChanged;
 			}
-	    }
+		}
+
+		/// <summary>
+		/// This is needed because this folder is not used by all versions of Studio and so the adding of its path must be done differently
+		/// </summary>
+		private void AddProjectApiFolderLocation()
+		{
+			var projectApiFolderPaths =
+				StudioVersionsCollection.Where(v => v.IsSelected && !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.Select(
+					v => Path.GetDirectoryName(v.ProjectApiPath));
+			var apiPathDescription = LocationsDescription.ProjectApiPath;
+
+			foreach (var path in projectApiFolderPaths)
+			{
+				AddLocation(path, apiPathDescription, nameof(StudioVersion.ProjectApiPath), "Project API folder");
+			}
+		}
+
+		private void AddLocation(string path, string description, string alias, string pathName)
+		{
+			Locations.Add(new StudioLocationListItem
+			{
+				DisplayName = $"{pathName}: {path}",
+				IsSelected = true,
+				Description = description,
+				Alias = alias
+			});
+		}
+
+		private void GetInstalledVersions()
+		{
+			_studioVersionsCollection = new ObservableCollection<IStudioVersion>(_versionService.GetInstalledStudioVersions());
+
+			foreach (var studioVersion in _studioVersionsCollection)
+			{
+				studioVersion.PropertyChanged += StudioVersion_PropertyChanged;
+			}
+		}
+
+		private string GetMsiName(IStudioVersion version)
+		{
+			var msiName = version.MajorVersion > 15
+				? "TradosStudio.msi"
+				: $"TranslationStudio{version.LegacyVersion}.msi";
+			return msiName;
+		}
+
+		private (List<IStudioVersion>, List<IStudioVersion>) GetUnchangeableAndChangeableVersions()
+		{
+			var processList = Process.GetProcesses();
+
+			var studioProcesses = processList.Where(p => p.ProcessName.Contains(Constants.SDLTradosStudio)).ToList();
+			var studioProcessesIds = studioProcesses.Select(p => p.MainModule.FileVersionInfo.FileMajorPart).ToList();
+
+			var selectedVersionsIds = GetSelectedVersions();
+
+			var unchangeable = selectedVersionsIds.Where(sv => studioProcessesIds.Contains(sv.MajorVersion)).ToList();
+			var changeable = selectedVersionsIds.Where(sv => !unchangeable.Contains(sv)).ToList();
+
+			return (unchangeable, changeable);
+		}
 
 		private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var lastSelectedItem = sender as StudioLocationListItem;
-			var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
-			if (lastSelectedItem != null)
-			{
-				if (lastSelectedItem.IsSelected)
-				{
-					FolderDescription = lastSelectedItem.Description;
-				}
-				else
-				{
-					
-					if (selectedLocations.Any())
-					{
-						FolderDescription = selectedLocations.First().Description;
-					}
-				}
-			}
-			if (!selectedLocations.Any())
-			{
-				FolderDescription = string.Empty;
-			}
-
 			SetButtonColors();
 		}
-		
+
+		public bool RegistryKeyChecked
+		{
+			get => _registryKeyChecked;
+			set
+			{
+				_registryKeyChecked = value;
+				SetButtonColors();
+				OnPropertyChanged(nameof(RegistryKeyChecked));
+			}
+		}
+
+		private List<LocationDetails> GetLocationsForSelectedVersions(List<IStudioVersion> selectedChangeableVersions)
+		{
+			var allLocations = _persistenceSettings.Load(true);
+			var locationsForSelectedVersion = new List<LocationDetails>();
+			if (selectedChangeableVersions.Any())
+			{
+				foreach (var version in selectedChangeableVersions)
+				{
+					var locations = allLocations.Where(f => f.Version.Equals(version.VersionWithEdition)).ToList();
+					locationsForSelectedVersion.AddRange(locations);
+				}
+				return locationsForSelectedVersion;
+			}
+			//if nothing is selected, we presume the user wants everything restored
+			return allLocations;
+		}
+
+		private List<IStudioVersion> GetSelectedVersions()
+		{
+			return StudioVersionsCollection.Where(s => s.IsSelected).ToList();
+		}
+
+		private async void RemoveFromLocations()
+		{
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RemoveMessage);
+
+			if (result == MessageBoxResult.Yes)
+			{
+				var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+				var controller = await ShowProgress(Constants.Wait, Constants.RemoveFilesMessage);
+
+				var foldersToClearOrRestore = new List<LocationDetails>();
+				var registryToClearOrRestore = new List<LocationDetails>();
+				var locations = new List<LocationDetails>();
+
+				var selectedLocations = Locations.Where(f => f.IsSelected).ToList();
+
+				if (changeableVersions.Any())
+				{
+					locations = Paths.GetLocationsFromVersions(selectedLocations.Select(l => l.Alias).ToList(), changeableVersions);
+
+					var registryLocations = locations.Where(l => l.Alias == nameof(StudioVersion.SdlRegistryKeys)).ToList();
+					registryToClearOrRestore.AddRange(registryLocations);
+
+					var folderLocations = locations.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKeys)).ToList();
+					foldersToClearOrRestore.AddRange(folderLocations);
+				}
+
+				_persistenceSettings.SaveSettings(locations, true);
+				await FileManager.BackupFiles(foldersToClearOrRestore);
+				await _registryHelper.BackupKeys(registryToClearOrRestore);
+
+				RemoveFromFolders(foldersToClearOrRestore);
+				RemoveFromRegistry(registryToClearOrRestore);
+
+				UnselectGrids();
+				await controller.CloseAsync();
+
+				if (unchangeableVersions.Any())
+				{
+					GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+					_messageService.ShowWarningMessage(Constants.StudioRunMessage,
+						$"{Constants.CloseStudioRemoveMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
+				}
+			}
+		}
+
+		private void RemoveFromRegistry(List<LocationDetails> registryToClearOrRestore)
+		{
+			try
+			{
+				_registryHelper.DeleteKeys(registryToClearOrRestore, true);
+			}
+			catch (Exception ex)
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, string.Format(Constants.RegistryNotDeleted, ex.Message));
+			}
+		}
+
+		private void RemoveFromFolders(List<LocationDetails> foldersToClearOrRestore)
+		{
+			try
+			{
+				FileManager.RemoveFromSelectedFolderLocations(foldersToClearOrRestore);
+			}
+			catch
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, Constants.FilesNotDeletedMessage);
+			}
+		}
+
+		private void RepairStudio()
+		{
+			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+			if (Directory.Exists(_packageCache))
+			{
+				foreach (var version in changeableVersions)
+				{
+					RunRepair(version);
+				}
+			}
+
+			if (unchangeableVersions.Any())
+			{
+				GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+				_messageService.ShowWarningMessage(Constants.StudioRunMessage,
+					$"{Constants.CloseStudioRepairMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
+			}
+		}
+
+		private async void RestoreLocations()
+		{
+			var result = _messageService.ShowConfirmationMessage(Constants.Confirmation, Constants.RestoreRemovedFoldersMessage);
+
+			if (result != MessageBoxResult.Yes) return;
+			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
+
+			var controller = await ShowProgress(Constants.Wait, Constants.RestoringMessage);
+			var locationsToRestore = GetLocationsForSelectedVersions(changeableVersions);
+
+			await RestoreFolders(locationsToRestore);
+			await RestoreRegistry(locationsToRestore);
+
+			UnselectGrids();
+			await controller.CloseAsync();
+
+			if (unchangeableVersions.Any())
+			{
+				GetWarningInfo(unchangeableVersions, changeableVersions, out var unchangedString, out var changedString);
+				_messageService.ShowWarningMessage(Constants.StudioRunMessage,
+					$"{Constants.CloseStudioRestoreMessage}{Environment.NewLine}{unchangedString}{Environment.NewLine}{changedString}");
+			}
+		}
+
+		private static void GetWarningInfo(List<IStudioVersion> unchangeableVersions, List<IStudioVersion> changeableVersions, out string unchangedString, out string changedString)
+		{
+			unchangedString =
+				$"Currently running affected versions:{Environment.NewLine}{string.Join(Environment.NewLine, unchangeableVersions.Select(s => s.VersionWithEdition).ToList())}";
+
+			var changeable = changeableVersions.Select(s => s.VersionWithEdition).ToList();
+			changedString = changeable.Any()
+				? $"Changed:{Environment.NewLine}{string.Join(Environment.NewLine, changeable)}"
+				: null;
+		}
+
+		private async Task RestoreRegistry(List<LocationDetails> locationsToRestore)
+		{
+			var registryToRestore = locationsToRestore
+				.TakeWhile(l => l.Alias == nameof(StudioVersion.SdlRegistryKeys)).ToList();
+			try
+			{
+				await _registryHelper.RestoreKeys(registryToRestore);
+			}
+			catch (Exception e)
+			{
+				_messageService.ShowWarningMessage(Constants.Warning, string.Format(Resources.NotAllRegistriesCouldBeRestored, e.Message));
+			}
+		}
+
+		private async Task RestoreFolders(List<LocationDetails> locationsToRestore)
+		{
+			var foldersToRestore = locationsToRestore
+				.TakeWhile(l => l.Alias != nameof(StudioVersion.SdlRegistryKeys)).ToList();
+			await FileManager.RestoreBackupFiles(foldersToRestore);
+		}
+
+		private void RunRepair(IStudioVersion version)
+		{
+			_logger.Info(
+				$"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
+
+			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(version.ExecutableVersion,
+				version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
+			var msiName = GetMsiName(version);
+			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
+
+			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
+		}
+
 		private void SetButtonColors()
 		{
-			if (AnyLocationSelected()&&AnyVersionSelected())
+			if (AnyLocationSelected() && AnyVersionSelected())
 			{
 				IsRemoveEnabled = true;
 				RemoveBtnColor = "#3D9DAA";
@@ -393,224 +584,19 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			}
 		}
 
-		private void FillStudioVersionList()
-	    {
-		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
-		    {
-				new StudioVersionListItem
-				{
-					DisplayName = "Studio 2019",
-					IsSelected = false,
-					MajorVersionNumber = "15",
-					MinorVersionNumber = "15",
-					FolderName ="Studio15",
-					CacheFolderName = "SDLTradosStudio2019"
-				},
-			    new StudioVersionListItem
-			    {
-				    DisplayName = "Studio 2017",
-				    IsSelected = false,
-					MajorVersionNumber = "14",
-					MinorVersionNumber = "5",
-					FolderName ="Studio5",
-					CacheFolderName = "SDLTradosStudio2017"
-				},
-			    new StudioVersionListItem
-			    {
-				    DisplayName = "Studio 2015",
-				    IsSelected = false,
-					MajorVersionNumber = "12",
-				    MinorVersionNumber = "4",
-					FolderName = "Studio4",
-				    CacheFolderName = "SDLTradosStudio2015"
-				},
-			    new StudioVersionListItem
-			    {
-				    DisplayName = "Studio 2014",
-					MajorVersionNumber = "11",
-				    MinorVersionNumber = "3",
-					IsSelected = false,
-				    FolderName = "Studio3",
-				    CacheFolderName = "SDLTradosStudio2014"
-				}
-		    };
-		    foreach (var studioVersion in _studioVersionsCollection)
-		    {
-				studioVersion.PropertyChanged += StudioVersion_PropertyChanged;
-		    }
-	    }
+		private async Task<ProgressDialogController> ShowProgress(string title, string message)
+		{
+			var controller = await _mainWindow.ShowProgressAsync(title, message);
+			controller.SetIndeterminate();
+			return controller;
+		}
 
 		private void StudioVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
+			FillFoldersLocationList();
 			SetButtonColors();
-		}		
-
-		private async void RestoreFolders()
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-
-			};
-			var result =
-				await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RestoreRemovedFoldersMessage, MessageDialogStyle.AffirmativeAndNegative, dialog);
-			if (result == MessageDialogResult.Affirmative)
-			{
-				if (!IsStudioRunning())
-				{
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RestoringMessage);
-					controller.SetIndeterminate();
-
-					//load saved folders path
-					var foldersToRestore = LocationsForSelectedVersions();
-					await Remove.RestoreBackupFiles(foldersToRestore);
-
-					UnselectGrids();
-					//to close the message
-					await controller.CloseAsync();
-				}
-				else
-				{
-					await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage,	Constants.CloseStudioRestoreMessage, MessageDialogStyle.Affirmative, dialog);
-				}
-			}
 		}
 
-		private List<LocationDetails> LocationsForSelectedVersions()
-		{
-			var allFolders = _persistenceSettings.Load(true);
-			var selectedVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
-			var locationsForSelectedVersion = new List<LocationDetails>();
-			if (selectedVersions.Any())
-			{
-				foreach (var version in selectedVersions)
-				{
-					var locations = allFolders.Where(v => v.Version.Equals(version.DisplayName)).ToList();
-					locationsForSelectedVersion.AddRange(locations);
-				}
-				return locationsForSelectedVersion;
-			}
-			return allFolders;
-		}
-
-		private async void RepairStudio()
-		{
-			if (!IsStudioRunning())
-			{
-				if (Directory.Exists(_packageCache))
-				{
-					var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();
-					foreach (var version in selectedVersions)
-					{
-						RunRepair(version);
-					}
-				}
-			}
-			else
-			{
-				var dialog = new MetroDialogSettings
-				{
-					AffirmativeButtonText = "OK"
-
-				};
-				await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage,Constants.CloseStudioRepairMessage, MessageDialogStyle.Affirmative, dialog);
-			}
-		
-		}
-
-		private void RunRepair(StudioVersionListItem version)
-		{
-			var directoriesPath = new DirectoryInfo(_packageCache).GetDirectories()
-				.Where(n => n.Name.Contains(version.CacheFolderName))
-				.Select(n => n.FullName).ToList();
-			foreach (var directoryPath in directoriesPath)
-			{
-				var msiName = GetMsiName(version);
-				var moduleDirectoryPath = Path.Combine(directoryPath, "modules");
-				if (Directory.Exists(moduleDirectoryPath))
-				{
-					var msiFile = Path.Combine(moduleDirectoryPath,msiName);
-					if (File.Exists(msiFile))
-					{
-
-						var process = new ProcessStartInfo
-						{
-							FileName = "msiexec",
-							WorkingDirectory = moduleDirectoryPath,
-							Arguments = "/fa " + msiName,
-							Verb = "runas"
-						};
-						Process.Start(process);
-					}
-				}
-			}
-		}
-
-		private string GetMsiName(StudioVersionListItem version)
-		{
-			var msiName = string.Format("TranslationStudio{0}.msi", version.MinorVersionNumber);
-			return msiName;
-		}
-		
-		private void CheckAllLocations(bool check)
-		{
-			foreach (var location in FoldersLocationsCollection)
-			{
-				location.IsSelected = check;
-			}
-		}
-
-		private async void RemoveFiles()
-		{
-			var dialog = new MetroDialogSettings
-			{
-				AffirmativeButtonText = "OK"
-
-			};
-			var result =
-				await _mainWindow.ShowMessageAsync(Constants.Confirmation, Constants.RemoveMessage, MessageDialogStyle.AffirmativeAndNegative,dialog);
-			if (result == MessageDialogResult.Affirmative)
-			{
-				if (!IsStudioRunning())
-				{
-					var foldersToClearOrRestore = new List<LocationDetails>();
-					var controller = await _mainWindow.ShowProgressAsync(Constants.Wait, Constants.RemoveFilesMessage);
-					controller.SetIndeterminate();
-
-					var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
-					var selectedStudioLocations = FoldersLocationsCollection.Where(f => f.IsSelected).ToList();
-					if (selectedStudioVersions.Any())
-					{
-						var documentsFolderLocation =
-							await FoldersPath.GetFoldersPath(_userName, selectedStudioVersions, selectedStudioLocations);
-						foldersToClearOrRestore.AddRange(documentsFolderLocation);
-					}
-
-					//save local selected locations
-					_persistenceSettings.SaveSettings(foldersToClearOrRestore,true);
-					await Remove.BackupFiles(foldersToClearOrRestore);
-
-					try
-					{
-						await Remove.FromSelectedLocations(foldersToClearOrRestore);
-					}
-					catch(Exception e)
-					{
-						await _dialogCoordinator.ShowMessageAsync(this, Constants.Warning, Constants.FilesNotDeletedMessage);
-					}
-
-					UnselectGrids();
-					//to close the message
-					await controller.CloseAsync();
-				}
-				else
-				{
-					await _mainWindow.ShowMessageAsync(Constants.StudioRunMessage, Constants.CloseStudioRemoveMessage, MessageDialogStyle.Affirmative, dialog);
-				}
-
-			}
-		}
-		
 		private void UnselectGrids()
 		{
 			var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();
@@ -619,35 +605,12 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				version.IsSelected = false;
 			}
 
-			var selectedLocations = FoldersLocationsCollection.Where(l => l.IsSelected).ToList();
+			var selectedLocations = Locations.Where(l => l.IsSelected).ToList();
 			foreach (var selectedLocation in selectedLocations)
 			{
 				selectedLocation.IsSelected = false;
 			}
 			CheckAll = false;
 		}
-
-		private bool IsStudioRunning()
-		{
-			var processList = Process.GetProcesses();
-			var studioProcesses = processList.Where(p => p.ProcessName.Contains(Constants.SDLTradosStudio)).ToList();
-			return studioProcesses.Any();
-		}
-
-		private bool AnyLocationSelected()
-		{
-			return FoldersLocationsCollection.Any(l => l.IsSelected);
-		}
-
-		private bool AnyVersionSelected()
-		{
-			return StudioVersionsCollection.Any(v => v.IsSelected);
-		}
-
-		[NotifyPropertyChangedInvocator]
-	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-	    {
-		    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	    }
 	}
 }

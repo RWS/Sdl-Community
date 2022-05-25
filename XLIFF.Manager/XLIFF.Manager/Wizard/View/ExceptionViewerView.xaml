@@ -1,0 +1,102 @@
+﻿<Window x:Class="Sdl.Community.XLIFF.Manager.Wizard.View.ExceptionViewerView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
+		xmlns:viewModel="clr-namespace:Sdl.Community.XLIFF.Manager.Wizard.ViewModel"
+		xmlns:controls="clr-namespace:Sdl.Community.XLIFF.Manager.Controls"
+		xmlns:behaviours="clr-namespace:Sdl.Community.XLIFF.Manager.Behaviours"
+        WindowStartupLocation="CenterScreen"			
+        ResizeMode="CanResizeWithGrip"
+        ShowInTaskbar="True"
+		mc:Ignorable="d" 
+        Title ="Exceptions"
+        MinHeight="300" MinWidth="200" Height="400" Width="650"
+		d:DataContext="{d:DesignInstance viewModel:ExceptionViewerViewModel}">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.XLIFF.Manager;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="Button" x:Key="SdlWizardStyleButton" BasedOn="{StaticResource SdlSecondaryButtonStyle}">
+				<Setter Property="MinWidth" Value="70"></Setter>
+				<Setter Property="Height" Value="34"></Setter>
+				<Setter Property="Margin" Value="5,9,5,11"></Setter>
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Grid x:Name="GridParent">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="auto" />
+		</Grid.RowDefinitions>
+		<Grid>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<TreeView Grid.Column="0" Name="TreeView1" 
+		          ItemsSource="{Binding TreeViewItems, Mode=OneWay}" 
+		          Margin="5" 
+				Padding="5"
+			      MinWidth="250"
+		         behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}" >
+			</TreeView>
+
+			<GridSplitter Width="3" Margin="0,5,0,5" Grid.Row="0" Grid.Column="0" ResizeBehavior="CurrentAndNext" />
+
+			<Border Grid.Column="1" BorderThickness="{Binding ElementName=TreeView1, Path=BorderThickness}" 
+			        BorderBrush="{Binding ElementName=TreeView1,Path=BorderBrush}" Margin="5" Padding="5"  >
+				<RichTextBox x:Name="RichTextBox"
+				             VerticalAlignment="Top"
+				             HorizontalAlignment="Left"
+				             HorizontalContentAlignment="Stretch"								
+				             Height="Auto" 
+				             MaxWidth="{Binding ElementName=MediaElementGrid, Path=ActualWidth}"
+				             BorderBrush="Transparent" 
+				             BorderThickness="0" 
+				             Padding="0,0,0,5" 
+				             Margin="0"
+				             Visibility="Visible" 
+				             IsReadOnly="True" 
+				             IsEnabled="True"
+				             HorizontalScrollBarVisibility="Auto"
+				             VerticalScrollBarVisibility="Auto" >
+					<FlowDocument TextAlignment="Left">
+						<controls:BindableParagraphBlock 
+					          BoundInline="{Binding SubtitleSpan, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+					</FlowDocument>
+				</RichTextBox>
+			</Border>
+		</Grid>
+
+		<Border Padding="5" Grid.Row="1" Background="{StaticResource WindowsControl.Navigation.Backround}" >
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
+
+				<Button IsCancel="True" Style="{StaticResource SdlWizardStyleButton}" Content="Close"
+                    Grid.Column="2"
+                    Padding="0"                   
+                    VerticalAlignment="Center"/>
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

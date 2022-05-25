@@ -1,0 +1,327 @@
+﻿<xliff version="1.2" xmlns:sdl="http://schemas.sdl.com/xliff" sdl:support="xliff12sdl" sdl:version="1.2.1">
+  <sdl:doc-info project-id="0c0340b6-f0e1-4719-8825-33ad717d6e02" 
+                source="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\SampleProject\de-DE\DefaultSample.doc.sdlxliff" 
+                source-language="en-US" 
+                target-language="de-DE" 
+                created="2020-05-28T14:43:13.207Z">
+    <sdl:cmt-defs>
+      <sdl:cmt-def id="55e16084-ddb1-49ec-94a2-222f193f0428">
+        <sdl:comments>
+          <sdl:comment user="phartnett" date="2020-02-21T14:14:08.099Z" version="1.0" severity="Medium">some comment</sdl:comment>
+        </sdl:comments>
+      </sdl:cmt-def>
+      <sdl:cmt-def id="f2963fbe-7004-4a29-b53f-e09804077d51">
+        <sdl:comments>
+          <sdl:comment user="phartnett" date="2020-02-21T14:14:17.410Z" version="1.0" severity="Low">another comment</sdl:comment>
+        </sdl:comments>
+      </sdl:cmt-def>
+    </sdl:cmt-defs>
+  </sdl:doc-info>
+  <file original="C:\Users\phartnett\Documents\Studio 2019\Projects\Samples\NewSampleProject\en-US\DefaultSample.doc" 
+        source-language="en-US" 
+        target-language="de-DE" 
+        datatype="Word 2000-2003 v 1.0.0.0">
+    <header />
+    <body>
+      <trans-unit id="c54aa716-7cec-41fe-921c-8df7bd5898fe">
+        <source>Getting Started</source>
+        <seg-source>
+          <mrk mtype="seg" mid="1">Getting Started</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="1">Getting Started</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="1" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">fmL9XS6sZnNre1C4SmY7sxi1pq0=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="cad198fe-2086-47da-a63b-3773ebe46405">
+        <source>Finding a location for your photo printer</source>
+        <seg-source>
+          <mrk mtype="seg" mid="2">Finding a location for your photo printer</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="2">Finding a location for your photo printer</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="2" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">qqxYVtw5sYDe8xZScIJT9PFVrEE=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="17555c3a-3385-4df5-90f8-cd975816940e">
+        <source>Place the photo printer on a flat, clean and dust-free surface, <bpt id="pt10">&lt;cf bold="on"&gt;</bpt>in a dry location<ept id="pt10">&lt;/cf&gt;</ept>, and <bpt id="pt11">&lt;cf italic="on"&gt;</bpt>out of direct sunlight<ept id="pt11">&lt;/cf&gt;</ept>.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="3">Place the photo printer on a flat, clean and dust-free surface, <bpt id="pt10">&lt;cf bold="on"&gt;</bpt>in a dry location<ept id="pt10">&lt;/cf&gt;</ept>, and <bpt id="pt11">&lt;cf italic="on"&gt;</bpt>out of direct sunlight<ept id="pt11">&lt;/cf&gt;</ept>.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="3">Place the photo printer on a flat, clean and dust-free surface, <bpt id="pt10">&lt;cf bold="on"&gt;</bpt>in a dry location<ept id="pt10">&lt;/cf&gt;</ept>, and <bpt id="pt11">&lt;cf italic="on"&gt;</bpt>out of direct sunlight<ept id="pt11">&lt;/cf&gt;</ept>.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="3" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">JEDMnj/A+BH/FPLdr94l7icZ6Dk=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="892b95cc-a342-48c8-ab55-254a51842330">
+        <source>Allow at least 12 cm clearance from the back of the photo printer for the paper to travel. When connecting power or USB cables, keep the cables clear of the paper path to the front and rear of the photo printer.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="4">Allow at least 12 cm clearance from the back of the photo printer for the paper to travel.</mrk>
+          <mrk mtype="seg" mid="5 a">When</mrk>
+          <mrk mtype="seg" mid="5 b">connecting power or USB cables, keep the cables clear of the paper path to the front and rear of the photo printer.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="4">Allow at least 12 cm clearance from the back of the photo printer for the paper to travel.</mrk>
+          <mrk mtype="seg" mid="5 a">When </mrk>
+          <mrk mtype="seg" mid="5 b">connecting <bpt id="1">&lt;cf highlight=yellow&gt;</bpt>power <ept id="1">&lt;/cf&gt;</ept>or USB cables, <bpt id="Underline">&lt;cf underlinestyle="single"&gt;</bpt>keep the<ept id="Underline">&lt;/cf&gt;</ept> cables clear of the paper path to the front <mrk mtype="x-sdl-comment" cid="55e16084-ddb1-49ec-94a2-222f193f0428">and </mrk>rear of<mrk mtype="x-sdl-comment" cid="f2963fbe-7004-4a29-b53f-e09804077d51"> the photo</mrk> printer.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="4" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">/x5HyYAFJ/6FZXcyq7fLN1lhjFY=</sdl:value>
+          </sdl:seg>
+          <sdl:seg id="5 a" conf="Draft" origin="interactive">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">02/21/2020 14:13:14</sdl:value>
+            <sdl:value key="SegmentIdentityHash">N67wK7oj2EO0+GTrifHT8sPqIvg=</sdl:value>
+            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="created_on">02/21/2020 14:13:14</sdl:value>
+            <sdl:prev-origin origin="source">
+              <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+              <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+              <sdl:value key="SegmentIdentityHash">nDwVnTxzpO56ITY9nG4RB+f1uHY=</sdl:value>
+            </sdl:prev-origin>
+          </sdl:seg>
+          <sdl:seg id="5 b" conf="Draft" origin="interactive">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">02/21/2020 14:13:51</sdl:value>
+            <sdl:value key="SegmentIdentityHash">NnIA0J4QfPJI3nShOobeXZxHOkY=</sdl:value>
+            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="created_on">02/21/2020 14:13:51</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="f5afdbbe-ad12-488c-859c-0b7ce5029b36">
+        <source>For proper ventilation<ph id="ph14">&lt;footnotereference style="Footnote Reference" autonumber="1"/&gt;</ph>, make sure the top and back of the photo printer are not blocked.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="6">For proper ventilation<ph id="ph14">&lt;footnotereference style="Footnote Reference" autonumber="1"/&gt;</ph>, make sure the top and back of the photo printer are not blocked.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="6">For proper ventilation<ph id="ph14">&lt;footnotereference style="Footnote Reference" autonumber="1"/&gt;</ph>, make sure the top and back of the photo printer are not blocked.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="6" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">Y9cVyV+5FEMfpoUijjxz2oploTo=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="33038aff-f8f5-4d0e-b587-a9822ed97c1a">
+        <source>Allow enough space on all sides of the photo printer to let you connect and disconnect cables, change the color cartridge, and add paper.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="7 a">Allow enough</mrk>
+          <mrk mtype="seg" mid="7 b">space on all sides of the photo printer to let you connect and disconnect cables, change the color cartridge, and add paper.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="7 a">Allow enough space on all sides of the photo printer to let you connect and disconnect cables, change the color cartridge, and add paper.</mrk>
+          <mrk mtype="seg" mid="7 b">New translation</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="7 a" conf="Draft" origin="interactive">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">02/21/2020 08:28:24</sdl:value>
+            <sdl:value key="SegmentIdentityHash">BPfaH2O9SJnAWwZ8horozvEtXP4=</sdl:value>
+            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="created_on">02/21/2020 08:28:24</sdl:value>
+            <sdl:prev-origin origin="source">
+              <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+              <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+              <sdl:value key="SegmentIdentityHash">iOzDGBeZWawQi/04mQZAwaO59NY=</sdl:value>
+            </sdl:prev-origin>
+          </sdl:seg>
+          <sdl:seg id="7 b" conf="Draft" origin="interactive">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">02/21/2020 08:28:29</sdl:value>
+            <sdl:value key="SegmentIdentityHash">QkWgOy0rnBagqqXfwOJ+KWrkZDQ=</sdl:value>
+            <sdl:value key="created_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="created_on">02/21/2020 08:28:29</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="a2ec7d0a-5a97-46f9-8ab7-091f9469f720">
+        <source>Connecting and turning on the power</source>
+        <seg-source>
+          <mrk mtype="seg" mid="8">Connecting and turning on the power</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="8">Connecting and turning on the power</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="8" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">TsytEW+RWKb4NMSuN/M1U4+2dfQ=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="9db6b9df-68f1-435c-8f13-d02442eb0cf6">
+        <source>Note: Use only the AC power adapter included with your photo printer. Other adapters can damage your camera, photo printer, or computer.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="9">Note:</mrk>
+          <mrk mtype="seg" mid="10">Use only the AC power adapter included with your photo printer.</mrk>
+          <mrk mtype="seg" mid="11">Other adapters can damage your camera, photo printer, or computer.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="9">Note:</mrk>
+          <mrk mtype="seg" mid="10">Use only the AC power adapter included with your photo printer.</mrk>
+          <mrk mtype="seg" mid="11">Other adapters can damage your camera, photo printer, or computer.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="9" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">Ug7KH4EZzEvlihsAQetbK5qzPLs=</sdl:value>
+          </sdl:seg>
+          <sdl:seg id="10" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">2F2YEGs3OgJJOZFB3LBWtrGXBKA=</sdl:value>
+          </sdl:seg>
+          <sdl:seg id="11" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">XC5c0G9JHjwTWpP2aBfbBj6A57Y=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="9365d622-bd96-4d4d-858a-dfed753434b2">
+        <source>To connect and turn on the power, follow these steps:</source>
+        <seg-source>
+          <mrk mtype="seg" mid="12">To connect and turn on the power, follow these steps:</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="12">To connect and turn on the power, follow these steps:</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="12" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">+m0KzR/Ag/ZHlvVmYfFln3cx4nI=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="a8f07e4d-64fb-42f8-9793-a178cd810252">
+        <source>Step</source>
+        <seg-source>
+          <mrk mtype="seg" mid="13">Step</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="13">Step</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="13" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">YJKnaQHfRRGqULn1lhXCYP0pmis=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="1de523ef-14d1-4799-a2f1-44d90ea2f289">
+        <source>Notes</source>
+        <seg-source>
+          <mrk mtype="seg" mid="14">Notes</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="14">Notes</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="14" conf="Unspecified" origin="source">
+            <sdl:value key="last_modified_by">GLOBAL\phartnett</sdl:value>
+            <sdl:value key="modified_on">10/04/2019 07:25:20</sdl:value>
+            <sdl:value key="SegmentIdentityHash">bAsAhRr1vfFuiMm/r4fTMTX9l7Q=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="1be37e0e-228b-454c-b7b5-7af01022a19f">
+        <source>Connect the AC power cord to the AC power adapter, then to the back of the photo printer.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="15">Connect the AC power cord to the AC power adapter, then to the back of the photo printer.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="15">Connect the AC power cord to the AC power adapter, then to the back of the photo printer.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="15" conf="Unspecified" origin="source">
+            <sdl:value key="SegmentIdentityHash">W6db6t7tI2ORDy6rGfhJtEfbnLk=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="0c2a9011-f426-41c5-a4f2-8272aa00346b">
+        <source>The AC power cable included with your photo printer may not require assembly, and may be different from the one shown.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="16">The AC power cable included with your photo printer may not require assembly, and may be different from the one shown.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="16">The AC power cable included with your photo printer may not require assembly, and may be different from the one shown.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="16" conf="Unspecified" origin="source">
+            <sdl:value key="SegmentIdentityHash">+etww1GT6oO06NQEkWsJE1oXxy0=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="c50ffbd7-87c1-4521-b577-d5606ba5385d">
+        <source>Plug the AC power cable into a power outlet.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="17">Plug the AC power cable into a power outlet.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="17">Plug the AC power cable into a power outlet.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="17" conf="Unspecified" origin="source">
+            <sdl:value key="SegmentIdentityHash">AGrBuL1M4EScCNKpwSFp2GIxU/s=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="ef9fa187-5a81-436f-adc9-87a39adf4119">
+        <source>Press the On / Off button to turn the power on.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="18">Press the On / Off button to turn the power on.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="18">Press the On / Off button to turn the power on.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="18" conf="Unspecified" origin="source">
+            <sdl:value key="SegmentIdentityHash">PxCjsIvis4qJIVkC9OQcc7KEF3Y=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+      <trans-unit id="8065ecbd-f7c2-4117-a9e8-419ec4b2d488">
+        <source>The photo printer initializes and the On/Off button glows steady green.</source>
+        <seg-source>
+          <mrk mtype="seg" mid="19">The photo printer initializes and the On/Off button glows steady green.</mrk>
+        </seg-source>
+        <target>
+          <mrk mtype="seg" mid="19">The photo printer initializes and the On/Off button glows steady green.</mrk>
+        </target>
+        <sdl:seg-defs>
+          <sdl:seg id="19" conf="Unspecified" origin="source">
+            <sdl:value key="SegmentIdentityHash">VpUSCj8m4Xsj+5T/iacgIS/GWAc=</sdl:value>
+          </sdl:seg>
+        </sdl:seg-defs>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

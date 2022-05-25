@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sdl.Studio.SpotCheck.Helpers
+﻿namespace Sdl.Community.SpotCheck.Helpers
 {
     public class ApplicationSettings : ApplicationSettingsBase
     {

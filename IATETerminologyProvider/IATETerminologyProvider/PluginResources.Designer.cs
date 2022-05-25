@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IATETerminologyProvider {
+namespace Sdl.Community.IATETerminologyProvider {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace IATETerminologyProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -39,7 +39,7 @@ namespace IATETerminologyProvider {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IATETerminologyProvider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.IATETerminologyProvider.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,24 @@ namespace IATETerminologyProvider {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear local cache.
+        /// </summary>
+        public static string ClearCache {
+            get {
+                return ResourceManager.GetString("ClearCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear local cache?.
+        /// </summary>
+        public static string ClearConfirmation {
+            get {
+                return ResourceManager.GetString("ClearConfirmation", resourceCulture);
             }
         }
         
@@ -127,6 +145,15 @@ namespace IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum number of term entries:.
+        /// </summary>
+        public static string Label_MaximumEntries {
+            get {
+                return ResourceManager.GetString("Label_MaximumEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.IATETerminologyProvider.
         /// </summary>
         public static string Plugin_Name {
@@ -155,11 +182,57 @@ namespace IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search in subdomains.
+        /// </summary>
+        public static string Search_Subdomains {
+            get {
+                return ResourceManager.GetString("Search_Subdomains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select collection(s):.
+        /// </summary>
+        public static string SelectCollections_TextBlock {
+            get {
+                return ResourceManager.GetString("SelectCollections_TextBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select settings file.
+        /// </summary>
+        public static string SelectSettingsFile_DialogTitle {
+            get {
+                return ResourceManager.GetString("SelectSettingsFile_DialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {
             get {
                 return ResourceManager.GetString("Settings_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap StarYellow {
+            get {
+                object obj = ResourceManager.GetObject("StarYellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching in subdomains will increase the response time from IATE service.
+        /// </summary>
+        public static string Subdomains_Tooltip {
+            get {
+                return ResourceManager.GetString("Subdomains_Tooltip", resourceCulture);
             }
         }
         

@@ -51,16 +51,19 @@ namespace Sdl.Community.NumberVerifier
             _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
+            _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
+	        _Control.CheckInOrder = _ControlSettings.CheckInOrder;
+	        _Control.RegexExclusionList = _ControlSettings.RegexExclusionList ?? new System.Collections.Generic.List<Model.RegexPattern>();
 
 			_Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
             _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
             _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
-            _Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
+			_Control.ReportNumberFormatErrors = _ControlSettings.ReportNumberFormatErrors;
+			_Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
             _Control.ReportExtendedMessages = _ControlSettings.ReportExtendedMessages;
             _Control.ExcludeTagText = _ControlSettings.ExcludeTagText;
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
-			_Control.HindiNumberVerification = _ControlSettings.HindiNumberVerification;
 			_Control.AllowLocalizations = _ControlSettings.AllowLocalizations;
             _Control.PreventLocalizations = _ControlSettings.PreventLocalizations;
             _Control.RequireLocalizations = _ControlSettings.RequireLocalizations;
@@ -89,15 +92,15 @@ namespace Sdl.Community.NumberVerifier
             _Control.ExcludeDraftSegments = _ControlSettings.ExcludeDraftSegments;
             _Control.SourceOmitLeadingZero = _ControlSettings.SourceOmitLeadingZero;
             _Control.TargetOmitLeadingZero = _ControlSettings.TargetOmitLeadingZero;
-            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator;
-            _Control.TargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustomSeparator;
-            _Control.SourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustomSeparator;
-            _Control.TargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustomSeparator;
-            _Control.GetSourceThousandsCustomSeparator= _ControlSettings.GetSourceThousandsCustomSeparator;
-            _Control.GetTargetThousandsCustomSeparator= _ControlSettings.GetTargetThousandsCustomSeparator;
-            _Control.GetSourceDecimalCustomSeparator= _ControlSettings.GetSourceDecimalCustomSeparator;
-            _Control.GetTargetDecimalCustomSeparator= _ControlSettings.GetTargetDecimalCustomSeparator;
-			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
+            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustom;
+            _Control.TargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustom;
+            _Control.SourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustom;
+            _Control.TargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustom;
+            _Control.GetSourceThousandsCustomSeparator= _ControlSettings.SourceThousandsCustomSeparator;
+            _Control.GetTargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustomSeparator;
+            _Control.GetSourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustomSeparator;
+            _Control.GetTargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustomSeparator;
+			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.AlphanumericsCustomSeparator;
 		}
 
         #endregion
@@ -111,6 +114,10 @@ namespace Sdl.Community.NumberVerifier
             _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
+            _Control.NumberFormatErrorType = _ControlSettings.NumberFormatErrorType;
+	        _Control.CheckInOrder = _ControlSettings.CheckInOrder;
+	        _Control.RegexExclusionList = _ControlSettings.RegexExclusionList;
+
 			_ControlSettings.Reset("ReportAddedNumbers");
             _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _ControlSettings.Reset("ReportRemovedNumbers");
@@ -119,10 +126,14 @@ namespace Sdl.Community.NumberVerifier
             _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
             _ControlSettings.Reset("ReportModifiedAlphanumerics");
             _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
+            
+            
+            _ControlSettings.Reset("ReportNumberFormatErrors");
+            _Control.ReportNumberFormatErrors = _ControlSettings.ReportNumberFormatErrors;
+            
 			_ControlSettings.Reset("CustomsSeparatorsAlphanumerics");
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
 			_ControlSettings.Reset("HindiNumberVerification");
-			_Control.HindiNumberVerification = _ControlSettings.HindiNumberVerification;
 			_ControlSettings.Reset("ReportBriefMessages");
             _Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
             _ControlSettings.Reset("ReportExtendedMessages");
@@ -184,25 +195,25 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.Reset("SourceOmitLeadingZero");
             _Control.TargetOmitLeadingZero = _ControlSettings.TargetOmitLeadingZero;
             _ControlSettings.Reset("TargetOmitLeadingZero");
-            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator;
-            _ControlSettings.Reset("SourceThousandsCustomSeparator");
-            _Control.TargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustomSeparator;
-            _ControlSettings.Reset("TargetThousandsCustomSeparator");
-            _Control.SourceDecimalCustomSeparator = _ControlSettings.SourceDecimalCustomSeparator;
-            _ControlSettings.Reset("SourceDecimalCustomSeparator");
-            _Control.TargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustomSeparator;
-            _ControlSettings.Reset("TargetDecimalCustomSeparator");
+            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustom;
+            _ControlSettings.Reset("SourceThousandsCustom");
+            _Control.TargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustom;
+            _ControlSettings.Reset("TargetThousandsCustom");
+            _Control.SourceDecimalCustomSeparator = _ControlSettings.SourceDecimalCustom;
+            _ControlSettings.Reset("SourceDecimalCustom");
+            _Control.TargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustom;
+            _ControlSettings.Reset("TargetDecimalCustom");
             _Control.GetSourceThousandsCustomSeparator =
-            _ControlSettings.GetSourceThousandsCustomSeparator;
-            _ControlSettings.Reset("GetSourceThousandsCustomSeparator");
-            _Control.GetTargetThousandsCustomSeparator = _ControlSettings.GetTargetThousandsCustomSeparator;
-            _ControlSettings.Reset("GetTargetThousandsCustomSeparator");
-            _Control.GetSourceDecimalCustomSeparator = _ControlSettings.GetSourceDecimalCustomSeparator;
-            _ControlSettings.Reset("GetSourceDecimalCustomSeparator");
-            _Control.GetTargetDecimalCustomSeparator = _ControlSettings.GetTargetDecimalCustomSeparator;
-            _ControlSettings.Reset("GetTargetDecimalCustomSeparator");
-			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
-			_ControlSettings.Reset("GetAlphanumericsCustomSeparator");
+            _ControlSettings.SourceThousandsCustomSeparator;
+            _ControlSettings.Reset("SourceThousandsCustomSeparator");
+            _Control.GetTargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustomSeparator;
+            _ControlSettings.Reset("TargetThousandsCustomSeparator");
+            _Control.GetSourceDecimalCustomSeparator = _ControlSettings.SourceDecimalCustomSeparator;
+            _ControlSettings.Reset("SourceDecimalCustomSeparator");
+            _Control.GetTargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustomSeparator;
+            _ControlSettings.Reset("TargetDecimalCustomSeparator");
+			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.AlphanumericsCustomSeparator;
+			_ControlSettings.Reset("AlphanumericsCustomSeparator");
 
 		}
 		#endregion
@@ -223,16 +234,19 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
+            _ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
+	        _ControlSettings.CheckInOrder = _Control.CheckInOrder;
+	        _ControlSettings.RegexExclusionList = _Control.RegexExclusionList;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
             _ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
             _ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
-            _ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
+			_ControlSettings.ReportNumberFormatErrors = _Control.ReportNumberFormatErrors;
+			_ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
             _ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
             _ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
 			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
-			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
 
 			_ControlSettings.AllowLocalizations = _Control.AllowLocalizations;
             _ControlSettings.PreventLocalizations = _Control.PreventLocalizations;
@@ -262,15 +276,15 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ExcludeDraftSegments = _Control.ExcludeDraftSegments;
             _ControlSettings.SourceOmitLeadingZero = _Control.SourceOmitLeadingZero;
             _ControlSettings.TargetOmitLeadingZero = _Control.TargetOmitLeadingZero;
-            _ControlSettings.SourceThousandsCustomSeparator = _Control.SourceThousandsCustomSeparator;
-            _ControlSettings.TargetThousandsCustomSeparator = _Control.TargetThousandsCustomSeparator;
-            _ControlSettings.SourceDecimalCustomSeparator = _Control.SourceDecimalCustomSeparator;
-            _ControlSettings.TargetDecimalCustomSeparator = _Control.TargetDecimalCustomSeparator;
-            _ControlSettings.GetSourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
-            _ControlSettings.GetTargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
-            _ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
-            _ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
-			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
+            _ControlSettings.SourceThousandsCustom = _Control.SourceThousandsCustomSeparator;
+            _ControlSettings.TargetThousandsCustom = _Control.TargetThousandsCustomSeparator;
+            _ControlSettings.SourceDecimalCustom = _Control.SourceDecimalCustomSeparator;
+            _ControlSettings.TargetDecimalCustom = _Control.TargetDecimalCustomSeparator;
+            _ControlSettings.SourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
+            _ControlSettings.TargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
+            _ControlSettings.SourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
+            _ControlSettings.TargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
+			_ControlSettings.AlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
 
 		}
 
@@ -282,12 +296,14 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
 			_ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
 			_ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
+			_ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
 			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
 			_ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
 			_ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
 			_ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
+			_ControlSettings.ReportNumberFormatErrors = _Control.ReportNumberFormatErrors;
 			_ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
 			_ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
 			_ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
@@ -318,16 +334,15 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.ExcludeDraftSegments = _Control.ExcludeDraftSegments;
 			_ControlSettings.SourceOmitLeadingZero = _Control.SourceOmitLeadingZero;
 			_ControlSettings.TargetOmitLeadingZero = _Control.TargetOmitLeadingZero;
-			_ControlSettings.SourceThousandsCustomSeparator = _Control.SourceThousandsCustomSeparator;
-			_ControlSettings.TargetThousandsCustomSeparator = _Control.TargetThousandsCustomSeparator;
-			_ControlSettings.SourceDecimalCustomSeparator = _Control.SourceDecimalCustomSeparator;
-			_ControlSettings.TargetDecimalCustomSeparator = _Control.TargetDecimalCustomSeparator;
-			_ControlSettings.GetSourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
-			_ControlSettings.GetTargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
-			_ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
-			_ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
-			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
-			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
+			_ControlSettings.SourceThousandsCustom = _Control.SourceThousandsCustomSeparator;
+			_ControlSettings.TargetThousandsCustom = _Control.TargetThousandsCustomSeparator;
+			_ControlSettings.SourceDecimalCustom = _Control.SourceDecimalCustomSeparator;
+			_ControlSettings.TargetDecimalCustom = _Control.TargetDecimalCustomSeparator;
+			_ControlSettings.SourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
+			_ControlSettings.TargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
+			_ControlSettings.SourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
+			_ControlSettings.TargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
+			_ControlSettings.AlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
 		}
 
 		// Call EndEdit after all changes have been saved in the Save() call.

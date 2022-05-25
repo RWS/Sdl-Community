@@ -70,12 +70,30 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to Abbreviations.
         /// </summary>
-        public static System.Drawing.Icon AddFolder {
+        public static string Abbreviations {
+            get {
+                return ResourceManager.GetString("Abbreviations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Folder.
+        /// </summary>
+        public static string Add_Folder {
+            get {
+                return ResourceManager.GetString("Add_Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap AddFolder {
             get {
                 object obj = ResourceManager.GetObject("AddFolder", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -108,21 +126,29 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Checked {
-            get {
-                object obj = ResourceManager.GetObject("Checked", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Choose a template....
         /// </summary>
         public static string Choose_Template {
             get {
                 return ResourceManager.GetString("Choose_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currencies.
+        /// </summary>
+        public static string Currencies {
+            get {
+                return ResourceManager.GetString("Currencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decimal.
+        /// </summary>
+        public static string DecimalSeparatorCategory {
+            get {
+                return ResourceManager.GetString("DecimalSeparatorCategory", resourceCulture);
             }
         }
         
@@ -297,6 +323,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Global settings.
+        /// </summary>
+        public static string GlobalSettings {
+            get {
+                return ResourceManager.GetString("GlobalSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon GreenDropDown {
@@ -362,11 +397,56 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Long dates.
+        /// </summary>
+        public static string LongDates {
+            get {
+                return ResourceManager.GetString("LongDates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Long times.
+        /// </summary>
+        public static string LongTimes {
+            get {
+                return ResourceManager.GetString("LongTimes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measurements.
+        /// </summary>
+        public static string Measurements {
+            get {
+                return ResourceManager.GetString("Measurements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file path provided.
+        /// </summary>
+        public static string No_file_path_provided {
+            get {
+                return ResourceManager.GetString("No_file_path_provided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No languages could be identified in the template.
         /// </summary>
         public static string No_Languages_IDed {
             get {
                 return ResourceManager.GetString("No_Languages_IDed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No resource template path provided.
+        /// </summary>
+        public static string No_resource_template_path_provided {
+            get {
+                return ResourceManager.GetString("No_resource_template_path_provided", resourceCulture);
             }
         }
         
@@ -380,6 +460,33 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nothing processed yet.
+        /// </summary>
+        public static string Nothing_processed_yet {
+            get {
+                return ResourceManager.GetString("Nothing_processed_yet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number separators.
+        /// </summary>
+        public static string NumberSeparators {
+            get {
+                return ResourceManager.GetString("NumberSeparators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ordinal followers.
+        /// </summary>
+        public static string OrdinalFollowers {
+            get {
+                return ResourceManager.GetString("OrdinalFollowers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the folder containing the TMs.
         /// </summary>
         public static string Please_select_the_folder_containing_the_TMs {
@@ -389,12 +496,11 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to Please specify a correct template path.
         /// </summary>
-        public static System.Drawing.Icon PlusSign {
+        public static string Please_specify_a_correct_template_path {
             get {
-                object obj = ResourceManager.GetObject("PlusSign", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("Please_specify_a_correct_template_path", resourceCulture);
             }
         }
         
@@ -405,6 +511,15 @@ namespace Sdl.Community.ApplyTMTemplate {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recognizers.
+        /// </summary>
+        public static string Recognizers {
+            get {
+                return ResourceManager.GetString("Recognizers", resourceCulture);
             }
         }
         
@@ -447,6 +562,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SegmentationRules.
+        /// </summary>
+        public static string SegmentationRules {
+            get {
+                return ResourceManager.GetString("SegmentationRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a template.
         /// </summary>
         public static string Select_A_Template {
@@ -461,6 +585,24 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Select_at_least_one_TM {
             get {
                 return ResourceManager.GetString("Select_at_least_one_TM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short dates.
+        /// </summary>
+        public static string ShortDates {
+            get {
+                return ResourceManager.GetString("ShortDates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short times.
+        /// </summary>
+        public static string ShortTimes {
+            get {
+                return ResourceManager.GetString("ShortTimes", resourceCulture);
             }
         }
         
@@ -537,6 +679,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template loading error.
+        /// </summary>
+        public static string Template_loading_error {
+            get {
+                return ResourceManager.GetString("Template_loading_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file is not of the required type.
         /// </summary>
         public static string The_file_is_not_of_the_required_type {
@@ -546,21 +697,30 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This TM is corrupted or the file is not a TM.
+        ///   Looks up a localized string similar to Thousands.
         /// </summary>
-        public static string TmCorruptedMarker {
+        public static string ThousandsSeparatorCategory {
             get {
-                return ResourceManager.GetString("TmCorruptedMarker", resourceCulture);
+                return ResourceManager.GetString("ThousandsSeparatorCategory", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Unchecked {
+        public static System.Drawing.Icon TM {
             get {
-                object obj = ResourceManager.GetObject("Unchecked", resourceCulture);
+                object obj = ResourceManager.GetObject("TM", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This TM is corrupted or the file is not a TM.
+        /// </summary>
+        public static string TmCorruptedMarker {
+            get {
+                return ResourceManager.GetString("TmCorruptedMarker", resourceCulture);
             }
         }
         
@@ -584,11 +744,56 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variables.
+        /// </summary>
+        public static string Variables {
+            get {
+                return ResourceManager.GetString("Variables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warning.
         /// </summary>
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string WindowsControl_Close {
+            get {
+                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        public static string WindowsControl_Maximize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string WindowsControl_Minimize {
+            get {
+                return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word count flags.
+        /// </summary>
+        public static string WordCountFlags {
+            get {
+                return ResourceManager.GetString("WordCountFlags", resourceCulture);
             }
         }
     }

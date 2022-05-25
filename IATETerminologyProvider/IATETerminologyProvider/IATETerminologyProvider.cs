@@ -1,32 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using IATETerminologyProvider.EventArgs;
-using IATETerminologyProvider.Helpers;
-using IATETerminologyProvider.Model;
-using IATETerminologyProvider.Service;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Newtonsoft.Json;
+using NLog;
+using Sdl.Community.IATETerminologyProvider.EventArgs;
+using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Model;
+using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace IATETerminologyProvider
+namespace Sdl.Community.IATETerminologyProvider
 {
 	public class IATETerminologyProvider : AbstractTerminologyProvider
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private IList<EntryModel> _entryModels;
-		private SettingsModel _providerSettings;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private ProjectsController _projectsController;		
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
-		public IATETerminologyProvider(SettingsModel providerSettings)
+		public SettingsModel ProviderSettings { get; set; }
+
+		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
+			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
 		{
-			UpdateSettings(providerSettings);			
+			ProviderSettings = providerSettings;
+			ConnectionProvider = connectionProvider;
+			InventoriesProvider = inventoriesProvider;
+			CacheProvider = cacheProvider;
+
+			Task.Run(async () => await Setup());
 		}
+
+		private async Task Setup()
+		{
+			if (!InventoriesProvider.IsInitialized)
+			{
+				await InventoriesProvider.Initialize();
+			}
+
+			_entryModels = new List<EntryModel>();
+			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
+
+			InitializeEditorController();
+		}
+
+		public ConnectionProvider ConnectionProvider { get; private set; }
+
+		public InventoriesProvider InventoriesProvider { get; private set; }
+
+		public ICacheProvider CacheProvider { get; private set; }
 
 		public const string IateUriTemplate = Constants.IATEUriTemplate;
 
@@ -36,7 +68,7 @@ namespace IATETerminologyProvider
 
 		public override string Name => PluginResources.IATETerminologyProviderName;
 
-		public override Uri Uri => new Uri((IateUriTemplate + "https://iate.europa.eu/em-api/entries/_search").RemoveUriForbiddenCharacters());
+		public override Uri Uri => new Uri(Constants.IATEUriTemplate);
 
 		public override IEntry GetEntry(int id)
 		{
@@ -55,9 +87,31 @@ namespace IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			_entryModels.Clear();
+			ClearEntries();
+			_logger.Info("--> Try searching for segment");
 
-			var results = _searchService.GetTerms(text, source, target, maxResultsCount);
+			var jsonBody = GetApiRequestBodyValues(source, target, text);
+			var queryString = JsonConvert.SerializeObject(jsonBody);
+			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
+
+			if (canConnect != null && (bool)canConnect)
+			{
+				_logger.Info("--> Try to get cache results");
+
+				var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
+				if (cachedResults != null && cachedResults.Count > 0)
+				{
+					CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
+
+					_logger.Info("--> Cache results found");
+					OnTermEntriesChanged(text, source, target);
+
+					return cachedResults;
+				}
+			}
+
+			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
+			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
 			if (results != null)
 			{
 				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
@@ -65,28 +119,25 @@ namespace IATETerminologyProvider
 				results = RemoveDuplicateTerms(termGroups, source, target);
 				results = MaxSearchResults(results, maxResultsCount);
 				CreateEntryTerms(results, source, GetLanguages());
+
+				// add search to cache db
+				var searchCache = new SearchCache
+				{
+					SourceText = text,
+					TargetLanguage = target.Locale.Name,
+					QueryString = queryString
+				};
+
+				if (CacheProvider != null)
+				{
+					_logger.Info("--> Try to add results in db");
+					CacheProvider.AddSearchResults(searchCache, results);
+				}
 			}
 
-			if (IsActiveSegmentText(text, source))
-			{
-				OnTermEntriesChanged(new TermEntriesChangedEventArgs
-				{
-					EntryModels = _entryModels,
-					SourceLanguage = new Language(source.Locale.Name),
-					TargetLanguage = new Language(target.Locale.Name)
-				});
-			}
+			OnTermEntriesChanged(text, source, target);
 
 			return results;
-		}
-
-		public void UpdateSettings(SettingsModel providerSettings)
-		{
-			_providerSettings = providerSettings;
-			_entryModels = new List<EntryModel>();
-			_searchService = new TermSearchService(_providerSettings);
-
-			InitializeEditorController();
 		}
 
 		public IList<IDescriptiveField> GetDescriptiveFields()
@@ -127,9 +178,15 @@ namespace IATETerminologyProvider
 		}
 
 		public IList<IDefinitionLanguage> GetDefinitionLanguages()
-		{			
+		{
 			var result = new List<IDefinitionLanguage>();
-			var currentProject = _projectsController.CurrentProject;
+
+			var currentProject = IATEApplication.ProjectsController?.CurrentProject;
+			if (currentProject == null)
+			{
+				return result;
+			}
+
 			var projectInfo = currentProject.GetProjectInfo();
 
 			var sourceLanguage = new DefinitionLanguage
@@ -138,7 +195,7 @@ namespace IATETerminologyProvider
 				Locale = projectInfo.SourceLanguage.CultureInfo,
 				Name = projectInfo.SourceLanguage.DisplayName,
 				TargetOnly = false
-			};						
+			};
 			result.Add(sourceLanguage);
 
 			foreach (var language in projectInfo.TargetLanguages)
@@ -153,7 +210,7 @@ namespace IATETerminologyProvider
 
 				result.Add(targetLanguage);
 			}
-		
+
 			return result;
 		}
 
@@ -174,9 +231,101 @@ namespace IATETerminologyProvider
 			if (_editorController != null)
 			{
 				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_editorController.Opened -= EditorControllerOnOpened;
 			}
 
 			base.Dispose();
+		}
+
+		private object GetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
+		{
+			var targetLanguages = new List<string>();
+			var filteredDomains = new List<string>();
+			var filteredTermTypes = new List<int>();
+			var filteredCollections = new List<string>();
+			var filteredInstitutions = new List<string>();
+
+			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
+			var primarities = new List<int>();
+			var sourceReliabilities = new List<int>();
+			var targetReliabilities = new List<int>();
+			var searchInSubdomains = false;
+			if (ProviderSettings != null)
+			{
+				var domains = ProviderSettings.Domains.Where(d => d.IsSelected).Select(d => d.Code).ToList();
+				filteredDomains.AddRange(domains);
+
+				var termTypes = ProviderSettings.TermTypes.Where(t => t.IsSelected).Select(t => t.Code).ToList();
+				filteredTermTypes.AddRange(termTypes);
+
+				var collections = ProviderSettings.Collections.Select(c => c.Code).ToList();
+				filteredCollections.AddRange(collections);
+				
+				var institutions = ProviderSettings.Institutions.Select(i => i.Code).ToList();
+				filteredInstitutions.AddRange(institutions);
+
+				primarities = ProviderSettings.Primarities.GetPrimarities();
+
+				sourceReliabilities = ProviderSettings.SourceReliabilities.GetReliabilityCodes();
+				targetReliabilities = ProviderSettings.TargetReliabilities.GetReliabilityCodes();
+
+				searchInSubdomains = ProviderSettings.SearchInSubdomains;
+			}
+
+			dynamic bodyModel = new ExpandoObject();
+
+			bodyModel.query = text;
+			bodyModel.source = source.Locale.TwoLetterISOLanguageName;
+			bodyModel.targets = targetLanguages;
+			bodyModel.cascade_domains = searchInSubdomains;
+			bodyModel.query_operator = 18;
+			bodyModel.search_in_fields = 0;
+
+			if (filteredDomains.Count > 0)
+				bodyModel.filter_by_domains = filteredDomains;
+
+			if (filteredTermTypes.Count > 0)
+				bodyModel.search_in_term_types = filteredTermTypes;
+
+			if (filteredCollections.Count > 0)
+				bodyModel.filter_by_entry_collection = filteredCollections;
+
+			if (filteredInstitutions.Count > 0)
+				bodyModel.filter_by_entry_institution_owner = filteredInstitutions;
+
+			if (primarities.Count > 0)
+				bodyModel.filter_by_entry_primarity = primarities;
+
+			if (sourceReliabilities.Count > 0)
+				bodyModel.filter_by_source_term_reliability = sourceReliabilities;
+
+			if (targetReliabilities.Count > 0)
+				bodyModel.filter_by_target_term_reliability = targetReliabilities;
+
+			return bodyModel;
+		}
+
+		private void ClearEntries()
+		{
+			if (_entryModels == null)
+			{
+				_entryModels = new List<EntryModel>();
+			}
+
+			_entryModels.Clear();
+		}
+
+		private void OnTermEntriesChanged(string text, ILanguage source, ILanguage target)
+		{
+			if (IsActiveSegmentText(text, source))
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = new Language(source.Locale.Name),
+					TargetLanguage = new Language(target.Locale.Name)
+				});
+			}
 		}
 
 		protected virtual void OnTermEntriesChanged(TermEntriesChangedEventArgs e)
@@ -186,6 +335,11 @@ namespace IATETerminologyProvider
 
 		private bool IsActiveSegmentText(string text, ILanguage source)
 		{
+			if (text == null || source == null)
+			{
+				return false;
+			}
+			
 			var selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			if (selectedSegmentPair?.Source == null)
 			{
@@ -205,13 +359,31 @@ namespace IATETerminologyProvider
 
 		private void InitializeEditorController()
 		{
-			if (!(_editorController is null)) return;
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
-				
 			if (_editorController != null)
 			{
-				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;				
+				return;
+			}
+
+			_editorController = SdlTradosStudio.Application?.GetController<EditorController>();
+
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+				_editorController.Opened += EditorControllerOnOpened;
+			}
+		}
+
+		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
+		{
+			Application.DoEvents();
+			if (_editorController?.ActiveDocument != null)
+			{
+				OnTermEntriesChanged(new TermEntriesChangedEventArgs
+				{
+					EntryModels = _entryModels,
+					SourceLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage,
+					TargetLanguage = _editorController.ActiveDocument.ActiveFile.Language
+				});
 			}
 		}
 
@@ -225,9 +397,12 @@ namespace IATETerminologyProvider
 
 		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
-			_entryModels.Clear();
+			ClearEntries();
 
-			foreach (var searchResult in termsResult.Where(s => s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName)))
+			var termsForSourceLanguage = termsResult.Where(s =>
+				s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName));
+
+			foreach (var searchResult in termsForSourceLanguage)
 			{
 				var termResult = (SearchResultModel)searchResult;
 
@@ -371,7 +546,8 @@ namespace IATETerminologyProvider
 
 			foreach (var termResult in termsResult)
 			{
-				var sourceTerms = termResult.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
+				var sourceTerms = termResult.Results
+					.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{

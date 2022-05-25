@@ -84,8 +84,8 @@ namespace Sdl.Community.TargetWordCount
 				case nameof(UseLineCount):
 					return false;
 
-				case nameof(CharactersPerLine):
-					return string.Empty;
+				//case nameof(CharactersPerLine):
+				//	return string.Empty;
 			}
 
 			return base.GetDefaultValue(settingId);

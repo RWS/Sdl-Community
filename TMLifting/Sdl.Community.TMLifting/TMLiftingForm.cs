@@ -8,11 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using System.Threading.Tasks;
 
 namespace Sdl.Community.TMLifting
 {
 	public delegate void AddServerBasedTMsDetails(string userName, string password, string uri);
-    public partial class TMLiftingForm : UserControl
+    public partial class TMLiftingForm : UserControl,IUIControl
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
@@ -133,7 +135,7 @@ namespace Sdl.Community.TMLifting
 			}
 			catch (Exception ex)
 			{
-				throw new SystemException(Constants.AuthentificationErrorMsg);				
+				MessageBox.Show(ex.Message);
 			}
 		}
 
@@ -195,7 +197,7 @@ namespace Sdl.Community.TMLifting
             }
         }
 
-        private void btnReindex_Click(object sender, EventArgs e)
+        private async void btnReindex_Click(object sender, EventArgs e)
         {			
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
 			{
@@ -224,9 +226,11 @@ namespace Sdl.Community.TMLifting
 					{
 						TranslationMemory = selectedTm
 					};
-					
-					reindexOperation.Queue();
-					reindexOperation.Refresh();
+
+
+					await Task.Run(() => reindexOperation.Queue()); 
+					await Task.Run(() => reindexOperation.Refresh()); 
+
 					_reIndexOperationStatus.Add(new ReindexOperationStatus { RowIndex = row.Index, ReindexOperation = reindexOperation });
 					gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = reindexOperation.Status;
 				}

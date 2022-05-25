@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	{
 		public CommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 		public override void Execute()
 		{
@@ -16,7 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDLMachineTranslationCloud results";
+		public override string Category => $"{PluginResources.SDLMTCloud_Provider_Name} results";
 
 		public override Icon Icon => PluginResources.ForumIcon;
 	}

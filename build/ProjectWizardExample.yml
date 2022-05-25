@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ProjectWizardExample/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - ProjectWizardExample/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/ProjectWizardExample.sln'
+
+steps:
+  - template: jobs/build-sdlplugin.yml

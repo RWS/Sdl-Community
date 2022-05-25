@@ -8,7 +8,7 @@ namespace Sdl.Community.InSource.Tellme
 	{
 		public InSourceCommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()
@@ -17,7 +17,7 @@ namespace Sdl.Community.InSource.Tellme
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "InSource results";
+		public override string Category => "Trados InSource! results";
 		public override Icon Icon => PluginResources.ForumIcon;
 	}
 }

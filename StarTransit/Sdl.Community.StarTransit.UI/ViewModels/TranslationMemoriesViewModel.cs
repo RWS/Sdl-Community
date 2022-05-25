@@ -7,8 +7,8 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Commands;
-using Sdl.Community.Toolkit.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -50,9 +50,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_title = $"Please select Translation memory for pair {LanguagePairs?[0]?.PairName}";
 			_importMtVisible = "Collapsed";
 
-			var studioVersion = new Studio().GetStudioVersion();
+			var studioVersion = new StudioVersionService().GetStudioVersion();
 			_initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-					studioVersion.PublicVersion.Replace("SDL", "").Trim(), "Translation Memories");
+					studioVersion.StudioDocumentsFolderName, "Translation Memories");
 		}
 
 		public string TmMessage

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using NLog;
 using Sdl.Community.StarTransit.Shared.Interfaces;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
@@ -21,8 +20,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private readonly ReturnPackageService _returnService;
 		private readonly CellViewModel _cellViewModel;
         private readonly IMessageBoxService _messageBoxService;
-
-		private bool _active;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private bool _active;
 		
 		public Action CloseAction { get; set; }
 
@@ -97,21 +96,18 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"CreatePackage method: {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
 		/// <summary>
 		/// Create return  package folder in the studio project folder
 		/// </summary>
-		/// <param name="projectPath"></param>
 		private string CreateReturnPackageFolder(string projectPath)
 		{
 			var returnPackageFolderPath = Path.Combine(projectPath, "Return package");
-			if (!Directory.Exists(returnPackageFolderPath))
-			{
-				Directory.CreateDirectory(returnPackageFolderPath);
-			}
+			Directory.CreateDirectory(returnPackageFolderPath);
+
 			return returnPackageFolderPath;
 		}
 	}

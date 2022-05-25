@@ -1,10 +1,11 @@
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 {
-    public partial class StudioTimeTrackerViewControl : UserControl
-    {
+    public partial class StudioTimeTrackerViewControl : UserControl, IUIControl
+	{
         public StudioTimeTrackerViewControl()
         {
             InitializeComponent();

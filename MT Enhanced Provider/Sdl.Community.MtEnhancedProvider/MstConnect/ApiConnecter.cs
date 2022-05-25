@@ -1,83 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 using RestSharp;
-using Sdl.Community.MtEnhancedProvider.Helpers;
 using Sdl.Community.MtEnhancedProvider.Model;
+using Sdl.Community.MtEnhancedProvider.Service;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
 	internal class ApiConnecter
 	{
-		private static string _authToken;
-		private static DateTime _tokenExpiresAt; //to keep track of when token expires
-		public static List<string> SupportedLangs { get; set; }
-		private MtTranslationOptions _options;
-		private string _subscriptionKey = string.Empty;
-		private static readonly string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
-
-		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
+		private const string BaseUri = @"api.cognitive.microsofttranslator.com";
+		private const string ServiceBaseUri = @"api.cognitive.microsoft.com";
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-		private Constants _constants = new Constants();
 
-		public Log Log = Log.Instance;
+		private List<string> _supportedLangs;
+		private string _authToken;
+
+		//TODO PACH (06/04/2021): identify if we can enhance the service using this value.
+		private DateTime _tokenExpiresAt;
+
+		private string _subscriptionKey;
+		private string _region;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly HtmlUtil _htmlUtil;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
-		/// <param name="options"></param>
-		internal ApiConnecter(MtTranslationOptions options)
+		/// <param name="subscriptionKey">Microsoft API key</param>
+		/// <param name="region">Region</param>
+		internal ApiConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
-			_options = options;
-			_subscriptionKey = _options.ClientId;
+			_subscriptionKey = subscriptionKey;
+			_region = region;
+			_htmlUtil = htmlUtil;
+
 			if (_authToken == null)
 			{
 				_authToken = GetAuthToken(); //if the class variable has not been set
 			}
-			if (SupportedLangs == null)
+			if (_supportedLangs == null)
 			{
-				SupportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
 			}
 		}
 
 		/// <summary>
 		/// Allows static credentials to be updated by the calling program
 		/// </summary>
-		/// <param name="cid">the client Id obtained from Microsoft</param>
-		/// <param name="cst">the client secret obtained from Microsoft</param>
-		internal void resetCrd(string cid, string cst)
+		/// <param name="subscriptionKey">the client Id obtained from Microsoft</param>
+		/// <param name="region">Region</param>
+		internal void ResetCrd(string subscriptionKey, string region)
 		{
-			_subscriptionKey = cid;
+			if (subscriptionKey != _subscriptionKey || region != _region)
+			{
+				_subscriptionKey = subscriptionKey;
+				_region = region;
+				_authToken = GetAuthToken();
+				_supportedLangs = GetSupportedLanguages();
+			}
 		}
 
 		/// <summary>
 		/// translates the text input
 		/// </summary>
-		/// <param name="sourceLang"></param>
-		/// <param name="targetLang"></param>
-		/// <param name="textToTranslate"></param>
-		/// <param name="categoryId"></param>
-		/// <param name="format"></param>
-		/// <returns></returns>
-		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId,
-			string format)
+		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
 		{
 			//convert our language codes
-			var sourceLc = convertLangCode(sourceLang);
-			var targetLc = convertLangCode(targetLang);
+			var sourceLc = ConvertLangCode(sourceLang);
+			var targetLc = ConvertLangCode(targetLang);
 
 			//check to see if token is null
-			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+			if (_authToken == null)
+			{
+				_authToken = GetAuthToken();
+				if (_authToken == null)
+				{
+					throw new Exception("Authorization token not valid!");
+				}
+			}
+
 			var translatedText = string.Empty;
 			try
 			{
@@ -117,12 +130,12 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 						if (response.IsSuccessStatusCode)
 						{
 							var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
-							translatedText = responseTranslation[0]?.Translations[0]?.Text;
+							translatedText = _htmlUtil.HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
 						}
 						else
 						{
 							var responseMessage = JsonConvert.DeserializeObject<ResponseMessage>(responseBody);
-							throw  new Exception(responseMessage.Error.Message);
+							throw new Exception(responseMessage.Error.Message);
 						}
 					}
 				}
@@ -130,7 +143,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				Log.Logger.Error($"{_constants.Translate} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n {exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return translatedText;
@@ -162,11 +175,11 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 					}
 				}
 			}
-			var splitedText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
+			var splitText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
 			var positions = new List<int>();
-			for (var i = 0; i < splitedText.Count; i++)
+			for (var i = 0; i < splitText.Count; i++)
 			{
-				if (!splitedText[i].Contains("tg"))
+				if (!splitText[i].Contains("tg"))
 				{
 					positions.Add(i);
 				}
@@ -174,13 +187,13 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 			foreach (var position in positions)
 			{
-				var originalString = splitedText[position];
+				var originalString = splitText[position];
 				var start = Regex.Replace(originalString, "<", "&lt;");
 				var finalString = Regex.Replace(start, ">", "&gt;");
-				splitedText[position] = finalString;
+				splitText[position] = finalString;
 			}
 			var finalText = string.Empty;
-			foreach (var text in splitedText)
+			foreach (var text in splitText)
 			{
 				finalText += text;
 			}
@@ -190,20 +203,17 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <summary>
 		/// Checks of lang pair is supported by MS
 		/// </summary>
-		/// <param name="sourceLang"></param>
-		/// <param name="targetLang"></param>
-		/// <returns></returns>
-		internal bool isSupportedLangPair(string sourceLang, string targetLang)
+		internal bool IsSupportedLangPair(string sourceLang, string targetLang)
 		{
 			//convert our language codes
-			var source = convertLangCode(sourceLang);
-			var target = convertLangCode(targetLang);
+			var source = ConvertLangCode(sourceLang);
+			var target = ConvertLangCode(targetLang);
 
 			var sourceSupported = false;
 			var targetSupported = false;
 
 			//check to see if both the source and target languages are supported
-			foreach (string lang in SupportedLangs)
+			foreach (var lang in _supportedLangs)
 			{
 				if (lang.Equals(source)) sourceSupported = true;
 				if (lang.Equals(target)) targetSupported = true;
@@ -219,15 +229,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		{
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
 			var languageCodeList = new List<string>();
 			try
 			{
-				var client = new RestClient(TranslatorUri);
+				var uri = new Uri("https://" + BaseUri);
+				var client = new RestClient(uri);
+
 				var request = new RestRequest("languages", Method.GET);
-				request.AddHeader("Authorization", _authToken);
 				request.AddParameter("api-version", "3.0");
 				request.AddParameter("scope", "translation");
 
@@ -244,7 +253,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			catch (WebException exception)
 			{
 				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				Log.Logger.Error($"{_constants.GetSupportedLanguages} {exception.Message}\n { exception.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{exception.Message}\n { exception.StackTrace}");
 				throw new Exception(mesg);
 			}
 			return languageCodeList;
@@ -252,21 +261,21 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		private string ProcessWebException(WebException e, string message)
 		{
-			Console.WriteLine("{0}: {1}", message, e);
+			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
 
 			// Obtain detailed error information
-			var strResponse = string.Empty;
+			string strResponse;
 			using (var response = (HttpWebResponse)e.Response)
 			{
 				using (var responseStream = response.GetResponseStream())
 				{
-					using (var sr = new StreamReader(responseStream, System.Text.Encoding.ASCII))
+					using (var sr = new StreamReader(responseStream, Encoding.ASCII))
 					{
 						strResponse = sr.ReadToEnd();
 					}
 				}
 			}
-			return string.Format("Http status code={0}, error message={1}", e.Status, strResponse);
+			return $"Http status code={e.Status}, error message={strResponse}";
 		}
 
 		private string GetAuthToken()
@@ -283,7 +292,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			if (task.IsFaulted)
 			{
-				throw task.Exception;
+				if (task.Exception != null) throw new Exception(task.Exception.InnerException?.Message);
 			}
 			if (task.IsCanceled)
 			{
@@ -292,27 +301,82 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			return accessToken;
 		}
 
-		public async Task<string> GetAccessTokenAsync()
+		public void RefreshAuthToken()
 		{
-			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
+			//Clear the existing token because the api key has changed
+			_authToken = string.Empty;
 
-			using (var client = new HttpClient())
-			using (var request = new HttpRequestMessage())
-			{
-				request.Method = HttpMethod.Post;
-				request.RequestUri = ServiceUrl;
-				request.Content = new StringContent(string.Empty);
-				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-				var response = await client.SendAsync(request);
-				response.EnsureSuccessStatusCode();
-				var token = await response.Content.ReadAsStringAsync();
-				_tokenExpiresAt = DateTime.Now;
-				_authToken = "Bearer " + token;
-				return _authToken;
-			}
+			//try to get the token for the new api key
+			_authToken = GetAuthToken();
 		}
 
-		private string convertLangCode(string languageCode)
+		public async Task<string> GetAccessTokenAsync()
+		{
+			if (!string.IsNullOrWhiteSpace(_authToken)) return _authToken;
+			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
+
+
+			var uri = new Uri("https://"
+							  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
+							  + ServiceBaseUri + "/sts/v1.0/issueToken");
+
+			try
+			{
+				using (var client = new HttpClient())
+				using (var request = new HttpRequestMessage())
+				{
+					request.Method = HttpMethod.Post;
+					request.RequestUri = uri;
+					request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
+					var response = await client.SendAsync(request);
+					response.EnsureSuccessStatusCode();
+					var tokenString = await response.Content.ReadAsStringAsync();
+
+					_authToken = "Bearer " + tokenString;
+
+					var token = ReadToken(tokenString);
+					_tokenExpiresAt = token?.ValidTo ?? DateTime.Now;
+
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{ex.Message}\n { ex.StackTrace}");
+				throw ex;
+			}
+
+			return _authToken;
+		}
+
+		private JwtSecurityToken ReadToken(string token)
+		{
+			if (string.IsNullOrEmpty(token))
+			{
+				return null;
+			}
+
+			try
+			{
+				var jwtHandler = new JwtSecurityTokenHandler();
+
+				//Check if readable token (string is in a JWT format)
+				var readableToken = jwtHandler.CanReadToken(token);
+				if (!readableToken)
+				{
+					return null;
+				}
+
+				return jwtHandler.ReadJwtToken(token);
+			}
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return null;
+		}
+
+		private string ConvertLangCode(string languageCode)
 		{
 			//takes the language code input and converts it to one that MS Translate can use
 			if (languageCode.Contains("sr-Cyrl")) return "sr-Cyrl";
@@ -326,58 +390,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 			return ci.TwoLetterISOLanguageName;
 
-		}
-
-		/// <summary>
-		/// This method can be used to add translations to the microsoft server.  It is currently not implemented in the plugin
-		/// </summary>
-		/// <param name="originalText">The original source text.</param>
-		/// <param name="translatedText">The updated transated target text.</param>
-		/// <param name="sourceLang">The source languge.</param>
-		/// <param name="targetLang">The target language.</param>
-		/// <param name="user">The MST user to associate the update with (see MS Translator documentation).</param>
-		/// <param name="rating">The rating to associate with the update (see MS Translator documentation).</param>
-		internal void AddTranslationMethod(string originalText, string translatedText, string sourceLang, string targetLang, string user, string rating)
-		{
-			//convert our language codes
-			var from = convertLangCode(sourceLang);
-			var to = convertLangCode(targetLang);
-
-			//check to see if token is null
-			if (_authToken == null) _authToken = GetAuthToken();
-			//check to see if token expired and if so, get a new one
-			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
-
-
-			HttpWebRequest httpWebRequest = null;
-			WebResponse response = null;
-
-			string addTranslationuri = "http://api.microsofttranslator.com/V2/Http.svc/AddTranslation?originaltext=" + originalText
-								+ "&translatedtext=" + translatedText
-								+ "&from=" + from
-								+ "&to=" + to
-								+ "&user=" + user
-								+ "&rating=" + rating;
-
-			httpWebRequest = (HttpWebRequest)WebRequest.Create(addTranslationuri);
-			httpWebRequest.Headers.Add("Authorization", _authToken);
-
-			try
-			{
-				response = httpWebRequest.GetResponse();
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"{_constants.AddTranslationMethod} {ex.Message}\n { ex.StackTrace}");
-			}
-			finally
-			{
-				if (response != null)
-				{
-					response.Close();
-					response = null;
-				}
-			}
 		}
 	}
 }

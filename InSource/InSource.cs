@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using NLog;
 using Sdl.Community.InSource.Helpers;
 
 
@@ -11,7 +12,7 @@ namespace Sdl.Community.InSource
         public static readonly InSource Instance = new InSource();
         public static Persistence Persistence = new Persistence();
         private string _requestPath = string.Empty;
-	    public static readonly Log Log = Log.Instance;
+        public static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public  static List<ProjectRequest> ProjectRequests
         {
@@ -107,7 +108,7 @@ namespace Sdl.Community.InSource
 		    }
 		    catch (Exception e)
 		    {
-			    Log.Logger.Error($"RequestAccepted method: {e.Message}\n {e.StackTrace}");
+			    _logger.Error($"RequestAccepted method: {e.Message}\n {e.StackTrace}");
 		    }
 
 		    Persistence.Update(request);
@@ -148,7 +149,7 @@ namespace Sdl.Community.InSource
 		    }
 		    catch (Exception e)
 		    {
-				Log.Logger.Error($"CheckForSubfolders method: {e.Message}\n {e.StackTrace}");
+			    _logger.Error($"CheckForSubfolders method: {e.Message}\n {e.StackTrace}");
 			}
 	    }
 
@@ -166,7 +167,7 @@ namespace Sdl.Community.InSource
 	        }
 	        catch (Exception e)
 	        {
-		        Log.Logger.Error($"MoveFilesToAcceptedFolder method: {e.Message}\n {e.StackTrace}");
+		        _logger.Error($"MoveFilesToAcceptedFolder method: {e.Message}\n {e.StackTrace}");
 	        }
         }
     }

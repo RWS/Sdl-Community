@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AdvancedDisplayFilter/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - AdvancedDisplayFilter/*
+
+pool: 
+  vmImage : '$(DefaultBuildVm)'
+
+variables:
+- template: jobs/branch-variables.yml
+- name: buildPlatform 
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution
+  value: '**/Sdl.Community.AdvancedDisplayFilter.sln'
+- name: pathToPublish
+  value: 'AdvancedDisplayFilter\bin\Release\Sdl.Community.AdvancedDisplayFilter.sdlplugin'
+
+steps:
+  - template: jobs/build-sdlplugin.yml
+  - template: jobs/publish-build-artifact-task.yml

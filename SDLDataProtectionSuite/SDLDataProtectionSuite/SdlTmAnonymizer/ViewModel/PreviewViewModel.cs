@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services.LinqParser;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 {
@@ -22,6 +24,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		private ContentSearchResult _selectedItem;
 		private string _textBoxColor;
 		private readonly Window _window;
+		private ICommand _applyFilterCommand;
 
 		public PreviewViewModel(Window window, List<ContentSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTms, TranslationMemoryViewModel model)
@@ -30,14 +33,71 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			_textBoxColor = "White";
 	
 			SourceSearchResults = new ObservableCollection<ContentSearchResult>(searchResults);
+			SourceSearchResultsCollectionView = CollectionViewSource.GetDefaultView(SourceSearchResults);
 
 			_model = model;
 			_anonymizeTms = anonymizeTms;
 		}
 
-		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ?? (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
+		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??= new CommandHandler(SelectResults, true);
 
-		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+		public ICommand ApplyCommand => _applyCommand ??= new CommandHandler(ApplyChanges, true);
+
+		public ICommand ApplyFilterCommand
+			=>
+				_applyFilterCommand ??=
+					new RelayCommand(ApplyFilter,
+						obj => obj?.ToString() switch { "Reset" => FilterPresent, _ => !FilterPresent });
+
+		public bool FilterPresent => SourceSearchResultsCollectionView.Filter is not null;
+
+		private void ApplyFilter(object parameter)
+		{
+			var parameterString = parameter.ToString();
+			if (parameterString == "Reset")
+			{
+				RemoveFilter();
+				return;
+			}
+
+			//by converting to FilterableTm, we choose which properties we let users filter on
+			var sourceSearchResultsFilterable = SourceSearchResults.Select(ssr => new FilterableTm
+			{
+				Id = ssr.TranslationUnit.ResourceId.Id,
+				ChangeDate = ssr.TranslationUnit.SystemFields.ChangeDate,
+				UseDate = ssr.TranslationUnit.SystemFields.UseDate,
+				CreationDate = ssr.TranslationUnit.SystemFields.CreationDate
+			});
+
+			try
+			{
+				sourceSearchResultsFilterable = sourceSearchResultsFilterable.Evaluate(parameterString);
+				var filteredResultsIds = sourceSearchResultsFilterable.Select(ssr => ssr.Id).ToList();
+				SetFilter(filteredResultsIds);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+
+		}
+
+		private void SetFilter(List<int> filteredResultsIds)
+		{
+			SourceSearchResultsCollectionView.Filter =
+				csr =>
+					csr is ContentSearchResult contentSearchResult &&
+					filteredResultsIds.Contains(contentSearchResult.TranslationUnit.ResourceId.Id);
+			OnPropertyChanged(nameof(FilterPresent));
+			UpdateCheckedAllState();
+		}
+
+		private void RemoveFilter()
+		{
+			SourceSearchResultsCollectionView.Filter = null;
+			OnPropertyChanged(nameof(FilterPresent));
+			UpdateCheckedAllState();
+		}
 
 		public void ApplyChanges()
 		{
@@ -81,13 +141,13 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 				if (result.Cancelled)
 				{
-					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, System.Windows.Forms.Application.ProductName);
+					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, PluginResources.ProductName);
 					_window.Close();
 				}
 
 				if (result.OperationFailed)
 				{
-					System.Windows.Forms.MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, System.Windows.Forms.Application.ProductName);
+					System.Windows.Forms.MessageBox.Show(StringResources.Process_failed + Environment.NewLine + Environment.NewLine + result.Error.Message, PluginResources.ProductName);
 				}
 
 				RemoveSelectedTusToAnonymize();
@@ -96,7 +156,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				System.Windows.Forms.MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, System.Windows.Forms.Application.ProductName);
+				System.Windows.Forms.MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, PluginResources.ProductName);
 			}
 		}
 
@@ -274,6 +334,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 		private bool SelectingAllAction { get; set; }
 
+		public ICollectionView SourceSearchResultsCollectionView { get; set; }
+
 		private void SelectResults()
 		{
 			var value = SelectAllResults;
@@ -281,7 +343,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			try
 			{
 				SelectingAllAction = true;
-				foreach (var result in _sourceSearchResults)
+				foreach (ContentSearchResult result in SourceSearchResultsCollectionView)
 				{
 					result.TuSelected = value;
 				}
@@ -297,14 +359,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 		private void UpdateCheckedAllState()
 		{
-			if (SourceSearchResults.Count > 0)
-			{
-				SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
-			}
-			else
-			{
-				SelectAllResults = false;
-			}
+			SelectAllResults = SourceSearchResultsCollectionView.Cast<object>().Any() &&
+			                   SourceSearchResultsCollectionView.Cast<ContentSearchResult>().All(csr => csr.TuSelected);
 		}
 
 		private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)

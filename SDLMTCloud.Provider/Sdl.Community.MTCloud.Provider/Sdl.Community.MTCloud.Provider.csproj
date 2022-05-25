@@ -6,14 +6,17 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C5C7E441-7416-47F3-A4B0-C20AEEC12ABF}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.MTCloud.Provider</RootNamespace>
     <AssemblyName>Sdl.Community.MTCloud.Provider</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,99 +36,99 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.JsonPatch">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Tokens">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\NLog.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReachFramework" />
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=1.8.8.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.1.8.8\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=1.9.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.1.9.0\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    <Reference Include="Sdl.Community.RateItControl">
+      <HintPath>3rd party\Sdl.Community.RateItControl.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
-      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.DesktopEditor.Control">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.DesktopEditor.Control.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.DesktopEditor.EditorApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.DesktopEditor.EditorApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguageCloud.IdentityApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Versioning">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System.IdentityModel.Tokens.Jwt">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Printing" />
+    <Reference Include="System.Reactive">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -142,40 +145,119 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="Controls\PasswordHelper.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Controls\ToolWindowsControl.xaml.cs">
       <DependentUpon>ToolWindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\EnumBooleanConverter.cs" />
+    <Compile Include="Converters\InvertableBoolEnabledConverter.cs" />
+    <Compile Include="Events\ActiveSegmentQeChanged.cs" />
+    <Compile Include="Events\RefreshQeStatus.cs" />
+    <Compile Include="Events\TranslationProviderRateItOptionsChanged.cs" />
+    <Compile Include="Events\VoidEventHandler.cs" />
     <Compile Include="Extensions\WindowsControlUtils.cs" />
+    <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="Helpers\TaskUtilities.cs" />
+    <Compile Include="Interfaces\IActionProvider.cs" />
+    <Compile Include="Interfaces\IAsyncCommand.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IConnectionService.cs" />
+    <Compile Include="Interfaces\IErrorHandler.cs" />
     <Compile Include="Interfaces\ILanguageMappingsService.cs" />
+    <Compile Include="Interfaces\IRatingService.cs" />
+    <Compile Include="Interfaces\ISDLMTCloudAction.cs" />
+    <Compile Include="Interfaces\IShortcutService.cs" />
     <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Model\AuthorizationResponse.cs" />
+    <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\RateIt\Evaluations.cs" />
+    <Compile Include="Model\RateIt\FeedbackInfo.cs" />
+    <Compile Include="Model\FileAndSegmentIds.cs" />
+    <Compile Include="Model\MetadataTransferObject.cs" />
+    <Compile Include="Model\QELabelExtractorModel\File.cs" />
+    <Compile Include="Model\QELabelExtractorModel\QeFileReport.cs" />
+    <Compile Include="Model\QELabelExtractorModel\QeValue.cs" />
+    <Compile Include="Model\QELabelExtractorModel\Report.cs" />
+    <Compile Include="Model\QELabelExtractorModel\ReportSummary.cs" />
+    <Compile Include="Model\QELabelExtractorModel\Data.cs" />
+    <Compile Include="Model\RateIt\QualityEstimation.cs" />
+    <Compile Include="Model\Status.cs" />
     <Compile Include="Model\ClientCredential.cs" />
     <Compile Include="Model\Credential.cs" />
+    <Compile Include="Model\FeedbackOption.cs" />
+    <Compile Include="Model\RateIt\FeedbackSendingStatus.cs" />
+    <Compile Include="Model\RateIt\ImprovementFeedback.cs" />
+    <Compile Include="Model\RateIt\Improvement.cs" />
+    <Compile Include="Model\InternalLanguageMapping.cs" />
     <Compile Include="Model\LanguageCloudIdentityApiModel.cs" />
     <Compile Include="Model\Options.cs" />
+    <Compile Include="Model\RateIt\Rating.cs" />
+    <Compile Include="Model\StudioShortcut.cs" />
+    <Compile Include="Model\RateIt\TranslationData.cs" />
+    <Compile Include="Model\RateIt\TranslationFeedbackRequest.cs" />
+    <Compile Include="Model\RateIt\TranslationOriginData.cs" />
+    <Compile Include="Model\RateIt\TranslationOriginDatum.cs" />
     <Compile Include="Model\TranslationRequest.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="Model\TranslationResponseStats.cs" />
     <Compile Include="Model\TranslationResponseStatus.cs" />
     <Compile Include="Model\UserCredential.cs" />
+    <Compile Include="Model\WorkingPortalsAddress.cs" />
+    <Compile Include="MTCloudApplicationInitializer.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Service\ConnectionService.cs" />
+    <Compile Include="Interfaces\ISegmentSupervisor.cs" />
+    <Compile Include="Events\ShouldSendFeedbackEventHandler.cs" />
+    <Compile Include="Events\TranslationReceivedEventHandler.cs" />
+    <Compile Include="Service\HttpClient.cs" />
+    <Compile Include="Service\Interface\IMetadataSupervisor.cs" />
+    <Compile Include="Service\Interface\IHttpClient.cs" />
+    <Compile Include="Service\Interface\ISegmentMetadataCreator.cs" />
+    <Compile Include="Service\Interface\ISupervisor.cs" />
+    <Compile Include="Service\QEReportCreator\StringWriterWithEncoding.cs" />
+    <Compile Include="Service\RateIt\MetaDataProcessor.cs" />
+    <Compile Include="Service\RateIt\MetadataSupervisor.cs" />
+    <Compile Include="Service\QEReportCreator\QeReportCreator.cs" />
+    <Compile Include="Service\RateIt\SegmentMetadataCreator.cs" />
+    <Compile Include="Service\RateIt\SegmentRetriever.cs" />
+    <Compile Include="Service\RateIt\SegmentSupervisor.cs" />
+    <Compile Include="Service\ShortcutService.cs" />
+    <Compile Include="Model\Term.cs" />
     <Compile Include="Service\TranslationService.cs" />
-    <Compile Include="Studio\SdlMTCloudTranslationProvider.cs" />
+    <Compile Include="Studio\ContextMenuAction\AddDictionaryTermAction.cs" />
+    <Compile Include="Studio\QEReportBatchTask\QeLabelExtractor.cs" />
+    <Compile Include="Studio\QEReportBatchTask\QeReportBatchTask.cs" />
+    <Compile Include="Studio\RateItController.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudTranslationProvider.cs" />
+    <Compile Include="Studio\ShortcutActions\DecreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\FocusFeedbackAction.cs" />
+    <Compile Include="Studio\ShortcutActions\IncreaseRatingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SendFeedbackAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetCapitalizationAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetGrammarAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetSpellingAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetUnintelligibilityAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetWordChoiceAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetWordsAdditionAction.cs" />
+    <Compile Include="Studio\ShortcutActions\SetWordsOmissionAction.cs" />
+    <Compile Include="Events\TranslationProviderAdded.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\ContactAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
@@ -188,7 +270,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Service\VersionService.cs" />
     <Compile Include="Helpers\WindowCloser.cs" />
     <Compile Include="Interfaces\ILanguageMappingSettings.cs" />
@@ -205,24 +286,23 @@
     <Compile Include="Model\SubscriptionInfo.cs" />
     <Compile Include="Model\TranslationModel.cs" />
     <Compile Include="Model\UserDetails.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Service\LanguageMappingsService.cs" />
     <Compile Include="Service\MessageBoxService.cs" />
     <Compile Include="Service\PrintService.cs" />
     <Compile Include="Studio\SdlMTCloudExcelRibbon.cs" />
-    <Compile Include="Studio\SdlMTCloudLanguageDirection.cs" />
-    <Compile Include="Studio\SdlMTCloudProviderWinFormsUI.cs" />
-    <Compile Include="Studio\SdlMTCloudTranslationProviderFactory.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudLanguageDirection.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudProviderWinFormsUI.cs" />
+    <Compile Include="Studio\TranslationProvider\SdlMTCloudTranslationProviderFactory.cs" />
     <Compile Include="Controls\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UiHelpers\Watermark\TextBoxWatermarkHelper.cs" />
+    <Compile Include="UiHelpers\Watermark\TreeHelper.cs" />
     <Compile Include="ViewModel\CredentialsViewModel.cs" />
+    <Compile Include="ViewModel\RateItViewModel.cs" />
+    <Compile Include="View\ActionProvider.cs" />
     <Compile Include="View\CredentialsWindow.xaml.cs">
       <DependentUpon>CredentialsWindow.xaml</DependentUpon>
     </Compile>
@@ -235,34 +315,92 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MTCodesViewModel.cs" />
+    <Compile Include="View\RateItControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\RateItControl.designer.cs">
+      <DependentUpon>RateItControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\RateItView.xaml.cs">
+      <DependentUpon>RateItView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XliffConverter\Models\Body.cs" />
+    <Compile Include="XliffConverter\Models\File.cs" />
+    <Compile Include="XliffConverter\Models\Header.cs" />
+    <Compile Include="XliffConverter\Models\TargetTranslation.cs" />
+    <Compile Include="XliffConverter\Models\Tool.cs" />
+    <Compile Include="XliffConverter\Models\TranslationOption.cs" />
+    <Compile Include="XliffConverter\Models\TranslationUnit.cs" />
+    <Compile Include="XliffConverter\SegmentParser\Parser.cs" />
+    <Compile Include="XliffConverter\Converter\Converter.cs" />
+    <Compile Include="XliffConverter\Converter\Extensions.cs" />
+    <Compile Include="XliffConverter\Converter\Xliff.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\LWLogo.png" />
+    <Resource Include="Resources\ReportExample.xml" />
+    <EmbeddedResource Include="Resources\Report.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Page Include="Styles\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\SendFeedbackButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="Resources\rating.ico" />
+    <Resource Include="Resources\information.png" />
     <Resource Include="Resources\checked.png" />
+    <Resource Include="Resources\add_dictionary.ico" />
+    <Resource Include="Resources\Additional logo.png" />
+    <Resource Include="Resources\soontobecome.png" />
+    <Resource Include="Resources\success.png" />
+    <Resource Include="Resources\Unchecked.ico" />
+    <Resource Include="Resources\NMT.ico" />
+    <EmbeddedResource Include="View\RateItControl.resx">
+      <DependentUpon>RateItControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\CustomProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UiHelpers\Watermark\WatermarkTextBoxResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\RateItView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Resources\selectedStar.png" />
+    <Resource Include="Resources\defaultStar.png" />
     <Resource Include="Resources\warning.png" />
-    <Resource Include="Resources\MTCodesLogo.png" />
     <Resource Include="Resources\dictionaryIcon.ico" />
     <Resource Include="Resources\add_langcode.ico" />
     <Resource Include="Resources\Search %281%29.png" />
     <Resource Include="Resources\Print.png" />
-    <None Include="app.config" />
     <None Include="Resources\global1.png" />
-    <Resource Include="Resources\MTCloud_logo_small.png" />
-    <Resource Include="Resources\MTCloud_logo.png" />
-    <Resource Include="Resources\logoRes.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\logoRe.png" />
     <Resource Include="Resources\global.ico" />
-    <Resource Include="Resources\logoB.png" />
-    <Resource Include="Resources\sdl.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Page Include="Styles\ComboBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -272,10 +410,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\GroupBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ProgressRingAsteriskStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -291,6 +425,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -299,18 +434,11 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\ToolWindowsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ButtonsStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\DataGridColumnStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -345,7 +473,24 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
+    <PackageReference Include="Microsoft.Office.Interop.Excel">
+      <Version>15.0.4795.1000</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.39</Version>
+    </PackageReference>
+    <PackageReference Include="Sdl.Core.PluginFramework">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Sdl.Core.PluginFramework.Build">
+      <Version>17.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Trados.Community.Toolkit.Core">
+      <Version>4.0.6</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
       <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
       <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
     </ProjectReference>
@@ -358,21 +503,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

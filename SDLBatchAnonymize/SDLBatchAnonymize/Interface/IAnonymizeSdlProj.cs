@@ -5,6 +5,6 @@ namespace Sdl.Community.SDLBatchAnonymize.Interface
 	public interface IAnonymizeSdlProj
 	{
 		void RemoveFileVersionComment(string projectPath);
-		void RemoveTemplateId(string projectPath);
+		void RemoveTraces(string projectPath);
 	}
 }

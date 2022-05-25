@@ -13,7 +13,7 @@ namespace SDLCommunityCleanUpTasks.TellMe
 
         public override void Execute()
         {
-            Process.Start("https://appstore.sdl.com/language/app/cleanup-tasks/963/");
+            Process.Start("https://appstore.rws.com/language/app/cleanup-tasks/963/");
         }
 
 		public override bool IsAvailable => true;

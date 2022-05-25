@@ -1,0 +1,76 @@
+trigger:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - HunspellDictionaryManager/*
+
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - HunspellDictionaryManager/*
+
+variables:
+- group: 'SDLPLC Authenticode Credentials'
+- template: jobs/branch-variables.yml
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: solution 
+  value: '**/HunspellDictionaryManager.sln'
+- name: Version.MajorMinor
+  value: 3.2
+- name: VersionPatch
+  value: 0
+- name: Version.Year
+  value: 2021
+
+- name: Version.Revision
+  value: $[counter(variables['Version.MajorMinor'], 0)]
+
+- name: PipelineVersion
+  value: $(Version.MajorMinor).$(Version.Revision).$(VersionPatch)
+
+name: $(Build.DefinitionName)_$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision).$(VersionPatch)_$(Date:yyyyMMdd)$(Rev:.r)
+
+pool: 
+ vmImage : '$(DefaultBuildVm)'
+
+steps:
+  - template: tasks/version-assemblies/version-assemblies.yml
+    parameters:
+      PathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\HunspellDictionaryManager\Properties'
+      InstallPathToVersion: '$(Build.SourcesDirectory)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\defines.wxi'
+ 
+  - template: jobs/build-sdlplugin.yml
+
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.HunspellDictionaryManager.exe'
+       description: 'HunspellDictionaryManager'
+  - task: VSBuild@1
+    inputs:
+       solution: '**Sdl.Community.HunspellDictionaryManager.Installer.wixproj'
+       platform: 'x86'
+       configuration: '$(buildConfiguration)'
+       msbuildArgs: '/p:RunWixToolsOutOfProc=true'
+ 
+  - template: tasks/sign-artifacts/prepare-signing.yml
+
+  - template: tasks/sign-artifacts/sign-single-artifact.yml
+    parameters:
+     fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.Installer.msi'
+     description: 'HunspellDictionaryManager '
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      artifactName: HunspellDictionaryManagerInstaller
+      pathToPublish: '$(Build.Repository.LocalPath)\\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.Installer\bin\$(buildConfiguration)'

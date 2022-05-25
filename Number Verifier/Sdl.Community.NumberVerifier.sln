@@ -5,11 +5,6 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.NumberVerifier", "Sdl.Community.NumberVerifier.csproj", "{33CE6B44-6501-421E-A92B-0ACD0E0655A6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{68AD2B81-8351-43C9-91F3-B2B14AC4FC4D}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94076CE8-58A3-4D36-B8B4-E4FC38147B87}"
 	ProjectSection(SolutionItems) = preProject
 		setup.iss = setup.iss
