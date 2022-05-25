@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -6,6 +7,8 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Sdl.Utilities.TMTool.Lib")]
 [assembly: AssemblyProduct("Sdl.Utilities.TMTool.Lib")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -25,6 +28,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyVersion("4.0.0.0")]
+[assembly: AssemblyFileVersion("4.0.0.1")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sdl.Utilities.TMTool.UTests, PublicKey=002400000480000094000000060200000024000052534131000400000100010013f795cf308f1cb7b368d9dec675d92d677449fe6849aca68a1400e21445c2d01e7e5994b9f2b01306a5208c750e9f7beedc3efac831f003f9a55b391048e7ad665a4c5a8efafc09b636db82394a47285ea8aef41109c693801d167945027381708f96533cc31fc4de1e12bfd440c6c06d0bd712629b1906336e69993bc084c0")]
