@@ -11,7 +11,7 @@ If the segment has no target content the switcher appears not to work. It does, 
 
 
 ##Technical requirements
-SDL Trados Studio 2015 / SDL Trados Studio 2017
+Trados Studio 2021 / Trados Studio 2022
 
 ##Issues
 
