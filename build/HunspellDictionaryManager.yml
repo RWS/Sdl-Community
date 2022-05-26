@@ -33,7 +33,7 @@ variables:
   value: $(Build.SourcesDirectory)\HunspellDictionaryManager\bin\$(Configuration)
 
 - name: Version.Revision
-  value: $[counter(variables['Version.MajorMinor'], 1)]
+  value: $[counter(variables['Version.MajorMinor'], 0)]
 
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision).$(VersionPatch)
