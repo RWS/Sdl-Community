@@ -24,11 +24,13 @@ variables:
 - name: solution 
   value: '**/HunspellDictionaryManager.sln'
 - name: Version.MajorMinor
-  value: 3.2
+  value: 4.0
 - name: VersionPatch
   value: 0
 - name: Version.Year
-  value: 2021
+  value: 2022
+- name: var.BuildOutputPath
+  value: $(Build.SourcesDirectory)\HunspellDictionaryManager\bin\$(Configuration)
 
 - name: Version.Revision
   value: $[counter(variables['Version.MajorMinor'], 0)]
@@ -53,7 +55,7 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.HunspellDictionaryManager.exe'
+       fileToSign: '$(Build.SourcesDirectory)\HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.exe'
        description: 'HunspellDictionaryManager'
   - task: VSBuild@1
     inputs:
