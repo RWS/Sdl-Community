@@ -29,8 +29,6 @@ variables:
   value: 0
 - name: Version.Year
   value: 2022
-- name: var.BuildOutputPath
-  value: $(Build.SourcesDirectory)\HunspellDictionaryManager\bin\$(Configuration)
 
 - name: Version.Revision
   value: $[counter(variables['Version.MajorMinor'], 0)]
