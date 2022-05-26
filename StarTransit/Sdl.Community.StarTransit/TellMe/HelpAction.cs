@@ -8,12 +8,12 @@ namespace Sdl.Community.StarTransit.TellMe
 	{
 		public HelpAction()
 		{
-			Name = "StarTransit wiki in the SDL Community";
+			Name = "StarTransit wiki in the RWS Community";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3270/star-transit");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3270/star-transit-transitpackage-handler");
 		}
 
 		public override bool IsAvailable => true;

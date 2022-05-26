@@ -15,10 +15,6 @@ namespace Sdl.Community.StarTransit.TellMe
 			new HelpAction
 			{
 				Keywords = new []{ "startransit", "star transit", "startransit help", "startransit guide" }
-			},
-			new StoreAction
-			{
-				Keywords = new []{ "startransit", "star transit", "startransit store", "startransit download" }
 			}
 		};
 	}
