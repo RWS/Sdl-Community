@@ -71,7 +71,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- Define location where the app will be installed, Hunspell folder -->
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="SDL" Name="SDL" >
+        <Directory Id="Trados" Name="Trados" >
           <Directory Id="HunspellDictionaryManager" Name="Hunspell Dictionary Manager" >
             <Directory Id="Hunspell" Name="Hunspell"/>
           </Directory>
