@@ -29,7 +29,7 @@ variables:
   value: 0
 - name: Version.Year
   value: 2022
-- name: BuildOutputPath
+- name: var.BuildOutputPath
   value: $(Build.SourcesDirectory)\HunspellDictionaryManager\bin\$(Configuration)
 
 - name: Version.Revision
