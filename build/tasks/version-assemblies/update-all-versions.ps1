@@ -1,6 +1,6 @@
 param(
 [string]$PathToVersion="$psscriptroot\..\..\..",
-[string]$VersionString="16.0.0.42",
+[string]$VersionString="17.0.0.11594",
 [string]$ProductIdentifier="studio17",
 [string]$InstallPathToVersion="$psscriptroot\..\..\.."
 )
