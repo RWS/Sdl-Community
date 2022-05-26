@@ -34,7 +34,7 @@ param (
 $DebugPreference ='Continue' 
 
 $ThisYear=Get-Date -Format "yyyy"
-$Copyright="Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (`"RWS Group`")."
+$Copyright="Copyright © $ThisYear SDL. All rights reserved."
 
 
 if ($env:Build_SourceBranch -like "*release*")
