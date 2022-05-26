@@ -94,19 +94,19 @@
 	  <ComponentGroup Id="Dependencies" Directory="HunspellDictionaryManager">
 		  
 		  <Component Id="NLog.dll" Guid="*">
-			  <File Id="NLog.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\NLog.dll"></File>
+			  <File Id="NLog.dll" KeyPath="yes" Source="$(BuildOutputPath)\NLog.dll"></File>
 		  </Component>
 
 		  <Component Id="Sdl.Versioning.dll" Guid="*">
-			  <File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Versioning.dll"></File>
+			  <File Id="Sdl.Versioning.dll" KeyPath="yes" Source="$(BuildOutputPath)\Sdl.Versioning.dll"></File>
 		  </Component> 
 		  
 		  <Component Id="Sdl.Desktop.Platform.Styles.dll" Guid="*">
-			  <File Id="Sdl.Desktop.Platform.Styles.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Desktop.Platform.Styles.dll"></File>
+			  <File Id="Sdl.Desktop.Platform.Styles.dll" KeyPath="yes" Source="$(BuildOutputPath)\Sdl.Desktop.Platform.Styles.dll"></File>
 		  </Component>
 		  
 		  <Component Id="Sdl.Core.Globalization.dll" Guid="*">
-			  <File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.dll"></File>
+			  <File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(BuildOutputPath)\Sdl.Core.Globalization.dll"></File>
 		  </Component>
 	  </ComponentGroup>
   </Fragment>
@@ -115,7 +115,7 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="HunspellDictionaryManager">
       <Component Id="Sdl.Community.HunspellDictionaryManager">
-        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.BuildOutputPath)\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(BuildOutputPath)\Sdl.Community.HunspellDictionaryManager.exe" KeyPath="yes" />
       </Component>
 
     </ComponentGroup>
