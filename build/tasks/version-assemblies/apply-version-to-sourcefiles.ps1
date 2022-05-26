@@ -24,7 +24,7 @@ param (
 
     $Field,
 
-    $productId="Studio16",
+    $productId="Studio17",
 
     $outputversion="ProductVersion",
 
