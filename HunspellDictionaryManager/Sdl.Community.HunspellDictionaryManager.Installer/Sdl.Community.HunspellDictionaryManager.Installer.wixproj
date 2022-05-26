@@ -19,7 +19,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Version=3.0.1.6</DefineConstants>
+    <DefineConstants>Version=3.0.1.6;BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="defines.wxi" />
