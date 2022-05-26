@@ -9,8 +9,7 @@
 			xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
 			xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
 			xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
-			xmlns:provider="clr-namespace:Sdl.Community.MTCloud.Languages.Provider;assembly=Sdl.Community.MTCloud.Languages.Provider"
-			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
+		    helpers:WindowCloser.DialogResult="{Binding DialogResult}"
 			WindowStartupLocation="CenterScreen" 
 			mc:Ignorable="d"
 			WindowStyle="None" 
@@ -21,16 +20,16 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/DataGridStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
@@ -65,7 +64,8 @@
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
 			       VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/LWLogo.png"/>
+			       Source="pack://application:,,,/Language Weaver;component/Resources/LWLogo.png"
+				   />
 			
 
 			<Border Background="White" Grid.Column="0" Grid.Row="2"  >
