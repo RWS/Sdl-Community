@@ -1,8 +1,8 @@
 param(
-[string]$ProductVersion="16.0.0.0",
+[string]$ProductVersion="17.0.0.0",
 [string]$ProductIdentifier="StudioLocal",
-[string]$FullProductName="SDL Trados Studio $Env:Computername",
-[string]$InstallerDisplayName="SDL Trados Studio $Env:Computername",
+[string]$FullProductName="Trados Studio $Env:Computername",
+[string]$InstallerDisplayName="Trados Studio $Env:Computername",
 [string]$WixFile="$psscriptroot\..\..\..\Deployment\Wix\StudioDefines.wxi"
 )
 
