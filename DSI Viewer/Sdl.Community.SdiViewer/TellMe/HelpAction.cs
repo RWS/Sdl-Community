@@ -15,7 +15,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 		public override void Execute()
 		{
 			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5563/dsi-viewer");
+				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5563/dsi-viewer");
 		}
 	}
 }
