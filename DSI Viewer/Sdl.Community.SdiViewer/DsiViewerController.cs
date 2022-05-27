@@ -6,7 +6,7 @@ using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DsiViewer
-{
+{ 
 	[ViewPart(
         Id = "DSI Viewer",
         Name = "DSI Viewer",

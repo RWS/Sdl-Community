@@ -30,16 +30,18 @@
 		<StackPanel Orientation="Vertical">
 			<GroupBox Header="Document Structure Information" 
 			          Margin="2,5,2,5" Visibility="{Binding Path=HasDocumentStructureInformation, Converter={StaticResource BooleanToVisibilityConverter}}">
-				<DataGrid Margin="2,5,2,5"
-			          ItemsSource="{Binding Path=DocumentStructureInformation, Mode=OneWay}"
-			          GridLinesVisibility="None"
-			          BorderBrush="Transparent"
-					  HeadersVisibility="None"
-			          BorderThickness="0"
-			          SelectionUnit="CellOrRowHeader"
-			          IsReadOnly="True"
-					  HorizontalScrollBarVisibility="Disabled"
-			          Style="{StaticResource CustomGridStyle}">
+				<controls:SortAwareDataGrid Margin="2,5,2,5" 
+				                            ItemsSource="{Binding Path=DocumentStructureInformation, Mode=OneWay}"
+											DefaultColumnName="Code"
+											DefaultSortDirection="Ascending"
+				                   GridLinesVisibility="None"
+				                   BorderBrush="Transparent"
+				                   HeadersVisibility="None"
+				                   BorderThickness="0"
+				                   SelectionUnit="CellOrRowHeader"
+				                   IsReadOnly="True"
+				                   HorizontalScrollBarVisibility="Disabled"
+				                   Style="{StaticResource CustomGridStyle}">
 					<DataGrid.RowStyle>
 						<Style TargetType="DataGridRow">
 							<Setter Property="Padding" Value="0,0,2,0" />
@@ -51,7 +53,7 @@
 						</ContextMenu>
 					</DataGrid.ContextMenu>
 					<DataGrid.Columns>
-						<DataGridTemplateColumn Header="Color" Width="5">
+						<DataGridTemplateColumn Header="" Width="5">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:DsiModel">
 									<Border Background="{Binding RowColor}"
@@ -79,7 +81,7 @@
 							</DataGridTextColumn.ElementStyle>
 						</DataGridTextColumn>
 					</DataGrid.Columns>
-				</DataGrid>
+				</controls:SortAwareDataGrid>
 			</GroupBox>
 			<GroupBox Margin="2,8,2,0" Header="Comments"  
 			          Visibility="{Binding Path=HasComments, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -224,11 +226,11 @@
 										<CheckBox Content="{x:Static dsiViewer:PluginResources.CheckBox_Unknown}"
 												  IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.QeUnknown}"
 										          Style="{StaticResource QeLabels}" />
-										
+
 									</StackPanel>
 								</DockPanel>
 							</GroupBox>
-							
+
 							<GroupBox Grid.Row="1" Grid.Column="1">
 								<GroupBox.Header>
 									<CheckBox x:Name="ByModel" IsChecked="{Binding FilterApplier.SdlMtCloudFilterSettings.ByModel}"

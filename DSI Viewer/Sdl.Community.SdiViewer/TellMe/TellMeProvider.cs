@@ -11,15 +11,11 @@ namespace Sdl.Community.DsiViewer.TellMe
 		{
 			new CommunitySupportAction
 			{
-				Keywords = new []{ "dsi viewer metadata community support", "dsi", "viewer" }
+				Keywords = new []{ "dsi", "viewer", "metadata", "community", "support" }
 			},
 			new HelpAction
 			{
-				Keywords = new []{ "dsi viewer metadata help guide", "dsi", "viewer" }
-			},
-			new StoreAction
-			{
-				Keywords = new []{ "dsi viewer metadata store download", "dsi", "viewer" }
+				Keywords = new []{ "dsi", "viewer", "metadata", "community", "support", "help" }
 			}
 		};
 	}
