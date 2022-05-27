@@ -1035,3 +1035,5 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /CopyTags/CopyTags/Properties/launchSettings.json
 /InvoiceAndQuotes/Sdl.Community.InvoiceAndQuotes.Integration/Properties/launchSettings.json
 /SDLDataProtectionSuite/SDLDataProtectionSuite/Properties/launchSettings.json
+/SDLTMRepair/SDLTMRepair/Properties/launchSettings.json
+/SDLMTEdge.Provider/SDLMTEdgeTranslationProvider/Properties/launchSettings.json
