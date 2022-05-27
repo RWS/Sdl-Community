@@ -1,4 +1,4 @@
-﻿using Sdl.Community.Toolkit.Core.Services;
+﻿using Sdl.Versioning;
 
 namespace Sdl.Community.InvoiceAndQuotes.Helpers
 {
