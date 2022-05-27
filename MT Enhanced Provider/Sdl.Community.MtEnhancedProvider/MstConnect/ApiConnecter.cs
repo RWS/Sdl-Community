@@ -33,7 +33,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		private string _subscriptionKey;
 		private string _region;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly HtmlUtil _htmlUtil;
+		private HtmlUtil _htmlUtil;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
@@ -41,6 +41,13 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <param name="subscriptionKey">Microsoft API key</param>
 		/// <param name="region">Region</param>
 		internal ApiConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
+		{
+			Initialize = CreateInstanceAsync(subscriptionKey, region, htmlUtil);
+		}
+
+		private Task Initialize { get; }
+
+		private async Task CreateInstanceAsync(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
@@ -52,7 +59,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			if (_supportedLangs == null)
 			{
-				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+				_supportedLangs = await GetSupportedLanguages(); //if the class variable has not been set
 			}
 		}
 
@@ -61,14 +68,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// </summary>
 		/// <param name="subscriptionKey">the client Id obtained from Microsoft</param>
 		/// <param name="region">Region</param>
-		internal void ResetCrd(string subscriptionKey, string region)
+		internal async Task ResetCrd(string subscriptionKey, string region)
 		{
 			if (subscriptionKey != _subscriptionKey || region != _region)
 			{
 				_subscriptionKey = subscriptionKey;
 				_region = region;
 				_authToken = GetAuthToken();
-				_supportedLangs = GetSupportedLanguages();
+				_supportedLangs = await GetSupportedLanguages();
 			}
 		}
 
@@ -225,7 +232,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			return false;
 		}
 
-		private List<string> GetSupportedLanguages()
+		private async Task<List<string>> GetSupportedLanguages()
 		{
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
@@ -236,12 +243,12 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 				var uri = new Uri("https://" + BaseUri);
 				var client = new RestClient(uri);
 
-				var request = new RestRequest("languages", Method.GET);
+				var request = new RestRequest("languages", Method.Get);
 				request.AddParameter("api-version", "3.0");
 				request.AddParameter("scope", "translation");
 
-				var languageResponse = client.Execute(request).Content;
-				var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse);
+				var languageResponse = await client.ExecuteAsync(request);
+				var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
 				if (languages != null)
 				{
 					foreach (var language in languages.Translation)
