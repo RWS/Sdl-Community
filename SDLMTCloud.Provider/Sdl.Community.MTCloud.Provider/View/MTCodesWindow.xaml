@@ -14,13 +14,13 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/DataGridStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Styles/CustomProgressRing.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/CustomProgressRing.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 			<Style TargetType="Image">
@@ -48,7 +48,7 @@
 			       Margin="0 10 0 0" VerticalAlignment="Top"  IsHitTestVisible="False"
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
-			       Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/LWLogo.png"/>
+			       Source="pack://application:,,,/Language Weaver;component/Resources/LWLogo.png"/>
 
 			<controls:CustomProgressRing Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="ProgressRing" Margin="0" SpinnerSize="24"
 			                             Style="{StaticResource Sdl.CustomProgressRing.Normal}"
@@ -58,14 +58,14 @@
 				<DockPanel Background="White" Height="28" >
 					<TextBox Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Query, UpdateSourceTrigger=PropertyChanged}" 
 					         Style="{DynamicResource SearchTextBoxStyle}" Height="24" Margin="0,2" Width="224"/>
-					<Image Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/Search (1).png" VerticalAlignment="Center" Height="14" HorizontalAlignment="Right" Margin="5"/>
+					<Image Source="pack://application:,,,/Language Weaver;component/Resources/Search (1).png" VerticalAlignment="Center" Height="14" HorizontalAlignment="Right" Margin="5"/>
 				</DockPanel>
 			</Border>
 
 			<Button Grid.Row="2" Grid.Column="1" Background="Transparent" BorderThickness="1" 
 			        Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=MappedLanguagesGrid}" 
 				HorizontalAlignment="Right" Margin="0,15,15,7" ToolTip="Print MT Codes" BorderBrush="#B5B2B2">
-				<Image Source="pack://application:,,,/Sdl.Community.MTCloud.Provider;component/Resources/Print.png" 
+				<Image Source="pack://application:,,,/Language Weaver;component/Resources/Print.png" 
 				       RenderOptions.BitmapScalingMode="HighQuality"
 				       RenderOptions.EdgeMode="Aliased" Height="26" Width="26" Stretch="UniformToFill"/>
 			</Button>
