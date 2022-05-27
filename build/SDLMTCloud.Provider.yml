@@ -26,7 +26,7 @@ variables:
 - name: solution 
   value: '**/Sdl.Community.MTCloud.Provider.sln'
 - name: pathToPublish
-  value: 'SDLMTCloud.Provider\Sdl.Community.MTCloud.Provider\bin\Release\Sdl.Community.MTCloud.Provider.sdlplugin'
+  value: 'SDLMTCloud.Provider\Sdl.Community.MTCloud.Provider\bin\Release\Language Weaver.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

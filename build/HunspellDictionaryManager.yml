@@ -31,7 +31,7 @@ variables:
   value: 2022
 
 - name: Version.Revision
-  value: $[counter(variables['Version.MajorMinor'], 0)]
+  value: $[counter(variables['Version.MajorMinor'], 1)]
 
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision).$(VersionPatch)
@@ -53,7 +53,7 @@ steps:
 
   - template: tasks/sign-artifacts/sign-single-artifact.yml
     parameters:
-       fileToSign: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)\Sdl.Community.HunspellDictionaryManager.exe'
+       fileToSign: '$(Build.Repository.LocalPath)\HunspellDictionaryManager\HunspellDictionaryManager\bin\$(buildConfiguration)\Sdl.Community.HunspellDictionaryManager.exe'
        description: 'HunspellDictionaryManager'
   - task: VSBuild@1
     inputs:
