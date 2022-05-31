@@ -6,11 +6,8 @@ using System.Reflection;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("SDLXLIFF Split/Merge")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 //
 // Version information for an assembly consists of the following four values:
@@ -23,7 +20,7 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyVersion("4.0.0.0")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
@@ -51,5 +48,3 @@ using System.Reflection;
 //       documentation for more information on this.
 //
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("")]
-[assembly: AssemblyKeyName("")]

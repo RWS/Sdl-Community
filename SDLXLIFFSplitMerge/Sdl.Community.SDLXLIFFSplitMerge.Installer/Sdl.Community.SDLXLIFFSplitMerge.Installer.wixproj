@@ -10,20 +10,20 @@
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants>Debug;BuildOutputPath=..\Sdl.Community.SplitMergeUIWix\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>BuildOutputPath=..\Sdl.Community.SplitMergeUIWix\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="terms_and_conditions.rtf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.SplitMergeUIWix\Sdl.Community.SplitMergeUIWix.csproj">
