@@ -26,28 +26,12 @@
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.SplitMergeUIWix\Sdl.Community.SplitMergeUIWix.csproj">
-      <Name>Sdl.Community.SplitMergeUIWix</Name>
-      <Project>{7dce09ff-8c82-4ffb-9e02-345170498215}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\SplitSDLXLIFF\Sdl.Utilities.SplitSDLXLIFF.csproj">
-      <Name>Sdl.Utilities.SplitSDLXLIFF</Name>
-      <Project>{7c927446-0461-4fcc-8c1d-a309430e064c}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
+  	<WixExtension Include="WixUIExtension">
+  		<HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+  		<Name>WixUIExtension</Name>
+  	</WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="WixUIExtension">
-      <HintPath>$(ProgramFiles)\WiX Toolset v3.11\bin\WixUIExtension.dll</HintPath>
-      <Name>WixUIExtension</Name>
-    </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
