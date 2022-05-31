@@ -20,10 +20,7 @@ steps:
 
 
 - task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 4.5.3'
-  inputs:
-    versionSpec: 4.5.3
-
+  
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
   inputs:
