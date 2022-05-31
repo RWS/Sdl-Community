@@ -39,7 +39,7 @@ steps:
     description: 'SDLXLIFFSplitMerge '
 - task: VSBuild@1
   inputs:
-    solution: '**Sdl.Community.SDLXLIFFSplitMerge.Installer'
+    solution: '**Sdl.Community.SDLXLIFFSplitMerge.Installer.wixproj'
     platform: 'x86'
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:RunWixToolsOutOfProc=true'
@@ -47,7 +47,7 @@ steps:
 - template: tasks/sign-artifacts/prepare-signing.yml
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
-    fileToSign: '$(Build.Repository.LocalPath)\SdlFreshstart\Sdl.Community.SdlFreshstart.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
+    fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
     description: 'TradosFreshstart'
 
 - task: PublishBuildArtifacts@1
