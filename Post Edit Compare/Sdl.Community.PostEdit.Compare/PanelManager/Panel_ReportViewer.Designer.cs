@@ -35,7 +35,8 @@
             this.ToolStripMenuItem_Dockable = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_AutoHide = new System.Windows.Forms.ToolStripMenuItem();
             this.webBrowserReport = new System.Windows.Forms.WebBrowser();
-            this.contextMenuStrip_DockContentMenu.SuspendLayout();
+	        this.webBrowserReport.ScriptErrorsSuppressed = true;
+			this.contextMenuStrip_DockContentMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip_DockContentMenu
