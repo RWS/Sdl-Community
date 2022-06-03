@@ -5,12 +5,8 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 	public static class Constants
 	{
 		public static readonly string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\RWS AppStore", Environment.UserName);
-		public static readonly string Backup2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\HunspellDictionaries";
-		public static readonly string Backup2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\HunspellDictionaries";
-		public static readonly string Restore2017HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2017\RestoreHunspellDictionaries";
-		public static readonly string Restore2019HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2019\RestoreHunspellDictionaries";
-		public static readonly string Backup2021HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2021\HunspellDictionaries";
-		public static readonly string Restore2021HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2021\RestoreHunspellDictionaries";
+		public static readonly string Backup2022HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2022\HunspellDictionaries";
+		public static readonly string Restore2022HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2022\RestoreHunspellDictionaries";
 
 		public static readonly string HunspellDictionaries = "HunspellDictionaries";
 
@@ -21,9 +17,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		public static readonly string ConfigFileName = "spellcheckmanager_config.xml";
 
 		public static readonly string HelpLink = "https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3316.hunspell-dictionary-manager";
-		public static readonly string Studio2017ErrorMessage = "Application error occured: Studio 2017 needs to be installed!";
-		public static readonly string Studio2019ErrorMessage = "Application error occured: Studio 2019 needs to be installed!";
-		public static readonly string Studio2021ErrorMessage = "Application error occured: Studio 2021 needs to be installed!";
+		public static readonly string Studio2022ErrorMessage = "Application error occured: Studio 2022 needs to be installed!";
 
 		public static readonly string InformativeMessage = "Informative message";
 		public static readonly string SuccessfullCreateMessage = "Dictionary language was successfully created!";
