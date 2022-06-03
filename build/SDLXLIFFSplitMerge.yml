@@ -23,9 +23,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
-  value: '|
-  **/SDLXLIFFSplitMerge.sln
-  !**/*.wixproj'
+  value: '!**/*.wixproj'
 
 pool:
   vmImage : '$(DefaultBuildVm)'
