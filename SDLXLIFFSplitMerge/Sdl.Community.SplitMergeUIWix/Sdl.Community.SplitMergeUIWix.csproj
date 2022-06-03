@@ -4,8 +4,9 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<OutputType>WinExe</OutputType>
-		<SignAssembly>False</SignAssembly>
+		<SignAssembly>True</SignAssembly>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
