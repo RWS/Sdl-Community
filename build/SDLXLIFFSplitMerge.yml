@@ -23,8 +23,8 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
-  value: |
-  '**/SDLXLIFFSplitMerge.sln
+  value: '|
+  **/SDLXLIFFSplitMerge.sln
   !**/*.wixproj'
 
 pool:
