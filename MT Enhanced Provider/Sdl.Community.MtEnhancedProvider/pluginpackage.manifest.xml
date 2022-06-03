@@ -1,9 +1,9 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 		<PlugInName>MT Enhanced Plugin for Trados Studio</PlugInName>
-		<Version>6.0.0.0</Version>
+		<Version>6.0.0.1</Version>
 		<Description>This plugin provides machine translation results from Microsoft Translator or Google Translate.</Description>
-		<Author>RWS AppStore Team</Author>
+		<Author>Trados AppStore Team</Author>
 		<Include>
 				<File>System.Net.Http.dll</File>
 				<File>RestSharp.dll</File>
