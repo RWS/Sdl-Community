@@ -12,12 +12,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\Debug\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;BuildOutputPath=..\Sdl.Community.SplitMergeUIWix\bin\$(Configuration)\net48</DefineConstants>
+    <DefineConstants>Debug;BuildOutputPath=..\Sdl.Community.SplitMergeUIWix\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>BuildOutputPath=..\Sdl.Community.SplitMergeUIWix\bin\$(Configuration)\net48</DefineConstants>
+    <DefineConstants>BuildOutputPath=..\Sdl.Community.SplitMergeUIWix\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
