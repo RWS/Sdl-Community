@@ -5,7 +5,6 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<SignAssembly>False</SignAssembly>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AssemblyOriginatorKeyFile>C:\Code\SDLCOM - Studio 2022\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -40,8 +39,5 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SdlCommunity.snk" />
   </ItemGroup>
 </Project>

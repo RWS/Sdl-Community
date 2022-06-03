@@ -64,9 +64,6 @@
     <None Include="Resources\SplitMerge_Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SplitSDLXLIFF\Sdl.Utilities.SplitSDLXLIFF.csproj">
       <Project>{7c927446-0461-4fcc-8c1d-a309430e064c}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF</Name>
@@ -85,9 +82,6 @@
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>True</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>C:\Code\SDLCOM - Studio 2022\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>False</SignAssembly>
   </PropertyGroup>
 </Project>

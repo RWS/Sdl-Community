@@ -5,7 +5,6 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<SignAssembly>False</SignAssembly>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AssemblyOriginatorKeyFile>C:\Code\SDLCOM - Studio 2022\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.IntegrationApi">
@@ -41,7 +40,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FilterDefinition%28C77668%29.ico" />
