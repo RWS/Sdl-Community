@@ -42,13 +42,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// <param name="region">Region</param>
 		internal ApiConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
-			Initialize = CreateInstanceAsync(subscriptionKey, region, htmlUtil);
-		}
-
-		private Task Initialize { get; }
-
-		private async Task CreateInstanceAsync(string subscriptionKey, string region, HtmlUtil htmlUtil)
-		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_htmlUtil = htmlUtil;
@@ -59,7 +52,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			}
 			if (_supportedLangs == null)
 			{
-				_supportedLangs = await GetSupportedLanguages(); //if the class variable has not been set
+				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
 			}
 		}
 
@@ -68,14 +61,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		/// </summary>
 		/// <param name="subscriptionKey">the client Id obtained from Microsoft</param>
 		/// <param name="region">Region</param>
-		internal async Task ResetCrd(string subscriptionKey, string region)
+		internal void ResetCrd(string subscriptionKey, string region)
 		{
 			if (subscriptionKey != _subscriptionKey || region != _region)
 			{
 				_subscriptionKey = subscriptionKey;
 				_region = region;
 				_authToken = GetAuthToken();
-				_supportedLangs = await GetSupportedLanguages();
+				_supportedLangs = GetSupportedLanguages();
 			}
 		}
 
@@ -232,7 +225,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			return false;
 		}
 
-		private async Task<List<string>> GetSupportedLanguages()
+		private List<string> GetSupportedLanguages()
 		{
 			//check to see if token is null
 			if (_authToken == null) _authToken = GetAuthToken();
@@ -247,7 +240,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 				request.AddParameter("api-version", "3.0");
 				request.AddParameter("scope", "translation");
 
-				var languageResponse = await client.ExecuteAsync(request);
+				var languageResponse = client.ExecuteAsync(request).Result;
 				var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
 				if (languages != null)
 				{

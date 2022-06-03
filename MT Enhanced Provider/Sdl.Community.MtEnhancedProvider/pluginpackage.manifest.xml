@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 		<PlugInName>MT Enhanced Plugin for Trados Studio</PlugInName>
-		<Version>6.0.0.1</Version>
+		<Version>6.0.0.2</Version>
 		<Description>This plugin provides machine translation results from Microsoft Translator or Google Translate.</Description>
 		<Author>Trados AppStore Team</Author>
 		<Include>
@@ -24,6 +24,7 @@
 				<File>System.Memory.dll</File>
 				<File>grpc_csharp_ext.x86.dll</File>
 				<File>System.Runtime.CompilerServices.Unsafe.dll</File>
+				<File>System.Text.Json.dll</File>
 		</Include>
 		<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>
