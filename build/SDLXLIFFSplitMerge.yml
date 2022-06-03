@@ -23,7 +23,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
-  value: '!**/*.wixproj'
+  value: '**/*.csproj'
 
 pool:
   vmImage : '$(DefaultBuildVm)'
