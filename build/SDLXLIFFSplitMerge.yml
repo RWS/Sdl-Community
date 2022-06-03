@@ -34,7 +34,7 @@ steps:
 
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
-    fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SplitMergeUIWix\bin\$(buildConfiguration)\net48\Sdl.Community.SplitMergeUIWix.exe'
+    fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SplitMergeUIWix\bin\$(buildConfiguration)\Sdl.Community.SplitMergeUIWix.exe'
     description: 'SDLXLIFFSplitMerge '
 - task: VSBuild@1
   inputs:
