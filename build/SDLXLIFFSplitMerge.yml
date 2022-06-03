@@ -24,8 +24,8 @@ variables:
   value: 'Release'
 - name: solution 
   value: |
-  **/SDLXLIFFSplitMerge.sln
-  !**/*.wixproj
+  '**/SDLXLIFFSplitMerge.sln
+  !**/*.wixproj'
 
 pool:
   vmImage : '$(DefaultBuildVm)'
