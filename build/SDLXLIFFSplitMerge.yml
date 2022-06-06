@@ -47,7 +47,7 @@ steps:
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
     fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
-    description: 'TradosFreshstart'
+    description: 'SDLXLIFFSplitMerge'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
