@@ -6,13 +6,24 @@
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<LangVersion>latest</LangVersion>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>C:\Code\SDLCOM - Studio 2022\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="SdlTmAnonymizer\Connected Services\**" />
 	  <EmbeddedResource Remove="SdlTmAnonymizer\Connected Services\**" />
 	  <None Remove="SdlTmAnonymizer\Connected Services\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="SdlTmAnonymizer\UsefulTips\de\de.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\en\en.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\es\es.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\fr\fr.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\it\it.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\ja\ja.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
+	  <None Remove="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="NLog">
@@ -131,6 +142,15 @@
     <Content Include="Resources\Gifs\SDLTMAnonymizer.Anonymize.CustomFields.gif" />
     <Content Include="Resources\Gifs\SDLTMAnonymizer.Anonymize.Data.gif" />
     <Content Include="Resources\Gifs\SDLTMAnonymizer.Anonymize.SystemFields.gif" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\de\de.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\en\en.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\es\es.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\fr\fr.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\it\it.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\ja\ja.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
+    <EmbeddedResource Include="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
     <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
     <Resource Include="Resources\Settings.ico" />
