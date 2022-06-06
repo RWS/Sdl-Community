@@ -35,8 +35,10 @@ steps:
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
     fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SplitMergeUIWix\bin\$(buildConfiguration)\Sdl.Community.SplitMergeUIWix.exe'
-    description: 'SDLXLIFFSplitMerge '
+    description: 'SDLXLIFFSplitMerge'
+
 - task: VSBuild@1
+  displayName: 'Visual Studio build Sdl.Community.SDLXLIFFSplitMerge.Installer.sln'
   inputs:
     solution: '**Sdl.Community.SDLXLIFFSplitMerge.Installer.sln'
     platform: 'x86'
@@ -44,6 +46,7 @@ steps:
     msbuildArgs: '/p:RunWixToolsOutOfProc=true'
 
 - template: tasks/sign-artifacts/prepare-signing.yml
+
 - template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
     fileToSign: '$(Build.Repository.LocalPath)\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.Installer\bin\$(buildConfiguration)\Sdl.Community.SdlFreshstart.Installer.msi'
