@@ -19,7 +19,7 @@ variables:
 - group: 'SDLPLC Authenticode Credentials'
 - template: jobs/branch-variables.yml
 - name: buildPlatform
-  value: 'Mixed Platforms'
+  value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
@@ -38,7 +38,7 @@ steps:
     description: 'SDLXLIFFSplitMerge '
 - task: VSBuild@1
   inputs:
-    solution: '**Sdl.Community.SDLXLIFFSplitMerge.Installer.wixproj'
+    solution: '**Sdl.Community.SDLXLIFFSplitMerge.Installer.sln'
     platform: 'x86'
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:RunWixToolsOutOfProc=true'
