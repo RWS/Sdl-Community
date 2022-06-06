@@ -19,7 +19,7 @@ variables:
 - group: 'SDLPLC Authenticode Credentials'
 - template: jobs/branch-variables.yml
 - name: buildPlatform
-  value: 'Any CPU'
+  value: 'Mixed Platforms'
 - name: buildConfiguration
   value: 'Release'
 - name: solution 
