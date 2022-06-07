@@ -8,7 +8,7 @@
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<OutputType>WinExe</OutputType>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
