@@ -13,21 +13,27 @@
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.PluginFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.TM.ImportExport">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.TM.ImportExport.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
       <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
