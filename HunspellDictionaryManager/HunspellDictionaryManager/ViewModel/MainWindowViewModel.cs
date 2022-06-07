@@ -37,7 +37,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private bool _isDeleteEnabled = true;
 		private static string _hunspellDictionariesFolderPath;
 		private static string _backupFolderPath;
-		private static string _undoDictFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Restore2021HunspellDicFolderPath);
+		private static string _undoDictFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Restore2022HunspellDicFolderPath);
 		private ICommand _createHunspellDictionaryCommand;
 		private ICommand _closeCommand;
 		private ICommand _deleteCommand;
@@ -539,7 +539,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				{
 					Directory.CreateDirectory(Constants.BackupFolderPath);
 				}
-				_backupFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Backup2021HunspellDicFolderPath);
+				_backupFolderPath = Path.Combine(Constants.BackupFolderPath, Constants.Backup2022HunspellDicFolderPath);
 
 				var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
 				{

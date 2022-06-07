@@ -10,30 +10,24 @@ namespace Sdl.Community.StudioMigrationUtility.Services
     {
         private readonly List<string> _pluginFolderLocations = new List<string>
         {
-           Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-               @"SDL\SDL Trados Studio\{0}\Plugins\Packages"),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-               @"SDL\SDL Trados Studio\{0}\Plugins\Packages"),
-             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-               @"SDL\SDL Trados Studio\{0}\Plugins\Packages")
+			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+			Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
         };
 
-        public List<string> GetInstalledPlugins(StudioVersion studioVersion)
+		public List<string> GetInstalledPlugins(StudioVersion studioVersion)
         {
             var installedPlugins = new List<string>();
 
-
-            var pluginPath = _pluginFolderLocations.Select(
-                pluginFolderLocation =>
-                    string.Format(pluginFolderLocation, studioVersion.ExecutableVersion.Major));
-
+			var pluginPath = _pluginFolderLocations.Select(
+				pluginFolderLocation => Path.Combine(pluginFolderLocation, studioVersion.PluginPackagePath));
 
             foreach (var plugin in pluginPath.Select(path => Directory.GetFiles(path, "*.sdlplugin"))
                 .Where(plugin => plugin.Length != 0))
             {
-
                 installedPlugins.AddRange(plugin);
             }
+
             return installedPlugins;
         }
 

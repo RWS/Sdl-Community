@@ -147,22 +147,22 @@ namespace Sdl.Community.TQA
 
 				for (var k = 0; k < entry.Count; k++)
 				{
-					cell.RichText.AddText(entry[k].Item1);
+					cell.GetRichText().AddText(entry[k].Item1);
 					switch (entry[k].Item2)
 					{
 						case TextType.Added:
-							cell.RichText.ToArray()[k].SetFontColor(XLColor.GreenPigment);
-							cell.RichText.ToArray()[k].SetUnderline();
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.GreenPigment);
+							cell.GetRichText().ToArray()[k].SetUnderline();
 							break;
 						case TextType.Deleted:
-							cell.RichText.ToArray()[k].SetFontColor(XLColor.Red);
-							cell.RichText.ToArray()[k].SetStrikethrough(true);
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Red);
+							cell.GetRichText().ToArray()[k].SetStrikethrough(true);
 							break;
 						case TextType.Regular:
 							continue;
 						case TextType.Comment:
-							cell.RichText.ToArray()[k].SetFontColor(XLColor.Blue);
-							cell.RichText.ToArray()[k].SetBold();
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Blue);
+							cell.GetRichText().ToArray()[k].SetBold();
 							break;
 					}
 				}
@@ -172,22 +172,22 @@ namespace Sdl.Community.TQA
 				entry = rowsArray[i].SourceContent;
 				for (var k = 0; k < entry.Count; k++)
 				{
-					cell.RichText.AddText(entry[k].Item1);
+					cell.GetRichText().AddText(entry[k].Item1);
 					switch (entry[k].Item2)
 					{
 						case TextType.Added:
-							cell.RichText.ToArray()[k].SetFontColor(XLColor.GreenPigment);
-							cell.RichText.ToArray()[k].SetUnderline();
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.GreenPigment);
+							cell.GetRichText().ToArray()[k].SetUnderline();
 							break;
 						case TextType.Deleted:
-							cell.RichText.ToArray()[k].SetFontColor(XLColor.Red);
-							cell.RichText.ToArray()[k].SetStrikethrough(true);
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Red);
+							cell.GetRichText().ToArray()[k].SetStrikethrough(true);
 							break;
 						case TextType.Regular:
 							continue;
 						case TextType.Comment:
-							cell.RichText.ToArray()[k].SetFontColor(XLColor.Blue);
-							cell.RichText.ToArray()[k].SetBold();
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Blue);
+							cell.GetRichText().ToArray()[k].SetBold();
 							break;
 					}
 				}
@@ -239,14 +239,14 @@ namespace Sdl.Community.TQA
 
 	    private static void AjustCommentSize(IXLWorksheet wsReport)
 	    {
-		    wsReport.Cell("C4").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("C5").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("C6").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("C7").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("C10").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("M8").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("M9").Comment?.Style.Size.SetAutomaticSize();
-		    wsReport.Cell("M10").Comment?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C4").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C5").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C6").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C7").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("C10").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("M8").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("M9").GetComment()?.Style.Size.SetAutomaticSize();
+		    wsReport.Cell("M10").GetComment()?.Style.Size.SetAutomaticSize();
 	    }
 
 	    private static void AddGradient(SpreadsheetDocument spreadSheet,string dummyColorCode,string firstColorCode, string secondColorCode)

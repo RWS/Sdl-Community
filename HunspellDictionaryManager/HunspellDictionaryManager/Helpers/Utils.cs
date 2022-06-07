@@ -35,7 +35,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 					return studio.InstallPath;
 				}
 
-				MessageBox.Show(Constants.Studio2021ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBox.Show(Constants.Studio2022ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 			catch (Exception ex)
 			{

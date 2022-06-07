@@ -52,23 +52,24 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 				Model.LogViewModel.IsEnabled = true;
 				_control = new TmAnonymizerViewControl(Model);
 
-				var pathInfo = new RwsAppStore.UsefulTipsService.Model.PathInfo(PluginResources.Plugin_Name, "16");
+				var pathInfo = new RwsAppStore.UsefulTipsService.Model.PathInfo(PluginResources.Plugin_Name, "17");
 				var tipsProvider = new TipsProvider(pathInfo);
 				var usefulTipsService = new UsefulTipsService(tipsProvider, SettingsService.PathInfo);
 
-				var tipLanguages = usefulTipsService.GetPluginUsefulTips();
-				
+				var pluginTips = usefulTipsService.GetPluginUsefulTips();
+				var studioTips = tipsProvider.GetStudioTips();
 
-				var tipsInstalled = TipsInstalled(tipLanguages, "SDLTMAnonymizerView");
+				AlignLanguageTipIds(studioTips, pluginTips, usefulTipsService);
+
+				var tipsInstalled = TipsInstalled(studioTips, "SDLTMAnonymizerView");
 				if (tipsInstalled == 0)
 				{
-					var importTips = new ImportTips { TipLanguages = tipLanguages };
+					var importTips = new ImportTips { TipLanguages = pluginTips };
 					var countInstalled = usefulTipsService.AddUsefulTips(importTips, true);
 
 					Trace.WriteLine(string.Format("Installed {0}", countInstalled));
 				}
 
-				AlignLanguageTipIds(tipLanguages, tipsProvider, usefulTipsService);
 
 				//var tipReferences = new List<TipReference>();
 				//foreach (var tipLanguage in tipLanguages)
@@ -95,10 +96,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 			}
 		}
 
-		private static void AlignLanguageTipIds(IEnumerable<TipLanguage> tipLanguages, TipsProvider tipsProvider, UsefulTipsService usefulTipsService)
+		private static void AlignLanguageTipIds(IReadOnlyCollection<TipLanguage> studioTips, List<TipLanguage> pluginTips, UsefulTipsService usefulTipsService)
 		{
-			var studioTips = tipsProvider.GetStudioTips();
-			foreach (var tipLanguage in tipLanguages)
+			if (pluginTips == null || studioTips == null)
+			{
+				return;
+			}
+
+			foreach (var tipLanguage in pluginTips)
 			{
 				var installedTipLanguages = studioTips.FirstOrDefault(a => a.LanguageId == tipLanguage.LanguageId);
 				if (installedTipLanguages == null)
@@ -117,10 +122,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 			}
 		}
 
-		public int TipsInstalled(List<TipLanguage> tipLanguages, string context)
+		public int TipsInstalled(List<TipLanguage> studioTips, string context)
 		{
-
-			return tipLanguages.Sum(tipContext => tipContext.Tips.Count(a => a.Context == context));
+			return studioTips.Sum(tipContext => tipContext.Tips.Count(a => a.Context == context));
 		}
 
 		protected override IUIControl GetContentControl()
