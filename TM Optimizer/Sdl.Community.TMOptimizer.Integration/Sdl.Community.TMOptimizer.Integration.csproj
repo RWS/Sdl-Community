@@ -56,9 +56,6 @@
     <None Include="Resources\product.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.TMOptimizer.Control\Sdl.Community.TMOptimizer.Control.csproj">
       <Project>{a82ed8ee-c8ff-4ad2-b09f-ec379aa17b0e}</Project>
       <Name>Sdl.Community.TMOptimizer.Control</Name>
@@ -83,6 +80,6 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 </Project>
