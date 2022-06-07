@@ -83,6 +83,6 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 </Project>

@@ -7,6 +7,8 @@
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<OutputType>WinExe</OutputType>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
@@ -78,7 +80,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.TMOptimizerLib\Sdl.Community.TMOptimizerLib.csproj">
