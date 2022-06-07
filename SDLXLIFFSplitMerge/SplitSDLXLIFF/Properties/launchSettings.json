@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Trados\\SDLXLIFF SplitMerge\\Sdl.Community.SplitMergeUIWix.exe"
+    }
+  }
+}

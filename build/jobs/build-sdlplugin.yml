@@ -28,9 +28,11 @@ steps:
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
 
 - task: VSBuild@1
+  displayName: 'Visual Studio build $(solution)'
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'		
+    configuration: '$(buildConfiguration)'
+    
 - task: PublishPipelineMetadata@0
 

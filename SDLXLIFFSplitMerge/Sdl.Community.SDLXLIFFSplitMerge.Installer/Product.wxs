@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="SDLXLIFF Split and Merge 2021" Language="1033" Version="3.0.0.4" Manufacturer="SDL Community Developers" UpgradeCode="48a1c47f-b3be-4580-ae01-30f4114217ce">
+	<Product Id="*" Name="SDLXLIFF Split and Merge 2022" Language="1033" Version="4.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="48a1c47f-b3be-4580-ae01-30f4114217ce">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
-
-		<Property Id="WIXUI_INSTALLDIR" Value="Studio16" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 		<!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
-		<UIRef Id="WixUI_Minimal"/>
+
+		<UI>
+			<UIRef Id="WixUI_InstallDir" />
+
+			<!-- Skip license dialog -->
+			<Publish Dialog="WelcomeDlg"
+			         Control="Next"
+			         Event="NewDialog"
+			         Value="InstallDirDlg"
+			         Order="2">1</Publish>
+			<Publish Dialog="InstallDirDlg"
+			         Control="Back"
+			         Event="NewDialog"
+			         Value="WelcomeDlg"
+			         Order="2">1</Publish>
+		</UI>
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes"/>
 
-		<Feature Id="ProductFeature" Title="SDLXLIFF Split and Merge 2021" Level="1">
+		<Feature Id="ProductFeature" Title="SDLXLIFF Split and Merge 2022" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 			<ComponentRef Id='ApplicationProgramDataShortcut' />
 			<ComponentRef Id='ApplicationShortcutDesktop' />
@@ -24,24 +37,24 @@
 	</Product>
 
 	<!-- Create shortcut to the Desktop directory. Use .exe from the INSTALLFOLDER where the application together with all 
-	.dll dependecies will be installed. Studio16 is the location provided by user when running .msi file -->
+	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
 		<DirectoryRef Id="DesktopFolder">
 			<Component Id="ApplicationShortcutDesktop" Guid="df2360f0-5a5c-4446-927f-c55ff3b8078c">
-				<Shortcut Id="ApplicationDesktopShortcut" Name="SDLXLIFF Split and Merge 2021" Icon="icon.ico" Description="SDLXLIFF Split and Merge 2021" Target="[Studio16]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="Studio16" />
+				<Shortcut Id="ApplicationDesktopShortcut" Name="SDLXLIFF Split and Merge 2022" Icon="icon.ico" Description="SDLXLIFF Split and Merge 2022" Target="[INSTALLFOLDER]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="INSTALLFOLDER" />
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SplitMergeUIWix" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
 
-	<!-- Create shortcut to the SDLTradosStudio2021Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
-	.dll dependecies will be installed. Studio16 is the location provided by user when running .msi file -->
+	<!-- Create shortcut to the TradosStudio2022Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
-		<DirectoryRef Id="SDLTradosStudio2021Apps">
+		<DirectoryRef Id="TradosStudio2022Apps">
 			<Component Id="ApplicationProgramDataShortcut" Guid="4c2c7cb3-0b11-4b52-bca4-d4218b3b5c87">
-				<Shortcut Id="ApplicationProgDataShortcut" Name="SDLXLIFF Split and Merge 2021" Icon="icon.ico" Description="SDLXLIFF Split and Merge 2021" Target="[Studio16]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="Studio16" />
-				<RemoveFolder Id="RemoveSDLTradosStudio2021Apps" Directory="SDLTradosStudio2021Apps" On="uninstall" />
+				<Shortcut Id="ApplicationProgDataShortcut" Name="SDLXLIFF Split and Merge 2022" Icon="icon.ico" Description="SDLXLIFF Split and Merge 2022" Target="[INSTALLFOLDER]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="RemoveTradosStudio2022Apps" Directory="TradosStudio2022Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SplitMergeUIWix" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
@@ -49,19 +62,17 @@
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<!-- Define location where the app will be installed, Studio16 folder (it is used because dll's needs to be loaded from the Studio folder)-->
+			<!-- Define location where the app will be installed, INSTALLFOLDER folder (it is used because dll's needs to be loaded from the Studio folder)-->
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="SDL" Name="SDL" >
-					<Directory Id="SDLTradosStudio" Name="SDL Trados Studio" >
-						<Directory Id="Studio16" Name="Studio16"/>
-					</Directory>
+				<Directory Id="Trados" Name="Trados" >
+					<Directory Id="INSTALLFOLDER" Name="SDLXLIFF SplitMerge"/>
 				</Directory>
 			</Directory>
 
-			<!-- Define location where the shortcut will be added: in our case, folder SDLTradosStudio2021Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+			<!-- Define location where the shortcut will be added: in our case, folder TradosStudio2022Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
-				<Directory Id="SDLTradosStudio2021Apps" Name="SDL Trados Studio 2021 Apps" />
+				<Directory Id="TradosStudio2022Apps" Name="Trados Studio 2022 Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
@@ -71,25 +82,37 @@
 
 	<!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
 	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="Studio16">
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 			<Component Id="Sdl.Community.SplitMergeUIWix">
-				<File Id="Sdl.Community.SplitMergeUIWix.exe" Name="Sdl.Community.SplitMergeUIWix.exe" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetPath)" KeyPath="yes" />
+				<File Id="Sdl.Community.SplitMergeUIWix.exe" Name="Sdl.Community.SplitMergeUIWix.exe" Source="$(var.BuildOutputPath)\Sdl.Community.SplitMergeUIWix.exe" KeyPath="yes" />
 			</Component>
-
-			<Component Id="Sdl.Community.SplitMergeUIWix.exe.config" Guid="4a3b5f4c-0d1e-4aee-947a-953dcaf2d95e">
-				<File Id="Sdl.Community.SplitMergeUIWix.exe.config" Name="Sdl.Community.SplitMergeUIWix.exe.config" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.SplitMergeUIWix.exe.config" />
+			
+			<Component Id="Sdl.TranslationStudioAutomation.IntegrationApi.dll">
+				<File Id="Sdl.TranslationStudioAutomation.IntegrationApi.dll" Name="Sdl.TranslationStudioAutomation.IntegrationApi.dll" Source="$(var.BuildOutputPath)\Sdl.TranslationStudioAutomation.IntegrationApi.dll" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.Desktop.IntegrationApi.dll">
+				<File Id="Sdl.Desktop.IntegrationApi.dll" Name="Sdl.Desktop.IntegrationApi.dll" Source="$(var.BuildOutputPath)\Sdl.Desktop.IntegrationApi.dll" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.Desktop.IntegrationApi.Extensions.dll">
+				<File Id="Sdl.Desktop.IntegrationApi.Extensions.dll" Name="Sdl.Desktop.IntegrationApi.Extensions.dll" Source="$(var.BuildOutputPath)\Sdl.Desktop.IntegrationApi.Extensions.dll" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.ProjectAutomation.Core.dll">
+				<File Id="Sdl.ProjectAutomation.Core.dll" Name="Sdl.ProjectAutomation.Core.dll" Source="$(var.BuildOutputPath)\Sdl.ProjectAutomation.Core.dll" KeyPath="yes" />
 			</Component>
 
 			<Component Id="Sdl.Utilities.SplitSDLXLIFF.dll" Guid="*">
-				<File Id="Sdl.Utilities.SplitSDLXLIFF.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.dll"></File>
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Utilities.SplitSDLXLIFF.dll"></File>
 			</Component>
 
 			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" Guid="*">
-				<File Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.Lib.dll"></File>
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Utilities.SplitSDLXLIFF.Lib.dll"></File>
 			</Component>
 
 			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" Guid="*">
-				<File Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.Wizard.dll"></File>
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Utilities.SplitSDLXLIFF.Wizard.dll"></File>
 			</Component>
 
 		</ComponentGroup>
