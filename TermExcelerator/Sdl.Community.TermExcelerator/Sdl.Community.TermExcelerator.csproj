@@ -178,7 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EPPlus">
-      <Version>6.0.3</Version>
+      <Version>4.5.3.3</Version>
     </PackageReference>
     <PackageReference Include="FuzzyString">
       <Version>1.0.0</Version>

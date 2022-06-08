@@ -75,9 +75,6 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EPPlus">
-      <Version>4.0.5</Version>
-    </PackageReference>
     <PackageReference Include="xunit">
       <Version>2.1.0</Version>
     </PackageReference>
@@ -97,4 +94,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  </Project>
+</Project>
