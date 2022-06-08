@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Trados.TargetRenamer")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Trados.TargetRenamer")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyTitle("Trados Target Renamer")]
+[assembly: AssemblyProduct("Trados Target Renamer")]
+[assembly: AssemblyDescription("Batch task plugin that allows the user to save the target files with various options for custom naming")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
+
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("5.0.0.0")]
+[assembly: AssemblyFileVersion("5.0.0.0")]
