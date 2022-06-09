@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:ui="http://schemas.microsoft.com/wix/UIExtension"><?define Sdl.Community.SplitMergeUIWix_TargetDir=$(var.Sdl.Community.SplitMergeUIWix.TargetDir)?>
-	<Product Id="*" Name="SDLXLIFF Split and Merge 2022" Language="1033" Version="4.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="48a1c47f-b3be-4580-ae01-30f4114217ce">
+	<Product Id="*" Name="SDLXLIFF Split and Merge 2022" Language="1033" Version="4.0.1" Manufacturer="Trados AppStore Team" UpgradeCode="48a1c47f-b3be-4580-ae01-30f4114217ce">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
