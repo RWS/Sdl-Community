@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:ui="http://schemas.microsoft.com/wix/UIExtension"><?define Sdl.Community.SplitMergeUIWix_TargetDir=$(var.Sdl.Community.SplitMergeUIWix.TargetDir)?>
 	<Product Id="*" Name="SDLXLIFF Split and Merge 2022" Language="1033" Version="4.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="48a1c47f-b3be-4580-ae01-30f4114217ce">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -14,25 +13,18 @@
 			<UIRef Id="WixUI_InstallDir" />
 
 			<!-- Skip license dialog -->
-			<Publish Dialog="WelcomeDlg"
-			         Control="Next"
-			         Event="NewDialog"
-			         Value="InstallDirDlg"
-			         Order="2">1</Publish>
-			<Publish Dialog="InstallDirDlg"
-			         Control="Back"
-			         Event="NewDialog"
-			         Value="WelcomeDlg"
-			         Order="2">1</Publish>
+			<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="2">1</Publish>
+			<Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">1</Publish>
 		</UI>
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate EmbedCab="yes"/>
+		<MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="ProductFeature" Title="SDLXLIFF Split and Merge 2022" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
-			<ComponentRef Id='ApplicationProgramDataShortcut' />
-			<ComponentRef Id='ApplicationShortcutDesktop' />
+			<ComponentRef Id="ApplicationProgramDataShortcut" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+			<ComponentGroupRef Id="Trados_files" />
 		</Feature>
 	</Product>
 
@@ -64,14 +56,14 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<!-- Define location where the app will be installed, INSTALLFOLDER folder (it is used because dll's needs to be loaded from the Studio folder)-->
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="Trados" Name="Trados" >
-					<Directory Id="INSTALLFOLDER" Name="SDLXLIFF SplitMerge"/>
+				<Directory Id="Trados" Name="Trados">
+					<Directory Id="INSTALLFOLDER" Name="SDLXLIFF SplitMerge" />
 				</Directory>
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case, folder TradosStudio2022Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
-			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
+			<Directory Id="ProgramMenuFolder" Name="All Programs folder">
 				<Directory Id="TradosStudio2022Apps" Name="Trados Studio 2022 Apps" />
 			</Directory>
 
@@ -114,7 +106,726 @@
 			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" Guid="*">
 				<File Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Utilities.SplitSDLXLIFF.Wizard.dll"></File>
 			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Settings.dll" Guid="9e0263cf-13e1-4b35-a8bf-85bb3a0f0062">
+			  <File Id="Sdl.MultiTerm.Core.Settings.dll" Name="Sdl.MultiTerm.Core.Settings.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Settings.dll" />
+			</Component>
+			<Component Id="Sdl.StudioServer.ProjectServer.Package.dll" Guid="04164672-460f-452d-8bcc-6ce8b39ecd6c">
+			  <File Id="Sdl.StudioServer.ProjectServer.Package.dll" Name="Sdl.StudioServer.ProjectServer.Package.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.StudioServer.ProjectServer.Package.dll" />
+			</Component>
+			<Component Id="Sdl.Common.Licensing.Provider.SafeNetRMS.dll" Guid="36d0d676-03a4-45a8-bd51-e3efa0a5d5a7">
+			  <File Id="Sdl.Common.Licensing.Provider.SafeNetRMS.dll" Name="Sdl.Common.Licensing.Provider.SafeNetRMS.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Common.Licensing.Provider.SafeNetRMS.dll" />
+			</Component>
+			<Component Id="SentinelLicensing.dll" Guid="0c206bf9-2887-4f80-95c5-8a1d5b93d947">
+			  <File Id="SentinelLicensing.dll" Name="SentinelLicensing.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)SentinelLicensing.dll" />
+			</Component>
+			<Component Id="SentinelLicgenParser.dll" Guid="e7eea96a-c3b1-4010-9e68-5ecbd43a8326">
+			  <File Id="SentinelLicgenParser.dll" Name="SentinelLicgenParser.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)SentinelLicgenParser.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.Reporting.XmlReporting.dll" Guid="519d9ec2-e3cb-44f4-8da1-10a8d82026f4">
+			  <File Id="Sdl.ProjectApi.Reporting.XmlReporting.dll" Name="Sdl.ProjectApi.Reporting.XmlReporting.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.Reporting.XmlReporting.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.AutomaticTasks.dll" Guid="b493cc47-3a86-4e46-a409-2f97396eee5d">
+			  <File Id="Sdl.ProjectApi.AutomaticTasks.dll" Name="Sdl.ProjectApi.AutomaticTasks.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.AutomaticTasks.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.Translation.dll" Guid="86cf552e-990e-461c-971d-8e96ae2a2756">
+			  <File Id="Sdl.ProjectApi.Translation.dll" Name="Sdl.ProjectApi.Translation.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.Translation.dll" />
+			</Component>
+			<Component Id="Sdl.Core.MatchRepair.Core.dll" Guid="0f79a92f-d380-4e82-a633-c55f000546af">
+			  <File Id="Sdl.Core.MatchRepair.Core.dll" Name="Sdl.Core.MatchRepair.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.MatchRepair.Core.dll" />
+			</Component>
+			<Component Id="Sdl.Core.MatchRepair.dll" Guid="16927124-6de7-41c3-ae47-f5c9ee79835a">
+			  <File Id="Sdl.Core.MatchRepair.dll" Name="Sdl.Core.MatchRepair.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.MatchRepair.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Processing.Processors.PerfectMatch.dll" Guid="8c9bcf5d-da6f-49e1-a76b-a230b12c861a">
+			  <File Id="Sdl.Core.Processing.Processors.PerfectMatch.dll" Name="Sdl.Core.Processing.Processors.PerfectMatch.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Processing.Processors.PerfectMatch.dll" />
+			</Component>
+			<Component Id="Sdl.Verification.QAChecker.dll" Guid="64b74060-2b7e-481f-9418-1c1aafddde04">
+			  <File Id="Sdl.Verification.QAChecker.dll" Name="Sdl.Verification.QAChecker.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Verification.QAChecker.dll" />
+			</Component>
+			<Component Id="Sdl.DesktopEditor.BasicControls.dll" Guid="6e1592f9-a836-4838-a44d-b6d8984aa35b">
+			  <File Id="Sdl.DesktopEditor.BasicControls.dll" Name="Sdl.DesktopEditor.BasicControls.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.DesktopEditor.BasicControls.dll" />
+			</Component>
+			<Component Id="Sdl.Verification.TagVerifier.dll" Guid="d9e59343-91d9-4862-9882-0d942c36bc69">
+			  <File Id="Sdl.Verification.TagVerifier.dll" Name="Sdl.Verification.TagVerifier.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Verification.TagVerifier.dll" />
+			</Component>
+			<Component Id="Sdl.Verification.TermVerifier.dll" Guid="b78ba6bf-c770-4cfc-8c0f-5c398698219a">
+			  <File Id="Sdl.Verification.TermVerifier.dll" Name="Sdl.Verification.TermVerifier.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Verification.TermVerifier.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.Api.dll" Guid="eacebb4a-af04-4b48-8c80-bf1027c1aba4">
+			  <File Id="Sdl.TranslationStudio.Api.dll" Name="Sdl.TranslationStudio.Api.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.Api.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.AutoCorrect.Api.dll" Guid="a27c7d76-bef2-41d5-97a9-447b69be9ed6">
+			  <File Id="Sdl.TranslationStudio.AutoCorrect.Api.dll" Name="Sdl.TranslationStudio.AutoCorrect.Api.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.AutoCorrect.Api.dll" />
+			</Component>
+			<Component Id="Sdl.SpellChecking.Api.dll" Guid="997a5c4b-a75f-4a4a-a4b0-b926b75fdbc8">
+			  <File Id="Sdl.SpellChecking.Api.dll" Name="Sdl.SpellChecking.Api.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.SpellChecking.Api.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.Terminology.UI.dll" Guid="8a7ff65d-d9b3-44b9-b166-2de834de771c">
+			  <File Id="Sdl.MultiTerm.Client.Terminology.UI.dll" Name="Sdl.MultiTerm.Client.Terminology.UI.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.Terminology.UI.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Filters.Xliff.dll" Guid="c2442509-edf1-47df-8820-84c6aaed59e7">
+			  <File Id="Sdl.FileTypeSupport.Filters.Xliff.dll" Name="Sdl.FileTypeSupport.Filters.Xliff.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Filters.Xliff.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Filters.PreviewCommon.dll" Guid="3a790a1e-e6c0-4dd3-8f78-7c464e5d75f7">
+			  <File Id="Sdl.FileTypeSupport.Filters.PreviewCommon.dll" Name="Sdl.FileTypeSupport.Filters.PreviewCommon.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Filters.PreviewCommon.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Filters.ThirdParty.NQuant.Signed.dll" Guid="0c9265aa-4399-4e09-95c5-e919b9754f71">
+			  <File Id="Sdl.FileTypeSupport.Filters.ThirdParty.NQuant.Signed.dll" Name="Sdl.FileTypeSupport.Filters.ThirdParty.NQuant.Signed.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Filters.ThirdParty.NQuant.Signed.dll" />
+			</Component>
+			<Component Id="HtmlAgilityPack.dll" Guid="3e35c90f-6b30-46e1-afc3-68a19b18b6a9">
+			  <File Id="HtmlAgilityPack.dll" Name="HtmlAgilityPack.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)HtmlAgilityPack.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Filters.PreviewCommon.WinUi.dll" Guid="b3f10732-fdf5-46b0-9ad1-79d8a5dc7123">
+			  <File Id="Sdl.FileTypeSupport.Filters.PreviewCommon.WinUi.dll" Name="Sdl.FileTypeSupport.Filters.PreviewCommon.WinUi.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Filters.PreviewCommon.WinUi.dll" />
+			</Component>
+			<Component Id="Microsoft.Web.WebView2.WinForms.dll" Guid="f1de41ec-606a-4350-8dc2-4e5831a3c472">
+			  <File Id="Microsoft.Web.WebView2.WinForms.dll" Name="Microsoft.Web.WebView2.WinForms.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Web.WebView2.WinForms.dll" />
+			</Component>
+			<Component Id="Microsoft.Web.WebView2.Core.dll" Guid="19b13a01-43fb-4679-9d73-9e7b676e66e0">
+			  <File Id="Microsoft.Web.WebView2.Core.dll" Name="Microsoft.Web.WebView2.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Web.WebView2.Core.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll" Guid="31fe43c5-b8c9-4694-a972-23bcf60db99c">
+			  <File Id="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll" Name="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.Editor.dll" Guid="ce09fcc5-8dfb-4722-ba71-27d782c3c566">
+			  <File Id="Sdl.TranslationStudio.Editor.dll" Name="Sdl.TranslationStudio.Editor.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.Editor.dll" />
+			</Component>
+			<Component Id="SmartThreadPool.dll" Guid="e74a8990-a2b9-41ce-9ea5-85f1da8e5c09">
+			  <File Id="SmartThreadPool.dll" Name="SmartThreadPool.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)SmartThreadPool.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.Common.dll" Guid="1c50918c-fb2e-45f3-addb-5e1b85bb487f">
+			  <File Id="Sdl.TranslationStudio.Common.dll" Name="Sdl.TranslationStudio.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.Common.dll" />
+			</Component>
+			<Component Id="SharpCompress.dll" Guid="ebc17d4c-5f85-43d6-bddf-e68b1414c228">
+			  <File Id="SharpCompress.dll" Name="SharpCompress.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)SharpCompress.dll" />
+			</Component>
+			<Component Id="Sdl.DesktopEditor.Control.dll" Guid="de9ce602-c10f-4a6a-bff0-660ed32e76d2">
+			  <File Id="Sdl.DesktopEditor.Control.dll" Name="Sdl.DesktopEditor.Control.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.DesktopEditor.Control.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.XmlProcessor.dll" Guid="841eff91-6dac-44d6-b200-2cfd82deead3">
+			  <File Id="Sdl.MultiTerm.Core.XmlProcessor.dll" Name="Sdl.MultiTerm.Core.XmlProcessor.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.XmlProcessor.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Connectors.dll" Guid="9aa0898d-2691-4df0-a2d5-a6f2414ff48d">
+			  <File Id="Sdl.MultiTerm.Core.Connectors.dll" Name="Sdl.MultiTerm.Core.Connectors.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Connectors.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Server.Interop.dll" Guid="5a222b28-6834-496b-b79c-d354918186cb">
+			  <File Id="Sdl.MultiTerm.Server.Interop.dll" Name="Sdl.MultiTerm.Server.Interop.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Server.Interop.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Common.Interop.dll" Guid="53baf732-1ae5-4985-bdf9-1f1fe2f1a25d">
+			  <File Id="Sdl.MultiTerm.Common.Interop.dll" Name="Sdl.MultiTerm.Common.Interop.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Common.Interop.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Search.dll" Guid="c15bbb74-233d-4b9b-b9a6-8f99ca453c0b">
+			  <File Id="Sdl.MultiTerm.Core.Search.dll" Name="Sdl.MultiTerm.Core.Search.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Search.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Kernel.Core.dll" Guid="c65ade29-387c-4968-815f-bb281b21b0f1">
+			  <File Id="Sdl.MultiTerm.Kernel.Core.dll" Name="Sdl.MultiTerm.Kernel.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Kernel.Core.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.RenderEngine.dll" Guid="d4379bab-0fb5-4f40-9296-5a4470c0a9b9">
+			  <File Id="Sdl.MultiTerm.Core.RenderEngine.dll" Name="Sdl.MultiTerm.Core.RenderEngine.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.RenderEngine.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.JsonProcessor.dll" Guid="4368a660-503e-489d-af6a-2b62fab73863">
+			  <File Id="Sdl.MultiTerm.Core.JsonProcessor.dll" Name="Sdl.MultiTerm.Core.JsonProcessor.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.JsonProcessor.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Kernel.Local.dll" Guid="7a6c1618-16dc-4720-9a93-268a766b9680">
+			  <File Id="Sdl.MultiTerm.Kernel.Local.dll" Name="Sdl.MultiTerm.Kernel.Local.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Kernel.Local.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.Connectors.dll" Guid="5bfa328a-0c91-4311-9877-3bc1bb56afba">
+			  <File Id="Sdl.MultiTerm.Client.Connectors.dll" Name="Sdl.MultiTerm.Client.Connectors.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.Connectors.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Licensing.dll" Guid="d62d5770-deb9-4b2c-a2ac-492713df6768">
+			  <File Id="Sdl.MultiTerm.Core.Licensing.dll" Name="Sdl.MultiTerm.Core.Licensing.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Licensing.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.TermRecognition.Interop.dll" Guid="b5e9abe2-c43b-4c9b-8af2-2002fef48539">
+			  <File Id="Sdl.MultiTerm.TermRecognition.Interop.dll" Name="Sdl.MultiTerm.TermRecognition.Interop.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.TermRecognition.Interop.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.TermAccess.dll" Guid="e5033efe-7e11-4126-bdab-eeb83babc446">
+			  <File Id="Sdl.MultiTerm.Client.TermAccess.dll" Name="Sdl.MultiTerm.Client.TermAccess.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.TermAccess.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.TermEditing.dll" Guid="dca88bfc-7354-49f4-9ac7-3dae28e41079">
+			  <File Id="Sdl.MultiTerm.Client.TermEditing.dll" Name="Sdl.MultiTerm.Client.TermEditing.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.TermEditing.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll" Guid="81203151-f65f-41ee-a92c-e2cf22acaaa5">
+			  <File Id="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll" Name="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll" />
+			</Component>
+			<Component Id="DocumentFormat.OpenXml.dll" Guid="2ad24c80-774a-4bcf-9080-324f20d9cdc9">
+			  <File Id="DocumentFormat.OpenXml.dll" Name="DocumentFormat.OpenXml.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)DocumentFormat.OpenXml.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Bilingual.SdlXliff.dll" Guid="e3f20754-1abf-4328-b558-65caf115320c">
+			  <File Id="Sdl.FileTypeSupport.Bilingual.SdlXliff.dll" Name="Sdl.FileTypeSupport.Bilingual.SdlXliff.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Bilingual.SdlXliff.dll" />
+			</Component>
+			<Component Id="MurmurHash.dll" Guid="95fd5e9c-321b-4fcd-9915-3f8cd1b8b78d">
+			  <File Id="MurmurHash.dll" Name="MurmurHash.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)MurmurHash.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Framework.PreviewControls.dll" Guid="b9270134-bfc7-4f26-a78a-2fb7beba857f">
+			  <File Id="Sdl.FileTypeSupport.Framework.PreviewControls.dll" Name="Sdl.FileTypeSupport.Framework.PreviewControls.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Framework.PreviewControls.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectAutomation.FileBased.dll" Guid="cd1e0a6d-e9a4-4b7f-a508-1b0c545b1262">
+			  <File Id="Sdl.ProjectAutomation.FileBased.dll" Name="Sdl.ProjectAutomation.FileBased.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectAutomation.FileBased.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectAutomation.Settings.dll" Guid="d274c77f-f7d1-401f-8d1b-2239a962d095">
+			  <File Id="Sdl.ProjectAutomation.Settings.dll" Name="Sdl.ProjectAutomation.Settings.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectAutomation.Settings.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.Helpers.dll" Guid="bdaa9df3-98b5-4ba2-b3cf-797a0f1ed974">
+			  <File Id="Sdl.ProjectApi.Helpers.dll" Name="Sdl.ProjectApi.Helpers.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.Helpers.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.Implementation.dll" Guid="39f1876a-5991-4f90-a90e-e42b9ae278a0">
+			  <File Id="Sdl.ProjectApi.Implementation.dll" Name="Sdl.ProjectApi.Implementation.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.Implementation.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectAutomation.AutomaticTasks.dll" Guid="6383554e-03fd-4237-a282-ae65e629fad3">
+			  <File Id="Sdl.ProjectAutomation.AutomaticTasks.dll" Name="Sdl.ProjectAutomation.AutomaticTasks.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectAutomation.AutomaticTasks.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.StudioBFF.dll" Guid="dbedc88c-2588-436c-8b27-ae0a10e0be02">
+			  <File Id="Sdl.ApiClientSdk.StudioBFF.dll" Name="Sdl.ApiClientSdk.StudioBFF.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.StudioBFF.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.BCMApi.dll" Guid="e145a81a-43a6-4e2a-9b4d-56a95fd39339">
+			  <File Id="Sdl.ApiClientSdk.BCMApi.dll" Name="Sdl.ApiClientSdk.BCMApi.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.BCMApi.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.Reporting.dll" Guid="7ae72e72-fea5-439d-a581-23106ee93498">
+			  <File Id="Sdl.ProjectApi.Reporting.dll" Name="Sdl.ProjectApi.Reporting.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.Reporting.dll" />
+			</Component>
+			<Component Id="Sdl.DesktopEditor.Control.Support.dll" Guid="123c4bbd-615f-4f45-b4bd-c104d3778f39">
+			  <File Id="Sdl.DesktopEditor.Control.Support.dll" Name="Sdl.DesktopEditor.Control.Support.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.DesktopEditor.Control.Support.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Logging.dll" Guid="7a374c73-1eb4-44b5-ace4-1b17d8585b38">
+			  <File Id="Sdl.MultiTerm.Core.Logging.dll" Name="Sdl.MultiTerm.Core.Logging.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Logging.dll" />
+			</Component>
+			<Component Id="Sdl.MultiSelectComboBox.dll" Guid="617f2acd-043b-4a5b-8f29-2359424ca520">
+			  <File Id="Sdl.MultiSelectComboBox.dll" Name="Sdl.MultiSelectComboBox.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiSelectComboBox.dll" />
+			</Component>
+			<Component Id="Sdl.Tools.Common.dll" Guid="cd51b8f3-04ff-44cb-a1e3-ef720144c41c">
+			  <File Id="Sdl.Tools.Common.dll" Name="Sdl.Tools.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Tools.Common.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.Connections.Abstractions.dll" Guid="378d6ee6-f268-419f-9a40-84e227b42476">
+			  <File Id="Microsoft.AspNetCore.Connections.Abstractions.dll" Name="Microsoft.AspNetCore.Connections.Abstractions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.Connections.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Features.dll" Guid="02820098-6cb7-4b68-bcc5-dfe566088d54">
+			  <File Id="Microsoft.Extensions.Features.dll" Name="Microsoft.Extensions.Features.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.Features.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" Guid="38dc7370-6101-4b0f-a71e-55b8520c7d2e">
+			  <File Id="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" Name="Microsoft.AspNetCore.SignalR.Protocols.Json.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.SignalR.Protocols.Json.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.Http.Connections.Client.dll" Guid="95572c1f-56d7-4a5b-b466-0b70fe27d50a">
+			  <File Id="Microsoft.AspNetCore.Http.Connections.Client.dll" Name="Microsoft.AspNetCore.Http.Connections.Client.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.Http.Connections.Client.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.Http.Connections.Common.dll" Guid="3f212c56-f780-4b39-ab62-6f94bf73397c">
+			  <File Id="Microsoft.AspNetCore.Http.Connections.Common.dll" Name="Microsoft.AspNetCore.Http.Connections.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.Http.Connections.Common.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.SignalR.Client.dll" Guid="9c37482a-b468-4a69-be65-0228788b2608">
+			  <File Id="Microsoft.AspNetCore.SignalR.Client.dll" Name="Microsoft.AspNetCore.SignalR.Client.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.SignalR.Client.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Pricing.dll" Guid="aede906d-30c3-4aa4-ac44-c4856dbcf187">
+			  <File Id="Sdl.ApiClientSdk.Pricing.dll" Name="Sdl.ApiClientSdk.Pricing.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Pricing.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Package.dll" Guid="824d590e-23ee-436b-9ea7-783d22fb9935">
+			  <File Id="Sdl.ApiClientSdk.Package.dll" Name="Sdl.ApiClientSdk.Package.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Package.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.FileTypeSettings.dll" Guid="8bb10148-b436-49be-b129-4092c98221cd">
+			  <File Id="Sdl.ApiClientSdk.FileTypeSettings.dll" Name="Sdl.ApiClientSdk.FileTypeSettings.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.FileTypeSettings.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.DataHubImport.dll" Guid="05889535-55d8-45b0-9505-80f5fe005061">
+			  <File Id="Sdl.ApiClientSdk.DataHubImport.dll" Name="Sdl.ApiClientSdk.DataHubImport.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.DataHubImport.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Projects.dll" Guid="bb9a9507-d79f-434c-b5df-89a7a24c0fb5">
+			  <File Id="Sdl.ApiClientSdk.Projects.dll" Name="Sdl.ApiClientSdk.Projects.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Projects.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.FileManagement.dll" Guid="1765cd6e-fcc7-4b26-8fd7-eeebe4f39d9c">
+			  <File Id="Sdl.ApiClientSdk.FileManagement.dll" Name="Sdl.ApiClientSdk.FileManagement.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.FileManagement.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Customers.dll" Guid="3274ef4d-129e-4c14-942d-6231531c8ac3">
+			  <File Id="Sdl.ApiClientSdk.Customers.dll" Name="Sdl.ApiClientSdk.Customers.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Customers.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Terminology.dll" Guid="cc99274e-664c-42c5-9595-566916c60249">
+			  <File Id="Sdl.ApiClientSdk.Terminology.dll" Name="Sdl.ApiClientSdk.Terminology.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Terminology.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.TranslationMemory.dll" Guid="fdac6351-b427-47e3-88dd-da59b3d828af">
+			  <File Id="Sdl.ApiClientSdk.TranslationMemory.dll" Name="Sdl.ApiClientSdk.TranslationMemory.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.TranslationMemory.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.LanguageResource.dll" Guid="714630a1-1512-4f94-a49d-ba3973e6f682">
+			  <File Id="Sdl.ApiClientSdk.LanguageResource.dll" Name="Sdl.ApiClientSdk.LanguageResource.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.LanguageResource.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Groups.dll" Guid="5d3c58d4-711b-4925-83d6-6b3507c6604b">
+			  <File Id="Sdl.ApiClientSdk.Groups.dll" Name="Sdl.ApiClientSdk.Groups.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Groups.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Vendor.dll" Guid="6bf8f174-d2b3-4f37-a503-5a46767fea53">
+			  <File Id="Sdl.ApiClientSdk.Vendor.dll" Name="Sdl.ApiClientSdk.Vendor.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Vendor.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Framework.AdministrationUI.dll" Guid="4c365513-b5c3-4c17-9a7c-c3b21f01a7e4">
+			  <File Id="Sdl.FileTypeSupport.Framework.AdministrationUI.dll" Name="Sdl.FileTypeSupport.Framework.AdministrationUI.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Framework.AdministrationUI.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.MiniEditor.dll" Guid="32b6f7e2-a2ae-4385-95d8-1e3cb0beb7d0">
+			  <File Id="Sdl.MultiTerm.Client.MiniEditor.dll" Name="Sdl.MultiTerm.Client.MiniEditor.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.MiniEditor.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.UI.dll" Guid="de2d69e0-4f72-4184-b185-a6e37a3e38dc">
+			  <File Id="Sdl.MultiTerm.Client.UI.dll" Name="Sdl.MultiTerm.Client.UI.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.UI.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Desktop.Platform.WinForms.dll" Guid="39179917-1085-4157-8b10-73988a3ba485">
+			  <File Id="Sdl.MultiTerm.Desktop.Platform.WinForms.dll" Name="Sdl.MultiTerm.Desktop.Platform.WinForms.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Desktop.Platform.WinForms.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.UI.WPF.dll" Guid="703c3f9b-af4f-41cb-8d52-6271a612adc2">
+			  <File Id="Sdl.MultiTerm.Client.UI.WPF.dll" Name="Sdl.MultiTerm.Client.UI.WPF.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.UI.WPF.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.Api.dll" Guid="6ca2651b-2351-4b2a-ab5b-680fca4af086">
+			  <File Id="Sdl.MultiTerm.Client.Api.dll" Name="Sdl.MultiTerm.Client.Api.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.Api.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.Adapters.dll" Guid="7b387138-171e-47f7-bc1a-1fec21d53c55">
+			  <File Id="Sdl.MultiTerm.Client.Adapters.dll" Name="Sdl.MultiTerm.Client.Adapters.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.Adapters.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.CppBridge.dll" Guid="8e92eea6-263d-4f7a-9695-4725cf63e633">
+			  <File Id="Sdl.MultiTerm.Client.CppBridge.dll" Name="Sdl.MultiTerm.Client.CppBridge.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.CppBridge.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.ProjectManagement.dll" Guid="94fa6743-4ac0-4ce8-bfd0-63143c1b270f">
+			  <File Id="Sdl.TranslationStudio.ProjectManagement.dll" Name="Sdl.TranslationStudio.ProjectManagement.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.ProjectManagement.dll" />
+			</Component>
+			<Component Id="System.Text.Encodings.Web.dll" Guid="c4c8b71f-ecdb-4c61-8b7e-a431130fa98a">
+			  <File Id="System.Text.Encodings.Web.dll" Name="System.Text.Encodings.Web.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Text.Encodings.Web.dll" />
+			</Component>
+			<Component Id="Sdl.Tools.Msi.dll" Guid="4d71601a-f1a6-4712-b528-dc4b3b7b6759">
+			  <File Id="Sdl.Tools.Msi.dll" Name="Sdl.Tools.Msi.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Tools.Msi.dll" />
+			</Component>
+			<Component Id="System.Text.Json.dll" Guid="45e367dc-67e5-4e44-81d4-bb464ce335d5">
+			  <File Id="System.Text.Json.dll" Name="System.Text.Json.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Text.Json.dll" />
+			</Component>
+			<Component Id="System.Threading.Channels.dll" Guid="953015d5-cbad-45c9-9e91-7676e34966c5">
+			  <File Id="System.Threading.Channels.dll" Name="System.Threading.Channels.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Threading.Channels.dll" />
+			</Component>
+			<Component Id="PowerCollections.dll" Guid="54c5be27-7e1e-42c2-a10d-22bbad93d5d6">
+			  <File Id="PowerCollections.dll" Name="PowerCollections.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)PowerCollections.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.BeGlobalCommunity.dll" Guid="196956e0-b255-4aa8-99bc-ff22dbafcbc6">
+			  <File Id="Sdl.LanguagePlatform.BeGlobalCommunity.dll" Name="Sdl.LanguagePlatform.BeGlobalCommunity.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.BeGlobalCommunity.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Cryptography.dll" Guid="29bceb58-9ca2-4c91-bd36-ceba8ae8502f">
+			  <File Id="Sdl.Core.Cryptography.dll" Name="Sdl.Core.Cryptography.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Cryptography.dll" />
+			</Component>
+			<Component Id="Sdl.BestMatchService.TranslationProvider.dll" Guid="3d8e633d-2f27-456c-8d8e-cdc25cd61aad">
+			  <File Id="Sdl.BestMatchService.TranslationProvider.dll" Name="Sdl.BestMatchService.TranslationProvider.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.BestMatchService.TranslationProvider.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Feedback.dll" Guid="c3376ab7-34f3-4ff2-9597-5efdf79e5a7c">
+			  <File Id="Sdl.ApiClientSdk.Feedback.dll" Name="Sdl.ApiClientSdk.Feedback.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Feedback.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Platform.WinForms.dll" Guid="90e6296c-3bba-4c85-b193-be75e16ed633">
+			  <File Id="Sdl.Desktop.Platform.WinForms.dll" Name="Sdl.Desktop.Platform.WinForms.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Platform.WinForms.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinDock.v21.2.dll" Guid="e3ce2a45-dcf0-4b26-b916-59646ae8a9df">
+			  <File Id="Infragistics4.Win.UltraWinDock.v21.2.dll" Name="Infragistics4.Win.UltraWinDock.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinDock.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinExplorerBar.v21.2.dll" Guid="3bccccd9-45e5-430f-a604-5218675d0f5a">
+			  <File Id="Infragistics4.Win.UltraWinExplorerBar.v21.2.dll" Name="Infragistics4.Win.UltraWinExplorerBar.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinExplorerBar.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.SupportDialogs.v21.2.dll" Guid="94f98191-516e-4823-bf86-d816e9f33210">
+			  <File Id="Infragistics4.Win.SupportDialogs.v21.2.dll" Name="Infragistics4.Win.SupportDialogs.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.SupportDialogs.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinListView.v21.2.dll" Guid="00bf44aa-414d-435c-830a-258c1af2b25a">
+			  <File Id="Infragistics4.Win.UltraWinListView.v21.2.dll" Name="Infragistics4.Win.UltraWinListView.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinListView.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinCalcManager.v21.2.FormulaBuilder.dll" Guid="ec46fd31-8a0c-4d49-9ba4-2ea378a8383a">
+			  <File Id="Infragistics4.Win.UltraWinCalcManager.v21.2.FormulaBuilder.dll" Name="Infragistics4.Win.UltraWinCalcManager.v21.2.FormulaBuilder.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinCalcManager.v21.2.FormulaBuilder.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinCalcManager.v21.2.dll" Guid="8b16d8c5-c265-45b4-852e-e52963aa1eb1">
+			  <File Id="Infragistics4.Win.UltraWinCalcManager.v21.2.dll" Name="Infragistics4.Win.UltraWinCalcManager.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinCalcManager.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinChart.v21.2.dll" Guid="32c3f1bb-7c5a-4fc1-8524-75fcea697e98">
+			  <File Id="Infragistics4.Win.UltraWinChart.v21.2.dll" Name="Infragistics4.Win.UltraWinChart.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinChart.v21.2.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Accounts.dll" Guid="c5baba6e-3982-4ca2-8185-328f7c55031b">
+			  <File Id="Sdl.ApiClientSdk.Accounts.dll" Name="Sdl.ApiClientSdk.Accounts.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Accounts.dll" />
+			</Component>
+			<Component Id="Customisation.dll" Guid="5e13e76b-bf1c-4463-b0c8-f6b715f04070">
+			  <File Id="Customisation.dll" Name="Customisation.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Customisation.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.MTConnectors.LanguageWeaver.dll" Guid="272aa20a-3ada-40a3-98fe-a5a0f47a6fc9">
+			  <File Id="Sdl.LanguagePlatform.MTConnectors.LanguageWeaver.dll" Name="Sdl.LanguagePlatform.MTConnectors.LanguageWeaver.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.MTConnectors.LanguageWeaver.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.MTConnectors.BeGlobalCommunity.dll" Guid="9c68e87c-1fed-4df2-86e9-eed8bc89bebc">
+			  <File Id="Sdl.LanguagePlatform.MTConnectors.BeGlobalCommunity.dll" Name="Sdl.LanguagePlatform.MTConnectors.BeGlobalCommunity.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.MTConnectors.BeGlobalCommunity.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.Secure.dll" Guid="df557da9-6498-4ea4-a915-e6f74f2993d5">
+			  <File Id="Sdl.TranslationStudio.Secure.dll" Name="Sdl.TranslationStudio.Secure.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.Secure.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.StudioKeyManagement.dll" Guid="3b2e1ff6-85aa-4e07-a3c7-e549ba958016">
+			  <File Id="Sdl.ApiClientSdk.StudioKeyManagement.dll" Name="Sdl.ApiClientSdk.StudioKeyManagement.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.StudioKeyManagement.dll" />
+			</Component>
+			<Component Id="Sdl.TranslationStudio.LanguageCloud.dll" Guid="1eb8dbdb-2250-4b38-87fe-7a2216de0bc8">
+			  <File Id="Sdl.TranslationStudio.LanguageCloud.dll" Name="Sdl.TranslationStudio.LanguageCloud.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TranslationStudio.LanguageCloud.dll" />
+			</Component>
+			<Component Id="InfragisticsWPF4.Editors.v21.2.dll" Guid="8aa2f462-03a0-4283-9ad4-2895217f7cd4">
+			  <File Id="InfragisticsWPF4.Editors.v21.2.dll" Name="InfragisticsWPF4.Editors.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)InfragisticsWPF4.Editors.v21.2.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Folders.dll" Guid="dc8856d5-8383-4ad2-bcb8-c4285a6c1c90">
+			  <File Id="Sdl.ApiClientSdk.Folders.dll" Name="Sdl.ApiClientSdk.Folders.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Folders.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.StudioSubscription.dll" Guid="ba823eb6-e493-4b4c-84f4-c084dd0fafcf">
+			  <File Id="Sdl.ApiClientSdk.StudioSubscription.dll" Name="Sdl.ApiClientSdk.StudioSubscription.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.StudioSubscription.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.AccountUsers.dll" Guid="90399bec-849e-464d-ade4-e0078ad8878c">
+			  <File Id="Sdl.ApiClientSdk.AccountUsers.dll" Name="Sdl.ApiClientSdk.AccountUsers.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.AccountUsers.dll" />
+			</Component>
+			<Component Id="TradosStudio.PushNotificationProvider.dll" Guid="66270c89-3dba-4e6b-9b7e-e8dbf68a4851">
+			  <File Id="TradosStudio.PushNotificationProvider.dll" Name="TradosStudio.PushNotificationProvider.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)TradosStudio.PushNotificationProvider.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.SignalR.Client.Core.dll" Guid="c6e251eb-3400-4d4d-ac1f-6502128decc1">
+			  <File Id="Microsoft.AspNetCore.SignalR.Client.Core.dll" Name="Microsoft.AspNetCore.SignalR.Client.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.SignalR.Client.Core.dll" />
+			</Component>
+			<Component Id="System.IO.Pipelines.dll" Guid="2a9a2f12-90c8-435c-9da9-dd7359540035">
+			  <File Id="System.IO.Pipelines.dll" Name="System.IO.Pipelines.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.IO.Pipelines.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.SignalR.Common.dll" Guid="f998dbb1-6dd0-468a-8c31-ce4a4ebd6434">
+			  <File Id="Microsoft.AspNetCore.SignalR.Common.dll" Name="Microsoft.AspNetCore.SignalR.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.SignalR.Common.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Desktop.Common.dll" Guid="29f59249-d029-464f-8796-ab31c8178a44">
+			  <File Id="Sdl.MultiTerm.Desktop.Common.dll" Name="Sdl.MultiTerm.Desktop.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Desktop.Common.dll" />
+			</Component>
+			<Component Id="System.Numerics.Vectors.dll" Guid="f06027aa-5a3f-4e93-bf8a-2eac95ca04cd">
+			  <File Id="System.Numerics.Vectors.dll" Name="System.Numerics.Vectors.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Numerics.Vectors.dll" />
+			</Component>
+			<Component Id="System.Buffers.dll" Guid="92674c5a-f587-48e9-aafd-61f6ec9bebe7">
+			  <File Id="System.Buffers.dll" Name="System.Buffers.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Buffers.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Platform.ServerConnectionPlugin.dll" Guid="e4564206-70e5-4273-9553-eea2ba6df265">
+			  <File Id="Sdl.Desktop.Platform.ServerConnectionPlugin.dll" Name="Sdl.Desktop.Platform.ServerConnectionPlugin.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Platform.ServerConnectionPlugin.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Platform.Controls.dll" Guid="764521c1-9b51-432e-9897-f4f233b726c3">
+			  <File Id="Sdl.Desktop.Platform.Controls.dll" Name="Sdl.Desktop.Platform.Controls.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Platform.Controls.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Abstractions.dll" Guid="3f157609-30d3-46c6-b3f4-6699d1572435">
+			  <File Id="Microsoft.Extensions.Logging.Abstractions.dll" Name="Microsoft.Extensions.Logging.Abstractions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.Logging.Abstractions.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Platform.dll" Guid="9677c6a7-92d2-45b0-b05a-120ff4bcc4ab">
+			  <File Id="Sdl.Desktop.Platform.dll" Name="Sdl.Desktop.Platform.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Platform.dll" />
+			</Component>
+			<Component Id="Sdl.Platform.Interfaces.dll" Guid="419baef7-8103-40eb-92e0-497621d16d92">
+			  <File Id="Sdl.Platform.Interfaces.dll" Name="Sdl.Platform.Interfaces.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Platform.Interfaces.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Logger.dll" Guid="23391ac4-b67c-4e36-a02e-f96748abcd3f">
+			  <File Id="Sdl.Desktop.Logger.dll" Name="Sdl.Desktop.Logger.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Logger.dll" />
+			</Component>
+			<Component Id="log4net.dll" Guid="c9465582-a11d-48e7-a6fb-468113a4ef8b">
+			  <File Id="log4net.dll" Name="log4net.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)log4net.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.dll" Guid="4857a807-4305-4033-acf7-66757dfdcafd">
+			  <File Id="Microsoft.Extensions.Logging.dll" Name="Microsoft.Extensions.Logging.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.Logging.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Guid="eb15d944-f83a-4f13-bbfb-78d5169a6347">
+			  <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Name="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Bcl.AsyncInterfaces.dll" Guid="1fc924a6-4ee3-4021-ad51-5d7552022e35">
+			  <File Id="Microsoft.Bcl.AsyncInterfaces.dll" Name="Microsoft.Bcl.AsyncInterfaces.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Bcl.AsyncInterfaces.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Options.dll" Guid="b720d65e-10b4-4a3c-9939-c55eeeca7199">
+			  <File Id="Microsoft.Extensions.Options.dll" Name="Microsoft.Extensions.Options.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.Options.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Primitives.dll" Guid="59fc3422-8391-4e72-9124-e4af7e8beb04">
+			  <File Id="Microsoft.Extensions.Primitives.dll" Name="Microsoft.Extensions.Primitives.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.Primitives.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.DependencyInjection.dll" Guid="01d06e94-c147-42c0-968e-ffe6118deb30">
+			  <File Id="Microsoft.Extensions.DependencyInjection.dll" Name="Microsoft.Extensions.DependencyInjection.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Extensions.DependencyInjection.dll" />
+			</Component>
+			<Component Id="System.Collections.Immutable.dll" Guid="e5f864da-b43f-4580-a803-edd155ece9b2">
+			  <File Id="System.Collections.Immutable.dll" Name="System.Collections.Immutable.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Collections.Immutable.dll" />
+			</Component>
+			<Component Id="Sdl.Common.Licensing.Provider.Core.dll" Guid="a5534eff-96ed-47f4-9565-24a061cf608c">
+			  <File Id="Sdl.Common.Licensing.Provider.Core.dll" Name="Sdl.Common.Licensing.Provider.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Common.Licensing.Provider.Core.dll" />
+			</Component>
+			<Component Id="Infragistics4.Shared.v21.2.dll" Guid="fd9a2914-4698-4ce5-a951-292b268f3aa2">
+			  <File Id="Infragistics4.Shared.v21.2.dll" Name="Infragistics4.Shared.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Shared.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinGrid.v21.2.dll" Guid="fa585c6d-9743-4978-9e61-50486068d34d">
+			  <File Id="Infragistics4.Win.UltraWinGrid.v21.2.dll" Name="Infragistics4.Win.UltraWinGrid.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinGrid.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.v21.2.dll" Guid="085c6b30-01e8-439c-a0fa-bd783cc97283">
+			  <File Id="Infragistics4.Win.v21.2.dll" Name="Infragistics4.Win.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.Misc.v21.2.dll" Guid="e46c021f-0bab-409b-ad24-077e090693c6">
+			  <File Id="Infragistics4.Win.Misc.v21.2.dll" Name="Infragistics4.Win.Misc.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.Misc.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinDataSource.v21.2.dll" Guid="ee36e161-d0c7-4f12-86c1-f3ccd23823f4">
+			  <File Id="Infragistics4.Win.UltraWinDataSource.v21.2.dll" Name="Infragistics4.Win.UltraWinDataSource.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinDataSource.v21.2.dll" />
+			</Component>
+			<Component Id="System.Reactive.dll" Guid="a23d4e3b-7049-4d7b-9047-e6af96db964c">
+			  <File Id="System.Reactive.dll" Name="System.Reactive.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Reactive.dll" />
+			</Component>
+			<Component Id="SimpleInjector.dll" Guid="8b6198dc-1b7c-40ef-abc6-b1b0307df638">
+			  <File Id="SimpleInjector.dll" Name="SimpleInjector.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)SimpleInjector.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinTree.v21.2.dll" Guid="d73b4ced-4db4-417f-b7c8-fb8787f391ea">
+			  <File Id="Infragistics4.Win.UltraWinTree.v21.2.dll" Name="Infragistics4.Win.UltraWinTree.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinTree.v21.2.dll" />
+			</Component>
+			<Component Id="System.Memory.dll" Guid="a49f8c49-77d8-4ad4-8b6c-8858f3a0d6c9">
+			  <File Id="System.Memory.dll" Name="System.Memory.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Memory.dll" />
+			</Component>
+			<Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="0ccc9248-b573-4b66-9a02-4fa21b9260c5">
+			  <File Id="System.Runtime.CompilerServices.Unsafe.dll" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Runtime.CompilerServices.Unsafe.dll" />
+			</Component>
+			<Component Id="System.Threading.Tasks.Extensions.dll" Guid="1e0a36b0-35a3-44d6-9ef5-1670cf33bf48">
+			  <File Id="System.Threading.Tasks.Extensions.dll" Name="System.Threading.Tasks.Extensions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Threading.Tasks.Extensions.dll" />
+			</Component>
+			<Component Id="System.ValueTuple.dll" Guid="b3b7ffba-32e1-4fe7-bdd2-c20de5b17bd7">
+			  <File Id="System.ValueTuple.dll" Name="System.ValueTuple.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.ValueTuple.dll" />
+			</Component>
+			<Component Id="Sdl.Versioning.dll" Guid="4bd80198-3ff9-4706-9521-aee9e64d1738">
+			  <File Id="Sdl.Versioning.dll" Name="Sdl.Versioning.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Versioning.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.Core.dll" Guid="d2ec5e3e-f573-4269-be0f-9ffa1c735554">
+			  <File Id="Sdl.LanguagePlatform.Core.dll" Name="Sdl.LanguagePlatform.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.Core.dll" />
+			</Component>
+			<Component Id="Newtonsoft.Json.dll" Guid="3bd7a4bc-7eeb-4d5a-b71e-c6da9d298e66">
+			  <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Newtonsoft.Json.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Globalization.dll" Guid="6b344afc-060a-4c9a-882e-9189d973cf07">
+			  <File Id="Sdl.Core.Globalization.dll" Name="Sdl.Core.Globalization.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Globalization.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Framework.Core.dll" Guid="be933d7c-8954-4d11-b3fc-93f0ad3e1d7e">
+			  <File Id="Sdl.FileTypeSupport.Framework.Core.dll" Name="Sdl.FileTypeSupport.Framework.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Framework.Core.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Settings.dll" Guid="f3a23546-faa1-4bd7-90b5-4c2ea3d8a320">
+			  <File Id="Sdl.Core.Settings.dll" Name="Sdl.Core.Settings.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Settings.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Framework.Core.Settings.dll" Guid="d02819d9-0c93-4902-b00d-5dd20916c597">
+			  <File Id="Sdl.FileTypeSupport.Framework.Core.Settings.dll" Name="Sdl.FileTypeSupport.Framework.Core.Settings.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Framework.Core.Settings.dll" />
+			</Component>
+			<Component Id="ICSharpCode.SharpZipLib.dll" Guid="6b8850fc-88d3-48e7-a043-06113835a644">
+			  <File Id="ICSharpCode.SharpZipLib.dll" Name="ICSharpCode.SharpZipLib.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)ICSharpCode.SharpZipLib.dll" />
+			</Component>
+			<Component Id="Sdl.Core.PluginFramework.dll" Guid="2d34b62a-b7d2-494d-a75e-9a10b9456518">
+			  <File Id="Sdl.Core.PluginFramework.dll" Name="Sdl.Core.PluginFramework.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.PluginFramework.dll" />
+			</Component>
+			<Component Id="Sdl.DesktopEditor.EditorApi.dll" Guid="64e1c230-de61-4009-a2e9-595d8c4fca65">
+			  <File Id="Sdl.DesktopEditor.EditorApi.dll" Name="Sdl.DesktopEditor.EditorApi.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.DesktopEditor.EditorApi.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Framework.Core.Utilities.dll" Guid="d27cdc6e-46d1-463a-b970-88c5b9b166e5">
+			  <File Id="Sdl.FileTypeSupport.Framework.Core.Utilities.dll" Name="Sdl.FileTypeSupport.Framework.Core.Utilities.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Framework.Core.Utilities.dll" />
+			</Component>
+			<Component Id="ManagedCompactEncodingDetector.dll" Guid="b9008379-4e50-4599-891e-65d12a781666">
+			  <File Id="ManagedCompactEncodingDetector.dll" Name="ManagedCompactEncodingDetector.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)ManagedCompactEncodingDetector.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinToolbars.v21.2.dll" Guid="e5c37956-9bc0-4f38-8076-2397616dee27">
+			  <File Id="Infragistics4.Win.UltraWinToolbars.v21.2.dll" Name="Infragistics4.Win.UltraWinToolbars.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinToolbars.v21.2.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Guid="2b030528-01b2-424a-b261-5340738ece1b">
+			  <File Id="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Name="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.TranslationMemoryApi.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.Lingua.dll" Guid="546fcc48-385e-4c04-8e6b-b7eacbd55ab8">
+			  <File Id="Sdl.LanguagePlatform.Lingua.dll" Name="Sdl.LanguagePlatform.Lingua.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.Lingua.dll" />
+			</Component>
+			<Component Id="Sdl.Core.LanguageProcessing.dll" Guid="4e555762-d07f-4d59-aa83-4ff9f9539a8e">
+			  <File Id="Sdl.Core.LanguageProcessing.dll" Name="Sdl.Core.LanguageProcessing.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.LanguageProcessing.dll" />
+			</Component>
+			<Component Id="NLog.dll" Guid="c34f3f32-f94d-4dd2-a8bf-a30d526bca59">
+			  <File Id="NLog.dll" Name="NLog.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)NLog.dll" />
+			</Component>
+			<Component Id="Sdl.Core.LanguageProcessing.ICU2.dll" Guid="6e503ab4-4db2-4633-b06c-6d24c8122417">
+			  <File Id="Sdl.Core.LanguageProcessing.ICU2.dll" Name="Sdl.Core.LanguageProcessing.ICU2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.LanguageProcessing.ICU2.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Framework.Implementation.dll" Guid="d0a09bad-1c35-453a-b451-7f44cf921faa">
+			  <File Id="Sdl.FileTypeSupport.Framework.Implementation.dll" Name="Sdl.FileTypeSupport.Framework.Implementation.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Framework.Implementation.dll" />
+			</Component>
+			<Component Id="System.Data.SQLite.dll" Guid="298a2882-fb87-4695-81b1-d731195e3fe0">
+			  <File Id="System.Data.SQLite.dll" Name="System.Data.SQLite.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.Data.SQLite.dll" />
+			</Component>
+			<Component Id="Sdl.Core.LanguageProcessing.Stemmers.dll" Guid="ca10b30f-cde3-413b-a130-b985698ed865">
+			  <File Id="Sdl.Core.LanguageProcessing.Stemmers.dll" Name="Sdl.Core.LanguageProcessing.Stemmers.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.LanguageProcessing.Stemmers.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.TranslationMemory.dll" Guid="702d7a36-5894-47cc-8f08-c4db84e24019">
+			  <File Id="Sdl.LanguagePlatform.TranslationMemory.dll" Name="Sdl.LanguagePlatform.TranslationMemory.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.TranslationMemory.dll" />
+			</Component>
+			<Component Id="Sdl.Core.FineGrainedAlignment.Core.dll" Guid="297a0003-578f-4c84-b76d-31b8fbabe7e6">
+			  <File Id="Sdl.Core.FineGrainedAlignment.Core.dll" Name="Sdl.Core.FineGrainedAlignment.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.FineGrainedAlignment.Core.dll" />
+			</Component>
+			<Component Id="Sdl.Core.FineGrainedAlignment.dll" Guid="939b4298-f088-4980-a4b1-d4d9e08dbbd4">
+			  <File Id="Sdl.Core.FineGrainedAlignment.dll" Name="Sdl.Core.FineGrainedAlignment.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.FineGrainedAlignment.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.Stat.dll" Guid="1f6c40a6-2884-4007-bedb-6603e8543cd5">
+			  <File Id="Sdl.LanguagePlatform.Stat.dll" Name="Sdl.LanguagePlatform.Stat.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.Stat.dll" />
+			</Component>
+			<Component Id="Npgsql.dll" Guid="d6bffb17-4bff-4ce6-a627-ada83a2d7a88">
+			  <File Id="Npgsql.dll" Name="Npgsql.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Npgsql.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.TranslationMemoryImpl.dll" Guid="2a3c52b4-003c-41b1-9f74-6793ef453b0c">
+			  <File Id="Sdl.LanguagePlatform.TranslationMemoryImpl.dll" Name="Sdl.LanguagePlatform.TranslationMemoryImpl.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.TranslationMemoryImpl.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinEditors.v21.2.dll" Guid="3df9075a-37ec-4924-8500-2ac29ae564a3">
+			  <File Id="Infragistics4.Win.UltraWinEditors.v21.2.dll" Name="Infragistics4.Win.UltraWinEditors.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinEditors.v21.2.dll" />
+			</Component>
+			<Component Id="Sdl.Core.PluginFramework.PackageSupport.dll" Guid="0e88cce7-e882-4104-b88a-c70c179e80ef">
+			  <File Id="Sdl.Core.PluginFramework.PackageSupport.dll" Name="Sdl.Core.PluginFramework.PackageSupport.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.PluginFramework.PackageSupport.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinStatusBar.v21.2.dll" Guid="a5742be5-b0ff-45e0-90c7-fe3f87773600">
+			  <File Id="Infragistics4.Win.UltraWinStatusBar.v21.2.dll" Name="Infragistics4.Win.UltraWinStatusBar.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinStatusBar.v21.2.dll" />
+			</Component>
+			<Component Id="Infragistics4.Win.UltraWinTabControl.v21.2.dll" Guid="020968c9-d697-420a-ac38-5a4f1f30a992">
+			  <File Id="Infragistics4.Win.UltraWinTabControl.v21.2.dll" Name="Infragistics4.Win.UltraWinTabControl.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Infragistics4.Win.UltraWinTabControl.v21.2.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.TranslationEngine.dll" Guid="512bb132-b874-4ec6-b555-06554ea900d8">
+			  <File Id="Sdl.ApiClientSdk.TranslationEngine.dll" Name="Sdl.ApiClientSdk.TranslationEngine.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.TranslationEngine.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.TranslationProfile.dll" Guid="78e8b973-1b18-4d90-9663-198d7d4a07e8">
+			  <File Id="Sdl.ApiClientSdk.TranslationProfile.dll" Name="Sdl.ApiClientSdk.TranslationProfile.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.TranslationProfile.dll" />
+			</Component>
+			<Component Id="System.IdentityModel.Tokens.Jwt.dll" Guid="ea7b2f20-4dfe-4ed2-9609-72d754c3d214">
+			  <File Id="System.IdentityModel.Tokens.Jwt.dll" Name="System.IdentityModel.Tokens.Jwt.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)System.IdentityModel.Tokens.Jwt.dll" />
+			</Component>
+			<Component Id="Microsoft.IdentityModel.Tokens.dll" Guid="255be2dd-1636-4088-9c50-06b002ac047e">
+			  <File Id="Microsoft.IdentityModel.Tokens.dll" Name="Microsoft.IdentityModel.Tokens.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.IdentityModel.Tokens.dll" />
+			</Component>
+			<Component Id="Microsoft.IdentityModel.Logging.dll" Guid="45022506-a073-4d5f-9b5c-e309ebd353d3">
+			  <File Id="Microsoft.IdentityModel.Logging.dll" Name="Microsoft.IdentityModel.Logging.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.IdentityModel.Logging.dll" />
+			</Component>
+			<Component Id="Microsoft.IdentityModel.JsonWebTokens.dll" Guid="63a9ec40-f070-4805-bc49-d65d014ece25">
+			  <File Id="Microsoft.IdentityModel.JsonWebTokens.dll" Name="Microsoft.IdentityModel.JsonWebTokens.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.IdentityModel.JsonWebTokens.dll" />
+			</Component>
+			<Component Id="Sdl.Terminology.TerminologyProvider.Core.dll" Guid="37727d68-af90-487d-8f48-b1fa0a2648af">
+			  <File Id="Sdl.Terminology.TerminologyProvider.Core.dll" Name="Sdl.Terminology.TerminologyProvider.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Terminology.TerminologyProvider.Core.dll" />
+			</Component>
+			<Component Id="Sdl.Commute.Client.dll" Guid="4744bb58-7c10-4fb5-9008-3ef4a290ae5d">
+			  <File Id="Sdl.Commute.Client.dll" Name="Sdl.Commute.Client.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Commute.Client.dll" />
+			</Component>
+			<Component Id="Sdl.StudioServer.ProjectServer.Contracts.dll" Guid="6038a4b7-836f-4dd8-aa3b-057a648c7d91">
+			  <File Id="Sdl.StudioServer.ProjectServer.Contracts.dll" Name="Sdl.StudioServer.ProjectServer.Contracts.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.StudioServer.ProjectServer.Contracts.dll" />
+			</Component>
+			<Component Id="Sdl.Verification.Api.dll" Guid="cfd1481e-6d9e-4b9e-8cb3-482bd465ddaa">
+			  <File Id="Sdl.Verification.Api.dll" Name="Sdl.Verification.Api.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Verification.Api.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.TerminologySearch.dll" Guid="3efd1747-f6f7-4d5c-8a8a-98aa200e0a11">
+			  <File Id="Sdl.MultiTerm.Client.TerminologySearch.dll" Name="Sdl.MultiTerm.Client.TerminologySearch.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.TerminologySearch.dll" />
+			</Component>
+			<Component Id="Sdl.BestMatchService.Common.dll" Guid="344a6187-084b-460d-b759-b6c3664b6b3b">
+			  <File Id="Sdl.BestMatchService.Common.dll" Name="Sdl.BestMatchService.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.BestMatchService.Common.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Client.TerminologyProvider.dll" Guid="05123480-50e3-4b36-a64d-fad74d133dc8">
+			  <File Id="Sdl.MultiTerm.Client.TerminologyProvider.dll" Name="Sdl.MultiTerm.Client.TerminologyProvider.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Client.TerminologyProvider.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Utilities.dll" Guid="1d9460e3-9002-4e7d-a7fe-d62815d4f28a">
+			  <File Id="Sdl.MultiTerm.Core.Utilities.dll" Name="Sdl.MultiTerm.Core.Utilities.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Utilities.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Resources.dll" Guid="e66fd6fe-7fee-4e0c-a06f-5352c6cfcd7e">
+			  <File Id="Sdl.MultiTerm.Core.Resources.dll" Name="Sdl.MultiTerm.Core.Resources.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Resources.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Contracts.dll" Guid="4c9e17e4-1431-4919-b4a3-eb6788fadbd3">
+			  <File Id="Sdl.MultiTerm.Core.Contracts.dll" Name="Sdl.MultiTerm.Core.Contracts.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Contracts.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Common.dll" Guid="5c6d95b4-a334-4702-941a-8a452ce1f178">
+			  <File Id="Sdl.MultiTerm.Core.Common.dll" Name="Sdl.MultiTerm.Core.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Common.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.TMO.Interop.dll" Guid="524ec0a1-948d-4205-b871-a6298c8a6db7">
+			  <File Id="Sdl.MultiTerm.TMO.Interop.dll" Name="Sdl.MultiTerm.TMO.Interop.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.TMO.Interop.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Desktop.Platform.ServerConnectionPlugin.dll" Guid="70a4b2f1-c959-4d0d-a910-cca1b92b1421">
+			  <File Id="Sdl.MultiTerm.Desktop.Platform.ServerConnectionPlugin.dll" Name="Sdl.MultiTerm.Desktop.Platform.ServerConnectionPlugin.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Desktop.Platform.ServerConnectionPlugin.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Desktop.Platform.WPF.dll" Guid="00f92760-58a2-4b52-955b-0dbc3b386b20">
+			  <File Id="Sdl.MultiTerm.Desktop.Platform.WPF.dll" Name="Sdl.MultiTerm.Desktop.Platform.WPF.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Desktop.Platform.WPF.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Desktop.Platform.dll" Guid="49a40af7-71ce-4d87-bc62-01e885cc7415">
+			  <File Id="Sdl.MultiTerm.Desktop.Platform.dll" Name="Sdl.MultiTerm.Desktop.Platform.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Desktop.Platform.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Desktop.IntegrationApi.Extensions.dll" Guid="82fa59f7-14ae-40af-8595-42fb0e15e717">
+			  <File Id="Sdl.MultiTerm.Desktop.IntegrationApi.Extensions.dll" Name="Sdl.MultiTerm.Desktop.IntegrationApi.Extensions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Desktop.IntegrationApi.Extensions.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Versioning.dll" Guid="de899ed2-5a51-4483-a5fa-4e58e0cecac8">
+			  <File Id="Sdl.MultiTerm.Versioning.dll" Name="Sdl.MultiTerm.Versioning.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Versioning.dll" />
+			</Component>
+			<Component Id="MultiTerm.Core.Telemetry.dll" Guid="4e7af6ad-4705-4cbe-931c-cecf942cae95">
+			  <File Id="MultiTerm.Core.Telemetry.dll" Name="MultiTerm.Core.Telemetry.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)MultiTerm.Core.Telemetry.dll" />
+			</Component>
+			<Component Id="Microsoft.ApplicationInsights.dll" Guid="20dc5edb-06f1-4f26-9a7d-3e37287eb5a0">
+			  <File Id="Microsoft.ApplicationInsights.dll" Name="Microsoft.ApplicationInsights.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.ApplicationInsights.dll" />
+			</Component>
+			<Component Id="Sdl.MultiTerm.Core.Entities.dll" Guid="81b9c563-6e7f-4f36-a520-221a1b16babe">
+			  <File Id="Sdl.MultiTerm.Core.Entities.dll" Name="Sdl.MultiTerm.Core.Entities.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.MultiTerm.Core.Entities.dll" />
+			</Component>
+			<Component Id="Sdl.BestMatchServiceStudioIntegration.Common.dll" Guid="8a4d856b-b18a-4a7c-9ff3-e063be0c3410">
+			  <File Id="Sdl.BestMatchServiceStudioIntegration.Common.dll" Name="Sdl.BestMatchServiceStudioIntegration.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.BestMatchServiceStudioIntegration.Common.dll" />
+			</Component>
+			<Component Id="Sdl.ApiClientSdk.Core.dll" Guid="348819d5-4ce9-46cc-97f1-be65236c3208">
+			  <File Id="Sdl.ApiClientSdk.Core.dll" Name="Sdl.ApiClientSdk.Core.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ApiClientSdk.Core.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Processing.Alignment.Common.dll" Guid="6842c19a-1d56-4ea5-b32b-558d15a0979a">
+			  <File Id="Sdl.Core.Processing.Alignment.Common.dll" Name="Sdl.Core.Processing.Alignment.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Processing.Alignment.Common.dll" />
+			</Component>
+			<Component Id="Crc32C.NET.dll" Guid="583c0695-f873-45d5-ba99-1347fbef3d91">
+			  <File Id="Crc32C.NET.dll" Name="Crc32C.NET.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Crc32C.NET.dll" />
+			</Component>
+			<Component Id="Sdl.TmService.Sdk.dll" Guid="b2ab52f9-2f32-4017-b46c-17650a942a82">
+			  <File Id="Sdl.TmService.Sdk.dll" Name="Sdl.TmService.Sdk.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.TmService.Sdk.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Bcm.BcmModel.dll" Guid="f4b5924d-224c-459a-9248-28bf7f5daa21">
+			  <File Id="Sdl.Core.Bcm.BcmModel.dll" Name="Sdl.Core.Bcm.BcmModel.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Bcm.BcmModel.dll" />
+			</Component>
+			<Component Id="Microsoft.AspNetCore.JsonPatch.dll" Guid="ce7b9cb2-2458-4387-9de4-5ee9fb544dc3">
+			  <File Id="Microsoft.AspNetCore.JsonPatch.dll" Name="Microsoft.AspNetCore.JsonPatch.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.AspNetCore.JsonPatch.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Bcm.BcmConverters.dll" Guid="233bf567-d1ce-4d75-9c90-5cd34a450ea2">
+			  <File Id="Sdl.Core.Bcm.BcmConverters.dll" Name="Sdl.Core.Bcm.BcmConverters.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Bcm.BcmConverters.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Bcm.Common.dll" Guid="26cf1db1-e2e8-4bd6-99bb-1cd744349081">
+			  <File Id="Sdl.Core.Bcm.Common.dll" Name="Sdl.Core.Bcm.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Bcm.Common.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Bcm.BcmModel.Extensions.dll" Guid="cfc83e09-7430-4ff4-8fcb-a6f17d78fb49">
+			  <File Id="Sdl.Core.Bcm.BcmModel.Extensions.dll" Name="Sdl.Core.Bcm.BcmModel.Extensions.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Bcm.BcmModel.Extensions.dll" />
+			</Component>
+			<Component Id="Sdl.FileTypeSupport.Filters.Processors.dll" Guid="f0e253cc-1ad1-4d52-8dd1-7c08a30864c3">
+			  <File Id="Sdl.FileTypeSupport.Filters.Processors.dll" Name="Sdl.FileTypeSupport.Filters.Processors.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.FileTypeSupport.Filters.Processors.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.TranslationMemoryTools.dll" Guid="5e821ef4-fa48-4ee9-b6ef-53d7c3fd7114">
+			  <File Id="Sdl.LanguagePlatform.TranslationMemoryTools.dll" Name="Sdl.LanguagePlatform.TranslationMemoryTools.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.TranslationMemoryTools.dll" />
+			</Component>
+			<Component Id="Sdl.LanguagePlatform.IO.dll" Guid="b6b63713-0d3b-4d53-bf40-64c70ae510ae">
+			  <File Id="Sdl.LanguagePlatform.IO.dll" Name="Sdl.LanguagePlatform.IO.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.LanguagePlatform.IO.dll" />
+			</Component>
+			<Component Id="Sdl.ProjectApi.dll" Guid="e2bb1ecd-a296-44f1-8403-7b3a6444cc73">
+			  <File Id="Sdl.ProjectApi.dll" Name="Sdl.ProjectApi.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.ProjectApi.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Common.dll" Guid="8f6067da-ce28-4391-9886-0371feef87d7">
+			  <File Id="Sdl.Desktop.Common.dll" Name="Sdl.Desktop.Common.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Common.dll" />
+			</Component>
+			<Component Id="Microsoft.WindowsAPICodePack.Shell.dll" Guid="dcce2ab2-39dc-46fd-b773-d862de251d51">
+			  <File Id="Microsoft.WindowsAPICodePack.Shell.dll" Name="Microsoft.WindowsAPICodePack.Shell.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.WindowsAPICodePack.Shell.dll" />
+			</Component>
+			<Component Id="SDL.ApiClientSDK.GS.dll" Guid="0234f942-d81f-4c9b-ad9a-bc9deaf85e3f">
+			  <File Id="SDL.ApiClientSDK.GS.dll" Name="SDL.ApiClientSDK.GS.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)SDL.ApiClientSDK.GS.dll" />
+			</Component>
+			<Component Id="Sdl.Enterprise2.Platform.Contracts.dll" Guid="a346d136-f0ee-412a-a551-b098a2515ccb">
+			  <File Id="Sdl.Enterprise2.Platform.Contracts.dll" Name="Sdl.Enterprise2.Platform.Contracts.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Enterprise2.Platform.Contracts.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Processing.Alignment.dll" Guid="c457655b-7443-42a2-8fec-7740f034a830">
+			  <File Id="Sdl.Core.Processing.Alignment.dll" Name="Sdl.Core.Processing.Alignment.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Processing.Alignment.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Processing.Processors.Storage.dll" Guid="3f2e817a-0a4e-46f0-8435-14b58cc3ccc5">
+			  <File Id="Sdl.Core.Processing.Processors.Storage.dll" Name="Sdl.Core.Processing.Processors.Storage.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Processing.Processors.Storage.dll" />
+			</Component>
+			<Component Id="Sdl.Core.Processing.Alignment.Api.dll" Guid="abb69ead-3167-479d-b533-f73227e18539">
+			  <File Id="Sdl.Core.Processing.Alignment.Api.dll" Name="Sdl.Core.Processing.Alignment.Api.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.Processing.Alignment.Api.dll" />
+			</Component>
+			<Component Id="Sdl.Core.TM.ImportExport.dll" Guid="eea50025-004f-43f0-92a5-ed3f6de832dd">
+			  <File Id="Sdl.Core.TM.ImportExport.dll" Name="Sdl.Core.TM.ImportExport.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Core.TM.ImportExport.dll" />
+			</Component>
+			<Component Id="Sdl.Enterprise2.MultiTerm.Client.dll" Guid="80d1d8a0-b40b-4045-8942-a181f6c00907">
+			  <File Id="Sdl.Enterprise2.MultiTerm.Client.dll" Name="Sdl.Enterprise2.MultiTerm.Client.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Enterprise2.MultiTerm.Client.dll" />
+			</Component>
+			<Component Id="Microsoft.Xaml.Behaviors.dll" Guid="cb286710-9ace-4c20-849b-0dd98bf18ba4">
+			  <File Id="Microsoft.Xaml.Behaviors.dll" Name="Microsoft.Xaml.Behaviors.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.Xaml.Behaviors.dll" />
+			</Component>
+			<Component Id="Microsoft.WindowsAPICodePack.dll" Guid="39733722-edb5-4bf7-8d15-b88e5e1a65eb">
+			  <File Id="Microsoft.WindowsAPICodePack.dll" Name="Microsoft.WindowsAPICodePack.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Microsoft.WindowsAPICodePack.dll" />
+			</Component>
+			<Component Id="InfragisticsWPF4.Controls.Editors.XamColorPicker.v21.2.dll" Guid="aa823f11-d302-42ee-9be5-ed184cc876de">
+			  <File Id="InfragisticsWPF4.Controls.Editors.XamColorPicker.v21.2.dll" Name="InfragisticsWPF4.Controls.Editors.XamColorPicker.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)InfragisticsWPF4.Controls.Editors.XamColorPicker.v21.2.dll" />
+			</Component>
+			<Component Id="InfragisticsWPF4.v21.2.dll" Guid="2cf21d04-057c-4db6-9a8c-0509f219672c">
+			  <File Id="InfragisticsWPF4.v21.2.dll" Name="InfragisticsWPF4.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)InfragisticsWPF4.v21.2.dll" />
+			</Component>
+			<Component Id="InfragisticsWPF4.Controls.Editors.XamSlider.v21.2.dll" Guid="57ad53c1-57fa-4449-8fab-228dd9549e41">
+			  <File Id="InfragisticsWPF4.Controls.Editors.XamSlider.v21.2.dll" Name="InfragisticsWPF4.Controls.Editors.XamSlider.v21.2.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)InfragisticsWPF4.Controls.Editors.XamSlider.v21.2.dll" />
+			</Component>
+			<Component Id="Sdl.Desktop.Platform.WPF.dll" Guid="909c402a-3f88-4f6e-a9b6-7e0fa5e482e2">
+			  <File Id="Sdl.Desktop.Platform.WPF.dll" Name="Sdl.Desktop.Platform.WPF.dll" Source="$(var.Sdl.Community.SplitMergeUIWix_TargetDir)Sdl.Desktop.Platform.WPF.dll" />
+			</Component>
 
 		</ComponentGroup>
 	</Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Trados_files" Directory="Trados">
+    </ComponentGroup>
+  </Fragment>
 </Wix>
