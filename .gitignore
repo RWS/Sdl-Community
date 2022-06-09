@@ -231,6 +231,7 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /AmazonTranslateTradosPlugin/Properties/launchSettings.json
 /ApplyTMTemplate/Sdl.Community.ApplyTMTemplate/Properties/launchSettings.json
 /CopyTags/CopyTags/Properties/launchSettings.json
+/SDLXLIFFSplitMerge/SplitSDLXLIFF/Properties/launchSettings.json
 /InvoiceAndQuotes/Sdl.Community.InvoiceAndQuotes.Integration/Properties/launchSettings.json
 /SDLDataProtectionSuite/SDLDataProtectionSuite/Properties/launchSettings.json
 /SDLTMRepair/SDLTMRepair/Properties/launchSettings.json
