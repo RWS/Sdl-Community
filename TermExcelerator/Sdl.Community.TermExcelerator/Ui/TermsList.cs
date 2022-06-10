@@ -28,6 +28,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 		public TermsList(TerminologyProviderExcel terminologyProviderExcel) : this()
 		{
 			_terminologyProviderExcel = terminologyProviderExcel;
+
 			_terms = _terminologyProviderExcel.Terms;
 			var uri = _terminologyProviderExcel.Uri;
 
@@ -42,6 +43,8 @@ namespace Sdl.Community.TermExcelerator.Ui
 			_transformerService = new EntryTransformerService(parser);
 
 			_excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, _transformerService);
+			_terminologyProviderExcel.TermsLoaded += SetTerms;
+			SetTerms(_terminologyProviderExcel.Terms);
 		}
 
 		public void SetTerms(List<ExcelEntry> terms)
@@ -130,18 +133,8 @@ namespace Sdl.Community.TermExcelerator.Ui
 
 		private void AddTermInternal(string source, string target)
 		{
-			var excelTerm = new ExcelTerm
-			{
-				SourceCulture = _providerSettings.SourceLanguage,
-				TargetCulture = _providerSettings.TargetLanguage,
-				Source = source,
-				Target = target
-			};
-			AddTermInternal(excelTerm);
-		}
+			var excelTerm = GetExcelTerm(source, target);
 
-		private void AddTermInternal(ExcelTerm excelTerm)
-		{
 			try
 			{
 				if (_providerSettings.IsReadOnly)
@@ -168,8 +161,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 					IsDirty = true
 
 				};
-
-				sourceListView.AddObject(excelEntry);
+				AddToInternalList(excelEntry);
 				JumpToTerm(excelEntry);
 			}
 			catch (Exception ex)
@@ -177,6 +169,22 @@ namespace Sdl.Community.TermExcelerator.Ui
 				Log.Logger.Error($"AddTermInternal method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
+		}
+
+		private ExcelTerm GetExcelTerm(string source, string target)
+		{
+			return new ExcelTerm
+			{
+				SourceCulture = _providerSettings.SourceLanguage,
+				TargetCulture = _providerSettings.TargetLanguage,
+				Source = source,
+				Target = target
+			};
+		}
+
+		private void AddToInternalList(ExcelEntry excelEntry)
+		{
+			sourceListView.AddObject(excelEntry);
 		}
 
 		public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
@@ -242,7 +250,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 				}
 				else
 				{
-					MessageBox.Show(@"Taget selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(@"Target selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
 			catch (Exception ex)

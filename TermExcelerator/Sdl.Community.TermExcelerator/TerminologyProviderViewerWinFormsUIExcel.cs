@@ -27,7 +27,6 @@ namespace Sdl.Community.TermExcelerator
 				JumpToTermAction += _control.JumpToTerm;
 				AddAndEditAction += _control.AddAndEdit;
 				AddTermAction += _control.AddTerm;
-				_terminologyProvider.TermsLoaded += _control.SetTerms;
 
 				return _control;
 			}
