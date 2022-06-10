@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Sdl.Community.TermExcelerator.Model;
 using Sdl.Community.TermExcelerator.Services.Interfaces;
@@ -16,6 +17,51 @@ namespace Sdl.Community.TermExcelerator.Services
         {
             _parser = parser;
         }
+
+		private ExcelTerm GetExcelTerm(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLamguage)
+		{
+			return new ExcelTerm
+			{
+				SourceCulture = sourceLanguage,
+				TargetCulture = targetLamguage,
+				Source = source,
+				Target = target
+			};
+		}
+
+		public ExcelEntry CreateExcelEntry(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLanguage, int id = 0)
+		{
+			var excelTerm = GetExcelTerm(source, target, sourceLanguage, targetLanguage);
+
+			var entryLanguages = CreateEntryLanguages(excelTerm);
+
+			var excelEntry = new ExcelEntry
+			{
+				Id = id,
+				Fields = new List<IEntryField>(),
+				Languages = entryLanguages,
+				SearchText = excelTerm.Source,
+				IsDirty = true
+
+			};
+
+			return excelEntry;
+		}
+		
+		public ExcelEntry CreateExcelEntry(ExcelTerm excelTerm, int id = 0)
+		{
+			var entryLanguages = CreateEntryLanguages(excelTerm);
+
+			var excelEntry = new ExcelEntry
+			{
+				Id = id,
+				Fields = new List<IEntryField>(),
+				Languages = entryLanguages,
+				SearchText = excelTerm.Source
+			};
+
+			return excelEntry;
+		}
 
         public IList<IEntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm)
         {

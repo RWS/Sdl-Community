@@ -24,10 +24,6 @@ namespace Sdl.Community.TermExcelerator
 					BackColor = Color.White
 				};
 
-				JumpToTermAction += _control.JumpToTerm;
-				AddAndEditAction += _control.AddAndEdit;
-				AddTermAction += _control.AddTerm;
-
 				return _control;
 			}
 		}
@@ -40,12 +36,12 @@ namespace Sdl.Community.TermExcelerator
 
 		public void JumpToTerm(IEntry entry)
 		{
-			JumpToTermAction?.Invoke(entry);
+			_control?.JumpToTerm(entry);
 		}
 
 		public void AddTerm(string source, string target)
 		{
-			AddTermAction?.Invoke(source, target);
+			_control?.AddTerm(source, target);
 		}
 
 		public void EditTerm(IEntry term)
@@ -55,12 +51,13 @@ namespace Sdl.Community.TermExcelerator
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
-			var dataGrid = new ExcelDataGrid
+			var dataGrid = new ExcelData
 			{
 				Term = target,
 				Approved = null
 			};
-			AddAndEditAction?.Invoke(term, dataGrid);
+
+			_control?.AddAndEdit(term, dataGrid);
 		}
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
@@ -77,8 +74,5 @@ namespace Sdl.Community.TermExcelerator
 		public IEntry SelectedTerm { get; set; }
 		public event EventHandler TermChanged;
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
-		public event Action<IEntry> JumpToTermAction;
-		public event Action<IEntry, ExcelDataGrid> AddAndEditAction;
-		public event Action<string, string> AddTermAction;
 	}
 }

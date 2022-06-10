@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using OfficeOpenXml;
 using Sdl.Community.TermExcelerator.Model;
 using Sdl.Community.TermExcelerator.Services.Interfaces;
@@ -19,6 +20,8 @@ namespace Sdl.Community.TermExcelerator.Services
         {
 	        _providerSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings));
         }
+
+
 
         public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
         {
@@ -39,9 +42,30 @@ namespace Sdl.Community.TermExcelerator.Services
             return result;
         }
 
-        public async Task AddOrUpdateTerm(int entryId,ExcelTerm excelTerm)
+		private bool IsExcelFileWritable(bool onlyReadOnly = false)
+		{
+			if (_providerSettings.IsReadOnly)
+			{
+				MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
+				return false;
+			}
+			if (!onlyReadOnly && !_providerSettings.IsFileReady())
+			{
+				MessageBox.Show(
+					@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
+					@"Excel file is used by another process",
+					MessageBoxButtons.OK);
+				return false;
+			}
+
+			return true;
+		}
+
+		public async Task AddOrUpdateTerm(int entryId,ExcelTerm excelTerm)
         {
-            using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+	        if (!IsExcelFileWritable()) return;
+
+			using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
                 if (workSheet == null) return;
@@ -66,7 +90,9 @@ namespace Sdl.Community.TermExcelerator.Services
 
         public async Task AddOrUpdateTerms( Dictionary<int,ExcelTerm> excelTerms)
         {
-            using (var excelPackage =
+	        if (!IsExcelFileWritable()) return;
+
+			using (var excelPackage =
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
@@ -81,7 +107,9 @@ namespace Sdl.Community.TermExcelerator.Services
 
         public async Task DeleteTerm(int id)
         {
-            using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+	        if (!IsExcelFileWritable()) return;
+
+			using (var excelPackage = new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
                 if (workSheet == null) return;
@@ -112,7 +140,8 @@ namespace Sdl.Community.TermExcelerator.Services
                 if (worksheet == null) return result;
                 await Task.Run(() =>
                 {
-                    foreach (var cell in worksheet.Cells[worksheet.Dimension.Address])
+	                if (worksheet.Dimension?.Address == null) return;
+                    foreach (var cell in worksheet.Cells[worksheet.Dimension?.Address])
                     {
                         var excellCellAddress = new ExcelCellAddress(cell.Address);
 

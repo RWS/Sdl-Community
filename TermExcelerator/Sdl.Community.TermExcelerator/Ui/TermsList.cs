@@ -16,6 +16,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 		private readonly ProviderSettings _providerSettings;
 		private readonly EntryTransformerService _transformerService;
 		private List<ExcelEntry> _terms = new List<ExcelEntry>();
+		private bool _listChanged;
 		private readonly TerminologyProviderExcel _terminologyProviderExcel;
 
 		public static readonly Log Log = Log.Instance;
@@ -45,6 +46,22 @@ namespace Sdl.Community.TermExcelerator.Ui
 			_excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, _transformerService);
 			_terminologyProviderExcel.TermsLoaded += SetTerms;
 			SetTerms(_terminologyProviderExcel.Terms);
+
+			sourceListView.CellEditFinishing += SourceListView_CellEditFinished;
+		}
+
+		private void SourceListView_CellEditFinished(object sender, CellEditEventArgs e)
+		{
+			var entries = SourceListViewEntries.Select(entry => entry.SearchText);
+			if (string.IsNullOrWhiteSpace(e.NewValue.ToString()))
+			{
+				e.Cancel = true;	
+			}
+			else if (entries.Any(entry => entry == e.NewValue.ToString()))
+			{
+				MessageBox.Show(@"Cannot have two identical entries. Add the terms to the existing entry.", @"Duplicate entries", MessageBoxButtons.OK);
+				e.Cancel = true;	
+			}
 		}
 
 		public void SetTerms(List<ExcelEntry> terms)
@@ -95,7 +112,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 		{
 			try
 			{
-				var selectedItem = sourceListView.Objects.Cast<ExcelEntry>().FirstOrDefault(s => s.Id == entry.Id);
+				var selectedItem = SourceListViewEntries.FirstOrDefault(s => s.Id == entry.Id);
 
 				if (selectedItem != null)
 				{
@@ -112,55 +129,22 @@ namespace Sdl.Community.TermExcelerator.Ui
 			}
 		}
 
-		public void AddTerm(string source, string target)
+		public async void AddTerm(string source, string target)
 		{
-			if (_providerSettings.IsReadOnly)
-			{
-				MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
-				return;
-			}
-			if (!_providerSettings.IsFileReady())
-			{
-				MessageBox.Show(
-					@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-					@"Excel file is used by another process",
-					MessageBoxButtons.OK);
-				return;
-			}
+			
+
 			AddTermInternal(source, target);
-			Task.Run(Save);
+			await Save();
 		}
+
+		
 
 		private void AddTermInternal(string source, string target)
 		{
-			var excelTerm = GetExcelTerm(source, target);
-
 			try
 			{
-				if (_providerSettings.IsReadOnly)
-				{
-					MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
-					return;
-				}
-				if (!_providerSettings.IsFileReady())
-				{
-					MessageBox.Show(
-						@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-						@"Excel file is used by another process",
-						MessageBoxButtons.OK);
-					return;
-				}
-				var entryLanguages = _transformerService.CreateEntryLanguages(excelTerm);
+				var excelEntry = _transformerService.CreateExcelEntry(source, target, _providerSettings.SourceLanguage, _providerSettings.TargetLanguage);
 
-				var excelEntry = new ExcelEntry
-				{
-					Id = 0,
-					Fields = new List<IEntryField>(),
-					Languages = entryLanguages,
-					SearchText = excelTerm.Source,
-					IsDirty = true
-
-				};
 				AddToInternalList(excelEntry);
 				JumpToTerm(excelEntry);
 			}
@@ -171,120 +155,80 @@ namespace Sdl.Community.TermExcelerator.Ui
 			}
 		}
 
-		private ExcelTerm GetExcelTerm(string source, string target)
-		{
-			return new ExcelTerm
-			{
-				SourceCulture = _providerSettings.SourceLanguage,
-				TargetCulture = _providerSettings.TargetLanguage,
-				Source = source,
-				Target = target
-			};
-		}
-
 		private void AddToInternalList(ExcelEntry excelEntry)
 		{
+			var entriesSearchTexts = SourceListViewEntries.Select(e => e.SearchText);
+			if (entriesSearchTexts.Any(e => e == excelEntry.SearchText)) return;
+
 			sourceListView.AddObject(excelEntry);
+			_listChanged = true;
 		}
 
-		public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
+		public async void AddAndEdit(IEntry entry, ExcelData excelDataGrid)
 		{
-			try
+			if (!string.IsNullOrEmpty(excelDataGrid?.Term))
 			{
-				if (!string.IsNullOrEmpty(excelDataGrid?.Term))
-				{
-					if (_providerSettings.IsReadOnly)
-					{
-						MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
-						return;
-					}
-					if (!_providerSettings.IsFileReady())
-					{
-						MessageBox.Show(
-							@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-							@"Excel file is used by another process",
-							MessageBoxButtons.OK);
-						return;
-					}
-					var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
-					var selectedTerm = terms.FirstOrDefault(item => item.Id == entry.Id);
+				EditTerm(entry, excelDataGrid);
+				JumpToTerm(entry);
 
-					var excelTerm = new ExcelTerm
+				await Save();
+			}
+			else
+			{
+				MessageBox.Show(@"Target selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+		}
+
+		private void EditTerm(IEntry entry, ExcelData excelDataGrid)
+		{
+			((ExcelEntry)entry).IsDirty = true;
+
+			var terms = sourceListView.Objects?.Cast<ExcelEntry>().ToList();
+			var selectedTerm = terms.FirstOrDefault(item => item.Id == entry.Id);
+
+			var targetLanguage = selectedTerm?.Languages.Cast<ExcelEntryLanguage>()
+				.FirstOrDefault(x => !x.IsSource);
+			var exist = false;
+			if (targetLanguage != null)
+			{
+				foreach (var term in targetLanguage.Terms)
+				{
+					if (term.Value == excelDataGrid.Term)
 					{
-						SourceCulture = _providerSettings.SourceLanguage,
-						TargetCulture = _providerSettings.TargetLanguage,
-						Target = excelDataGrid.Term
+						exist = true;
+					}
+				}
+
+				if (exist == false)
+				{
+					_listChanged = true;
+					var termToAdd = new EntryTerm
+					{
+						Value = excelDataGrid.Term
 					};
-					var source = (ExcelEntry)entry;
-					source.IsDirty = true;
-					excelTerm.Source = source.SearchText;
+					targetLanguage.Terms.Add(termToAdd);
 
-					var exist = false;
-					var targetLanguage = selectedTerm?.Languages.Cast<ExcelEntryLanguage>()
-						.FirstOrDefault(x => !x.IsSource);
-
-					if (targetLanguage != null)
-					{
-						foreach (var term in targetLanguage.Terms)
-						{
-							if (term.Value == excelDataGrid.Term)
-							{
-								exist = true;
-							}
-						}
-
-						if (exist == false)
-						{
-							var termToAdd = new EntryTerm
-							{
-								Value = excelDataGrid.Term
-							};
-							targetLanguage.Terms.Add(termToAdd);
-
-							terms[entry.Id].Languages = selectedTerm.Languages;
-						}
-					}
-
-					JumpToTerm(entry);
-					Task.Run(Save);
+					var updatingTerm = terms.FirstOrDefault(x => x.Id == entry.Id);
+					updatingTerm.Languages = selectedTerm.Languages;
 				}
-				else
-				{
-					MessageBox.Show(@"Target selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Logger.Error($"AddAndEdit method: {ex.Message}\n {ex.StackTrace}");
-				Console.Write(ex);
 			}
 		}
 
-		private void confirmBtn_Click(object sender, EventArgs e)
+		private async void confirmBtn_Click(object sender, EventArgs e)
 		{
-			if (_providerSettings.IsReadOnly)
-			{
-				MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
-				return;
-			}
-			if (!_providerSettings.IsFileReady())
-			{
-				MessageBox.Show(
-					@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-					@"Excel file is used by another process",
-					MessageBoxButtons.OK);
-				return;
-			}
-			Task.Run(Save);
+			await Save();
 		}
 
 		private async Task Save()
 		{
 			try
 			{
+				if (!_listChanged) return;
+				_listChanged = false;
+
 				if (sourceListView.SelectedObject == null) return;
 				var entry = new ExcelTerm();
-				var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+				var terms = SourceListViewEntries.ToList();
 
 				var source = (ExcelEntry)sourceListView.SelectedObject;
 				if (source.Id == 0)
@@ -295,19 +239,13 @@ namespace Sdl.Community.TermExcelerator.Ui
 				var entryId = source.Id;
 				entry.Source = source.SearchText;
 
-				foreach (var cultureCast in source.Languages.Cast<ExcelEntryLanguage>())
-				{
-					if (cultureCast.IsSource)
-					{
-						entry.SourceCulture = cultureCast.Locale;
-					}
-					else
-					{
-						entry.TargetCulture = cultureCast.Locale;
-					}
-				}
+				var sourceEntryLanguages = source.Languages.Cast<ExcelEntryLanguage>().ToList();
 
-				var targetTerms = bsTarget.DataSource as List<ExcelDataGrid>;
+				var isSourceFirst = sourceEntryLanguages[0].IsSource;
+				entry.SourceCulture = sourceEntryLanguages[isSourceFirst ? 0 : 1].Locale;
+				entry.TargetCulture = sourceEntryLanguages[isSourceFirst ? 1 : 0].Locale;
+
+				var targetTerms = bsTarget.DataSource as List<ExcelData>;
 				if (targetTerms != null)
 				{
 					var termValue = string.Join(_providerSettings.Separator.ToString(), targetTerms.Select(x => x.Term));
@@ -340,9 +278,9 @@ namespace Sdl.Community.TermExcelerator.Ui
 			try
 			{
 				var rowIndex = e.ItemIndex;
-				var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+				var terms = SourceListViewEntries.ToList();
 
-				var result = new List<ExcelDataGrid>();
+				var result = new List<ExcelData>();
 				if (rowIndex == 0 && terms.Count == 0)
 				{
 					bsTarget.DataSource = result;
@@ -356,7 +294,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 
 					if (!targetCast.IsSource)
 					{
-						result.AddRange(targetCast.Terms.Select(term => new ExcelDataGrid
+						result.AddRange(targetCast.Terms.Select(term => new ExcelData
 						{
 							Term = term.Value,
 							Approved = string.Join(string.Empty, term.Fields.Select(x => x.Value))
@@ -377,19 +315,6 @@ namespace Sdl.Community.TermExcelerator.Ui
 		{
 			try
 			{
-				if (_providerSettings.IsReadOnly)
-				{
-					MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
-					return;
-				}
-				if (!_providerSettings.IsFileReady())
-				{
-					MessageBox.Show(
-						@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-						@"Excel file is used by another process",
-						MessageBoxButtons.OK);
-					return;
-				}
 				if (sourceListView.SelectedObject == null) return;
 				var source = (ExcelEntry)sourceListView.SelectedObject;
 				sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
@@ -412,20 +337,6 @@ namespace Sdl.Community.TermExcelerator.Ui
 		{
 			try
 			{
-				if (_providerSettings.IsReadOnly)
-				{
-					MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
-					return;
-				}
-				if (!_providerSettings.IsFileReady())
-				{
-					MessageBox.Show(
-						@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-						@"Excel file is used by another process",
-						MessageBoxButtons.OK);
-					return;
-				}
-
 				AddTermInternal(string.Empty, string.Empty);
 				var item = sourceListView.GetLastItemInDisplayOrder();
 
@@ -442,21 +353,13 @@ namespace Sdl.Community.TermExcelerator.Ui
 		{
 			try
 			{
-				if (!_providerSettings.IsFileReady())
-				{
-					MessageBox.Show(
-						@"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-						@"Excel file is used by another process",
-						MessageBoxButtons.OK);
-					return;
-				}
-				var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+				var terms = SourceListViewEntries.ToList();
 				//get all terms that are new or have any changes
 				var uiAddedTerms = terms.Where(x => x.IsDirty).ToList();
 				//load excel entries from file
 				await _terminologyProviderExcel.LoadEntries();
 				//load in memory the newly loaded terms
-				terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+				terms = SourceListViewEntries.ToList();
 				var maxId = 0;
 				if (terms.Count > 0)
 				{
@@ -539,6 +442,8 @@ namespace Sdl.Community.TermExcelerator.Ui
 			}
 		}
 
+		private IEnumerable<ExcelEntry> SourceListViewEntries => sourceListView.Objects.Cast<ExcelEntry>();
+
 		private void sourceListView_CellEditFinished(object sender, CellEditEventArgs e)
 		{
 			var textBox = e.Control as CustomTabTextBox;
@@ -574,7 +479,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 		private void bsTarget_CurrentItemChanged(object sender, EventArgs e)
 		{
 			if (bsTarget.Count == 0) return;
-			var currentSynonimEntry = bsTarget.Current as ExcelDataGrid;
+			var currentSynonimEntry = bsTarget.Current as ExcelData;
 			if (currentSynonimEntry == null) return;
 			var excelEntry = sourceListView.SelectedObject as ExcelEntry;
 
@@ -587,7 +492,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			if (targetTerm == null)
 			{
 				targetEntryLanguage.Terms.Clear();
-				var targetSynonims = bsTarget.DataSource as List<ExcelDataGrid>;
+				var targetSynonims = bsTarget.DataSource as List<ExcelData>;
 				if (targetSynonims != null)
 					foreach (var targetSynonim in targetSynonims)
 					{
