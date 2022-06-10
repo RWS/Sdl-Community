@@ -5,6 +5,6 @@ namespace Sdl.Community.TermExcelerator.Model
 {
 	public interface IExcelEntry : IEntry, IEquatable<ExcelEntry>
 	{
-        string SearchText { get; set; }
-    }
+		string SearchText { get; set; }
+	}
 }

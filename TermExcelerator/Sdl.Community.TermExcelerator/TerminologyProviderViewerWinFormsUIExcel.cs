@@ -11,8 +11,12 @@ namespace Sdl.Community.TermExcelerator
 	[TerminologyProviderViewerWinFormsUI]
 	public class TerminologyProviderViewerWinFormsUIExcel : ITerminologyProviderViewerWinFormsUI
 	{
-		private TerminologyProviderExcel _terminologyProvider;
 		private TermsList _control;
+		private TerminologyProviderExcel _terminologyProvider;
+
+		public event EventHandler<EntryEventArgs> SelectedTermChanged;
+
+		public event EventHandler TermChanged;
 
 		public Control Control
 		{
@@ -28,26 +32,9 @@ namespace Sdl.Community.TermExcelerator
 			}
 		}
 
+		public bool Initialized => true;
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri.Scheme == "excelglossary";
-		}
-
-		public void JumpToTerm(IEntry entry)
-		{
-			_control?.JumpToTerm(entry);
-		}
-
-		public void AddTerm(string source, string target)
-		{
-			_control?.AddTerm(source, target);
-		}
-
-		public void EditTerm(IEntry term)
-		{
-
-		}
+		public IEntry SelectedTerm { get; set; }
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
@@ -60,9 +47,23 @@ namespace Sdl.Community.TermExcelerator
 			_control?.AddAndEdit(term, dataGrid);
 		}
 
+		public void AddTerm(string source, string target)
+		{
+			_control?.AddTerm(source, target);
+		}
+
+		public void EditTerm(IEntry term)
+		{
+		}
+
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
 		{
 			_terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
+		}
+
+		public void JumpToTerm(IEntry entry)
+		{
+			_control?.JumpToTerm(entry);
 		}
 
 		public void Release()
@@ -70,9 +71,9 @@ namespace Sdl.Community.TermExcelerator
 			_terminologyProvider = null;
 		}
 
-		public bool Initialized => true;
-		public IEntry SelectedTerm { get; set; }
-		public event EventHandler TermChanged;
-		public event EventHandler<EntryEventArgs> SelectedTermChanged;
+		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+		{
+			return terminologyProviderUri.Scheme == "excelglossary";
+		}
 	}
 }
