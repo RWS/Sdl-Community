@@ -107,12 +107,12 @@ namespace Sdl.Community.TermExcelerator.Services
 			return excelEntry;
 		}
 
-		private ExcelTerm GetExcelTerm(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLamguage)
+		public ExcelTerm GetExcelTerm(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			return new ExcelTerm
 			{
 				SourceCulture = sourceLanguage,
-				TargetCulture = targetLamguage,
+				TargetCulture = targetLanguage,
 				Source = source,
 				Target = target
 			};

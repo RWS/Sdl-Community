@@ -16,7 +16,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 		{
 			InitializeComponent();
 		}
-
+		
 		protected override void OnLoad(EventArgs e)
 		{
 			sourceBox.Text = @"A";

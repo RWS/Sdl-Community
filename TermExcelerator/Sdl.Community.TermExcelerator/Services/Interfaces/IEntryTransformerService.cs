@@ -16,5 +16,6 @@ namespace Sdl.Community.TermExcelerator.Services.Interfaces
 		ExcelEntry CreateExcelEntry(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLanguage, int id = 0);
 
 		ExcelEntry CreateExcelEntry(ExcelTerm excelTerm, int id = 0);
+		ExcelTerm GetExcelTerm(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLanguage);
 	}
 }
