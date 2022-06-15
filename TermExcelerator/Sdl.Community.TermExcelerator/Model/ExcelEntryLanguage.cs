@@ -12,5 +12,5 @@ namespace Sdl.Community.TermExcelerator.Model
         public IEntry ParentEntry { get; set; }
         public IList<IEntryField> Fields { get; set; }
         public IList<IEntryTerm> Terms { get; set; }
-    }
+	}
 }

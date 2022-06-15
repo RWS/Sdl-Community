@@ -1,9 +1,8 @@
-﻿using System;
-using Sdl.Terminology.TerminologyProvider.Core;
+﻿using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.TermExcelerator.Model
 {
-	public interface IExcelEntry : IEntry, IEquatable<ExcelEntry>
+	public interface IExcelEntry : IEntry
 	{
 		string SearchText { get; set; }
 	}

@@ -7,6 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.TermExcelerator</RootNamespace>
     <AssemblyName>Sdl.Community.TermExcelerator</AssemblyName>
@@ -111,7 +112,6 @@
     <Compile Include="Model\IExcelEntry.cs" />
     <Compile Include="Model\IExcelEntryLanguage.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
-    <Compile Include="Model\TerminologyEntryIndex.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

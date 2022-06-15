@@ -188,8 +188,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			{
 				var approvedField =
 					targetTerm.Fields.FirstOrDefault(x => x.Name.Equals(EntryTransformerService.ApprovedFieldName));
-				if (approvedField == null ||
-					approvedField.Value.Equals(currentSynonimEntry.Approved, StringComparison.InvariantCultureIgnoreCase))
+				if (approvedField != null && approvedField.Value.Equals(currentSynonimEntry.Approved, StringComparison.InvariantCultureIgnoreCase))
 					return;
 				targetTerm.Fields.Clear();
 				targetTerm.Fields.Add(new EntryField
@@ -206,92 +205,31 @@ namespace Sdl.Community.TermExcelerator.Ui
 			try
 			{
 				var terms = SourceListViewEntries.ToList();
-				//get all terms that are new or have any changes
 				var uiAddedTerms = terms.Where(x => x.IsDirty).ToList();
-				//load excel entries from file
-				await _terminologyProviderExcel.LoadEntries();
-				//load in memory the newly loaded terms
-				terms = SourceListViewEntries.ToList();
-				var maxId = 0;
-				if (terms.Count > 0)
-				{
-					maxId = terms.Max(x => x.Id);
-				}
-				var termsToBeSaved = new Dictionary<int, ExcelTerm>();
-				foreach (var newTerm in uiAddedTerms)
-				{
-					var ignoreTerm = false;
-					if (newTerm.Id == 0)
-					{
-						//if we have newly added term then the id is 0 so we need to
-						//assign a new id which is the max row numbers
-						maxId++;
-						newTerm.Id = maxId;
-						newTerm.IsDirty = false;
-						terms.Add(newTerm);
-					}
-					else
-					{
-						//if we have an existing term that has some changes then we
-						//need to look into the newly loaded from excel terms
-						// and see if we have the same terms
-						var existingTerms = terms.Where(
-								x => x.SearchText.Equals(newTerm.SearchText, StringComparison.InvariantCultureIgnoreCase))
-							.ToList();
+				AssignIdsToNewTerms(terms, uiAddedTerms);
 
-						foreach (var existingTerm in existingTerms)
-						{
-							if (existingTerm.Id != newTerm.Id)
-							{
-								//if we found terms that have the same text and they are coming
-								//from excel we ignore the changes made in the viewer (lose them)
-								ignoreTerm = true;
-								continue;
-							}
-							//we merge the terms from excel with the ones from memory
-							newTerm.IsDirty = false;
-
-							var existingTargetLanguage =
-								existingTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
-							var newTargetLanguage =
-								newTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
-							if (newTargetLanguage != null)
-							{
-								foreach (
-									var newTargetTerm in
-									newTargetLanguage.Terms.Where(newTargetTerm =>
-									{
-										return existingTargetLanguage != null && !existingTargetLanguage.Terms.Any(
-												   x =>
-													   x.Value.Equals(newTargetTerm.Value,
-														   StringComparison.InvariantCultureIgnoreCase));
-									}))
-								{
-									existingTargetLanguage?.Terms.Add(newTargetTerm);
-								}
-								//we want to save in the excel the merge result so we need to override the value to be saved
-								if (existingTargetLanguage != null)
-								{
-									newTargetLanguage.Terms = existingTargetLanguage.Terms;
-								}
-							}
-						}
-					}
-					if (!ignoreTerm)
-					{
-						termsToBeSaved.Add(newTerm.Id, newTerm.ToExcelTerm());
-					}
-				}
-				//save all the entries to excel
-				await _excelTermProviderService.AddOrUpdateEntries(termsToBeSaved);
-				SetTerms(terms);
-				JumpToTerm(terms.FirstOrDefault());
+				var excelTerms = uiAddedTerms.ToDictionary(t => t.Id, t => t.ToExcelTerm());
+				await _excelTermProviderService.AddOrUpdateEntries(excelTerms);
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"btnSync_Click method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
+		}
+
+		private static void AssignIdsToNewTerms(List<ExcelEntry> terms, List<ExcelEntry> uiAddedTerms)
+		{
+			var maxId = 0;
+			if (terms.Count > 0)
+			{
+				maxId = terms.Max(x => x.Id);
+			}
+
+			uiAddedTerms.ForEach(t =>
+			{
+				if (t.Id == 0) t.Id = ++maxId;
+			});
 		}
 
 		private async void confirmBtn_Click(object sender, EventArgs e)
@@ -364,7 +302,6 @@ namespace Sdl.Community.TermExcelerator.Ui
 				_listChanged = false;
 
 				if (sourceListView.SelectedObject == null) return;
-				var entry = new ExcelTerm();
 				var terms = SourceListViewEntries.ToList();
 
 				var source = (ExcelEntry)sourceListView.SelectedObject;
@@ -373,33 +310,23 @@ namespace Sdl.Community.TermExcelerator.Ui
 					var maxId = terms.Max(x => x.Id);
 					source.Id = maxId + 1;
 				}
-				var entryId = source.Id;
-				entry.Source = source.SearchText;
 
 				var sourceEntryLanguages = source.Languages.Cast<ExcelEntryLanguage>().ToList();
-
 				var isSourceFirst = sourceEntryLanguages[0].IsSource;
-				entry.SourceCulture = sourceEntryLanguages[isSourceFirst ? 0 : 1].Locale;
-				entry.TargetCulture = sourceEntryLanguages[isSourceFirst ? 1 : 0].Locale;
 
-				var targetTerms = bsTarget.DataSource as List<ExcelData>;
-				if (targetTerms != null)
-				{
-					var termValue = string.Join(_providerSettings.Separator.ToString(), targetTerms.Select(x => x.Term));
-					var approvedValue = string.Join(_providerSettings.Separator.ToString(),
-						targetTerms.Select(x => x.Approved));
-					entry.Target = termValue;
-					entry.Approved = approvedValue;
-				}
-				var entryLanguage = _transformerService.CreateEntryLanguages(entry);
-				var entryToUpdate = terms.Find(item => item.Id == entryId);
+				var targetTerms = (List<ExcelData>)bsTarget.DataSource;
+				var termValue = string.Join(_providerSettings.Separator.ToString(), targetTerms.Select(x => x.Term));
+				var approvedValue = string.Join(_providerSettings.Separator.ToString(),
+					targetTerms.Select(x => x.Approved));
 
-				if (entryToUpdate != null)
-				{
-					entryToUpdate.Languages = entryLanguage;
-				}
-				await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
+				var entry = _transformerService.GetExcelTerm(source.SearchText, termValue,
+					sourceEntryLanguages[isSourceFirst ? 0 : 1].Locale,
+					sourceEntryLanguages[isSourceFirst ? 1 : 0].Locale);
+				entry.Approved = approvedValue;
+
+				await _excelTermProviderService.AddOrUpdateEntry(source.Id, entry);
 				source.IsDirty = false;
+
 				_terminologyProviderExcel.Terms.Add(source);
 			}
 			catch (Exception ex)
@@ -423,7 +350,6 @@ namespace Sdl.Community.TermExcelerator.Ui
 			{
 				addBtn.Enabled = false;
 				deleteBtn.Enabled = false;
-				confirmBtn.Enabled = false;
 				sourceColumn.IsEditable = false;
 				sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.None;
 				targetGridView.AllowUserToAddRows = false;

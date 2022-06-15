@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.TermExcelerator.Model;
 using Sdl.Community.TermExcelerator.Ui;
@@ -59,6 +60,7 @@ namespace Sdl.Community.TermExcelerator
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
 		{
 			_terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
+			Task.Run(_terminologyProvider.LoadEntries);
 		}
 
 		public void JumpToTerm(IEntry entry)
@@ -68,7 +70,8 @@ namespace Sdl.Community.TermExcelerator
 
 		public void Release()
 		{
-			_terminologyProvider = null;
+			_control?.Dispose();
+			_terminologyProvider?.Dispose();
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
