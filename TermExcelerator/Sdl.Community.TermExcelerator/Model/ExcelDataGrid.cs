@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.TermExcelerator.Model
 {
-	public class ExcelDataGrid
+	public class ExcelData
     {
         public string Term { get; set; }
         public string Approved { get; set; }

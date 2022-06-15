@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.TermExcelerator.Model;
 using Sdl.Community.TermExcelerator.Ui;
@@ -11,8 +12,12 @@ namespace Sdl.Community.TermExcelerator
 	[TerminologyProviderViewerWinFormsUI]
 	public class TerminologyProviderViewerWinFormsUIExcel : ITerminologyProviderViewerWinFormsUI
 	{
-		private TerminologyProviderExcel _terminologyProvider;
 		private TermsList _control;
+		private TerminologyProviderExcel _terminologyProvider;
+
+		public event EventHandler<EntryEventArgs> SelectedTermChanged;
+
+		public event EventHandler TermChanged;
 
 		public Control Control
 		{
@@ -24,62 +29,54 @@ namespace Sdl.Community.TermExcelerator
 					BackColor = Color.White
 				};
 
-				JumpToTermAction += _control.JumpToTerm;
-				AddAndEditAction += _control.AddAndEdit;
-				AddTermAction += _control.AddTerm;
-				_terminologyProvider.TermsLoaded += _control.SetTerms;
-
 				return _control;
 			}
 		}
 
+		public bool Initialized => true;
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri.Scheme == "excelglossary";
-		}
-
-		public void JumpToTerm(IEntry entry)
-		{
-			JumpToTermAction?.Invoke(entry);
-		}
-
-		public void AddTerm(string source, string target)
-		{
-			AddTermAction?.Invoke(source, target);
-		}
-
-		public void EditTerm(IEntry term)
-		{
-
-		}
+		public IEntry SelectedTerm { get; set; }
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
-			var dataGrid = new ExcelDataGrid
+			var dataGrid = new ExcelData
 			{
 				Term = target,
 				Approved = null
 			};
-			AddAndEditAction?.Invoke(term, dataGrid);
+
+			_control?.AddAndEdit(term, dataGrid);
+		}
+
+		public void AddTerm(string source, string target)
+		{
+			_control?.AddTerm(source, target);
+		}
+
+		public void EditTerm(IEntry term)
+		{
 		}
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
 		{
 			_terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
+			Task.Run(_terminologyProvider.LoadEntries);
+		}
+
+		public void JumpToTerm(IEntry entry)
+		{
+			_control?.JumpToTerm(entry);
 		}
 
 		public void Release()
 		{
-			_terminologyProvider = null;
+			_control?.Dispose();
+			_terminologyProvider?.Dispose();
 		}
 
-		public bool Initialized => true;
-		public IEntry SelectedTerm { get; set; }
-		public event EventHandler TermChanged;
-		public event EventHandler<EntryEventArgs> SelectedTermChanged;
-		public event Action<IEntry> JumpToTermAction;
-		public event Action<IEntry, ExcelDataGrid> AddAndEditAction;
-		public event Action<string, string> AddTermAction;
+		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+		{
+			return terminologyProviderUri.Scheme == "excelglossary";
+		}
 	}
 }

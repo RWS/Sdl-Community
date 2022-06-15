@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Sdl.Community.TermExcelerator.Services;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -18,7 +17,6 @@ namespace Sdl.Community.TermExcelerator
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri,
 			ITerminologyProviderCredentialStore credentials)
 		{
-
 			TerminologyProviderExcel terminologyProvider;
 			try
 			{
@@ -34,7 +32,6 @@ namespace Sdl.Community.TermExcelerator
 
 				var termSearchService = new NormalTermSeachService(providerSettings);
 				terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
-				Task.Run(terminologyProvider.LoadEntries);
 			}
 			catch (Exception ex)
 			{

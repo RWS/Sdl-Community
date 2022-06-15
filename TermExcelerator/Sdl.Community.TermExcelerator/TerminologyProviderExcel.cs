@@ -16,7 +16,7 @@ namespace Sdl.Community.TermExcelerator
 
 		public const string ExcelUriTemplate = "excelglossary://";
 
-        public ProviderSettings ProviderSettings { get; }
+        public ProviderSettings ProviderSettings { get; set; }
         public List<ExcelEntry> Terms { get; private set; }
 		public static readonly Log Log = Log.Instance;
 
@@ -27,6 +27,11 @@ namespace Sdl.Community.TermExcelerator
 		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
 		public event Action<List<ExcelEntry>> TermsLoaded;
+
+		public override void Dispose()
+		{
+			Terms.Clear();
+		}
 
 		public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
 		{
