@@ -28,7 +28,7 @@ variables:
   value: '**/ChangeScalingBehavior.sln'
 
 - name: Version.MajorMinorPatch
-  value: 1.0.3
+  value: 2.0.0
 
 - name: Version.Year
   value: 2021
