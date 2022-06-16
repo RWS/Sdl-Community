@@ -31,7 +31,7 @@ variables:
   value: 2.0.0
 
 - name: Version.Year
-  value: 2021
+  value: 2022
 
 - name: Version.Revision
   value: $[counter(variables['Version.MajorMinorPatch'], 0)]
