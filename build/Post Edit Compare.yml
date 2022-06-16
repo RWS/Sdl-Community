@@ -2,7 +2,6 @@ trigger:
   branches:
     include:
      - master
-     - studio_2021
   paths:
     include:
      - Post Edit Compare/*
@@ -11,7 +10,6 @@ pr:
   branches:
     include:
      - master
-     - studio_2021
   paths:
     include:
      - Post Edit Compare/*
