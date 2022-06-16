@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Sdl.Community.YourProductivity.Model")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Sdl.Community.YourProductivity.Model")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
