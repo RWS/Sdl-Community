@@ -4,7 +4,11 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="FailSafeTask.xsl" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
@@ -58,6 +62,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FailSafeTask.xsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SdlCommunity.snk" />
