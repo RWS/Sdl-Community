@@ -5,7 +5,7 @@
 	<Description>Language Weaver Provider</Description>
 	<Author>Trados AppStore Team</Author>
 	<Include>
-		<File>System.Windows.Interactivity.dll</File>
+		<File>Microsoft.Xaml.Behaviors.dll</File>
 		<File>Trados.Community.Toolkit.Core.dll</File>
 		<File>Microsoft.Office.Interop.Excel.dll</File>
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>
