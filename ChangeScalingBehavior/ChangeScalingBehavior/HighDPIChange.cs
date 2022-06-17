@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
-using Sdl.Community.Toolkit.Core;
 using BrightIdeasSoftware;
 using System.IO;
+using Trados.Community.Toolkit.Core;
 
 namespace ChangeScalingBehavior
 {

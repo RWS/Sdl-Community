@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Model
 {
 	public class DocInfo
 	{

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Model;
 using File = System.IO.File;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
+namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	public class SdlxliffReader
 	{
@@ -39,6 +39,7 @@ namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
 
 			var contentReader = new XliffContentReader(projectId, documentId, filePath, targetLanguage, false, _segmentBuilder,
 				_exportOptions, _analysisBands);
+			//converter.AddBilingualProcessor(new SegmentRenumberingBilingualProcessor());
 			converter.AddBilingualProcessor(contentReader);
 
 			converter.Parse();

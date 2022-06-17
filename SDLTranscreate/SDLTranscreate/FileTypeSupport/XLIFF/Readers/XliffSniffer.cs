@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sdl.Community.Transcreate.Common;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Readers
+namespace Trados.Transcreate.FileTypeSupport.XLIFF.Readers
 {
 	public class XliffSniffer
 	{

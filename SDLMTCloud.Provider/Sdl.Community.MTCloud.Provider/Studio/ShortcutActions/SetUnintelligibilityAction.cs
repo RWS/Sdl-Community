@@ -6,7 +6,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
 	[Action(Id = "UnintelligibilityOptionId",
-		Name = "Unintelligibility",
+		Name = "Unintelligible",
 		Description =
 			"Check/Uncheck Unintelligibility option", 
 		ContextByType = typeof(EditorController))]

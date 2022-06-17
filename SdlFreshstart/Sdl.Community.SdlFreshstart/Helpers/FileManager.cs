@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using NLog;
 using Sdl.Community.SdlFreshstart.Model;
 
 namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class FileManager
 	{
-		public static readonly Log Log = Log.Instance;
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 		public static async Task BackupFiles(List<LocationDetails> foldersToBackup)
 		{
@@ -55,7 +56,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.RestoreFiles} {ex.Message}\n {ex.StackTrace}");
+				Logger.Error($"{Constants.RestoreFiles} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -79,7 +80,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		    }
 		    catch (Exception ex)
 		    {
-				Log.Logger.Error($"{Constants.FromSelectedLocations} {ex.Message}\n {ex.StackTrace}");
+			    Logger.Error($"{Constants.FromSelectedLocations} {ex.Message}\n {ex.StackTrace}");
 				throw;
 			}
 		}
@@ -90,9 +91,9 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var folder in foldersToBackup)
 				{
-					if (!Directory.Exists(folder.BackupFilePath))
+					if (!Directory.Exists(folder?.BackupFilePath))
 					{
-						if (!folder.OriginalPath.Contains("projects.xml"))
+						if (folder.OriginalPath != null && !folder.OriginalPath.Contains("projects.xml"))
 						{
 							Directory.CreateDirectory(folder.BackupFilePath);
 						}
@@ -119,7 +120,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.FromSelectedLocations} {ex.Message}\n {ex.StackTrace}");
+				Logger.Error($"{Constants.FromSelectedLocations} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -148,7 +149,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.CopyFiles} {ex.Message}\n {ex.StackTrace}");
+				Logger.Error($"{Constants.CopyFiles} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -180,7 +181,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.CheckForSubfolders} {ex.Message}\n {ex.StackTrace}");
+				Logger.Error($"{Constants.CheckForSubfolders} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -198,7 +199,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			    }
 			    catch (Exception ex)
 			    {
-					Log.Logger.Error($"{Constants.MoveToBackUp} {ex.Message}\n {ex.StackTrace}");
+				    Logger.Error($"{Constants.MoveToBackUp} {ex.Message}\n {ex.StackTrace}");
 				}
 			}
 	    }
@@ -215,7 +216,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			}
 			catch(Exception ex)
 			{
-				Log.Logger.Error($"{Constants.RemoveDirectoryInfo} {ex.Message}\n {ex.StackTrace}");
+				Logger.Error($"{Constants.RemoveDirectoryInfo} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 

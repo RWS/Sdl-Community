@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Article>
+  <Title>My Article</Title>
+  <Authors>
+    <Author>Mr. Foo</Author>
+    <Author>Mr. Bar</Author>
+  </Authors>
+  <Body>This is my article text.</Body>
+</Article>

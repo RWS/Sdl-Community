@@ -11,6 +11,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 	public class Xliff12SDLWriter : IXliffWriter
 	{
 		private const string NsPrefix = "sdlxliff";
+
 		private Dictionary<string, List<IComment>> Comments { get; set; }
 
 		private bool IncludeTranslations { get; set; }
@@ -19,6 +20,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		{
 			Comments = xliff.DocInfo.Comments;
 			IncludeTranslations = includeTranslations;
+
+			UpdateGenericPlaceholdersIds(xliff);
 
 			var settings = new XmlWriterSettings
 			{
@@ -63,6 +66,51 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			}
 
 			return true;
+		}
+
+		private void UpdateGenericPlaceholdersIds(Xliff xliff)
+		{
+			var lastId = 0;
+			foreach (var xliffFile in xliff.Files)
+			{
+				foreach (var transUnit in xliffFile.Body.TransUnits)
+				{
+					foreach (var segmentPair in transUnit.SegmentPairs)
+					{
+						var ids = new List<int>();
+						foreach (var element in segmentPair.Source.Elements)
+						{
+							if (element is ElementGenericPlaceholder genericPlaceholder)
+							{
+								ids.Add(++lastId);
+								genericPlaceholder.TagId = string.Format("lb{0}", lastId);
+							}
+						}
+
+						var targetLbIndex = 0;
+						foreach (var element in segmentPair.Target.Elements)
+						{
+							if (element is ElementGenericPlaceholder genericPlaceholder)
+							{
+								int id;
+								if (targetLbIndex < ids.Count)
+								{
+									id = ids[targetLbIndex];
+								}
+								else
+								{
+									ids.Add(++lastId);
+									id = lastId;
+								}
+
+								targetLbIndex++;
+
+								genericPlaceholder.TagId = string.Format("x{0}", id);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private void WriteDocInfo(Xliff xliff, XmlWriter writer)
@@ -249,6 +297,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		private void WriteSourceParagraph(XmlWriter writer, TransUnit transUnit)
 		{
 			writer.WriteStartElement("source");
+			//writer.WriteAttributeString("xml", "space", null, "preserve");
+
 			for (var index = 0; index < transUnit.SegmentPairs.Count; index++)
 			{
 				var segmentPair = transUnit.SegmentPairs[index];
@@ -305,6 +355,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 		private void WriteTargetParagraph(XmlWriter writer, TransUnit transUnit)
 		{
 			writer.WriteStartElement("target");
+			//writer.WriteAttributeString("xml", "space", null, "preserve");
 
 			foreach (var segmentPair in transUnit.SegmentPairs)
 			{
@@ -354,6 +405,18 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 				writer.WriteStartElement("ph");
 				writer.WriteAttributeString("id", placeholder.TagId);
 				writer.WriteString(placeholder.TagContent);
+				writer.WriteEndElement();
+			}
+
+			if (element is ElementGenericPlaceholder genericPlaceholder)
+			{
+				writer.WriteStartElement("x");
+				writer.WriteAttributeString("id", genericPlaceholder.TagId);
+				writer.WriteAttributeString("ctype", genericPlaceholder.CType);
+				if (!string.IsNullOrEmpty(genericPlaceholder.TextEquivalent))
+				{
+					writer.WriteAttributeString("equiv-text", genericPlaceholder.TextEquivalent);
+				}
 				writer.WriteEndElement();
 			}
 

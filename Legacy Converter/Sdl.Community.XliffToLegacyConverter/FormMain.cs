@@ -1423,11 +1423,7 @@ namespace Sdl.Community.XliffToLegacyConverter
 				DeleteFilesFromImportListView();
 		}
 
-		private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			var f = new About();
-			f.ShowDialog();
-		}
+		
 
 		private void comboBox_OuputFormat_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -1517,8 +1513,8 @@ namespace Sdl.Community.XliffToLegacyConverter
 			{
 				var openFileDialog = new OpenFileDialog
 				{
-					Filter = @"SDL Trados Studio Project Files(*.sdlproj)|*.sdlproj;",
-					Title = @"Select an SDL Trados Studio project file",
+					Filter = @"Trados Studio Project Files(*.sdlproj)|*.sdlproj;",
+					Title = @"Select an Trados Studio project file",
 					FilterIndex = 0,
 					Multiselect = true,
 					RestoreDirectory = true
@@ -1546,8 +1542,8 @@ namespace Sdl.Community.XliffToLegacyConverter
 				var openFileDialog = new OpenFileDialog();
 
 
-				openFileDialog.Filter = @"SDL Trados Studio Project Files(*.sdlproj)|*.sdlproj;";
-				openFileDialog.Title = @"Select an SDL Trados Studio project file";
+				openFileDialog.Filter = @"Trados Studio Project Files(*.sdlproj)|*.sdlproj;";
+				openFileDialog.Title = @"Select an Trados Studio project file";
 				openFileDialog.FilterIndex = 0;
 
 				openFileDialog.Multiselect = true;
@@ -1670,14 +1666,10 @@ namespace Sdl.Community.XliffToLegacyConverter
 			}
 		}
 
-		private void toolStripButton_Help_Click(object sender, EventArgs e)
-		{
-			Process.Start(@"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3280.legacy-converter");
-		}
 
 		private void help1ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Process.Start(@"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3280.legacy-converter");
+			Process.Start(@"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3280/sdlxliff-to-legacy-converter");
 		}
 	}
 }

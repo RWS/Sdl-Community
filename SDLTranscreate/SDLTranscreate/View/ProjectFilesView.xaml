@@ -1,32 +1,31 @@
-﻿<UserControl x:Class="Sdl.Community.Transcreate.View.ProjectFilesView"             
+﻿<UserControl x:Class="Trados.Transcreate.View.ProjectFilesView"             
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.Transcreate.View"
-             xmlns:controls="clr-namespace:Sdl.Community.Transcreate.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             xmlns:model="clr-namespace:Sdl.Community.Transcreate.Model"
-             xmlns:converters="clr-namespace:Sdl.Community.Transcreate.Converters"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.ViewModel"
-             xmlns:behaviours="clr-namespace:Sdl.Community.Transcreate.Behaviours"
+             xmlns:converters="clr-namespace:Trados.Transcreate.Converters"
+             xmlns:controls="clr-namespace:Trados.Transcreate.Controls"
+             xmlns:behaviours="clr-namespace:Trados.Transcreate.Behaviours"
+             xmlns:viewModel="clr-namespace:Trados.Transcreate.ViewModel"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
              mc:Ignorable="d" 			 
              d:DesignHeight="150" d:DesignWidth="650" d:DataContext="{d:DesignInstance viewModel:ProjectFilesViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/General.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ExpanderStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TreeView.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ExpanderStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
@@ -39,7 +38,9 @@
 				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
 			</Style>
 
-			<CollectionViewSource x:Key="ProjectFiles" Source="{Binding ProjectFiles}">
+			<CollectionViewSource x:Key="ProjectFiles" 
+			                      Source="{Binding ProjectFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			                      IsLiveFilteringRequested="True">
 				<CollectionViewSource.SortDescriptions>
 					<componentModel:SortDescription PropertyName="Name"/>
 				</CollectionViewSource.SortDescriptions>
@@ -124,19 +125,19 @@
 													<Setter Property="ToolTip" Value="Ready"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Export">
-													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="Source" Value="../Resources/export_small.ico"/>
 													<Setter Property="ToolTip" Value="Exported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="Import">
-													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="Source" Value="../Resources/import_small.ico"/>
 													<Setter Property="ToolTip" Value="Imported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="ExportBackTranslation">
-													<Setter Property="Source" Value="../Resources/Exported.png"/>
+													<Setter Property="Source" Value="../Resources/export_small.ico"/>
 													<Setter Property="ToolTip" Value="Exported"/>
 												</DataTrigger>
 												<DataTrigger Binding="{Binding Action}" Value="ImportBackTranslation">
-													<Setter Property="Source" Value="../Resources/Imported.png"/>
+													<Setter Property="Source" Value="../Resources/import_small.ico"/>
 													<Setter Property="ToolTip" Value="Imported"/>
 												</DataTrigger>
 											</Style.Triggers>
@@ -187,39 +188,46 @@
 					<MenuItem Header="Export files" Command="{Binding ExportFilesCommand}" 
 					          IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
-							<Image Source="../Resources/export.ico"/>
+							<Image Source="../Resources/export_small.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Import files" 
 					          Command="{Binding ImportFilesCommand}" 
 					          IsEnabled="{Binding IsProjectFileSelected}">
 						<MenuItem.Icon>
-							<Image Source="../Resources/import.ico"/>
+							<Image Source="../Resources/import_small.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Open For Translation" 
+					<MenuItem Header="Open for Translation" 
 					          Command="{Binding OpenFileForTranslationCommand}" 
-					          IsEnabled="{Binding IsSingleProjectFileSelected}">
+					          IsEnabled="{Binding CanOpenSelectedInEditor}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForTranslation.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Open For Review" 
+					<MenuItem Header="Open for Review" 
 					          Command="{Binding OpenFileForReviewCommand}"
-					          IsEnabled="{Binding IsSingleProjectFileSelected}">
+					          IsEnabled="{Binding CanOpenSelectedInEditor}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForReview.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Open For Sign-off" 
+					<MenuItem Header="Open for Sign-off" 
 					          Command="{Binding OpenFileForSignOffCommand}" 
-					          IsEnabled="{Binding IsSingleProjectFileSelected}">
+					          IsEnabled="{Binding CanOpenSelectedInEditor}">
 						<MenuItem.Icon>
 							<Image Source="../Resources/OpenForSignOff.ico"/>
 						</MenuItem.Icon>
 					</MenuItem>
-					
+					<Separator/>
+					<MenuItem Header="Create Transcreate reports for the selected files" 
+					          Command="{Binding CreateReportsFromSelectionCommand}" 
+					          IsEnabled="{Binding IsTranscreateProject}">
+						<MenuItem.Icon>
+							<Image Source="../Resources/Report.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Open folder in explorer" Command="{Binding OpenFolderCommand}" 
 					          IsEnabled="{Binding IsSingleProjectFileSelected}">

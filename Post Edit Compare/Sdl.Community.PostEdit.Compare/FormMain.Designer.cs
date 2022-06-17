@@ -30,21 +30,21 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
-            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin2 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient4 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient8 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient9 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient5 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient10 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient11 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient12 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient13 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient14 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
+            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient1 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient2 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient3 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient4 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient5 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             this.menuStrip_main = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
@@ -108,30 +108,13 @@
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.resetAllWindowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_message_1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.dockPanel_manager = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton_createComparisonReport = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_compareInViewer = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripComboBox_fileFilters = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripButton_Activate_Filters = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_filter_settings_edit = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton_ignoreEqualFiles = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_ignoreOrphansLeftSide = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_ignoreOrphansRightSide = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_ignoreDifferencesLeftSide = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_ignoreDifferencesRightSide = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton_showEmptyFolders = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_refresh = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -141,16 +124,32 @@
             this.toolStripButton_collapseCurrentFolder = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton_settings = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton_ignoreEqualFiles = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_ignoreOrphansLeftSide = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_ignoreOrphansRightSide = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_ignoreDifferencesLeftSide = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_ignoreDifferencesRightSide = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton_showEmptyFolders = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBox_fileFilters = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripButton_Activate_Filters = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_filter_settings_edit = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton_createComparisonReport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_compareInViewer = new System.Windows.Forms.ToolStripButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.menuStrip_main.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
-            this.toolStrip3.SuspendLayout();
-            this.toolStrip4.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
+            this.toolStrip4.SuspendLayout();
+            this.toolStrip3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip_main
@@ -646,7 +645,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // settingsToolStripMenuItem
@@ -714,13 +713,19 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            //this.licenseToolStripMenuItem,
-            //this.toolStripSeparator1,
-            this.aboutToolStripMenuItem,
             this.helpToolStripMenuItem1});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // helpToolStripMenuItem1
+            // 
+            this.helpToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripMenuItem1.Image")));
+            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            this.helpToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.helpToolStripMenuItem1.Text = "&Online Help";
+            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
             // licenseToolStripMenuItem
             // 
@@ -728,30 +733,11 @@
             this.licenseToolStripMenuItem.Name = "licenseToolStripMenuItem";
             this.licenseToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.licenseToolStripMenuItem.Text = "License Manager";
-            
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F1)));
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.aboutToolStripMenuItem.Text = "&About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem1
-            // 
-            this.helpToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripMenuItem1.Image")));
-            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(163, 22);
-            this.helpToolStripMenuItem1.Text = "&Online Help";
-            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
             // statusStrip1
             // 
@@ -776,7 +762,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel_manager);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1111, 460);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1111, 361);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
@@ -801,140 +787,144 @@
             this.dockPanel_manager.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
             this.dockPanel_manager.Location = new System.Drawing.Point(0, 0);
             this.dockPanel_manager.Name = "dockPanel_manager";
-            this.dockPanel_manager.Size = new System.Drawing.Size(1111, 460);
-            dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient4.StartColor = System.Drawing.SystemColors.ControlLight;
-            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
-            tabGradient8.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient8.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            autoHideStripSkin2.TabGradient = tabGradient8;
-            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
-            tabGradient9.EndColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient9.StartColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient9.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
-            dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
-            tabGradient10.EndColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient10.StartColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient10.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
-            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
-            tabGradient11.EndColor = System.Drawing.SystemColors.ActiveCaption;
-            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient11.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
-            tabGradient11.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
-            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
-            tabGradient12.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient12.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient12.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
-            dockPanelGradient6.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient6.StartColor = System.Drawing.SystemColors.ControlLight;
-            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
-            tabGradient13.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient13.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            tabGradient13.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
-            tabGradient14.EndColor = System.Drawing.Color.Transparent;
-            tabGradient14.StartColor = System.Drawing.Color.Transparent;
-            tabGradient14.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
-            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
-            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
-            this.dockPanel_manager.Skin = dockPanelSkin2;
+            this.dockPanel_manager.Size = new System.Drawing.Size(1111, 361);
+            dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
+            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
+            tabGradient1.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient1.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin1.TabGradient = tabGradient1;
+            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
+            tabGradient2.EndColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
+            dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
+            tabGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
+            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
+            tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
+            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
+            tabGradient4.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
+            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
+            tabGradient5.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient5.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient5.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
+            dockPanelGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
+            tabGradient6.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient6.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient6.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
+            tabGradient7.EndColor = System.Drawing.Color.Transparent;
+            tabGradient7.StartColor = System.Drawing.Color.Transparent;
+            tabGradient7.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
+            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
+            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
+            this.dockPanel_manager.Skin = dockPanelSkin1;
             this.dockPanel_manager.TabIndex = 0;
             // 
-            // toolStrip3
+            // toolStrip1
             // 
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(26, 26);
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton_createComparisonReport,
-            this.toolStripButton_compareInViewer});
-            this.toolStrip3.Location = new System.Drawing.Point(734, 0);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(72, 33);
-            this.toolStrip3.TabIndex = 2;
-            this.toolStrip3.Text = "toolStrip1";
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(26, 26);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton_refresh,
+            this.toolStripSeparator3,
+            this.toolStripButton_expandAll,
+            this.toolStripButton_collapseAll,
+            this.toolStripButton_expandAllCurrentFolder,
+            this.toolStripButton_collapseCurrentFolder,
+            this.toolStripSeparator2,
+            this.toolStripButton_settings});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 99);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(204, 33);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton_createComparisonReport
+            // toolStripButton_refresh
             // 
-            this.toolStripButton_createComparisonReport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_createComparisonReport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_createComparisonReport.Image")));
-            this.toolStripButton_createComparisonReport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_createComparisonReport.Name = "toolStripButton_createComparisonReport";
-            this.toolStripButton_createComparisonReport.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_createComparisonReport.Text = "Create comparison report";
-            this.toolStripButton_createComparisonReport.Click += new System.EventHandler(this.toolStripButton_createReport_Click);
+            this.toolStripButton_refresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_refresh.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_refresh.Image")));
+            this.toolStripButton_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_refresh.Name = "toolStripButton_refresh";
+            this.toolStripButton_refresh.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_refresh.Text = "Compare folders";
+            this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
             // 
-            // toolStripButton_compareInViewer
+            // toolStripSeparator3
             // 
-            this.toolStripButton_compareInViewer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_compareInViewer.Enabled = false;
-            this.toolStripButton_compareInViewer.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_compareInViewer.Image")));
-            this.toolStripButton_compareInViewer.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_compareInViewer.Name = "toolStripButton_compareInViewer";
-            this.toolStripButton_compareInViewer.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_compareInViewer.Text = "Compare in file viewer";
-            this.toolStripButton_compareInViewer.Click += new System.EventHandler(this.toolStripButton_compareInViewer_Click);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 33);
             // 
-            // toolStrip4
+            // toolStripButton_expandAll
             // 
-            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(26, 26);
-            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel1,
-            this.toolStripComboBox_fileFilters,
-            this.toolStripButton_Activate_Filters,
-            this.toolStripButton_filter_settings_edit});
-            this.toolStrip4.Location = new System.Drawing.Point(417, 0);
-            this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.Size = new System.Drawing.Size(317, 33);
-            this.toolStrip4.TabIndex = 3;
-            this.toolStrip4.Text = "File Filters";
+            this.toolStripButton_expandAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_expandAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_expandAll.Image")));
+            this.toolStripButton_expandAll.ImageTransparentColor = System.Drawing.Color.White;
+            this.toolStripButton_expandAll.Name = "toolStripButton_expandAll";
+            this.toolStripButton_expandAll.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_expandAll.Text = "Expand all folders";
+            this.toolStripButton_expandAll.ToolTipText = "Expand all folders";
+            this.toolStripButton_expandAll.Click += new System.EventHandler(this.toolStripButton_expandAll_Click);
             // 
-            // toolStripLabel1
+            // toolStripButton_collapseAll
             // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(41, 30);
-            this.toolStripLabel1.Text = "Filters:";
+            this.toolStripButton_collapseAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_collapseAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_collapseAll.Image")));
+            this.toolStripButton_collapseAll.ImageTransparentColor = System.Drawing.Color.White;
+            this.toolStripButton_collapseAll.Name = "toolStripButton_collapseAll";
+            this.toolStripButton_collapseAll.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_collapseAll.Text = "Collapse all folders";
+            this.toolStripButton_collapseAll.Click += new System.EventHandler(this.toolStripButton_collapseAll_Click);
             // 
-            // toolStripComboBox_fileFilters
+            // toolStripButton_expandAllCurrentFolder
             // 
-            this.toolStripComboBox_fileFilters.AutoSize = false;
-            this.toolStripComboBox_fileFilters.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBox_fileFilters.Name = "toolStripComboBox_fileFilters";
-            this.toolStripComboBox_fileFilters.Size = new System.Drawing.Size(200, 23);
-            this.toolStripComboBox_fileFilters.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_fileFilters_SelectedIndexChanged);
-            this.toolStripComboBox_fileFilters.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripComboBox_fileFilters_KeyPress);
-            this.toolStripComboBox_fileFilters.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_fileFilters_KeyUp);
+            this.toolStripButton_expandAllCurrentFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_expandAllCurrentFolder.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_expandAllCurrentFolder.Image")));
+            this.toolStripButton_expandAllCurrentFolder.ImageTransparentColor = System.Drawing.Color.White;
+            this.toolStripButton_expandAllCurrentFolder.Name = "toolStripButton_expandAllCurrentFolder";
+            this.toolStripButton_expandAllCurrentFolder.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_expandAllCurrentFolder.Text = "Expand all subfolders";
+            this.toolStripButton_expandAllCurrentFolder.ToolTipText = "Expand all subfolders";
+            this.toolStripButton_expandAllCurrentFolder.Click += new System.EventHandler(this.toolStripButton_expandAllCurrentFolder_Click);
             // 
-            // toolStripButton_Activate_Filters
+            // toolStripButton_collapseCurrentFolder
             // 
-            this.toolStripButton_Activate_Filters.Checked = true;
-            this.toolStripButton_Activate_Filters.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton_Activate_Filters.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_Activate_Filters.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_Activate_Filters.Image")));
-            this.toolStripButton_Activate_Filters.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_Activate_Filters.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
-            this.toolStripButton_Activate_Filters.Name = "toolStripButton_Activate_Filters";
-            this.toolStripButton_Activate_Filters.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_Activate_Filters.Text = "Activate Filters";
-            this.toolStripButton_Activate_Filters.Click += new System.EventHandler(this.toolStripButton_Activate_Filters_Click);
+            this.toolStripButton_collapseCurrentFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_collapseCurrentFolder.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_collapseCurrentFolder.Image")));
+            this.toolStripButton_collapseCurrentFolder.ImageTransparentColor = System.Drawing.Color.White;
+            this.toolStripButton_collapseCurrentFolder.Name = "toolStripButton_collapseCurrentFolder";
+            this.toolStripButton_collapseCurrentFolder.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_collapseCurrentFolder.Text = "Collapse all subfolders";
+            this.toolStripButton_collapseCurrentFolder.ToolTipText = "Collapse all subfolders";
+            this.toolStripButton_collapseCurrentFolder.Click += new System.EventHandler(this.toolStripButton_collapseCurrentFolder_Click);
             // 
-            // toolStripButton_filter_settings_edit
+            // toolStripSeparator2
             // 
-            this.toolStripButton_filter_settings_edit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_filter_settings_edit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_filter_settings_edit.Image")));
-            this.toolStripButton_filter_settings_edit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_filter_settings_edit.Name = "toolStripButton_filter_settings_edit";
-            this.toolStripButton_filter_settings_edit.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_filter_settings_edit.Text = "Edit filter settings";
-            this.toolStripButton_filter_settings_edit.Click += new System.EventHandler(this.toolStripButton_filter_settings_edit_Click);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 33);
+            // 
+            // toolStripButton_settings
+            // 
+            this.toolStripButton_settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_settings.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_settings.Image")));
+            this.toolStripButton_settings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_settings.Name = "toolStripButton_settings";
+            this.toolStripButton_settings.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_settings.Text = "Settings";
+            this.toolStripButton_settings.Click += new System.EventHandler(this.toolStripButton_settings_Click);
             // 
             // toolStrip2
             // 
@@ -948,7 +938,7 @@
             this.toolStripButton_ignoreDifferencesRightSide,
             this.toolStripSeparator5,
             this.toolStripButton_showEmptyFolders});
-            this.toolStrip2.Location = new System.Drawing.Point(207, 0);
+            this.toolStrip2.Location = new System.Drawing.Point(3, 66);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(210, 33);
             this.toolStrip2.TabIndex = 1;
@@ -1037,97 +1027,93 @@
             this.toolStripButton_showEmptyFolders.Text = "Show Empty Folders";
             this.toolStripButton_showEmptyFolders.Click += new System.EventHandler(this.toolStripButton_showEmptyFolders_Click);
             // 
-            // toolStrip1
+            // toolStrip4
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(26, 26);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton_refresh,
-            this.toolStripSeparator3,
-            this.toolStripButton_expandAll,
-            this.toolStripButton_collapseAll,
-            this.toolStripButton_expandAllCurrentFolder,
-            this.toolStripButton_collapseCurrentFolder,
-            this.toolStripSeparator2,
-            this.toolStripButton_settings});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(204, 33);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(26, 26);
+            this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.toolStripComboBox_fileFilters,
+            this.toolStripButton_Activate_Filters,
+            this.toolStripButton_filter_settings_edit});
+            this.toolStrip4.Location = new System.Drawing.Point(3, 33);
+            this.toolStrip4.Name = "toolStrip4";
+            this.toolStrip4.Size = new System.Drawing.Size(317, 33);
+            this.toolStrip4.TabIndex = 3;
+            this.toolStrip4.Text = "File Filters";
             // 
-            // toolStripButton_refresh
+            // toolStripLabel1
             // 
-            this.toolStripButton_refresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_refresh.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_refresh.Image")));
-            this.toolStripButton_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_refresh.Name = "toolStripButton_refresh";
-            this.toolStripButton_refresh.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_refresh.Text = "Compare folders";
-            this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(41, 30);
+            this.toolStripLabel1.Text = "Filters:";
             // 
-            // toolStripSeparator3
+            // toolStripComboBox_fileFilters
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 33);
+            this.toolStripComboBox_fileFilters.AutoSize = false;
+            this.toolStripComboBox_fileFilters.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBox_fileFilters.Name = "toolStripComboBox_fileFilters";
+            this.toolStripComboBox_fileFilters.Size = new System.Drawing.Size(200, 23);
+            this.toolStripComboBox_fileFilters.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_fileFilters_SelectedIndexChanged);
+            this.toolStripComboBox_fileFilters.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripComboBox_fileFilters_KeyPress);
+            this.toolStripComboBox_fileFilters.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_fileFilters_KeyUp);
             // 
-            // toolStripButton_expandAll
+            // toolStripButton_Activate_Filters
             // 
-            this.toolStripButton_expandAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_expandAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_expandAll.Image")));
-            this.toolStripButton_expandAll.ImageTransparentColor = System.Drawing.Color.White;
-            this.toolStripButton_expandAll.Name = "toolStripButton_expandAll";
-            this.toolStripButton_expandAll.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_expandAll.Text = "Expand all folders";
-            this.toolStripButton_expandAll.ToolTipText = "Expand all folders";
-            this.toolStripButton_expandAll.Click += new System.EventHandler(this.toolStripButton_expandAll_Click);
+            this.toolStripButton_Activate_Filters.Checked = true;
+            this.toolStripButton_Activate_Filters.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButton_Activate_Filters.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_Activate_Filters.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_Activate_Filters.Image")));
+            this.toolStripButton_Activate_Filters.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_Activate_Filters.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
+            this.toolStripButton_Activate_Filters.Name = "toolStripButton_Activate_Filters";
+            this.toolStripButton_Activate_Filters.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_Activate_Filters.Text = "Activate Filters";
+            this.toolStripButton_Activate_Filters.Click += new System.EventHandler(this.toolStripButton_Activate_Filters_Click);
             // 
-            // toolStripButton_collapseAll
+            // toolStripButton_filter_settings_edit
             // 
-            this.toolStripButton_collapseAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_collapseAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_collapseAll.Image")));
-            this.toolStripButton_collapseAll.ImageTransparentColor = System.Drawing.Color.White;
-            this.toolStripButton_collapseAll.Name = "toolStripButton_collapseAll";
-            this.toolStripButton_collapseAll.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_collapseAll.Text = "Collapse all folders";
-            this.toolStripButton_collapseAll.Click += new System.EventHandler(this.toolStripButton_collapseAll_Click);
+            this.toolStripButton_filter_settings_edit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_filter_settings_edit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_filter_settings_edit.Image")));
+            this.toolStripButton_filter_settings_edit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_filter_settings_edit.Name = "toolStripButton_filter_settings_edit";
+            this.toolStripButton_filter_settings_edit.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_filter_settings_edit.Text = "Edit filter settings";
+            this.toolStripButton_filter_settings_edit.Click += new System.EventHandler(this.toolStripButton_filter_settings_edit_Click);
             // 
-            // toolStripButton_expandAllCurrentFolder
+            // toolStrip3
             // 
-            this.toolStripButton_expandAllCurrentFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_expandAllCurrentFolder.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_expandAllCurrentFolder.Image")));
-            this.toolStripButton_expandAllCurrentFolder.ImageTransparentColor = System.Drawing.Color.White;
-            this.toolStripButton_expandAllCurrentFolder.Name = "toolStripButton_expandAllCurrentFolder";
-            this.toolStripButton_expandAllCurrentFolder.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_expandAllCurrentFolder.Text = "Expand all subfolders";
-            this.toolStripButton_expandAllCurrentFolder.ToolTipText = "Expand all subfolders";
-            this.toolStripButton_expandAllCurrentFolder.Click += new System.EventHandler(this.toolStripButton_expandAllCurrentFolder_Click);
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(26, 26);
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton_createComparisonReport,
+            this.toolStripButton_compareInViewer});
+            this.toolStrip3.Location = new System.Drawing.Point(78, 0);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Size = new System.Drawing.Size(72, 33);
+            this.toolStrip3.TabIndex = 2;
+            this.toolStrip3.Text = "toolStrip1";
             // 
-            // toolStripButton_collapseCurrentFolder
+            // toolStripButton_createComparisonReport
             // 
-            this.toolStripButton_collapseCurrentFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_collapseCurrentFolder.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_collapseCurrentFolder.Image")));
-            this.toolStripButton_collapseCurrentFolder.ImageTransparentColor = System.Drawing.Color.White;
-            this.toolStripButton_collapseCurrentFolder.Name = "toolStripButton_collapseCurrentFolder";
-            this.toolStripButton_collapseCurrentFolder.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_collapseCurrentFolder.Text = "Collapse all subfolders";
-            this.toolStripButton_collapseCurrentFolder.ToolTipText = "Collapse all subfolders";
-            this.toolStripButton_collapseCurrentFolder.Click += new System.EventHandler(this.toolStripButton_collapseCurrentFolder_Click);
+            this.toolStripButton_createComparisonReport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_createComparisonReport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_createComparisonReport.Image")));
+            this.toolStripButton_createComparisonReport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_createComparisonReport.Name = "toolStripButton_createComparisonReport";
+            this.toolStripButton_createComparisonReport.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_createComparisonReport.Text = "Create comparison report";
+            this.toolStripButton_createComparisonReport.Click += new System.EventHandler(this.toolStripButton_createReport_Click);
             // 
-            // toolStripSeparator2
+            // toolStripButton_compareInViewer
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 33);
-            // 
-            // toolStripButton_settings
-            // 
-            this.toolStripButton_settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_settings.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_settings.Image")));
-            this.toolStripButton_settings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_settings.Name = "toolStripButton_settings";
-            this.toolStripButton_settings.Size = new System.Drawing.Size(30, 30);
-            this.toolStripButton_settings.Text = "Settings";
-            this.toolStripButton_settings.Click += new System.EventHandler(this.toolStripButton_settings_Click);
+            this.toolStripButton_compareInViewer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_compareInViewer.Enabled = false;
+            this.toolStripButton_compareInViewer.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_compareInViewer.Image")));
+            this.toolStripButton_compareInViewer.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_compareInViewer.Name = "toolStripButton_compareInViewer";
+            this.toolStripButton_compareInViewer.Size = new System.Drawing.Size(30, 30);
+            this.toolStripButton_compareInViewer.Text = "Compare in file viewer";
+            this.toolStripButton_compareInViewer.Click += new System.EventHandler(this.toolStripButton_compareInViewer_Click);
             // 
             // imageList1
             // 
@@ -1174,14 +1160,14 @@
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
-            this.toolStrip3.ResumeLayout(false);
-            this.toolStrip3.PerformLayout();
-            this.toolStrip4.ResumeLayout(false);
-            this.toolStrip4.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
+            this.toolStrip4.ResumeLayout(false);
+            this.toolStrip4.PerformLayout();
+            this.toolStrip3.ResumeLayout(false);
+            this.toolStrip3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1219,7 +1205,6 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox_fileFilters;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStripButton toolStripButton_compareInViewer;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton toolStripButton_settings;

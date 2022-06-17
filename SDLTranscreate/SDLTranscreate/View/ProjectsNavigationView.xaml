@@ -1,31 +1,29 @@
-﻿<UserControl x:Class="Sdl.Community.Transcreate.View.ProjectsNavigationView"
+﻿<UserControl x:Class="Trados.Transcreate.View.ProjectsNavigationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.Transcreate.View"
-             xmlns:controls="clr-namespace:Sdl.Community.Transcreate.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:metroControls="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:model="clr-namespace:Sdl.Community.Transcreate.Model"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             xmlns:viewModel="clr-namespace:Sdl.Community.Transcreate.ViewModel"
-             xmlns:behaviours="clr-namespace:Sdl.Community.Transcreate.Behaviours"
+             xmlns:behaviours="clr-namespace:Trados.Transcreate.Behaviours"
+             xmlns:model="clr-namespace:Trados.Transcreate.Model"
+             xmlns:viewModel="clr-namespace:Trados.Transcreate.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ProjectsNavigationViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/General.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TreeView.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Transcreate;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockProjectInfoToolTipStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="{x:Type UserControl}">
@@ -38,18 +36,31 @@
 				<Setter Property="ContextMenu" Value="{DynamicResource TreeViewContextMenu}"/>
 			</Style>
 			<ContextMenu x:Key="TreeViewContextMenu">
-				<MenuItem Header="Create Back-Projects" 
-							IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
-							Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+
+				<MenuItem Header="Remove Transcreate project" 
+				          IsEnabled="{Binding DataContext.IsEnabledDeleteProject, 
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
 							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-							Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+				          Command="{Binding DataContext.RemoveProjectCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 					<MenuItem.Icon>
-						<Image Source="../Resources/sdl_transcreate_back.ico"/>
+						<Image Source="../Resources/Delete.ico"/>
 					</MenuItem.Icon>
 				</MenuItem>
-				<MenuItem Header="Remove Back-Projects" 
+				<Separator/>
+
+				<MenuItem Header="Create Back-Translation projects" 
+				          IsEnabled="{Binding DataContext.IsEnabledCreateBackProjects,
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
+							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+				          Command="{Binding DataContext.CreateBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+					<MenuItem.Icon>
+						<Image Source="../Resources/back_translation_small.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<MenuItem Header="Remove Back-Translation projects" 
 							IsEnabled="{Binding DataContext.IsEnabledRemoveBackProjects, 
-							Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+							Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
 							RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
 							Command="{Binding DataContext.RemoveBackProjectsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 					<MenuItem.Icon>
@@ -57,17 +68,14 @@
 					</MenuItem.Icon>
 				</MenuItem>
 
+				<Separator/>
 				<MenuItem Header="Open folder in explorer" 
-				          Command="{Binding DataContext.OpenProjectFolderCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-				       >
+				          Command="{Binding DataContext.OpenProjectFolderCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 					<MenuItem.Icon>
 						<Image Source="../Resources/Folder.png"/>
 					</MenuItem.Icon>
 				</MenuItem>
 			</ContextMenu>
-
-			
-
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Border BorderBrush="Gainsboro" BorderThickness="1" Background="White">
@@ -133,7 +141,7 @@
 			</Grid>
 
 			<TreeView Grid.Column="0" Padding="2,5,2,2" Grid.Row="1" 					  
-			          ItemsSource="{Binding CustomerGroups}"
+			          ItemsSource="{Binding CustomerGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}">
 				<TreeView.ItemContainerStyle>
 					<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
@@ -153,7 +161,7 @@
 						<HierarchicalDataTemplate.ItemTemplate>
 							<HierarchicalDataTemplate ItemsSource="{Binding BackTranslationProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" 
 							                          DataType="{x:Type model:Project}">
-								
+
 								<StackPanel Orientation="Horizontal" Margin="0,1,0,1"
 								            Style="{StaticResource ContextMenuStyle}">
 									<Image Focusable="False"
@@ -181,7 +189,7 @@
 											       HorizontalAlignment="Center"
 											       VerticalAlignment="Center"		
 											       Width="17"
-											       Source="../Resources/sdl_transcreate_back.ico"
+											       Source="../Resources/back_translation_small.ico"
 											       Margin="0,0,2,0"/>
 											<TextBlock FontWeight="Regular" FontSize="13" Text="{Binding Name}" Margin="0,1,0,1"/>
 										</StackPanel>

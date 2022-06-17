@@ -30,12 +30,12 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- ICON TBD -->
-                <Image x:Uid="Image_1" Grid.Column="1" DockPanel.Dock="Left" Width="auto" Height="32" Margin="0 0 0 0" Source="{Binding Path=Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                <Image x:Uid="Image_1" Grid.Column="1" DockPanel.Dock="Left" Width="auto" Height="20" Margin="5 0 0 0" Source="{Binding Path=Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
 
                 <!-- TITLE -->
                 <Grid x:Uid="Grid_2" Grid.Column="2">
                     <TextBlock x:Uid="TextBlock_1" TextTrimming="CharacterEllipsis" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                           Margin="10,0,0,1" FontSize="16" Foreground="#414141" FontFamily="Calibry" Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                           Margin="5,0,0,1" FontSize="16" Foreground="#414141" FontFamily="Calibry" Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
                         <TextBlock.Style>
                             <Style x:Uid="Style_1" TargetType="TextBlock">
                                 <Setter x:Uid="Setter_1" Property="Foreground" Value="{DynamicResource WindowsControl.Active.CaptionText}" />

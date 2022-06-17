@@ -27,8 +27,9 @@ variables:
 - name: solution
   value: '**/Reports.Viewer.sln'
 - name: pathToPublish
-  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
-
+  value: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Reports.Viewer.Plus.sdlplugin'
+- name: outputpath
+  value: '$(Build.Repository.LocalPath)\Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)'
 steps:
 - task: PowerShell@2
   displayName: 'set x86path'
@@ -38,17 +39,6 @@ steps:
       Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
 
 - task: DownloadPipelineArtifact@2
-  displayName: 'Download Reports Viewer Components'
-  inputs:
-    buildType: 'specific'
-    project: 'bec36e61-e55d-402c-89cf-e2b28aefe754'
-    definition: '2019'
-    buildVersionToDownload: 'latestFromBranch'
-    artifactName: 'RVC'
-    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
-    runBranch: 'refs/heads/master'
-
-- task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
   inputs:
     buildType: 'specific'
@@ -56,14 +46,12 @@ steps:
     definition: '1258'
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+    targetPath: '$(X86PATH)\Trados\Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
     tags: 'Package'
 
 - task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 4.5.3'
-  inputs:
-    versionSpec: 4.5.3
+  displayName: 'Use NuGet last version'
 
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
@@ -80,6 +68,6 @@ steps:
 
 - template: tasks/sign-artifacts/sign-plugin.yml
   parameters:
-    fileToSign: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Sdl.Community.Reports.Viewer.sdlplugin'
+    fileToSign: 'Reports.Viewer\Reports.Viewer\bin\$(buildConfiguration)\Reports.Viewer.Plus.sdlplugin'
 
 - template: jobs/publish-build-artifact-task.yml

@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
-using Sdl.Community.Reports.Viewer.Controls;
+using Reports.Viewer.Plus.Controls;
 
-namespace Sdl.Community.Reports.Viewer.Service
+namespace Reports.Viewer.Plus.Service
 {
 	public class DialogService
 	{

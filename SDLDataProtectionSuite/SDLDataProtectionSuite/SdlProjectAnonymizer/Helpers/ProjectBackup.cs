@@ -10,8 +10,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			var projectFolder = Path.GetDirectoryName(projectPath);
 			var projectName = Path.GetFileNameWithoutExtension(projectPath);
 
-			var communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community");
-			var projectFolderPath = Path.Combine(communityFolderPath, "SDLProjectAnonymizer");
+			var communityFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore");
+			var projectFolderPath = Path.Combine(communityFolderPath, "TradosProjectAnonymizer");
 			var backupFolderPath = Path.Combine(projectFolderPath, "Backup");
 
 			if (!Directory.Exists(communityFolderPath))

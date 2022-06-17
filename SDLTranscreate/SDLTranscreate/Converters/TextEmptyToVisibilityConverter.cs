@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Sdl.Community.Transcreate.Converters
+namespace Trados.Transcreate.Converters
 {
 	public class TextEmptyToVisibilityConverter : IValueConverter
 	{

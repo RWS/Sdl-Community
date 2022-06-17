@@ -228,7 +228,7 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL InSource!.
+        ///   Looks up a localized string similar to Trados InSource!.
         /// </summary>
         internal static string Plugin_Name {
             get {

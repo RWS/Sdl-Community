@@ -4,10 +4,11 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 {
-	public class BatchAnonymizerSettingsPage:DefaultSettingsPage<BatchAnonymizerHostControl,BatchAnonymizerSettings>
+	public class BatchAnonymizerSettingsPage : DefaultSettingsPage<BatchAnonymizerHostControl, BatchAnonymizerSettings>
 	{
-		private BatchAnonymizerSettings _settings;
 		private BatchAnonymizerHostControl _control;
+		private BatchAnonymizerSettings _settings;
+
 		public override object GetControl()
 		{
 			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<BatchAnonymizerSettings>();
@@ -39,6 +40,7 @@ namespace Sdl.Community.SDLBatchAnonymize.BatchTask
 			_settings.SetSpecificResChecked = _control.BatchAnonymizerSettingsViewModel.SetSpecificResChecked;
 			_settings.FuzzyScore = _control.BatchAnonymizerSettingsViewModel.FuzzyScore;
 			_settings.TmName = _control.BatchAnonymizerSettingsViewModel.TmName;
+			_settings.RemoveMtCloudMetadata = _control.BatchAnonymizerSettingsViewModel.RemoveMtCloudMetadata;
 		}
 	}
 }

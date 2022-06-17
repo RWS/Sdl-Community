@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sdl.Community.Toolkit.Core;
+using Trados.Community.Toolkit.Core;
 
 namespace ChangeScalingBehavior
 {

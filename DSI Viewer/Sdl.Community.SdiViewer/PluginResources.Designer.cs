@@ -19,7 +19,7 @@ namespace Sdl.Community.DsiViewer {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -61,6 +61,78 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply filter.
+        /// </summary>
+        public static string ApplyFilter_Button_Content {
+            get {
+                return ResourceManager.GetString("ApplyFilter_Button_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adequate.
+        /// </summary>
+        public static string CheckBox_Adequate {
+            get {
+                return ResourceManager.GetString("CheckBox_Adequate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to by Model.
+        /// </summary>
+        public static string CheckBox_ByModel_Content {
+            get {
+                return ResourceManager.GetString("CheckBox_ByModel_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to by Quality Estimation.
+        /// </summary>
+        public static string CheckBox_ByQualityEstimation {
+            get {
+                return ResourceManager.GetString("CheckBox_ByQualityEstimation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string CheckBox_Good {
+            get {
+                return ResourceManager.GetString("CheckBox_Good", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poor.
+        /// </summary>
+        public static string CheckBox_Poor {
+            get {
+                return ResourceManager.GetString("CheckBox_Poor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string CheckBox_Unknown {
+            get {
+                return ResourceManager.GetString("CheckBox_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear filter.
+        /// </summary>
+        public static string ClearFilter_Button_Content {
+            get {
+                return ResourceManager.GetString("ClearFilter_Button_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ds {
@@ -71,11 +143,95 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Global {
+            get {
+                object obj = ResourceManager.GetObject("Global", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model.
+        /// </summary>
+        public static string Label_Model {
+            get {
+                return ResourceManager.GetString("Label_Model", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality Estimation.
+        /// </summary>
+        public static string Label_QualityEstimation {
+            get {
+                return ResourceManager.GetString("Label_QualityEstimation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Language Weaver Filter:.
+        /// </summary>
+        public static string Label_SDLMTCloudFilter {
+            get {
+                return ResourceManager.GetString("Label_SDLMTCloudFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Translation Origin Info:.
+        /// </summary>
+        public static string Label_SDLMTCloudInfo {
+            get {
+                return ResourceManager.GetString("Label_SDLMTCloudInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Related.
+        /// </summary>
+        public static string Label_SDLMTCloudRelated {
+            get {
+                return ResourceManager.GetString("Label_SDLMTCloudRelated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DSI Viewer.
         /// </summary>
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to weaver.
+        /// </summary>
+        public static string ProviderId {
+            get {
+                return ResourceManager.GetString("ProviderId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -121,6 +277,16 @@ namespace Sdl.Community.DsiViewer {
         public static string StructureContextInfo_MetaValue_chars {
             get {
                 return ResourceManager.GetString("StructureContextInfo_MetaValue_chars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe {
+            get {
+                object obj = ResourceManager.GetObject("TellMe", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

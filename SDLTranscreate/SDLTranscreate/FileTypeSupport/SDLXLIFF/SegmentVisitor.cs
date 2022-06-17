@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF
+namespace Trados.Transcreate.FileTypeSupport.SDLXLIFF
 {
 	internal class SegmentVisitor : IMarkupDataVisitor
 	{

@@ -11,15 +11,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Wizard.View;
+using NLog;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.MSOffice;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Visitors;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Wizard.View;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
+namespace Trados.Transcreate.Wizard.ViewModel.Export
 {
 	public class WizardPageExportPreparationViewModel : WizardPageViewModelBase
 	{
@@ -124,7 +125,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				//},
 				new JobProcess
 				{
-					Name = PluginResources.JobProcess_Export
+					Name = PluginResources.JobProcess_CreateBackTranslations
 				},
 				new JobProcess
 				{
@@ -153,7 +154,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 				if (success)
 				{
-					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_Export);
+					job = JobProcesses.FirstOrDefault(a => a.Name == PluginResources.JobProcess_CreateBackTranslations);
 					if (job != null)
 					{
 						success = await Export(job);
@@ -170,6 +171,10 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 				}
 
 				FinalizeJobProcesses(success);
+			}
+			catch (Exception ex)
+			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 			}
 			finally
 			{
@@ -203,12 +208,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -246,8 +252,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 						var folder = GetXliffFolder(languageFolder, targetFile);
 						var outputFilePath = Path.Combine(folder, targetFile.Name + ".docx");
 
-						_logReport.AppendLine(string.Format(PluginResources.label_SdlXliffFile, targetFile.Location));
-						_logReport.AppendLine(string.Format(PluginResources.label_XliffFile, outputFilePath));
+						_logReport.AppendLine(string.Format(PluginResources.Label_SdlXliffFile, targetFile.Location));
+						_logReport.AppendLine(string.Format(PluginResources.Label_XliffFile, outputFilePath));
 
 						var exported  = processor.ExportFile(targetFile.Location, outputFilePath, targetFile.TargetLanguage);
 
@@ -292,12 +298,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);
@@ -323,12 +330,13 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 			}
 			catch (Exception ex)
 			{
+				LogManager.GetCurrentClassLogger().Error(ex);
 				jobProcess.Errors.Add(ex);
 				jobProcess.Status = JobProcess.ProcessStatus.Failed;
 				success = false;
 
 				_logReport.AppendLine();
-				_logReport.AppendLine(string.Format(PluginResources.label_ExceptionMessage, ex.Message));
+				_logReport.AppendLine(string.Format(PluginResources.Label_ExceptionMessage, ex.Message));
 			}
 
 			return await Task.FromResult(success);

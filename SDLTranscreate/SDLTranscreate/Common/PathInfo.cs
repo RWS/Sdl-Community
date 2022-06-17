@@ -1,17 +1,19 @@
 ﻿using System;
 using System.IO;
 
-namespace Sdl.Community.Transcreate.Common
+namespace Trados.Transcreate.Common
 {
 	public class PathInfo: ICloneable
 	{
-		private const string SdlCommunityPathName = "SDL Community";
+		private const string SdlCommunityPathName = "RWS AppStore";
 		private const string ApplicationPathName = "Transcreate";
 		private const string SettingsPathName = "Settings";
 		private const string LogsPathName = "Logs";
 		private const string IconsPathName = "Icons";
 		private const string SettingsFileName = "Settings.xml";
 		private const string LanguageMappingsFileName = "LanguageMappings.xlsx";
+		private const string ProjectIconFileName = "Transcreate.ico";
+		private const string BackTranslationIconFileName = "BackTranslation.ico";
 
 		private string _sdlCommunityFolderPath;
 		private string _applicationFolderPath;
@@ -97,6 +99,10 @@ namespace Sdl.Community.Transcreate.Common
 			}
 		}
 
+		public string ProjectIconFilePath => Path.Combine(ApplicationIconsFolderPath, ProjectIconFileName);
+
+		public string BackTranslationIconFilePath => Path.Combine(ApplicationIconsFolderPath, BackTranslationIconFileName);
+
 		public string SettingsFolderPath
 		{
 			get
@@ -115,7 +121,6 @@ namespace Sdl.Community.Transcreate.Common
 				return _settingsFolderPath;
 			}
 		}
-
 
 		public string SettingsFilePath => Path.Combine(SettingsFolderPath, SettingsFileName);
 

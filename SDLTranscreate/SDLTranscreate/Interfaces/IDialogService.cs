@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.Community.Transcreate.Interfaces
+namespace Trados.Transcreate.Interfaces
 {
 	public interface IDialogService
 	{

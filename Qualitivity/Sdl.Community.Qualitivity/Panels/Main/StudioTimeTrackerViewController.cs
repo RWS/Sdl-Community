@@ -2814,13 +2814,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			System.Diagnostics.Process.Start("https://community.sdl.com/solutions/language/translationproductivity/w/customer-experience/2251.qualitivity");
 		}
 
-		public void ViewAboutInfo()
-		{
-			Tracked.TrackerLastActivity = DateTime.Now;
-			var about = new About();
-			about.ShowDialog();
-		}
-
 		private static void LoadCurrencies()
 		{
 			Tracked.Currencies = new List<Currency>();

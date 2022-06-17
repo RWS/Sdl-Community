@@ -137,7 +137,7 @@
     <value>Create Projects</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDL InSource!</value>
+    <value>Trados InSource!</value>
   </data>
   <data name="WikipediaSearchAction_Description" xml:space="preserve">
     <value>Search Wikipedia with current selection</value>

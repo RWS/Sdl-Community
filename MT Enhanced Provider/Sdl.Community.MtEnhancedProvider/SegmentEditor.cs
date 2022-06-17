@@ -15,11 +15,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using NLog;
-using Sdl.Community.MtEnhancedProvider.Helpers;
 
 namespace Sdl.Community.MtEnhancedProvider
 {
@@ -28,9 +28,7 @@ namespace Sdl.Community.MtEnhancedProvider
 	    private readonly string _filename;
         private EditCollection _edcoll;
         private DateTime _lastversion;
-		private Constants _constants = new Constants();
-
-		private Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public SegmentEditor(string editCollectionFilename)
         {
@@ -51,7 +49,7 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
             {
-				_logger.Error($"{_constants.LoadCollection} {ex.Message}\n { ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n { ex.StackTrace}");
 
 				var caption = PluginResources.EditSettingsErrorCaption;
                 var message = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(_filename));
@@ -60,7 +58,7 @@ namespace Sdl.Community.MtEnhancedProvider
             }
             catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
             {
-				_logger.Error($"{_constants.LoadCollection} {exp.Message}\n { exp.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {exp.Message}\n { exp.StackTrace}");
 
 				var caption = PluginResources.EditSettingsErrorCaption;
                 var message = PluginResources.EditSettingsGenericErrorMessage + " " + exp.Message;

@@ -16,6 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
         private static readonly Regex EndingTag = new Regex(@"</(\d+)>");
         private static readonly Regex StandaloneTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)/>");
         private static readonly Regex PlaceholderTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""(.*)""/>");
+        private static readonly Regex LockedTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""(.*)"" locked=""true""/>");
 
         /// <summary>
         /// Method used in Unit tests
@@ -68,8 +69,16 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 				}
 				else if (parsedTag.Type == TagType.End)
 				{
-					var correspondingStartTag = startingTags.Pop();
-					parsedTag.TagID = correspondingStartTag.TagID;
+					if (parsedTag.Anchor == startingTags.Peek().Anchor)
+					{
+						var correspondingStartTag = startingTags.Pop();
+						parsedTag.TagID = correspondingStartTag.TagID;
+					}
+					else
+					{
+						segment.Add(tag);
+						continue;
+					}
 				}
 
 				segment.Add(parsedTag);
@@ -87,7 +96,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 		/// </summary>
 		/// <param name="tag"></param>
 		/// <returns cref="Tag"/>
-		public static Tag ParseTag(string tag)
+		public static Tag ParseTag(string tag) 
 		{
 			Match match;
 			if ((match = StartingTag.Match(tag)).Success)
@@ -104,19 +113,20 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 				return new Tag(TagType.Standalone, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
 					!string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, null);
 			}
+			if ((match = LockedTag.Match(tag)).Success)
+			{
+				var textEquivalent = match.Groups[4].Value;
+				return new Tag(TagType.LockedContent, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
+					!string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, textEquivalent);
+			}
             if ((match = PlaceholderTag.Match(tag)).Success)
             {
-	            if (match.Groups[4].Value.Contains("<locked>") || match.Groups[4].Value.Contains(@"translate status=""no"""))
-	            {
-		            var tagContent = match.Groups[4].Value;
-                    return new Tag(TagType.LockedContent, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
-	                    !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, tagContent);
-                }
+	            var textEquivalent = match.Groups[4].Value;
                 return new Tag(TagType.TextPlaceholder, match.Groups[3].Value, int.Parse(match.Groups[1].Value),
-                    !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, match.Groups[4].Value);
+                    !string.IsNullOrEmpty(match.Groups[2].Value) ? int.Parse(match.Groups[2].Value) : 0, textEquivalent);
             }
 
-            return null;
+			return null;
 		}
 	}
 }

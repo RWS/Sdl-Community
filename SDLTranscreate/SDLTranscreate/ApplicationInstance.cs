@@ -4,7 +4,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Application = System.Windows.Application;
 
-namespace Sdl.Community.Transcreate
+namespace Trados.Transcreate
 {
 	[ApplicationInitializer]
 	internal class ApplicationInstance : IApplicationInitializer
@@ -12,6 +12,8 @@ namespace Sdl.Community.Transcreate
 		public void Execute()
 		{
 			SetApplicationShutdownMode();
+
+			Common.Log.Setup();
 		}
 
 		public static Form GetActiveForm()
@@ -34,7 +36,7 @@ namespace Sdl.Community.Transcreate
 		{
 			if (Application.Current == null)
 			{
-				// initialize the enviornments application instance
+				// initialize the environments application instance
 				new Application();
 			}
 

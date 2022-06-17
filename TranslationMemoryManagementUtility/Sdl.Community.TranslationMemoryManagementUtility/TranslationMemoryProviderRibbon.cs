@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace Sdl.Community.TranslationMemoryManagementUtility
 {
-	[RibbonGroup("SDL TM Management", Name = "SDL TM Management")]
+	[RibbonGroup("Plugin_Name", Name = "Plugin_Name")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TranslationMemoryProviderRibbon : AbstractRibbonGroup
 	{
-		[Action("Sdl.Community.TranslationMemoryManagementUtility", Name = "SDL TM Management", Icon = "TM_icon", Description = "SDL TM Management")]
+		[Action("Plugin_Name", Name = "Plugin_Name", Icon = "TM_icon", Description = "Plugin_Name")]
 		[ActionLayout(typeof(TranslationMemoryProviderRibbon), 20, DisplayType.Large)]
 		public class TMProviderAction : AbstractAction
 		{

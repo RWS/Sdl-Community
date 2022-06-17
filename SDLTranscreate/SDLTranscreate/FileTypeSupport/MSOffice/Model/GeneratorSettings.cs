@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Xml.Serialization;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Model
+namespace Trados.Transcreate.FileTypeSupport.MSOffice.Model
 {
 	public class GeneratorSettings
 	{

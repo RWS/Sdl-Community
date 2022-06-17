@@ -24,7 +24,7 @@ param (
 
     $Field,
 
-    $productId="Studio16",
+    $productId="Studio17",
 
     $outputversion="ProductVersion",
 
@@ -34,7 +34,7 @@ param (
 $DebugPreference ='Continue' 
 
 $ThisYear=Get-Date -Format "yyyy"
-$Copyright="Copyright © $ThisYear SDL. All rights reserved."
+$Copyright="Copyright Â© $ThisYear SDL. All rights reserved."
 
 
 if ($env:Build_SourceBranch -like "*release*")
@@ -58,7 +58,7 @@ else
 }
 
 
-$ProductName="SDL Trados Studio"
+$ProductName="Trados Studio"
 
 
 # Make sure path to source code directory is available
@@ -150,7 +150,7 @@ if($files)
                 {
                     $CPPVersionRegex = $VersionRegex -replace "\." , ","
                     $CPPVersion = $NewVersion -replace "\." , ","
-                    $CPPCopyright=$Copyright -replace "©" , "\xa9"
+                    $CPPCopyright=$Copyright -replace "Â©" , "\xa9"
                     $CPPAttr = $attr.ToUpper()
                     $newContent = $newContent -replace "$CPPAttr $CPPVersionRegex", "$CPPAttr $CPPVersion"
                     $newContent = $newContent -replace "`"$attr`", `"$CPPVersionRegex", "`"$attr`", `"$CPPVersion"

@@ -4,7 +4,7 @@ using System.Windows;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	[Action("ReportsViewer_RemoveReport_Action",
 		Name = "ReportsViewer_RemoveReport_Name",
@@ -59,7 +59,7 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
 		{
-			_canEnable = e.SelectedReports?.Count > 0;			
+			_canEnable = e.SelectedReports?.Count > 0;
 			SetEnabled();
 		}
 

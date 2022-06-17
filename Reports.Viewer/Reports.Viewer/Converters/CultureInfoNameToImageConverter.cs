@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using Sdl.Community.Reports.Viewer.Service;
+using Reports.Viewer.Plus.Service;
 
-namespace Sdl.Community.Reports.Viewer.Converters
+namespace Reports.Viewer.Plus.Converters
 {
 	public class CultureInfoNameToImageConverter : IValueConverter
 	{

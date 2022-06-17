@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.Transcreate.Common;
+using Trados.Transcreate.Common;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class ExportOptions : BaseModel
 	{
@@ -10,11 +10,12 @@ namespace Sdl.Community.Transcreate.Model
 
 		public ExportOptions()
 		{
-			XliffSupport = Enumerators.XLIFFSupport.xliff12polyglot;
-			IncludeTranslations = false;
-			CopySourceToTarget = false;
-			ExcludeFilterIds = new List<string>();
+			XliffSupport = Enumerators.XLIFFSupport.xliff12sdl;
+			IncludeTranslations = true;
+			CopySourceToTarget = true;
 			IncludeBackTranslations = false;
+			ExcludeFilterIds = new List<string>();
+			//ExcludeFilterIds.Add("Locked");
 		}
 
 		public Enumerators.XLIFFSupport XliffSupport { get; set; }

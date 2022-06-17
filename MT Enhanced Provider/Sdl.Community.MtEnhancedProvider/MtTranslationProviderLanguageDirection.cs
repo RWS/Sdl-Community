@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Sdl.Community.MtEnhancedProvider.GoogleApi;
+using Sdl.Community.MtEnhancedProvider.Helpers;
+using Sdl.Community.MtEnhancedProvider.Model.Interface;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
+using Sdl.Community.MtEnhancedProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -10,11 +14,12 @@ namespace Sdl.Community.MtEnhancedProvider
 {
 	public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-
 		private readonly LanguagePair _languageDirection;
-		private readonly MtTranslationOptions _options;
+		private readonly IMtTranslationOptions _options;
 		private readonly MtTranslationProvider _provider;
+		private readonly HtmlUtil _htmlUtil;
 		private MtTranslationProviderGTApiConnecter _gtConnect;
+		private GoogleV3Connecter _googleV3Connecter;
 		private TranslationUnit _inputTu;
 		private ApiConnecter _mstConnect;
 		private SegmentEditor _postLookupSegmentEditor;
@@ -24,16 +29,12 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// Instantiates the variables and fills the list file content into
 		/// a Dictionary collection object.
 		/// </summary>
-		/// <param name="provider"></param>
-		/// <param name="languages"></param>
-
-		public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages)
+		public MtTranslationProviderLanguageDirection(MtTranslationProvider provider, LanguagePair languages, HtmlUtil htmlUtil)
 		{
-
 			_provider = provider;
 			_languageDirection = languages;
 			_options = _provider.Options;
-
+			_htmlUtil = htmlUtil;
 		}
 
 		public bool CanReverseLanguageDirection { get; } = false;
@@ -134,10 +135,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// (in our implementation always 100%, as only exact matches are supported)
 		/// as well as the confirmation level, i.e. Translated.
 		/// </summary>
-		/// <param name="searchSegment"></param>
-		/// <param name="translation"></param>
-		/// <param name="sourceSegment"></param>
-		/// <returns></returns>
 		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
 		{
 			var tu = new TranslationUnit { SourceSegment = searchSegment.Duplicate(), TargetSegment = translation };
@@ -156,9 +153,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Used to do batch find-replace on a segment with tags.
 		/// </summary>
-		/// <param name="inSegment"></param>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
 		private Segment GetEditedSegment(SegmentEditor editor, Segment inSegment)
 		{
 			var newSeg = new Segment(inSegment.Culture);
@@ -183,33 +177,41 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Used to do batch find-replace on a string of plain text.
 		/// </summary>
-		/// <param name="sourcetext"></param>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
 		private string GetEditedString(SegmentEditor editor, string sourcetext)
 		{
 			var result = editor.EditText(sourcetext);
 			return result;
 		}
 
-		private string LookupGt(string sourcetext, MtTranslationOptions options, string format)
-		{		
-			//instantiate GtApiConnecter if necessary
-			if (_gtConnect == null)
+		private string LookupGt(string sourcetext, IMtTranslationOptions options, string format)
+		{
+			if (options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)
 			{
-				// need to get and insert key
-				_gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey); //needs key
-			}
-			else
-			{
-				_gtConnect.ApiKey = options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
-			}
-			var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
+				//instantiate GtApiConnecter if necessary
+				if (_gtConnect == null)
+				{
+					// need to get and insert key
+					_gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey, _htmlUtil); //needs key
+				}
+				else
+				{
+					//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+					_gtConnect.ApiKey = options.ApiKey; 
+				}
+				
+				var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
 
-			return translatedText;
+				return translatedText;
+			}
+			_googleV3Connecter = new GoogleV3Connecter(options);
+
+			var v3TranslatedText =
+				_googleV3Connecter.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext, format);
+
+			return v3TranslatedText;
 		}
 
-		private string LookupMst(string sourcetext, MtTranslationOptions options, string format)
+		private string LookupMst(string sourcetext, IMtTranslationOptions options, string format)
 		{
 			var catId = "";
 			if (options.UseCatID)
@@ -220,11 +222,12 @@ namespace Sdl.Community.MtEnhancedProvider
 			//instantiate ApiConnecter if necessary
 			if (_mstConnect == null)
 			{
-				_mstConnect = new ApiConnecter(_options);
+				_mstConnect = new ApiConnecter(_options.ClientId, options.Region, _htmlUtil);
 			}
 			else
 			{
-				_mstConnect.ResetCrd(options.ClientId, options.ClientSecret); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+				_mstConnect.ResetCrd(options.ClientId, options.Region); 
 			}
 
 			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);
@@ -237,10 +240,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// Depening on the search mode, a segment lookup (with exact machting) or a source / target
 		/// concordance search is done.
 		/// </summary>
-		/// <param name="settings"></param>
-		/// <param name="segment"></param>
-		/// <returns></returns>
-
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
 			var translation = new Segment(_languageDirection.TargetCulture);//this will be the target segment
@@ -273,7 +272,7 @@ namespace Sdl.Community.MtEnhancedProvider
 					newseg = GetEditedSegment(_preLookupSegmentEditor, newseg);
 				}
 				//return our tagged target segment
-				var tagplacer = new MtTranslationProviderTagPlacer(newseg);
+				var tagplacer = new MtTranslationProviderTagPlacer(newseg, _htmlUtil);
 				////tagplacer is constructed and gives us back a properly marked up source string for google
 				if (_options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
 				{
@@ -310,7 +309,7 @@ namespace Sdl.Community.MtEnhancedProvider
 				{
 					//now do lookup
 					case MtTranslationOptions.ProviderType.GoogleTranslate:
-						translatedText = LookupGt(sourcetext, _options, "html"); //plain??
+						translatedText = LookupGt(sourcetext, _options, "text");
 						break;
 					case MtTranslationOptions.ProviderType.MicrosoftTranslator:
 						translatedText = LookupMst(sourcetext, _options, "text/plain");
@@ -334,10 +333,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="previousTranslationHashes"></param>
-		/// <param name="settings"></param>
-		/// <returns></returns>
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
 			throw new NotImplementedException();
@@ -346,11 +341,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="previousTranslationHashes"></param>
-		/// <param name="settings"></param>
-		/// <param name="mask"></param>
-		/// <returns></returns>
 		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
 		{
 			ImportResult[] result = { AddTranslationUnit(translationUnits[translationUnits.GetLength(0) - 1], settings) };
@@ -371,9 +361,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="settings"></param>
-		/// <returns></returns>
 		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
 		{
 			throw new NotImplementedException();
@@ -382,10 +369,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <param name="settings"></param>
-		/// <param name="mask"></param>
-		/// <returns></returns>
 		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
 		{
 			throw new NotImplementedException();
@@ -394,8 +377,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnit"></param>
-		/// <returns></returns>
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
 		{
 			throw new NotImplementedException();
@@ -404,8 +385,6 @@ namespace Sdl.Community.MtEnhancedProvider
 		/// <summary>
 		/// Not required for this implementation.
 		/// </summary>
-		/// <param name="translationUnits"></param>
-		/// <returns></returns>
 		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
 		{
 			throw new NotImplementedException();

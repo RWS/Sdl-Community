@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.Reports.Viewer.Model
+﻿namespace Reports.Viewer.Plus.Model
 {
     public class ReportState
     {

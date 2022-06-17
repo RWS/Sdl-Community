@@ -12,7 +12,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public NumVerifierCommunityForumAction()
 		{
-			Name = "SDL Community AppStore Forum";
+			Name = "RWS Community AppStore Forum";
 		}
 
 		public override void Execute()

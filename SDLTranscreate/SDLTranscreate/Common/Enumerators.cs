@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.Transcreate.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.MultiSelectComboBox.API;
+using Rws.MultiSelectComboBox.API;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Common
+namespace Trados.Transcreate.Common
 {
 	public class Enumerators
 	{
@@ -82,7 +82,7 @@ namespace Sdl.Community.Transcreate.Common
 				{
 					new XLIFFSupportItem
 					{
-						Name = "XLIFF 1.2 SDL",
+						Name = "XLIFF 1.2 RWS",
 						SupportType = Enumerators.XLIFFSupport.xliff12sdl
 					},
 					new XLIFFSupportItem

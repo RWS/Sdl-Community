@@ -39,7 +39,11 @@ namespace Sdl.Community.TermExcelerator
             var result = new List<string>();
             foreach (var term in entryLanguages.Terms)
             {
-                result.AddRange(term.Fields.Select(x => x.Value));
+				if (!term.Fields.Any()) result.Add("");
+                result.AddRange(term.Fields.Select(x =>
+                {
+	                return x.Value;
+                }));
             }
 
             return result.ToArray();

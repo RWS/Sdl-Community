@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.Reports.Viewer {
+namespace Reports.Viewer.Plus {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.Reports.Viewer {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Reports.Viewer.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reports.Viewer.Plus.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -87,6 +87,15 @@ namespace Sdl.Community.Reports.Viewer {
             get {
                 object obj = ResourceManager.GetObject("Edit", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to locate the xml file: {0}.
+        /// </summary>
+        internal static string ErrorMessage_UnableToLocateXmlFile {
+            get {
+                return ResourceManager.GetString("ErrorMessage_UnableToLocateXmlFile", resourceCulture);
             }
         }
         
@@ -181,6 +190,33 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter cannot be null.
+        /// </summary>
+        internal static string Message_TheParameterCannotBeNull {
+            get {
+                return ResourceManager.GetString("Message_TheParameterCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The report Id cannot be null!.
+        /// </summary>
+        internal static string Message_TheReportIdCannotBeNull {
+            get {
+                return ResourceManager.GetString("Message_TheReportIdCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to locate report {0}.
+        /// </summary>
+        internal static string Message_UnableToLocateReport {
+            get {
+                return ResourceManager.GetString("Message_UnableToLocateReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon PageSetup {
@@ -191,7 +227,7 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports Viewer.
+        ///   Looks up a localized string similar to Reports Viewer Plus.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -421,6 +457,15 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Report As....
+        /// </summary>
+        internal static string ReportsViewer_SaveReportAs {
+            get {
+                return ResourceManager.GetString("ReportsViewer_SaveReportAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configuration.
         /// </summary>
         internal static string ReportsViewer_SettingsGroup_Name {
@@ -449,7 +494,7 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports Viewer.
+        ///   Looks up a localized string similar to Reports Viewer Plus.
         /// </summary>
         internal static string SDLReportsViewer_Description {
             get {
@@ -458,7 +503,7 @@ namespace Sdl.Community.Reports.Viewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports Viewer.
+        ///   Looks up a localized string similar to Reports Viewer Plus.
         /// </summary>
         internal static string SDLReportsViewer_Name {
             get {

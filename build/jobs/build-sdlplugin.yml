@@ -14,16 +14,13 @@ steps:
     definition: '1258'
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(X86PATH)\SDL\SDL Trados Studio\$(StudioProductIdentifier)'
+    targetPath: '$(X86PATH)\Trados\Trados Studio\$(StudioProductIdentifier)'
     runBranch: '$(StudioBranch)'
     tags: 'Package'
 
 
 - task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 4.5.3'
-  inputs:
-    versionSpec: 4.5.3
-
+  
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
   inputs:
@@ -31,9 +28,11 @@ steps:
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
 
 - task: VSBuild@1
+  displayName: 'Visual Studio build $(solution)'
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'		
+    configuration: '$(buildConfiguration)'
+    
 - task: PublishPipelineMetadata@0
 

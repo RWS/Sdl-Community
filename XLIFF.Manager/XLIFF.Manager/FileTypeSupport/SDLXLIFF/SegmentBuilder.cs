@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
@@ -16,57 +18,94 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 		public SegmentBuilder()
 		{
-			_factory = DefaultDocumentItemFactory.CreateInstance();
-			_propertiesFactory = DefaultPropertiesFactory.CreateInstance();
-			_formattingFactory = _propertiesFactory.FormattingItemFactory;
+			ItemFactory = DefaultDocumentItemFactory.CreateInstance();
+			PropertiesFactory = DefaultPropertiesFactory.CreateInstance();
+			FormattingFactory = PropertiesFactory.FormattingItemFactory;
 		}
+
+		public IDocumentItemFactory ItemFactory { get; }
+
+		public IPropertiesFactory PropertiesFactory { get; }
+
+		public IFormattingItemFactory FormattingFactory { get; }
+
+		public List<string> ExistingTagIds { get; set; }
 
 		public ITranslationOrigin CreateTranslationOrigin()
 		{
-			return _factory.CreateTranslationOrigin();
+			return ItemFactory.CreateTranslationOrigin();
 		}
 
-		public IAbstractMarkupData CreatePlaceholder(string tagId, string text)
+		public IContextInfo CreateContextInfo(Context context)
 		{
-			var textProperties = _propertiesFactory.CreatePlaceholderTagProperties(text);
-			//if (!string.IsNullOrEmpty(tagId))
-			//{
-			//	textProperties.TagId = new TagId(tagId);
-			//}
+			var contextInfo = PropertiesFactory.CreateContextInfo(context.ContextType);
+			contextInfo.DisplayName = context.DisplayName;
+			contextInfo.DisplayCode = context.DisplayCode;
+			contextInfo.Description = context.Description;
+			foreach (var metaData in context.MetaData)
+			{
+				contextInfo.SetMetaData(metaData.Key, metaData.Value);
+			}
 
-			return _factory.CreatePlaceholderTag(textProperties);
+			return contextInfo;
+		}
+
+		public IAbstractMarkupData CreatePlaceholder(string tagId, string tagContent)
+		{
+			// Dev Notes: the tagContent is switched with the Display text to align with how the tags are 
+			// recreated by the XLIFF 1.2 parser from the framework
+
+			var textProperties = PropertiesFactory.CreatePlaceholderTagProperties("<ph id=\"" + tagId + "\"/>");
+			textProperties.DisplayText = tagContent;
+			textProperties.SetMetaData("localName", "ph");
+			textProperties.SetMetaData("displayText", tagContent);
+			textProperties.SetMetaData("attribute:id", tagId);
+
+			if (ExistingTagIds.Contains(textProperties.TagId.Id))
+			{
+				textProperties.TagId = !ExistingTagIds.Contains(tagId)
+					? new TagId(tagId)
+					: new TagId(GetUniqueTagPairId());
+			}
+
+			if (!ExistingTagIds.Contains(textProperties.TagId.Id))
+			{
+				ExistingTagIds.Add(textProperties.TagId.Id);
+			}
+
+			return ItemFactory.CreatePlaceholderTag(textProperties);
 		}
 
 		public IAbstractMarkupData Text(string text)
 		{
-			var textProperties = _propertiesFactory.CreateTextProperties(text);
-			return _factory.CreateText(textProperties);
+			var textProperties = PropertiesFactory.CreateTextProperties(text);
+			return ItemFactory.CreateText(textProperties);
 		}
 
 		public ISegmentPairProperties CreateSegmentPairProperties()
 		{
-			var properties = _factory.CreateSegmentPairProperties();
+			var properties = ItemFactory.CreateSegmentPairProperties();
 			properties.TranslationOrigin = CreateTranslationOrigin();
 			return properties;
 		}
 
 		public IComment CreateComment(string text, string author, Severity severity, DateTime dateTime, string version)
-		{			
-			var comment = _propertiesFactory.CreateComment(text, author, severity);
+		{
+			var comment = PropertiesFactory.CreateComment(text, author, severity);
 			comment.Date = dateTime;
 			comment.Version = version;
 			return comment;
 		}
 
 		public IAbstractMarkupData CreateCommentContainer(string text, string author, Severity severity, DateTime dateTime, string version)
-		{			
-			var comment = _propertiesFactory.CreateComment(text, author, severity);
+		{
+			var comment = PropertiesFactory.CreateComment(text, author, severity);
 			comment.Date = dateTime;
 			comment.Version = version;
 
-			var commentProperties = _propertiesFactory.CreateCommentProperties();
+			var commentProperties = PropertiesFactory.CreateCommentProperties();
 			commentProperties.Add(comment);
-			var commentMarker = _factory.CreateCommentMarker(commentProperties);
+			var commentMarker = ItemFactory.CreateCommentMarker(commentProperties);
 
 			return commentMarker;
 		}
@@ -75,28 +114,59 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		{
 			var tagName = GetStartTagName(tagContent, out var refId);
 
-			var startTagProperties = _propertiesFactory.CreateStartTagProperties(tagContent);
-			//if (!string.IsNullOrEmpty(tagId))
-			//{
-			//	startTagProperties.TagId = new TagId(tagId);
-			//}
+			// Dev Notes: the tagContent is switched with the Display text to align with how the tags are 
+			// recreated by the XLIFF 1.2 parser from the framework
 
-			var endTagProperties = _propertiesFactory.CreateEndTagProperties("</" + tagName + ">");
+			var startTagProperties = PropertiesFactory.CreateStartTagProperties("<bpt id=\"" + tagId + "\">");
+			startTagProperties.DisplayText = tagContent;
+			startTagProperties.SetMetaData("localName", "bpt");
+			startTagProperties.SetMetaData("displayText", tagContent);
+			startTagProperties.SetMetaData("attribute:id", tagId);
+
+			if (ExistingTagIds.Contains(startTagProperties.TagId.Id))
+			{
+				startTagProperties.TagId = !ExistingTagIds.Contains(tagId)
+					? new TagId(tagId)
+					: new TagId(GetUniqueTagPairId());
+			}
+
+			if (!ExistingTagIds.Contains(startTagProperties.TagId.Id))
+			{
+				ExistingTagIds.Add(startTagProperties.TagId.Id);
+			}
+
+			var endTagProperties = PropertiesFactory.CreateEndTagProperties("<ept id=\"" + tagId + "\">");
+			endTagProperties.DisplayText = "</" + tagName + ">";
+			endTagProperties.SetMetaData("localName", "ept");
+			endTagProperties.SetMetaData("displayText", "</" + tagName + ">");
+			endTagProperties.SetMetaData("attribute:id", tagId);
+
 
 			//TODO formatting example
 			//var xItem = _formattingFactory.CreateFormattingItem("italic", "True");
 			//x.Formatting = _formattingFactory.CreateFormatting();
 			//x.Formatting.Add(xItem);
 
-			var tagPair = _factory.CreateTagPair(startTagProperties, endTagProperties);
-			
+			var tagPair = ItemFactory.CreateTagPair(startTagProperties, endTagProperties);
+
 			return tagPair;
+		}
+
+		private string GetUniqueTagPairId()
+		{
+			var id = 1;
+			while (ExistingTagIds.Contains(id.ToString()))
+			{
+				id++;
+			}
+
+			return id.ToString();
 		}
 
 		public IAbstractMarkupData CreateLockedContent()
 		{
-			var lockedContentProperties = _propertiesFactory.CreateLockedContentProperties(LockTypeFlags.Manual);			
-			var lockedContent = _factory.CreateLockedContent(lockedContentProperties);			
+			var lockedContentProperties = PropertiesFactory.CreateLockedContentProperties(LockTypeFlags.Manual);
+			var lockedContent = ItemFactory.CreateLockedContent(lockedContentProperties);
 			return lockedContent;
 		}
 
@@ -106,7 +176,7 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 			var tagName = string.Empty;
 			refId = string.Empty;
 			var regexTagName = new Regex(@"\<(?<name>[^\s""\>]*)", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-			var regexTagId = new Regex(@"\<[^\s""]*\s+(?<name>[^\s""]+)\=""(?<value>[^""]*)""", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+			var regexAttribute = new Regex(@"\s+(?<name>[^\s""]+)\=""(?<value>[^""]*)""", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
 			var m = regexTagName.Match(text);
 			if (m.Success)
@@ -114,18 +184,20 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 				tagName = m.Groups["name"].Value;
 			}
 
-			m = regexTagId.Match(text);
-			if (m.Success)
+			var mc = regexAttribute.Matches(text);
+			if (mc.Count > 0)
 			{
-				var id = m.Groups["value"].Value;
-				var attName = m.Groups["name"].Value;
-
-				if (string.Compare(attName, "id", StringComparison.OrdinalIgnoreCase) == 0)
+				foreach (Match match in mc)
 				{
-					refId = id;
+					var attValue = match.Groups["value"].Value;
+					var attName = match.Groups["name"].Value;
+
+					if (string.Compare(attName, "id", StringComparison.OrdinalIgnoreCase) == 0)
+					{
+						refId = attValue;
+					}
 				}
 			}
-
 
 			return tagName;
 		}

@@ -5,7 +5,7 @@ namespace Sdl.Community.InSource.Tellme
 	[TellMeProvider]
 	public class InSourceTellMeProvider : ITellMeProvider
 	{
-		public string Name => "InSource tell me provider";
+		public string Name => "Trados InSource! tell me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

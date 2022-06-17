@@ -27,7 +27,7 @@ namespace Sdl.Community.MTEdge.Provider
 			};
 
 			config.AddTarget(target);
-			config.AddRuleForAllLevels(target, "*ETS*");
+			config.AddRuleForAllLevels(target, "*MTEdge*");
 
 			LogManager.ReconfigExistingLoggers();
 		}

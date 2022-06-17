@@ -203,6 +203,8 @@ packaging/
 # except build/, which is used as an MSBuild target.
 !**/tools/Nuget/
 
+.vscode/
+
 # FAKE temporary files
 .fake/
 sh.exe.stackdump
@@ -218,3 +220,20 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /AmazonTranslateTradosPlugin.zip
 /DeepLMTProvider/MigrationBackup/e3123a5b/Sdl.Community.DeepLMTProvider
 /DSI Viewer/MigrationBackup/0d652574/Sdl.Community.DsiViewer
+/TMBackup/build/
+
+/Export Analysis Reports/Sdl.Community.ExportAnalysisReports/Properties/launchSettings.json
+/Export to Excel/Export to Excel/Properties/launchSettings.json
+/FailSafeTask/Sdl.Community.FailSafeTask/Properties/launchSettings.json
+/FileTypeSupport.MXLIFF/Properties/launchSettings.json
+/RapidAddTerm/RapidAddTerm/Properties/launchSettings.json
+/TermExcelerator/Sdl.Community.TermExcelerator/Properties/launchSettings.json
+/AmazonTranslateTradosPlugin/Properties/launchSettings.json
+/ApplyTMTemplate/Sdl.Community.ApplyTMTemplate/Properties/launchSettings.json
+/CopyTags/CopyTags/Properties/launchSettings.json
+/SDLXLIFFSplitMerge/SplitSDLXLIFF/Properties/launchSettings.json
+/InvoiceAndQuotes/Sdl.Community.InvoiceAndQuotes.Integration/Properties/launchSettings.json
+/SDLDataProtectionSuite/SDLDataProtectionSuite/Properties/launchSettings.json
+/SDLTMRepair/SDLTMRepair/Properties/launchSettings.json
+/SDLMTEdge.Provider/SDLMTEdgeTranslationProvider/Properties/launchSettings.json
+

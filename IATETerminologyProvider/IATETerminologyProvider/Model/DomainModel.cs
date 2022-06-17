@@ -14,6 +14,6 @@
 				_isSelected = value;
 				OnPropertyChanged(nameof(IsSelected));
 			}
-		}	
+		}
 	}
 }

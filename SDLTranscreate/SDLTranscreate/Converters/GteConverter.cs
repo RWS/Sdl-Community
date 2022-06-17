@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Sdl.Community.Transcreate.Converters
+namespace Trados.Transcreate.Converters
 {
 	public class RelationalValueConverter : IMultiValueConverter
 	{

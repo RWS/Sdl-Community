@@ -1,11 +1,11 @@
-﻿<Window x:Class="Sdl.Community.Reports.Viewer.View.AppendReportWindow"
+﻿<Window x:Class="Reports.Viewer.Plus.View.AppendReportWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"       
         xmlns:sdl="http://schemas.sdl.com/xaml"
-        xmlns:viewModel="clr-namespace:Sdl.Community.Reports.Viewer.ViewModel"
-        xmlns:converters="clr-namespace:Sdl.Community.Reports.Viewer.Converters"
+        xmlns:converters="clr-namespace:Reports.Viewer.Plus.Converters"
+        xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
         WindowStyle="ThreeDBorderWindow"
 		WindowStartupLocation="CenterScreen"
         AllowsTransparency="False" 
@@ -17,18 +17,18 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/General.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/TreeView.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/ComboboStyle.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Sdl.Community.Reports.Viewer;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
@@ -64,6 +64,7 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
 			<Grid Grid.Row="0">
@@ -72,10 +73,6 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
 				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Path:" Margin="5,10,5,5"/>
 				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,10,5,5">
 					<TextBox HorizontalContentAlignment="Stretch" 
@@ -160,9 +157,9 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
-				<TextBlock Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template:" 
+				<TextBlock Grid.Row="0" Grid.Column="0" MinWidth="80" VerticalAlignment="Center" Text="Template:" 
 				           Margin="5,5,5,5"/>
-				<Grid Grid.Column="1" Height="24" Margin="0,0,5,0">
+				<Grid Grid.Row="0" Grid.Column="1" Height="24" Margin="0,0,5,0">
 					<TextBox HorizontalContentAlignment="Stretch" 
 					         Padding="2,0,20,0" Height="24" 
 					         VerticalAlignment="Center"
@@ -220,15 +217,28 @@
 					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
 					</Button>
 				</Grid>
-				<Button Grid.Column="2" Content="..." 
+				<Button Grid.Row="0" Grid.Column="2" Content="..." 
 				        Command="{Binding BrowseFolderCommand}"
 				        CommandParameter="xslt"
-						ToolTip="Select the output folder"
+				        ToolTip="Select the output folder"
 				        HorizontalAlignment="Left" VerticalAlignment="Center" 
 				        Height="24" Width="24" Margin="0,0,0,0"/>
 			</Grid>
 
-			<Grid Grid.Row="2" Margin="0,5,0,0">
+			<Grid Grid.Row="2" Visibility="{Binding  CanUseDefaultStudioTemplate, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Column="0" Text="  " MinWidth="80" Margin="5,0,5,0" />
+				<CheckBox Grid.Column="1" Margin="0,5,0,5"
+						  Content="Use default Trados Studio template"
+						  IsChecked="{Binding UseDefaultStudioTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+
+			<Grid Grid.Row="3" Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -236,8 +246,8 @@
 				<TextBlock  Margin="5,0,5,5" VerticalAlignment="Center" Grid.Column="0" MinWidth="80" Text="Name:"/>
 				<TextBox Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,0,30,0"/>
 			</Grid>
-			
-			<Grid Grid.Row="3" 
+
+			<Grid Grid.Row="4" 
 			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 			      Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
@@ -250,7 +260,7 @@
 				          Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</Grid>
 
-			<Grid Grid.Row="4"
+			<Grid Grid.Row="5"
 			      IsEnabled="{Binding CanEditProperties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
@@ -285,7 +295,7 @@
 
 			</Grid>
 
-			<Grid Grid.Row="5" Margin="0,5,0,0">
+			<Grid Grid.Row="6" Margin="0,5,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />

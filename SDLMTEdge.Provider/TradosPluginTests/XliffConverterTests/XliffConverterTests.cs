@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sdl.Community.Toolkit.LanguagePlatform.XliffConverter;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
 
 namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 {
@@ -20,8 +20,8 @@ namespace Sdl.Community.MTEdge.UnitTests.XliffConverterTests
 			var text = System.IO.File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SampleXliff.xliff"));
 			var xliff = Converter.ParseXliffString(text);
 
-			Assert.AreEqual("MTEdge", xliff.File.Header.Tools[0].ToolId);
-			Assert.AreEqual("SDL MTEdge", xliff.File.Header.Tools[0].ToolName);
+		//	Assert.AreEqual("MTEdge", xliff.File.Header.Tools[0].ToolId);
+			Assert.AreEqual("Language Weaver Edge", xliff.File.Header.Tools[0].ToolName);
 			Assert.AreEqual("5.4", xliff.File.Header.Tools[0].ToolVersion);
 
 			Assert.AreEqual("ar", xliff.File.SourceLanguage);

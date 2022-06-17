@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>SDL Trados Studio – Export Analysis Reports</PlugInName>
-  <Version>4.0.0.1</Version>
-  <Description>Plugin which exports Studio analysis report to CSV</Description>
-  <Author>SDL Community Developers</Author>
+  <PlugInName>Trados Studio – Export Analysis Reports</PlugInName>
+  <Version>5.0.6.1</Version>
+  <Description>Plugin which exports Trados Studio analysis report to CSV</Description>
+  <Author>Trados AppStore Team</Author>
 	<Include>
-		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Trados.Community.Toolkit.Core.dll</File>
 	</Include>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>

@@ -297,20 +297,16 @@ namespace Sdl.Community.Controls
 					}
 
 					// check if we have an image
-					if (welcomeImage == null)
-					{
-						// display a focus rect as a place holder
-						ControlPaint.DrawFocusRectangle(e.Graphics, glyphRect);
-					}
-					else
+					if (welcomeImage != null)
 					{
 						// draw welcome page image
 						e.Graphics.DrawImage(welcomeImage, glyphRect);
 					}
 
 					// calculate text sizes
-					titleRect.Location = new Point(WELCOME_GLYPH_WIDTH + HEADER_TEXT_PADDING,
-													HEADER_TEXT_PADDING);
+					titleRect.Location = welcomeImage != null ?
+						new Point(WELCOME_GLYPH_WIDTH + HEADER_TEXT_PADDING, HEADER_TEXT_PADDING) :
+						new Point(HEADER_TEXT_PADDING, HEADER_TEXT_PADDING);
 					titleRect.Width = this.Width - titleRect.Left - HEADER_TEXT_PADDING;
 					// determine title height
 					int welcomeTitleHeight = (int)Math.Ceiling(e.Graphics.MeasureString(this.title, welcomeTitleFont, titleRect.Width, textFormat).Height);

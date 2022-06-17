@@ -1,6 +1,6 @@
 ﻿using Sdl.MultiSelectComboBox.API;
 
-namespace Sdl.Community.Reports.Viewer.Model
+namespace Reports.Viewer.Plus.Model
 {
 	public class LanguageGroup: IItemGroup
 	{

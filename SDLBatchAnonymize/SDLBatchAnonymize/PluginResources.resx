@@ -167,7 +167,7 @@
     <value>Anonymizer settings</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>SDLBatchAnonymize</value>
+    <value>Trados Batch Anonymizer</value>
   </data>
   <data name="ProviderNameToolTip" xml:space="preserve">
     <value>This allows you to specify the name of the Translation Memory used. It will be applied to Machine Translation or Translation Memory results depending on the options selected in the Anonymizer settings</value>
@@ -213,5 +213,23 @@
   </data>
   <data name="UsernameHeader" xml:space="preserve">
     <value>Username</value>
+  </data>
+  <data name="RemoveQE_CheckBoxContent" xml:space="preserve">
+    <value>Remove Language Weaver provider quality estimation</value>
+  </data>
+  <data name="RemoveQE_ToolTipContent" xml:space="preserve">
+    <value>Remove Language Weaver provider quality estimation from the metadata of the segments</value>
+  </data>
+  <data name="MTCloudMetadata_GroupBoxHeader" xml:space="preserve">
+    <value>Language Weaver provider metadata</value>
+  </data>
+  <data name="AppStoreFolder" xml:space="preserve">
+    <value>RWS AppStore</value>
+  </data>
+  <data name="LogMessage_BatchTaskStarted" xml:space="preserve">
+	  <value>Batch task started...</value>
+  </data>
+  <data name="LogMessage_BackingUpProject" xml:space="preserve">
+	  <value>Backing up project...</value>
   </data>
 </root>

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Readers;
-using Sdl.Community.Transcreate.FileTypeSupport.MSOffice.Visitors;
-using Sdl.Community.Transcreate.Model;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Readers;
+using Trados.Transcreate.FileTypeSupport.MSOffice.Visitors;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.FileTypeSupport.MSOffice
+namespace Trados.Transcreate.FileTypeSupport.MSOffice
 {
 	public class ExportProcessor
 	{

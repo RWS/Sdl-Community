@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Sdl.Community.Transcreate.Extensions;
+using Trados.Transcreate.Extensions;
 
-namespace Sdl.Community.Transcreate.Controls
+namespace Trados.Transcreate.Controls
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml

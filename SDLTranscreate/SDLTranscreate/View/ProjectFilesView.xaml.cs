@@ -1,34 +1,43 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
-using Sdl.Community.Transcreate.ViewModel;
+using System.Windows.Threading;
+using Sdl.Desktop.IntegrationApi.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.ViewModel;
 
-namespace Sdl.Community.Transcreate.View
+namespace Trados.Transcreate.View
 {
 	/// <summary>
 	/// Interaction logic for ProjectFilesView.xaml
 	/// </summary>
-	public partial class ProjectFilesView : UserControl
+	public partial class ProjectFilesView : UserControl, IUIControl
 	{
-		private readonly ProjectFilesViewModel _viewModel;
-
-		public ProjectFilesView(ProjectFilesViewModel viewModel)
+		public ProjectFilesView()
 		{
 			InitializeComponent();
-
-			_viewModel = viewModel;
-			Loaded += ProjectFilesView_Loaded;
+			Loaded += OnLoaded;
 		}
 
-		/// <summary>
-		/// We need to wait for the view to be fully loaded before binding the view model
-		/// Ensure Loaded is called only once; unsubscribe to the Loaded event
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ProjectFilesView_Loaded(object sender, RoutedEventArgs e)
+		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
-			Loaded -= ProjectFilesView_Loaded;
-			DataContext = _viewModel;
+			Loaded -= OnLoaded;
+			Refresh();
+		}
+
+		private void Refresh()
+		{
+			var context = DataContext as ProjectFilesViewModel;
+			if (context?.ProjectFiles?.Count == 0)
+			{
+				// resolves know issue in binding properties on the view before tree is available
+				Dispatcher.Invoke(delegate { context.ProjectFiles = new List<ProjectFile> {new ProjectFile()}; }, DispatcherPriority.ContextIdle);
+				Dispatcher.Invoke(delegate { context.ProjectFiles = new List<ProjectFile>(); }, DispatcherPriority.ContextIdle);
+			}
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }

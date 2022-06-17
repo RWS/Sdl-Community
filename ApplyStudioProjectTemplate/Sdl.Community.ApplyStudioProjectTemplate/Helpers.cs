@@ -87,5 +87,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			}
 			return true;
 		}
+		public static object[] IntArrayToObjArray(int[] intArray)
+		{
+			var result = new object[intArray.Length];
+			for (var i = 0; i < intArray.Length; i++)
+				result[i] = intArray[i];
+			return result;
+		}
+
 	}
 }

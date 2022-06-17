@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Linq;
 using Sdl.Community.SDLBatchAnonymize.Interface;
+using System.Linq;
 
 namespace Sdl.Community.SDLBatchAnonymize.Service
 {
@@ -8,7 +10,8 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 	{
 		public void RemoveFileVersionComment(string projectPath)
 		{
-			const string comment = "Created by \'SDL Batch Anonymizer\'";
+			const string sdlComment = "Created by \'SDL Batch Anonymizer\'";
+			const string tradosComment = "Created by \'Trados Batch Anonymizer\'";
 			var nodesToBeRemoved = new List<XmlNode>();
 			var sdlProj = new XmlDocument();
 			sdlProj.Load(projectPath);
@@ -31,7 +34,7 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 							{
 								var fileVersionCommentValue = fileVersion.Attributes?["Comment"]?.Value.ToLower();
 								if (string.IsNullOrEmpty(fileVersionCommentValue)) continue;
-								if (fileVersionCommentValue.Equals(comment.ToLower()))
+								if (fileVersionCommentValue.Equals(sdlComment.ToLower()) || fileVersionCommentValue.Equals(tradosComment.ToLower()))
 								{
 									nodesToBeRemoved.Add(fileVersion);
 								}
@@ -47,37 +50,25 @@ namespace Sdl.Community.SDLBatchAnonymize.Service
 			sdlProj.Save(projectPath);
 		}
 
-		public void RemoveTemplateId(string projectPath)
+		public void RemoveTraces(string projectPath)
 		{
-			var taskTemplateId = "SDL Batch Anonymizer".ToLower();
-			var sdlProj = new XmlDocument();
-			sdlProj.Load(projectPath);
-			var tasksNodes = sdlProj.GetElementsByTagName("Tasks");
-			foreach (XmlNode taskNode in tasksNodes)
-			{
-				foreach (XmlNode taskChild in taskNode.ChildNodes)
-				{
-					var templateIdsNode = taskChild.SelectSingleNode("TaskTemplateIds");
-					if (templateIdsNode is null) continue;
-					foreach (XmlNode templateChild in templateIdsNode.ChildNodes)
-					{
-						for (var i = 0; i < templateChild.ChildNodes.Count; i++)
-						{
-							var templateChildNode = templateIdsNode.ChildNodes[i];
-							for (var j = 0; j < templateChildNode.ChildNodes.Count; j++)
-							{
-								var node = templateChildNode.ChildNodes[j];
-								if (string.IsNullOrEmpty(node.Value)) continue;
-								if (node.Value.ToLower().Equals(taskTemplateId))
-								{
-									node.ParentNode?.RemoveChild(node);
-								}
-							}
-						}
-					}
-				}
-			}
-			sdlProj.Save(projectPath);
+			var sdlTaskTemplateId = "SDL Batch Anonymizer";
+			var tradosTaskTemplateId = "Trados Batch Anonymizer";
+			var rootElement = XElement.Load(projectPath);
+
+			rootElement.Element("Tasks")?.Elements()
+				.Where(el => el.Value == sdlTaskTemplateId ||
+									el.Value == tradosTaskTemplateId)
+				.Remove();
+
+			rootElement.Element("InitialTaskTemplate")?.Elements().Elements()
+				.Where(
+					el =>
+						el.Attribute("TaskTemplateId")?.Value == sdlTaskTemplateId ||
+						el.Attribute("TaskTemplateId")?.Value == tradosTaskTemplateId)
+				.Remove();
+
+			rootElement.Save(projectPath);
 		}
 	}
 }

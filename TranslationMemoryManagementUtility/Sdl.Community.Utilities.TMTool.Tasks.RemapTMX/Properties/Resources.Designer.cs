@@ -115,7 +115,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export for SDL Trados Studio 2021.
+        ///   Looks up a localized string similar to Export for Trados Studio 2021.
         /// </summary>
         internal static string TaskName {
             get {

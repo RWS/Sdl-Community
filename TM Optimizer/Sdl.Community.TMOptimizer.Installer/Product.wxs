@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="TMOptimizer 2021" Language="1033" Version="3.2.1.0" Manufacturer="Sdl" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
+	<Product Id="*" Name="TMOptimizer 2022" Language="1033" Version="4.0.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="product.ico" SourceFile="$(var.ProjectDir)product.ico" />
 		<Property Id="ARPPRODUCTICON" Value="product.ico" />
 
-		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
-
-		<Property Id="WIXUI_INSTALLDIR" Value="Studio16" />
+		<Property Id="WIXUI_INSTALLDIR" Value="TMOPTIMIZER" />
 		<!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
 
-		<UIRef Id="WixUI_Minimal"/>
+		<UIRef Id="WixUI_InstallDir"/>
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes"/>
@@ -23,6 +21,21 @@
 			<ComponentRef Id='ApplicationProgramDataShortcut' />
 			<ComponentRef Id='ApplicationShortcutDesktop' />
 		</Feature>
+
+		<UI>
+			<UIRef Id="WixUI_InstallDir" />
+			<Publish Dialog="WelcomeDlg"
+			         Control="Next"
+			         Event="NewDialog"
+			         Value="InstallDirDlg"
+			         Order="2">1</Publish>
+			<Publish Dialog="InstallDirDlg"
+			         Control="Back"
+			         Event="NewDialog"
+			         Value="WelcomeDlg"
+			         Order="2">1</Publish>
+		</UI>
+
 	</Product>
 
 	<!-- Create shortcut to the Desktop directory. Use .exe from the INSTALLFOLDER where the application together with all 
@@ -30,20 +43,20 @@
 	<Fragment>
 		<DirectoryRef Id="DesktopFolder">
 			<Component Id="ApplicationShortcutDesktop" Guid="07bd2eb0-4658-4fed-b1d1-a93fe7581f68">
-				<Shortcut Id="ApplicationDesktopShortcut" Name="TMOptimizer2021" Icon="product.ico" Description="TMOptimizer2021" Target="[Studio16]Sdl.Community.TMOptimizer.exe" WorkingDirectory="Studio16" />
+				<Shortcut Id="ApplicationDesktopShortcut" Name="TMOptimizer2022" Icon="product.ico" Description="TMOptimizer2022" Target="[TMOPTIMIZER]Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOPTIMIZER" />
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.TMOptimizer" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
 
-	<!-- Create shortcut to the SDLTradosStudio2021Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	<!-- Create shortcut to the TradosStudio2022Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
-		<DirectoryRef Id="SDLTradosStudio2021Apps">
+		<DirectoryRef Id="TradosStudio2022Apps">
 			<Component Id="ApplicationProgramDataShortcut" Guid="1fa73f50-a0d8-43fc-8894-5c222a142545">
-				<Shortcut Id="ApplicationProgDataShortcut" Name="TMOptimizer2021" Icon="product.ico" Description="TMOptimizer2021" Target="[Studio16]\Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOptimizer" />
-				<RemoveFolder Id="RemoveSDLTradosStudio2021Apps" Directory="SDLTradosStudio2021Apps" On="uninstall" />
+				<Shortcut Id="ApplicationProgDataShortcut" Name="TMOptimizer2022" Icon="product.ico" Description="TMOptimizer2022" Target="[TMOPTIMIZER]\Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOPTIMIZER" />
+				<RemoveFolder Id="RemoveTradosStudio2022Apps" Directory="TradosStudio2022Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Communities.TMOptimizerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
@@ -51,19 +64,17 @@
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<!-- Define location where the app will be installed, Studio16 folder (it is used because dll's needs to be loaded from the Studio folder)-->
+			<!-- Define location where the app will be installed, TMOptimizer folder (it is used because dll's needs to be loaded from the Studio folder)-->
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="SDL" Name="SDL" >
-					<Directory Id="SDLTradosStudio" Name="SDL Trados Studio" >
-						<Directory Id="Studio16" Name="Studio16"/>
-					</Directory>
+				<Directory Id="Trados" Name="Trados" >
+					<Directory Id="TMOPTIMIZER" Name="TMOptimizer"/>
 				</Directory>
 			</Directory>
 
-			<!-- Define location where the shortcut will be added: in our case, folder SDLTradosStudio2021Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+			<!-- Define location where the shortcut will be added: in our case, folder TradosStudio2022Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
-				<Directory Id="SDLTradosStudio2021Apps" Name="SDL Trados Studio 2021 Apps" />
+				<Directory Id="TradosStudio2022Apps" Name="Trados Studio 2022 Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
@@ -73,9 +84,33 @@
 
 	<!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
 	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="Studio16">
+		<ComponentGroup Id="ProductComponents" Directory="TMOPTIMIZER">
 			<Component Id="Sdl.Community.TMOptimizer">
 				<File Id="Sdl.Community.TMOptimizer.exe" Name="Sdl.Community.TMOptimizer.exe" Source="$(var.Sdl.Community.TMOptimizer.TargetPath)" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.Core.Globalization">
+				<File Id="Sdl.Core.Globalization.dll" Name="Sdl.Core.Globalization.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Core.Globalization.dll" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.Core.PluginFramework">
+				<File Id="Sdl.Core.PluginFramework.dll" Name="Sdl.Core.PluginFramework.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Core.PluginFramework.dll" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.Core.TM.ImportExport">
+				<File Id="Sdl.Core.TM.ImportExport.dll" Name="Sdl.Core.TM.ImportExport.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Core.TM.ImportExport.dll" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.Core">
+				<File Id="Sdl.LanguagePlatform.Core.dll" Name="Sdl.LanguagePlatform.Core.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.LanguagePlatform.Core.dll" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.TranslationMemory">
+				<File Id="Sdl.LanguagePlatform.TranslationMemory.dll" Name="Sdl.LanguagePlatform.TranslationMemory.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.LanguagePlatform.TranslationMemory.dll" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.TranslationMemoryApi">
+				<File Id="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Name="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.LanguagePlatform.TranslationMemoryApi.dll" KeyPath="yes" />
 			</Component>
 
 			<Component Id="Sdl.Community.TMOptimizer.exe.config" Guid="55dfa363-c959-49cb-861e-c05c75860968">

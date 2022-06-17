@@ -6,12 +6,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Model;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.ViewModel
+namespace Trados.Transcreate.ViewModel
 {
 	public class SettingsViewModel : BaseModel, IDisposable
 	{		

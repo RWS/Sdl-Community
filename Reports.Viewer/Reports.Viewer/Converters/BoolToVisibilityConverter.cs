@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Sdl.Community.Reports.Viewer.Converters
+namespace Reports.Viewer.Plus.Converters
 {
 	[ValueConversion(typeof(bool), typeof(Visibility))]
 	public sealed class BoolToVisibilityConverter : IValueConverter

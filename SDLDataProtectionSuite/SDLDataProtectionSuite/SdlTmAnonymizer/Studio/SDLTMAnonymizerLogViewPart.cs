@@ -7,6 +7,7 @@ using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 {
+	//We'll not rebrand the ViewPartId because is used by Useful tips
 	[ViewPart(
 		Id = "SDLTMAnonymizerLogViewPart",
 		Name = "Log Report",

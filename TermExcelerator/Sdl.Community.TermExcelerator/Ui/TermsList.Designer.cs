@@ -36,12 +36,11 @@
             this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bsTarget = new System.Windows.Forms.BindingSource(this.components);
             this.buttonsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.confirmBtn = new System.Windows.Forms.Button();
-            this.addBtn = new System.Windows.Forms.Button();
             this.btnSync = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.FastObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.deleteLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.addBtn = new System.Windows.Forms.Button();
             this.deleteBtn = new System.Windows.Forms.Button();
             this.mainLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).BeginInit();
@@ -117,8 +116,6 @@
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
-            this.buttonsLayoutPanel.Controls.Add(this.confirmBtn, 1, 0);
-            this.buttonsLayoutPanel.Controls.Add(this.addBtn, 0, 0);
             this.buttonsLayoutPanel.Controls.Add(this.btnSync, 2, 0);
             this.buttonsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonsLayoutPanel.Location = new System.Drawing.Point(191, 501);
@@ -128,28 +125,6 @@
             this.buttonsLayoutPanel.Size = new System.Drawing.Size(344, 44);
             this.buttonsLayoutPanel.TabIndex = 2;
             // 
-            // confirmBtn
-            // 
-            this.confirmBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.confirmBtn.Location = new System.Drawing.Point(148, 3);
-            this.confirmBtn.Name = "confirmBtn";
-            this.confirmBtn.Size = new System.Drawing.Size(75, 23);
-            this.confirmBtn.TabIndex = 1;
-            this.confirmBtn.Text = "Save Entry";
-            this.confirmBtn.UseVisualStyleBackColor = true;
-            this.confirmBtn.Click += new System.EventHandler(this.confirmBtn_Click);
-            // 
-            // addBtn
-            // 
-            this.addBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addBtn.Location = new System.Drawing.Point(35, 3);
-            this.addBtn.Name = "addBtn";
-            this.addBtn.Size = new System.Drawing.Size(75, 23);
-            this.addBtn.TabIndex = 2;
-            this.addBtn.Text = "Add";
-            this.addBtn.UseVisualStyleBackColor = true;
-            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
-            // 
             // btnSync
             // 
             this.btnSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -158,7 +133,7 @@
             this.btnSync.Name = "btnSync";
             this.btnSync.Size = new System.Drawing.Size(75, 23);
             this.btnSync.TabIndex = 3;
-            this.btnSync.Text = "Sync";
+            this.btnSync.Text = "Save list";
             this.btnSync.UseVisualStyleBackColor = true;
             this.btnSync.Click += new System.EventHandler(this.btnSync_Click);
             // 
@@ -174,8 +149,6 @@
             this.sourceListView.FullRowSelect = true;
             this.sourceListView.GridLines = true;
             this.sourceListView.HideSelection = false;
-            this.sourceListView.HighlightBackgroundColor = System.Drawing.Color.Empty;
-            this.sourceListView.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.sourceListView.Location = new System.Drawing.Point(3, 3);
             this.sourceListView.MultiSelect = false;
             this.sourceListView.Name = "sourceListView";
@@ -198,18 +171,31 @@
             // 
             // deleteLayoutPanel
             // 
-            this.deleteLayoutPanel.ColumnCount = 1;
+            this.deleteLayoutPanel.ColumnCount = 2;
             this.deleteLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.deleteLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
             this.deleteLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.deleteLayoutPanel.Controls.Add(this.addBtn, 1, 0);
             this.deleteLayoutPanel.Controls.Add(this.deleteBtn, 0, 0);
             this.deleteLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.deleteLayoutPanel.Location = new System.Drawing.Point(3, 501);
             this.deleteLayoutPanel.Name = "deleteLayoutPanel";
             this.deleteLayoutPanel.RowCount = 1;
             this.deleteLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.deleteLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.deleteLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
             this.deleteLayoutPanel.Size = new System.Drawing.Size(182, 44);
             this.deleteLayoutPanel.TabIndex = 4;
+            // 
+            // addBtn
+            // 
+            this.addBtn.AutoSize = true;
+            this.addBtn.Location = new System.Drawing.Point(97, 3);
+            this.addBtn.Name = "addBtn";
+            this.addBtn.Size = new System.Drawing.Size(82, 23);
+            this.addBtn.TabIndex = 2;
+            this.addBtn.Text = "Add";
+            this.addBtn.UseVisualStyleBackColor = true;
+            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
             // 
             // deleteBtn
             // 
@@ -234,6 +220,7 @@
             this.buttonsLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sourceListView)).EndInit();
             this.deleteLayoutPanel.ResumeLayout(false);
+            this.deleteLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -243,15 +230,14 @@
         private System.Windows.Forms.DataGridView targetGridView;
         private System.Windows.Forms.TableLayoutPanel mainLayoutPanel;
         private System.Windows.Forms.TableLayoutPanel buttonsLayoutPanel;
-        private System.Windows.Forms.Button confirmBtn;
         private BrightIdeasSoftware.FastObjectListView sourceListView;
         private BrightIdeasSoftware.OLVColumn sourceColumn;
-        private System.Windows.Forms.Button addBtn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Target;
         private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
         private System.Windows.Forms.BindingSource bsTarget;
         private System.Windows.Forms.TableLayoutPanel deleteLayoutPanel;
         private System.Windows.Forms.Button deleteBtn;
         private System.Windows.Forms.Button btnSync;
-    }
+		private System.Windows.Forms.Button addBtn;
+	}
 }

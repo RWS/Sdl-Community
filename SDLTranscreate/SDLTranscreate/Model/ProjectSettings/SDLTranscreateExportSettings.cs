@@ -1,7 +1,7 @@
 ﻿using System;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.Transcreate.Model.ProjectSettings
+namespace Trados.Transcreate.Model.ProjectSettings
 {
 	public class SDLTranscreateExportSettings : SettingsGroup
 	{

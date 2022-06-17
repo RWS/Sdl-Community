@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Interfaces;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
 	public class ProjectFile : BaseModel, IDisposable, ICloneable
 	{
@@ -14,6 +14,7 @@ namespace Sdl.Community.Transcreate.Model
 		private string _path;
 		private string _externalFilePath;
 		private string _targetLanguage;
+		private string _report;
 		private Enumerators.Status _status;
 
 		public ProjectFile()
@@ -159,7 +160,20 @@ namespace Sdl.Community.Transcreate.Model
 
 		public string ShortMessage { get; set; }
 
-		public string Report { get; set; }
+		public string Report
+		{
+			get => _report;
+			set
+			{
+				if (_report == value)
+				{
+					return;
+				}
+
+				_report = value;
+				OnPropertyChanged(nameof(Report));
+			}
+		}
 
 		public void Dispose()
 		{

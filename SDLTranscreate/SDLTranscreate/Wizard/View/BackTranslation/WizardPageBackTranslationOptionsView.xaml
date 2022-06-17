@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Trados.Transcreate.Wizard.View.BackTranslation.WizardPageBackTranslationOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sdl="http://schemas.sdl.com/xaml"
+             xmlns:backTranslation="clr-namespace:Trados.Transcreate.Wizard.ViewModel.BackTranslation"
+             mc:Ignorable="d" 
+             d:DesignHeight="290" d:DesignWidth="700" d:DataContext="{d:DesignInstance backTranslation:WizardPageBackTranslationOptionsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Trados.Transcreate;component/Styles/DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Options">
+			<Grid Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<CheckBox Grid.Row="0" Margin="5,5,5,5" Grid.Column="0"  
+				          Content="Overwrite existing Back-Translation files." 
+				          IsEnabled="{Binding OverwriteExistingBackTranslationsEnabled}"
+				          IsChecked="{Binding OverwriteExistingBackTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<Image Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center" Stretch="UniformToFill"
+				                   Width="16"  RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+				                   Source="../../../Resources/information.png"
+				                   ToolTip="{Binding OverwriteExistingBackTranslationsToolTip, Mode=OneWay}"/>
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

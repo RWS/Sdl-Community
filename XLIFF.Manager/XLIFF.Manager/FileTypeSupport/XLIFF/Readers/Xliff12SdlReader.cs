@@ -27,9 +27,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 			var xliff = new Xliff();
 
 			var xmlTextReader = new XmlTextReader(filePath);
+			xmlTextReader.WhitespaceHandling = WhitespaceHandling.All;
 			var xmlReaderSettings = new XmlReaderSettings
 			{
-				ValidationType = ValidationType.None, IgnoreWhitespace = true, IgnoreComments = true
+				ValidationType = ValidationType.None,
+				IgnoreWhitespace = false,
+				IgnoreComments = true
 			};
 			using (var xmlReader = XmlReader.Create(xmlTextReader, xmlReaderSettings))
 			{
@@ -573,6 +576,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							segment.Elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
@@ -669,6 +678,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							segment.Elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							segment.Elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
@@ -756,9 +771,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						elementTagPair.TagContent += xmlReader.Value;
-						break;
+					//case XmlNodeType.Whitespace:
+					//	elementTagPair.TagContent += xmlReader.Value;
+					//	break;
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
 						break;
@@ -803,9 +818,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						elementTagPair.TagContent += xmlReader.Value;
-						break;
+					//case XmlNodeType.Whitespace:
+					//	elementTagPair.TagContent += xmlReader.Value;
+					//	break;
 					case XmlNodeType.Text:
 						elementTagPair.TagContent += xmlReader.Value;
 						break;
@@ -847,9 +862,9 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							}
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						placeholder.TagContent += xmlReader.Value;
-						break;
+					//case XmlNodeType.Whitespace:
+					//	placeholder.TagContent += xmlReader.Value;
+					//	break;
 					case XmlNodeType.Text:
 						placeholder.TagContent += xmlReader.Value;
 						break;
@@ -858,6 +873,42 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 						break;
 					case XmlNodeType.EntityReference:
 						placeholder.TagContent += xmlReader.Name;
+						break;
+				}
+			}
+
+			return placeholder;
+		}
+
+		private ElementGenericPlaceholder ReadElementGenericPlaceholder(XmlReader xmlReader)
+		{
+			var placeholder = new ElementGenericPlaceholder();
+
+			var index = 0;
+			while (xmlReader.Read())
+			{
+				switch (xmlReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						if (index == 0 && string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							index++;
+							while (xmlReader.MoveToNextAttribute())
+							{
+								if (string.Compare(xmlReader.Name, "id", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.TagId = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "equiv-text", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.TextEquivalent = xmlReader.Value;
+								}
+								if (string.Compare(xmlReader.Name, "ctype", StringComparison.OrdinalIgnoreCase) == 0)
+								{
+									placeholder.CType = xmlReader.Value;
+								}
+							}
+						}
 						break;
 				}
 			}
@@ -916,6 +967,12 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							elements.Add(ReadElementPlaceholder(xmlReaderSub));
 							xmlReaderSub.Close();
 						}
+						else if (string.Compare(xmlReader.Name, "x", StringComparison.OrdinalIgnoreCase) == 0)
+						{
+							var xmlReaderSub = xmlReader.ReadSubtree();
+							elements.Add(ReadElementGenericPlaceholder(xmlReaderSub));
+							xmlReaderSub.Close();
+						}
 						else if (string.Compare(xmlReader.Name, "mrk", StringComparison.OrdinalIgnoreCase) == 0)
 						{
 							var xmlReaderSub = xmlReader.ReadSubtree();
@@ -928,16 +985,16 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Readers
 							xmlReaderSub.Close();
 						}
 						break;
-					case XmlNodeType.Whitespace:
-						{
-							var whiteSpace = new ElementText
-							{
-								Text = xmlReader.Value
-							};
+					//case XmlNodeType.Whitespace:
+					//	{
+					//		var whiteSpace = new ElementText
+					//		{
+					//			Text = xmlReader.Value
+					//		};
 
-							elements.Add(whiteSpace);
-						}
-						break;
+					//		elements.Add(whiteSpace);
+					//	}
+					//	break;
 					case XmlNodeType.Text:
 						{
 							var text = new ElementText

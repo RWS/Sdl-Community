@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Sdl.Community.Reports.Viewer.Commands
+namespace Reports.Viewer.Plus.Commands
 {
 	public class CommandHandler : ICommand
 	{

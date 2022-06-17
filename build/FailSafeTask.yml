@@ -24,9 +24,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: solution
-  value: '**/FailSafeTask.sln'
+  value: '**/Sdl.Community.FailSafeTask.sln'
 - name: pathToPublish
-  value: 'FailSafeTask\Sdl.Community.FailSafeTask\bin\Release\FailSafeTask.sdlplugin'
+  value: 'FailSafeTask\Sdl.Community.FailSafeTask\bin\Release\Sdl.Community.FailSafeTask.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

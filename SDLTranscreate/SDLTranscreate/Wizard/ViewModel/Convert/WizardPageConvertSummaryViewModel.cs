@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using Sdl.Community.Transcreate.Model;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
+namespace Trados.Transcreate.Wizard.ViewModel.Convert
 {
 	public class WizardPageConvertSummaryViewModel : WizardPageViewModelBase
 	{
@@ -79,7 +79,7 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Convert
 					TaskContext.ProjectFiles.Where(a => a.Selected && Equals(a.TargetLanguage, targetLanguage));
 				foreach (var targetLanguageFile in targetLanguageFiles)
 				{
-					summaryText += indent + string.Format(PluginResources.label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
+					summaryText += indent + string.Format(PluginResources.Label_SdlXliffFile, targetLanguageFile.Location) + Environment.NewLine;
 				}
 			}
 

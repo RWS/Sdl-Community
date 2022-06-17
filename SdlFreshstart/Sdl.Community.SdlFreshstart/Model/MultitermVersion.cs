@@ -9,9 +9,10 @@ namespace Sdl.Community.SdlFreshstart.Model
 	{
 		private bool _isSelected;
 
-		public MultitermVersion(string publicVersion)
+		public MultitermVersion(string publicVersion,Version executableVersion)
 		{
 			PublicVersion = publicVersion;
+			ExecutableVersion = executableVersion;
 		}
 
 		public string CacheFolderName
@@ -40,8 +41,11 @@ namespace Sdl.Community.SdlFreshstart.Model
 			var x when x.Contains("2017") => 14,
 			var x when x.Contains("2019") => 15,
 			var x when x.Contains("2021") => 16,
+			var x when x.Contains("2022") => 17,
 			_ => 0
 		};
+
+		public Version ExecutableVersion { get; set; }
 
 		public string MultiTermLocal => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
 			MultitermFolderPath);
@@ -56,8 +60,9 @@ namespace Sdl.Community.SdlFreshstart.Model
 			MultitermFolderPath, "Updates");
 
 		public string PublicVersion { get; }
-		public string MultiTermRegistryKey => $@"HKEY_CURRENT_USER\Software\SDL\SDL MultiTerm\{VersionName}";
+		public string MultiTermFolder => MajorVersion > 16 ? @"Trados\MultiTerm" : @"SDL\SDL MultiTerm";
+		public string MultiTermRegistryKey => $@"{MultiTermFolder}\{VersionName}";
 		public string VersionName => $"MultiTerm{MajorVersion}";
-		private string MultitermFolderPath => $@"SDL\SDL MultiTerm\{VersionName}";
+		private string MultitermFolderPath => $@"{MultiTermFolder}\{VersionName}";
 	}
 }

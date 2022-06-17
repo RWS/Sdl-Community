@@ -1,8 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>SDL Legit!</PlugInName>
-	<Version>3.0.1.1</Version>
+	<PlugInName>Trados Legit!</PlugInName>
+	<Version>4.0.0.1</Version>
 	<Description>This application supports the batch conversion of source files to TTX or Bilingual Doc. so they can be used in a legacy workflow.</Description>
-	<Author>SDL Community Developers</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0" />
+	<Author>Trados AppStore Team</Author>
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<Include>
+		<File>Interop.TmAccess.dll</File>
+		<File>Interop.TMFileServices.dll</File>
+		<File>Trados.Interop.SettingsManager.dll</File>
+	</Include>
 </PluginPackage>

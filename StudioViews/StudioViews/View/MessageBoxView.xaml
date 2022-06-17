@@ -1,0 +1,68 @@
+﻿<Window x:Class="Sdl.Community.StudioViews.View.MessageBoxView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:Sdl.Community.StudioViews.ViewModel"
+        ShowInTaskbar="True"
+		ResizeMode="NoResize"
+		WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"		
+        Title="{Binding Title}" 
+        d:DesignHeight="210"
+        d:DesignWidth="500" 
+        MaxWidth="650" MaxHeight="400"
+		MinWidth="500" MinHeight="210"
+        d:DataContext="{d:DesignInstance viewModel:MessageBoxViewModel}" SizeToContent="WidthAndHeight">
+
+	<Window.Resources>
+
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0" Margin="10,15,10,10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<Image Visibility="{Binding Path=ShowImage, Converter={StaticResource BooleanToVisibilityConverter}}" 
+			       Source="{Binding ImageUrl}" Height="32" Width="32" VerticalAlignment="Top" Margin="5,5,10,0"/>
+
+			<TextBlock Grid.Column="1" Padding="5,10,5,5" Margin="0" TextWrapping="Wrap"
+			           Text="{Binding Message, Mode=OneWay}"/>
+		</Grid>
+
+		<Grid Grid.Row="1" Height="27" Margin="10" VerticalAlignment="Bottom">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+
+			<Button Grid.Column="0" 
+			        Content="Open folder in file explorer" 
+			        Padding="15,0,15,0"
+			        Command="{Binding OpenFolderInExplorerCommand}"/>
+			
+			<Button Grid.Column="1" Content="View Report"
+			        Margin="10,0,10,0" 
+			        Padding="15,0,15,0"
+			        Visibility="{Binding Path=ShowViewReport, Converter={StaticResource BooleanToVisibilityConverter}}"
+			        Command="{Binding ViewReportCommand}"/>
+
+			<Button Grid.Column="2" Margin="0" Width="90" IsDefault="True" Tag="OK"
+			        Command="{Binding OkClickCommand}" 
+			        HorizontalAlignment="Right" Content="OK"/>
+		</Grid>
+
+	</Grid>
+</Window>
+

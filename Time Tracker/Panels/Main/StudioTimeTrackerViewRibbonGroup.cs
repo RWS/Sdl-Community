@@ -13,17 +13,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     {
     }
 
-    [Action("StudioTimeTrackerContactRibbonGroupAbout", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerContactRibbonGroupAbout_Name", Description = "StudioTimeTrackerContactRibbonGroupAbout_Description", Icon = "StudioTimeTrackerAbout_Icon")]
-    [ActionLayout(typeof(StudioTimeTrackerContactRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Large)]
-    public class StudioTimeTrackerContactAbout : AbstractViewControllerAction<StudioTimeTrackerViewController>
-    {
-        protected override void Execute()
-        {
-            Controller.ViewAboutInfo();
-        }
-    }
-    
-
     [RibbonGroup("StudioTimeTrackerToolsRibbonGroup", "StudioTimeTrackerToolsRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 1)]
     internal class StudioTimeTrackerToolsRibbonGroup : AbstractRibbonGroup

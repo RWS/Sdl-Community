@@ -17,13 +17,13 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private bool _restOfFilesParsed;
 
-		public void ParseRestOfFiles(ProjectsController projectController, ProjectFile[] taskFiles,
+		public void ParseRestOfFiles(IProject project, ProjectFile[] taskFiles,
 			AbstractBilingualContentProcessor contentProcessor, out List<string> ignoredFiles)
 		{
 			ignoredFiles = _ignoredList;
 			if (_restOfFilesParsed) return;
 
-			var unParsedProjectFiles = GetUnparsedFiles(projectController, taskFiles);
+			var unParsedProjectFiles = GetUnparsedFiles(project, taskFiles);
 
 			CloseOpenedDocuments();
 
@@ -57,12 +57,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			}
 		}
 
-		private List<ProjectFile> GetUnparsedFiles(ProjectsController projectController, ProjectFile[] taskFiles)
+		private IEnumerable<ProjectFile> GetUnparsedFiles(IProject project, IEnumerable<ProjectFile> taskFiles)
 		{
-			var project =
-				projectController.GetProjects().FirstOrDefault(proj => proj.GetProjectInfo().Id == taskFiles[0].ProjectId);
 			var projectFiles = project?.GetTargetLanguageFiles();
-
 			var taskFilesIds = taskFiles.GetIds();
 			var unparsedFiles = projectFiles?.Where(file => !taskFilesIds.Contains(file.Id)).ToList();
 

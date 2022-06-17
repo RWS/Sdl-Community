@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Community.MTCloud.Provider.Service.RateIt;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -26,16 +27,15 @@ namespace Sdl.Community.MTCloud.Provider.View
 
 		private void LoadDataContext()
 		{
-			var shortcutService = new ShortcutService();
+			var versionService = new VersionService();
+			var shortcutService = new ShortcutService(versionService);
 			var actionProvider = new ActionProvider();
 			var messageBoxService = new MessageBoxService();
 
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var segmentSupervisor = new SegmentSupervisor(editorController);
-			var eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
+			var editorController = MtCloudApplicationInitializer.EditorController;
 
-			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, segmentSupervisor, messageBoxService,
-				editorController, eventAggregator);
+			var rateItViewModel = new RateItViewModel(shortcutService, actionProvider, MtCloudApplicationInitializer.SegmentSupervisor, messageBoxService,
+				editorController);
 			_rateItWindow = new RateItView
 			{
 				DataContext = rateItViewModel

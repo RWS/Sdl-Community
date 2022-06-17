@@ -9,15 +9,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
-using Sdl.Community.Reports.Viewer.Actions;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.CustomEventArgs;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.View;
-using Sdl.Reports.Viewer.API.Model;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Plus.Actions;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.CustomEventArgs;
+using Reports.Viewer.Plus.Model;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Task = System.Threading.Tasks.Task;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
 	{
@@ -28,6 +29,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private Report _selectedReport;
 		private bool _isReportSelected;
 		private ObservableCollection<ReportGroup> _reportGroups;
+		private IProject _selectedProject;
 		private GroupType _groupType;
 		private List<GroupType> _groupTypes;
 		private string _projectLocalFolder;
@@ -47,7 +49,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ICommand _saveAsCommand;
 		private ICommand _mouseDoubleClick;
 
-		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo)
+		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo, IProject selectedProject)
 		{
 			_reports = reports;
 			_filteredReports = _reports;
@@ -55,6 +57,8 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 			Settings = settings;
 			_pathInfo = pathInfo;
 			_filterString = string.Empty;
+
+			SelectedProject = selectedProject;
 
 			_groupType = GroupTypes.FirstOrDefault(a => a.Type == settings.GroupByType) ?? GroupTypes.First();
 
@@ -88,8 +92,6 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
 		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
-
-		public ReportsNavigationView ReportsNavigationView { get; set; }
 
 		public void AddReports(List<Report> reports)
 		{
@@ -191,6 +193,21 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				if (ReportViewModel != null)
 				{
 					ReportViewModel.ProjectLocalFolder = ProjectLocalFolder;
+				}
+			}
+		}
+
+		public IProject SelectedProject
+		{
+			get { return _selectedProject; }
+			set
+			{
+				_selectedProject = value;
+				OnPropertyChanged(nameof(SelectedProject));
+
+				if (ReportViewModel != null)
+				{
+					ReportViewModel.SelectedProject = SelectedProject;
 				}
 			}
 		}
@@ -402,7 +419,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						string.Compare(a.Name ?? string.Empty, (_groupType.Type == "Group" ? report.Language ?? string.Empty : report.Group ?? string.Empty), StringComparison.CurrentCultureIgnoreCase) == 0);
 					if (groupItem != null)
 					{
-						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, report.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, report.Id.ToString(), StringComparison.CurrentCultureIgnoreCase) == 0);
 						if (reportState != null)
 						{
 							report.IsSelected = reportState.IsSelected;
@@ -429,7 +446,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 						reportGroup.GroupItems.Add(groupItem);
 						foreach (var itemReport in groupItem.Reports)
 						{
-							var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+							var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id.ToString(), StringComparison.CurrentCultureIgnoreCase) == 0);
 							if (reportState != null)
 							{
 								itemReport.IsSelected = reportState.IsSelected;
@@ -471,7 +488,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					foreach (var itemReport in groupItem.Reports)
 					{
-						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id, StringComparison.CurrentCultureIgnoreCase) == 0);
+						var reportState = _previousReportStates?.FirstOrDefault(a => string.Compare(a.Id, itemReport.Id.ToString(), StringComparison.CurrentCultureIgnoreCase) == 0);
 						if (reportState != null)
 						{
 							itemReport.IsSelected = reportState.IsSelected;
@@ -548,11 +565,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 					foreach (var report in groupItem.Reports)
 					{
-						if (!reportStates.Exists(a => a.Id == report.Id))
+						if (!reportStates.Exists(a => a.Id == report.Id.ToString()))
 						{
 							reportStates.Add(new ReportState
 							{
-								Id = report.Id,
+								Id = report.Id.ToString(),
 								IsSelected = report.IsSelected
 							});
 						}
@@ -602,7 +619,11 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 				}
 			}
 
-			reportGroups[0].IsSelected = true;
+			var firstGroup = reportGroups.FirstOrDefault();
+			if (firstGroup != null)
+			{
+				firstGroup.IsSelected = true;
+			}
 
 			return reportGroups;
 		}
@@ -682,14 +703,14 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 		private void PrintPreview(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
-			action.Run();
+			//var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
+			//action.Run();
 		}
 
 		private void PageSetup(object parameter)
 		{
-			var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
-			action.Run();
+			//var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
+			//action.Run();
 		}
 
 		private void SaveAs(object parameter)

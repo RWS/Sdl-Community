@@ -1,54 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sdl.Community.ExportAnalysisReports.Service;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.ExportAnalysisReports
 {
-	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
-	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Export Analysis Reports")]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
+	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
 	public class ReportExporterRibbon : AbstractRibbonGroup
 	{
 	}
 
-	[Action("ExportAnalysisReports", Name = "Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Export Analysis Reports for all analysed projects")]
+	[Action("ExportAnalysisReports", Name = "Trados Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Trados Export Analysis Reports for all analysed projects")]
 	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
-	class ReportExporterViewPartAction : AbstractAction
+	class ReportExporterViewPartAction : AbstractExportReportAction
 	{
-		public override void Initialize()
-		{
-			base.Initialize();
-			Text = "Export Analysis Reports";
-		}
-		protected override void Execute()
-		{
-			var exporter = new ReportExporterControl();
-			exporter.ShowDialog();
-		}
 	}
 
-	[Action("ExportAnalysisReports.Button", Name = "Export Analysis Reports (selected projects)", Description = "Open Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
+	[Action("ExportAnalysisReports.Button", Name = "Trados Export Analysis Reports (selected projects)", Description = "Open Trados Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
-	public class ReportExporter : AbstractAction
+	public class ReportExporter : AbstractExportReportAction
+	{
+	}
+
+	public class AbstractExportReportAction : AbstractAction
 	{
 		public override void Initialize()
 		{
 			base.Initialize();
-			Text = "Export Analysis Reports";
+			Text = "Trados Export Analysis Reports";
 		}
+
 		protected override void Execute()
 		{
-			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var selectedProjects = projectController?.SelectedProjects;
-			var foldersPth = new List<string>();
-			foreach (var project in selectedProjects)
+			var pathInfo = new PathInfo();
+			var settingsService = new SettingsService(pathInfo);
+			var projectService = new ProjectService();
+			var messageBoxService = new MessageBoxService();
+			var reportService = new ReportService(messageBoxService, projectService, settingsService);
+			
+			var studioProjectsPaths = new List<string>();
+			var selectedProjects = projectService.GetSelectedStudioProjects();
+			if (selectedProjects != null)
 			{
-				foldersPth.Add(project.FilePath);
+				studioProjectsPaths.AddRange(selectedProjects.Select(project => project.FilePath));
 			}
-			var dialog = new ReportExporterControl(foldersPth);
+
+			var dialog = new ReportExporterControl(studioProjectsPaths, settingsService, projectService, messageBoxService, reportService);
 			dialog.ShowDialog();
 		}
 	}

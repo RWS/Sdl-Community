@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Sdl.Community.Transcreate.Service.ProgressDialog
+namespace Trados.Transcreate.Service.ProgressDialog
 {
 	internal class ProgressDialogResult
 	{

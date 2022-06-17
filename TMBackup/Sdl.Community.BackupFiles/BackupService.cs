@@ -4,22 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NLog;
 
 namespace Sdl.Community.BackupFiles
 {
 	public class BackupService
 	{
-		public static readonly Log Log = Log.Instance;
-
-		#region Private methods
-		private string GetAcceptedRequestsFolder(string path)
-		{
-			if (!Directory.Exists(path))
-			{
-				Directory.CreateDirectory(path);
-			}
-			return path;
-		}
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 		public void BackupFilesRecursive(string trimmedBackupName)
 		{
@@ -27,8 +18,10 @@ namespace Sdl.Community.BackupFiles
 			{
 				var service = new Service();
 				var jsonResult = service.GetJsonInformation();
-				var backupModel = jsonResult?.BackupModelList?.FirstOrDefault(b => b.TrimmedBackupName.Equals(trimmedBackupName));
-				var backupModelList = jsonResult?.BackupDetailsModelList?.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).ToList();
+				var backupModel =
+					jsonResult?.BackupModelList?.FirstOrDefault(b => b.TrimmedBackupName.Equals(trimmedBackupName));
+				var backupModelList = jsonResult?.BackupDetailsModelList
+					?.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).ToList();
 				if (backupModel != null)
 				{
 					var fileExtensions = new List<string>();
@@ -41,50 +34,42 @@ namespace Sdl.Community.BackupFiles
 						}
 					}
 
-					if (backupModel != null)
+					var splittedSourcePathList = backupModel.BackupFrom.Split(';').ToList<string>();
+					var files = new List<string>().ToArray();
+
+					foreach (var sourcePath in splittedSourcePathList)
 					{
-						var splittedSourcePathList = backupModel.BackupFrom.Split(';').ToList<string>();
-						var files = new List<string>().ToArray();
-
-						foreach (var sourcePath in splittedSourcePathList)
+						if (!string.IsNullOrEmpty(sourcePath))
 						{
-							if (!string.IsNullOrEmpty(sourcePath))
+							// create the directory where to move files
+							Directory.CreateDirectory(backupModel.BackupTo);
+
+							// take files depending on defined action
+							if (fileExtensions.Any())
 							{
-								var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
+								// get all files which have extension set up depending on actions from TMBackupDetails grid
+								files = Directory.GetFiles(sourcePath, "*.*")
+									.Where(f => fileExtensions
+										.Contains(Path.GetExtension(f)))
+									.ToArray();
+							}
+							else
+							{
+								// take all files
+								files = Directory.GetFiles(sourcePath);
+							}
 
-								// create the directory where to move files
-								if (!Directory.Exists(backupModel.BackupTo))
+							if (files.Length != 0)
+							{
+								MoveFilesToAcceptedFolder(files, backupModel.BackupTo);
+							} //that means we have a subfolder in watch folder
+							else
+							{
+								var subdirectories = Directory.GetDirectories(sourcePath);
+								foreach (var subdirectory in subdirectories)
 								{
-									Directory.CreateDirectory(backupModel.BackupTo);
-								}
-
-								// take files depending on defined action
-								if (fileExtensions.Any())
-								{
-									// get all files which have extension set up depending on actions from TMBackupDetails grid
-									files = Directory.GetFiles(sourcePath, "*.*")
-														 .Where(f => fileExtensions
-														 .Contains(Path.GetExtension(f)))
-														 .ToArray();
-								}
-								else
-								{
-									// take all files
-									files = Directory.GetFiles(sourcePath);
-								}
-
-								if (files.Length != 0)
-								{
-									MoveFilesToAcceptedFolder(files, backupModel.BackupTo);
-								} //that means we have a subfolder in watch folder
-								else
-								{
-									var subdirectories = Directory.GetDirectories(sourcePath);
-									foreach (var subdirectory in subdirectories)
-									{
-										var currentDirInfo = new DirectoryInfo(subdirectory);
-										CheckForSubfolders(currentDirInfo, backupModel.BackupTo, trimmedBackupName);
-									}
+									var currentDirInfo = new DirectoryInfo(subdirectory);
+									CheckForSubfolders(currentDirInfo, backupModel.BackupTo, trimmedBackupName);
 								}
 							}
 						}
@@ -93,7 +78,7 @@ namespace Sdl.Community.BackupFiles
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"{Constants.BackupFilesRecursive} {ex.Message}\n {ex.StackTrace}");
+				Logger.Error($"{Constants.BackupFilesRecursive} {ex.Message}\n {ex.StackTrace}");
 			}
 		}
 
@@ -104,7 +89,6 @@ namespace Sdl.Community.BackupFiles
 			var backupModel = jsonResult?.BackupModelList?.FirstOrDefault(b => b.TrimmedBackupName.Equals(trimmedBackupName));
 			if (backupModel != null)
 			{
-				var sourcePath = backupModel.BackupFrom;
 				var subdirectories = directory.GetDirectories();
 				var path = root + @"\" + directory.Parent;
 				var subdirectoryFiles = Directory.GetFiles(directory.FullName);
@@ -128,7 +112,6 @@ namespace Sdl.Community.BackupFiles
 		{
 			foreach (var subFile in files)
 			{
-				var dirName = new DirectoryInfo(subFile).Name;
 				var parentName = new DirectoryInfo(subFile).Parent != null ? new DirectoryInfo(subFile).Parent.Name : string.Empty;
 
 				var fileName = subFile.Substring(subFile.LastIndexOf(@"\", StringComparison.Ordinal));
@@ -143,10 +126,9 @@ namespace Sdl.Community.BackupFiles
 				}
 				catch (Exception ex)
 				{
-					Log.Logger.Error($"{Constants.MoveFilesToAcceptedFolder} {ex.Message} \n {ex.StackTrace}");
+					Logger.Error($"{Constants.MoveFilesToAcceptedFolder} {ex.Message} \n {ex.StackTrace}");
 				}
 			}
 		}
-		#endregion
 	}
 }

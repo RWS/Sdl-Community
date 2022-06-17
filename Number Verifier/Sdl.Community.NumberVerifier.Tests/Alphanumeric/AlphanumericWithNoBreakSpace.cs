@@ -5,64 +5,64 @@ using Xunit;
 namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 {
 	public class AlphanumericWithNoBreakSpace
-	{
-		[Theory]
-		[InlineData("AB14 word C12", ",.", ",.")]
-		public List<string> FindAlphanumericsNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
-		{
-			var iNumberSettingsMock = NumberVerifierLocalizationsSettings.AllowLocalization();
-			NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
+    {
+        [Theory]
+        [InlineData("AB14 ab12 #Cd23 EF12", ",.", ",.")]
+        public void AlphanumericsWithNormalSpaceAndNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
+        {
+            FindAlphanumericsNoBreakSpace(text, decimalSeparators, thousandSeparators);
+        }
 
-			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+        [Theory]
+        [InlineData("There are no alphanumerics here")]
+        public void CantFindAlphanumericsNoBreakSpace(string text)
+        {
+            var iNumberSettingsMock = NumberVerifierLocalizationsSettings.RequireLocalization();
+            NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
+            var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
-			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
 
-			Assert.True(textAlphanumericsList.Item2.Count != 0);
-			return textAlphanumericsList.Item2;
-		}
+            Assert.True(textAlphanumericsList.Item2.Count == 0);
+        }
 
-		[Theory]
-		[InlineData("AB14 word C12", ",.", ",.")]
-		public void CheckIfAlphanumericsAreCorrectNoBreakSpace(string text, string decimalSeparators,
-			string thousandSeparators)
-		{
-			var alphanumericsList = FindAlphanumericsNoBreakSpace(text, decimalSeparators, thousandSeparators);
+        [Theory]
+        [InlineData("AB14 word C12", ",.", ",.")]
+        public void CheckIfAlphanumericsAreCorrectNoBreakSpace(string text, string decimalSeparators,
+            string thousandSeparators)
+        {
+            var alphanumericsList = FindAlphanumericsNoBreakSpace(text, decimalSeparators, thousandSeparators);
 
-			Assert.Contains("AB14", alphanumericsList);
-			Assert.Contains("C12", alphanumericsList);
-		}
+            Assert.Contains("AB14", alphanumericsList);
+            Assert.Contains("C12", alphanumericsList);
+        }
 
-		[Theory]
-		[InlineData("There are no alphanumerics here")]
-		public void CantFindAlphanumericsNoBreakSpace(string text)
-		{
-			var iNumberSettingsMock = NumberVerifierLocalizationsSettings.RequireLocalization();
-			NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
-			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+        [Theory]
+        [InlineData("AB14 word C12", ",.", ",.")]
+        public List<string> FindAlphanumericsNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
+        {
+            var iNumberSettingsMock = NumberVerifierLocalizationsSettings.AllowLocalization();
+            NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
 
-			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+            var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
-			Assert.True(textAlphanumericsList.Item2.Count == 0);
-		}
+            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
 
-		[Theory]
-		[InlineData("!AB14 ab12 #Cd23 12 those aren't  alphanumerics ")]
-		public void FindAlphanumericsWithSpecialCharactersNoBreakSpace(string text)
-		{
-			var iNumberSettingsMock = NumberVerifierLocalizationsSettings.RequireLocalization();
-			NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
-			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+            Assert.True(textAlphanumericsList.Item2.Count != 0);
+            return textAlphanumericsList.Item2;
+        }
 
-			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+        [Theory]
+        [InlineData("!AB14 ab12 #Cd23 12 those aren't  alphanumerics ")]
+        public void FindAlphanumericsWithSpecialCharactersNoBreakSpace(string text)
+        {
+            var iNumberSettingsMock = NumberVerifierLocalizationsSettings.RequireLocalization();
+            NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
+            var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
-			Assert.True(textAlphanumericsList.Item2.Count != 0);
-		}
+            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
 
-		[Theory]
-		[InlineData("AB14 ab12 #Cd23 EF12", ",.", ",.")]
-		public void AlphanumericsWithNormalSpaceAndNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
-		{
-			FindAlphanumericsNoBreakSpace(text, decimalSeparators, thousandSeparators);
-		}
-	}
+            Assert.True(textAlphanumericsList.Item2.Count != 0);
+        }
+    }
 }

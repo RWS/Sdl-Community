@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -14,7 +15,12 @@ namespace Sdl.Community.MTCloud.Provider.Converters
 			{
 				var valueString = value?.ToString();
 				var parameterString = parameter?.ToString() ?? string.Empty;
-
+				if (parameterString.Contains("#"))
+				{
+					var parameters = parameterString.Split('#');
+					return parameters.Any(param => param.Equals(valueString, StringComparison.InvariantCultureIgnoreCase)) ? Visibility.Visible
+						: Visibility.Collapsed;
+				}
 				return string.Compare(parameterString, valueString, StringComparison.InvariantCultureIgnoreCase) == 0 
 					? Visibility.Visible 
 					: Visibility.Collapsed;

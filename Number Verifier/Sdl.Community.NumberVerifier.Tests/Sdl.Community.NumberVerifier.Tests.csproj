@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,23 +32,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Verification.Api">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Verification.Api.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Verification.Api.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -66,25 +64,30 @@
     <Compile Include="Alphanumeric\AlphanumericWithNormalSpace.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithThinSpace.cs" />
     <Compile Include="Alphanumeric\NormalizeAlphanumerics.cs" />
+    <Compile Include="ISettingsBuilder.cs" />
     <Compile Include="NegativeNumbers\NegativeNumbers.cs" />
     <Compile Include="NormalizeNumbers\CheckFullWidthJapaneseNumbers.cs" />
     <Compile Include="NormalizeNumbers\CheckNumbersAgainstRegularExpression.cs" />
+    <Compile Include="Validator\CrossCheck.cs" />
     <Compile Include="NormalizeNumbers\HindiNumbers.cs" />
     <Compile Include="NormalizeNumbers\MultipleErrors.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersAllowLocalization.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersNoSeparator.cs" />
+    <Compile Include="Validator\InOrderCheck.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationAllow.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationPrevent.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationRequire.cs" />
+    <Compile Include="Parsers\Number\NumberParserTests.cs" />
     <Compile Include="OmitZero\OmitLeadingZero.cs" />
     <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="OmitZero\OmitZeroSourceAndTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rerouting.cs" />
+    <Compile Include="SettingsBuilder.cs" />
     <Compile Include="SourceSettings\SourceSettingsAndAllowLocalization.cs" />
     <Compile Include="SourceSettings\SourceSettingsAndPreventLocalization.cs" />
     <Compile Include="Utilities\NumberVerifierLocalizationsSettings.cs" />
     <Compile Include="Utilities\NumberVerifierRequireLocalizationSettings.cs" />
-    <Compile Include="Utilities\NumberVerifierSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.NumberVerifier.csproj">
@@ -126,5 +129,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

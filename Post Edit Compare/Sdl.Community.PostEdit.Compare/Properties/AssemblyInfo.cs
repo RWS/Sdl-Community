@@ -6,12 +6,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("PostEdit.Compare")]
 [assembly: AssemblyDescription("Post-Edit Compare")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sdl Community")]
 [assembly: AssemblyProduct("Post-Edit Compare")]
-[assembly: AssemblyCopyright("Copyright © 2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -32,5 +29,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.7.8.0")]
-[assembly: AssemblyFileVersion("1.7.8.0")]
+[assembly: AssemblyVersion("7.0.0.0")]
+[assembly: AssemblyFileVersion("7.5.4.4")]

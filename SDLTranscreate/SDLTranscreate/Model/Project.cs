@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Trados.Transcreate.Interfaces;
 
-namespace Sdl.Community.Transcreate.Model
+namespace Trados.Transcreate.Model
 {
-	public class Project : BaseModel, ICloneable, Interfaces.IProject
+	public class Project : BaseModel, ICloneable, IProject
 	{
 		private Customer _customer;
 		private List<ProjectFile> _projectFiles;
@@ -119,17 +120,16 @@ namespace Sdl.Community.Transcreate.Model
 
 		public object Clone()
 		{
-			var project = new Project
-			{
-				Id = Id,
-				Name = Name,
-				Customer = Customer?.Clone() as Customer,
-				Created = new DateTime(Created.Ticks, DateTimeKind.Utc),
-				DueDate = new DateTime(DueDate.Ticks, DateTimeKind.Utc),
-				Path = Path,
-				ProjectType = ProjectType,
-				SourceLanguage = SourceLanguage.Clone() as LanguageInfo
-			};
+			var project = this is BackTranslationProject ? new BackTranslationProject() : new Project();
+
+			project.Id = Id;
+			project.Name = Name;
+			project.Customer = Customer?.Clone() as Customer;
+			project.Created = new DateTime(Created.Ticks, DateTimeKind.Utc);
+			project.DueDate = new DateTime(DueDate.Ticks, DateTimeKind.Utc);
+			project.Path = Path;
+			project.ProjectType = ProjectType;
+			project.SourceLanguage = SourceLanguage.Clone() as LanguageInfo;
 
 			foreach (var languageInfo in TargetLanguages)
 			{

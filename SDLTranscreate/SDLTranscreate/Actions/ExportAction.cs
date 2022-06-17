@@ -2,16 +2,19 @@
 using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.CustomEventArgs;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.CustomEventArgs;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service;
+using MessageBox = System.Windows.MessageBox;
 
-namespace Sdl.Community.Transcreate.Actions
+namespace Trados.Transcreate.Actions
 {
 	[Action("TranscreateManager_Export_Action",
 		Name = "TranscreateManager_Export_Name",
@@ -29,6 +32,8 @@ namespace Sdl.Community.Transcreate.Actions
 		private IDialogService _dialogService;
 		private SegmentBuilder _segmentBuilder;
 		private ProjectAutomationService _projectAutomationService;
+		private ProjectSettingsService _projectSettingsService;
+		private StudioVersionService _studioVersionService;
 
 		protected override void Execute()
 		{
@@ -36,6 +41,17 @@ namespace Sdl.Community.Transcreate.Actions
 			if (selectedProject == null)
 			{
 				return;
+			}
+
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == selectedProject.Id))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
 			}
 
 			var action = selectedProject is BackTranslationProject
@@ -47,7 +63,7 @@ namespace Sdl.Community.Transcreate.Actions
 			var settings = GetSettings();
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, settings, _dialogService,
-				_projectAutomationService);
+				_projectAutomationService, _projectSettingsService);
 
 			var taskContext = wizardService.ShowWizard(Controller, out var message);
 			if (taskContext == null && !string.IsNullOrEmpty(message))
@@ -61,7 +77,7 @@ namespace Sdl.Community.Transcreate.Actions
 				var projects = _controllers.TranscreateController.GetProjects();
 				var parentProject = projects.FirstOrDefault(project => project.BackTranslationProjects.Exists(a => a.Id == selectedProject.Id));
 
-				_controllers.TranscreateController.UpdateBackTranslationProjectData(parentProject, taskContext);
+				_controllers.TranscreateController.UpdateBackTranslationProjectData(parentProject?.Id, taskContext);
 			}
 			else
 			{
@@ -76,14 +92,17 @@ namespace Sdl.Community.Transcreate.Actions
 
 		public override void Initialize()
 		{
-			_controllers = new Controllers();
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			SetupTranscreateController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
 			_dialogService = new DialogService();
 			_segmentBuilder = new SegmentBuilder();
-			_projectAutomationService = new ProjectAutomationService(_imageService, _controllers.TranscreateController, _customerProvider);
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
+			_projectSettingsService = new ProjectSettingsService();
 
 			Enabled = false;
 		}

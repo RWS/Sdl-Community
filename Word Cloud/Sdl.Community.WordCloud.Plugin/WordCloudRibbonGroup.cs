@@ -7,13 +7,13 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.WordCloud.Plugin
 {
-	[RibbonGroup("CodingBreeze.WordCloudRibbonGroup", Name = "Word Cloud", ContextByType = typeof(ProjectsController))]
+	[RibbonGroup("CodingBreeze.WordCloudRibbonGroup", Name = "Trados Studio Word Cloud", ContextByType = typeof(ProjectsController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	class WordCloudRibbonGroup : AbstractRibbonGroup
 	{
 	}
 
-	[Action("CodingBreeze.WordCloud.GenerateWordCloudAction", Name = "Create Word Cloud...", Icon = "wordcloud", Description = "Generate a word cloud based on this project's content...")]
+	[Action("CodingBreeze.WordCloud.GenerateWordCloudAction", Name = "Create Trados Studio Word Cloud...", Icon = "wordcloud", Description = "Generate a word cloud based on this project's content...")]
 	[ActionLayout(typeof(WordCloudRibbonGroup), 200, DisplayType.Large)]
 	class GenerateWordCloudAction : AbstractAction
 	{
@@ -36,7 +36,8 @@ namespace Sdl.Community.WordCloud.Plugin
 
 		private void OnSelectedProjectsChanged()
 		{
-			Enabled = ProjectsController.SelectedProjects.Count() == 1;
+			Enabled = (ProjectsController.SelectedProjects.Count() == 1)
+			&& (ProjectsController.SelectedProjects.Single().GetProjectInfo().ProjectType != ProjectAutomation.Core.ProjectType.InLanguageCloud);
 		}
 
 		private ProjectsController ProjectsController
@@ -64,7 +65,7 @@ namespace Sdl.Community.WordCloud.Plugin
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3289.word-cloud");
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3289/trados-studio-word-cloud");
 		}
 	}
 }

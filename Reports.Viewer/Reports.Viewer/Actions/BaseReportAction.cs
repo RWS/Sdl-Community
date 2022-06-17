@@ -1,6 +1,6 @@
 ﻿using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	public class BaseReportAction: AbstractAction
 	{

@@ -15,7 +15,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkProfile />
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -29,6 +29,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,77 +40,51 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Sdl.Core.Globalization">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.BasicControls">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.DesktopEditor.BasicControls.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.DesktopEditor.BasicControls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.EditorApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.DesktopEditor.EditorApi.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.DesktopEditor.EditorApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TellMe.ProviderApi.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Verification.Api">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Verification.Api.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Verification.Api.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationInitializer.cs" />
@@ -122,6 +97,7 @@
     <Compile Include="Composers\NumberErrorComposer.cs" />
     <Compile Include="Composers\SourceErrorMessageComposer.cs" />
     <Compile Include="Composers\TargetErrorMessageComposer.cs" />
+    <Compile Include="Model\ExcludedRange.cs" />
     <Compile Include="GUI\NumberVerifierHelp.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,6 +105,14 @@
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
+    <Compile Include="GUI\RegexExclusions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\RegexExclusions.Designer.cs">
+      <DependentUpon>RegexExclusions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\RegexImporter.cs" />
+    <Compile Include="Model\RegexPattern.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\TextFormatter.cs" />
@@ -141,8 +125,11 @@
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
     <Compile Include="Interfaces\INumberVerifierSettings.cs" />
     <Compile Include="Interfaces\ISkipTheDashProcessor.cs" />
+    <Compile Include="Interfaces\INumberVerifier.cs" />
+    <Compile Include="Interfaces\ITextGenerator.cs" />
     <Compile Include="Interfaces\IVerifyProcessor.cs" />
     <Compile Include="Interfaces\IVerifySpecification.cs" />
+    <Compile Include="MessageUI\AlignmentErrorExtendedData.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageData.cs" />
     <Compile Include="MessageUI\NumberVerifierMessagePlugIn.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageUI.cs">
@@ -151,10 +138,21 @@
     <Compile Include="MessageUI\NumberVerifierMessageUI.designer.cs">
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="MessageUI\TextRange.cs" />
+    <Compile Include="Model\Error.cs" />
     <Compile Include="Model\ErrorReporting.cs" />
+    <Compile Include="Model\ExtendedErrorReportInfo.cs" />
     <Compile Include="Model\ExtractData.cs" />
+    <Compile Include="Model\ComparisonItem.cs" />
+    <Compile Include="Validator\NumberComparisonExtension.cs" />
+    <Compile Include="Validator\ComparisonConstants.cs" />
+    <Compile Include="Validator\Comparer.cs" />
+    <Compile Include="Validator\NumberFormattingSettings.cs" />
+    <Compile Include="Validator\NumberTexts.cs" />
+    <Compile Include="Parsers\Number\Model\NumberSeparator.cs" />
+    <Compile Include="Parsers\Number\Model\NumberToken.cs" />
     <Compile Include="Model\HindiNumberModel.cs" />
-    <Compile Include="Model\NormalizedNumber.cs" />
+    <Compile Include="Parsers\Number\Model\NumberPart.cs" />
     <Compile Include="Model\SeparatorModel.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
@@ -169,6 +167,9 @@
     </Compile>
     <Compile Include="NumberVerifierSettings.cs" />
     <Compile Include="GUI\NumberVerifierUIPage.cs" />
+    <Compile Include="Validator\NumberText.cs" />
+    <Compile Include="Validator\NumberValidator.cs" />
+    <Compile Include="Validator\ValidatorExtensions.cs" />
     <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateSourceIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateTargetIssuesOnNewLineErrorMessageProcessor.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Processors\LocalizationProcessors\TargetDecimalRequireLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\TargetThousandRequireLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\ThousandAllowLocalizationExtractProcessor.cs" />
+    <Compile Include="Parsers\Number\NumberParser.cs" />
     <Compile Include="Processors\SkipTheDashProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\DecimalPreventLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\LocalizationProcessors\ThousandPreventLocalizationExtractProcessor.cs" />
@@ -224,13 +226,20 @@
     <Compile Include="TellMe\NumVerifierCommunityWikiAction.cs" />
     <Compile Include="TellMe\NumVerifierStoreAction.cs" />
     <Compile Include="TextGenerator.cs" />
+    <Compile Include="Processors\NumberFormatVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\NumberVerifierHelp.resx">
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\NumberVerifierUI.resx">
       <DependentUpon>NumberVerifierUI.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\RegexExclusions.resx">
+      <DependentUpon>RegexExclusions.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageUI\NumberVerifierMessageUI.resx">
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
@@ -261,12 +270,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.0.0</Version>
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>16.0.0</Version>
+      <Version>17.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

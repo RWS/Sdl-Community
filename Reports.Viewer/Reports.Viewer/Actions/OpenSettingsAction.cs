@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Community.Reports.Viewer.View;
-using Sdl.Community.Reports.Viewer.ViewModel;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
+using Reports.Viewer.Plus.View;
+using Reports.Viewer.Plus.ViewModel;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Reports.Viewer.API.Model;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	[Action("ReportsViewer_OpenSettings_Action",
 		Name = "ReportsViewer_OpenSettings_Name",
@@ -29,12 +29,13 @@ namespace Sdl.Community.Reports.Viewer.Actions
 		protected override void Execute()
 		{
 			var reports = _reportsViewerController.GetReports();
+			
 			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
 
 			var settings = GetSettings();
 			var view = new SettingsWindow();
-			var viewModel = new SettingsViewModel(view, settings, _imageService, _pathInfo, 
-				_reportsViewerController.ReportsController, groupNames, _reportsViewerController.ClientId);
+			var viewModel = new SettingsViewModel(view, settings, _imageService, _pathInfo,
+				_reportsViewerController, groupNames);
 			view.DataContext = viewModel;
 			var result = view.ShowDialog();
 			if (result != null && (bool)result)
@@ -49,6 +50,16 @@ namespace Sdl.Community.Reports.Viewer.Actions
 			SetEnabled();
 		}
 
+		public override void Initialize()
+		{
+			_canEnable = true;
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
+
+			SetEnabled();
+		}
+
 		private Settings GetSettings()
 		{
 			if (File.Exists(_pathInfo.SettingsFilePath))
@@ -59,16 +70,6 @@ namespace Sdl.Community.Reports.Viewer.Actions
 
 			return new Settings();
 		}
-
-		public override void Initialize()
-		{
-			_canEnable = true;
-			_pathInfo = new PathInfo();
-			_imageService = new ImageService();
-			_reportsViewerController = SdlTradosStudio.Application.GetController<ReportsViewerController>();
-
-			SetEnabled();
-		}		
 
 		private void SetEnabled()
 		{

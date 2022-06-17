@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -7,12 +6,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("PostEdit.Versions")]
 [assembly: AssemblyDescription("Post-Edit Versions")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sdl Community")]
 [assembly: AssemblyProduct("Post-Edit Versions")]
-[assembly: AssemblyCopyright("Copyright © 2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -32,5 +28,5 @@ using System.Runtime.InteropServices;
 // You can sPostEdit.Versionsify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.5.2.1")]
-[assembly: AssemblyFileVersion("5.5.2.1")]
+[assembly: AssemblyVersion("7.0.0.0")]
+[assembly: AssemblyFileVersion("7.5.4.4")]

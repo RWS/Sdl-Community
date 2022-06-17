@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Sdl.Community.Transcreate.Commands;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.Interfaces;
-using Sdl.Community.Transcreate.Model;
-using Sdl.MultiSelectComboBox.EventArgs;
+using Rws.MultiSelectComboBox.EventArgs;
+using Trados.Transcreate.Commands;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.Interfaces;
+using Trados.Transcreate.Model;
 
-namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
+namespace Trados.Transcreate.Wizard.ViewModel.Export
 {
 	public class WizardPageExportOptionsViewModel : WizardPageViewModelBase, IDisposable
 	{
@@ -63,6 +63,8 @@ namespace Sdl.Community.Transcreate.Wizard.ViewModel.Export
 
 		public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
 
+		public string ExcludeSegmentsToolTip => PluginResources.ToolTip_Label_ExcludeSegments_Export;
+		
 		public List<FilterItem> FilterItems
 		{
 			get => _filterItems;

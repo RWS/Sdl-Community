@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Documents.Records;
-using Sdl.Community.Toolkit.LanguagePlatform;
+using Trados.Community.Toolkit.LanguagePlatform;
 
 namespace Sdl.Community.Qualitivity.Tracking
 {
@@ -75,8 +75,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 				}
 
 				_segmentPairProcessor = new SegmentPairProcessor(
-					new Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)),
-					new Toolkit.LanguagePlatform.Models.PathInfo());
+					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)),
+					new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
 
 				return _segmentPairProcessor;
 			}

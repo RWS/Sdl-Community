@@ -8,16 +8,16 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	{
 		public StoreAction()
 		{
-			Name = "Download SDL MT Cloud from AppStore";
+			Name = $"Download {PluginResources.SDLMTCloud_Provider_Name} from AppStore";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/sdl-beglobal-nmt/941/");
+			Process.Start("https://appstore.sdl.com/language/app/language-weaver-cloud/941/");
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "SDL MT Cloud results";
+		public override string Category => $"{PluginResources.SDLMTCloud_Provider_Name} results";
 		public override Icon Icon => PluginResources.TellMe1;
 	}
 }

@@ -9,34 +9,58 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 	public class BatchAnonymizerSettingsViewModel : ModelBase, ISettingsAware<BatchAnonymizerSettings>
 	{
 		private bool _anonymizeAllSettings;
-		private bool _useGeneral;
-		private bool _createdByChecked;
-		private bool _modifyByChecked;
-		private bool _commentChecked;
-		private bool _trackedChecked;
 		private bool _changeMtChecked;
 		private bool _changeTmChecked;
-		private bool _setSpecificResChecked;
-		private bool _isFuzzyEnabled;
 		private bool _clearSettings;
-		private string _createdByName;
-		private string _modifyByName;
 		private string _commentAuthorName;
-		private string _trackedName;
-		private string _tmName;
+		private bool _commentChecked;
+		private bool _createdByChecked;
+		private string _createdByName;
 		private decimal _fuzzyScore;
+		private bool _isFuzzyEnabled;
 		private ICommand _loadWindowAction;
-		public BatchAnonymizerSettings Settings { get; set; }
+		private bool _modifyByChecked;
+		private string _modifyByName;
+		private bool _removeMtCloudMetadata;
+		private bool _setSpecificResChecked;
+		private string _tmName;
+		private bool _trackedChecked;
+		private string _trackedName;
+		private bool _useGeneral;
 
 		public bool AnonymizeAllSettings
 		{
 			get => _anonymizeAllSettings;
 			set
 			{
-				if (_anonymizeAllSettings == value)return;
+				if (_anonymizeAllSettings == value) return;
 				_anonymizeAllSettings = value;
 				SetOptions(value);
 				OnPropertyChanged(nameof(AnonymizeAllSettings));
+			}
+		}
+
+		public bool ChangeMtChecked
+		{
+			get => _changeMtChecked;
+			set
+			{
+				if (_changeMtChecked == value) return;
+				_changeMtChecked = value;
+				OnPropertyChanged(nameof(ChangeMtChecked));
+				EnableFuzzy();
+			}
+		}
+
+		public bool ChangeTmChecked
+		{
+			get => _changeTmChecked;
+			set
+			{
+				if (_changeTmChecked == value) return;
+				_changeTmChecked = value;
+				OnPropertyChanged(nameof(ChangeTmChecked));
+				EnableFuzzy();
 			}
 		}
 
@@ -51,14 +75,33 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			}
 		}
 
-		public bool UseGeneral
+		public string CommentAuthorName
 		{
-			get => _useGeneral;
+			get => _commentAuthorName;
 			set
 			{
-				if (_useGeneral == value) return;
-				_useGeneral = value;
-				OnPropertyChanged(nameof(UseGeneral));
+				if (_commentAuthorName == value) return;
+				_commentAuthorName = value;
+				if (!string.IsNullOrEmpty(value))
+				{
+					CommentChecked = true;
+				}
+				OnPropertyChanged(nameof(CommentAuthorName));
+			}
+		}
+
+		public bool CommentChecked
+		{
+			get => _commentChecked;
+			set
+			{
+				if (_commentChecked == value) return;
+				_commentChecked = value;
+				if (!value)
+				{
+					CommentAuthorName = string.Empty;
+				}
+				OnPropertyChanged(nameof(CommentChecked));
 			}
 		}
 
@@ -92,6 +135,34 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			}
 		}
 
+		public decimal FuzzyScore
+		{
+			get => _fuzzyScore;
+			set
+			{
+				if (_fuzzyScore == value) return;
+				_fuzzyScore = value;
+				if (value > 0)
+				{
+					SetSpecificResChecked = true;
+				}
+				OnPropertyChanged(nameof(FuzzyScore));
+			}
+		}
+
+		public bool IsFuzzyEnabled
+		{
+			get => _isFuzzyEnabled;
+			set
+			{
+				if (_isFuzzyEnabled == value) return;
+				_isFuzzyEnabled = value;
+				OnPropertyChanged(nameof(IsFuzzyEnabled));
+			}
+		}
+
+		public ICommand LoadWindowAction => _loadWindowAction ?? (_loadWindowAction = new CommandHandler(WindowLoaded));
+
 		public bool ModifyByChecked
 		{
 			get => _modifyByChecked;
@@ -106,6 +177,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 				OnPropertyChanged(nameof(ModifyByChecked));
 			}
 		}
+
 		public string ModifyByName
 		{
 			get => _modifyByName;
@@ -121,32 +193,46 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			}
 		}
 
-		public bool CommentChecked
+		public bool RemoveMtCloudMetadata
 		{
-			get => _commentChecked;
+			get => _removeMtCloudMetadata;
 			set
 			{
-				if (_commentChecked == value) return;
-				_commentChecked = value;
-				if (!value)
-				{
-					CommentAuthorName = string.Empty;
-				}
-				OnPropertyChanged(nameof(CommentChecked));
+				_removeMtCloudMetadata = value;
+				OnPropertyChanged(nameof(RemoveMtCloudMetadata));
 			}
 		}
-		public string CommentAuthorName
+
+		public bool SetSpecificResChecked
 		{
-			get => _commentAuthorName;
+			get => _setSpecificResChecked;
 			set
 			{
-				if (_commentAuthorName == value) return;
-				_commentAuthorName = value;
+				if (_setSpecificResChecked == value) return;
+				_setSpecificResChecked = value;
+				if (!value)
+				{
+					FuzzyScore = 0;
+					TmName = string.Empty;
+				}
+				OnPropertyChanged(nameof(SetSpecificResChecked));
+			}
+		}
+
+		public BatchAnonymizerSettings Settings { get; set; }
+
+		public string TmName
+		{
+			get => _tmName;
+			set
+			{
+				if (_tmName == value) return;
+				_tmName = value;
 				if (!string.IsNullOrEmpty(value))
 				{
-					CommentChecked = true;
+					SetSpecificResChecked = true;
 				}
-				OnPropertyChanged(nameof(CommentAuthorName));
+				OnPropertyChanged(nameof(TmName));
 			}
 		}
 
@@ -180,86 +266,55 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			}
 		}
 
-		public bool ChangeMtChecked
+		public bool UseGeneral
 		{
-			get => _changeMtChecked;
+			get => _useGeneral;
 			set
 			{
-				if (_changeMtChecked == value) return;
-				_changeMtChecked = value;
-				OnPropertyChanged(nameof(ChangeMtChecked));
-				EnableFuzzy();
-			}
-		}
-		public bool SetSpecificResChecked
-		{
-			get => _setSpecificResChecked;
-			set
-			{
-				if (_setSpecificResChecked == value) return;
-				_setSpecificResChecked = value;
-				if (!value)
-				{
-					FuzzyScore = 0;
-					TmName = string.Empty;
-				}
-				OnPropertyChanged(nameof(SetSpecificResChecked));
-			}
-		}
-		public bool ChangeTmChecked
-		{
-			get => _changeTmChecked;
-			set
-			{
-				if (_changeTmChecked == value) return;
-				_changeTmChecked = value;
-				OnPropertyChanged(nameof(ChangeTmChecked));
-				EnableFuzzy();
+				if (_useGeneral == value) return;
+				_useGeneral = value;
+				OnPropertyChanged(nameof(UseGeneral));
 			}
 		}
 
-		public string TmName
+		private void EnableFuzzy()
 		{
-			get => _tmName;
-			set
+			if (AnonymizeAllSettings)
 			{
-				if (_tmName == value) return;
-				_tmName = value;
-				if (!string.IsNullOrEmpty(value))
-				{
-					SetSpecificResChecked = true;
-				}
-				OnPropertyChanged(nameof(TmName));
+				IsFuzzyEnabled = false;
+			}
+			else if (ChangeTmChecked && !ChangeMtChecked)
+			{
+				IsFuzzyEnabled = false;
+			}
+			else
+			{
+				IsFuzzyEnabled = true;
 			}
 		}
 
-		public decimal FuzzyScore
+		/// <summary>
+		/// Set/Reset values for anonymize all option
+		/// </summary>
+		private void SetOptions(bool anonymizeAll)
 		{
-			get => _fuzzyScore;
-			set
-			{
-				if (_fuzzyScore == value) return;
-				_fuzzyScore = value;
-				if (value > 0)
-				{
-					SetSpecificResChecked = true;
-				}
-				OnPropertyChanged(nameof(FuzzyScore));
-			}
+			CreatedByChecked = anonymizeAll;
+			ModifyByChecked = anonymizeAll;
+			CommentChecked = anonymizeAll;
+			TrackedChecked = anonymizeAll;
+			ChangeMtChecked = anonymizeAll;
+			RemoveMtCloudMetadata = anonymizeAll;
+			if (!anonymizeAll) return;
+			CreatedByName = string.Empty;
+			ModifyByName = string.Empty;
+			CommentAuthorName = string.Empty;
+			TrackedName = string.Empty;
+			TmName = string.Empty;
+			ChangeTmChecked = false;
+			SetSpecificResChecked = false;
+			FuzzyScore = 0;
 		}
 
-		public bool IsFuzzyEnabled
-		{
-			get => _isFuzzyEnabled;
-			set
-			{
-				if (_isFuzzyEnabled == value) return;
-				_isFuzzyEnabled = value;
-				OnPropertyChanged(nameof(IsFuzzyEnabled));
-			}
-		}
-
-		public ICommand LoadWindowAction => _loadWindowAction ?? (_loadWindowAction = new CommandHandler(WindowLoaded));
 		private void WindowLoaded(object obj)
 		{
 			if (Settings == null) return;
@@ -279,43 +334,7 @@ namespace Sdl.Community.SDLBatchAnonymize.ViewModel
 			SetSpecificResChecked = Settings.SetSpecificResChecked;
 			TmName = Settings.TmName;
 			FuzzyScore = Settings.FuzzyScore;
-		}
-
-		/// <summary>
-		/// Set/Reset values for anonymize all option
-		/// </summary>
-		private void SetOptions(bool anonymizeAll)
-		{
-			CreatedByChecked = anonymizeAll;
-			ModifyByChecked = anonymizeAll;
-			CommentChecked = anonymizeAll;
-			TrackedChecked = anonymizeAll;
-			ChangeMtChecked = anonymizeAll;
-			if (!anonymizeAll) return;
-			CreatedByName = string.Empty;
-			ModifyByName = string.Empty;
-			CommentAuthorName = string.Empty;
-			TrackedName = string.Empty;
-			TmName = string.Empty;
-			ChangeTmChecked = false;
-			SetSpecificResChecked = false;
-			FuzzyScore = 0;
-		}
-
-		private void EnableFuzzy()
-		{
-			if (AnonymizeAllSettings)
-			{
-				IsFuzzyEnabled = false;
-			}
-			else if (ChangeTmChecked && !ChangeMtChecked)
-			{
-				IsFuzzyEnabled = false;
-			}
-			else
-			{
-				IsFuzzyEnabled = true;
-			}
+			RemoveMtCloudMetadata = Settings.RemoveMtCloudMetadata;
 		}
 	}
 }

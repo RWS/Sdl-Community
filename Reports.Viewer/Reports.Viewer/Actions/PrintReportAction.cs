@@ -1,7 +1,7 @@
 ﻿using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.Reports.Viewer.Actions
+namespace Reports.Viewer.Plus.Actions
 {
 	[Action("ReportsViewer_PrintReport_Action",
 		Name = "ReportsViewer_PrintReport_Name",

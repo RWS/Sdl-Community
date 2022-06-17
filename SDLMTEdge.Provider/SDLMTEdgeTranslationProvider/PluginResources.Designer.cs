@@ -129,7 +129,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A translation provider plug-in for performing searches..
+        ///   Looks up a localized string similar to Language Weaver on premise machine translation provider.
         /// </summary>
         internal static string Plugin_Description {
             get {
@@ -138,7 +138,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Edge.
+        ///   Looks up a localized string similar to Language Weaver Edge.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -147,7 +147,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Machine Translation Edge.
+        ///   Looks up a localized string similar to Language Weaver Edge provider.
         /// </summary>
         internal static string Plugin_NiceName {
             get {

@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Dynamic;
 using System.IO;
-using System.Reflection;
 using Sdl.Community.InvoiceAndQuotes.Integration.Properties;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.InvoiceAndQuotes.Integration
 {
-    [RibbonGroup("Sdl.Community.InvoiceAndQuotes", Name = "Invoice and quotes")]
+    [RibbonGroup("Sdl.Community.InvoiceAndQuotes", Name = "Trados Studio InQuote")]
     [RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
     class InvoiceAndQuotesRibbon : AbstractRibbonGroup
     {
     }
 
-    [Action("Sdl.Community.InvoiceAndQuotes", Name = "Invoice and quotes", Icon = "Invoice", Description = "Invoice and quotes")]
+    [Action("Sdl.Community.InvoiceAndQuotes", Name = "Trados Studio InQuote", Icon = "Invoice", Description = "Trados Studio InQuote")]
     [ActionLayout(typeof(InvoiceAndQuotesRibbon), 20, DisplayType.Large)]
     class InvoiceAndQuotesViewPart:AbstractAction
     {
@@ -31,7 +28,7 @@ namespace Sdl.Community.InvoiceAndQuotes.Integration
 
         private string CreateTemplateFolder()
         {
-            var templateFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\Invoice\Office Templates");
+            var templateFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"RWS AppStore\Invoice\Office Templates");
             if (!Directory.Exists(templateFolderPath))
             {
                 Directory.CreateDirectory(templateFolderPath);

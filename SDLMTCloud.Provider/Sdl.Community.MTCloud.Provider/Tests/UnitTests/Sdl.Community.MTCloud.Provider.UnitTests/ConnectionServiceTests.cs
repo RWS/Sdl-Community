@@ -39,7 +39,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					AccessToken = credential.Token,
 					Email = credential.Name
 				};
-				connectionService.StudioSignIn().Returns(new Tuple<LanguageCloudIdentityApiModel, string>(languageCloudIdentityApiModel, string.Empty));
+				connectionService.StudioSignIn().Returns((languageCloudIdentityApiModel, string.Empty));
 
 				var userDetails = new UserDetails
 				{
@@ -47,8 +47,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					UserId = "abc123",
 					ClientId = null
 				};
-				connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>()).Returns(
-					Task.FromResult(new Tuple<UserDetails, string>(userDetails, string.Empty)));
+				connectionService.GetUserDetails(Arg.Any<string>()).Returns(
+					Task.FromResult((userDetails, string.Empty)));
 			}
 
 			var result = connectionService.EnsureSignedIn(credential);
@@ -79,7 +79,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					AccessToken = credential.Token,
 					Email = credential.Name
 				};
-				connectionService.StudioSignIn().Returns(new Tuple<LanguageCloudIdentityApiModel, string>(languageCloudIdentityApiModel, string.Empty));
+				connectionService.StudioSignIn().Returns((languageCloudIdentityApiModel, string.Empty));
 
 				var userDetails = new UserDetails
 				{
@@ -87,8 +87,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					UserId = "abc123",
 					ClientId = null
 				};
-				connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>()).Returns(
-					Task.FromResult(new Tuple<UserDetails, string>(userDetails, string.Empty)));
+				connectionService.GetUserDetails(Arg.Any<string>()).Returns(
+					Task.FromResult((userDetails, string.Empty)));
 			}
 
 			var result = connectionService.Connect(credential);
@@ -121,7 +121,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					Email = string.Empty
 				};
 				connectionService.StudioSignIn()
-					.Returns(new Tuple<LanguageCloudIdentityApiModel, string>(languageCloudIdentityApiModel, "Invalid Credentials!"));
+					.Returns((languageCloudIdentityApiModel, "Invalid Credentials!"));
 			}
 			else
 			{
@@ -130,7 +130,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					AccessToken = string.Empty
 				};
 				connectionService.SignIn(Arg.Any<string>(), Arg.Any<string>())
-					.Returns(Task.FromResult(new Tuple<AuthorizationResponse, string>(authorizationResponse, "Invalid Credentials!")));
+					.Returns(Task.FromResult((authorizationResponse, "Invalid Credentials!")));
 			}
 
 			var userDetails = new UserDetails
@@ -139,8 +139,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				UserId = type != Authentication.AuthenticationType.Client ? "abc123" : null,
 				ClientId = type == Authentication.AuthenticationType.Client ? "abc123" : null,
 			};
-			connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>())
-				.Returns(Task.FromResult(new Tuple<UserDetails, string>(userDetails, string.Empty)));
+			connectionService.GetUserDetails(Arg.Any<string>())
+				.Returns(Task.FromResult((userDetails, string.Empty)));
 
 			var result = connectionService.Connect(credential);
 			Assert.False(result.Item1, "Expected value: false");
@@ -171,7 +171,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					AccessToken = credential.Token,
 					Email = credential.Name
 				};
-				connectionService.StudioSignIn().Returns(new Tuple<LanguageCloudIdentityApiModel, string>(languageCloudIdentityApiModel, string.Empty));
+				connectionService.StudioSignIn().Returns((languageCloudIdentityApiModel, string.Empty));
 			}
 			else
 			{
@@ -180,7 +180,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					AccessToken = credential.Token
 				};
 				connectionService.SignIn(Arg.Any<string>(), Arg.Any<string>())
-					.Returns(Task.FromResult(new Tuple<AuthorizationResponse, string>(authorizationResponse, string.Empty)));
+					.Returns(Task.FromResult((authorizationResponse, string.Empty)));
 			}
 
 			var userDetails = new UserDetails
@@ -189,8 +189,8 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				UserId = type != Authentication.AuthenticationType.Client ? "abc123" : null,
 				ClientId = type == Authentication.AuthenticationType.Client ? "abc123" : null,
 			};
-			connectionService.GetUserDetails(Arg.Any<string>(), Arg.Any<string>())
-				.Returns(Task.FromResult(new Tuple<UserDetails, string>(userDetails, string.Empty)));
+			connectionService.GetUserDetails(Arg.Any<string>())
+				.Returns(Task.FromResult((userDetails, string.Empty)));
 
 			var result = connectionService.Connect(credential);
 			Assert.True(result.Item1, "Expected value: true");

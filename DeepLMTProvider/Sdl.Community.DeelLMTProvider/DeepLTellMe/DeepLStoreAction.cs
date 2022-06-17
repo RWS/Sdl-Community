@@ -8,7 +8,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
     {
         public DeepLStoreAction()
         {
-            Name = "Download DeepL from AppStore";
+            Name = "Download DeepL from RWS AppStore";
         }
 
         public override string Category => "DeepL results";

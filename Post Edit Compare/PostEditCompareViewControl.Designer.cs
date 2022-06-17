@@ -279,59 +279,59 @@ namespace Sdl.Community.PostEdit.Versions
             this.toolStripSeparator2,
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(291, 148);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(292, 148);
             // 
             // saveNewProjectVersionToolStripMenuItem
             // 
             this.saveNewProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveNewProjectVersionToolStripMenuItem.Image")));
             this.saveNewProjectVersionToolStripMenuItem.Name = "saveNewProjectVersionToolStripMenuItem";
-            this.saveNewProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.saveNewProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.saveNewProjectVersionToolStripMenuItem.Text = "New Project Version";
             // 
             // editSelectedProjectVersionToolStripMenuItem
             // 
             this.editSelectedProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("editSelectedProjectVersionToolStripMenuItem.Image")));
             this.editSelectedProjectVersionToolStripMenuItem.Name = "editSelectedProjectVersionToolStripMenuItem";
-            this.editSelectedProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.editSelectedProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.editSelectedProjectVersionToolStripMenuItem.Text = "Edit Project Version";
             // 
             // removeSelectedProjectVersionsToolStripMenuItem
             // 
             this.removeSelectedProjectVersionsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("removeSelectedProjectVersionsToolStripMenuItem.Image")));
             this.removeSelectedProjectVersionsToolStripMenuItem.Name = "removeSelectedProjectVersionsToolStripMenuItem";
-            this.removeSelectedProjectVersionsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.removeSelectedProjectVersionsToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.removeSelectedProjectVersionsToolStripMenuItem.Text = "Remove Project Version";
             // 
             // restoreProjectVersionToolStripMenuItem
             // 
             this.restoreProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("restoreProjectVersionToolStripMenuItem.Image")));
             this.restoreProjectVersionToolStripMenuItem.Name = "restoreProjectVersionToolStripMenuItem";
-            this.restoreProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.restoreProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.restoreProjectVersionToolStripMenuItem.Text = "Restore Project Version";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(287, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(288, 6);
             // 
             // compareWithPostEditCompareToolStripMenuItem
             // 
             this.compareWithPostEditCompareToolStripMenuItem.Enabled = false;
             this.compareWithPostEditCompareToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compareWithPostEditCompareToolStripMenuItem.Image")));
             this.compareWithPostEditCompareToolStripMenuItem.Name = "compareWithPostEditCompareToolStripMenuItem";
-            this.compareWithPostEditCompareToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.compareWithPostEditCompareToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.compareWithPostEditCompareToolStripMenuItem.Text = "Compare with \'Post-Edit Compare\'";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(287, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(288, 6);
             // 
             // viewProjectVersionInWindowsExplorerToolStripMenuItem
             // 
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("viewProjectVersionInWindowsExplorerToolStripMenuItem.Image")));
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Name = "viewProjectVersionInWindowsExplorerToolStripMenuItem";
-            this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Text = "View Project Version in Windows Explorer";
             // 
             // imageList1

@@ -6,7 +6,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 {
 	[Action(Id = "WordsOmissionId",
-		Name = "Words Omission",
+		Name = "Words omission",
 		Description = "Check/Uncheck Words omission option", 
 		ContextByType = typeof(EditorController))]
 	public class SetWordsOmissionAction : AbstractAction, ISDLMTCloudAction

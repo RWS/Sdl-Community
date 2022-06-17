@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.ProjectAutomation.FileBased;
+using Sdl.Community.MtEnhancedProvider.Service;
+using Sdl.Community.MtEnhancedProvider.View;
+using Sdl.Community.MtEnhancedProvider.ViewModel;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
@@ -21,7 +21,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 
 			if (currentProject == null)
 			{
-				MessageBox.Show("No project is set as active");
+				MessageBox.Show(@"No project is set as active");
 			}
 			else
 			{
@@ -29,7 +29,7 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 				if (!settings.Entries.Any(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider")))
 				{
 					MessageBox.Show(
-						"MT Enhanced Provider is not set on this project\nPlease set it in project settings before using TellMe to access it");
+						@"MT Enhanced Provider is not set on this project\nPlease set it in project settings before using TellMe to access it");
 				}
 				else
 				{
@@ -41,10 +41,17 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 						var mtTranslationOptions =
 							new MtTranslationOptions(translationProvider.MainTranslationProvider.Uri);
 
-						var dialog = new MtProviderConfDialog(mtTranslationOptions, true);
-						dialog.ShowDialog();
+						var dialogService = new OpenFileDialogService();
 
-						if (dialog.DialogResult == DialogResult.OK)
+						var settingsControlVm = new SettingsControlViewModel(mtTranslationOptions, dialogService,true);
+						var mainWindowVm = new MainWindowViewModel(mtTranslationOptions,settingsControlVm,true);
+
+						var mainWindow = new MainWindow
+						{
+							DataContext = mainWindowVm
+						};
+
+						mainWindowVm.CloseEventRaised += () =>
 						{
 							settings.Entries.Find(entry =>
 									entry.MainTranslationProvider.Uri.ToString().Contains("mtenhancedprovider"))
@@ -52,7 +59,10 @@ namespace Sdl.Community.MtEnhancedProvider.MTEnhancedTellMe
 								.Uri = mtTranslationOptions.Uri;
 
 							currentProject.UpdateTranslationProviderConfiguration(settings);
-						}
+							mainWindow.Close();
+						};
+
+						mainWindow.ShowDialog();
 					}
 				}
 			}

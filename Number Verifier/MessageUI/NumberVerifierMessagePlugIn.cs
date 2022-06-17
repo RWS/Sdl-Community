@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-
+using Sdl.Community.NumberVerifier.MessageUI;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -24,7 +24,7 @@ namespace Sdl.Community.Extended.MessageUI
         public bool SupportsMessage(MessageEventArgs messageEventArgs)
         {
             return messageEventArgs.ExtendedData != null &&
-                   messageEventArgs.ExtendedData.GetType().Equals(typeof(NumberVerifierMessageData));
+                   (messageEventArgs.ExtendedData.GetType() == typeof(NumberVerifierMessageData) || messageEventArgs.ExtendedData.GetType() == typeof(AlignmentErrorExtendedData));
         }
         #endregion
 

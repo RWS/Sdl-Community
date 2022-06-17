@@ -25,7 +25,8 @@ variables:
   value: 'Release'
 - name: solution
   value: '**/Sdl.Community.DsiViewer.sln'
-  pathToPublish: 'DSI Viewer\Sdl.Community.SdiViewer\bin\Release\Sdl.Community.DsiViewer.sdlplugin'
+- name: pathToPublish
+  value: 'DSI Viewer\Sdl.Community.SdiViewer\bin\Release\Sdl.Community.DsiViewer.sdlplugin'
 
 steps:
   - template: jobs/build-sdlplugin.yml

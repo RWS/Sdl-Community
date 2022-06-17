@@ -10,16 +10,15 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Newtonsoft.Json;
-using Sdl.Community.Reports.Viewer.Commands;
-using Sdl.Community.Reports.Viewer.Model;
-using Sdl.Community.Reports.Viewer.Service;
-using Sdl.Community.Reports.Viewer.View;
-using Sdl.Reports.Viewer.API;
-using Sdl.Reports.Viewer.API.Model;
+using Reports.Viewer.Api.Model;
+using Reports.Viewer.Plus.Commands;
+using Reports.Viewer.Plus.Model;
+using Reports.Viewer.Plus.Service;
+using Reports.Viewer.Plus.View;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 
-namespace Sdl.Community.Reports.Viewer.ViewModel
+namespace Reports.Viewer.Plus.ViewModel
 {
 	public class SettingsViewModel : INotifyPropertyChanged
 	{
@@ -27,8 +26,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private readonly Settings _settings;
 		private readonly PathInfo _pathInfo;
 		private readonly ImageService _imageService;
-		private readonly ReportsController _controller;
-		private readonly string _clientId;
+		private readonly ReportsViewerController _controller;
 		private readonly List<string> _groupNames;
 		private string _windowTitle;
 		private ICommand _saveCommand;
@@ -46,14 +44,13 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private ReportTemplate _selectedReportTemplate;
 
 		public SettingsViewModel(Window window, Settings settings, ImageService imageService,
-			PathInfo pathInfo, ReportsController controller, List<string> groupNames, string clientId)
+			PathInfo pathInfo, ReportsViewerController controller, List<string> groupNames)
 		{
 			_window = window;
 			_settings = settings;
 			_pathInfo = pathInfo;
 			_imageService = imageService;
 			_controller = controller;
-			_clientId = clientId;
 			_groupNames = groupNames;
 
 			WindowTitle = "Settings";
@@ -220,7 +217,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 
 			File.WriteAllText(_pathInfo.SettingsFilePath, JsonConvert.SerializeObject(_settings));
 
-			_controller.UpdateCustomReportTemplates(_clientId, _reportTemplates.ToList());
+			_controller.UpdateCustomReportTemplates(_reportTemplates.ToList());
 
 			_window.DialogResult = true;
 			_window?.Close();
@@ -237,7 +234,7 @@ namespace Sdl.Community.Reports.Viewer.ViewModel
 		private void OpenAppendTemplate(ReportTemplate reportTemplate, bool isEditMode)
 		{
 			var viewModel = new AppendTemplateViewModel(reportTemplate,
-				_reportTemplates.ToList(), _controller.SelectedProject, _imageService, _groupNames, isEditMode);
+				_reportTemplates.ToList(), _controller.GetSelectedProject(), _imageService, _groupNames, isEditMode);
 
 			var window = new AppendTemplateWindow(viewModel, _window);
 

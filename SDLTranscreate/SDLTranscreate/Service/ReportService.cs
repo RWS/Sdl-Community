@@ -8,23 +8,23 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using Sdl.Community.Transcreate.Common;
-using Sdl.Community.Transcreate.FileTypeSupport.SDLXLIFF;
-using Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model;
-using Sdl.Community.Transcreate.Model;
-using Sdl.Community.Transcreate.Service.ProgressDialog;
+using Reports.Viewer.Api.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
-using Sdl.Reports.Viewer.API.Model;
-using AnalysisBand = Sdl.Community.Transcreate.Model.AnalysisBand;
-using ConfirmationStatistics = Sdl.Community.Transcreate.Model.ConfirmationStatistics;
-using File = Sdl.Community.Transcreate.FileTypeSupport.XLIFF.Model.File;
-using PathInfo = Sdl.Community.Transcreate.Common.PathInfo;
-using ProjectFile = Sdl.Community.Transcreate.Model.ProjectFile;
+using Trados.Transcreate.Common;
+using Trados.Transcreate.FileTypeSupport.SDLXLIFF;
+using Trados.Transcreate.FileTypeSupport.XLIFF.Model;
+using Trados.Transcreate.Model;
+using Trados.Transcreate.Service.ProgressDialog;
+using AnalysisBand = Trados.Transcreate.Model.AnalysisBand;
+using ConfirmationStatistics = Trados.Transcreate.Model.ConfirmationStatistics;
+using File = Trados.Transcreate.FileTypeSupport.XLIFF.Model.File;
+using PathInfo = Trados.Transcreate.Common.PathInfo;
+using ProjectFile = Trados.Transcreate.Model.ProjectFile;
 
-namespace Sdl.Community.Transcreate.Service
+namespace Trados.Transcreate.Service
 {
 	public class ReportService
 	{
@@ -39,7 +39,7 @@ namespace Sdl.Community.Transcreate.Service
 			_segmentBuilder = segmentBuilder;
 		}
 
-		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, out string workingPathOut)
+		public List<Report> CreateFinalReport(Interfaces.IProject project, FileBasedProject studioProject, List<ProjectFile> selectedFiles, out string workingPathOut)
 		{
 			var reports = new List<Report>();
 			var settings = new XmlWriterSettings
@@ -47,7 +47,7 @@ namespace Sdl.Community.Transcreate.Service
 				OmitXmlDeclaration = true,
 				Indent = false
 			};
-			var reportName = "SDL Transcreate Report";
+			var reportName = "Trados Transcreate Report";
 
 			var studioProjectInfo = studioProject.GetProjectInfo();
 			var dateTimeStamp = DateTime.UtcNow;
@@ -71,8 +71,20 @@ namespace Sdl.Community.Transcreate.Service
 				decimal current = 0;
 				foreach (var targetLanguage in project.TargetLanguages)
 				{
-					var projectFiles = project.ProjectFiles.Where(a => string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name,
-																   StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+					var projectFiles = project.ProjectFiles.Where(a =>
+						string.Compare(a.TargetLanguage, targetLanguage.CultureInfo.Name, StringComparison.CurrentCultureIgnoreCase) == 0).ToList();
+
+					var hasProjectFiles = HasProjectFiles(selectedFiles, projectFiles);
+					if (!hasProjectFiles)
+					{
+						current += projectFiles.Count;
+						var progress = current / maximum * 100;
+
+						ProgressDialog.ProgressDialog.Current.Report((int)progress,
+							string.Format("Language: {0}\r\nFile: {1}", targetLanguage.CultureInfo.DisplayName, projectFiles.FirstOrDefault().Name));
+
+						continue;
+					}
 
 					var workingLanguageFolder = GetPath(workingPath, targetLanguage.CultureInfo.Name);
 					foreach (var projectFile in projectFiles)
@@ -84,8 +96,12 @@ namespace Sdl.Community.Transcreate.Service
 
 						current++;
 						var progress = current / maximum * 100;
-						ProgressDialog.ProgressDialog.Current.Report((int)progress, "File: " + projectFile.Name);
+						ProgressDialog.ProgressDialog.Current.Report((int)progress, string.Format("Language: {0}\r\nFile: {1}", targetLanguage.CultureInfo.DisplayName, projectFile.Name));
 
+						if (selectedFiles != null && !selectedFiles.Exists(a => a.FileId == projectFile.FileId))
+						{
+							continue;
+						}
 
 						var projectFilePath = Path.Combine(project.Path, projectFile.Location);
 						var xliffData = sdlxliffReader.ReadFile(project.Id, projectFile.FileId, projectFilePath,
@@ -105,7 +121,7 @@ namespace Sdl.Community.Transcreate.Service
 							writer.WriteAttributeString("created", dataTimeStampToString);
 
 							writer.WriteStartElement("taskInfo");
-							writer.WriteAttributeString("action", "SDL Transcreate Report");
+							writer.WriteAttributeString("action", "Trados Transcreate Report");
 							writer.WriteAttributeString("file", projectFile.Path + projectFile.Name);
 							writer.WriteAttributeString("taskId", Guid.NewGuid().ToString());
 							writer.WriteAttributeString("runAt", GetDisplayDateTime(dateTimeStamp));
@@ -220,6 +236,28 @@ namespace Sdl.Community.Transcreate.Service
 
 		}
 
+		private static bool HasProjectFiles(List<ProjectFile> selectedFiles, List<ProjectFile> projectFiles)
+		{
+			var hasProjectFiles = true;
+
+			if (selectedFiles?.Count > 0 && projectFiles.Any())
+			{
+				var availableFiles = projectFiles
+					.Where(projectFile => selectedFiles.Exists(a => a.FileId == projectFile.FileId)).ToList();
+
+				if (!availableFiles.Any())
+				{
+					hasProjectFiles = false;
+				}
+			}
+			else if (!projectFiles.Any())
+			{
+				hasProjectFiles = false;
+			}
+
+			return hasProjectFiles;
+		}
+
 		public void CreateTaskReport(TaskContext taskContext, string reportFile,
 			FileBasedProject selectedProject, string targetLanguageCode)
 		{
@@ -240,7 +278,14 @@ namespace Sdl.Community.Transcreate.Service
 					reportName = "Create Transcreate Project Report";
 					break;
 				case Enumerators.Action.CreateBackTranslation:
-					reportName = "Create Back-Translation Project Report";
+					if (taskContext.Project is BackTranslationProject backTranslationProject && backTranslationProject.IsUpdate)
+					{
+						reportName = "Update Back-Translation Project Report";
+					}
+					else
+					{
+						reportName = "Create Back-Translation Project Report";
+					}
 					break;
 				case Enumerators.Action.Export:
 					reportName = "Export Translations Report";
@@ -303,7 +348,7 @@ namespace Sdl.Community.Transcreate.Service
 		public string GetReportTemplatePath(string name)
 		{
 			var filePath = Path.Combine(_pathInfo.SettingsFolderPath, name);
-			var resourceName = "Sdl.Community.Transcreate.Resources." + name;
+			var resourceName = "Trados.Transcreate.Resources." + name;
 
 			WriteResourceToFile(resourceName, filePath);
 
