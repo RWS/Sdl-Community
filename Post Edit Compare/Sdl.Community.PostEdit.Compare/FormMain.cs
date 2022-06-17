@@ -837,14 +837,6 @@ namespace PostEdit.Compare
             SaveApplicationSettings();
         }
 
-
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var f = new About();
-            f.ShowDialog();
-        }
-
         private void toolStripButton_settings_Click(object sender, EventArgs e)
         {
 
