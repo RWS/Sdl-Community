@@ -329,50 +329,65 @@ namespace Sdl.Community.XliffCompare.Core.Comparer.TextComparer
                     else
                     {
 
-                        while (curPos < xSegmentSection.Content.Length)
-                        {
-                            var prevPos = curPos;
-                            while (curPos < xSegmentSection.Content.Length &&
-                               (char.IsControl(xSegmentSection.Content[curPos])
-                               || char.IsWhiteSpace(xSegmentSection.Content[curPos])))
-                            {
-                                curPos++;
-                            }
-                            prefix += xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
+						while (curPos < xSegmentSection.Content.Length)
+						{
+							var prevPos = curPos;
+							while (curPos < xSegmentSection.Content.Length &&
+								xSegmentSection.Content[curPos] != '\xa0' && // stop at nbsp
+							   (char.IsControl(xSegmentSection.Content[curPos])
+							   || char.IsWhiteSpace(xSegmentSection.Content[curPos])))
+							{
+								curPos++;
+							}
+							prefix += xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
 
-                            if (curPos == xSegmentSection.Content.Length)
-                            {
+							if (curPos == xSegmentSection.Content.Length)
+							{
 
-                                if (prefix != string.Empty)
-                                {
-                                    words.Add(new Word(string.Empty, prefix, string.Empty));
-                                }
-                                break;
-                            }
+								if (prefix != string.Empty)
+								{
+									words.Add(new Word(string.Empty, prefix, string.Empty));
+								}
+								break;
+							}
 
-                            prevPos = curPos;
-                            while (curPos < xSegmentSection.Content.Length &&
-                                !char.IsControl(xSegmentSection.Content[curPos]) &&
-                                !char.IsWhiteSpace(xSegmentSection.Content[curPos]))
-                            {
-                                curPos++;
-                            }
-                            var word = xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
+							prevPos = curPos;
+
+							if (xSegmentSection.Content[curPos] == '\xa0') // make nbsp a word
+							{
+								// a word may be a string of non-breaking spaces ...
+								while (xSegmentSection.Content[curPos] == '\xa0')
+								{
+									curPos++;
+								}
+							}
+							else
+							{
+								// ... or a string of non-whitespace/non-control
+								while (curPos < xSegmentSection.Content.Length &&
+									!char.IsControl(xSegmentSection.Content[curPos]) &&
+									!char.IsWhiteSpace(xSegmentSection.Content[curPos]))
+								{
+									curPos++;
+								}
+							}
+							var word = xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
 
 
-                            prevPos = curPos;
-                            while (curPos < xSegmentSection.Content.Length &&
-                                (char.IsControl(xSegmentSection.Content[curPos]) ||
-                                char.IsWhiteSpace(xSegmentSection.Content[curPos])))
-                            {
-                                curPos++;
-                            }
-                            suffix = xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
-                            ProcessWord(words, prefix, word, suffix);
-                            prefix = string.Empty;
-                        }
-                    }
-                }
+							prevPos = curPos;
+							while (curPos < xSegmentSection.Content.Length &&
+								xSegmentSection.Content[curPos] != '\xa0' && // stop at nbsp
+								(char.IsControl(xSegmentSection.Content[curPos]) ||
+								char.IsWhiteSpace(xSegmentSection.Content[curPos])))
+							{
+								curPos++;
+							}
+							suffix = xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
+							ProcessWord(words, prefix, word, suffix);
+							prefix = string.Empty;
+						}
+					}
+				}
                 return words;
             }
 
