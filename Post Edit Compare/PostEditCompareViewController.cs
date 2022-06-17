@@ -18,7 +18,6 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using About = Sdl.Community.PostEdit.Versions.Dialogs.About;
 using SettingsSerializer = Sdl.Community.PostEdit.Versions.Structures.SettingsSerializer;
 
 namespace Sdl.Community.PostEdit.Versions
@@ -353,11 +352,6 @@ namespace Sdl.Community.PostEdit.Versions
         public void ViewOnlineHelp()
         {
             Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3190.post-edit-compare");
-        }
-        public void ViewAboutInfo()
-        {
-            var about = new About();
-            about.ShowDialog();
         }
 
         public void LoadConfigurationSettings()

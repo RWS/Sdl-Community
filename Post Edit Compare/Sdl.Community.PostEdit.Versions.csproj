@@ -117,12 +117,6 @@
     <Compile Include="Automation\AutomationComunicationSettings.cs" />
     <Compile Include="Automation\SettingsSerializer.cs" />
     <Compile Include="ComboboxItem.cs" />
-    <Compile Include="Dialogs\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\About.Designer.cs">
-      <DependentUpon>About.cs</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\RestoreProjectVersion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -199,9 +193,6 @@
     <Content Include="Resources\Remove.ico" />
     <Content Include="Resources\Restore.ico" />
     <Content Include="Resources\Settings.ico" />
-    <EmbeddedResource Include="Dialogs\About.resx">
-      <DependentUpon>About.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\RestoreProjectVersion.resx">
       <DependentUpon>RestoreProjectVersion.cs</DependentUpon>
     </EmbeddedResource>
