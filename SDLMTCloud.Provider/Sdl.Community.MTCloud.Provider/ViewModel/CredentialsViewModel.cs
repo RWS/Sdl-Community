@@ -263,14 +263,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public WorkingPortal SelectedWorkingPortal
 		{
-			get => _selectedWorkingPortal;
+			get { return _selectedWorkingPortal; }
 			set
 			{
-				if (_selectedWorkingPortal == value)
-				{
-					return;
-				}
-
+			
 				_selectedWorkingPortal = value;
 				_connectionService.Credential.AccountRegion = _selectedWorkingPortal;
 		
