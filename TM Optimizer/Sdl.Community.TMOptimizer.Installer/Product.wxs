@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="TMOptimizer 2022" Language="1033" Version="4.0.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
+	<Product Id="*" Name="TMOptimizer 2022" Language="1033" Version="4.0.0.1" Manufacturer="Trados AppStore Team" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="product.ico" SourceFile="$(var.ProjectDir)product.ico" />
@@ -27,9 +27,9 @@
 			<Publish Dialog="WelcomeDlg"
 			         Control="Next"
 			         Event="NewDialog"
-			         Value="InstallDirDlg"
+			         Value="VerifyReadyDlg"
 			         Order="2">1</Publish>
-			<Publish Dialog="InstallDirDlg"
+			<Publish Dialog="VerifyReadyDlg"
 			         Control="Back"
 			         Event="NewDialog"
 			         Value="WelcomeDlg"
@@ -67,7 +67,9 @@
 			<!-- Define location where the app will be installed, TMOptimizer folder (it is used because dll's needs to be loaded from the Studio folder)-->
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="Trados" Name="Trados" >
-					<Directory Id="TMOPTIMIZER" Name="TMOptimizer"/>
+					<Directory Id="TradosStudio" Name="Trados Studio">
+						<Directory Id="TMOPTIMIZER" Name="Studio17"/>
+					</Directory>
 				</Directory>
 			</Directory>
 
@@ -89,32 +91,12 @@
 				<File Id="Sdl.Community.TMOptimizer.exe" Name="Sdl.Community.TMOptimizer.exe" Source="$(var.Sdl.Community.TMOptimizer.TargetPath)" KeyPath="yes" />
 			</Component>
 			
-			<Component Id="Sdl.Core.Globalization">
-				<File Id="Sdl.Core.Globalization.dll" Name="Sdl.Core.Globalization.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Core.Globalization.dll" KeyPath="yes" />
-			</Component>
-			
-			<Component Id="Sdl.Core.PluginFramework">
-				<File Id="Sdl.Core.PluginFramework.dll" Name="Sdl.Core.PluginFramework.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Core.PluginFramework.dll" KeyPath="yes" />
-			</Component>
-			
-			<Component Id="Sdl.Core.TM.ImportExport">
-				<File Id="Sdl.Core.TM.ImportExport.dll" Name="Sdl.Core.TM.ImportExport.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Core.TM.ImportExport.dll" KeyPath="yes" />
-			</Component>
-
-			<Component Id="Sdl.LanguagePlatform.Core">
-				<File Id="Sdl.LanguagePlatform.Core.dll" Name="Sdl.LanguagePlatform.Core.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.LanguagePlatform.Core.dll" KeyPath="yes" />
-			</Component>
-
-			<Component Id="Sdl.LanguagePlatform.TranslationMemory">
-				<File Id="Sdl.LanguagePlatform.TranslationMemory.dll" Name="Sdl.LanguagePlatform.TranslationMemory.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.LanguagePlatform.TranslationMemory.dll" KeyPath="yes" />
-			</Component>
-
-			<Component Id="Sdl.LanguagePlatform.TranslationMemoryApi">
-				<File Id="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Name="Sdl.LanguagePlatform.TranslationMemoryApi.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.LanguagePlatform.TranslationMemoryApi.dll" KeyPath="yes" />
-			</Component>
-
 			<Component Id="Sdl.Community.TMOptimizer.exe.config" Guid="55dfa363-c959-49cb-861e-c05c75860968">
 				<File Id="Sdl.Community.TMOptimizer.exe.config" Name="Sdl.Community.TMOptimizer.exe.config" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\Sdl.Community.TMOptimizer.exe.config" />
+			</Component>
+			
+			<Component Id="icu.net.dll">
+				<File Id="icu.net.dll" Name="icu.net.dll" Source="$(var.Sdl.Community.TMOptimizer.TargetDir)\icu.net.dll" />
 			</Component>
 
 			<Component Id="Sdl.Community.TMOptimizerLib.dll" Guid="*">
