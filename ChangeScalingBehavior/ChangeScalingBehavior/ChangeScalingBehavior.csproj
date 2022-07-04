@@ -7,6 +7,9 @@
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Versioning">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />

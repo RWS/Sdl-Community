@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Sdl.Versioning;
 using Trados.Community.Toolkit.Core;
 
 namespace ChangeScalingBehavior
 {
 	internal class ResourceFilesManager
     {
-        public bool NoStudioManifestFile(List<StudioVersion> installedStudioVersions)
+        public bool NoStudioManifestFile(List<Sdl.Versioning.StudioVersion> installedStudioVersions)
         {
             var counter = 0;
             for (var i = 0; i < installedStudioVersions.Count; i++)

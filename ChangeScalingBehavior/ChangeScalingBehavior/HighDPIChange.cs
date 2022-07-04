@@ -6,13 +6,14 @@ using System.Diagnostics;
 using BrightIdeasSoftware;
 using System.IO;
 using Trados.Community.Toolkit.Core;
+using Sdl.Versioning;
 
 namespace ChangeScalingBehavior
 {
     public partial class HighDPIChange : Form
     {
         private readonly List<string> _processNames = new List<string> { "MultiTerm", "SDLTradosStudio" };
-        private List<StudioVersion> _installedStudioVersions;
+        private List<Sdl.Versioning.StudioVersion> _installedStudioVersions;
         private List<MultiTermVersion> _installedMultiTermVersions;
         private readonly List<ApplicationVersion> _versions =new List<ApplicationVersion>();
 
@@ -25,8 +26,8 @@ namespace ChangeScalingBehavior
         {
 	        Load -= HighDPIChange_Load;
 
-			var tradosStudio = new Studio();        
-            _installedStudioVersions = tradosStudio.GetInstalledStudioVersion();
+			var tradosStudio = new StudioVersionService();        
+            _installedStudioVersions = tradosStudio.GetInstalledStudioVersions();
 
 	        var multiTerm = new MultiTerm();
             _installedMultiTermVersions = multiTerm.GetInstalledMultiTermVersion();
@@ -42,7 +43,7 @@ namespace ChangeScalingBehavior
         private static string Getter(object rowObject)
         {            
             var registerKeyMan = new RegistryKeyManager();
-	        if (rowObject is StudioVersion studioVersion)
+	        if (rowObject is Sdl.Versioning.StudioVersion studioVersion)
             {
                 if (File.Exists(studioVersion.InstallPath + "SDLTradosStudio.exe.manifest") && registerKeyMan.IsRegistryKey())
                 {
@@ -107,7 +108,7 @@ namespace ChangeScalingBehavior
                     }
                 }
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 MessageBox.Show(this, "Admin rights are required!");
             }
