@@ -20,16 +20,16 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaver;component/Styles/DataGridStyle.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/TextBlockStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/TextBoxStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/DataGridColumnStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Language Weaver;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaver;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaver;component/Styles/TextBoxStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaver;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaver;component/Styles/DataGridColumnStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaver;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="CheckBox" x:Key="OptionsCheckboxesStyle">
@@ -64,7 +64,7 @@
 			       RenderOptions.BitmapScalingMode="HighQuality"
 			       RenderOptions.EdgeMode="Aliased"
 			       VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/Language Weaver;component/Resources/LWLogo.png"
+			       Source="pack://application:,,,/LanguageWeaver;component/Resources/LWLogo.png"
 				   />
 			
 
