@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>LanguageWeaver</AssemblyName>
-		<TradosFolder>$(TradosBuild17)</TradosFolder>
+		<TradosFolder>$(MSBuildProgramFiles32)/Trados/Trados Studio/Studio17</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
