@@ -5,7 +5,7 @@
 		public static string AddMTCode = "AddMTCode method: ";
 		public static string BeGlobalV4Translator = "BeGlobalV4Translator constructor: ";
 		public static string Browse = "Browse:";
-		public static string ClientAuthentication = $"Client credentials - {PluginResources.SDLMTCloud_Provider_Name}";
+		public static string ClientAuthentication = $"Client credentials";
 		public static string ClientLoginAuthentication = "ClientLogin";
 		public static string CredentialsAndInternetValidation = "The Language Weaver host could not be reached and setups cannot be saved. Please verify your credentials and internet connection, and ensure you are able to connect to the server from this computer.";
 		public static string CredentialsNotValid = "Please verify your credentials!";
@@ -54,7 +54,7 @@
 
 		public static string SettingsGroupId = "SDLMTCloudLanguageMappings";
 		public static string SplitLanguagePair = "SplitLanguagePair method: ";
-		public static string StudioAuthentication = "Studio credentials - SDL Language Cloud";
+		public static string StudioAuthentication = "Studio credentials";
 		public static string SubscriptionInfoMethod = "Subscription info method: ";
 		public static string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
 		public static string SupportsLanguageDirection = "SupportsLanguageDirection: ";
@@ -66,7 +66,7 @@
 		public static string TranslateTextMethod = "Translate text method: ";
 
 		public static string TRANSLATING = "TRANSLATING";
-		public static string UserAuthentication = $"User credentials - {PluginResources.SDLMTCloud_Provider_Name}";
+		public static string UserAuthentication = $"User credentials";
 		public static string UserLoginAuthentication = "UserLogin";
 		public static string WaitTranslationMethod = "Wait for translation method: ";
 		public static string WriteExcelLocally = "WriteExcelLocally method: ";
