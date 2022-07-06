@@ -18,7 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		string StudioVersion { get; }
 
-		void AddTraceHeader(HttpRequestMessage request);
+		void AddTraceHeaders(HttpRequestMessage request);
 
 		(bool, string) Connect(ICredential credential);
 
