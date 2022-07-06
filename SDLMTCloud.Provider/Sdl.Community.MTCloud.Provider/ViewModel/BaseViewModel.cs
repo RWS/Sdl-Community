@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
-{	
+{
 	[DataContract]
 	public class BaseViewModel : INotifyPropertyChanged
 	{

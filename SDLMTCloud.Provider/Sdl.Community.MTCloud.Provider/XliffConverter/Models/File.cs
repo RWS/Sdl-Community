@@ -4,17 +4,25 @@ using System.Xml.Serialization;
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 {
 	public class File
-	{		
+	{
 		private string _sourceLanguage;
-		
-		private string _targetLanguage;
-		
+
 		private CultureInfo _targetCulture;
+		private string _targetLanguage;
 
 		public File()
 		{
 			Body = new Body();
 		}
+
+		[XmlElement("body")]
+		public Body Body { get; set; }
+
+		[XmlElement("header")]
+		public Header Header { get; set; }
+
+		[XmlIgnore]
+		public CultureInfo SourceCulture { get; set; }
 
 		[XmlAttribute("source-language")]
 		public string SourceLanguage
@@ -33,9 +41,22 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 				}
 			}
 		}
-		
+
 		[XmlIgnore]
-		public CultureInfo SourceCulture { get; set; }
+		public CultureInfo TargetCulture
+		{
+			get => _targetCulture;
+			set
+			{
+				_targetCulture = value;
+
+				// verify targetLanguage isn't the desired value before setting,
+				// else you run the risk of infinite loop
+				var newTargetLanguage = value.ToString();
+				if (TargetLanguage != newTargetLanguage)
+					TargetLanguage = newTargetLanguage;
+			}
+		}
 
 		[XmlAttribute("target-language")]
 		public string TargetLanguage
@@ -54,28 +75,5 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 				}
 			}
 		}
-
-
-		[XmlIgnore]
-		public CultureInfo TargetCulture
-		{
-			get => _targetCulture;
-			set
-			{
-				_targetCulture = value;
-
-				// verify targetLanguage isn't the desired value before setting,
-				// else you run the risk of infinite loop
-				var newTargetLanguage = value.ToString();
-				if (TargetLanguage != newTargetLanguage)
-					TargetLanguage = newTargetLanguage;
-			}
-		}
-
-		[XmlElement("header")]
-		public Header Header { get; set; }
-
-		[XmlElement("body")]
-		public Body Body { get; set; }
 	}
 }

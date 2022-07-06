@@ -14,10 +14,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 {
 	public class SegmentSupervisor : ISegmentSupervisor
 	{
+		private static List<string> _providerNames;
 		private readonly EditorController _editorController;
 		private ITranslationService _translationService;
-		private static List<string> _providerNames;
-		
 
 		public SegmentSupervisor(EditorController editorController)
 		{
@@ -46,14 +45,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		}
 
 		private Dictionary<Guid, ConcurrentDictionary<SegmentId, ImprovementFeedback>> Data { get; set; } = new();
-
-		public void UpdateImprovement(SegmentId segmentId, string improvement)
-		{
-			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
-
-			var item = ActiveDocumentData[segmentId];
-			if (item.Improvement != improvement) item.Improvement = improvement;
-		}
 
 		public void CreateFeedbackEntry(SegmentId segmentId, string originalTarget, string source)
 		{
@@ -103,14 +94,22 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 		}
 
-		private static bool WasPreviousOriginMTCloud(ITranslationOrigin translationOrigin)
+		public void UpdateImprovement(SegmentId segmentId, string improvement)
 		{
-			return _providerNames.Contains(translationOrigin?.OriginBeforeAdaptation?.OriginSystem);
+			if (!ActiveDocumentData.ContainsKey(segmentId)) return;
+
+			var item = ActiveDocumentData[segmentId];
+			if (item.Improvement != improvement) item.Improvement = improvement;
 		}
 
 		private static bool IsOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
 			return _providerNames.Contains(translationOrigin?.OriginSystem);
+		}
+
+		private static bool WasPreviousOriginMTCloud(ITranslationOrigin translationOrigin)
+		{
+			return _providerNames.Contains(translationOrigin?.OriginBeforeAdaptation?.OriginSystem);
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
@@ -127,7 +126,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			}
 
 			if (!IsOriginMTCloud(translationOrigin) && !WasPreviousOriginMTCloud(translationOrigin) ||
-			    targetSegment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
+				targetSegment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
 
 			ShouldSendFeedback?.Invoke(segmentId);
 		}
@@ -144,9 +143,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			if (ActiveDocumentData is null) return false;
 
 			return (WasPreviousOriginMTCloud(translationOrigin) || IsOriginMTCloud(translationOrigin)) &&
-			       ActiveDocumentData.ContainsKey(segmentId) &&
-			       ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
-			       segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
+				   ActiveDocumentData.ContainsKey(segmentId) &&
+				   ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
+				   segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
 		}
 
 		private void TranslationService_TranslationReceived(TranslationData translationData)

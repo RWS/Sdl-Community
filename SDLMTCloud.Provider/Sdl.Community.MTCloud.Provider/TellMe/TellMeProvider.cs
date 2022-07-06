@@ -6,6 +6,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	public class TellMeProvider : ITellMeProvider
 	{
 		public string Name => $"{PluginResources.SDLMTCloud_Provider_Name} tell me provider";
+
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new CommunitySupportAction

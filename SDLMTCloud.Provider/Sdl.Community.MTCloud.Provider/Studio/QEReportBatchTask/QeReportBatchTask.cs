@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
 using Sdl.Community.MTCloud.Provider.Service.QEReportCreator;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;

@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
-using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -42,17 +41,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			StudioVersion = VersionService?.GetStudioVersion();
 
 			LanguageCloudIdentityApi = languageCloudIdentityApi;
-
-		
 		}
 
 		public virtual ICredential Credential { get; private set; }
-		public bool IsSignedIn { get; private set; }
-		public LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
-		public IWin32Window Owner { get; set; }
-		public string PluginVersion { get; }
-		public string StudioVersion { get; }
-		public VersionService VersionService { get; }
 
 		public string CurrentWorkingPortalAddress
 		{
@@ -63,6 +54,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			set { _currentWorkingPortalAddress = value; }
 		}
+
+		public bool IsSignedIn { get; private set; }
+		public LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
+		public IWin32Window Owner { get; set; }
+		public string PluginVersion { get; }
+		public string StudioVersion { get; }
+		public VersionService VersionService { get; }
 
 		public void AddTraceHeader(HttpRequestMessage request)
 		{
@@ -158,7 +156,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public string CredentialToString()
 		{
-			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary()+ "; AccountRegion=" + Credential.AccountRegion;
+			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary() + "; AccountRegion=" + Credential.AccountRegion;
 		}
 
 		public (bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
@@ -184,12 +182,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
 			credentialsWindow.DataContext = viewModel;
 
-
 			var message = string.Empty;
 			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;
 			credentialsWindow.ClientSecretBox.Password = viewModel.ClientSecret;
 			credentialsWindow.ClientIdBox.Password = viewModel.ClientId;
-
 
 			var result1 = credentialsWindow.ShowDialog();
 			if (result1.HasValue && result1.Value)
@@ -482,18 +478,18 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credentialsWindow;
 		}
 
-		private DateTime GetTokenValidTo(string token = null)
-		{
-			var tokenModel = ReadToken(token ?? Credential.Token);
-			return tokenModel?.ValidTo ?? DateTime.MinValue;
-		}
-
 		private HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri)
 		{
 			var request = new HttpRequestMessage(httpMethod, uri);
 			request.Headers.Add("Authorization", $"Bearer {Credential.Token}");
 			AddTraceHeader(request);
 			return request;
+		}
+
+		private DateTime GetTokenValidTo(string token = null)
+		{
+			var tokenModel = ReadToken(token ?? Credential.Token);
+			return tokenModel?.ValidTo ?? DateTime.MinValue;
 		}
 
 		private async Task<(UserDetails, string)> GetUserDetailsAttempt(string resource)

@@ -70,6 +70,29 @@ namespace Sdl.Community.MTCloud.Provider
 			Providers[CurrentProjectId] = provider;
 		}
 
+		public static string EnsureValidPath(string filepath, string targetLanguage)
+		{
+			if (File.Exists(filepath)) return filepath;
+
+			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
+							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
+
+			var pathWithExtension = filepath.Contains(".sdlxliff") ? filepath : $"{filepath}.sdlxliff";
+			var processedPath = $@"{projectPath}\{targetLanguage}\{pathWithExtension}";
+
+			if (File.Exists(processedPath)) return processedPath;
+
+			if (string.IsNullOrWhiteSpace(projectPath)) return null;
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
+			processedPath =
+				targetLanguageFiles.FirstOrDefault(
+					f =>
+						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(pathWithExtension)) &&
+						Path.GetExtension(f) == ".sdlxliff");
+
+			return File.Exists(processedPath) ? processedPath : null;
+		}
+
 		public static SdlMTCloudTranslationProvider GetCurrentProjectProvider()
 		{
 			return Providers.ContainsKey(ProjectInProcessing)
@@ -161,29 +184,6 @@ namespace Sdl.Community.MTCloud.Provider
 				MetadataSupervisor = new MetadataSupervisor(new SegmentMetadataCreator(), EditorController);
 				SegmentSupervisor = new SegmentSupervisor(EditorController);
 			}
-		}
-
-		public static string EnsureValidPath(string filepath, string targetLanguage)
-		{
-			if (File.Exists(filepath)) return filepath;
-
-			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
-							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
-
-			var pathWithExtension = filepath.Contains(".sdlxliff") ? filepath : $"{filepath}.sdlxliff";
-			var processedPath = $@"{projectPath}\{targetLanguage}\{pathWithExtension}";
-
-			if (File.Exists(processedPath)) return processedPath;
-
-			if (string.IsNullOrWhiteSpace(projectPath)) return null;
-			var targetLanguageFiles = Directory.GetFiles(projectPath);
-			processedPath =
-				targetLanguageFiles.FirstOrDefault(
-					f =>
-						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(pathWithExtension)) &&
-						Path.GetExtension(f) == ".sdlxliff");
-
-			return File.Exists(processedPath) ? processedPath : null;
 		}
 
 		private static void AttachToProjectCreatedEvent()

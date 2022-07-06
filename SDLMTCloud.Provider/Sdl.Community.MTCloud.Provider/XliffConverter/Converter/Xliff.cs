@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.XliffConverter.Models;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 {
+	public class EvaluatedSegment
+	{
+		public string QualityEstimation { get; set; }
+		public Segment Segment { get; set; }
+	}
+
 	[XmlRoot(Namespace = "urn:oasis:names:tc:xliff:document:1.2")]
 	public class Xliff
 	{
-		[XmlAttribute]
-		public string Version { get; set; }
-
 		[XmlElement("file")]
 		public File File { get; set; }
 
+		[XmlAttribute]
+		public string Version { get; set; }
 
-		public void AddTranslationUnit(LanguagePlatform.TranslationMemory.TranslationUnit translationUnit, string toolId)
+		public void AddSourceSegment(Segment sourceSegment)
 		{
-			File?.Body?.Add(translationUnit?.SourceSegment, translationUnit?.TargetSegment, toolId);
+			File?.Body?.Add(sourceSegment);
 		}
 
 		public void AddSourceText(string sourceText)
@@ -36,14 +39,14 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 			File?.Body?.Add(seg);
 		}
 
-		public void AddSourceSegment(Segment sourceSegment)
-		{
-			File?.Body?.Add(sourceSegment);
-		}
-
 		public void AddTranslation(Segment sourceSegment, Segment targetSegment, string toolId)
 		{
 			File?.Body?.Add(sourceSegment, targetSegment, toolId);
+		}
+
+		public void AddTranslationUnit(LanguagePlatform.TranslationMemory.TranslationUnit translationUnit, string toolId)
+		{
+			File?.Body?.Add(translationUnit?.SourceSegment, translationUnit?.TargetSegment, toolId);
 		}
 
 		public List<EvaluatedSegment> GetTargetSegments()
@@ -74,11 +77,5 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 		{
 			return Converter.PrintXliff(this);
 		}
-	}
-
-	public class EvaluatedSegment
-	{
-		public Segment Segment { get; set; }
-		public string QualityEstimation { get; set; }
 	}
 }

@@ -1,17 +1,17 @@
 ﻿<UserControl x:Class="Sdl.Community.MTCloud.Provider.Controls.WindowsControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 			 
-             mc:Ignorable="d" 			 
-             d:DesignHeight="100" d:DesignWidth="200" >
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+             d:DesignHeight="100" d:DesignWidth="200">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\Styles\Buttons.xaml" />
-				<ResourceDictionary Source="..\Styles\General.xaml"/>
+				<ResourceDictionary Source="..\Styles\General.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel>
@@ -21,8 +21,8 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
 			<!-- ICON AND TITLE -->
@@ -59,7 +59,7 @@
 
 				<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="MinimizeButton" Width="34" Height="26"
                             ToolTip="{Binding Path=ControlMinimize, ElementName=WizardWindowControl}" IsEnabled="True" Click="MinButton_Click">
-					<Path SnapsToDevicePixels="True" Data="F1M0,6L0,9 9,9 9,6 0,6z" 
+					<Path SnapsToDevicePixels="True" Data="F1M0,6L0,9 9,9 9,6 0,6z"
                               Fill="{Binding Foreground, ElementName=MinimizeButton}" />
 				</Button>
 				<Button x:Name="RestoreButton" Width="34" Height="26" IsEnabled="True" Click="MaxButton_Click">
@@ -88,7 +88,7 @@
 				</Button>
 
 				<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="CloseButton" Width="34" Height="26"
-                            ToolTip="{Binding Path=ControlClose, ElementName=WizardWindowControl}"  
+                            ToolTip="{Binding Path=ControlClose, ElementName=WizardWindowControl}"
                             IsEnabled="True" Click="CloseButton_OnClick">
 					<Path SnapsToDevicePixels="True"
                             Data="M 10.009,1.704 L 8.331,0.026 5.03,3.327 1.703,0 0,1.704 3.326,5.031 0.025,8.332 1.703,10.009 5.004,6.708 8.305,10.009 10.009,8.305 6.708,5.005"

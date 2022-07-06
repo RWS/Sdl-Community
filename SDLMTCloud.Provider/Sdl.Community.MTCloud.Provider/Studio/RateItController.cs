@@ -76,7 +76,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 
 			var projectInProcessing = MtCloudApplicationInitializer.GetProjectInProcessing();
 			if (MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project !=
-			    projectInProcessing) return;
+				projectInProcessing) return;
 
 			var currentProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
 

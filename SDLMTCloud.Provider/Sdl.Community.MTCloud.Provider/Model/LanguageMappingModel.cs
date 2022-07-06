@@ -6,25 +6,60 @@ namespace Sdl.Community.MTCloud.Provider.Model
 {
 	[DataContract]
 	public class LanguageMappingModel : BaseViewModel
-	{	
+	{
+		private List<MTCloudDictionary> _dictionaries;
+		private List<TranslationModel> _models;
+		private MTCloudDictionary _selectedDictionary;
+		private TranslationModel _selectedModel;
 		private MTCloudLanguage _selectedSource;
 		private MTCloudLanguage _selectedTarget;
-		private TranslationModel _selectedModel;		
-		private MTCloudDictionary _selectedDictionary;
-
 		private List<MTCloudLanguage> _sourceLanguages;
 		private List<MTCloudLanguage> _targetLanguages;
-		private List<TranslationModel> _models;	
-		private List<MTCloudDictionary> _dictionaries;
+
+		public List<MTCloudDictionary> Dictionaries
+		{
+			get => _dictionaries;
+			set
+			{
+				_dictionaries = value;
+				OnPropertyChanged(nameof(Dictionaries));
+			}
+		}
+
+		public List<TranslationModel> Models
+		{
+			get => _models;
+			set
+			{
+				_models = value;
+				OnPropertyChanged(nameof(Models));
+			}
+		}
 
 		[DataMember]
 		public string Name { get; set; }
 
 		[DataMember]
-		public string SourceTradosCode { get; set; }
+		public MTCloudDictionary SelectedDictionary
+		{
+			get => _selectedDictionary;
+			set
+			{
+				_selectedDictionary = value;
+				OnPropertyChanged(nameof(SelectedDictionary));
+			}
+		}
 
 		[DataMember]
-		public string TargetTradosCode { get; set; }
+		public TranslationModel SelectedModel
+		{
+			get => _selectedModel;
+			set
+			{
+				_selectedModel = value;
+				OnPropertyChanged(nameof(SelectedModel));
+			}
+		}
 
 		[DataMember]
 		public MTCloudLanguage SelectedSource
@@ -59,28 +94,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 		[DataMember]
-		public TranslationModel SelectedModel
-		{
-			get => _selectedModel;
-			set
-			{
-				_selectedModel = value;
-				OnPropertyChanged(nameof(SelectedModel));
-			}
-		}
-
-		[DataMember]
-		public MTCloudDictionary SelectedDictionary
-		{
-			get => _selectedDictionary;
-			set
-			{
-				_selectedDictionary = value;
-				OnPropertyChanged(nameof(SelectedDictionary));
-			}
-		}
-
-		[DataMember]
 		public List<MTCloudLanguage> SourceLanguages
 		{
 			get => _sourceLanguages;
@@ -90,6 +103,9 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				OnPropertyChanged(nameof(SourceLanguages));
 			}
 		}
+
+		[DataMember]
+		public string SourceTradosCode { get; set; }
 
 		[DataMember]
 		public List<MTCloudLanguage> TargetLanguages
@@ -102,26 +118,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		
-		public List<TranslationModel> Models
-		{
-			get => _models;
-			set
-			{
-				_models = value;
-				OnPropertyChanged(nameof(Models));
-			}
-		}
-
-		
-		public List<MTCloudDictionary> Dictionaries
-		{
-			get => _dictionaries;
-			set
-			{
-				_dictionaries = value;
-				OnPropertyChanged(nameof(Dictionaries));
-			}
-		}		
+		[DataMember]
+		public string TargetTradosCode { get; set; }
 	}
 }
