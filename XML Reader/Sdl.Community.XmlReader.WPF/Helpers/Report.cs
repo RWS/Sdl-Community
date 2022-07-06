@@ -85,6 +85,8 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 							if (reportRawData != null)
 							{
 								var reportName = string.Concat("generatedReport_", report.AnalyzeFileName, ".xlsx");
+								if (!Directory.Exists(folderPath))
+									Directory.CreateDirectory(folderPath);
 								using (Stream s = File.Create(Path.Combine(folderPath, reportName)))
 								{
 									s.Write(reportRawData, 0, reportRawData.Length);
