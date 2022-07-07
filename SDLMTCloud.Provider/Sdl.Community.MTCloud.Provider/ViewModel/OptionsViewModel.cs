@@ -58,7 +58,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void NavigateToWiki(object obj)
 		{
 			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
+				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5561/rating-translations");
 		}
 
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
