@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>LanguageWeaver</AssemblyName>
 		<TradosFolder>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

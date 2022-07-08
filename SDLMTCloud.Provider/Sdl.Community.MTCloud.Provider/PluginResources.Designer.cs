@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -208,6 +208,42 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string GoodQuality {
             get {
                 return ResourceManager.GetString("GoodQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid path.
+        /// </summary>
+        public static string InvalidPath {
+            get {
+                return ResourceManager.GetString("InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path to file {0} is invalid or doesn&apos;t exist!.
+        /// </summary>
+        public static string InvalidPathInFileName {
+            get {
+                return ResourceManager.GetString("InvalidPathInFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path {0} is invalid or doesn&apos;t exist! .
+        /// </summary>
+        public static string InvalidPathOrDirectoryDoesntExist {
+            get {
+                return ResourceManager.GetString("InvalidPathOrDirectoryDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid path or file name.
+        /// </summary>
+        public static string InvalidPathOrFileDoesntExist {
+            get {
+                return ResourceManager.GetString("InvalidPathOrFileDoesntExist", resourceCulture);
             }
         }
         
