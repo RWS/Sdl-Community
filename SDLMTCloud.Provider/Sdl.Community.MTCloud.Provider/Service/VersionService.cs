@@ -12,8 +12,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public string GetAppDataStudioFolder()
 		{
-			return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				Path.GetDirectoryName(Path.GetDirectoryName(StudioVersion.PluginPackagePath)));
+			return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
+				"SDL Trados Studio", StudioVersion.Version);
 		}
 
 		/// <summary>
