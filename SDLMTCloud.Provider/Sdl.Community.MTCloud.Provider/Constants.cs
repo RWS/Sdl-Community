@@ -20,7 +20,7 @@
 		public static string ClientLoginAuthentication = "ClientLogin";
 		public static string UserLoginAuthentication= "UserLogin";
 
-		public static string StudioAuthentication = "Studio credentials - SDL Language Cloud";
+		public static string StudioAuthentication = "Studio credentials - RWS Language Cloud";
 		public static string UserAuthentication = $"User credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 		public static string ClientAuthentication = $"Client credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 
