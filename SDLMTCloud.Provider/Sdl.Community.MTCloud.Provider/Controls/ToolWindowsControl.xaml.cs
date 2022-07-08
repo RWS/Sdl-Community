@@ -13,17 +13,17 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 	public partial class ToolWindowsControl : UserControl
 	{
 		/// <summary>
-		///     Identifies the <see cref="ControlClose" /> property.
-		/// </summary>
-		public static readonly DependencyProperty CloseProperty =
-			DependencyProperty.Register("ControlClose", typeof(string), typeof(ToolWindowsControl),
-				new PropertyMetadata(string.Empty));
-
-		/// <summary>
 		///     Identifies the <see cref="ControlHelp" /> property.
 		/// </summary>
 		public static readonly DependencyProperty HelpProperty =
 			DependencyProperty.Register("ControlHelp", typeof(string), typeof(ToolWindowsControl),
+				new PropertyMetadata(string.Empty));
+
+		/// <summary>
+		///     Identifies the <see cref="ControlClose" /> property.
+		/// </summary>
+		public static readonly DependencyProperty CloseProperty =
+			DependencyProperty.Register("ControlClose", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
 		/// <summary>
@@ -47,23 +47,14 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 			DependencyProperty.Register("ControlRestore", typeof(string), typeof(ToolWindowsControl),
 				new PropertyMetadata(string.Empty));
 
-		public ToolWindowsControl()
-		{
-			InitializeComponent();
 
-			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
-			{
-				if (string.IsNullOrWhiteSpace(ControlMinimize))
-					ControlMinimize = "Minimize";
-				if (string.IsNullOrWhiteSpace(ControlMaximize))
-					ControlMaximize = "Maximize";
-				if (string.IsNullOrWhiteSpace(ControlClose))
-					ControlClose = "Close";
-				if (string.IsNullOrWhiteSpace(ControlRestore))
-					ControlRestore = "Restore";
-				if (string.IsNullOrWhiteSpace(ControlHelp))
-					ControlHelp = "Help";
-			}));
+		/// <summary>
+		///     Gets or sets the tool-tip for the help button.
+		/// </summary>        
+		public string ControlHelp
+		{
+			get => (string)GetValue(HelpProperty);
+			set => SetValue(HelpProperty, value);
 		}
 
 		/// <summary>
@@ -73,15 +64,6 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 		{
 			get => (string)GetValue(CloseProperty);
 			set => SetValue(CloseProperty, value);
-		}
-
-		/// <summary>
-		///     Gets or sets the tool-tip for the help button.
-		/// </summary>
-		public string ControlHelp
-		{
-			get => (string)GetValue(HelpProperty);
-			set => SetValue(HelpProperty, value);
 		}
 
 		/// <summary>
@@ -111,19 +93,38 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 			set => SetValue(RestoreProperty, value);
 		}
 
+		public ToolWindowsControl()
+		{
+			InitializeComponent();
+
+			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
+			{
+				if (string.IsNullOrWhiteSpace(ControlMinimize))
+					ControlMinimize = "Minimize";
+				if (string.IsNullOrWhiteSpace(ControlMaximize))
+					ControlMaximize = "Maximize";
+				if (string.IsNullOrWhiteSpace(ControlClose))
+					ControlClose = "Close";
+				if (string.IsNullOrWhiteSpace(ControlRestore))
+					ControlRestore = "Restore";
+				if (string.IsNullOrWhiteSpace(ControlHelp))
+					ControlHelp = "Help";
+			}));
+		}
+
 		private void CloseButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			sender.ForWindowFromFrameworkElement(w => w.Close());
 		}
 
-		private void MaxButton_Click(object sender, RoutedEventArgs e)
-		{
-			sender.ForWindowFromFrameworkElement(w => w.WindowState = w.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized);
-		}
-
 		private void MinButton_Click(object sender, RoutedEventArgs e)
 		{
 			sender.ForWindowFromFrameworkElement(w => w.WindowState = WindowState.Minimized);
+		}
+
+		private void MaxButton_Click(object sender, RoutedEventArgs e)
+		{
+			sender.ForWindowFromFrameworkElement(w => w.WindowState = w.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized);
 		}
 
 		private void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

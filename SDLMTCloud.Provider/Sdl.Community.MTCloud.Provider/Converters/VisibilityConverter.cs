@@ -21,8 +21,8 @@ namespace Sdl.Community.MTCloud.Provider.Converters
 					return parameters.Any(param => param.Equals(valueString, StringComparison.InvariantCultureIgnoreCase)) ? Visibility.Visible
 						: Visibility.Collapsed;
 				}
-				return string.Compare(parameterString, valueString, StringComparison.InvariantCultureIgnoreCase) == 0
-					? Visibility.Visible
+				return string.Compare(parameterString, valueString, StringComparison.InvariantCultureIgnoreCase) == 0 
+					? Visibility.Visible 
 					: Visibility.Collapsed;
 			}
 			catch

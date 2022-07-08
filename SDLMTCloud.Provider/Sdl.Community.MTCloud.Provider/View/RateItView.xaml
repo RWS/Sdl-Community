@@ -129,19 +129,19 @@
 					  VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True"
 			          IsEnabled="{Binding IsSendFeedbackEnabled,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBoolEnabledConverter}}" />
 			<DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="False">
-				<Border CornerRadius="4" Margin="5 0 0 0" BorderThickness="0.6" BorderBrush="#AF000000"
+				<Border CornerRadius="4" Margin="5 0 0 0" BorderThickness="0.6" BorderBrush="#AF000000" 
 				        Visibility="{Binding QeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<ComboBox Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 					          Text="Reevaluation"
 					          SelectedIndex="{Binding ActiveDocumentEvaluations.CurrentSegmentEvaluation.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 						<ComboBoxItem Name="GoodQe"
-						              Content="{x:Static rsx:PluginResources.GoodQuality}" Foreground="#11A200" />
+						              Content="{x:Static rsx:PluginResources.GoodQuality}" Foreground="#11A200"  />
 						<ComboBoxItem Name="AdequateQe"
 						              Content="{x:Static rsx:PluginResources.AdequateQuality}" Foreground="#F09C00" />
 						<ComboBoxItem Name="PoorQe"
 						              Content="{x:Static rsx:PluginResources.PoorQuality}" Foreground="#FF4848" />
 						<ComboBoxItem Name="UnknownQe"
-						              Content="{x:Static rsx:PluginResources.UnknownQuality}" Foreground="#B7B7DB" />
+						              Content="{x:Static rsx:PluginResources.UnknownQuality}" Foreground="#B7B7DB"  />
 					</ComboBox>
 					<Border.Style>
 						<Style TargetType="{x:Type Border}">

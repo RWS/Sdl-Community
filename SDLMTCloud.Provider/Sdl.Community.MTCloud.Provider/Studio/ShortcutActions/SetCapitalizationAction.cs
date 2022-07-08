@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 	[Action(Id = "CapitalizationOptionId",
 		Name = "Capitalization, punctuation",
 		Description =
-			"Check/Uncheck Capitalization,punctuation  option",
+			"Check/Uncheck Capitalization,punctuation  option", 
 		ContextByType = typeof(EditorController))]
 	public class SetCapitalizationAction : AbstractAction, ISDLMTCloudAction
 	{

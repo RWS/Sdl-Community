@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 	[Action(Id = "WordsAdditionOptionId",
 		Name = "Words addition",
 		Description =
-			"Check/Uncheck Words Addition option",
+			"Check/Uncheck Words Addition option", 
 		ContextByType = typeof(EditorController))]
 	public class SetWordsAdditionAction : AbstractAction, ISDLMTCloudAction
 	{

@@ -11,19 +11,18 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 				typeof(WindowCloser),
 				new PropertyMetadata(DialogResultChanged));
 
-		public static void SetDialogResult(Window target, bool? value)
-		{
-			target.SetValue(DialogResultProperty, value);
-		}
-
 		private static void DialogResultChanged(
-					DependencyObject d,
+			DependencyObject d,
 			DependencyPropertyChangedEventArgs e)
 		{
 			if (d is Window window)
 			{
 				window.DialogResult = e.NewValue as bool?;
 			}
+		}
+		public static void SetDialogResult(Window target, bool? value)
+		{
+			target.SetValue(DialogResultProperty, value);
 		}
 	}
 }

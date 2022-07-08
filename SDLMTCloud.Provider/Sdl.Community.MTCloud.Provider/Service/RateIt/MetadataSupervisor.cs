@@ -17,12 +17,12 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 {
 	public class MetadataSupervisor : IMetadataSupervisor
 	{
-		private static List<string> _providerNames;
 		private readonly EditorController _editorController;
 		private readonly ISegmentMetadataCreator _segmentMetadataCreator;
 		private Window _batchProcessingWindow;
 		private bool _isFirstTime = true;
 		private ITranslationService _translationService;
+		private static List<string> _providerNames;
 
 		public MetadataSupervisor(ISegmentMetadataCreator segmentMetadataCreator, EditorController editorController)
 		{
@@ -36,6 +36,8 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		}
 
 		private IStudioDocument ActiveDocument => _editorController?.ActiveDocument;
+
+		private Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
 
 		private ConcurrentDictionary<SegmentId, TranslationOriginDatum> ActiveDocumentData
 		{
@@ -53,8 +55,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			}
 		}
 
-		private Dictionary<Guid, ConcurrentDictionary<SegmentId, TranslationOriginDatum>> Data { get; set; } = new();
-
 		public void CloseOpenedDocuments()
 		{
 			var activeDocs = _editorController.GetDocuments().ToList();
@@ -63,11 +63,6 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			{
 				_editorController.Close(activeDoc);
 			}
-		}
-
-		public string GetSegmentQe(SegmentId segmentId)
-		{
-			return ActiveDocumentData.TryGetValue(segmentId, out var value) ? value.QualityEstimation : null;
 		}
 
 		public void OnQeStatus(RefreshQeStatus refreshQeStatus)
@@ -95,6 +90,11 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 			_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+		}
+
+		public string GetSegmentQe(SegmentId segmentId)
+		{
+			return ActiveDocumentData.TryGetValue(segmentId, out var value) ? value.QualityEstimation : null;
 		}
 
 		private static bool IsFromSdlMtCloud(ITranslationOrigin translationOrigin)

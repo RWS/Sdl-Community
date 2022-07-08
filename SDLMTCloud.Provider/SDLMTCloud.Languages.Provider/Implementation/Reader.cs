@@ -53,64 +53,6 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			return excelRows;
 		}
 
-		private static void FillEmptyRowCells(ExcelRow excelRow, IReadOnlyCollection<ExcelColumn> excelColumns)
-		{
-			if (excelRow.Cells.Count >= excelColumns.Count)
-			{
-				return;
-			}
-
-			foreach (var excelColumn in excelColumns)
-			{
-				var exists = excelRow.Cells.Exists(a => a.Column.Index == excelColumn.Index);
-				if (!exists)
-				{
-					excelRow.Cells.Insert(excelColumn.Index, new ExcelCell
-					{
-						Column = excelColumn,
-						Value = string.Empty
-					});
-				}
-			}
-		}
-
-		private static string GetCellValue(SpreadsheetDocument doc, CellType cell)
-		{
-			var value = cell.CellValue.Text;
-			if (cell.DataType?.Value == CellValues.SharedString)
-			{
-				return doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
-			}
-
-			return value;
-		}
-
-		private static int GetColumnIndexFromCellReference(string value)
-		{
-			var index = -1;
-
-			if (string.IsNullOrEmpty(value))
-			{
-				return index;
-			}
-
-			var regex = new Regex(@"(?<Column>[a-zA-Z]+)(?<Row>[0-9]+)", RegexOptions.IgnoreCase);
-			var match = regex.Match(value);
-			if (match.Success)
-			{
-				var column = match.Groups["Column"].Value;
-				var row = match.Groups["Row"].Value;
-
-				if (!string.IsNullOrEmpty(column) && column.Length == 1)
-				{
-					var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-					index = abc.IndexOf(column, StringComparison.InvariantCultureIgnoreCase);
-				}
-			}
-
-			return index;
-		}
-
 		private List<ExcelRow> GetExcelRows(string path, IReadOnlyList<ExcelColumn> columns)
 		{
 			var excelRows = new List<ExcelRow>();
@@ -167,6 +109,64 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			FillEmptyRowCells(excelRow, excelColumns);
 
 			return excelRow;
+		}
+
+		private static void FillEmptyRowCells(ExcelRow excelRow, IReadOnlyCollection<ExcelColumn> excelColumns)
+		{
+			if (excelRow.Cells.Count >= excelColumns.Count)
+			{
+				return;
+			}
+
+			foreach (var excelColumn in excelColumns)
+			{
+				var exists = excelRow.Cells.Exists(a => a.Column.Index == excelColumn.Index);
+				if (!exists)
+				{
+					excelRow.Cells.Insert(excelColumn.Index, new ExcelCell
+					{
+						Column = excelColumn,
+						Value = string.Empty
+					});
+				}
+			}
+		}
+
+		private static string GetCellValue(SpreadsheetDocument doc, CellType cell)
+		{
+			var value = cell.CellValue.Text;
+			if (cell.DataType?.Value == CellValues.SharedString)
+			{
+				return doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
+			}
+
+			return value;
+		}
+
+		private static int GetColumnIndexFromCellReference(string value)
+		{
+			var index = -1;
+
+			if (string.IsNullOrEmpty(value))
+			{
+				return index;
+			}
+
+			var regex = new Regex(@"(?<Column>[a-zA-Z]+)(?<Row>[0-9]+)", RegexOptions.IgnoreCase);
+			var match = regex.Match(value);
+			if (match.Success)
+			{
+				var column = match.Groups["Column"].Value;
+				var row = match.Groups["Row"].Value;
+
+				if (!string.IsNullOrEmpty(column) && column.Length == 1)
+				{
+					var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+					index = abc.IndexOf(column, StringComparison.InvariantCultureIgnoreCase);
+				}
+			}
+
+			return index;
 		}
 	}
 }

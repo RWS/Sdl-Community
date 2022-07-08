@@ -2,7 +2,8 @@
 {
 	public class ExcelCell
 	{
-		public ExcelColumn Column { get; set; }
 		public string Value { get; set; }
+
+		public ExcelColumn Column { get; set; }
 	}
 }

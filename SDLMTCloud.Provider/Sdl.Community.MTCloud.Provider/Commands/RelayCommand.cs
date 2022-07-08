@@ -6,14 +6,13 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 {
 	public class RelayCommand : ICommand
 	{
-		private readonly Predicate<object> _canExecute;
 		private readonly Action<object> _execute;
+		private readonly Predicate<object> _canExecute;
 
 		public RelayCommand(Action<object> execute)
 			: this(execute, null)
 		{
 		}
-
 		/// <summary>
 		/// Creates a new command.
 		/// </summary>
@@ -24,6 +23,11 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 			_execute = execute ?? throw new ArgumentNullException("execute");
 			_canExecute = canExecute;
 		}
+		[DebuggerStepThrough]
+		public bool CanExecute(object parameter)
+		{
+			return _canExecute?.Invoke(parameter) ?? true;
+		}
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -31,18 +35,12 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 			remove => CommandManager.RequerySuggested -= value;
 		}
 
-		[DebuggerStepThrough]
-		public bool CanExecute(object parameter)
-		{
-			return _canExecute?.Invoke(parameter) ?? true;
-		}
-
 		public void Execute(object parameter)
 		{
 			_execute(parameter);
 		}
-	}
 
+	}
 	public class RelayCommand<T> : ICommand
 	{
 		private readonly Predicate<T> _canExecute;
@@ -60,12 +58,6 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 			_canExecute = canExecute;
 		}
 
-		public event EventHandler CanExecuteChanged
-		{
-			add => CommandManager.RequerySuggested += value;
-			remove => CommandManager.RequerySuggested -= value;
-		}
-
 		public bool CanExecute(object parameter)
 		{
 			return _canExecute == null || _canExecute((T)parameter);
@@ -74,6 +66,12 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 		public void Execute(object parameter)
 		{
 			_execute((T)parameter);
+		}
+
+		public event EventHandler CanExecuteChanged
+		{
+			add => CommandManager.RequerySuggested += value;
+			remove => CommandManager.RequerySuggested -= value;
 		}
 	}
 }

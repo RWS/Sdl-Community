@@ -8,13 +8,12 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 {
 	public class AsyncCommand : IAsyncCommand
 	{
-		private readonly Func<bool> _canExecute;
-
-		private readonly IErrorHandler _errorHandler;
-
-		private readonly Func<Task> _execute;
+		public event EventHandler CanExecuteChanged;
 
 		private bool _isExecuting;
+		private readonly Func<Task> _execute;
+		private readonly Func<bool> _canExecute;
+		private readonly IErrorHandler _errorHandler;
 
 		public AsyncCommand(
 			Func<Task> execute,
@@ -26,21 +25,9 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 			_errorHandler = errorHandler;
 		}
 
-		public event EventHandler CanExecuteChanged;
-
 		public bool CanExecute()
 		{
 			return !_isExecuting && (_canExecute?.Invoke() ?? true);
-		}
-
-		bool ICommand.CanExecute(object parameter)
-		{
-			return CanExecute();
-		}
-
-		void ICommand.Execute(object parameter)
-		{
-			ExecuteAsync().FireAndForgetSafeAsync(_errorHandler);
 		}
 
 		public async Task ExecuteAsync()
@@ -65,17 +52,26 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 		{
 			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 		}
+
+		bool ICommand.CanExecute(object parameter)
+		{
+			return CanExecute();
+		}
+
+		void ICommand.Execute(object parameter)
+		{
+			ExecuteAsync().FireAndForgetSafeAsync(_errorHandler);
+		}
 	}
 
 	public class AsyncCommand<T> : IAsyncCommand<T>
 	{
-		private readonly Func<T, bool> _canExecute;
-
-		private readonly IErrorHandler _errorHandler;
-
-		private readonly Func<T, Task> _execute;
+		public event EventHandler CanExecuteChanged;
 
 		private bool _isExecuting;
+		private readonly Func<T, Task> _execute;
+		private readonly Func<T, bool> _canExecute;
+		private readonly IErrorHandler _errorHandler;
 
 		public AsyncCommand(Func<T, Task> execute, Func<T, bool> canExecute = null, IErrorHandler errorHandler = null)
 		{
@@ -84,21 +80,9 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 			_errorHandler = errorHandler;
 		}
 
-		public event EventHandler CanExecuteChanged;
-
 		public bool CanExecute(T parameter)
 		{
 			return !_isExecuting && (_canExecute?.Invoke(parameter) ?? true);
-		}
-
-		bool ICommand.CanExecute(object parameter)
-		{
-			return CanExecute((T)parameter);
-		}
-
-		void ICommand.Execute(object parameter)
-		{
-			ExecuteAsync((T)parameter).FireAndForgetSafeAsync(_errorHandler);
 		}
 
 		public async Task ExecuteAsync(T parameter)
@@ -122,6 +106,16 @@ namespace Sdl.Community.MTCloud.Provider.Commands
 		public void RaiseCanExecuteChanged()
 		{
 			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		bool ICommand.CanExecute(object parameter)
+		{
+			return CanExecute((T)parameter);
+		}
+
+		void ICommand.Execute(object parameter)
+		{
+			ExecuteAsync((T)parameter).FireAndForgetSafeAsync(_errorHandler);
 		}
 	}
 }

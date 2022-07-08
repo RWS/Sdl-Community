@@ -9,8 +9,10 @@
 			Client
 		}
 
-		public string DisplayName { get; set; }
-		public long Index { get; set; }
 		public AuthenticationType Type { get; set; }
+
+		public string DisplayName { get; set; }
+
+		public long Index { get; set; }
 	}
 }

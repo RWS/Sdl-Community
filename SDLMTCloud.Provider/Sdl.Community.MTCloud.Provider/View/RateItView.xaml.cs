@@ -1,4 +1,6 @@
-﻿namespace Sdl.Community.MTCloud.Provider.View
+﻿using System.Windows.Controls;
+
+namespace Sdl.Community.MTCloud.Provider.View
 {
 	/// <summary>
 	/// Interaction logic for RateItView.xaml

@@ -8,7 +8,7 @@ using Sdl.Community.MTCloud.Languages.Provider.OpenXml;
 namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 {
 	internal class Writer
-	{
+	{	
 		internal bool WriteLanguages(List<MappedLanguage> mappedLanguages, string path)
 		{
 			if (string.IsNullOrEmpty(path))
@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			if (mappedLanguages == null || mappedLanguages.Count == 0)
 			{
 				throw new NullReferenceException("Languages cannot be empty or null!");
-			}
+			}			
 
 			File.Delete(path);
 
@@ -36,7 +36,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			excelDocument.SetCellValue(spreadsheet, worksheet1, 3, rowIndex, "Trados Code");
 			excelDocument.SetCellValue(spreadsheet, worksheet1, 4, rowIndex, "MT Code");
 			excelDocument.SetCellValue(spreadsheet, worksheet1, 5, rowIndex, "MT Code (locale)");
-
+			
 			// write the language rows
 			foreach (var langauge in mappedLanguages)
 			{
@@ -59,9 +59,9 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			// add a table filter
 			var autoFilter = new AutoFilter { Reference = "A1:E" + mappedLanguages.Count + 1 };
 			worksheet1.Append(autoFilter);
-
+		
 			worksheet1.Save();
-			spreadsheet.Close();
+			spreadsheet.Close();			
 
 			return true;
 		}

@@ -7,7 +7,7 @@ using Sdl.LanguagePlatform.Core;
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 {
 	public class Body
-	{
+	{		
 		public Body()
 		{
 			TranslationUnits = new List<TranslationUnit>();
@@ -42,6 +42,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 				throw new NullReferenceException("Target segment cannot be null");
 			}
 
+
 			var translationOption = new TranslationOption
 			{
 				ToolId = toolId,
@@ -56,7 +57,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Models
 			{
 				Id = TranslationUnits.Count,
 				SourceText = sourceSegment.ToXliffString(),
-				TranslationList = new List<TranslationOption> { translationOption }
+				TranslationList = new List<TranslationOption>{translationOption}				
 			});
 		}
 	}

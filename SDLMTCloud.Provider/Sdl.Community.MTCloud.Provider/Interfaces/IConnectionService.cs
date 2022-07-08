@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -9,37 +10,41 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface IConnectionService
 	{
-		ICredential Credential { get; }
-		string CurrentWorkingPortalAddress { get; set; }
-		bool IsSignedIn { get; }
-		LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
 		IWin32Window Owner { get; set; }
+
+		LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
+
+		bool IsSignedIn { get; }
+
+		ICredential Credential { get; }
+
 		string PluginVersion { get; }
 
 		string StudioVersion { get; }
 
-		void AddTraceHeaders(HttpRequestMessage request);
-
-		(bool, string) Connect(ICredential credential);
-
 		string CredentialToString();
-
-		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
 
 		ICredential GetCredential(string credentialString);
 
-		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
+		(bool, string) Connect(ICredential credential);
 
-		Task<(UserDetails, string)> GetUserDetails(string resource);
-
-		bool IsValidCredential(out string message);
+		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
 
 		bool IsValidStudioCredential(out string message);
 
-		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
+		bool IsValidCredential(out string message);
+
+		(LanguageCloudIdentityApiModel, string) StudioSignIn();
 
 		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
 
-		(LanguageCloudIdentityApiModel, string) StudioSignIn();
+		Task<(UserDetails, string)> GetUserDetails(string resource);
+
+		void AddTraceHeader(HttpRequestMessage request);
+
+		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
+
+		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
+		string CurrentWorkingPortalAddress { get; set; }
 	}
 }

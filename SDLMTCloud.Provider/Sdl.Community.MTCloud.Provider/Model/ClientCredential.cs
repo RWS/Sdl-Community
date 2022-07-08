@@ -7,6 +7,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		[JsonProperty("clientId")]
 		public string ClientId { get; set; }
 
+
 		[JsonProperty("clientSecret")]
 		public string ClientSecret { get; set; }
 	}

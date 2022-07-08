@@ -471,6 +471,7 @@ namespace Sdl.Community.MTCloud.Languages.Provider.OpenXml
 			Column previousColumn = null;
 			var cellAddress = ColumnNameFromIndex(columnIndex) + rowIndex;
 
+
 			// Check if the row exists, create if necessary
 			if (sheetData.Elements<Row>().Count(item => item.RowIndex == rowIndex) != 0)
 			{

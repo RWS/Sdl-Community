@@ -14,6 +14,12 @@ namespace Sdl.Community.MTCloud.Provider.View
 			InitializeComponent();
 		}
 
+		private void UserPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+		{
+			if (DataContext != null)
+			{ ((CredentialsViewModel)DataContext).UserPassword = ((PasswordBox)sender).Password; }
+		}
+
 		private void ClientIdBox_PasswordChanged(object sender, RoutedEventArgs e)
 		{
 			if (DataContext != null)
@@ -24,12 +30,6 @@ namespace Sdl.Community.MTCloud.Provider.View
 		{
 			if (DataContext != null)
 			{ ((CredentialsViewModel)DataContext).ClientSecret = ((PasswordBox)sender).Password; }
-		}
-
-		private void UserPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-		{
-			if (DataContext != null)
-			{ ((CredentialsViewModel)DataContext).UserPassword = ((PasswordBox)sender).Password; }
 		}
 	}
 }

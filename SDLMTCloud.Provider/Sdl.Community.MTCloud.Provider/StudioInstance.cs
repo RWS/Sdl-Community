@@ -12,6 +12,12 @@ namespace Sdl.Community.MTCloud.Provider
 	[ApplicationInitializer]
 	public sealed class StudioInstance : IApplicationInitializer
 	{
+		public void Execute()
+		{
+			Log.Setup();
+			SetApplicationShutdownMode();
+		}		
+
 		public static Form GetActiveForm()
 		{
 			try
@@ -39,20 +45,6 @@ namespace Sdl.Community.MTCloud.Provider
 			return null;
 		}
 
-		public static EditorController GetEditorController()
-		{
-			try
-			{
-				return SdlTradosStudio.Application?.GetController<EditorController>();
-			}
-			catch
-			{
-				//catch all; ignore
-			}
-
-			return null;
-		}
-
 		public static LanguageCloudIdentityApi GetLanguageCloudIdentityApi()
 		{
 			try
@@ -67,11 +59,11 @@ namespace Sdl.Community.MTCloud.Provider
 			return null;
 		}
 
-		public static ProjectsController GetProjectsController()
-		{
+		public static EditorController GetEditorController()
+		{			
 			try
 			{
-				return SdlTradosStudio.Application?.GetController<ProjectsController>();
+				return SdlTradosStudio.Application?.GetController<EditorController>();
 			}
 			catch
 			{
@@ -79,12 +71,6 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 
 			return null;
-		}
-
-		public void Execute()
-		{
-			Log.Setup();
-			SetApplicationShutdownMode();
 		}
 
 		private static void SetApplicationShutdownMode()
@@ -106,6 +92,20 @@ namespace Sdl.Community.MTCloud.Provider
 			{
 				//ignore; catch all
 			}
+		}
+
+		public static ProjectsController GetProjectsController()
+		{
+			try
+			{
+				return SdlTradosStudio.Application?.GetController<ProjectsController>();
+			}
+			catch
+			{
+				//catch all; ignore
+			}
+
+			return null;
 		}
 	}
 }

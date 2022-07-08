@@ -9,6 +9,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public long AccountId { get; set; }
 
 		[JsonProperty("dictionaries")]
-		public List<MTCloudDictionary> Dictionaries { get; set; }
+		public List<MTCloudDictionary> Dictionaries {get; set;}
 	}
 }

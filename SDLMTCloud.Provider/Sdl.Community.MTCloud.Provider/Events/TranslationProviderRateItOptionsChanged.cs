@@ -2,11 +2,11 @@
 {
 	public class TranslationProviderRateItOptionsChanged
 	{
+		public bool SendFeedback { get; }
+
 		public TranslationProviderRateItOptionsChanged(bool sendFeedback)
 		{
 			SendFeedback = sendFeedback;
 		}
-
-		public bool SendFeedback { get; }
 	}
 }

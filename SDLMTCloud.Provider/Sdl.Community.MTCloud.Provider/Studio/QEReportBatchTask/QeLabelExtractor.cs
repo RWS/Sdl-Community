@@ -14,14 +14,14 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 		private readonly ProjectFile _projectFile;
 		private readonly WordCounter _wordCounter;
 
+		public Dictionary<string, QeFileReport> QeFileReports { get; set; }
+
 		public QeLabelExtractor(ProjectFile projectFile, Dictionary<string, QeFileReport> qeFileReports, WordCounter wordCounter)
 		{
 			_projectFile = projectFile;
 			QeFileReports = qeFileReports;
 			_wordCounter = wordCounter;
 		}
-
-		public Dictionary<string, QeFileReport> QeFileReports { get; set; }
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
