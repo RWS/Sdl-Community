@@ -64,10 +64,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			set { _currentWorkingPortalAddress = value; }
 		}
 
-		public void AddTraceHeader(HttpRequestMessage request)
+		public void AddTraceHeaders(HttpRequestMessage request)
 		{
 			request.Headers.Add(Constants.TraceId,
 				$"{Constants.LanguageWeaver} {PluginVersion} - {StudioVersion}.{Guid.NewGuid()}");
+			request.Headers.Add("Trace-App", Constants.LanguageWeaver);
+			request.Headers.Add("Trace-App-Version", PluginVersion);
+			//request.Headers.Add("Trace-App-Meta-Info", "Optional data");
 		}
 
 		public (bool, string) Connect(ICredential credential)
@@ -492,7 +495,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var request = new HttpRequestMessage(httpMethod, uri);
 			request.Headers.Add("Authorization", $"Bearer {Credential.Token}");
-			AddTraceHeader(request);
+			AddTraceHeaders(request);
 			return request;
 		}
 

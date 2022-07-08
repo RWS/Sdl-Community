@@ -2,11 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>LanguageWeaver</AssemblyName>
-		<TradosFolder>$(TradosBuild17)</TradosFolder>
+		<TradosFolder>$(TradosBuild16)</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\16\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<PlatformTarget>x86</PlatformTarget>
 		<LangVersion>latest</LangVersion>

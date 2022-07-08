@@ -300,7 +300,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var request = new HttpRequestMessage(httpMethod, uri);
 			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
-			ConnectionService.AddTraceHeader(request);
+			ConnectionService.AddTraceHeaders(request);
 			return request;
 		}
 

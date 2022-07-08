@@ -1,12 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>$(TradosBuild17)</TradosFolder>
+		<TradosFolder>$(TradosBuild16)</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
-		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
