@@ -126,7 +126,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					_customShortcuts.Add(studioShortcut);
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				//TODO:" Log error
 			}
