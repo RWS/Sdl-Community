@@ -53,64 +53,6 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			return excelRows;
 		}
 
-		private List<ExcelRow> GetExcelRows(string path, IReadOnlyList<ExcelColumn> columns)
-		{
-			var excelRows = new List<ExcelRow>();
-
-			using (var doc = SpreadsheetDocument.Open(path, false))
-			{
-				var workbook = doc.WorkbookPart;
-				var worksheet = workbook.WorksheetParts.First();
-				var sheetData = worksheet.Worksheet.Elements<SheetData>().First();
-
-				var rowIndex = 0;
-				foreach (var row in sheetData.Elements<Row>())
-				{
-					rowIndex++;
-
-					// ignore the header values
-					if (rowIndex > 1)
-					{
-						var excelRow = ReadExcelRow(rowIndex, row, columns, doc);
-						excelRows.Add(excelRow);
-					}
-				}
-			}
-
-			return excelRows;
-		}
-
-		private ExcelRow ReadExcelRow(int rowIndex, OpenXmlElement row, IReadOnlyList<ExcelColumn> excelColumns, SpreadsheetDocument doc)
-		{
-			var excelRow = new ExcelRow
-			{
-				Index = rowIndex
-			};
-
-			foreach (var cell in row.Elements<Cell>())
-			{
-				var columnIndex = GetColumnIndexFromCellReference(cell.CellReference.Value);
-				if (columnIndex == -1)
-				{
-					continue;
-				}
-
-				var column = excelColumns[columnIndex];
-				var value = GetCellValue(doc, cell);
-
-				excelRow.Cells.Add(new ExcelCell
-				{
-					Column = column,
-					Value = value
-				});
-			}
-
-			// fill in empty cells
-			FillEmptyRowCells(excelRow, excelColumns);
-
-			return excelRow;
-		}
-
 		private static void FillEmptyRowCells(ExcelRow excelRow, IReadOnlyCollection<ExcelColumn> excelColumns)
 		{
 			if (excelRow.Cells.Count >= excelColumns.Count)
@@ -167,6 +109,64 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Implementation
 			}
 
 			return index;
+		}
+
+		private List<ExcelRow> GetExcelRows(string path, IReadOnlyList<ExcelColumn> columns)
+		{
+			var excelRows = new List<ExcelRow>();
+
+			using (var doc = SpreadsheetDocument.Open(path, false))
+			{
+				var workbook = doc.WorkbookPart;
+				var worksheet = workbook.WorksheetParts.First();
+				var sheetData = worksheet.Worksheet.Elements<SheetData>().First();
+
+				var rowIndex = 0;
+				foreach (var row in sheetData.Elements<Row>())
+				{
+					rowIndex++;
+
+					// ignore the header values
+					if (rowIndex > 1)
+					{
+						var excelRow = ReadExcelRow(rowIndex, row, columns, doc);
+						excelRows.Add(excelRow);
+					}
+				}
+			}
+
+			return excelRows;
+		}
+
+		private ExcelRow ReadExcelRow(int rowIndex, OpenXmlElement row, IReadOnlyList<ExcelColumn> excelColumns, SpreadsheetDocument doc)
+		{
+			var excelRow = new ExcelRow
+			{
+				Index = rowIndex
+			};
+
+			foreach (var cell in row.Elements<Cell>())
+			{
+				var columnIndex = GetColumnIndexFromCellReference(cell.CellReference.Value);
+				if (columnIndex == -1)
+				{
+					continue;
+				}
+
+				var column = excelColumns[columnIndex];
+				var value = GetCellValue(doc, cell);
+
+				excelRow.Cells.Add(new ExcelCell
+				{
+					Column = column,
+					Value = value
+				});
+			}
+
+			// fill in empty cells
+			FillEmptyRowCells(excelRow, excelColumns);
+
+			return excelRow;
 		}
 	}
 }

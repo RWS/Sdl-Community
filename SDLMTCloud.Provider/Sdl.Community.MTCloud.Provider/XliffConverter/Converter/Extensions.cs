@@ -3,7 +3,7 @@ using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 {
-	public static  class Extensions
+	public static class Extensions
 	{
 		public static string ToXliffString(this Segment segment)
 		{
@@ -25,22 +25,27 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 					switch (tag.Type)
 					{
 						case TagType.Start:
-							result.Append($"<bpt id=\"{ tag.TagID}\">{tagString}</bpt>");
+							result.Append($"<bpt id=\"{tag.TagID}\">{tagString}</bpt>");
 							break;
+
 						case TagType.End:
 							result.Append($"<ept id=\"{tag.TagID}\">{tagString}</ept>");
 							break;
+
 						case TagType.UnmatchedStart:
 						case TagType.UnmatchedEnd:
 							result.Append($"<it id=\"{tag.TagID}\">{tagString}</it>");
 							break;
+
 						case TagType.Standalone:
 						case TagType.TextPlaceholder:
 							result.Append($"<x id=\"{tag.TagID}\">{tagString}</x>");
 							break;
+
 						case TagType.LockedContent:
 							result.Append($"<x id=\"{tag.TagID}\">{tagString.Replace("/>", @" locked=""true""/>")}</x>");
 							break;
+
 						default:
 							System.Diagnostics.Debug.Assert(false, "Unexpected tag type");
 							break;

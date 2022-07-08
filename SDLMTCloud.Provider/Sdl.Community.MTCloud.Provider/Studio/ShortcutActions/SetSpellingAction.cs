@@ -8,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ShortcutActions
 	[Action(Id = "SpellingOptionId",
 		Name = "Spelling",
 		Description =
-			"Check/Uncheck Spelling option", 
+			"Check/Uncheck Spelling option",
 		ContextByType = typeof(EditorController))]
 	public class SetSpellingAction : AbstractAction, ISDLMTCloudAction
 	{

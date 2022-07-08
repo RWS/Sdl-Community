@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -10,41 +9,37 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface IConnectionService
 	{
-		IWin32Window Owner { get; set; }
-
-		LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
-
-		bool IsSignedIn { get; }
-
 		ICredential Credential { get; }
-
+		string CurrentWorkingPortalAddress { get; set; }
+		bool IsSignedIn { get; }
+		LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
+		IWin32Window Owner { get; set; }
 		string PluginVersion { get; }
 
 		string StudioVersion { get; }
 
-		string CredentialToString();
-
-		ICredential GetCredential(string credentialString);
+		void AddTraceHeaders(HttpRequestMessage request);
 
 		(bool, string) Connect(ICredential credential);
 
+		string CredentialToString();
+
 		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
 
-		bool IsValidStudioCredential(out string message);
+		ICredential GetCredential(string credentialString);
 
-		bool IsValidCredential(out string message);
-
-		(LanguageCloudIdentityApiModel, string) StudioSignIn();
-
-		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
+		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
 
 		Task<(UserDetails, string)> GetUserDetails(string resource);
 
-		void AddTraceHeader(HttpRequestMessage request);
+		bool IsValidCredential(out string message);
+
+		bool IsValidStudioCredential(out string message);
 
 		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
 
-		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
-		string CurrentWorkingPortalAddress { get; set; }
+		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
+
+		(LanguageCloudIdentityApiModel, string) StudioSignIn();
 	}
 }

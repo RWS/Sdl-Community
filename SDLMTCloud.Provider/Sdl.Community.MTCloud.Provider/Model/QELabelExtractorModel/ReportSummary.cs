@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel
+﻿namespace Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel
 {
 	public class ReportSummary
 	{

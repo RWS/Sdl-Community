@@ -24,9 +24,20 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private IEnumerable<IGrouping<string, MetadataTransferObject>> GroupedData
 			=> _groupedData ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
 
-		public void StoreMetadata(TranslationData translationData)
+		public void AddStoredMetadataToProjectFile()
 		{
-			Data.Add(translationData);
+			foreach (var kvp in GroupedData)
+			{
+				var translationData = kvp.ToList();
+				var currentFilePath = MtCloudApplicationInitializer.EnsureValidPath(kvp.Key, translationData[0].TargetLanguage);
+				if (currentFilePath == null) continue;
+
+				var converter = _manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
+				var contentProcessor = new MetaDataProcessor(translationData);
+				converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter?.Parse();
+			}
+			ResetData();
 		}
 
 		public void AddToCurrentSegmentContextData(IStudioDocument activeDocument, TranslationOriginDatum translationOriginDatum)
@@ -43,20 +54,9 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			activeDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
-		public void AddStoredMetadataToProjectFile()
+		public void StoreMetadata(TranslationData translationData)
 		{
-			foreach (var kvp in GroupedData)
-			{
-				var translationData = kvp.ToList();
-				var currentFilePath = MtCloudApplicationInitializer.EnsureValidPath(kvp.Key, translationData[0].TargetLanguage);
-				if (currentFilePath == null) continue;
-
-				var converter = _manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
-				var contentProcessor = new MetaDataProcessor(translationData);
-				converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
-				converter?.Parse();
-			}
-			ResetData();
+			Data.Add(translationData);
 		}
 
 		private MetadataTransferObject ConvertToSdlMtData(TranslationData translationData) => new()

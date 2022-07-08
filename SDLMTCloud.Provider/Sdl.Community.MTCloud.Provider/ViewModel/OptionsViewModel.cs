@@ -11,33 +11,30 @@ using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.LanguagePlatform.Core;
 using Application = System.Windows.Forms.Application;
 using Cursors = System.Windows.Input.Cursors;
-using MessageBox = System.Windows.Forms.MessageBox;
 using LogManager = NLog.LogManager;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class OptionsViewModel : BaseViewModel, IDisposable
 	{
-		private readonly SdlMTCloudTranslationProvider _provider;
 		private readonly List<LanguagePair> _languagePairs;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-		private ICommand _saveCommand;
-		private ICommand _resetToDefaultsCommand;
-		private ICommand _viewLanguageMappingsCommand;
-		private ICommand _navigateToWikiCommand;
-
-		private bool _reSendChecked;
-		private LanguageMappingModel _selectedLanguageMappingModel;
-		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
+		private readonly SdlMTCloudTranslationProvider _provider;
 		private bool _isWaiting;
+		private ObservableCollection<LanguageMappingModel> _languageMappingModels;
+		private ICommand _navigateToWikiCommand;
+		private bool _reSendChecked;
+		private ICommand _resetToDefaultsCommand;
+		private ICommand _saveCommand;
+		private LanguageMappingModel _selectedLanguageMappingModel;
 		private bool _sendFeedback;
+		private ICommand _viewLanguageMappingsCommand;
 
 		public OptionsViewModel(Window owner, SdlMTCloudTranslationProvider provider, List<LanguagePair> languagePairs)
 		{
@@ -52,22 +49,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			LoadLanguageMappings();
 		}
 
-		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
-		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
-
-		private void NavigateToWiki(object obj)
+		public bool IsWaiting
 		{
-			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
+			get => _isWaiting;
+			set
+			{
+				_isWaiting = value;
+				OnPropertyChanged(nameof(IsWaiting));
+			}
 		}
-
-		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
-														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
-
-		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
-														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
-
-		public Window Owner { get; }
 
 		public ObservableCollection<LanguageMappingModel> LanguageMappingModels
 		{
@@ -96,15 +86,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public LanguageMappingModel SelectedLanguageMappingModel
-		{
-			get => _selectedLanguageMappingModel;
-			set
-			{
-				_selectedLanguageMappingModel = value;
-				OnPropertyChanged(nameof(SelectedLanguageMappingModel));
-			}
-		}
+		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
+		public Window Owner { get; }
 
 		public bool ReSendChecked
 		{
@@ -121,23 +104,54 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
+		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
+														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
+
+		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
+
+		public LanguageMappingModel SelectedLanguageMappingModel
+		{
+			get => _selectedLanguageMappingModel;
+			set
+			{
+				_selectedLanguageMappingModel = value;
+				OnPropertyChanged(nameof(SelectedLanguageMappingModel));
+			}
+		}
+
 		public bool SendFeedback
 		{
 			get => _sendFeedback;
 			set
 			{
-				_sendFeedback = value; 
+				_sendFeedback = value;
 				OnPropertyChanged(nameof(SendFeedback));
 			}
 		}
 
-		public bool IsWaiting
+		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
+														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
+
+		public void Dispose()
 		{
-			get => _isWaiting;
-			set
+			if (_languageMappingModels != null)
 			{
-				_isWaiting = value;
-				OnPropertyChanged(nameof(IsWaiting));
+				foreach (var languageMappingModel in _languageMappingModels)
+				{
+					languageMappingModel.PropertyChanged -= LanguageMappingModel_PropertyChanged;
+				}
+			}
+		}
+
+		private void LanguageMappingModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (sender is LanguageMappingModel languageModel)
+			{
+				if (e.PropertyName == nameof(LanguageMappingModel.SelectedSource) ||
+					e.PropertyName == nameof(LanguageMappingModel.SelectedTarget))
+				{
+					_provider.UpdateLanguageMappingModel(languageModel);
+				}
 			}
 		}
 
@@ -160,6 +174,49 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			LanguageMappingModels = new ObservableCollection<LanguageMappingModel>(languageMappingModels);
+		}
+
+		private void NavigateToWiki(object obj)
+		{
+			Process.Start(
+				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
+		}
+
+		private void Reload()
+		{
+			try
+			{
+				IsWaiting = true;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Wait;
+				}
+
+				if (LanguageMappingModels != null)
+				{
+					LanguageMappingModels.Clear();
+					LoadLanguageMappings();
+				}
+			}
+			catch (Exception ex)
+			{
+				IsWaiting = false;
+				_logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
+
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+					MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
+			finally
+			{
+				IsWaiting = false;
+				if (Owner != null)
+				{
+					Mouse.OverrideCursor = Cursors.Arrow;
+				}
+			}
 		}
 
 		private void ResetToDefaults(object parameter)
@@ -187,43 +244,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 						System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
 							Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
 					}
-				}
-			}
-			catch (Exception ex)
-			{
-				IsWaiting = false;
-				_logger.Error($"{Constants.IsWindowValid} {ex.Message}\n {ex.StackTrace}");
-
-				if (Owner != null)
-				{
-					Mouse.OverrideCursor = Cursors.Arrow;
-					MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-			}
-			finally
-			{
-				IsWaiting = false;
-				if (Owner != null)
-				{
-					Mouse.OverrideCursor = Cursors.Arrow;
-				}
-			}
-		}
-
-		private void Reload()
-		{
-			try
-			{
-				IsWaiting = true;
-				if (Owner != null)
-				{
-					Mouse.OverrideCursor = Cursors.Wait;
-				}
-
-				if (LanguageMappingModels != null)
-				{
-					LanguageMappingModels.Clear();
-					LoadLanguageMappings();
 				}
 			}
 			catch (Exception ex)
@@ -321,29 +341,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			if (result.HasValue && result.Value)
 			{
 				Reload();
-			}
-		}
-
-		private void LanguageMappingModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (sender is LanguageMappingModel languageModel)
-			{
-				if (e.PropertyName == nameof(LanguageMappingModel.SelectedSource) ||
-					e.PropertyName == nameof(LanguageMappingModel.SelectedTarget))
-				{
-					_provider.UpdateLanguageMappingModel(languageModel);
-				}
-			}
-		}
-
-		public void Dispose()
-		{
-			if (_languageMappingModels != null)
-			{
-				foreach (var languageMappingModel in _languageMappingModels)
-				{
-					languageMappingModel.PropertyChanged -= LanguageMappingModel_PropertyChanged;
-				}
 			}
 		}
 	}

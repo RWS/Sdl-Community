@@ -41,7 +41,6 @@
 					line-height: 20px;
 					}
 
-
 					.ReportTable {
 					border: #BFCDD4 1px solid;
 					border-collapse: collapse;
@@ -330,4 +329,3 @@
 		</html>
 	</xsl:template>
 </xsl:stylesheet>
-

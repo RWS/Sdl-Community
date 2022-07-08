@@ -6,7 +6,7 @@ namespace Sdl.Community.MTCloud.Provider.Converters
 {
 	public class InvertableBoolEnabledConverter : IValueConverter
 	{
-		enum Parameters
+		private enum Parameters
 		{
 			Inverted
 		}

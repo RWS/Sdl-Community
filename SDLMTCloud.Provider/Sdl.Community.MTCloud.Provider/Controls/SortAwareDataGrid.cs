@@ -11,6 +11,11 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 {
 	public class SortAwareDataGrid : DataGrid, IDisposable
 	{
+		public static readonly DependencyProperty SelectedItemsListProperty =
+			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
+
+		private List<SortDescription> _sortDescriptions;
+
 		public SortAwareDataGrid()
 		{
 			SelectionChanged += SortAwareDataGrid_SelectionChanged;
@@ -27,22 +32,10 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 			set => SetValue(SelectedItemsListProperty, value);
 		}
 
-		public static readonly DependencyProperty SelectedItemsListProperty =
-			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
-
-		private List<SortDescription> _sortDescriptions;
-
-		protected override void OnSorting(DataGridSortingEventArgs eventArgs)
+		public void Dispose()
 		{
-			base.OnSorting(eventArgs);
-
-			UpdateSorting();
-		}
-
-		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
-		{
+			SelectionChanged -= SortAwareDataGrid_SelectionChanged;
 			Loaded -= SortAwareDataGrid_Loaded;
-			SelectedItem = Items.Count > 0 ? Items[0] : null;
 		}
 
 		protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
@@ -76,31 +69,14 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 				{
 					column.SortDirection = sortDescription.Direction;
 				}
-			}			
+			}
 		}
 
-		private void UpdateSorting()
+		protected override void OnSorting(DataGridSortingEventArgs eventArgs)
 		{
-			if (ItemsSource == null)
-			{
-				return;
-			}
+			base.OnSorting(eventArgs);
 
-			var view = CollectionViewSource.GetDefaultView(ItemsSource);
-			
-			if (_sortDescriptions == null)
-			{
-				_sortDescriptions = new List<SortDescription>();
-			}
-			else
-			{
-				_sortDescriptions.Clear();
-			}
-			
-			foreach (var sortDescription in view.SortDescriptions)
-			{
-				_sortDescriptions.Add(new SortDescription(sortDescription.PropertyName, sortDescription.Direction));
-			}
+			UpdateSorting();
 		}
 
 		private void SetDefaultSortDescriptions()
@@ -114,17 +90,41 @@ namespace Sdl.Community.MTCloud.Provider.Controls
 			{
 				new SortDescription(DefaultColumnName, DefaultSortDirection)
 			};
-		}	
+		}
+
+		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
+		{
+			Loaded -= SortAwareDataGrid_Loaded;
+			SelectedItem = Items.Count > 0 ? Items[0] : null;
+		}
 
 		private void SortAwareDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			SelectedItemsList = SelectedItems;
 		}
 
-		public void Dispose()
+		private void UpdateSorting()
 		{
-			SelectionChanged -= SortAwareDataGrid_SelectionChanged;
-			Loaded -= SortAwareDataGrid_Loaded;
+			if (ItemsSource == null)
+			{
+				return;
+			}
+
+			var view = CollectionViewSource.GetDefaultView(ItemsSource);
+
+			if (_sortDescriptions == null)
+			{
+				_sortDescriptions = new List<SortDescription>();
+			}
+			else
+			{
+				_sortDescriptions.Clear();
+			}
+
+			foreach (var sortDescription in view.SortDescriptions)
+			{
+				_sortDescriptions.Add(new SortDescription(sortDescription.PropertyName, sortDescription.Direction));
+			}
 		}
 	}
 }

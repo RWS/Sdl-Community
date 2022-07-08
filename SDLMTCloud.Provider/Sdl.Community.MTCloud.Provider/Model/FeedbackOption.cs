@@ -31,6 +31,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				OnPropertyChanged(nameof(StudioActionId));
 			}
 		}
+
 		public string Tooltip
 		{
 			get => _tooltip;

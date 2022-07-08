@@ -12,7 +12,6 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
-using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -47,8 +46,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			Initialize();
 			UpdateActionTooltips();
 		}
-
-		private IStudioDocument ActiveDocument => _editorController.ActiveDocument;
 
 		public Evaluations ActiveDocumentEvaluations
 		{
@@ -131,6 +128,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand SendFeedbackCommand
 			=> _sendFeedbackCommand ??= new AsyncCommand(() => SendFeedback(null));
 
+		private IStudioDocument ActiveDocument => _editorController.ActiveDocument;
 		private SegmentId? ActiveSegmentId => ActiveDocument.ActiveSegmentPair?.Properties.Id;
 		private ConcurrentDictionary<Guid, Evaluations> Evaluations { get; set; } = new();
 		private Rating PreviousRating { get; set; } = new Rating();
@@ -355,29 +353,29 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			switch (sender)
 			{
 				case FeedbackOption feedbackOption:
-				{
-					if (RateItControlProperties.Contains(feedbackOption.OptionName))
 					{
-						isResetNeeded = true;
+						if (RateItControlProperties.Contains(feedbackOption.OptionName))
+						{
+							isResetNeeded = true;
+						}
+						break;
 					}
-					break;
-				}
 				case RateItViewModel _:
-				{
-					if (RateItControlProperties.Contains(e.PropertyName))
 					{
-						isResetNeeded = true;
+						if (RateItControlProperties.Contains(e.PropertyName))
+						{
+							isResetNeeded = true;
+						}
+						break;
 					}
-					break;
-				}
 				case Document _:
-				{
-					if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
 					{
-						isResetNeeded = true;
+						if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
+						{
+							isResetNeeded = true;
+						}
+						break;
 					}
-					break;
-				}
 			}
 			return isResetNeeded;
 		}

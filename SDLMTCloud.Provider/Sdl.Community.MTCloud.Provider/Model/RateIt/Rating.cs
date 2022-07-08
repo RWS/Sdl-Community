@@ -4,9 +4,10 @@ namespace Sdl.Community.MTCloud.Provider.Model.RateIt
 {
 	public class Rating
 	{
-		public int Score { get; set; }
 		// Corresponds to the options (checkboxes) set on the UI
 		public List<string> Comments { get; set; }
+
+		public int Score { get; set; }
 
 		public void Empty()
 		{

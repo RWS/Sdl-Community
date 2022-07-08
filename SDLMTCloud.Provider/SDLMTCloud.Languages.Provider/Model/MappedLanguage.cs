@@ -3,15 +3,47 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.MTCloud.Languages.Provider.Model
 {
-	public class MappedLanguage: INotifyPropertyChanged
+	public class MappedLanguage : INotifyPropertyChanged
 	{
+		private string _mtCode;
+		private string _mtCodeLocale;
 		private string _name;
 		private string _region;
 		private string _tradosCode;
-		private string _mtCode;
-		private string _mtCodeLocale;
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public int Index { get; set; }
+
+		public string MTCode
+		{
+			get => _mtCode;
+			set
+			{
+				if (_mtCode == value)
+				{
+					return;
+				}
+
+				_mtCode = value;
+				OnPropertyChanged(nameof(MTCode));
+			}
+		}
+
+		public string MTCodeLocale
+		{
+			get => _mtCodeLocale;
+			set
+			{
+				if (_mtCodeLocale == value)
+				{
+					return;
+				}
+
+				_mtCodeLocale = value;
+				OnPropertyChanged(nameof(MTCodeLocale));
+			}
+		}
 
 		public string Name
 		{
@@ -57,39 +89,6 @@ namespace Sdl.Community.MTCloud.Languages.Provider.Model
 				OnPropertyChanged(nameof(TradosCode));
 			}
 		}
-
-		public string MTCode
-		{
-			get => _mtCode;
-			set
-			{
-				if (_mtCode == value)
-				{
-					return;
-				}
-
-				_mtCode = value;
-				OnPropertyChanged(nameof(MTCode));
-			}
-		}
-
-		public string MTCodeLocale
-		{
-			get => _mtCodeLocale;
-			set
-			{
-				if (_mtCodeLocale == value)
-				{
-					return;
-				}
-
-				_mtCodeLocale = value;
-				OnPropertyChanged(nameof(MTCodeLocale));
-			}
-		}
-
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{

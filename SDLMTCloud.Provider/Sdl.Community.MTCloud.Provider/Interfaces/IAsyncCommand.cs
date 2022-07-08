@@ -5,13 +5,15 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
 	public interface IAsyncCommand : ICommand
 	{
-		Task ExecuteAsync();
 		bool CanExecute();
+
+		Task ExecuteAsync();
 	}
 
 	public interface IAsyncCommand<T> : ICommand
 	{
-		Task ExecuteAsync(T parameter);
 		bool CanExecute(T parameter);
+
+		Task ExecuteAsync(T parameter);
 	}
 }
