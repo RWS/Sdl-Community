@@ -5,10 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Language Weaver provider tests")]
-[assembly: AssemblyProduct("Language weaver provider tests")]
+[assembly: AssemblyProduct("Language Weaver provider tests")]
+[assembly: AssemblyDescription("Unit test project for Language Weaver provider")]
 [assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
-[assembly: AssemblyDescription("Language weaver provider integration tests")]
+
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
@@ -20,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ea39eb5d-0e7e-4eff-b77a-3a15ad1de50a")]
+[assembly: Guid("1d6b3478-0b2d-429b-b7d7-1f45ce7e4b05")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -33,4 +34,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("5.0.0.0")]
-[assembly: AssemblyFileVersion("5.0.1.3")]
+[assembly: AssemblyFileVersion("5.0.1.2")]
