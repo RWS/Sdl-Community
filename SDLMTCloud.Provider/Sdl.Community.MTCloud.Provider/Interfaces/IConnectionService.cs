@@ -40,7 +40,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		Task<(UserDetails, string)> GetUserDetails(string resource);
 
-		void AddTraceHeader(HttpRequestMessage request);
+		void AddTraceHeaders(HttpRequestMessage request);
 
 		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
 
