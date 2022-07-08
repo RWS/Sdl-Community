@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<Tradosfolder>$(TradosBuild17)</Tradosfolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
