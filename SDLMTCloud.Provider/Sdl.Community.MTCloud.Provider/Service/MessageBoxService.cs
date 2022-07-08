@@ -25,5 +25,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var result = MessageBox.Show(message, string.Empty, MessageBoxButton.OKCancel, MessageBoxImage.Question);
 			return result.HasFlag(MessageBoxResult.OK);
 		}
+		public void ShowErrorMessage(string text, string header)
+		{
+			MessageBox.Show(text, header, MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 	}
 }

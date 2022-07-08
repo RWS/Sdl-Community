@@ -421,4 +421,16 @@ Response from Language Weaver:
   <data name="ClickingHere" xml:space="preserve">
     <value>here</value>
   </data>
+  <data name="InvalidPath" xml:space="preserve">
+    <value>Invalid path</value>
+  </data>
+  <data name="InvalidPathInFileName" xml:space="preserve">
+    <value>The path to file {0} is invalid or doesn't exist!</value>
+  </data>
+  <data name="InvalidPathOrDirectoryDoesntExist" xml:space="preserve">
+    <value>The path {0} is invalid or doesn't exist! </value>
+  </data>
+  <data name="InvalidPathOrFileDoesntExist" xml:space="preserve">
+    <value>Invalid path or file name</value>
+  </data>
 </root>

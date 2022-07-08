@@ -6,5 +6,6 @@
 		void ShowWarningMessage(string text, string header);
 		void ShowInformationMessage(string text, string header);
 		bool AskForConfirmation(string message);
+		void ShowErrorMessage(string text, string header);
 	}
 }
