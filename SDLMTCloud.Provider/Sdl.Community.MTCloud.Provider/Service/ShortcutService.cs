@@ -144,7 +144,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					_customShortcuts.Add(studioShortcut);
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + e.Message);
 			}
