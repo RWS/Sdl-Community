@@ -11,20 +11,6 @@ namespace PretranslateProjectsCreatedFromTemplateSample.Helpers
 			return Directory.CreateDirectory(path);
 		}
 
-		private static string GeneratePath(string newProjectPath)
-		{
-			while (true)
-			{
-				var path = $"{newProjectPath}_{GetGuid()}";
-				//if (Directory.Exists(path)) continue;
-
-				return path;
-			}
-		}
-
-		private static string GetGuid()
-		{
-			return Guid.NewGuid().ToString();
-		}
+		private static string GeneratePath(string newProjectPath) => $"{newProjectPath}_{Guid.NewGuid()}";
 	}
 }

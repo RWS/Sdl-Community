@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using PretranslateProjectsCreatedFromTemplateSample.Helpers;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace PretranslateProjectsCreatedFromTemplateSample
 {
@@ -19,14 +22,27 @@ namespace PretranslateProjectsCreatedFromTemplateSample
 
 		private static void Run(string[] args, ProjectTemplateReference template, int cyclesTotal)
 		{
+			var pretranslator = new Pretranslator();
+			var projects = new List<FileBasedProject>();
+			for (var i = 1; i < args.Length - 2; i++)
+			{
+				projects.Add(pretranslator.CreateProjectFromTemplate(template, args[i], $"{args[args.Length - 2]}"));
+				Console.WriteLine($@"Project with files from ""{args[i]}"" created succesfully");
+			}
+
 			for (var cycleNo = 0; cycleNo < cyclesTotal; cycleNo++)
 			{
-				for (var i = 1; i < args.Length - 2; i++)
+				foreach (var project in projects)
 				{
-					using (var pretranslator = new Pretranslator())
+					using (var pretranslator2 = new Pretranslator())
 					{
-						_ = pretranslator.CreateProjectFromTemplate(template, args[i], $"{args[args.Length - 2]}");
-						Console.WriteLine($@"Cycle {cycleNo + 1} - Project with files from ""{args[i]}"" created succesfully");
+						var task = pretranslator2.Pretranslate(project);
+						project.Save();
+
+						var message = "";
+						if (task.Status == TaskStatus.Failed)
+							message = string.Join(Environment.NewLine, task.Messages.Select(m => m.Message));
+						Console.WriteLine($"Pretranslation {cycleNo + 1}: {task.Status} {message}");
 					}
 				}
 			}

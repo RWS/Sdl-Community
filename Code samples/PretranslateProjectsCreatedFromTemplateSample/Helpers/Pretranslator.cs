@@ -9,7 +9,7 @@ namespace PretranslateProjectsCreatedFromTemplateSample.Helpers
 	{
 		public FileBasedProject CreateProjectFromTemplate(ProjectTemplateReference template, string pathToFiles, string newProjectPath)
 		{
-			var newProjectDirectory = DirectoryHelper.GetDestinationDirectory($"{newProjectPath}_{new DirectoryInfo(pathToFiles).Name}");
+			var newProjectDirectory = DirectoryHelper.GetDestinationDirectory($"{newProjectPath}\\{new DirectoryInfo(pathToFiles).Name}");
 
 			var projectInfo = new ProjectInfo
 			{
@@ -27,7 +27,6 @@ namespace PretranslateProjectsCreatedFromTemplateSample.Helpers
 					AutomaticTaskTemplateIds.Scan,
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages,
-					AutomaticTaskTemplateIds.PreTranslateFiles
 				});
 			newProject.Save();
 
@@ -36,6 +35,12 @@ namespace PretranslateProjectsCreatedFromTemplateSample.Helpers
 
 		public void Dispose()
 		{
+		}
+
+		public AutomaticTask Pretranslate(FileBasedProject project)
+		{
+			return project.RunAutomaticTask(
+				project.GetTargetLanguageFiles().GetIds(), AutomaticTaskTemplateIds.PreTranslateFiles);
 		}
 	}
 }
