@@ -1,14 +1,17 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace PretranslateInLoopWithFailSafeAction.Helpers
 {
 	public static class DirectoryHelper
 	{
-		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs = true)
+		public static void DirectoryCopy(string sourceDirName, ref string destDirName, bool copySubDirs = true)
 		{
 			sourceDirName = EnsureParentDirectory(sourceDirName);
 			destDirName = EnsureParentDirectory(destDirName);
+
+			if (Directory.Exists(destDirName)) destDirName = $"{destDirName}_{Guid.NewGuid()}";
 
 			var dir = new DirectoryInfo(sourceDirName);
 			var dirs = dir.GetDirectories();
@@ -29,7 +32,7 @@ namespace PretranslateInLoopWithFailSafeAction.Helpers
 				foreach (var subdir in dirs)
 				{
 					var temppath = Path.Combine(destDirName, subdir.Name);
-					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+					DirectoryCopy(subdir.FullName, ref temppath, copySubDirs);
 				}
 			}
 		}
