@@ -25,16 +25,15 @@ namespace PretranslateInLoopWithFailSafeAction
 
 		private static void Run(string projectPath, string destinationPath, int cyclesTotal, int cycleNo = 0)
 		{
-			DirectoryHelper.DirectoryCopy(projectPath, ref destinationPath);
-			var newProjectPath = DirectoryHelper.GetSdlproj(destinationPath);
+			destinationPath = DirectoryHelper.EnsurePathExists(destinationPath);
+			DirectoryHelper.DirectoryCopy(projectPath, destinationPath);
 
+			var newProjectPath = DirectoryHelper.GetSdlproj(destinationPath);
 			var project = new FileBasedProject(newProjectPath);
 			for (; cycleNo < cyclesTotal; cycleNo++)
 			{
 				var task = Pretranslate(project);
-
 				RunFailSafeAction(projectPath, ref project, ref task);
-
 				project.Save();
 
 				Console.WriteLine($"Pretranslation {cycleNo + 1}: {task.Status}");
@@ -50,7 +49,7 @@ namespace PretranslateInLoopWithFailSafeAction
 				var filePath = project.FilePath;
 				project.Delete();
 
-				DirectoryHelper.DirectoryCopy(originalProjectPath, ref filePath);
+				DirectoryHelper.DirectoryCopy(originalProjectPath, filePath);
 
 				project = new FileBasedProject(filePath);
 				task = Pretranslate(project);
