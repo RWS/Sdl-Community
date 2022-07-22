@@ -1,0 +1,40 @@
+﻿<Window x:Class="WebView2Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:viewModel="clr-namespace:WebView2Test.ViewModel"
+        xmlns:converters="clr-namespace:WebView2Test.Converters"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
+        Title="MainWindow"
+        SizeToContent="WidthAndHeight">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<converters:BooleanToStringConverter x:Key="BoolToString" />
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid Margin="50" Height="Auto">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Button DockPanel.Dock="Top"
+				Grid.Row="0"
+		        Command="{Binding LogInOutCommand}"
+		        HorizontalAlignment="Center"
+				Click="LogInOutButton_OnClick"
+		        Style="{StaticResource LightGreenButtonsStyle}"
+		        Content="{Binding IsLoggedIn, Converter={StaticResource BoolToString}}"/>
+		<wv2:WebView2 Name="webView" 
+					  Grid.Row="1"
+		              Height="450" 
+		              Width="485" 
+		              Visibility="Visible" 
+		              Source="{Binding Url}"/>
+	</Grid>
+</Window>
