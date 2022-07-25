@@ -41,24 +41,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>3rd party signed\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -74,6 +70,9 @@
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -95,6 +94,8 @@
   <ItemGroup>
     <Compile Include="DataConverter.cs" />
     <Compile Include="HelpButton.cs" />
+    <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\AssessementCategories.cs" />
     <Compile Include="Model\Entry.cs" />
     <Compile Include="HelpForm.cs">
       <SubType>Form</SubType>
@@ -109,7 +110,11 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ReportResults.cs" />
+    <Compile Include="Model\SubCategories.cs" />
+    <Compile Include="Model\SubCategory.cs" />
     <Compile Include="Model\TextType.cs" />
+    <Compile Include="Factories\TQStandardsFactory.cs" />
+    <Compile Include="Model\TQSCategories.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -141,6 +146,8 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX-.xlsm" />
+    <None Include="Resources\SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM" />
     <None Include="Resources\template.XLSM" />
     <None Include="Resources\tqa3.ico" />
     <None Include="Resources\Help.ico" />

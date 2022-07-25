@@ -124,22 +124,49 @@
   <data name="ClosedXmlStudioFix" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ClosedXmlStudioFix.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="CurrentlyWorkingOnProject" xml:space="preserve">
+    <value>Currently working on: {0}</value>
+  </data>
+  <data name="CurrentTQAProfile" xml:space="preserve">
+    <value>TQA profile {0}</value>
+  </data>
   <data name="Help" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Help.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Plugin_Name" xml:space="preserve">
-    <value>TQA</value>
+  <data name="MsgTQAProcessCompleted" xml:space="preserve">
+    <value>TQA reporting completed. Please find your report here: \n</value>
   </data>
-  <data name="template" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\template.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="MsgTQAProfileStandardNotSupported" xml:space="preserve">
+    <value>TQA profile {0} is not supported!</value>
+  </data>
+  <data name="NoActiveProjectSelected" xml:space="preserve">
+    <value>No active project selected!</value>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>TQA Reporting</value>
+  </data>
+  <data name="ReportGenerationFinished" xml:space="preserve">
+    <value>TQA report finished</value>
+  </data>
+  <data name="RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX-.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tqa3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\tqa3.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TQAProfileStandardEmpty" xml:space="preserve">
+    <value>TQA profile: empty</value>
   </data>
   <data name="TqaRibbonGroupHelp_Description" xml:space="preserve">
     <value>Get some basic information about plugin.</value>
   </data>
   <data name="TqaRibbonGroupRun_Description" xml:space="preserve">
     <value>Run TQA on opened project.</value>
+  </data>
+  <data name="UnknownCategoriesInReportTemplate" xml:space="preserve">
+    <value>The TQ report template currently used contains unknown Categories items {0}</value>
   </data>
 </root>
