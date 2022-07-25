@@ -10,7 +10,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 	public class NumberTexts
 	{
 		private readonly NumberFormattingSettings _formattingSettings;
-		private readonly string _digitClass = "[0-9٠-٩]";
+		private readonly string _digitClass = "[０-９0-9٠-٩]";
 
 		public NumberTexts(string text, NumberFormattingSettings formattingSettings)
 		{
