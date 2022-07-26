@@ -97,6 +97,7 @@
     <Compile Include="Composers\NumberErrorComposer.cs" />
     <Compile Include="Composers\SourceErrorMessageComposer.cs" />
     <Compile Include="Composers\TargetErrorMessageComposer.cs" />
+    <Compile Include="Reporter\ErrorReporter.cs" />
     <Compile Include="Model\ExcludedRange.cs" />
     <Compile Include="GUI\NumberVerifierHelp.cs">
       <SubType>UserControl</SubType>
@@ -144,6 +145,8 @@
     <Compile Include="Model\ExtendedErrorReportInfo.cs" />
     <Compile Include="Model\ExtractData.cs" />
     <Compile Include="Model\ComparisonItem.cs" />
+    <Compile Include="Reporter\IMessageFilter.cs" />
+    <Compile Include="Reporter\MessageFilter.cs" />
     <Compile Include="Validator\NumberComparisonExtension.cs" />
     <Compile Include="Validator\ComparisonConstants.cs" />
     <Compile Include="Validator\Comparer.cs" />
