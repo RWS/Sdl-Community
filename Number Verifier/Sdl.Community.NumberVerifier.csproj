@@ -48,11 +48,11 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Sdl.Core.Globalization">
-     <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
-      </Reference>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
@@ -73,7 +73,7 @@
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
- </Reference>
+    </Reference>
     <Reference Include="Sdl.Verification.Api">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Verification.Api.dll</HintPath>
     </Reference>

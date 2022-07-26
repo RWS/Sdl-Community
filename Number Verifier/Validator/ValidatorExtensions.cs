@@ -129,7 +129,7 @@ namespace Sdl.Community.NumberVerifier.Validator
 			if (IsLeadingZeroOmitted(numberToken))
 				normalized = normalized.AddLeadingZero(numberToken.HasSign);
 
-			return normalized;
+			return normalized.Normalize(System.Text.NormalizationForm.FormKC);
 		}
 
 		public static string ToRegexPattern(this List<string> toBeJoined)
