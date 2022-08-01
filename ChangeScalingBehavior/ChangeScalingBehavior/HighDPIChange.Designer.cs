@@ -61,7 +61,7 @@
             this.olvApplicationVersions.Groupable = false;
             this.olvApplicationVersions.Text = "Application Versions";
             this.olvApplicationVersions.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.olvApplicationVersions.Width = 155;
+            this.olvApplicationVersions.Width = 170;
             // 
             // olvColumnAction
             // 
