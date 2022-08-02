@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Sdl.Versioning;
 using Trados.Community.Toolkit.Core;
 
 namespace ChangeScalingBehavior
