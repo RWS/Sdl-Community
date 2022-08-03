@@ -131,6 +131,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Report.xsl">
       <SubType>Designer</SubType>

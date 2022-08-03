@@ -24,6 +24,8 @@ namespace Sdl.Community.TQA.Model
 		const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX-.XLSM";
 		const string TQS_EmptyProfile = "";
 		const string TQS_NotSupportedProfile = "not supported TQS profile";
+		public const string reportingFileExtension = ".xlsm";
+		public const string excelFormatFile = "xlsm";
 
 		internal static List<string> TQStandardDescriptions => new List<string> { "TQA Profile - Empty", "TQA Profile - J2450 Standard", "TQA Profile - MQM Standard", "TQA Profile - not compatible" };
 		internal static List<string> TQS_J2450_Qualities => new List<string> { "Premium", "Value", "Economy" };

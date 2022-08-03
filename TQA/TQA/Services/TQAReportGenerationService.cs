@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using ClosedXML.Excel;
@@ -9,13 +9,13 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Sdl.Community.TQA.Model;
 using Color = DocumentFormat.OpenXml.Spreadsheet.Color;
 
-namespace Sdl.Community.TQA
+namespace Sdl.Community.TQA.Services
 {
-	public static class DataConverter
+	internal static class TQAReportGenerationService
 	{
 		private static readonly string ProtectionPassword = "Thames";
 
-		public static ReportResults ExtractFromXml(string path, string qualityLevel)
+		internal static ReportResults ExtractFromXml(string path, string qualityLevel)
 		{
 			var report = XDocument.Load(path);
 			var languages = report.Descendants("language");
