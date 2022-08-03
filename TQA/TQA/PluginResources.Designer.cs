@@ -22,7 +22,7 @@ namespace Sdl.Community.TQA {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.TQA {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.TQA.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.TQA {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] ClosedXML {
+        public static byte[] ClosedXML {
             get {
                 object obj = ResourceManager.GetObject("ClosedXML", resourceCulture);
                 return ((byte[])(obj));
@@ -73,7 +73,7 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] ClosedXmlStudioFix {
+        public static byte[] ClosedXmlStudioFix {
             get {
                 object obj = ResourceManager.GetObject("ClosedXmlStudioFix", resourceCulture);
                 return ((byte[])(obj));
@@ -81,27 +81,36 @@ namespace Sdl.Community.TQA {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Currently working on: {0}.
+        ///   Looks up a localized string similar to Project: {0}.
         /// </summary>
-        internal static string CurrentlyWorkingOnProject {
+        public static string CurrentlyWorkingOnProject {
             get {
                 return ResourceManager.GetString("CurrentlyWorkingOnProject", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TQA profile {0}.
+        ///   Looks up a localized string similar to TQA profile: {0}.
         /// </summary>
-        internal static string CurrentTQAProfile {
+        public static string CurrentTQAProfile {
             get {
                 return ResourceManager.GetString("CurrentTQAProfile", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path is empty..
+        /// </summary>
+        public static string EmptyPath {
+            get {
+                return ResourceManager.GetString("EmptyPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Help {
+        public static System.Drawing.Icon Help {
             get {
                 object obj = ResourceManager.GetObject("Help", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -109,9 +118,54 @@ namespace Sdl.Community.TQA {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TQA reporting completed. Please find your report here: \n.
+        ///   Looks up a localized string similar to Path is not valid..
         /// </summary>
-        internal static string MsgTQAProcessCompleted {
+        public static string InvalidPath {
+            get {
+                return ResourceManager.GetString("InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path contains invalid characters..
+        /// </summary>
+        public static string InvalidPathChars {
+            get {
+                return ResourceManager.GetString("InvalidPathChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aborted!.
+        /// </summary>
+        public static string MsgAborted {
+            get {
+                return ResourceManager.GetString("MsgAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please activate one project.
+        /// </summary>
+        public static string MsgActivateOneProject {
+            get {
+                return ResourceManager.GetString("MsgActivateOneProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation terminated by user!.
+        /// </summary>
+        public static string MsgTQAOperationAborted {
+            get {
+                return ResourceManager.GetString("MsgTQAOperationAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TQA reporting completed. Please find your report here: {0}.
+        /// </summary>
+        public static string MsgTQAProcessCompleted {
             get {
                 return ResourceManager.GetString("MsgTQAProcessCompleted", resourceCulture);
             }
@@ -120,25 +174,43 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized string similar to TQA profile {0} is not supported!.
         /// </summary>
-        internal static string MsgTQAProfileStandardNotSupported {
+        public static string MsgTQAProfileStandardNotSupported {
             get {
                 return ResourceManager.GetString("MsgTQAProfileStandardNotSupported", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No active project selected!.
+        ///   Looks up a localized string similar to The TQA task has not been run correctly..
         /// </summary>
-        internal static string NoActiveProjectSelected {
+        public static string MsgTQATaskNotRunCorrectly {
+            get {
+                return ResourceManager.GetString("MsgTQATaskNotRunCorrectly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project: No active project selected! .
+        /// </summary>
+        public static string NoActiveProjectSelected {
             get {
                 return ResourceManager.GetString("NoActiveProjectSelected", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TQA Reporting.
+        ///   Looks up a localized string similar to Translation Quality Assessment Reporting.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Description {
+            get {
+                return ResourceManager.GetString("Plugin_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run TQA Reporting.
+        /// </summary>
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -147,16 +219,25 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized string similar to TQA report finished.
         /// </summary>
-        internal static string ReportGenerationFinished {
+        public static string ReportGenerationFinished {
             get {
                 return ResourceManager.GetString("ReportGenerationFinished", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset to default.
+        /// </summary>
+        public static string ResetToDef {
+            get {
+                return ResourceManager.GetString("ResetToDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_ {
+        public static byte[] RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_ {
             get {
                 object obj = ResourceManager.GetObject("RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_", resourceCulture);
                 return ((byte[])(obj));
@@ -166,7 +247,7 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX {
+        public static byte[] SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX {
             get {
                 object obj = ResourceManager.GetObject("SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX", resourceCulture);
                 return ((byte[])(obj));
@@ -176,7 +257,7 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon tqa3 {
+        public static System.Drawing.Icon tqa3 {
             get {
                 object obj = ResourceManager.GetObject("tqa3", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -184,18 +265,54 @@ namespace Sdl.Community.TQA {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translation Quality Assessment Reporting is a batch task plugin that allows the user to generate an Excel report based on an TQA XLST template.
+        /// </summary>
+        public static string TQABatchTask_PluginInfo {
+            get {
+                return ResourceManager.GetString("TQABatchTask_PluginInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string TQAOptions {
+            get {
+                return ResourceManager.GetString("TQAOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TQA profile: empty.
         /// </summary>
-        internal static string TQAProfileStandardEmpty {
+        public static string TQAProfileStandardEmpty {
             get {
                 return ResourceManager.GetString("TQAProfileStandardEmpty", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TQA quality level:.
+        /// </summary>
+        public static string TQAQualityLevel {
+            get {
+                return ResourceManager.GetString("TQAQualityLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reporting folder:.
+        /// </summary>
+        public static string TQAReportFolder {
+            get {
+                return ResourceManager.GetString("TQAReportFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get some basic information about plugin..
         /// </summary>
-        internal static string TqaRibbonGroupHelp_Description {
+        public static string TqaRibbonGroupHelp_Description {
             get {
                 return ResourceManager.GetString("TqaRibbonGroupHelp_Description", resourceCulture);
             }
@@ -204,7 +321,7 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized string similar to Run TQA on opened project..
         /// </summary>
-        internal static string TqaRibbonGroupRun_Description {
+        public static string TqaRibbonGroupRun_Description {
             get {
                 return ResourceManager.GetString("TqaRibbonGroupRun_Description", resourceCulture);
             }
@@ -213,7 +330,7 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized string similar to The TQ report template currently used contains unknown Categories items {0}.
         /// </summary>
-        internal static string UnknownCategoriesInReportTemplate {
+        public static string UnknownCategoriesInReportTemplate {
             get {
                 return ResourceManager.GetString("UnknownCategoriesInReportTemplate", resourceCulture);
             }

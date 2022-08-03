@@ -6,7 +6,10 @@ using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Core.Settings;
 using Sdl.Community.TQA.Model;
-using System.Collections.Generic;
+using Sdl.ProjectAutomation.Core;
+using Sdl.Community.TQA.BatchTask;
+using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Internal;
 
 
 namespace Sdl.Community.TQA
@@ -14,15 +17,17 @@ namespace Sdl.Community.TQA
 	public partial class MainWindow : Form
 	{
 
-		private FileBasedProject _currentProject;
-		private AssessmentCategories TQACategories { get; set; }
-		private TQStandardType CurrentTQStandardType { get; set; }
+		private FileBasedProject CurrentProject { get; }
+		private TQAReportingTask ReportingTask { get; }
+
 
 		public MainWindow(ProjectsController controller)
 		{
 			InitializeComponent();
+			CurrentProject = controller.CurrentProject;
+			ReportingTask = new TQAReportingTask(CurrentProject);
 			SetupWindow();
-			SetupTQA(controller);
+			SetupTQA();
 		}
 
 		private void SetupWindow()
@@ -30,159 +35,108 @@ namespace Sdl.Community.TQA
 			txtProjectName.Text = PluginResources.NoActiveProjectSelected;
 			txtStandardUsed.Text = PluginResources.TQAProfileStandardEmpty;
 			StartButton.Enabled = false;
+			//	LanguageSelector.Enabled = false;
 		}
-		private void SetupTQA(ProjectsController controller)
+		private void SetupTQA()
 		{
-			_currentProject = controller.CurrentProject;
-			if (_currentProject != null)
+			if (CurrentProject != null)
 			{
-				var selectedProjectInfo = _currentProject.GetProjectInfo();
+				var selectedProjectInfo = CurrentProject.GetProjectInfo();
 				SetupProjectInfo(selectedProjectInfo);
 				SetupTargetLanguages(selectedProjectInfo);
-				SetupTQAStandard(selectedProjectInfo);
+				SetupTQAStandardProfile();
 				SetupReportOutputFile();
+#warning 'Used in debug to see the objects available. It should be removed at the end'
+				//AddEventFlags();
 			}
 		}
 
-		private void SetupTargetLanguages(ProjectAutomation.Core.ProjectInfo projectInfo)
-		{
-			var targetLanguages = projectInfo.TargetLanguages.Select(l => l.DisplayName).ToArray();
-			LanguageSelector.Items.AddRange(targetLanguages);
-			LanguageSelector.SelectedItem = targetLanguages[0];
-		}
+		//private void AddEventFlags()
+		//{
+		//	var filesController = SdlTradosStudio.Application.GetController<FilesController>();
+		//	var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+		//	var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+		//	//filesController.CurrentSelectedLanguage
+		//	//editorController.ActivationChanged
+		//}
 
-		private void SetupProjectInfo(ProjectAutomation.Core.ProjectInfo projectInfo)
+		private void SetupProjectInfo(ProjectInfo projectInfo)
 		{
 			var currentProjectName = projectInfo.Name;
 			txtProjectName.Text = string.Format(PluginResources.CurrentlyWorkingOnProject, currentProjectName);
 		}
 
-		private void SetupReportOutputFile()
+		private void SetupTargetLanguages(ProjectInfo projectInfo)
 		{
-			outputSaveDialog.FileName = TQStandardsFactory.GetReportOutputFilenameForTQStandard(CurrentTQStandardType);
+			object[] targetLanguages = projectInfo.TargetLanguages.Select(l => l.DisplayName).ToArray();
+			LanguageSelector.Items.AddRange(targetLanguages);
+			if (targetLanguages.Length > 0)
+				LanguageSelector.SelectedItem = targetLanguages[0];
 		}
-		private void StartButton_Click(object sender, EventArgs e)
+
+
+		private void SetupTQAStandardProfile()
 		{
-			if (_currentProject != null)
-			{
-				SaveActiveFile();
-
-				var tempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
-				var tqaTask = _currentProject.RunAutomaticTask(_currentProject.GetTargetLanguageFiles(_currentProject.GetProjectInfo().TargetLanguages.Single(l => l.DisplayName == LanguageSelector.SelectedItem.ToString())).Select(f => f.Id).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback");
-
-				_currentProject.SaveTaskReportAs(tqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml);
-
-				var extractedData = DataConverter.ExtractFromXml(tempPath, (string)QualityCombo.SelectedItem);
-
-				if (outputSaveDialog.ShowDialog() == DialogResult.OK)
-				{
-					try
-					{
-						DataConverter.WriteExcel(outputSaveDialog.FileName, extractedData, CurrentTQStandardType);
-					}
-					catch (IOException ex)
-					{
-						throw ex;
-					}
-					catch (Exception ex)
-					{
-						MessageBox.Show(ex.ToString());
-						return;
-					}
-					MessageBox.Show(PluginResources.MsgTQAProcessCompleted + outputSaveDialog.FileName, PluginResources.ReportGenerationFinished, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-				else
-				{
-					MessageBox.Show(@"Operation terminated by user!", @"Aborted", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-				}
-				Close();
-			}
-			else
-			{
-				MessageBox.Show(@"Please activate one project", string.Empty, MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-				Close();
-			}
+			SetupStandardProfileUIControls();
 		}
-		private static void SaveActiveFile()
-		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeFile = editorController?.ActiveDocument;
 
-			if (activeFile != null)
-			{
-				editorController.Save(activeFile); // if the file is not saved in the editor TQA changes does not appear in the report
-			}
-		}
-		private void SetupTQAStandard(ProjectAutomation.Core.ProjectInfo projectInfo)
+		private void SetupStandardProfileUIControls()
 		{
-			//var targetLanguage = selectedProjectInfo.TargetLanguages.Where(l => l.DisplayName == LanguageSelector.SelectedItem.ToString()).FirstOrDefault();
-			ISettingsBundle settings = _currentProject.GetSettings();//later if it's needed we'll call it with targetLanguage as param. It is a request there, in this Epic, to make it to work with more target languages...
-			SetupTQStandard(settings);
+			txtStandardUsed.Text = ReportingTask.GetCurrentTQStandardDescription();
+			StartButton.Enabled = ReportingTask.CurrentStandardTypeIsSetAndSupported();
 			SetupQualityCombobox();
 		}
 
-		private void SetupTQStandard(ISettingsBundle projectSettings)
+		private void SetupReportOutputFile()
 		{
-			TQACategories = GetAssessmentCategories(projectSettings);
-			CurrentTQStandardType = GetTQSStandardBasedOnCurrentImportedTemplate();
-			txtStandardUsed.Text = GetCurrentTQStandardDescription();
-			StartButton.Enabled = CurrentStandardTypeIsSetAndSupported();
-		}
-
-		private bool CurrentStandardTypeIsSetAndSupported()
-		{
-			return CurrentTQStandardType == TQStandardType.tqsJ2450 || CurrentTQStandardType == TQStandardType.tqsMQM;
+			outputSaveDialog.FileName = ReportingTask.GetReportOutputFile(string.Empty);
+			outputSaveDialog.InitialDirectory = !string.IsNullOrEmpty(Path.GetDirectoryName(outputSaveDialog.FileName)) ? Path.GetDirectoryName(outputSaveDialog.FileName) : Path.GetTempPath();
 		}
 
 		private void SetupQualityCombobox()
 		{
 			QualityCombo.Items.Clear();
-			QualityCombo.Items.AddRange(GetQualitiesForTQAStandard().ToArray());
-			if (QualityCombo.Items.Count>0)
-		    	QualityCombo.SelectedItem = (string)QualityCombo.Items[0];
-		}
-
-		private List<string> GetQualitiesForTQAStandard()
-		{
-			return TQStandardsFactory.GetTQSQualities(CurrentTQStandardType);
-		}
-
-		private string GetCurrentTQStandardDescription()
-		{
-			return TQStandardsFactory.GetCurrentTQStandardDescription(CurrentTQStandardType);
-		}
-
-		private TQStandardType GetTQSStandardBasedOnCurrentImportedTemplate()
-		{
-
-			return TQSCategories.GetStandardBasedOnCategories(TQACategories);//GetCategoriesNames()
-		}
-
-		private List<Guid> GetCategoriesIds()
-		{
-			return TQACategories.Select(cat => cat.Id).Distinct().ToList();
-		}
-		private List<string> GetCategoriesNames()
-		{
-			return TQACategories.Select(category => category.Name).Distinct().ToList();
-		}
-
-		private AssessmentCategories GetAssessmentCategories(ISettingsBundle settingsBundle)
-		{
-			return GetCategorySettings<AssessmentCategories>(settingsBundle, "AssessmentCategories");
-		}
-		private static T GetCategorySettings<T>(ISettingsBundle settingsBundle, string setting) where T : new()
-		{
-			ISettingsGroup settingsGroup = settingsBundle.GetSettingsGroup("TranslationQualityAssessmentSettings");
-			if (!settingsGroup.ContainsSetting(setting))
+			QualityCombo.Items.AddRange(ReportingTask.GetQualitiesForTQAStandard().ToArray());
+			if (QualityCombo.Items.Count > 0)
 			{
-				return new T();
+				var tqaSettingQuality = ReportingTask.GetTQAQualityFromBatchTaskSettings();
+				if (string.IsNullOrEmpty(tqaSettingQuality))
+					QualityCombo.SelectedItem = (string)QualityCombo.Items[0];
+				else
+					QualityCombo.SelectedItem = tqaSettingQuality;
+
 			}
 
-			return settingsGroup.GetSetting<T>(setting);
 		}
 
+		private void RunTQAReport_ButtonClick(object sender, EventArgs e)
+		{
+			if (CurrentProject != null)
+			{
+				if (outputSaveDialog.ShowDialog() == DialogResult.OK)
+				{
+					//aici trebuie chemat TQAReportingTask care va chema TQAReportGenerationService
+					var filesToBeProcessed = CurrentProject
+						.GetTargetLanguageFiles(CurrentProject.GetProjectInfo().TargetLanguages
+							.Single(l => l.DisplayName == LanguageSelector.SelectedItem.ToString())).ToList();
+					ReportingTask.UserReportFileName = outputSaveDialog.FileName;
+					ReportingTask.ExecuteTQATaskForProjectFiles(filesToBeProcessed, QualityCombo.SelectedItem.ToString());
+				}
+				else
+				{
+					MessageBox.Show(PluginResources.MsgTQAOperationAborted, PluginResources.MsgAborted,
+						MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+					Close();
+				}
+			}
+			else
+			{
+				MessageBox.Show(PluginResources.MsgActivateOneProject, string.Empty, MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+				Close();
+			}
+
+		}
 
 	}
 

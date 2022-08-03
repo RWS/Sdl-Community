@@ -2,6 +2,7 @@
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using System.Windows.Forms;
 
 namespace Sdl.Community.TQA
 {
@@ -20,15 +21,31 @@ namespace Sdl.Community.TQA
 				if (!_mw.Visible)
 				{
 					_mw = new MainWindow(Controller);
-					_mw.Show();
+					_mw.Show(GetActiveForm());
 				}
 			}
 			else
 			{
 				_mw = new MainWindow(Controller);
-				_mw.Show();
+				_mw.Show(GetActiveForm());
 			}
 
+		}
+
+		public static Form GetActiveForm()
+		{
+			var allForms = System.Windows.Forms.Application.OpenForms;
+			var activeForm = allForms[allForms.Count - 1];
+			foreach (Form form in allForms)
+			{
+				if (form.GetType().Name == "StudioWindowForm")
+				{
+					activeForm = form;
+					break;
+				}
+			}
+
+			return activeForm;
 		}
 	}
 }

@@ -125,28 +125,55 @@
     <value>Resources\ClosedXmlStudioFix.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="CurrentlyWorkingOnProject" xml:space="preserve">
-    <value>Currently working on: {0}</value>
+    <value>Project: {0}</value>
   </data>
   <data name="CurrentTQAProfile" xml:space="preserve">
-    <value>TQA profile {0}</value>
+    <value>TQA profile: {0}</value>
+  </data>
+  <data name="EmptyPath" xml:space="preserve">
+    <value>Path is empty.</value>
   </data>
   <data name="Help" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Help.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="InvalidPath" xml:space="preserve">
+    <value>Path is not valid.</value>
+  </data>
+  <data name="InvalidPathChars" xml:space="preserve">
+    <value>Path contains invalid characters.</value>
+  </data>
+  <data name="MsgAborted" xml:space="preserve">
+    <value>Aborted!</value>
+  </data>
+  <data name="MsgActivateOneProject" xml:space="preserve">
+    <value>Please activate one project</value>
+  </data>
+  <data name="MsgTQAOperationAborted" xml:space="preserve">
+    <value>Operation terminated by user!</value>
+  </data>
   <data name="MsgTQAProcessCompleted" xml:space="preserve">
-    <value>TQA reporting completed. Please find your report here: \n</value>
+    <value>TQA reporting completed. Please find your report here: {0}</value>
   </data>
   <data name="MsgTQAProfileStandardNotSupported" xml:space="preserve">
     <value>TQA profile {0} is not supported!</value>
   </data>
+  <data name="MsgTQATaskNotRunCorrectly" xml:space="preserve">
+    <value>The TQA task has not been run correctly.</value>
+  </data>
   <data name="NoActiveProjectSelected" xml:space="preserve">
-    <value>No active project selected!</value>
+    <value>Project: No active project selected! </value>
+  </data>
+  <data name="Plugin_Description" xml:space="preserve">
+    <value>Translation Quality Assessment Reporting</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>TQA Reporting</value>
+    <value>Run TQA Reporting</value>
   </data>
   <data name="ReportGenerationFinished" xml:space="preserve">
     <value>TQA report finished</value>
+  </data>
+  <data name="ResetToDef" xml:space="preserve">
+    <value>Reset to default</value>
   </data>
   <data name="RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX-.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -157,8 +184,20 @@
   <data name="tqa3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\tqa3.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TQABatchTask_PluginInfo" xml:space="preserve">
+    <value>Translation Quality Assessment Reporting is a batch task plugin that allows the user to generate an Excel report based on an TQA XLST template</value>
+  </data>
+  <data name="TQAOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
   <data name="TQAProfileStandardEmpty" xml:space="preserve">
     <value>TQA profile: empty</value>
+  </data>
+  <data name="TQAQualityLevel" xml:space="preserve">
+    <value>TQA quality level:</value>
+  </data>
+  <data name="TQAReportFolder" xml:space="preserve">
+    <value>Reporting folder:</value>
   </data>
   <data name="TqaRibbonGroupHelp_Description" xml:space="preserve">
     <value>Get some basic information about plugin.</value>
