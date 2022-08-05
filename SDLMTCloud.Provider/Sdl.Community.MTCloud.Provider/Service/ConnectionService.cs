@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Auth0Service;
+using Auth0Service.ViewModel;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
@@ -25,7 +26,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	{
 		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private Auth0Control _auth0Control;
 		private string _currentWorkingPortalAddress;
 
 		public ConnectionService(IWin32Window owner, VersionService versionService, IHttpClient httpClient)
@@ -76,7 +76,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			string message;
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
-				//IsSignedIn = IsValidStudioCredential(out message);
 				var signInResult = StudioSignIn(showDialog);
 
 				IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
@@ -170,6 +169,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return (IsSignedIn, PluginResources.Message_Invalid_credentials);
 			}
 
+			var credentialsWindow = GetCredentialsWindow(Owner);
+			Auth0ViewModel = credentialsWindow.AuthControl.Auth0Service;
+
+			var viewModel = new CredentialsViewModel(credentialsWindow, this);
+			credentialsWindow.DataContext = viewModel;
+
 			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(Credential.AccountRegion);
 			var result = Connect(Credential);
 			if (result.Item1 && !alwaysShowWindow)
@@ -179,10 +184,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			Mouse.OverrideCursor = Cursors.Arrow;
 
-			var credentialsWindow = GetCredentialsWindow(Owner);
-
-			var viewModel = new CredentialsViewModel(credentialsWindow, this);
-			credentialsWindow.DataContext = viewModel;
 
 			var message = string.Empty;
 			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;
@@ -204,6 +205,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			return (IsSignedIn, message);
 		}
+
+		private Auth0ControlViewModel Auth0ViewModel { get; set; }
 
 		public ICredential GetCredential(string credentialString)
 		{
@@ -411,13 +414,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public void SignOut()
 		{
-			_auth0Control.Logout();
+			Auth0ViewModel.Logout();
 		}
 
 		public (LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog = false)
 		{
-			_auth0Control = new Auth0Control();
-			var (authenticationMessage, credentials) = _auth0Control.TryLogin(showDialog);
+			var (authenticationMessage, credentials) = Auth0ViewModel.TryLogin(showDialog);
 
 		   	if (authenticationMessage.IsSuccessful)
 		   	{

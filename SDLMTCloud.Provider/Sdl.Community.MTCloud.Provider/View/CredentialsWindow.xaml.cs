@@ -16,8 +16,6 @@ namespace Sdl.Community.MTCloud.Provider.View
 			//AuthenticationControl = AuthControl;
 		}
 
-		public Auth0Control AuthenticationControl { get; set; }
-
 		private void UserPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
 		{
 			if (DataContext != null)
