@@ -31,8 +31,6 @@ namespace Auth0Service.ViewModel
 			set => _deleteAllCookiesCommand = (CommandHandler)value;
 		}
 
-		public bool IsLoggedIn => AuthorizationService.Credentials is not null;
-
 		public ICommand OnNavigationCompletedCommand =>
 			_onNavigationCompletedCommand ??= new CommandHandler(OnNavigationCompleted, true);
 
@@ -75,8 +73,6 @@ namespace Auth0Service.ViewModel
 			Url = new Uri(AuthorizationService.GenerateLogoutUrl());
 			AuthorizationService.Logout();
 
-			OnPropertyChanged(nameof(IsLoggedIn));
-
 			DeleteAllCookiesCommand?.Execute(null);
 		}
 
@@ -103,7 +99,6 @@ namespace Auth0Service.ViewModel
 		internal AuthenticationResult Login(string uriQuery)
 		{
 			var login = AuthorizationService.Login(uriQuery);
-			OnPropertyChanged(nameof(IsLoggedIn));
 			return login;
 		}
 
@@ -117,8 +112,6 @@ namespace Auth0Service.ViewModel
 			if (Url.LocalPath == "/" && !string.IsNullOrWhiteSpace(Url.Query))
 			{
 				Visibility = Visibility.Collapsed;
-				//var script = "document.body.style.overflow ='hidden'";
-				//await webView.ExecuteScriptAsync(script);
 
 				AuthenticationResult = Login(Url.Query);
 				if (!AuthenticationResult.IsSuccessful) return;

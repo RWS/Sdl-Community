@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
-using Auth0Service;
 using Auth0Service.ViewModel;
 using Newtonsoft.Json;
 using NLog;
@@ -80,7 +79,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public (bool, string) Connect(ICredential credential = null, bool showDialog = false)
 		{
-			if (credential is not null) Credential = credential;
+			if (credential is not null)
+			{
+				SwitchAuthType(credential);
+			}
 
 			string message;
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
@@ -164,6 +166,21 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return (IsSignedIn, message);
 		}
 
+		private void SwitchAuthType(ICredential credential)
+		{
+			Credential.Type = credential.Type;
+			switch (credential.Type)
+			{
+				case Authentication.AuthenticationType.Studio:
+					if (!string.IsNullOrEmpty(credential.Token) && !(string.IsNullOrEmpty(credential.RefreshToken)))
+						Credential = credential;
+					break;
+				default:
+					Credential = credential;
+					break;
+			}
+		}
+
 		public string CredentialToString()
 		{
 			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary() + "; AccountRegion=" + Credential.AccountRegion + "; RefreshToken=" + Credential.RefreshToken;
@@ -193,7 +210,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			Mouse.OverrideCursor = Cursors.Arrow;
-
 
 			var message = string.Empty;
 			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;

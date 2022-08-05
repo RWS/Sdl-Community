@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;

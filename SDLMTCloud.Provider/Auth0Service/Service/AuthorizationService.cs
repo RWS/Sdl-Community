@@ -135,7 +135,7 @@ namespace Auth0Service.Service
 					break;
 
 				case Operation.Logout:
-					parameters.Add("token", Credentials.RefreshToken);
+					parameters.Add("token", Credentials?.RefreshToken);
 					break;
 
 				case Operation.Refresh:

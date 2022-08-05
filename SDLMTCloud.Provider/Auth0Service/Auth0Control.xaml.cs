@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using Auth0Service.Helpers;
 using Auth0Service.Model;
 using Auth0Service.Service;
@@ -35,6 +36,19 @@ namespace Auth0Service
 
 			var envir = await CoreWebView2Environment.CreateAsync(null, _webView2UserDataFolder, options);
 			await webView.EnsureCoreWebView2Async(envir);
+
+			webView.IsVisibleChanged += CustomWebView_IsVisibleChanged;
+		}
+
+		private void CustomWebView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			if ((bool)e.NewValue && IsInitialized) RemoveScrolls();
+		}
+
+		private async void RemoveScrolls()
+		{
+			var script = "document.body.style.overflow ='hidden'";
+			await webView.ExecuteScriptAsync(script);
 		}
 
 		private void SetViewModel()

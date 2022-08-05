@@ -107,8 +107,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _isInProgress;
 			set
 			{
+				if (_owner is not null)
+				{
+					Mouse.OverrideCursor = value ? Cursors.Wait : Cursors.Arrow;
+				}
+
 				_isInProgress = value;
-				OnPropertyChanged(nameof(IsInProgress));
+				OnPropertyChanged();
 			}
 		}
 
@@ -376,6 +381,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					return;
 				}
 
+				IsInProgress = false;
 				_selectedAuthentication = value;
 				OnPropertyChanged(nameof(SelectedAuthentication));
 
@@ -383,7 +389,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					(StudioIsSignedIn, var message) = _connectionService.Connect(null);
+					(StudioIsSignedIn, var message) = _connectionService.Connect(new Credential{Type = Authentication.AuthenticationType.Studio});
 					StudioSignedInAs = StudioIsSignedIn ? _connectionService.Credential?.Name : string.Empty;
 					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
 					ExceptionMessage = message != "OK" ? message : "";
@@ -412,19 +418,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			switch (SelectedAuthentication.Type)
 			{
 				case Authentication.AuthenticationType.Studio:
-					if (!StudioIsSignedIn)
-					{
-						if (showMessage)
-						{
-							//ExceptionMessage = PluginResources.Message_User_is_signed_out;
-						}
-
-						return true;
-					}
-					else
-					{
-						return true;
-					}
+					return true;
 				case Authentication.AuthenticationType.User:
 					if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserPassword))
 					{
@@ -475,10 +469,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 
 			IsInProgress = true;
-			if (_owner != null)
-			{
-				Mouse.OverrideCursor = Cursors.Wait;
-			}
 
 			try
 			{
@@ -487,7 +477,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					// Studio SSO will use the studio credentials											
 					var result = _connectionService.Connect(
 						new Credential
 						{
@@ -496,13 +485,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 						}, parameter.ToString() != "Use");
 
 					IsSignedIn = result.Item1;
+					StudioIsSignedIn = result.Item1;
 					message = result.Item2;
 					StudioSignedInAs = _connectionService.Credential.Name;
-					SignInLabel = IsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
+					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
 				}
 				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
 				{
-					//var serviceCredential = _connectionService.Credential ?? new Credential();
 					var serviceCredential = new Credential()
 					{
 						Type = Authentication.AuthenticationType.User,
@@ -540,10 +529,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			finally
 			{
 				IsInProgress = false;
-				if (_owner != null)
-				{
-					Mouse.OverrideCursor = Cursors.Arrow;
-				}
 
 				if (IsSignedIn && _owner != null)
 				{
