@@ -45,19 +45,19 @@ namespace Sdl.Community.MTCloud.Provider
 			return null;
 		}
 
-		public static LanguageCloudIdentityApi GetLanguageCloudIdentityApi()
-		{
-			try
-			{
-				return (LanguageCloudIdentityApi)LanguageCloudIdentityApi.Instance;
-			}
-			catch
-			{
-				// ignore; catch all
-			}
+		//public static LanguageCloudIdentityApi GetLanguageCloudIdentityApi()
+		//{
+		//	try
+		//	{
+		//		return (LanguageCloudIdentityApi)LanguageCloudIdentityApi.Instance;
+		//	}
+		//	catch
+		//	{
+		//		// ignore; catch all
+		//	}
 
-			return null;
-		}
+		//	return null;
+		//}
 
 		public static EditorController GetEditorController()
 		{			

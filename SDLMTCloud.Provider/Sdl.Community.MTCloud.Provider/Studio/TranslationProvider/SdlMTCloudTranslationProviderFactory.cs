@@ -21,8 +21,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				return currentProjProvider;
 			}
 
-			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
-				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
+			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), MtCloudApplicationInitializer.Client);
 
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);

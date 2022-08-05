@@ -33,7 +33,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			try
 			{
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				var connectionService = new ConnectionService(owner, new VersionService(), StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
+				var connectionService = new ConnectionService(owner, new VersionService(), MtCloudApplicationInitializer.Client);
 
 				var credential = connectionService.GetCredential(credentialStore);
 				var connectionResult = connectionService.EnsureSignedIn(credential, true);

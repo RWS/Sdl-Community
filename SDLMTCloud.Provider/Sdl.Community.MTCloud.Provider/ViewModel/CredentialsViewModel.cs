@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Auth0Service;
+using Auth0Service.ViewModel;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -383,10 +386,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					StudioIsSignedIn = _connectionService.IsValidStudioCredential(out var message);
+					(StudioIsSignedIn, var message) = _connectionService.Connect(new Credential{Type = Authentication.AuthenticationType.Studio});
 					StudioSignedInAs = StudioIsSignedIn ? _connectionService.Credential?.Name : string.Empty;
-					SignInLabel = StudioIsSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
-					ExceptionMessage = message;
+					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
+					ExceptionMessage = message != "OK" ? message : "";
 				}
 				else
 				{
@@ -451,8 +454,19 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void Signin(object obj)
+		private void Signin(object parameter)
 		{
+			if (parameter.ToString() == "Sign out")
+			{
+				IsInProgress = true;
+				StudioSignOut();
+				IsInProgress = false;
+
+				StudioSignedInAs = null;
+				StudioIsSignedIn = false;
+				return;
+			}
+
 			if (!CanAttemptSignIn())
 			{
 				return;
@@ -477,12 +491,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 						{
 							Type = Authentication.AuthenticationType.Studio,
 							AccountRegion = SelectedWorkingPortal
-						});
+						}, parameter.ToString() != "Use");
 
 					IsSignedIn = result.Item1;
 					message = result.Item2;
 					StudioSignedInAs = _connectionService.Credential.Name;
-					SignInLabel = IsSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
+					SignInLabel = IsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
 				}
 				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
 				{
@@ -535,6 +549,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					_owner.Close();
 				}
 			}
+		}
+
+		private void StudioSignOut()
+		{
+			_connectionService.SignOut();
+			SignInLabel = PluginResources.Label_Sign_In;
 		}
 
 		private string GetLoginFailMessagePlatformRelated(string message)

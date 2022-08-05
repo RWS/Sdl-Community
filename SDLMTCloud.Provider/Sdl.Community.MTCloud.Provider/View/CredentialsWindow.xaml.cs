@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Auth0Service;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
 namespace Sdl.Community.MTCloud.Provider.View
@@ -12,7 +13,10 @@ namespace Sdl.Community.MTCloud.Provider.View
 		public CredentialsWindow()
 		{
 			InitializeComponent();
+			//AuthenticationControl = AuthControl;
 		}
+
+		public Auth0Control AuthenticationControl { get; set; }
 
 		private void UserPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
 		{
@@ -20,7 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 			{ ((CredentialsViewModel)DataContext).UserPassword = ((PasswordBox)sender).Password; }
 		}
 
-		private void ClientIdBox_PasswordChanged(object sender, RoutedEventArgs e)
+		private void ClientIdBox_PasswordChanged(object sender, RoutedEventArgs e) 
 		{
 			if (DataContext != null)
 			{ ((CredentialsViewModel)DataContext).ClientId = ((PasswordBox)sender).Password; }

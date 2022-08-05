@@ -1,0 +1,27 @@
+﻿<Window x:Class="Auth0Service.Auth0Control"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:viewModel="clr-namespace:Auth0Service.ViewModel"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Auth0Service" xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+			 d:DataContext="{d:DesignInstance viewModel:Auth0ControlViewModel}"
+             mc:Ignorable="d"
+             SizeToContent="WidthAndHeight"
+			 Closed="Window_Closed">
+    <Grid>
+		<Grid Margin="50" Height="Auto">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<wv2:WebView2 Name="webView" 
+			              Grid.Row="1"
+			              Height="450" 
+						  NavigationCompleted="WebView_NavigationCompleted"
+						  NavigationStarting="WebView_NavigationStarting"
+			              Width="485" 
+			              Source="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		</Grid>
+	</Grid>
+</Window>
