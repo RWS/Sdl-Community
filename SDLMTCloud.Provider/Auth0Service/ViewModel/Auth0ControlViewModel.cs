@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Auth0Service.Commands;
@@ -12,20 +10,34 @@ namespace Auth0Service.ViewModel
 {
 	public class Auth0ControlViewModel : ModelBase
 	{
-		private Uri _url;
-		private ICommand _onNavigationStartingCommand;
-		private Visibility _visibility = Visibility.Collapsed;
+		private CommandHandler _deleteAllCookiesCommand;
 		private CommandHandler _onNavigationCompletedCommand;
-		private bool _authenticationTerminated;
-		private CommandHandler _goBackCommand;
+		private ICommand _onNavigationStartingCommand;
+		private bool _showDialog;
+		private Uri _url;
+		private Visibility _visibility = Visibility.Collapsed;
 
 		public Auth0ControlViewModel(AuthorizationService authorizationService)
 		{
 			AuthorizationService = authorizationService;
 		}
 
+		public AuthenticationResult AuthenticationResult { get; set; }
 		public AuthorizationService AuthorizationService { get; }
+
+		public ICommand DeleteAllCookiesCommand
+		{
+			get => _deleteAllCookiesCommand;
+			set => _deleteAllCookiesCommand = (CommandHandler)value;
+		}
+
 		public bool IsLoggedIn => AuthorizationService.Credentials is not null;
+
+		public ICommand OnNavigationCompletedCommand =>
+			_onNavigationCompletedCommand ??= new CommandHandler(OnNavigationCompleted, true);
+
+		public ICommand OnNavigationStartingCommand =>
+			_onNavigationStartingCommand ??= new CommandHandler(OnNavigationStarting, true);
 
 		public Uri Url
 		{
@@ -37,20 +49,23 @@ namespace Auth0Service.ViewModel
 			}
 		}
 
-		public (AuthenticationResult, Credential) TryLogin(bool showDialog = false)
+		public Visibility Visibility
 		{
-			_authenticationTerminated = false;
-
-			if (showDialog) Visibility = Visibility.Visible;
-
-			AuthenticationResult = EnsureLoggedIn();
-
-			while (showDialog && !_authenticationTerminated)
+			get => _visibility;
+			set
 			{
-				Application.Current.DoEvents();
+				_visibility = value;
+				OnPropertyChanged();
 			}
+		}
 
-			return (AuthenticationResult, AuthorizationService.Credentials);
+		public AuthenticationResult EnsureLoggedIn()
+		{
+			var authenticationResult = AuthorizationService.AreCredentialsValid();
+			if (authenticationResult.IsSuccessful) return authenticationResult;
+
+			GoToLoginPage();
+			return authenticationResult;
 		}
 
 		public void Logout()
@@ -65,18 +80,36 @@ namespace Auth0Service.ViewModel
 			DeleteAllCookiesCommand?.Execute(null);
 		}
 
-		public AuthenticationResult AuthenticationResult { get; set; }
-
-		public ICommand OnNavigationStartingCommand =>
-			_onNavigationStartingCommand ??= new CommandHandler(OnNavigationStarting, true);
-		
-		public ICommand OnNavigationCompletedCommand =>
-			_onNavigationCompletedCommand ??= new CommandHandler(OnNavigationCompleted, true);
-
-		public ICommand DeleteAllCookiesCommand
+		public void OnNavigationStarting()
 		{
-			get => _goBackCommand;
-			set => _goBackCommand = (CommandHandler)value;
+			Visibility = Visibility.Collapsed;
+		}
+
+		public (AuthenticationResult, Credential) TryLogin(bool showDialog = false, Credential credentials = null)
+		{
+			_showDialog = showDialog;
+			if (credentials is not null) AuthorizationService.Credentials = credentials;
+
+			AuthenticationResult = EnsureLoggedIn();
+
+			while (showDialog && (!AuthenticationResult.IsSuccessful))
+			{
+				Application.Current.DoEvents();
+			}
+
+			return (AuthenticationResult, AuthorizationService.Credentials);
+		}
+
+		internal AuthenticationResult Login(string uriQuery)
+		{
+			var login = AuthorizationService.Login(uriQuery);
+			OnPropertyChanged(nameof(IsLoggedIn));
+			return login;
+		}
+
+		private void GoToLoginPage()
+		{
+			Url = new Uri(AuthorizationService.GenerateAuthorizationRequest());
 		}
 
 		private void OnNavigationCompleted()
@@ -91,52 +124,9 @@ namespace Auth0Service.ViewModel
 				if (!AuthenticationResult.IsSuccessful) return;
 
 				Visibility = Visibility.Collapsed;
-				_authenticationTerminated = true;
 			}
 
-			if (Url.LocalPath == "/login") Visibility = Visibility.Visible;
-		}
-
-		public void OnNavigationStarting()
-		{
-			Visibility = Visibility.Collapsed;
-		}
-
-		public Visibility Visibility
-		{
-			get => _visibility;
-			set
-			{
-				_visibility = value; 
-				OnPropertyChanged();
-			}
-		}
-
-		//public static Task<Auth0ControlViewModel> CreateAsync(AuthorizationService authorizationService)
-		//{
-		//	var ret = new Auth0ControlViewModel(authorizationService);
-		//	return ret.InitializeAsync();
-		//}
-
-		internal AuthenticationResult Login(string uriQuery)
-		{
-			var login = AuthorizationService.Login(uriQuery);
-			OnPropertyChanged(nameof(IsLoggedIn));
-			return login;
-		}
-
-		private void GoToLoginPage()
-		{
-			Url = new Uri(AuthorizationService.GenerateAuthorizationRequest());
-		}
-
-		public AuthenticationResult EnsureLoggedIn()
-		{
-			var authenticationResult = AuthorizationService.AreCredentialsValid();
-			if (authenticationResult.IsSuccessful) return authenticationResult;
-
-			GoToLoginPage();
-			return authenticationResult;
+			if (Url.LocalPath == "/login" && _showDialog) Visibility = Visibility.Visible;
 		}
 	}
 }

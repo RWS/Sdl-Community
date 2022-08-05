@@ -30,7 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			{
 				throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 			}
-			connectionService.SaveCredential(credentialStore);
+			connectionService.SaveCredential();
 
 			MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 

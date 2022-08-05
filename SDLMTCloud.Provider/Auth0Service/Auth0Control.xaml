@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              Visibility="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
              Height="Auto" Width="Auto">
-    <Grid>
+	<Grid>
 		<Grid Margin="50" Height="Auto">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
@@ -19,7 +19,7 @@
 			<local:CustomWebView x:Name="webView" 
 								 Grid.Row="1"
 								 Height="450" 
-								 DeleteAllCookiesCommand="{Binding DeleteAllCookiesCommand}"
+								 DeleteAllCookiesCommand="{Binding DeleteAllCookiesCommand, Mode=OneWayToSource}"
 								 Width="485" 
 								 Source="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 			</local:CustomWebView>

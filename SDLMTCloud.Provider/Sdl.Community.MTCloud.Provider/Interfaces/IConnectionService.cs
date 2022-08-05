@@ -24,7 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		ICredential GetCredential(string credentialString);
 
-		(bool, string) Connect(ICredential credential, bool showDialog = false);
+		(bool, string) Connect(ICredential credential = null, bool showDialog = false);
 
 		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
 
@@ -38,7 +38,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		void AddTraceHeaders(HttpRequestMessage request);
 
-		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
+		void SaveCredential(bool persist = true);
 
 		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
 		string CurrentWorkingPortalAddress { get; set; }

@@ -27,6 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private string _currentWorkingPortalAddress;
+		private ITranslationProviderCredentialStore _credentialStore;
 
 		public ConnectionService(IWin32Window owner, VersionService versionService, IHttpClient httpClient)
 		{
@@ -40,6 +41,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			PluginVersion = VersionService?.GetPluginVersion();
 			StudioVersion = VersionService?.GetStudioVersion();
+		}
+
+		private void ClearStudioCredentials()
+		{
+			Credential.Token = null;
+			Credential.RefreshToken = null;
+			Credential.ValidTo = default;
+			SaveCredential();
 		}
 
 		public virtual ICredential Credential { get; private set; }
@@ -69,21 +78,22 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			//request.Headers.Add("Trace-App-Meta-Info", "Optional data");
 		}
 
-		public (bool, string) Connect(ICredential credential, bool showDialog = false)
+		public (bool, string) Connect(ICredential credential = null, bool showDialog = false)
 		{
-			Credential = credential;
+			if (credential is not null) Credential = credential;
 
 			string message;
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
-				var signInResult = StudioSignIn(showDialog);
+				var (credentials, authMessage) = StudioSignIn(showDialog);
 
-				IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
-				Credential.Token = signInResult.Item1?.AccessToken;
+				IsSignedIn = !string.IsNullOrEmpty(credentials?.AccessToken);
+				Credential.Token = credentials?.AccessToken;
 				Credential.ValidTo = GetTokenValidTo();
-				Credential.Name = signInResult.Item1?.Email;
+				Credential.Name = credentials?.Email;
 				Credential.Password = null;
-				message = signInResult.Item2;
+				Credential.RefreshToken = credentials?.RefreshToken;
+				message = authMessage;
 
 				if (IsSignedIn)
 				{
@@ -156,7 +166,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public string CredentialToString()
 		{
-			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary() + "; AccountRegion=" + Credential.AccountRegion;
+			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary() + "; AccountRegion=" + Credential.AccountRegion + "; RefreshToken=" + Credential.RefreshToken;
 		}
 
 		public (bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
@@ -176,7 +186,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			credentialsWindow.DataContext = viewModel;
 
 			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(Credential.AccountRegion);
-			var result = Connect(Credential);
+			var result = Connect(credential);
 			if (result.Item1 && !alwaysShowWindow)
 			{
 				return result;
@@ -220,6 +230,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var user = string.Empty;
 			var password = string.Empty;
 			var token = string.Empty;
+			var refreshToken = string.Empty;
 			var accountId = string.Empty;
 			var validTo = DateTime.MinValue;
 			var accountRegion = WorkingPortal.UEPortal;
@@ -259,6 +270,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				if (string.Compare(itemName, "Token", StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					token = itemValue;
+				}
+				
+				if (string.Compare(itemName, "RefreshToken", StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					refreshToken = itemValue;
 				}
 
 				if (string.Compare(itemName, "AccountId", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -311,6 +327,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					Name = name,
 					Password = password,
 					Token = token,
+					RefreshToken = refreshToken,
 					AccountId = accountId,
 					ValidTo = validTo,
 					AccountRegion = accountRegion
@@ -329,6 +346,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public ICredential GetCredential(ITranslationProviderCredentialStore credentialStore)
 		{
+			_credentialStore = credentialStore;
 			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
 
 			ICredential credential = null;
@@ -389,13 +407,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return true;
 		}
 
-		public void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true)
+		public void SaveCredential(bool persist = true)
 		{
 			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
 
 			var credentials = new TranslationProviderCredential(CredentialToString(), persist);
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, credentials);
+			_credentialStore.RemoveCredential(uri);
+			_credentialStore.AddCredential(uri, credentials);
 		}
 
 		public virtual async Task<(AuthorizationResponse, string)> SignIn(string resource, string content)
@@ -415,11 +433,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public void SignOut()
 		{
 			Auth0ViewModel.Logout();
+			ClearStudioCredentials();
 		}
 
 		public (LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog = false)
 		{
-			var (authenticationMessage, credentials) = Auth0ViewModel.TryLogin(showDialog);
+			var auth0Credential = Credential is {Token: { }, RefreshToken: { }} ?
+				new Auth0Service.Model.Credential(Credential.Token, Credential.RefreshToken, Credential.Name) : null;
+		
+			var (authenticationMessage, credentials) = Auth0ViewModel.TryLogin(showDialog, auth0Credential);
 
 		   	if (authenticationMessage.IsSuccessful)
 		   	{
@@ -427,6 +449,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		   		{
 		   			AccessToken = credentials.Token,
 		   			Email = credentials.Email,
+					RefreshToken = credentials.RefreshToken
 		   		};
 
 		   		return (model, authenticationMessage.Message);
