@@ -8,7 +8,7 @@
 			 xmlns:resx="clr-namespace:Sdl.Community.TQA"
 			 mc:Ignorable="d"
 			 
-             d:DataContext="{d:DesignInstance viewModel:TQAReportingSettingsViewModel}" Loaded="UserControl_Loaded" d:DesignHeight="144.627">
+             d:DataContext="{d:DesignInstance viewModel:TQAReportingSettingsViewModel}"  d:DesignHeight="144.627">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -32,7 +32,7 @@
 	</UserControl.Resources>
 	<DockPanel Width="Auto" Dock="Top">
 		<!--Panel Reporting Folder-->
-		<StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" DockPanel.Dock="Top">
+		<StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" DockPanel.Dock="Top" Margin="10">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition/>
@@ -43,17 +43,14 @@
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
-				<Label Name="txtReportingFolder"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"
+				<!--<Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"
 				       Margin="10,0,0,0" VerticalContentAlignment="Center" 
 				       Content="{x:Static resx:PluginResources.TQAReportFolder}"/>
-				<TextBox Grid.Row="0" Margin="5,0,5,0" Grid.Column="1" 
+				<TextBox Grid.Row="0" Margin="3,0,5,0" Grid.Column="1" 
 							 Name="ReportOutputLocationTextBox"
 					         VerticalAlignment="Center"
 					         Width="Auto" MinWidth="310" Height="23"
-					         VerticalContentAlignment="Center"
-							 
-					        >
-					<!--Height="{Binding ActualHeight, ElementName=ComboBox}"-->
+					         VerticalContentAlignment="Center" >
 					<TextBox.Text >
 						<Binding Path="ReportOutputLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
 							<Binding.ValidationRules>
@@ -65,41 +62,26 @@
 				<Button Margin="0,5,10,5" Grid.Column="2"  Grid.Row="0"
 					        Command="{Binding SelectReportOutputFolder}"
 					        Style="{StaticResource Sdl.Button.GeneralStyle}"
-					        Content="Browse" HorizontalAlignment="Left"
-					        />
+					        Content="Browse" HorizontalAlignment="Left"/>-->
 
+
+				<Label Grid.Row="1" Grid.Column="0" Content="{x:Static resx:PluginResources.TQAQualityLevel}" 
+				       Margin="10,0,0,0"  HorizontalAlignment="Left"
+				       MinWidth="{Binding ActualWidth, ElementName=txtReportingFolder}"/>
+				<!--Width="{Binding ActualWidth, ElementName=txtReportingFolder}"-->
+
+				<ComboBox Grid.Row="1" Grid.Column="1" x:Name="TQAQualityLevelComboBox"
+				          Margin="3,0,0,0 " 
+				          HorizontalContentAlignment="Left"
+				          HorizontalAlignment="Left"
+				          Width="220" Height="{Binding ActualHeight, ElementName=ReportOutputLocationTextBox}"				  
+				          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+				          ItemsSource="{Binding TQAQualityItems}"
+				          SelectedItem="{Binding SelectedTQAQualityItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			</Grid>
 		</StackPanel>
-<!--Panel TQA Qualities and reset to default-->
-		<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left" DockPanel.Dock="Top">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<!--<RowDefinition Height="*" />-->
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					
-					<!--<ColumnDefinition Width="*"/>-->
 
-				</Grid.ColumnDefinitions>
-				<WrapPanel Grid.Row="0" Grid.Column="0" >
-					<Label Content="{x:Static resx:PluginResources.TQAQualityLevel}" 
-					       Margin="10,0,0,0"  HorizontalAlignment="Left"
-					       MinWidth="{Binding ActualWidth, ElementName=txtReportingFolder}"/>
-					<!--Width="{Binding ActualWidth, ElementName=txtReportingFolder}"-->
-
-					<ComboBox x:Name="TQAQualityLevelComboBox"
-					          Margin="3,0,0,0 " 
-					          HorizontalContentAlignment="Left"
-					          HorizontalAlignment="Left"
-					          Width="220" Height="{Binding ActualHeight, ElementName=ReportOutputLocationTextBox}"				  
-					          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-					          ItemsSource="{Binding TQAQualityItems}"
-					          SelectedItem="{Binding SelectedComboBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-				</WrapPanel>
-			</Grid>
-		</StackPanel>
+	
 		<StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
 	     	<Button HorizontalAlignment="Right" VerticalAlignment="Bottom" 
 			        Margin="5"

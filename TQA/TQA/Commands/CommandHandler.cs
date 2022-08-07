@@ -2,8 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-
-namespace Sdl.Community.TQA.Services
+namespace Sdl.Community.TQA.Commands
 {
 	public class CommandHandler : ICommand
     {

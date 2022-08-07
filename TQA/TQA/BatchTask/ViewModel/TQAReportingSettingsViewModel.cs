@@ -1,159 +1,141 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Forms;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-//using Microsoft.Win32;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.Community.TQA.BatchTask;
+using Sdl.Community.TQA.Commands;
 using Sdl.Community.TQA.Model;
-using Sdl.Community.TQA.Services;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.TQA.Providers;
+using Sdl.Core.Settings;
 
 
 namespace Sdl.Community.TQA.BatchTask.ViewModel
 {
 	public class TQAReportingSettingsViewModel : BaseModel, ISettingsAware<TQAReportingSettings>
 	{
-
 		private ICommand resetToDefault;
-		private string selectedComboBoxItem;
-		private ICommand selectReportingFolder;
-		private SaveFileDialog outputSaveDialog = new SaveFileDialog();
+		//private ICommand selectReportingFolder;
+		//private string _reportOutputLocation;
+		private string _selectedTqaQualityItem;
+		private ObservableCollection<string> _tqaQualityItems;
 
+		private readonly TQAProfileType _currentTqaProfileType;
+		private readonly ReportProvider _reportProvider;
+		private readonly QualitiesProvider _qualitiesProvider;
+		private readonly CategoriesProvider _categoriesProvider;
 
-
-		public TQAReportingSettingsViewModel()
+		public TQAReportingSettingsViewModel(ISettingsBundle projectSettings, TQAReportingSettings settings, ReportProvider reportProvider,
+			CategoriesProvider categoriesProvider, QualitiesProvider qualitiesProvider)
 		{
-			TQAQualityItems = new ObservableCollection<string>();
-			SetupSaveDialog();
+			Settings = settings;
+			_reportProvider = reportProvider;
+			_categoriesProvider = categoriesProvider;
+			_qualitiesProvider = qualitiesProvider;
 
-		}
+			var tqaCategories = categoriesProvider.GetAssessmentCategories(projectSettings);
+			var currentTqaProfileType = categoriesProvider.GetTQAProfileType(tqaCategories);
 
-		internal void SetupQualitiesItems()
-		{
-			if (ReportQualities == null)
+			var qualities = _qualitiesProvider.GetQualities(currentTqaProfileType);
+
+			TQAQualityItems = new ObservableCollection<string>(qualities);
+			if (TQAQualityItems.Count > 0)
 			{
-				var filesController = SdlTradosStudio.Application.GetController<FilesController>();
-				var currentProject= filesController?.CurrentProject;
-				var reportingTask = new TQAReportingTask(currentProject);
-				if (currentProject != null)
-				{
-					
-					ReportQualities = reportingTask.GetQualitiesForTQAStandard();
-					ReportQualities.ForEach(TQAQualityItems.Add);
-				}
-			}
-			else
-			{
-				foreach (var qualityName in ReportQualities)
-				{
-					if (!TQAQualityItems.Contains(qualityName))
-					   TQAQualityItems.Add(qualityName);
-				}
-				
+				SelectedTQAQualityItem = settings.TQAReportingQuality;
 			}
 		}
 
-		public ObservableCollection<string> TQAQualityItems { get; }
-
-		public string ReportOutputLocation
-		{
-			get => Settings.TQAReportOutputLocation;
-			set
-			{
-				if (Settings.TQAReportOutputLocation == value) return;
-				Settings.TQAReportOutputLocation = value;
-				OnPropertyChanged(nameof(ReportOutputLocation));
-			}
-		}
+		public TQAReportingSettings Settings { get; set; }
 
 		public string ReportQuality
 		{
 			get => Settings.TQAReportingQuality;
 			set
 			{
-				if (Settings.TQAReportingQuality == value) return;
+				if (Settings.TQAReportingQuality == value)
+				{
+					return;
+				}
 				Settings.TQAReportingQuality = value;
 				OnPropertyChanged(nameof(ReportQuality));
 			}
 		}
 
-		public List<string> ReportQualities
+		public ObservableCollection<string> TQAQualityItems
 		{
-			get => Settings.TQAReportingQualities;
+			get => _tqaQualityItems;
 			set
 			{
-				if (Settings.TQAReportingQualities == value) return;
-				Settings.TQAReportingQualities = value;
-				OnPropertyChanged(nameof(ReportQualities));
+				_tqaQualityItems = value;
+				OnPropertyChanged(nameof(TQAQualityItems));
 			}
 		}
 
 		public ICommand ResetToDefault => resetToDefault ?? (resetToDefault = new CommandHandler(ResetSettingsToDefault));
 
-		public string SelectedComboBoxItem
+		//public ICommand SelectReportOutputFolder => selectReportingFolder ?? (selectReportingFolder = new CommandHandler(SelectFolder));
+
+		//public string ReportOutputLocation
+		//{
+		//	get => _reportOutputLocation;
+		//	set
+		//	{
+		//		if (value == _reportOutputLocation)
+		//		{
+		//			return;
+		//		}
+
+		//		_reportOutputLocation = value;
+		//		OnPropertyChanged(nameof(ReportOutputLocation));
+		//	}
+		//}
+
+		public string SelectedTQAQualityItem
 		{
-			get => selectedComboBoxItem;
+			get => _selectedTqaQualityItem;
 			set
 			{
-				if (selectedComboBoxItem == value) return;
-				OnSelectedComboBoxValueChanged(value);
+				if (_selectedTqaQualityItem == value)
+				{
+					return;
+				}
 
-				selectedComboBoxItem = value;
-				OnPropertyChanged(nameof(SelectedComboBoxItem));
+				_selectedTqaQualityItem = value;
+				OnPropertyChanged(nameof(SelectedTQAQualityItem));
+
 				Settings.TQAReportingQuality = value;
 			}
 		}
 
-		public ICommand SelectReportOutputFolder =>
-			selectReportingFolder ?? (selectReportingFolder = new CommandHandler(SelectFolder));
-		private TQAReportingSettings _settings;
-		public TQAReportingSettings Settings
-		{
-			get => _settings;
-			set
-			{
-				if (string.IsNullOrWhiteSpace(value.TQAReportOutputLocation)) value.TQAReportOutputLocation =TQAReportingSettings.GetReportingOutputFolder();// Path.GetTempPath()
-				if (string.IsNullOrWhiteSpace(value.TQAReportingQuality)) value.TQAReportingQuality = TQAReportingSettings.TQAReportingDefaultQuality;
-
-				_settings = value;
-
-				SelectedComboBoxItem = value.TQAReportingQuality;
-			}
-		}
-
-
-		private void OnSelectedComboBoxValueChanged(string value)
-		{
-
-		}
-
-		private void SetupSaveDialog()
-		{
-			outputSaveDialog.InitialDirectory = TQAReportingSettings.GetReportingOutputFolder();
-			outputSaveDialog.Filter = @"Excel Macro - Enabled Workbook | *.xlsm";
-			outputSaveDialog.DefaultExt = TQStandardsFactory.reportingFileExtension;
-		}
-
-	
-
 		private void ResetSettingsToDefault(object obj)
 		{
-			SelectedComboBoxItem = "Premium";
-			var projectFolder= TQAReportingSettings.GetReportingOutputFolder();
-			ReportOutputLocation = projectFolder;
-			outputSaveDialog.InitialDirectory = projectFolder;
-			Settings.TQAReportOutputLocation = projectFolder;
-			Settings.TQAReportingQuality = SelectedComboBoxItem;
+			ResetToDefaults();
 		}
 
-		private void SelectFolder(object obj)
+		public TQAReportingSettings ResetToDefaults()
 		{
-			if (outputSaveDialog.ShowDialog() == DialogResult.OK)
-				ReportOutputLocation = outputSaveDialog.FileName;
+			Settings.ResetToDefaults();
+			Settings.TQAReportingQuality = SelectedTQAQualityItem;
 
+			return Settings;
 		}
+
+		public TQAReportingSettings SaveSettings()
+		{
+			Settings.TQAReportingQuality = SelectedTQAQualityItem;
+
+			return Settings;
+		}
+
+		//public void SelectFolder(object obj)
+		//{
+		//	var folderDialog = new FolderSelectDialog
+		//	{
+		//		Title = "Select the report folder",
+		//		InitialDirectory = ReportOutputLocation
+		//	};
+
+		//	if (folderDialog.ShowDialog())
+		//	{
+		//		ReportOutputLocation = folderDialog.FileName;
+		//	}
+		//}
 	}
 }

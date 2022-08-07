@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sdl.Community.TQA.Providers;
 
 namespace Sdl.Community.TQA.Model
 {
@@ -47,10 +48,10 @@ namespace Sdl.Community.TQA.Model
 			HighlightedText = highlightedText;
 		}
 
-		internal string[] GetArray(TQStandardType tqaStandardType)
-		{   if (tqaStandardType==TQStandardType.tqsMQM)
+		internal string[] GetArray(TQAProfileType tqaStandardType)
+		{   if (tqaStandardType==TQAProfileType.tqsMQM)
 			  return new[] { File, Segment, "", OriginalTranslation, "", Category, Subcategory, Severity, Comment };
-		    else if (tqaStandardType==TQStandardType.tqsJ2450)
+		    else if (tqaStandardType==TQAProfileType.tqsJ2450)
 			  return new[] { File, Segment, "", OriginalTranslation, "", Category, Severity, Comment };
 			throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
 		}

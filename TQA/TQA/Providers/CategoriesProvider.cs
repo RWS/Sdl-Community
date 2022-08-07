@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Sdl.Community.TQA.Model;
+using Sdl.Core.Settings;
 
-namespace Sdl.Community.TQA.Model
+namespace Sdl.Community.TQA.Providers
 {
-	internal static class TQSCategories
+	public class CategoriesProvider
 	{
-		internal static Dictionary<Guid, string> TQS_J2450_Categories => new Dictionary<Guid, string>
+		private Dictionary<Guid, string> TQS_J2450_Categories => new Dictionary<Guid, string>
 		{
-			{new Guid("c6be61c6-8796-4280-8c11-5f2450572e98"),"Wrong Term (WT)"}, //WT (is Abreviation)
+			{new Guid("c6be61c6-8796-4280-8c11-5f2450572e98"),"Wrong Term (WT)"}, //WT (is Abbreviation)
 			{new Guid("28fe5b65-c6c1-4a35-9ed5-8b63353ce654"),"Wrong Meaning (WM)"},//WM
 			{new Guid("19743cbc-ca35-49bf-8070-c79323081760"),"Omission (OM)"},//OM
 			{new Guid("6065ab78-cf2f-4eb0-8913-803492f5e01e"),"Structural Error (SE)"},//SE
@@ -23,7 +23,7 @@ namespace Sdl.Community.TQA.Model
 			{new Guid("9fe180e2-4e7d-4e78-acf2-fab0dfe64106"),"Formatting / non-linguistic"}//NS3-Unspecified 3
 		};
 
-		internal static Dictionary<Guid, string> TQS_MQM_Categories => new Dictionary<Guid, string>
+		private Dictionary<Guid, string> TQS_MQM_Categories => new Dictionary<Guid, string>
 		{
 			{new Guid("c6be61c6-8796-4280-8c11-5f2450572e98"),"Terminology"},
 			{new Guid("28fe5b65-c6c1-4a35-9ed5-8b63353ce654"),"Accuracy"},
@@ -35,7 +35,7 @@ namespace Sdl.Community.TQA.Model
 			{new Guid("b73f3f31-47f8-4079-8b67-1ac7a07440c6"),"Other"}
 		};
 
-		internal static Dictionary<Guid, Dictionary<Guid, string>> TQS_MQM_SubCategories =>
+		private Dictionary<Guid, Dictionary<Guid, string>> TQS_MQM_SubCategories =>
 		new Dictionary<Guid, Dictionary<Guid, string>>
 		{
 			//Terminology -c6be61c6-8796-4280-8c11-5f2450572e98
@@ -125,43 +125,84 @@ namespace Sdl.Community.TQA.Model
 				{new Guid("cd3e59d0-bf53-466d-98e6-d9a5ccdb4e55"),"Source text data"},
 				{new Guid("5ec74d77-1fd2-4b22-acdd-e6e06135daff"),"Other"}
 			  }
-			 },
+			 }
 		};
 
-		internal static TQStandardType GetStandardBasedOnCategories(List<Guid> categoriesIds)
+		public TQAProfileType GetTQAProfileType(List<Guid> categoriesIds)
 		{
-			if (categoriesIds.All(catId => TQS_J2450_Categories.ContainsKey(catId)) && TQS_J2450_Categories.Keys.All(catKey => categoriesIds.Contains(catKey)))
-				return TQStandardType.tqsJ2450;
-			else if (categoriesIds.All(catId => TQS_MQM_Categories.ContainsKey(catId)) && TQS_MQM_Categories.Keys.All(catKey => categoriesIds.Contains(catKey)))
-				return TQStandardType.tqsMQM;
-			else
-				throw new ArgumentException(string.Format(PluginResources.UnknownCategoriesInReportTemplate, string.Join(",", categoriesIds)));
+			if (categoriesIds.All(catId => TQS_J2450_Categories.ContainsKey(catId)) &&
+				TQS_J2450_Categories.Keys.All(catKey => categoriesIds.Contains(catKey)))
+			{
+				return TQAProfileType.tqsJ2450;
+			}
+
+			if (categoriesIds.All(catId => TQS_MQM_Categories.ContainsKey(catId)) &&
+				TQS_MQM_Categories.Keys.All(catKey => categoriesIds.Contains(catKey)))
+			{
+				return TQAProfileType.tqsMQM;
+			}
+
+			throw new ArgumentException(string.Format(PluginResources.UnknownCategoriesInReportTemplate, string.Join(",", categoriesIds)));
 		}
 
-		internal static TQStandardType GetStandardBasedOnCategories(AssessmentCategories tqaProjectCategories)
+		public TQAProfileType GetTQAProfileType(ISettingsBundle settingsBundle)
 		{
+			return GetTQAProfileType(GetAssessmentCategories(settingsBundle));
+		}
+
+		public TQAProfileType GetTQAProfileType(AssessmentCategories tqaProjectCategories)
+		{
+			if (tqaProjectCategories == null)
+			{
+				return TQAProfileType.tqsEmpty;
+			}
+
 			var tqaCategNames = tqaProjectCategories.Select(category => category.Name).ToList();
 
 			if (!tqaCategNames.Any())
-				return TQStandardType.tqsEmpty;
-			else if (AllTQACategoriesAreCompatible(TQS_J2450_Categories, tqaCategNames))
-				return TQStandardType.tqsJ2450;
-			else if (AllMQMCategoriesAndSubcategoriesAreCompatible(tqaProjectCategories, tqaCategNames))
-				return TQStandardType.tqsMQM;
-			else
-				return TQStandardType.tqsOther;
+			{
+				return TQAProfileType.tqsEmpty;
+			}
+
+			if (AllTQACategoriesAreCompatible(TQS_J2450_Categories, tqaCategNames))
+			{
+				return TQAProfileType.tqsJ2450;
+			}
+
+			if (AllMQMCategoriesAndSubcategoriesAreCompatible(tqaProjectCategories, tqaCategNames))
+			{
+				return TQAProfileType.tqsMQM;
+			}
+
+			return TQAProfileType.tqsOther;
 		}
 
-		private static bool AllMQMCategoriesAndSubcategoriesAreCompatible(AssessmentCategories tqaProjectCategories, List<string> categoriesNames)
+		public AssessmentCategories GetAssessmentCategories(ISettingsBundle settingsBundle)
+		{
+			var settingsGroup = settingsBundle.GetSettingsGroup("TranslationQualityAssessmentSettings");
+			if (settingsGroup.ContainsSetting("AssessmentCategories"))
+			{
+				return settingsGroup.GetSetting<AssessmentCategories>("AssessmentCategories");
+			}
+
+			return null;
+		}
+
+		private bool AllMQMCategoriesAndSubcategoriesAreCompatible(AssessmentCategories tqaProjectCategories, List<string> categoriesNames)
 		{
 			//checks if the categories from the current TQA profile are the same (perfect match) with TQS_MQM_Categories-fixed/hardcoded MQM TQAStandard. 
-			if (!AllTQACategoriesAreCompatible(TQS_MQM_Categories, categoriesNames)) return false;
+			if (!AllTQACategoriesAreCompatible(TQS_MQM_Categories, categoriesNames))
+			{
+				return false;
+			}
 
 			//for each MQM Profile category checks  if their subcategories are matching the TQS_MQMCategory Standard
 			foreach (var category in tqaProjectCategories)//Categories from MQM imported profile
 			{
 				if (!AllSubcategoriesOfTQSProfileArePresentInTQS_MQMCategory(category.Id, category.SubCategories))
+				{
 					return false;
+				}
 			}
 
 			//checks if the categories and their subcategories from TQS_MQM_Categories(fixed MQM TQAStandard) are compatible with the categories and subcategories from the current TQA profile.
@@ -170,17 +211,20 @@ namespace Sdl.Community.TQA.Model
 			{
 				var mqmProfileSubcategories = tqaProjectCategories.Where(categ => categ.Id == categoryId).First().SubCategories;
 				if (!AllTQA_MQMSubcategoryArePresentInTQSProfile(categoryId, mqmProfileSubcategories))
+				{
 					return false;
+				}
 			}
+
 			return true;
 		}
 
-		private static bool AllTQACategoriesAreCompatible(Dictionary<Guid, string> TQSCategories, List<string> taProfileCategoriesNames)
+		private bool AllTQACategoriesAreCompatible(Dictionary<Guid, string> TQSCategories, List<string> taProfileCategoriesNames)
 		{   //cross checks for categories full match between TQA Project Imported Profile vs TQA Standard profile (J2450 or MQM)
 			return taProfileCategoriesNames.All(catName => TQSCategories.ContainsValue(catName))
 				&& TQSCategories.Values.All(cat => taProfileCategoriesNames.Contains(cat));
 		}
-		internal static bool AllSubcategoriesOfTQSProfileArePresentInTQS_MQMCategory(Guid mqmProfileCategoryId, SubCategories mqmProfileSubcategories)
+		private bool AllSubcategoriesOfTQSProfileArePresentInTQS_MQMCategory(Guid mqmProfileCategoryId, SubCategories mqmProfileSubcategories)
 		{
 			//get all subcategories names from the current TQS_MQM_Category
 			var subcategsNamesInMQMStandardCategory = GetMQMStandardSubcategoriesNamesFor(mqmProfileCategoryId);
@@ -188,28 +232,19 @@ namespace Sdl.Community.TQA.Model
 			return mqmProfileSubcategories.Select(item => item.Name).ToList().All(subcat => subcategsNamesInMQMStandardCategory.Contains(subcat));
 		}
 
-		internal static bool AllTQA_MQMSubcategoryArePresentInTQSProfile(Guid tqs_MQMCategoryId, SubCategories mqmProfileSubcategories)
+		private bool AllTQA_MQMSubcategoryArePresentInTQSProfile(Guid tqs_MQMCategoryId, SubCategories mqmProfileSubcategories)
 		{   //get all subcategories names from the current TQS_MQM_Category
 			var subcategsNamesInMQMStandardCategory = GetMQMStandardSubcategoriesNamesFor(tqs_MQMCategoryId);
 			return subcategsNamesInMQMStandardCategory.All(subcat => mqmProfileSubcategories.Select(item => item.Name).ToList().Contains(subcat));
 		}
-		private static List<string> GetMQMStandardSubcategoriesNamesFor(Guid tqs_MQMCategoryId)
+
+		private List<string> GetMQMStandardSubcategoriesNamesFor(Guid tqs_MQMCategoryId)
 		{
 			//get all subcategories of TQS_MQM_Category from TQA MQM Standard (Standard means the subcategories that are in MQM-Standard Profile)
 			var subcategsInMQMStandardCategory = TQS_MQM_SubCategories.Where(subcateglist => subcateglist.Key == tqs_MQMCategoryId).Select(subcategs => subcategs.Value).First();
 			//return all subcategories names from TQA MQM Standard values of category specified by tqs_MQMCategoryId
 			return subcategsInMQMStandardCategory.Values.ToList();
 		}
-
-		//old code - subcategories cross cheks in one compact method, works fine, but it's too complicated - too hard to be follow.
-		//private static bool AllMQMCategoriesAndSubcategoriesAreCompatible(AssessmentCategories categories, List<string> categoriesNames)
-		//{
-		//	return categoriesNames.All(catName => TQS_MQM_Categories.ContainsValue(catName))&& (TQS_MQM_Categories.Values.All(cat => categoriesNames.Contains(cat)
-		//			&& AllSubcategoriesArePresentInCategory((from item in TQS_MQM_Categories where item.Value == cat select item.Key).First(),
-		//			(from item in categories where item.Name == cat select item.SubCategories).First())
-		//			&& AllSubcategoriesArePresentInCategory((from item in categories where item.Name == cat select item.Id).First(),
-		//			from item in TQS_MQM_SubCategories where item.Key == (from itm in categories where itm.Name == cat select itm.Id).First() select itm.SubCategories;
-		//}
 	}
 
 }

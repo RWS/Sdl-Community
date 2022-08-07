@@ -1,54 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using Sdl.Core.Settings;
-using System.IO;
-using Sdl.Core.Settings.Implementation.Json;
-using Sdl.Core.Settings.Implementation.Xml;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+﻿using Sdl.Core.Settings;
 
 
 namespace Sdl.Community.TQA.BatchTask
 {
 	public class TQAReportingSettings : SettingsGroup
 	{
-		private const string TQAReportingReportFolder = "TQAReports";
-		internal const string TQAReportingDefaultQuality = "Premium";
-		internal string TQAReportOutputLocation
+		private const string TQAReportingQualityId = "TQAReportingQuality";
+		private const string TQAReportingDefaultQuality = "Premium";
+
+
+		public string TQAReportingQuality
 		{
-			get => GetSetting<string>(nameof(TQAReportOutputLocation));
-			set => GetSetting<string>(nameof(TQAReportOutputLocation)).Value = value;
+			get => GetSetting<string>(TQAReportingQualityId, (string)GetDefaultValue(TQAReportingQualityId));
+			set => GetSetting<string>(TQAReportingQualityId, (string)GetDefaultValue(TQAReportingQualityId)).Value = value;
 		}
 
-		internal string TQAReportingQuality
+		public TQAReportingSettings ResetToDefaults()
 		{
-			get => GetSetting<string>(nameof(TQAReportingQuality));
-			set => GetSetting<string>(nameof(TQAReportingQuality)).Value = value;
+			TQAReportingQuality = (string)GetDefaultValue(TQAReportingQualityId);
+			return this;
 		}
 
-		internal List<string> TQAReportingQualities
+		protected override object GetDefaultValue(string settingId)
 		{
-
-			get
+			switch (settingId)
 			{
-				var qualities = GetSetting<List<string>>(nameof(TQAReportingQualities)) ?? new List<string>();
-				return qualities;
-			} 
-			set
-			{
-				var qualities = GetSetting<List<string>>(nameof(TQAReportingQualities));
-				if (qualities != null)
-					qualities.Value = value;
-			
+				case TQAReportingQualityId: return TQAReportingDefaultQuality;
 			}
-			
-		}
 
-		internal static string GetReportingOutputFolder()
-		{
-			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
-			var projectFolder = filesController != null ? Path.GetDirectoryName(filesController.CurrentProject.FilePath) : Path.GetTempPath();
-			return Path.Combine(projectFolder ?? Path.GetTempPath(), TQAReportingReportFolder);
+			return base.GetDefaultValue(settingId);
 		}
-
 	}
 }

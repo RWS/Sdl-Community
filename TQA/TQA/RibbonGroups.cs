@@ -1,26 +1,25 @@
 ﻿using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.TQA
 {
-	[RibbonGroup("TqaRibbonGroup", Name = "TQA Reporting", ContextByType = typeof(ProjectsController))]
+	[RibbonGroup("TQAReporting_RibbonGroup_ProjectsView", Name = "RibbonGroup_Name", ContextByType = typeof(ProjectsController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class TqaRibbonGroup : AbstractRibbonGroup
+	public class TQAReportingRibbonGroupProjectsView : AbstractRibbonGroup
 	{
 	}
 
-	[RibbonGroup("TqaRibbonGroupReview", Name = "TQA Reporting", ContextByType = typeof(FilesController))]
+	[RibbonGroup("TQAReporting_RibbonGroup_FilesView", Name = "RibbonGroup_Name", ContextByType = typeof(FilesController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class TqaRibbonGroupFiles : AbstractRibbonGroup
+	public class TQAReportingRibbonGroupFilesView : AbstractRibbonGroup
 	{
 	}
 
-	[RibbonGroup("TqaRibbonGroupReview", Name = "TQA Reporting", ContextByType = typeof(EditorController))]
+	[RibbonGroup("TQAReporting_RibbonGroup_EditorView", Name = "RibbonGroup_Name", ContextByType = typeof(EditorController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorReviewRibbonTabLocation))]
-	public class TqaRibbonGroupReview : AbstractRibbonGroup
+	public class TQAReportingRibbonGroupEditorView : AbstractRibbonGroup
 	{
 	}
 }
