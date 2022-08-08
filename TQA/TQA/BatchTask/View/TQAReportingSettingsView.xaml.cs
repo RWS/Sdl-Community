@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.Community.TQA.BatchTask.ViewModel;
 
 namespace Sdl.Community.TQA.BatchTask.View
 {

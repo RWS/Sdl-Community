@@ -31,7 +31,6 @@ namespace Sdl.Community.TQA.Providers
 		const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.XLSM";
 		const string DefaultReportRelativePath = "Reports\\TQAReports";
 		const string reportingFileExtension = ".xlsm";
-		const string excelFormatFile = "xlsm";
 
 		private static readonly string ProtectionPassword = "Thames";
 		private readonly string _reportRelativePath;

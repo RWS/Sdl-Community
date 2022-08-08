@@ -44,8 +44,7 @@
       <HintPath>3rd party signed\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="NLog">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -62,7 +61,7 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Controls, Version=17.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Desktop.Platform.Controls">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">

@@ -184,14 +184,21 @@ namespace Sdl.Community.TQA
 		private void Execute()
 		{
 			var projectFileIds = GetProjectFiles().Select(a => a.Id).ToArray();
-			if (projectFileIds.Any())
+			if (!projectFileIds.Any())
+			{
+				MessageBox.Show(PluginResources.ProgressMessage_NoProjectFilesFound, PluginResources.MsgAborted,
+					MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+			}
+			else
 			{
 				var localProjectFolder = _currentProject.GetProjectInfo().LocalProjectFolder;
 				var defaultReportsDirectory = _reportProvider.GetReportDirectory(localProjectFolder);
 				var defaultReportFileName = _reportProvider.GetReportDefaultOutputFilename(_tqaProfileType);
 				var languageId = GetLanguageId();
 
-				var reportFilePath = _reportProvider.GetDefaultReportFileFullPath(defaultReportsDirectory, defaultReportFileName, languageId);
+				var reportFilePath =
+					_reportProvider.GetDefaultReportFileFullPath(defaultReportsDirectory, defaultReportFileName,
+						languageId);
 
 				outputSaveDialog.FileName = Path.GetFileName(reportFilePath);
 				outputSaveDialog.InitialDirectory = defaultReportsDirectory;
@@ -203,23 +210,24 @@ namespace Sdl.Community.TQA
 					_qualitiesProvider.UpdateQualityValue(_currentProject,
 						QualityCombo.SelectedItem.ToString());
 
-					var tqaAutomaticTask = _currentProject.RunAutomaticTask(projectFileIds, Constants.AutomatedTasks_Feedback_Id);
+					var tqaAutomaticTask =
+						_currentProject.RunAutomaticTask(projectFileIds, Constants.AutomatedTasks_Feedback_Id);
 					if (tqaAutomaticTask == null || tqaAutomaticTask.Status != TaskStatus.Completed)
 					{
-						_logger.Error($"{tqaAutomaticTask?.Messages?.FirstOrDefault()?.Message}\n " + PluginResources.MsgTQATaskNotRunCorrectly);
+						_logger.Error($"{tqaAutomaticTask?.Messages?.FirstOrDefault()?.Message}\n " +
+						              PluginResources.MsgTQATaskNotRunCorrectly);
 					}
 
-					var success = _reportProvider.GenerateReport(_currentProject, tqaAutomaticTask, _tqaProfileType, updatedReportFilePath, QualityCombo.SelectedItem.ToString());
+					var success = _reportProvider.GenerateReport(_currentProject, tqaAutomaticTask, _tqaProfileType,
+						updatedReportFilePath, QualityCombo.SelectedItem.ToString());
 					if (success)
 					{
-						MessageBox.Show(string.Format(PluginResources.MsgTQAProcessCompleted, string.Join("\n", updatedReportFilePath)), PluginResources.ReportGenerationFinished, MessageBoxButtons.OK, MessageBoxIcon.Information);
+						MessageBox.Show(
+							string.Format(PluginResources.MsgTQAProcessCompleted,
+								string.Join("\n", updatedReportFilePath)), PluginResources.ReportGenerationFinished,
+							MessageBoxButtons.OK, MessageBoxIcon.Information);
 					}
 				}
-			}
-			else
-			{
-				MessageBox.Show(PluginResources.ProgressMessage_NoProjectFilesFound, PluginResources.MsgAborted,
-					MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 			}
 		}
 
