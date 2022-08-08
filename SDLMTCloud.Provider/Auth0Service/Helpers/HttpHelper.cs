@@ -2,13 +2,24 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace Auth0Service.Helpers
 {
-	public static class HttpHelper
+	public class HttpHelper : IDisposable
 	{
-		public static HttpResponseMessage Send(HttpMethod method, Uri uri, Dictionary<string, string> parameters = null, string token = null)
+		private HttpClient _httpClient;
+
+		public HttpHelper()
+		{
+			_httpClient = new HttpClient();
+		}
+
+		public void Dispose()
+		{
+			_httpClient?.Dispose();
+		}
+
+		public HttpResponseMessage Send(HttpMethod method, Uri uri, Dictionary<string, string> parameters = null, string token = null)
 		{
 			using var httpRequest = new HttpRequestMessage
 			{
@@ -18,12 +29,12 @@ namespace Auth0Service.Helpers
 
 			if (parameters is not null) httpRequest.Content = new FormUrlEncodedContent(parameters);
 
-			using var httpClient = new HttpClient();
+			_httpClient = new HttpClient();
 
 			if (token is not null)
-				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-			return httpClient.SendAsync(httpRequest).Result;
+			return _httpClient.SendAsync(httpRequest).Result;
 		}
 	}
 }

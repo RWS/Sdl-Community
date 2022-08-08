@@ -11,14 +11,16 @@ using UserControl = System.Windows.Controls.UserControl;
 
 namespace Auth0Service
 {
-	public partial class Auth0Control : UserControl
+	public partial class Auth0Control : UserControl, IDisposable
 	{
+		private HttpHelper _httpHelper;
 		private string _webView2UserDataFolder;
 
 		public Auth0Control()
 		{
 			InitializeComponent();
 			DataContextChanged += webView.Initialize;
+			_httpHelper = new HttpHelper();
 
 			SetViewModel();
 			WebViewInitialization = InitializeAsync();
@@ -27,6 +29,11 @@ namespace Auth0Service
 		public Auth0ControlViewModel Auth0Service { get; set; }
 
 		public Task WebViewInitialization { get; set; }
+
+		public void Dispose()
+		{
+			_httpHelper?.Dispose();
+		}
 
 		public async Task InitializeAsync()
 		{
