@@ -6,6 +6,7 @@
 	<Author>Trados AppStore Team</Author>
 	<Include>
 		<File>Auth0Service.dll</File>
+		<File>Auth0Service.dll.config</File>
 		<File>Trados.Community.Toolkit.Core.dll</File>
 		<File>Microsoft.Office.Interop.Excel.dll</File>
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>

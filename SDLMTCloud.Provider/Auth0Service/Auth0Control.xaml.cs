@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Auth0Service.Helpers;
@@ -47,6 +49,24 @@ namespace Auth0Service
 			webView.IsVisibleChanged += CustomWebView_IsVisibleChanged;
 		}
 
+		public void SetViewModel()
+		{
+			var path = Assembly.GetExecutingAssembly().Location;
+			var config = ConfigurationManager.OpenExeConfiguration(path);
+
+			var authorizationSettings = new AuthorizationSettings
+				(
+					config.AppSettings.Settings["ClientId"].Value,
+					config.AppSettings.Settings["Audience"].Value,
+					config.AppSettings.Settings["Auth0Url"].Value
+				);
+
+			var authService = new AuthorizationService(new LoginGeneratorsHelper(), authorizationSettings, _httpHelper);
+			Auth0Service = new Auth0ControlViewModel(authService);
+
+			DataContext = Auth0Service;
+		}
+
 		private void CustomWebView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			if ((bool)e.NewValue && IsInitialized) RemoveScrolls();
@@ -56,20 +76,6 @@ namespace Auth0Service
 		{
 			var script = "document.body.style.overflow ='hidden'";
 			await webView.ExecuteScriptAsync(script);
-		}
-
-		private void SetViewModel()
-		{
-			var authorizationSettings = new AuthorizationSettings
-			(
-				"F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff",
-				"https://api.sdl.com",
-				"https://sdl-prod.eu.auth0.com"
-			);
-			var authService = new AuthorizationService(new LoginGeneratorsHelper(), authorizationSettings);
-			Auth0Service = new Auth0ControlViewModel(authService);
-
-			DataContext = Auth0Service;
 		}
 	}
 }
