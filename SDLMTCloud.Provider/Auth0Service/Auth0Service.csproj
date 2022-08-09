@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+		<TradosFolder>$(Trados16)</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -12,18 +12,21 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>C:\Code\RWS Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(TradosFolder)\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core">
-      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.WinForms">
-      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Winforms.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Winforms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf">
-      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.WPF.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>

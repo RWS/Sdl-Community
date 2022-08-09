@@ -59,8 +59,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			SignInCommand = new CommandHandler(Signin);
 			NavigateToCommand = new CommandHandler(NavigateTo);
 
-
-
 			AuthenticationOptions = new List<Authentication>
 			{
 				new Authentication
@@ -83,7 +81,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 			};
 
-
 			var authentication = AuthenticationOptions.First(a => a.Type == connectionService.Credential.Type);
 
 			if (connectionService.Credential.Type == Authentication.AuthenticationType.User)
@@ -99,7 +96,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 			SelectedAuthentication = authentication;
 			SelectedWorkingPortal = connectionService.Credential.AccountRegion;
-
 		}
 
 		public ICommand SignInCommand { get; }
@@ -296,6 +292,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public Dictionary<WorkingPortal, string> WeaverWorkingPlatformsUriLogin;
 		private string _clickingHere;
+		private Auth0ControlViewModel _auth0ViewModel;
 
 		public string ClickingHere
 		{
@@ -399,6 +396,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					SignInLabel = PluginResources.Label_Sign_In;
 				}
+			}
+		}
+
+		public Auth0ControlViewModel Auth0ViewModel
+		{
+			get => _auth0ViewModel;
+			set
+			{
+				_auth0ViewModel = value; 
+				OnPropertyChanged();
 			}
 		}
 
