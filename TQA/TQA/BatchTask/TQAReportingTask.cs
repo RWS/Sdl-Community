@@ -58,7 +58,7 @@ namespace Sdl.Community.TQA.BatchTask
 		{
 			if (!IsValidProfileType())
 			{
-				throw new Exception(string.Format(PluginResources.Message_Invalid, _reportProvider.GetCurrentTQAtandardDescription(_tqaProfileType)));
+				throw new Exception(string.Format(PluginResources.Message_Invalid, _reportProvider.GetProfileTypeName(_tqaProfileType)));
 			}
 
 			Execute(_projectFiles);

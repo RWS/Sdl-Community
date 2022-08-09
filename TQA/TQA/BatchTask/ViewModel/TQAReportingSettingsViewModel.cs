@@ -14,10 +14,12 @@ namespace Sdl.Community.TQA.BatchTask.ViewModel
 		private ICommand resetToDefault;
 		//private ICommand selectReportingFolder;
 		//private string _reportOutputLocation;
+
+		private string _tqaProfileName;
+		
 		private string _selectedTqaQualityItem;
 		private ObservableCollection<string> _tqaQualityItems;
 
-		private readonly TQAProfileType _currentTqaProfileType;
 		private readonly ReportProvider _reportProvider;
 		private readonly QualitiesProvider _qualitiesProvider;
 		private readonly CategoriesProvider _categoriesProvider;
@@ -31,15 +33,17 @@ namespace Sdl.Community.TQA.BatchTask.ViewModel
 			_qualitiesProvider = qualitiesProvider;
 
 			var tqaCategories = categoriesProvider.GetAssessmentCategories(projectSettings);
-			var currentTqaProfileType = categoriesProvider.GetTQAProfileType(tqaCategories);
+			var tqaProfileType = categoriesProvider.GetTQAProfileType(tqaCategories);
 
-			var qualities = _qualitiesProvider.GetQualities(currentTqaProfileType);
+			var qualities = _qualitiesProvider.GetQualities(tqaProfileType);
 
 			TQAQualityItems = new ObservableCollection<string>(qualities);
 			if (TQAQualityItems.Count > 0)
 			{
 				SelectedTQAQualityItem = settings.TQAReportingQuality;
 			}
+
+			TQAProfileName = _reportProvider.GetProfileTypeName(tqaProfileType);
 		}
 
 		public TQAReportingSettings Settings { get; set; }
@@ -86,6 +90,21 @@ namespace Sdl.Community.TQA.BatchTask.ViewModel
 		//		OnPropertyChanged(nameof(ReportOutputLocation));
 		//	}
 		//}
+
+		public string TQAProfileName
+		{
+			get => _tqaProfileName;
+			set
+			{
+				if (value == _tqaProfileName)
+				{
+					return;
+				}
+
+				_tqaProfileName = value;
+				OnPropertyChanged(nameof(TQAProfileName));
+			}
+		}
 
 		public string SelectedTQAQualityItem
 		{

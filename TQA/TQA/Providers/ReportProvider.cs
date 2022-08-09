@@ -85,7 +85,7 @@ namespace Sdl.Community.TQA.Providers
 			var index = 1;
 			while (File.Exists(reportFilePath))
 			{
-				reportFileName = string.Concat(defaultReportFileName, "_", languageId, " (" + index + ") " + reportingFileExtension);
+				reportFileName = string.Concat(defaultReportFileName, "_", languageId, " (" + index + ")" + reportingFileExtension);
 				reportFilePath = Path.Combine(reportsDirectory, reportFileName);
 				index++;
 			}
@@ -93,18 +93,18 @@ namespace Sdl.Community.TQA.Providers
 			return reportFilePath;
 		}
 
-		public string GetCurrentTQAtandardDescription(TQAProfileType tqaStandardType)
+		public string GetProfileTypeName(TQAProfileType tqaStandardType)
 		{
 			switch (tqaStandardType)
 			{
 				case TQAProfileType.tqsEmpty:
-					return PluginResources.Label_TQAProfile + " " + PluginResources.Label_Empty;
+					return PluginResources.Label_Empty;
 				case TQAProfileType.tqsJ2450:
-					return PluginResources.Label_TQAProfile + " " + PluginResources.Label_J2450Standard;
+					return PluginResources.Label_J2450Standard;
 				case TQAProfileType.tqsMQM:
-					return PluginResources.Label_TQAProfile + " " + PluginResources.Label_MQMStandard;
+					return PluginResources.Label_MQMStandard;
 				case TQAProfileType.tqsOther:
-					return PluginResources.Label_TQAProfile + " " + PluginResources.Label_NotCompatible;
+					return PluginResources.Label_NotCompatible;
 				default:
 					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
 			}
@@ -252,16 +252,19 @@ namespace Sdl.Community.TQA.Providers
 										if (revisedTranslation.Elements().Contains(rTrans))
 										{
 											revisedTranslationText.Add(
-												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Deleted));}
+												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Deleted));
+										}
 										else
 										{
 											revisedTranslationText.Add(
-												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Regular));}
+												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Regular));
+										}
 										break;
 									case "FeedbackComment":
-									{
-										revisedTranslationText.Add(
-											new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Comment));}
+										{
+											revisedTranslationText.Add(
+												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Comment));
+										}
 										break;
 								}
 							}
@@ -409,7 +412,7 @@ namespace Sdl.Community.TQA.Providers
 		{
 			var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
 			ChangeStyleForEvaluationReport(wsFinalResult);
-			
+
 			if (!wsFinalResult.IsProtected)
 			{
 				wsFinalResult.Protect(ProtectionPassword);

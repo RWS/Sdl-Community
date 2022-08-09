@@ -123,19 +123,17 @@ namespace Sdl.Community.TQA
 
 		private void SetupTqaStandardProfile()
 		{
-			txtStandardUsed.Text = GetCurrentTQStandardDescription();
-			StartButton.Enabled = CurrentStandardTypeIsSetAndSupported();
+			txtStandardUsed.Text = PluginResources.Label_TQAProfile + " " + _reportProvider.GetProfileTypeName(_tqaProfileType);
+			StartButton.Enabled = IsValid();
 			SetupQualityCombobox();
 		}
 
-		private string GetCurrentTQStandardDescription()
+		private bool IsValid()
 		{
-			return _reportProvider.GetCurrentTQAtandardDescription(_tqaProfileType);
-		}
+			var IsValidProfileType = _tqaProfileType == TQAProfileType.tqsJ2450 || _tqaProfileType == TQAProfileType.tqsMQM;
+			var IsValidFiles = GetProjectFiles().Any();
 
-		private bool CurrentStandardTypeIsSetAndSupported()
-		{
-			return _tqaProfileType == TQAProfileType.tqsJ2450 || _tqaProfileType == TQAProfileType.tqsMQM;
+			return IsValidProfileType && IsValidFiles;
 		}
 
 		private string GetLanguageId()

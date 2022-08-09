@@ -199,7 +199,7 @@ namespace Sdl.Community.TQA {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid {0}.
+        ///   Looks up a localized string similar to Invalid TQA Profile: {0}.
         /// </summary>
         public static string Message_Invalid {
             get {

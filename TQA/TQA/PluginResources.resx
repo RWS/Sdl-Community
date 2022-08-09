@@ -242,6 +242,6 @@
 	  <value>Not compatible</value>
   </data>
   <data name="Message_Invalid" xml:space="preserve">
-	  <value>Invalid {0}</value>
+	  <value>Invalid TQA Profile: {0}</value>
   </data>
 </root>
