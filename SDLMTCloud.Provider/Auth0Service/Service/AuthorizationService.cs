@@ -9,7 +9,7 @@ using Auth0Service.Model;
 
 namespace Auth0Service.Service
 {
-	public class AuthorizationService : IDisposable
+	public class AuthorizationService
 	{
 		private const string GetTokenEndpoint = "/oauth/token";
 		private const string RevokeTokenEndpoint = "/oauth/revoke";
@@ -18,16 +18,13 @@ namespace Auth0Service.Service
 		private readonly string _authorizationUrl = "/authorize";
 		private readonly string _codeChallenge;
 		private readonly string _codeChallengeMethod = "S256";
-		private readonly CredentialRepository _credentialRepository;
 		private readonly AuthorizationSettings _authorizationSettings;
 		private readonly string _redirectUrl = "https://www.rws.com";
 		private readonly string _state;
-		private Credential _credentials;
 		private Timer _refreshAccessTokenTimer;
 
-		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper, CredentialRepository credentialRepository, AuthorizationSettings authorizationSettings)
+		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper,AuthorizationSettings authorizationSettings)
 		{
-			_credentialRepository = credentialRepository;
 			_authorizationSettings = authorizationSettings;
 			_state = loginGeneratorsHelper.RandomDataBase64url(32);
 			CodeVerifier = loginGeneratorsHelper.RandomDataBase64url(32);
@@ -43,11 +40,7 @@ namespace Auth0Service.Service
 
 		private string CodeVerifier { get; }
 
-		public Credential Credentials
-		{
-			get => _credentials ??= LoadCredentials();
-			set => _credentials = value;
-		}
+		public Credential Credentials { get; set; }
 
 		public void Dispose()
 		{
@@ -112,7 +105,6 @@ namespace Auth0Service.Service
 
 		private void ClearCredentials()
 		{
-			_credentialRepository.ClearCredentials();
 			Credentials = null;
 		}
 
@@ -155,11 +147,6 @@ namespace Auth0Service.Service
 			return parameters;
 		}
 
-		private Credential LoadCredentials()
-		{
-			return _credentialRepository.LoadCredentials();
-		}
-
 		private AuthenticationResult RefreshAccessToken()
 		{
 			var parameters = GetParameters(Operation.Refresh);
@@ -190,8 +177,6 @@ namespace Auth0Service.Service
 				responseJson["refresh_token"].ToString(), profile["email"].ToString());
 			
 			SetRefreshAccessTokenTimer();
-
-			_credentialRepository.SaveCredentials(Credentials);
 		}
 
 		private void SetRefreshAccessTokenTimer()

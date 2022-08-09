@@ -17,33 +17,38 @@ namespace Auth0Service
 		public Auth0Control()
 		{
 			InitializeComponent();
+			DataContextChanged += webView.Initialize;
 
-			var authorizationSettings = new AuthorizationSettings
-			(
-				"F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff",
-				"https://api.sdl.com",
-				"https://sdl-prod.eu.auth0.com"
-			);
-
-			var authService = new AuthorizationService(new LoginGeneratorsHelper(), new CredentialRepository(), authorizationSettings);
-			Initialization = InitializeAsync(authService);
+			SetViewModel();
+			WebViewInitialization = InitializeAsync();
 		}
 
 		public Auth0ControlViewModel Auth0Service { get; set; }
 
-		public Task Initialization { get; set; }
+		public Task WebViewInitialization { get; set; }
 
-		public async Task InitializeAsync(AuthorizationService authorizationService)
+		public async Task InitializeAsync()
 		{
-			Auth0Service = new Auth0ControlViewModel(authorizationService);
-			DataContext = Auth0Service;
-
 			var options = new CoreWebView2EnvironmentOptions(null, null, null, true);
 			_webView2UserDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				"Trados AppStore", "Language Weaver", "WebView2Data");
 
 			var envir = await CoreWebView2Environment.CreateAsync(null, _webView2UserDataFolder, options);
 			await webView.EnsureCoreWebView2Async(envir);
+		}
+
+		private void SetViewModel()
+		{
+			var authorizationSettings = new AuthorizationSettings
+			(
+				"F4NpOGG1sBaEzk379M6ZxX3gGa0iH1Ff",
+				"https://api.sdl.com",
+				"https://sdl-prod.eu.auth0.com"
+			);
+			var authService = new AuthorizationService(new LoginGeneratorsHelper(), authorizationSettings);
+			Auth0Service = new Auth0ControlViewModel(authService);
+
+			DataContext = Auth0Service;
 		}
 	}
 }

@@ -387,7 +387,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					(StudioIsSignedIn, var message) = _connectionService.Connect(new Credential{Type = Authentication.AuthenticationType.Studio});
+					(StudioIsSignedIn, var message) = _connectionService.Connect(null);
 					StudioSignedInAs = StudioIsSignedIn ? _connectionService.Credential?.Name : string.Empty;
 					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
 					ExceptionMessage = message != "OK" ? message : "";
@@ -420,7 +420,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					{
 						if (showMessage)
 						{
-							ExceptionMessage = PluginResources.Message_User_is_signed_out;
+							//ExceptionMessage = PluginResources.Message_User_is_signed_out;
 						}
 
 						return true;
@@ -469,12 +469,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (parameter.ToString() == "Sign out")
 			{
-				IsInProgress = true;
 				StudioSignOut();
-				IsInProgress = false;
-
-				StudioSignedInAs = null;
-				StudioIsSignedIn = false;
 				return;
 			}
 
@@ -564,8 +559,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void StudioSignOut()
 		{
+			IsInProgress = true;
+
 			_connectionService.SignOut();
 			SignInLabel = PluginResources.Label_Sign_In;
+			StudioSignedInAs = null;
+			StudioIsSignedIn = false;
+
+			IsInProgress = false;
 		}
 
 		private string GetLoginFailMessagePlatformRelated(string message)

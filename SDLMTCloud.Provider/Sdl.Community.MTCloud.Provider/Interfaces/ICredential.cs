@@ -18,5 +18,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		DateTime ValidTo { get; set; }
 
 		WorkingPortal AccountRegion { get; set; }
+		string RefreshToken { get; set; }
 	}
 }
