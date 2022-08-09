@@ -103,6 +103,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 						Task.Run(async () => await GetUserDetails(Constants.MTCloudUriResourceUserDetails)).Result;
 					IsSignedIn = userDetailsResult.Item1 != null;
 					Credential.AccountId = userDetailsResult.Item1?.AccountId.ToString();
+					Credential.Name = userDetailsResult.Item1?.Email;
 					message = userDetailsResult.Item2;
 				}
 			}
@@ -336,7 +337,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(name))
-			{
+			{		
 				var credential = new Credential
 				{
 					Type = (Authentication.AuthenticationType)Enum.Parse(typeof(Authentication.AuthenticationType), type, true),
@@ -454,8 +455,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public (LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog = false)
 		{
-			var auth0Credential = Credential is {Token: { }, RefreshToken: { }} ?
-				new Auth0Service.Model.Credential(Credential.Token, Credential.RefreshToken, Credential.Name) : null;
+			var auth0Credential = Credential is {Token: { }} ?
+				new Auth0Service.Model.Credential(Credential.Token, Credential.RefreshToken) : null;
 		
 			var (authenticationMessage, credentials) = Auth0ViewModel.TryLogin(showDialog, auth0Credential);
 
@@ -464,7 +465,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		   		var model = new LanguageCloudIdentityApiModel
 		   		{
 		   			AccessToken = credentials.Token,
-		   			Email = credentials.Email,
 					RefreshToken = credentials.RefreshToken
 		   		};
 
