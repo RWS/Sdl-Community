@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sdl.Community.MTCloud.Provider.UnitTests")]
-[assembly: AssemblyProduct("Sdl.Community.MTCloud.Provider.UnitTests")]
+[assembly: AssemblyTitle("Auth0Service")]
+[assembly: AssemblyProduct("Auth0Service")]
 [assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1d6b3478-0b2d-429b-b7d7-1f45ce7e4b05")]
+[assembly: Guid("ba25868a-2501-4cc0-bdb9-ea97822ca2b5")]
 
 // Version information for an assembly consists of the following four values:
 //

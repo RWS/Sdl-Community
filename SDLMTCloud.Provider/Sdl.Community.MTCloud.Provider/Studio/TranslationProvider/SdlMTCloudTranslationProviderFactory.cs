@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -21,8 +20,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				return currentProjProvider;
 			}
 
-			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(),
-				StudioInstance.GetLanguageCloudIdentityApi(), MtCloudApplicationInitializer.Client);
+			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), MtCloudApplicationInitializer.Client);
 
 			var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credential);
@@ -31,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			{
 				throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
 			}
-			connectionService.SaveCredential(credentialStore);
+			connectionService.SaveCredential();
 
 			MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 
