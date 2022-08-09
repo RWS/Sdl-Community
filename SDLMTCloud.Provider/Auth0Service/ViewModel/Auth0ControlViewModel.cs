@@ -52,6 +52,7 @@ namespace Auth0Service.ViewModel
 			get => _visibility;
 			set
 			{
+				if (value == _visibility) return;
 				_visibility = value;
 				OnPropertyChanged();
 			}
@@ -98,8 +99,7 @@ namespace Auth0Service.ViewModel
 
 		internal AuthenticationResult Login(string uriQuery)
 		{
-			var login = AuthorizationService.Login(uriQuery);
-			return login;
+			return AuthorizationService.Login(uriQuery);
 		}
 
 		private void GoToLoginPage()
@@ -111,12 +111,12 @@ namespace Auth0Service.ViewModel
 		{
 			if (Url.LocalPath == "/" && !string.IsNullOrWhiteSpace(Url.Query))
 			{
-				Visibility = Visibility.Collapsed;
+				//Visibility = Visibility.Collapsed;
 
 				AuthenticationResult = Login(Url.Query);
 				if (!AuthenticationResult.IsSuccessful) return;
 
-				Visibility = Visibility.Collapsed;
+				//Visibility = Visibility.Collapsed;
 			}
 
 			if (Url.LocalPath == "/login" && _showDialog) Visibility = Visibility.Visible;

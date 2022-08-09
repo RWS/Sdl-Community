@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using Auth0Service.Helpers;
 using Auth0Service.Model;
 
@@ -15,16 +14,16 @@ namespace Auth0Service.Service
 		private const string RevokeTokenEndpoint = "/oauth/revoke";
 		private const string UrlTemplateNormal = "{0}?audience={1}&response_type=code&scope=openid%20email%20profile%20offline_access&redirect_uri={2}&client_id={3}&allowsignup=false&state={4}&code_challenge={5}&code_challenge_method={6}";
 		private const string UserInfoEndpoint = "/userinfo";
+		private readonly AuthorizationSettings _authorizationSettings;
 		private readonly string _authorizationUrl = "/authorize";
 		private readonly string _codeChallenge;
-		private readonly HttpHelper _httpHelper;
 		private readonly string _codeChallengeMethod = "S256";
-		private readonly AuthorizationSettings _authorizationSettings;
+		private readonly HttpHelper _httpHelper;
 		private readonly string _redirectUrl = "https://www.rws.com";
 		private readonly string _state;
 		private Timer _refreshAccessTokenTimer;
 
-		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper,AuthorizationSettings authorizationSettings, HttpHelper httpHelper)
+		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper, AuthorizationSettings authorizationSettings, HttpHelper httpHelper)
 		{
 			_authorizationSettings = authorizationSettings;
 			_state = loginGeneratorsHelper.RandomDataBase64url(32);
@@ -40,24 +39,8 @@ namespace Auth0Service.Service
 			Refresh
 		}
 
-		private string CodeVerifier { get; }
-
 		public Credential Credentials { get; set; }
-
-		public void Dispose()
-		{
-			_refreshAccessTokenTimer?.Dispose();
-		}
-
-		public string GenerateAuthorizationRequest()
-		{
-			return GenerateRequestUrl(UrlTemplateNormal);
-		}
-
-		public string GenerateLogoutUrl()
-		{
-			return $"{_authorizationSettings.Auth0Url}/v2/logout?federated&client_id={_authorizationSettings.ClientId}&returnTo={_redirectUrl}";
-		}
+		private string CodeVerifier { get; }
 
 		public AuthenticationResult AreCredentialsValid()
 		{
@@ -72,10 +55,19 @@ namespace Auth0Service.Service
 			return RefreshAccessToken();
 		}
 
-		private HttpResponseMessage GetUserProfile(string token)
+		public void Dispose()
 		{
-			return _httpHelper.Send(HttpMethod.Get, new Uri($"{_authorizationSettings.Auth0Url}{UserInfoEndpoint}"), null,
-							token);
+			_refreshAccessTokenTimer?.Dispose();
+		}
+
+		public string GenerateAuthorizationRequest()
+		{
+			return GenerateRequestUrl(UrlTemplateNormal);
+		}
+
+		public string GenerateLogoutUrl()
+		{
+			return $"{_authorizationSettings.Auth0Url}/v2/logout?federated&client_id={_authorizationSettings.ClientId}&returnTo={_redirectUrl}";
 		}
 
 		public AuthenticationResult Login(string query)
@@ -147,6 +139,12 @@ namespace Auth0Service.Service
 			}
 
 			return parameters;
+		}
+
+		private HttpResponseMessage GetUserProfile(string token)
+		{
+			return _httpHelper.Send(HttpMethod.Get, new Uri($"{_authorizationSettings.Auth0Url}{UserInfoEndpoint}"), null,
+							token);
 		}
 
 		private AuthenticationResult RefreshAccessToken()
