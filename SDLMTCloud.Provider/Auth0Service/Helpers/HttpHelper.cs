@@ -29,8 +29,6 @@ namespace Auth0Service.Helpers
 
 			if (parameters is not null) httpRequest.Content = new FormUrlEncodedContent(parameters);
 
-			_httpClient = new HttpClient();
-
 			if (token is not null)
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 

@@ -10,7 +10,7 @@
 		<PlatformTarget>x86</PlatformTarget>
 		<LangVersion>latest</LangVersion>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>C:\Code\RWS Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
