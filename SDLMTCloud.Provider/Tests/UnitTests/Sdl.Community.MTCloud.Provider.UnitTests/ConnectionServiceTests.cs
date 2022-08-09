@@ -28,7 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 
 			if (type == Authentication.AuthenticationType.Studio)
 			{
-				connectionService.IsValidStudioCredential(out Arg.Any<string>()).Returns(x =>
+				connectionService.IsValidCredential(out Arg.Any<string>()).Returns(x =>
 				{
 					x[0] = string.Empty;
 					return true;
@@ -68,7 +68,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 
 			if (type == Authentication.AuthenticationType.Studio)
 			{
-				connectionService.IsValidStudioCredential(out Arg.Any<string>()).Returns(x =>
+				connectionService.IsValidCredential(out Arg.Any<string>()).Returns(x =>
 				{
 					x[0] = string.Empty;
 					return true;
@@ -109,7 +109,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 
 			if (type == Authentication.AuthenticationType.Studio)
 			{
-				connectionService.IsValidStudioCredential(out Arg.Any<string>()).Returns(x =>
+				connectionService.IsValidCredential(out Arg.Any<string>()).Returns(x =>
 				{
 					x[0] = "Credential has expired";
 					return false;
@@ -159,7 +159,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			connectionService.Credential.Returns(credential);
 			if (type == Authentication.AuthenticationType.Studio)
 			{
-				connectionService.IsValidStudioCredential(out Arg.Any<string>()).Returns(x =>
+				connectionService.IsValidCredential(out Arg.Any<string>()).Returns(x =>
 				{
 					x[0] = "Credential has expired";
 					return false;

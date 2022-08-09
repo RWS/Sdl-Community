@@ -20,13 +20,13 @@
       <HintPath>$(TradosFolder)\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Core">
-      <HintPath>$(TradosFolder)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.WinForms">
-      <HintPath>$(TradosFolder)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Winforms.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Winforms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf">
-      <HintPath>$(TradosFolder)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.WPF.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
