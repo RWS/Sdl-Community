@@ -17,18 +17,20 @@ namespace Auth0Service.Service
 		private const string UserInfoEndpoint = "/userinfo";
 		private readonly string _authorizationUrl = "/authorize";
 		private readonly string _codeChallenge;
+		private readonly HttpHelper _httpHelper;
 		private readonly string _codeChallengeMethod = "S256";
 		private readonly AuthorizationSettings _authorizationSettings;
 		private readonly string _redirectUrl = "https://www.rws.com";
 		private readonly string _state;
 		private Timer _refreshAccessTokenTimer;
 
-		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper,AuthorizationSettings authorizationSettings)
+		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper,AuthorizationSettings authorizationSettings, HttpHelper httpHelper)
 		{
 			_authorizationSettings = authorizationSettings;
 			_state = loginGeneratorsHelper.RandomDataBase64url(32);
 			CodeVerifier = loginGeneratorsHelper.RandomDataBase64url(32);
 			_codeChallenge = loginGeneratorsHelper.Base64urlencodeNoPadding(loginGeneratorsHelper.Sha256(CodeVerifier));
+			_httpHelper = httpHelper;
 		}
 
 		private enum Operation
@@ -72,7 +74,7 @@ namespace Auth0Service.Service
 
 		private HttpResponseMessage GetUserProfile(string token)
 		{
-			return HttpHelper.Send(HttpMethod.Get, new Uri($"{_authorizationSettings.Auth0Url}{UserInfoEndpoint}"), null,
+			return _httpHelper.Send(HttpMethod.Get, new Uri($"{_authorizationSettings.Auth0Url}{UserInfoEndpoint}"), null,
 							token);
 		}
 
@@ -82,7 +84,7 @@ namespace Auth0Service.Service
 			GetParameters(Operation.Login, parameters);
 
 			var endpoint = new Uri($"{_authorizationSettings.Auth0Url}{GetTokenEndpoint}");
-			var response = HttpHelper.Send(HttpMethod.Post, endpoint, parameters);
+			var response = _httpHelper.Send(HttpMethod.Post, endpoint, parameters);
 
 			if (!response.IsSuccessStatusCode) return new AuthenticationResult(AuthenticationResult.CredentialsValidity.Invalid);
 
@@ -94,10 +96,10 @@ namespace Auth0Service.Service
 		public void Logout()
 		{
 			var logoutEndpoint = new Uri(GenerateLogoutUrl());
-			HttpHelper.Send(HttpMethod.Get, logoutEndpoint);
+			_httpHelper.Send(HttpMethod.Get, logoutEndpoint);
 
 			var revokeEndpoint = new Uri($"{_authorizationSettings.Auth0Url}{RevokeTokenEndpoint}");
-			HttpHelper.Send(HttpMethod.Post, revokeEndpoint,
+			_httpHelper.Send(HttpMethod.Post, revokeEndpoint,
 				GetParameters(Operation.Logout));
 
 			ClearCredentials();
@@ -152,7 +154,7 @@ namespace Auth0Service.Service
 			var parameters = GetParameters(Operation.Refresh);
 
 			var endpoint = $"{_authorizationSettings.Auth0Url}{GetTokenEndpoint}";
-			var response = HttpHelper.Send(HttpMethod.Post, new Uri(endpoint), parameters);
+			var response = _httpHelper.Send(HttpMethod.Post, new Uri(endpoint), parameters);
 
 			if (response.IsSuccessStatusCode)
 			{
@@ -169,13 +171,10 @@ namespace Auth0Service.Service
 			_refreshAccessTokenTimer?.Dispose();
 
 			var responseJson = HttpDecoder.ParseJson(response);
-
 			var accessToken = responseJson["access_token"].ToString();
-			var profile = HttpDecoder.ParseJson((GetUserProfile(accessToken)).Content.ReadAsStringAsync().Result);
 
-			Credentials = new Credential(accessToken,
-				responseJson["refresh_token"].ToString(), profile["email"].ToString());
-			
+			Credentials = new Credential(accessToken, responseJson["refresh_token"]?.ToString());
+
 			SetRefreshAccessTokenTimer();
 		}
 
