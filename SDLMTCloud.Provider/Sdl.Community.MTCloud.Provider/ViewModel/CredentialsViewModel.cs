@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using Auth0Service;
 using Auth0Service.ViewModel;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Interfaces;

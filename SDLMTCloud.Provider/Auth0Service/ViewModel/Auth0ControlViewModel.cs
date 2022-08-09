@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Auth0Service.Commands;
@@ -82,14 +83,14 @@ namespace Auth0Service.ViewModel
 			Visibility = Visibility.Collapsed;
 		}
 
-		public (AuthenticationResult, Credential) TryLogin(bool showDialog = false, Credential credentials = null)
+		public (AuthenticationResult, Credential) TryLogin(CancellationToken cancellationToken, bool showDialog = false, Credential credentials = null)
 		{
 			_showDialog = showDialog;
 			if (credentials is not null) AuthorizationService.Credentials = credentials;
 
 			AuthenticationResult = EnsureLoggedIn();
 
-			while (showDialog && (!AuthenticationResult.IsSuccessful))
+			while (showDialog && (!AuthenticationResult.IsSuccessful) && !cancellationToken.IsCancellationRequested)
 			{
 				Application.Current.DoEvents();
 			}
