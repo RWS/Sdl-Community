@@ -259,7 +259,7 @@ namespace Sdl.Community.MTCloud.Provider {
         /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
-        public static string Label_OK {
+        public static string Label_SignOut {
             get {
                 return ResourceManager.GetString("Label_OK", resourceCulture);
             }

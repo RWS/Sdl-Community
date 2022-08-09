@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.MTCloud.Langu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.MTCloud.Languages.Provider.IntegrationTests", "Tests\IntegrationTests\Sdl.Community.MTCloud.Languages.Provider.IntegrationTests\Sdl.Community.MTCloud.Languages.Provider.IntegrationTests.csproj", "{04B2AD4E-68AF-485F-8BE8-8B40E06A5561}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTCloud.Provider.UnitTests", "Tests\UnitTests\Sdl.Community.MTCloud.Provider.UnitTests\Sdl.Community.MTCloud.Provider.UnitTests.csproj", "{1D6B3478-0B2D-429B-B7D7-1F45CE7E4B05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.MTCloud.Provider.UnitTests", "Tests\UnitTests\Sdl.Community.MTCloud.Provider.UnitTests\Sdl.Community.MTCloud.Provider.UnitTests.csproj", "{1D6B3478-0B2D-429B-B7D7-1F45CE7E4B05}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth0Service", "Auth0Service\Auth0Service.csproj", "{62740C33-3280-49B5-9CEF-EA816B784B8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1D6B3478-0B2D-429B-B7D7-1F45CE7E4B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D6B3478-0B2D-429B-B7D7-1F45CE7E4B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D6B3478-0B2D-429B-B7D7-1F45CE7E4B05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

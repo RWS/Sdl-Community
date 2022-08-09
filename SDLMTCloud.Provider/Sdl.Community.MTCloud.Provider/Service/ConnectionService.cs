@@ -2,12 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
-using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Auth0Service;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Interfaces;
@@ -15,7 +15,6 @@ using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
-using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using LogManager = NLog.LogManager;
@@ -26,9 +25,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 	{
 		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private Auth0Control _auth0Control;
 		private string _currentWorkingPortalAddress;
 
-		public ConnectionService(IWin32Window owner, VersionService versionService, LanguageCloudIdentityApi languageCloudIdentityApi, IHttpClient httpClient)
+		public ConnectionService(IWin32Window owner, VersionService versionService, IHttpClient httpClient)
 		{
 			_httpClient = httpClient;
 			_httpClient.SetLogger(_logger);
@@ -40,19 +40,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			PluginVersion = VersionService?.GetPluginVersion();
 			StudioVersion = VersionService?.GetStudioVersion();
-
-			LanguageCloudIdentityApi = languageCloudIdentityApi;
-
-		
 		}
 
 		public virtual ICredential Credential { get; private set; }
-		public bool IsSignedIn { get; private set; }
-		public LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
-		public IWin32Window Owner { get; set; }
-		public string PluginVersion { get; }
-		public string StudioVersion { get; }
-		public VersionService VersionService { get; }
 
 		public string CurrentWorkingPortalAddress
 		{
@@ -64,6 +54,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			set { _currentWorkingPortalAddress = value; }
 		}
 
+		public bool IsSignedIn { get; private set; }
+		public IWin32Window Owner { get; set; }
+		public string PluginVersion { get; }
+		public string StudioVersion { get; }
+		public VersionService VersionService { get; }
+
 		public void AddTraceHeaders(HttpRequestMessage request)
 		{
 			request.Headers.Add(Constants.TraceId,
@@ -73,7 +69,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			//request.Headers.Add("Trace-App-Meta-Info", "Optional data");
 		}
 
-		public (bool, string) Connect(ICredential credential)
+		public (bool, string) Connect(ICredential credential, bool showDialog = false)
 		{
 			Credential = credential;
 
@@ -81,7 +77,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
 				//IsSignedIn = IsValidStudioCredential(out message);
-				var signInResult = StudioSignIn();
+				var signInResult = StudioSignIn(showDialog);
 
 				IsSignedIn = !string.IsNullOrEmpty(signInResult.Item1?.AccessToken);
 				Credential.Token = signInResult.Item1?.AccessToken;
@@ -161,7 +157,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public string CredentialToString()
 		{
-			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary()+ "; AccountRegion=" + Credential.AccountRegion;
+			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary() + "; AccountRegion=" + Credential.AccountRegion;
 		}
 
 		public (bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
@@ -184,15 +180,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			Mouse.OverrideCursor = Cursors.Arrow;
 
 			var credentialsWindow = GetCredentialsWindow(Owner);
+
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
 			credentialsWindow.DataContext = viewModel;
-
 
 			var message = string.Empty;
 			credentialsWindow.UserPasswordBox.Password = viewModel.UserPassword;
 			credentialsWindow.ClientSecretBox.Password = viewModel.ClientSecret;
 			credentialsWindow.ClientIdBox.Password = viewModel.ClientId;
-
 
 			var result1 = credentialsWindow.ShowDialog();
 			if (result1.HasValue && result1.Value)
@@ -391,37 +386,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return true;
 		}
 
-		public virtual bool IsValidStudioCredential(out string message)
-		{
-			if (LanguageCloudIdentityApi == null)
-			{
-				message = PluginResources.Message_The_LanguageCloudIdentityApi_is_not_implemented;
-				return false;
-			}
-
-			var languageCloudCredential = LanguageCloudIdentityApi?.LanguageCloudCredential;
-
-			message = string.Empty;
-
-			var isNullOrEmpty = string.IsNullOrEmpty(languageCloudCredential?.Email)
-				   || string.IsNullOrEmpty(LanguageCloudIdentityApi?.AccessToken);
-
-			if (isNullOrEmpty)
-			{
-				message = PluginResources.Message_Credential_criteria_is_not_valid;
-				return false;
-			}
-
-			var validTo = GetTokenValidTo(LanguageCloudIdentityApi?.AccessToken);
-			if (validTo < DateTime.UtcNow)
-			{
-				message = PluginResources.Message_Credential_has_expired;
-				return false;
-			}
-
-			return true;
-		}
-
 		public void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true)
 		{
 			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
@@ -445,32 +409,28 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return signIn;
 		}
 
-		public virtual (LanguageCloudIdentityApiModel, string) StudioSignIn()
+		public void SignOut()
 		{
-			if (LanguageCloudIdentityApi == null)
-			{
-				return (null, string.Empty);
-			}
+			_auth0Control.Logout();
+		}
 
-			var success = LanguageCloudIdentityApi.TryLogin(out var message);
-			if (success)
-			{
-				var model = new LanguageCloudIdentityApiModel
-				{
-					AccessToken = LanguageCloudIdentityApi.AccessToken,
-					ActiveAccountId = LanguageCloudIdentityApi.ActiveAccountId,
-					ActiveUserId = LanguageCloudIdentityApi.ActiveUserId,
-					ActiveTenantId = LanguageCloudIdentityApi.ActiveTenantId,
-					StudioApplicationKey = LanguageCloudIdentityApi.StudioApplicationKey,
-					StudioClientId = LanguageCloudIdentityApi.StudioClientId,
-					AccountName = LanguageCloudIdentityApi.LanguageCloudCredential?.AccountName,
-					Email = LanguageCloudIdentityApi.LanguageCloudCredential?.Email,
-				};
+		public (LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog = false)
+		{
+			_auth0Control = new Auth0Control();
+			var (authenticationMessage, credentials) = _auth0Control.TryLogin(showDialog);
 
-				return (model, message);
-			}
+		   	if (authenticationMessage.IsSuccessful)
+		   	{
+		   		var model = new LanguageCloudIdentityApiModel
+		   		{
+		   			AccessToken = credentials.Token,
+		   			Email = credentials.Email,
+		   		};
 
-			return (null, message);
+		   		return (model, authenticationMessage.Message);
+		   	}
+
+		   	return (default, authenticationMessage.Message);
 		}
 
 		private CredentialsWindow GetCredentialsWindow(IWin32Window owner)
@@ -485,18 +445,18 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credentialsWindow;
 		}
 
-		private DateTime GetTokenValidTo(string token = null)
-		{
-			var tokenModel = ReadToken(token ?? Credential.Token);
-			return tokenModel?.ValidTo ?? DateTime.MinValue;
-		}
-
 		private HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri)
 		{
 			var request = new HttpRequestMessage(httpMethod, uri);
 			request.Headers.Add("Authorization", $"Bearer {Credential.Token}");
 			AddTraceHeaders(request);
 			return request;
+		}
+
+		private DateTime GetTokenValidTo(string token = null)
+		{
+			var tokenModel = ReadToken(token ?? Credential.Token);
+			return tokenModel?.ValidTo ?? DateTime.MinValue;
 		}
 
 		private async Task<(UserDetails, string)> GetUserDetailsAttempt(string resource)

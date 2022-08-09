@@ -267,6 +267,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auth0Service\Auth0Service.csproj" />
     <ProjectReference Include="..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj">
       <Project>{9d257236-08a9-4b23-9249-aca78139172e}</Project>
       <Name>Sdl.Community.MTCloud.Languages.Provider</Name>
