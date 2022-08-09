@@ -111,12 +111,8 @@ namespace Auth0Service.ViewModel
 		{
 			if (Url.LocalPath == "/" && !string.IsNullOrWhiteSpace(Url.Query))
 			{
-				//Visibility = Visibility.Collapsed;
-
 				AuthenticationResult = Login(Url.Query);
 				if (!AuthenticationResult.IsSuccessful) return;
-
-				//Visibility = Visibility.Collapsed;
 			}
 
 			if (Url.LocalPath == "/login" && _showDialog) Visibility = Visibility.Visible;
