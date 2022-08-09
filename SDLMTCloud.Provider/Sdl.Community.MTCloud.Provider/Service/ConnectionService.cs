@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -23,6 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 {
 	public class ConnectionService : IConnectionService
 	{
+		private readonly CancellationTokenSource _cancellationTokenSource;
 		private readonly IHttpClient _httpClient;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private string _currentWorkingPortalAddress;
@@ -30,6 +32,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public ConnectionService(IWin32Window owner, VersionService versionService, IHttpClient httpClient)
 		{
+			_cancellationTokenSource = new CancellationTokenSource();
 			_httpClient = httpClient;
 			_httpClient.SetLogger(_logger);
 
@@ -198,6 +201,10 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			var credentialsWindow = GetCredentialsWindow(Owner);
+
+			credentialsWindow.Closing -= CredentialsWindow_Closing;
+			credentialsWindow.Closing += CredentialsWindow_Closing;
+
 			Auth0ViewModel = credentialsWindow.AuthControl.Auth0Service;
 
 			var viewModel = new CredentialsViewModel(credentialsWindow, this);
@@ -231,6 +238,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return (IsSignedIn, message);
+		}
+
+		private void CredentialsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			_cancellationTokenSource.Cancel();
 		}
 
 		private Auth0ControlViewModel Auth0ViewModel { get; set; }
@@ -457,8 +469,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var auth0Credential = Credential is {Token: { }} ?
 				new Auth0Service.Model.Credential(Credential.Token, Credential.RefreshToken) : null;
-		
-			var (authenticationMessage, credentials) = Auth0ViewModel.TryLogin(showDialog, auth0Credential);
+
+			var (authenticationMessage, credentials) = Auth0ViewModel.TryLogin(_cancellationTokenSource.Token, showDialog, auth0Credential);
 
 		   	if (authenticationMessage.IsSuccessful)
 		   	{
