@@ -1025,3 +1025,5 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /TMBackup/build/Customisation.dll
 /TMBackup/build/Crc32C.NET.dll
 /SDLDataProtectionSuite/SDLDataProtectionSuite/Properties/launchSettings.json
+/Code samples/PretranslateProjectsCreatedFromTemplateSample/Properties/launchSettings.json
+/Code samples/PretranslateInLoopWithFailSafeAction/Properties/launchSettings.json
