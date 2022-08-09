@@ -3,35 +3,33 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
-using WebView2Test.Helpers;
-using WebView2Test.Model;
+using Auth0Service.Helpers;
+using Auth0Service.Model;
 
-namespace WebView2Test.Service
+namespace Auth0Service.Service
 {
-	public class AuthorizationService : IDisposable
+	public class AuthorizationService
 	{
 		private const string GetTokenEndpoint = "/oauth/token";
 		private const string RevokeTokenEndpoint = "/oauth/revoke";
 		private const string UrlTemplateNormal = "{0}?audience={1}&response_type=code&scope=openid%20email%20profile%20offline_access&redirect_uri={2}&client_id={3}&allowsignup=false&state={4}&code_challenge={5}&code_challenge_method={6}";
 		private const string UserInfoEndpoint = "/userinfo";
+		private readonly AuthorizationSettings _authorizationSettings;
 		private readonly string _authorizationUrl = "/authorize";
 		private readonly string _codeChallenge;
 		private readonly string _codeChallengeMethod = "S256";
-		private readonly CredentialRepository _credentialRepository;
-		private readonly AuthorizationSettings _authorizationSettings;
+		private readonly HttpHelper _httpHelper;
 		private readonly string _redirectUrl = "https://www.rws.com";
 		private readonly string _state;
-		private Credential _credentials;
 		private Timer _refreshAccessTokenTimer;
 
-		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper, CredentialRepository credentialRepository, AuthorizationSettings authorizationSettings)
+		public AuthorizationService(LoginGeneratorsHelper loginGeneratorsHelper, AuthorizationSettings authorizationSettings, HttpHelper httpHelper)
 		{
-			_credentialRepository = credentialRepository;
 			_authorizationSettings = authorizationSettings;
 			_state = loginGeneratorsHelper.RandomDataBase64url(32);
 			CodeVerifier = loginGeneratorsHelper.RandomDataBase64url(32);
 			_codeChallenge = loginGeneratorsHelper.Base64urlencodeNoPadding(loginGeneratorsHelper.Sha256(CodeVerifier));
+			_httpHelper = httpHelper;
 		}
 
 		private enum Operation
@@ -41,12 +39,20 @@ namespace WebView2Test.Service
 			Refresh
 		}
 
+		public Credential Credentials { get; set; }
 		private string CodeVerifier { get; }
 
-		public Credential Credentials
+		public AuthenticationResult AreCredentialsValid()
 		{
-			get => _credentials ??= LoadCredentials();
-			set => _credentials = value;
+			if (Credentials is null) return new AuthenticationResult(AuthenticationResult.CredentialsValidity.NotPresent);
+			var response = GetUserProfile(Credentials.Token);
+
+			if (response.IsSuccessStatusCode)
+			{
+				return new AuthenticationResult(AuthenticationResult.CredentialsValidity.Valid);
+			}
+
+			return RefreshAccessToken();
 		}
 
 		public void Dispose()
@@ -61,43 +67,31 @@ namespace WebView2Test.Service
 
 		public string GenerateLogoutUrl()
 		{
-			return $"{_authorizationSettings.Auth0Url}/v2/logout?client_id={_authorizationSettings.ClientId}&returnTo={_redirectUrl}&federated";
+			return $"{_authorizationSettings.Auth0Url}/v2/logout?federated&client_id={_authorizationSettings.ClientId}&returnTo={_redirectUrl}";
 		}
 
-		public async Task<bool> EnsureLoggedIn()
-		{
-			if (Credentials is null) return false;
-
-			var response = await HttpHelper.SendAsync(HttpMethod.Get, new Uri($"{_authorizationSettings.Auth0Url}{UserInfoEndpoint}"), null,
-				Credentials.Token);
-
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-
-			return await RefreshAccessToken();
-		}
-
-		public async Task<bool> Login(string query)
+		public AuthenticationResult Login(string query)
 		{
 			var parameters = HttpDecoder.ParseQuery(query);
 			GetParameters(Operation.Login, parameters);
 
 			var endpoint = new Uri($"{_authorizationSettings.Auth0Url}{GetTokenEndpoint}");
-			var response = await HttpHelper.SendAsync(HttpMethod.Post, endpoint, parameters);
+			var response = _httpHelper.Send(HttpMethod.Post, endpoint, parameters);
 
-			if (!response.IsSuccessStatusCode) return false;
+			if (!response.IsSuccessStatusCode) return new AuthenticationResult(AuthenticationResult.CredentialsValidity.Invalid);
 
-			SetCredential(await response.Content.ReadAsStringAsync());
+			SetCredential(response.Content.ReadAsStringAsync().Result);
 
-			return true;
+			return new AuthenticationResult(AuthenticationResult.CredentialsValidity.Valid);
 		}
 
-		public async Task Logout()
+		public void Logout()
 		{
-			var endpoint = new Uri($"{_authorizationSettings.Auth0Url}{RevokeTokenEndpoint}");
-			await HttpHelper.SendAsync(HttpMethod.Post, endpoint,
+			var logoutEndpoint = new Uri(GenerateLogoutUrl());
+			_httpHelper.Send(HttpMethod.Get, logoutEndpoint);
+
+			var revokeEndpoint = new Uri($"{_authorizationSettings.Auth0Url}{RevokeTokenEndpoint}");
+			_httpHelper.Send(HttpMethod.Post, revokeEndpoint,
 				GetParameters(Operation.Logout));
 
 			ClearCredentials();
@@ -106,7 +100,6 @@ namespace WebView2Test.Service
 		private void ClearCredentials()
 		{
 			Credentials = null;
-			_credentialRepository.ClearCredentials();
 		}
 
 		private string GenerateRequestUrl(string urlTemplate)
@@ -136,7 +129,7 @@ namespace WebView2Test.Service
 					break;
 
 				case Operation.Logout:
-					parameters.Add("token", Credentials.RefreshToken);
+					parameters.Add("token", Credentials?.RefreshToken);
 					break;
 
 				case Operation.Refresh:
@@ -148,26 +141,27 @@ namespace WebView2Test.Service
 			return parameters;
 		}
 
-		private Credential LoadCredentials()
+		private HttpResponseMessage GetUserProfile(string token)
 		{
-			return _credentialRepository.LoadCredentials();
+			return _httpHelper.Send(HttpMethod.Get, new Uri($"{_authorizationSettings.Auth0Url}{UserInfoEndpoint}"), null,
+							token);
 		}
 
-		private async Task<bool> RefreshAccessToken()
+		private AuthenticationResult RefreshAccessToken()
 		{
 			var parameters = GetParameters(Operation.Refresh);
 
 			var endpoint = $"{_authorizationSettings.Auth0Url}{GetTokenEndpoint}";
-			var response = await HttpHelper.SendAsync(HttpMethod.Post, new Uri(endpoint), parameters);
+			var response = _httpHelper.Send(HttpMethod.Post, new Uri(endpoint), parameters);
 
 			if (response.IsSuccessStatusCode)
 			{
-				SetCredential(await response.Content.ReadAsStringAsync());
-				return true;
+				SetCredential(response.Content.ReadAsStringAsync().Result);
+				return new AuthenticationResult(AuthenticationResult.CredentialsValidity.Valid);
 			}
 
 			ClearCredentials();
-			return false;
+			return new AuthenticationResult(AuthenticationResult.CredentialsValidity.Invalid);
 		}
 
 		private void SetCredential(string response)
@@ -175,13 +169,11 @@ namespace WebView2Test.Service
 			_refreshAccessTokenTimer?.Dispose();
 
 			var responseJson = HttpDecoder.ParseJson(response);
+			var accessToken = responseJson["access_token"].ToString();
 
-			Credentials = new Credential(responseJson["access_token"].ToString(),
-				responseJson["refresh_token"].ToString());
+			Credentials = new Credential(accessToken, responseJson["refresh_token"]?.ToString());
 
 			SetRefreshAccessTokenTimer();
-
-			_credentialRepository.SaveCredentials(Credentials);
 		}
 
 		private void SetRefreshAccessTokenTimer()
@@ -190,7 +182,7 @@ namespace WebView2Test.Service
 			var accessTokenValidTo = handler.ReadJwtToken(Credentials.Token).ValidTo;
 
 			var timeUntilExpiry = accessTokenValidTo.Subtract(DateTime.Now).Subtract(new TimeSpan(0, 5, 0));
-			_refreshAccessTokenTimer = new Timer(async _ => await RefreshAccessToken(), null, timeUntilExpiry,
+			_refreshAccessTokenTimer = new Timer(_ => RefreshAccessToken(), null, timeUntilExpiry,
 				Timeout.InfiniteTimeSpan);
 		}
 	}

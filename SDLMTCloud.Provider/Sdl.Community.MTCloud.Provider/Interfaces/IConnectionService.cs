@@ -12,8 +12,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	{
 		IWin32Window Owner { get; set; }
 
-		LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
-
 		bool IsSignedIn { get; }
 
 		ICredential Credential { get; }
@@ -26,15 +24,13 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		ICredential GetCredential(string credentialString);
 
-		(bool, string) Connect(ICredential credential);
+		(bool, string) Connect(ICredential credential = null, bool showDialog = false);
 
 		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
 
-		bool IsValidStudioCredential(out string message);
-
 		bool IsValidCredential(out string message);
 
-		(LanguageCloudIdentityApiModel, string) StudioSignIn();
+		(LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog);
 
 		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
 
@@ -42,9 +38,10 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		void AddTraceHeaders(HttpRequestMessage request);
 
-		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
+		void SaveCredential(bool persist = true);
 
 		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
 		string CurrentWorkingPortalAddress { get; set; }
+		void SignOut();
 	}
 }
