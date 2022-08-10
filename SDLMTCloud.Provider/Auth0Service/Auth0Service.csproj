@@ -12,9 +12,6 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(TradosFolder)\Microsoft.IdentityModel.Tokens.dll</HintPath>
@@ -27,6 +24,9 @@
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf">
       <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors">
+      <HintPath>$(TradosFolder)\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
