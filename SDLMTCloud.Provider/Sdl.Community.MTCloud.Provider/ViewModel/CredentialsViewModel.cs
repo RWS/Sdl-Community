@@ -359,7 +359,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-
 		public List<Authentication> AuthenticationOptions
 		{
 			get => _authenticationOptions;
