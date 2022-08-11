@@ -79,6 +79,9 @@ namespace Sdl.Community.TQA.BatchTask
 			var defaultReportsDirectory = _reportProvider.GetReportDirectory(localProjectFolder);
 			var defaultReportFileName = _reportProvider.GetReportDefaultOutputFilename(_tqaProfileType);
 
+			var quality = _qualitiesProvider.GetQuality(Project);
+			var fileBasedProject = Project as FileBasedProject;
+
 			foreach (var language in Project.GetProjectInfo().TargetLanguages)
 			{
 				var reportFilePath = _reportProvider.GetDefaultReportFileFullPath(defaultReportsDirectory, defaultReportFileName, language.CultureInfo.Name);
@@ -94,7 +97,7 @@ namespace Sdl.Community.TQA.BatchTask
 						_logger.Error($"{tqaAutomaticTask?.Messages?.FirstOrDefault()?.Message}\n " + PluginResources.MsgTQATaskNotRunCorrectly);
 					}
 
-					_reportProvider.GenerateReport(Project as FileBasedProject, tqaAutomaticTask, _tqaProfileType, reportFilePath, _qualitiesProvider.GetQuality(Project));
+					_reportProvider.GenerateReport(fileBasedProject, tqaAutomaticTask, _tqaProfileType, reportFilePath, quality);
 				}
 			}
 		}

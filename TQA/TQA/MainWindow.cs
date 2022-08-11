@@ -130,10 +130,10 @@ namespace Sdl.Community.TQA
 
 		private bool IsValid()
 		{
-			var IsValidProfileType = _tqaProfileType == TQAProfileType.tqsJ2450 || _tqaProfileType == TQAProfileType.tqsMQM;
-			var IsValidFiles = GetProjectFiles().Any();
+			var isValidProfileType = _tqaProfileType == TQAProfileType.tqsJ2450 || _tqaProfileType == TQAProfileType.tqsMQM;
+			var isValidFiles = GetProjectFiles().Any();
 
-			return IsValidProfileType && IsValidFiles;
+			return isValidProfileType && isValidFiles;
 		}
 
 		private string GetLanguageId()
