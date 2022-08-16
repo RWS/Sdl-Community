@@ -7,23 +7,23 @@ namespace Sdl.Community.MTCloud.Provider.UiHelpers.Watermark
 	{
 		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached("WatermarkText", typeof(string), typeof(PasswordBoxWatermarkHelper), new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
-		public static readonly DependencyProperty WatermarkIsVisibleProperty = DependencyProperty.RegisterAttached("WatermarkIsVisible", typeof(bool), typeof(PasswordBoxWatermarkHelper));
+		public static readonly DependencyProperty IsWatermarkVisibleProperty = DependencyProperty.RegisterAttached("IsWatermarkVisible", typeof(bool), typeof(PasswordBoxWatermarkHelper));
 
 		public static string GetWatermarkText(DependencyObject control)
 			=> (string)control.GetValue(WatermarkTextProperty);
 
-		public static bool GetWatermarkIsVisible(DependencyObject control)
-			=> (bool)control.GetValue(WatermarkIsVisibleProperty);
+		public static bool GetIsWatermarkVisible(DependencyObject control)
+			=> (bool)control.GetValue(IsWatermarkVisibleProperty);
 
 		public static void SetWatermarkText(DependencyObject control, string value)
 			=> control.SetValue(WatermarkTextProperty, value);
 
-		public static void SetWatermarkIsVisible(DependencyObject control, bool value)
-			=> control.SetValue(WatermarkIsVisibleProperty, value);
+		public static void SetIsWatermarkVisible(DependencyObject control, bool value)
+			=> control.SetValue(IsWatermarkVisibleProperty, value);
 
 		private static void OnControlGotFocus(object sender, RoutedEventArgs e)
 		{
-			SetWatermarkIsVisible(sender as PasswordBox, false);
+			SetIsWatermarkVisible(sender as PasswordBox, false);
 		}
 
 		private static void OnControlLostFocus(object sender, RoutedEventArgs e)
@@ -31,18 +31,18 @@ namespace Sdl.Community.MTCloud.Provider.UiHelpers.Watermark
 			var passwordBox = sender as PasswordBox;
 			if (passwordBox.Password.Length == 0)
 			{
-				SetWatermarkIsVisible(passwordBox, true);
+				SetIsWatermarkVisible(passwordBox, true);
 			}
 		}
 
 		private static void OnWatermarkTextChanged(DependencyObject control, DependencyPropertyChangedEventArgs e)
 		{
 			var passwordBox = control as PasswordBox;
-			SetWatermarkIsVisible(passwordBox, true);
+			SetIsWatermarkVisible(passwordBox, true);
 			if (!string.IsNullOrEmpty(passwordBox.Password))
 			{
-				passwordBox.SetValue(WatermarkIsVisibleProperty, false);
-				SetWatermarkIsVisible(passwordBox, false);
+				passwordBox.SetValue(IsWatermarkVisibleProperty, false);
+				SetIsWatermarkVisible(passwordBox, false);
 			}
 
 			if (passwordBox is not null)
