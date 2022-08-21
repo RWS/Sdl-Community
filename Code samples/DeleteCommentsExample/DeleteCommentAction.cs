@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
@@ -27,6 +28,12 @@ namespace DeleteCommentsExample
 			{
 				to = from;
 				from = selection.UpTo;
+			}
+
+			if (from is null || to is null)
+			{
+				MessageBox.Show("Select valid segments", null, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
 			}
 
 			var startCoordinates = new TextCoordinates
