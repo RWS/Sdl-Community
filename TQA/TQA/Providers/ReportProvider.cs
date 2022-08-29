@@ -25,8 +25,8 @@ namespace Sdl.Community.TQA.Providers
 
 	public class ReportProvider
 	{
-		const string TQS_J2450_ReportFileName = "SDL-5-401-F001 Quality Evaluation Form_XXX_XXXXXX_XXX_XX";
-		const string TQS_MQM_ReportFileName = "RWS-5-401-F002-MQM Quality Evaluation Form-XXX_XXXXXX_XXX";
+		const string TQS_J2450_ReportFileName = "SDL-5-401-F001 QE Form_XXX_XXXXXX_XXX_XX";
+		const string TQS_MQM_ReportFileName = "RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX";
 		const string TQS_J2450_ReportTemplate = "SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM";
 		const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.XLSM";
 		const string DefaultReportRelativePath = "Reports\\TQAReports";
@@ -130,7 +130,7 @@ namespace Sdl.Community.TQA.Providers
 				case TQAProfileType.tqsJ2450:
 					return PluginResources.SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX;
 				case TQAProfileType.tqsMQM:
-					return PluginResources.RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_;
+					return PluginResources.RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX;
 				default:
 					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
 			}

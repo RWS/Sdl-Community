@@ -31,8 +31,6 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
 			this.outputSaveDialog = new System.Windows.Forms.SaveFileDialog();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.txtStandardUsed = new System.Windows.Forms.Label();
-			this.txtProjectName = new System.Windows.Forms.Label();
 			this.gbTQAReportingOptions = new System.Windows.Forms.GroupBox();
 			this.QualityCombo = new System.Windows.Forms.ComboBox();
 			this.QualityLevelLbl = new System.Windows.Forms.Label();
@@ -42,10 +40,14 @@
 			this.label_progress = new System.Windows.Forms.Label();
 			this.StartButton = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.txtProjectName = new System.Windows.Forms.Label();
+			this.txtStandardUsed = new System.Windows.Forms.Label();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1.SuspendLayout();
 			this.gbTQAReportingOptions.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// outputSaveDialog
@@ -56,43 +58,14 @@
 			// panel1
 			// 
 			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel1.Controls.Add(this.txtStandardUsed);
-			this.panel1.Controls.Add(this.txtProjectName);
+			this.panel1.Controls.Add(this.tableLayoutPanel1);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Margin = new System.Windows.Forms.Padding(2);
 			this.panel1.Name = "panel1";
-			this.panel1.Padding = new System.Windows.Forms.Padding(3, 15, 3, 6);
-			this.panel1.Size = new System.Drawing.Size(403, 58);
+			this.panel1.Padding = new System.Windows.Forms.Padding(5, 10, 5, 5);
+			this.panel1.Size = new System.Drawing.Size(395, 63);
 			this.panel1.TabIndex = 3;
-			// 
-			// txtStandardUsed
-			// 
-			this.txtStandardUsed.AutoEllipsis = true;
-			this.txtStandardUsed.AutoSize = true;
-			this.txtStandardUsed.Dock = System.Windows.Forms.DockStyle.Top;
-			this.txtStandardUsed.Location = new System.Drawing.Point(3, 31);
-			this.txtStandardUsed.Margin = new System.Windows.Forms.Padding(0);
-			this.txtStandardUsed.MaximumSize = new System.Drawing.Size(267, 0);
-			this.txtStandardUsed.Name = "txtStandardUsed";
-			this.txtStandardUsed.Padding = new System.Windows.Forms.Padding(5, 10, 0, 3);
-			this.txtStandardUsed.Size = new System.Drawing.Size(95, 26);
-			this.txtStandardUsed.TabIndex = 11;
-			this.txtStandardUsed.Text = "TQStandardUsed";
-			// 
-			// txtProjectName
-			// 
-			this.txtProjectName.AutoEllipsis = true;
-			this.txtProjectName.AutoSize = true;
-			this.txtProjectName.Dock = System.Windows.Forms.DockStyle.Top;
-			this.txtProjectName.Location = new System.Drawing.Point(3, 15);
-			this.txtProjectName.Margin = new System.Windows.Forms.Padding(0, 3, 0, 6);
-			this.txtProjectName.MaximumSize = new System.Drawing.Size(267, 0);
-			this.txtProjectName.Name = "txtProjectName";
-			this.txtProjectName.Padding = new System.Windows.Forms.Padding(5, 0, 0, 3);
-			this.txtProjectName.Size = new System.Drawing.Size(73, 16);
-			this.txtProjectName.TabIndex = 1;
-			this.txtProjectName.Text = "ProjectName";
 			// 
 			// gbTQAReportingOptions
 			// 
@@ -105,7 +78,7 @@
 			this.gbTQAReportingOptions.Margin = new System.Windows.Forms.Padding(2);
 			this.gbTQAReportingOptions.Name = "gbTQAReportingOptions";
 			this.gbTQAReportingOptions.Padding = new System.Windows.Forms.Padding(2);
-			this.gbTQAReportingOptions.Size = new System.Drawing.Size(383, 124);
+			this.gbTQAReportingOptions.Size = new System.Drawing.Size(375, 140);
 			this.gbTQAReportingOptions.TabIndex = 3;
 			this.gbTQAReportingOptions.TabStop = false;
 			this.gbTQAReportingOptions.Text = "Options";
@@ -158,11 +131,11 @@
 			this.panel3.Controls.Add(this.label_progress);
 			this.panel3.Controls.Add(this.StartButton);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel3.Location = new System.Drawing.Point(0, 202);
+			this.panel3.Location = new System.Drawing.Point(0, 223);
 			this.panel3.Margin = new System.Windows.Forms.Padding(2, 10, 2, 2);
 			this.panel3.Name = "panel3";
 			this.panel3.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-			this.panel3.Size = new System.Drawing.Size(403, 32);
+			this.panel3.Size = new System.Drawing.Size(395, 32);
 			this.panel3.TabIndex = 5;
 			// 
 			// label_progress
@@ -178,7 +151,7 @@
 			// StartButton
 			// 
 			this.StartButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.StartButton.Location = new System.Drawing.Point(265, 1);
+			this.StartButton.Location = new System.Drawing.Point(257, 1);
 			this.StartButton.Name = "StartButton";
 			this.StartButton.Size = new System.Drawing.Size(129, 23);
 			this.StartButton.TabIndex = 2;
@@ -190,12 +163,54 @@
 			// 
 			this.panel2.Controls.Add(this.gbTQAReportingOptions);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(0, 58);
+			this.panel2.Location = new System.Drawing.Point(0, 63);
 			this.panel2.Margin = new System.Windows.Forms.Padding(2);
 			this.panel2.Name = "panel2";
 			this.panel2.Padding = new System.Windows.Forms.Padding(10);
-			this.panel2.Size = new System.Drawing.Size(403, 144);
+			this.panel2.Size = new System.Drawing.Size(395, 160);
 			this.panel2.TabIndex = 4;
+			// 
+			// txtProjectName
+			// 
+			this.txtProjectName.AutoEllipsis = true;
+			this.txtProjectName.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtProjectName.Location = new System.Drawing.Point(0, 0);
+			this.txtProjectName.Margin = new System.Windows.Forms.Padding(0);
+			this.txtProjectName.Name = "txtProjectName";
+			this.txtProjectName.Padding = new System.Windows.Forms.Padding(3);
+			this.txtProjectName.Size = new System.Drawing.Size(385, 24);
+			this.txtProjectName.TabIndex = 1;
+			this.txtProjectName.Text = "ProjectName";
+			this.txtProjectName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtStandardUsed
+			// 
+			this.txtStandardUsed.AutoEllipsis = true;
+			this.txtStandardUsed.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtStandardUsed.Location = new System.Drawing.Point(0, 24);
+			this.txtStandardUsed.Margin = new System.Windows.Forms.Padding(0);
+			this.txtStandardUsed.Name = "txtStandardUsed";
+			this.txtStandardUsed.Padding = new System.Windows.Forms.Padding(3);
+			this.txtStandardUsed.Size = new System.Drawing.Size(385, 24);
+			this.txtStandardUsed.TabIndex = 11;
+			this.txtStandardUsed.Text = "TQAProfileName";
+			this.txtStandardUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.txtStandardUsed, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.txtProjectName, 0, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 10);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(385, 48);
+			this.tableLayoutPanel1.TabIndex = 12;
 			// 
 			// MainWindow
 			// 
@@ -203,7 +218,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoScroll = true;
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(403, 234);
+			this.ClientSize = new System.Drawing.Size(395, 255);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel1);
@@ -216,12 +231,12 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Run TQA Reporting";
 			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.gbTQAReportingOptions.ResumeLayout(false);
 			this.gbTQAReportingOptions.PerformLayout();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
 			this.panel2.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -229,8 +244,6 @@
         #endregion
         private System.Windows.Forms.SaveFileDialog outputSaveDialog;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Label txtProjectName;
-		private System.Windows.Forms.Label txtStandardUsed;
 		private System.Windows.Forms.GroupBox gbTQAReportingOptions;
 		private System.Windows.Forms.ComboBox QualityCombo;
 		private System.Windows.Forms.Label QualityLevelLbl;
@@ -240,5 +253,8 @@
 		private System.Windows.Forms.Button StartButton;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Label label_progress;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.Label txtStandardUsed;
+		private System.Windows.Forms.Label txtProjectName;
 	}
 }

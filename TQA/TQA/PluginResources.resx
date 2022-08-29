@@ -181,7 +181,7 @@
   <data name="ResetToDef" xml:space="preserve">
     <value>Reset to default</value>
   </data>
-  <data name="RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX" type="System.Resources.ResXFileRef, System.Windows.Forms">
