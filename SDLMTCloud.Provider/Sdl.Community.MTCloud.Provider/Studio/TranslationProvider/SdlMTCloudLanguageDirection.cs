@@ -330,7 +330,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				var currentSegmentId = currentTdSegment.SegmentId.ToString();
 
 				var startOfNullList = -1;
-				if (!previousWasNull && currentSegmentId == "null")
+				if (!previousWasNull && currentSegmentId == "null" && index != 0)
 				{
 					startOfNullList = index;
 					previousWasNull = true;
@@ -434,10 +434,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		private (SegmentId, SegmentId) GetSegmentIdRange((int Start, int End) adjacentNullSequence, List<(SegmentId Id, string Text)> translationUnitData, List<ISegment> allFileSegments)
 		{
-			var previousIndex = adjacentNullSequence.Start - 1;
+			// Start can be -1, End can be 0
+			var previousIndex = adjacentNullSequence.Start - 1; // previeousIndex will become -2
 			var previousNonNullSegmentId = previousIndex > -1
 				? translationUnitData[previousIndex].Id
-				: allFileSegments[0].Properties.Id;
+				: allFileSegments[0].Properties.Id; // allFileSegments has no elements
 
 			var nextIndex = adjacentNullSequence.End + 1;
 			var nextNonNullSegmentId = nextIndex < translationUnitData.Count
