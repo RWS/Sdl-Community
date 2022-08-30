@@ -14,8 +14,9 @@ namespace Sdl.Community.TargetWordCount
 			if (_settings is null) return;
 			_settings.CharactersPerLine = _control.charPerLineTextBox.Text;
 			_control.SetInvoiceRates();
-
 		}
+
+
 		public override object GetControl()
 		{
 			_control = base.GetControl() as WordCountBatchTaskSettingsControl;
