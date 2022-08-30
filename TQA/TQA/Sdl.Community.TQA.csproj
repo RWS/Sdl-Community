@@ -43,6 +43,9 @@
     <Reference Include="ClosedXML">
       <HintPath>3rd party signed\ClosedXML.dll</HintPath>
     </Reference>
+    <Reference Include="FastMember">
+      <HintPath>3rd party signed\FastMember.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
@@ -61,11 +64,11 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -158,10 +161,13 @@
     <None Include="Resources\ClosedXML.dll" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="3rd party signed\ClosedXML.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="3rd party signed\FastMember.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="pluginpackage.manifest.xml">
