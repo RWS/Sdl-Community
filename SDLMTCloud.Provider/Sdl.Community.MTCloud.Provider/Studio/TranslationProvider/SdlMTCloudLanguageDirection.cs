@@ -262,15 +262,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		}
 
 		private string GetFilePath(TranslationUnit[] translationUnits)
-		{
-			var filepath = translationUnits[0].DocumentProperties is not null
-				? Path.GetFileName(translationUnits[0].DocumentProperties.LastOpenedAsPath)
+			=> translationUnits[0].DocumentProperties is not null
+				? translationUnits[0].DocumentProperties.LastOpenedAsPath
 				: translationUnits.Length > 1
-					? Path.GetFileName(translationUnits[1].DocumentProperties.LastOpenedAsPath)
+					? translationUnits[1].DocumentProperties.LastOpenedAsPath
 					: null;
-
-			return filepath;
-		}
 
 		public Dictionary<string, List<ISegment>> Segments { get; set; } = new();
 
@@ -334,7 +330,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				var currentSegmentId = currentTdSegment.SegmentId.ToString();
 
 				var startOfNullList = -1;
-				if (!previousWasNull && currentSegmentId == "null")
+				if (!previousWasNull && currentSegmentId == "null" && index != 0)
 				{
 					startOfNullList = index;
 					previousWasNull = true;
