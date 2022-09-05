@@ -161,7 +161,7 @@
     <None Include="Resources\ClosedXML.dll" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="3rd party signed\ClosedXML.dll">
