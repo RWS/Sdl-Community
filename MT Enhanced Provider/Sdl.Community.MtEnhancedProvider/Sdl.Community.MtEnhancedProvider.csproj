@@ -285,5 +285,4 @@
   <PropertyGroup>
     <ApplicationIcon>my_icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
