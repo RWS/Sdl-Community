@@ -68,8 +68,8 @@ namespace Sdl.Community.MtEnhancedProvider.GoogleApi
 						sourceText
 					},
 					Model = _modelPath,
-					TargetLanguageCode = targetLanguage.Name,
-					SourceLanguageCode = sourceLanguage.Name,
+					TargetLanguageCode = targetLanguage.TwoLetterISOLanguageName,
+					SourceLanguageCode = sourceLanguage.TwoLetterISOLanguageName,
 					Parent = new ProjectName(_options.ProjectName).ToString(),
 					MimeType = mimeType
 				};
