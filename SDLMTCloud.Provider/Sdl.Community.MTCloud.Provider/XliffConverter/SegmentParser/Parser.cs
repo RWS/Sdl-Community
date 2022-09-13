@@ -15,8 +15,8 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 		private static readonly Regex StartingTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)>");
         private static readonly Regex EndingTag = new Regex(@"</(\d+)>");
         private static readonly Regex StandaloneTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+)/>");
-        private static readonly Regex PlaceholderTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""(.*)""/>");
-        private static readonly Regex LockedTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""(.*)"" locked=""true""/>");
+        private static readonly Regex PlaceholderTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""([\S\s]+)""/>");
+        private static readonly Regex LockedTag = new Regex(@"<(\d+) (?:x=(\d+) )?id=([^ />]+) text-equiv=""([\S\s]+)"" locked=""true""/>");
 
         /// <summary>
         /// Method used in Unit tests
@@ -45,7 +45,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 			// allow any character except >
 			if (string.IsNullOrEmpty(text)) return segment;
 
-			var tags = Regex.Split(text, @"(<[^>""]*>|<.*?"".*?""\/>)");
+			var tags = Regex.Split(text, @"(<(?:""[^""]*""['""]*|'[^']*'['""]*|[^'"">])+>)");
 			var startingTags = new Stack<Tag>();
 			foreach (var tag in tags)
 			{
@@ -55,7 +55,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.SegmentParser
 				var parsedTag = ParseTag(tag);
 				if (parsedTag == null)
 				{
-					segment.Add(tag);
+					segment.Add(tag.Replace("\r\n", "\n"));
 					continue;
 				}
 
