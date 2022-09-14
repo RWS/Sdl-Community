@@ -166,6 +166,7 @@
 			this.LanguageSelector.Name = "LanguageSelector";
 			this.LanguageSelector.Size = new System.Drawing.Size(209, 21);
 			this.LanguageSelector.TabIndex = 0;
+			this.LanguageSelector.SelectedIndexChanged += new System.EventHandler(this.LanguageSelector_SelectedIndexChanged);
 			// 
 			// panel3
 			// 

@@ -125,8 +125,9 @@ namespace Sdl.Community.TQA
 		private void SetupTqaStandardProfile()
 		{
 			txtStandardUsed.Text = PluginResources.Label_TQAProfile + " " + _reportProvider.GetProfileTypeName(_tqaProfileType);
-			StartButton.Enabled = IsValid();
 			SetupQualityCombobox();
+
+			IsValid();
 		}
 
 		private bool IsValid()
@@ -134,7 +135,10 @@ namespace Sdl.Community.TQA
 			var isValidProfileType = _tqaProfileType == TQAProfileType.tqsJ2450 || _tqaProfileType == TQAProfileType.tqsMQM;
 			var isValidFiles = GetProjectFiles().Any();
 
-			return isValidProfileType && isValidFiles;
+			var isValid = isValidProfileType && isValidFiles;
+			StartButton.Enabled = isValid;
+
+			return isValid;
 		}
 
 		private string GetLanguageId()
@@ -191,6 +195,11 @@ namespace Sdl.Community.TQA
 			else
 			{
 				var localProjectFolder = _currentProject.GetProjectInfo().LocalProjectFolder;
+				if (!Directory.Exists(localProjectFolder))
+				{
+					Directory.CreateDirectory(localProjectFolder);
+				}
+
 				var defaultReportsDirectory = _reportProvider.GetReportDirectory(localProjectFolder);
 				var defaultReportFileName = _reportProvider.GetReportDefaultOutputFilename(_tqaProfileType);
 				var languageId = GetLanguageId();
@@ -214,7 +223,7 @@ namespace Sdl.Community.TQA
 					if (tqaAutomaticTask == null || tqaAutomaticTask.Status != TaskStatus.Completed)
 					{
 						_logger.Error($"{tqaAutomaticTask?.Messages?.FirstOrDefault()?.Message}\n " +
-						              PluginResources.MsgTQATaskNotRunCorrectly);
+									  PluginResources.MsgTQATaskNotRunCorrectly);
 					}
 
 					var success = _reportProvider.GenerateReport(_currentProject, tqaAutomaticTask, _tqaProfileType,
@@ -272,6 +281,11 @@ namespace Sdl.Community.TQA
 			}
 
 			return projectFiles;
+		}
+
+		private void LanguageSelector_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			IsValid();
 		}
 	}
 }
