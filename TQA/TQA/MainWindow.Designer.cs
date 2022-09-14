@@ -31,6 +31,9 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
 			this.outputSaveDialog = new System.Windows.Forms.SaveFileDialog();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.txtStandardUsed = new System.Windows.Forms.Label();
+			this.txtProjectName = new System.Windows.Forms.Label();
 			this.gbTQAReportingOptions = new System.Windows.Forms.GroupBox();
 			this.QualityCombo = new System.Windows.Forms.ComboBox();
 			this.QualityLevelLbl = new System.Windows.Forms.Label();
@@ -40,14 +43,11 @@
 			this.label_progress = new System.Windows.Forms.Label();
 			this.StartButton = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.txtProjectName = new System.Windows.Forms.Label();
-			this.txtStandardUsed = new System.Windows.Forms.Label();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.gbTQAReportingOptions.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// outputSaveDialog
@@ -66,6 +66,48 @@
 			this.panel1.Padding = new System.Windows.Forms.Padding(5, 10, 5, 5);
 			this.panel1.Size = new System.Drawing.Size(395, 63);
 			this.panel1.TabIndex = 3;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.txtStandardUsed, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.txtProjectName, 0, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 10);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(385, 48);
+			this.tableLayoutPanel1.TabIndex = 12;
+			// 
+			// txtStandardUsed
+			// 
+			this.txtStandardUsed.AutoEllipsis = true;
+			this.txtStandardUsed.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtStandardUsed.Location = new System.Drawing.Point(0, 24);
+			this.txtStandardUsed.Margin = new System.Windows.Forms.Padding(0);
+			this.txtStandardUsed.Name = "txtStandardUsed";
+			this.txtStandardUsed.Padding = new System.Windows.Forms.Padding(3);
+			this.txtStandardUsed.Size = new System.Drawing.Size(385, 24);
+			this.txtStandardUsed.TabIndex = 11;
+			this.txtStandardUsed.Text = "TQAProfileName";
+			this.txtStandardUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtProjectName
+			// 
+			this.txtProjectName.AutoEllipsis = true;
+			this.txtProjectName.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtProjectName.Location = new System.Drawing.Point(0, 0);
+			this.txtProjectName.Margin = new System.Windows.Forms.Padding(0);
+			this.txtProjectName.Name = "txtProjectName";
+			this.txtProjectName.Padding = new System.Windows.Forms.Padding(3);
+			this.txtProjectName.Size = new System.Drawing.Size(385, 24);
+			this.txtProjectName.TabIndex = 1;
+			this.txtProjectName.Text = "ProjectName";
+			this.txtProjectName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// gbTQAReportingOptions
 			// 
@@ -124,6 +166,7 @@
 			this.LanguageSelector.Name = "LanguageSelector";
 			this.LanguageSelector.Size = new System.Drawing.Size(209, 21);
 			this.LanguageSelector.TabIndex = 0;
+			this.LanguageSelector.SelectedIndexChanged += new System.EventHandler(this.LanguageSelector_SelectedIndexChanged);
 			// 
 			// panel3
 			// 
@@ -170,48 +213,6 @@
 			this.panel2.Size = new System.Drawing.Size(395, 160);
 			this.panel2.TabIndex = 4;
 			// 
-			// txtProjectName
-			// 
-			this.txtProjectName.AutoEllipsis = true;
-			this.txtProjectName.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtProjectName.Location = new System.Drawing.Point(0, 0);
-			this.txtProjectName.Margin = new System.Windows.Forms.Padding(0);
-			this.txtProjectName.Name = "txtProjectName";
-			this.txtProjectName.Padding = new System.Windows.Forms.Padding(3);
-			this.txtProjectName.Size = new System.Drawing.Size(385, 24);
-			this.txtProjectName.TabIndex = 1;
-			this.txtProjectName.Text = "ProjectName";
-			this.txtProjectName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// txtStandardUsed
-			// 
-			this.txtStandardUsed.AutoEllipsis = true;
-			this.txtStandardUsed.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtStandardUsed.Location = new System.Drawing.Point(0, 24);
-			this.txtStandardUsed.Margin = new System.Windows.Forms.Padding(0);
-			this.txtStandardUsed.Name = "txtStandardUsed";
-			this.txtStandardUsed.Padding = new System.Windows.Forms.Padding(3);
-			this.txtStandardUsed.Size = new System.Drawing.Size(385, 24);
-			this.txtStandardUsed.TabIndex = 11;
-			this.txtStandardUsed.Text = "TQAProfileName";
-			this.txtStandardUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.ColumnCount = 1;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.txtStandardUsed, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.txtProjectName, 0, 0);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 10);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(385, 48);
-			this.tableLayoutPanel1.TabIndex = 12;
-			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,12 +232,12 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Run TQA Reporting";
 			this.panel1.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
 			this.gbTQAReportingOptions.ResumeLayout(false);
 			this.gbTQAReportingOptions.PerformLayout();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
 			this.panel2.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
