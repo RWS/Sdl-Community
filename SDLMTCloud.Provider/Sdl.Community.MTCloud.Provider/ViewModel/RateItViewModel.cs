@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider;
@@ -12,7 +13,6 @@ using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
-using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -473,19 +473,25 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private async Task SendFeedback(SegmentId? segmentId)
 		{
 			DefaultFeedbackSendingStatus();
-			if (!IsSendFeedbackEnabled) return;
-			var suggestion = GetImprovement(segmentId);
-
-			//Checking for consistency: whether translation corresponds to source
-			if (suggestion != null && suggestion.OriginalSource != GetSourceSegment(segmentId))
+			if (!IsSendFeedbackEnabled)
 			{
-				_messageBoxService.ShowWarningMessage(
-					string.Format(PluginResources.SourceModifiedTextAndAdvice, PluginResources.SDLMTCloud_Provider_Name), PluginResources.SourceModified);
-
 				return;
 			}
 
-			var rating = GetRatingObject(segmentId);
+			var suggestion = GetImprovement(segmentId);
+			var regexPattern = @"(<(?:""[^""]*""['""]*|'[^']*'['""]*|[^'"">])+>)";
+			var originalSourceText = Regex.Replace(suggestion?.OriginalSource, regexPattern, string.Empty);
+			var sourceSegmentText = Regex.Replace(GetSourceSegment(segmentId), regexPattern, string.Empty);
+
+			//Checking for consistency: whether translation corresponds to source
+			if (suggestion is null
+			 || originalSourceText != sourceSegmentText)
+			{
+				_messageBoxService.ShowWarningMessage(string.Format(PluginResources.SourceModifiedTextAndAdvice,
+																	PluginResources.SDLMTCloud_Provider_Name),
+													  PluginResources.SourceModified);
+				return;
+			}
 
 			var segmentPairInProcessing = ActiveDocument.SegmentPairs.ToList().FirstOrDefault(sp => sp.Properties.Id.Equals(segmentId));
 			var segmentSource = segmentId != null
@@ -499,16 +505,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			var feedbackInfo = new FeedbackInfo
 			{
 				Evaluation = estimation,
-				Rating = rating,
+				Rating = GetRatingObject(segmentId),
 				SegmentSource = segmentSource,
 				Suggestion = suggestion?.Improvement,
 				OriginalMtCloudTranslation = suggestion?.OriginalMtCloudTranslation
 			};
 
 			EnsureFeedbackWillGetThrough(segmentId, feedbackInfo, segmentPairInProcessing);
-
 			var responseMessage = await _translationService.SendFeedback(feedbackInfo);
-
 			await FeedbackSendingStatus.ChangeStatus(responseMessage);
 			OnFeedbackSendingStatusChanged();
 		}
