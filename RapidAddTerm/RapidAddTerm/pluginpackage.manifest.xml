@@ -4,5 +4,5 @@
   <Version>3.0.3.0</Version>
   <Description>Rapid Add Term</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.0.3" maxversion="17.9" />
 </PluginPackage>
