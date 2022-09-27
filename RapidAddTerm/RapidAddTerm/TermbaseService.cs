@@ -16,18 +16,16 @@ namespace Sdl.Community.RapidAddTerm
 {
 	public class TermbaseService
 	{
-		private FileBasedProject GetProject() => SdlTradosStudio.Application.GetController<ProjectsController>()?.CurrentProject;
+		private ProjectsController _projectsController = null;
+		private EditorController _editorController = null;
+
+		private ProjectsController ProjectsController => _projectsController ?? (_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>());
+		private EditorController EditorController => _editorController ?? (_editorController = SdlTradosStudio.Application.GetController<EditorController>());
+
+		private FileBasedProject GetProject() => ProjectsController.CurrentProject;
 		private TermbaseConfiguration GetTermbaseConfiguration() => GetProject()?.GetTermbaseConfiguration();
 
-		private IStudioDocument GetActiveDocument() => SdlTradosStudio.Application.GetController<EditorController>()?.ActiveDocument;
-
-		private string GetSourceLanguage()
-		{
-			var activeDocument = GetActiveDocument();
-			var sourceLanguage = activeDocument.ActiveFile?.SourceFile.Language;
-			var projectSourceLanguage = GetProject().GetSourceLanguageFiles().Length > 0 ? GetProject().GetSourceLanguageFiles()[0].Language : null;
-			return projectSourceLanguage.DefaultSpecificLanguageCode;
-		}
+		private IStudioDocument GetActiveDocument() => EditorController.ActiveDocument;
 		public void AddNewTerm()
 		{
 			var activeDocument = GetActiveDocument();
