@@ -165,26 +165,29 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static string EnsureValidPath(string filePath, string targetLanguage)
 		{
-			if (!File.Exists(filePath))
-			{
-				const string fileType = ".sdlxliff";
-				var fileName = filePath.ToLower()
-									   .Split(new string[] { $"{targetLanguage.ToLower()}\\" },
-												 StringSplitOptions.RemoveEmptyEntries)
-									   .LastOrDefault();
-				var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ?? Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
-				var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}{(fileName.EndsWith(fileType) ? string.Empty : fileType)}";
-				if (!File.Exists(processedPath))
-				{
-					processedPath = Directory.GetFiles(projectPath)
-											 .FirstOrDefault(file => Path.GetFileName(file)
-																		 .Contains(Path.GetFileNameWithoutExtension(filePath)) && Path.GetExtension(file) == fileType);
-				}
+			if (File.Exists(filePath)) return filePath;
 
-				return File.Exists(processedPath) ? processedPath : null;
-			}
+			const string filenameExtension = ".sdlxliff";
+			var separatorTokens = new string[] { $@"{targetLanguage.ToLower()}\" };
+			var fileName = filePath.ToLower()
+								   .Split(separatorTokens, StringSplitOptions.RemoveEmptyEntries)
+								   .LastOrDefault();
+			fileName += !fileName.EndsWith(filenameExtension) ? filenameExtension : string.Empty;
+			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
+							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
+			var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}";
 
-			return filePath;
+			if (File.Exists(processedPath)) return processedPath;
+
+			if (string.IsNullOrEmpty(projectPath)) return null;
+
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
+			processedPath = targetLanguageFiles.FirstOrDefault(
+					file =>
+						Path.GetFileName(file).Contains(Path.GetFileNameWithoutExtension(filePath)) &&
+						Path.GetExtension(file) == filenameExtension);
+
+			return File.Exists(processedPath) ? processedPath : null;
 		}
 
 		private static void AttachToProjectCreatedEvent()
