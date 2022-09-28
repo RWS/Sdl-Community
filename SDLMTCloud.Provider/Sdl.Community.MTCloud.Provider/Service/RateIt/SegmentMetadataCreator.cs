@@ -21,7 +21,8 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private List<TranslationData> Data { get; } = new();
 
-		private IEnumerable<IGrouping<string, MetadataTransferObject>> GroupedData => _groupedData ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
+		private IEnumerable<IGrouping<string, MetadataTransferObject>> GroupedData
+			=> _groupedData ??= Data.Select(ConvertToSdlMtData).GroupBy(mtData => mtData.FilePath);
 
 		public void StoreMetadata(TranslationData translationData)
 		{
@@ -32,12 +33,14 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		{
 			var currentSegmentPair = activeDocument.ActiveSegmentPair;
 			var translationOrigin = currentSegmentPair.Properties.TranslationOrigin;
-			if (translationOrigin is not null)
-			{
-				translationOrigin.SetMetaData("quality_estimation", translationOriginDatum.QualityEstimation);
-				translationOrigin.SetMetaData("model", translationOriginDatum.Model);
-				activeDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
-			}
+
+			if (translationOrigin is null)
+				return;
+
+			translationOrigin.SetMetaData("quality_estimation", translationOriginDatum.QualityEstimation);
+			translationOrigin.SetMetaData("model", translationOriginDatum.Model);
+
+			activeDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
 		public void AddStoredMetadataToProjectFile()
@@ -46,15 +49,13 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			{
 				var translationData = kvp.ToList();
 				var currentFilePath = MtCloudApplicationInitializer.EnsureValidPath(kvp.Key, translationData[0].TargetLanguage);
-				if (currentFilePath is not null)
-				{
-					var converter = _manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
-					var contentProcessor = new MetaDataProcessor(translationData);
-					converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
-					converter?.Parse();
-				}
-			}
+				if (currentFilePath == null) continue;
 
+				var converter = _manager.GetConverterToDefaultBilingual(currentFilePath, currentFilePath, null);
+				var contentProcessor = new MetaDataProcessor(translationData);
+				converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
+				converter?.Parse();
+			}
 			ResetData();
 		}
 
