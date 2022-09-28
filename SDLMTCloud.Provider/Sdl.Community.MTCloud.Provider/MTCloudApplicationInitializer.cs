@@ -163,27 +163,28 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 		}
 
-		public static string EnsureValidPath(string filepath, string targetLanguage)
+		public static string EnsureValidPath(string filePath, string targetLanguage)
 		{
-			if (File.Exists(filepath)) return filepath;
+			if (!File.Exists(filePath))
+			{
+				const string fileType = ".sdlxliff";
+				var fileName = filePath.ToLower()
+									   .Split(new string[] { $"{targetLanguage.ToLower()}\\" },
+												 StringSplitOptions.RemoveEmptyEntries)
+									   .LastOrDefault();
+				var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ?? Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
+				var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}{(fileName.EndsWith(fileType) ? string.Empty : fileType)}";
+				if (!File.Exists(processedPath))
+				{
+					processedPath = Directory.GetFiles(projectPath)
+											 .FirstOrDefault(file => Path.GetFileName(file)
+																		 .Contains(Path.GetFileNameWithoutExtension(filePath)) && Path.GetExtension(file) == fileType);
+				}
 
-			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
-							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
+				return File.Exists(processedPath) ? processedPath : null;
+			}
 
-			var pathWithExtension = filepath.Contains(".sdlxliff") ? filepath : $"{filepath}.sdlxliff";
-			var processedPath = $@"{projectPath}\{targetLanguage}\{pathWithExtension}";
-
-			if (File.Exists(processedPath)) return processedPath;
-
-			if (string.IsNullOrWhiteSpace(projectPath)) return null;
-			var targetLanguageFiles = Directory.GetFiles(projectPath);
-			processedPath =
-				targetLanguageFiles.FirstOrDefault(
-					f =>
-						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(pathWithExtension)) &&
-						Path.GetExtension(f) == ".sdlxliff");
-
-			return File.Exists(processedPath) ? processedPath : null;
+			return filePath;
 		}
 
 		private static void AttachToProjectCreatedEvent()
