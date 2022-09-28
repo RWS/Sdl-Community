@@ -59,70 +59,74 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public static void AddCurrentProjectProvider(SdlMTCloudTranslationProvider provider)
 		{
-			if (!IsStudioRunning()) return;
-			if (IsProjectCreationTime())
+			if (IsStudioRunning())
 			{
-				AttachToProjectCreatedEvent();
+				if (IsProjectCreationTime())
+				{
+					AttachToProjectCreatedEvent();
+				}
+
+				if (!string.IsNullOrEmpty(CurrentProjectId))
+				{
+					Providers[CurrentProjectId] = provider;
+				}
 			}
-
-			if (string.IsNullOrEmpty(CurrentProjectId)) return;
-
-			Providers[CurrentProjectId] = provider;
 		}
 
 		public static SdlMTCloudTranslationProvider GetCurrentProjectProvider()
 		{
 			return Providers.ContainsKey(ProjectInProcessing)
-				? Providers[ProjectInProcessing]
-				: string.IsNullOrEmpty(CurrentProjectId) ? null : Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
+				 ? Providers[ProjectInProcessing]
+				 : string.IsNullOrEmpty(CurrentProjectId) ? null : Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
 		}
 
 		public static Window GetCurrentWindow()
 		{
-			return
-				Application.Current.Windows.Cast<Window>().FirstOrDefault(
-					window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
+			return Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 		}
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
-			if (!IsStudioRunning()) return null;
-			if (Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
+			if (IsStudioRunning())
 			{
-				return null;
+				if (!Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
+				{
+					var projectInProcessing = CurrentViewDetector.View
+						switch
+					{
+						CurrentViewDetector.CurrentView.ProjectsView => ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject,
+						CurrentViewDetector.CurrentView.FilesView => ProjectsController.CurrentProject,
+						CurrentViewDetector.CurrentView.EditorView => ProjectsController.CurrentProject,
+						_ => null
+					};
+
+					return projectInProcessing;
+				}
 			}
 
-			var projectInProcessing = CurrentViewDetector.View
-				switch
-			{
-				CurrentViewDetector.CurrentView.ProjectsView => ProjectsController.SelectedProjects.FirstOrDefault() ?? ProjectsController.CurrentProject,
-				CurrentViewDetector.CurrentView.FilesView => ProjectsController.CurrentProject,
-				CurrentViewDetector.CurrentView.EditorView => ProjectsController.CurrentProject,
-				_ => null
-			};
-			return projectInProcessing;
+			return null;
 		}
 
 		public static bool IsProjectCreationTime()
 		{
-			return
-				Application.Current.Dispatcher.Invoke(
-					() =>
-						GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
+			return Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
 		}
 
 		public static bool IsStudioRunning()
 		{
-			if (_isStudioRunning is not null) return _isStudioRunning.Value;
-
-			try
+			if (_isStudioRunning is null)
 			{
-				_isStudioRunning ??= SdlTradosStudio.Application is not null;
-				return _isStudioRunning.Value;
-			}
-			catch { }
+				try
+				{
+					_isStudioRunning ??= SdlTradosStudio.Application is not null;
+					return _isStudioRunning.Value;
+				}
+				catch { }
 
-			return _isStudioRunning ??= false;
+				return _isStudioRunning ??= false;
+			}
+
+			return _isStudioRunning.Value;
 		}
 
 		public static void PublishEvent<TEvent>(TEvent sampleEvent)
@@ -133,7 +137,9 @@ namespace Sdl.Community.MTCloud.Provider
 		public static void RefreshQeStatus()
 		{
 			if (TranslationService?.IsActiveModelQeEnabled ?? false)
+			{
 				PublishEvent(new RefreshQeStatus());
+			}
 		}
 
 		public static void SetTranslationService(IConnectionService connectionService, ITranslationService translationService)
@@ -151,7 +157,6 @@ namespace Sdl.Community.MTCloud.Provider
 		public void Execute()
 		{
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
 			if (IsStudioRunning())
 			{
 				FileTypeManager = DefaultFileTypeManager.CreateInstance(true);
@@ -167,18 +172,19 @@ namespace Sdl.Community.MTCloud.Provider
 		{
 			if (!File.Exists(filePath))
 			{
-				const string fileType = ".sdlxliff";
+				const string filenameExtension = ".sdlxliff";
 				var fileName = filePath.ToLower()
 									   .Split(new string[] { $"{targetLanguage.ToLower()}\\" },
-												 StringSplitOptions.RemoveEmptyEntries)
+											  StringSplitOptions.RemoveEmptyEntries)
 									   .LastOrDefault();
+				fileName += !fileName.EndsWith(filenameExtension) ? filenameExtension : string.Empty;
 				var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ?? Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
-				var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}{(fileName.EndsWith(fileType) ? string.Empty : fileType)}";
+				var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}";
 				if (!File.Exists(processedPath))
 				{
 					processedPath = Directory.GetFiles(projectPath)
 											 .FirstOrDefault(file => Path.GetFileName(file)
-																		 .Contains(Path.GetFileNameWithoutExtension(filePath)) && Path.GetExtension(file) == fileType);
+																		 .Contains(Path.GetFileNameWithoutExtension(filePath)) && Path.GetExtension(file) == filenameExtension);
 				}
 
 				return File.Exists(processedPath) ? processedPath : null;
@@ -195,16 +201,15 @@ namespace Sdl.Community.MTCloud.Provider
 		private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
 		{
 			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
+			if (Providers.ContainsKey(ProjectInProcessing))
+			{
+				var currentProvider = Providers[ProjectInProcessing];
+				Providers.Remove(ProjectInProcessing);
 
-			if (!Providers.ContainsKey(ProjectInProcessing)) return;
-
-			var currentProvider = Providers[ProjectInProcessing];
-			Providers.Remove(ProjectInProcessing);
-
-			var projectInCreation = ProjectsController.CurrentProject;
-
-			ProjectInCreationFilePath = projectInCreation.FilePath;
-			Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
+				var projectInCreation = ProjectsController.CurrentProject;
+				ProjectInCreationFilePath = projectInCreation.FilePath;
+				Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
+			}
 		}
 	}
 }
