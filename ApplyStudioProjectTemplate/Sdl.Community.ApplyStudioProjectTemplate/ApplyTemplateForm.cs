@@ -52,12 +52,19 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// </value>
 		public bool ApplyToSelected => ApplyTo.SelectedIndex == 1;
 
+		private string GetTemplatesPath()
+		{
+			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			Directory.CreateDirectory( Path.GetDirectoryName(projectTemplatesPath) );
+			return projectTemplatesPath;
+		}
+
 		/// <summary>
 		/// Saves the project templates.
 		/// </summary>
 		public void SaveProjectTemplates()
 		{
-			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			var projectTemplatesPath = GetTemplatesPath();
 			var settings = new XmlWriterSettings
 			{
 				Indent = true
@@ -112,7 +119,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			// Add in any extra templates manually defined
 			var selectedId = Guid.Empty;
 			ApplyTo.SelectedIndex = 0;
-			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			var projectTemplatesPath = GetTemplatesPath();
 			if (File.Exists(projectTemplatesPath))
 			{
 				try
