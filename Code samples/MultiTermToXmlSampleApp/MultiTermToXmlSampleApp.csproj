@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{763F497C-18B5-4543-888F-EF67F1D1621B}</ProjectGuid>
+    <ProjectGuid>{1674B301-4A87-4049-A4B4-68F77763ACF9}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MultiTermSearchExample</RootNamespace>
-    <AssemblyName>MultiTermSearchExample</AssemblyName>
+    <RootNamespace>MultiTermToXmlSampleApp</RootNamespace>
+    <AssemblyName>MultiTermToXmlSampleApp</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
@@ -47,16 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\EntryField.cs" />
-    <Compile Include="Model\TermEntry.cs" />
-    <Compile Include="Model\TermHit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TerminologyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
