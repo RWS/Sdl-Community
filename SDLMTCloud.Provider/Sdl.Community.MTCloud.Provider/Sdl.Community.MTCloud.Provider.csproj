@@ -12,6 +12,7 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\Report.xsl" />
 	  <None Remove="UiHelpers\Watermark\WatermarkPasswordBoxResources.xaml" />
 	</ItemGroup>
   <ItemGroup>
@@ -217,6 +218,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Report.xsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
