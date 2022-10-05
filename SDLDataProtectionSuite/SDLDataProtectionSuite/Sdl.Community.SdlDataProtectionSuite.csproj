@@ -192,6 +192,7 @@
     <Compile Include="SdlProjectAnonymizer\Helpers\CustomColumnHeader.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\Expressions.cs" />
     <Compile Include="SdlProjectAnonymizer\Helpers\ProjectBackup.cs" />
+    <Compile Include="SdlProjectAnonymizer\Helpers\TradosApp.cs" />
     <Compile Include="SdlProjectAnonymizer\Interfaces\IAnonymizerSettings.cs" />
     <Compile Include="SdlProjectAnonymizer\Interfaces\IDecryptSettings.cs" />
     <Compile Include="SdlProjectAnonymizer\Models\Agreement.cs" />
@@ -202,7 +203,6 @@
     <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptDataProcessor.cs" />
     <Compile Include="SdlProjectAnonymizer\Process Xliff\DecryptSegmentVisitor.cs" />
     <Compile Include="SdlProjectAnonymizer\Process Xliff\SegmentVisitor.cs" />
-    <Compile Include="SdlProjectAnonymizer\Services\ActiveViewService.cs" />
     <Compile Include="SdlProjectAnonymizer\Services\AnonymizerSettingsService.cs" />
     <Compile Include="SdlProjectAnonymizer\Ui\AcceptWindow.cs">
       <SubType>Form</SubType>
