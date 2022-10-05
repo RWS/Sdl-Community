@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using NLog;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
@@ -48,7 +49,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 
 		private static void CloseOpenedDocuments()
 		{
-			var editor = SdlTradosStudio.Application.GetController<EditorController>();
+			var editor = TradosApp.GetController<EditorController>();
+			if (editor == null)
+				return;
 			var activeDocs = editor.GetDocuments().ToList();
 
 			foreach (var activeDoc in activeDocs)
