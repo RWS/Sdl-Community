@@ -71,47 +71,47 @@
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
-      <Private>False</Private>
+      
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.MultiTerm.Client.Api">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.MultiTerm.Client.Api.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
-      <Private>False</Private>
+      
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <Private>False</Private>
+      
       <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
