@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormControlLoading", "Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiTermToXmlSampleApp", "MultiTermToXmlSampleApp\MultiTermToXmlSampleApp.csproj", "{1674B301-4A87-4049-A4B4-68F77763ACF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trados2019DataProtectionSample", "Trados2019DataProtectionSample\Trados2019DataProtectionSample.csproj", "{43EBCEE2-3535-493D-AB03-D0CAC5424B64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -401,6 +403,14 @@ Global
 		{1674B301-4A87-4049-A4B4-68F77763ACF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1674B301-4A87-4049-A4B4-68F77763ACF9}.Release|x86.ActiveCfg = Release|Any CPU
 		{1674B301-4A87-4049-A4B4-68F77763ACF9}.Release|x86.Build.0 = Release|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Debug|x86.Build.0 = Debug|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Release|x86.ActiveCfg = Release|Any CPU
+		{43EBCEE2-3535-493D-AB03-D0CAC5424B64}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
