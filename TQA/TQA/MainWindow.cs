@@ -194,6 +194,8 @@ namespace Sdl.Community.TQA
 			}
 			else
 			{
+				SaveProject();
+
 				var localProjectFolder = _currentProject.GetProjectInfo().LocalProjectFolder;
 				if (!Directory.Exists(localProjectFolder))
 				{
@@ -237,6 +239,20 @@ namespace Sdl.Community.TQA
 					}
 				}
 			}
+		}
+
+		private void SaveProject()
+		{
+			var editorController = _controller as EditorController ?? SdlTradosStudio.Application.GetController<EditorController>();
+			if (editorController != null)
+			{
+				foreach (var document in editorController.GetDocuments())
+				{
+					editorController.Save(document);
+				}
+			}
+
+			_currentProject.Save();
 		}
 
 		private IEnumerable<ProjectFile> GetProjectFiles()
