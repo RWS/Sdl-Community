@@ -9,7 +9,7 @@ using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Services;
 
-namespace Trados2019DataProtectionSample
+namespace ProjectAutomationDataProtectionSuiteSample
 {
     internal class Program
     {

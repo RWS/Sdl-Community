@@ -9,7 +9,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using TaskStatus = Sdl.ProjectAutomation.Core.TaskStatus;
 
-namespace Trados2019DataProtectionSample
+namespace ProjectAutomationDataProtectionSuiteSample
 {
 	public class LocalProjectSettings
 	{
