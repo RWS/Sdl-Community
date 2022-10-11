@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -9,7 +10,7 @@ namespace ProjectAutomation.Services
 {
 	public class ProjectCreator : IDisposable
 	{
-		public bool Create(string sourceFilesDirectory, string projectDirectory, string sourceLanguage, string targetLanguage, string tmPath)
+		public bool Create(string sourceFilesDirectory, string projectDirectory, string sourceLanguage, string targetLanguage, MemoryResource memory)
 		{
 			if (string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(targetLanguage))
 			{
@@ -21,11 +22,13 @@ namespace ProjectAutomation.Services
 				var projectInfo = GetProjectInformation(sourceLanguage, targetLanguage, projectDirectory);
 				var project = new FileBasedProject(projectInfo);
 
-				AddTranslationProvider(project, tmPath);
+				AddTranslationProvider(project, memory);
 
 				AddFilesToProject(project, sourceFilesDirectory);
 
 				ConvertFiles(project);
+
+				UpdateTranslateSettings(project);
 
 				RunAnalyzeTaskFiles(project, targetLanguage);
 				RunPreTranslateFiles(project, targetLanguage);
@@ -42,6 +45,55 @@ namespace ProjectAutomation.Services
 			return false;
 		}
 
+		private static void UpdateTranslateSettings(FileBasedProject project)
+		{
+			var settings = project.GetSettings();
+			var translateSettings = settings.GetSettingsGroup<TranslateTaskSettings>();
+			translateSettings.NoTranslationMemoryMatchFoundAction.Value =
+				NoTranslationMemoryMatchFoundAction.ApplyAutomatedTranslation;
+			translateSettings.TranslationOverwriteMode.Value = TranslationUpdateMode.OverwriteExistingTranslation;
+			project.UpdateSettings(settings);
+		}
+
+		private static void AddTranslationProvider(FileBasedProject project, MemoryResource memory)
+		{
+		
+			var provider = GetTranslationProviderReference(memory);
+			var entry = new TranslationProviderCascadeEntry(provider, false, true, false, 0);
+
+			var tpConfig = project.GetTranslationProviderConfiguration();
+
+			// remove any existing entries, if needed!
+			tpConfig.Entries.Clear();
+
+			tpConfig.Entries.Add(entry);
+			project.UpdateTranslationProviderConfiguration(tpConfig);
+
+			if (memory.Uri != null && !string.IsNullOrEmpty(memory.UserNameOrClientId) &&
+			    !string.IsNullOrEmpty(memory.UserPasswordOrClientSecret))
+			{
+				project.Credentials.AddCredential(memory.Uri, false,
+					memory.UserNameOrClientId, memory.UserPasswordOrClientSecret);
+			}
+
+			project.Save();
+		}
+
+		private static TranslationProviderReference GetTranslationProviderReference(MemoryResource memory)
+		{
+			TranslationProviderReference provider = null;
+			if (!string.IsNullOrEmpty(memory.Path) && File.Exists(memory.Path))
+			{
+				provider = new TranslationProviderReference(memory.Path);
+			}
+			else if (memory.Uri != null && !string.IsNullOrEmpty(memory.UserNameOrClientId) &&
+			         !string.IsNullOrEmpty(memory.UserPasswordOrClientSecret))
+			{
+				provider = new TranslationProviderReference(memory.Uri, null, true);
+			}
+
+			return provider;
+		}
 
 		private void RunAnalyzeTaskFiles(IProject project, string targetLanguage)
 		{
@@ -51,22 +103,19 @@ namespace ProjectAutomation.Services
 				targetFiles.GetIds(),
 				AutomaticTaskTemplateIds.AnalyzeFiles
 			);
+
+			Console.WriteLine("RunAnalyzeTaskFiles: " + task.Status);
 		}
 
 		private void RunPreTranslateFiles(IProject project, string targetLanguage)
 		{
-			var settings = project.GetSettings();
-			var translateSettings = settings.GetSettingsGroup<TranslateTaskSettings>();
-			translateSettings.NoTranslationMemoryMatchFoundAction.Value = NoTranslationMemoryMatchFoundAction.ApplyAutomatedTranslation;
-			translateSettings.TranslationOverwriteMode.Value = TranslationUpdateMode.OverwriteExistingTranslation;
-
-			project.UpdateSettings(settings);
-
 			var targetFiles = project.GetTargetLanguageFiles(new Language(CultureInfo.GetCultureInfo(targetLanguage)));
 
 			var task = project.RunAutomaticTask(
 				targetFiles.GetIds(),
 				AutomaticTaskTemplateIds.PreTranslateFiles);
+
+			Console.WriteLine("RunPreTranslateFiles: " + task.Status);
 		}
 
 		private static ProjectInfo GetProjectInformation(string sourceLanguage, string targetLanguage, string projectDirectory)
@@ -86,21 +135,6 @@ namespace ProjectAutomation.Services
 			return info;
 		}
 
-		private void AddTranslationProvider(FileBasedProject project, string path)
-		{
-			var tmConfig = project.GetTranslationProviderConfiguration();
-			var provider = new TranslationProviderReference(path);
-			var entry = new TranslationProviderCascadeEntry(provider, false, true, true, 0);
-
-			// remove any existing entries, if needed!
-			tmConfig.Entries.Clear();
-
-			tmConfig.Entries.Add(entry);
-			project.UpdateTranslationProviderConfiguration(tmConfig);
-
-			project.Save();
-		}
-
 		private static void AddFilesToProject(IProject project, string sourceFilesDirectory)
 		{
 			project.AddFolderWithFiles(sourceFilesDirectory, true);
@@ -111,6 +145,8 @@ namespace ProjectAutomation.Services
 				projectFiles.GetIds(),
 				AutomaticTaskTemplateIds.Scan
 			);
+
+			Console.WriteLine("Scan: " + scanResult.Status);
 
 			var files = project.GetSourceLanguageFiles();
 
@@ -137,10 +173,14 @@ namespace ProjectAutomation.Services
 						AutomaticTaskTemplateIds.ConvertToTranslatableFormat
 					);
 
+					Console.WriteLine("ConvertToTranslatableFormatTask: " + convertToTranslatableFormatTask.Status);
+
 					var copyToTargetLanguagesTask = project.RunAutomaticTask(
 						currentFileId,
 						AutomaticTaskTemplateIds.CopyToTargetLanguages
 					);
+
+					Console.WriteLine("CopyToTargetLanguagesTask: " + copyToTargetLanguagesTask.Status);
 				}
 			}
 		}

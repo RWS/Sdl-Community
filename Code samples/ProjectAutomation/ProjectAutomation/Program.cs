@@ -6,47 +6,46 @@ namespace ProjectAutomation
 {
 	class Program
 	{
-		private static string _sourceFilesDirectory;
-		private static string _projectsDirectory;
-		private static string _sourceLanguage;
-		private static string _targetLanguage;
-		private static string _tmPath;
-
-	
 		static void Main(string[] args)
 		{
 			// TODO: Set location where to find the source files
-			_sourceFilesDirectory = Path.Combine(@"C:\Code\Automation\AutomationTests", "SourceFiles", "en");
+			var sourceFilesDirectory = @"c:\temp\source files folder";
 
 			// TODO: Set location for the project output folder... projects will be created here in sub-folders
-			_projectsDirectory = Path.Combine(@"C:\Code\Automation\AutomationTests", "Projects");
-			if (!Directory.Exists(_projectsDirectory))
+			var projectsDirectory = @"c:\temp\projects";
+			if (!Directory.Exists(projectsDirectory))
 			{
-				Directory.CreateDirectory(_projectsDirectory);
+				Directory.CreateDirectory(projectsDirectory);
 			}
 
-			// TODO: Set full path to the file based tm
-			_tmPath = @"C:\Users\phartnett\Documents\Studio 2022\Translation Memories\it-IT.sdltm";
-
 			// TODO: Set the source and target language combination
-			_sourceLanguage = "en-US";
-			_targetLanguage = "it-IT";
-		
-			
-			CreateProject();
+			var sourceLanguage = "en-US";
+			var targetLanguage = "it-IT";
 
+			// TODO: Set the credentials for Language Weaver
+			var memory = new MemoryResource
+			{
+				Uri = new Uri("sdlmtcloud:///"),
+				UserNameOrClientId = "TODO: UserName Or ClientID",
+				UserPasswordOrClientSecret = "TODO: UserPassword Or ClientSecret"
+			};
+
+			CreateProject(sourceFilesDirectory, projectsDirectory, sourceLanguage, targetLanguage, memory);
+
+			Console.WriteLine("Done!");
 			Console.ReadLine();
 		}
 
 
 
-		private static void CreateProject()
+		private static void CreateProject(string sourceFilesDirectory, string projectsDirectory,
+			string sourceLanguage, string targetLanguage, MemoryResource memory)
 		{
-			var projectDirectory = GetOutputProjectDirectory(_projectsDirectory);
+			var projectDirectory = GetOutputProjectDirectory(projectsDirectory);
 
 			using (var projectCreator = new ProjectCreator())
 			{
-				projectCreator.Create(_sourceFilesDirectory, projectDirectory,_sourceLanguage, _targetLanguage, _tmPath);
+				projectCreator.Create(sourceFilesDirectory, projectDirectory, sourceLanguage, targetLanguage, memory);
 			}
 		}
 
