@@ -5,4 +5,7 @@
   <Description>Plugin description</Description>
   <Author></Author>
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<Include>
+		<File>RestSharp.dll</File>
+	</Include>
 </PluginPackage>

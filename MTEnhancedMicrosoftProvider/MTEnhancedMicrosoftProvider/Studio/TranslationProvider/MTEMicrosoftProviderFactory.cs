@@ -22,11 +22,6 @@ namespace MTEnhancedMicrosoftProvider
 			var loadOptions = new MTEMicrosoftTranslationOptions(translationProviderUri);
 			var regionsProvider = new RegionsProvider();
 			var htmlUtil = new HtmlUtil();
-			if (loadOptions.SelectedProvider != MTEMicrosoftTranslationOptions.ProviderType.MicrosoftTranslator)
-			{
-				return new MTEMicrosoftProvider(loadOptions, regionsProvider, htmlUtil);
-			}
-
 			var credential = credentialStore.GetCredential(new Uri(PluginResources.UriMs))
 						  ?? credentialStore.GetCredential(translationProviderUri)
 						  ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));

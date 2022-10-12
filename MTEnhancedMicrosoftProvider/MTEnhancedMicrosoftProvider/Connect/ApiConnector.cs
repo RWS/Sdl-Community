@@ -44,7 +44,7 @@ namespace MTEnhancedMicrosoftProvider.Connect
 			_region = region;
 			_htmlUtil = htmlUtil;
 
-			_authToken = _authToken is null ? GetAuthToken() : _authToken;
+			_authToken = string.IsNullOrEmpty(_authToken) ? GetAuthToken() : _authToken;
 			_supportedLangs = _supportedLangs is null ? GetSupportedLanguages() : _supportedLangs;
 		}
 
@@ -62,7 +62,7 @@ namespace MTEnhancedMicrosoftProvider.Connect
 
 		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
 		{
-			if (_authToken is null)
+			if (string.IsNullOrEmpty(_authToken))
 			{
 				_authToken = GetAuthToken();
 				if (_authToken is null)
@@ -71,30 +71,41 @@ namespace MTEnhancedMicrosoftProvider.Connect
 				}
 			}
 
-			const string host = "https://api.cognitive.microsofttranslator.com";
-			const string path = "/translate?api-version=3.0";
+			var sourceLc = ConvertLangCode(sourceLang);
+			var targetLc = ConvertLangCode(targetLang);
+
 			var translatedText = string.Empty;
 			try
 			{
-				var expression = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
-				var matches = expression.Matches(textToTranslate);
-				if (matches.Count > 0)
+				//search for words like this <word> 
+				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
+				if (!string.IsNullOrEmpty(textToTranslate))
 				{
-					textToTranslate = ReplaceCharacters(textToTranslate, matches);
+					var words = rgx.Matches(textToTranslate);
+					if (words.Count > 0)
+					{
+						textToTranslate = ReplaceCharacters(textToTranslate, words);
+					}
 				}
 
-				var body = new object[] { new { Text = textToTranslate } };
+				const string host = "https://api.cognitive.microsofttranslator.com";
+				const string path = "/translate?api-version=3.0";
+				var category = categoryId == "" ? "general" : categoryId;
+				var languageParams = $"&from={sourceLc}&to={targetLc}&textType=html&category={category}";
+
+				var uri = string.Concat(host, path, languageParams);
+				var body = new object[]
+				{
+					new
+					{
+						Text =textToTranslate
+					}
+				};
 				var requestBody = JsonConvert.SerializeObject(body);
 				using (var httpClient = new HttpClient())
 				{
 					using (var httpRequest = new HttpRequestMessage())
 					{
-						var convertedSource = ConvertLangCode(sourceLang);
-						var convertedTarget = ConvertLangCode(targetLang);
-						var category = string.IsNullOrEmpty(categoryId) ? "general" : categoryId;
-						var languageParams = $"&from={convertedSource}&to={convertedTarget}&textType=html&category={category}";
-						var uri = string.Concat(host, path, languageParams);
-
 						httpRequest.Method = HttpMethod.Post;
 						httpRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 						httpRequest.RequestUri = new Uri(uri);
@@ -117,11 +128,11 @@ namespace MTEnhancedMicrosoftProvider.Connect
 			}
 			catch (WebException exception)
 			{
+				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n {exception.Message}\n {exception.StackTrace}");
-
-				var message = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				throw new Exception(message);
+				throw new Exception(mesg);
 			}
+
 
 			return translatedText;
 		}
@@ -199,7 +210,7 @@ namespace MTEnhancedMicrosoftProvider.Connect
 
 		private List<string> GetSupportedLanguages()
 		{
-			_authToken = _authToken is null ? GetAuthToken() : _authToken;
+			_authToken = string.IsNullOrEmpty(_authToken) ? GetAuthToken() : _authToken;
 
 			var languageCodeList = new List<string>();
 			try
@@ -288,19 +299,23 @@ namespace MTEnhancedMicrosoftProvider.Connect
 				return string.Empty;
 			}
 
+			var uri = new Uri("https://"
+				  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
+				  + ServiceBaseUri + "/sts/v1.0/issueToken");
 			try
 			{
 				using (var client = new HttpClient())
 				using (var request = new HttpRequestMessage())
 				{
 					request.Method = HttpMethod.Post;
+					request.RequestUri = uri;
 					request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-					request.RequestUri = new Uri(
-						$"https://{(string.IsNullOrEmpty(_region) ? "" : _region + ".")}{ServiceBaseUri}/sts/v1.0/issueToken");
 					var response = await client.SendAsync(request);
 					response.EnsureSuccessStatusCode();
 					var tokenString = await response.Content.ReadAsStringAsync();
+
 					_authToken = "Bearer " + tokenString;
+
 					var token = ReadToken(tokenString);
 				}
 			}
@@ -323,10 +338,20 @@ namespace MTEnhancedMicrosoftProvider.Connect
 			try
 			{
 				var jwtHandler = new JwtSecurityTokenHandler();
-				return jwtHandler.CanReadToken(token) ? jwtHandler.ReadJwtToken(token)
-													  : null;
+
+				//Check if readable token (string is in a JWT format)
+				var readableToken = jwtHandler.CanReadToken(token);
+				if (!readableToken)
+				{
+					return null;
+				}
+
+				return jwtHandler.ReadJwtToken(token);
 			}
-			catch { }
+			catch
+			{
+				// catch all; ignore
+			}
 
 			return null;
 		}

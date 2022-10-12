@@ -28,6 +28,9 @@
 		<Reference Include="Microsoft.IdentityModel.Tokens">
 			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
 		</Reference>
+		<Reference Include="Newtonsoft.Json">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
+		</Reference>
 		<Reference Include="NLog">
 			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
 		</Reference>
@@ -75,6 +78,11 @@
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Drawing" />
+		<Reference Include="System.IdentityModel" />
+		<Reference Include="System.IdentityModel.Tokens.Jwt">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Net.Http" />
 		<Reference Include="System.Web" />
 		<Reference Include="System.Windows" />
 		<Reference Include="System.Windows.Forms" />
@@ -97,15 +105,13 @@
 		<None Include="pluginpackage.manifest.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="RestSharp" Version="108.0.2" />
+		<PackageReference Include="RestSharp" Version="107.3.0" />
 		<PackageReference Include="Sdl.Core.PluginFramework">
 			<Version>2.1.0</Version>
 		</PackageReference>
 		<PackageReference Include="Sdl.Core.PluginFramework.Build">
 			<Version>17.0.0</Version>
 		</PackageReference>
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Update="ConfigDialogResources.Designer.cs">

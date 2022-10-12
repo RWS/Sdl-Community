@@ -59,16 +59,16 @@ namespace MTEnhancedMicrosoftProvider
 				SourceSegment = segment.Duplicate()
 			};
 
+			var newseg = segment.Duplicate();
 			var translation = new Segment(_languageDirection.TargetCulture);
 			if (!_options.ResendDrafts
 				&& _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+				translation.Add(Lookup(newseg.ToPlain(), _options, "text/plain"));
 				results.Add(CreateSearchResult(segment, translation));
 				return results;
 			}
 
-			var newseg = segment.Duplicate();
 			var sendTextOnly = _options.SendPlainTextOnly || !newseg.HasTags;
 			if (!sendTextOnly)
 			{

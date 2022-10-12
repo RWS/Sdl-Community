@@ -317,33 +317,8 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private void SetTranslationOption()
 		{
-			/*if (_options?.SelectedProvider != null)
-			{
-				var selectedProvider = TranslationOptions.FirstOrDefault(t => t.ProviderType.Equals(_options.SelectedProvider));
-
-				if (selectedProvider == null)
-				{
-					SelectMicrosoftTranslation();
-				}
-				else
-				{
-					switch (selectedProvider.ProviderType)
-					{
-						case MTEMicrosoftTranslationOptions.ProviderType.MicrosoftTranslator:
-							IsMicrosoftSelected = true;
-							break;
-						case MTEMicrosoftTranslationOptions.ProviderType.None:
-							IsMicrosoftSelected = false;
-							break;
-					}
-					SelectedTranslationOption = selectedProvider;
-				}
-			}
-			else
-			{
-				//By default we'll select Microsoft translator option
-				SelectMicrosoftTranslation();
-			}*/
+			IsMicrosoftSelected = true;
+			SelectMicrosoftTranslation();
 		}
 
 		private void SelectMicrosoftTranslation()
