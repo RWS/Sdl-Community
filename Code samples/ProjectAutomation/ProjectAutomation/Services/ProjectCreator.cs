@@ -31,8 +31,7 @@ namespace ProjectAutomation.Services
 
 				ConvertFiles(project);
 
-				UpdateTranslateSettings(project);
-
+				
 				RunAnalyzeTaskFiles(project, targetLanguage);
 				RunPreTranslateFiles(project, targetLanguage);
 
@@ -47,17 +46,7 @@ namespace ProjectAutomation.Services
 
 			return false;
 		}
-
-		private static void UpdateTranslateSettings(FileBasedProject project)
-		{
-			var settings = project.GetSettings();
-			var translateSettings = settings.GetSettingsGroup<TranslateTaskSettings>();
-			translateSettings.NoTranslationMemoryMatchFoundAction.Value =
-				NoTranslationMemoryMatchFoundAction.ApplyAutomatedTranslation;
-			translateSettings.TranslationOverwriteMode.Value = TranslationUpdateMode.OverwriteExistingTranslation;
-			project.UpdateSettings(settings);
-		}
-
+		
 		private static void AddTranslationProvider(FileBasedProject project, MemoryResource memory)
 		{
 		
@@ -84,7 +73,19 @@ namespace ProjectAutomation.Services
 					memory.UserNameOrClientId, memory.UserPasswordOrClientSecret);
 			}
 
+			UpdateTranslateSettings(project);
+
 			project.Save();
+		}
+
+		private static void UpdateTranslateSettings(FileBasedProject project)
+		{
+			var settings = project.GetSettings();
+			var translateSettings = settings.GetSettingsGroup<TranslateTaskSettings>();
+			translateSettings.NoTranslationMemoryMatchFoundAction.Value =
+				NoTranslationMemoryMatchFoundAction.ApplyAutomatedTranslation;
+			translateSettings.TranslationOverwriteMode.Value = TranslationUpdateMode.OverwriteExistingTranslation;
+			project.UpdateSettings(settings);
 		}
 
 		private static TranslationProviderReference GetTranslationProviderReference(MemoryResource memory)
