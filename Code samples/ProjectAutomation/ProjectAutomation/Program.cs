@@ -22,12 +22,13 @@ namespace ProjectAutomation
 			var sourceLanguage = "en-US";
 			var targetLanguage = "it-IT";
 
-			// TODO: Set the credentials for Language Weaver
+			// TODO: Set the memory resource
 			var memory = new MemoryResource
 			{
-				Uri = new Uri("sdlmtcloud:///"),
-				UserNameOrClientId = "TODO: UserName Or ClientID",
-				UserPasswordOrClientSecret = "TODO: UserPassword Or ClientSecret"
+				Path = @"c:\temp\mytm.sdltm",
+				//Uri = new Uri("sdlmtcloud:///"),
+				//UserNameOrClientId = "TODO: UserName Or ClientID",
+				//UserPasswordOrClientSecret = "TODO: UserPassword Or ClientSecret"
 			};
 
 			CreateProject(sourceFilesDirectory, projectsDirectory, sourceLanguage, targetLanguage, memory);

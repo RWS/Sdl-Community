@@ -22,7 +22,10 @@ namespace ProjectAutomation.Services
 				var projectInfo = GetProjectInformation(sourceLanguage, targetLanguage, projectDirectory);
 				var project = new FileBasedProject(projectInfo);
 
-				AddTranslationProvider(project, memory);
+				if (memory != null)
+				{
+					AddTranslationProvider(project, memory);
+				}
 
 				AddFilesToProject(project, sourceFilesDirectory);
 
@@ -59,6 +62,11 @@ namespace ProjectAutomation.Services
 		{
 		
 			var provider = GetTranslationProviderReference(memory);
+			if (provider == null)
+			{
+				return;
+			}
+
 			var entry = new TranslationProviderCascadeEntry(provider, false, true, false, 0);
 
 			var tpConfig = project.GetTranslationProviderConfiguration();
