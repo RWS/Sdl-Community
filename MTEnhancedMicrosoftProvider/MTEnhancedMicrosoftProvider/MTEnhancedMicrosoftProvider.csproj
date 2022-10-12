@@ -4,14 +4,25 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<UseWPF>true</UseWPF>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\backImg.png" />
+	  <None Remove="Resources\Download.ico" />
+	  <None Remove="Resources\ForumIcon.ico" />
+	  <None Remove="Resources\my_icon.ico" />
+	  <None Remove="Resources\Question.ico" />
+	  <None Remove="Resources\Setting.png" />
+	  <None Remove="Resources\Settings.ico" />
 	  <None Remove="Styles\Buttons.xaml" />
 	  <None Remove="Styles\General.xaml" />
 	  <None Remove="Styles\WindowsBorder.xaml" />
 	  <None Remove="Styles\WindowsControl.xaml" />
-	  <None Remove="View\SettingsControl.xaml" />
 	  <None Remove="UiHelpers\WatermarkTextBoxResources.xaml" />
+	  <None Remove="View\MainWindow.xaml" />
+	  <None Remove="View\ProviderControl.xaml" />
+	  <None Remove="View\SettingsControl.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Microsoft.IdentityModel.Tokens">
@@ -25,8 +36,17 @@
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.Desktop.Platform.Controls">
 		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Styles">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -36,6 +56,12 @@
 		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.TellMe.ProviderApi">
 			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
@@ -121,9 +147,38 @@
 	  <Page Include="UiHelpers\WatermarkTextBoxResources.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
+	  <Page Include="View\MainWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="View\ProviderControl.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	  <Page Include="View\SettingsControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Resource Include="Resources\backImg.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Download.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\ForumIcon.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\my_icon.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Question.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Setting.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Settings.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 	<PropertyGroup>
 		<CreatePluginPackage>True</CreatePluginPackage>

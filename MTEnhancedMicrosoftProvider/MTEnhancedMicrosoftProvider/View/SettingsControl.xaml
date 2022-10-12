@@ -7,6 +7,7 @@
              xmlns:viewModels="clr-namespace:MTEnhancedMicrosoftProvider.ViewModel"
              xmlns:converters="clr-namespace:MTEnhancedMicrosoftProvider.Converters"
              xmlns:uiHelpers ="clr-namespace:MTEnhancedMicrosoftProvider.UiHelpers"
+			 xmlns:styles="clr-namespace:MTEnhancedMicrosoftProvider.Styles"
              d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">

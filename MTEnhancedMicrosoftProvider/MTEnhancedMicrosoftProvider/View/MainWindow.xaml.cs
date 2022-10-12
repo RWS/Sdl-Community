@@ -1,11 +1,11 @@
 ﻿namespace MTEnhancedMicrosoftProvider.View
 {
 	/// <summary>
-	/// Interaction logic for SettingsControl.xaml
+	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class SettingsControl
+	public partial class MainWindow 
 	{
-		public SettingsControl()
+		public MainWindow()
 		{
 			InitializeComponent();
 		}
