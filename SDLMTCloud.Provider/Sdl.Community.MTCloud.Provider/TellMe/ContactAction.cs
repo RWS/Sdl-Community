@@ -8,11 +8,11 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 	{
 		public override void Execute()
 		{
-			Process.Start("https://translate.sdlbeglobal.com/");
+			Process.Start(Constants.MTCloudTranslateAPIUrlEULogin);
 		}
 		public ContactAction()
 		{
-			Name = $"{PluginResources.SDLMTCloud_Provider_Name} web interface";
+			Name = $"{PluginResources.SDLMTCloud_Provider_Name} portal";
 		}
 
 		public override bool IsAvailable => true;

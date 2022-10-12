@@ -8,7 +8,6 @@
 		public static string MTCloudTranslateAPIUrlEULogin = "https://portal.languageweaver.com/login";
 		public static string MTCloudTranslateAPIUrlUSLogin = "https://us.portal.languageweaver.com/login";
 
-		public static string MTCloudTranslateUri = "https://translate.sdlbeglobal.com";
 		public static string MTCloudUriScheme = "sdlmtcloud";		
 		public static string MTCloudUriResourceUserToken = "/token/user";
 		public static string MTCloudUriResourceUserDetails = "/accounts/users/self";
