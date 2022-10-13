@@ -1,0 +1,257 @@
+﻿<UserControl x:Class="Multilingual.XML.FileType.FileType.Views.LanguageMappingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:rws="http://schemas.rws.com/xaml"
+             xmlns:controls="clr-namespace:Multilingual.XML.FileType.Controls"
+             xmlns:converters="clr-namespace:Multilingual.XML.FileType.Converters"
+             xmlns:behaviours="clr-namespace:Multilingual.XML.FileType.Behaviours"
+             xmlns:models="clr-namespace:Multilingual.XML.FileType.Models"
+             xmlns:resources="clr-namespace:Multilingual.XML.FileType"
+             xmlns:viewModels="clr-namespace:Multilingual.XML.FileType.FileType.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:LanguageMappingViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.XML.FileType;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
+			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
+			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Language Mapping">
+			<Grid Margin="10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0" Margin="0,0,15,0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Label Grid.Row="0" Grid.Column="0" MinWidth="90" Content="Languages Root:"/>
+					<TextBox Grid.Row="0" Grid.Column="1"
+                         VerticalContentAlignment="Center"
+				         Text="{Binding LanguagesXPath, 
+					Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<TextBlock Grid.Row="1" Grid.Column="1" Padding="0" Foreground="Gray" 
+					           TextTrimming="CharacterEllipsis" Text="{x:Static resources:PluginResources.ToolTip_AbsoluteXPathQueryLanguagesRoot}" />
+
+				
+				</Grid>
+
+				<Grid Grid.Row="1" Margin="0,5,0,5" >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<CheckBox Grid.Row="0" Grid.Column="0"  Content="Treat as monolingual" Margin="5"
+							  IsEnabled="{Binding MonoLanguageIsEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          IsChecked="{Binding MonoLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+					<Image Grid.Row="0" Grid.Column="1" Source="../../Resources/Information.png" Height="16" HorizontalAlignment="Left" 
+					       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="0,5,0,5"
+					       ToolTip="Select this option if the translations should overwrite the source content when generating target translations"/>
+				</Grid>
+
+				<GroupBox Header="Languages" Grid.Row="2">
+					<Grid Margin="10">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,2">
+							<Button Style="{StaticResource BaseButtonStyle}" 
+							        IsEnabled="{Binding AddLanguaeIsEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+							        Command="{Binding AddLanguageCommand}" 
+							        CommandParameter="{Binding ElementName=DataGrid}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Add.ico" Width="15"/>
+									<TextBlock Text="Add" Margin="5,0,0,0" ToolTip="{x:Static resources:PluginResources.Header_AddNewLanguage}"/>
+								</StackPanel>
+							</Button>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding EditLanguageCommand}" 
+							        CommandParameter="{Binding ElementName=DataGrid}"
+						        IsEnabled="{Binding IsLanguageMappingSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Edit.ico" Width="15"/>
+									<TextBlock Text="Edit" Margin="5,0,0,0" ToolTip="{x:Static resources:PluginResources.Header_EditSelectedLanguage}"/>
+								</StackPanel>
+							</Button>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" 
+							        Command="{Binding RemoveLanguageCommand}"
+							        CommandParameter="{Binding ElementName=DataGrid}"
+						        IsEnabled="{Binding IsLanguageMappingsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Delete.ico" Width="15"/>
+									<TextBlock Text="Delete" Margin="5,0,0,0" ToolTip="{x:Static resources:PluginResources.Header_RemoveSelectedLanguages}"/>
+								</StackPanel>
+							</Button>
+						</StackPanel>
+						<Grid Grid.Row="1">
+							<controls:SortAwareDataGrid x:Name="DataGrid"
+								Grid.Row="0"
+								VirtualizingStackPanel.IsVirtualizing="False"
+								DefaultColumnName="Date"
+							  DefaultSortDirection="Descending"									
+							  Style="{StaticResource CustomGridStyle}"
+							  Margin="0" 		
+							  AllowDrop="True"
+							  ItemsSource="{Binding LanguageMappings, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
+							  SelectedItem="{Binding SelectedLanguageMapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							  SelectedItems="{Binding SelectedLanguageMappings, Mode=OneWayToSource}"
+							  behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+							  behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"			
+							  FontSize="12"
+							  BorderBrush="#C1C0C0"
+							  FontFamily="Segoe UI"
+							  SelectionMode="Extended"
+							  SelectionUnit="FullRow"	
+							  GridLinesVisibility="Horizontal"
+							  VerticalScrollBarVisibility="Auto"
+							  HorizontalScrollBarVisibility="Disabled"
+							  CanUserDeleteRows="False">
+								<DataGrid.InputBindings>
+									<KeyBinding Key="Delete" Command="{Binding RemoveLanguageCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="N" Command="{Binding AddLanguageCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="E" Command="{Binding EditLanguageCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+								</DataGrid.InputBindings>
+								<DataGrid.Columns>
+									<DataGridTemplateColumn Header="Language" CanUserSort="True" IsReadOnly="True" 
+									                        SortMemberPath="DisplayName" Width="2.5*" >
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:LanguageMapping">
+												<Grid Margin="5,0,10,0" VerticalAlignment="Center">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="Auto"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
+
+													<Image 
+														Stretch="UniformToFill"
+														RenderOptions.BitmapScalingMode="HighQuality" 
+														RenderOptions.EdgeMode="Aliased"
+														HorizontalAlignment="Center"
+														VerticalAlignment="Center"
+														Source="{Binding Path=Image, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+														<Image.Style>
+															<Style TargetType="Image">
+																<Setter Property="Width" Value="22"/>
+																<Setter Property="Margin" Value="0,0,2,0"/>
+																<Style.Triggers>
+																	<DataTrigger Binding="{Binding Image}" Value="">
+																		<Setter Property="Width" Value="0"/>
+																		<Setter Property="Margin" Value="0"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Image}" Value="{x:Null}">
+																		<Setter Property="Width" Value="0"/>
+																		<Setter Property="Margin" Value="0"/>
+																	</DataTrigger>
+																</Style.Triggers>
+															</Style>
+														</Image.Style>
+													</Image>
+
+													<TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4,0,2,0"  
+												           Text="{Binding Path=DisplayName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+												</Grid>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="Location" CanUserSort="True" IsReadOnly="True"
+									                        SortMemberPath="Group" Width="2*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:LanguageMapping">
+												<TextBlock ToolTip="{Binding XPath}" VerticalAlignment="Center" Padding="2,0,2,0"
+											           Text="{Binding XPath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<!--<DataGridTemplateColumn Header="Comments XPath" CanUserSort="True" IsReadOnly="True" SortMemberPath="Group" Width="2*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:LanguageMapping">
+												<TextBlock ToolTip="{Binding CommentXPath}" VerticalAlignment="Center" Padding="2,0,2,0"
+												           Text="{Binding CommentXPath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>-->
+									<DataGridTemplateColumn Header="" IsReadOnly="True" MinWidth="24" CanUserSort="False" >
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<Button Background="Transparent" BorderThickness="0" ToolTip="Delete"
+												        VerticalAlignment="Center"
+												        Command="{Binding Path=DataContext.RemoveLanguageCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+												        CommandParameter="{Binding ElementName=DataGrid}">
+													<Image Opacity=".8" Source="../../Resources/Delete.ico" Width="16" Height="16"/>
+												</Button>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+								</DataGrid.Columns>
+								<DataGrid.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="{x:Static resources:PluginResources.Header_EditSelectedLanguage}" 
+										  IsEnabled="{Binding IsLanguageMappingSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding EditLanguageCommand}"
+										  CommandParameter="{Binding ElementName=DataGrid}">
+											<MenuItem.Icon>
+												<Image Source="../../Resources/Edit.ico"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="{x:Static resources:PluginResources.Header_RemoveSelectedLanguages}" 
+										  IsEnabled="{Binding IsLanguageMappingsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding RemoveLanguageCommand}"
+										  CommandParameter="{Binding ElementName=DataGrid}">
+											<MenuItem.Icon>
+												<Image Source="../../Resources/Delete.ico"/>
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</DataGrid.ContextMenu>
+							</controls:SortAwareDataGrid>
+						</Grid>
+
+						<Grid Grid.Row="2">
+							<Label HorizontalAlignment="Right" Foreground="#4E4D4D" Content="{Binding LanguageMappingsStatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+						</Grid>
+					</Grid>
+				</GroupBox>
+			</Grid>
+		</GroupBox>
+
+	</Grid>
+</UserControl>

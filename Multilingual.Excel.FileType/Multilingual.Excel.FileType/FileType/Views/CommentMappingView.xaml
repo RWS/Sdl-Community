@@ -1,0 +1,205 @@
+﻿<UserControl x:Class="Multilingual.Excel.FileType.FileType.Views.CommentMappingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:rws="http://schemas.rws.com/xaml"
+             xmlns:converters="clr-namespace:Multilingual.Excel.FileType.Converters"
+             xmlns:controls="clr-namespace:Multilingual.Excel.FileType.Controls"
+             xmlns:behaviours="clr-namespace:Multilingual.Excel.FileType.Behaviours"
+             xmlns:viewModels="clr-namespace:Multilingual.Excel.FileType.FileType.ViewModels"
+             xmlns:resources="clr-namespace:Multilingual.Excel.FileType"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:CommentMappingViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
+			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
+			<converters:CommentNameToNameAndDescriptionConverter x:Key="CommentNameToNameAndDescriptionConverter"/>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Comments">
+			<Grid Margin="10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0" Margin="0,0,15,20">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<CheckBox Grid.Row="0" Grid.Column="0" Content="Process comments with the following element structure"
+					          VerticalContentAlignment="Center"
+					          IsChecked="{Binding ProcessComments, 
+					Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				</Grid>
+
+				<Grid Grid.Row="1" Margin="0,0,15,15"
+				      IsEnabled="{Binding ProcessComments, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Label Grid.Row="0" Grid.Column="0" MinWidth="50" Content="Name:"/>
+					<TextBox Grid.Row="0" Grid.Column="1"
+                         VerticalContentAlignment="Center"
+				         Text="{Binding CommentElementName, 
+					Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<TextBlock Grid.Row="1" Grid.Column="1" Padding="0" Foreground="Gray" 
+					           TextTrimming="CharacterEllipsis" Text="{x:Static resources:PluginResources.ToolTip_CommentElementName}" />
+				</Grid>
+
+				<GroupBox Grid.Row="2" Header="Attributes"
+				          IsEnabled="{Binding ProcessComments, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+					<Grid Margin="10">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,2">
+							<Button Style="{StaticResource BaseButtonStyle}" Command="{Binding AddCommentPropertyCommand}"
+							        CommandParameter="{Binding ElementName=DataGrid}"
+							       IsEnabled="{Binding AddCommentPropertyIsEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Add.ico" Width="15"/>
+									<TextBlock Text="Add" Margin="5,0,0,0" ToolTip="{x:Static resources:PluginResources.Header_AddNewCommentProperty}"/>
+								</StackPanel>
+							</Button>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding EditCommentPropertyCommand}"
+							        CommandParameter="{Binding ElementName=DataGrid}"
+						        IsEnabled="{Binding IsCommentPropertyMappingSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Edit.ico" Width="15"/>
+									<TextBlock Text="Edit" Margin="5,0,0,0" ToolTip="{x:Static resources:PluginResources.Header_EditSelectedCommentProperty}"/>
+								</StackPanel>
+							</Button>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" 
+							        Command="{Binding RemoveCommentPropertyCommand}"
+							        CommandParameter="{Binding ElementName=DataGrid}"
+						        IsEnabled="{Binding IsCommentPropertyMappingsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Delete.ico" Width="15"/>
+									<TextBlock Text="Delete" Margin="5,0,0,0" ToolTip="{x:Static resources:PluginResources.Header_RemoveSelectedCommentProperties}"/>
+								</StackPanel>
+							</Button>
+						</StackPanel>
+						<Grid Grid.Row="1">
+							<controls:SortAwareDataGrid x:Name="DataGrid"
+								Grid.Row="0"
+							  DefaultColumnName="Date"
+							  DefaultSortDirection="Descending"									
+							  Style="{StaticResource CustomGridStyle}"
+							  Margin="0" 		
+							  AllowDrop="True"
+							  ItemsSource="{Binding CommentPropertyMappings, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
+							  SelectedItem="{Binding SelectedCommentPropertyMapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							  SelectedItems="{Binding SelectedCommentMappings, Mode=OneWayToSource}"
+							  behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+							  behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"			
+							  FontSize="12"
+							  BorderBrush="#C1C0C0"
+							  FontFamily="Segoe UI"
+							  SelectionMode="Extended"
+							  SelectionUnit="FullRow"	
+							  GridLinesVisibility="Horizontal"
+							  VerticalScrollBarVisibility="Auto"
+							  HorizontalScrollBarVisibility="Disabled"
+							  CanUserDeleteRows="False">
+								<DataGrid.InputBindings>
+									<KeyBinding Key="Delete" Command="{Binding RemoveCommentPropertyCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="N" Command="{Binding AddCommentPropertyCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="E" Command="{Binding EditCommentPropertyCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+								</DataGrid.InputBindings>
+								<DataGrid.Columns>
+									<DataGridTextColumn Header="Name" CanUserSort="True" IsReadOnly="True" 
+									                    Binding="{Binding PropertyName, Mode=OneWay}" Width="1.5*" >
+									</DataGridTextColumn>
+									<!--<DataGridTextColumn Header="Type" CanUserSort="True" IsReadOnly="True" 
+									                    Binding="{Binding PropertyType, Mode=OneWay}" Width=".5*" >
+									</DataGridTextColumn>-->
+									<DataGridTextColumn Header="Mapped to Studio comment attribute" CanUserSort="True" IsReadOnly="True"
+									                    Binding="{Binding Path=StudioPropertyName, Converter={StaticResource CommentNameToNameAndDescriptionConverter}, Mode=OneWay}" 
+									                    Width="3*" >
+									</DataGridTextColumn>
+									<DataGridTemplateColumn Header="" IsReadOnly="True" MinWidth="24" CanUserSort="False" >
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<Button Background="Transparent" BorderThickness="0" ToolTip="Delete"
+												        VerticalAlignment="Center"
+												        Command="{Binding Path=DataContext.RemoveCommentPropertyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+												        CommandParameter="{Binding ElementName=DataGrid}">
+													<Image Opacity=".8" Source="../../Resources/Delete.ico" Width="16" Height="16"/>
+												</Button>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+								</DataGrid.Columns>
+								<DataGrid.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="{x:Static resources:PluginResources.Header_EditSelectedCommentProperty}" 
+										  IsEnabled="{Binding IsCommentPropertyMappingSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding EditCommentPropertyCommand}"
+										  CommandParameter="{Binding ElementName=DataGrid}">
+											<MenuItem.Icon>
+												<Image Source="../../Resources/Edit.ico"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="{x:Static resources:PluginResources.Header_RemoveSelectedCommentProperties}" 
+										  IsEnabled="{Binding IsCommentPropertyMappingsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding RemoveCommentPropertyCommand}"
+										  CommandParameter="{Binding ElementName=DataGrid}">
+											<MenuItem.Icon>
+												<Image Source="../../Resources/Delete.ico"/>
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</DataGrid.ContextMenu>
+							</controls:SortAwareDataGrid>
+						</Grid>
+
+						<Grid Grid.Row="2">
+							<Label HorizontalAlignment="Right" Foreground="#4E4D4D" Content="{Binding CommentPropertyMappingsStatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+						</Grid>
+					</Grid>
+				</GroupBox>
+			</Grid>
+		</GroupBox>
+
+	</Grid>
+</UserControl>
