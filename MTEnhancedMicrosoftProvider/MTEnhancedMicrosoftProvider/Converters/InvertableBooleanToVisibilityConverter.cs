@@ -11,15 +11,19 @@ namespace MTEnhancedMicrosoftProvider.Converters
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			var boolValue = value != null && (bool)value;
-			if (parameter != null)
+			if (parameter == null)
 			{
-				var direction = (Parameters)Enum.Parse(typeof(Parameters), (string)parameter);
-
-				if (direction == Parameters.Inverted)
-					return !boolValue ? Visibility.Visible : Visibility.Collapsed;
+				return boolValue ? Visibility.Visible : Visibility.Collapsed;
 			}
 
-			return boolValue ? Visibility.Visible : Visibility.Collapsed;
+			var direction = (Parameters)Enum.Parse(typeof(Parameters), (string)parameter);
+			switch (direction)
+			{
+				case Parameters.Inverted:
+					return boolValue ? Visibility.Collapsed : Visibility.Visible;
+				default:
+					return boolValue ? Visibility.Visible : Visibility.Collapsed;
+			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

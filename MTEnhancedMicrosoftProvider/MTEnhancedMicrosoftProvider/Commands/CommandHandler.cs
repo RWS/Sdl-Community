@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
-using MTEnhancedMicrosoftProvider.Model;
 
 namespace MTEnhancedMicrosoftProvider.Commands
 {
-	public class CommandHandler : BaseModel, ICommand
+	public class CommandHandler : ICommand
 	{
 		public event EventHandler CanExecuteChanged;
 		private readonly Action _action;

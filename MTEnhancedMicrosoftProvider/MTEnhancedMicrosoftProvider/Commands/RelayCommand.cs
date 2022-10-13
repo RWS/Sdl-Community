@@ -5,9 +5,8 @@ namespace MTEnhancedMicrosoftProvider.Commands
 {
 	public class RelayCommand : ICommand
 	{
-		Action<object> execute;
-		Predicate<object> canExecute;
-
+		private readonly Action<object> execute;
+		private readonly Predicate<object> canExecute;
 
 		public RelayCommand(Action<object> action) : this(action, null) { }
 
@@ -17,13 +16,11 @@ namespace MTEnhancedMicrosoftProvider.Commands
 			canExecute = predicate;
 		}
 
-
 		public event EventHandler CanExecuteChanged
 		{
 			add { CommandManager.RequerySuggested += value; }
 			remove { CommandManager.RequerySuggested -= value; }
 		}
-
 
 		public bool CanExecute(object parameter)
 		{
@@ -36,12 +33,10 @@ namespace MTEnhancedMicrosoftProvider.Commands
 		}
 	}
 
-
 	public class RelayCommand<T> : ICommand
 	{
-		Action<T> execute;
-		Predicate<T> canExecute;
-
+		private readonly Action<T> execute;
+		private readonly Predicate<T> canExecute;
 
 		public RelayCommand(Action<T> action) : this(action, null) { }
 
@@ -51,13 +46,11 @@ namespace MTEnhancedMicrosoftProvider.Commands
 			canExecute = predicate;
 		}
 
-
 		public event EventHandler CanExecuteChanged
 		{
 			add { CommandManager.RequerySuggested += value; }
 			remove { CommandManager.RequerySuggested -= value; }
 		}
-
 
 		public bool CanExecute(object parameter)
 		{
