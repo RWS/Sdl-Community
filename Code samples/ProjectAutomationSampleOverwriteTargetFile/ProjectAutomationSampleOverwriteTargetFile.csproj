@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{43EBCEE2-3535-493D-AB03-D0CAC5424B64}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ProjectAutomationSample</RootNamespace>
-    <AssemblyName>ProjectAutomationSample</AssemblyName>
+    <RootNamespace>ProjectAutomationSampleOverwriteTargetFile</RootNamespace>
+    <AssemblyName>ProjectAutomationSampleOverwriteTargetFile</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
