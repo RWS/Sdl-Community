@@ -9,6 +9,7 @@
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<PlatformTarget>x86</PlatformTarget>
 		<LangVersion>latest</LangVersion>
+		<AssemblyName>Language Weaver</AssemblyName>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Resources\Report.xsl" />
@@ -289,6 +290,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>    
   </PropertyGroup>
 </Project>
