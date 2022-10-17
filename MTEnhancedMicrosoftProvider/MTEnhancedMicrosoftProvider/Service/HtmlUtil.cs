@@ -15,9 +15,9 @@ namespace MTEnhancedMicrosoftProvider.Service
 			{
 				return HttpUtility.HtmlDecode(input);
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
 			}
 
 			return input;

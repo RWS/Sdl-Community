@@ -1,0 +1,183 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Windows.Forms;
+using NLog;
+using MTEnhancedMicrosoftProvider.Interfaces;
+using MTEnhancedMicrosoftProvider.Model;
+using MTEnhancedMicrosoftProvider.Service;
+using MTEnhancedMicrosoftProvider.View;
+using MTEnhancedMicrosoftProvider.ViewModel;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+
+namespace MTEnhancedMicrosoftProvider.Studio
+{
+	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI",
+                                   Name = "Translation_Provider_Plug_inWinFormsUI",
+                                   Description = "Translation_Provider_Plug_inWinFormsUI")]
+    public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
+    {
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		public string TypeDescription => PluginResources.Plugin_Description;
+		public string TypeName => PluginResources.Plugin_NiceName;
+		public bool SupportsEditing => true;
+
+		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		{
+			var options = new MTETranslationOptions();
+			var regionsProvider = new RegionsProvider();
+			var htmlUtil = new HtmlUtil();
+
+			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider);
+			return mainWindowViewModel.DialogResult ? (new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) })
+													: null;
+		}
+
+		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		{
+			if (!(translationProvider is Provider editProvider))
+			{
+				return false;
+			}
+
+			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options, editProvider.RegionsProvider);
+			return mainWindowViewModel.DialogResult;
+		}
+
+
+		//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
+		/// <summary>
+		/// This gets called when a TranslationProviderAuthenticationException is thrown
+		/// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
+		/// any new options set in the form that comes up are never saved to the project XML...
+		/// so there is no way to change any options, only to provide the credentials
+		/// </summary>
+		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+		{
+			var languagePairs = new List<LanguagePair>();
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			var projectInfo = projectController?.CurrentProject?.GetProjectInfo();
+			if (projectInfo != null)
+			{
+				foreach (var targetLanguage in projectInfo.TargetLanguages)
+				{
+					var languagePair = new LanguagePair(projectInfo.SourceLanguage.CultureInfo, targetLanguage.CultureInfo);
+					languagePairs.Add(languagePair);
+				}
+			}
+
+			var options = new MTETranslationOptions();
+			var regionsProvider = new RegionsProvider();
+			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options, regionsProvider);
+			return mainWindowViewModel.DialogResult;
+		}
+
+		/// <summary>
+		/// Used for displaying the plug-in info such as the plug-in name,
+		/// tooltip, and icon.
+		/// </summary>
+		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
+		{
+			var info = new TranslationProviderDisplayInfo
+			{
+				TranslationProviderIcon = PluginResources.my_icon
+			};
+
+			var options = new MTETranslationOptions(translationProviderUri);
+			if (options.SelectedProvider == MTETranslationOptions.ProviderType.MicrosoftTranslator)
+			{
+				info.Name = PluginResources.Microsoft_NiceName;
+				info.TooltipText = PluginResources.Microsoft_Tooltip;
+				info.SearchResultImage = PluginResources.microsoft_image;
+			}
+			else
+			{
+				info.Name = PluginResources.Plugin_NiceName;
+				info.TooltipText = PluginResources.Plugin_Tooltip;
+			}
+
+			return info;
+		}
+
+		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
+		{
+			if (translationProviderUri == null)
+			{
+				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
+			}
+
+			return string.Equals(translationProviderUri.Scheme, Provider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
+		}
+
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider)
+		{
+			SetSavedCredentialsOnUi(credentialStore, loadOptions);
+			var dialogService = new OpenFileDialogService();
+			var providerControlVm = new ProviderControlViewModel(loadOptions, regionsProvider);
+			var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService, false);
+			var htmlUtil = new HtmlUtil();
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm, credentialStore, languagePairs, htmlUtil);
+			var mainWindow = new MainWindow
+			{
+				DataContext = mainWindowViewModel
+			};
+
+			mainWindowViewModel.CloseEventRaised += () =>
+			{
+				UpdateProviderCredentials(credentialStore, loadOptions);
+				mainWindow.Close();
+			};
+
+			mainWindow.ShowDialog();
+			return mainWindowViewModel;
+		}
+
+		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
+		{
+			var clientId = options.ClientId;
+			var microsoftCreds = options.PersistMicrosoftCreds;
+			SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriMs, clientId, microsoftCreds);
+		}
+
+		/// <summary>
+		/// Get saved key if there is one and put it into options
+		/// </summary>
+		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
+		{
+			//get microsoft credentials
+			var providerCredentials = GetCredentialsFromStore(credentialStore, PluginResources.UriMs);
+			if (providerCredentials == null)
+			{
+				return;
+			}
+
+			try
+			{
+				loadOptions.ClientId = providerCredentials.Credential;
+				loadOptions.PersistMicrosoftCreds = providerCredentials.Persist;
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
+			}
+		}
+
+		private TranslationProviderCredential GetCredentialsFromStore(ITranslationProviderCredentialStore credentialStore, string uri)
+		{
+			var providerCredentials = credentialStore.GetCredential(new Uri(uri));
+			return providerCredentials != null
+				 ? new TranslationProviderCredential(providerCredentials.Credential, providerCredentials.Persist)
+				 : null;
+		}
+
+		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string providerUri, string apiKey, bool persistKey)
+		{
+			var uri = new Uri(providerUri);
+			var proiderCredentials = new TranslationProviderCredential(apiKey, persistKey);
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, proiderCredentials);
+		}
+	}
+}

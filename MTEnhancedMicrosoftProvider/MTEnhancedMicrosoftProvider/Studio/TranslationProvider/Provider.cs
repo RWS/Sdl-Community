@@ -1,5 +1,4 @@
 ﻿using System;
-using MTEnhancedMicrosoftProvider.Connect;
 using MTEnhancedMicrosoftProvider.Interfaces;
 using MTEnhancedMicrosoftProvider.Model;
 using MTEnhancedMicrosoftProvider.Service;
@@ -10,20 +9,18 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace MTEnhancedMicrosoftProvider
 {
-	public class MTEMicrosoftProvider : ITranslationProvider
+	public class Provider : ITranslationProvider
     {
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
 		private readonly HtmlUtil _htmlUtil;
-		private ApiConnecter _mstConnect;
+		private ProviderConnecter _mstConnect;
 
-
-		public MTEMicrosoftProvider(ITranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
+		public Provider(ITranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
 		{
 			_htmlUtil = htmlUtil;
 			Options = options;
 			RegionsProvider = regionProvider;
 		}
-
 
 		public string Name => PluginResources.Plugin_Name;
 
@@ -71,18 +68,16 @@ namespace MTEnhancedMicrosoftProvider
 
 		public bool SupportsWordCounts => false;
 
-
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			_mstConnect = _mstConnect is null ? new ApiConnecter(Options.ClientId, Options.Region, _htmlUtil)
-											  : _mstConnect;
-			_mstConnect.ResetCredentials(Options.ClientId, Options.Region);
+			_mstConnect = _mstConnect ?? new ProviderConnecter(Options.ClientId, Options.Region, _htmlUtil);
+			_mstConnect.ResetCrd(Options.ClientId, Options.Region);
 			return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new MTEMicrosoftProviderLanguageDirection(this, languageDirection, _htmlUtil);
+			return new ProviderLanguageDirection(this, languageDirection, _htmlUtil);
 		}
 
 		public string SerializeState()
@@ -92,7 +87,7 @@ namespace MTEnhancedMicrosoftProvider
 
 		public void LoadState(string translationProviderState)
 		{
-			Options = JsonConvert.DeserializeObject<MTEMicrosoftTranslationOptions>(translationProviderState);
+			Options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
 		}
 
 		public void RefreshStatusInfo() { }

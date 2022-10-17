@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MTEnhancedMicrosoftProvider.Connect;
 using MTEnhancedMicrosoftProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
@@ -8,22 +7,24 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
 using MTEnhancedMicrosoftProvider.Interfaces;
+using MTEnhancedMicrosoftProvider.Helpers;
+using MTEnhancedMicrosoftProvider.Model;
 
 namespace MTEnhancedMicrosoftProvider
 {
-	public class MTEMicrosoftProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class ProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
 		private readonly LanguagePair _languageDirection;
 		private readonly ITranslationOptions _options;
-		private readonly MTEMicrosoftProvider _provider;
+		private readonly Provider _provider;
 		private readonly HtmlUtil _htmlUtil;
 		private TranslationUnit _inputTu;
-		private ApiConnecter _mstConnect;
-		private Model.SegmentEditor _postLookupSegmentEditor;
-		private Model.SegmentEditor _preLookupSegmentEditor;
+		private ProviderConnecter _mstConnect;
+		private Model.MTESegmentEditor _postLookupSegmentEditor;
+		private Model.MTESegmentEditor _preLookupSegmentEditor;
 
 
-		public MTEMicrosoftProviderLanguageDirection(MTEMicrosoftProvider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
+		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
 		{
 			_provider = provider;
 			_options = _provider.Options;
@@ -44,7 +45,7 @@ namespace MTEnhancedMicrosoftProvider
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
         {
 			var output = new SearchResults[segments.Length];
-			for (int i = 0; i < segments.Length; i++)
+			for (var i = 0; i < segments.Length; i++)
 			{
 				output[i] = SearchSegment(settings, segments[i]);
 			}
@@ -59,39 +60,39 @@ namespace MTEnhancedMicrosoftProvider
 				SourceSegment = segment.Duplicate()
 			};
 
-			var newseg = segment.Duplicate();
+			var newSegment = segment.Duplicate();
 			var translation = new Segment(_languageDirection.TargetCulture);
 			if (!_options.ResendDrafts
 				&& _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
-				translation.Add(Lookup(newseg.ToPlain(), _options, "text/plain"));
+				translation.Add(Lookup(newSegment.ToPlain(), _options, "text/plain"));
 				results.Add(CreateSearchResult(segment, translation));
 				return results;
 			}
 
-			var sendTextOnly = _options.SendPlainTextOnly || !newseg.HasTags;
+			var sendTextOnly = _options.SendPlainTextOnly || !newSegment.HasTags;
 			if (!sendTextOnly)
 			{
 				if (_options.UsePreEdit)
 				{
-					if (_preLookupSegmentEditor == null)
+					if (_preLookupSegmentEditor is null)
 					{
-						_preLookupSegmentEditor = new Model.SegmentEditor(_options.PreLookupFilename);
+						_preLookupSegmentEditor = new MTESegmentEditor(_options.PreLookupFilename);
 					}
 
-					newseg = GetEditedSegment(_preLookupSegmentEditor, newseg);
+					newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
 				}
 
-				var tagplacer = new TagPlacer(newseg, _htmlUtil);
+				var tagplacer = new TagPlacer(newSegment, _htmlUtil);
 				////tagplacer is constructed and gives us back a properly marked up source string for google
 				var translatedText = Lookup(tagplacer.PreparedSourceText, _options, "text/html");
 				//now we send the output back to tagplacer for our properly tagged segment
 				translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
 				if (_options.UsePostEdit)
 				{
-					if (_postLookupSegmentEditor == null)
+					if (_postLookupSegmentEditor is null)
 					{
-						_postLookupSegmentEditor = new Model.SegmentEditor(_options.PostLookupFilename);
+						_postLookupSegmentEditor = new MTESegmentEditor(_options.PostLookupFilename);
 					}
 
 					translation = GetEditedSegment(_postLookupSegmentEditor, translation);
@@ -99,25 +100,25 @@ namespace MTEnhancedMicrosoftProvider
 			}
 			else
 			{
-				var sourcetext = newseg.ToPlain();
+				var sourcetext = newSegment.ToPlain();
 				if (_options.UsePreEdit)
 				{
-					if (_preLookupSegmentEditor == null)
+					if (_preLookupSegmentEditor is null)
 					{
-						_preLookupSegmentEditor = new Model.SegmentEditor(_options.PreLookupFilename);
+						_preLookupSegmentEditor = new MTESegmentEditor(_options.PreLookupFilename);
 					}
 
 					sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
-					newseg.Clear();
-					newseg.Add(sourcetext);
+					newSegment.Clear();
+					newSegment.Add(sourcetext);
 				}
 
 				var translatedText = Lookup(sourcetext, _options, "text/plain");
 				if (_options.UsePostEdit)
 				{
-					if (_postLookupSegmentEditor == null)
+					if (_postLookupSegmentEditor is null)
 					{
-						_postLookupSegmentEditor = new Model.SegmentEditor(_options.PostLookupFilename);
+						_postLookupSegmentEditor = new MTESegmentEditor(_options.PostLookupFilename);
 					}
 
 					translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
@@ -126,20 +127,19 @@ namespace MTEnhancedMicrosoftProvider
 				translation.Add(translatedText);
 			}
 
-			results.Add(CreateSearchResult(newseg, translation));
-
+			results.Add(CreateSearchResult(newSegment, translation));
 			return results;
 		}
 
         public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
-			if (segments == null)
+			if (segments is null || mask is null)
 			{
-				throw new ArgumentNullException("segments in SearchSegmentsMasked");
+				throw new ArgumentNullException("null in SearchSegmentsMasked");
 			}
-			else if (mask == null || mask.Length != segments.Length)
+			else if (mask.Length != segments.Length)
 			{
-				throw new ArgumentException("mask in SearchSegmentsMasked");
+				throw new ArgumentException("length SearchSegmentsMasked");
 			}
 
 			var results = new SearchResults[segments.Length];
@@ -148,11 +148,10 @@ namespace MTEnhancedMicrosoftProvider
 				if (mask[i])
 				{
 					results[i] = SearchSegment(settings, segments[i]);
+					continue;
 				}
-				else
-				{
-					results[i] = null;
-				}
+
+				results[i] = null;
 			}
 
 			return results;
@@ -196,11 +195,10 @@ namespace MTEnhancedMicrosoftProvider
 				if (mask[i])
 				{
 					results.Add(SearchTranslationUnit(settings, translationUnits[i]));
+					continue;
 				}
-				else
-				{
-					results.Add(null);
-				}
+
+				results.Add(null);
 			}
 
 			return results.ToArray();
@@ -225,45 +223,40 @@ namespace MTEnhancedMicrosoftProvider
 			};
 		}
 
-		private string GetEditedString(Model.SegmentEditor editor, string sourcetext)
+		private string GetEditedString(Model.MTESegmentEditor editor, string sourcetext)
 		{
 			return editor.EditText(sourcetext);
 		}
 
-		private Segment GetEditedSegment(Model.SegmentEditor editor, Segment inSegment)
+		private Segment GetEditedSegment(Model.MTESegmentEditor editor, Segment inSegment)
 		{
-			var newSeg = new Segment(inSegment.Culture);
+			var newSegment = new Segment(inSegment.Culture);
 			foreach (var element in inSegment.Elements)
 			{
-				var elType = element.GetType();
-				if (elType.ToString() == "Sdl.LanguagePlatform.Core.Tag")
+				if (element.GetType().ToString() == "Sdl.LanguagePlatform.Core.Tag")
 				{
-					newSeg.Add(element); //if tag just add the tag
+					newSegment.Add(element); //if tag just add the tag
 					continue;
 				}
 
 				var temp = editor.EditText(element.ToString());
-				newSeg.Add(temp);
+				newSegment.Add(temp);
 			}
 
-			return newSeg;
+			return newSegment;
 		}
 
 		private string Lookup(string sourcetext, ITranslationOptions options, string format)
 		{
-			var catId = "";
-			if (options.UseCatID)
+			var catId = options.UseCatID ? _options.CatId : string.Empty;
+			switch (_mstConnect)
 			{
-				catId = _options.CatId;
-			}
-
-			if (_mstConnect == null)
-			{
-				_mstConnect = new ApiConnecter(_options.ClientId, options.Region, _htmlUtil);
-			}
-			else
-			{
-				_mstConnect.ResetCredentials(options.ClientId, options.Region);
+				case null:
+					_mstConnect = new ProviderConnecter(_options.ClientId, options.Region, _htmlUtil);
+					break;
+				default:
+					_mstConnect.ResetCrd(options.ClientId, options.Region);
+					break;
 			}
 
 			var sourcelang = _languageDirection.SourceCulture.ToString();

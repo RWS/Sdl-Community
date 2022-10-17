@@ -7,5 +7,6 @@
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 	<Include>
 		<File>RestSharp.dll</File>
+		<File>System.Text.Json.dll</File>
 	</Include>
 </PluginPackage>

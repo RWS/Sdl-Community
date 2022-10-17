@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using static System.Convert;
 
-namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
+namespace MTEnhancedMicrosoftProvider.Model
 {
-	public class MTEMicrosoftTranslationOptions : ITranslationOptions
+	public class MTETranslationOptions : ITranslationOptions
 	{
 		private const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
@@ -15,12 +15,12 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 
-		public MTEMicrosoftTranslationOptions()
+		public MTETranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(MTEMicrosoftProvider.ListTranslationProviderScheme);
+			_uriBuilder = new TranslationProviderUriBuilder(Provider.ListTranslationProviderScheme);
 		}
 
-		public MTEMicrosoftTranslationOptions(Uri uri)
+		public MTETranslationOptions(Uri uri)
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
 		}
@@ -133,26 +133,19 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 
 		public static string GetProviderTypeDescription(ProviderType type)
 		{
-			switch (type)
-			{
-				case ProviderType.MicrosoftTranslator:
-					return MsTranslatorString; //these strings should not be localized and are therefore hard-coded
-				default:
-					return "";
-			}
+			return type == ProviderType.MicrosoftTranslator ? MsTranslatorString : string.Empty;
 		}
 
 		public static ProviderType GetProviderType(string typeString)
 		{
 			//we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
-			//the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator' ...they both leave it untranslated in their documentation in other languages
-			switch (typeString)
+			//the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator'
+			//...they both leave it untranslated in their documentation in other languages
+			if (typeString is null)
 			{
-				case MsTranslatorString:
-					return ProviderType.MicrosoftTranslator;
-				default:
-					return ProviderType.None;
+				return ProviderType.MicrosoftTranslator;
 			}
+			return typeString.Equals(MsTranslatorString) ? ProviderType.MicrosoftTranslator : ProviderType.None;
 		}
 
 		[JsonIgnore]

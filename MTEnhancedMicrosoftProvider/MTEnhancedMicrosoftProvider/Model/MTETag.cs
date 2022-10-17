@@ -1,6 +1,6 @@
 ﻿using Sdl.LanguagePlatform.Core;
 
-namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
+namespace MTEnhancedMicrosoftProvider.Model
 {
 	public class MTETag
 	{

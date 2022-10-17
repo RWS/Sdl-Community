@@ -8,6 +8,7 @@ using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
 using MTEnhancedMicrosoftProvider.View;
 using MTEnhancedMicrosoftProvider.ViewModel;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using MTEnhancedMicrosoftProvider.Model;
 
 namespace MTEnhancedMicrosoftProvider.TellMe
 {
@@ -27,55 +28,46 @@ namespace MTEnhancedMicrosoftProvider.TellMe
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-
 			if (currentProject == null)
 			{
-				MessageBox.Show(@"No project is set as active");
+				MessageBox.Show("No project is set as active");
+				return;
 			}
-			else
+
+			var settings = currentProject.GetTranslationProviderConfiguration();
+			if (!settings.Entries.Any(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider")))
 			{
-				var settings = currentProject.GetTranslationProviderConfiguration();
-				if (!settings.Entries.Any(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider")))
-				{
-					MessageBox.Show(
-						@"MT Enhanced Provider is not set on this project\nPlease set it in project settings before using TellMe to access it");
-				}
-				else
-				{
-					var translationProvider = settings.Entries.FirstOrDefault(entry =>
-						entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider"));
-
-					if (translationProvider != null)
-					{
-						var mtTranslationOptions =
-							new MTEMicrosoftTranslationOptions(translationProvider.MainTranslationProvider.Uri);
-
-						var dialogService = new OpenFileDialogService();
-
-						var settingsControlVm = new SettingsControlViewModel(mtTranslationOptions, dialogService, true);
-						var mainWindowVm = new MainWindowViewModel(mtTranslationOptions, settingsControlVm, true);
-
-						var mainWindow = new MainWindow
-						{
-							DataContext = mainWindowVm
-						};
-
-						mainWindowVm.CloseEventRaised += () =>
-						{
-							settings.Entries.Find(entry =>
-									entry.MainTranslationProvider.Uri.ToString().Contains("mtenhancedprovider"))
-								.MainTranslationProvider
-								.Uri = mtTranslationOptions.Uri;
-
-							currentProject.UpdateTranslationProviderConfiguration(settings);
-							mainWindow.Close();
-						};
-
-						mainWindow.ShowDialog();
-					}
-				}
+				MessageBox.Show("MT Enhanced Provider is not set on this project\nPlease set it in project settings before using TellMe to access it");
+				return;
 			}
-		}
 
+			var translationProvider = settings.Entries.FirstOrDefault(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains("mtenhancedprovider"));
+			if (translationProvider == null)
+			{
+				return;
+			}
+
+			var mtTranslationOptions = new MTETranslationOptions(translationProvider.MainTranslationProvider.Uri);
+			var dialogService = new OpenFileDialogService();
+			var settingsControlVm = new SettingsControlViewModel(mtTranslationOptions, dialogService, true);
+			var mainWindowViewModel = new MainWindowViewModel(mtTranslationOptions, settingsControlVm, true);
+			var mainWindow = new MainWindow
+			{
+				DataContext = mainWindowViewModel
+			};
+
+			mainWindowViewModel.CloseEventRaised += () =>
+			{
+				settings.Entries
+						.Find(entry => entry.MainTranslationProvider.Uri.ToString().Contains("mtenhancedprovider"))
+						.MainTranslationProvider
+						.Uri = mtTranslationOptions.Uri;
+
+				currentProject.UpdateTranslationProviderConfiguration(settings);
+				mainWindow.Close();
+			};
+
+			mainWindow.ShowDialog();
+		}
 	}
 }

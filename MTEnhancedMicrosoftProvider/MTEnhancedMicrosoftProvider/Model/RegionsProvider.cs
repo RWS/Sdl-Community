@@ -7,7 +7,7 @@ namespace MTEnhancedMicrosoftProvider.Model
 	{
 		public List<RegionSubscription> GetSubscriptionRegions()
 		{
-			List<RegionSubscription> regions = new List<RegionSubscription>
+			var regions = new List<RegionSubscription>
 			{
 				new RegionSubscription {Key = "", Name = "None", Location = ""},
 				new RegionSubscription {Key = "australiaeast", Name = "Australia East", Location = "Australia"},

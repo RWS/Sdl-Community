@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
 using MTEnhancedMicrosoftProvider.Commands;
-using MTEnhancedMicrosoftProvider.Connect;
 using MTEnhancedMicrosoftProvider.Interfaces;
 using MTEnhancedMicrosoftProvider.Model;
 using MTEnhancedMicrosoftProvider.Service;
@@ -138,21 +137,17 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		public void AddEncriptionMetaToResponse(string errorMessage)
 		{
-			var htmlStart = "<html> \n <meta http-equiv=\'Content-Type\' content=\'text/html;charset=UTF-8\'>\n <body style=\"font-family:Segoe Ui!important;color:red!important;font-size:13px!important\">\n";
-
+			var htmlStart = @"<html>
+<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+<body style=""font-family:Segoe Ui!important;color:red!important;font-size:13px!important"">";
 			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
 		}
 
 		public bool IsWindowValid()
 		{
 			ErrorMessage = string.Empty;
-
-			if (!ValidMicrosoftOptions())
-			{
-				return false;
-			}
-
-			return ValidSettingsPageOptions();
+			var microsoftOptions = ValidMicrosoftOptions();
+			return microsoftOptions ? ValidSettingsPageOptions() : microsoftOptions;
 		}
 
 		private bool ValidSettingsPageOptions()
@@ -164,21 +159,32 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 					ErrorMessage = PluginResources.PreLookupEmptyMessage;
 					return false;
 				}
+
 				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
 				{
 					ErrorMessage = PluginResources.PreLookupWrongPathMessage;
 					return false;
 				}
 			}
-			if (!_settingsControlViewModel.DoPostLookup) return true;
+
+			if (!_settingsControlViewModel.DoPostLookup)
+			{
+				return true;
+			}
+
 			if (string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
 			{
 				ErrorMessage = PluginResources.PostLookupEmptyMessage;
 				return false;
 			}
-			if (File.Exists(_settingsControlViewModel.PostLookupFileName)) return true;
-			ErrorMessage = PluginResources.PostLookupWrongPathMessage;
-			return false;
+
+			if (!File.Exists(_settingsControlViewModel.PostLookupFileName))
+			{
+				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+				return false;
+			}
+
+			return true;
 		}
 
 		private bool ValidMicrosoftOptions()
@@ -188,11 +194,12 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 				ErrorMessage = PluginResources.ApiKeyError;
 				return false;
 			}
-			if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
+			else if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
 			{
 				ErrorMessage = PluginResources.CatIdError;
 				return false;
 			}
+
 			return AreMicrosoftCredentialsValid();
 		}
 
@@ -209,7 +216,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private void ClearMessageRaised()
 		{
 			ErrorMessage = string.Empty;
-			TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
+			TranslatorErrorResponse = "<html><body></html></body>";
 		}
 
 		private void Save(object window)
@@ -237,7 +244,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private void DeleteCredentialsIfNecessary()
 		{
 			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-				MTEMicrosoftTranslationOptions.ProviderType.MicrosoftTranslator && !Options.PersistMicrosoftCreds)
+				MTETranslationOptions.ProviderType.MicrosoftTranslator && !Options.PersistMicrosoftCreds)
 			{
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
 			}
@@ -246,17 +253,18 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private void RemoveCredentialsFromStore(Uri providerUri)
 		{
 			var credentials = _credentialStore.GetCredential(providerUri);
-			if (credentials != null)
+			if (credentials == null)
 			{
-				_credentialStore.RemoveCredential(providerUri);
+				return;
 			}
+			_credentialStore.RemoveCredential(providerUri);
 		}
 
 		private bool AreMicrosoftCredentialsValid()
 		{
 			try
 			{
-				var apiConnecter = new ApiConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
+				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
 				if (!string.IsNullOrEmpty(Options?.ClientId)
 					&& !Options.ClientId.Equals(_providerControlViewModel.ClientId))
 				{
@@ -264,7 +272,6 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 				}
 
 				return true;
-
 			}
 			catch (Exception e)
 			{
@@ -290,6 +297,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			{
 				Options.LanguagesSupported = new Dictionary<string, string>();
 			}
+
 			if (_languagePairs == null)
 			{
 				return;

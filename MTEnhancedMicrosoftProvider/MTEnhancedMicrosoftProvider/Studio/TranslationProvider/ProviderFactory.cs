@@ -1,15 +1,14 @@
 ﻿using System;
 using MTEnhancedMicrosoftProvider.Model;
 using MTEnhancedMicrosoftProvider.Service;
-using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace MTEnhancedMicrosoftProvider
 {
-    [TranslationProviderFactory(Id = "Translation_Provider_Plug_inFactory",
+	[TranslationProviderFactory(Id = "Translation_Provider_Plug_inFactory",
                                 Name = "Translation_Provider_Plug_inFactory",
                                 Description = "Translation_Provider_Plug_inFactory")]
-	public class MTEMicrosoftProviderFactory : ITranslationProviderFactory
+	public class ProviderFactory : ITranslationProviderFactory
 	{
 
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
@@ -19,9 +18,6 @@ namespace MTEnhancedMicrosoftProvider
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var loadOptions = new MTEMicrosoftTranslationOptions(translationProviderUri);
-			var regionsProvider = new RegionsProvider();
-			var htmlUtil = new HtmlUtil();
 			var credential = credentialStore.GetCredential(new Uri(PluginResources.UriMs))
 						  ?? credentialStore.GetCredential(translationProviderUri)
 						  ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
@@ -31,10 +27,13 @@ namespace MTEnhancedMicrosoftProvider
 			}
 
 			var providerCredentials = new TranslationProviderCredential(credential.Credential, credential.Persist);
-			loadOptions.ClientId = providerCredentials.Credential;
-			loadOptions.PersistMicrosoftCreds = providerCredentials.Persist;
+			var loadOptions = new MTETranslationOptions(translationProviderUri)
+			{
+				ClientId = providerCredentials.Credential,
+				PersistMicrosoftCreds = providerCredentials.Persist
+			};
 
-			return new MTEMicrosoftProvider(loadOptions, regionsProvider, htmlUtil);
+			return new Provider(loadOptions, new RegionsProvider(), new HtmlUtil());
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
@@ -44,14 +43,14 @@ namespace MTEnhancedMicrosoftProvider
 				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
 			}
 
-			return string.Equals(translationProviderUri.Scheme, MTEMicrosoftProvider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
+			return string.Equals(translationProviderUri.Scheme, Provider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
 			return new TranslationProviderInfo
 			{
-				TranslationMethod = MTEMicrosoftTranslationOptions.ProviderTranslationMethod,
+				TranslationMethod = MTETranslationOptions.ProviderTranslationMethod,
 				Name = PluginResources.Plugin_NiceName
 			};
 		}

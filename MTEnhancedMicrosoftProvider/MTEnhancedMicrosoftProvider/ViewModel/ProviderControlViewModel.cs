@@ -5,7 +5,6 @@ using System.Windows.Input;
 using MTEnhancedMicrosoftProvider.Commands;
 using MTEnhancedMicrosoftProvider.Interfaces;
 using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
 
 namespace MTEnhancedMicrosoftProvider.ViewModel
 {
@@ -17,19 +16,16 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private TranslationOption _selectedTranslationOption;
 		private bool _isMicrosoftSelected;
 		private bool _useCatId;
-		private bool _isV2Checked;
 		private bool _persistGoogleKey;
 		private bool _persistMicrosoftKey;
 		private bool _isTellMeAction;
 		private bool _basicCsvGlossary;
 		private string _catId;
-		private string _apiKey;
 		private string _clientId;
 		private RegionSubscription _region;
 		private ObservableCollection<RegionSubscription> _regions;
 		private string _jsonFilePath;
 		private string _projectName;
-		private string _googleEngineModel;
 		private string _projectLocation;
 		private string _glossaryId;
 		private string _glossaryPath;
@@ -50,6 +46,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		//	InitializeComponent();
 
 		//}
+		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
 
 		private void InitializeComponent()
 		{
@@ -58,36 +55,39 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 				new TranslationOption
 				{
 					Name = PluginResources.Microsoft,
-					ProviderType = MTEMicrosoftTranslationOptions.ProviderType.MicrosoftTranslator
+					ProviderType = MTETranslationOptions.ProviderType.MicrosoftTranslator
 				}
 			};
 
-			// set the default region
 			Region = Regions.FirstOrDefault(a => a.Key == "");
-			if (_options != null)
+			if (_options == null)
 			{
-				ClientId = _options.ClientId;
-				PersistMicrosoftKey = _options.PersistMicrosoftCreds;
-				UseCatId = _options.UseCatID;
-				CatId = _options.CatId;
-
-				JsonFilePath = _options.JsonFilePath;
-				ProjectName = _options.ProjectName;
-				ProjectLocation = _options.ProjectLocation;
-				GlossaryPath = _options.GlossaryPath;
-				BasicCsvGlossary = _options.BasicCsv;
-
-				Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
+				SetTranslationOption();
+				return;
 			}
-			
 
+			ClientId = _options.ClientId;
+			PersistMicrosoftKey = _options.PersistMicrosoftCreds;
+			UseCatId = _options.UseCatID;
+			CatId = _options.CatId;
+
+			JsonFilePath = _options.JsonFilePath;
+			ProjectName = _options.ProjectName;
+			ProjectLocation = _options.ProjectLocation;
+			GlossaryPath = _options.GlossaryPath;
+			BasicCsvGlossary = _options.BasicCsv;
+
+			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
 			SetTranslationOption();
 		}
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
+
 
 		private void Clear(object obj)
 		{
-			if (!(obj is string objectName)) return;
+			if (!(obj is string objectName))
+			{
+				return;
+			}
 
 			switch (objectName)
 			{
@@ -159,7 +159,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			set
 			{
 				_selectedTranslationOption = value;
-				IsMicrosoftSelected = value.ProviderType == MTEMicrosoftTranslationOptions.ProviderType.MicrosoftTranslator;
+				IsMicrosoftSelected = value.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
 				ClearMessageRaised?.Invoke();
 			}
@@ -211,8 +211,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		{
 			get
 			{
-				return _regions ?? (_regions = new ObservableCollection<RegionSubscription>(
-			  _regionsProvider.GetSubscriptionRegions()));
+				return _regions ?? (_regions = new ObservableCollection<RegionSubscription>( _regionsProvider.GetSubscriptionRegions()));
 			}
 			set
 			{
@@ -226,7 +225,11 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			get => _jsonFilePath;
 			set
 			{
-				if (_jsonFilePath == value) return;
+				if (_jsonFilePath == value)
+				{
+					return;
+				}
+
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
 				ClearMessageRaised?.Invoke();

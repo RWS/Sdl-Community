@@ -17,41 +17,54 @@ using Newtonsoft.Json;
 using NLog;
 using RestSharp;
 
-namespace MTEnhancedMicrosoftProvider.Connect
+namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 {
-	internal class ApiConnecter
+	internal class ProviderConnecter
 	{
 		private const string BaseUri = @"api.cognitive.microsofttranslator.com";
 		private const string ServiceBaseUri = @"api.cognitive.microsoft.com";
 		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
 
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private List<string> _supportedLangs;
+		private string _authToken;
+
+		//TODO PACH (06/04/2021): identify if we can enhance the service using this value.
+		private DateTime _tokenExpiresAt;
 
 		private string _subscriptionKey;
 		private string _region;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private HtmlUtil _htmlUtil;
-		private string _authToken;
-		private List<string> _supportedLangs;
 
 		/// <summary>
 		/// This class allows connection to the Microsoft Translation API
 		/// </summary>
 		/// <param name="subscriptionKey">Microsoft API key</param>
 		/// <param name="region">Region</param>
-		internal ApiConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
+		internal ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_htmlUtil = htmlUtil;
 
-			_authToken = string.IsNullOrEmpty(_authToken) ? GetAuthToken() : _authToken;
-			_supportedLangs = _supportedLangs is null ? GetSupportedLanguages() : _supportedLangs;
+			if (_authToken == null)
+			{
+				_authToken = GetAuthToken(); //if the class variable has not been set
+			}
+			if (_supportedLangs == null)
+			{
+				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+			}
 		}
 
-		internal void ResetCredentials(string subscriptionKey, string region)
+		/// <summary>
+		/// Allows static credentials to be updated by the calling program
+		/// </summary>
+		/// <param name="subscriptionKey">the client Id obtained from Microsoft</param>
+		/// <param name="region">Region</param>
+		internal void ResetCrd(string subscriptionKey, string region)
 		{
-			if (subscriptionKey != _subscriptionKey
-				|| region != _region)
+			if (subscriptionKey != _subscriptionKey || region != _region)
 			{
 				_subscriptionKey = subscriptionKey;
 				_region = region;
@@ -60,32 +73,34 @@ namespace MTEnhancedMicrosoftProvider.Connect
 			}
 		}
 
+		/// <summary>
+		/// translates the text input
+		/// </summary>
 		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
 		{
-			if (string.IsNullOrEmpty(_authToken))
+			//convert our language codes
+			var sourceLc = ConvertLangCode(sourceLang);
+			var targetLc = ConvertLangCode(targetLang);
+
+			//check to see if token is null
+			if (_authToken == null)
 			{
 				_authToken = GetAuthToken();
-				if (_authToken is null)
+				if (_authToken == null)
 				{
 					throw new Exception("Authorization token not valid!");
 				}
 			}
-
-			var sourceLc = ConvertLangCode(sourceLang);
-			var targetLc = ConvertLangCode(targetLang);
 
 			var translatedText = string.Empty;
 			try
 			{
 				//search for words like this <word> 
 				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
-				if (!string.IsNullOrEmpty(textToTranslate))
+				var words = rgx.Matches(textToTranslate);
+				if (words.Count > 0)
 				{
-					var words = rgx.Matches(textToTranslate);
-					if (words.Count > 0)
-					{
-						textToTranslate = ReplaceCharacters(textToTranslate, words);
-					}
+					textToTranslate = ReplaceCharacters(textToTranslate, words);
 				}
 
 				const string host = "https://api.cognitive.microsofttranslator.com";
@@ -132,8 +147,6 @@ namespace MTEnhancedMicrosoftProvider.Connect
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n {exception.Message}\n {exception.StackTrace}");
 				throw new Exception(mesg);
 			}
-
-
 			return translatedText;
 		}
 
@@ -145,27 +158,32 @@ namespace MTEnhancedMicrosoftProvider.Connect
 				if (match.Index.Equals(0))
 				{
 					indexes.Add(match.Length);
-					continue;
 				}
-
-				indexes.Add(match.Index);
-				var remainingText = textToTranslate.Substring(match.Index + match.Length);
-				if (!string.IsNullOrEmpty(remainingText))
+				else
 				{
-					indexes.Add(match.Index + match.Length);
+					//check if there is any text after PI
+					var remainingText = textToTranslate.Substring(match.Index + match.Length);
+					if (!string.IsNullOrEmpty(remainingText))
+					{
+						//get the position where PI starts to split before
+						indexes.Add(match.Index);
+						//split after PI
+						indexes.Add(match.Index + match.Length);
+					}
+					else
+					{
+						indexes.Add(match.Index);
+					}
 				}
 			}
-
 			var splitText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
 			var positions = new List<int>();
 			for (var i = 0; i < splitText.Count; i++)
 			{
-				if (splitText[i].Contains("tg"))
+				if (!splitText[i].Contains("tg"))
 				{
-					continue;
+					positions.Add(i);
 				}
-
-				positions.Add(i);
 			}
 
 			foreach (var position in positions)
@@ -175,63 +193,70 @@ namespace MTEnhancedMicrosoftProvider.Connect
 				var finalString = Regex.Replace(start, ">", "&gt;");
 				splitText[position] = finalString;
 			}
-
 			var finalText = string.Empty;
 			foreach (var text in splitText)
 			{
 				finalText += text;
 			}
-
 			return finalText;
 		}
 
+		/// <summary>
+		/// Checks of lang pair is supported by MS
+		/// </summary>
 		internal bool IsSupportedLangPair(string sourceLang, string targetLang)
 		{
-			var convertedSource = ConvertLangCode(sourceLang);
-			var convertedTarget = ConvertLangCode(targetLang);
+			//convert our language codes
+			var source = ConvertLangCode(sourceLang);
+			var target = ConvertLangCode(targetLang);
 
 			var sourceSupported = false;
 			var targetSupported = false;
+
+			//check to see if both the source and target languages are supported
 			foreach (var lang in _supportedLangs)
 			{
-				if (lang.Equals(convertedSource))
-				{
-					sourceSupported = true;
-				}
-
-				if (lang.Equals(convertedTarget))
-				{
-					targetSupported = true;
-				}
+				if (lang.Equals(source)) sourceSupported = true;
+				if (lang.Equals(target)) targetSupported = true;
 			}
 
-			return sourceSupported && targetSupported;
+			if (sourceSupported && targetSupported) return true; //if both are supported return true
+
+			//otherwise return false
+			return false;
 		}
 
 		private List<string> GetSupportedLanguages()
 		{
-			_authToken = string.IsNullOrEmpty(_authToken) ? GetAuthToken() : _authToken;
+			//check to see if token is null
+			if (_authToken == null) _authToken = GetAuthToken();
 
 			var languageCodeList = new List<string>();
 			try
 			{
+				var uri = new Uri("https://" + BaseUri);
+				var client = new RestClient(uri);
+
 				var request = new RestRequest("languages", Method.Get);
 				request.AddParameter("api-version", "3.0");
 				request.AddParameter("scope", "translation");
 
-				var client = new RestClient(new Uri("https://" + BaseUri));
 				var languageResponse = client.ExecuteAsync(request).Result;
 				var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
-				languageCodeList.AddRange(languages?.Translation.Select(language => language.Key));
+				if (languages != null)
+				{
+					foreach (var language in languages.Translation)
+					{
+						languageCodeList.Add(language.Key);
+					}
+				}
 			}
 			catch (WebException exception)
 			{
+				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{exception.Message}\n {exception.StackTrace}");
-
-				var message = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				throw new Exception(message);
+				throw new Exception(mesg);
 			}
-
 			return languageCodeList;
 		}
 
@@ -239,6 +264,7 @@ namespace MTEnhancedMicrosoftProvider.Connect
 		{
 			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
 
+			// Obtain detailed error information
 			string strResponse;
 			using (var response = (HttpWebResponse)e.Response)
 			{
@@ -250,7 +276,6 @@ namespace MTEnhancedMicrosoftProvider.Connect
 					}
 				}
 			}
-
 			return $"Http status code={e.Status}, error message={strResponse}";
 		}
 
@@ -266,42 +291,36 @@ namespace MTEnhancedMicrosoftProvider.Connect
 			{
 				System.Threading.Thread.Yield();
 			}
-
-			if (task.IsFaulted
-				&& task.Exception != null)
+			if (task.IsFaulted)
 			{
-				throw new Exception(task.Exception.InnerException?.Message);
+				if (task.Exception != null) throw new Exception(task.Exception.InnerException?.Message);
 			}
-
 			if (task.IsCanceled)
 			{
 				throw new Exception("Timeout obtaining access token.");
 			}
-
 			return accessToken;
 		}
 
 		public void RefreshAuthToken()
 		{
+			//Clear the existing token because the api key has changed
 			_authToken = string.Empty;
+
+			//try to get the token for the new api key
 			_authToken = GetAuthToken();
 		}
 
 		public async Task<string> GetAccessTokenAsync()
 		{
-			if (!string.IsNullOrWhiteSpace(_authToken))
-			{
-				return _authToken;
-			}
+			if (!string.IsNullOrWhiteSpace(_authToken)) return _authToken;
+			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
 
-			if (string.IsNullOrEmpty(_subscriptionKey))
-			{
-				return string.Empty;
-			}
 
 			var uri = new Uri("https://"
-				  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
-				  + ServiceBaseUri + "/sts/v1.0/issueToken");
+							  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
+							  + ServiceBaseUri + "/sts/v1.0/issueToken");
+
 			try
 			{
 				using (var client = new HttpClient())
@@ -317,6 +336,8 @@ namespace MTEnhancedMicrosoftProvider.Connect
 					_authToken = "Bearer " + tokenString;
 
 					var token = ReadToken(tokenString);
+					_tokenExpiresAt = token?.ValidTo ?? DateTime.Now;
+
 				}
 			}
 			catch (Exception ex)
@@ -358,33 +379,18 @@ namespace MTEnhancedMicrosoftProvider.Connect
 
 		private string ConvertLangCode(string languageCode)
 		{
-			const string traditionalChineseCodes = "zh-TW zh-HK zh-MO zh-Hant zh-CHT";
-			const string simplifiedChineseCodes = "zh-CN zh-SG zh-Hans-HK zh-Hans-MO zh-Hans zh-CHS";
+			//takes the language code input and converts it to one that MS Translate can use
+			if (languageCode.Contains("sr-Cyrl")) return "sr-Cyrl";
+			if (languageCode.Contains("sr-Latn")) return "sr-Latn";
 
-			var cultureInfo = new CultureInfo(languageCode);
-			var isLatin = languageCode.Contains("sr-Latn");
-			var isCyrillic = languageCode.Contains("sr-Cyrl");
-			var isTraditionalChinese = traditionalChineseCodes.Contains(cultureInfo.Name);
-			var isSimplifiedChinese = simplifiedChineseCodes.Contains(cultureInfo.Name);
+			var ci = new CultureInfo(languageCode); //construct a CultureInfo object with the language code
 
-			if (isCyrillic)
-			{
-				return "sr-Cyrl";
-			}
-			else if (isLatin)
-			{
-				return "sr-Latn";
-			}
-			else if (isTraditionalChinese)
-			{
-				return "zh-Hant";
-			}
-			else if (isSimplifiedChinese)
-			{
-				return "zh-Hans";
-			}
+			//deal with chinese..MS Translator has different ones
+			if (new[] { "zh-TW", "zh-HK", "zh-MO", "zh-Hant", "zh-CHT" }.Contains(ci.Name)) return "zh-Hant";
+			if (new[] { "zh-CN", "zh-SG", "zh-Hans-HK", "zh-Hans-MO", "zh-Hans", "zh-CHS" }.Contains(ci.Name)) return "zh-Hans";
 
-			return cultureInfo.TwoLetterISOLanguageName;
+			return ci.TwoLetterISOLanguageName;
+
 		}
 	}
 }

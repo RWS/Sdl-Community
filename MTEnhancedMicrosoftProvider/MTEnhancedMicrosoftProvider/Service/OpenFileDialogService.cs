@@ -13,8 +13,8 @@ namespace MTEnhancedMicrosoftProvider.Service
 				Multiselect = false
 			};
 
-			return openFileDialog.ShowDialog() == true ? openFileDialog.FileName
-													   : string.Empty;
+			return (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName
+											         : string.Empty;
 		}
 	}
 }

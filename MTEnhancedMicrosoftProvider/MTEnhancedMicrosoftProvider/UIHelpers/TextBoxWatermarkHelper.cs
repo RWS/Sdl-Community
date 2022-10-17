@@ -87,7 +87,8 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 
 		private static void IsClearTextButtonBehaviorEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			if (e.OldValue == e.NewValue || !(d is Button button))
+			if (e.OldValue == e.NewValue
+				|| !(d is Button button))
 			{
 				return;
 			}
@@ -124,8 +125,7 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 
 		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
 		{
-			if (sender == null
-				|| !(sender is TextBox textBox))
+			if (sender == null || !(sender is TextBox textBox))
 			{
 				return;
 			}
@@ -142,5 +142,4 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 			SetTextLength(sender as TextBox, textBox => textBox.Text.Length);
 		}
 	}
-
 }

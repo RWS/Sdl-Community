@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
+namespace MTEnhancedMicrosoftProvider.Studio
 {
 	public class WindowWrapper : System.Windows.Forms.IWin32Window
 	{
