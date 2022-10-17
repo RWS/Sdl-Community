@@ -9,7 +9,7 @@
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<PlatformTarget>x86</PlatformTarget>
 		<LangVersion>latest</LangVersion>
-		<AssemblyName>Language Weaver</AssemblyName>
+		<AssemblyName>LanguageWeaver</AssemblyName>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Resources\Report.xsl" />
