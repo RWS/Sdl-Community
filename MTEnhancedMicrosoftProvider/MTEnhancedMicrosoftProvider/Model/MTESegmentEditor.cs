@@ -90,13 +90,16 @@ namespace MTEnhancedMicrosoftProvider.Model
 
 		private void HandleException(object exObj)
 		{
+
 			var exception = exObj as Exception;
 			_logger.Error($"{MethodBase.GetCurrentMethod().Name} {exception.Message}\n {exception.StackTrace}");
 
-			var caption = PluginResources.EditSettingsErrorCaption;
-			var message = exObj is InvalidOperationException ? string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(_fileName))
-															 : PluginResources.EditSettingsGenericErrorMessage + " " + exception.Message;
 			var owner = new WindowWrapper(GetHandle());
+			var caption = PluginResources.EditSettingsErrorCaption;
+			var invalidOperationExceptionMessage = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(_fileName));
+			var generalExceptionMessage = PluginResources.EditSettingsGenericErrorMessage + " " + exception.Message;
+			var message = exObj is InvalidOperationException ? invalidOperationExceptionMessage
+															 : generalExceptionMessage;
 			MessageBox.Show(owner, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
 			throw new Exception(message);

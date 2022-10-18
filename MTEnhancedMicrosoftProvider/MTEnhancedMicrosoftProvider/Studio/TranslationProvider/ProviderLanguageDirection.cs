@@ -18,10 +18,9 @@ namespace MTEnhancedMicrosoftProvider
 		private readonly ITranslationOptions _options;
 		private readonly Provider _provider;
 		private readonly HtmlUtil _htmlUtil;
-		private TranslationUnit _inputTu;
 		private ProviderConnecter _mstConnect;
-		private Model.MTESegmentEditor _postLookupSegmentEditor;
-		private Model.MTESegmentEditor _preLookupSegmentEditor;
+		private MTESegmentEditor _postLookupSegmentEditor;
+		private MTESegmentEditor _preLookupSegmentEditor;
 
 
 		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
@@ -62,14 +61,6 @@ namespace MTEnhancedMicrosoftProvider
 
 			var newSegment = segment.Duplicate();
 			var translation = new Segment(_languageDirection.TargetCulture);
-			if (!_options.ResendDrafts
-				&& _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
-			{
-				translation.Add(Lookup(newSegment.ToPlain(), _options, "text/plain"));
-				results.Add(CreateSearchResult(segment, translation));
-				return results;
-			}
-
 			var sendTextOnly = _options.SendPlainTextOnly || !newSegment.HasTags;
 			if (!sendTextOnly)
 			{
@@ -85,7 +76,7 @@ namespace MTEnhancedMicrosoftProvider
 
 				var tagplacer = new TagPlacer(newSegment, _htmlUtil);
 				////tagplacer is constructed and gives us back a properly marked up source string for google
-				var translatedText = Lookup(tagplacer.PreparedSourceText, _options, "text/html");
+				var translatedText = Lookup(tagplacer.PreparedSourceText, _options);
 				//now we send the output back to tagplacer for our properly tagged segment
 				translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
 				if (_options.UsePostEdit)
@@ -113,7 +104,7 @@ namespace MTEnhancedMicrosoftProvider
 					newSegment.Add(sourcetext);
 				}
 
-				var translatedText = Lookup(sourcetext, _options, "text/plain");
+				var translatedText = Lookup(sourcetext, _options);
 				if (_options.UsePostEdit)
 				{
 					if (_postLookupSegmentEditor is null)
@@ -166,7 +157,6 @@ namespace MTEnhancedMicrosoftProvider
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
-			_inputTu = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
@@ -180,7 +170,6 @@ namespace MTEnhancedMicrosoftProvider
 					continue;
 				}
 
-				_inputTu = translationUnits[p];
 				results[p] = SearchSegment(settings, translationUnits[p].SourceSegment);
 			}
 
@@ -246,7 +235,7 @@ namespace MTEnhancedMicrosoftProvider
 			return newSegment;
 		}
 
-		private string Lookup(string sourcetext, ITranslationOptions options, string format)
+		private string Lookup(string sourcetext, ITranslationOptions options)
 		{
 			var catId = options.UseCatID ? _options.CatId : string.Empty;
 			switch (_mstConnect)
@@ -255,7 +244,7 @@ namespace MTEnhancedMicrosoftProvider
 					_mstConnect = new ProviderConnecter(_options.ClientId, options.Region, _htmlUtil);
 					break;
 				default:
-					_mstConnect.ResetCrd(options.ClientId, options.Region);
+					_mstConnect.ResetCredentials(options.ClientId, options.Region);
 					break;
 			}
 

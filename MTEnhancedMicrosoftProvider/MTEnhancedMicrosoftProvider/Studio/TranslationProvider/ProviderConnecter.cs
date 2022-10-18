@@ -21,133 +21,98 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 {
 	internal class ProviderConnecter
 	{
-		private const string BaseUri = @"api.cognitive.microsofttranslator.com";
-		private const string ServiceBaseUri = @"api.cognitive.microsoft.com";
-		private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
+		/*
+		 * change the async func to normal one?
+		 * useless public functions?
+		 * internal -> public?
+		 */
 
-		private List<string> _supportedLangs;
-		private string _authToken;
-
-		//TODO PACH (06/04/2021): identify if we can enhance the service using this value.
-		private DateTime _tokenExpiresAt;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private readonly HtmlUtil _htmlUtil;
 
 		private string _subscriptionKey;
 		private string _region;
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private HtmlUtil _htmlUtil;
+		private string _authToken;
+		private List<string> _supportedLangs;
 
-		/// <summary>
-		/// This class allows connection to the Microsoft Translation API
-		/// </summary>
-		/// <param name="subscriptionKey">Microsoft API key</param>
-		/// <param name="region">Region</param>
 		internal ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_htmlUtil = htmlUtil;
-
-			if (_authToken == null)
-			{
-				_authToken = GetAuthToken(); //if the class variable has not been set
-			}
-			if (_supportedLangs == null)
-			{
-				_supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
-			}
+			_authToken ??= GetAuthToken();
+			_supportedLangs ??= GetSupportedLanguages();
 		}
 
-		/// <summary>
-		/// Allows static credentials to be updated by the calling program
-		/// </summary>
-		/// <param name="subscriptionKey">the client Id obtained from Microsoft</param>
-		/// <param name="region">Region</param>
-		internal void ResetCrd(string subscriptionKey, string region)
+		public void RefreshAuthToken()
 		{
-			if (subscriptionKey != _subscriptionKey || region != _region)
-			{
-				_subscriptionKey = subscriptionKey;
-				_region = region;
-				_authToken = GetAuthToken();
-				_supportedLangs = GetSupportedLanguages();
-			}
+			_authToken = string.Empty;
+			_authToken = GetAuthToken();
 		}
 
-		/// <summary>
-		/// translates the text input
-		/// </summary>
-		internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId)
+		internal void ResetCredentials(string subscriptionKey, string region)
 		{
-			//convert our language codes
-			var sourceLc = ConvertLangCode(sourceLang);
-			var targetLc = ConvertLangCode(targetLang);
-
-			//check to see if token is null
-			if (_authToken == null)
+			if (subscriptionKey == _subscriptionKey
+				&& region == _region)
 			{
-				_authToken = GetAuthToken();
-				if (_authToken == null)
+				return;
+			}
+
+			_subscriptionKey = subscriptionKey;
+			_region = region;
+			_authToken = GetAuthToken();
+			_supportedLangs = GetSupportedLanguages();
+		}
+
+		internal bool IsSupportedLanguagePair(string sourceLanguage, string tarrgetLanguage)
+		{
+			sourceLanguage = ConvertLanguageCode(sourceLanguage);
+			tarrgetLanguage = ConvertLanguageCode(tarrgetLanguage);
+			var (sourceSupported, targetSupported) = (false, false);
+			foreach (var language in _supportedLangs)
+			{
+				sourceSupported = sourceSupported ? sourceSupported : language.Equals(sourceLanguage);
+				targetSupported = targetSupported ? targetSupported : language.Equals(tarrgetLanguage);
+				if (sourceSupported && targetSupported)
 				{
-					throw new Exception("Authorization token not valid!");
+					return true;
 				}
 			}
 
-			var translatedText = string.Empty;
+			return false;
+		}
+
+		internal string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
+		{
+			_authToken ??= GetAuthToken();
+			if (_authToken is null)
+			{
+				throw new Exception("Invalid credentials");
+			}
+
 			try
 			{
-				//search for words like this <word> 
-				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
-				var words = rgx.Matches(textToTranslate);
-				if (words.Count > 0)
-				{
-					textToTranslate = ReplaceCharacters(textToTranslate, words);
-				}
-
-				const string host = "https://api.cognitive.microsofttranslator.com";
-				const string path = "/translate?api-version=3.0";
-				var category = categoryId == "" ? "general" : categoryId;
-				var languageParams = $"&from={sourceLc}&to={targetLc}&textType=html&category={category}";
-
-				var uri = string.Concat(host, path, languageParams);
-				var body = new object[]
-				{
-					new
-					{
-						Text =textToTranslate
-					}
-				};
-				var requestBody = JsonConvert.SerializeObject(body);
-				using (var httpClient = new HttpClient())
-				{
-					using (var httpRequest = new HttpRequestMessage())
-					{
-						httpRequest.Method = HttpMethod.Post;
-						httpRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-						httpRequest.RequestUri = new Uri(uri);
-						httpRequest.Headers.Add("Authorization", _authToken);
-
-						var response = httpClient.SendAsync(httpRequest).Result;
-						var responseBody = response.Content.ReadAsStringAsync().Result;
-						if (response.IsSuccessStatusCode)
-						{
-							var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
-							translatedText = _htmlUtil.HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
-						}
-						else
-						{
-							var responseMessage = JsonConvert.DeserializeObject<ResponseMessage>(responseBody);
-							throw new Exception(responseMessage.Error.Message);
-						}
-					}
-				}
+				sourceLanguage = ConvertLanguageCode(sourceLanguage);
+				targetLanguage = ConvertLanguageCode(targetLanguage);
+				categoryId = categoryId == "" ? "general" : categoryId;
+				return TryTranslate(sourceLanguage, targetLanguage, textToTranslate, categoryId);
 			}
 			catch (WebException exception)
 			{
-				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n {exception.Message}\n {exception.StackTrace}");
-				throw new Exception(mesg);
+				throw new Exception(LogWebException(exception));
 			}
-			return translatedText;
+		}
+
+		private string TryTranslate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
+		{
+			const string RegexPattern = @"(\<\w+[üäåëöøßşÿÄÅÆĞ]*[^\d\W\\/\\]+\>)";
+			var words = new Regex(RegexPattern).Matches(textToTranslate); //search for words like this: <example> 
+			if (words.Count > 0)
+			{
+				textToTranslate = ReplaceCharacters(textToTranslate, words);
+			}
+
+			return RequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
 		}
 
 		private string ReplaceCharacters(string textToTranslate, MatchCollection matches)
@@ -158,24 +123,17 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 				if (match.Index.Equals(0))
 				{
 					indexes.Add(match.Length);
+					continue;
 				}
-				else
+
+				var remainingText = textToTranslate.Substring(match.Index + match.Length);
+				indexes.Add(match.Index);
+				if (!string.IsNullOrEmpty(remainingText))
 				{
-					//check if there is any text after PI
-					var remainingText = textToTranslate.Substring(match.Index + match.Length);
-					if (!string.IsNullOrEmpty(remainingText))
-					{
-						//get the position where PI starts to split before
-						indexes.Add(match.Index);
-						//split after PI
-						indexes.Add(match.Index + match.Length);
-					}
-					else
-					{
-						indexes.Add(match.Index);
-					}
+					indexes.Add(match.Index + match.Length);
 				}
 			}
+
 			var splitText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
 			var positions = new List<int>();
 			for (var i = 0; i < splitText.Count; i++)
@@ -193,90 +151,84 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 				var finalString = Regex.Replace(start, ">", "&gt;");
 				splitText[position] = finalString;
 			}
+
 			var finalText = string.Empty;
 			foreach (var text in splitText)
 			{
 				finalText += text;
 			}
+
 			return finalText;
 		}
 
-		/// <summary>
-		/// Checks of lang pair is supported by MS
-		/// </summary>
-		internal bool IsSupportedLangPair(string sourceLang, string targetLang)
+		private string RequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
 		{
-			//convert our language codes
-			var source = ConvertLangCode(sourceLang);
-			var target = ConvertLangCode(targetLang);
-
-			var sourceSupported = false;
-			var targetSupported = false;
-
-			//check to see if both the source and target languages are supported
-			foreach (var lang in _supportedLangs)
+			var body = new object[] { new { Text = textToTranslate } };
+			var requestBody = JsonConvert.SerializeObject(body);
+			var httpRequest = new HttpRequestMessage
 			{
-				if (lang.Equals(source)) sourceSupported = true;
-				if (lang.Equals(target)) targetSupported = true;
+				Method = HttpMethod.Post,
+				Content = new StringContent(requestBody, Encoding.UTF8, "application/json"),
+				RequestUri = new Uri(BuildTranslationUri(sourceLanguage, targetLanguage, categoryID))
+			};
+			httpRequest.Headers.Add("Authorization", _authToken);
+
+			var httpClient = new HttpClient();
+			var response = httpClient.SendAsync(httpRequest).Result;
+			var responseBody = response.Content.ReadAsStringAsync().Result;
+			if (!response.IsSuccessStatusCode)
+			{
+				var responseMessage = JsonConvert.DeserializeObject<ResponseMessage>(responseBody);
+				throw new Exception(responseMessage.Error.Message);
 			}
 
-			if (sourceSupported && targetSupported) return true; //if both are supported return true
+			var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
+			return _htmlUtil.HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
+		}
 
-			//otherwise return false
-			return false;
+		private string BuildTranslationUri(string sourceLanguage, string targetLanguage, string category)
+		{
+			const string host = "https://api.cognitive.microsofttranslator.com";
+			const string path = "/translate?api-version=3.0";
+			var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
+
+			return string.Concat(host, path, languageParams);
 		}
 
 		private List<string> GetSupportedLanguages()
 		{
-			//check to see if token is null
-			if (_authToken == null) _authToken = GetAuthToken();
-
-			var languageCodeList = new List<string>();
 			try
 			{
-				var uri = new Uri("https://" + BaseUri);
-				var client = new RestClient(uri);
-
-				var request = new RestRequest("languages", Method.Get);
-				request.AddParameter("api-version", "3.0");
-				request.AddParameter("scope", "translation");
-
-				var languageResponse = client.ExecuteAsync(request).Result;
-				var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
-				if (languages != null)
-				{
-					foreach (var language in languages.Translation)
-					{
-						languageCodeList.Add(language.Key);
-					}
-				}
+				_authToken ??= GetAuthToken();
+				return TryGetSupportedLanguages();
 			}
 			catch (WebException exception)
 			{
-				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{exception.Message}\n {exception.StackTrace}");
-				throw new Exception(mesg);
+				throw new Exception(LogWebException(exception));
 			}
-			return languageCodeList;
 		}
 
-		private string ProcessWebException(WebException e, string message)
+		private List<string> TryGetSupportedLanguages()
 		{
-			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
+			const string BaseUri = @"api.cognitive.microsofttranslator.com";
 
-			// Obtain detailed error information
-			string strResponse;
-			using (var response = (HttpWebResponse)e.Response)
+			var uri = new Uri("https://" + BaseUri);
+			var client = new RestClient(uri);
+
+			var request = new RestRequest("languages", Method.Get);
+			request.AddParameter("api-version", "3.0");
+			request.AddParameter("scope", "translation");
+
+			var languageResponse = client.ExecuteAsync(request).Result;
+			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
+
+			var languageCodeList = new List<string>();
+			foreach (var language in languages?.Translation)
 			{
-				using (var responseStream = response.GetResponseStream())
-				{
-					using (var sr = new StreamReader(responseStream, Encoding.ASCII))
-					{
-						strResponse = sr.ReadToEnd();
-					}
-				}
+				languageCodeList.Add(language.Key);
 			}
-			return $"Http status code={e.Status}, error message={strResponse}";
+
+			return languageCodeList;
 		}
 
 		private string GetAuthToken()
@@ -291,54 +243,51 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			{
 				System.Threading.Thread.Yield();
 			}
-			if (task.IsFaulted)
+
+			if (task.IsFaulted && task.Exception != null)
 			{
-				if (task.Exception != null) throw new Exception(task.Exception.InnerException?.Message);
+				throw new Exception(task.Exception.InnerException?.Message);
 			}
+
 			if (task.IsCanceled)
 			{
 				throw new Exception("Timeout obtaining access token.");
 			}
+
 			return accessToken;
-		}
-
-		public void RefreshAuthToken()
-		{
-			//Clear the existing token because the api key has changed
-			_authToken = string.Empty;
-
-			//try to get the token for the new api key
-			_authToken = GetAuthToken();
 		}
 
 		public async Task<string> GetAccessTokenAsync()
 		{
-			if (!string.IsNullOrWhiteSpace(_authToken)) return _authToken;
-			if (string.IsNullOrEmpty(_subscriptionKey)) return string.Empty;
+			if (!string.IsNullOrWhiteSpace(_authToken))
+			{
+				return _authToken;
+			}
 
+			if (string.IsNullOrEmpty(_subscriptionKey))
+			{
+				return string.Empty;
+			}
 
-			var uri = new Uri("https://"
-							  + (string.IsNullOrEmpty(_region) ? "" : _region + ".")
-							  + ServiceBaseUri + "/sts/v1.0/issueToken");
+			const string ServiceBaseUri = @"api.cognitive.microsoft.com";
+			const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
 
+			var region = string.IsNullOrEmpty(_region) ? "" : _region + ".";
+			var uriString = $"https://{region}{ServiceBaseUri}/sts/v1.0/issueToken";
+			var uri = new Uri(uriString);
 			try
 			{
-				using (var client = new HttpClient())
-				using (var request = new HttpRequestMessage())
-				{
-					request.Method = HttpMethod.Post;
-					request.RequestUri = uri;
-					request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
-					var response = await client.SendAsync(request);
-					response.EnsureSuccessStatusCode();
-					var tokenString = await response.Content.ReadAsStringAsync();
+				using var client = new HttpClient();
+				using var request = new HttpRequestMessage();
+				request.Method = HttpMethod.Post;
+				request.RequestUri = uri;
+				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
 
-					_authToken = "Bearer " + tokenString;
-
-					var token = ReadToken(tokenString);
-					_tokenExpiresAt = token?.ValidTo ?? DateTime.Now;
-
-				}
+				var response = await client.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+				var tokenString = await response.Content.ReadAsStringAsync();
+				var token = ReadToken(tokenString);
+				_authToken = "Bearer " + tokenString;
 			}
 			catch (Exception ex)
 			{
@@ -359,38 +308,66 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			try
 			{
 				var jwtHandler = new JwtSecurityTokenHandler();
-
-				//Check if readable token (string is in a JWT format)
 				var readableToken = jwtHandler.CanReadToken(token);
-				if (!readableToken)
-				{
-					return null;
-				}
-
-				return jwtHandler.ReadJwtToken(token);
+				return readableToken ? jwtHandler.ReadJwtToken(token)
+									 : null;
 			}
-			catch
-			{
-				// catch all; ignore
-			}
+			catch { }
 
 			return null;
 		}
 
-		private string ConvertLangCode(string languageCode)
+		private string ConvertLanguageCode(string languageCode)
 		{
-			//takes the language code input and converts it to one that MS Translate can use
-			if (languageCode.Contains("sr-Cyrl")) return "sr-Cyrl";
-			if (languageCode.Contains("sr-Latn")) return "sr-Latn";
+			const string TraditionalChinese = "zh-TW zh-HK zh-MO zh-Hant zh-CHT";
+			const string SimplifiedChinese = "zh-CN zh-SG zh-Hans-HK zh-Hans-MO zh-Hans zh-CHS";
 
-			var ci = new CultureInfo(languageCode); //construct a CultureInfo object with the language code
+			var cultureInfo = new CultureInfo(languageCode);
+			var isSerbianCyrillic = languageCode.Contains("sr-Cyrl");
+			var isSerbianLatin = languageCode.Contains("sr-Latn");
+			var isTraditionalChinese = TraditionalChinese.Contains(cultureInfo.Name);
+			var isSimplifiedChinese = SimplifiedChinese.Contains(cultureInfo.Name);
 
-			//deal with chinese..MS Translator has different ones
-			if (new[] { "zh-TW", "zh-HK", "zh-MO", "zh-Hant", "zh-CHT" }.Contains(ci.Name)) return "zh-Hant";
-			if (new[] { "zh-CN", "zh-SG", "zh-Hans-HK", "zh-Hans-MO", "zh-Hans", "zh-CHS" }.Contains(ci.Name)) return "zh-Hans";
+			if (isSerbianCyrillic)
+			{
+				return "sr-Cyrl";
+			}
+			else if (isSerbianLatin)
+			{
+				return "sr-Latn";
+			}
+			else if (isTraditionalChinese)
+			{
+				return "zh-Hant";
+			}
+			else if (isSimplifiedChinese)
+			{
+				return "zh-Hans";
+			}
 
-			return ci.TwoLetterISOLanguageName;
+			return cultureInfo.TwoLetterISOLanguageName;
+		}
 
+		private string ProcessWebException(WebException e, string message)
+		{
+			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
+
+			string strResponse;
+			using (var response = (HttpWebResponse)e.Response)
+			{
+				using var responseStream = response.GetResponseStream();
+				using var sr = new StreamReader(responseStream, Encoding.ASCII);
+				strResponse = sr.ReadToEnd();
+			}
+
+			return $"Http status code={e.Status}, error message={strResponse}";
+		}
+
+		private string LogWebException(WebException e)
+		{
+			var message = ProcessWebException(e, PluginResources.MsApiFailedGetLanguagesMessage);
+			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Message}\n {e.StackTrace}");
+			return message;
 		}
 	}
 }

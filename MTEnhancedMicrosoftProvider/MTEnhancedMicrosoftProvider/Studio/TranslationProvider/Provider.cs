@@ -30,7 +30,7 @@ namespace MTEnhancedMicrosoftProvider
 
 		public Uri Uri => Options.Uri;
 
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Microsoft_NiceName);
+		public ProviderStatusInfo StatusInfo => new(true, PluginResources.Microsoft_NiceName);
 
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
 
@@ -70,9 +70,9 @@ namespace MTEnhancedMicrosoftProvider
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			_mstConnect = _mstConnect ?? new ProviderConnecter(Options.ClientId, Options.Region, _htmlUtil);
-			_mstConnect.ResetCrd(Options.ClientId, Options.Region);
-			return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
+			_mstConnect ??= new ProviderConnecter(Options.ClientId, Options.Region, _htmlUtil);
+			_mstConnect.ResetCredentials(Options.ClientId, Options.Region);
+			return _mstConnect.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
