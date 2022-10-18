@@ -21,7 +21,7 @@ namespace MTEnhancedMicrosoftProvider
 		private ProviderConnecter _mstConnect;
 		private MTESegmentEditor _postLookupSegmentEditor;
 		private MTESegmentEditor _preLookupSegmentEditor;
-
+		private TranslationUnit _currentTranslationUnit;
 
 		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
 		{
@@ -31,7 +31,6 @@ namespace MTEnhancedMicrosoftProvider
 			_htmlUtil = htmlUtil;
 		}
 
-
 		public ITranslationProvider TranslationProvider => _provider;
 
 		public bool CanReverseLanguageDirection => false;
@@ -39,7 +38,6 @@ namespace MTEnhancedMicrosoftProvider
 		public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
 
 		public System.Globalization.CultureInfo TargetLanguage => _languageDirection.TargetCulture;
-
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
         {
@@ -53,76 +51,37 @@ namespace MTEnhancedMicrosoftProvider
         }
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
-        {
-			var results = new SearchResults
-			{
-				SourceSegment = segment.Duplicate()
-			};
-
+		{
 			var newSegment = segment.Duplicate();
 			var translation = new Segment(_languageDirection.TargetCulture);
-			var sendTextOnly = _options.SendPlainTextOnly || !newSegment.HasTags;
-			if (!sendTextOnly)
+			var results = new SearchResults { SourceSegment = segment.Duplicate()};
+			if (_options.SendPlainTextOnly || !newSegment.HasTags)
 			{
-				if (_options.UsePreEdit)
-				{
-					if (_preLookupSegmentEditor is null)
-					{
-						_preLookupSegmentEditor = new MTESegmentEditor(_options.PreLookupFilename);
-					}
-
-					newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
-				}
-
-				var tagplacer = new TagPlacer(newSegment, _htmlUtil);
-				////tagplacer is constructed and gives us back a properly marked up source string for google
-				var translatedText = Lookup(tagplacer.PreparedSourceText, _options);
-				//now we send the output back to tagplacer for our properly tagged segment
-				translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
-				if (_options.UsePostEdit)
-				{
-					if (_postLookupSegmentEditor is null)
-					{
-						_postLookupSegmentEditor = new MTESegmentEditor(_options.PostLookupFilename);
-					}
-
-					translation = GetEditedSegment(_postLookupSegmentEditor, translation);
-				}
+				translation.Add(SearchSegmentOnTextOnly(newSegment));
+				results.Add(CreateSearchResult(newSegment, translation));
+				return results;
 			}
-			else
+
+			if (_options.UsePreEdit)
 			{
-				var sourcetext = newSegment.ToPlain();
-				if (_options.UsePreEdit)
-				{
-					if (_preLookupSegmentEditor is null)
-					{
-						_preLookupSegmentEditor = new MTESegmentEditor(_options.PreLookupFilename);
-					}
+				_preLookupSegmentEditor ??= new MTESegmentEditor(_options.PreLookupFilename);
+				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
+			}
 
-					sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
-					newSegment.Clear();
-					newSegment.Add(sourcetext);
-				}
-
-				var translatedText = Lookup(sourcetext, _options);
-				if (_options.UsePostEdit)
-				{
-					if (_postLookupSegmentEditor is null)
-					{
-						_postLookupSegmentEditor = new MTESegmentEditor(_options.PostLookupFilename);
-					}
-
-					translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
-				}
-
-				translation.Add(translatedText);
+			var tagplacer = new TagPlacer(newSegment, _htmlUtil);
+			var translatedText = Lookup(tagplacer.PreparedSourceText, _options);
+			translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
+			if (_options.UsePostEdit)
+			{
+				_postLookupSegmentEditor ??= new MTESegmentEditor(_options.PostLookupFilename);
+				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 			}
 
 			results.Add(CreateSearchResult(newSegment, translation));
 			return results;
 		}
 
-        public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
+		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
 			if (segments is null || mask is null)
 			{
@@ -157,6 +116,7 @@ namespace MTEnhancedMicrosoftProvider
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
+			_currentTranslationUnit = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
@@ -170,6 +130,7 @@ namespace MTEnhancedMicrosoftProvider
 					continue;
 				}
 
+				_currentTranslationUnit = translationUnits[p];
 				results[p] = SearchSegment(settings, translationUnits[p].SourceSegment);
 			}
 
@@ -193,6 +154,26 @@ namespace MTEnhancedMicrosoftProvider
 			return results.ToArray();
 		}
 
+		private string SearchSegmentOnTextOnly(Segment segment)
+		{
+			var sourcetext = segment.ToPlain();
+			if (_options.UsePreEdit)
+			{
+				_preLookupSegmentEditor ??= new MTESegmentEditor(_options.PreLookupFilename);
+				sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
+				segment.Clear();
+				segment.Add(sourcetext);
+			}
+
+			var translatedText = Lookup(sourcetext, _options);
+			if (_options.UsePostEdit)
+			{
+				_postLookupSegmentEditor ??= new MTESegmentEditor(_options.PostLookupFilename);
+				translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
+			}
+
+			return translatedText;
+		}
 
 		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
 		{

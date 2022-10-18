@@ -24,7 +24,7 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 			var parent = button.GetAncestors().FirstOrDefault(a => a is TextBox || a is PasswordBox || a is ComboBox);
 			var command = GetButtonCommand(parent);
 			var commandParameter = GetButtonCommandParameter(parent) ?? parent;
-			if (command != null && command.CanExecute(commandParameter))
+			if (command is not null && command.CanExecute(commandParameter))
 			{
 				command.Execute(commandParameter);
 			}
@@ -72,7 +72,7 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 
 		private static void ButtonCommandOrClearTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			if (!(d is TextBox textbox))
+			if (d is not TextBox textbox)
 			{
 				return;
 			}
@@ -88,7 +88,7 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 		private static void IsClearTextButtonBehaviorEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			if (e.OldValue == e.NewValue
-				|| !(d is Button button))
+				|| d is not Button button)
 			{
 				return;
 			}
@@ -125,7 +125,7 @@ namespace MTEnhancedMicrosoftProvider.UiHelpers
 
 		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
 		{
-			if (sender == null || !(sender is TextBox textBox))
+			if (sender == null || sender is not TextBox textBox)
 			{
 				return;
 			}

@@ -11,24 +11,28 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 	public class ProviderControlViewModel : BaseModel, IProviderControlViewModel
 	{
 		private readonly ITranslationOptions _options;
-		private ICommand _clearCommand;
 		private readonly RegionsProvider _regionsProvider;
+
+		private ObservableCollection<RegionSubscription> _regions;
 		private TranslationOption _selectedTranslationOption;
+		private RegionSubscription _region;
+
 		private bool _isMicrosoftSelected;
 		private bool _useCatId;
 		private bool _persistGoogleKey;
 		private bool _persistMicrosoftKey;
 		private bool _isTellMeAction;
 		private bool _basicCsvGlossary;
+
 		private string _catId;
 		private string _clientId;
-		private RegionSubscription _region;
-		private ObservableCollection<RegionSubscription> _regions;
 		private string _jsonFilePath;
 		private string _projectName;
 		private string _projectLocation;
 		private string _glossaryId;
 		private string _glossaryPath;
+
+		private ICommand _clearCommand;
 
 		public ProviderControlViewModel(ITranslationOptions options, RegionsProvider regionsProvider)
 		{
@@ -38,15 +42,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			InitializeComponent();
 		}
 
-		////TODO: If is tell me action hide back button(first page) we need to show only the settings page
-		//public ProviderControlViewModel(IMtTranslationOptions options,bool isTellMeAction)
-		//{
-		//	_options = options;
-		//	_isTellMeAction = isTellMeAction;
-		//	InitializeComponent();
-
-		//}
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		private void InitializeComponent()
 		{
@@ -66,16 +62,15 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 				return;
 			}
 
-			ClientId = _options.ClientId;
-			PersistMicrosoftKey = _options.PersistMicrosoftCreds;
-			UseCatId = _options.UseCatID;
-			CatId = _options.CatId;
-
-			JsonFilePath = _options.JsonFilePath;
-			ProjectName = _options.ProjectName;
-			ProjectLocation = _options.ProjectLocation;
-			GlossaryPath = _options.GlossaryPath;
 			BasicCsvGlossary = _options.BasicCsv;
+			CatId = _options.CatId;
+			ClientId = _options.ClientId;
+			GlossaryPath = _options.GlossaryPath;
+			JsonFilePath = _options.JsonFilePath;
+			PersistMicrosoftKey = _options.PersistMicrosoftCreds;
+			ProjectLocation = _options.ProjectLocation;
+			ProjectName = _options.ProjectName;
+			UseCatId = _options.UseCatID;
 
 			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
 			SetTranslationOption();
@@ -84,7 +79,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private void Clear(object obj)
 		{
-			if (!(obj is string objectName))
+			if (obj is not string objectName)
 			{
 				return;
 			}

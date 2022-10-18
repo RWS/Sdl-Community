@@ -29,6 +29,17 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0">
+			<Button Style="{StaticResource TransparentButtonStyle}"
+					Command="{Binding ShowSettingsCommand}"
+					Padding="0 16 8 0">
+				<DockPanel>
+					<Image Source="../Resources/Setting.png" Width="auto" Height="15"/>
+					<TextBlock Text="{x:Static mtEnhanced:PluginResources.SettingsText}" FontSize="12" Margin="5,0,0,0"/>
+				</DockPanel>
+			</Button>
+		</StackPanel>
 		<!--Microsoft API Options-->
 		<StackPanel Grid.Row="1"
 		            Visibility="Visible"

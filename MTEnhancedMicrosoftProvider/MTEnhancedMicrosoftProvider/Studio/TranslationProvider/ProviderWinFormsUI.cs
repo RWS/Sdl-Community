@@ -30,14 +30,14 @@ namespace MTEnhancedMicrosoftProvider.Studio
 			var regionsProvider = new RegionsProvider();
 			var htmlUtil = new HtmlUtil();
 
-			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider);
-			return mainWindowViewModel.DialogResult ? (new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) })
-													: null;
+			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider).DialogResult;
+			return mainWindowDialogResult ? (new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) })
+										  : null;
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			if (!(translationProvider is Provider editProvider))
+			if (translationProvider is not Provider editProvider)
 			{
 				return false;
 			}
@@ -74,31 +74,18 @@ namespace MTEnhancedMicrosoftProvider.Studio
 			return mainWindowViewModel.DialogResult;
 		}
 
-		/// <summary>
-		/// Used for displaying the plug-in info such as the plug-in name,
-		/// tooltip, and icon.
-		/// </summary>
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var info = new TranslationProviderDisplayInfo
-			{
-				TranslationProviderIcon = PluginResources.my_icon
-			};
-
 			var options = new MTETranslationOptions(translationProviderUri);
-			if (options.SelectedProvider == MTETranslationOptions.ProviderType.MicrosoftTranslator)
-			{
-				info.Name = PluginResources.Microsoft_NiceName;
-				info.TooltipText = PluginResources.Microsoft_Tooltip;
-				info.SearchResultImage = PluginResources.microsoft_image;
-			}
-			else
-			{
-				info.Name = PluginResources.Plugin_NiceName;
-				info.TooltipText = PluginResources.Plugin_Tooltip;
-			}
+			var isMicrosoftProvider = options.SelectedProvider == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 
-			return info;
+			return new TranslationProviderDisplayInfo
+			{
+				TranslationProviderIcon = PluginResources.my_icon,
+				Name = PluginResources.Microsoft_NiceName,
+				TooltipText = PluginResources.Microsoft_Tooltip,
+				SearchResultImage = isMicrosoftProvider ? PluginResources.microsoft_image : default
+			};
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
@@ -115,10 +102,11 @@ namespace MTEnhancedMicrosoftProvider.Studio
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
 			var dialogService = new OpenFileDialogService();
-			var providerControlVm = new ProviderControlViewModel(loadOptions, regionsProvider);
-			var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService, false);
+			var providerControlViewModel = new ProviderControlViewModel(loadOptions, regionsProvider);
+			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
 			var htmlUtil = new HtmlUtil();
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlVm, settingsControlVm, credentialStore, languagePairs, htmlUtil);
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel,
+															  credentialStore, languagePairs, htmlUtil);
 			var mainWindow = new MainWindow
 			{
 				DataContext = mainWindowViewModel
@@ -141,9 +129,6 @@ namespace MTEnhancedMicrosoftProvider.Studio
 			SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriMs, clientId, microsoftCreds);
 		}
 
-		/// <summary>
-		/// Get saved key if there is one and put it into options
-		/// </summary>
 		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
 		{
 			//get microsoft credentials

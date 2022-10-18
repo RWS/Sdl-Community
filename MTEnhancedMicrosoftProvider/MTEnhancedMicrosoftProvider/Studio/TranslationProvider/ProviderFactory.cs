@@ -10,7 +10,6 @@ namespace MTEnhancedMicrosoftProvider
                                 Description = "Translation_Provider_Plug_inFactory")]
 	public class ProviderFactory : ITranslationProviderFactory
 	{
-
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
 			if (!SupportsTranslationProviderUri(translationProviderUri))

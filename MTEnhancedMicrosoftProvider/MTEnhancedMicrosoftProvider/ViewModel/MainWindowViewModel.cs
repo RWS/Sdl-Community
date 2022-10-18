@@ -14,18 +14,20 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 {
 	public class MainWindowViewModel : BaseModel, IMainWindow
 	{
-		private ViewDetails _selectedView;
-		private bool _dialogResult;
-		private readonly bool _isTellMeAction;
-		private string _errorMessage;
-		private string _translatorErrorResponse;
-		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
+		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
-		public delegate void CloseWindowEventRaiser();
+		private readonly bool _isTellMeAction;
+
+		private string _translatorErrorResponse;
+		private ViewDetails _selectedView;
+		private string _errorMessage;
+		private bool _dialogResult;
+
 		public event CloseWindowEventRaiser CloseEventRaised;
+		public delegate void CloseWindowEventRaiser();
 
 		public MainWindowViewModel(ITranslationOptions options, IProviderControlViewModel providerControlViewModel,
 			ISettingsControlViewModel settingsControlViewModel,
@@ -137,7 +139,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		public void AddEncriptionMetaToResponse(string errorMessage)
 		{
-			var htmlStart = @"<html>
+			const string htmlStart = @"<html>
 <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
 <body style=""font-family:Segoe Ui!important;color:red!important;font-size:13px!important"">";
 			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
@@ -194,7 +196,8 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 				ErrorMessage = PluginResources.ApiKeyError;
 				return false;
 			}
-			else if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
+			
+			if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
 			{
 				ErrorMessage = PluginResources.CatIdError;
 				return false;
@@ -243,8 +246,8 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private void DeleteCredentialsIfNecessary()
 		{
-			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-				MTETranslationOptions.ProviderType.MicrosoftTranslator && !Options.PersistMicrosoftCreds)
+			var isMicrosoftProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
+			if (isMicrosoftProvider && !Options.PersistMicrosoftCreds)
 			{
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
 			}
@@ -252,11 +255,11 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private void RemoveCredentialsFromStore(Uri providerUri)
 		{
-			var credentials = _credentialStore.GetCredential(providerUri);
-			if (credentials == null)
+			if (_credentialStore.GetCredential(providerUri) is null)
 			{
 				return;
 			}
+
 			_credentialStore.RemoveCredential(providerUri);
 		}
 
@@ -264,10 +267,10 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		{
 			try
 			{
-				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
 				if (!string.IsNullOrEmpty(Options?.ClientId)
 					&& !Options.ClientId.Equals(_providerControlViewModel.ClientId))
 				{
+					var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
 					apiConnecter.RefreshAuthToken();
 				}
 

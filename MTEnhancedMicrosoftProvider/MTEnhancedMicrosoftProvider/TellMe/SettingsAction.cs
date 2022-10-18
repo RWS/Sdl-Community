@@ -28,7 +28,7 @@ namespace MTEnhancedMicrosoftProvider.TellMe
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-			if (currentProject == null)
+			if (currentProject is null)
 			{
 				MessageBox.Show("No project is set as active");
 				return;
@@ -47,10 +47,10 @@ namespace MTEnhancedMicrosoftProvider.TellMe
 				return;
 			}
 
-			var mtTranslationOptions = new MTETranslationOptions(translationProvider.MainTranslationProvider.Uri);
+			var translationOptions = new MTETranslationOptions(translationProvider.MainTranslationProvider.Uri);
 			var dialogService = new OpenFileDialogService();
-			var settingsControlVm = new SettingsControlViewModel(mtTranslationOptions, dialogService, true);
-			var mainWindowViewModel = new MainWindowViewModel(mtTranslationOptions, settingsControlVm, true);
+			var settingsControlViewModel = new SettingsControlViewModel(translationOptions, dialogService, true);
+			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsControlViewModel, true);
 			var mainWindow = new MainWindow
 			{
 				DataContext = mainWindowViewModel
@@ -61,7 +61,7 @@ namespace MTEnhancedMicrosoftProvider.TellMe
 				settings.Entries
 						.Find(entry => entry.MainTranslationProvider.Uri.ToString().Contains("mtenhancedprovider"))
 						.MainTranslationProvider
-						.Uri = mtTranslationOptions.Uri;
+						.Uri = translationOptions.Uri;
 
 				currentProject.UpdateTranslationProviderConfiguration(settings);
 				mainWindow.Close();
