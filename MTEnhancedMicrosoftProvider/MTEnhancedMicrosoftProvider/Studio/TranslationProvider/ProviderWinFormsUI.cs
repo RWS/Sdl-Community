@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using NLog;
-using MTEnhancedMicrosoftProvider.Interfaces;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Service;
-using MTEnhancedMicrosoftProvider.View;
-using MTEnhancedMicrosoftProvider.ViewModel;
+using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service;
+using MicrosoftTranslatorProvider.View;
+using MicrosoftTranslatorProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.ProjectAutomation.Core;
 
-namespace MTEnhancedMicrosoftProvider.Studio
+namespace MicrosoftTranslatorProvider.Studio
 {
-	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI",
-                                   Name = "Translation_Provider_Plug_inWinFormsUI",
+	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI", // MicrosoftProviderPlugin_WinFormsUI
+								   Name = "Translation_Provider_Plug_inWinFormsUI",
                                    Description = "Translation_Provider_Plug_inWinFormsUI")]
     public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public string TypeDescription => PluginResources.Plugin_Description;
 		public string TypeName => PluginResources.Plugin_NiceName;
 		public bool SupportsEditing => true;
@@ -28,10 +30,10 @@ namespace MTEnhancedMicrosoftProvider.Studio
 		{
 			var options = new MTETranslationOptions();
 			var regionsProvider = new RegionsProvider();
-			var htmlUtil = new HtmlUtil();
-
 			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider).DialogResult;
-			return mainWindowDialogResult ? (new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) })
+
+			var htmlUtil = new HtmlUtil();
+			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) }
 										  : null;
 		}
 
@@ -58,8 +60,7 @@ namespace MTEnhancedMicrosoftProvider.Studio
 		{
 			var languagePairs = new List<LanguagePair>();
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var projectInfo = projectController?.CurrentProject?.GetProjectInfo();
-			if (projectInfo != null)
+			if (projectController?.CurrentProject?.GetProjectInfo() is ProjectInfo projectInfo)
 			{
 				foreach (var targetLanguage in projectInfo.TargetLanguages)
 				{
@@ -90,7 +91,7 @@ namespace MTEnhancedMicrosoftProvider.Studio
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			if (translationProviderUri == null)
+			if (translationProviderUri is null)
 			{
 				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
 			}
@@ -105,7 +106,8 @@ namespace MTEnhancedMicrosoftProvider.Studio
 			var providerControlViewModel = new ProviderControlViewModel(loadOptions, regionsProvider);
 			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
 			var htmlUtil = new HtmlUtil();
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel,
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
+															  providerControlViewModel, settingsControlViewModel,
 															  credentialStore, languagePairs, htmlUtil);
 			var mainWindow = new MainWindow
 			{
@@ -124,24 +126,23 @@ namespace MTEnhancedMicrosoftProvider.Studio
 
 		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
 		{
-			var clientId = options.ClientId;
-			var microsoftCreds = options.PersistMicrosoftCreds;
-			SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriMs, clientId, microsoftCreds);
+			var clientId = options.ClientID;
+			var microsoftCredentials = options.PersistMicrosoftCredentials;
+			SetCredentialsOnCredentialStore(credentialStore, clientId, microsoftCredentials);
 		}
 
 		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
 		{
-			//get microsoft credentials
-			var providerCredentials = GetCredentialsFromStore(credentialStore, PluginResources.UriMs);
-			if (providerCredentials == null)
+			if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderUriScheme)
+				is not TranslationProviderCredential providerCredentials)
 			{
 				return;
 			}
 
 			try
 			{
-				loadOptions.ClientId = providerCredentials.Credential;
-				loadOptions.PersistMicrosoftCreds = providerCredentials.Persist;
+				loadOptions.ClientID = providerCredentials.Credential;
+				loadOptions.PersistMicrosoftCredentials = providerCredentials.Persist;
 			}
 			catch (Exception e)
 			{
@@ -157,9 +158,9 @@ namespace MTEnhancedMicrosoftProvider.Studio
 				 : null;
 		}
 
-		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string providerUri, string apiKey, bool persistKey)
+		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
 		{
-			var uri = new Uri(providerUri);
+			var uri = new Uri(Constants.MicrosoftProviderUriScheme);
 			var proiderCredentials = new TranslationProviderCredential(apiKey, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, proiderCredentials);

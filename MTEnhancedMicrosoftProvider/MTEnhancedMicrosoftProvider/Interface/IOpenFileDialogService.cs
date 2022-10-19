@@ -1,4 +1,4 @@
-﻿namespace MTEnhancedMicrosoftProvider.Interfaces
+﻿namespace MicrosoftTranslatorProvider.Interfaces
 {
 	public interface IOpenFileDialogService
 	{

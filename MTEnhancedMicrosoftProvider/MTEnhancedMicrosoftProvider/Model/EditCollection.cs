@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MTEnhancedMicrosoftProvider.Model
+namespace MicrosoftTranslatorProvider.Model
 {
 	public class EditCollection
 	{

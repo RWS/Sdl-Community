@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using MTEnhancedMicrosoftProvider.Interfaces;
+using MicrosoftTranslatorProvider.Interfaces;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using static System.Convert;
 
-namespace MTEnhancedMicrosoftProvider.Model
+namespace MicrosoftTranslatorProvider.Model
 {
 	public class MTETranslationOptions : ITranslationOptions
 	{
 		private const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
-		private string _clientid;
-		private readonly TranslationProviderUriBuilder _uriBuilder;
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
+		private readonly TranslationProviderUriBuilder _uriBuilder;
+
+		private string _clientID;
 
 		public MTETranslationOptions()
 		{
@@ -161,10 +162,10 @@ namespace MTEnhancedMicrosoftProvider.Model
 
 		[JsonIgnore]
 		//User for Microsoft authentication
-		public string ClientId
+		public string ClientID
 		{
-			get => _clientid;
-			set => _clientid = value;
+			get => _clientID;
+			set => _clientID = value;
 		}
 
 		[JsonIgnore]
@@ -175,7 +176,7 @@ namespace MTEnhancedMicrosoftProvider.Model
 		}
 
 		[JsonIgnore]
-		public bool PersistMicrosoftCreds
+		public bool PersistMicrosoftCredentials
 		{
 			get;
 			set;
@@ -196,14 +197,14 @@ namespace MTEnhancedMicrosoftProvider.Model
 		}
 
 		[JsonIgnore]
-		public bool UseCatID //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
+		public bool UseCategoryID //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
 		{
 			get => ToBoolean(UseCatId);
 			set => UseCatId = value.ToString();
 		}
 
 		[JsonIgnore]
-		public string CatId
+		public string CategoryID
 		{
 			get => GetStringParameter("catid");
 			set => SetStringParameter("catid", value);

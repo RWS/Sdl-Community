@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Web;
 using NLog;
 
-namespace MTEnhancedMicrosoftProvider.Service
+namespace MicrosoftTranslatorProvider.Service
 {
 	public class HtmlUtil
 	{

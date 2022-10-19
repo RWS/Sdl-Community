@@ -1,4 +1,4 @@
-﻿namespace MTEnhancedMicrosoftProvider.Converters
+﻿namespace MicrosoftTranslatorProvider.Converters
 {
 	public enum Parameters
 	{

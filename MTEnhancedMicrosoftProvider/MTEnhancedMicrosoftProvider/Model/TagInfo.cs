@@ -1,6 +1,6 @@
 ﻿using Sdl.LanguagePlatform.Core;
 
-namespace MTEnhancedMicrosoftProvider.Model
+namespace MicrosoftTranslatorProvider.Model
 {
 	public class TagInfo
 	{

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MTEnhancedMicrosoftProvider {
+namespace MicrosoftTranslatorProvider {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MTEnhancedMicrosoftProvider {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MTEnhancedMicrosoftProvider.ConfigDialogResources", typeof(ConfigDialogResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MicrosoftTranslatorProvider.ConfigDialogResources", typeof(ConfigDialogResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -1,33 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using MTEnhancedMicrosoftProvider.Service;
+using MicrosoftTranslatorProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
-using MTEnhancedMicrosoftProvider.Interfaces;
-using MTEnhancedMicrosoftProvider.Helpers;
-using MTEnhancedMicrosoftProvider.Model;
+using MicrosoftTranslatorProvider.Studio.TranslationProvider;
+using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Helpers;
+using MicrosoftTranslatorProvider.Model;
 
-namespace MTEnhancedMicrosoftProvider
+namespace MicrosoftTranslatorProvider
 {
 	public class ProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
-		private readonly LanguagePair _languageDirection;
 		private readonly ITranslationOptions _options;
+		private readonly LanguagePair _languagePair;
 		private readonly Provider _provider;
 		private readonly HtmlUtil _htmlUtil;
-		private ProviderConnecter _mstConnect;
+		private ProviderConnecter _providerConnecter;
 		private MTESegmentEditor _postLookupSegmentEditor;
 		private MTESegmentEditor _preLookupSegmentEditor;
-		private TranslationUnit _currentTranslationUnit;
 
 		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
 		{
 			_provider = provider;
 			_options = _provider.Options;
-			_languageDirection = languagePair;
+			_languagePair = languagePair;
 			_htmlUtil = htmlUtil;
 		}
 
@@ -35,31 +34,31 @@ namespace MTEnhancedMicrosoftProvider
 
 		public bool CanReverseLanguageDirection => false;
 
-		public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		public System.Globalization.CultureInfo SourceLanguage => _languagePair.SourceCulture;
 
-		public System.Globalization.CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+		public System.Globalization.CultureInfo TargetLanguage => _languagePair.TargetCulture;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-        {
-			var output = new SearchResults[segments.Length];
+		{
+			var searchResults = new SearchResults[segments.Length];
 			for (var i = 0; i < segments.Length; i++)
 			{
-				output[i] = SearchSegment(settings, segments[i]);
+				searchResults[i] = SearchSegment(settings, segments[i]);
 			}
 
-			return output;
+			return searchResults;
         }
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
 			var newSegment = segment.Duplicate();
-			var translation = new Segment(_languageDirection.TargetCulture);
-			var results = new SearchResults { SourceSegment = segment.Duplicate()};
+			var translation = new Segment(_languagePair.TargetCulture);
+			var searchResults = new SearchResults { SourceSegment = segment.Duplicate()};
 			if (_options.SendPlainTextOnly || !newSegment.HasTags)
 			{
 				translation.Add(SearchSegmentOnTextOnly(newSegment));
-				results.Add(CreateSearchResult(newSegment, translation));
-				return results;
+				searchResults.Add(CreateSearchResult(newSegment, translation));
+				return searchResults;
 			}
 
 			if (_options.UsePreEdit)
@@ -68,17 +67,17 @@ namespace MTEnhancedMicrosoftProvider
 				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
 			}
 
-			var tagplacer = new TagPlacer(newSegment, _htmlUtil);
-			var translatedText = Lookup(tagplacer.PreparedSourceText, _options);
-			translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
+			var tagPlacer = new TagPlacer(newSegment, _htmlUtil);
+			var translatedText = Lookup(tagPlacer.PreparedSourceText, _options);
+			translation = tagPlacer.GetTaggedSegment(translatedText).Duplicate();
 			if (_options.UsePostEdit)
 			{
 				_postLookupSegmentEditor ??= new MTESegmentEditor(_options.PostLookupFilename);
 				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 			}
 
-			results.Add(CreateSearchResult(newSegment, translation));
-			return results;
+			searchResults.Add(CreateSearchResult(newSegment, translation));
+			return searchResults;
 		}
 
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
@@ -109,14 +108,13 @@ namespace MTEnhancedMicrosoftProvider
 
         public SearchResults SearchText(SearchSettings settings, string segment)
         {
-			var currentSegment = new Segment(_languageDirection.SourceCulture);
+			var currentSegment = new Segment(_languagePair.SourceCulture);
 			currentSegment.Add(segment);
 			return SearchSegment(settings, currentSegment);
 		}
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
-			_currentTranslationUnit = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
@@ -125,12 +123,11 @@ namespace MTEnhancedMicrosoftProvider
 			var results = new SearchResults[translationUnits.Length];
 			for (var p = 0; p < translationUnits.Length; ++p)
 			{
-				if (translationUnits[p] == null)
+				if (translationUnits[p] is null)
 				{
 					continue;
 				}
 
-				_currentTranslationUnit = translationUnits[p];
 				results[p] = SearchSegment(settings, translationUnits[p].SourceSegment);
 			}
 
@@ -203,9 +200,9 @@ namespace MTEnhancedMicrosoftProvider
 			var newSegment = new Segment(inSegment.Culture);
 			foreach (var element in inSegment.Elements)
 			{
-				if (element.GetType().ToString() == "Sdl.LanguagePlatform.Core.Tag")
+				if (element.GetType() == typeof(Tag))
 				{
-					newSegment.Add(element); //if tag just add the tag
+					newSegment.Add(element);
 					continue;
 				}
 
@@ -218,20 +215,20 @@ namespace MTEnhancedMicrosoftProvider
 
 		private string Lookup(string sourcetext, ITranslationOptions options)
 		{
-			var catId = options.UseCatID ? _options.CatId : string.Empty;
-			switch (_mstConnect)
+			var catId = options.UseCategoryID ? _options.CategoryID : string.Empty;
+			switch (_providerConnecter)
 			{
 				case null:
-					_mstConnect = new ProviderConnecter(_options.ClientId, options.Region, _htmlUtil);
+					_providerConnecter = new ProviderConnecter(_options.ClientID, options.Region, _htmlUtil);
 					break;
 				default:
-					_mstConnect.ResetCredentials(options.ClientId, options.Region);
+					_providerConnecter.ResetCredentials(options.ClientID, options.Region);
 					break;
 			}
 
-			var sourcelang = _languageDirection.SourceCulture.ToString();
-			var targetlang = _languageDirection.TargetCulture.ToString();
-			return _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);
+			var sourcelang = _languagePair.SourceCulture.ToString();
+			var targetlang = _languagePair.TargetCulture.ToString();
+			return _providerConnecter.Translate(sourcelang, targetlang, sourcetext, catId);
 		}
 
 

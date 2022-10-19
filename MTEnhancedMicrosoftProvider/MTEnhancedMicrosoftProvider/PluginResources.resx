@@ -126,43 +126,23 @@
     <comment>Line1</comment>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin</value>
+    <value>Microsoft Translator ProviderTrados Plugin</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator</value>
-  </data>
-  <data name="ApiConnectorGoogleAuthErrorMsg2" xml:space="preserve">
-    <value>Please verify that you have entered the correct API key and that your language pair is supported.</value>
-    <comment>Line2</comment>
-  </data>
-  <data name="Google_Name" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
+    <value>Microsoft Translator Provider Trados Plugin</value>
   </data>
   <data name="MsApiBadCredentialsMessage" xml:space="preserve">
     <value>Authentication error: bad credentials</value>
   </data>
-  <data name="Google_Tooltip" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
-  </data>
   <data name="Microsoft_Description" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="LangPairAuthErrorMsg2" xml:space="preserve">
     <value>Please verify that you have entered the correct API key.</value>
     <comment>Line2</comment>
   </data>
-  <data name="Google_Description" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
-  </data>
   <data name="Microsoft_Tooltip" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
-  </data>
-  <data name="Google_NiceName" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
-  </data>
-  <data name="ApiConnectorGoogleAuthErrorMsg1" xml:space="preserve">
-    <value>There was a problem getting the translation.</value>
-    <comment>Line1</comment>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="MsApiFailedGetLanguagesMessage" xml:space="preserve">
     <value>Failed to get languages for translation</value>
@@ -175,7 +155,7 @@
     <value>Invalid category ID. Use a valid category ID or disable category ID in settings.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>MTEnhancedMicrosoftProvider</value>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="microsoft_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\microsoft_image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -184,28 +164,22 @@
     <value>MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator</value>
   </data>
   <data name="Microsoft_Name" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="my_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\my_image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Microsoft_NiceName" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="MsApiFailedToTranslateMessage" xml:space="preserve">
     <value>Failed to translate</value>
-  </data>
-  <data name="ApiConnectionGoogleNoKeyErrorMessage" xml:space="preserve">
-    <value>No API key has been set.  Please open the plugin settings form and enter a valid API key</value>
   </data>
   <data name="EditSettingsErrorCaption" xml:space="preserve">
     <value>Edit settings error</value>
   </data>
   <data name="EditSettingsGenericErrorMessage" xml:space="preserve">
     <value>Error with edit settings:</value>
-  </data>
-  <data name="PromptForCredentialsCaption_Google" xml:space="preserve">
-    <value>Credentials for Google Translate...</value>
   </data>
   <data name="PromptForCredentialsCaption_Microsoft" xml:space="preserve">
     <value>Credentials for Microsoft Translator...</value>
@@ -236,9 +210,6 @@
   </data>
   <data name="backImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\backImg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Google" xml:space="preserve">
-    <value>Google Translator</value>
   </data>
   <data name="Microsoft" xml:space="preserve">
     <value>Microsoft Translator</value>
@@ -271,10 +242,10 @@
     <value>Browse</value>
   </data>
   <data name="CatIdDescription" xml:space="preserve">
-    <value>Use Category Id</value>
+    <value>Use CategoryID</value>
   </data>
   <data name="CatIdError" xml:space="preserve">
-    <value>Please add Category Id otherwise uncheck CategoryId checbox.</value>
+    <value>CategoryID is empty</value>
   </data>
   <data name="EmptyJsonFilePathMsg" xml:space="preserve">
     <value>The local path to json file cannot be empty.</value>
@@ -282,23 +253,11 @@
   <data name="EmptyProjectNameMsd" xml:space="preserve">
     <value>Project name cannot be empty.</value>
   </data>
-  <data name="GoogleApiDescription" xml:space="preserve">
-    <value>Please select the version of the Google Translate API that you wish to use:</value>
-  </data>
-  <data name="GoogleApiEnvironmentVariableName" xml:space="preserve">
-    <value>GOOGLE_APPLICATION_CREDENTIALS</value>
-  </data>
-  <data name="GoogleResponseDescription" xml:space="preserve">
-    <value>Google Response</value>
-  </data>
   <data name="InvalidProjectName" xml:space="preserve">
     <value>Invalid project name.</value>
   </data>
   <data name="MicrosoftApiDescription" xml:space="preserve">
     <value>Please enter your Microsoft Translate API Key</value>
-  </data>
-  <data name="PersistGoogle" xml:space="preserve">
-    <value>Save Google key</value>
   </data>
   <data name="PersistMicrosoft" xml:space="preserve">
     <value>Save Microsoft key</value>
@@ -345,47 +304,11 @@
   <data name="SendPlainDescription" xml:space="preserve">
     <value>Send plain text only (not tags)</value>
   </data>
-  <data name="UriGt" xml:space="preserve">
-    <value>mtenhancedprovidergt:///</value>
-  </data>
-  <data name="UriMs" xml:space="preserve">
-    <value>mtenhancedprovidermst:///</value>
-  </data>
-  <data name="V3JsonPathDescription" xml:space="preserve">
-    <value>Enter the local path to the json file associated with your API key:</value>
-  </data>
-  <data name="V3ProjectNameDescription" xml:space="preserve">
-    <value>Enter the project name for this file from your Google account:</value>
-  </data>
   <data name="WrongJsonFilePath" xml:space="preserve">
     <value>Json file could not be found at the specified path.</value>
   </data>
-  <data name="GoogleApiVersionV2Description" xml:space="preserve">
-    <value>V2 - Basic Translation</value>
-  </data>
-  <data name="GoogleApiVersionV3Description" xml:space="preserve">
-    <value>V3 - Advanced Translation</value>
-  </data>
-  <data name="GoogleAdvanced" xml:space="preserve">
-    <value>MT Enhanced using Google Translate Advanced</value>
-  </data>
-  <data name="GoogleBasic" xml:space="preserve">
-    <value>MT Enhanced using Google Translate Basic</value>
-  </data>
-  <data name="GoogleEngineModelDescription" xml:space="preserve">
-    <value>Enter AutoML Translation model:</value>
-  </data>
-  <data name="GoogleInvalidEngine" xml:space="preserve">
-    <value>Invalid model name</value>
-  </data>
-  <data name="GoogleProjectLocation" xml:space="preserve">
-    <value>Please add project location:</value>
-  </data>
   <data name="ProjectLocationValidation" xml:space="preserve">
     <value>Project location value is required</value>
-  </data>
-  <data name="V3Glossary" xml:space="preserve">
-    <value>Enter the URI where the glossary is stored:</value>
   </data>
   <data name="UnidirectionalGlossary" xml:space="preserve">
     <value>Unidirectional glossaries</value>
@@ -402,7 +325,7 @@
   <data name="LogsFolderPath" xml:space="preserve">
     <value>RWS AppStore</value>
   </data>
-  <data name="GoogleApiKeyDescription" xml:space="preserve">
-    <value>Please enter your Google Translate API Key</value>
+  <data name="MicrosoftTranslatorProviderPlugin_WinFormsUI" xml:space="preserve">
+    <value>MT Microsoft Translation Provider</value>
   </data>
 </root>

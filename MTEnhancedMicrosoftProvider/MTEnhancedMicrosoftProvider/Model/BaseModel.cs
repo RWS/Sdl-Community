@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MTEnhancedMicrosoftProvider.Model
+namespace MicrosoftTranslatorProvider.Model
 {
 	public class BaseModel : INotifyPropertyChanged
 	{

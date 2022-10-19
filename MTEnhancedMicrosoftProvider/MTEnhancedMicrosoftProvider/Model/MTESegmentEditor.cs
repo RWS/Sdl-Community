@@ -5,23 +5,23 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using MTEnhancedMicrosoftProvider.Studio;
+using MicrosoftTranslatorProvider.Studio;
 using NLog;
 
-namespace MTEnhancedMicrosoftProvider.Model
+namespace MicrosoftTranslatorProvider.Model
 {
 	public class MTESegmentEditor
 	{
 		private readonly string _fileName;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		private DateTime _lastversion;
-		private EditCollection _collection;
+		private EditCollection _editCollection;
+		private DateTime _lastVersion;
 
 		public MTESegmentEditor(string editCollectionFilename)
 		{
 			_fileName = editCollectionFilename;
-			_lastversion = File.GetLastWriteTime(_fileName);
+			_lastVersion = File.GetLastWriteTime(_fileName);
 			LoadCollection();
 		}
 
@@ -31,7 +31,7 @@ namespace MTEnhancedMicrosoftProvider.Model
 			{
 				var reader = new StreamReader(_fileName);
 				var serializer = new XmlSerializer(typeof(EditCollection));
-				_collection = serializer.Deserialize(reader) as EditCollection;
+				_editCollection = serializer.Deserialize(reader) as EditCollection;
 			}
 			catch (InvalidOperationException e)
 			{   //invalid operation is what happens when the xml can't be parsed into the objects correctly
@@ -47,31 +47,31 @@ namespace MTEnhancedMicrosoftProvider.Model
 		{
 			var result = text;
 			var currentversion = File.GetLastWriteTime(_fileName);
-			if (currentversion > _lastversion)
+			if (currentversion > _lastVersion)
 			{
-				_lastversion = currentversion;
+				_lastVersion = currentversion;
 				LoadCollection();
 			}
 
-			if (_collection.Items.Count == 0)
+			if (_editCollection.Items.Count == 0)
 			{
 				return text;
 			}
 
-			for (var i = 0; i < _collection.Items.Count; i++)
+			for (var i = 0; i < _editCollection.Items.Count; i++)
 			{
-				if (!_collection.Items[i].Enabled)
+				if (!_editCollection.Items[i].Enabled)
 				{
 					continue;
 				}
 
-				var find = _collection.Items[i].FindText;
-				var replace = _collection.Items[i].ReplaceText;
-				if (_collection.Items[i].Type == EditItem.EditItemType.PlainText)
+				var find = _editCollection.Items[i].FindText;
+				var replace = _editCollection.Items[i].ReplaceText;
+				if (_editCollection.Items[i].Type == EditItem.EditItemType.PlainText)
 				{
 					result = result.Replace(find, replace);
 				}
-				else if (_collection.Items[i].Type == EditItem.EditItemType.RegularExpression)
+				else if (_editCollection.Items[i].Type == EditItem.EditItemType.RegularExpression)
 				{
 					var reg = new Regex(find);
 					result = reg.Replace(result, replace);

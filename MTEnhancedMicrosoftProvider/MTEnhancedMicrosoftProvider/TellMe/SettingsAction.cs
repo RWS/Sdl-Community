@@ -3,14 +3,14 @@ using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 using System.Linq;
 using System.Windows;
-using MTEnhancedMicrosoftProvider.Service;
-using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
-using MTEnhancedMicrosoftProvider.View;
-using MTEnhancedMicrosoftProvider.ViewModel;
+using MicrosoftTranslatorProvider.Service;
+using MicrosoftTranslatorProvider.Studio.TranslationProvider;
+using MicrosoftTranslatorProvider.View;
+using MicrosoftTranslatorProvider.ViewModel;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using MTEnhancedMicrosoftProvider.Model;
+using MicrosoftTranslatorProvider.Model;
 
-namespace MTEnhancedMicrosoftProvider.TellMe
+namespace MicrosoftTranslatorProvider.TellMe
 {
 	public class SettingsAction : AbstractTellMeAction
 	{

@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Service;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service;
 using NLog;
 using Sdl.LanguagePlatform.Core;
 
-namespace MTEnhancedMicrosoftProvider.Helpers
+namespace MicrosoftTranslatorProvider.Helpers
 {
 	public class TagPlacer
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private Dictionary<string, MTETag> _tagsDictionary;
 		private readonly Segment _sourceSegment;
 		private readonly HtmlUtil _htmlUtil;
+
+		private Dictionary<string, MTETag> _tagsDictionary;
 		private string _returnedText;
 		private MTETag _currentTag;
 

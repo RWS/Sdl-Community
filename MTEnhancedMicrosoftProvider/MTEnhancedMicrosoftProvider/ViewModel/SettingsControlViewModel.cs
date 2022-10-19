@@ -3,18 +3,18 @@ using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using NLog;
-using MTEnhancedMicrosoftProvider.Commands;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Interfaces;
+using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Interfaces;
 
-namespace MTEnhancedMicrosoftProvider.ViewModel
+namespace MicrosoftTranslatorProvider.ViewModel
 {
 	public class SettingsControlViewModel: BaseModel, ISettingsControlViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly ITranslationOptions _options;
 		private readonly IOpenFileDialogService _openFileDialogService;
-		private ICommand _clearCommand;
+
 		private bool _reSendDraft;
 		private bool _sendPlainText;
 		private bool _doPreLookup;
@@ -23,6 +23,8 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private string _preLookupFileName;
 		private string _postLookupFileName;
 		private string _errorMessage;
+
+		private ICommand _clearCommand;
 
 		public SettingsControlViewModel(ITranslationOptions options, IOpenFileDialogService openFileDialogService,bool isTellMeAction)
 		{
@@ -143,7 +145,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			}
 		}
 
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 		
 		private void SetSavedSettings()
 		{
@@ -157,7 +159,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private void Clear(object obj)
 		{
-			if (!(obj is string objectName))
+			if (obj is not string objectName)
 			{
 				return;
 			}
@@ -199,18 +201,15 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			}
 		}
 
-
 		private void CheckIfIsValidLookupFile(string filePath)
 		{
 			try
 			{
-				using (var reader = new System.IO.StreamReader(filePath))
-				{
-					var serializer = new XmlSerializer(typeof(EditCollection));
-					var edcoll = (EditCollection) serializer.Deserialize(reader);
-				}
+				using var reader = new System.IO.StreamReader(filePath);
+				var serializer = new XmlSerializer(typeof(EditCollection));
+				var edcoll = (EditCollection)serializer.Deserialize(reader);
 			}
-			catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
+			catch (InvalidOperationException) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 			{
 				var fileName = System.IO.Path.GetFileName(filePath);
 				ErrorMessage = $"{ConfigDialogResources.lookupFileStructureCheckErrorCaption} {fileName}";
@@ -222,6 +221,5 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 				ErrorMessage = $"{ConfigDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}
 		}
-
 	}
 }

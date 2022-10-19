@@ -4,7 +4,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace MTEnhancedMicrosoftProvider.Helpers
+namespace MicrosoftTranslatorProvider.Helpers
 {
 	public static class Log
 	{

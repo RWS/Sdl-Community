@@ -1,6 +1,6 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-namespace MTEnhancedMicrosoftProvider.TellMe
+namespace MicrosoftTranslatorProvider.TellMe
 {
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider

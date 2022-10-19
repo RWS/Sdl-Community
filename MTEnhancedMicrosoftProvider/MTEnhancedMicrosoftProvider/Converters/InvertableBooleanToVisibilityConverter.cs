@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace MTEnhancedMicrosoftProvider.Converters
+namespace MicrosoftTranslatorProvider.Converters
 {
 	[ValueConversion(typeof(bool), typeof(Visibility))]
 	public class InvertableBooleanToVisibilityConverter : IValueConverter

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace MTEnhancedMicrosoftProvider.UiHelpers
+namespace MicrosoftTranslatorProvider.UiHelpers
 {
 	public class TextBoxWatermarkHelper : DependencyObject
 	{

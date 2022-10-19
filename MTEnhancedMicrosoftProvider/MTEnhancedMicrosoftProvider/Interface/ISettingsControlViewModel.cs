@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
-using MTEnhancedMicrosoftProvider.Model;
+using MicrosoftTranslatorProvider.Model;
 
-namespace MTEnhancedMicrosoftProvider.Interfaces
+namespace MicrosoftTranslatorProvider.Interfaces
 {
 	public interface ISettingsControlViewModel
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace MTEnhancedMicrosoftProvider.Helpers
+namespace MicrosoftTranslatorProvider.Helpers
 {
 	public class PasswordHelper
 	{

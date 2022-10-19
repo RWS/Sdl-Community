@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace MTEnhancedMicrosoftProvider.TellMe
+namespace MicrosoftTranslatorProvider.TellMe
 {
 	public class CommunityForumAction : AbstractTellMeAction
 	{

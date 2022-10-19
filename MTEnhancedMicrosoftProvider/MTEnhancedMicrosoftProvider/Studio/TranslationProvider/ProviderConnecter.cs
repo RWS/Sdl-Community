@@ -10,14 +10,14 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MTEnhancedMicrosoftProvider.Extensions;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Service;
+using MicrosoftTranslatorProvider.Extensions;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service;
 using Newtonsoft.Json;
 using NLog;
 using RestSharp;
 
-namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
+namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 {
 	internal class ProviderConnecter
 	{
@@ -33,7 +33,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 		private string _subscriptionKey;
 		private string _region;
 		private string _authToken;
-		private List<string> _supportedLangs;
+		private List<string> _supportedLanguages;
 
 		internal ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
@@ -41,7 +41,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			_region = region;
 			_htmlUtil = htmlUtil;
 			_authToken ??= GetAuthToken();
-			_supportedLangs ??= GetSupportedLanguages();
+			_supportedLanguages ??= GetSupportedLanguages();
 		}
 
 		public void RefreshAuthToken()
@@ -61,7 +61,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_authToken = GetAuthToken();
-			_supportedLangs = GetSupportedLanguages();
+			_supportedLanguages = GetSupportedLanguages();
 		}
 
 		internal bool IsSupportedLanguagePair(string sourceLanguage, string tarrgetLanguage)
@@ -69,7 +69,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			sourceLanguage = ConvertLanguageCode(sourceLanguage);
 			tarrgetLanguage = ConvertLanguageCode(tarrgetLanguage);
 			var (sourceSupported, targetSupported) = (false, false);
-			foreach (var language in _supportedLangs)
+			foreach (var language in _supportedLanguages)
 			{
 				sourceSupported = sourceSupported ? sourceSupported : language.Equals(sourceLanguage);
 				targetSupported = targetSupported ? targetSupported : language.Equals(tarrgetLanguage);
@@ -109,56 +109,10 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			var words = new Regex(RegexPattern).Matches(textToTranslate); //search for words like this: <example> 
 			if (words.Count > 0)
 			{
-				textToTranslate = ReplaceCharacters(textToTranslate, words);
+				textToTranslate = textToTranslate.ReplaceCharacters(words);
 			}
 
 			return RequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
-		}
-
-		private string ReplaceCharacters(string textToTranslate, MatchCollection matches)
-		{
-			var indexes = new List<int>();
-			foreach (Match match in matches)
-			{
-				if (match.Index.Equals(0))
-				{
-					indexes.Add(match.Length);
-					continue;
-				}
-
-				var remainingText = textToTranslate.Substring(match.Index + match.Length);
-				indexes.Add(match.Index);
-				if (!string.IsNullOrEmpty(remainingText))
-				{
-					indexes.Add(match.Index + match.Length);
-				}
-			}
-
-			var splitText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
-			var positions = new List<int>();
-			for (var i = 0; i < splitText.Count; i++)
-			{
-				if (!splitText[i].Contains("tg"))
-				{
-					positions.Add(i);
-				}
-			}
-
-			foreach (var position in positions)
-			{
-				var originalString = splitText[position];
-				var start = Regex.Replace(originalString, "<", "&lt;");
-				var finalString = Regex.Replace(start, ">", "&gt;");
-				splitText[position] = finalString;
-			}
-
-			var finalText = string.Empty;
-			foreach (var text in splitText)
-			{
-				finalText += text;
-			}
-
-			return finalText;
 		}
 
 		private string RequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
@@ -188,11 +142,11 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 
 		private string BuildTranslationUri(string sourceLanguage, string targetLanguage, string category)
 		{
-			const string host = "https://api.cognitive.microsofttranslator.com";
 			const string path = "/translate?api-version=3.0";
+			const string uri = $@"https://{Constants.MicrosoftProviderUriBase}";
 			var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
 
-			return string.Concat(host, path, languageParams);
+			return string.Concat(uri, path, languageParams);
 		}
 
 		private List<string> GetSupportedLanguages()
@@ -210,9 +164,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 
 		private List<string> TryGetSupportedLanguages()
 		{
-			const string BaseUri = @"api.cognitive.microsofttranslator.com";
-
-			var uri = new Uri("https://" + BaseUri);
+			var uri = new Uri("https://" + Constants.MicrosoftProviderUriBase);
 			var client = new RestClient(uri);
 
 			var request = new RestRequest("languages", Method.Get);
@@ -257,7 +209,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 			return accessToken;
 		}
 
-		public async Task<string> GetAccessTokenAsync()
+		private async Task<string> GetAccessTokenAsync()
 		{
 			if (!string.IsNullOrWhiteSpace(_authToken))
 			{
@@ -269,11 +221,8 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 				return string.Empty;
 			}
 
-			const string ServiceBaseUri = @"api.cognitive.microsoft.com";
-			const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-
 			var region = string.IsNullOrEmpty(_region) ? "" : _region + ".";
-			var uriString = $"https://{region}{ServiceBaseUri}/sts/v1.0/issueToken";
+			var uriString = $"https://{region}{Constants.MicrosoftProviderServiceUriBase}/sts/v1.0/issueToken";
 			var uri = new Uri(uriString);
 			try
 			{
@@ -281,7 +230,7 @@ namespace MTEnhancedMicrosoftProvider.Studio.TranslationProvider
 				using var request = new HttpRequestMessage();
 				request.Method = HttpMethod.Post;
 				request.RequestUri = uri;
-				request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, _subscriptionKey);
+				request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionKeyHeader, _subscriptionKey);
 
 				var response = await client.SendAsync(request);
 				response.EnsureSuccessStatusCode();

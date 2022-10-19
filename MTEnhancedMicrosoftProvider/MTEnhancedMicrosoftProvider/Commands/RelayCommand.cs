@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace MTEnhancedMicrosoftProvider.Commands
+namespace MicrosoftTranslatorProvider.Commands
 {
 	public class RelayCommand : ICommand
 	{

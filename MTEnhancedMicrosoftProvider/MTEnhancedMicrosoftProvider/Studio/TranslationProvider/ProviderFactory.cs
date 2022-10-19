@@ -1,9 +1,9 @@
 ﻿using System;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Service;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace MTEnhancedMicrosoftProvider
+namespace MicrosoftTranslatorProvider
 {
 	[TranslationProviderFactory(Id = "Translation_Provider_Plug_inFactory",
                                 Name = "Translation_Provider_Plug_inFactory",
@@ -17,7 +17,7 @@ namespace MTEnhancedMicrosoftProvider
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var credential = credentialStore.GetCredential(new Uri(PluginResources.UriMs))
+			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderUriScheme))
 						  ?? credentialStore.GetCredential(translationProviderUri)
 						  ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
 			if (credential is null)
@@ -28,8 +28,8 @@ namespace MTEnhancedMicrosoftProvider
 			var providerCredentials = new TranslationProviderCredential(credential.Credential, credential.Persist);
 			var loadOptions = new MTETranslationOptions(translationProviderUri)
 			{
-				ClientId = providerCredentials.Credential,
-				PersistMicrosoftCreds = providerCredentials.Persist
+				ClientID = providerCredentials.Credential,
+				PersistMicrosoftCredentials = providerCredentials.Persist
 			};
 
 			return new Provider(loadOptions, new RegionsProvider(), new HtmlUtil());

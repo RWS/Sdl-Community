@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace MTEnhancedMicrosoftProvider.UiHelpers
+namespace MicrosoftTranslatorProvider.UiHelpers
 {
 	public static class TreeHelper
 	{

@@ -1,4 +1,4 @@
-﻿namespace MTEnhancedMicrosoftProvider.Model
+﻿namespace MicrosoftTranslatorProvider.Model
 {
 	public class ResponseMessage
 	{

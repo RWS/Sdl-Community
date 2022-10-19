@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
-using MTEnhancedMicrosoftProvider.Interfaces;
+using MicrosoftTranslatorProvider.Interfaces;
 
-namespace MTEnhancedMicrosoftProvider.Service
+namespace MicrosoftTranslatorProvider.Service
 {
 	public class OpenFileDialogService : IOpenFileDialogService
 	{

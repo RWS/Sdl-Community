@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MTEnhancedMicrosoftProvider.Extensions
+namespace MicrosoftTranslatorProvider.Extensions
 {
 	public static class StringExtensions
 	{
@@ -20,7 +20,7 @@ namespace MTEnhancedMicrosoftProvider.Extensions
 			index = index.Distinct().OrderBy(x => x).ToArray();
 			var output = new string[index.Length + 1];
 			var pos = 0;
-			for (int i = 0; i < index.Length; pos = index[i++])
+			for (var i = 0; i < index.Length; pos = index[i++])
 			{
 				output[i] = source.Substring(pos, index[i] - pos);
 			}
@@ -70,6 +70,5 @@ namespace MTEnhancedMicrosoftProvider.Extensions
 
 			return splitText.Aggregate(string.Empty, (current, text) => current + text);
 		}
-
 	}
 }

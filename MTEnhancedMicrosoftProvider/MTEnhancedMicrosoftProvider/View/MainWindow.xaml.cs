@@ -1,4 +1,4 @@
-﻿namespace MTEnhancedMicrosoftProvider.View
+﻿namespace MicrosoftTranslatorProvider.View
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

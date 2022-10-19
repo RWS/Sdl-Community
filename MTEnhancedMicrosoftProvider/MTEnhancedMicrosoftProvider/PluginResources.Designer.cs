@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MTEnhancedMicrosoftProvider {
+namespace MicrosoftTranslatorProvider {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MTEnhancedMicrosoftProvider {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MTEnhancedMicrosoftProvider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MicrosoftTranslatorProvider.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,33 +57,6 @@ namespace MTEnhancedMicrosoftProvider {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No API key has been set.  Please open the plugin settings form and enter a valid API key.
-        /// </summary>
-        public static string ApiConnectionGoogleNoKeyErrorMessage {
-            get {
-                return ResourceManager.GetString("ApiConnectionGoogleNoKeyErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There was a problem getting the translation..
-        /// </summary>
-        public static string ApiConnectorGoogleAuthErrorMsg1 {
-            get {
-                return ResourceManager.GetString("ApiConnectorGoogleAuthErrorMsg1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please verify that you have entered the correct API key and that your language pair is supported..
-        /// </summary>
-        public static string ApiConnectorGoogleAuthErrorMsg2 {
-            get {
-                return ResourceManager.GetString("ApiConnectorGoogleAuthErrorMsg2", resourceCulture);
             }
         }
         
@@ -134,7 +107,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Category Id.
+        ///   Looks up a localized string similar to Use CategoryID.
         /// </summary>
         public static string CatIdDescription {
             get {
@@ -143,7 +116,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please add Category Id otherwise uncheck CategoryId checbox..
+        ///   Looks up a localized string similar to CategoryID is empty.
         /// </summary>
         public static string CatIdError {
             get {
@@ -217,150 +190,6 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator.
-        /// </summary>
-        public static string Google {
-            get {
-                return ResourceManager.GetString("Google", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
-        /// </summary>
-        public static string Google_Description {
-            get {
-                return ResourceManager.GetString("Google_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
-        /// </summary>
-        public static string Google_Name {
-            get {
-                return ResourceManager.GetString("Google_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
-        /// </summary>
-        public static string Google_NiceName {
-            get {
-                return ResourceManager.GetString("Google_NiceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
-        /// </summary>
-        public static string Google_Tooltip {
-            get {
-                return ResourceManager.GetString("Google_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate Advanced.
-        /// </summary>
-        public static string GoogleAdvanced {
-            get {
-                return ResourceManager.GetString("GoogleAdvanced", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please select the version of the Google Translate API that you wish to use:.
-        /// </summary>
-        public static string GoogleApiDescription {
-            get {
-                return ResourceManager.GetString("GoogleApiDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GOOGLE_APPLICATION_CREDENTIALS.
-        /// </summary>
-        public static string GoogleApiEnvironmentVariableName {
-            get {
-                return ResourceManager.GetString("GoogleApiEnvironmentVariableName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please enter your Google Translate API Key.
-        /// </summary>
-        public static string GoogleApiKeyDescription {
-            get {
-                return ResourceManager.GetString("GoogleApiKeyDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to V2 - Basic Translation.
-        /// </summary>
-        public static string GoogleApiVersionV2Description {
-            get {
-                return ResourceManager.GetString("GoogleApiVersionV2Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to V3 - Advanced Translation.
-        /// </summary>
-        public static string GoogleApiVersionV3Description {
-            get {
-                return ResourceManager.GetString("GoogleApiVersionV3Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate Basic.
-        /// </summary>
-        public static string GoogleBasic {
-            get {
-                return ResourceManager.GetString("GoogleBasic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter AutoML Translation model:.
-        /// </summary>
-        public static string GoogleEngineModelDescription {
-            get {
-                return ResourceManager.GetString("GoogleEngineModelDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid model name.
-        /// </summary>
-        public static string GoogleInvalidEngine {
-            get {
-                return ResourceManager.GetString("GoogleInvalidEngine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please add project location:.
-        /// </summary>
-        public static string GoogleProjectLocation {
-            get {
-                return ResourceManager.GetString("GoogleProjectLocation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Google Response.
-        /// </summary>
-        public static string GoogleResponseDescription {
-            get {
-                return ResourceManager.GetString("GoogleResponseDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Invalid project name..
         /// </summary>
         public static string InvalidProjectName {
@@ -424,7 +253,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Microsoft_Description {
             get {
@@ -443,7 +272,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Microsoft_Name {
             get {
@@ -452,7 +281,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Microsoft_NiceName {
             get {
@@ -461,7 +290,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Microsoft_Tooltip {
             get {
@@ -475,6 +304,15 @@ namespace MTEnhancedMicrosoftProvider {
         public static string MicrosoftApiDescription {
             get {
                 return ResourceManager.GetString("MicrosoftApiDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MT Microsoft Translation Provider.
+        /// </summary>
+        public static string MicrosoftTranslatorProviderPlugin_WinFormsUI {
+            get {
+                return ResourceManager.GetString("MicrosoftTranslatorProviderPlugin_WinFormsUI", resourceCulture);
             }
         }
         
@@ -544,15 +382,6 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Google key.
-        /// </summary>
-        public static string PersistGoogle {
-            get {
-                return ResourceManager.GetString("PersistGoogle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save Microsoft key.
         /// </summary>
         public static string PersistMicrosoft {
@@ -571,7 +400,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MTEnhancedMicrosoftProvider.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -580,7 +409,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin.
+        ///   Looks up a localized string similar to Microsoft Translator ProviderTrados Plugin.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -589,7 +418,7 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator.
+        ///   Looks up a localized string similar to Microsoft Translator Provider Trados Plugin.
         /// </summary>
         public static string Plugin_Tooltip {
             get {
@@ -724,15 +553,6 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credentials for Google Translate....
-        /// </summary>
-        public static string PromptForCredentialsCaption_Google {
-            get {
-                return ResourceManager.GetString("PromptForCredentialsCaption_Google", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Credentials for Microsoft Translator....
         /// </summary>
         public static string PromptForCredentialsCaption_Microsoft {
@@ -835,56 +655,11 @@ namespace MTEnhancedMicrosoftProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to mtenhancedprovidergt:///.
-        /// </summary>
-        public static string UriGt {
-            get {
-                return ResourceManager.GetString("UriGt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to mtenhancedprovidermst:///.
-        /// </summary>
-        public static string UriMs {
-            get {
-                return ResourceManager.GetString("UriMs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Translation provider URI not supported..
         /// </summary>
         public static string UriNotSupportedMessage {
             get {
                 return ResourceManager.GetString("UriNotSupportedMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter the URI where the glossary is stored:.
-        /// </summary>
-        public static string V3Glossary {
-            get {
-                return ResourceManager.GetString("V3Glossary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter the local path to the json file associated with your API key:.
-        /// </summary>
-        public static string V3JsonPathDescription {
-            get {
-                return ResourceManager.GetString("V3JsonPathDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter the project name for this file from your Google account:.
-        /// </summary>
-        public static string V3ProjectNameDescription {
-            get {
-                return ResourceManager.GetString("V3ProjectNameDescription", resourceCulture);
             }
         }
         

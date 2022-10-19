@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using MTEnhancedMicrosoftProvider.Model;
+using MicrosoftTranslatorProvider.Model;
 
-namespace MTEnhancedMicrosoftProvider.Interfaces
+namespace MicrosoftTranslatorProvider.Interfaces
 {
 	public delegate void ClearMessageEventRaiser();
 
@@ -18,9 +18,7 @@ namespace MTEnhancedMicrosoftProvider.Interfaces
 		
 		bool IsMicrosoftSelected { get; set; }
 		
-		bool UseCatId { get; set; }
-		
-		bool PersistGoogleKey { get; set; }
+		bool UseCategoryID { get; set; }
 		
 		bool PersistMicrosoftKey { get; set; }
 		
@@ -28,9 +26,9 @@ namespace MTEnhancedMicrosoftProvider.Interfaces
 		
 		bool BasicCsvGlossary { get; set; }
 		
-		string CatId { get; set; }
+		string CategoryID { get; set; }
 		
-		string ClientId { get; set; } //Microsoft
+		string ClientID { get; set; }
 
 		RegionSubscription Region { get; set; }
 

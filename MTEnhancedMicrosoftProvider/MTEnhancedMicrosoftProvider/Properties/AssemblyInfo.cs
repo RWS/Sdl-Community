@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MTEnhancedMicrosoftProvider")]
+[assembly: AssemblyTitle("MicrosoftTranslatorProvider")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Amazon.com")]
-[assembly: AssemblyProduct("MTEnhancedMicrosoftProvider")]
+[assembly: AssemblyProduct("MicrosoftTranslatorProvider")]
 [assembly: AssemblyCopyright("Copyright © Amazon.com 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

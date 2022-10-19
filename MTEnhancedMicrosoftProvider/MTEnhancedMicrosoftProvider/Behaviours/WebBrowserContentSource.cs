@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace MTEnhancedMicrosoftProvider.Behaviours
+namespace MicrosoftTranslatorProvider.Behaviours
 {
 	public static class WebBrowserContentSource
 	{

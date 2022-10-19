@@ -1,16 +1,16 @@
-﻿<Window x:Class="MTEnhancedMicrosoftProvider.View.MainWindow"
+﻿<Window x:Class="MicrosoftTranslatorProvider.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:ui="clr-namespace:MTEnhancedMicrosoftProvider.View"
-		xmlns:styles ="clr-namespace:MTEnhancedMicrosoftProvider.Styles"
-		xmlns:viewModels="clr-namespace:MTEnhancedMicrosoftProvider.ViewModel"
+        xmlns:ui="clr-namespace:MicrosoftTranslatorProvider.View"
+		xmlns:styles ="clr-namespace:MicrosoftTranslatorProvider.Styles"
+		xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 		mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
-        xmlns:behaviours ="clr-namespace:MTEnhancedMicrosoftProvider.Behaviours"
-		xmlns:converters ="clr-namespace:MTEnhancedMicrosoftProvider.Converters"
+        xmlns:behaviours ="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
+		xmlns:converters ="clr-namespace:MicrosoftTranslatorProvider.Converters"
         Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
 		Title="MT Enhanced" Height="620" Width="800"
@@ -69,8 +69,7 @@
 				Content="OK"
 				Margin="10 0 20 10"
 				HorizontalAlignment="Right"
-				Width="100"
-			/>
+				Width="100"/>
 		</Grid>
    </Border>
 </Window>

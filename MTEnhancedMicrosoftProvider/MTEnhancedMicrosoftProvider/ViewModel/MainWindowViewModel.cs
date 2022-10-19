@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
-using MTEnhancedMicrosoftProvider.Commands;
-using MTEnhancedMicrosoftProvider.Interfaces;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Service;
-using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
+using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service;
+using MicrosoftTranslatorProvider.Studio.TranslationProvider;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace MTEnhancedMicrosoftProvider.ViewModel
+namespace MicrosoftTranslatorProvider.ViewModel
 {
 	public class MainWindowViewModel : BaseModel, IMainWindow
 	{
@@ -191,13 +191,13 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private bool ValidMicrosoftOptions()
 		{
-			if (string.IsNullOrEmpty(_providerControlViewModel.ClientId))
+			if (string.IsNullOrEmpty(_providerControlViewModel.ClientID))
 			{
 				ErrorMessage = PluginResources.ApiKeyError;
 				return false;
 			}
 			
-			if (_providerControlViewModel.UseCatId && string.IsNullOrEmpty(_providerControlViewModel.CatId))
+			if (_providerControlViewModel.UseCategoryID && string.IsNullOrEmpty(_providerControlViewModel.CategoryID))
 			{
 				ErrorMessage = PluginResources.CatIdError;
 				return false;
@@ -247,9 +247,9 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private void DeleteCredentialsIfNecessary()
 		{
 			var isMicrosoftProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
-			if (isMicrosoftProvider && !Options.PersistMicrosoftCreds)
+			if (isMicrosoftProvider && !Options.PersistMicrosoftCredentials)
 			{
-				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
+				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderUriScheme));
 			}
 		}
 
@@ -267,10 +267,10 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		{
 			try
 			{
-				if (!string.IsNullOrEmpty(Options?.ClientId)
-					&& !Options.ClientId.Equals(_providerControlViewModel.ClientId))
+				if (!string.IsNullOrEmpty(Options?.ClientID)
+					&& !Options.ClientID.Equals(_providerControlViewModel.ClientID))
 				{
-					var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
+					var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil);
 					apiConnecter.RefreshAuthToken();
 				}
 
@@ -314,11 +314,11 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 
 		private void SetMicrosoftProviderOptions()
 		{
-			Options.ClientId = _providerControlViewModel.ClientId;
+			Options.ClientID = _providerControlViewModel.ClientID;
 			Options.Region = _providerControlViewModel.Region.Key;
-			Options.UseCatID = _providerControlViewModel.UseCatId;
-			Options.CatId = _providerControlViewModel.CatId;
-			Options.PersistMicrosoftCreds = _providerControlViewModel.PersistMicrosoftKey;
+			Options.UseCategoryID = _providerControlViewModel.UseCategoryID;
+			Options.CategoryID = _providerControlViewModel.CategoryID;
+			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
 		}
 	}
 }

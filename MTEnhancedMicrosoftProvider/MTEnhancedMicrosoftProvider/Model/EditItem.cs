@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace MTEnhancedMicrosoftProvider.Model
+namespace MicrosoftTranslatorProvider.Model
 {
 	public class EditItem
 	{

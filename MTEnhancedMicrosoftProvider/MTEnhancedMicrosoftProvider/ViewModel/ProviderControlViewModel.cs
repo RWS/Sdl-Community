@@ -2,11 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using MTEnhancedMicrosoftProvider.Commands;
-using MTEnhancedMicrosoftProvider.Interfaces;
-using MTEnhancedMicrosoftProvider.Model;
+using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Model;
 
-namespace MTEnhancedMicrosoftProvider.ViewModel
+namespace MicrosoftTranslatorProvider.ViewModel
 {
 	public class ProviderControlViewModel : BaseModel, IProviderControlViewModel
 	{
@@ -18,8 +18,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		private RegionSubscription _region;
 
 		private bool _isMicrosoftSelected;
-		private bool _useCatId;
-		private bool _persistGoogleKey;
+		private bool _useCategoryID;
 		private bool _persistMicrosoftKey;
 		private bool _isTellMeAction;
 		private bool _basicCsvGlossary;
@@ -63,14 +62,14 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			}
 
 			BasicCsvGlossary = _options.BasicCsv;
-			CatId = _options.CatId;
-			ClientId = _options.ClientId;
+			CategoryID = _options.CategoryID;
+			ClientID = _options.ClientID;
 			GlossaryPath = _options.GlossaryPath;
 			JsonFilePath = _options.JsonFilePath;
-			PersistMicrosoftKey = _options.PersistMicrosoftCreds;
+			PersistMicrosoftKey = _options.PersistMicrosoftCredentials;
 			ProjectLocation = _options.ProjectLocation;
 			ProjectName = _options.ProjectName;
-			UseCatId = _options.UseCatID;
+			UseCategoryID = _options.UseCategoryID;
 
 			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
 			SetTranslationOption();
@@ -87,7 +86,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			switch (objectName)
 			{
 				case "CategoryId":
-					CatId = string.Empty;
+					CategoryID = string.Empty;
 					break;
 				case "JsonFilePath":
 					JsonFilePath = string.Empty;
@@ -153,6 +152,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			get => _selectedTranslationOption;
 			set
 			{
+				if (_selectedTranslationOption == value) return;
 				_selectedTranslationOption = value;
 				IsMicrosoftSelected = value.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
@@ -165,23 +165,20 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			get => _isMicrosoftSelected;
 			set
 			{
-				if (_isMicrosoftSelected == value)
-				{
-					return;
-				}
-
+				if (_isMicrosoftSelected == value) return;
+				_isMicrosoftSelected = value;
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
 				ClearMessageRaised?.Invoke();
 			}
 		}
-		public string ClientId
+		public string ClientID
 		{
 			get => _clientId;
 			set
 			{
 				if (_clientId == value) return;
 				_clientId = value.Trim();
-				OnPropertyChanged(nameof(ClientId));
+				OnPropertyChanged(nameof(ClientID));
 				ClearMessageRaised?.Invoke();
 			}
 		}
@@ -191,11 +188,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			get => _region;
 			set
 			{
-				if (_region == value)
-				{
-					return;
-				}
-
+				if (_region == value) return;
 				_region = value;
 				OnPropertyChanged(nameof(Region));
 				ClearMessageRaised?.Invoke();
@@ -206,10 +199,11 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 		{
 			get
 			{
-				return _regions ?? (_regions = new ObservableCollection<RegionSubscription>( _regionsProvider.GetSubscriptionRegions()));
+				return _regions ??= new ObservableCollection<RegionSubscription>(_regionsProvider.GetSubscriptionRegions());
 			}
 			set
 			{
+				if (_regions == value) return;
 				_regions = value;
 				OnPropertyChanged(nameof(Region));
 			}
@@ -220,11 +214,7 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			get => _jsonFilePath;
 			set
 			{
-				if (_jsonFilePath == value)
-				{
-					return;
-				}
-
+				if (_jsonFilePath == value) return;
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
 				ClearMessageRaised?.Invoke();
@@ -243,29 +233,19 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			}
 		}
 
-		public bool UseCatId
+		public bool UseCategoryID
 		{
-			get => _useCatId;
+			get => _useCategoryID;
 			set
 			{
-				if (_useCatId == value) return;
-				_useCatId = value;
+				if (_useCategoryID == value) return;
+				_useCategoryID = value;
 				if (!value)
 				{
-					CatId = string.Empty;
+					CategoryID = string.Empty;
 				}
-				OnPropertyChanged(nameof(UseCatId));
-			}
-		}
 
-		public bool PersistGoogleKey
-		{
-			get => _persistGoogleKey;
-			set
-			{
-				if (_persistGoogleKey == value) return;
-				_persistGoogleKey = value;
-				OnPropertyChanged(nameof(PersistGoogleKey));
+				OnPropertyChanged(nameof(UseCategoryID));
 			}
 		}
 
@@ -302,14 +282,14 @@ namespace MTEnhancedMicrosoftProvider.ViewModel
 			}
 		}
 
-		public string CatId
+		public string CategoryID
 		{
 			get => _catId;
 			set
 			{
 				if (_catId == value) return;
 				_catId = value;
-				OnPropertyChanged(nameof(CatId));
+				OnPropertyChanged(nameof(CategoryID));
 			}
 		}
 

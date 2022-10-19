@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MTEnhancedMicrosoftProvider.Studio
+namespace MicrosoftTranslatorProvider.Studio
 {
 	public class WindowWrapper : System.Windows.Forms.IWin32Window
 	{

@@ -1,3 +1,3 @@
 ﻿using Sdl.Core.PluginFramework;
 
-[assembly: Plugin("MTEnhancedMicrosoftProvider")]
+[assembly: Plugin("MicrosoftTranslatorProvider")]

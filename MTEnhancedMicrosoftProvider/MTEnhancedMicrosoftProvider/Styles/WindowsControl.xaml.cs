@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Desktop.Platform.Controls.Controls;
 
-namespace MTEnhancedMicrosoftProvider.Styles
+namespace MicrosoftTranslatorProvider.Styles
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml

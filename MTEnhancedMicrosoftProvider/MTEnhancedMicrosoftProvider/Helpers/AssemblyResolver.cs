@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace MTEnhancedMicrosoftProvider.Helpers
+namespace MicrosoftTranslatorProvider.Helpers
 {
 	public static class AssemblyResolver
 	{

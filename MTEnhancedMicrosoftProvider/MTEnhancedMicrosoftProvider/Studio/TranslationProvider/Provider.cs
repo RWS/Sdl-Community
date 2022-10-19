@@ -1,19 +1,20 @@
 ﻿using System;
-using MTEnhancedMicrosoftProvider.Interfaces;
-using MTEnhancedMicrosoftProvider.Model;
-using MTEnhancedMicrosoftProvider.Service;
-using MTEnhancedMicrosoftProvider.Studio.TranslationProvider;
+using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service;
+using MicrosoftTranslatorProvider.Studio.TranslationProvider;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace MTEnhancedMicrosoftProvider
+namespace MicrosoftTranslatorProvider
 {
 	public class Provider : ITranslationProvider
     {
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
 		private readonly HtmlUtil _htmlUtil;
-		private ProviderConnecter _mstConnect;
+
+		private ProviderConnecter _providerConnecter;
 
 		public Provider(ITranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
 		{
@@ -70,9 +71,9 @@ namespace MTEnhancedMicrosoftProvider
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			_mstConnect ??= new ProviderConnecter(Options.ClientId, Options.Region, _htmlUtil);
-			_mstConnect.ResetCredentials(Options.ClientId, Options.Region);
-			return _mstConnect.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
+			_providerConnecter ??= new ProviderConnecter(Options.ClientID, Options.Region, _htmlUtil);
+			_providerConnecter.ResetCredentials(Options.ClientID, Options.Region);
+			return _providerConnecter.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
