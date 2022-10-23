@@ -70,7 +70,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MTEnhanced.
+        ///   Looks up a localized string similar to MicrosoftTranslatorProvider.
         /// </summary>
         public static string AppLogFolder {
             get {
@@ -226,7 +226,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MTEnhancedLogs.txt.
+        ///   Looks up a localized string similar to MicrosoftTranslatorProviderLogs.txt.
         /// </summary>
         public static string LogsFileName {
             get {
@@ -299,7 +299,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter your Microsoft Translate API Key.
+        ///   Looks up a localized string similar to Microsoft Translator Provider API Key.
         /// </summary>
         public static string MicrosoftApiDescription {
             get {
@@ -353,11 +353,33 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subscription Region:.
+        ///   Looks up a localized string similar to Region.
         /// </summary>
         public static string MSSubscriptionRegionLabel {
             get {
                 return ResourceManager.GetString("MSSubscriptionRegionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This parameter is used to get translations from a customized system built with custom translator.
+        ///
+        ///Add the Category ID from your Custom Translator project details to this parameter to use your deployed customized system. If you didn&apos;t created such thing, leave it empty..
+        /// </summary>
+        public static string MSTPCategoryTooltip {
+            get {
+                return ResourceManager.GetString("MSTPCategoryTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The region you select is the only region that you can use for text translation.
+        ///
+        ///It must be the same region you selected when you signed up for your multi-service subscription through the Azure portal..
+        /// </summary>
+        public static string MSTPRegionTooltip {
+            get {
+                return ResourceManager.GetString("MSTPRegionTooltip", resourceCulture);
             }
         }
         
@@ -382,7 +404,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Microsoft key.
+        ///   Looks up a localized string similar to Save key.
         /// </summary>
         public static string PersistMicrosoft {
             get {
@@ -391,7 +413,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator.
+        ///   Looks up a localized string similar to Microsoft Translator Provider Trados Plugin.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -409,7 +431,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Translator ProviderTrados Plugin.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -418,7 +440,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Translator Provider Trados Plugin.
+        ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Plugin_Tooltip {
             get {
@@ -581,7 +603,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send plain text only (not tags).
+        ///   Looks up a localized string similar to Exclude tags in translations.
         /// </summary>
         public static string SendPlainDescription {
             get {
@@ -610,7 +632,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translation Provider Settings.
+        ///   Looks up a localized string similar to Advanced settings.
         /// </summary>
         public static string SettingsText {
             get {
@@ -637,7 +659,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [segment already translated...source not re-sent].
+        ///   Looks up a localized string similar to This segment is already translated, source has not been sent for translation.
         /// </summary>
         public static string TranslationLookupDraftNotResentMessage {
             get {
@@ -664,7 +686,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose which MT Provider you want to use:.
+        ///   Looks up a localized string similar to Please choose which provider you want to use:.
         /// </summary>
         public static string WindowDescription {
             get {

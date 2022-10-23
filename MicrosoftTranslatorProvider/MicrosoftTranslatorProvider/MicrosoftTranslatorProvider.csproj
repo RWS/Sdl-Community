@@ -12,6 +12,7 @@
 	  <None Remove="Resources\backImg.png" />
 	  <None Remove="Resources\Download.ico" />
 	  <None Remove="Resources\ForumIcon.ico" />
+	  <None Remove="Resources\Information.png" />
 	  <None Remove="Resources\my_icon.ico" />
 	  <None Remove="Resources\Question.ico" />
 	  <None Remove="Resources\Setting.png" />
@@ -177,6 +178,7 @@
 	  <Resource Include="Resources\ForumIcon.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
+	  <Resource Include="Resources\Information.png" />
 	  <Resource Include="Resources\my_icon.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>

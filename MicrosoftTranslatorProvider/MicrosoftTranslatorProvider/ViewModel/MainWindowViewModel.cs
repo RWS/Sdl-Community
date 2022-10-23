@@ -267,12 +267,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			try
 			{
-				if (!string.IsNullOrEmpty(Options?.ClientID)
-					&& !Options.ClientID.Equals(_providerControlViewModel.ClientID))
-				{
-					var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil);
-					apiConnecter.RefreshAuthToken();
-				}
+				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil);
+				apiConnecter.RefreshAuthToken();
 
 				return true;
 			}

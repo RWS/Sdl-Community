@@ -126,10 +126,10 @@
     <comment>Line1</comment>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>Microsoft Translator ProviderTrados Plugin</value>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
-    <value>Microsoft Translator Provider Trados Plugin</value>
+    <value>Microsoft Translator Provider</value>
   </data>
   <data name="MsApiBadCredentialsMessage" xml:space="preserve">
     <value>Authentication error: bad credentials</value>
@@ -161,7 +161,7 @@
     <value>Resources\microsoft_image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator</value>
+    <value>Microsoft Translator Provider Trados Plugin</value>
   </data>
   <data name="Microsoft_Name" xml:space="preserve">
     <value>Microsoft Translator Provider</value>
@@ -185,7 +185,7 @@
     <value>Credentials for Microsoft Translator...</value>
   </data>
   <data name="TranslationLookupDraftNotResentMessage" xml:space="preserve">
-    <value>[segment already translated...source not re-sent]</value>
+    <value>This segment is already translated, source has not been sent for translation</value>
   </data>
   <data name="UriNotSupportedMessage" xml:space="preserve">
     <value>Translation provider URI not supported.</value>
@@ -221,7 +221,7 @@
     <value>Resources\Setting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SettingsText" xml:space="preserve">
-    <value>Translation Provider Settings</value>
+    <value>Advanced settings</value>
   </data>
   <data name="SettingsView" xml:space="preserve">
     <value>SettingsView</value>
@@ -230,7 +230,7 @@
     <value>Provider options</value>
   </data>
   <data name="WindowDescription" xml:space="preserve">
-    <value>Please choose which MT Provider you want to use:</value>
+    <value>Please choose which provider you want to use:</value>
   </data>
   <data name="WindowsControl_Close" xml:space="preserve">
     <value>Close</value>
@@ -257,10 +257,10 @@
     <value>Invalid project name.</value>
   </data>
   <data name="MicrosoftApiDescription" xml:space="preserve">
-    <value>Please enter your Microsoft Translate API Key</value>
+    <value>Microsoft Translator Provider API Key</value>
   </data>
   <data name="PersistMicrosoft" xml:space="preserve">
-    <value>Save Microsoft key</value>
+    <value>Save key</value>
   </data>
   <data name="PostLookupBrowse" xml:space="preserve">
     <value>PostLookup</value>
@@ -302,7 +302,7 @@
     <value>Re-send draft and translated segments</value>
   </data>
   <data name="SendPlainDescription" xml:space="preserve">
-    <value>Send plain text only (not tags)</value>
+    <value>Exclude tags in translations</value>
   </data>
   <data name="WrongJsonFilePath" xml:space="preserve">
     <value>Json file could not be found at the specified path.</value>
@@ -314,18 +314,28 @@
     <value>Unidirectional glossaries</value>
   </data>
   <data name="MSSubscriptionRegionLabel" xml:space="preserve">
-    <value>Subscription Region:</value>
+    <value>Region</value>
   </data>
   <data name="AppLogFolder" xml:space="preserve">
-    <value>MTEnhanced</value>
+    <value>MicrosoftTranslatorProvider</value>
   </data>
   <data name="LogsFileName" xml:space="preserve">
-    <value>MTEnhancedLogs.txt</value>
+    <value>MicrosoftTranslatorProviderLogs.txt</value>
   </data>
   <data name="LogsFolderPath" xml:space="preserve">
     <value>RWS AppStore</value>
   </data>
   <data name="MicrosoftTranslatorProviderPlugin_WinFormsUI" xml:space="preserve">
     <value>MT Microsoft Translation Provider</value>
+  </data>
+  <data name="MSTPCategoryTooltip" xml:space="preserve">
+    <value>This parameter is used to get translations from a customized system built with custom translator.
+
+Add the Category ID from your Custom Translator project details to this parameter to use your deployed customized system. If you didn't created such thing, leave it empty.</value>
+  </data>
+  <data name="MSTPRegionTooltip" xml:space="preserve">
+    <value>The region you select is the only region that you can use for text translation.
+
+It must be the same region you selected when you signed up for your multi-service subscription through the Azure portal.</value>
   </data>
 </root>

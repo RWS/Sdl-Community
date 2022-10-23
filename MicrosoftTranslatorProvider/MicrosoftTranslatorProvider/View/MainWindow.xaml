@@ -13,7 +13,7 @@
 		xmlns:converters ="clr-namespace:MicrosoftTranslatorProvider.Converters"
         Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
-		Title="MT Enhanced" Height="620" Width="800"
+		Title="Microsoft Translator Provider" Height="620" Width="800"
         d:DesignHeight="450" d:DesignWidth="800">
 	<Window.Resources>
 		<ResourceDictionary>

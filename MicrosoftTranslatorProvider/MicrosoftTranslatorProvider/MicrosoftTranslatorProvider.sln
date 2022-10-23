@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicrosoftTranslatorProvider", "MTEnhancedMicrosoftProvider\MicrosoftTranslatorProvider.csproj", "{0862E88D-3464-4DC7-B347-3E682388CE42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicrosoftTranslatorProvider", "MicrosoftTranslatorProvider.csproj", "{083F2C97-21CA-4EAC-A41E-DEF90634DA26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0862E88D-3464-4DC7-B347-3E682388CE42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0862E88D-3464-4DC7-B347-3E682388CE42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0862E88D-3464-4DC7-B347-3E682388CE42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0862E88D-3464-4DC7-B347-3E682388CE42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083F2C97-21CA-4EAC-A41E-DEF90634DA26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083F2C97-21CA-4EAC-A41E-DEF90634DA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083F2C97-21CA-4EAC-A41E-DEF90634DA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083F2C97-21CA-4EAC-A41E-DEF90634DA26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4CD0B604-1BA7-40D3-A852-9AFE0BF5723B}
+		SolutionGuid = {9018135E-5287-4D38-AFBE-60AA9CE886C7}
 	EndGlobalSection
 EndGlobal

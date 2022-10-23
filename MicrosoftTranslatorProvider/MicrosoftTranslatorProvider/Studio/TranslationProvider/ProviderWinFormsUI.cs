@@ -15,9 +15,9 @@ using Sdl.ProjectAutomation.Core;
 
 namespace MicrosoftTranslatorProvider.Studio
 {
-	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI", // MicrosoftProviderPlugin_WinFormsUI
-								   Name = "Translation_Provider_Plug_inWinFormsUI",
-                                   Description = "Translation_Provider_Plug_inWinFormsUI")]
+	[TranslationProviderWinFormsUi(Id = "MicrosoftTranslatorProviderPlugin_WinFormsUI",
+								   Name = "MicrosoftTranslatorProviderPlugin_WinFormsUI",
+                                   Description = "MicrosoftTranslatorProviderPlugin_WinFormsUI")]
     public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
