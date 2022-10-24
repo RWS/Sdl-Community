@@ -34,7 +34,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					return true;
 				});
 
-				var languageCloudIdentityApiModel = new LanguageCloudIdentityApiModel
+				var languageCloudIdentityApiModel = new LanguageCloudCredentials
 				{
 					AccessToken = credential.Token,
 					Email = credential.Name
@@ -74,7 +74,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					return true;
 				});
 
-				var languageCloudIdentityApiModel = new LanguageCloudIdentityApiModel
+				var languageCloudIdentityApiModel = new LanguageCloudCredentials
 				{
 					AccessToken = credential.Token,
 					Email = credential.Name
@@ -115,7 +115,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					return false;
 				});
 
-				var languageCloudIdentityApiModel = new LanguageCloudIdentityApiModel
+				var languageCloudIdentityApiModel = new LanguageCloudCredentials
 				{
 					AccessToken = string.Empty,
 					Email = string.Empty
@@ -166,7 +166,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 				});
 
 
-				var languageCloudIdentityApiModel = new LanguageCloudIdentityApiModel
+				var languageCloudIdentityApiModel = new LanguageCloudCredentials
 				{
 					AccessToken = credential.Token,
 					Email = credential.Name

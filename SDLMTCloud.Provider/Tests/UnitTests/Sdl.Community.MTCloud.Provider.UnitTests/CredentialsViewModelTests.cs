@@ -77,7 +77,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 					return false;
 				});
 
-				var languageCloudIdentityApiModel = new LanguageCloudIdentityApiModel
+				var languageCloudIdentityApiModel = new LanguageCloudCredentials
 				{
 					AccessToken = credential.Token,
 					Email = credential.Name

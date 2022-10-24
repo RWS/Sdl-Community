@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.MTCloud.Provider.Model
 {
-	public class LanguageCloudIdentityApiModel
+	public class LanguageCloudCredentials
 	{
 		public string AccessToken { get; set; }
 
