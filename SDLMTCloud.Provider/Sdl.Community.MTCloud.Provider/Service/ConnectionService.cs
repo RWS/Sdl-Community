@@ -87,19 +87,22 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				SwitchAuthType(credential);
 			}
 
-			string message;
+			var message = "";
 			if (Credential.Type == Authentication.AuthenticationType.Studio)
 			{
-				var (credentials, authMessage) = StudioSignIn(showDialog);
+				if (showDialog)
+				{
+					var (credentials, authMessage) = StudioSignIn(true);
 
-				IsSignedIn = !string.IsNullOrEmpty(credentials?.AccessToken);
-				Credential.Token = credentials?.AccessToken;
-				Credential.ValidTo = GetTokenValidTo();
-				Credential.Name = credentials?.Email;
-				Credential.Password = null;
-				Credential.RefreshToken = credentials?.RefreshToken;
-				message = authMessage;
+					Credential.Token = credentials?.AccessToken;
+					Credential.ValidTo = GetTokenValidTo();
+					Credential.Name = credentials?.Email;
+					Credential.Password = null;
+					Credential.RefreshToken = credentials?.RefreshToken;
+					message = authMessage;
+				}
 
+				IsSignedIn = !string.IsNullOrEmpty(Credential?.Token);
 				if (IsSignedIn)
 				{
 					var userDetailsResult =
@@ -200,22 +203,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return (IsSignedIn, PluginResources.Message_Invalid_credentials);
 			}
 
-			var credentialsWindow = GetCredentialsWindow(Owner);
-
-			credentialsWindow.Closing -= CredentialsWindow_Closing;
-			credentialsWindow.Closing += CredentialsWindow_Closing;
-
-			Auth0ViewModel = credentialsWindow.AuthControl.Auth0Service;
-
-			var viewModel = new CredentialsViewModel(credentialsWindow, this);
-			credentialsWindow.DataContext = viewModel;
-
 			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(Credential.AccountRegion);
 			var result = Connect(credential);
 			if (result.Item1 && !alwaysShowWindow)
 			{
 				return result;
 			}
+
+			GetCredentialsWindow(out var credentialsWindow);
+			var viewModel = (CredentialsViewModel)credentialsWindow.DataContext;
 
 			Mouse.OverrideCursor = Cursors.Arrow;
 
@@ -238,6 +234,18 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return (IsSignedIn, message);
+		}
+
+		private void GetCredentialsWindow(out CredentialsWindow credentialsWindow)
+		{
+			credentialsWindow = GetCredentialsWindow(Owner);
+			credentialsWindow.Closing -= CredentialsWindow_Closing;
+			credentialsWindow.Closing += CredentialsWindow_Closing;
+
+			Auth0ViewModel = credentialsWindow.AuthControl.Auth0Service;
+
+			var viewModel = new CredentialsViewModel(credentialsWindow, this);
+			credentialsWindow.DataContext = viewModel;
 		}
 
 		private void CredentialsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -465,7 +473,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			ClearStudioCredentials();
 		}
 
-		public (LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog = false)
+		public (LanguageCloudCredentials, string) StudioSignIn(bool showDialog = false)
 		{
 			var auth0Credential = Credential is {Token: { }} ?
 				new Auth0Service.Model.Credential(Credential.Token, Credential.RefreshToken) : null;
@@ -474,7 +482,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		   	if (authenticationMessage.IsSuccessful)
 		   	{
-		   		var model = new LanguageCloudIdentityApiModel
+		   		var model = new LanguageCloudCredentials
 		   		{
 		   			AccessToken = credentials.Token,
 					RefreshToken = credentials.RefreshToken

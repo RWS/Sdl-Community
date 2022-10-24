@@ -30,7 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		bool IsValidCredential(out string message);
 
-		(LanguageCloudIdentityApiModel, string) StudioSignIn(bool showDialog);
+		(LanguageCloudCredentials, string) StudioSignIn(bool showDialog);
 
 		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
 
