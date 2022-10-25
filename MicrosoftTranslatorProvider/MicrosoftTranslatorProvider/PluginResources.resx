@@ -338,4 +338,10 @@ Add the Category ID from your Custom Translator project details to this paramete
 
 It must be the same region you selected when you signed up for your multi-service subscription through the Azure portal.</value>
   </data>
+  <data name="lookupFileStructureCheckErrorCaption" xml:space="preserve">
+    <value>File error</value>
+  </data>
+  <data name="lookupFileStructureCheckGenericErrorMessage" xml:space="preserve">
+    <value>There was a problem with the selected file:</value>
+  </data>
 </root>

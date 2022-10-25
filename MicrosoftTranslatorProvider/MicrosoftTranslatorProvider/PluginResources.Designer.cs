@@ -244,6 +244,24 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File error.
+        /// </summary>
+        public static string lookupFileStructureCheckErrorCaption {
+            get {
+                return ResourceManager.GetString("lookupFileStructureCheckErrorCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem with the selected file:.
+        /// </summary>
+        public static string lookupFileStructureCheckGenericErrorMessage {
+            get {
+                return ResourceManager.GetString("lookupFileStructureCheckGenericErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft Translator.
         /// </summary>
         public static string Microsoft {

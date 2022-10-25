@@ -212,13 +212,13 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			catch (InvalidOperationException) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 			{
 				var fileName = System.IO.Path.GetFileName(filePath);
-				ErrorMessage = $"{ConfigDialogResources.lookupFileStructureCheckErrorCaption} {fileName}";
+				ErrorMessage = $"{PluginResources.lookupFileStructureCheckErrorCaption} {fileName}";
 			}
 			catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {exp}");
 
-				ErrorMessage = $"{ConfigDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
+				ErrorMessage = $"{PluginResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}
 		}
 	}

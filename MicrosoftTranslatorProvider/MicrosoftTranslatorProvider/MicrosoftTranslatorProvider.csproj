@@ -38,6 +38,7 @@
 		</Reference>
 		<Reference Include="PresentationCore" />
 		<Reference Include="PresentationFramework" />
+		<Reference Include="PresentationFramework.Aero" />
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
@@ -119,11 +120,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Update="ConfigDialogResources.Designer.cs">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
-		  <DependentUpon>ConfigDialogResources.resx</DependentUpon>
-		</Compile>
 		<Compile Update="PluginResources.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
@@ -131,10 +127,6 @@
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
-		<EmbeddedResource Update="ConfigDialogResources.resx">
-		  <Generator>PublicResXFileCodeGenerator</Generator>
-		  <LastGenOutput>ConfigDialogResources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
 		<EmbeddedResource Update="PluginResources.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
