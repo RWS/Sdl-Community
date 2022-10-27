@@ -479,6 +479,24 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Microsoft Private Endpoint Url.
+        /// </summary>
+        public static string MicrosoftPeDescription {
+            get {
+                return ResourceManager.GetString("MicrosoftPeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Translator with Private Endpoint.
+        /// </summary>
+        public static string MicrosoftWithPe {
+            get {
+                return ResourceManager.GetString("MicrosoftWithPe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication error: bad credentials.
         /// </summary>
         public static string MsApiBadCredentialsMessage {
@@ -558,6 +576,15 @@ namespace Sdl.Community.MtEnhancedProvider {
         public static string PersistMicrosoft {
             get {
                 return ResourceManager.GetString("PersistMicrosoft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private Endpont Url not valid.
+        /// </summary>
+        public static string PeUrlError {
+            get {
+                return ResourceManager.GetString("PeUrlError", resourceCulture);
             }
         }
         

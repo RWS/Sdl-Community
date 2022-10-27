@@ -20,6 +20,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private TranslationOption _selectedTranslationOption;
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private bool _isMicrosoftSelected;
+		private bool _isMicrosoftWithPeSelected;
 		private bool _useCatId;
 		private bool _isV2Checked;
 		private bool _persistGoogleKey;
@@ -27,6 +28,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private bool _isTellMeAction;
 		private bool _basicCsvGlossary;
 		private string _catId;
+		private string _peUrl;
 		private string _apiKey;
 		private string _clientId;
 		private SubscriptionRegion _region;
@@ -66,6 +68,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				},
 				new TranslationOption
 				{
+					Name = PluginResources.MicrosoftWithPe,
+					ProviderType = MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe
+				},
+				new TranslationOption
+				{
 					Name = PluginResources.Google,
 					ProviderType = MtTranslationOptions.ProviderType.GoogleTranslate
 				}
@@ -90,6 +97,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 			if (_options != null)
 			{
+				PeUrl = _options.PeUrl;
 				ClientId = _options.ClientId;
 				PersistMicrosoftKey = _options.PersistMicrosoftCreds;
 				UseCatId = _options.UseCatID;
@@ -137,6 +145,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					break;
 				case "GlossaryPath":
 					GlossaryPath = string.Empty;
+					break;
+				case "PeUrl":
+					PeUrl = string.Empty;
 					break;
 			}
 		}
@@ -217,7 +228,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			set
 			{
 				_selectedTranslationOption = value;
-				IsMicrosoftSelected = value.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslator;
+				IsMicrosoftSelected = value.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslator 
+										|| value.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe;
+				IsMicrosoftWithPeSelected = value.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
 				ClearMessageRaised?.Invoke();
 			}
@@ -243,6 +256,17 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 			}
 		}
 
+		public bool IsMicrosoftWithPeSelected
+		{
+			get => _isMicrosoftWithPeSelected;
+			set
+			{
+				if (_isMicrosoftWithPeSelected == value) return;
+				_isMicrosoftWithPeSelected = value;
+				OnPropertyChanged(nameof(IsMicrosoftWithPeSelected));
+			}
+		}
+
 		public bool IsV2Checked
 		{
 			get => _isV2Checked;
@@ -262,6 +286,18 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				if (_apiKey == value) return;
 				_apiKey = value.Trim();
 				OnPropertyChanged(nameof(ApiKey));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public string PeUrl
+		{
+			get => _peUrl;
+			set
+			{
+				if (_peUrl == value) return;
+				_peUrl = value.Trim();
+				OnPropertyChanged(nameof(PeUrl));
 				ClearMessageRaised?.Invoke();
 			}
 		}
@@ -418,12 +454,19 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 					{
 						case MtTranslationOptions.ProviderType.GoogleTranslate:
 							IsMicrosoftSelected = false;
+							IsMicrosoftWithPeSelected = false;
 							break;
 						case MtTranslationOptions.ProviderType.MicrosoftTranslator:
 							IsMicrosoftSelected = true;
+							IsMicrosoftWithPeSelected = false;
+							break;
+						case MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe:
+							IsMicrosoftSelected = true;
+							IsMicrosoftWithPeSelected = true;
 							break;
 						case MtTranslationOptions.ProviderType.None:
 							IsMicrosoftSelected = false;
+							IsMicrosoftWithPeSelected = false;
 							break;
 					}
 					SelectedTranslationOption = selectedProvider;

@@ -40,7 +40,7 @@ namespace Sdl.Community.MtEnhancedProvider
 			var htmlUtil = new HtmlUtil();
 
 			//start with MT...check if we are using MT
-			if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+			if (loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator || loadOptions.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe)
 			{
 				// The credential is saved with a different URI scheme than that of the plugin!
 				// We will need to make this known and/or provide a workaround in identifying the credentials

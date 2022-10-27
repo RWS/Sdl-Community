@@ -37,7 +37,7 @@
 					SelectedItem="{Binding SelectedTranslationOption}"
 					DisplayMemberPath="Name"
 					DockPanel.Dock="Left" 
-					Width="200"/>
+					Width="266"/>
 				<Button Style="{StaticResource TransparentButtonStyle}"
 						Command="{Binding ShowSettingsCommand}">
 					<DockPanel>
@@ -51,11 +51,24 @@
 		<StackPanel Grid.Row="1"
 		            Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 		            >
+			<StackPanel Visibility="{Binding IsMicrosoftWithPeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+				<TextBlock 
+					Margin="10, 5, 0, 5" 
+					Text="{x:Static mtEnhanced:PluginResources.MicrosoftPeDescription}"/>
+				<TextBox Style="{StaticResource WatermarkTextBox}"
+						 HorizontalAlignment="Left"
+				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="https://mytranslator.cognitiveservices.azure.com/translator/text/v3.0"
+						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PeUrl"
+						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+				         Margin="10,0,0,5"
+						 Width="500"
+				         Text="{Binding PeUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</StackPanel>
 			<TextBlock Margin="10,10,0,5" Text="{x:Static mtEnhanced:PluginResources.MicrosoftApiDescription}"/>
 			<controls:BindablePasswordBox
 				HorizontalAlignment="Left"
 				Margin="10,0,0,5"
-				Width="400"
+				Width="500"
 				Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
 				Password="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 			<CheckBox

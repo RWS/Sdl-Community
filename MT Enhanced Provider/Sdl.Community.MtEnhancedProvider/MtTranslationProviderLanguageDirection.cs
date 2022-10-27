@@ -22,6 +22,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		private GoogleV3Connecter _googleV3Connecter;
 		private TranslationUnit _inputTu;
 		private ApiConnecter _mstConnect;
+		private ApiConnecterWithPe _mstConnectWithPe;
 		private SegmentEditor _postLookupSegmentEditor;
 		private SegmentEditor _preLookupSegmentEditor;
 
@@ -219,19 +220,34 @@ namespace Sdl.Community.MtEnhancedProvider
 			var sourcelang = _languageDirection.SourceCulture.ToString();
 			var targetlang = _languageDirection.TargetCulture.ToString();
 
-			//instantiate ApiConnecter if necessary
-			if (_mstConnect == null)
+			if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
 			{
-				_mstConnect = new ApiConnecter(_options.ClientId, options.Region, _htmlUtil);
+				//instantiate ApiConnecter if necessary
+				if (_mstConnect == null)
+				{
+					_mstConnect = new ApiConnecter(_options.ClientId, options.Region, _htmlUtil);
+				}
+				else
+				{
+					//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+					_mstConnect.ResetCrd(options.ClientId, options.Region);
+				}
+				var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);
+				return translatedText;
 			}
-			else
+			else if(options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe)
 			{
-				//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
-				_mstConnect.ResetCrd(options.ClientId, options.Region); 
+				//instantiate ApiConnecter if necessary
+				if (_mstConnectWithPe == null)
+				{
+					_mstConnectWithPe = new ApiConnecterWithPe(_options.PeUrl, _options.ClientId, options.Region, _htmlUtil);
+				}
+
+				var translatedText = _mstConnectWithPe.Translate(sourcelang, targetlang, sourcetext, catId);
+				return translatedText;
 			}
 
-			var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId);
-			return translatedText;
+			throw new InvalidOperationException("No proper provider specified in options.");
 		}
 
 		/// <summary>
@@ -278,7 +294,8 @@ namespace Sdl.Community.MtEnhancedProvider
 				{
 					translatedText = LookupGt(tagplacer.PreparedSourceText, _options, "html");
 				}
-				else if (_options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+				else if (_options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator 
+					|| _options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe)
 				{
 					translatedText = LookupMst(tagplacer.PreparedSourceText, _options, "text/html");
 				}
@@ -312,6 +329,9 @@ namespace Sdl.Community.MtEnhancedProvider
 						translatedText = LookupGt(sourcetext, _options, "text");
 						break;
 					case MtTranslationOptions.ProviderType.MicrosoftTranslator:
+						translatedText = LookupMst(sourcetext, _options, "text/plain");
+						break;
+					case MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe:
 						translatedText = LookupMst(sourcetext, _options, "text/plain");
 						break;
 				}

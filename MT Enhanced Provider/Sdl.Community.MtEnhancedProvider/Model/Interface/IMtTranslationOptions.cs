@@ -21,6 +21,7 @@ namespace Sdl.Community.MtEnhancedProvider.Model.Interface
 		string JsonFilePath { get; set; }
 		string ProjectName { get; set; }
 		string GlossaryPath { get; set; }
+		string PeUrl { get; set; } // Microsoft private endpont url
 		string ApiKey { get; set; } //Google Key
 		string ClientId { get; set; } // Microsoft key
 		string Region { get; set; } // Microsoft Region
