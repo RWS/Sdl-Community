@@ -9,8 +9,8 @@
              xmlns:uiHelpers ="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
              xmlns:converters ="clr-namespace:MicrosoftTranslatorProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             mc:Ignorable="d"
+             Height="450" Width="800"
 			 Background="White">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -27,15 +27,40 @@
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="25"/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition Height="25"/>
+			<RowDefinition Height="25"/>
 		</Grid.RowDefinitions>
 
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="25"/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition Width="25"/>
+		</Grid.ColumnDefinitions>
+
+		<GroupBox HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Grid.Row="1" Grid.Column="1"
+                  Grid.RowSpan="5" Grid.ColumnSpan="4">
+			<GroupBox.Header>
+				<Image Source="../Resources/mtspcredlogo.png"
+                       Width="300"
+                       Height="50"/>
+			</GroupBox.Header>
+		</GroupBox>
+
 		<!-- Advanced settings -->
-		<StackPanel Grid.Row="0">
+		<StackPanel Grid.Row="1" Grid.Column="4">
 			<Button Style="{StaticResource TransparentButtonStyle}"
 					Command="{Binding ShowSettingsCommand}"
-					Padding="0 16 8 0">
+					Padding="0 40 0 0">
 				<DockPanel>
 					<Image Source="../Resources/Setting.png" Width="auto" Height="15"/>
 					<TextBlock Text="{x:Static microsofttp:PluginResources.SettingsText}"
@@ -45,85 +70,116 @@
 		</StackPanel>
 		<!-- Advanced settings -->
 
-		<StackPanel Grid.Row="1"
-		            Visibility="Visible"
-					HorizontalAlignment="Left"
-					Margin="36 20 0 36">
-
-			<!-- API Key -->
-			<StackPanel>
-				<TextBlock Text="{x:Static microsofttp:PluginResources.MicrosoftApiDescription}"
-						   Margin="2 0 0 0"/>
+		<!--MTP API KEY-->
+		<StackPanel Grid.Row="2"
+                    Grid.Column="1" Grid.ColumnSpan="2"
+                    Margin="16 0 16 0">
+			<TextBlock Text="{x:Static microsofttp:PluginResources.MicrosoftApiDescription}"
+                       FontSize="16"/>
+			<StackPanel HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+						Margin="0 2 0 0">
 				<controls:BindablePasswordBox Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
 											  Password="{Binding ClientID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-											  HorizontalAlignment="Left"
-											  Width="260"/>
+											  VerticalContentAlignment="Center"
+											  Padding="8 0 8 0"/>
 				<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding PersistMicrosoftKey}"
 						  Content="{x:Static microsofttp:PluginResources.PersistMicrosoft}"
-						  HorizontalAlignment="Left"
-						  Margin="0 1 1 0"/>
+						  Margin="-1 2 0 0"/>
 			</StackPanel>
-			<!-- API Key -->
+		</StackPanel>
+		<!--MTP API KEY-->
 
-			<!-- Region & CategoryID -->
+		<!--REGION-->
+		<StackPanel Grid.Row="3"
+                  Grid.Column="1" Grid.ColumnSpan="2"
+                  Margin="16 0 16 0">
 
-			<!-- Region -->
-			<StackPanel Margin="0 16 0 0">
+			<StackPanel Orientation="Horizontal"
+						Margin="0 0 0 2">
+				<TextBlock Text="{x:Static microsofttp:PluginResources.ProviderControl_RegionFieldName}" FontSize="16"/>
+				<Image Source="../Resources/Information.png"
+					   Width="14"
+					   Margin="4 4 0 0"
+                       ToolTip="{x:Static microsofttp:PluginResources.ProviderControl_RegionToolTip}"/>
+			</StackPanel>
 
-				<StackPanel Orientation="Horizontal"
-							Margin="2 0 0 0">
-					<TextBlock Text="{x:Static microsofttp:PluginResources.MSSubscriptionRegionLabel}"
-						   Margin="0 0 0 0"/>
-					<Image Source="../Resources/Information.png"
-						   Width="15"
-						   Margin="4 2 0 0"
-						   ToolTipService.Placement="Bottom">
-						<Image.ToolTip>
-							<TextBlock Text="{x:Static microsofttp:PluginResources.MSTPRegionTooltip}"
-									   TextWrapping="Wrap" Width="200"/>
-						</Image.ToolTip>
-					</Image>
-				</StackPanel>
-				
+			<StackPanel HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 				<ComboBox ItemsSource="{Binding Regions, Mode=OneWay}"
 						  SelectedItem="{Binding Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						  DisplayMemberPath="Name"
-						  HorizontalAlignment="Left"
-						  HorizontalContentAlignment="Center"
-						  Width="160"/>
-			</StackPanel>
-			<!-- Region -->
+						  Height="24"
+                          VerticalContentAlignment="Center"
+                          Padding="8 0 8 0"/>
 
-			<!-- CategoryID -->
-			<StackPanel Margin="0 24 0 0">
-				<StackPanel Orientation="Horizontal"
-							Margin="0 0 0 2">
-					<CheckBox Content="{x:Static microsofttp:PluginResources.CatIdDescription}"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  IsChecked="{Binding UseCategoryID, Mode=TwoWay}"
-						  Margin="0 0 0 0"/>
-					
-					<Image Source="../Resources/Information.png"
-						   Width="15"
-						   Margin="4 0 0 0"
-						   ToolTipService.Placement="Bottom">
-						<Image.ToolTip>
-							<TextBlock Text="{x:Static microsofttp:PluginResources.MSTPCategoryTooltip}"
-									   TextWrapping="Wrap" Width="200"/>
-						</Image.ToolTip>
-					</Image>
-				</StackPanel>
-					<TextBox Text="{Binding CategoryID}"
+				<TextBlock Foreground="#FF8C71C9"
+						   Text="{x:Static microsofttp:PluginResources.ProviderControl_RegionLearnMore}">
+                   		<Hyperlink NavigateUri="https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/change-organization-location?view=azure-devops/"
+						           Command="{Binding LearnMoreCommand}" 
+						           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+							<TextBlock Text="here"/>
+						</Hyperlink>
+				</TextBlock>
+
+			</StackPanel>
+		</StackPanel>
+		<!--REGION-->
+
+		<!--CATEGORY ID-->
+		<StackPanel Grid.Row="4"
+                  Grid.Column="1" Grid.ColumnSpan="2"
+                  Margin="16 0 16 0">
+
+			<StackPanel Orientation="Horizontal">
+
+				<CheckBox IsChecked="{Binding UseCategoryID, Mode=TwoWay}"
+						  VerticalContentAlignment="Center"
+						  Padding="4 0 0 2">
+					<CheckBox.Content>
+						<TextBlock Text="{x:Static microsofttp:PluginResources.ProviderControl_CategoryFieldName}"
+								   FontSize="16"/>
+					</CheckBox.Content>
+				</CheckBox>
+
+				<Image Source="../Resources/Information.png"
+					   Width="14"
+					   Margin="4 2 0 0"
+                       ToolTip="{x:Static microsofttp:PluginResources.ProviderControl_CategoryToolTip}"/>
+			</StackPanel>
+
+			<StackPanel HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+
+				<TextBox Text="{Binding CategoryID}"
 						 Style="{StaticResource WatermarkTextBox}"
 						 IsEnabled="{Binding UseCategoryID,Converter={StaticResource InvertableBoolEnabledConverter}}"
 						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Category ID"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="CategoryID"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-						 HorizontalAlignment="Left"
-						 Width="160" Margin="0 0 0 0"/>
+						 Height="24"
+                         VerticalContentAlignment="Center"
+                         Padding="8 0 8 0"/>
+
+				<TextBlock Foreground="#FF8C71C9"
+						   Text="{x:Static microsofttp:PluginResources.ProviderControl_CategoryLearnMore}">
+					    <Hyperlink NavigateUri="https://learn.microsoft.com/en-us/azure/cognitive-services/translator/custom-translator/overview/"
+						           Command="{Binding LearnMoreCommand}" 
+						           CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+							<TextBlock>here</TextBlock>
+						</Hyperlink>
+				</TextBlock>
+
 			</StackPanel>
-			<!-- CategoryID -->
+
 		</StackPanel>
+		<!--CATEGORY ID-->
+
+		<Image Source="../Resources/rwslogo.png"
+                   Grid.Row="2" Grid.Column="3"
+                   Grid.RowSpan="3" Grid.ColumnSpan="2"
+                   Width="200"
+               Margin="0 0 0 32"/>
 	</Grid>
 </UserControl>

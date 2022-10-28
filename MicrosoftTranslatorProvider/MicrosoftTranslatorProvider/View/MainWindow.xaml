@@ -13,8 +13,8 @@
 		xmlns:converters ="clr-namespace:MicrosoftTranslatorProvider.Converters"
         Icon="../Resources/my_icon.ico"
 		WindowStyle="None" ResizeMode="NoResize"
-		Title="Microsoft Translator Provider" Height="620" Width="800"
-        d:DesignHeight="450" d:DesignWidth="800">
+		Title="Microsoft Translator Provider"
+        Height="550" Width="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -34,8 +34,9 @@
 		</ResourceDictionary>
 		
 	</Window.Resources>
+	
 	<Border Style="{StaticResource WindowControlBorderStyle}">
-		<Grid Margin="1,0,0,0">
+		<Grid Margin="0,0,0,0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="35" />
 				<RowDefinition Height="auto"/>
@@ -45,16 +46,14 @@
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl Grid.Row="0" Background="White" />
 			
-			<StackPanel Grid.Row="1" Margin="10,10,10,0">
+			<StackPanel Grid.Row="1">
 				<ContentControl Content="{Binding SelectedView.ViewModel}"/>
 				<TextBlock 
 					Text="{Binding ErrorMessage}"
 					Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
 					Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-					Margin="10 5 0 0"
 					FontSize="12"/>
 				<WebBrowser
-					Margin="5"
 					Height="30" 
 					behaviours:WebBrowserContentSource.Html ="{Binding TranslatorErrorResponse,UpdateSourceTrigger=PropertyChanged}"
 					Visibility="{Binding TranslatorErrorResponse,Converter={StaticResource EmptyToVisibilityConverter}}"/>

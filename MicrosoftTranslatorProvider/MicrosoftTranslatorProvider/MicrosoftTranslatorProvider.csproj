@@ -13,8 +13,10 @@
 	  <None Remove="Resources\Download.ico" />
 	  <None Remove="Resources\ForumIcon.ico" />
 	  <None Remove="Resources\Information.png" />
+	  <None Remove="Resources\mtspcredlogo.png" />
 	  <None Remove="Resources\my_icon.ico" />
 	  <None Remove="Resources\Question.ico" />
+	  <None Remove="Resources\rwslogo.png" />
 	  <None Remove="Resources\Setting.png" />
 	  <None Remove="Resources\Settings.ico" />
 	  <None Remove="Styles\Buttons.xaml" />
@@ -171,12 +173,14 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\Information.png" />
+	  <Resource Include="Resources\mtspcredlogo.png" />
 	  <Resource Include="Resources\my_icon.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\Question.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
+	  <Resource Include="Resources\rwslogo.png" />
 	  <Resource Include="Resources\Setting.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>

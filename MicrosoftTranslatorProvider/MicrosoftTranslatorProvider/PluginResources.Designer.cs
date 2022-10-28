@@ -602,6 +602,60 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Category ID.
+        /// </summary>
+        public static string ProviderControl_CategoryFieldName {
+            get {
+                return ResourceManager.GetString("ProviderControl_CategoryFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn more about categories .
+        /// </summary>
+        public static string ProviderControl_CategoryLearnMore {
+            get {
+                return ResourceManager.GetString("ProviderControl_CategoryLearnMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable this option if you want to use the cateogory ID for your Custom Translator..
+        /// </summary>
+        public static string ProviderControl_CategoryToolTip {
+            get {
+                return ResourceManager.GetString("ProviderControl_CategoryToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string ProviderControl_RegionFieldName {
+            get {
+                return ResourceManager.GetString("ProviderControl_RegionFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn more about regions .
+        /// </summary>
+        public static string ProviderControl_RegionLearnMore {
+            get {
+                return ResourceManager.GetString("ProviderControl_RegionLearnMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the region that corresponds to your Azure account..
+        /// </summary>
+        public static string ProviderControl_RegionToolTip {
+            get {
+                return ResourceManager.GetString("ProviderControl_RegionToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Question {

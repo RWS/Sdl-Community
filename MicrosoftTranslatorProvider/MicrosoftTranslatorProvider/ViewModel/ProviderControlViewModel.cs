@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
@@ -32,6 +33,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private string _glossaryPath;
 
 		private ICommand _clearCommand;
+		private ICommand _learnMoreCommand;
 
 		public ProviderControlViewModel(ITranslationOptions options, RegionsProvider regionsProvider)
 		{
@@ -42,6 +44,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		}
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+		public ICommand LearnMoreCommand => _learnMoreCommand ??= new RelayCommand(NavigateTo);
 
 		private void InitializeComponent()
 		{
@@ -75,7 +78,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			SetTranslationOption();
 		}
 
-
 		private void Clear(object obj)
 		{
 			if (obj is not string objectName)
@@ -101,6 +103,17 @@ namespace MicrosoftTranslatorProvider.ViewModel
 					GlossaryPath = string.Empty;
 					break;
 			}
+		}
+
+		private void NavigateTo(object obj)
+		{
+			var value = obj.ToString().Trim();
+			if (string.IsNullOrEmpty(value))
+			{
+				return;
+			}
+
+			Process.Start(value);
 		}
 
 		public BaseModel ViewModel { get; set; }

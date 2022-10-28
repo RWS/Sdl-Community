@@ -9,7 +9,8 @@
              xmlns:uiHelpers ="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
              d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             Height="450" Width="800"
+			 Background="White">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -23,7 +24,7 @@
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
+	<Grid Margin="20 40 20 20">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
@@ -41,10 +42,6 @@
 					<TextBlock Text="{x:Static mtEnhanced:PluginResources.BackBtnText}" FontSize="12" Margin="5,0,0,0"/>
 				</DockPanel>
 			</Button>
-			<TextBlock Style="{StaticResource Sdl.TextBlock.TitleStyle}"
-			           Text="{x:Static mtEnhanced:PluginResources.SettingsViewTitle}"
-			           HorizontalAlignment="Center"
-			           FontSize="14"/>
 		</Grid>
 		
 		<StackPanel Grid.Row="1" Margin="10">
