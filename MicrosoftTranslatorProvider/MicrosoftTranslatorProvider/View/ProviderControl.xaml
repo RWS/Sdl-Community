@@ -50,9 +50,8 @@
                   Grid.Row="1" Grid.Column="1"
                   Grid.RowSpan="5" Grid.ColumnSpan="4">
 			<GroupBox.Header>
-				<Image Source="../Resources/mtspcredlogo.png"
-                       Width="300"
-                       Height="50"/>
+				<Image Source="../Resources/microsofttranslatorproviderlogo.png"
+					   Height="60"/>
 			</GroupBox.Header>
 		</GroupBox>
 

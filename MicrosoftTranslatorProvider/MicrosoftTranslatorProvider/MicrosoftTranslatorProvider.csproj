@@ -13,7 +13,7 @@
 	  <None Remove="Resources\Download.ico" />
 	  <None Remove="Resources\ForumIcon.ico" />
 	  <None Remove="Resources\Information.png" />
-	  <None Remove="Resources\mtspcredlogo.png" />
+	  <None Remove="Resources\microsofttranslatorproviderlogo.png" />
 	  <None Remove="Resources\my_icon.ico" />
 	  <None Remove="Resources\Question.ico" />
 	  <None Remove="Resources\rwslogo.png" />
@@ -135,34 +135,6 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
-	  <Page Include="Styles\General.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Include="Styles\WindowsBorder.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Include="Styles\WindowsControl.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
-	  <Page Include="Styles\Buttons.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Include="UiHelpers\WatermarkTextBoxResources.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Include="View\MainWindow.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Include="View\ProviderControl.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <Page Include="View\SettingsControl.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	</ItemGroup>
-	<ItemGroup>
 	  <Resource Include="Resources\backImg.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
@@ -173,7 +145,7 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\Information.png" />
-	  <Resource Include="Resources\mtspcredlogo.png" />
+	  <Resource Include="Resources\microsofttranslatorproviderlogo.png" />
 	  <Resource Include="Resources\my_icon.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
