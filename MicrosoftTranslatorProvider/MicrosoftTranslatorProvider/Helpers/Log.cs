@@ -23,7 +23,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 
 			var target = new FileTarget
 			{
-				Name = "MTEnhancedProvider",
+				Name = "MicrosoftTranslatorProvider",
 				FileName = Path.Combine(logDirectoryPath, PluginResources.LogsFileName),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};

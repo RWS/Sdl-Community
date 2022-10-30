@@ -24,10 +24,11 @@ namespace MicrosoftTranslatorProvider.Behaviours
 
 		static void OnHtmlChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
+			var eValue = e.NewValue as string;
 			if (obj is WebBrowser webBrowser
-				&& !string.IsNullOrEmpty(e.NewValue.ToString()))
+				&& !string.IsNullOrEmpty(eValue))
 			{
-				webBrowser.NavigateToString(e.NewValue as string);
+				webBrowser.NavigateToString(eValue);
 			}
 		}
 	}
