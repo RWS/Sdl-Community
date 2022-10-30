@@ -6,5 +6,7 @@
 		public const string MicrosoftProviderServiceUriBase = "api.cognitive.microsoft.com";
 		public const string MicrosoftProviderUriScheme = "mtenhancedprovidermst:///";
 		public const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
+
+		public const string MicrosoftTranslatorString = "Microsoft Translator";
 	}
 }

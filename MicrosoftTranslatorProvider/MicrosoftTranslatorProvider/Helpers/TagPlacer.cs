@@ -165,7 +165,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 					continue;
 				}
 
-				_currentTag = new MTETag((Tag)elements[i].Duplicate()); // .Duplicate()?
+				_currentTag = new MTETag((Tag)elements[i].Duplicate());
 				UpdateTagsInfo(i);
 				var tagText = ConvertTagToString();
 				PreparedSourceText += tagText;
@@ -182,7 +182,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 			}
 
 			return _currentTag.SdlTag.Type switch
-			{ // there are some TagTypes left: Undefined, UnmatchedStart, UnmatchedEnd
+			{ // Undefined, UnmatchedStart, UnmatchedEnd ?
 				TagType.Start => $"<tg{tagInfo.TagId}>",
 				TagType.End => $"</tg{tagInfo.TagId}>",
 				TagType.Standalone => $"<tg{tagInfo.TagId}/>",

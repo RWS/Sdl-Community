@@ -8,14 +8,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 	public interface IProviderControlViewModel
 	{
-		BaseModel ViewModel { get; set; }
-		
-		ICommand ShowSettingsCommand { get; set; }
-		
-		List<TranslationOption> TranslationOptions { get; set; }
-		
-		TranslationOption SelectedTranslationOption { get; set; }
-		
 		bool IsMicrosoftSelected { get; set; }
 		
 		bool UseCategoryID { get; set; }
@@ -30,8 +22,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		
 		string ClientID { get; set; }
 
-		RegionSubscription Region { get; set; }
-
 		string JsonFilePath { get; set; }
 		
 		string ProjectName { get; set; }
@@ -41,6 +31,16 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		string GlossaryId { get; set; }
 		
 		string GlossaryPath { get; set; }
+
+		BaseModel ViewModel { get; set; }
+		
+		RegionSubscription Region { get; set; }
+		
+		List<TranslationOption> TranslationOptions { get; set; }
+		
+		TranslationOption SelectedTranslationOption { get; set; }
+		
+		ICommand ShowSettingsCommand { get; set; }
 		
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}

@@ -344,4 +344,22 @@ It must be the same region you selected when you signed up for your multi-servic
   <data name="lookupFileStructureCheckGenericErrorMessage" xml:space="preserve">
     <value>There was a problem with the selected file:</value>
   </data>
+  <data name="ProviderControl_RegionFieldName" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="ProviderControl_RegionLearnMore" xml:space="preserve">
+    <value>Learn more about regions </value>
+  </data>
+  <data name="ProviderControl_RegionToolTip" xml:space="preserve">
+    <value>Select the region that corresponds to your Azure account.</value>
+  </data>
+  <data name="ProviderControl_CategoryFieldName" xml:space="preserve">
+    <value>Category ID</value>
+  </data>
+  <data name="ProviderControl_CategoryLearnMore" xml:space="preserve">
+    <value>Learn more about categories </value>
+  </data>
+  <data name="ProviderControl_CategoryToolTip" xml:space="preserve">
+    <value>Enable this option if you want to use the cateogory ID for your Custom Translator.</value>
+  </data>
 </root>

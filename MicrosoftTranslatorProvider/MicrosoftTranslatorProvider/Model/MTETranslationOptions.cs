@@ -9,11 +9,8 @@ namespace MicrosoftTranslatorProvider.Model
 {
 	public class MTETranslationOptions : ITranslationOptions
 	{
-		private const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
-
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 		private readonly TranslationProviderUriBuilder _uriBuilder;
-
 		private string _clientID;
 
 		public MTETranslationOptions()
@@ -55,12 +52,14 @@ namespace MicrosoftTranslatorProvider.Model
 			get => ToBoolean(usePreEdit);
 			set => usePreEdit = value.ToString();
 		}
+
 		[JsonIgnore]
 		public bool UsePostEdit
 		{
 			get => ToBoolean(usePostEdit);
 			set => usePostEdit = value.ToString();
 		}
+
 		[JsonIgnore]
 		public bool BasicCsv
 		{
@@ -75,12 +74,14 @@ namespace MicrosoftTranslatorProvider.Model
 			set => SetStringParameter("usepreedit", value);
 		}
 		[JsonIgnore]
+
 		private string usePostEdit
 		{
 			get => GetStringParameter("usepostedit");
 			set => SetStringParameter("usepostedit", value);
 		}
 		[JsonIgnore]
+
 		public string PreLookupFilename
 		{
 			get => GetStringParameter("prelookupfilename");
@@ -99,12 +100,14 @@ namespace MicrosoftTranslatorProvider.Model
 			get => GetStringParameter("postlookupfilename");
 			set => SetStringParameter("postlookupfilename", value);
 		}
+
 		[JsonIgnore]
 		public string JsonFilePath
 		{
 			get => GetStringParameter("jsonfilepath");
 			set => SetStringParameter("jsonfilepath", value);
 		}
+
 		[JsonIgnore]
 		public string ProjectName
 		{
@@ -132,23 +135,6 @@ namespace MicrosoftTranslatorProvider.Model
 			None = 0
 		}
 
-		public static string GetProviderTypeDescription(ProviderType type)
-		{
-			return type == ProviderType.MicrosoftTranslator ? MsTranslatorString : string.Empty;
-		}
-
-		public static ProviderType GetProviderType(string typeString)
-		{
-			//we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
-			//the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator'
-			//...they both leave it untranslated in their documentation in other languages
-			if (typeString is null)
-			{
-				return ProviderType.MicrosoftTranslator;
-			}
-			return typeString.Equals(MsTranslatorString) ? ProviderType.MicrosoftTranslator : ProviderType.None;
-		}
-
 		[JsonIgnore]
 		public ProviderType SelectedProvider
 		{
@@ -161,7 +147,6 @@ namespace MicrosoftTranslatorProvider.Model
 		}
 
 		[JsonIgnore]
-		//User for Microsoft authentication
 		public string ClientID
 		{
 			get => _clientID;
@@ -222,6 +207,23 @@ namespace MicrosoftTranslatorProvider.Model
 		{
 			var paramString = _uriBuilder[p];
 			return paramString;
+		}
+
+		public static string GetProviderTypeDescription(ProviderType type)
+		{
+			return type == ProviderType.MicrosoftTranslator ? Constants.MicrosoftTranslatorString : string.Empty;
+		}
+
+		public static ProviderType GetProviderType(string typeString)
+		{
+			//we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
+			//the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator'
+			//...they both leave it untranslated in their documentation in other languages
+			if (typeString is null)
+			{
+				return ProviderType.MicrosoftTranslator;
+			}
+			return typeString.Equals(Constants.MicrosoftTranslatorString) ? ProviderType.MicrosoftTranslator : ProviderType.None;
 		}
 	}
 }

@@ -19,14 +19,8 @@ using RestSharp;
 
 namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 {
-	internal class ProviderConnecter
+	public class ProviderConnecter
 	{
-		/*
-		 * change the async func to normal one?
-		 * useless public functions?
-		 * internal -> public?
-		 */
-
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly HtmlUtil _htmlUtil;
 
@@ -35,7 +29,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 		private string _authToken;
 		private List<string> _supportedLanguages;
 
-		internal ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
+		public ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
@@ -50,7 +44,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_authToken = GetAuthToken();
 		}
 
-		internal void ResetCredentials(string subscriptionKey, string region)
+		public void ResetCredentials(string subscriptionKey, string region)
 		{
 			if (subscriptionKey == _subscriptionKey
 				&& region == _region)
@@ -64,7 +58,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_supportedLanguages = GetSupportedLanguages();
 		}
 
-		internal bool IsSupportedLanguagePair(string sourceLanguage, string tarrgetLanguage)
+		public bool IsSupportedLanguagePair(string sourceLanguage, string tarrgetLanguage)
 		{
 			sourceLanguage = ConvertLanguageCode(sourceLanguage);
 			tarrgetLanguage = ConvertLanguageCode(tarrgetLanguage);
@@ -82,7 +76,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			return false;
 		}
 
-		internal string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
+		public string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
 		{
 			_authToken ??= GetAuthToken();
 			if (_authToken is null)

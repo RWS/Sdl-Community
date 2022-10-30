@@ -8,8 +8,8 @@ namespace MicrosoftTranslatorProvider.Model
 
 		public int Index { get; set; }
 
-		public TagType TagType { get; set; }
-
 		public bool IsClosed { get; set; }
+
+		public TagType TagType { get; set; }
 	}
 }
