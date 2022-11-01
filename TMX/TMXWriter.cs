@@ -4,10 +4,13 @@ using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using System.Collections;
+using Sdl.Community.FileType.TMX.Settings;
+using Sdl.Core.Settings;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace Sdl.Community.FileType.TMX
 {
-    class TMXWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware
+    class TMXWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware, ISettingsAware
     {
 
         private IPersistentFileConversionProperties _originalFileProperties;
@@ -16,6 +19,7 @@ namespace Sdl.Community.FileType.TMX
         private TMXTextExtractor _textExtractor;
         private XmlNodeList nodeList;
         private string lastTargetFile;
+        private WriterSettings _writerSettings;
 
         public void GetProposedOutputFileInfo(IPersistentFileConversionProperties fileProperties, IOutputFileInfo proposedFileInfo)
         {
@@ -59,7 +63,21 @@ namespace Sdl.Community.FileType.TMX
             CreateParagraphUnit(paragraphUnit, xmlUnit);
         }
 
+        private void UpdateSegmentAttributes(XmlNode node, ISegment segment)
+        {
+	        var author = _textExtractor.TryGetAuthor(segment);
+	        var modifiedDate = _textExtractor.TryGetModifiedDate(segment);
+	        if (author != null && (_writerSettings?.WriteUserID ?? false))
+	        {
+		        (node as XmlElement).SetAttribute("changeid", author);
+	        }
 
+	        if (modifiedDate != null && (_writerSettings?.WriteChangeDate ?? false))
+	        {
+				var dateIso8601 = modifiedDate.Value.ToString("yyyyMMddTHHmmssZ");
+		        (node as XmlElement).SetAttribute("changedate", dateIso8601);
+	        }
+		}
 
         private void CreateParagraphUnit(IParagraphUnit paragraphUnit, XmlNode xmlUnit)
         {
@@ -70,8 +88,9 @@ namespace Sdl.Community.FileType.TMX
 
                 XmlNode target = xmlUnit.SelectSingleNode("./tuv[2]/seg");
                 target.InnerXml = _textExtractor.GetPlainText(segmentPair.Target);
+                UpdateSegmentAttributes(xmlUnit, segmentPair.Source);
 
-                if (xmlUnit.SelectNodes("prop[@type='x-ConfirmationLevel']").Count > 0)
+				if (xmlUnit.SelectNodes("prop[@type='x-ConfirmationLevel']").Count > 0)
                 {
                     xmlUnit.SelectSingleNode("prop[@type='x-ConfirmationLevel']").InnerText = UpdateEditedStatus(segmentPair.Properties.ConfirmationLevel);
                 }
@@ -131,8 +150,13 @@ namespace Sdl.Community.FileType.TMX
 
         public void Dispose()
         {
-            //don't need to dispose of anthing
+            //don't need to dispose of anything
         }
 
+        public void InitializeSettings(ISettingsBundle settingsBundle, string configurationId)
+        {
+	        _writerSettings = new WriterSettings();
+			_writerSettings.PopulateFromSettingsBundle(settingsBundle, configurationId);
+        }
     }
 }

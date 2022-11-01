@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Xml;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.FileType.TMX
@@ -40,13 +43,33 @@ namespace Sdl.Community.FileType.TMX
             set;
         }
 
+        private string TryGetMetadata(ISegment segment, string metadataName)
+        {
+	        var meta = segment.Properties?.TranslationOrigin?.MetaData;
+	        return meta?.FirstOrDefault(m => m.Key == metadataName).Value ?? null;
+        }
+
+        public string TryGetAuthor(ISegment segment)
+        {
+	        var author = TryGetMetadata(segment, "last_modified_by");
+	        return author;
+        }
+
+        public DateTime? TryGetModifiedDate(ISegment segment)
+        {
+	        var modifiedDateStr = TryGetMetadata(segment, "modified_on");
+	        if (modifiedDateStr != null && DateTime.TryParse(modifiedDateStr, out var modifiedDate))
+		        return modifiedDate;
+	        else
+		        return null;
+        }
+
         public string GetPlainText(ISegment segment)
         {
             PlainText = new StringBuilder("");
             VisitChildren(segment);
             
             string segContent = PlainText.ToString();
-
             return segContent;
         }
 
@@ -88,7 +111,6 @@ namespace Sdl.Community.FileType.TMX
 
         public void VisitLocationMarker(ILocationMarker location)
         {
-
         }
 
         public void VisitLockedContent(ILockedContent lockedContent)
@@ -108,7 +130,6 @@ namespace Sdl.Community.FileType.TMX
 
         public void VisitRevisionMarker(IRevisionMarker revisionMarker)
         {
-
         }
         #endregion
 
