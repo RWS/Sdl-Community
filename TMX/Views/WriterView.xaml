@@ -9,6 +9,12 @@
              d:DataContext="{d:DesignInstance viewModels:WriterViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-		<TextBlock Text="Settings Test" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<GroupBox Header="Saving Target File Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" >
+			<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical" Margin="10" >
+				<CheckBox Content="Save Current Date on each update." IsChecked="{Binding WriteChangeDate,Mode=TwoWay}"/>
+				<CheckBox Content="Save User's ID on each update." IsChecked="{Binding WriteUserID,Mode=TwoWay}"
+				          Margin="0 5 0 0"/>
+			</StackPanel>
+		</GroupBox>
     </Grid>
 </UserControl>

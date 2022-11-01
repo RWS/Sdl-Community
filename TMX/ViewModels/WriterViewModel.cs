@@ -12,29 +12,56 @@ namespace Sdl.Community.FileType.TMX.ViewModels
 	public class WriterViewModel : INotifyPropertyChanged
 	{
 		private WriterSettings _settings;
-		private string _test;
+		private bool _writeChangeDate = false;
+		private bool _writeUserId = false;
 
 		public WriterSettings Settings => _settings;
+		private bool _loaded;
 
 		public WriterViewModel(WriterSettings settings)
 		{
 			_settings = settings;
+			Load();
+			_loaded = true;
 		}
 
-		public string Test
+		public bool WriteChangeDate
 		{
-			get => _test;
+			get => _writeChangeDate;
 			set
 			{
-				if (value == _test) return;
-				_test = value;
+				if (value == _writeChangeDate) return;
+				_writeChangeDate = value;
 				OnPropertyChanged();
 			}
 		}
 
+		public bool WriteUserID
+		{
+			get => _writeUserId;
+			set
+			{
+				if (value == _writeUserId) return;
+				_writeUserId = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private void Load()
+		{
+			WriteChangeDate = Settings.WriteChangeDate;
+			WriteUserID = Settings.WriteUserID;
+		}
+
+		private void Save()
+		{
+			Settings.WriteChangeDate = WriteChangeDate;
+			Settings.WriteUserID = WriteUserID;
+		}
+
 		public WriterSettings ResetToDefaults()
 		{
-			// FIXME
+			Settings.ResetToDefaults();
 			return Settings;
 		}
 
@@ -42,6 +69,8 @@ namespace Sdl.Community.FileType.TMX.ViewModels
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
+			if (_loaded)
+				Save();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 

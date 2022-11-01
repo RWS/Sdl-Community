@@ -4,10 +4,13 @@ using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using System.Collections;
+using Sdl.Community.FileType.TMX.Settings;
+using Sdl.Core.Settings;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace Sdl.Community.FileType.TMX
 {
-    class TMXWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware
+    class TMXWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware, ISettingsAware
     {
 
         private IPersistentFileConversionProperties _originalFileProperties;
@@ -16,6 +19,7 @@ namespace Sdl.Community.FileType.TMX
         private TMXTextExtractor _textExtractor;
         private XmlNodeList nodeList;
         private string lastTargetFile;
+        private WriterSettings _writerSettings;
 
         public void GetProposedOutputFileInfo(IPersistentFileConversionProperties fileProperties, IOutputFileInfo proposedFileInfo)
         {
@@ -131,8 +135,13 @@ namespace Sdl.Community.FileType.TMX
 
         public void Dispose()
         {
-            //don't need to dispose of anthing
+            //don't need to dispose of anything
         }
 
+        public void InitializeSettings(ISettingsBundle settingsBundle, string configurationId)
+        {
+	        _writerSettings = new WriterSettings();
+			_writerSettings.PopulateFromSettingsBundle(settingsBundle, configurationId);
+        }
     }
 }
