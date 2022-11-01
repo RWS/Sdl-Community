@@ -731,7 +731,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This segment is already translated, source has not been sent for translation.
+        ///   Looks up a localized string similar to [segment already translated...source not re-sent].
         /// </summary>
         public static string TranslationLookupDraftNotResentMessage {
             get {

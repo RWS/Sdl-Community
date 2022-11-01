@@ -185,7 +185,7 @@
     <value>Credentials for Microsoft Translator...</value>
   </data>
   <data name="TranslationLookupDraftNotResentMessage" xml:space="preserve">
-    <value>This segment is already translated, source has not been sent for translation</value>
+    <value>[segment already translated...source not re-sent]</value>
   </data>
   <data name="UriNotSupportedMessage" xml:space="preserve">
     <value>Translation provider URI not supported.</value>
