@@ -63,7 +63,21 @@ namespace Sdl.Community.FileType.TMX
             CreateParagraphUnit(paragraphUnit, xmlUnit);
         }
 
+        private void UpdateSegmentAttributes(XmlNode node, ISegment segment)
+        {
+	        var author = _textExtractor.TryGetAuthor(segment);
+	        var modifiedDate = _textExtractor.TryGetModifiedDate(segment);
+	        if (author != null && (_writerSettings?.WriteUserID ?? false))
+	        {
+		        (node as XmlElement).SetAttribute("changeid", author);
+	        }
 
+	        if (modifiedDate != null && (_writerSettings?.WriteChangeDate ?? false))
+	        {
+				var dateIso8601 = modifiedDate.Value.ToString("yyyyMMddTHHmmssZ");
+		        (node as XmlElement).SetAttribute("changedate", dateIso8601);
+	        }
+		}
 
         private void CreateParagraphUnit(IParagraphUnit paragraphUnit, XmlNode xmlUnit)
         {
@@ -74,8 +88,9 @@ namespace Sdl.Community.FileType.TMX
 
                 XmlNode target = xmlUnit.SelectSingleNode("./tuv[2]/seg");
                 target.InnerXml = _textExtractor.GetPlainText(segmentPair.Target);
+                UpdateSegmentAttributes(xmlUnit, segmentPair.Source);
 
-                if (xmlUnit.SelectNodes("prop[@type='x-ConfirmationLevel']").Count > 0)
+				if (xmlUnit.SelectNodes("prop[@type='x-ConfirmationLevel']").Count > 0)
                 {
                     xmlUnit.SelectSingleNode("prop[@type='x-ConfirmationLevel']").InnerText = UpdateEditedStatus(segmentPair.Properties.ConfirmationLevel);
                 }
