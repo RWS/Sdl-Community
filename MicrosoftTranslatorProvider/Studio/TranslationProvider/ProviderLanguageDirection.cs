@@ -21,6 +21,7 @@ namespace MicrosoftTranslatorProvider
 		private ProviderConnecter _providerConnecter;
 		private MTESegmentEditor _postLookupSegmentEditor;
 		private MTESegmentEditor _preLookupSegmentEditor;
+		private TranslationUnit _inputTu;
 
 		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
 		{
@@ -51,9 +52,16 @@ namespace MicrosoftTranslatorProvider
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			var newSegment = segment.Duplicate();
 			var translation = new Segment(_languagePair.TargetCulture);
-			var searchResults = new SearchResults { SourceSegment = segment.Duplicate()};
+			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
+			if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
+			{
+				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+				searchResults.Add(CreateSearchResult(segment, translation));
+				return searchResults;
+			}
+
+			var newSegment = segment.Duplicate();
 			if (_options.SendPlainTextOnly || !newSegment.HasTags)
 			{
 				translation.Add(SearchSegmentOnTextOnly(newSegment));
@@ -115,20 +123,22 @@ namespace MicrosoftTranslatorProvider
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
+			_inputTu = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
 		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
 		{
 			var results = new SearchResults[translationUnits.Length];
-			for (var p = 0; p < translationUnits.Length; ++p)
+			for (var i = 0; i < translationUnits.Length; ++i)
 			{
-				if (translationUnits[p] is null)
+				if (translationUnits[i] is null)
 				{
 					continue;
 				}
 
-				results[p] = SearchSegment(settings, translationUnits[p].SourceSegment);
+				_inputTu = translationUnits[i];
+				results[i] = SearchSegment(settings, translationUnits[i].SourceSegment);
 			}
 
 			return results;
@@ -178,24 +188,23 @@ namespace MicrosoftTranslatorProvider
 			{
 				SourceSegment = searchSegment.Duplicate(),
 				TargetSegment = translation,
-				Origin = TranslationUnitOrigin.Nmt,
-				ConfirmationLevel = ConfirmationLevel.Draft
+				Origin = TranslationUnitOrigin.Nmt
 			};
 
 			translationUnit.ResourceId = new PersistentObjectToken(translationUnit.GetHashCode(), Guid.Empty);
-			return new SearchResult(translationUnit)
-			{
-				ScoringResult = new ScoringResult { BaseScore = 0 },
-				TranslationProposal = new TranslationUnit(translationUnit)
-			};
+			var searchResult = new SearchResult(translationUnit) { ScoringResult = new ScoringResult { BaseScore = 0 } };
+			translationUnit.ConfirmationLevel = ConfirmationLevel.Draft;
+			searchResult.TranslationProposal = new TranslationUnit(translationUnit);
+
+			return searchResult;
 		}
 
-		private string GetEditedString(Model.MTESegmentEditor editor, string sourcetext)
+		private string GetEditedString(MTESegmentEditor editor, string sourcetext)
 		{
 			return editor.EditText(sourcetext);
 		}
 
-		private Segment GetEditedSegment(Model.MTESegmentEditor editor, Segment inSegment)
+		private Segment GetEditedSegment(MTESegmentEditor editor, Segment inSegment)
 		{
 			var newSegment = new Segment(inSegment.Culture);
 			foreach (var element in inSegment.Elements)
