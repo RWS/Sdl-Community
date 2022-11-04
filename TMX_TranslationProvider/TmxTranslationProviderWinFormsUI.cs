@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -46,9 +47,17 @@ namespace TMX_TranslationProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
+			var fullFileName = new TmxTranslationsOptions(translationProviderUri).FileName;
+			var friendly = "";
+			if (File.Exists(fullFileName))
+			{
+				var fileName = Path.GetFileName(fullFileName);
+				var folder = Path.GetDirectoryName(fullFileName);
+				friendly = $" - {fileName} ({folder})";
+			}
 			return new TranslationProviderDisplayInfo
 			{
-				Name = PluginResources.Plugin_NiceName,
+				Name = $"{PluginResources.Plugin_NiceName} {friendly}",
 				TranslationProviderIcon = null,
 				TooltipText = PluginResources.Plugin_Tooltip,
 				SearchResultImage = null,

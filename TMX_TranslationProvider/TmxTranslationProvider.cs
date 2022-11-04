@@ -22,7 +22,7 @@ namespace TMX_TranslationProvider
 
 		public TmxTranslationProvider(TmxTranslationsOptions options)
 		{
-			_options = options.Clone();
+			_options = options;
 		}
 
 		public TmxTranslationsOptions Options

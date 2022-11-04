@@ -22,6 +22,7 @@ namespace TMX_TranslationProvider
 		public TmxTranslationsOptions()
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(new Uri($"{TmxTranslationProvider.ProviderScheme}://"));
+			FileName = ""; // just make sure file name is not null
 		}
 
 		[JsonIgnore]
