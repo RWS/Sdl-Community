@@ -120,20 +120,20 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 		{
 			try
 			{
-				FileBasedTranslationMemory tm = new FileBasedTranslationMemory(fileName);
-				RemapTMXSettings settings = (RemapTMXSettings)this.Control.Options;
+				var tm = new FileBasedTranslationMemory(fileName);
+				var settings = (RemapTMXSettings)Control.Options;
 
 				// check for unsupported languages
-				string culture = string.Empty;
-				bool containsUnsupported = false;
+				var culture = string.Empty;
+				var containsUnsupported = false;
 
-				if (this.notSupportedCultures.Contains(tm.LanguageDirection.SourceLanguage.Name))
+				if (notSupportedCultures.Contains(tm.LanguageDirection.SourceLanguage.Name))
 				{
 					culture = tm.LanguageDirection.SourceLanguage.EnglishName;
 					containsUnsupported = true;
 				}
 
-				if (this.notSupportedCultures.Contains(tm.LanguageDirection.TargetLanguage.Name))
+				if (notSupportedCultures.Contains(tm.LanguageDirection.TargetLanguage.Name))
 				{
 					culture = tm.LanguageDirection.TargetLanguage.EnglishName;
 					containsUnsupported = true;
@@ -151,16 +151,16 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 									MessageBoxDefaultButton.Button2);
 					if (result == DialogResult.No)
 					{
-						this.OnProgressChanged(100, string.Empty);
-						this.OnLogAddedChanged(string.Format(Properties.Resources.SkipTM, fileName));
+						OnProgressChanged(100, string.Empty);
+						OnLogAddedChanged(string.Format(Properties.Resources.SkipTM, fileName));
 						return;
 					}
 				}
 
-				this.OnProgressChanged(0, string.Format(Properties.Resources.TMExportStarted, fileName));
+				OnProgressChanged(0, string.Format(Properties.Resources.TMExportStarted, fileName));
 
 				// Export into TMX
-				TranslationMemoryExporter exporter = new TranslationMemoryExporter()
+				var exporter = new TranslationMemoryExporter()
 				{
 					ChunkSize = Sdl.LanguagePlatform.TranslationMemoryApi.TranslationMemoryExporter.DefaultTranslationUnitChunkSize,
 					TranslationMemoryLanguageDirection = tm.LanguageDirection
@@ -168,16 +168,16 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 
 				exporter.BatchExported += (object obj, BatchExportedEventArgs args) =>
 				{
-					StringBuilder info = new StringBuilder();
+					var info = new StringBuilder();
 
 					info.AppendLine(string.Format(Properties.Resources.TotalTUProcessed, args.TotalProcessed));
 					info.AppendLine(string.Format(Properties.Resources.TotalTUExported, args.TotalExported));
 
-					this.OnLogAddedChanged(info.ToString());
+					OnLogAddedChanged(info.ToString());
 					args.Cancel = false;
 				};
 
-				string targetTMXFile = string.Format(
+				var targetTMXFile = string.Format(
 					"{0}{1}{2}.tmx",
 					settings.TargetFolder,
 					Path.DirectorySeparatorChar,
@@ -187,39 +187,26 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 				// convert TMX into required format
 
 				var flavour = TranslationUnitFormat.TradosTranslatorsWorkbench;
-				string targetTMXFlavouredFile = string.Empty;
-				if (settings.SaveIntoTargetFolder)
-				{
-					targetTMXFlavouredFile = string.Format(
+				var targetTMXFlavouredFile = string.Format(
 					"{0}{1}{2}_Trados{3}.tmx",
-					Path.GetDirectoryName(fileName),
+					settings.SaveIntoTargetFolder ? Path.GetDirectoryName(fileName) : settings.TargetFolder,
 					Path.DirectorySeparatorChar,
 					Path.GetFileNameWithoutExtension(fileName),
 					Versions.ProductYear);
-				}
-				else
-				{
-					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados{3}.tmx",
-					settings.TargetFolder,
-					Path.DirectorySeparatorChar,
-					Path.GetFileNameWithoutExtension(fileName),
-					Versions.ProductYear);
-				}
 
-				this.Convert(targetTMXFile, targetTMXFlavouredFile, flavour);
-				this.OnProgressChanged(0, string.Empty);
-				this.OnLogAddedChanged(string.Format(Properties.Resources.TMXFlavouredConverted, targetTMXFile));
+				Convert(targetTMXFile, targetTMXFlavouredFile, flavour);
+				OnProgressChanged(0, string.Empty);
+				OnLogAddedChanged(string.Format(Properties.Resources.TMXFlavouredConverted, targetTMXFile));
 
 				File.Delete(targetTMXFile);
 
-				this.OnProgressChanged(100, string.Empty);
-				this.OnLogAddedChanged(string.Format(Properties.Resources.TMExportFinished, fileName));
+				OnProgressChanged(100, string.Empty);
+				OnLogAddedChanged(string.Format(Properties.Resources.TMExportFinished, fileName));
 			}
 			catch (Exception ex)
 			{
-				this.OnProgressChanged(0, string.Empty);
-				this.OnLogAddedChanged(string.Format(Properties.Resources.RemapException, ex.Message));
+				OnProgressChanged(0, string.Empty);
+				OnLogAddedChanged(string.Format(Properties.Resources.RemapException, ex.Message));
 			}
 		}
 
