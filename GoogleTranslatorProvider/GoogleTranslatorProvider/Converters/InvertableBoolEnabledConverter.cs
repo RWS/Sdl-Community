@@ -1,0 +1,25 @@
+﻿using System;
+using System.Globalization;
+using System.Security.Cryptography;
+using System.Windows.Data;
+
+namespace GoogleTranslatorProvider.Converters
+{
+	public class InvertableBoolEnabledConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			var boolValue = value != null && (bool)value;
+			if (parameter == null)
+			{
+				return boolValue;
+			}
+
+			var direction = (Parameters)Enum.Parse(typeof(Parameters), (string)parameter);
+			return direction == Parameters.Inverted ? !boolValue : (object)boolValue;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+			=> null;
+	}
+}
