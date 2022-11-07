@@ -92,7 +92,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Wizard
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackgroundImage = global::Sdl.Utilities.SplitSDLXLIFF.Wizard.Properties.Resources.sdlxliff_splitnmerge;
+            this.panel1.BackgroundImage = global::Sdl.Utilities.SplitSDLXLIFF.Wizard.Properties.Resources.SDL_logo;
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panel1.Location = new System.Drawing.Point(331, 10);
             this.panel1.Name = "panel1";
