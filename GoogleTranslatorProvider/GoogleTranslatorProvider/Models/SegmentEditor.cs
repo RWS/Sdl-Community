@@ -21,7 +21,6 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using GoogleTranslatorProvider.Studio;
 using NLog;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace GoogleTranslatorProvider.Models
 {

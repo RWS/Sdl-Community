@@ -10,10 +10,9 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
-using System.Xml.Linq;
+using LogManager = NLog.LogManager;
 
 namespace GoogleTranslatorProvider.GoogleAPI
 {

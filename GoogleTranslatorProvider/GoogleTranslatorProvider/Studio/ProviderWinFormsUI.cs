@@ -10,7 +10,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
-using Sdl.LanguagePlatform.TranslationMemory;
+using LogManager = NLog.LogManager;
 
 namespace GoogleTranslatorProvider.Studio
 {

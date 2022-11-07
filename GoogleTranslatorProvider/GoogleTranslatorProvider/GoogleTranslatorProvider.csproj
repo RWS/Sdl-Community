@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+		<SignAssembly>True</SignAssembly>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
-		<CreatePluginPackage>true</CreatePluginPackage>
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -21,21 +21,53 @@
     <None Remove="Resources\Settings.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -52,23 +84,21 @@
 	  <None Include="Properties\PluginProperties.cs" />
 	</ItemGroup>
   <ItemGroup>
-    <None Include="PluginResources.resx" />
+    <None Include="PluginResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </None>
     <None Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
+  	<PackageReference Include="Google.Cloud.Translate.V3" Version="3.0.0" />
+  	<PackageReference Include="RestSharp" Version="108.0.2" />
   	<PackageReference Include="Sdl.Core.PluginFramework">
   		<Version>2.1.0</Version>
   	</PackageReference>
   	<PackageReference Include="Sdl.Core.PluginFramework.Build">
   		<Version>17.0.0</Version>
   	</PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder - Copy %285%29\" />
-    <Folder Include="NewFolder - Copy %286%29\" />
-    <Folder Include="NewFolder - Copy %287%29\" />
-    <Folder Include="NewFolder - Copy %288%29\" />
-    <Folder Include="NewFolder - Copy %289%29\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\$this.Icon.ico" />
@@ -82,7 +112,15 @@
     <Resource Include="Resources\Setting.png" />
     <Resource Include="Resources\Settings.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="PluginResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
   <PropertyGroup>
-    <CreatePluginPackage>true</CreatePluginPackage>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   </Project>

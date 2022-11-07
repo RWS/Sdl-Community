@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using GoogleTranslatorProvider.Interfaces;
+﻿using GoogleTranslatorProvider.Interfaces;
 using Microsoft.Win32;
 
 namespace GoogleTranslatorProvider.Service

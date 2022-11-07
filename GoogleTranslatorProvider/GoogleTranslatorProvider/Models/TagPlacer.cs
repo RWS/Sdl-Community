@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using GoogleTranslatorProvider.Service;
 using NLog;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace GoogleTranslatorProvider.Models
 {

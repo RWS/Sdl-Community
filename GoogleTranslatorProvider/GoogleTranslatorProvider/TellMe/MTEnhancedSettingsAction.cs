@@ -1,8 +1,6 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using GoogleTranslatorProvider.Interfaces;
-using System.Xml.Linq;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
 using GoogleTranslatorProvider.ViewModels;

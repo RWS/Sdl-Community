@@ -2,13 +2,8 @@
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using NLog;
-using Sdl.LanguagePlatform.TranslationMemory;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
 

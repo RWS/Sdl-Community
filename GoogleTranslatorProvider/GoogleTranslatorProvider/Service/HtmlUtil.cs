@@ -1,5 +1,4 @@
 ﻿using NLog;
-using Sdl.LanguagePlatform.TranslationMemory;
 using System;
 using System.Reflection;
 using System.Web;

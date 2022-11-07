@@ -1,7 +1,6 @@
 ﻿using NLog;
 using NLog.Config;
 using NLog.Targets;
-using Sdl.LanguagePlatform.TranslationMemory;
 using System;
 using System.IO;
 
