@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Sdl.Community.Utilities.TMTool.Task;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 {
@@ -190,18 +191,20 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 				if (settings.SaveIntoTargetFolder)
 				{
 					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados2019.tmx",
+					"{0}{1}{2}_Trados{3}.tmx",
 					Path.GetDirectoryName(fileName),
 					Path.DirectorySeparatorChar,
-					Path.GetFileNameWithoutExtension(fileName));
+					Path.GetFileNameWithoutExtension(fileName),
+					Versions.ProductYear);
 				}
 				else
 				{
 					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados2019.tmx",
+					"{0}{1}{2}_Trados{3}.tmx",
 					settings.TargetFolder,
 					Path.DirectorySeparatorChar,
-					Path.GetFileNameWithoutExtension(fileName));
+					Path.GetFileNameWithoutExtension(fileName),
+					Versions.ProductYear);
 				}
 
 				this.Convert(targetTMXFile, targetTMXFlavouredFile, flavour);
