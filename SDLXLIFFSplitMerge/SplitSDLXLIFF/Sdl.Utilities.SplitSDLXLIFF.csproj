@@ -105,6 +105,9 @@
     <!--<Compile Include="..\..\..\Utilities\VersionInfo\UtilitiesVersionInfo.cs">
       <Link>UtilitiesVersionInfo.cs</Link>
     </Compile>-->
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
     <Compile Include="AppOptions.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
