@@ -6,11 +6,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.Utilities.TMTool;
-using System.Globalization;
-using System.Resources;
-using System.Reflection;
-using Sdl.Community.Utilities.TMTool.Tasks.RemapTMX;
-using System.Linq;
 
 namespace Sdl.Community.TranslationMemoryManagementUtility
 {
@@ -145,14 +140,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 
 		private string ValidateFiles()
 		{
-			if (_files.Count < 1)
-			{
-				return PluginResources.findFilesNotAdded;
-			}
-			else
-			{
-				return string.Empty;
-			}
+			return _files.Count < 1 ? PluginResources.findFilesNotAdded : string.Empty;
 		}
 
 		#region events
@@ -195,26 +183,24 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 
 		private void btnPerform_Click(object sender, EventArgs e)
 		{
-			ISettings taskOptions = _tManager.GetSelectedTaskSettings();
-			taskOptions.TargetFolder = ((RemapTMXSettings)taskOptions).SaveIntoTargetFolder ? Path.GetDirectoryName(_files.First()) : taskOptions.TargetFolder;
-			if (taskOptions != null)
+			var taskOptions = _tManager.GetSelectedTaskSettings();
+			if (taskOptions is null)
 			{
-				string errMsg = ValidateFiles();
-				if (errMsg.Length > 0 || !taskOptions.ValidateSettings(out errMsg))
-				{
-					MessageBox.Show(errMsg, PluginResources.Title);
-					return;
-				}
-
-				TMResultsForm results = new TMResultsForm(_files, _tManager.SelectedTask);
-				results.ShowDialog();
+				return;
 			}
+
+			var errMsg = ValidateFiles();
+			if (!errMsg.Equals(string.Empty) || !taskOptions.ValidateSettings(out errMsg))
+			{
+				MessageBox.Show(errMsg, PluginResources.Title);
+				return;
+			}
+
+			var results = new TMResultsForm(_files, _tManager.SelectedTask);
+			results.ShowDialog();
 		}
 
-		private void lvFiles_KeyDown(object sender, KeyEventArgs e)
-		{
-
-		}
+		private void lvFiles_KeyDown(object sender, KeyEventArgs e) { }
 
 		private void lvFiles_DragDrop(object sender, DragEventArgs e)
 		{

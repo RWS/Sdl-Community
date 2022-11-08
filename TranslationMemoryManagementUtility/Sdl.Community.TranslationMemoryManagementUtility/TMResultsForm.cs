@@ -53,16 +53,19 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 		private void SetTargetFolder()
 		{
 			btnOpenFolder.Visible = false;
-
-			ISettings settings = _task.Control.Options;
-			if (settings != null)
+			var settings = _task.Control.Options;
+			if (settings is null)
 			{
-				settings.TargetFolder = ((RemapTMXSettings)settings).SaveIntoTargetFolder ? Path.GetDirectoryName(_files.First()) : settings.TargetFolder;
-				if (settings.TargetFolder != null && settings.TargetFolder.Length > 0)
-				{
-					_targetFolder = settings.TargetFolder;
-					btnOpenFolder.Visible = true;
-				}
+				return;
+			}
+
+			var targetPath = ((RemapTMXSettings)settings).SaveIntoTargetFolder ? Path.GetDirectoryName(_files.FirstOrDefault())
+																			   : settings.TargetFolder;
+			settings.TargetFolder = targetPath;
+			if (!string.IsNullOrEmpty(settings.TargetFolder))
+			{
+				_targetFolder = settings.TargetFolder;
+				btnOpenFolder.Visible = true;
 			}
 		}
 
