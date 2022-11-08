@@ -15,6 +15,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Wizard
 		private System.Windows.Forms.Label titleLabel;
 		private System.Windows.Forms.Label subtitleLabel;
         private Sdl.Utilities.SplitSDLXLIFF.Wizard.EtchedLine etchedLine1;
+		private Panel panel1;
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
