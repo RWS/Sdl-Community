@@ -6,6 +6,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Newtonsoft.Json;
+using TMX_TranslationProvider.TmxFormat;
 
 namespace TMX_TranslationProvider
 {
@@ -19,6 +20,7 @@ namespace TMX_TranslationProvider
 
 		private TmxTranslationsOptions _options;
 		private TmxTranslationProviderLanguageDirection _languageDirection;
+		private TmxParser _parser;
 
 		public TmxTranslationProvider(TmxTranslationsOptions options)
 		{
@@ -30,6 +32,8 @@ namespace TMX_TranslationProvider
 			get => _options;
 			set => _options = value;
 		}
+
+		public TmxParser Parser => _parser;
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair pair)
 		{
@@ -47,6 +51,7 @@ namespace TMX_TranslationProvider
 		public void LoadState(string translationProviderState)
 		{
 			_options = JsonConvert.DeserializeObject<TmxTranslationsOptions>(translationProviderState);
+			_parser = _options.FileName != "" ? new TmxParser(_options.FileName) : null;
 		}
 
 		public string Name => PluginResources.Plugin_NiceName;

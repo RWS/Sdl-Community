@@ -12,6 +12,9 @@ namespace TMX_TranslationProvider.Search.Result
 {
 	internal class SimpleResult
 	{
+		// if !minvalue -> it's the time when this was translated
+		public DateTime TranslateTime = DateTime.MinValue;
+
 		public List<TextPart> Source = new List<TextPart>();
 		public List<TextPart> Target = new List<TextPart>();
 
@@ -22,8 +25,18 @@ namespace TMX_TranslationProvider.Search.Result
 		public TranslationUnitOrigin Origin = TranslationUnitOrigin.TM;
 		public int Score = 100;
 
+		public List<PenaltyType> Penalties = new List<PenaltyType>();
+
+		// more about Penalties: TranslationMemorySettings.cs:498
+		private void AddPenalty(SearchResult result, PenaltyType type, SearchSettings settings)
+		{
+			var penalty = settings.FindPenalty(type);
+			if (penalty != null)
+				result.ScoringResult.ApplyPenalty(penalty);
+		}
+
 		// FIXME tokenize it!
-		public SearchResult ToSearchResult(CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		public SearchResult ToSearchResult(SearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			var source = new Segment(sourceLanguage);
 			var target = new Segment(targetLanguage);
@@ -46,6 +59,9 @@ namespace TMX_TranslationProvider.Search.Result
 				},
 				TranslationProposal = tu,
 			};
+
+			foreach (var penalty in Penalties)
+				AddPenalty(sr, penalty, settings);
 
 			return sr;
 		}

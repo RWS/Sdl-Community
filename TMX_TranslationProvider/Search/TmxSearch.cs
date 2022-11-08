@@ -37,6 +37,26 @@ namespace TMX_TranslationProvider.Search
 
 		public SimpleResult TryTranslate(string sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, SearchMode searchMode)
 		{
+			// care about search mode!!!
+			/*
+  public enum SearchMode
+  {
+    ExactSearch,
+    NormalSearch,
+    FullSearch,
+    ConcordanceSearch,
+    TargetConcordanceSearch,
+    DuplicateSearch,
+    FuzzySearch,
+  }
+
+exact, normal, full, concordance, fuzzy
+			 */
+
+			// care about penalties - searchresult.ScoringResult.ApplyPenalty()
+
+			// TranslateTime -> Change or Create time
+
 			return null;
 		}
 	}
