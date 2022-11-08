@@ -58,6 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
     <Compile Include="TranslationMemoryProviderRibbon.cs" />
     <Compile Include="OptionsPanel.cs">
       <SubType>UserControl</SubType>
