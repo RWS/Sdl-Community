@@ -9,6 +9,8 @@ using Sdl.Utilities.TMTool;
 using System.Globalization;
 using System.Resources;
 using System.Reflection;
+using Sdl.Community.Utilities.TMTool.Tasks.RemapTMX;
+using System.Linq;
 
 namespace Sdl.Community.TranslationMemoryManagementUtility
 {
@@ -194,6 +196,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 		private void btnPerform_Click(object sender, EventArgs e)
 		{
 			ISettings taskOptions = _tManager.GetSelectedTaskSettings();
+			taskOptions.TargetFolder = ((RemapTMXSettings)taskOptions).SaveIntoTargetFolder ? Path.GetDirectoryName(_files.First()) : taskOptions.TargetFolder;
 			if (taskOptions != null)
 			{
 				string errMsg = ValidateFiles();
