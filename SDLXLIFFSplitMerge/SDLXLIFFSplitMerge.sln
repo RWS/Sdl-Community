@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.SplitMergeUIW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Utilities.SplitSDLXLIFF.Lib", "Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj", "{CF7D0374-46BF-4186-BB52-10C4210106E8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assembly", "Assembly", "{36CDD896-0435-48FB-B743-76D20704CE03}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionInfo.cs = SolutionInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
