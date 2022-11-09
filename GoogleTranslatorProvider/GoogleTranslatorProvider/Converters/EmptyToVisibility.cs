@@ -9,8 +9,9 @@ namespace GoogleTranslatorProvider.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			return string.IsNullOrEmpty(value?.ToString()) ? Visibility.Collapsed
-														   : Visibility.Visible;
+			var valueString = value.ToString();
+			return string.IsNullOrEmpty(valueString) ? Visibility.Collapsed
+													 : Visibility.Visible;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -10,13 +10,14 @@ namespace GoogleTranslatorProvider.Converters
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			var isEmpty = string.IsNullOrEmpty(value as string);
-			if (parameter == null)
+			if (parameter is null)
 			{
 				return isEmpty;
 			}
 
 			var direction = (Parameters)Enum.Parse(typeof(Parameters), (string)parameter);
-			return direction == Parameters.Inverted ? !isEmpty : isEmpty;
+			return direction == Parameters.Inverted ? !isEmpty
+													: isEmpty;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

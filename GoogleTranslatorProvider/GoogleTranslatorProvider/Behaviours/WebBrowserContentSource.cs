@@ -24,10 +24,11 @@ namespace GoogleTranslatorProvider.Behaviours
 
 		static void OnHtmlChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
+			var eNewValue = e.NewValue.ToString();
 			if (obj is WebBrowser webBrowser
-				&& !string.IsNullOrEmpty(e.NewValue.ToString()))
+				&& !string.IsNullOrEmpty(eNewValue))
 			{
-				webBrowser.NavigateToString(e.NewValue as string);
+				webBrowser.NavigateToString(eNewValue);
 			}
 		}
 	}

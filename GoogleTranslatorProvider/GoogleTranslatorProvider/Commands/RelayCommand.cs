@@ -24,12 +24,12 @@ namespace GoogleTranslatorProvider.Commands
 
 		public bool CanExecute(object parameter)
 		{
-			return canExecute is null || canExecute((object)parameter);
+			return canExecute is null || canExecute(parameter);
 		}
 
 		public void Execute(object parameter)
 		{
-			execute((object)parameter);
+			execute(parameter);
 		}
 	}
 
