@@ -19,7 +19,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Wizard.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -76,6 +76,16 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Wizard.Properties {
         internal static System.Drawing.Bitmap SDL_logo_color {
             get {
                 object obj = ResourceManager.GetObject("SDL_logo_color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sdlxliff_splitnmerge {
+            get {
+                object obj = ResourceManager.GetObject("sdlxliff_splitnmerge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

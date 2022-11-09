@@ -193,6 +193,9 @@
   <ItemGroup>
     <None Include="Resources\SDL_logo-02_png_2.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sdlxliff_splitnmerge.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent />
