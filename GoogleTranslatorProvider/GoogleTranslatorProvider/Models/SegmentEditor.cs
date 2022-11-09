@@ -1,18 +1,4 @@
-﻿/* Copyright 2015 Patrick Porter
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.*/
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -90,11 +76,11 @@ namespace GoogleTranslatorProvider.Models
 					var find = _edcoll.Items[i].FindText;
 					var replace = _edcoll.Items[i].ReplaceText;
 
-					if (_edcoll.Items[i].Type == EditItem.EditItemType.PlainText)
+					if (_edcoll.Items[i].Type == EditItemType.PlainText)
 					{
 						result = result.Replace(find, replace);
 					}
-					else if (_edcoll.Items[i].Type == EditItem.EditItemType.RegularExpression)
+					else if (_edcoll.Items[i].Type == EditItemType.RegularExpression)
 					{
 						var reg = new Regex(find);
 						result = reg.Replace(result, replace);

@@ -3,6 +3,7 @@
 	public class GoogleApiVersion
 	{
 		public string Name { get; set; }
-		public GoogleTranslatorProvider.ApiVersion Version { get; set; }
+
+		public ApiVersion Version { get; set; }
 	}
 }

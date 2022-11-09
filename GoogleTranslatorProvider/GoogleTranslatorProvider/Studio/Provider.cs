@@ -39,7 +39,7 @@ namespace GoogleTranslatorProvider.Studio
 		{
 			get
 			{
-				if (Options.SelectedProvider == GTPTranslationOptions.ProviderType.GoogleTranslate)
+				if (Options.SelectedProvider == ProviderType.GoogleTranslate)
 				{
 					return Options.SelectedGoogleVersion == ApiVersion.V2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
 				}

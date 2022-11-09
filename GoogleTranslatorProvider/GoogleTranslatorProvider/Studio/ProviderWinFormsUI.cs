@@ -96,7 +96,7 @@ namespace GoogleTranslatorProvider.Studio
 			info.TranslationProviderIcon = PluginResources.my_icon;
 			var options = new GTPTranslationOptions(translationProviderUri);
 
-			if (options.SelectedProvider == GTPTranslationOptions.ProviderType.GoogleTranslate)
+			if (options.SelectedProvider == ProviderType.GoogleTranslate)
 			{
 				if (options.SelectedGoogleVersion == ApiVersion.V2)
 				{
@@ -162,7 +162,7 @@ namespace GoogleTranslatorProvider.Studio
 		{
 			switch (options.SelectedProvider)
 			{
-				case GTPTranslationOptions.ProviderType.GoogleTranslate:
+				case ProviderType.GoogleTranslate:
 					SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriGt, options.ApiKey,
 						options.PersistGoogleKey);
 					break;

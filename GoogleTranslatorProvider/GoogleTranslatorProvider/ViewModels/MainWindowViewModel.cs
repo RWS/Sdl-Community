@@ -153,7 +153,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			switch (_providerControlViewModel.SelectedTranslationOption.ProviderType)
 			{
-				case GTPTranslationOptions.ProviderType.GoogleTranslate:
+				case ProviderType.GoogleTranslate:
 					if (!ValidGoogleOptions()) return false;
 					break;
 			}
@@ -265,7 +265,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private void DeleteCredentialsIfNecessary()
 		{
 			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-				GTPTranslationOptions.ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
+				ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
 			{
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriGt));
 			}

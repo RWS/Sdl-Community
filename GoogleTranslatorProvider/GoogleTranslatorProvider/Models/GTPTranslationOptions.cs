@@ -11,7 +11,6 @@ namespace GoogleTranslatorProvider.Models
 	public class GTPTranslationOptions : ITranslationOptions
 	{
 		private string _apiKey;
-		const string GTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
 		//The translation method affects when/if the plugin gets called by Studio
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
@@ -35,13 +34,6 @@ namespace GoogleTranslatorProvider.Models
 		{
 			get => GetStringParameter("sendplaintextonly");
 			set => SetStringParameter("sendplaintextonly", value);
-		}
-
-		[JsonIgnore]
-		private string UseCatId
-		{
-			get => GetStringParameter("usecatid");
-			set => SetStringParameter("usecatid", value);
 		}
 
 		[JsonIgnore]
@@ -135,36 +127,24 @@ namespace GoogleTranslatorProvider.Models
 			set => SetStringParameter("projectlocation", value);
 		}
 
-		public enum ProviderType
-		{
-			GoogleTranslate = 1,
-			None = 0
-		}
-
 		public static string GetProviderTypeDescription(ProviderType type)
 		{
-			switch (type)
+			return type switch
 			{
-				case ProviderType.GoogleTranslate:
-					return GTranslateString; //these strings should not be localized and are therefore hard-coded
-				default:
-					return "";
-			}
+				ProviderType.GoogleTranslate => Constants.GoogleTranslatorString,
+				_ => string.Empty
+			};
 		}
 
 		public static ProviderType GetProviderType(string typeString)
 		{
 			//we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
 			//the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator' ...they both leave it untranslated in their documentation in other languages
-			switch (typeString)
+			return typeString switch
 			{
-				case null:
-					return ProviderType.None;
-				case GTranslateString:
-					return ProviderType.GoogleTranslate;
-				default:
-					return ProviderType.None;
-			}
+				Constants.GoogleTranslatorString => ProviderType.GoogleTranslate,
+				_ => ProviderType.None
+			};
 		}
 
 		[JsonIgnore]
@@ -247,18 +227,6 @@ namespace GoogleTranslatorProvider.Models
 		{
 			get => ToBoolean(sendPlainTextOnly);
 			set => sendPlainTextOnly = value.ToString();
-		}
-		[JsonIgnore]
-		public bool UseCatID //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
-		{
-			get => ToBoolean(UseCatId);
-			set => UseCatId = value.ToString();
-		}
-		[JsonIgnore]
-		public string CatId
-		{
-			get => GetStringParameter("catid");
-			set => SetStringParameter("catid", value);
 		}
 
 		private void SetStringParameter(string p, string value)

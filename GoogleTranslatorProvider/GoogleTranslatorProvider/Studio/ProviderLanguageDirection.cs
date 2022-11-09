@@ -1,5 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using System;
+using System.Collections.Generic;
 using GoogleTranslatorProvider.GoogleAPI;
+using GoogleTranslatorProvider.Helpers;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
@@ -7,10 +9,6 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SegmentEditor = GoogleTranslatorProvider.Models.SegmentEditor;
 
 namespace GoogleTranslatorProvider.Studio
@@ -256,7 +254,7 @@ namespace GoogleTranslatorProvider.Studio
 				//return our tagged target segment
 				var tagplacer = new TagPlacer(newseg, _htmlUtil);
 				////tagplacer is constructed and gives us back a properly marked up source string for google
-				if (_options.SelectedProvider == GTPTranslationOptions.ProviderType.GoogleTranslate)
+				if (_options.SelectedProvider == ProviderType.GoogleTranslate)
 				{
 					translatedText = LookupGt(tagplacer.PreparedSourceText, _options, "html");
 				}
@@ -286,7 +284,7 @@ namespace GoogleTranslatorProvider.Studio
 				switch (_options.SelectedProvider)
 				{
 					//now do lookup
-					case GTPTranslationOptions.ProviderType.GoogleTranslate:
+					case ProviderType.GoogleTranslate:
 						translatedText = LookupGt(sourcetext, _options, "text");
 						break;
 					default:

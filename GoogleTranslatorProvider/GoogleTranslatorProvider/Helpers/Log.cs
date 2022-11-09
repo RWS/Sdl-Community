@@ -27,8 +27,6 @@ namespace GoogleTranslatorProvider.Helpers
 			var config = LogManager.Configuration;
 			config.AddTarget(target);
 			config.AddRuleForAllLevels(target, "*MtEnhanced*");
-
-			//NLog object
 			LogManager.ReconfigExistingLoggers();
 		}
 	}

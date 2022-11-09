@@ -49,7 +49,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				new TranslationOption
 				{
 					Name = PluginResources.Google,
-					ProviderType = GTPTranslationOptions.ProviderType.GoogleTranslate
+					ProviderType = ProviderType.GoogleTranslate
 				}
 			};
 
