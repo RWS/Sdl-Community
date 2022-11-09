@@ -126,7 +126,7 @@ namespace GoogleTranslatorProvider.Studio
 					_gtConnect.ApiKey = Options.ApiKey;
 				}
 
-				return _gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+				return _gtConnect.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 			}
 
 			_googleV3Connecter = new GoogleV3Connecter(Options);
