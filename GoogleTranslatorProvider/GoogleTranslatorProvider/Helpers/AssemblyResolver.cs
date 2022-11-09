@@ -8,23 +8,21 @@ namespace GoogleTranslatorProvider.Helpers
 {
 	public static class AssemblyResolver
 	{
-		public static List<string> AssemblyFolders = new List<string>();
+		private static List<string> assemblyFolders;
 
-		public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+		public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs e)
 		{
-			AssemblyFolders = AssemblyFolders.Distinct().ToList();
+			assemblyFolders = assemblyFolders.Distinct().ToList();
 			var binBath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)?.Substring(6);
-
 			var binFolder = new DirectoryInfo($"{binBath}");
-
-			var requestedAssembly = new AssemblyName(args.Name);
+			if (!assemblyFolders.Contains(binFolder.FullName))
+			{
+				assemblyFolders.Add(binFolder.FullName);
+			}
 
 			var files = new List<FileInfo>();
-
-			if (!AssemblyFolders.Contains(binFolder.FullName))
-				AssemblyFolders.Add(binFolder.FullName);
-
-			foreach (var assemblyFolder in AssemblyFolders)
+			var requestedAssembly = new AssemblyName(e.Name);
+			foreach (var assemblyFolder in assemblyFolders)
 			{
 				files.AddRange(new DirectoryInfo(assemblyFolder).GetFiles("*.*", SearchOption.AllDirectories).Where(V => V.Name.Contains(requestedAssembly.Name)));
 			}
@@ -33,26 +31,31 @@ namespace GoogleTranslatorProvider.Helpers
 			foreach (var file in files)
 			{
 				if (!(file.FullName.ToLower().EndsWith(".dll") || file.FullName.ToLower().EndsWith(".exe")))
-					continue;
-
-				var foundAsm = AssemblyName.GetAssemblyName(file.FullName);
-				if (foundAsm.Version > requestedAssembly.Version)
 				{
-					requestedAssembly.Version = foundAsm.Version;
-				}
-				else if (foundAsm.Version < requestedAssembly.Version)
 					continue;
+				}
+
+				var assemblyName = AssemblyName.GetAssemblyName(file.FullName);
+				if (assemblyName.Version > requestedAssembly.Version)
+				{
+					requestedAssembly.Version = assemblyName.Version;
+				}
+				else if (assemblyName.Version < requestedAssembly.Version)
+				{
+                    continue;
+                }
 
 				asemblies.Add(Assembly.LoadFrom(file.FullName));
-				break;
 			}
 
 			foreach (var assembly in asemblies)
 			{
-				if (assembly.FullName.Split(',').ElementAt(0) == args.Name.Split(',').ElementAt(0))
+				if (assembly.FullName.Split(',').ElementAt(0) == e.Name.Split(',').ElementAt(0))
+				{
 					return assembly;
-
+				}
 			}
+
 			return null;
 		}
 	}

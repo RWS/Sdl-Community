@@ -1,8 +1,8 @@
-﻿using NLog;
+﻿using System;
+using System.IO;
+using NLog;
 using NLog.Config;
 using NLog.Targets;
-using System;
-using System.IO;
 
 namespace GoogleTranslatorProvider.Helpers
 {
@@ -10,24 +10,21 @@ namespace GoogleTranslatorProvider.Helpers
 	{
 		public static void Setup()
 		{
-			if (LogManager.Configuration == null)
-			{
-				LogManager.Configuration = new LoggingConfiguration();
-			}
-			var config = LogManager.Configuration;
+			LogManager.Configuration ??= new LoggingConfiguration();
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder);
-			if (!Directory.Exists(logDirectoryPath))
+			var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder);
+			if (!Directory.Exists(logPath))
 			{
-				Directory.CreateDirectory(logDirectoryPath);
+				Directory.CreateDirectory(logPath);
 			}
 			var target = new FileTarget
 			{
 				Name = "MTEnhancedProvider",
-				FileName = Path.Combine(logDirectoryPath, PluginResources.LogsFileName),
+				FileName = Path.Combine(logPath, PluginResources.LogsFileName),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
+			var config = LogManager.Configuration;
 			config.AddTarget(target);
 			config.AddRuleForAllLevels(target, "*MtEnhanced*");
 

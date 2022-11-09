@@ -1,72 +1,72 @@
-﻿using System.Windows.Controls;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace GoogleTranslatorProvider.Helpers
 {
 	public class PasswordHelper
 	{
-		public static readonly DependencyProperty PasswordProperty =
-			DependencyProperty.RegisterAttached("Password",
-			typeof(string), typeof(PasswordHelper),
+		public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached(
+			"Password",
+			typeof(string),
+			typeof(PasswordHelper),
 			new FrameworkPropertyMetadata(string.Empty, OnPasswordPropertyChanged));
 
-		public static readonly DependencyProperty AttachProperty =
-			DependencyProperty.RegisterAttached("Attach",
-			typeof(bool), typeof(PasswordHelper), new PropertyMetadata(false, Attach));
+		public static readonly DependencyProperty AttachProperty = DependencyProperty.RegisterAttached(
+			"Attach",
+			typeof(bool),
+			typeof(PasswordHelper),
+			new PropertyMetadata(false, Attach));
 
-		private static readonly DependencyProperty IsUpdatingProperty =
-		   DependencyProperty.RegisterAttached("IsUpdating", typeof(bool),
-		   typeof(PasswordHelper));
+		private static readonly DependencyProperty IsUpdatingProperty = DependencyProperty.RegisterAttached(
+			"IsUpdating",
+			typeof(bool),
+			typeof(PasswordHelper));
 
-		public static void SetAttach(DependencyObject dp, bool value)
+		public static bool GetAttach(DependencyObject dependencyObject)
 		{
-			dp.SetValue(AttachProperty, value);
+			return (bool)dependencyObject.GetValue(AttachProperty);
 		}
 
-		public static bool GetAttach(DependencyObject dp)
+		public static void SetAttach(DependencyObject dependencyObject, bool value)
 		{
-			return (bool)dp.GetValue(AttachProperty);
+			dependencyObject.SetValue(AttachProperty, value);
 		}
 
-		public static string GetPassword(DependencyObject dp)
+		public static string GetPassword(DependencyObject dependencyObject)
 		{
-			return (string)dp.GetValue(PasswordProperty);
+			return (string)dependencyObject.GetValue(PasswordProperty);
 		}
 
-		public static void SetPassword(DependencyObject dp, string value)
+		public static void SetPassword(DependencyObject dependencyObject, string value)
 		{
-			dp.SetValue(PasswordProperty, value);
+			dependencyObject.SetValue(PasswordProperty, value);
 		}
 
-		private static bool GetIsUpdating(DependencyObject dp)
+		private static bool GetIsUpdating(DependencyObject dependencyObject)
 		{
-			return (bool)dp.GetValue(IsUpdatingProperty);
+			return (bool)dependencyObject.GetValue(IsUpdatingProperty);
 		}
 
-		private static void SetIsUpdating(DependencyObject dp, bool value)
+		private static void SetIsUpdating(DependencyObject dependencyObject, bool value)
 		{
-			dp.SetValue(IsUpdatingProperty, value);
+			dependencyObject.SetValue(IsUpdatingProperty, value);
 		}
 
-		private static void OnPasswordPropertyChanged(DependencyObject sender,
-			DependencyPropertyChangedEventArgs e)
+		private static void OnPasswordPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			var passwordBox = sender as PasswordBox;
 			passwordBox.PasswordChanged -= PasswordChanged;
-
 			if (!GetIsUpdating(passwordBox))
 			{
 				passwordBox.Password = (string)e.NewValue;
 			}
+
 			passwordBox.PasswordChanged += PasswordChanged;
 		}
 
-		private static void Attach(DependencyObject sender,
-			DependencyPropertyChangedEventArgs e)
+		private static void Attach(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
-			var passwordBox = sender as PasswordBox;
-
-			if (passwordBox == null)
+			if (sender is not PasswordBox passwordBox)
 			{
 				return;
 			}
