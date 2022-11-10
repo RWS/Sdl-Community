@@ -9,7 +9,7 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using SegmentEditor = GoogleTranslatorProvider.Models.SegmentEditor;
+using GTPSegmentEditor = GoogleTranslatorProvider.Models.GTPSegmentEditor;
 
 namespace GoogleTranslatorProvider.Studio
 {
@@ -22,8 +22,8 @@ namespace GoogleTranslatorProvider.Studio
 		private ApiConnecter _gtConnect;
 		private GoogleV3Connecter _googleV3Connecter;
 		private TranslationUnit _inputTu;
-		private SegmentEditor _postLookupSegmentEditor;
-		private SegmentEditor _preLookupSegmentEditor;
+		private GTPSegmentEditor _postLookupSegmentEditor;
+		private GTPSegmentEditor _preLookupSegmentEditor;
 
 		/// <summary>
 		/// Instantiates the variables and fills the list file content into
@@ -154,7 +154,7 @@ namespace GoogleTranslatorProvider.Studio
 		/// <summary>
 		/// Used to do batch find-replace on a segment with tags.
 		/// </summary>
-		private Segment GetEditedSegment(SegmentEditor editor, Segment inSegment)
+		private Segment GetEditedSegment(GTPSegmentEditor editor, Segment inSegment)
 		{
 			var newSeg = new Segment(inSegment.Culture);
 
@@ -178,7 +178,7 @@ namespace GoogleTranslatorProvider.Studio
 		/// <summary>
 		/// Used to do batch find-replace on a string of plain text.
 		/// </summary>
-		private string GetEditedString(SegmentEditor editor, string sourcetext)
+		private string GetEditedString(GTPSegmentEditor editor, string sourcetext)
 		{
 			var result = editor.EditText(sourcetext);
 			return result;
