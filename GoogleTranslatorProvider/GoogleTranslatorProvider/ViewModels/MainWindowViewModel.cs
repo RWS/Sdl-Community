@@ -12,24 +12,30 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
-	public class MainWindowViewModel : BaseModel, IMainWindow
+	public class MainWindowViewModel : BaseModel
 	{
-		private ViewDetails _selectedView;
-		private bool _dialogResult;
-		private readonly bool _isTellMeAction;
-		private string _errorMessage;
-		private string _translatorErrorResponse;
+		
+		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
-		private readonly ITranslationProviderCredentialStore _credentialStore;
+
+		private readonly bool _isTellMeAction;
+		private readonly List<ViewDetails> _availableViews;
 		private readonly LanguagePair[] _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
-		public delegate void CloseWindowEventRaiser();
-		public event CloseWindowEventRaiser CloseEventRaised;
+		
+		private ViewDetails _selectedView;
+		private string _translatorErrorResponse;
+		private string _errorMessage;
+		private bool _dialogResult;
 
-		public MainWindowViewModel(ITranslationOptions options, IProviderControlViewModel providerControlViewModel,
-			ISettingsControlViewModel settingsControlViewModel,
-			ITranslationProviderCredentialStore credentialStore, LanguagePair[] languagePairs, HtmlUtil htmlUtil)
+
+		public MainWindowViewModel(ITranslationOptions options,
+								   IProviderControlViewModel providerControlViewModel,
+								   ISettingsControlViewModel settingsControlViewModel,
+								   ITranslationProviderCredentialStore credentialStore,
+								   LanguagePair[] languagePairs,
+								   HtmlUtil htmlUtil)
 		{
 			Options = options;
 			_providerControlViewModel = providerControlViewModel;
@@ -46,7 +52,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
 			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
 
-			AvailableViews = new List<ViewDetails>
+			_availableViews = new List<ViewDetails>
 			{
 				new ViewDetails
 				{
@@ -70,7 +76,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			_settingsControlViewModel = settingsControlViewModel;
 			SaveCommand = new RelayCommand(Save);
 
-			AvailableViews = new List<ViewDetails>
+			_availableViews = new List<ViewDetails>
 			{
 				new ViewDetails
 				{
@@ -81,26 +87,24 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			if (_isTellMeAction)
 			{
-				SelectedView = AvailableViews[0];
+				SelectedView = _availableViews[0];
 			}
 		}
+
+
+		public ITranslationOptions Options { get; set; }
 
 		public ViewDetails SelectedView
 		{
 			get => _selectedView;
 			set
 			{
+				if (_selectedView == value) return;
 				_selectedView = value;
 				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(SelectedView));
 			}
 		}
-
-		public List<ViewDetails> AvailableViews { get; set; }
-		public ICommand ShowSettingsViewCommand { get; set; }
-		public ICommand ShowMainViewCommand { get; set; }
-		public ICommand SaveCommand { get; set; }
-		public ITranslationOptions Options { get; set; }
 
 		public bool DialogResult
 		{
@@ -135,63 +139,135 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public void AddEncriptionMetaToResponse(string errorMessage)
-		{
-			var htmlStart = "<html> \n <meta http-equiv=\'Content-Type\' content=\'text/html;charset=UTF-8\'>\n <body style=\"font-family:Segoe Ui!important;color:red!important;font-size:13px!important\">\n";
 
-			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
-		}
+		public delegate void CloseWindowEventRaiser();
+
+		public event CloseWindowEventRaiser CloseEventRaised;
+
+
+		public ICommand ShowSettingsViewCommand { get; set; }
+
+		public ICommand ShowMainViewCommand { get; set; }
+
+		public ICommand SaveCommand { get; set; }
+
 
 		public bool IsWindowValid()
 		{
 			ErrorMessage = string.Empty;
-			//TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
+			var isGoogleProvider = _providerControlViewModel.SelectedTranslationOption?.ProviderType == ProviderType.GoogleTranslate;
+			if (isGoogleProvider && !ValidGoogleOptions())
+			{
+				return false;
+			}
 
-			switch (_providerControlViewModel.SelectedTranslationOption.ProviderType)
-			{
-				case ProviderType.GoogleTranslate:
-					if (!ValidGoogleOptions()) return false;
-					break;
-			}
-			if (ValidSettingsPageOptions())
-			{
-				return true;
-			}
-			return false;
+			return ValidSettingsPageOptions();
 		}
 
 		private bool ValidGoogleOptions()
 		{
-			if (_providerControlViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V2)
+			if (_providerControlViewModel.SelectedGoogleApiVersion.Version != ApiVersion.V2)
 			{
-				if (string.IsNullOrEmpty(_providerControlViewModel.ApiKey))
-				{
-					ErrorMessage = PluginResources.ApiKeyError;
-					return false;
-				}
-				return AreGoogleV2CredentialsValid();
+				return GoogleV3OptionsAreSet() && AreGoogleV3CredentialsValid();
 			}
+
+			if (string.IsNullOrEmpty(_providerControlViewModel.ApiKey))
+			{
+				ErrorMessage = PluginResources.ApiKeyError;
+				return false;
+			}
+
+			return AreGoogleV2CredentialsValid();
+		}
+
+		private bool GoogleV3OptionsAreSet()
+		{
 			if (string.IsNullOrEmpty(_providerControlViewModel.JsonFilePath))
 			{
 				ErrorMessage = PluginResources.EmptyJsonFilePathMsg;
 				return false;
 			}
+
 			if (!File.Exists(_providerControlViewModel.JsonFilePath))
 			{
 				ErrorMessage = PluginResources.WrongJsonFilePath;
 				return false;
 			}
+
 			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
 			{
 				ErrorMessage = PluginResources.InvalidProjectName;
 				return false;
 			}
+
 			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectLocation))
 			{
 				ErrorMessage = PluginResources.ProjectLocationValidation;
 				return false;
 			}
-			return AreGoogleV3CredentialsValid();
+
+			return true;
+		}
+
+		private bool AreGoogleV3CredentialsValid()
+		{
+			try
+			{
+				var providerOptions = new GTPTranslationOptions
+				{
+					ProjectName = _providerControlViewModel.ProjectName,
+					JsonFilePath = _providerControlViewModel.JsonFilePath,
+					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
+					ProjectLocation = _providerControlViewModel.ProjectLocation,
+					GlossaryPath = _providerControlViewModel.GlossaryPath,
+					BasicCsv = _providerControlViewModel.BasicCsvGlossary,
+					SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType,
+					SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version
+				};
+
+				var googleV3 = new V3Connector(providerOptions);
+				googleV3.TryToAuthenticateUser();
+				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath) && _languagePairs is not null)
+				{
+					googleV3.CreateGoogleGlossary(_languagePairs);
+				}
+
+				return true;
+			}
+			catch (Exception e)
+			{
+				string message;
+				if (e.Message.Contains("Resource type: models"))
+				{
+					message = PluginResources.GoogleInvalidEngine;
+				}
+				else if (e.Message.Contains("Invalid resource name"))
+				{
+					message = PluginResources.InvalidProjectName;
+				}
+				else
+				{
+					message = e.Message;
+				}
+
+				AddEncriptionMetaToResponse(message);
+				return false;
+			}
+		}
+
+		private bool AreGoogleV2CredentialsValid()
+		{
+			try
+			{
+				var v2Connector = new V2Connector(_providerControlViewModel.ApiKey, _htmlUtil);
+				v2Connector.ValidateCredentials();
+				return true;
+			}
+			catch (Exception e)
+			{
+				AddEncriptionMetaToResponse(e.Message);
+				return false;
+			}
 		}
 
 		private bool ValidSettingsPageOptions()
@@ -203,37 +279,32 @@ namespace GoogleTranslatorProvider.ViewModels
 					ErrorMessage = PluginResources.PreLookupEmptyMessage;
 					return false;
 				}
+
 				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
 				{
 					ErrorMessage = PluginResources.PreLookupWrongPathMessage;
 					return false;
 				}
 			}
-			if (!_settingsControlViewModel.DoPostLookup) return true;
+
+			if (!_settingsControlViewModel.DoPostLookup)
+			{
+				return true;
+			}
+
 			if (string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
 			{
 				ErrorMessage = PluginResources.PostLookupEmptyMessage;
 				return false;
 			}
-			if (File.Exists(_settingsControlViewModel.PostLookupFileName)) return true;
-			ErrorMessage = PluginResources.PostLookupWrongPathMessage;
-			return false;
-		}
 
-		private void ShowSettingsPage()
-		{
-			SelectedView = AvailableViews[1];
-		}
+			if (!File.Exists(_settingsControlViewModel.PostLookupFileName))
+			{
+				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+				return false;
+			}
 
-		private void ShowProvidersPage()
-		{
-			SelectedView = AvailableViews[0];
-		}
-
-		private void ClearMessageRaised()
-		{
-			ErrorMessage = string.Empty;
-			TranslatorErrorResponse = "<html><body></html></body>"; //Clear web browser content
+			return true;
 		}
 
 		private void Save(object window)
@@ -258,87 +329,22 @@ namespace GoogleTranslatorProvider.ViewModels
 			CloseEventRaised?.Invoke();
 		}
 
-		private void DeleteCredentialsIfNecessary()
+		private void SetGoogleProviderOptions()
 		{
-			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
-				ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
-			{
-				RemoveCredentialsFromStore(new Uri(PluginResources.UriGt));
-			}
+			Options.ApiKey = _providerControlViewModel.ApiKey;
+			Options.PersistGoogleKey = _providerControlViewModel.PersistGoogleKey;
+			Options.SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version;
+			Options.JsonFilePath = _providerControlViewModel.JsonFilePath;
+			Options.ProjectName = _providerControlViewModel.ProjectName;
+			Options.SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType;
+			Options.GoogleEngineModel = _providerControlViewModel.GoogleEngineModel;
+			Options.ProjectLocation = _providerControlViewModel.ProjectLocation;
+			Options.GlossaryPath = _providerControlViewModel.GlossaryPath;
+			Options.BasicCsv = _providerControlViewModel.BasicCsvGlossary;
 		}
-
-		private void RemoveCredentialsFromStore(Uri providerUri)
-		{
-			var credentials = _credentialStore.GetCredential(providerUri);
-			if (credentials != null)
-			{
-				_credentialStore.RemoveCredential(providerUri);
-			}
-		}
-
-		private bool AreGoogleV3CredentialsValid()
-		{
-			try
-			{
-				var providerOptions = new GTPTranslationOptions
-				{
-					ProjectName = _providerControlViewModel.ProjectName,
-					JsonFilePath = _providerControlViewModel.JsonFilePath,
-					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
-					ProjectLocation = _providerControlViewModel.ProjectLocation,
-					GlossaryPath = _providerControlViewModel.GlossaryPath,
-					BasicCsv = _providerControlViewModel.BasicCsvGlossary,
-					SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType,
-					SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version
-				};
-				var googleV3 = new V3Connector(providerOptions);
-				googleV3.TryToAuthenticateUser();
-				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath) && _languagePairs != null)
-				{
-					googleV3.CreateGoogleGlossary(_languagePairs);
-				}
-			}
-			catch (Exception e)
-			{
-				string message;
-				if (e.Message.Contains("Resource type: models"))
-				{
-					message = PluginResources.GoogleInvalidEngine;
-				}
-				else if (e.Message.Contains("Invalid resource name"))
-				{
-					message = PluginResources.InvalidProjectName;
-				}
-				else
-				{
-					message = e.Message;
-				}
-
-				AddEncriptionMetaToResponse(message);
-				return false;
-			}
-			return true;
-		}
-
-		private bool AreGoogleV2CredentialsValid()
-		{
-			try
-			{
-				var googleApiConecter = new V2Connector(_providerControlViewModel.ApiKey, _htmlUtil);
-				googleApiConecter.ValidateCredentials();
-
-				return true;
-			}
-			catch (Exception e)
-			{
-				AddEncriptionMetaToResponse(e.Message);
-			}
-			return false;
-		}
-
 		private void SetGeneralProviderOptions()
 		{
-			if (_settingsControlViewModel != null)
+			if (_settingsControlViewModel is not null)
 			{
 				Options.SendPlainTextOnly = _settingsControlViewModel.SendPlainText;
 				Options.ResendDrafts = _settingsControlViewModel.ReSendDraft;
@@ -348,32 +354,62 @@ namespace GoogleTranslatorProvider.ViewModels
 				Options.PostLookupFilename = _settingsControlViewModel.PostLookupFileName;
 			}
 
-			if (Options != null && Options.LanguagesSupported == null)
+			if (Options is not null && Options.LanguagesSupported is null)
 			{
 				Options.LanguagesSupported = new Dictionary<string, string>();
 			}
-			if (_languagePairs == null) return;
+
+			if (_languagePairs is null)
+			{
+				return;
+			}
+
 			foreach (var languagePair in _languagePairs)
 			{
-				Options?.LanguagesSupported.Add(languagePair.TargetCultureName, _providerControlViewModel.SelectedTranslationOption.Name);
+				Options.LanguagesSupported.Add(languagePair.TargetCultureName, _providerControlViewModel.SelectedTranslationOption.Name);
 			}
 		}
 
-		private void SetGoogleProviderOptions()
+		private void DeleteCredentialsIfNecessary()
 		{
-			//Google options-V2
-			Options.ApiKey = _providerControlViewModel.ApiKey;
-			Options.PersistGoogleKey = _providerControlViewModel.PersistGoogleKey;
-			Options.SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version;
+			var isGoogleProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == ProviderType.GoogleTranslate;
+			if (isGoogleProvider && !Options.PersistGoogleKey)
+			{
+				RemoveCredentialsFromStore(new Uri(Constants.GoogleTranslationFullScheme));
+			}
+		}
 
-			//Google options-V3
-			Options.JsonFilePath = _providerControlViewModel.JsonFilePath;
-			Options.ProjectName = _providerControlViewModel.ProjectName;
-			Options.SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType;
-			Options.GoogleEngineModel = _providerControlViewModel.GoogleEngineModel;
-			Options.ProjectLocation = _providerControlViewModel.ProjectLocation;
-			Options.GlossaryPath = _providerControlViewModel.GlossaryPath;
-			Options.BasicCsv = _providerControlViewModel.BasicCsvGlossary;
+		private void RemoveCredentialsFromStore(Uri providerUri)
+		{
+			if (_credentialStore.GetCredential(providerUri) is not null)
+			{
+				_credentialStore.RemoveCredential(providerUri);
+			}
+		}
+
+		private void ClearMessageRaised()
+		{
+			ErrorMessage = string.Empty;
+			TranslatorErrorResponse = "<html><body></html></body>";
+		}
+
+		private void ShowSettingsPage()
+		{
+			SelectedView = _availableViews[1];
+		}
+
+		private void ShowProvidersPage()
+		{
+			SelectedView = _availableViews[0];
+		}
+
+		private void AddEncriptionMetaToResponse(string errorMessage)
+		{
+			var htmlStart = @"<html> 
+ <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+ <body style=""font-family:Segoe Ui!important;color:red!important;font-size:13px!important"">
+";
+			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
 		}
 	}
 }
