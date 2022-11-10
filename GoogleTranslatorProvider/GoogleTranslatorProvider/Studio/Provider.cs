@@ -11,14 +11,10 @@ namespace GoogleTranslatorProvider.Studio
 {
 	public class Provider : ITranslationProvider
 	{
-		/// <summary>
-		///     This string needs to be a unique value.
-		///     It is the string that precedes the plug-in URI.
-		/// </summary>
-		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
+		private readonly HtmlUtil _htmlUtil;
+
 		private V2Connector _googleV2Api;
 		private V3Connector _googleV3Api;
-		private readonly HtmlUtil _htmlUtil;
 
 		public Provider(ITranslationOptions options, HtmlUtil htmlUtil)
 		{
@@ -30,20 +26,12 @@ namespace GoogleTranslatorProvider.Studio
 
 		public bool IsReadOnly => true;
 
-		public string Name
-		{
-			get
-			{
-				if (Options.SelectedProvider == ProviderType.GoogleTranslate)
-				{
-					return Options.SelectedGoogleVersion == ApiVersion.V2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
-				}
+		public string Name => Options.SelectedProvider == ProviderType.GoogleTranslate
+							? Options.SelectedGoogleVersion == ApiVersion.V2 ? PluginResources.GoogleBasic
+																			 : PluginResources.GoogleAdvanced
+							: PluginResources.Plugin_Name;
 
-				return PluginResources.Plugin_Name;
-			}
-		}
-
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
+		public ProviderStatusInfo StatusInfo => new(true, PluginResources.Plugin_NiceName);
 
 		public bool SupportsConcordanceSearch { get; } = false;
 
@@ -81,6 +69,26 @@ namespace GoogleTranslatorProvider.Studio
 
 		public Uri Uri => Options.Uri;
 
+		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+		{
+			if (Options.SelectedGoogleVersion is not ApiVersion.V2)
+			{
+				_googleV3Api = new V3Connector(Options);
+				return _googleV3Api.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			}
+
+			if (_googleV2Api is null)
+			{
+				_googleV2Api = new V2Connector(Options.ApiKey, _htmlUtil);
+			}
+			else
+			{
+				_googleV2Api.ApiKey = Options.ApiKey;
+			}
+
+			return _googleV2Api.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+		}
+
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
 			return new ProviderLanguageDirection(this, languageDirection, _htmlUtil);
@@ -91,43 +99,11 @@ namespace GoogleTranslatorProvider.Studio
 			Options = JsonConvert.DeserializeObject<GTPTranslationOptions>(translationProviderState);
 		}
 
-		public void RefreshStatusInfo()
-		{
-		}
-
 		public string SerializeState()
 		{
 			return JsonConvert.SerializeObject(Options);
 		}
 
-		/// <summary>
-		///     Determines the language direction of the delimited list file by
-		///     reading the first line. Based upon this information it is determined
-		///     whether the plug-in supports the language pair that was selected by
-		///     the user.
-		/// </summary>
-		public bool SupportsLanguageDirection(LanguagePair languageDirection)
-		{
-
-			if (Options.SelectedGoogleVersion == ApiVersion.V2)
-			{
-				if (_googleV2Api == null) //instantiate GtApiConnecter if necessary
-				{
-					_googleV2Api = new V2Connector(Options.ApiKey, _htmlUtil);
-				}
-				else
-				{
-					//reset in case it has been changed since last time GtApiConnecter was instantiated
-					_googleV2Api.ApiKey = Options.ApiKey;
-				}
-
-				return _googleV2Api.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
-			}
-
-			_googleV3Api = new V3Connector(Options);
-
-
-			return _googleV3Api.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
-		}
+		public void RefreshStatusInfo() { }
 	}
 }
