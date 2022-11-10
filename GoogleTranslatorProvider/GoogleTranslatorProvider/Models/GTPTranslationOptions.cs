@@ -19,7 +19,7 @@ namespace GoogleTranslatorProvider.Models
 
 		public GTPTranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(Provider.ListTranslationProviderScheme);
+			_uriBuilder = new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme);
 		}
 
 		public GTPTranslationOptions(Uri uri)
@@ -138,8 +138,6 @@ namespace GoogleTranslatorProvider.Models
 
 		public static ProviderType GetProviderType(string typeString)
 		{
-			//we changed the options provider type to use resource strings..but if a user migrates a project to a machine with a different culture then it will be a problem
-			//the solution seems to be to not translate the names for 'Google Translate' and 'Microsoft Translator' ...they both leave it untranslated in their documentation in other languages
 			return typeString switch
 			{
 				Constants.GoogleTranslatorString => ProviderType.GoogleTranslate,
