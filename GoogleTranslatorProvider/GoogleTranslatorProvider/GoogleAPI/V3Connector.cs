@@ -13,18 +13,21 @@ using Sdl.LanguagePlatform.Core;
 
 namespace GoogleTranslatorProvider.GoogleAPI
 {
-	public class GoogleV3Connecter
+	public class V3Connector
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		private readonly ITranslationOptions _options;
 		private readonly TranslationServiceClient _translationServiceClient;
+		private readonly List<V3LanguageModel> _supportedLanguages;
 		private readonly string _glossaryResourceLocation;
 		private readonly string _modelPath;
 
-		public GoogleV3Connecter(ITranslationOptions options)
+		private string _glossaryID;
+
+		public V3Connector(ITranslationOptions options)
 		{
-			SupportedLanguages = new List<GoogleV3LanguageModel>();
+			_supportedLanguages = new List<V3LanguageModel>();
 			_options = options;
 			_modelPath = SetModelPath();
 			_glossaryResourceLocation = SetGlossary();
@@ -39,10 +42,6 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 			}
 		}
-
-		public string GlossaryId { get; set; }
-
-		public List<GoogleV3LanguageModel> SupportedLanguages { get; set; }
 
 		public void TryToAuthenticateUser()
 		{
@@ -74,13 +73,13 @@ namespace GoogleTranslatorProvider.GoogleAPI
 
 		public bool IsSupportedLanguage(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
-			if (!SupportedLanguages.Any())
+			if (!_supportedLanguages.Any())
 			{
 				SetGoogleAvailableLanguages();
 			}
 
-			var searchedSource = SupportedLanguages.FirstOrDefault(x => x.CultureInfo.Name.Equals(sourceLanguage.TwoLetterISOLanguageName));
-			var searchedTarget = SupportedLanguages.FirstOrDefault(x => x.CultureInfo.Name.Equals(targetLanguage.TwoLetterISOLanguageName));
+			var searchedSource = _supportedLanguages.FirstOrDefault(x => x.CultureInfo.Name.Equals(sourceLanguage.TwoLetterISOLanguageName));
+			var searchedTarget = _supportedLanguages.FirstOrDefault(x => x.CultureInfo.Name.Equals(targetLanguage.TwoLetterISOLanguageName));
 
 			return searchedSource.SupportSource && searchedTarget.SupportTarget;
 		}
@@ -148,7 +147,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			var request = new GetSupportedLanguagesRequest { ParentAsLocationName = locationName };
 			var response = _translationServiceClient.GetSupportedLanguages(request);
 
-			SupportedLanguages.AddRange(response.Languages.Select(language => new GoogleV3LanguageModel
+			_supportedLanguages.AddRange(response.Languages.Select(language => new V3LanguageModel
 			{
 				GoogleLanguageCode = language.LanguageCode,
 				SupportSource = language.SupportSource,
@@ -180,7 +179,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 		{
 			var glossary = new Glossary
 			{
-				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, GlossaryId).ToString(),
+				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, _glossaryID).ToString(),
 				LanguageCodesSet = new Glossary.Types.LanguageCodesSet(),
 				InputConfig = new GlossaryInputConfig
 				{
@@ -214,7 +213,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 		{
 			return new Glossary
 			{
-				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, GlossaryId).ToString(),
+				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, _glossaryID).ToString(),
 				LanguagePair = new Glossary.Types.LanguageCodePair
 				{
 					SourceLanguageCode = sourceLanguage,
@@ -247,12 +246,12 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				return null;
 			}
 
-			GlossaryId = Path.GetFileNameWithoutExtension(_options.GlossaryPath).Replace(" ", string.Empty);
+			_glossaryID = Path.GetFileNameWithoutExtension(_options.GlossaryPath).Replace(" ", string.Empty);
 			return string.Format(
 				"projects/{0}/locations/{1}/glossaries/{2}",
 				_options.ProjectName,
 				_options.ProjectLocation,
-				GlossaryId);
+				_glossaryID);
 		}
 	}
 }

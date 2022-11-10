@@ -1,16 +1,11 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using System;
 using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GoogleTranslatorProvider.Studio
 {
@@ -21,8 +16,8 @@ namespace GoogleTranslatorProvider.Studio
 		///     It is the string that precedes the plug-in URI.
 		/// </summary>
 		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
-		private ApiConnecter _gtConnect;
-		private GoogleV3Connecter _googleV3Connecter;
+		private V2Connector _googleV2Api;
+		private V3Connector _googleV3Api;
 		private readonly HtmlUtil _htmlUtil;
 
 		public Provider(ITranslationOptions options, HtmlUtil htmlUtil)
@@ -116,23 +111,23 @@ namespace GoogleTranslatorProvider.Studio
 
 			if (Options.SelectedGoogleVersion == ApiVersion.V2)
 			{
-				if (_gtConnect == null) //instantiate GtApiConnecter if necessary
+				if (_googleV2Api == null) //instantiate GtApiConnecter if necessary
 				{
-					_gtConnect = new ApiConnecter(Options.ApiKey, _htmlUtil);
+					_googleV2Api = new V2Connector(Options.ApiKey, _htmlUtil);
 				}
 				else
 				{
 					//reset in case it has been changed since last time GtApiConnecter was instantiated
-					_gtConnect.ApiKey = Options.ApiKey;
+					_googleV2Api.ApiKey = Options.ApiKey;
 				}
 
-				return _gtConnect.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+				return _googleV2Api.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 			}
 
-			_googleV3Connecter = new GoogleV3Connecter(Options);
+			_googleV3Api = new V3Connector(Options);
 
 
-			return _googleV3Connecter.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
+			return _googleV3Api.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 	}
 }

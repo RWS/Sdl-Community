@@ -1,4 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Input;
 using GoogleTranslatorProvider.Commands;
 using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
@@ -6,13 +9,6 @@ using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
@@ -295,7 +291,7 @@ namespace GoogleTranslatorProvider.ViewModels
 					SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType,
 					SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version
 				};
-				var googleV3 = new GoogleV3Connecter(providerOptions);
+				var googleV3 = new V3Connector(providerOptions);
 				googleV3.TryToAuthenticateUser();
 				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath) && _languagePairs != null)
 				{
@@ -328,7 +324,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			try
 			{
-				var googleApiConecter = new ApiConnecter(_providerControlViewModel.ApiKey, _htmlUtil);
+				var googleApiConecter = new V2Connector(_providerControlViewModel.ApiKey, _htmlUtil);
 				googleApiConecter.ValidateCredentials();
 
 				return true;

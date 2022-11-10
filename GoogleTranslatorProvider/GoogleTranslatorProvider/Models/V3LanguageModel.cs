@@ -2,7 +2,7 @@
 
 namespace GoogleTranslatorProvider.Models
 {
-	public class GoogleV3LanguageModel
+	public class V3LanguageModel
 	{
 		public bool SupportTarget { get; set; }
 

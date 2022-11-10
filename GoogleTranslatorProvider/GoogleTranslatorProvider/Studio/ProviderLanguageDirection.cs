@@ -9,7 +9,6 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using GTPSegmentEditor = GoogleTranslatorProvider.Models.GTPSegmentEditor;
 
 namespace GoogleTranslatorProvider.Studio
 {
@@ -19,8 +18,8 @@ namespace GoogleTranslatorProvider.Studio
 		private readonly ITranslationOptions _options;
 		private readonly Provider _provider;
 		private readonly HtmlUtil _htmlUtil;
-		private ApiConnecter _gtConnect;
-		private GoogleV3Connecter _googleV3Connecter;
+		private V2Connector _googleV2Api;
+		private V3Connector _googleV3Api;
 		private TranslationUnit _inputTu;
 		private GTPSegmentEditor _postLookupSegmentEditor;
 		private GTPSegmentEditor _preLookupSegmentEditor;
@@ -189,25 +188,25 @@ namespace GoogleTranslatorProvider.Studio
 			if (options.SelectedGoogleVersion == ApiVersion.V2)
 			{
 				//instantiate GtApiConnecter if necessary
-				if (_gtConnect == null)
+				if (_googleV2Api == null)
 				{
 					// need to get and insert key
-					_gtConnect = new ApiConnecter(options.ApiKey, _htmlUtil); //needs key
+					_googleV2Api = new V2Connector(options.ApiKey, _htmlUtil); //needs key
 				}
 				else
 				{
 					//reset key in case it has been changed in dialog since GtApiConnecter was instantiated
-					_gtConnect.ApiKey = options.ApiKey;
+					_googleV2Api.ApiKey = options.ApiKey;
 				}
 
-				var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
+				var translatedText = _googleV2Api.Translate(_languageDirection, sourcetext, format);
 
 				return translatedText;
 			}
-			_googleV3Connecter = new GoogleV3Connecter(options);
+			_googleV3Api = new V3Connector(options);
 
 			var v3TranslatedText =
-				_googleV3Connecter.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext, format);
+				_googleV3Api.TranslateText(_languageDirection.SourceCulture, _languageDirection.TargetCulture, sourcetext, format);
 
 			return v3TranslatedText;
 		}
@@ -248,7 +247,7 @@ namespace GoogleTranslatorProvider.Studio
 				//do preedit with tagged segment
 				if (_options.UsePreEdit)
 				{
-					if (_preLookupSegmentEditor == null) _preLookupSegmentEditor = new SegmentEditor(_options.PreLookupFilename);
+					if (_preLookupSegmentEditor == null) _preLookupSegmentEditor = new GTPSegmentEditor(_options.PreLookupFilename);
 					newseg = GetEditedSegment(_preLookupSegmentEditor, newseg);
 				}
 				//return our tagged target segment
@@ -264,7 +263,7 @@ namespace GoogleTranslatorProvider.Studio
 				//now do post-edit if that option is checked
 				if (_options.UsePostEdit)
 				{
-					if (_postLookupSegmentEditor == null) _postLookupSegmentEditor = new SegmentEditor(_options.PostLookupFilename);
+					if (_postLookupSegmentEditor == null) _postLookupSegmentEditor = new GTPSegmentEditor(_options.PostLookupFilename);
 					translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 				}
 			}
@@ -274,7 +273,7 @@ namespace GoogleTranslatorProvider.Studio
 				//do preedit with string
 				if (_options.UsePreEdit)
 				{
-					if (_preLookupSegmentEditor == null) _preLookupSegmentEditor = new SegmentEditor(_options.PreLookupFilename);
+					if (_preLookupSegmentEditor == null) _preLookupSegmentEditor = new GTPSegmentEditor(_options.PreLookupFilename);
 					sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
 					//change our source segment so it gets sent back with modified text to show in translation results window that it was changed before sending
 					newseg.Clear();
@@ -293,7 +292,7 @@ namespace GoogleTranslatorProvider.Studio
 				//now do post-edit if that option is checked
 				if (_options.UsePostEdit)
 				{
-					if (_postLookupSegmentEditor == null) _postLookupSegmentEditor = new SegmentEditor(_options.PostLookupFilename);
+					if (_postLookupSegmentEditor == null) _postLookupSegmentEditor = new GTPSegmentEditor(_options.PostLookupFilename);
 					translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
 				}
 				translation.Add(translatedText);

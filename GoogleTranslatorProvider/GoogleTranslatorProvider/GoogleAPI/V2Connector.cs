@@ -15,14 +15,14 @@ using LogManager = NLog.LogManager;
 
 namespace GoogleTranslatorProvider.GoogleAPI
 {
-	public class ApiConnecter
+	public class V2Connector
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly HtmlUtil _htmlUtil;
 
 		private Dictionary<string, List<string>> supportedLanguages;
 
-		public ApiConnecter(string apiKey, HtmlUtil htmlUtil)
+		public V2Connector(string apiKey, HtmlUtil htmlUtil)
 		{
 			ApiKey = apiKey;
 			_htmlUtil = htmlUtil;
