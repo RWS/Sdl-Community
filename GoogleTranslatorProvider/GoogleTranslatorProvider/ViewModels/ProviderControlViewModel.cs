@@ -272,7 +272,6 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			if ((_options?.SelectedProvider) == null)
 			{
-				//By default we'll select Microsoft translator option
 				SelectGoogleV2();
 				return;
 			}
@@ -282,6 +281,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				SelectGoogleV2();
 			}
+
+			SelectedTranslationOption ??= selectedProvider;
 		}
 
 		private void SetGoogleApiVersion()
