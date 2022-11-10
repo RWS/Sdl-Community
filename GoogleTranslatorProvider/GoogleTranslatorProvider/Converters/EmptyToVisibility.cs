@@ -9,7 +9,7 @@ namespace GoogleTranslatorProvider.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var valueString = value.ToString();
+			var valueString = value?.ToString();
 			return string.IsNullOrEmpty(valueString) ? Visibility.Collapsed
 													 : Visibility.Visible;
 		}
