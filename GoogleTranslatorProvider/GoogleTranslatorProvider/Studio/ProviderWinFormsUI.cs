@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using NLog;
 using GoogleTranslatorProvider.Interfaces;
+using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
+using GoogleTranslatorProvider.ViewModels;
+using GoogleTranslatorProvider.Views;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.ViewModels;
-using GoogleTranslatorProvider.Views;
-using LogManager = NLog.LogManager;
 
 namespace GoogleTranslatorProvider.Studio
 {
@@ -19,43 +17,115 @@ namespace GoogleTranslatorProvider.Studio
 								   Description = "GoogleTranslatorProviderPlugin_WinFormsUI")]
 	public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		public string TypeDescription => PluginResources.Plugin_Description;
-		public string TypeName => PluginResources.Plugin_NiceName;
-
-		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs,
-			ITranslationProviderCredentialStore credentialStore)
-		{
-			var options = new GTPTranslationOptions();
-			var htmlUtil = new HtmlUtil();
-
-			var mainWindowVm = ShowProviderWindow(languagePairs, credentialStore, options);
-
-			if (!mainWindowVm.DialogResult) return null;
-
-			var provider = new Provider(options, htmlUtil);
-
-			return new ITranslationProvider[] { provider };
-		}
-
-		/// <summary>
-		/// Determines whether the plug-in settings can be changed
-		/// by displaying the Settings button in SDL Trados Studio.
-		/// </summary>
 		public bool SupportsEditing => true;
 
-		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs,
-			ITranslationProviderCredentialStore credentialStore)
+		public string TypeName => PluginResources.Plugin_NiceName;
+
+		public string TypeDescription => PluginResources.Plugin_Description;
+
+		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			if (!(translationProvider is Provider editProvider))
+			var options = new GTPTranslationOptions();
+			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, options);
+
+			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new Provider(options, new HtmlUtil()) }
+													: null;
+		}
+
+		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		{
+			if (translationProvider is not Provider provider)
 			{
 				return false;
 			}
 
-			var mainWindowVm = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options);
-			return mainWindowVm.DialogResult;
+			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, provider.Options);
+			return mainWindowViewModel.DialogResult;
 		}
 
+		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
+		{
+			var options = new GTPTranslationOptions(translationProviderUri);
+			if (options.SelectedProvider != ProviderType.GoogleTranslate)
+			{
+				return new TranslationProviderDisplayInfo
+				{
+					TranslationProviderIcon = PluginResources.my_icon,
+					Name = PluginResources.Plugin_NiceName,
+					TooltipText = PluginResources.Plugin_Tooltip
+				};
+			}
+
+			var isV2 = options.SelectedGoogleVersion == ApiVersion.V2;
+			var versionString = isV2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
+			return new TranslationProviderDisplayInfo()
+			{
+				SearchResultImage = PluginResources.my_image,
+				TranslationProviderIcon = PluginResources.my_icon,
+				TooltipText = versionString,
+				Name = versionString
+			};
+		}
+
+		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
+		{
+			if (translationProviderUri is null)
+			{
+				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
+			}
+
+			return string.Equals(translationProviderUri.Scheme, Constants.GoogleTranslationScheme, StringComparison.CurrentCultureIgnoreCase);
+		}
+
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
+		{
+			SetSavedCredentialsOnUi(credentialStore, loadOptions);
+			var providerControlViewModel = new ProviderControlViewModel(loadOptions);
+			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, new OpenFileDialogService(), false);
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel, credentialStore, languagePairs, new HtmlUtil());
+			var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
+			mainWindowViewModel.CloseEventRaised += () =>
+			{
+				UpdateProviderCredentials(credentialStore, loadOptions);
+
+				mainWindow.Close();
+			};
+
+			mainWindow.ShowDialog();
+			return mainWindowViewModel;
+		}
+
+		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
+		{
+			if (options.SelectedProvider == ProviderType.GoogleTranslate)
+			{
+				SetCredentialsOnCredentialStore(credentialStore, Constants.GoogleTranslationFullScheme, options.ApiKey, options.PersistGoogleKey);
+			}
+		}
+
+		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
+		{
+			if (GetCredentialsFromStore(credentialStore, Constants.GoogleTranslationFullScheme) is TranslationProviderCredential googleCredentials)
+			{
+				loadOptions.ApiKey = googleCredentials.Credential;
+				loadOptions.PersistGoogleKey = googleCredentials.Persist;
+			}
+		}
+
+		private TranslationProviderCredential GetCredentialsFromStore(ITranslationProviderCredentialStore credentialStore, string uri)
+		{
+			var credentials = credentialStore.GetCredential(new Uri(uri));
+			return credentials is not null ? new TranslationProviderCredential(credentials.Credential, credentials.Persist)
+										   : null;
+		}
+
+		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string providerUri, string apiKey, bool persistKey)
+		{
+			var uri = new Uri(providerUri);
+			var credentials = new TranslationProviderCredential(apiKey, persistKey);
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, credentials);
+		}
 
 		//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
 		/// <summary>
@@ -70,8 +140,7 @@ namespace GoogleTranslatorProvider.Studio
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var projectInfo = projectController?.CurrentProject?.GetProjectInfo();
 			var languagePairs = new List<LanguagePair>();
-
-			if (projectInfo != null)
+			if (projectInfo is not null)
 			{
 				foreach (var targetLanguage in projectInfo.TargetLanguages)
 				{
@@ -79,135 +148,10 @@ namespace GoogleTranslatorProvider.Studio
 					languagePairs.Add(languagePair);
 				}
 			}
+
 			var options = new GTPTranslationOptions();
-			var mainWindowVm = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options);
-
-			if (!mainWindowVm.DialogResult) return false;
-			return mainWindowVm.DialogResult;
-		}
-
-		/// <summary>
-		/// Used for displaying the plug-in info such as the plug-in name,
-		/// tooltip, and icon.
-		/// </summary>
-		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
-		{
-			var info = new TranslationProviderDisplayInfo();
-			info.TranslationProviderIcon = PluginResources.my_icon;
-			var options = new GTPTranslationOptions(translationProviderUri);
-
-			if (options.SelectedProvider == ProviderType.GoogleTranslate)
-			{
-				if (options.SelectedGoogleVersion == ApiVersion.V2)
-				{
-					info.Name = PluginResources.GoogleBasic;
-					info.TooltipText = PluginResources.GoogleBasic;
-				}
-				else
-				{
-					info.Name = PluginResources.GoogleAdvanced;
-					info.TooltipText = PluginResources.GoogleAdvanced;
-				}
-				info.SearchResultImage = PluginResources.my_image;
-			}
-			else
-			{
-				info.Name = PluginResources.Plugin_NiceName;
-				info.TooltipText = PluginResources.Plugin_Tooltip;
-			}
-
-			return info;
-		}
-
-		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-		{
-			if (translationProviderUri == null)
-			{
-				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
-			}
-			return string.Equals(translationProviderUri.Scheme, Provider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
-		}
-
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs,
-			ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
-		{
-			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-
-			var dialogService = new OpenFileDialogService();
-			var providerControlVm = new ProviderControlViewModel(loadOptions);
-			var htmlUtil = new HtmlUtil();
-
-			var settingsControlVm = new SettingsControlViewModel(loadOptions, dialogService, false);
-			var mainWindowVm = new MainWindowViewModel(
-				loadOptions, providerControlVm, settingsControlVm, credentialStore, languagePairs, htmlUtil);
-
-			var mainWindow = new MainWindow
-			{
-				DataContext = mainWindowVm
-			};
-
-			mainWindowVm.CloseEventRaised += () =>
-			{
-				UpdateProviderCredentials(credentialStore, loadOptions);
-
-				mainWindow.Close();
-			};
-
-			mainWindow.ShowDialog();
-			return mainWindowVm;
-		}
-
-		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore,
-			ITranslationOptions options)
-		{
-			switch (options.SelectedProvider)
-			{
-				case ProviderType.GoogleTranslate:
-					SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriGt, options.ApiKey,
-						options.PersistGoogleKey);
-					break;
-			}
-		}
-
-		/// <summary>
-		/// Get saved key if there is one and put it into options
-		/// </summary>
-		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore,
-			ITranslationOptions loadOptions)
-		{
-			//get google credentials
-			var getCredGt = GetCredentialsFromStore(credentialStore, PluginResources.UriGt);
-			if (getCredGt != null)
-			{
-				loadOptions.ApiKey = getCredGt.Credential;
-				loadOptions.PersistGoogleKey = getCredGt.Persist;
-			}
-		}
-
-		private TranslationProviderCredential GetCredentialsFromStore(ITranslationProviderCredentialStore credentialStore, string uri)
-		{
-			var myUri = new Uri(uri);
-			TranslationProviderCredential cred = null;
-
-			if (credentialStore.GetCredential(myUri) != null)
-			{
-				//get the credential to return
-				cred = new TranslationProviderCredential(credentialStore.GetCredential(myUri).Credential, credentialStore.GetCredential(myUri).Persist);
-			}
-
-			return cred;
-		}
-
-		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string providerUri, string apiKey, bool persistKey)
-		{
-			var myUri = new Uri(providerUri);
-
-			var cred = new TranslationProviderCredential(apiKey, persistKey);
-
-
-			credentialStore.RemoveCredential(myUri);
-			credentialStore.AddCredential(myUri, cred);
+			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options);
+			return mainWindowViewModel.DialogResult;
 		}
 	}
-
 }
