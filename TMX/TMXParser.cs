@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -198,11 +200,17 @@ namespace Sdl.Community.FileType.TMX
             return matchValue;
         }
 
-        // helper function for creating segment objects
-        private ISegment CreateSegment(XmlNode segNode, ISegmentPairProperties pair)
+        // if not found, returns ""
+        private static string GetAttribute(XmlNode node, string attributeName)
         {
-            int i = 1;
+	        var found = node.Attributes?.OfType<XmlAttribute>().FirstOrDefault(a => a.Name.Equals(attributeName, StringComparison.OrdinalIgnoreCase));
+	        var value = found?.Value;
+	        return value ?? "";
+        }
 
+        // helper function for creating segment objects
+		private ISegment CreateSegment(XmlNode segNode, ISegmentPairProperties pair)
+        {
             ISegment segment = ItemFactory.CreateSegment(pair);
 
             foreach (XmlNode item in segNode.ChildNodes)
@@ -214,8 +222,11 @@ namespace Sdl.Community.FileType.TMX
 
                 if (item.NodeType == XmlNodeType.Element)
                 {
-                    segment.Add(CreatePhTag(item.Name, item, i));
-                    i++;
+	                var idStr = GetAttribute(item, "type");
+	                int id = -1;
+	                if (int.TryParse(idStr, out var n))
+		                id = n;
+	                segment.Add(CreatePhTag(item.Name, item, id));
                 }
             }
             return segment;
@@ -232,23 +243,27 @@ namespace Sdl.Community.FileType.TMX
 
         private IPlaceholderTag CreatePhTag(string tagContent, XmlNode item, int tagNo)
         {
-            IPlaceholderTagProperties phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
-            IPlaceholderTag phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
+	        IPlaceholderTagProperties phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
 
-            string cont;
-            if (item.NextSibling == null)
-                cont = "";
-            else
-                cont = item.NextSibling.Value;
+			phTagProperties.TagContent = item.OuterXml;
+			if (tagNo >= 0)
+			{
+				phTagProperties.DisplayText = tagNo.ToString();
+				phTagProperties.TextEquivalent = tagNo.ToString();
+			}
+			else
+				phTagProperties.DisplayText = item.Name;
+			phTagProperties.CanHide = false;
 
-            phTagProperties.TagContent = item.OuterXml;
-            phTagProperties.DisplayText = item.Name;
-            phTagProperties.CanHide = false;
+			IPlaceholderTag phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
+
+			if (tagNo >= 0)
+				phTag.UniqueId = tagNo;
 
             return phTag;
         }
 
-        private IContextProperties CreateContext(string spec, string unitID)
+		private IContextProperties CreateContext(string spec, string unitID)
         {
             IContextProperties contextProperties = PropertiesFactory.CreateContextProperties();
             IContextInfo contextInfo = PropertiesFactory.CreateContextInfo(StandardContextTypes.TranslatableContent);
