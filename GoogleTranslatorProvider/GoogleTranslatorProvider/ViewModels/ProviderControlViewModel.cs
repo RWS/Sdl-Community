@@ -307,6 +307,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void SelectGoogleV2()
 		{
+			SelectedTranslationOption = TranslationOptions[0];
 			SelectedGoogleApiVersion = GoogleApiVersions[0];
 			IsV2Checked = true;
 		}
