@@ -213,20 +213,39 @@ namespace Sdl.Community.FileType.TMX
         {
             ISegment segment = ItemFactory.CreateSegment(pair);
 
+            var startId = -1;
             foreach (XmlNode item in segNode.ChildNodes)
             {
                 if (item.NodeType == XmlNodeType.Text)
                 {
-                    segment.Add(CreateText(item.InnerText));
+					if (startId >= 0)
+						segment.Add(CreateTagPair(item.InnerText, startId, "bpt", "ept"));
+					else 
+						segment.Add(CreateText(item.InnerText));
+					startId = -1;
                 }
 
                 if (item.NodeType == XmlNodeType.Element)
                 {
-	                var idStr = GetAttribute(item, "type");
-	                int id = -1;
-	                if (int.TryParse(idStr, out var n))
-		                id = n;
-	                segment.Add(CreatePhTag(item.Name, item, id));
+	                switch (item.Name)
+	                {
+						case "bpt": // start tag 
+						{
+							var idStr = GetAttribute(item, "type");
+							startId = -1;
+							if (int.TryParse(idStr, out var n))
+								startId = n;
+							break;
+						}
+						case "ept": // end tag
+							startId = -1;
+							break;
+						default:
+							startId = -1;
+							segment.Add(CreatePhTag(item.Name, item));
+							break;
+	                }
+
                 }
             }
             return segment;
@@ -241,26 +260,28 @@ namespace Sdl.Community.FileType.TMX
             return textContent;
         }
 
-        private IPlaceholderTag CreatePhTag(string tagContent, XmlNode item, int tagNo)
+        private ITagPair CreateTagPair(string text, int id, string tagStart, string tagEnd)
         {
-	        IPlaceholderTagProperties phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
+	        var pair = ItemFactory.CreateTagPair(
+									PropertiesFactory.CreateStartTagProperties(tagStart), 
+									PropertiesFactory.CreateEndTagProperties(tagEnd));
+	        var textElement = ItemFactory.CreateText(PropertiesFactory.CreateTextProperties(text));
+			pair.Add(textElement);
+			pair.StartTagProperties.TagId = new TagId(id.ToString());
+			return pair;
+        }
+
+        private IPlaceholderTag CreatePhTag(string tagContent, XmlNode item)
+        {
+
+	        var phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
 
 			phTagProperties.TagContent = item.OuterXml;
-			if (tagNo >= 0)
-			{
-				phTagProperties.DisplayText = tagNo.ToString();
-				phTagProperties.TextEquivalent = tagNo.ToString();
-			}
-			else
-				phTagProperties.DisplayText = item.Name;
+			phTagProperties.DisplayText = item.Name;
 			phTagProperties.CanHide = false;
 
 			IPlaceholderTag phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
-
-			if (tagNo >= 0)
-				phTag.UniqueId = tagNo;
-
-            return phTag;
+			return phTag;
         }
 
 		private IContextProperties CreateContext(string spec, string unitID)
