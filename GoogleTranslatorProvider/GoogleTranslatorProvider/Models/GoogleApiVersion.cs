@@ -1,4 +1,4 @@
-﻿namespace GoogleTranslatorProvider.Model
+﻿namespace GoogleTranslatorProvider.Models
 {
 	public class GoogleApiVersion
 	{

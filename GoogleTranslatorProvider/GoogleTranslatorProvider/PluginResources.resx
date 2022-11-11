@@ -126,23 +126,23 @@
     <comment>Line1</comment>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin</value>
+    <value>Google Translator Provider Plugin</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator</value>
+    <value>Google Translator Provider Plugin - Choose between V2 or V3</value>
   </data>
   <data name="ApiConnectorGoogleAuthErrorMsg2" xml:space="preserve">
     <value>Please verify that you have entered the correct API key and that your language pair is supported.</value>
     <comment>Line2</comment>
   </data>
   <data name="Google_Name" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
+    <value>Google Translate</value>
   </data>
   <data name="MsApiBadCredentialsMessage" xml:space="preserve">
     <value>Authentication error: bad credentials</value>
   </data>
   <data name="Google_Tooltip" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
+    <value>Google Translate</value>
   </data>
   <data name="Microsoft_Description" xml:space="preserve">
     <value>MT Enhanced using Microsoft Translator</value>
@@ -152,13 +152,13 @@
     <comment>Line2</comment>
   </data>
   <data name="Google_Description" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
+    <value>Google Translate</value>
   </data>
   <data name="Microsoft_Tooltip" xml:space="preserve">
     <value>MT Enhanced using Microsoft Translator</value>
   </data>
   <data name="Google_NiceName" xml:space="preserve">
-    <value>MT Enhanced using Google Translate</value>
+    <value>Google Translate</value>
   </data>
   <data name="ApiConnectorGoogleAuthErrorMsg1" xml:space="preserve">
     <value>There was a problem getting the translation.</value>
@@ -175,13 +175,13 @@
     <value>Invalid category ID. Use a valid category ID or disable category ID in settings.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin</value>
+    <value>Google Translator Provider Plugin</value>
   </data>
   <data name="microsoft_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\microsoft_image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
-    <value>MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator</value>
+    <value>Google Translator Provider Plugin - Choose between V2 or V3</value>
   </data>
   <data name="Microsoft_Name" xml:space="preserve">
     <value>MT Enhanced using Microsoft Translator</value>
@@ -367,10 +367,10 @@
     <value>V3 - Advanced Translation</value>
   </data>
   <data name="GoogleAdvanced" xml:space="preserve">
-    <value>MT Enhanced using Google Translate Advanced</value>
+    <value>Google Translate - V3 Advanced Translation</value>
   </data>
   <data name="GoogleBasic" xml:space="preserve">
-    <value>MT Enhanced using Google Translate Basic</value>
+    <value>Google Translate - V2 Basic Translation</value>
   </data>
   <data name="GoogleEngineModelDescription" xml:space="preserve">
     <value>Enter AutoML Translation model:</value>
@@ -394,7 +394,7 @@
     <value>Subscription Region:</value>
   </data>
   <data name="AppLogFolder" xml:space="preserve">
-    <value>MTEnhanced</value>
+    <value>GoogleTranslatorProvider</value>
   </data>
   <data name="LogsFileName" xml:space="preserve">
     <value>MTEnhancedLogs.txt</value>

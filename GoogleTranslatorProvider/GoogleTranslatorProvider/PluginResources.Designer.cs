@@ -97,7 +97,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MTEnhanced.
+        ///   Looks up a localized string similar to GoogleTranslatorProvider.
         /// </summary>
         public static string AppLogFolder {
             get {
@@ -226,7 +226,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
+        ///   Looks up a localized string similar to Google Translate.
         /// </summary>
         public static string Google_Description {
             get {
@@ -235,7 +235,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
+        ///   Looks up a localized string similar to Google Translate.
         /// </summary>
         public static string Google_Name {
             get {
@@ -244,7 +244,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
+        ///   Looks up a localized string similar to Google Translate.
         /// </summary>
         public static string Google_NiceName {
             get {
@@ -253,7 +253,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate.
+        ///   Looks up a localized string similar to Google Translate.
         /// </summary>
         public static string Google_Tooltip {
             get {
@@ -262,7 +262,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate Advanced.
+        ///   Looks up a localized string similar to Google Translate - V3 Advanced Translation.
         /// </summary>
         public static string GoogleAdvanced {
             get {
@@ -316,7 +316,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Google Translate Basic.
+        ///   Looks up a localized string similar to Google Translate - V2 Basic Translation.
         /// </summary>
         public static string GoogleBasic {
             get {
@@ -562,7 +562,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator.
+        ///   Looks up a localized string similar to Google Translator Provider Plugin - Choose between V2 or V3.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -571,7 +571,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin.
+        ///   Looks up a localized string similar to Google Translator Provider Plugin.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -580,7 +580,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin.
+        ///   Looks up a localized string similar to Google Translator Provider Plugin.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -589,7 +589,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced Trados Plugin - Choose between Google Translate or Microsoft Translator.
+        ///   Looks up a localized string similar to Google Translator Provider Plugin - Choose between V2 or V3.
         /// </summary>
         public static string Plugin_Tooltip {
             get {

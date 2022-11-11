@@ -17,16 +17,17 @@ namespace GoogleTranslatorProvider.Helpers
 			{
 				Directory.CreateDirectory(logPath);
 			}
+
 			var target = new FileTarget
 			{
-				Name = "MTEnhancedProvider",
+				Name = "GoogleTranslatorProvider",
 				FileName = Path.Combine(logPath, PluginResources.LogsFileName),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
 			var config = LogManager.Configuration;
 			config.AddTarget(target);
-			config.AddRuleForAllLevels(target, "*MtEnhanced*");
+			config.AddRuleForAllLevels(target, "*GoogleTranslatorProvider*");
 			LogManager.ReconfigExistingLoggers();
 		}
 	}

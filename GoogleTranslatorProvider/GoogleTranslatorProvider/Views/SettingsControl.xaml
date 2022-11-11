@@ -21,6 +21,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -34,7 +35,7 @@
 		<Grid Grid.Row="0">
 			<Button Style="{StaticResource TransparentButtonStyle}"
 			        HorizontalAlignment="Left"
-					IsEnabled="{Binding IsTellMeAction, Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
+					Visibility="{Binding IsTellMeAction, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 			        Command="{Binding ShowMainWindowCommand}">
 				<DockPanel>
 					<Image Source="../Resources/backImg.png" Width="auto" Height="15"/>
