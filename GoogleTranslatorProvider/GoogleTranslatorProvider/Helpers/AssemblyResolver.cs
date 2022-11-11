@@ -30,7 +30,8 @@ namespace GoogleTranslatorProvider.Helpers
 			var asemblies = new List<Assembly>();
 			foreach (var file in files)
 			{
-				if (!(file.FullName.ToLower().EndsWith(".dll") || file.FullName.ToLower().EndsWith(".exe")))
+				if (!file.FullName.ToLower().EndsWith(".dll")
+				 && !file.FullName.ToLower().EndsWith(".exe"))
 				{
 					continue;
 				}

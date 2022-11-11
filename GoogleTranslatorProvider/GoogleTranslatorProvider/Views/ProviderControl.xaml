@@ -30,14 +30,7 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<StackPanel Grid.Row="0">
-			<TextBlock Text="{x:Static googleTP:PluginResources.WindowDescription}" Margin="10,10,0,5"/>
 			<DockPanel Margin="10,0,0,5">
-				<ComboBox
-					ItemsSource="{Binding TranslationOptions}"
-					SelectedItem="{Binding SelectedTranslationOption}"
-					DisplayMemberPath="Name"
-					DockPanel.Dock="Left" 
-					Width="200"/>
 				<Button Style="{StaticResource TransparentButtonStyle}"
 						Command="{Binding ShowSettingsCommand}">
 					<DockPanel>
@@ -48,10 +41,9 @@
 			</DockPanel>
 		</StackPanel>
 		<!--Google API Options-->
-		<StackPanel 
-			Grid.Row="1" 
-			Visibility="{Binding IsMicrosoftSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
-			<TextBlock Margin="10,10, 0,5" Text="{x:Static googleTP:PluginResources.GoogleApiDescription}"/>
+		<StackPanel Grid.Row="1">
+			<TextBlock Margin="10,10, 0,5"
+					   Text="{x:Static googleTP:PluginResources.GoogleApiDescription}"/>
 			<ComboBox
 				ItemsSource="{Binding GoogleApiVersions}"
 				SelectedItem="{Binding SelectedGoogleApiVersion}"
@@ -60,7 +52,10 @@
 				Margin="10, 0,0,5"
 				Width="200"/>
 			<!--Google API V2-->
-			<TextBlock Margin="10,10,0,5" Text="{x:Static googleTP:PluginResources.GoogleApiKeyDescription}"/>
+			<TextBlock
+				Margin="10,10,0,5"
+				Text="{x:Static googleTP:PluginResources.GoogleApiKeyDescription}"
+				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"/>
 			<controls:BindablePasswordBox
 				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 				HorizontalAlignment="Left"

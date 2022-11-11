@@ -186,7 +186,6 @@ namespace GoogleTranslatorProvider.Studio
 			};
 
 			translationUnit.ResourceId = new PersistentObjectToken(translationUnit.GetHashCode(), Guid.Empty);
-
 			return new SearchResult(translationUnit)
 			{
 				ScoringResult = new ScoringResult { BaseScore = 0 },

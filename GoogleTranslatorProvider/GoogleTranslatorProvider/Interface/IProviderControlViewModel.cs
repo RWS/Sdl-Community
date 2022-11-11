@@ -1,11 +1,6 @@
-﻿using GoogleTranslatorProvider.Model;
-using GoogleTranslatorProvider.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
+using GoogleTranslatorProvider.Models;
 
 namespace GoogleTranslatorProvider.Interfaces
 {
@@ -15,7 +10,7 @@ namespace GoogleTranslatorProvider.Interfaces
 	{
 		BaseModel ViewModel { get; set; }
 
-		ICommand ShowSettingsCommand { get; set; }
+		TranslationOption SelectedTranslationOption { get; }
 
 		List<TranslationOption> TranslationOptions { get; set; }
 
@@ -23,19 +18,13 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		GoogleApiVersion SelectedGoogleApiVersion { get; set; }
 
-		TranslationOption SelectedTranslationOption { get; set; }
-
-		bool IsV2Checked { get; set; }
+		bool IsV2Checked { get; }
 
 		bool PersistGoogleKey { get; set; }
 
-
 		bool IsTellMeAction { get; set; }
 
-		bool BasicCsvGlossary { get; set; }
-
-
-		string ApiKey { get; set; } //Google
+		string ApiKey { get; set; }
 
 		string JsonFilePath { get; set; }
 
@@ -48,6 +37,10 @@ namespace GoogleTranslatorProvider.Interfaces
 		string GlossaryId { get; set; }
 
 		string GlossaryPath { get; set; }
+
+		bool BasicCsvGlossary { get; set; }
+
+		ICommand ShowSettingsCommand { get; set; }
 
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}

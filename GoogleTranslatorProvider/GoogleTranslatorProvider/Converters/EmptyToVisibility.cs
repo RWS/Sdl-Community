@@ -1,7 +1,7 @@
-﻿using System.Globalization;
-using System.Windows.Data;
+﻿using System;
+using System.Globalization;
 using System.Windows;
-using System;
+using System.Windows.Data;
 
 namespace GoogleTranslatorProvider.Converters
 {

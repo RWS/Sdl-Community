@@ -1,30 +1,30 @@
-﻿using GoogleTranslatorProvider.Commands;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Model;
-using GoogleTranslatorProvider.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using GoogleTranslatorProvider.Commands;
+using GoogleTranslatorProvider.Interfaces;
+using GoogleTranslatorProvider.Models;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
 	public class ProviderControlViewModel : BaseModel, IProviderControlViewModel
 	{
 		private readonly ITranslationOptions _options;
-		private ICommand _clearCommand;
-		private TranslationOption _selectedTranslationOption;
+
 		private GoogleApiVersion _selectedGoogleApiVersion;
-		private bool _isV2Checked;
-		private bool _persistGoogleKey;
-		private bool _isTellMeAction;
-		private bool _basicCsvGlossary;
-		private string _apiKey;
-		private string _jsonFilePath;
-		private string _projectName;
 		private string _googleEngineModel;
 		private string _projectLocation;
-		private string _glossaryId;
 		private string _glossaryPath;
+		private string _jsonFilePath;
+		private string _projectName;
+		private string _glossaryId;
+		private string _apiKey;
+
+		private bool _persistGoogleKey;
+		private bool _basicCsvGlossary;
+		private bool _isTellMeAction;
+
+		private ICommand _clearCommand;
 
 		public ProviderControlViewModel(ITranslationOptions options)
 		{
@@ -42,80 +42,11 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		//}
 
-		private void InitializeComponent()
-		{
-			TranslationOptions = new List<TranslationOption>
-			{
-				new TranslationOption
-				{
-					Name = PluginResources.Google,
-					ProviderType = ProviderType.GoogleTranslate
-				}
-			};
-
-			GoogleApiVersions = new List<GoogleApiVersion>
-			{
-				new GoogleApiVersion
-				{
-					Name = PluginResources.GoogleApiVersionV2Description,
-					Version = ApiVersion.V2
-				},
-				new GoogleApiVersion
-				{
-					Name = PluginResources.GoogleApiVersionV3Description,
-					Version = ApiVersion.V3
-				}
-			};
-
-			if (_options != null)
-			{
-				ApiKey = _options.ApiKey;
-				PersistGoogleKey = _options.PersistGoogleKey;
-				JsonFilePath = _options.JsonFilePath;
-				ProjectName = _options.ProjectName;
-				GoogleEngineModel = _options.GoogleEngineModel;
-				ProjectLocation = _options.ProjectLocation;
-				GlossaryPath = _options.GlossaryPath;
-				BasicCsvGlossary = _options.BasicCsv;
-			}
-
-
-			SetTranslationOption();
-			SetGoogleApiVersion();
-		}
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
-
-		private void Clear(object obj)
-		{
-			if (obj is not string objectName) return;
-
-			switch (objectName)
-			{
-				case "JsonFilePath":
-					JsonFilePath = string.Empty;
-					break;
-				case "ProjectName":
-					ProjectName = string.Empty;
-					break;
-				case "ProjectLocation":
-					ProjectLocation = string.Empty;
-					break;
-				case "GoogleEngineModel":
-					GoogleEngineModel = string.Empty;
-					break;
-				case "GlossaryPath":
-					GlossaryPath = string.Empty;
-					break;
-			}
-		}
-
 		public BaseModel ViewModel { get; set; }
 
-		public ICommand ShowSettingsCommand { get; set; }
+		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
 		public List<TranslationOption> TranslationOptions { get; set; }
-
-		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
 		public string GoogleEngineModel
 		{
@@ -164,41 +95,24 @@ namespace GoogleTranslatorProvider.ViewModels
 				ClearMessageRaised?.Invoke();
 			}
 		}
-		public event ClearMessageEventRaiser ClearMessageRaised;
+
 
 		public GoogleApiVersion SelectedGoogleApiVersion
 		{
 			get => _selectedGoogleApiVersion;
 			set
 			{
+				if (_selectedGoogleApiVersion == value) return;
 				_selectedGoogleApiVersion = value;
-				IsV2Checked = _selectedGoogleApiVersion.Version == ApiVersion.V2;
 				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public TranslationOption SelectedTranslationOption
-		{
-			get => _selectedTranslationOption;
-			set
-			{
-				_selectedTranslationOption = value;
-				OnPropertyChanged(nameof(SelectedTranslationOption));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public bool IsV2Checked
-		{
-			get => _isV2Checked;
-			set
-			{
-				if (_isV2Checked == value) return;
-				_isV2Checked = value;
 				OnPropertyChanged(nameof(IsV2Checked));
+				ClearMessageRaised?.Invoke();
 			}
 		}
+
+		public TranslationOption SelectedTranslationOption => TranslationOptions[0];
+
+		public bool IsV2Checked => SelectedGoogleApiVersion.Version == ApiVersion.V2;
 
 		public string ApiKey
 		{
@@ -211,6 +125,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				ClearMessageRaised?.Invoke();
 			}
 		}
+
 		public string JsonFilePath
 		{
 			get => _jsonFilePath;
@@ -268,49 +183,115 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+		public ICommand ShowSettingsCommand { get; set; }
+
+		public event ClearMessageEventRaiser ClearMessageRaised;
+
+		private void InitializeComponent()
+		{
+			TranslationOptions = new List<TranslationOption>
+			{
+				new TranslationOption
+				{
+					Name = PluginResources.Google,
+					ProviderType = ProviderType.GoogleTranslate
+				}
+			};
+
+			GoogleApiVersions = new List<GoogleApiVersion>
+			{
+				new GoogleApiVersion
+				{
+					Name = PluginResources.GoogleApiVersionV2Description,
+					Version = ApiVersion.V2
+				},
+				new GoogleApiVersion
+				{
+					Name = PluginResources.GoogleApiVersionV3Description,
+					Version = ApiVersion.V3
+				}
+			};
+
+			if (_options is not null)
+			{
+				ApiKey = _options.ApiKey;
+				PersistGoogleKey = _options.PersistGoogleKey;
+				JsonFilePath = _options.JsonFilePath;
+				ProjectName = _options.ProjectName;
+				GoogleEngineModel = _options.GoogleEngineModel;
+				ProjectLocation = _options.ProjectLocation;
+				GlossaryPath = _options.GlossaryPath;
+				BasicCsvGlossary = _options.BasicCsv;
+			}
+
+
+			SetTranslationOption();
+			SetGoogleApiVersion();
+		}
+
 		private void SetTranslationOption()
 		{
-			if ((_options?.SelectedProvider) == null)
+			if (_options?.SelectedProvider is null)
 			{
 				SelectGoogleV2();
 				return;
 			}
 
 			var selectedProvider = TranslationOptions.FirstOrDefault(t => t.ProviderType.Equals(_options.SelectedProvider));
-			if (selectedProvider == null)
+			if (selectedProvider is null)
 			{
 				SelectGoogleV2();
+				return;
 			}
-
-			SelectedTranslationOption ??= selectedProvider;
 		}
 
 		private void SetGoogleApiVersion()
 		{
-			if (_options?.SelectedGoogleVersion != null)
+			if (_options?.SelectedGoogleVersion is null)
 			{
-				var selectedVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion));
-				if (selectedVersion != null)
-				{
-					SelectedGoogleApiVersion = selectedVersion;
-				}
-				else
-				{
-					SelectGoogleV2();
-				}
-			}
-			else
-			{
-				//Bydefault we'll select Google V2 version - which is the basic one
 				SelectGoogleV2();
+				return;
 			}
+
+			var selectedVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion));
+			if (selectedVersion is null)
+			{
+				SelectGoogleV2();
+				return;
+			}
+
+			SelectedGoogleApiVersion = selectedVersion;
 		}
 
 		private void SelectGoogleV2()
 		{
-			SelectedTranslationOption = TranslationOptions[0];
 			SelectedGoogleApiVersion = GoogleApiVersions[0];
-			IsV2Checked = true;
+		}
+
+		private void Clear(object obj)
+		{
+			if (obj is not string objectName) return;
+
+			switch (objectName)
+			{
+				case "JsonFilePath":
+					JsonFilePath = string.Empty;
+					break;
+				case "ProjectName":
+					ProjectName = string.Empty;
+					break;
+				case "ProjectLocation":
+					ProjectLocation = string.Empty;
+					break;
+				case "GoogleEngineModel":
+					GoogleEngineModel = string.Empty;
+					break;
+				case "GlossaryPath":
+					GlossaryPath = string.Empty;
+					break;
+			}
 		}
 	}
 }

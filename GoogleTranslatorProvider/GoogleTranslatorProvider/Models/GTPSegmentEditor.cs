@@ -101,7 +101,6 @@ namespace GoogleTranslatorProvider.Models
 			processName = processName.Substring(0, processName.LastIndexOf('.'));
 			var process = Process.GetProcessesByName(processName);
 			return process[0].MainWindowHandle;
-
 		}
 	}
 }

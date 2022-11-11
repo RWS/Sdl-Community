@@ -22,7 +22,7 @@ namespace GoogleTranslatorProvider.Behaviours
 			webBrowser.SetValue(HtmlProperty, value);
 		}
 
-		static void OnHtmlChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+		private static void OnHtmlChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
 			var eNewValue = e.NewValue.ToString();
 			if (obj is WebBrowser webBrowser

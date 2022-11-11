@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Studio;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using static System.Convert;
@@ -10,12 +9,9 @@ namespace GoogleTranslatorProvider.Models
 {
 	public class GTPTranslationOptions : ITranslationOptions
 	{
-		private string _apiKey;
-
-		//The translation method affects when/if the plugin gets called by Studio
+		private readonly TranslationProviderUriBuilder _uriBuilder;
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
-
-		TranslationProviderUriBuilder _uriBuilder;
+		private string _apiKey;
 
 		public GTPTranslationOptions()
 		{
@@ -251,5 +247,4 @@ namespace GoogleTranslatorProvider.Models
 			}
 		}
 	}
-
 }

@@ -47,10 +47,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 		{
 			var request = new TranslateTextRequest
 			{
-				Contents =
-				{
-					"test"
-				},
+				Contents = { "test" },
 				TargetLanguageCode = "fr-FR",
 				Parent = new ProjectName(_options.ProjectName).ToString()
 			};
