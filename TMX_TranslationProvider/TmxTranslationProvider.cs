@@ -74,38 +74,23 @@ namespace TMX_TranslationProvider
 			return JsonConvert.SerializeObject(_options);
 		}
 
-
-		public bool SupportsConcordanceSearch => true;
-
-		public bool SupportsDocumentSearches => true;
-
 		public bool SupportsFilters => false;
+		public bool SupportsWordCounts => false;
+		public bool SupportsUpdate => false;
 
-		public bool SupportsFuzzySearch => true;
-
-		public bool SupportsMultipleResults => true;
-
+		public bool SupportsConcordanceSearch => false;
+		public bool SupportsDocumentSearches => false;
+		public bool SupportsFuzzySearch => false;
+		public bool SupportsMultipleResults => false;
 		public bool SupportsPenalties => true;
-
-		public bool SupportsPlaceables => true;
-
-		public bool SupportsScoring => true;
-
+		public bool SupportsPlaceables => false;
+		public bool SupportsScoring => false;
 		public bool SupportsSearchForTranslationUnits => true;
-
-		public bool SupportsSourceConcordanceSearch => true;
-
-		public bool SupportsStructureContext => true;
-
+		public bool SupportsSourceConcordanceSearch => false;
+		public bool SupportsStructureContext => false;
 		public bool SupportsTaggedInput => true;
-
-		public bool SupportsTargetConcordanceSearch => true;
-
+		public bool SupportsTargetConcordanceSearch => false;
 		public bool SupportsTranslation => true;
-
-		public bool SupportsUpdate => true;
-
-		public bool SupportsWordCounts => true;
 
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)

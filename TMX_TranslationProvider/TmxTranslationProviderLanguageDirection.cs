@@ -9,6 +9,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TMX_TranslationProvider.Search;
+using TMX_TranslationProvider.Utils;
 
 namespace TMX_TranslationProvider
 {
@@ -51,6 +52,9 @@ namespace TMX_TranslationProvider
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
+			// FIXME
+			return DummyTranslate.SearchSegment(segment);
+
 			CreateSearcher();
 			return _searcher?.Search(settings, segment, _languagePair) ?? new SearchResults();
 		}
@@ -88,7 +92,9 @@ namespace TMX_TranslationProvider
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
-            var searchResult = new SearchResults();
+			return SearchSegment(settings, translationUnit.SourceSegment);
+			
+			var searchResult = new SearchResults();
 
             if (translationUnit.TargetSegment !=null)
             {
@@ -101,9 +107,7 @@ namespace TMX_TranslationProvider
                     if (translationUnit.TargetSegment.IsEmpty)
                         searchResult = SearchSegment(settings, translationUnit.SourceSegment);
                     else
-                    {
                         searchResult.SourceSegment = translationUnit.SourceSegment.Duplicate();
-                    }
                 }                
             }
             else
@@ -123,6 +127,23 @@ namespace TMX_TranslationProvider
 			return results;
 		}
 
+		private SearchResults UnchangedTU(TranslationUnit tu)
+		{
+			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+			tu.Origin = TranslationUnitOrigin.Unknown;
+
+			var sr = new SearchResult(tu)
+			{
+				ScoringResult = new ScoringResult
+				{
+					BaseScore = 0,
+				},
+				TranslationProposal = tu,
+			};
+			var result = new SearchResults();
+			result.Add(sr);
+			return result;
+		}
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
 			var results = new List<SearchResults>();
@@ -136,9 +157,7 @@ namespace TMX_TranslationProvider
 					results.Add(result);
 				}
 				else
-				{
 					results.Add(null);
-				}
 				i++;
 			}
 

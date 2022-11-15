@@ -11,7 +11,6 @@ namespace TMX_TranslationProvider
 	public class TmxTranslationsOptions
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
-		//public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.TranslationMemory;
 
 		public TmxTranslationsOptions(Uri uri )
