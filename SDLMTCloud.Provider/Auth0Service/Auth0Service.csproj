@@ -12,6 +12,9 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(TradosFolder)\Microsoft.IdentityModel.Tokens.dll</HintPath>

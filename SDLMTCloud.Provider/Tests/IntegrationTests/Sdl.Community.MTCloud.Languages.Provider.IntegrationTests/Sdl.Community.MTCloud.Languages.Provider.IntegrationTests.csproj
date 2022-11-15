@@ -6,6 +6,9 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\..\..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
