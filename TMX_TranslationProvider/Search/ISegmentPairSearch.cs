@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_TranslationProvider.Search.Result;
+using TMX_TranslationProvider.Search.SearchSegment;
 
 namespace TMX_TranslationProvider.Search
 {
@@ -17,6 +18,8 @@ namespace TMX_TranslationProvider.Search
 		bool SupportsTargetLanguage(CultureInfo language);
 
 		int SegmentPairCount();
-		SimpleResult TryTranslate(string sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, SearchMode searchMode);
+		SimpleResult TryTranslateExact(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, int minScore);
+		SimpleResult TryTranslateFuzzy(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, int minScore);
+		SimpleResult TryTranslateConcordance(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, bool sourceConcordance, int minScore);
 	}
 }

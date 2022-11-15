@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TMX_TranslationProvider.Util
+namespace TMX_TranslationProvider.Utils
 {
-	internal static class Constants
+	internal class Util
 	{
 	}
 }

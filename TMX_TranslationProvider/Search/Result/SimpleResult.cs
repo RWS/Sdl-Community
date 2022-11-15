@@ -10,7 +10,7 @@ using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace TMX_TranslationProvider.Search.Result
 {
-	internal class SimpleResult
+	public class SimpleResult
 	{
 		// if !minvalue -> it's the time when this was translated
 		public DateTime TranslateTime = DateTime.MinValue;
@@ -24,6 +24,8 @@ namespace TMX_TranslationProvider.Search.Result
 		public ConfirmationLevel ConfirmationLevel = ConfirmationLevel.Draft;
 		public TranslationUnitOrigin Origin = TranslationUnitOrigin.TM;
 		public int Score = 100;
+
+		public bool IsExactMatch => Score >= 100;
 
 		public List<PenaltyType> Penalties = new List<PenaltyType>();
 

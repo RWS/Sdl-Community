@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.ProjectApi.Settings;
+using Sdl.ProjectAutomation.Settings;
 using TMX_TranslationProvider.Search.Result;
+using TMX_TranslationProvider.Search.SearchSegment;
 
 namespace TMX_TranslationProvider.Search
 {
@@ -29,7 +30,6 @@ namespace TMX_TranslationProvider.Search
 
 		public TranslationMemorySettings TMSettings { get; set; }
 
-		public bool ShowMostRecentTranslationsFirst => TMSettings?.OrderSearchResultsInReverseChronologicalOrder ?? false;
 		private int MaxResults(SearchSettings settings) => settings.IsConcordanceSearch 
 			? (TMSettings?.ConcordanceMaximumResults ?? settings.MaxResults) : settings.MaxResults;
 
@@ -37,7 +37,7 @@ namespace TMX_TranslationProvider.Search
 			? (TMSettings?.ConcordanceMinimumMatchValue ?? settings.MinScore)
 			: settings.MinScore;
 
-		private bool LookupMtEvenIfTmHasMatch => TMSettings?.LookupMtEvenIfTmHasMatch?.Value ?? false;
+		private bool LookupMtEvenIfTmHasMatch => TMSettings.GetSetting<bool>("LookupMtEvenIfTmHasMatch");
 
 		public GenericSegmentPairSearch(ISegmentPairSearch provider)
 		{
@@ -106,8 +106,63 @@ namespace TMX_TranslationProvider.Search
 		private void SortSearchResults(SearchSettings settings, SimpleResults results)
 		{
 			// more about SortSpecification: TranslationMemorySettings.cs:596
-
 			results.Results.Sort((a,b) => SortSimpleResult(a,b,settings.SortSpecification.Criteria));
+		}
+
+		private void SearchExact(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		{
+			if (HaveEnoughResults(results, settings))
+				return;
+
+			var count = _provider.SegmentPairCount();
+			var minScore = MinScore(settings);
+			for (int i = 0; i < count; ++i)
+			{
+				var result = _provider.TryTranslateExact(text, i, language.SourceCulture, language.TargetCulture, minScore);
+				if (result != null && result.Score >= minScore)
+				{
+					results.Results.Add(result);
+					if (HaveEnoughResults(results, settings))
+						break;
+				}
+			}
+		}
+
+		private void SearchFuzzy(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		{
+			if (HaveEnoughResults(results, settings))
+				return;
+
+			var count = _provider.SegmentPairCount();
+			var minScore = MinScore(settings);
+			for (int i = 0; i < count; ++i)
+			{
+				var result = _provider.TryTranslateFuzzy(text, i, language.SourceCulture, language.TargetCulture, minScore);
+				if (result != null && result.Score >= minScore)
+				{
+					results.Results.Add(result);
+					if (HaveEnoughResults(results, settings))
+						break;
+				}
+			}
+		}
+		private void SearchConcordance(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
+		{
+			if (HaveEnoughResults(results, settings))
+				return;
+
+			var count = _provider.SegmentPairCount();
+			var minScore = MinScore(settings);
+			for (int i = 0; i < count; ++i)
+			{
+				var result = _provider.TryTranslateConcordance(text, i, language.SourceCulture, language.TargetCulture, sourceConcorance, minScore);
+				if (result != null && result.Score >= minScore)
+				{
+					results.Results.Add(result);
+					if (HaveEnoughResults(results, settings))
+						break;
+				}
+			}
 		}
 
 		public SearchResults Search(SearchSettings settings, Segment segment, LanguagePair language)
@@ -115,17 +170,52 @@ namespace TMX_TranslationProvider.Search
 			if (!_provider.SupportsSourceLanguage(language.SourceCulture) || !_provider.SupportsTargetLanguage(language.TargetCulture))
 				return new SearchResults();
 
+			var text = new TextSegment(segment.ToPlain());
 			var results = new SimpleResults();
-			var count = _provider.SegmentPairCount();
-			for (int i = 0; i < count; ++i)
+			switch (settings.Mode)
 			{
-				var result = _provider.TryTranslate(segment.ToPlain(), i, language.SourceCulture, language.TargetCulture, settings.Mode);
-				if (result != null && result.Score >= MinScore(settings))
-				{
-					results.Results.Add(result);
-					if (HaveEnoughResults(results, settings))
-						break;
-				}
+				// Performs only an exact search, without fuzzy search.
+				case SearchMode.ExactSearch:
+					SearchExact(settings, text, language, results);
+					break;
+
+				// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
+				// if no exact matches are found.
+				case SearchMode.NormalSearch:
+					SearchExact(settings, text, language, results);
+					var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
+					if (!anyExactMatches)
+						SearchFuzzy(settings, text, language, results);
+					break;
+
+				// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 
+				// fuzzy search is always triggered, even if exact matches are found.
+				case SearchMode.FullSearch:
+					SearchExact(settings, text, language, results);
+					SearchFuzzy(settings, text, language, results);
+					break;
+
+				// Performs a concordance search on the source segments, using the source character-based index if it exists or
+				// the default word-based index otherwise.
+				case SearchMode.ConcordanceSearch:
+					SearchConcordance(settings, text, language, results, sourceConcorance: true);
+					break;
+
+				// Performs a concordance search on the target segments, if the target character-based index exists.
+				case SearchMode.TargetConcordanceSearch:
+					SearchConcordance(settings, text, language, results, sourceConcorance: false);
+					break;
+
+				// Performs only a fuzzy search. 
+				case SearchMode.FuzzySearch:
+					SearchFuzzy(settings, text, language, results);
+					break;
+
+				// Performs a search on the source and target hashes for duplicate search during import (only used internally).
+				case SearchMode.DuplicateSearch:
+					throw new ArgumentOutOfRangeException(nameof(SearchMode));
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 
 			CompleteSearch(settings, results);

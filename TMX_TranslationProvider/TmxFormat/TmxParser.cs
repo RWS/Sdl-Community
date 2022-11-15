@@ -125,7 +125,10 @@ namespace TMX_TranslationProvider.TmxFormat
 		{
 			var source = xmlUnit.SelectSingleNode("tuv[1]/seg");
 			var target = xmlUnit.SelectSingleNode("tuv[2]/seg");
-            var tu = new TmxTranslationUnit();
+            var tu = new TmxTranslationUnit
+            {
+				SourceLanguage = _header.SourceLanguage, TargetLanguage = _header.TargetLanguage,
+            };
             tu.Source = NoteToTextPart(source);
             if (target != null)
                 tu.Target = NoteToTextPart(target);
@@ -136,10 +139,10 @@ namespace TMX_TranslationProvider.TmxFormat
             var changeAuthor = GetAttribute(xmlUnit, "changeid");
 
 			if (creationDate != "")
-                tu.CreationDate = Iso8601Date(creationDate);
+                tu.CreationTime = Iso8601Date(creationDate);
             tu.CreationAuthor = creationAuthor;
             if (changeDate != "")
-                tu.ChangeDate = Iso8601Date(changeDate);
+                tu.ChangeTime = Iso8601Date(changeDate);
             tu.ChangeAuthor = changeAuthor;
 
 			// confirmation level

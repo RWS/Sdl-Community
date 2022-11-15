@@ -7,8 +7,11 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="packages\**" />
     <Compile Remove="TMXTests\**" />
+    <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="TMXTests\**" />
+    <None Remove="packages\**" />
     <None Remove="TMXTests\**" />
   </ItemGroup>
   <ItemGroup>
@@ -41,12 +44,12 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
-    </Reference>
+    </Reference>	
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>	
-    <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectApi.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
