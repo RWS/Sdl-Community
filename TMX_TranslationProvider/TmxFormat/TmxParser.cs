@@ -70,6 +70,7 @@ namespace TMX_TranslationProvider.TmxFormat
 			_error = "";
 			try
 			{
+				List<TmxTranslationUnit> translations = new List<TmxTranslationUnit>();
 				XmlReaderSettings settings = new XmlReaderSettings();
 				settings.XmlResolver = null;
 				settings.DtdProcessing = DtdProcessing.Ignore;
@@ -80,8 +81,11 @@ namespace TMX_TranslationProvider.TmxFormat
                 ParseHeader();
 
 				foreach (XmlNode item in _document.SelectNodes("//tu"))
-					_translations.Add(NodeToTU(item));
-            }
+					translations.Add(NodeToTU(item));
+
+				lock (this)
+					_translations = translations;
+			}
 			catch (Exception e)
 			{
 				_error = $"There has been an error parsing {_fileName}: {e.Message}";

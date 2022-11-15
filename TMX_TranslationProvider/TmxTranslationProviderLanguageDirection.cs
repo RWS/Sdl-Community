@@ -49,42 +49,10 @@ namespace TMX_TranslationProvider
 				_searcher.TMSettings = _projectsController.CurrentProject.GetSettings().GetSettingsGroup<TranslationMemorySettings>();
 		}
 
-		private string DummyTranslateText(string text)
-		{
-			var dummy = new StringBuilder();
-			foreach (var ch in text)
-				dummy.Append($"{ch}-");
-			return dummy.ToString();
-		}
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
 			CreateSearcher();
-
-			// FIXME
-			var result = new SearchResults();
-			var source = new Segment();
-			var target = new Segment();
-			source.Add(segment.ToPlain());
-			target.Add(DummyTranslateText(segment.ToPlain()));
-			var tu = new TranslationUnit
-			{
-				SourceSegment = source, 
-				TargetSegment = target,
-				ConfirmationLevel = ConfirmationLevel.Draft,
-			};
-			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-			tu.Origin = TranslationUnitOrigin.Nmt;
-
-			var sr = new SearchResult(tu)
-			{
-				ScoringResult = new ScoringResult
-				{
-					BaseScore = 70,
-				},
-				TranslationProposal = tu,
-			};
-			result.Add(sr);
-			return result;
+			return _searcher?.Search(settings, segment, _languagePair) ?? new SearchResults();
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)

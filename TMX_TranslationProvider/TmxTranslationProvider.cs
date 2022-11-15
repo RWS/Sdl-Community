@@ -25,6 +25,10 @@ namespace TMX_TranslationProvider
 		public TmxTranslationProvider(TmxTranslationsOptions options)
 		{
 			_options = options;
+			_parser = _options.FileName != "" ? new TmxParser(_options.FileName) : null;
+			if (_parser != null)
+				// loading happens async
+				_parser.LoadAsync();
 		}
 
 		public TmxTranslationsOptions Options
@@ -52,6 +56,10 @@ namespace TMX_TranslationProvider
 		{
 			_options = JsonConvert.DeserializeObject<TmxTranslationsOptions>(translationProviderState);
 			_parser = _options.FileName != "" ? new TmxParser(_options.FileName) : null;
+
+			if (_parser != null)
+				// loading happens async
+				_parser.LoadAsync();
 		}
 
 		public string Name => PluginResources.Plugin_NiceName;
