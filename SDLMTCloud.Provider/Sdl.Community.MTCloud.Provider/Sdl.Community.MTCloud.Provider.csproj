@@ -16,6 +16,9 @@
 	  <None Remove="Resources\Report.xsl" />
 	  <None Remove="UiHelpers\Watermark\WatermarkPasswordBoxResources.xaml" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.JsonPatch">
       <HintPath>$(TradosFolder)\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
