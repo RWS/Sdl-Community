@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -52,9 +53,6 @@ namespace TMX_TranslationProvider
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			// FIXME
-			return DummyTranslate.SearchSegment(segment);
-
 			CreateSearcher();
 			return _searcher?.Search(settings, segment, _languagePair) ?? new SearchResults();
 		}
@@ -92,11 +90,8 @@ namespace TMX_TranslationProvider
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
-			return SearchSegment(settings, translationUnit.SourceSegment);
-			
 			var searchResult = new SearchResults();
-
-            if (translationUnit.TargetSegment !=null)
+			if (translationUnit.TargetSegment !=null)
             {
                 if (!_provider.Options.IgnoreTranslatedSegments )
                 {
@@ -127,10 +122,21 @@ namespace TMX_TranslationProvider
 			return results;
 		}
 
-		private SearchResults UnchangedTU(TranslationUnit tu)
+		private SearchResults EmptyTU()
 		{
+			var result = new SearchResults();
+			var source = new Segment(SourceLanguage);
+			var target = new Segment(TargetLanguage);
+			result.SourceSegment = source;
+			var tu = new TranslationUnit
+			{
+				SourceSegment = source,
+				TargetSegment = target,
+				ConfirmationLevel = ConfirmationLevel.Draft,
+			};
+
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-			tu.Origin = TranslationUnitOrigin.Unknown;
+			tu.Origin = TranslationUnitOrigin.Nmt;
 
 			var sr = new SearchResult(tu)
 			{
@@ -140,28 +146,13 @@ namespace TMX_TranslationProvider
 				},
 				TranslationProposal = tu,
 			};
-			var result = new SearchResults();
 			result.Add(sr);
 			return result;
 		}
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
-			var results = new List<SearchResults>();
-
-			var i = 0;
-			foreach (var tu in translationUnits)
-			{
-				if (mask == null || mask[i])
-				{
-					var result = SearchTranslationUnit(settings, tu);
-					results.Add(result);
-				}
-				else
-					results.Add(null);
-				i++;
-			}
-
-			return results.ToArray();
+			var sr = SearchTranslationUnits(settings, translationUnits);
+			return sr;
 		}
 
 

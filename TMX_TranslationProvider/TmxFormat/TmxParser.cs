@@ -13,8 +13,6 @@ namespace TMX_TranslationProvider.TmxFormat
 	
 	public class TmxParser : IDisposable
 	{
-		private bool _loaded;
-		private XmlDocument _document;
 
 		private string _fileName;
 		// if non-empty -> error parsing the file
@@ -31,38 +29,39 @@ namespace TMX_TranslationProvider.TmxFormat
         public IReadOnlyList<TmxTranslationUnit> TranslationUnits => _translations;
 
         private TmxHeader _header;
+        public TmxHeader Header {
+	        get
+	        {
+				lock(this)
+					return _header;
+			}
+        }
 
-		public TmxParser(string fileName)
+        public TmxParser(string fileName)
 		{
 			_fileName = fileName;
+			// note: loading async is a really bad idea, since all calls to the language direction are sync
+			// processing the nodes is async, but at the end of this function, we'll know the source + target languages
+			Load();
 		}
 
-		public async Task LoadAsync()
-		{
-			lock(this)
-				if (_loaded)
-					return;
-			await Task.Run(Load);
-			lock (this)
-				_loaded = true;
-		}
-
-        private void ParseHeader()
+        private void ParseHeader(XmlDocument document)
         {
-            string sourceLanguage = _document.SelectSingleNode("tmx/header/@srclang")?.InnerText ?? "";
-            string targetLanguage = _document.SelectSingleNode("tmx/body/tu[1]/tuv[2]")?.Attributes?[0].InnerText ?? "";
+            string sourceLanguage = document.SelectSingleNode("tmx/header/@srclang")?.InnerText ?? "";
+            string targetLanguage = document.SelectSingleNode("tmx/body/tu[1]/tuv[2]")?.Attributes?[0].InnerText ?? "";
             List<string> domains = new List<string>();
 
-            var domainsStr = _document.SelectSingleNode("tmx/header/prop[@type='x-Domain:SinglePicklist']")?.InnerText ?? "";
+            var domainsStr = document.SelectSingleNode("tmx/header/prop[@type='x-Domain:SinglePicklist']")?.InnerText ?? "";
             if (domainsStr != "")
                 domains = domainsStr.Split(',').Select(s => s.Trim()).ToList();
-            var creationDateStr = GetAttribute(_document.SelectSingleNode("tmx/header"), "creationdate");
-            var author = GetAttribute(_document.SelectSingleNode("tmx/header"), "creationid");
+            var creationDateStr = GetAttribute(document.SelectSingleNode("tmx/header"), "creationdate");
+            var author = GetAttribute(document.SelectSingleNode("tmx/header"), "creationid");
             DateTime? creationDate = null;
             if (creationDateStr != "")
                 creationDate = Iso8601Date(creationDateStr);
 
-            _header = new TmxHeader(sourceLanguage, targetLanguage, domains, creationDate, author);
+			lock(this)
+				_header = new TmxHeader(sourceLanguage, targetLanguage, domains, creationDate, author);
         }
 
         private void Load()
@@ -76,15 +75,18 @@ namespace TMX_TranslationProvider.TmxFormat
 				settings.DtdProcessing = DtdProcessing.Ignore;
 				XmlReader xmlReader = XmlTextReader.Create(_fileName, settings);
 
-				_document = new XmlDocument();
-				_document.Load(xmlReader);
-                ParseHeader();
+				var document = new XmlDocument();
+				document.Load(xmlReader);
+                ParseHeader(document);
 
-				foreach (XmlNode item in _document.SelectNodes("//tu"))
-					translations.Add(NodeToTU(item));
+                Task.Run(() =>
+                {
+	                foreach (XmlNode item in document.SelectNodes("//tu"))
+		                translations.Add(NodeToTU(item));
 
-				lock (this)
-					_translations = translations;
+	                lock (this)
+		                _translations = translations;
+                });
 			}
 			catch (Exception e)
 			{
@@ -182,7 +184,6 @@ namespace TMX_TranslationProvider.TmxFormat
 
 		public void Dispose()
 		{
-			_document = null;
 		}
 	}
 }

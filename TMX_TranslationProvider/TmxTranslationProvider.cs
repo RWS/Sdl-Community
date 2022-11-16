@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Newtonsoft.Json;
 using TMX_TranslationProvider.TmxFormat;
+using TMX_TranslationProvider.Utils;
+using Sdl.FileTypeSupport.Framework;
 
 namespace TMX_TranslationProvider
 {
@@ -26,28 +29,30 @@ namespace TMX_TranslationProvider
 		{
 			_options = options;
 			_parser = _options.FileName != "" ? new TmxParser(_options.FileName) : null;
-			if (_parser != null)
-				// loading happens async
-				_parser.LoadAsync();
+			TryLoadLanguageDirection();
 		}
 
 		public TmxTranslationsOptions Options
 		{
 			get => _options;
-			set => _options = value;
+			set
+			{
+				_options = value;
+
+				// force reload
+				_parser = null;
+				TryLoadLanguageDirection();
+			}
 		}
 
 		public TmxParser Parser => _parser;
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair pair)
 		{
-			if (_languageDirection == null)
-				_languageDirection = new TmxTranslationProviderLanguageDirection(pair, this);
-
-			if (_languageDirection.SourceLanguage.Name != pair.SourceCulture.Name || _languageDirection.TargetLanguage.Name != pair.TargetCulture.Name)
-				_languageDirection = new TmxTranslationProviderLanguageDirection(pair, this);
-
-			return _languageDirection;
+			if (_languageDirection != null && _languageDirection.SourceLanguage.IsoLanguageName() == pair.SourceCultureName &&
+			    _languageDirection.TargetLanguage.IsoLanguageName() == pair.TargetCultureName)
+				return _languageDirection;
+			return null;
 		}
 
 		public bool IsReadOnly => true;
@@ -56,10 +61,9 @@ namespace TMX_TranslationProvider
 		{
 			_options = JsonConvert.DeserializeObject<TmxTranslationsOptions>(translationProviderState);
 			_parser = _options.FileName != "" ? new TmxParser(_options.FileName) : null;
+			_languageDirection = null;
 
-			if (_parser != null)
-				// loading happens async
-				_parser.LoadAsync();
+			TryLoadLanguageDirection();
 		}
 
 		public string Name => PluginResources.Plugin_NiceName;
@@ -92,10 +96,28 @@ namespace TMX_TranslationProvider
 		public bool SupportsTargetConcordanceSearch => false;
 		public bool SupportsTranslation => true;
 
-
-		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+		private void TryLoadLanguageDirection()
 		{
-			return true;
+			if (_parser == null)
+			{
+				_languageDirection = null;
+				return;
+			}
+
+			if (_languageDirection != null &&
+			    (_languageDirection.SourceLanguage.Name != _parser.Header.SourceLanguage || _languageDirection.TargetLanguage.Name != _parser.Header.TargetLanguage))
+				_languageDirection = new TmxTranslationProviderLanguageDirection(new LanguagePair(_parser.Header.SourceLanguage, _parser.Header.TargetLanguage), this);
+			if (_languageDirection == null)
+				_languageDirection = new TmxTranslationProviderLanguageDirection(new LanguagePair(_parser.Header.SourceLanguage, _parser.Header.TargetLanguage), this);
+		}
+
+		public bool SupportsLanguageDirection(LanguagePair pair)
+		{
+			if (_languageDirection == null)
+				return false;
+			var supports = _languageDirection.SourceLanguage.IsoLanguageName() == pair.SourceCultureName &&
+			               _languageDirection.TargetLanguage.IsoLanguageName() == pair.TargetCultureName;
+			return supports;
 		}
 
 

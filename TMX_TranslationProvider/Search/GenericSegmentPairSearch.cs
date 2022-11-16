@@ -18,9 +18,14 @@ namespace TMX_TranslationProvider.Search
 
 		private class SimpleResults
 		{
-			public SearchResults ToSearchResults(SearchSettings settings, LanguagePair language)
+			public SearchResults ToSearchResults(string text, SearchSettings settings, LanguagePair language)
 			{
-				var searchResults = new SearchResults();
+				var source = new Segment();
+				source.Add(text);
+				var searchResults = new SearchResults
+				{
+					SourceSegment = source
+				};
 				foreach (var result in Results)
 					searchResults.Add(result.ToSearchResult(settings, language.SourceCulture, language.TargetCulture));
 				return searchResults;
@@ -219,7 +224,7 @@ namespace TMX_TranslationProvider.Search
 			}
 
 			CompleteSearch(settings, results);
-			return results.ToSearchResults(settings, language);
+			return results.ToSearchResults(text.OriginalText, settings, language);
 		}
 
 	}

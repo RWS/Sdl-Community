@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,14 @@ namespace TMX_TranslationProvider.Utils
 				dummy.Append($"{ch}-");
 			return dummy.ToString();
 		}
-		public static SearchResults SearchSegment(Segment segment)
+		public static SearchResults SearchSegment(Segment segment, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			var result = new SearchResults();
-			var source = new Segment();
-			var target = new Segment();
+			var source = new Segment(sourceLanguage);
+			var target = new Segment(targetLanguage);
 			source.Add(segment.ToPlain());
 			target.Add(DummyTranslateText(segment.ToPlain()));
+			result.SourceSegment = source;
 			var tu = new TranslationUnit
 			{
 				SourceSegment = source,
