@@ -107,7 +107,7 @@ namespace Sdl.Community.MTCloud.Provider.UnitTests
 			var model = Substitute.For<CredentialsViewModel>(null, connectionService);
 			Assert.False(model.IsSignedIn, "Expected: 'False' Found: 'True'");
 
-			model.SignInCommand.Execute(null);
+			model.LoginCommand.Execute(null);
 			Assert.True(model.IsSignedIn, "Expected: 'True' Found: 'False'");
 		}
 	}

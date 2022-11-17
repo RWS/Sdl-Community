@@ -69,6 +69,6 @@
 		public static string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
 		public static string NoEnginesLoaded = "No LW engines were received from Language Weaver for the current project's Language Pairs";
 		public static string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
-		public static string NoTranslationMessage = "Translation cannot be received because LW engine is not set for the current Language Pair";				
+		public static string NoTranslationMessage = "Translation cannot be received because LW engine is not set for the current Language Pair";
 	}
 }
