@@ -11,10 +11,14 @@
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<PlatformTarget>x86</PlatformTarget>
 		<LangVersion>latest</LangVersion>
+		<UseWPF>true</UseWPF>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Resources\Report.xsl" />
 	  <None Remove="UiHelpers\Watermark\WatermarkPasswordBoxResources.xaml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.JsonPatch">
@@ -140,18 +144,6 @@
   <ItemGroup>
     <Resource Include="Resources\LWLogo.png" />
     <Resource Include="Resources\ReportExample.xml" />
-    <Page Include="Styles\CustomProgressRing.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\SendFeedbackButtonStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\Watermark\WatermarkPasswordBoxResources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Resource Include="Resources\rating.ico" />
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\checked.png" />
@@ -161,22 +153,6 @@
     <Resource Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\NMT.ico" />
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic\CustomProgressRing.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\Watermark\WatermarkTextBoxResources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\RateItView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Resource Include="Resources\selectedStar.png" />
     <Resource Include="Resources\defaultStar.png" />
     <Resource Include="Resources\warning.png" />
@@ -187,34 +163,6 @@
     <None Include="Resources\global1.png" />
     <Resource Include="Resources\AdaptiveEngine.ico" />
     <Resource Include="Resources\global.ico" />
-    <Page Include="Styles\ComboBoxStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\GroupBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\RadioButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\WindowsBorder.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Content Include="3rd party\Sdl.Community.RateItControl.dll" />
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
@@ -227,40 +175,6 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Controls\ToolWindowsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\DataGridColumnStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBlockStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\TextBoxStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\WindowsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\CredentialsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\OptionsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MTCodesWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
