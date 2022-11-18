@@ -7,6 +7,9 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\..\..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
     <Reference Include="Sdl.LanguageCloud.IdentityApi">
