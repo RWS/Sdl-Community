@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TMX_TranslationProvider.csproj" />
+    <ProjectReference Include="..\TMX_Lib\TMX_Lib.csproj" />
   </ItemGroup>
 
 </Project>

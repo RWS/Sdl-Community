@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemory;
-using TMX_TranslationProvider.Search.Result;
-using TMX_TranslationProvider.Search.SearchSegment;
-using TMX_TranslationProvider.Utils;
+using TMX_Lib.Search.Result;
+using TMX_Lib.Search.SearchSegment;
+using TMX_Lib.Utils;
 
-namespace TMX_TranslationProvider.TmxFormat
+namespace TMX_Lib.TmxFormat
 {
 	public class TmxTranslationUnit
 	{

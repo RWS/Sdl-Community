@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMX_TranslationProvider", "TMX_TranslationProvider.csproj", "{72AAE27F-BA13-448B-97C2-7795B8AF3BD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMXTests", "TMXTests\TMXTests.csproj", "{D6AACDF2-D32C-4335-A7EC-B20401DE260C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMXTests", "TMXTests\TMXTests.csproj", "{D6AACDF2-D32C-4335-A7EC-B20401DE260C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMX_Lib", "TMX_Lib\TMX_Lib.csproj", "{96461895-6ED6-42F3-A610-4FBEDC18C442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D6AACDF2-D32C-4335-A7EC-B20401DE260C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6AACDF2-D32C-4335-A7EC-B20401DE260C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6AACDF2-D32C-4335-A7EC-B20401DE260C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96461895-6ED6-42F3-A610-4FBEDC18C442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96461895-6ED6-42F3-A610-4FBEDC18C442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96461895-6ED6-42F3-A610-4FBEDC18C442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96461895-6ED6-42F3-A610-4FBEDC18C442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

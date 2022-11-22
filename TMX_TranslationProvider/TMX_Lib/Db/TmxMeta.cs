@@ -1,4 +1,4 @@
-﻿namespace TMX_TranslationProvider.Db
+﻿namespace TMX_Lib.Db
 {
     public class TmxMeta
     {

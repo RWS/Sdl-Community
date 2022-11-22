@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Core.Globalization;
-using Sdl.LanguagePlatform.Core.Tokenization;
-using Sdl.LanguagePlatform.TranslationMemory;
-using TMX_TranslationProvider.Search.Result;
-using TMX_TranslationProvider.Search.SearchSegment;
-using TMX_TranslationProvider.TmxFormat;
+using TMX_Lib.Search.Result;
+using TMX_Lib.Search.SearchSegment;
+using TMX_Lib.TmxFormat;
 
-namespace TMX_TranslationProvider.Search
+namespace TMX_Lib.Search
 {
-	internal class TmxSearch : ISegmentPairSearch
+	public class TmxSearch : ISegmentPairSearch
 	{
 		private TmxParser _parser;
 

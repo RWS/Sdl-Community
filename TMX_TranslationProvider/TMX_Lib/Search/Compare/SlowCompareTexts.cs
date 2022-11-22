@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMX_TranslationProvider.Utils;
+using TMX_Lib.Utils;
 
-namespace TMX_TranslationProvider.Search.Compare
+namespace TMX_Lib.Search.Compare
 {
 	// compares two texts, returns a score 1-100
 	// this is a slow and detailed compare, to be run only after the fast searches have shown the probability for "sameness"

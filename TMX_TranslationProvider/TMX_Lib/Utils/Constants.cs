@@ -1,4 +1,4 @@
-﻿namespace TMX_TranslationProvider.Utils
+﻿namespace TMX_Lib.Utils
 {
 	internal static class Constants
 	{

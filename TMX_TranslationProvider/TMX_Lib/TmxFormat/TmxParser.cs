@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
 using Sdl.Core.Globalization;
 
-namespace TMX_TranslationProvider.TmxFormat
+namespace TMX_Lib.TmxFormat
 {
 	
 	public class TmxParser : IDisposable
@@ -27,6 +25,7 @@ namespace TMX_TranslationProvider.TmxFormat
 		private List<TmxTranslationUnit> _translations = new List<TmxTranslationUnit>();
 
         public IReadOnlyList<TmxTranslationUnit> TranslationUnits => _translations;
+
 
         private TmxHeader _header;
         public TmxHeader Header {
@@ -54,6 +53,7 @@ namespace TMX_TranslationProvider.TmxFormat
             var domainsStr = document.SelectSingleNode("tmx/header/prop[@type='x-Domain:SinglePicklist']")?.InnerText ?? "";
             if (domainsStr != "")
                 domains = domainsStr.Split(',').Select(s => s.Trim()).ToList();
+            var xml = document.SelectSingleNode("tmx/header")?.OuterXml ?? "";
             var creationDateStr = GetAttribute(document.SelectSingleNode("tmx/header"), "creationdate");
             var author = GetAttribute(document.SelectSingleNode("tmx/header"), "creationid");
             DateTime? creationDate = null;
@@ -61,7 +61,7 @@ namespace TMX_TranslationProvider.TmxFormat
                 creationDate = Iso8601Date(creationDateStr);
 
 			lock(this)
-				_header = new TmxHeader(sourceLanguage, targetLanguage, domains, creationDate, author);
+				_header = new TmxHeader(sourceLanguage, targetLanguage, domains, creationDate, author, xml);
         }
 
         private void Load()

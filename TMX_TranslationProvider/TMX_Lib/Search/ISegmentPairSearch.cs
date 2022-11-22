@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Core.Globalization;
-using Sdl.LanguagePlatform.TranslationMemory;
-using TMX_TranslationProvider.Search.Result;
-using TMX_TranslationProvider.Search.SearchSegment;
+﻿using System.Globalization;
+using TMX_Lib.Search.Result;
+using TMX_Lib.Search.SearchSegment;
 
-namespace TMX_TranslationProvider.Search
+namespace TMX_Lib.Search
 {
 	// if you have a provider that holds <source, target> pairs, implement this
-	internal interface ISegmentPairSearch
+	public interface ISegmentPairSearch
 	{
 		bool SupportsSourceLanguage(CultureInfo language);
 		bool SupportsTargetLanguage(CultureInfo language);

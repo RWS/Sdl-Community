@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.ProjectAutomation.Settings;
-using TMX_TranslationProvider.Search.Result;
-using TMX_TranslationProvider.Search.SearchSegment;
+using TMX_Lib.Search.Result;
+using TMX_Lib.Search.SearchSegment;
 
-namespace TMX_TranslationProvider.Search
+namespace TMX_Lib.Search
 {
 
-	internal class GenericSegmentPairSearch
+	public class GenericSegmentPairSearch
 	{
 		private ISegmentPairSearch _provider;
 

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TMX_TranslationProvider.Search.Compare;
-using TMX_TranslationProvider.Utils;
+using TMX_Lib.Search.Compare;
+using TMX_Lib.Utils;
 
-namespace TMX_TranslationProvider.Search.SearchSegment
+namespace TMX_Lib.Search.SearchSegment
 {
 	// represents the text we're searching for, optimized for comparison
 	public class TextSegment

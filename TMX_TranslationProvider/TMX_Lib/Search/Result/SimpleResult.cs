@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace TMX_TranslationProvider.Search.Result
+namespace TMX_Lib.Search.Result
 {
 	public class SimpleResult
 	{

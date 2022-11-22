@@ -7,9 +7,9 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Newtonsoft.Json;
-using TMX_TranslationProvider.TmxFormat;
-using TMX_TranslationProvider.Utils;
 using Sdl.FileTypeSupport.Framework;
+using TMX_Lib.TmxFormat;
+using TMX_Lib.Utils;
 
 namespace TMX_TranslationProvider
 {

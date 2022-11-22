@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace TMX_TranslationProvider.Utils
+namespace TMX_Lib.Utils
 {
 	// for testing/debugging
 	internal class DummyTranslate

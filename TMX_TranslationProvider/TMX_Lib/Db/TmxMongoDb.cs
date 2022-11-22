@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
-namespace TMX_TranslationProvider.Db
+namespace TMX_Lib.Db
 {
     // example:
     // TmxMongoDb db = new TmxMongoDb("localhost:27017", "mydb");

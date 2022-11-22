@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TMX_TranslationProvider.TmxFormat
+namespace TMX_Lib.TmxFormat
 {
 	public class TmxHeader
     {
@@ -10,14 +10,16 @@ namespace TMX_TranslationProvider.TmxFormat
         public readonly List<string> Domains ;
         public readonly DateTime? CreationDate;
         public readonly string Author;
+        public readonly string Xml;
 
-        public TmxHeader(string sourceLanguage, string targetLanguage, List<string> domains, DateTime? creationDate, string author)
+        public TmxHeader(string sourceLanguage, string targetLanguage, List<string> domains, DateTime? creationDate, string author, string xml)
         {
             SourceLanguage = sourceLanguage;
             TargetLanguage = targetLanguage;
             Domains = domains;
             CreationDate = creationDate;
             Author = author;
+            Xml = xml;
         }
     }
 }
