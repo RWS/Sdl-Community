@@ -64,6 +64,7 @@ namespace TMX_Lib.TmxFormat
 				_header = new TmxHeader(sourceLanguage, targetLanguage, domains, creationDate, author, xml);
         }
 
+        private Task _loadTask;
         private void Load()
 		{
 			_error = "";
@@ -79,7 +80,7 @@ namespace TMX_Lib.TmxFormat
 				document.Load(xmlReader);
                 ParseHeader(document);
 
-                Task.Run(() =>
+                _loadTask = Task.Run(() =>
                 {
 	                foreach (XmlNode item in document.SelectNodes("//tu"))
 		                translations.Add(NodeToTU(item));
@@ -93,6 +94,12 @@ namespace TMX_Lib.TmxFormat
 				_error = $"There has been an error parsing {_fileName}: {e.Message}";
 			}
 		}
+
+        public async Task LoadAsync()
+        {
+	        if (_loadTask != null)
+		        await _loadTask;
+        }
 
 		// if not found, returns ""
         private static string GetAttribute(XmlNode node, string attributeName)
