@@ -19,12 +19,20 @@ namespace TMX_Lib.TmxFormat
 
 		public DateTime? TranslateTime => ChangeTime ?? CreationTime;
 
+		public string XmlProperties = "";
+		public string TuAttributes = "";
+
 		public string SourceLanguage, TargetLanguage;
 
 		// Example: <prop type="x-Domain:SinglePicklist">Construction</prop>
 		public string Domain = "";
 
         public ConfirmationLevel ConfirmationLevel = ConfirmationLevel.Draft;
+
+        public string SourceText => SourceSegment().OriginalText;
+        public string TargetText => TargetSegment().OriginalText;
+        public string SourceFormattedText => SourceSegment().OriginalText;
+        public string TargetFormattedText => TargetSegment().OriginalText;
 
 		public List<TmxFormattedTextPart> Source = new List<TmxFormattedTextPart>();
 		public List<TmxFormattedTextPart> Target = new List<TmxFormattedTextPart>();

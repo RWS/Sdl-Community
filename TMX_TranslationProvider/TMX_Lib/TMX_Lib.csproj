@@ -83,7 +83,9 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\DummyTranslate.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\MongoDbUtil.cs" />
     <Compile Include="Utils\Util.cs" />
+    <Compile Include="XmlSplit\XmlSplitter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -93,5 +95,6 @@
       <Version>2.18.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

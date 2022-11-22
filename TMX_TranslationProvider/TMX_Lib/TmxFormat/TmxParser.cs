@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using Sdl.Core.Globalization;
+using TMX_Lib.XmlSplit;
 
 namespace TMX_Lib.TmxFormat
 {
@@ -19,13 +20,11 @@ namespace TMX_Lib.TmxFormat
 		public bool HasError => _error != "";
 		public string Error => _error;
 
-		private string _sourceLanguage, _targetLanguage;
+		private XmlSplitter _splitter;
+		private XmlDocument _headerDocument;
 
-		// there's a 1-to-1 correspondence between the TMX file' /tu nodes and the TmxTranslationUnit objects
-		private List<TmxTranslationUnit> _translations = new List<TmxTranslationUnit>();
-
-        public IReadOnlyList<TmxTranslationUnit> TranslationUnits => _translations;
-
+		// FIXME update, when supporting several languages
+        public IReadOnlyList<string> Languages() => new[] { Header.SourceLanguage, Header.TargetLanguage };
 
         private TmxHeader _header;
         public TmxHeader Header {
@@ -41,7 +40,7 @@ namespace TMX_Lib.TmxFormat
 			_fileName = fileName;
 			// note: loading async is a really bad idea, since all calls to the language direction are sync
 			// processing the nodes is async, but at the end of this function, we'll know the source + target languages
-			Load();
+			LoadHeader();
 		}
 
         private void ParseHeader(XmlDocument document)
@@ -64,30 +63,14 @@ namespace TMX_Lib.TmxFormat
 				_header = new TmxHeader(sourceLanguage, targetLanguage, domains, creationDate, author, xml);
         }
 
-        private Task _loadTask;
-        private void Load()
+        private void LoadHeader()
 		{
 			_error = "";
 			try
 			{
-				List<TmxTranslationUnit> translations = new List<TmxTranslationUnit>();
-				XmlReaderSettings settings = new XmlReaderSettings();
-				settings.XmlResolver = null;
-				settings.DtdProcessing = DtdProcessing.Ignore;
-				XmlReader xmlReader = XmlTextReader.Create(_fileName, settings);
-
-				var document = new XmlDocument();
-				document.Load(xmlReader);
-                ParseHeader(document);
-
-                _loadTask = Task.Run(() =>
-                {
-	                foreach (XmlNode item in document.SelectNodes("//tu"))
-		                translations.Add(NodeToTU(item));
-
-	                lock (this)
-		                _translations = translations;
-                });
+				_splitter = new XmlSplitter(_fileName);
+				_headerDocument = _splitter.TryGetNextSubDocument();
+				ParseHeader(_headerDocument);
 			}
 			catch (Exception e)
 			{
@@ -95,14 +78,23 @@ namespace TMX_Lib.TmxFormat
 			}
 		}
 
-        public async Task LoadAsync()
+        public IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
         {
-	        if (_loadTask != null)
-		        await _loadTask;
+	        var document = _headerDocument ?? _splitter.TryGetNextSubDocument();
+	        _headerDocument = null;
+
+	        if (document == null)
+		        return null;
+
+	        List<TmxTranslationUnit> translations = new List<TmxTranslationUnit>();
+	        foreach (XmlNode item in document.SelectNodes("//tu"))
+		        translations.Add(NodeToTU(item));
+	        return translations;
         }
 
+
 		// if not found, returns ""
-        private static string GetAttribute(XmlNode node, string attributeName)
+		private static string GetAttribute(XmlNode node, string attributeName)
         {
             var found = node.Attributes?.OfType<XmlAttribute>().FirstOrDefault(a => a.Name.Equals(attributeName, StringComparison.OrdinalIgnoreCase));
             var value = found?.Value;
@@ -131,7 +123,22 @@ namespace TMX_Lib.TmxFormat
         };
         private static DateTime Iso8601Date(string date)
         {
-            return DateTime.ParseExact(date, iso8061formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+	        try
+	        {
+		        return DateTime.ParseExact(date, iso8061formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+	        }
+			catch 
+	        { }
+
+	        try
+	        {
+				//fallback
+				return DateTime.Parse(date);
+	        }
+	        catch
+	        { }
+
+	        return DateTime.MinValue;
         }
 
 		private TmxTranslationUnit NodeToTU(XmlNode xmlUnit)

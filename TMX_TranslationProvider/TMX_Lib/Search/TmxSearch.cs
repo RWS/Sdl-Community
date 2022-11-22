@@ -16,7 +16,7 @@ namespace TMX_Lib.Search
 		public TmxSearch(TmxParser parser)
 		{
 			_parser = parser;
-			_canDoFuzzySearch = _parser.TranslationUnits.Count <= MAX_WORD_COUNT_FUZZY_SEARCH;
+			//_canDoFuzzySearch = _parser.TranslationUnits.Count <= MAX_WORD_COUNT_FUZZY_SEARCH;
 		}
 
 		public bool SupportsSourceLanguage(CultureInfo language)
@@ -38,75 +38,75 @@ namespace TMX_Lib.Search
 			// FIXME
 		}
 
-		public int SegmentPairCount() => _parser.TranslationUnits.Count;
+		public int SegmentPairCount() => 0;// _parser.TranslationUnits.Count;
 		public SimpleResult TryTranslateExact(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, int minScore)
 		{
-			if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
-				throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
+			return null;
+			//if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
+			//	throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
 
-			var unit = _parser.TranslationUnits[segmentPairIndex];
-			if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
-				return null;
+			//var unit = _parser.TranslationUnits[segmentPairIndex];
+			//if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
+			//	return null;
 
 
-			SimpleResult result = null;
-			var tmxText = unit.Text(sourceLanguage);
-			if (tmxText.OriginalText == sourceText.OriginalText)
-			{
-				result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
-				ApplyPenalties(sourceText, tmxText);
-			}
+			//SimpleResult result = null;
+			//var tmxText = unit.Text(sourceLanguage);
+			//if (tmxText.OriginalText == sourceText.OriginalText)
+			//{
+			//	result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
+			//	ApplyPenalties(sourceText, tmxText);
+			//}
 
 			// care about penalties 
 			// TranslateTime -> Change or Create time
 
-			// care about full word misses - create 2 dictionaries for the sourceText and unit.sourcelanguage
-			// + care about numbers
-			// + care about punctuation
-			return result;
+			//return result;
 		}
 
 		public SimpleResult TryTranslateFuzzy(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, int minScore)
 		{
-			if (!_canDoFuzzySearch)
-				return null;
+			return null;
+			//if (!_canDoFuzzySearch)
+			//	return null;
 
-			if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
-				throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
+			//if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
+			//	throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
 
-			var unit = _parser.TranslationUnits[segmentPairIndex];
-			if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
-				return null;
+			//var unit = _parser.TranslationUnits[segmentPairIndex];
+			//if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
+			//	return null;
 
-			SimpleResult result = null;
-			var tmxText = unit.Text(sourceLanguage);
-			if (TextSegment.CompareScore(sourceText, tmxText, minScore) >= minScore)
-			{
-				result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
-				ApplyPenalties(sourceText, tmxText);
-			}
+			//SimpleResult result = null;
+			//var tmxText = unit.Text(sourceLanguage);
+			//if (TextSegment.CompareScore(sourceText, tmxText, minScore) >= minScore)
+			//{
+			//	result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
+			//	ApplyPenalties(sourceText, tmxText);
+			//}
 
-			return result;
+			//return result;
 		}
 
 		public SimpleResult TryTranslateConcordance(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage,
 			bool sourceConcordance, int minScore)
 		{
-			if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
-				throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
+			return null;
+			//if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
+			//	throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
 
-			var unit = _parser.TranslationUnits[segmentPairIndex];
-			if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
-				return null;
+			//var unit = _parser.TranslationUnits[segmentPairIndex];
+			//if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
+			//	return null;
 
-			var tmxText = unit.Text(sourceConcordance ? sourceLanguage : targetLaguage);
-			SimpleResult result = null;
-			if (sourceText.ConcordanceSearchMatch(tmxText, minScore) >= minScore)
-			{
-				result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
-				ApplyPenalties(sourceText, tmxText);
-			}
-			return result;
+			//var tmxText = unit.Text(sourceConcordance ? sourceLanguage : targetLaguage);
+			//SimpleResult result = null;
+			//if (sourceText.ConcordanceSearchMatch(tmxText, minScore) >= minScore)
+			//{
+			//	result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
+			//	ApplyPenalties(sourceText, tmxText);
+			//}
+			//return result;
 		}
 
 
