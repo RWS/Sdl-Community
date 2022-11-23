@@ -2,6 +2,6 @@
 {
 	public interface IOpenFileDialogService
 	{
-		string ShowDialog(string filter);
+		string ShowDialog(string filter = null);
 	}
 }

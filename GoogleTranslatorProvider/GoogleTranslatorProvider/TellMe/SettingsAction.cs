@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Forms;
 using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
 using Sdl.TellMe.ProviderApi;
@@ -29,7 +28,7 @@ namespace GoogleTranslatorProvider.TellMe
 
 			if (currentProject is null)
 			{
-				MessageBox.Show(@"No project is set as active");
+				MessageBox.Show("No project is set as active");
 				return;
 			}
 
@@ -47,7 +46,7 @@ namespace GoogleTranslatorProvider.TellMe
 			}
 
 			var translationOptions = new GTPTranslationOptions(translationProvider.MainTranslationProvider.Uri);
-			var settingsControlViewModel = new SettingsControlViewModel(translationOptions, new OpenFileDialogService(), true);
+			var settingsControlViewModel = new SettingsControlViewModel(translationOptions, true);
 			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsControlViewModel, true);
 			var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
 

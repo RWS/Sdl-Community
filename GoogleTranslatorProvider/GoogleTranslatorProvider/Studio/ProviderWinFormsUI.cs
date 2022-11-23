@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
+using GoogleTranslatorProvider.TellMe;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
 using Sdl.LanguagePlatform.Core;
@@ -17,11 +18,11 @@ namespace GoogleTranslatorProvider.Studio
 								   Description = "GoogleTranslatorProviderPlugin_WinFormsUI")]
 	public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
-		public bool SupportsEditing => true;
+		public string TypeDescription => PluginResources.Plugin_Description;
 
 		public string TypeName => PluginResources.Plugin_NiceName;
 
-		public string TypeDescription => PluginResources.Plugin_Description;
+		public bool SupportsEditing => true;
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
@@ -39,8 +40,13 @@ namespace GoogleTranslatorProvider.Studio
 				return false;
 			}
 
-			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, provider.Options);
-			return mainWindowViewModel.DialogResult;
+			try
+			{
+				new SettingsAction().Execute();
+				return true;
+			}
+			catch { }
+			return false;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
@@ -81,7 +87,7 @@ namespace GoogleTranslatorProvider.Studio
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
 			var providerControlViewModel = new ProviderControlViewModel(loadOptions);
-			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, new OpenFileDialogService(), false);
+			var settingsControlViewModel = new SettingsControlViewModel(loadOptions);
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel, credentialStore, languagePairs, new HtmlUtil());
 			var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>

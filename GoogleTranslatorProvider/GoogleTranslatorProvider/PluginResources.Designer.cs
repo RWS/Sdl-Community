@@ -271,7 +271,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select the version of the Google Translate API that you wish to use:.
+        ///   Looks up a localized string similar to Select the version of the Google TP and sign in using your credentials.
         /// </summary>
         public static string GoogleApiDescription {
             get {
@@ -790,7 +790,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translation Provider Settings.
+        ///   Looks up a localized string similar to Advanced settings.
         /// </summary>
         public static string SettingsText {
             get {
@@ -808,7 +808,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provider options.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string SettingsViewTitle {
             get {
@@ -871,7 +871,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the local path to the json file associated with your API key:.
+        ///   Looks up a localized string similar to Select the JSON file from your machine.
         /// </summary>
         public static string V3JsonPathDescription {
             get {

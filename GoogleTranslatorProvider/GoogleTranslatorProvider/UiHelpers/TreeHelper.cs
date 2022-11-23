@@ -9,7 +9,7 @@ namespace GoogleTranslatorProvider.UiHelpers
 		public static IEnumerable<DependencyObject> GetAncestors(this DependencyObject child)
 		{
 			var parent = VisualTreeHelper.GetParent(child);
-			while (parent != null)
+			while (parent is not null)
 			{
 				yield return parent;
 				parent = VisualTreeHelper.GetParent(parent);

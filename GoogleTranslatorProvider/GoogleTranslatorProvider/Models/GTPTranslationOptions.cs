@@ -13,14 +13,10 @@ namespace GoogleTranslatorProvider.Models
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 		private string _apiKey;
 
-		public GTPTranslationOptions()
+		public GTPTranslationOptions(Uri uri = null)
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme);
-		}
-
-		public GTPTranslationOptions(Uri uri)
-		{
-			_uriBuilder = new TranslationProviderUriBuilder(uri);
+			_uriBuilder = uri is null ? new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme)
+									  : new TranslationProviderUriBuilder(uri);
 		}
 
 		public Dictionary<string, string> LanguagesSupported { get; set; }
@@ -152,7 +148,6 @@ namespace GoogleTranslatorProvider.Models
 			}
 		}
 
-
 		[JsonIgnore]
 		public ApiVersion SelectedGoogleVersion
 		{
@@ -216,6 +211,7 @@ namespace GoogleTranslatorProvider.Models
 			get => ToBoolean(resendDrafts);
 			set => resendDrafts = value.ToString();
 		}
+
 		[JsonIgnore]
 		public bool SendPlainTextOnly //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
 		{

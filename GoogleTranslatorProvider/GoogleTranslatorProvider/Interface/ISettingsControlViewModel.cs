@@ -25,8 +25,8 @@ namespace GoogleTranslatorProvider.Interfaces
 		
 		ICommand ShowMainWindowCommand { get; set; }
 		
-		ICommand BrowseCommand { get; set; }
-		
 		ICommand ShowSettingsCommand { get; set; }
+		
+		ICommand BrowseCommand { get; }
 	}
 }

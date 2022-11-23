@@ -40,8 +40,6 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		bool BasicCsvGlossary { get; set; }
 
-		ICommand ShowSettingsCommand { get; set; }
-
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }

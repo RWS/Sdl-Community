@@ -5,7 +5,7 @@ namespace GoogleTranslatorProvider.Service
 {
 	public class OpenFileDialogService : IOpenFileDialogService
 	{
-		public string ShowDialog(string filter)
+		public string ShowDialog(string filter = null)
 		{
 			var openFileDialog = new OpenFileDialog
 			{

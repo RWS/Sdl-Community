@@ -34,13 +34,13 @@ namespace GoogleTranslatorProvider.Studio
 			_htmlUtil = htmlUtil;
 		}
 
-		public bool CanReverseLanguageDirection { get; } = false;
-
 		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
 
 		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 
 		public ITranslationProvider TranslationProvider => _provider;
+
+		public bool CanReverseLanguageDirection => false;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{

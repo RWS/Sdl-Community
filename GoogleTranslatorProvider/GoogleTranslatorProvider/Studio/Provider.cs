@@ -24,7 +24,6 @@ namespace GoogleTranslatorProvider.Studio
 
 		public ITranslationOptions Options { get; set; }
 
-		public bool IsReadOnly => true;
 
 		public string Name => Options.SelectedProvider == ProviderType.GoogleTranslate
 							? Options.SelectedGoogleVersion == ApiVersion.V2 ? PluginResources.GoogleBasic
@@ -32,38 +31,40 @@ namespace GoogleTranslatorProvider.Studio
 							: PluginResources.Plugin_Name;
 
 		public ProviderStatusInfo StatusInfo => new(true, PluginResources.Plugin_NiceName);
-
-		public bool SupportsConcordanceSearch { get; } = false;
-
-		public bool SupportsDocumentSearches { get; } = false;
-
-		public bool SupportsFilters { get; } = false;
-
-		public bool SupportsFuzzySearch => false;
-
-		public bool SupportsMultipleResults => false;
-
-		public bool SupportsPenalties => true;
-
-		public bool SupportsPlaceables => false;
-
-		public bool SupportsScoring => false;
-
+		
 		public bool SupportsSearchForTranslationUnits => true;
-
-		public bool SupportsSourceConcordanceSearch => false;
-
-		public bool SupportsStructureContext { get; } = false;
-
+		
 		public bool SupportsTaggedInput => true;
-
-		public bool SupportsTargetConcordanceSearch => false;
-
+		
 		public bool SupportsTranslation => true;
-
-		public bool SupportsUpdate => false;
-
+		
+		public bool SupportsPenalties => true;
+		
+		public bool IsReadOnly => true;
+		
+		public bool SupportsSourceConcordanceSearch => false;
+		
+		public bool SupportsTargetConcordanceSearch => false;
+		
+		public bool SupportsConcordanceSearch => false;
+		
+		public bool SupportsDocumentSearches => false;
+		
+		public bool SupportsStructureContext => false;
+		
+		public bool SupportsMultipleResults => false;
+		
+		public bool SupportsFuzzySearch => false;
+		
+		public bool SupportsPlaceables => false;
+		
 		public bool SupportsWordCounts => false;
+		
+		public bool SupportsFilters => false;
+		
+		public bool SupportsScoring => false;
+		
+		public bool SupportsUpdate => false;
 
 		public TranslationMethod TranslationMethod => GTPTranslationOptions.ProviderTranslationMethod;
 
@@ -89,14 +90,14 @@ namespace GoogleTranslatorProvider.Studio
 			return _googleV2Api.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 
-		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
-		{
-			return new ProviderLanguageDirection(this, languageDirection, _htmlUtil);
-		}
-
 		public void LoadState(string translationProviderState)
 		{
 			Options = JsonConvert.DeserializeObject<GTPTranslationOptions>(translationProviderState);
+		}
+
+		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
+		{
+			return new ProviderLanguageDirection(this, languageDirection, _htmlUtil);
 		}
 
 		public string SerializeState()
