@@ -25,23 +25,15 @@ namespace TMX_Lib.Utils
 				TuAttributes = tu.TuAttributes,
 			};
 
-			// FIXME handle multiple languages
-			var dbSource = new Db.TmxText
+			var texts = tu.Texts.Select(t => new Db.TmxText
 			{
 				TranslationUnitID = id,
-				Language = tu.SourceLanguage,
-				Text = tu.SourceText,
-				FormattedText = tu.SourceFormattedText,
-			};
-			var dbTarget = new Db.TmxText
-			{
-				TranslationUnitID = id,
-				Language = tu.TargetLanguage,
-				Text = tu.TargetText,
-				FormattedText = tu.TargetFormattedText,
-			};
+				Language = t.Language,
+				Text = t.Text,
+				FormattedText = t.FormattedText,
+			}).ToList();
 
-			return (new[] { dbSource, dbTarget }, dbTU);
+			return (texts, dbTU);
 		}
 
 		public static async Task ImportToDbAsync(TmxParser parser, TmxMongoDb db)
@@ -68,7 +60,7 @@ namespace TMX_Lib.Utils
 					if (TUs == null)
 						break;
 
-					var dbTexts = new List<TmxText>();
+					var dbTexts = new List<Db.TmxText>();
 					var dbTUs = new List<Db.TmxTranslationUnit>();
 					foreach (var tu in TUs)
 					{
@@ -84,12 +76,16 @@ namespace TMX_Lib.Utils
 				// languages are known only after everything has been imported
 				var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
 				await db.AddLanguagesAsync(languages);
+
+				// best practice - create indexes after everything has been imported
+				await db.CreateIndexesAsync();
 			}
 			catch (Exception e)
 			{
 				throw new TmxException("Import to db failed", e);
 			}
 			Debug.WriteLine($"import complete, took {watch.ElapsedMilliseconds} ms");
+			Console.WriteLine($"import complete, took {watch.ElapsedMilliseconds} ms");
 		}
 	}
 }

@@ -10,6 +10,12 @@ using TMX_Lib.Utils;
 
 namespace TMX_Lib.TmxFormat
 {
+	public class TmxText
+	{
+		public string Language;
+		public string Text;
+		public string FormattedText;
+	}
 	public class TmxTranslationUnit
 	{
 		public DateTime? CreationTime;
@@ -29,27 +35,12 @@ namespace TMX_Lib.TmxFormat
 
         public ConfirmationLevel ConfirmationLevel = ConfirmationLevel.Draft;
 
-        public string SourceText => SourceSegment().OriginalText;
-        public string TargetText => TargetSegment().OriginalText;
-        public string SourceFormattedText => SourceSegment().OriginalText;
-        public string TargetFormattedText => TargetSegment().OriginalText;
+        public List<TmxText> Texts = new List<TmxText>();
 
-		public List<TmxFormattedTextPart> Source = new List<TmxFormattedTextPart>();
-		public List<TmxFormattedTextPart> Target = new List<TmxFormattedTextPart>();
-
-		private static TextSegment ToSegment(List<TmxFormattedTextPart> formattedText) =>
-			new TextSegment(string.Join("", formattedText.Where(part => part.Text != "").Select(part => part.Text)));
-
-		private TextSegment SourceSegment() => _sourceSegment ?? (_sourceSegment = ToSegment(Source));
-		private TextSegment TargetSegment() => _targetSegment ?? (_targetSegment = ToSegment(Target));
-
-		// FIXME I will implement this properly for multiple languages
-		public TextSegment Text(CultureInfo language) => language.IsoLanguageName().Equals(SourceLanguage, StringComparison.OrdinalIgnoreCase)
-			? SourceSegment() : TargetSegment();
-
+        public TmxText Text(CultureInfo language) =>
+			Texts.First(t => t.Language.Equals(language.IsoLanguageName(), StringComparison.OrdinalIgnoreCase));
+		
 		public bool HasLanguage(CultureInfo language) => true;
-
-		private TextSegment _sourceSegment, _targetSegment;
 
 		public SimpleResult ToSimpleResult(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
@@ -59,9 +50,9 @@ namespace TMX_Lib.TmxFormat
 				ConfirmationLevel = ConfirmationLevel, 
 				Origin = TranslationUnitOrigin.TM,
 				// FIXME
-				Source = new List<TextPart> { new TextPart { Text = SourceSegment().OriginalText }},
+				Source = new List<TextPart> { new TextPart { Text = Text(sourceLanguage).Text }},
 				// FIXME
-				Target = new List<TextPart> { new TextPart { Text = TargetSegment().OriginalText } },
+				Target = new List<TextPart> { new TextPart { Text = Text(targetLanguage).Text } },
 			};
 			return sr;
 		}

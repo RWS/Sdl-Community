@@ -76,7 +76,6 @@
     <Compile Include="Search\Result\TextPart.cs" />
     <Compile Include="Search\SearchSegment\TextSegment.cs" />
     <Compile Include="Search\TmxSearch.cs" />
-    <Compile Include="TmxFormat\TmxFormattedTextPart.cs" />
     <Compile Include="TmxFormat\TmxHeader.cs" />
     <Compile Include="TmxFormat\TmxParser.cs" />
     <Compile Include="TmxFormat\TmxTranslationUnit.cs" />

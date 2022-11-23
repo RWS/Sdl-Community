@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,8 +24,12 @@ namespace TMX_Lib.TmxFormat
 		private XmlSplitter _splitter;
 		private XmlDocument _headerDocument;
 
-		// FIXME update, when supporting several languages
-        public IReadOnlyList<string> Languages() => new[] { Header.SourceLanguage, Header.TargetLanguage };
+		public IReadOnlyList<string> Languages()
+		{
+			Debug.Assert(_splitter?.EndOfStreamReached ?? false);
+			return _languages.ToList();
+		}
+        private HashSet<string> _languages = new HashSet<string>();
 
         private TmxHeader _header;
         public TmxHeader Header {
@@ -141,19 +146,42 @@ namespace TMX_Lib.TmxFormat
 	        return DateTime.MinValue;
         }
 
+        private TmxText TuvToText(XmlNode xmlTuv)
+        {
+	        var language = GetAttribute(xmlTuv, "xml:lang");
+	        var seg = xmlTuv.SelectSingleNode("seg");
+	        var text = seg.InnerText;
+	        var formattedText = seg.InnerXml;
+	        return new TmxText
+	        {
+				Language = language,
+				Text = text,
+				FormattedText = formattedText,
+	        };
+        }
+
 		private TmxTranslationUnit NodeToTU(XmlNode xmlUnit)
 		{
-			var source = xmlUnit.SelectSingleNode("tuv[1]/seg");
-			var target = xmlUnit.SelectSingleNode("tuv[2]/seg");
             var tu = new TmxTranslationUnit
             {
 				SourceLanguage = _header.SourceLanguage, TargetLanguage = _header.TargetLanguage,
             };
-            tu.Source = NoteToTextPart(source);
-            if (target != null)
-                tu.Target = NoteToTextPart(target);
+            var properties = xmlUnit.SelectNodes("prop");
+            if (properties != null)
+	            tu.XmlProperties = string.Join(" ", properties.OfType<XmlNode>().Select(p => p.OuterXml));
+            if (xmlUnit.Attributes != null)
+	            tu.TuAttributes = string.Join("\r\n", xmlUnit.Attributes.OfType<XmlAttribute>().Select(a => $"{a.Name}=\"{a.Value}\""));
 
-            var creationDate = GetAttribute(xmlUnit, "creationdate");
+            var tuv = xmlUnit.SelectNodes("tuv");
+			if (tuv != null)
+				foreach (XmlNode item in tuv)
+				{
+					var text = TuvToText(item);
+					tu.Texts.Add(text);
+					_languages.Add(text.Language);
+				}
+
+			var creationDate = GetAttribute(xmlUnit, "creationdate");
             var creationAuthor = GetAttribute(xmlUnit, "creationid");
             var changeDate = GetAttribute(xmlUnit, "changedate");
             var changeAuthor = GetAttribute(xmlUnit, "changeid");
@@ -173,27 +201,6 @@ namespace TMX_Lib.TmxFormat
             var domain = xmlUnit.SelectSingleNode("prop[@type='x-Domain:SinglePicklist']");
             tu.Domain = domain?.InnerText ?? "";
             return tu;
-        }
-
-		private List<TmxFormattedTextPart> NoteToTextPart(XmlNode segNode)
-        {
-            List<TmxFormattedTextPart> list = new List<TmxFormattedTextPart>();
-            foreach (XmlNode item in segNode.ChildNodes)
-            {
-                if (item.NodeType == XmlNodeType.Text)
-                {
-					list.Add(new TmxFormattedTextPart { Text = item.InnerText });
-                } else if (item.NodeType == XmlNodeType.Element)
-                {
-                    var tp = new TmxFormattedTextPart { FormatType = item.Name };
-					if ( item.Attributes != null)
-                        foreach (XmlAttribute attribute in item.Attributes)
-                            tp.FormatAttributes.Add( (attribute.Name, attribute.Value));
-                    list.Add(tp);
-                }
-            }
-
-            return list;
         }
 
 		public void Dispose()

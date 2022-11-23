@@ -14,16 +14,45 @@ namespace QuickTmxTesting
 	// quick and dirty tests
     internal class Program
     {
-	    private static async Task Test(string root)
+	    private static async Task TestImportLargeFile(string root)
 	    {
-//		    var parser = new TmxParser($"{root}\\SampleTestFiles\\Banking TextBase.tmx");
 		    var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx");
-		    //var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx");
-		    var db = new TmxMongoDb("localhost:27017", "mydb");
+		    var db = new TmxMongoDb("localhost:27017", "large_db");
+		    await MongoDbUtil.ImportToDbAsync(parser, db);
+	    }
+	    private static async Task TestImportLargeFile2(string root)
+	    {
+		    var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (DGT 2019_5.0M).tmx");
+		    var db = new TmxMongoDb("localhost:27017", "large2_db");
 		    await MongoDbUtil.ImportToDbAsync(parser, db);
 	    }
 
-	    private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
+		private static async Task TestImportSmallFile(string root)
+	    {
+		    var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\cy-GB to en-US.tmx");
+		    var db = new TmxMongoDb("localhost:27017", "small_db");
+		    await MongoDbUtil.ImportToDbAsync(parser, db);
+	    }
+	    private static async Task TestImportSmallFile2(string root)
+	    {
+		    var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\#2 - TUs with a different single field.tmx");
+		    var db = new TmxMongoDb("localhost:27017", "small2_db");
+		    await MongoDbUtil.ImportToDbAsync(parser, db);
+	    }
+	    private static async Task TestImportMultilingual(string root)
+	    {
+		    var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\TMX Test Files\\multilingual\\4 - multilingual_TMX.tmx");
+		    var db = new TmxMongoDb("localhost:27017", "multilingual_db");
+		    await MongoDbUtil.ImportToDbAsync(parser, db);
+	    }
+	    private static async Task TestImportMultilingual2(string root)
+	    {
+		    var parser = new TmxParser("C:\\john\\buff\\TMX Examples\\TMX Test Files\\multilingual\\ecdc.tmx");
+		    var db = new TmxMongoDb("localhost:27017", "multilingual_big_db");
+		    await MongoDbUtil.ImportToDbAsync(parser, db);
+	    }
+
+		private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
 	    {
 		    var splitter = new XmlSplitter(inputXmlFile);
 		    var idx = 0;
@@ -47,7 +76,7 @@ namespace QuickTmxTesting
 	        if (args.Length > 0)
 		        root = args[0];
 
-	        Task.Run(() => Test(root)).Wait();
+	        Task.Run(() => TestImportSmallFile2(root)).Wait();
 	        Console.ReadLine();
         }
     }

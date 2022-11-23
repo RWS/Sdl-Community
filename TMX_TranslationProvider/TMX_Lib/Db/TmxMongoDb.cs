@@ -65,7 +65,6 @@ namespace TMX_Lib.Db
                     _database.CreateCollection("meta");
                     _database.CreateCollection("texts");
                     _database.CreateCollection("translation_units");
-                    CreateIndexes();
                 }
 
                 _metas = _database.GetCollection<TmxMeta>("meta");
@@ -110,13 +109,25 @@ namespace TMX_Lib.Db
             }
         }
 
-        private void CreateIndexes()
+        public async Task CreateIndexesAsync()
         {
             try
             {
-                //_metas.Indexes.CreateOne();
+	            var list = await _translationUnits.Indexes.ListAsync();
+	            int count = 0;
+	            await list.ForEachAsync(c => ++count);
+	            if (count > 1)
+		            return;
+
+				var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.ID);
+	            await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
+
+	            var indexTextByLangText = Builders<TmxText>.IndexKeys.Ascending(i => i.Language).Ascending(i => i.Text);
+	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangText));
+	            var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.Language).Ascending(i => i.TranslationUnitID);
+	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangTU));
             }
-            catch (Exception e)
+			catch (Exception e)
             {
                 throw new TmxException("Can't create indexes", e);
             }

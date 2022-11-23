@@ -42,6 +42,9 @@ namespace TMX_Lib.XmlSplit
 		private byte[] _buffer;
 		private int _offset;
 
+		private Encoding _encoding;
+		public bool EndOfStreamReached  => _eofReached;
+
 		public XmlSplitter(string fileName, string rootXmlName = "tmx", string bodyXmlName = "body", string elementXmlName = "tu")
 		{
 			_fileName = fileName;
@@ -53,12 +56,36 @@ namespace TMX_Lib.XmlSplit
 
 			try
 			{
+				_encoding = GetEncoding(fileName);
 				_stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 			}
 			catch (Exception e)
 			{
 				throw new TmxException($"can't open file for reading {fileName}");
 			}
+		}
+
+		// https://stackoverflow.com/questions/3825390/effective-way-to-find-any-files-encoding
+		private static Encoding GetEncoding(string filename)
+		{
+			// Read the BOM
+			var bom = new byte[4];
+			using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
+			{
+				file.Read(bom, 0, 4);
+			}
+
+			// Analyze the BOM
+			if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
+			if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
+			if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32; //UTF-32LE
+			if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; //UTF-16LE
+			if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; //UTF-16BE
+			if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);  //UTF-32BE
+
+			// We actually have no idea what the encoding is if we reach this point, so
+			// you may wish to return null instead of defaulting to ASCII
+			return Encoding.ASCII;
 		}
 
 		// tries to get the same sub-document
@@ -84,8 +111,8 @@ namespace TMX_Lib.XmlSplit
 			while(true)
 				try
 				{
-					// this can throw if the last UTF8 char hasn't been fully read
-					curString = Encoding.UTF8.GetString(_buffer, 0, readByteCount);
+					// this can throw if the last char hasn't been fully read
+					curString = _encoding.GetString(_buffer, 0, readByteCount);
 					break;
 				}
 				catch
@@ -148,7 +175,7 @@ namespace TMX_Lib.XmlSplit
 				settings.XmlResolver = null;
 				settings.DtdProcessing = DtdProcessing.Ignore;
 
-				var bytes = Encoding.UTF8.GetBytes(str);
+				var bytes = _encoding.GetBytes(str);
 				using (var memoryStream = new MemoryStream(bytes))
 				using (var reader = new StreamReader(memoryStream))
 				using (var xmlReader = XmlTextReader.Create(reader, settings))
